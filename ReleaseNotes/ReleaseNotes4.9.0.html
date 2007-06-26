@@ -159,6 +159,7 @@ introduced. The step limitation types are:
 New UI commands are added: <TT>/process/msc/Skin</TT>,
 <TT>/process/msc/RangeFactor</TT>, <TT>/process/msc/GeomFactor</TT>, and  
 <TT>/process/msc/StepLimit</TT>.
+<TT>/process/msc/LateralDisplacement</TT>.
 
 <P> </P>
 <B>Hadronic physics</B>
@@ -338,12 +339,12 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI>In all processes inheriting from <TT>G4VEnergyLossProcess</TT> or
     <TT>G4VEmProcess</TT>, removed method <TT>SecondaryPostStep()</TT>.</LI>
+<LI>Modified interface of <TT>SampleSecondary()</TT> method in all models
+    inheriting from <TT>G4VEmModel</TT> base class.</LI>
 <LI><B>High Energy</B>
     <UL>
     <LI><TT>G4mplIonisation</TT>: fixed destruction of monopole ionisation
         model.</LI>
-    <LI>Modified interface of <TT>SampleSecondary()</TT> method according to
-        changes in base class <TT>G4VEmModel</TT>.</LI>
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
@@ -372,8 +373,6 @@ please refer to the related History files provided in most packages):
         design change in <TT>utils</TT> module.</LI>
     <LI><TT>G4PolarizedCompton</TT>: fixed compilation warning and incorrect
         usage of <TT>G4PhysicsVector</TT>.</LI>
-    <LI>Modified interface of <TT>SampleSecondary()</TT> method according to
-        changes in base class <TT>G4VEmModel</TT>.</LI>
     </UL></LI>
 <LI><B>Standard</B>
     <UL>
@@ -381,12 +380,13 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>Added <TT>InitialiseMassCharge()</TT> method; removed
             <TT>GetMeanFreePath()</TT> implementation.</LI>
-        <LI>Added <TT>NuclearStopping</TT> flag; add data for stopping
-            only for GenericIons.</LI>
+        <LI>Added <TT>NuclearStopping</TT> flag;</LI> 
+        <LI>add stopping data only for particle type "GenericIon".</LI>
         </UL></LI>
     <LI><TT>G4MultipleScattering</TT>, <TT>G4hMultipleScattering</TT>:
         <UL>
-        <LI>Reorganized methods for setting multiple-scattering parameters.</LI>
+        <LI>Reorganized methods for setting parameters of <TT>G4UrbanMscModel</TT>
+            providing a possibility to change parameters between runs.</LI>
         </UL></LI>
     <LI><TT>G4UrbanMscModel</TT>:
         <UL>
@@ -398,14 +398,12 @@ please refer to the related History files provided in most packages):
             remove pointer to G4Navigator.</LI>	    
         </UL></LI>
     <LI><TT>G4UniversalFluctuation</TT>: correction of the algorithm in order to have 
-        better agreement between sampled width and data.</LI>
+        better agreement between sampled width and data - precision is few percents.</LI>
     <LI><TT>G4eBremsstrahlung</TT>: removed definition of gamma threshold from
         constructor, define this parameter at initialisation of the process
         from <TT>G4LossTableManager</TT> - allow to use UI command.</LI>
     <LI>Use <TT>fParticleChange</TT> in
         <TT>G4eeToTwoGammaModel::SampleSecondaries()</TT>.</LI>
-    <LI>Modified interface of <TT>SampleSecondary()</TT> method according to
-        changes in base class <TT>G4VEmModel</TT>.</LI>
     <LI>Removed obsolete classes <TT>G4VeEnergyLoss</TT>,
         <TT>G4VhEnergyLoss</TT>, <TT>G4GammaConversion52</TT>,
         <TT>G4PhotoElectricEffect52</TT>, <TT>G4eBremsstrahlung52</TT>,
@@ -432,7 +430,8 @@ please refer to the related History files provided in most packages):
     <LI><TT>G4VEnergyLossProcess</TT>:
         <UL>
         <LI>Added methods <TT>InitialiseStep()</TT> and
-            <TT>InitialiseMassCharge()</TT>.</LI>
+            <TT>InitialiseMassCharge()</TT> to define mass and change 
+            of ions at each step.</LI>
         <LI>Added implementation method
             <TT>AlongStepGetPhysicalInteractionLength()</TT> in order to 
 	    speedup computations.</LI>
@@ -454,11 +453,11 @@ please refer to the related History files provided in most packages):
             Using <TT>G4EmProcessOptions</TT> as an interface to all EM
             processes.</LI>
         </UL></LI>
-    <LI><TT>G4LossTableManager</TT>: removed set multiple-scattering
-        parameters and fixed deletion of <TT>G4EmCorrections</TT> in
+    <LI><TT>G4LossTableManager</TT>: removed seting of  multiple-scattering
+        parameters and fixed deletion of <TT>G4EmCorrections</TT> class in
         destructor.</LI>
     <LI><TT>G4EmProcessOptions</TT>: updated interface to multiple-scattering
-        processes, added extra methods to set parameters.</LI>
+        processes, added extra methods to set MSC parameters.</LI>
     <LI>Added class <TT>G4MscStepLimitType</TT>.</LI>
     </UL></LI>
 </UL>
