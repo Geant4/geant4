@@ -139,7 +139,7 @@ Developers for the details).
 <LI>When defining a parallel geometry for importance biasing, the parallel
     geometry now has to inherit from <TT>G4VUserParallelWorld</TT> which also
     has the <TT>GetWorld()</TT> method in order to retrieve a copy of the mass
-    geometry WorldVolume.</LI>
+    geometry world volume.</LI>
 <LI>The different parallel and mass sampler classes have been combined into
     one <TT>G4GeometrySampler</TT> class which requires the following
     instantiation, e.g.:
@@ -780,7 +780,7 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Try to limit sum of secondary photons energy while keeping
         distributions in <TT>G4NeutronHPPhotonDist</TT>.</LI>
-    <LI>Renamed variable <TT>NeutronHPCrossSections<TT> to
+    <LI>Renamed variable <TT>NeutronHPCrossSections</TT> to
         <TT>G4NEUTRONHPDATA</TT> for the path definition to the G4NDL data
         library.</LI>
     <LI>Added possibility to neglet Doppler broadening mode to boost
