@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2007-06-11 15:07:37 vnivanch Exp $
+$Id: History,v 1.33 2007-06-27 10:06:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-06-2007, G.Cosmo      phys-lists-V08-03-07
+- Updated G4DataQuestionaire to change NeutronHPCrossSections with
+  G4NEUTRONHPDATA environment variable.
+
 11-06-2007, V.Ivanchenko phys-lists-V08-03-06
 - G4EmStandardPhysics_option1 - substitute name "G4v71" by "Minimal"
 
@@ -22,7 +26,6 @@ track of all tags.
 - in QBBC.icc use consistent cross sections for elastic and inelastic
 
 01-06-2007, G.Folger     phys-lists-V08-03-04
-----------------------------------------------------------
 - active Quasielastic for FTF lists. Required changes to lists/*/HadronPhysicsFTF*, 
    and builders/*/G4FTF*Builder.* 
 - lower threshold for FTF: FTF starts at 4.0 GeV, overlaps with LEP up to 5.0 GeV   
