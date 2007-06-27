@@ -1,0 +1,12 @@
+/run/verbose 1
+/control/verbose 1
+
+/testem/det/setAbsorberMat  G4_Al
+/testem/det/setWidth        1.5 mm
+
+/testem/setFileName        HISTFILENAME
+/testem/phys/addPhysics    PHYSLIST
+
+/testem/phys/setCuts 0.7 mm
+/run/initialize
+/run/beamOn 100000

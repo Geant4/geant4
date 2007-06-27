@@ -1,0 +1,17 @@
+/run/verbose 1
+/control/verbose 1
+/tracking/verbose 0
+
+#/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  standardSS
+/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt1
+#/testem/phys/addPhysics  emstandard_opt2
+#/testem/phys/addPhysics  livermore
+#/testem/phys/addPhysics  penelope
+
+/testem/setFileName       test41.log 
+
+/testem/phys/setCuts 0.7 mm
+/run/initialize
+/run/beamOn 100000

@@ -1,7 +1,7 @@
 # test mass geometry with timed application
 /Tst33/MassGeometry
 /Tst33/Timed 1000
-
+/tracking/verbose 1
 /control/execute SamplingChange.mac
 
 
