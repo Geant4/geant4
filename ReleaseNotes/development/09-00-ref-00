@@ -195,7 +195,7 @@ particles                                        particles-V08-03-01
 - Added deletion of IsotopeTableList in G4IonTable destructor.
 - Fix in G4PDGCodeChecker::GetQuarkFlavor().
 
-physics_lists                                    phys-lists-V08-03-06
+physics_lists                                    phys-lists-V08-03-07
 -------------
 - In QBBC list, use consistent cross sections for elastic and inelastic.
 - Activated quasi-elastic for FTF lists. Lower threshold for FTF: FTF starts
@@ -209,6 +209,8 @@ physics_lists                                    phys-lists-V08-03-06
 - QGSP_BIC_HP is no longer experimental.
 - Removed definition of name of EM constructor, now name of EM constructor
   defined inside the constructor itself.
+- Updated G4DataQuestionaire to change 'NeutronHPCrossSections' with
+  'G4NEUTRONHPDATA' environment variable.
 - Incremented version number.
 
 processes/biasing                                procbiasing-V08-03-08
@@ -392,7 +394,9 @@ processes/hadronic                               hadr-V08-03-00
   o Fixed bug in low A,Z false condition in G4DiscreteGammaDeexcitation, now
     the condition is (Z<2 || A<3 || Z>98) false (so stops at Cf rather than
     >100) and includes helium (previously excluded).
-- models/lll_fission (hadr-lllfis-V08-03-06)
+- models/isotope_production (hadr-isoprod-V08-03-00)
+  o Replaced references to 'NeutronHPCrossSections' with 'G4NEUTRONHPDATA'.
+- models/lll_fission (hadr-lllfis-V08-03-07)
   o New module for Livermore LLNL spontaneous fission model.
 - models/neutron_hp (hadr-hpn-V08-03-05)
   o Try to limit sum of secondary photons energy while keeping distributions
