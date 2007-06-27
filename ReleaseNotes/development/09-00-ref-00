@@ -419,12 +419,15 @@ processes/hadronic                               hadr-V08-03-00
 - models/radioactive_decay (radioactive_decay-V08-03-00)
   o Minor fix to remove compilation warnings on Windows in G4RIsotopeTable
     and G4RadioactiveDecay.
-- util (hadr-util-V08-03-02)
+- util (hadr-util-V08-03-03)
   o Removed un-used classes G4Fuzzy, G4EffectiveCharge and G4ParticleVector.
   o Three bug fixes in G4ReactionDynamics::TwoCluster(): removed a sharp peak
     at 180 degrees by fixing a units error and fixed an error in sampling the
     momentum transfer. Fixed array bound violation which caused in some rare
     occasions an infinite loop.
+  o Removed 'DumpCoreOnHadronicException' protection around Report() in
+    G4HadronicException, temporary fix to give output for cases where the
+    G4NEUTRONHPDATA variable is not set.
 
 processes/management                             procman-V08-02-00
 --------------------
