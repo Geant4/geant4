@@ -14,6 +14,10 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+27 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-07)
+---------------------------------------------------
+- Replace NeutronHPCrossSections with G4NEUTRONHPDATA variable.
+
 1 June 2007 Dennis Wright (hadr-lllfis-V08-03-06)
 -------------------------------------------------
 - Fix un-initialized variable in G4SmpNuDistDataPu239.cc
