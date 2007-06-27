@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 June 2007 Alex Howard (hadr-util-V08-03-03)
+------------------------------------------------
+- Removed DumpCoreOnHadronicException protection around Report() in
+  G4HadronicException, temporary fix to give output for G4NEUTRONHPDATA not set
+
 12 June 2007 Dennis Wright (hadr-util-V08-03-02)
 ------------------------------------------------
 - G4ReactionDynamics::TwoCluster : fix array bound violation when backward
