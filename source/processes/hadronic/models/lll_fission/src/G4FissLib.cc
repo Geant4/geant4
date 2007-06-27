@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissLib.cc,v 1.1 2007-05-22 00:51:15 dennis Exp $
+// $Id: G4FissLib.cc,v 1.2 2007-06-27 09:57:42 gcosmo Exp $
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
@@ -65,11 +65,11 @@ G4FissLib::G4FissLib()
 {
   SetMinEnergy( 0.0 );
   SetMaxEnergy( 20.*MeV );
-  if(!getenv("NeutronHPCrossSections")) {
-     G4cout << "Please setenv NeutronHPCrossSections to point to the neutron cross-section files." << G4endl;
-     throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+  if(!getenv("G4NEUTRONHPDATA")) {
+     G4cout << "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files." << G4endl;
+     throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
   }
-  dirName = getenv("NeutronHPCrossSections");
+  dirName = getenv("G4NEUTRONHPDATA");
   G4String tString = "/Fission/";
   dirName = dirName + tString;
   numEle = G4Element::GetNumberOfElements();
