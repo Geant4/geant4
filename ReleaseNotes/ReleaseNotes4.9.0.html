@@ -195,7 +195,15 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
 <UL>
   <LI>Isotope production counting flag is now set to OFF by default.
       If desired, user code must switch it on using the method 
-      <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.</LI>
+      <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.
+      Isotope production models allow users to specify their own 
+      isotope production mechanism and data set, or use G4NDL to get 
+      the production cross sections.   If no model is specified,
+      the largest final state nuclear fragment becomes the produced 
+      isotope.  If enabled, isotope production will occur for any 
+      hadronic model.  Only users who have specifically assigned an 
+      isotope production model in their physics lists will be affected
+      by tghe above change.</LI>
   <LI>The old variable <TT>NeutronHPCrossSections</TT> defining the path where
       to load the G4NDL data set has been renamed to <TT>G4NEUTRONHPDATA</TT>,
       so that this variable shares the G4 prefix used for other environment
