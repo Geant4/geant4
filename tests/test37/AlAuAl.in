@@ -9,7 +9,9 @@
 /testem/det/setThick3 1247.35458 um
 /testem/det/setNbOfLayers3 70 
 
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  PHYSLIST
+
+#/testem/phys/addPhysics  standard
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2

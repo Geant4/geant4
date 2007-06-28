@@ -106,8 +106,20 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForPositron(cut);
     } 
 
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
+  if( command == pListCmd ) {
+    G4String name = newValue;
+    if(name == "PHYSLIST") {
+      char* path = getenv(name);
+      if (path) name = G4String(path);
+      else {
+        G4cout << "### PhysicsListMessenger WARNING: "
+               << " environment variable PHYSLIST is not defined"
+               << G4endl;
+        return;
+      }
+    }
+    pPhysicsList->AddPhysicsList(name);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
