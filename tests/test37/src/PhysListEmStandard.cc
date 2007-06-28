@@ -37,6 +37,8 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4EmProcessOptions.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
@@ -81,6 +83,9 @@ void PhysListEmStandard::ConstructProcess()
             
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 100*um);
+  opt.SetSkin(2.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
