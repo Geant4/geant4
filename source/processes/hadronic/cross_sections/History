@@ -14,8 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 June 2007 Dennis Wright (hadr-cross-V09-00-00)
+-------------------------------------------------
+- V. Grichine changed log to std::log in G4HadronNucleonXsc.cc and
+    G4GlauberGribovCrossSection.cc
+- D. Wright added log(0) protection in G4NeutronInelasticCrossSection.cc
+    and G4ProtonInelasticCrossSection.cc
+
 15 June 2007 Gabriele Cosmo (hadr-cross-V08-03-04)
----------------------------
+--------------------------------------------------
 - Fixed memory leak in classes G4ElectroNuclearCrossSection and
   G4PhotoNuclearCrossSection.
 
