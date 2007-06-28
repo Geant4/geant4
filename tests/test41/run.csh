@@ -14,7 +14,7 @@ setenv PHYSLIST    standard
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    standard_opt1
+setenv PHYSLIST    emstandard_opt1
 set    phys = "opt1"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
