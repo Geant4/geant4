@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.109 2007-06-26 13:09:03 gcosmo Exp $
+# $Id: architecture.gmk,v 1.110 2007-06-28 14:16:55 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -51,7 +51,7 @@ ifndef G4TMP
   G4TMP := $(G4WORKDIR)/tmp
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMP) ] && mkdir -p $(G4TMP) )
-	
+
 # If not specified, the default path for G4 libraries G4LIB is
 # set to $G4INSTALL/lib/$G4SYSTEM ...
 #
@@ -298,8 +298,7 @@ ifdef OGLFLAGS
   OGLFLAGS:= $(filter-out -I/usr/include,$(OGLFLAGS))
   OGLFLAGS:= $(filter-out -I/usr//include,$(OGLFLAGS))
 endif
-	
-	
+
 # If there is no cbrt() function...
 #
 ifdef G4_NO_CBRT

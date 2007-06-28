@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.122 2007-06-22 15:32:10 gcosmo Exp $
+# $Id: binmake.gmk,v 1.123 2007-06-28 14:16:55 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -60,8 +60,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/hadrons/ions/include \
               -I$(G4BASE)/particles/hadrons/mesons/include \
               -I$(G4BASE)/particles/shortlived/include \
-	      -I$(G4BASE)/physics_lists/lists/include \
-	      -I$(G4BASE)/physics_lists/builders/include \
+              -I$(G4BASE)/physics_lists/lists/include \
+              -I$(G4BASE)/physics_lists/builders/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
               -I$(G4BASE)/processes/biasing/include \
@@ -78,19 +78,19 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/highenergy/include \
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	      -I$(G4BASE)/processes/hadronic/management/include \
-	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
+              -I$(G4BASE)/processes/hadronic/management/include \
+              -I$(G4BASE)/processes/hadronic/models/abrasion/include \
               -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
-	      -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-	      -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
-	      -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
+              -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+              -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
-	      -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
-	      -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
@@ -215,7 +215,7 @@ ifdef GLOBALLIBS
              -lG4run \
              -lG4event \
              -lG4tracking \
-	     -lG4parmodels \
+             -lG4parmodels \
              -lG4processes \
              -lG4digits_hits \
              -lG4track \
@@ -231,19 +231,19 @@ else
   ifeq ($(G4INCLUDE_EXEC),1)
     LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
-	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
-	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
-	$(G4LIB)/$(G4SYSTEM)/liblist \
-	  -m $(G4LIB)/$(G4SYSTEM) \
-	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+        if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+          -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+        $(G4LIB)/$(G4SYSTEM)/liblist \
+          -m $(G4LIB)/$(G4SYSTEM) \
+          < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
   else
     LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
-	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
-	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
-	$(G4LIB)/$(G4SYSTEM)/liblist \
-	  -d $(G4TMPDIR) \
-	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+        if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+          -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+        $(G4LIB)/$(G4SYSTEM)/liblist \
+          -d $(G4TMPDIR) \
+          < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
 # Warning: do not add to LDLIBS2 with += because this causes it to be
 # expanded too soon.  Hence extra libraries must have a different name...
 # Extra libraries to resolve remaining circular dependencies...
@@ -291,10 +291,10 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     ifdef G4LIB_USE_DLL
         LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP3)) $(patsubst -l%,lib%.lib,$(WIN32TMP4))
     else
-	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.lib,$(WIN32TMP2))
+        LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.lib,$(WIN32TMP2))
     endif
   else
-  	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
+    LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
 else
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
@@ -304,7 +304,7 @@ ifdef transform-RPath
 # Invoke system specific transformation of 
 include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
-	
+
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.$(TARGOBJEXT),$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
