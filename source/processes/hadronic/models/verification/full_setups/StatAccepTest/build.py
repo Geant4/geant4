@@ -224,6 +224,21 @@ setupFile = open( "setup.sh", "w" )
 
 ###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun07 \n" )   #***LOOKHERE***
 
+# In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
+# is not defined. Its equivalent is:  $OSG_APP/geant4 .
+setupFile.write( "if [ -d $VO_GEANT4_SW_DIR/dirInstallations ] ; then \n" )
+setupFile.write( "  echo VO_GEANT4_SW_DIR=$VO_GEANT4_SW_DIR \n" )
+setupFile.write( "else \n")
+setupFile.write( "  if [ -d $OSG_APP/geant4 ] ; then \n" )
+setupFile.write( "    echo OSG_APP=$OSG_APP \n" )
+setupFile.write( "    echo set VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
+setupFile.write( "    export VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
+setupFile.write( "  else \n")
+setupFile.write( "    echo ***ERROR*** : VO_GEANT4_SW_DIR and OSG_APP are undefined or unaccessible! \n" )
+setupFile.write( "    exit 1 \n")
+setupFile.write( "  fi \n")
+setupFile.write( "fi \n")
+
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
 setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
