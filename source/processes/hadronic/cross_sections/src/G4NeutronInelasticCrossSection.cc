@@ -63,7 +63,8 @@ GetCrossSection(const G4DynamicParticle* aPart,
 G4double G4NeutronInelasticCrossSection::
 GetCrossSection(G4double anEnergy, G4double atomicNumber, G4double nOfProtons)
 {
-  G4double kineticEnergy = std::log10(anEnergy/MeV);
+  G4double kineticEnergy = std::log10(DBL_MIN/MeV);
+  if (anEnergy > DBL_MIN/MeV) kineticEnergy = std::log10(anEnergy/MeV);
   G4double nOfNeutrons = atomicNumber-nOfProtons;
   const G4double p1=1.3773;
   const G4double p2=1.+10./atomicNumber-0.0006*atomicNumber;
