@@ -129,67 +129,58 @@ Advanced applications making use of such constants in the code are required
 to retrieve the values for Cartesian, Angular and Radial tolerances through
 the class <TT>G4GeometryTolerance</TT>, a new class providing the methods,
 respectively: <TT>GetSurfaceTolerance()</TT>, <TT>GetRadialTolerance()</TT>
-and <TT>GetAngularTolerance()</TT> (see the User's Guide for Application
-Developers for the details).
+and <TT>GetAngularTolerance().</TT> Applications with setups of diameters can now adjust these values, and must do so before creating any part of the geometry description. Please see the User's Guide for Application
+Developers for the details.
 
 <P> </P>
 <B>Biasing & Scoring</B>
 <P> </P>
 <UL>
 <LI>When defining a parallel geometry for importance biasing, the parallel
-    geometry now has to inherit from <TT>G4VUserParallelWorld</TT> which also
-    has the <TT>GetWorld()</TT> method in order to retrieve a copy of the mass
-    geometry world volume.</LI>
+    geometry now must inherit from <TT>G4VUserParallelWorld</TT>. This 
+    has a <TT>GetWorld()</TT> method which creates a (named) copy of the mass
+    geometry world volume and later retrieves it.</LI>
 <LI>The different parallel and mass sampler classes have been combined into
     one <TT>G4GeometrySampler</TT> class which requires the following
     instantiation, e.g.:
     <UL>
     <LI><TT>mgs(detector->GetWorldVolume(),"neutron");</TT></LI>
-    </UL></LI>
-    with an additional set method for whether or not the sampler is a
-    parallel geometry: <TT>mgs.SetParallel(false);</TT></LI>
-<LI>The parallel navigation is now automatically taken care of via
+    </UL> </LI>
+    An additional set method defines whether or not the sampler is in a
+    parallel geometry: <TT>mgs.SetParallel(false);</TT>    </LI>
+  <LI>When a parallel world is created, then parallel navigation must be activated. An applicaiton with physics list  that uses the <TT>AddTransportation</TT> method will automatically use
     <TT>G4CoupledTransportation</TT> which is picked up by the creation of
     the parallel world copy.</LI>
-<LI>The scoring can now only be implemented through the Primitive Scorer
-    classes.  The same functionality (apart from <TT>G4ScoreTable</TT>) should
-    be present, but scorers are now attached to logical volumes. This requires
+<LI>Scoring can only be implemented through the Primitive Scorer
+    classes.  Users utilising the older Scoring Classes will need to migrate to using Primitive Scorers. The same functionality is provided apart from G4ScoreTable, but scorers are now attached to logical volumes (in place of geometry cells).. This requires
     explicit copy numbers to be utilised for the same logical volume and the
     <TT>GeometryCell</TT> methods should be accessed through the physical
     volume <B>and</B> replica number method.</LI>
-<LI><TT>examples/extended/biasing/B01</TT> and <TT>B02</TT> demonstrate
-    the new implementation of both scoring and biasing.</LI>
+<LI>A demonstration of the new biasing and scoring is available in <TT>examples/extended/biasing/B01</TT> and <TT>B02</TT>.</LI>
 </UL>
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 
-Old implementations of physics processes from release 5.2 have been removed 
-(see below detailed list of changings).
-The interfaces <TT>G4VEmModel</TT>, <TT>G4VEnergyLossProcess</TT>,
-<TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were slightly modified
-in order to speed up computations. All classes inheriting these interfaces need
-to be modified accordingly (see detailed list of changes).<BR>
-The structure of UI commands has been changed: a new directory
-<TT>/process/msc</TT> is added and all commands for multiple scattering moved
-to this path. The interface to <TT>G4EmProcessOptions</TT> is also modified to
-be consistent with the changes in the UI interface. As a result of this
-modification, the possibility to change parameters between runs is extended
-for all parameters which are defined via UI.<BR>
-An enumerator of multiple-scattering step limitation algorithms has been
-introduced. The step limitation types are:
-<UL>
-<LI><TT>Minimal</TT> - equivalent to the algorithm implemented in release 7.1</LI>
-<LI><TT>UseSafety</TT> - the default, making use of the geometrical safety</LI> 
-<LI><TT>UseDistanceToBoundary</TT> - the most advanced, recommended for the
+ <p>A few methods of the  interface classes <TT>G4VEmModel</TT>, <TT>G4VEnergyLossProcess</TT>,
+   <TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were  revised, 
+in order to reduce memory allocations. All classes inheriting these interfaces were modified accordingly (see detailed list of changes). Advanced users with derived classes must make similar changes. </p>
+ <p>Old implementations of physics processes, of configurations frozen in release 5.2, have been removed 
+   (see below detailed list of changings).</p>
+ <p>The structure of UI commands was changed: a new directory <TT>/process/msc</TT> contains all commands for multiple scattering. The interface to <TT>G4EmProcessOptions</TT> is  modified to
+   be consistent with this change. As a result, the possibility to change the values of parameters between runs is now extended
+   to all parameters which can be  defined via the UI.<BR>
+   An enumerator of step limitation algorithms of the multiple-scattering process has been introduced. It replaces a boolean value . The step limitation types are: </p>
+ <UL>
+<LI><TT>Minimal</TT> - equivalent to the original algorithm, as implemented in Geant4 7.1 and earlier releases.</LI>
+<LI><TT>UseSafety</TT> - the current default, which makes use of the geometrical safety</LI> 
+<LI><TT>UseDistanceToBoundary</TT> - the most advanced, recommended for accuracy in the
     cases where no magnetic field is set.</LI>
 </UL>
-New UI commands are added: <TT>/process/msc/Skin</TT>,
-<TT>/process/msc/RangeFactor</TT>, <TT>/process/msc/GeomFactor</TT>,
-<TT>/process/msc/StepLimit</TT> and <TT>/process/msc/LateralDisplacement</TT>.
-
-<P> </P>
+ <p>As in releases 8.0 to 8.2, the minimal option (which used to be called 'no step limitation') results in fewer steps, and typically provides less stability than the other options. </p>
+ <p>New UI commands are added: <TT>/process/msc/Skin</TT>, <TT>/process/msc/RangeFactor</TT>, <TT>/process/msc/GeomFactor</TT>, <TT>/process/msc/StepLimit</TT> and <TT>/process/msc/LateralDisplacement</TT>. </p>
+ <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
