@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 21-Jun-2006
+# Last update: 28-Jun-2007
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -61,29 +61,43 @@ import string
 #***LOOKHERE*** Select the expected cases, to get at the end the
 #               list of missing cases (i.e. jobs that are either
 #               running or that never get back).
+
+#               It is convenient to use a restricted subset of jobs
+#               ( 7 x 7 x  5 =  245 jobs instead of the full
+#                 7 x 8 x 23 = 1288 jobs , per Physics List)
+#               selecting the following beam particles and energies:
+#                  1) all particles but k0L ; 1 , 9 , 20 , 50 , 200 GeV
+#                     (without magnetic field: BFIELD = "0" in mainScript.py);
+#                  2) all particles but e-  ; 5 , 30 , 80 , 150 , 300 GeV
+#                     (with magnetic field: BFIELD = "4tesla" in mainScript.py).
+#               Usually : 1) is used for all the candidates;
+#                         2) is used only for the last, final candidate.
+
 listPhysicsLists = ( \
                      'LHEP',
-                     'QGSP',
-                     'QGSC',
-                     'QGSP_BIC',
-                     'QGSP_BERT',
+###                     'QGSP',
+###                     'QGSP_EMV',
+###                     'FTFP',
+###                     'QGSC',
+###                     'FTFC',
+###                     'QGSP_BIC',
+###                     'QGSP_BERT',
                      )
 
 listCalorimeters = ( 'FeSci', 'CuSci', 'CuLAr', 'WLAr', 'PbSci', 'PbLAr', 'PbWO4' )
 
-listBeamParticles = ( 'e-', 'pi+', 'pi-', 'k+', 'k-', 'p', 'n',
-#
-###                      'k0L',      # Selected only for the full production
-#
+listBeamParticles = ( \
+                      'e-',
+                      'pi+', 'pi-', 'k+', 'k-', 'p', 'n',
+#                      'k0L',
                       )
                       
-listBeamEnergies = ( '1GeV', '9GeV', '20GeV', '50GeV', '200GeV',                     
-#
-###                     '2GeV', '3GeV', '4GeV', '5GeV', '6GeV', '7GeV', '8GeV',
-###                     '10GeV', '30GeV', '60GeV', '80GeV',
-###                     '100GeV', '120GeV', '150GeV', '180GeV',
-###                     '250GeV', '300GeV'
-#
+listBeamEnergies = ( \
+                     '1GeV', '9GeV', '20GeV', '50GeV', '200GeV',             
+#                     '5GeV', '30GeV', '80GeV', '150GeV', '300GeV',
+###                  '2GeV', '3GeV', '4GeV',     '6GeV', '7GeV', '8GeV',
+###                          '10GeV',         '60GeV',
+###                  '100GeV', '120GeV',      '180GeV', '250GeV'
                      )
 
 # The following dictionaries keep track, calorimeter by calorimeter,
