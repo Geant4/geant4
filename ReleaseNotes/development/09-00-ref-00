@@ -27,7 +27,7 @@ Some of the development/fixes included since the last development tags are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V08-03-03
+config                                           config-V08-03-04
 ------
 - Added modules "biasing", "error_propagation" and "lll_fission" to
   binmake.gmk.
@@ -35,6 +35,8 @@ config                                           config-V08-03-03
 - Updated Configure script to detect new data sets (Configure-V08-03-00)
   and to remove search for old physics_list module in installation of
   libraries.
+- Updated Configure scripts to fix installation issue when installation
+  path is different from source path and headers are not installed.
 
 digits_hits                                      digits_hits-V08-03-04
 -----------
