@@ -148,11 +148,11 @@ Developers for the details.
     </UL> </LI>
     An additional set method defines whether or not the sampler is in a
     parallel geometry: <TT>mgs.SetParallel(false);</TT>    </LI>
-  <LI>When a parallel world is created, then parallel navigation must be activated. An applicaiton with physics list  that uses the <TT>AddTransportation</TT> method will automatically use
+  <LI>When a parallel world is created, then parallel navigation must be activated. An application with physics list  that uses the <TT>AddTransportation</TT> method will automatically use
     <TT>G4CoupledTransportation</TT> which is picked up by the creation of
     the parallel world copy.</LI>
-<LI>Scoring can only be implemented through the Primitive Scorer
-    classes.  Users utilising the older Scoring Classes will need to migrate to using Primitive Scorers. The same functionality is provided apart from G4ScoreTable, but scorers are now attached to logical volumes (in place of geometry cells).. This requires
+  <LI>All scoring can  be implemented only through the Primitive Scorer
+    classes.  Users utilising the older scoring classes will need to migrate to using Primitive Scorers. The same functionality is provided apart from G4ScoreTable, but scorers are now attached to logical volumes (in place of geometry cells).. This requires
     explicit copy numbers to be utilised for the same logical volume and the
     <TT>GeometryCell</TT> methods should be accessed through the physical
     volume <B>and</B> replica number method.</LI>
@@ -167,7 +167,7 @@ Developers for the details.
    <TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were  revised, 
 in order to reduce memory allocations. All classes inheriting these interfaces were modified accordingly (see detailed list of changes). Advanced users with derived classes must make similar changes. </p>
  <p>Old implementations of physics processes, of configurations frozen in release 5.2, have been removed 
-   (see below detailed list of changings).</p>
+   (see below detailed list of changes).</p>
  <p>The structure of UI commands was changed: a new directory <TT>/process/msc</TT> contains all commands for multiple scattering. The interface to <TT>G4EmProcessOptions</TT> is  modified to
    be consistent with this change. As a result, the possibility to change the values of parameters between runs is now extended
    to all parameters which can be  defined via the UI.<BR>
@@ -199,33 +199,17 @@ in order to reduce memory allocations. All classes inheriting these interfaces w
       to load the G4NDL data set has been renamed to <TT>G4NEUTRONHPDATA</TT>,
       so that this variable shares the G4 prefix used for other environment
       variables; therefore the user environment must be changed accordingly.</LI>
-  <LI>When using high precision neutron code, user may now choose to force the 
-      use of Photon Evaporation model instead of using the neutron capture
-      final state data. The environment variable
-      <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT> must be
-      set to do this. If the final state data didn't exist in the G4NDL data
-      library previously, then there is no change. </LI>
-  <LI>User can now force high precison neutron code to use only exact isotope 
-      data files instead of allowing nearby isotope files to be used. If the 
-      exact file is not available, the cross section will be set to zero and a 
-      warning message will be printed. To enable this, set the environment 
-      variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</LI>
-  <LI>User can now switch off Doppler broadening due to the thermal motion of
-      the target nucleus and the fact that the G4NDL data are zero temperature.
-      The environment variable <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT> is required
-      to be set. This only neglects the Doppler broadening in the cross section
-      calculation whilst the thermal motion of the nucleus is still taken into
-      account in the Final State Generator. This will however still give a CPU
-      performance advantage, although changing the output (for very low energy
-      neutrons).</LI>
+
 </UL>
 
 <P> </P>
 <B>Physics Lists</B>
 <P> </P>
-Removed physics lists LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP
-and LHEP_PRECO, and  lists using Mars leading particle classes, 
-i.e. lists with a name containing _LEAD_.
+<p>Removed physics lists LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP
+  and LHEP_PRECO, which were marked obsolete in release 8.2.  Users are encouraged to evaluate  QGSP_BIC as a replacement of LHEP_PRECO and LHEP_BIC.  The list LHEP_BIC_HP is replaced by QGSP_BIC_HP. In place of 
+  the remainding lists (LHEP_HP, QGSP_HP) we suggest to evaluate QGSP_BERT_HP and QGSP_BIC_HP.   </p>
+<p>Also removed physics lists using the  Mars13 leading particle classes, 
+i.e. lists with a name containing _LEAD_.</p>
 <P>
 The components for electro-magnetic physics have been renamed and three
 variants are now available:
@@ -242,11 +226,11 @@ variants are now available:
 <B>Data Sets</B>
 <P> </P>
 
-This release introduced three new versions of data sets:
+This release introduced three new versions of the following data sets. Please see the last section for the corresponding details.
 <UL>
 <LI>New data for neutron cross-sections, G4NDL.3.11.</LI>
 <LI>New low-energy data set, G4EMLOW.4.3.</LI>
-<LI>New data set for radioactive-decay, G4RadioactiveDecay.3.2.</LI>
+<LI>Fix in revised data set for radioactive-decay, G4RadioactiveDecay.3.2.</LI>
 </UL>
 
 <P> </P>
@@ -255,16 +239,52 @@ This release introduced three new versions of data sets:
 
 <!-- ============================================== -->
 
-<H2>4. Expected effects on physics and performance</H2>
+<H2>4. New Developments</H2>
+
+<B>Error Propagation</B>
+<UL>
+   <LI>The first implementation of error progration for tracks is provided.
+       This capability is new to Geant4, and is a new implementation of GEANE 
+	   capabilities.  Users are invited to provide feedback.
+   </LI>
+</UL>
+<B>Hadronics: Neutrons</B>
+<UL>
+  <LI>When using the high precision neutron module, a user may now choose to force the 
+      use of the Photon Evaporation model, instead of the neutron capture
+      final state data. The environment variable
+      <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT> must be
+      set to do this.  For cases in which the final state data does not exist 
+	  in the G4NDL data library, this model was already used and thus 
+	  there is no change. </LI>
+  <LI>A user can force high precison neutron code to use only exact isotope 
+      data files, instead of allowing nearby isotope files to be used. In this case if the 
+      exact file is not available, the cross section will be set to zero and a 
+      warning message will be printed. To enable this, set the environment 
+      variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</LI>
+  <LI>A user can switch off the Doppler broadening due to the thermal motion of
+      the target nucleus.  The broadening is used to correct the G4NDL data, which are at 
+	  zero temperature.  This must be done only for appropriate applications. 
+      To switch it broadening off, the environment variable <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT> 
+	  must be set. Then the Doppler broadening in the cross section
+      calculation is neglected. However, the thermal motion of the nucleus is still taken into
+      account in the Final State Generator. This option provides a significant CPU performance 
+	  advantage. It is not suitable, though, for simulation in which low energy (thermal) 
+	  neutrons are important, as related observables are affected.</LI>
+</UL>
+
+<!-- ============================================== -->
+
+<H2>5. Expected effects on physics and performance</H2>
 
 <B>Standard Electromagnetic physics</B>
 <UL>
   <LI>Results for calorimetry are expected to be unchanged within 0.5%.
       The width of energy deposition in thin layers (vertex detectors) should
-      be more close to data - current accuracy is few percent. 
-      About 10% speedup of simulation of EM showers 
-      is expected for default physics lists (QGSP) and about 5% for more fast 
-      optional physics lists (QGSP_EMV).</LI>
+      be more close to data - current accuracy is few percent.      </LI>
+  <LI>In simple setups a speedup of simulation of EM showers of about 10% 
+    is observed for the 'default' EM physics configuration (used in most lists, including QGSP) and about 5% for the faster 
+    'optional' physics configuration (used in 'EMV' lists, such as QGSP_EMV).</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -288,7 +308,7 @@ This release introduced three new versions of data sets:
 
 <!-- ============================================== -->
 
-<H2>5. Known Run-Time Problems and Limitations</H2>
+<H2>6. Known Run-Time Problems and Limitations</H2>
 
 For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
@@ -302,7 +322,7 @@ System</A>.
 
 <!-- ============================================== -->
 
-<H2>6. Compilation Warnings</H2>
+<H2>7. Compilation Warnings</H2>
 
 There may be compilation warnings on some platforms.  We do not believe
 that any will lead to incorrect run-time behaviour.
@@ -314,7 +334,7 @@ that any will lead to incorrect run-time behaviour.
 
 <!-- ============================================== -->
 
-<H2>7. Known Run-Time Warnings</H2>
+<H2>8. Known Run-Time Warnings</H2>
 
 The following message can be written to error output while tracking.
 We believe it does not give rise to incorrect behaviour.
@@ -332,7 +352,7 @@ We believe it does not give rise to incorrect behaviour.
 
 <!-- ============================================== -->
 
-<H2>8. Geant4 Software License</H2>
+<H2>9. Geant4 Software License</H2>
 
 A Software License applies to the Geant4 code.
 The details and the list of copyright holders is available at
@@ -345,7 +365,7 @@ and also in a text file <TT>LICENSE</TT> distributed with the source code.
 
 <!-- ============================================== -->
 
-<H2>9. Detailed list of changes and fixes</H2>
+<H2>10. Detailed list of changes and fixes</H2>
 
 These are the main new features/fixes included in this release since the
 last patched public release (for the detailed list of fixes/additions,
