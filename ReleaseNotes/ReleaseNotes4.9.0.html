@@ -379,7 +379,7 @@ default value is 250 MeV.
 <H2>9. Geant4 Software License</H2>
 
 A Software License applies to the Geant4 code.
-The details and the list of copyright holders is available at
+Users must accept this license in order to use it. The details and the list of copyright holders is available at
 <A href="http://cern.ch/geant4/license">http://cern.ch/geant4/license</A>
 and also in the text file <TT>LICENSE</TT> distributed with the source code.
 
@@ -392,8 +392,8 @@ and also in the text file <TT>LICENSE</TT> distributed with the source code.
 <H2>10. Detailed list of changes and fixes</H2>
 
 These are the main new features/fixes included in this release since the
-last patched public release (for the detailed list of fixes/additions,
-please refer to the related History files provided in most packages):
+last patched public release (for more detailed lists of fixes/additions,
+please refer to the corresponding History files provided in most packages):
 
 <P> </P>
 
@@ -421,7 +421,7 @@ please refer to the related History files provided in most packages):
 <H3><I>Electromagnetic Processes</I></H3></A>
 <UL>
 <LI>In all processes inheriting from <TT>G4VEnergyLossProcess</TT> or
-    <TT>G4VEmProcess</TT>, removed method <TT>SecondaryPostStep()</TT>.</LI>
+    <TT>G4VEmProcess</TT>, removed the method <TT>SecondaryPostStep()</TT>.</LI>
 <LI>Modified interface of <TT>SampleSecondary()</TT> method in all models
     inheriting from <TT>G4VEmModel</TT> base class.</LI>
 <LI><B>High Energy</B>
@@ -431,9 +431,9 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
-    <LI>Archived obsolete class <TT>G4LowEnergyBraggModel</TT>.</LI>
-    <LI>Updated license information in <TT>G4DNACrossSectionDataSet</TT>.</LI>
-    </UL></LI>
+    <LI>Removed obsolete class <TT>G4LowEnergyBraggModel</TT>.</LI>
+    </UL>
+</LI>
 <LI><B>Muons</B>
     <UL>
     <LI><TT>G4EnergyLossForExtrapolator</TT>: added <TT>Set</TT> methods for
