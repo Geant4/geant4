@@ -168,9 +168,7 @@ Developers for the details.
 in order to reduce memory allocations. All classes inheriting these interfaces were modified accordingly (see detailed list of changes). Advanced users with derived classes must make similar changes. </p>
  <p>Old implementations of physics processes, of configurations frozen in release 5.2, have been removed 
    (see below detailed list of changes).</p>
- <p>The structure of UI commands was changed: a new directory <TT>/process/msc</TT> contains all commands for multiple scattering. The interface to <TT>G4EmProcessOptions</TT> is  modified to
-   be consistent with this change. As a result, the possibility to change the values of parameters between runs is now extended
-   to all parameters which can be  defined via the UI.<BR>
+
    An enumerator of step limitation algorithms of the multiple-scattering process has been introduced. It replaces a boolean value . The step limitation types are: </p>
  <UL>
 <LI><TT>Minimal</TT> - equivalent to the original algorithm, as implemented in Geant4 7.1 and earlier releases.</LI>
@@ -179,7 +177,7 @@ in order to reduce memory allocations. All classes inheriting these interfaces w
     cases where no magnetic field is set.</LI>
 </UL>
  <p>As in releases 8.0 to 8.2, the minimal option (which used to be called 'no step limitation') results in fewer steps, and typically provides less stability than the other options. </p>
- <p>New UI commands are added: <TT>/process/msc/Skin</TT>, <TT>/process/msc/RangeFactor</TT>, <TT>/process/msc/GeomFactor</TT>, <TT>/process/msc/StepLimit</TT> and <TT>/process/msc/LateralDisplacement</TT>. </p>
+ <p>&nbsp;</p>
  <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
@@ -239,7 +237,7 @@ This release introduced three new versions of the following data sets. Please se
 
 <!-- ============================================== -->
 
-<H2>4. New Developments</H2>
+<H2>4. New Developments and Capabilities </H2>
 
 <B>Error Propagation</B>
 <UL>
@@ -247,6 +245,23 @@ This release introduced three new versions of the following data sets. Please se
        This capability is new to Geant4, and is a new implementation of GEANE 
 	   capabilities.  Users are invited to provide feedback.
    </LI>
+</UL>
+	   
+<B>Standard Electromagnetic physics</B>
+<UL>
+  <LI>The structure of UI commands was changed: a new directory <TT>/process/msc</TT> contains all commands for multiple scattering. New UI commands are added to control the parameters of the Multiple Scattering process: 
+   <UL> 
+      <LI><TT>/process/msc/Skin</TT>, </LI> 
+      <LI><TT>/process/msc/RangeFactor</TT>,</LI> 
+	  <LI><TT>/process/msc/GeomFactor</TT>,</LI>
+	  <LI><TT>/process/msc/StepLimit</TT>, and </LI>
+      <LI><TT>/process/msc/LateralDisplacement</TT>.</LI>
+   </UL>
+   </LI>
+
+  <LI>The interface to G4EmProcessOptions is modified to be consistent with this change. </LI>
+  <LI>As a result, the possibility to change the values of parameters between runs is now extended to all parameters which can be defined via the UI.</LI>
+   </UL>
 </UL>
 <B>Hadronics: Neutrons</B>
 <UL>
@@ -273,6 +288,9 @@ This release introduced three new versions of the following data sets. Please se
 	  neutrons are important, as related observables are affected.</LI>
 </UL>
 
+<P> </P>
+<A NAME="5."></A>
+<HR>
 <!-- ============================================== -->
 
 <H2>5. Expected effects on physics and performance</H2>
@@ -303,7 +321,7 @@ This release introduced three new versions of the following data sets. Please se
 </UL>  
 
 <P> </P>
-<A NAME="5."></A>
+<A NAME="6."></A>
 <HR>
 
 <!-- ============================================== -->
@@ -317,37 +335,43 @@ System</A>.
 
 
 <P> </P>
-<A NAME="6."></A>
+<A NAME="7."></A>
 <HR>
 
 <!-- ============================================== -->
 
 <H2>7. Compilation Warnings</H2>
 
-There may be compilation warnings on some platforms.  We do not believe
-that any will lead to incorrect run-time behaviour.
-
+There are compilation warnings on some tested platforms.  We do not believe
+that any of these lead to incorrect run-time behaviour.
 
 <P> </P>
-<A NAME="7."></A>
+<A NAME="8."></A>
 <HR>
 
 <!-- ============================================== -->
 
 <H2>8. Known Run-Time Warnings</H2>
 
-The following message can be written to error output while tracking.
-We believe it does not give rise to incorrect behaviour.
+The following message can be written to standard output at the end of a program:
 <PRE>
-    G4PropagateInField: Warning: Particle is looping 
-    -  tracking in field will be stopped. 
-       It has performed 1000 steps in Field while a maximum of 1000
-       are allowed. 
+    G4Transportation: Statistics for looping particles 
+       Sum of energy of loopers killed: 
+       Max energy of loopers killed: 
 </PRE>
-
+It provides the total energy (in MeV) of tracks  killed due to excessive number of 
+steps ('looping') during the simulation, and the maximum energy of such a track.
+Such behaviour can be due to looping in magnetic fields or encountering problems 
+at geometrical boundaries.
+<p>
+In case either of these reported energy is significant, we recommend to increase 
+the verbosity of <TT>G4Transportation</TT> to obtain information for each 
+track killed.  A user can change the threshold energy above which particles are not killed ]
+using the method <TT>SetThresholdImportantEnergy</TT> of G4Transportation. The 
+default value is 250 MeV.
 
 <P> </P>
-<A NAME="8."></A>
+<A NAME="9."></A>
 <HR>
 
 <!-- ============================================== -->
@@ -357,10 +381,10 @@ We believe it does not give rise to incorrect behaviour.
 A Software License applies to the Geant4 code.
 The details and the list of copyright holders is available at
 <A href="http://cern.ch/geant4/license">http://cern.ch/geant4/license</A>
-and also in a text file <TT>LICENSE</TT> distributed with the source code.
+and also in the text file <TT>LICENSE</TT> distributed with the source code.
 
 <P> </P>
-<A NAME="9."></A>
+<A NAME="10."></A>
 <HR>
 
 <!-- ============================================== -->
