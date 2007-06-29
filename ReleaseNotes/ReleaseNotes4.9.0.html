@@ -39,12 +39,13 @@ User Documentation</A> for further information about using Geant4.
 <LI><A HREF="#1.">Supported and Tested Platforms</A></LI>
 <LI><A HREF="#2.">CLHEP and AIDA</A></LI>
 <LI><A HREF="#3.">Items for migration of the user code</A></LI>
-<LI><A HREF="#4.">Expected effects on physics and performance</A></LI>
-<LI><A HREF="#5.">Known Run-Time Problems</A></LI>
-<LI><A HREF="#6.">Compilation Warnings</A></LI>
-<LI><A HREF="#7.">Known Run-Time Warnings</A></LI>
-<LI><A HREF="#8.">Geant4 Software License</A></LI>
-<LI><A HREF="#9.">Detailed list of changes and fixes</A></LI>
+<LI><A HREF="#4.">New Developments and Capabilities</A></LI>
+<LI><A HREF="#5.">Expected effects on physics and performance</A></LI>
+<LI><A HREF="#6.">Known Run-Time Problems and Limitations</A></LI>
+<LI><A HREF="#7.">Compilation Warnings</A></LI>
+<LI><A HREF="#8.">Known Run-Time Warnings</A></LI>
+<LI><A HREF="#9.">Geant4 Software License</A></LI>
+<LI><A HREF="#10.">Detailed list of changes and fixes</A></LI>
 </OL>
 
 <P> </P>
@@ -129,7 +130,10 @@ Advanced applications making use of such constants in the code are required
 to retrieve the values for Cartesian, Angular and Radial tolerances through
 the class <TT>G4GeometryTolerance</TT>, a new class providing the methods,
 respectively: <TT>GetSurfaceTolerance()</TT>, <TT>GetRadialTolerance()</TT>
-and <TT>GetAngularTolerance().</TT> Applications with setups of diameters can now adjust these values, and must do so before creating any part of the geometry description. Please see the User's Guide for Application
+and <TT>GetAngularTolerance()</TT>. Applications with setups of unusual
+dimensions (e.g. smaller than <TT>1 mm</TT> or larger than <TT>1 km</TT>)
+can now adjust these values, and must do so before creating any part of
+the geometry description. Please see the User's Guide for Application
 Developers for the details.
 
 <P> </P>
@@ -143,9 +147,7 @@ Developers for the details.
 <LI>The different parallel and mass sampler classes have been combined into
     one <TT>G4GeometrySampler</TT> class which requires the following
     instantiation, e.g.:
-    <UL>
-    <LI><TT>mgs(detector->GetWorldVolume(),"neutron");</TT></LI>
-    </UL> </LI>
+    <TT>mgs(detector->GetWorldVolume(),"neutron");</TT><BR>
     An additional set method defines whether or not the sampler is in a
     parallel geometry: <TT>mgs.SetParallel(false);</TT>    </LI>
   <LI>When a parallel world is created, then parallel navigation must be activated. An application with physics list  that uses the <TT>AddTransportation</TT> method will automatically use
@@ -156,29 +158,39 @@ Developers for the details.
     explicit copy numbers to be utilised for the same logical volume and the
     <TT>GeometryCell</TT> methods should be accessed through the physical
     volume <B>and</B> replica number method.</LI>
-<LI>A demonstration of the new biasing and scoring is available in <TT>examples/extended/biasing/B01</TT> and <TT>B02</TT>.</LI>
+<LI>A demonstration of the new biasing and scoring is available in
+    <TT>examples/extended/biasing/B01</TT> and <TT>B02</TT>.</LI>
 </UL>
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
 <P> </P>
-
- <p>A few methods of the  interface classes <TT>G4VEmModel</TT>, <TT>G4VEnergyLossProcess</TT>,
-   <TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were  revised, 
-in order to reduce memory allocations. All classes inheriting these interfaces were modified accordingly (see detailed list of changes). Advanced users with derived classes must make similar changes. </p>
- <p>Old implementations of physics processes, of configurations frozen in release 5.2, have been removed 
-   (see below detailed list of changes).</p>
-
-   An enumerator of step limitation algorithms of the multiple-scattering process has been introduced. It replaces a boolean value . The step limitation types are: </p>
- <UL>
+<P>
+A few methods of the  interface classes <TT>G4VEmModel</TT>,
+<TT>G4VEnergyLossProcess</TT>, <TT>G4VEmProcess</TT>,
+<TT>G4VMultipleScattering</TT> were  revised, in order to reduce memory
+allocations. All classes inheriting these interfaces were modified accordingly
+(see detailed list of changes). Advanced users with derived classes must make
+similar changes.
+</P>
+<P>
+Old implementations of physics processes, of configurations frozen in release
+5.2, have been removed (see below detailed list of changes).
+</P>
+An enumerator of step limitation algorithms of the multiple-scattering process
+has been introduced. It replaces a boolean value . The step limitation types
+are:
+<UL>
 <LI><TT>Minimal</TT> - equivalent to the original algorithm, as implemented in Geant4 7.1 and earlier releases.</LI>
 <LI><TT>UseSafety</TT> - the current default, which makes use of the geometrical safety</LI> 
 <LI><TT>UseDistanceToBoundary</TT> - the most advanced, recommended for accuracy in the
     cases where no magnetic field is set.</LI>
 </UL>
- <p>As in releases 8.0 to 8.2, the minimal option (which used to be called 'no step limitation') results in fewer steps, and typically provides less stability than the other options. </p>
- <p>&nbsp;</p>
- <P> </P>
+As in releases 8.0 to 8.2, the minimal option (which used to be called
+'no step limitation') results in fewer steps, and typically provides less
+stability than the other options.
+
+<P> </P>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
@@ -203,11 +215,16 @@ in order to reduce memory allocations. All classes inheriting these interfaces w
 <P> </P>
 <B>Physics Lists</B>
 <P> </P>
-<p>Removed physics lists LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP
-  and LHEP_PRECO, which were marked obsolete in release 8.2.  Users are encouraged to evaluate  QGSP_BIC as a replacement of LHEP_PRECO and LHEP_BIC.  The list LHEP_BIC_HP is replaced by QGSP_BIC_HP. In place of 
-  the remainding lists (LHEP_HP, QGSP_HP) we suggest to evaluate QGSP_BERT_HP and QGSP_BIC_HP.   </p>
-<p>Also removed physics lists using the  Mars13 leading particle classes, 
-i.e. lists with a name containing _LEAD_.</p>
+
+Removed physics lists <TT>LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP</TT>
+and <TT>LHEP_PRECO</TT>, which were marked obsolete in release 8.2.
+Users are encouraged to evaluate <TT>QGSP_BIC</TT> as a replacement of
+<TT>LHEP_PRECO</TT> and <TT>LHEP_BIC</TT>. The list <TT>LHEP_BIC_HP</TT>
+is replaced by <TT>QGSP_BIC_HP</TT>. In place of the remaining lists
+(<TT>LHEP_HP, QGSP_HP</TT>) we suggest to evaluate <TT>QGSP_BERT_HP</TT>
+and <TT>QGSP_BIC_HP</TT>.<BR>
+Also removed physics lists using the <TT>Mars13</TT> leading particle classes, 
+i.e. lists with a name containing <TT>_LEAD_</TT>.
 <P>
 The components for electro-magnetic physics have been renamed and three
 variants are now available:
@@ -224,7 +241,8 @@ variants are now available:
 <B>Data Sets</B>
 <P> </P>
 
-This release introduced three new versions of the following data sets. Please see the last section for the corresponding details.
+This release introduced three new versions of the following data sets.
+Please see the last section for the corresponding details.
 <UL>
 <LI>New data for neutron cross-sections, G4NDL.3.11.</LI>
 <LI>New low-energy data set, G4EMLOW.4.3.</LI>
@@ -242,50 +260,53 @@ This release introduced three new versions of the following data sets. Please se
 <B>Error Propagation</B>
 <UL>
    <LI>The first implementation of error progration for tracks is provided.
-       This capability is new to Geant4, and is a new implementation of GEANE 
-	   capabilities.  Users are invited to provide feedback.
-   </LI>
+       This capability is new to Geant4, and is a new implementation of
+       <TT>GEANE</TT> capabilities. Users are invited to provide feedback.</LI>
 </UL>
 	   
 <B>Standard Electromagnetic physics</B>
 <UL>
-  <LI>The structure of UI commands was changed: a new directory <TT>/process/msc</TT> contains all commands for multiple scattering. New UI commands are added to control the parameters of the Multiple Scattering process: 
-   <UL> 
-      <LI><TT>/process/msc/Skin</TT>, </LI> 
-      <LI><TT>/process/msc/RangeFactor</TT>,</LI> 
-	  <LI><TT>/process/msc/GeomFactor</TT>,</LI>
-	  <LI><TT>/process/msc/StepLimit</TT>, and </LI>
-      <LI><TT>/process/msc/LateralDisplacement</TT>.</LI>
-   </UL>
-   </LI>
-
-  <LI>The interface to G4EmProcessOptions is modified to be consistent with this change. </LI>
-  <LI>As a result, the possibility to change the values of parameters between runs is now extended to all parameters which can be defined via the UI.</LI>
-   </UL>
+  <LI>The structure of UI commands was changed: a new directory
+      <TT>/process/msc</TT> contains all commands for multiple scattering.
+      New UI commands are added to control the parameters of the Multiple
+      Scattering process: 
+      <UL> 
+        <LI><TT>/process/msc/Skin</TT></LI> 
+        <LI><TT>/process/msc/RangeFactor</TT></LI>
+        <LI><TT>/process/msc/GeomFactor</TT></LI>
+        <LI><TT>/process/msc/StepLimit</TT></LI>
+        <LI><TT>/process/msc/LateralDisplacement</TT>.</LI>
+      </UL></LI>
+  <LI>The interface to <TT>G4EmProcessOptions</TT> is modified to be consistent
+      with this change.</LI>
+  <LI>As a result, the possibility to change the values of parameters between
+      runs is now extended to all parameters which can be defined via the UI.</LI>
 </UL>
-<B>Hadronics: Neutrons</B>
+
+<B>Hadronic physics: Neutrons</B>
 <UL>
-  <LI>When using the high precision neutron module, a user may now choose to force the 
-      use of the Photon Evaporation model, instead of the neutron capture
-      final state data. The environment variable
+  <LI>When using the high precision neutron module, a user may now choose to
+      force the use of the Photon Evaporation model, instead of the neutron
+      capture final state data. The environment variable
       <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT> must be
       set to do this.  For cases in which the final state data does not exist 
-	  in the G4NDL data library, this model was already used and thus 
-	  there is no change. </LI>
+      in the G4NDL data library, this model was already used and thus there is
+      no change. </LI>
   <LI>A user can force high precison neutron code to use only exact isotope 
-      data files, instead of allowing nearby isotope files to be used. In this case if the 
-      exact file is not available, the cross section will be set to zero and a 
-      warning message will be printed. To enable this, set the environment 
-      variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</LI>
+      data files, instead of allowing nearby isotope files to be used. In this
+      case if the exact file is not available, the cross section will be set to
+      zero and a warning message will be printed. To enable this, set the
+      environment variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</LI>
   <LI>A user can switch off the Doppler broadening due to the thermal motion of
-      the target nucleus.  The broadening is used to correct the G4NDL data, which are at 
-	  zero temperature.  This must be done only for appropriate applications. 
-      To switch it broadening off, the environment variable <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT> 
-	  must be set. Then the Doppler broadening in the cross section
-      calculation is neglected. However, the thermal motion of the nucleus is still taken into
-      account in the Final State Generator. This option provides a significant CPU performance 
-	  advantage. It is not suitable, though, for simulation in which low energy (thermal) 
-	  neutrons are important, as related observables are affected.</LI>
+      the target nucleus.  The broadening is used to correct the G4NDL data,
+      which are at zero temperature. This must be done only for appropriate
+      applications. To switch it broadening off, the environment variable
+      <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT> must be set. Then the Doppler
+      broadening in the cross section calculation is neglected. However, the
+      thermal motion of the nucleus is still taken into account in the Final
+      State Generator. This option provides a significant CPU performance 
+      advantage. It is not suitable, though, for simulation in which low energy (thermal) 
+      neutrons are important, as related observables are affected.</LI>
 </UL>
 
 <P> </P>
@@ -299,16 +320,16 @@ This release introduced three new versions of the following data sets. Please se
 <UL>
   <LI>Results for calorimetry are expected to be unchanged within 0.5%.
       The width of energy deposition in thin layers (vertex detectors) should
-      be more close to data - current accuracy is few percent.      </LI>
+      be more close to data - current accuracy is few percent.</LI>
   <LI>In simple setups a speedup of simulation of EM showers of about 10% 
-    is observed for the 'default' EM physics configuration (used in most lists, including QGSP) and about 5% for the faster 
-    'optional' physics configuration (used in 'EMV' lists, such as QGSP_EMV).</LI>
+      is observed for the 'default' EM physics configuration (used in most
+      lists, including QGSP) and about 5% for the faster 'optional' physics
+      configuration (used in <TT>EMV</TT> lists, such as <TT>QGSP_EMV</TT>).</LI>
 </UL>
 
 <B>Hadronic physics</B>
 <UL>
-  <LI>The FTF model is now used in some physics lists down to
-      <TT>5 GeV</TT>.</LI>
+  <LI>The FTF model is now used in some physics lists down to <TT>5 GeV</TT>.</LI>
   <LI>Bug fixes in LEP models remove an un-physical peak at 180 degrees and 
       reduce the number of very low energy nucleons produced. The net effect 
       is to shift the angular distributions forward by about 5-10 degrees and 
@@ -330,9 +351,8 @@ This release introduced three new versions of the following data sets. Please se
 
 For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
-<A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem Reporting
-System</A>.
-
+<A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem
+Reporting System</A>.
 
 <P> </P>
 <A NAME="7."></A>
@@ -342,7 +362,7 @@ System</A>.
 
 <H2>7. Compilation Warnings</H2>
 
-There are compilation warnings on some tested platforms.  We do not believe
+There are compilation warnings on some tested platforms. We do not believe
 that any of these lead to incorrect run-time behaviour.
 
 <P> </P>
@@ -359,16 +379,16 @@ The following message can be written to standard output at the end of a program:
        Sum of energy of loopers killed: 
        Max energy of loopers killed: 
 </PRE>
-It provides the total energy (in MeV) of tracks  killed due to excessive number of 
-steps ('looping') during the simulation, and the maximum energy of such a track.
-Such behaviour can be due to looping in magnetic fields or encountering problems 
-at geometrical boundaries.
-<p>
-In case either of these reported energy is significant, we recommend to increase 
-the verbosity of <TT>G4Transportation</TT> to obtain information for each 
-track killed.  A user can change the threshold energy above which particles are not killed ]
-using the method <TT>SetThresholdImportantEnergy</TT> of G4Transportation. The 
-default value is 250 MeV.
+It provides the total energy (in <TT>MeV</TT>) of tracks  killed due to
+excessive number of steps ('looping') during the simulation, and the maximum
+energy of such a track. Such behaviour can be due to looping in magnetic fields
+or encountering problems at geometrical boundaries.
+<P></P>
+In case either of these reported energy is significant, we recommend to
+increase the verbosity of <TT>G4Transportation</TT> to obtain information for
+each track killed. A user can change the threshold energy above which particles
+are not killed using the method <TT>SetThresholdImportantEnergy</TT> of
+<TT>G4Transportation</TT>. The default value is <TT>250 MeV</TT>.
 
 <P> </P>
 <A NAME="9."></A>
@@ -379,7 +399,8 @@ default value is 250 MeV.
 <H2>9. Geant4 Software License</H2>
 
 A Software License applies to the Geant4 code.
-Users must accept this license in order to use it. The details and the list of copyright holders is available at
+Users must accept this license in order to use it. The details and the list of
+copyright holders is available at
 <A href="http://cern.ch/geant4/license">http://cern.ch/geant4/license</A>
 and also in the text file <TT>LICENSE</TT> distributed with the source code.
 
@@ -473,12 +494,13 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI><TT>G4UrbanMscModel</TT>:
         <UL>
-        <LI>Reorganized initialisation and ComputeTruePathLengthLimit method using 
-            <TT>G4MscStepLimitType</TT> enumerator to choose step limit algorithm.</LI>
+        <LI>Reorganized initialisation and <TT>ComputeTruePathLengthLimit()</TT>
+            method using <TT>G4MscStepLimitType</TT> enumerator to choose step
+            limit algorithm.</LI>
         <LI>Optimisation of step limitation for <TT>skin&gt;0</TT> (about 5%
             CPU save).</LI>
-        <LI>Use G4SafetyHelper for computation of safety and distance to the boundary;
-            remove pointer to G4Navigator.</LI>	    
+        <LI>Use <TT>G4SafetyHelper</TT> for computation of safety and distance
+            to the boundary; removed pointer to <TT>G4Navigator</TT>.</LI>	    
         </UL></LI>
     <LI><TT>G4UniversalFluctuation</TT>: correction of the algorithm in order to have 
         better agreement between sampled width and data - precision is few percents.</LI>
@@ -550,7 +572,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="err-notes">
 <H3><I>Error Propagation</I></H3></A>
 <UL>
-<LI>New module for backwards error propagation of tracks (Geant4e).</LI>
+<LI>New module for backwards error propagation of tracks (<TT>Geant4e</TT>).</LI>
 </UL>
 
 <A NAME="evt-notes">
@@ -918,17 +940,18 @@ please refer to the corresponding History files provided in most packages):
 <H3><I>Physics lists</I></H3></A>
 <UL>
 <LI>In QBBC list, use consistent cross sections for elastic and inelastic.</LI>
-<LI>Activated quasi-elastic for FTF lists. Lower threshold for FTF: FTF starts
-    at <TT>4.0 GeV</TT>, overlaps with LEP up to <TT>5.0 GeV</TT>.</LI>
+<LI>Activated quasi-elastic for <TT>FTF</TT> lists.
+    Lower threshold for <TT>FTF</TT>: <TT>FTF</TT> starts
+    at <TT>4.0 GeV</TT>, overlaps with <TT>LEP</TT> up to <TT>5.0 GeV</TT>.</LI>
 <LI>Added <TT>G4QEmExtraPhysics</TT> for <TT>gamma, e+-, mu+-</TT> nuclear
     CHIPS.</LI>
-<LI>Removed obsolete physics lists LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP
-    and LHEP_PRECO. Removed physics lists using Mars leading particle classes
-    (*LEAD*).</LI>
+<LI>Removed obsolete physics lists <TT>LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP</TT>
+    and <TT>LHEP_PRECO</TT>. Removed physics lists using <TT>Mars</TT> leading
+    particle classes (*<TT>LEAD</TT>*).</LI>
 <LI>Removed obsolete <TT>G4EmStandardPhysics72</TT> and
     <TT>G4EmStandardPhysics71</TT>; using new commands for
     <TT>G4EmStandardPhysics_option1,2</TT>.
-<LI>QGSP_BIC_HP is no longer experimental.</LI>
+<LI><TT>QGSP_BIC_HP</TT> is no longer experimental.</LI>
 <LI>Removed definition of name of EM constructor, now name of EM constructor
     defined inside the constructor itself.</LI>
 <LI>Incremented version number.</LI>
