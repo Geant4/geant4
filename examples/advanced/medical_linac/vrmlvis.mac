@@ -7,7 +7,6 @@
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 1.4
-/tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
 
