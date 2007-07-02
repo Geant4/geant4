@@ -50,6 +50,8 @@
 #include "G4ClassicalRK4.hh"
 #include "G4SimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
+#include "G4RKG3_Stepper.hh"
+#include "G4HelixMixedStepper.hh"
 
 #include "G4DELPHIMagField.hh"
 #include "G4PropagatorInField.hh"
@@ -207,14 +209,18 @@ NTSTDetectorConstruction::Construct()
 
   pEquation = new G4Mag_UsualEqRhs( &field); 
  
-  // pStepper= new G4ClassicalRK4( pEquation );
+  // pStepper = 
+  //           new G4ClassicalRK4( pEquation ); 
+  //           new G4RKG3_Stepper( fEquation );  // Nystrom, like Geant3 
   // pStepper= new G4SimpleRunge( pEquation );
-  pStepper= new G4CashKarpRKF45( pEquation );
+  // pStepper= new G4CashKarpRKF45( pEquation );
+  pStepper= new G4HelixMixedStepper( pEquation );
   // pStepper=  StepperFactory::CreateStepper( order ); 
 
   G4cout << "Stepper is " 
-     << "CashKarpRKF45" << G4endl;
-//	 << "ClassicalRK4" << G4endl;
+    //   << "CashKarpRKF45" << G4endl;
+    //	 << "ClassicalRK4" << G4endl;
+	 << " G4HelixMixedStepper " << G4endl;
 
   // globalFieldManager->CreateChordFinder( (G4MagneticField *)&field );
   fpChordFinder= new G4ChordFinder( (G4MagneticField *)&field, 
