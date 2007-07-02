@@ -240,7 +240,7 @@ void DMXPhysicsList::AddTransportation() {
 #include "G4MuonMinusCaptureAtRest.hh"
 
 //OTHERS:
-//#include "G4hIonisation.hh" // standard hadron ionisation
+#include "G4hIonisation.hh" // standard hadron ionisation
 
 //em process options to allow msc step-limitation to be switched off
 #include "G4EmProcessOptions.hh"
