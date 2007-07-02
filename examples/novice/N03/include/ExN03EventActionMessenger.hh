@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.hh,v 1.9 2006-10-26 14:28:00 allison Exp $
+// $Id: ExN03EventActionMessenger.hh,v 1.10 2007-07-02 13:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,16 +46,16 @@ class G4UIcmdWithAnInteger;
 
 class ExN03EventActionMessenger: public G4UImessenger
 {
-  public:
-    ExN03EventActionMessenger(ExN03EventAction*);
-   ~ExN03EventActionMessenger();
+public:
+  ExN03EventActionMessenger(ExN03EventAction*);
+  virtual ~ExN03EventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    ExN03EventAction*     eventAction;
-    G4UIdirectory*        eventDir;   
-    G4UIcmdWithAnInteger* PrintCmd;    
+private:
+  ExN03EventAction*     eventAction;
+  G4UIdirectory*        eventDir;   
+  G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

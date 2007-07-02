@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.31 2007-06-25 12:21:03 maire Exp $
+// $Id: exampleN03.cc,v 1.32 2007-07-02 13:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,21 +115,21 @@ int main(int argc,char** argv)
   else           // interactive mode : define visualization UI terminal
     {
 #ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif
 
-     G4UIsession* session = 0;
+      G4UIsession* session = 0;
 #if defined(G4UI_USE_TCSH)
-     session = new G4UIterminal(new G4UItcsh);      
+      session = new G4UIterminal(new G4UItcsh);      
 #elif defined(G4UI_USE_XM)
-     session = new G4UIXm(argc,argv);
-     UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+      session = new G4UIXm(argc,argv);
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
 #elif defined(G4UI_USE_WIN32)
-     session = new G4UIWin32();
-     UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+      session = new G4UIWin32();
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
 #else
-     session = new G4UIterminal();
+      session = new G4UIterminal();
 #endif
 
       UI->ApplyCommand("/control/execute vis.mac");
@@ -137,7 +137,7 @@ int main(int argc,char** argv)
       delete session;
       
 #ifdef G4VIS_USE
-  delete visManager;
+      delete visManager;
 #endif                
     }
 
