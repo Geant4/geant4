@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.15 2007-06-25 13:02:14 maire Exp $
+// $Id: exampleN04.cc,v 1.16 2007-07-02 13:28:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,23 +104,23 @@ int main(int argc,char** argv)
   else           // interactive mode : define visualization and UI terminal
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif    
      
-     G4UIsession * session = 0;
+      G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
 #endif
 
-     UI->ApplyCommand("/control/execute vis.mac");     
-     session->SessionStart();
-     delete session;
+      UI->ApplyCommand("/control/execute vis.mac");     
+      session->SessionStart();
+      delete session;
      
 #ifdef G4VIS_USE
-     delete visManager;
+      delete visManager;
 #endif     
     }
     
