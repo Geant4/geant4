@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2007-06-21 17:47:08 maire Exp $
+$Id: History,v 1.71 2007-07-02 08:42:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,11 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< History
+<<<<<<< History
+
+12-06-07  V.Ivant (testem2-V08-03-03)
+- PhysicsLists - add options from physics_lists library
+- TestEm2.in update to provide the same reference output as before
+
 21-06-07 mma (testem2-V08-03-02)
 - cosmetic in TestEm2.cc
      
 21-06-07 mma (testem2-V08-03-01)
 - PhysListEmStandard options completed
+=======
+>>>>>>> 1.68
+=======
+21-06-07 mma (testem2-V08-03-02)
+- cosmetic in TestEm2.cc
+     
+21-06-07 mma (testem2-V08-03-01)
+- PhysListEmStandard options completed
+>>>>>>> 1.70
 
 12-06-07  V.Ivant (testem2-V08-03-00)
 - Update main macro file; use visialisation only for interactive session
