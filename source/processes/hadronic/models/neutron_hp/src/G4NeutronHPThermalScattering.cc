@@ -26,7 +26,8 @@
 // Thermal Neutron Scattering
 // Koi, Tatsumi (SLAC/SCCS)
 //
-// Class Description
+// Class Description:
+//
 // Final State Generators for a high precision (based on evaluated data
 // libraries) description of themal neutron scattering below 4 eV;
 // Based on Thermal neutron scattering files
@@ -34,7 +35,7 @@
 // To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with
 // the corresponding process.
-// Class Description - End
+
 
 // 070625 Fix memory leaking at destructor by T. Koi 
 
@@ -66,14 +67,11 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
       }
    }
 
-
-   G4String dirName;
    if ( !getenv("G4NEUTRONHPDATA") ) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
    dirName = getenv("G4NEUTRONHPDATA");
 
-
-// Read data
+//  Read data
 //  Element (id)  -> FS Type -> read file
    for ( size_t i = 0 ; i < indexOfThermalElement.size() ; i++ )
    {
