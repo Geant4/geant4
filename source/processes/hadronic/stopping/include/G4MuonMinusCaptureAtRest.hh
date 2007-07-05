@@ -23,29 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.17 2006-11-15 12:17:15 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.18 2007-07-05 18:19:14 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
+//  G4MuonMinusCaptureAtRest physics process
+//  Larry Felawka (TRIUMF) and Art Olin (TRIUMF) April 1998
+//---------------------------------------------------------------------
 //
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuonMinusCaptureAtRest physics process ------
-//                   by Larry Felawka (TRIUMF)
-//                     E-mail: felawka@alph04.triumf.ca
-//                   and Art Olin (TRIUMF)
-//                     E-mail: olin@triumf.ca
-//                            April 1998
-//-----------------------------------------------------------------------------
+// Class Description:
 //
-// Class Description
-// Process for nuclear capture of muon- at rest takes into account Fermi model of
-// muon capture in compounds, simplified EM cascade model, muon decay from K-shell,
-// and muon nucleus reaction 
-// Class Description - End
-//
+// Process for nuclear capture of mu- at rest takes into account Fermi 
+// model of muon capture in compounds, simplified EM cascade model, muon 
+// decay from K-shell, and muon nucleus reaction. 
 
 //
 // Modifications: 

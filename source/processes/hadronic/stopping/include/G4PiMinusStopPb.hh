@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4PiMinusStopPb.hh 
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
 //      Creation date: 18 May 1998
 //
-//      Modifications: 
 // -------------------------------------------------------------------
 
 #ifndef G4PIMINUSSTOPPB_HH

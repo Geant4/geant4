@@ -23,26 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4NeutronCaptureAtRest physics process ------
-//                   by Larry Felawka (TRIUMF), April 1998
-//                     E-mail: felawka@alph04.triumf.ca
-// ************************************************************
-//-----------------------------------------------------------------------------
+//   G4NeutronCaptureAtRest physics process
+//   Larry Felawka (TRIUMF), April 1998
+//---------------------------------------------------------------------
 
 #ifndef G4NeutronCaptureAtRest_h
 #define G4NeutronCaptureAtRest_h 1
-// Class Description
-// Process for capture of neutrons at rest; 
-// to be used in your physics list in case you need this physics.
-// Class Description - End
+
+// Class Description:
+//
+// Process for capture of neutrons at rest. 
+// To be used in your physics list in case you need this physics.
 
  
 #include "globals.hh"

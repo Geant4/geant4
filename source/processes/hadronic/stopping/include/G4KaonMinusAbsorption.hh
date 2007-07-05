@@ -23,19 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4KaonMinusAbsorption physics process ------
-//                   by Larry Felawka (TRIUMF), April 1998
-//                     E-mail: felawka@alph04.triumf.ca
-// ************************************************************
-//-----------------------------------------------------------------------------
+//    G4KaonMinusAbsorption physics process
+//    Larry Felawka (TRIUMF), April 1998
+//---------------------------------------------------------------------
 
 #ifndef G4KaonMinusAbsorption_h
 #define G4KaonMinusAbsorption_h 1
@@ -46,10 +36,11 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GHEKinematicsVector.hh"
-// Class Description
-// Alternative process for absorption of K- at rest; 
-// to be used in your physics list in case you need this physics.
-// Class Description - End
+
+// Class Description:
+//
+// Alternative process for absorption of K- at rest.
+// To be used in your physics list in case you need this physics.
 
 
 class G4KaonMinusAbsorption : public G4VRestProcess

@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.43 2007-01-30 10:31:02 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.44 2007-07-05 18:19:14 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class file
-//
-//      ------------ G4MuonMinusCaptureAtRest physics process ------
-//                   by Larry Felawka (TRIUMF)
-//                     E-mail: felawka@alph04.triumf.ca
-//                   and Art Olin (TRIUMF)
-//                     E-mail: olin@triumf.ca
-//                            April 1998
-//-----------------------------------------------------------------------------
+//   G4MuonMinusCaptureAtRest physics process
+//   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
+//   April 1998
+//---------------------------------------------------------------------
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description

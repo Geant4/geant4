@@ -23,21 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4DistributionGenerator.hh 
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
 //      Creation date: 12 May 1998
 //
-//      Modifications: 
-// -------------------------------------------------------------------
 
 #ifndef G4DISTRIBUTIONGENERATOR_HH
 #define G4DISTRIBUTIONGENERATOR_HH
