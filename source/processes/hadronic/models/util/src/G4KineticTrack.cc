@@ -448,7 +448,6 @@ const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
     {
      theDefinition = right.GetDefinition();
      theFormationTime = right.GetFormationTime();
-//     thePosition = right.GetPosition();
      the4Momentum = right.the4Momentum;  
      the4Momentum = right.GetTrackingMomentum();
      theFermi3Momentum = right.theFermi3Momentum;
@@ -510,19 +509,19 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
      //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
      G4double r = theTotalActualWidth * G4UniformRand();
-     G4ParticleDefinition* theDefinition = this->GetDefinition();
-     if(!theDefinition)
+     G4ParticleDefinition* thisDefinition = this->GetDefinition();
+     if(!thisDefinition)
      {
        G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
        G4cerr << "  track has no particle definition associated."<<G4endl;
        return 0;
      }
-     G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
+     G4DecayTable* theDecayTable = thisDefinition->GetDecayTable();
      if(!theDecayTable)
      {
        G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
        G4cerr << "  particle definiton has no decay table associated."<<G4endl;
-       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
        return 0;
      }
      G4VDecayChannel* theDecayChannel=NULL;
@@ -541,7 +540,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      {
        G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
        G4cerr << "  decay channel has 0x0 channel associated."<<G4endl;
-       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
        G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
        return 0;
      }
@@ -632,7 +631,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      {
        G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
        G4cerr << "  phase-space decay failed."<<G4endl;
-       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
        G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
        G4cerr << "  "<<theNumberOfDaughters<< " Daughter particles: "
               << theDaughtersName1<<" "<<theDaughtersName2<<" "<<theDaughtersName3<<G4endl;
@@ -644,8 +643,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 //
      G4LorentzRotation toMoving(Get4Momentum().boostVector());
      G4DynamicParticle* theDynamicParticle;
-     G4double theFormationTime = 0.0;
-     G4ThreeVector thePosition = this->GetPosition();
+     G4double formationTime = 0.0;
+     G4ThreeVector position = this->GetPosition();
      G4LorentzVector momentum;
      G4LorentzVector momentumBalanceCMS(0);
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
@@ -661,8 +660,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          momentum = toMoving*theDynamicParticle->Get4Momentum();
          energyMomentumBalance -= momentum;
          theDecayProductList->push_back(new G4KineticTrack (aProduct,
-                                                         theFormationTime,
-                                                         thePosition,
+                                                         formationTime,
+                                                         position,
                                                          momentum));
          delete theDynamicParticle;
         }
