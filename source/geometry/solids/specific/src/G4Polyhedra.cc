@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.33 2007-01-22 12:58:53 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.34 2007-07-05 15:02:45 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -752,12 +752,12 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   {  
     chose = RandFlat::shoot(startPhi,endPhi);
     rang = std::floor((chose-startPhi)/ksi-0.01);
+    if(rang<0)rang=0;
     rang = std::fabs(rang);  
     sinphi1 = std::sin(startPhi+rang*ksi);
     sinphi2 = std::sin(startPhi+(rang+1)*ksi);
     cosphi1 = std::cos(startPhi+rang*ksi);
     cosphi2 = std::cos(startPhi+(rang+1)*ksi);
-    
     chose = RandFlat::shoot(0., aTop + aBottom);
     if(chose>=0. && chose<aTop)
     {
@@ -799,7 +799,8 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   if( (chose>=0.) && (chose<numSide*aVector1[j]) )
   {
     chose = RandFlat::shoot(startPhi,endPhi);
-    rang = std::floor((chose-startPhi)/ksi-0.01); 
+    rang = std::floor((chose-startPhi)/ksi-0.01);
+    if(rang<0)rang=0;
     rang = std::fabs(rang);
     rad1 = original_parameters->Rmax[j];
     rad2 = original_parameters->Rmax[j+1];
@@ -816,7 +817,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 
     p2 = G4ThreeVector(rad2*cosphi2,rad2*sinphi2,zVal);
     p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,zVal);
-    
     return GetPointOnPlane(p0,p1,p2,p3);
   }
   else if ( (chose >= numSide*aVector1[j])
@@ -824,6 +824,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   {
     chose = RandFlat::shoot(startPhi,endPhi);
     rang = std::floor((chose-startPhi)/ksi-0.01);
+    if(rang<0)rang=0;
     rang = std::fabs(rang);
     rad1 = original_parameters->Rmin[j];
     rad2 = original_parameters->Rmin[j+1];
@@ -840,7 +841,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     
     p2 = G4ThreeVector(rad2*cosphi2,rad2*sinphi2,zVal);
     p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,zVal);
-    
     return GetPointOnPlane(p0,p1,p2,p3);
   }
 
@@ -869,7 +869,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
                      original_parameters->Z_values[j+1]);
   p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,
                      original_parameters->Z_values[j+1]);
-    
   return GetPointOnPlane(p0,p1,p2,p3);
 }
 
