@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2007-06-08 10:20:21 gcosmo Exp $
+$Id: History,v 1.96 2007-07-05 09:48:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 5th, 2007 - G.Cosmo
+------------------------
+- Corrected signature to method PrepareNewTrack(). Resolves linking
+  problems detected on SUN-CC platform.
+- Changes included in tag  "geomnav-V08-03-02c".
 
 June 8th, 2007 - T.Nikitina
 ---------------------------

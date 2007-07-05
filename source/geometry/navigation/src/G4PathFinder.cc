@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.45 2007-06-01 15:22:24 japost Exp $
+// $Id: G4PathFinder.cc,v 1.46 2007-07-05 09:48:49 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -280,8 +280,8 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 // ----------------------------------------------------------------------
 
 void
-G4PathFinder::PrepareNewTrack( const G4ThreeVector position, 
-                               const G4ThreeVector direction,
+G4PathFinder::PrepareNewTrack( const G4ThreeVector& position, 
+                               const G4ThreeVector& direction,
 			       G4VPhysicalVolume*  massStartVol)
 {
   // Key purposes:

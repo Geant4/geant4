@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.30 2007-05-31 17:57:11 japost Exp $
+// $Id: G4PathFinder.hh,v 1.31 2007-07-05 09:48:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -94,7 +94,9 @@ class G4PathFinder
      // Make secondary relocation of global point (within safety only) 
      // in all navigators, and update them.
 
-   void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction, G4VPhysicalVolume* massStartVol=0); 
+   void PrepareNewTrack( const G4ThreeVector& position,
+                         const G4ThreeVector& direction,
+                               G4VPhysicalVolume* massStartVol=0); 
      //
      // Check and cache set of active navigators.
 
