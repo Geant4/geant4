@@ -45,13 +45,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 :detector(det), primary(kin)
-{ 
-  asciiFileName="Sandia.out";
-  std::ofstream asciiFile(asciiFileName, std::ios::app);
-  if(asciiFile.is_open()) {
-    asciiFile << " FMR (z/r0)    ||       J(MeV/g/cm2)" << G4endl << G4endl;
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -181,156 +175,127 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
- 
-  G4bool entering = false;
+  G4double NumbrOfEvents = double (aRun->GetNumberOfEvent());
+  G4double totalAbsEnergy = (energyDepositRun1/MeV)+(energyDepositRun2/MeV)+(energyDepositRun3/MeV);
 
- G4double NumbrOfEvents = double (aRun->GetNumberOfEvent());
- G4double totalAbsEnergy = (energyDepositRun1/MeV)+(energyDepositRun2/MeV)+(energyDepositRun3/MeV);
+  G4int    n12 = detector->GetNbOfLayersOfMedium1();
+  G4double thick11 = detector->GetAbsorber1Thickness();
+  G4double thick12 = G4double (n12);
+  G4double LayerTh1= thick11/thick12;
+  G4double deltaX1 = LayerTh1*density1/MFP1;
 
-G4double thick11=detector->GetAbsorber1Thickness();
-G4double thick12=double (detector->GetNbOfLayersOfMedium1());
-G4double LayerTh1 = thick11/thick12;
-G4double deltaX1 = LayerTh1*density1/MFP1;
+  G4int    n22     = detector->GetNbOfLayersOfMedium2();
+  G4double thick21 = detector->GetAbsorber2Thickness();
+  G4double thick22 = G4double (n22);
+  G4double LayerTh2= thick21/thick22;
+  G4double deltaX2 = LayerTh2*density2/MFP2;
 
-G4double thick21=detector->GetAbsorber2Thickness();
-G4double thick22=double (detector->GetNbOfLayersOfMedium2());
-G4double LayerTh2 = thick21/thick22;
-G4double deltaX2 = LayerTh2*density2/MFP2;
+  G4int    n32     = detector->GetNbOfLayersOfMedium3();
+  G4double thick31 = detector->GetAbsorber3Thickness();
+  G4double thick32 = G4double (n32);
+  G4double LayerTh3= thick31/thick32;
+  G4double deltaX3 = LayerTh3*density3/MFP3;
+  G4cout<<thick21/cm<<"  "<<thick22/cm<<"  "<<thick32/cm<<"  "<<G4endl;
 
-G4double thick31=detector->GetAbsorber3Thickness();
-G4double thick32=double (detector->GetNbOfLayersOfMedium3());
-G4double LayerTh3 = thick31/thick32;
-G4double deltaX3 = LayerTh3*density3/MFP3;
-G4cout<<thick21/cm<<"  "<<thick22/cm<<"  "<<LayerTh2/cm<<"  "<<G4endl;
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
+  G4cout<<" ----------------  RUN SUMMARY ----------------------------"<<G4endl;
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
 
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-G4cout<<" ----------------  RUN SUMMARY ----------------------------"<<G4endl;
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-if(matName1!="G4_Galactic")
-{
-G4cout<<"             Medium 1 ==>   "<<matName1<<G4endl;
-G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
-entering = true;  
-// Write to file
-  if(entering)
+  asciiFileName="Sandia.out";
+  std::ofstream asciiFile(asciiFileName, std::ios::app);
+  if(asciiFile.is_open()) {
+    asciiFile << " FMR(z/r0)      ||       J(MeV/g/cm2)" << G4endl;
+  } else {
+    G4cout<<"ERROR file <"<<asciiFileName<< "> is not opened" <<G4endl;
+    return;
+  }
+
+  if(matName1!="G4_Galactic")
     {
-    std::ofstream asciiFile(asciiFileName, std::ios::app);
-    if(asciiFile.is_open()) 
-	{
-     asciiFile<<"       Medium 1 ==>   "<<matName1<<G4endl;
+      asciiFile<<"             Medium 1 ==>   "<<matName1<< "  " << n12 << G4endl;
+      G4cout<<"             Medium 1 ==>   "<<matName1<<G4endl;
+      G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
 
-    for (G4int k=1; k<=thick12; k++)
-      {normalizedvalue1[k] =(energyDeposit1[k]/MeV)/(NumbrOfEvents*deltaX1*(MFP1/(g/cm2))); 
-       G4cout<<"\t   "<<deltaX1*k<<"\t          "<<normalizedvalue1[k]<<G4endl;
-            asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(5)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-            asciiFile << deltaX1*k;
-            asciiFile << "           ";
-            asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(5)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-            asciiFile << normalizedvalue1[k]
-		<< G4endl;      
-          }
-	   asciiFile.close();
-         }
+      // Write to file
+      for (G4int k=1; k<=n12; k++) {
+	normalizedvalue1[k] =(energyDeposit1[k]/MeV)/(NumbrOfEvents*deltaX1*(MFP1/(g/cm2))); 
+	G4cout<<"\t   "<<deltaX1*k<<"\t          "<<normalizedvalue1[k]<<G4endl;
+	asciiFile << std::setiosflags(std::ios::fixed)
+		  << std::setprecision(5)
+		  << std::setiosflags(std::ios::right)
+		  << std::setw(10);
+	asciiFile << deltaX1*k;
+	asciiFile << "           ";
+	asciiFile << std::setiosflags(std::ios::fixed)
+		  << std::setprecision(5)
+		  << std::setiosflags(std::ios::right)
+		  << std::setw(10);
+	asciiFile << normalizedvalue1[k]
+		  << G4endl;      
+      }
       G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun1/MeV)/NumbrOfEvents<<G4endl;
     }
-}                
-entering = false;  
+                
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
+  if(matName2!="G4_Galactic"){
 
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-if(matName2!="G4_Galactic"){
-
-G4cout<<"               Medium 2 ==>   "<<matName2<<G4endl;
-G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
-entering = true;  
-// Write to file
-  if(entering)
-    {
-    std::ofstream asciiFile(asciiFileName, std::ios::app);
-    if(asciiFile.is_open()) 
-	{
-     asciiFile<<G4endl;
-     asciiFile<<"       Medium 2 ==>   "<<matName2<<G4endl;
+    G4cout<<"               Medium 2 ==>   "<<matName2<<G4endl;
+    G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
+    asciiFile<<"       Medium 2 ==>   "<<matName2<<"  " << n22 <<G4endl;
           
-     for (G4int k=1; k<=thick22; k++)
-       {normalizedvalue2[k] =(energyDeposit2[k]/MeV)/(NumbrOfEvents*deltaX2*(MFP2/(g/cm2)));
-        G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*k)<<"\t          "<<normalizedvalue2[k]<<G4endl;
-            asciiFile << std::setiosflags(std::ios::fixed)
+    for (G4int k=1; k<=n22; k++) {
+      normalizedvalue2[k] =(energyDeposit2[k]/MeV)/(NumbrOfEvents*deltaX2*(MFP2/(g/cm2)));
+      G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*k)<<"\t          "<<normalizedvalue2[k]<<G4endl;
+      asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-            asciiFile << (deltaX1*thick12)+(deltaX2*k);
-            asciiFile << "           ";
-            asciiFile << std::setiosflags(std::ios::fixed)
+      asciiFile << (deltaX1*thick12)+(deltaX2*k);
+      asciiFile << "           ";
+      asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-            asciiFile << normalizedvalue2[k]
+      asciiFile << normalizedvalue2[k]
 		<< G4endl;      
-          }
-	   asciiFile.close();
-         }
-      G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun2/MeV)/NumbrOfEvents<<G4endl;
     }
+    G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun2/MeV)/NumbrOfEvents<<G4endl;
+  }
 
-}                
-entering = false;  
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
 
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-
-if(matName3!="G4_Galactic"){
-G4cout<<"               Medium 3 ==>   "<<matName3<<G4endl;
-G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
-entering = true;  
-// Write to file
-  if(entering)
-    {
-    std::ofstream asciiFile(asciiFileName, std::ios::app);
-    if(asciiFile.is_open()) 
-	{
-     asciiFile<<G4endl;
-     asciiFile<<"       Medium 3 ==>   "<<matName3<<G4endl;
+  if(matName3!="G4_Galactic"){
+    G4cout<<"               Medium 3 ==>   "<<matName3<<G4endl;
+    G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
+    asciiFile<<"       Medium 3 ==>   "<<matName3<<"  " << n32 <<G4endl;
           
-    for (G4int k=1; k<=thick32; k++)
-      {normalizedvalue3[k] =(energyDeposit3[k]/MeV)/(NumbrOfEvents*deltaX3*(MFP3/(g/cm2))); 
-       G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k)<<"\t          "<<normalizedvalue3[k]<<G4endl;
-            asciiFile << std::setiosflags(std::ios::fixed)
+    for (G4int k=1; k<=n32; k++) {
+      normalizedvalue3[k] =(energyDeposit3[k]/MeV)/(NumbrOfEvents*deltaX3*(MFP3/(g/cm2))); 
+      G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k)
+	    <<"\t          "<<normalizedvalue3[k]<<G4endl;
+      asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-            asciiFile << (deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k);
-            asciiFile << "           ";
-            asciiFile << std::setiosflags(std::ios::fixed)
+      asciiFile << (deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k);
+      asciiFile << "           ";
+      asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-            asciiFile << normalizedvalue3[k]
+      asciiFile << normalizedvalue3[k]
 		<< G4endl;      
-          }
-	   asciiFile.close();
-
-
-        }
-      G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun3/MeV)/(NumbrOfEvents*1.0)<<G4endl;
     }
+    G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun3/MeV)/(NumbrOfEvents*1.0)<<G4endl;
+  }
+  asciiFile.close();
 
-}                
-entering = false;  
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
 
+  G4cout<<" Total Deposit energy (MeV) = "<<(totalAbsEnergy/MeV)/(NumbrOfEvents*1.0)<<G4endl;
 
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-
-G4cout<<" Total Deposit energy (MeV) = "<<(totalAbsEnergy/MeV)/(NumbrOfEvents*1.0)<<G4endl;
-
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-G4cout<<" ----------------  END OF RUN SUMMARY ---------------------"<<G4endl;
-G4cout<<" ----------------------------------------------------------"<<G4endl;
-
-
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
+  G4cout<<" ----------------  END OF RUN SUMMARY ---------------------"<<G4endl;
+  G4cout<<" ----------------------------------------------------------"<<G4endl;
 }
 
