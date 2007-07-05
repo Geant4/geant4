@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.16 2006-06-29 16:55:38 gunter Exp $
+// $Id: HistoManager.cc,v 1.17 2007-07-05 17:11:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,25 +164,30 @@ void HistoManager::SetHisto(G4int ih,
   }
 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                         "10","11","12","13","14","15","16"};
+                         "10","11","12","13","14","15","16","17","18","19",
+			 "20" };
   const G4String title[] =
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
                   "energy of gammas at creation (std::log10(ekin/MeV))",//3
 		  "(transmit, charged) : kinetic energy at exit",	//4
-		  "(transmit, charged) : space angle at exit",		//5
+		  "(transmit, charged) : space angle: dN/dOmega",	//5
 		  "(transmit, charged) : projected angle at exit",	//6
 		  "(transmit, charged) : projected position at exit",	//7
 		  "(transmit, neutral) : kinetic energy at exit",	//8
-		  "(transmit, neutral) : space angle at exit",		//9
+		  "(transmit, neutral) : space angle: dN/dOmega",	//9
 		  "(transmit, neutral) : projected angle at exit",	//10
 		  "(reflect , charged) : kinetic energy at exit",	//11
-		  "(reflect , charged) : space angle at exit",		//12
+		  "(reflect , charged) : space angle: dN/dOmega",	//12
 		  "(reflect , charged) : projected angle at exit",	//13
 		  "(reflect , neutral) : kinetic energy at exit",	//14
-		  "(reflect , neutral) : space angle at exit",		//15
-		  "(reflect , neutral) : projected angle at exit"	//16
+		  "(reflect , neutral) : space angle: dN/dOmega",	//15
+		  "(reflect , neutral) : projected angle at exit",	//16
+		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//17
+		  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",	//18
+		  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",	//19
+		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//20
                  };
 
   G4String titl = title[ih];

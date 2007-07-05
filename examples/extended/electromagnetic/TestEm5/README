@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2006-05-30 12:36:46 maire Exp $
+$Id: README,v 1.17 2007-07-05 17:11:40 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -72,7 +72,7 @@ $Id: README,v 1.16 2006-05-30 12:36:46 maire Exp $
  List of the built-in histograms
  -------------------------------
         
- The test contains 16 built-in 1D histograms, which are managed by the
+ The test contains 20 built-in 1D histograms, which are managed by the
  HistoManager class and its Messenger. The histos can be individually activated
  with the command :
  /testem/histo/setHisto id nbBins  valMin valMax unit 
@@ -83,18 +83,22 @@ $Id: README,v 1.16 2006-05-30 12:36:46 maire Exp $
 	2	"energy of charged secondaries at creation"
 	3	"energy of gammas at creation (log10(Ekin/MeV))"
 	4	"(transmit, charged) : kinetic energy at exit"
-	5	"(transmit, charged) : space angle at exit"
+	5	"(transmit, charged) : space angle dN/dOmega"
 	6	"(transmit, charged) : projected angle at exit"
 	7	"(transmit, charged) : projected position at exit"
 	8	"(transmit, neutral) : kinetic energy at exit"
-	9	"(transmit, neutral) : space angle at exit"
+	9	"(transmit, neutral) : space angle dN/dOmega"
 	10	"(transmit, neutral) : projected angle at exit"
 	11	"(reflect , charged) : kinetic energy at exit"
-	12	"(reflect , charged) : space angle at exit"
+	12	"(reflect , charged) : space angle dN/dOmega"
 	13	"(reflect , charged) : projected angle at exit"
 	14	"(reflect , neutral) : kinetic energy at exit"
-	15	"(reflect , neutral) : space angle at exit"
+	15	"(reflect , neutral) : space angle dN/dOmega"
 	16	"(reflect , neutral) : projected angle at exit"
+        17	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"
+	18	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"
+	19	"(reflect , charged) : ener fluence: dE(MeV)/dOmega"
+	20	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"
 
  The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
  
@@ -109,7 +113,7 @@ $Id: README,v 1.16 2006-05-30 12:36:46 maire Exp $
  A Geant4/Geant3/exp. data comparison is given here for a few cases.
  These cases can be classified as follow:
  - e-/e+ incident particles versus protons and others. 
- - 3 energy regimes : low: < 1 MeV; medium: 1MeV -> few 10 MeV; high: > 100 MeV
+ - 3 energy regimes: low: < 1MeV; medium: 1MeV -> few 10MeV; high: > 100MeV
  
  We indicate here the corresponding macros.
  

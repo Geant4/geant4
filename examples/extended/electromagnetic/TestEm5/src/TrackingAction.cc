@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.11 2006-06-29 16:56:29 gunter Exp $
+// $Id: TrackingAction.cc,v 1.12 2007-07-05 17:11:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,22 +93,38 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   histoManager->FillHisto(id, aTrack->GetKineticEnergy());
 
-  //space angle distribution at exit
+  //space angle distribution at exit : dN/dOmega
   //
        if (transmit && charged) id =  5;
   else if (transmit && neutral) id =  9;
   else if (reflect  && charged) id = 12;
   else if (reflect  && neutral) id = 15;
 
-  G4ThreeVector direction = aTrack->GetMomentumDirection();
+  G4ThreeVector direction = aTrack->GetMomentumDirection();  
   if (histoManager->HistoExist(id)) {
     G4double theta  = std::acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
-    G4double weight = 1./(twopi*std::sin(theta)*dteta);
-    G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->FillHisto(id,theta,weight*unit*unit);
+    G4double unit   = histoManager->GetHistoUnit(id);    
+    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+    histoManager->FillHisto(id,theta,weight);
   }
+  
+  //energy fluence at exit : dE(MeV)/dOmega
+  //
+       if (transmit && charged) id = 17;
+  else if (transmit && neutral) id = 18;
+  else if (reflect  && charged) id = 19;
+  else if (reflect  && neutral) id = 20;
 
+  if (histoManager->HistoExist(id)) {
+    G4double theta  = std::acos(direction.x());
+    G4double dteta  = histoManager->GetBinWidth(id);
+    G4double unit   = histoManager->GetHistoUnit(id);    
+    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+    weight *= (aTrack->GetKineticEnergy()/MeV); 
+    histoManager->FillHisto(id,theta,weight);    
+  }
+  
   //projected angles distribution at exit
   //
        if (transmit && charged) id =  6;
