@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.cc,v 1.5 2006-06-29 16:05:25 gunter Exp $
+// $Id: MicrobeamDetectorConstruction.cc,v 1.6 2007-07-06 06:52:54 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamDetectorConstruction.hh"
@@ -633,7 +633,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
                             logicPhantom,    // their logical volumr
 //                            logicCyto,       // Mother logical volume
                             logicKgm,       // Mother logical volume
-			    kZAxis,          // Are placed along this axis 
+			    kUndefined,          // Are placed along this axis 
                             phantomParam->GetNoBoxes(),    // Number of boxes
                             phantomParam,false);   // The parametrisation
 

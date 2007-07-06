@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2007-02-27 12:02:09 sincerti Exp $
+$Id: History,v 1.12 2007-07-06 06:52:54 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.11 2007-02-27 12:02:09 sincerti Exp $
 
                        Package History file
                        --------------------
+
+05 July 2007 - S. Incerti
+- Added protection against scattering at large angles in collimators in src/MicrobeamEMField.cc
+- Suppressed field manager in zero field zones in src/MicrobeamEMField.cc
+- Chose kUndefined optimization in cell phantom implementation in src/MicrobeamDetectorConstruction.cc
+- Updated dose computation for very low energy secondaries in src/MicrobeamSteppingAction.cc
 
 27 Fev 2007 - S. Incerti
 - Modified dE/dX calculation in src/MicrobeamSteppingAction.cc 
