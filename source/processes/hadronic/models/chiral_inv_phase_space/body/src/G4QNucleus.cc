@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.75 2007-05-15 13:30:47 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.76 2007-07-06 07:38:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -817,7 +817,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   //static const G4double   uWell=7.;               // EffectiveDepth of potential well B
   static const G4double   uWell=1.7;              // EffectiveDepth of potential well B
   //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B
-  //static const G4double   alpha=7.2;              // Probability for alpha to evaporate
+  //static const G4double   evalph=7.2;              // Probability for alpha to evaporate
   //////////static const G4double   gunA=80.;       // Switch A-parameter for BaryonGun
   //static const G4double   gunB=exp(1)/gunA;
   ///////////////////static const G4double   gunB=exp(2)/4/gunA/gunA;
@@ -867,11 +867,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4bool barf=true;                               // Take into account CB in limits
   G4double uW=uWell;
   G4int    a = GetA();
-  G4double alpha=0.;                                // NO alpha evaporation
-  //G4double alpha=1.;
-  //G4double alpha=clustProb*clustProb*clustProb;
+  G4double evalph=0.;                                // NO alpha evaporation
+  //G4double evalph=1.;
+  //G4double evalph=clustProb*clustProb*clustProb;
 #ifdef ppdebug
-  G4cout<<"G4QNucleus::EvaporBaryon:Called with a="<<a<<GetThis()<<",alph="<<alpha<<G4endl;
+  G4cout<<"G4QNucleus::EvaporBaryon: *Called*, a="<<a<<GetThis()<<",alph="<<evalph<<G4endl;
 #endif
   G4double a1= a-1;
   //////////G4double z = Z;
@@ -1435,7 +1435,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       if(nFlag&&nMin<minE) minE=nMin;
       if(pFlag&&pMin<minE) minE=pMin;
       if(lFlag&&lMin<minE) minE=lMin;
-      if(alpha&&aFlag&&aMin<minE) minE=aMin;
+      if(evalph&&aFlag&&aMin<minE) minE=aMin;
 
 #ifdef ppdebug
       G4cout<<"G4QNucleus::EvapBaryon: nE="<<nExcess<<">"<<nMin<<",pE="<<pExcess<<">"<<pMin
@@ -1560,7 +1560,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 			         }
             psum+=lCBPP;
             lCBPP+=nCBPP;
-			         if(alpha&&aFlag&&tk>aMin)
+			         if(evalph&&aFlag&&tk>aMin)
             {
               G4double kin=tk-aBnd;
               //if(barf) kin-=ABarr; //@@ This is a mistake
@@ -1568,7 +1568,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 			           G4cout<<"G4QN::EB:Alpha="<<kin<<",CB="<<ABarr<<",p="
                     <<CoulBarPenProb(ABarr,kin,2,4)<<G4endl;
 #endif
-              psum+=CoulBarPenProb(ABarr,kin,2,4)*sqrt(kin)*alpha*Z*(Z-1)*N*(N-1)
+              psum+=CoulBarPenProb(ABarr,kin,2,4)*sqrt(kin)*evalph*Z*(Z-1)*N*(N-1)
                                                  *6/a1/(a-2)/(a-3);
 			         }
             G4double r = psum*G4UniformRand();
@@ -1750,11 +1750,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
               else     sLim+=(S+S)*pow(totMass-mProt-mLamb-GSResPL,2);
 			         }
             G4double aLim=sLim;
-            if(alpha&&Z>2&&N>1&&a>4&&GSResPL!=GSMass&&fMass+SAPBarr+mAlph+GSResPA<totMass)
+            if(evalph&&Z>2&&N>1&&a>4&&GSResPL!=GSMass&&fMass+SAPBarr+mAlph+GSResPA<totMass)
 			         {
-			           if(barf) aLim+=pow(totMass-mProt-mAlph-SAPBarr-GSResPA,2)*alpha*(Z-1)*(Z-2)*N
-                             *(N-1)*12/(a-2)/(a-3)/(a-4);
-              else     aLim+=pow(totMass-mProt-mAlph-GSResPA,2)*alpha*(Z-1)*(Z-2)*N*(N-1)
+			           if(barf) aLim+=pow(totMass-mProt-mAlph-SAPBarr-GSResPA,2)*evalph*
+                             (Z-1)*(Z-2)*N*(N-1)*12/(a-2)/(a-3)/(a-4);
+              else     aLim+=pow(totMass-mProt-mAlph-GSResPA,2)*evalph*(Z-1)*(Z-2)*N*(N-1)
                              *12/(a-2)/(a-3)/(a-4);
 			         }
             G4double r = aLim*G4UniformRand();
@@ -1827,12 +1827,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             if(S&&GSResNL!=GSMass&&fMass+mLamb+GSResNL<totMass)
               sLim+=(S+S)*pow(totMass-mNeut-mLamb-GSResNL,2);
             G4double aLim=sLim;
-            if(alpha&&Z>1&&N>2&&a>4&&GSResNA!=GSMass&&fMass+mAlph+ABarr+GSResNA<totMass)
+            if(evalph&&Z>1&&N>2&&a>4&&GSResNA!=GSMass&&fMass+mAlph+ABarr+GSResNA<totMass)
 			         {
 			           if(barf) aLim+=pow(totMass-mNeut-mAlph-ABarr-GSResNA,2)*
-                             alpha*Z*(Z-1)*(N-1)*(N-2)*12/(a-2)/(a-3)/(a-4);
+                             evalph*Z*(Z-1)*(N-1)*(N-2)*12/(a-2)/(a-3)/(a-4);
               else     aLim+=pow(totMass-mNeut-mAlph-GSResNA,2)*
-                             alpha*Z*(Z-1)*(N-1)*(N-2)*12/(a-2)/(a-3)/(a-4);
+                             evalph*Z*(Z-1)*(N-1)*(N-2)*12/(a-2)/(a-3)/(a-4);
 			         }
             G4double r = aLim*G4UniformRand();
 #ifdef ppdebug
@@ -1904,12 +1904,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             if(S>1&&GSResLL!=GSMass&&fMass+mLamb+GSResLL<totMass)
               sLim+=(S-1)*pow(totMass-mLamb-mLamb-GSResLL,2);
             G4double aLim=sLim;
-            if(alpha&&Z>1&&N>1&&a>4&&GSResLA!=GSMass&&fMass+mAlph+ABarr+GSResLA<totMass)
+            if(evalph&&Z>1&&N>1&&a>4&&GSResLA!=GSMass&&fMass+mAlph+ABarr+GSResLA<totMass)
 			         {
 			           if(barf) aLim+=pow(totMass-mLamb-mAlph-ABarr-GSResLA,2)*
-                             alpha*Z*(Z-1)*N*(N-1)*12/(a-2)/(a-3)/(a-4);
+                             evalph*Z*(Z-1)*N*(N-1)*12/(a-2)/(a-3)/(a-4);
               else     aLim+=pow(totMass-mLamb-mAlph-GSResLA,2)*
-                             alpha*Z*(Z-1)*N*(N-1)*12/(a-2)/(a-3)/(a-4);
+                             evalph*Z*(Z-1)*N*(N-1)*12/(a-2)/(a-3)/(a-4);
 			         }
             G4double r = aLim*G4UniformRand();
 #ifdef ppdebug
@@ -1987,12 +1987,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
               else     sLim+=S*pow(totMass-mLamb-mAlph-GSResLA,2);
 			         }
             G4double aLim=sLim;
-            if(alpha&&Z>3&&N>3&&a>7&&GSResAA!=GSMass&&fMass+mAlph+SAABarr+GSResAA<totMass)
+            if(evalph&&Z>3&&N>3&&a>7&&GSResAA!=GSMass&&fMass+mAlph+SAABarr+GSResAA<totMass)
 			         {
 			           if(barf) aLim+=pow(totMass-mAlph-mAlph-SAABarr-GSResAA,2)*
-                             alpha*(Z-2)*(Z-3)*(N-2)*(N-3)*12/(a-5)/(a-6)/(a-7);
+                             evalph*(Z-2)*(Z-3)*(N-2)*(N-3)*12/(a-5)/(a-6)/(a-7);
               else     aLim+=pow(totMass-mAlph-mAlph-GSResAA,2)*
-                             alpha*(Z-2)*(Z-3)*(N-2)*(N-3)*12/(a-5)/(a-6)/(a-7);
+                             evalph*(Z-2)*(Z-3)*(N-2)*(N-3)*12/(a-5)/(a-6)/(a-7);
 			         }
             G4double r = aLim*G4UniformRand();
 #ifdef ppdebug
@@ -2078,11 +2078,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           sLim+=S*CoulBarPenProb(0.,ken,0,1)*sqrt(ken);
 		      }
         G4double aLim=sLim;
-        if(alpha&&aFlag&&mAlph+GSResNa<totMass)
+        if(evalph&&aFlag&&mAlph+GSResNa<totMass)
         {
           G4double ken=totMass-mAlph-GSResNa;
           if(barf) ken-=ABarr;
-          aLim+=CoulBarPenProb(ABarr,ken,2,4)*sqrt(ken)*alpha*Z*(Z-1)*N*(N-1)
+          aLim+=CoulBarPenProb(ABarr,ken,2,4)*sqrt(ken)*evalph*Z*(Z-1)*N*(N-1)
                 *6/a1/(a-2)/(a-3);
 		      }
         G4double r = aLim*G4UniformRand();
@@ -2226,7 +2226,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         G4bool tpd=true;
         //@@ Coulomb Barrier penetration can be added
         G4double alp=0.;
-		      if(aSecF)alp=alpha*Z*(Z-1)*N*(N-1)*10/(a-2)/(a-3)/(a-4);
+		      if(aSecF)alp=evalph*Z*(Z-1)*N*(N-1)*10/(a-2)/(a-3)/(a-4);
         G4double  nnLim=0.;
         if(nnFlag&&totMass>mNeut+mNeut+GSResNN)
           nnLim+=N*(N-1)*pow(totMass-mNeut-mNeut-GSResNN,2);
@@ -2273,12 +2273,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           else     laLim+=S*alp*pow(totMass-mLamb-mAlph-GSResLA,2);
 		      }
         G4double  aaLim=laLim;
-        if(alpha&&aaFlag&&totMass>mAlph+mAlph+SAABarr+GSResAA)
+        if(evalph&&aaFlag&&totMass>mAlph+mAlph+SAABarr+GSResAA)
 		      {
           if(barf) aaLim+=alp*pow(totMass-mAlph-mAlph-SAABarr-GSResAA,2)*
-                          alpha*(Z-2)*(Z-3)*(N-2)*(N-3)*7/(a-5)/(a-6)/(a-7);
+                          evalph*(Z-2)*(Z-3)*(N-2)*(N-3)*7/(a-5)/(a-6)/(a-7);
           else     aaLim+=alp*pow(totMass-mAlph-mAlph-GSResAA,2)*
-                          alpha*(Z-2)*(Z-3)*(N-2)*(N-3)*7/(a-5)/(a-6)/(a-7);
+                          evalph*(Z-2)*(Z-3)*(N-2)*(N-3)*7/(a-5)/(a-6)/(a-7);
 		      }
         G4double r = aaLim*G4UniformRand();
         if     (aaLim&&laLim<r)
@@ -2529,11 +2529,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         {
           G4double ken=totMass-mAlph-GSResNa;
           if(barf) ken-=ABarr;
-          aLim+=CoulBarPenProb(ABarr,ken,2,4)*sqrt(ken)*alpha*Z*(Z-1)*N*(N-1)
+          aLim+=CoulBarPenProb(ABarr,ken,2,4)*sqrt(ken)*evalph*Z*(Z-1)*N*(N-1)
                 *6/a1/(a-2)/(a-3);
 #ifdef ppdebug
-          G4cout<<"G4QN::EvaB:al="<<alpha<<",k="<<ken<<",P="<<CoulBarPenProb(ABarr,ken,2,4)
-                <<G4endl;
+          G4cout<<"G4QNucleus::EvaporateBaryon:al="<<evalph<<",k="<<ken<<",P="
+                <<CoulBarPenProb(ABarr,ken,2,4)<<G4endl;
 #endif
 		      }
         G4double r = aLim*G4UniformRand();
