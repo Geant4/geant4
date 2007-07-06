@@ -261,6 +261,8 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
 
   G4int particlePDG = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
 
+  G4double particleEkin = aStep->GetTrack()->GetKineticEnergy(); 
+
   //G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
   //       << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
   //       << " mm ;  replica = " << replica  << " ;  radius = " << radius/mm 
@@ -294,10 +296,13 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
   // because in the EventAction only the hit collection is available
   // and the hits do not have information about the radius of each
   // energy deposition that contributed (and also about the PDG code
-  // of the particle that made such energy deposition).
+  // of the particle that made such energy deposition; in order to
+  // study the contribution of particles of different kinetic energies,
+  // we include also the information of the kinetic energy of the
+  // particle that has deposited energy in this step).
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
   if ( analysis ) {
-    analysis->fillShowerProfile( replica, radius, edep, particlePDG );
+    analysis->fillShowerProfile( replica, radius, edep, particlePDG, particleEkin );
   }
 
   return true;

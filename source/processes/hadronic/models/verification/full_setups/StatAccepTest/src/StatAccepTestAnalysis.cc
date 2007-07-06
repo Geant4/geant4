@@ -23,6 +23,19 @@ bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = false;
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
 
+G4double StatAccepTestAnalysis::infParticleEkin_electron = -999.9;
+G4double StatAccepTestAnalysis::supParticleEkin_electron = 1.0E+30; 
+G4double StatAccepTestAnalysis::infParticleEkin_muon     = -999.9;     
+G4double StatAccepTestAnalysis::supParticleEkin_muon     = 1.0E+30;     
+G4double StatAccepTestAnalysis::infParticleEkin_pion     = -999.9;     
+G4double StatAccepTestAnalysis::supParticleEkin_pion     = 1.0E+30; 
+G4double StatAccepTestAnalysis::infParticleEkin_kaon     = -999.9;     
+G4double StatAccepTestAnalysis::supParticleEkin_kaon     = 1.0E+30; 
+G4double StatAccepTestAnalysis::infParticleEkin_proton   = -999.9;   
+G4double StatAccepTestAnalysis::supParticleEkin_proton   = 1.0E+30;
+G4double StatAccepTestAnalysis::infParticleEkin_nuclei   = -999.9;   
+G4double StatAccepTestAnalysis::supParticleEkin_nuclei   = 1.0E+30;
+
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
 
 
@@ -177,6 +190,12 @@ void StatAccepTestAnalysis::init() {
   } 
   numberOfEvents = 0;
   vecEvis.clear();
+
+  vecEvis_muon.clear();
+  vecEvis_pion.clear();
+  vecEvis_kaon.clear();
+  vecEvis_proton.clear();
+  vecEvis_nuclei.clear();
 
   sumEdepAct_electron  = 0.0;
   sumEdepAct_electron2 = 0.0;
@@ -1322,8 +1341,8 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 
 
 void StatAccepTestAnalysis::
-fillShowerProfile( G4int replica, const G4double radius, 
-		   const G4double edep, const G4int particlePDG ) {
+fillShowerProfile( G4int replica, const G4double radius, const G4double edep,
+                   const G4int particlePDG, const G4double particleEkin ) {
 
   if ( replica >= numberOfReplicas ) {
     G4cout << " StatAccepTestAnalysis::fillShowerProfile : ***ERROR*** " << G4endl
@@ -1365,7 +1384,11 @@ fillShowerProfile( G4int replica, const G4double radius,
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
+  //    -  nuclei   (all particles with PDG code = 0 , or with
+  //                 the new PDG code with 10-digits; also
+  //                 neutrons are included, as an effective way
+  //                 to take into account the recoil of nuclei
+  //                 below a certain threshold)
 
   // 02-Apr-2007 : I have tried to transform the following long  if  
   //               statement into a  switch  statement in which 
@@ -1376,31 +1399,48 @@ fillShowerProfile( G4int replica, const G4double radius,
   // The errors do not disappear if static constants are used instead
   // of simple constant integers. So I gave up!
 
+  //***HERE***
+
   if ( particlePDG == electronId  ||  particlePDG == positronId ) {
-    sumEdepAct_electron += edep;
-    sumEdepTot_electron += edep;
-    longitudinalProfile_electron[ readoutLayer ] += edep;
-    transverseProfile_electron[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_electron  &&  
+	 particleEkin < supParticleEkin_electron ) {
+      sumEdepAct_electron += edep;
+      sumEdepTot_electron += edep;
+      longitudinalProfile_electron[ readoutLayer ] += edep;
+      transverseProfile_electron[ iBinRadius ] += edep;
+    }
   } else if ( particlePDG == muonMinusId  ||  particlePDG == muonPlusId ) {
-    sumEdepAct_muon += edep;
-    sumEdepTot_muon += edep;
-    longitudinalProfile_muon[ readoutLayer ] += edep;
-    transverseProfile_muon[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_muon  &&  
+	 particleEkin < supParticleEkin_muon ) {
+      sumEdepAct_muon += edep;
+      sumEdepTot_muon += edep;
+      longitudinalProfile_muon[ readoutLayer ] += edep;
+      transverseProfile_muon[ iBinRadius ] += edep;
+    }
   } else if ( particlePDG == pionPlusId  ||  particlePDG == pionMinusId ) {
-    sumEdepAct_pion += edep;
-    sumEdepTot_pion += edep;
-    longitudinalProfile_pion[ readoutLayer ] += edep;
-    transverseProfile_pion[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_pion  &&  
+	 particleEkin < supParticleEkin_pion ) {
+      sumEdepAct_pion += edep;
+      sumEdepTot_pion += edep;
+      longitudinalProfile_pion[ readoutLayer ] += edep;
+      transverseProfile_pion[ iBinRadius ] += edep;
+    }
   } else if ( particlePDG == kaonMinusId  ||  particlePDG == kaonPlusId ) {
-    sumEdepAct_kaon += edep;
-    sumEdepTot_kaon += edep;
-    longitudinalProfile_kaon[ readoutLayer ] += edep;
-    transverseProfile_kaon[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_kaon  &&  
+	 particleEkin < supParticleEkin_kaon ) {
+      sumEdepAct_kaon += edep;
+      sumEdepTot_kaon += edep;
+      longitudinalProfile_kaon[ readoutLayer ] += edep;
+      transverseProfile_kaon[ iBinRadius ] += edep;
+    }
   } else if ( particlePDG == protonId  ||  particlePDG == antiProtonId ) {
-    sumEdepAct_proton += edep;
-    sumEdepTot_proton += edep;
-    longitudinalProfile_proton[ readoutLayer ] += edep;
-    transverseProfile_proton[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_proton  &&  
+	 particleEkin < supParticleEkin_proton ) {
+      sumEdepAct_proton += edep;
+      sumEdepTot_proton += edep;
+      longitudinalProfile_proton[ readoutLayer ] += edep;
+      transverseProfile_proton[ iBinRadius ] += edep;
+    }
   } else if ( particlePDG == 0  || 
 	      particlePDG / 1000000000 >= 1  ||
 	      particlePDG == neutronId ) {
@@ -1411,10 +1451,13 @@ fillShowerProfile( G4int replica, const G4double radius,
     // Starting with 8.1, neutrons can also deposit energy, as an 
     // effective way to take into account the recoil of nuclei 
     // below a certain threshold.
-    sumEdepAct_nuclei += edep;
-    sumEdepTot_nuclei += edep;
-    longitudinalProfile_nuclei[ readoutLayer ] += edep;
-    transverseProfile_nuclei[ iBinRadius ] += edep;
+    if ( particleEkin > infParticleEkin_nuclei  &&  
+	 particleEkin < supParticleEkin_nuclei ) {
+      sumEdepAct_nuclei += edep;
+      sumEdepTot_nuclei += edep;
+      longitudinalProfile_nuclei[ readoutLayer ] += edep;
+      transverseProfile_nuclei[ iBinRadius ] += edep;
+    }
   }
 
 }
@@ -2868,8 +2911,11 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
   // of the following groups of particles:
   // e-  and  e+  together
   static G4double sumEdepAct_electron_previous = 0.0;
-  sumEdepAct_electron2 += ( sumEdepAct_electron - sumEdepAct_electron_previous ) *
-                          ( sumEdepAct_electron - sumEdepAct_electron_previous );
+  G4double totalEnergyDepositedInActiveLayers_electron = 
+    sumEdepAct_electron - sumEdepAct_electron_previous;
+  vecEvis_electron.push_back( totalEnergyDepositedInActiveLayers_electron );
+  sumEdepAct_electron2 += totalEnergyDepositedInActiveLayers_electron *
+                          totalEnergyDepositedInActiveLayers_electron;
   sumEdepAct_electron_previous = sumEdepAct_electron;
   static G4double sumEdepTot_electron_previous = 0.0;
   sumEdepTot_electron2 += ( sumEdepTot_electron - sumEdepTot_electron_previous ) *
@@ -2890,8 +2936,11 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
   // mu-  and  mu+  together
   static G4double sumEdepAct_muon_previous = 0.0;
-  sumEdepAct_muon2 += ( sumEdepAct_muon - sumEdepAct_muon_previous ) *
-                      ( sumEdepAct_muon - sumEdepAct_muon_previous );
+  G4double totalEnergyDepositedInActiveLayers_muon = 
+    sumEdepAct_muon - sumEdepAct_muon_previous;
+  vecEvis_muon.push_back( totalEnergyDepositedInActiveLayers_muon );
+  sumEdepAct_muon2 += totalEnergyDepositedInActiveLayers_muon *
+                          totalEnergyDepositedInActiveLayers_muon;
   sumEdepAct_muon_previous = sumEdepAct_muon;
   static G4double sumEdepTot_muon_previous = 0.0;
   sumEdepTot_muon2 += ( sumEdepTot_muon - sumEdepTot_muon_previous ) *
@@ -2912,8 +2961,11 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
   // pi+  and  pi-  together
   static G4double sumEdepAct_pion_previous = 0.0;
-  sumEdepAct_pion2 += ( sumEdepAct_pion - sumEdepAct_pion_previous ) *
-                      ( sumEdepAct_pion - sumEdepAct_pion_previous );
+  G4double totalEnergyDepositedInActiveLayers_pion = 
+    sumEdepAct_pion - sumEdepAct_pion_previous;
+  vecEvis_pion.push_back( totalEnergyDepositedInActiveLayers_pion );
+  sumEdepAct_pion2 += totalEnergyDepositedInActiveLayers_pion *
+                          totalEnergyDepositedInActiveLayers_pion;
   sumEdepAct_pion_previous = sumEdepAct_pion;
   static G4double sumEdepTot_pion_previous = 0.0;
   sumEdepTot_pion2 += ( sumEdepTot_pion - sumEdepTot_pion_previous ) *
@@ -2934,8 +2986,11 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
   // k+  and  k-  together
   static G4double sumEdepAct_kaon_previous = 0.0;
-  sumEdepAct_kaon2 += ( sumEdepAct_kaon - sumEdepAct_kaon_previous ) *
-                      ( sumEdepAct_kaon - sumEdepAct_kaon_previous );
+  G4double totalEnergyDepositedInActiveLayers_kaon = 
+    sumEdepAct_kaon - sumEdepAct_kaon_previous;
+  vecEvis_kaon.push_back( totalEnergyDepositedInActiveLayers_kaon );
+  sumEdepAct_kaon2 += totalEnergyDepositedInActiveLayers_kaon *
+                          totalEnergyDepositedInActiveLayers_kaon;
   sumEdepAct_kaon_previous = sumEdepAct_kaon;
   static G4double sumEdepTot_kaon_previous = 0.0;
   sumEdepTot_kaon2 += ( sumEdepTot_kaon - sumEdepTot_kaon_previous ) *
@@ -2956,8 +3011,11 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
   // p  and  pbar  together
   static G4double sumEdepAct_proton_previous = 0.0;
-  sumEdepAct_proton2 += ( sumEdepAct_proton - sumEdepAct_proton_previous ) *
-                        ( sumEdepAct_proton - sumEdepAct_proton_previous );
+  G4double totalEnergyDepositedInActiveLayers_proton = 
+    sumEdepAct_proton - sumEdepAct_proton_previous;
+  vecEvis_proton.push_back( totalEnergyDepositedInActiveLayers_proton );
+  sumEdepAct_proton2 += totalEnergyDepositedInActiveLayers_proton *
+                          totalEnergyDepositedInActiveLayers_proton;
   sumEdepAct_proton_previous = sumEdepAct_proton;
   static G4double sumEdepTot_proton_previous = 0.0;
   sumEdepTot_proton2 += ( sumEdepTot_proton - sumEdepTot_proton_previous ) *
@@ -2976,10 +3034,13 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
     transverseProfile_proton[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-  // all particles with PDG code = 0
+  // Nuclei  and  neutrons  together
   static G4double sumEdepAct_nuclei_previous = 0.0;
-  sumEdepAct_nuclei2 += ( sumEdepAct_nuclei - sumEdepAct_nuclei_previous ) *
-                        ( sumEdepAct_nuclei - sumEdepAct_nuclei_previous );
+  G4double totalEnergyDepositedInActiveLayers_nuclei = 
+    sumEdepAct_nuclei - sumEdepAct_nuclei_previous;
+  vecEvis_nuclei.push_back( totalEnergyDepositedInActiveLayers_nuclei );
+  sumEdepAct_nuclei2 += totalEnergyDepositedInActiveLayers_nuclei *
+                          totalEnergyDepositedInActiveLayers_nuclei;
   sumEdepAct_nuclei_previous = sumEdepAct_nuclei;
   static G4double sumEdepTot_nuclei_previous = 0.0;
   sumEdepTot_nuclei2 += ( sumEdepTot_nuclei - sumEdepTot_nuclei_previous ) *
@@ -3342,6 +3403,7 @@ void StatAccepTestAnalysis::finish() {
     std::vector< G4double > vecSumL2;
     std::vector< G4double > vecSumR;
     std::vector< G4double > vecSumR2;
+    std::vector< G4double > particle_vecEvis;
 
     switch ( iCase ) {
     case 0 : {
@@ -3357,6 +3419,10 @@ void StatAccepTestAnalysis::finish() {
       for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
 	vecSumR.push_back( sumR_electron[ iBinR ] );
 	vecSumR2.push_back( sumR_electron2[ iBinR ] );
+      }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_electron.begin();
+	    cit != vecEvis_electron.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
       }
       break;
     }
@@ -3374,6 +3440,10 @@ void StatAccepTestAnalysis::finish() {
 	vecSumR.push_back( sumR_muon[ iBinR ] );
 	vecSumR2.push_back( sumR_muon2[ iBinR ] );
       }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_muon.begin();
+	    cit != vecEvis_muon.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
+      }
       break;
     }
     case 2 : {
@@ -3389,6 +3459,10 @@ void StatAccepTestAnalysis::finish() {
       for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
 	vecSumR.push_back( sumR_pion[ iBinR ] );
 	vecSumR2.push_back( sumR_pion2[ iBinR ] );
+      }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_pion.begin();
+	    cit != vecEvis_pion.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
       }
       break;
     }
@@ -3406,6 +3480,10 @@ void StatAccepTestAnalysis::finish() {
 	vecSumR.push_back( sumR_kaon[ iBinR ] );
 	vecSumR2.push_back( sumR_kaon2[ iBinR ] );
       }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_kaon.begin();
+	    cit != vecEvis_kaon.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
+      }
       break;
     }
     case 4 : {
@@ -3422,6 +3500,10 @@ void StatAccepTestAnalysis::finish() {
 	vecSumR.push_back( sumR_proton[ iBinR ] );
 	vecSumR2.push_back( sumR_proton2[ iBinR ] );
       }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_proton.begin();
+	    cit != vecEvis_proton.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
+      }
       break;
     }
     case 5 : {
@@ -3437,6 +3519,10 @@ void StatAccepTestAnalysis::finish() {
       for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
 	vecSumR.push_back( sumR_nuclei[ iBinR ] );
 	vecSumR2.push_back( sumR_nuclei2[ iBinR ] );
+      }
+      for ( std::vector< G4double >::const_iterator cit = vecEvis_nuclei.begin();
+	    cit != vecEvis_nuclei.end() ; ++cit ) {
+	particle_vecEvis.push_back( *cit );
       }
       break;
     }
@@ -3481,6 +3567,31 @@ void StatAccepTestAnalysis::finish() {
     }
     G4cout << "\t \t <E_tot> = " << mu << " +/- " << mu_sigma 
 	   << "  ( " << 100.0*f << " +/- " << 100.0*f_sigma << " % )" << G4endl;
+
+    G4double width_Evis = 0.0;
+    for ( std::vector< G4double >::const_iterator cit = particle_vecEvis.begin();
+	  cit != particle_vecEvis.end() ; ++cit ) {
+      width_Evis += std::abs( *cit - particle_mu_Evis );
+    }
+    width_Evis *= std::sqrt( 3.141592654/2.0 ) / n;
+    G4double width_Evis_sigma = width_Evis / std::sqrt( 2.0*(n - 1) );
+    G4double energyResolution = 0.0;
+    G4double energyResolution_sigma = 0.0;
+    if ( particle_mu_Evis > 1.0E-06 ) {
+      energyResolution = width_Evis / particle_mu_Evis;
+      if ( width_Evis > 1.0E-06 ) {
+	energyResolution_sigma = energyResolution *
+	  std::sqrt( ( width_Evis_sigma * width_Evis_sigma ) / 
+		     ( width_Evis * width_Evis ) 
+		     +
+		     ( particle_mu_Evis_sigma * particle_mu_Evis_sigma ) / 
+		     ( particle_mu_Evis + particle_mu_Evis ) );
+      }
+    }
+    G4cout << "\t \t sigma_Evis = " << width_Evis << " +/- " 
+	   << width_Evis_sigma << G4endl
+	   << "\t \t energy resolution = " << energyResolution << " +/- "  
+	   << energyResolution_sigma << G4endl;
 
     G4double fLongitudinal1stQuarter = 0.0;
     G4double fLongitudinal2ndQuarter = 0.0;

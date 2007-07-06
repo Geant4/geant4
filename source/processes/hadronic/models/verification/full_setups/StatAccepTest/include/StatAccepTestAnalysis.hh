@@ -60,8 +60,8 @@ public:
                    float totalEnergyDepositedInCalorimeter );
   // This method is supposed to be called at most once for each event.  
 
-  void fillShowerProfile( G4int replica, const G4double radius, 
-			  const G4double edep, const G4int particlePDG );
+  void fillShowerProfile( G4int replica, const G4double radius, const G4double edep,
+			  const G4int particlePDG, const G4double particleEkin );
   // This method is called by StatAccepTestSensitiveCalorimeter at each step
   // in the active layer of the calorimeter.
 
@@ -100,6 +100,19 @@ private:
   static bool isCountingProcessesOn; // To switch on/off the counting of processes.
 
   static bool isMapParticleNamesOn;  // To switch on/off the map of particle names.
+
+  static G4double infParticleEkin_electron; // Energy thresholds for electrons,
+  static G4double supParticleEkin_electron; // only for electron-information.
+  static G4double infParticleEkin_muon;     // Energy thresholds for muons,
+  static G4double supParticleEkin_muon;     // only for muon-information.
+  static G4double infParticleEkin_pion;     // Energy thresholds for pions,
+  static G4double supParticleEkin_pion;     // only for pion-information.
+  static G4double infParticleEkin_kaon;     // Energy thresholds for kaons,
+  static G4double supParticleEkin_kaon;     // only for kaon-information.
+  static G4double infParticleEkin_proton;   // Energy thresholds for protons,
+  static G4double supParticleEkin_proton;   // only for proton-information.
+  static G4double infParticleEkin_nuclei;   // Energy thresholds for nuclei,
+  static G4double supParticleEkin_nuclei;   // only for nuclei-information.
 
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
@@ -203,6 +216,13 @@ private:
   // "normalized deviation". To calculate it, we need to keep all
   // the values of EdepAct in a vector.
   std::vector< G4double > vecEvis;
+
+  std::vector< G4double > vecEvis_electron;
+  std::vector< G4double > vecEvis_muon;
+  std::vector< G4double > vecEvis_pion;
+  std::vector< G4double > vecEvis_kaon;
+  std::vector< G4double > vecEvis_proton;
+  std::vector< G4double > vecEvis_nuclei;
 
   // Keep the count of the total number of steps and tracks,
   // for all events (so at the end it is necessary to divide
