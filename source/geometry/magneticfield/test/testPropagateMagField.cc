@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.31 2006-06-29 18:25:04 gunter Exp $
+// $Id: testPropagateMagField.cc,v 1.32 2007-07-06 14:16:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -239,6 +239,7 @@ G4VPhysicalVolume* BuildGeometry()
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+#include "G4HelixMixedStepper.hh"
 
 G4UniformMagField myMagField(10.*tesla, 0., 0.); 
 
@@ -261,9 +262,14 @@ G4FieldManager* SetupField(G4int type)
       case 6: pStepper = new G4HelixImplicitEuler( fEquation ); break;
       case 7: pStepper = new G4HelixSimpleRunge( fEquation ); break;
       case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
-      case 9: pStepper = new G4ExactHelixStepper( fEquation );    break;
-      case 10: pStepper = new G4RKG3_Stepper( fEquation );    break;
-      default: pStepper = 0;
+      case 9: pStepper = new G4ExactHelixStepper( fEquation );   break;
+      case 10: pStepper = new G4RKG3_Stepper( fEquation );       break;
+      case 11: pStepper = new G4HelixMixedStepper( fEquation );  break;
+      default: 
+        pStepper = 0;
+        G4cerr << " Stepper type provided is " << type << G4endl;
+        G4Exception(" Invalid value of stepper type"); 
+        break; 
     }
     
     pFieldMgr= G4TransportationManager::GetTransportationManager()->
