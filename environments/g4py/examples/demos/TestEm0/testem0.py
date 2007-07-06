@@ -4,7 +4,7 @@
 #
 # ==================================================================
 import Geant4 as g4
-import pyTestEm0
+import TestEm0
 
 # ==================================================================
 # user actions in python
@@ -15,17 +15,17 @@ import pyTestEm0
 # main
 # ==================================================================
 
-myDC= pyTestEm0.DetectorConstruction()
+myDC= TestEm0.DetectorConstruction()
 g4.gRunManager.SetUserInitialization(myDC)
 
-myPL= pyTestEm0.PhysicsList()
+myPL= TestEm0.PhysicsList()
 g4.gRunManager.SetUserInitialization(myPL)
 
 # set user actions...
-myPGA= pyTestEm0.PrimaryGeneratorAction(myDC)
+myPGA= TestEm0.PrimaryGeneratorAction(myDC)
 g4.gRunManager.SetUserAction(myPGA)
         
-myRA= pyTestEm0.RunAction(myDC,myPGA)
+myRA= TestEm0.RunAction(myDC,myPGA)
 
 # set user action classes
 g4.gRunManager.SetUserAction(myRA)
@@ -36,9 +36,9 @@ g4.gRunManager.Initialize()
 
 pg = g4.G4ParticleGun()
     
-materialList = pyTestEm0.getMaterialTable();
+materialList = TestEm0.getMaterialTable();
 
-particleList = pyTestEm0.getParticleTable()
+particleList = TestEm0.getParticleTable()
 
 enrgyList = ["eV","keV","MeV","GeV","TeV","PeV"]
 
