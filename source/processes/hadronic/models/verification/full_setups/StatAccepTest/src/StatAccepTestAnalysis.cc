@@ -1476,6 +1476,8 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   G4double stepEnergyDeposit = aStep->GetTotalEnergyDeposit();
   G4double stepWeight = aStep->GetTrack()->GetWeight();
 
+  //G4cout << "L=" << stepLength/mm << " Edep=" << stepEnergyDeposit/MeV << G4endl;
+
   // 02-Apr-2007 : I have tried to transform the following long  if  
   //               statement into a  switch  statement in which 
   // "electronId", "positronId", etc. appear as "case label", but 
@@ -1487,7 +1489,10 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 
   // Count the number of inelastic and stoppingAtRest processes.
   if ( StatAccepTestAnalysis::isCountingProcessesOn ) { 
-    G4String processStr( aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() );  
+    G4String processStr = "UserLimit";
+    if ( aStep->GetPostStepPoint()->GetProcessDefinedStep() ) {
+      processStr = aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+    }  
     //G4cout << " Process = " << processStr << G4endl; //***DEBUG***
     if ( processStr.find( "Inelastic" ) != G4String::npos  ||
 	 processStr.find( "AbsorptionAtRest" ) != G4String::npos  ||
