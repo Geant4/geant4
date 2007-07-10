@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2007-07-06 06:39:07 kmura Exp $
+$Id: History,v 1.27 2007-07-10 07:15:06 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,9 +14,11 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 July 2007 K.Murakami
+10 July 2007 K.Murakami
  - add version contorol in pyG4UIterminal.cc
  - a new example of TestEm0 is contributed by Jean
+ - fix a bug in pyG4VUserDetectorConstruction
+    - Construct() method should return PV
 
 07 June 2007 K.Murakami
  - modified for 9.0
