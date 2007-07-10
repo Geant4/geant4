@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2007-07-02 07:23:58 ahoward Exp $
+$Id: History,v 1.14 2007-07-10 09:54:30 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.13 2007-07-02 07:23:58 ahoward Exp $
 
                       Category History file
                       ---------------------
+02.07.2007 - A. Howard (DMX-V09-00-01)
+	     Added G4StepLimiter to physics list (correction of migration to
+             Geant4 7.0)
+
 02.07.2007 - A. Howard (DMX-V09-00-00)
 	     Added missing header file G4hIonisation.hh to DMXPhysicsLists.cc
 
