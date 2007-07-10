@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.10 2007-06-06 12:31:51 bmorgan Exp $
+# $Id: Configure,v 1.11 2007-07-10 10:19:28 bmorgan Exp $
 #
-# Generated on Wed Jun  6 11:24:06 BST 2007 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 22 12:32:16 BST 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2769,7 +2769,7 @@ Please, specify default directory where ALL the Geant4 data is installed:
 
  G4LEDATA:			$g4ledata
 
- NeutronHPCrossSections:	$g4neutronhpcrosssections
+ G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
 You will be asked about customizing these next.
 
@@ -2811,7 +2811,7 @@ Please, specify default directory where the Geant4 data is installed:
 
 3) G4LEDATA:			$g4ledata
 
-4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
