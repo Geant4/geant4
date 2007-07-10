@@ -1,0 +1,4 @@
+Metaconfig requires a non-empty hints directory in order to build the
+Configure script correctly (not fully understood why as of 10/07/07). This
+file simply exists so that the hints directory will not be empty under CVS and
+so will be checked out and there for the user.
