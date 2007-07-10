@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 09-Apr-2006
+# Last update: 10-Jul-2007
 #
 # ATLAS Barrel LAr electromagnetic calorimeter:
 #                Pb (1.53 mm) - LAr (4.2 mm)
@@ -24,8 +24,21 @@
 # number of active layers (92), 23 is the closest to the
 # usual (20) number of readout layers we are used to consider
 # for the longitudinal profile).
-# For the lateral profile, we use 10 bins (as usual), with
-# X0(Pb)/4 = 1.403 mm as size of the first bin.
+#
+# As radius of the cylindrical calorimeter, we take a large
+# one, corresponding to the usual  5 lambda radius
+# ("lambda" of the absorber material, Pb) used for
+# hadronic calorimeter: in practice, for electromagnetic
+# showers, this corresponds to an infinite wide calorimeter,
+# without lateral leakage. 
+#
+# For the binning of lateral profile, we use (as usual) 
+# 10 bins, but with X0(Pb)/4 = 1.403 mm as size of the first
+# bin, in such a way to have the proper "granularity" to
+# study an electromagnetic shower. This implies that the
+# last lateral bin is very big: for electromagnetic showers
+# it should anyhow being almost empty, but for hadronic 
+# showers it should get a large fraction of visible energy.
 #
 # The real setup is made of 3 longitudinal segmentation of 
 # thicknesses: 4.7 X0 (front); 18.1 X0 (middle); 4.8 X0 (back).
@@ -54,7 +67,7 @@
 #
 /mydet/isUnitInLambda 0
 /mydet/absorberTotalLength 140.76
-/mydet/calorimeterRadius 70.38
+/mydet/calorimeterRadius 854.6
 /mydet/activeLayerNumber 92
 /mydet/readoutLayerNumber 23
 /mydet/activeLayerSize 4.2

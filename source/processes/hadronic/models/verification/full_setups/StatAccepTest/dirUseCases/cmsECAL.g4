@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 15-May-2007
+# Last update: 10-Jul-2007
 #
 # CMS ECAL : made of  2 cm x 2 cm x 23 cm  PbWO4 crystals.
 #  
@@ -9,8 +9,18 @@
 #                    23 cm = 25.8 X0 = 1.03 lambda
 #
 # The configuration which we used is a cylinder of
-#  23 cm  length  and  5 cm radius  (corresponding
-# approximately to a 5 x 5 matrix of crystals).
+#  23 cm  length  and the following choices for the
+# the radius of the calorimeter:
+#     -   5 cm : corresponding to approximately 
+#                5 x 5 matrix of crystals;
+#     -   7 cm : corresponding to approximately
+#                7 x 7 matrix of crystals;
+#     - 112 cm : corresponding to 5 lambda 
+#                (the "usual" choice for hadronic showers);
+#                in practice, for electromagnetic showers,
+#                this corresponds to an infinite wide
+#                calorimeter, without lateral leakage. 
+# 
 # We consider only 1 layer, with thickness of the of
 # the active layer very small (1 nm): notice that we
 # cannot avoid to use an active layer, even if we do
@@ -49,7 +59,12 @@
 /mydet/isCalHomogeneous 1
 /mydet/isUnitInLambda 0
 /mydet/absorberTotalLength 230.0
-/mydet/calorimeterRadius 50.0
+#
+#***LOOKHERE*** CHOICE OF THE RADIUS
+###/mydet/calorimeterRadius   50.0
+###/mydet/calorimeterRadius   70.0
+/mydet/calorimeterRadius 1120.0
+#
 /mydet/activeLayerSize 0.000001
 /mydet/activeLayerNumber 1
 /mydet/readoutLayerNumber 1
