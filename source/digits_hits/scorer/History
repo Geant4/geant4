@@ -1,0 +1,42 @@
+$Id: History,v 1.1 2007-07-11 01:27:26 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+July 11, 2007  M.Asai (detscorer-V09-00-00)
+- Moved from digits_hits/utilis.
+
+June 06, 2007  A.Howard (detutils-V08-03-02)
+- Added modified G4PSPopulation removing event (circular) dependency 
+  (file form T.Aso).
+
+June 05, 2007  M.Asai (detutils-V08-03-01)
+- Drop G4PSPopulation from the release.
+
+May 17, 2007  M.Asai (detutils-V08-03-00)
+- New scorers for event biasing.
+- kCarTolerance now becomes a local data member obtained from G4GeometryTolerance class.
+
+November 17, 2006  M.Asai (detutils-V08-01-00)
+- G4PSCellCharge is introduced.
+
+November 18, 2005  M.Asai (detutils-V07-01-01)
+- Introducing concrete primitive scorer and filter classes.
+
+November 16, 2005  M.Asai (detutils-V07-01-00)
+- Created.
+
