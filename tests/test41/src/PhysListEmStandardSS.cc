@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.1 2007-06-27 16:58:39 vnivanch Exp $
+// $Id: PhysListEmStandardSS.cc,v 1.2 2007-07-11 18:04:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,15 +101,10 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);
              
-    } else if (particleName == "alpha" || particleName == "He3") {
+    } else if (particleName == "alpha" || 
+	       particleName == "He3" ||
+               particleName == "GenericIon") {
       pmanager->AddDiscreteProcess(new G4CoulombScattering);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
-
-    } else if (particleName == "GenericIon" ) { 
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      pmanager->AddDiscreteProcess(cs);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
      
     } else if ((!particle->IsShortLived()) &&
