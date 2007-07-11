@@ -209,6 +209,19 @@ private:
   std::vector< G4double > longitudinalProfile_nuclei;
   std::vector< G4double > transverseProfile_nuclei; 
 
+  // All but  e-  and  e+
+  G4double sumEdepAct_no_electron, sumEdepAct_no_electron2;
+  // All but  mu-  and  mu+ 
+  G4double sumEdepAct_no_muon, sumEdepAct_no_muon2;
+  // All but  pi-  and  pi+
+  G4double sumEdepAct_no_pion, sumEdepAct_no_pion2;
+  // All but  k-  and  k+
+  G4double sumEdepAct_no_kaon, sumEdepAct_no_kaon2;
+  // All but  proton  and  anti-proton
+  G4double sumEdepAct_no_proton, sumEdepAct_no_proton2;
+  // All but  nuclei and neutrons
+  G4double sumEdepAct_no_nuclei, sumEdepAct_no_nuclei2;
+
   // Due to the non-gaussian visible energy distribution, the width 
   // of it cannot be estimated as the sigma of the gaussian fit; on
   // the other hand, the rms is not appropriate because it weights 
@@ -217,12 +230,19 @@ private:
   // the values of EdepAct in a vector.
   std::vector< G4double > vecEvis;
 
-  std::vector< G4double > vecEvis_electron;
-  std::vector< G4double > vecEvis_muon;
-  std::vector< G4double > vecEvis_pion;
-  std::vector< G4double > vecEvis_kaon;
-  std::vector< G4double > vecEvis_proton;
-  std::vector< G4double > vecEvis_nuclei;
+  std::vector< G4double > vecEvis_electron;    // only e- and e+ within Ekin range
+  std::vector< G4double > vecEvis_muon;        //  "  mu-  " mu+   "      "     "
+  std::vector< G4double > vecEvis_pion;        //  "  pi-  " pi+   "      "     "
+  std::vector< G4double > vecEvis_kaon;        //  "   K-  "  K+   "      "     "
+  std::vector< G4double > vecEvis_proton;      //  "   p   " pbar  "      "     "
+  std::vector< G4double > vecEvis_nuclei;      //  "  nuclei & neutrons   "     " 
+
+  std::vector< G4double > vecEvis_no_electron; // all but e- and e+ within Ekin range
+  std::vector< G4double > vecEvis_no_muon;     //  "   " mu-  " mu+   "     "    "
+  std::vector< G4double > vecEvis_no_pion;     //  "   " pi-  " pi+   "     "    "
+  std::vector< G4double > vecEvis_no_kaon;     //  "   "  K-  "  K+   "     "    "
+  std::vector< G4double > vecEvis_no_proton;   //  "   "  p   " pbar  "     "    "
+  std::vector< G4double > vecEvis_no_nuclei;   //  "  nuclei & neutrons     "    "
 
   // Keep the count of the total number of steps and tracks,
   // for all events (so at the end it is necessary to divide
