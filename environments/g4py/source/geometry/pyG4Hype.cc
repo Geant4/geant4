@@ -23,34 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Box.cc,v 1.5 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Hype.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pyG4Box.cc
+//   pyG4Hype.cc
 //
-//                                         2005 Q
+//                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Box.hh"
+#include "G4Hype.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4Box()
+void export_G4Hype()
 {
-  class_<G4Box, G4Box*, bases<G4VSolid> >
-    ("G4Box", "box solid class", no_init)
+  class_<G4Hype, G4Hype*, bases<G4VSolid> >
+    ("G4Hype", "hyperbolic solid class", no_init)
     // constructors
-    .def(init<const G4String&, G4double, G4double, G4double>())
+    .def(init<const G4String&, G4double, G4double, G4double,
+                               G4double, G4double>())
     // ---
-    .def("GetXHalfLength",   &G4Box::GetXHalfLength)
-    .def("GetYHalfLength",   &G4Box::GetYHalfLength)
-    .def("GetZHalfLength",   &G4Box::GetZHalfLength)
-    .def("SetXHalfLength",   &G4Box::SetXHalfLength)
-    .def("SetYHalfLength",   &G4Box::SetYHalfLength)
-    .def("SetZHalfLength",   &G4Box::SetZHalfLength)
+    .def("GetInnerRadius",   &G4Hype::GetInnerRadius)
+    .def("GetOuterRadius",   &G4Hype::GetOuterRadius)
+    .def("GetZHalfLength",   &G4Hype::GetZHalfLength)
+    .def("GetInnerStereo",   &G4Hype::GetInnerStereo)
+    .def("GetOuterStereo",   &G4Hype::GetOuterStereo)
+    .def("SetInnerRadius",   &G4Hype::SetInnerRadius)
+    .def("SetOuterRadius",   &G4Hype::SetOuterRadius)
+    .def("SetZHalfLength",   &G4Hype::SetZHalfLength)
+    .def("SetInnerStereo",   &G4Hype::SetInnerStereo)
+    .def("SetOuterStereo",   &G4Hype::SetOuterStereo)
 
     // operators
     .def(self_ns::str(self))

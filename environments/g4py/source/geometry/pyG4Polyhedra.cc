@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Polyhedra.cc,v 1.1 2007-07-11 05:39:50 kmura Exp $
+// $Id: pyG4Polyhedra.cc,v 1.2 2007-07-11 10:02:22 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Polyhedra.cc
@@ -55,11 +55,8 @@ G4Polyhedra* f1_CreatePolyhedra(const G4String& name,
 
   for (G4int i=0; i< numZPlanes; i++) {
     zlist[i]= zPlane[i];
-  }
-
-  for (G4int j=0; j< numSide; j++) {
-    r0list[j]= rInner[j];
-    r1list[j]= rOuter[j];
+    r0list[i]= rInner[i];
+    r1list[i]= rOuter[i];
   }
 
   return new G4Polyhedra(name, phiStart, phiTotal, numSide, numZPlanes,
@@ -78,10 +75,7 @@ G4Polyhedra* f2_CreatePolyhedra(const G4String& name,
 
   for (G4int i=0; i< numRZ; i++) {
     zlist[i]= z[i];
-  }
-
-  for (G4int j=0; j< numSide; j++) {
-    rlist[j]= r[j];
+    rlist[i]= r[i];
   }
 
   return new G4Polyhedra(name, phiStart, phiTotal, numSide, numRZ, 

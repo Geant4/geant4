@@ -23,34 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Box.cc,v 1.5 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Ellipsoid.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pyG4Box.cc
+//   pyG4Ellipsoid.cc
 //
-//                                         2005 Q
+//                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Box.hh"
+#include "G4Ellipsoid.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4Box()
+void export_G4Ellipsoid()
 {
-  class_<G4Box, G4Box*, bases<G4VSolid> >
-    ("G4Box", "box solid class", no_init)
+  class_<G4Ellipsoid, G4Ellipsoid*, bases<G4VSolid> >
+    ("G4Ellipsoid", "ellipsoid class", no_init)
     // constructors
     .def(init<const G4String&, G4double, G4double, G4double>())
+    .def(init<const G4String&, G4double, G4double, G4double, G4double>())
+    .def(init<const G4String&, G4double, G4double, G4double, G4double, 
+                               G4double>())
     // ---
-    .def("GetXHalfLength",   &G4Box::GetXHalfLength)
-    .def("GetYHalfLength",   &G4Box::GetYHalfLength)
-    .def("GetZHalfLength",   &G4Box::GetZHalfLength)
-    .def("SetXHalfLength",   &G4Box::SetXHalfLength)
-    .def("SetYHalfLength",   &G4Box::SetYHalfLength)
-    .def("SetZHalfLength",   &G4Box::SetZHalfLength)
+    .def("GetSemiAxisMax", &G4Ellipsoid::GetSemiAxisMax)
+    .def("GetZBottomCut",  &G4Ellipsoid::GetZBottomCut)
+    .def("GetZTopCut",     &G4Ellipsoid::GetZTopCut)
+    .def("SetSemiAxis",  &G4Ellipsoid::SetSemiAxis)
+    .def("SetZCuts",  &G4Ellipsoid::SetZCuts)
 
     // operators
     .def(self_ns::str(self))

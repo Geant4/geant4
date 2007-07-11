@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4geometry.cc,v 1.5 2007-07-11 05:39:50 kmura Exp $
+// $Id: pymodG4geometry.cc,v 1.6 2007-07-11 10:02:22 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4geometry.cc [Geant4Py module]
@@ -56,6 +56,14 @@ void export_G4Trap();
 void export_G4Tubs();
 void export_G4Polycone();
 void export_G4Polyhedra();
+void export_G4EllipticalTube();
+void export_G4Ellipsoid();
+void export_G4EllipticalCone();
+void export_G4Hype();
+void export_G4Tet();
+void export_G4TwistedBox();
+void export_G4TwistedTrap();
+void export_G4TwistedTubs();
 void export_G4TransportationManager();
 void export_G4FieldManager();
 void export_G4Field();
@@ -84,6 +92,14 @@ BOOST_PYTHON_MODULE(G4geometry)
   export_G4Tubs();
   export_G4Polycone();
   export_G4Polyhedra();
+  export_G4EllipticalTube();
+  export_G4Ellipsoid();
+  export_G4EllipticalCone();
+  export_G4Hype();
+  export_G4Tet();
+  export_G4TwistedBox();
+  export_G4TwistedTrap();
+  export_G4TwistedTubs();
   export_G4TransportationManager();
   export_G4FieldManager();
   export_G4Field();

@@ -23,34 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Box.cc,v 1.5 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4EllipticalCone.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pyG4Box.cc
+//   pyG4EllipticalCone.cc
 //
-//                                         2005 Q
+//                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Box.hh"
+#include "G4EllipticalCone.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4Box()
+void export_G4EllipticalCone()
 {
-  class_<G4Box, G4Box*, bases<G4VSolid> >
-    ("G4Box", "box solid class", no_init)
+  class_<G4EllipticalCone, G4EllipticalCone*, bases<G4VSolid> >
+    ("G4EllipticalCone", "elliptical cone solid class", no_init)
     // constructors
-    .def(init<const G4String&, G4double, G4double, G4double>())
+    .def(init<const G4String&, G4double, G4double, G4double, G4double>())
     // ---
-    .def("GetXHalfLength",   &G4Box::GetXHalfLength)
-    .def("GetYHalfLength",   &G4Box::GetYHalfLength)
-    .def("GetZHalfLength",   &G4Box::GetZHalfLength)
-    .def("SetXHalfLength",   &G4Box::SetXHalfLength)
-    .def("SetYHalfLength",   &G4Box::SetYHalfLength)
-    .def("SetZHalfLength",   &G4Box::SetZHalfLength)
+    .def("GetSimiAxisMax",  &G4EllipticalCone::GetSemiAxisMax)
+    .def("GetZTopCut",      &G4EllipticalCone::GetZTopCut)
+    .def("SetSemiAxis",     &G4EllipticalCone::SetSemiAxis)
+    .def("SetZCut",         &G4EllipticalCone::SetZCut)
 
     // operators
     .def(self_ns::str(self))
