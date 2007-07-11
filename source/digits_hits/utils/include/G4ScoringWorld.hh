@@ -24,65 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.2 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4ScoringWorld.hh,v 1.1 2007-07-11 07:00:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringManager_h
-#define G4ScoringManager_h 1
+#ifndef G4ScoringWorld_h
+#define G4ScoringWorld_h 1
 
 #include "globals.hh"
-#include "G4ScoringWorld.hh"
-#include <vector>
-class G4ScoringMessenger;
+class G4VPhysicalVolume;
 
 // class description:
 //
-//  This is a singleton class which manages the interactive scoring.
-// The user cannot access to the constructor. The pointer of the
-// only existing object can be got via G4ScoringManager::GetScoringManager()
-// static method. The first invokation of this static method makes
-// the singleton object.
+//  This class represents a parallel world for interactive scoring purposes.
 //
 
-typedef std::vector<G4ScoringWorld*> WorldVec;
-typedef std::vector<G4ScoringWorld*>::iterator WorldVecItr;
-
-class G4ScoringManager 
+class G4ScoringWorld 
 {
-  public: // with description
-      static G4ScoringManager* GetScoringManager();
-      // Returns the pointer to the singleton object.
   public:
-      static G4ScoringManager* GetScoringManagerIfExist();
-
-  protected:
-      G4ScoringManager();
+      G4ScoringWorld(G4String wName);
+      ~G4ScoringWorld();
 
   public:
-      ~G4ScoringManager();
+      void Construct(G4VPhysicalVolume* fWorldPhys);
 
   public:
-      void List() const;
+      inline const G4String& GetWorldName() const
+      { return fWorldName; }
 
-  private: 
-      static G4ScoringManager * fSManager;
-      G4int verboseLevel;
-      G4ScoringMessenger* fMessenger;
-
-      WorldVec fWorldVec;
-
-  public:
-      inline void SetVerboseLevel(G4int vl) 
-      { verboseLevel = vl; }
-      inline G4int GetVerboseLevel() const
-      { return verboseLevel; }
-      inline size_t GetNumberOfWorlds() const
-      { return fWorldVec.size(); }
-      inline G4ScoringWorld* GetWorld(G4int i) const
-      { return fWorldVec[i]; }
-      inline G4String GetWorldName(G4int i) const
-      { return fWorldVec[i]->GetWorldName(); }
+  private:
+      G4String fWorldName;
+      G4bool   fConstructed;
 };
 
 

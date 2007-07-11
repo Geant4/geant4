@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.1 2007-07-11 02:26:59 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.2 2007-07-11 07:00:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringManager.hh"
+#include "G4ScoringMessenger.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
 
@@ -46,9 +47,16 @@ G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 
 G4ScoringManager::G4ScoringManager():verboseLevel(0)
 {
+  fMessenger = new G4ScoringMessenger(this);
 }
 
 G4ScoringManager::~G4ScoringManager()
 {
+  delete fMessenger;
+  fSManager = 0;
 }
 
+void G4ScoringManager::List() const
+{
+  G4cout << "G4ScoringManager" << G4endl;
+}

@@ -24,69 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.2 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.1 2007-07-11 07:00:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ---------------------------------------------------------------------
 
-#ifndef G4ScoringManager_h
-#define G4ScoringManager_h 1
+#include "G4ScoringMessenger.hh"
+#include "G4ScoringManager.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
-#include "globals.hh"
-#include "G4ScoringWorld.hh"
-#include <vector>
-class G4ScoringMessenger;
-
-// class description:
-//
-//  This is a singleton class which manages the interactive scoring.
-// The user cannot access to the constructor. The pointer of the
-// only existing object can be got via G4ScoringManager::GetScoringManager()
-// static method. The first invokation of this static method makes
-// the singleton object.
-//
-
-typedef std::vector<G4ScoringWorld*> WorldVec;
-typedef std::vector<G4ScoringWorld*>::iterator WorldVecItr;
-
-class G4ScoringManager 
+G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager):fSMan(SManager)
 {
-  public: // with description
-      static G4ScoringManager* GetScoringManager();
-      // Returns the pointer to the singleton object.
-  public:
-      static G4ScoringManager* GetScoringManagerIfExist();
+  scoreDir = new G4UIdirectory("/score/");
+  scoreDir->SetGuidance("Interactive scoring commands.");
 
-  protected:
-      G4ScoringManager();
+  listCmd = new G4UIcmdWithoutParameter("/score/list",this);
+  listCmd->SetGuidance("List scoring worlds.");
 
-  public:
-      ~G4ScoringManager();
+  verboseCmd = new G4UIcmdWithAnInteger("/score/verbose",this);
+  verboseCmd->SetGuidance("Verbosity");
+}
 
-  public:
-      void List() const;
+G4ScoringMessenger::~G4ScoringMessenger()
+{
+  delete listCmd;
+  delete scoreDir;
+}
 
-  private: 
-      static G4ScoringManager * fSManager;
-      G4int verboseLevel;
-      G4ScoringMessenger* fMessenger;
+void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
+{
+  if(command==listCmd)
+  { fSMan->List(); }
+  else if(command==verboseCmd)
+  { fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); }
+}
 
-      WorldVec fWorldVec;
+G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand * command)
+{
+  G4String val;
+  if(command==verboseCmd)
+  { val = verboseCmd->ConvertToString(fSMan->GetVerboseLevel()); }
 
-  public:
-      inline void SetVerboseLevel(G4int vl) 
-      { verboseLevel = vl; }
-      inline G4int GetVerboseLevel() const
-      { return verboseLevel; }
-      inline size_t GetNumberOfWorlds() const
-      { return fWorldVec.size(); }
-      inline G4ScoringWorld* GetWorld(G4int i) const
-      { return fWorldVec[i]; }
-      inline G4String GetWorldName(G4int i) const
-      { return fWorldVec[i]->GetWorldName(); }
-};
-
-
-
-
-#endif
+  return val;
+}
 
