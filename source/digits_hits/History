@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007-06-05 16:46:55 ahoward Exp $
+$Id: History,v 1.26 2007-07-11 02:04:11 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 11, 2007, M.Asai (digits_hits-V09-00-00)
+- Create new sub-directory "scorer" and move all scorer and filter classes
+  to this new directory. "utils" sub-directory will be used for interactive
+  scoring utilities.
 
 June 4, 2007, A.Howard (digits_hits-V08-03-04)
 - Removed G4PSPopulation class to obviate circular dependency
