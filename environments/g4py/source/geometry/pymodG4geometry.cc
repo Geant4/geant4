@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4geometry.cc,v 1.4 2006-06-29 15:33:00 gunter Exp $
+// $Id: pymodG4geometry.cc,v 1.5 2007-07-11 05:39:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4geometry.cc [Geant4Py module]
@@ -54,6 +54,8 @@ void export_G4Orb();
 void export_G4Sphere();
 void export_G4Trap();
 void export_G4Tubs();
+void export_G4Polycone();
+void export_G4Polyhedra();
 void export_G4TransportationManager();
 void export_G4FieldManager();
 void export_G4Field();
@@ -80,6 +82,8 @@ BOOST_PYTHON_MODULE(G4geometry)
   export_G4Sphere();
   export_G4Trap();
   export_G4Tubs();
+  export_G4Polycone();
+  export_G4Polyhedra();
   export_G4TransportationManager();
   export_G4FieldManager();
   export_G4Field();
