@@ -64,7 +64,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   // EM physics
   emPhysicsList = new PhysListEmStandard(emName = "standard");
-
+  emName = "standard";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

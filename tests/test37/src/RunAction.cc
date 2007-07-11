@@ -66,108 +66,146 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   matName2     = detector->GetAbsorber2Material()->GetName();
   matName3     = detector->GetAbsorber3Material()->GetName();
 
+  MFP1 = 1.e+10;
+  MFP2 = 1.e+10;
+  MFP3 = 1.e+10;
+
 // Medium 1
   if (matName1=="G4_Ta") // Tantalum 
-  { 
-  density1 =16.654*g/cm3; 
-  if(energy==1.033*MeV)      MFP1 = 0.788*g/cm2  ; // MFP1, MFP2 &  MFP3 values were taken from SANDIA Report
-  else if(energy==1.000*MeV) MFP1 = 0.763*g/cm2  ;
-  else if(energy==0.521*MeV) MFP1 = 0.339*g/cm2 ;
-  else if(energy==0.500*MeV) MFP1 = 0.325*g/cm2  ;
-  else if(energy==0.314*MeV) MFP1 = 0.167*g/cm2  ;
-  else if(energy==0.300*MeV) MFP1 = 0.160*g/cm2  ;
-  }
+    { 
+      density1 =16.654*g/cm3; 
+      if(energy==1.033*MeV)      MFP1 = 0.788*g/cm2  ; // MFP1, MFP2 &  MFP3 values were taken from SANDIA Report
+      else if(energy==1.000*MeV) MFP1 = 0.763*g/cm2  ;
+      else if(energy==0.521*MeV) MFP1 = 0.339*g/cm2 ;
+      else if(energy==0.500*MeV) MFP1 = 0.325*g/cm2  ;
+      else if(energy==0.314*MeV) MFP1 = 0.167*g/cm2  ;
+      else if(energy==0.300*MeV) MFP1 = 0.160*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName1 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if (matName1=="G4_Mo") // Molybdenum 
-  { 
-  density1 =10.22*g/cm3; 
-  if(energy==0.5*MeV)      MFP1 = 0.281*g/cm2  ;
-  }
+    { 
+      density1 =10.22*g/cm3; 
+      if(energy==0.5*MeV)      MFP1 = 0.281*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName1 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName1=="G4_Al")//Aluminium
-  { 
-  density1 = 2.699*g/cm3;
-  if(energy==1.033*MeV)      MFP1 = 0.569*g/cm2  ;
-  else if(energy==1.000*MeV) MFP1 = 0.551*g/cm2  ;
-  else if(energy==0.521*MeV) MFP1 = 0.234*g/cm2  ;
-  else if(energy==0.314*MeV) MFP1 = 0.113*g/cm2 ;
-  }
+    { 
+      density1 = 2.699*g/cm3;
+      if(energy==1.033*MeV)      MFP1 = 0.569*g/cm2  ;
+      else if(energy==1.000*MeV) MFP1 = 0.551*g/cm2  ;
+      else if(energy==0.521*MeV) MFP1 = 0.234*g/cm2  ;
+      else if(energy==0.314*MeV) MFP1 = 0.113*g/cm2 ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName1 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName1=="G4_Au")//Gold
-  { 
-  density1 = 19.32*g/cm3;
-  if(energy==1.000*MeV)      MFP1 = 0.772*g/cm2  ;
-  }
+    { 
+      density1 = 19.32*g/cm3;
+      if(energy==1.000*MeV)      MFP1 = 0.772*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName1 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
 
 
 // Medium 2
   if (matName2=="G4_Ta") // Tantalum 
-  { 
-  density2 =16.654*g/cm3; 
-  if(energy==1.033*MeV)      MFP2 = 0.788*g/cm2  ;
-  else if(energy==1.000*MeV) MFP2 = 0.763*g/cm2  ;
-  else if(energy==0.521*MeV) MFP2 = 0.339*g/cm2 ;
-  else if(energy==0.500*MeV) MFP2 = 0.325*g/cm2  ;
-  else if(energy==0.314*MeV) MFP2 = 0.167*g/cm2  ;
-  else if(energy==0.300*MeV) MFP2 = 0.160*g/cm2  ;
-  }
+    { 
+      density2 =16.654*g/cm3; 
+      if(energy==1.033*MeV)      MFP2 = 0.788*g/cm2  ;
+      else if(energy==1.000*MeV) MFP2 = 0.763*g/cm2  ;
+      else if(energy==0.521*MeV) MFP2 = 0.339*g/cm2 ;
+      else if(energy==0.500*MeV) MFP2 = 0.325*g/cm2  ;
+      else if(energy==0.314*MeV) MFP2 = 0.167*g/cm2  ;
+      else if(energy==0.300*MeV) MFP2 = 0.160*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName2 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if (matName2=="G4_Mo") // Molybdenum 
-  { 
-  density2 =10.22*g/cm3; 
-  if(energy==0.5*MeV)      MFP2 = 0.281*g/cm2  ;
-  }
+    { 
+      density2 =10.22*g/cm3; 
+      if(energy==0.5*MeV)      MFP2 = 0.281*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName2 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName2=="G4_Al")//Aluminium
-  { 
-  density2 = 2.699*g/cm3;
-  if(energy==1.033*MeV)      MFP2 = 0.569*g/cm2  ;
-  else if(energy==1.000*MeV) MFP2 = 0.551*g/cm2  ;
-  else if(energy==0.521*MeV) MFP2 = 0.234*g/cm2  ;
-  else if(energy==0.314*MeV) MFP2 = 0.113*g/cm2 ;
-  }
+    { 
+      density2 = 2.699*g/cm3;
+      if(energy==1.033*MeV)      MFP2 = 0.569*g/cm2  ;
+      else if(energy==1.000*MeV) MFP2 = 0.551*g/cm2  ;
+      else if(energy==0.521*MeV) MFP2 = 0.234*g/cm2  ;
+      else if(energy==0.314*MeV) MFP2 = 0.113*g/cm2 ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName2 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName2=="G4_Au")//Gold
-  { 
-  density2 = 19.32*g/cm3;
-  if(energy==1.000*MeV)      MFP2 = 0.772*g/cm2  ;
+    { 
+      density2 = 19.32*g/cm3;
+      if(energy==1.000*MeV)      MFP2 = 0.772*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName2 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
   }
 
 // Medium 3
   if (matName3=="G4_Ta") // Tantalum 
-  { 
-  density3 =16.654*g/cm3; 
-  if(energy==1.033*MeV)      MFP3 = 0.788*g/cm2  ;
-  else if(energy==1.000*MeV) MFP3 = 0.763*g/cm2  ;
-  else if(energy==0.521*MeV) MFP3 = 0.339*g/cm2 ;
-  else if(energy==0.500*MeV) MFP3 = 0.325*g/cm2  ;
-  else if(energy==0.314*MeV) MFP3 = 0.167*g/cm2  ;
-  else if(energy==0.300*MeV) MFP3 = 0.160*g/cm2  ;
-  }
+    { 
+      density3 =16.654*g/cm3; 
+      if(energy==1.033*MeV)      MFP3 = 0.788*g/cm2  ;
+      else if(energy==1.000*MeV) MFP3 = 0.763*g/cm2  ;
+      else if(energy==0.521*MeV) MFP3 = 0.339*g/cm2 ;
+      else if(energy==0.500*MeV) MFP3 = 0.325*g/cm2  ;
+      else if(energy==0.314*MeV) MFP3 = 0.167*g/cm2  ;
+      else if(energy==0.300*MeV) MFP3 = 0.160*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName3 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if (matName3=="G4_Mo") // Molybdenum 
-  { 
-  density3 =10.22*g/cm3; 
-  if(energy==0.5*MeV)      MFP3 = 0.281*g/cm2  ;
-  }
+    { 
+      density3 =10.22*g/cm3; 
+      if(energy==0.5*MeV)      MFP3 = 0.281*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName3 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName3=="G4_Al")//Aluminium
-  { 
-  density3 = 2.699*g/cm3;
-  if(energy==1.033*MeV)      MFP3 = 0.569*g/cm2  ;
-  else if(energy==1.000*MeV) MFP3 = 0.551*g/cm2  ;
-  else if(energy==0.521*MeV) MFP3 = 0.234*g/cm2  ;
-  else if(energy==0.314*MeV) MFP3 = 0.113*g/cm2 ;
-  }
+    { 
+      density3 = 2.699*g/cm3;
+      if(energy==1.033*MeV)      MFP3 = 0.569*g/cm2  ;
+      else if(energy==1.000*MeV) MFP3 = 0.551*g/cm2  ;
+      else if(energy==0.521*MeV) MFP3 = 0.234*g/cm2  ;
+      else if(energy==0.314*MeV) MFP3 = 0.113*g/cm2 ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName3 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
   else if(matName3=="G4_Au")//Gold
-  { 
-  density3 = 19.32*g/cm3;
-  if(energy==1.000*MeV)      MFP3 = 0.772*g/cm2  ;
-  }
+    { 
+      density3 = 19.32*g/cm3;
+      if(energy==1.000*MeV)      MFP3 = 0.772*g/cm2  ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName3 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
 
   //initialize EnergyDeposit per Layer
-  for (G4int k=0; k<detector->GetNbOfLayersOfMedium1(); k++)   energyDeposit1[k] = 0.0*MeV;   
-  for (G4int k=0; k<detector->GetNbOfLayersOfMedium2(); k++)   energyDeposit2[k] = 0.0*MeV;   
-  for (G4int k=0; k<detector->GetNbOfLayersOfMedium3(); k++)   energyDeposit3[k] = 0.0*MeV;   
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium1(); k++)   energyDeposit1[k] = 0.0*MeV;   
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium2(); k++)   energyDeposit2[k] = 0.0*MeV;   
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium3(); k++)   energyDeposit3[k] = 0.0*MeV;   
 
   //initialize EnergyDeposit per Medium
   energyDepositRun1 = 0.*MeV;
   energyDepositRun2 = 0.*MeV;
   energyDepositRun3 = 0.*MeV;
- 
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,7 +233,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double thick32 = G4double (n32);
   G4double LayerTh3= thick31/thick32;
   G4double deltaX3 = LayerTh3*density3/MFP3;
-  G4cout<<thick21/cm<<"  "<<thick22/cm<<"  "<<thick32/cm<<"  "<<G4endl;
+  G4cout<<"Thicknesses(mm)= " << thick21/mm<<"  "<<thick22/mm<<"  "<<thick32/mm<<"  "<<G4endl;
+  G4cout<<"Bins(R/R0)=      " << deltaX1<<"  "<<deltaX2<<"  "<<deltaX3<<"  "<<G4endl;
 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
   G4cout<<" ----------------  RUN SUMMARY ----------------------------"<<G4endl;
@@ -210,6 +249,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     return;
   }
 
+  G4double pos = 0.0;
+  G4double norm = g/(NumbrOfEvents*deltaX1*MFP1*MeV*cm2);
+
   if(matName1!="G4_Galactic")
     {
       asciiFile<<"             Medium 1 ==>   "<<matName1<< "  " << n12 << G4endl;
@@ -218,20 +260,21 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
       // Write to file
       for (G4int k=1; k<=n12; k++) {
-	normalizedvalue1[k] =(energyDeposit1[k]/MeV)/(NumbrOfEvents*deltaX1*(MFP1/(g/cm2))); 
-	G4cout<<"\t   "<<deltaX1*k<<"\t          "<<normalizedvalue1[k]<<G4endl;
+	pos +=  deltaX1;      
+	normalizedvalue1[k] = energyDeposit1[k]*norm; 
+	G4cout<<"\t   "<<pos<<"\t          "<<normalizedvalue1[k]<<G4endl;
 	asciiFile << std::setiosflags(std::ios::fixed)
 		  << std::setprecision(5)
 		  << std::setiosflags(std::ios::right)
 		  << std::setw(10);
-	asciiFile << deltaX1*k;
+	asciiFile << pos;
 	asciiFile << "           ";
 	asciiFile << std::setiosflags(std::ios::fixed)
 		  << std::setprecision(5)
 		  << std::setiosflags(std::ios::right)
 		  << std::setw(10);
 	asciiFile << normalizedvalue1[k]
-		  << G4endl;      
+		  << G4endl;
       }
       G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun1/MeV)/NumbrOfEvents<<G4endl;
     }
@@ -242,15 +285,18 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout<<"               Medium 2 ==>   "<<matName2<<G4endl;
     G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
     asciiFile<<"       Medium 2 ==>   "<<matName2<<"  " << n22 <<G4endl;
+
+    norm = g/(NumbrOfEvents*deltaX2*MFP2*MeV*cm2);
           
     for (G4int k=1; k<=n22; k++) {
-      normalizedvalue2[k] =(energyDeposit2[k]/MeV)/(NumbrOfEvents*deltaX2*(MFP2/(g/cm2)));
-      G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*k)<<"\t          "<<normalizedvalue2[k]<<G4endl;
+      pos +=  deltaX2;      
+      normalizedvalue2[k] = energyDeposit2[k]*norm;
+      G4cout<<"\t   "<< pos <<"\t          "<<normalizedvalue2[k]<<G4endl;
       asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-      asciiFile << (deltaX1*thick12)+(deltaX2*k);
+      asciiFile << pos;
       asciiFile << "           ";
       asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
@@ -269,15 +315,18 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
     asciiFile<<"       Medium 3 ==>   "<<matName3<<"  " << n32 <<G4endl;
           
+    norm = g/(NumbrOfEvents*deltaX3*MFP3*MeV*cm2);
+
     for (G4int k=1; k<=n32; k++) {
-      normalizedvalue3[k] =(energyDeposit3[k]/MeV)/(NumbrOfEvents*deltaX3*(MFP3/(g/cm2))); 
-      G4cout<<"\t   "<<(deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k)
+      pos +=  deltaX3;      
+      normalizedvalue3[k] = energyDeposit3[k]*norm; 
+      G4cout<<"\t   "<< pos
 	    <<"\t          "<<normalizedvalue3[k]<<G4endl;
       asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)
 		<< std::setiosflags(std::ios::right)
 		<< std::setw(10);
-      asciiFile << (deltaX1*thick12)+(deltaX2*thick22)+(deltaX3*k);
+      asciiFile << pos;
       asciiFile << "           ";
       asciiFile << std::setiosflags(std::ios::fixed)
 		<< std::setprecision(5)

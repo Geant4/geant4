@@ -1,9 +1,10 @@
 #/bin/csh
 
+rm -f ${1}.out
 ${2} ${3}Aluminum.in >& ${1}.out
 mv Sandia.out Al_${1}.log
 
-${2} ${3}Molibdenum.in >>& ${1}.out
+${2} ${3}Molybdenum.in >>& ${1}.out
 mv Sandia.out Mo_${1}.log
 
 ${2} ${3}Tantalum.in >>& ${1}.out

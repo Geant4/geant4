@@ -40,8 +40,8 @@
 
 #include "G4UnitsTable.hh"
 
-//#include "G4VisAttributes.hh"
-//#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,7 +110,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   G4SolidStore::GetInstance()->Clean();
   DefineMaterials();
   // World
-  solidWorld = new G4Box("World",(4./2)*cm,(1.5/2)*cm,(15./2)*cm);	
+  solidWorld = new G4Box("World",(4./2)*cm,(15./2)*cm,(15./2)*cm);	
   logicWorld = new G4LogicalVolume(solidWorld,WorldMaterial,"World");	
   physiWorld = new G4PVPlacement(0,G4ThreeVector(),logicWorld,"World",0,false,0);			
 
@@ -118,25 +118,25 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 //--------------------------------------------------------------------------------
 //                                 Medium1
 
-  solidMedium1 = new G4Box("Medium 1",Absorber1Thickness/2,(1.0/2)*cm,(10./2)*cm);
+  solidMedium1 = new G4Box("Medium 1",Absorber1Thickness/2,(10.0/2)*cm,(10./2)*cm);
   logicMedium1 = new G4LogicalVolume(solidMedium1,Absorber1Material,"Medium 1");	
   physiMedium1 = new G4PVPlacement(0,G4ThreeVector(Absorber1Thickness/2,0.,0.),logicMedium1,
                                    "Medium 1",logicWorld,false,0);			
 
                                 // Layers of Medium1
   LayerThichness1 = Absorber1Thickness/NbOfLayersOfMedium1;
-  solidLayerMedium1 = new G4Box("LayerMedium 1",LayerThichness1/2,(1.0/2)*cm,(10./2)*cm);
+  solidLayerMedium1 = new G4Box("LayerMedium 1",LayerThichness1/2,(10.0/2)*cm,(10./2)*cm);
   logicLayerMedium1 = new G4LogicalVolume(solidLayerMedium1,Absorber1Material,"LayerMedium 1");	
   
   for (G4int iAbs=0; iAbs<NbOfLayersOfMedium1; iAbs++) 
   {
-  physiLayerMedium1 = new G4PVPlacement(0,G4ThreeVector(
-  ((LayerThichness1-Absorber1Thickness)/2 + iAbs * LayerThichness1)  
-  ,0.,0.),logicLayerMedium1,"LayerMedium 1",logicMedium1,false,iAbs+1);			
+    physiLayerMedium1 = new G4PVPlacement(0,
+	G4ThreeVector(((LayerThichness1-Absorber1Thickness)/2 + iAbs * LayerThichness1)  
+		      ,0.,0.),logicLayerMedium1,"LayerMedium 1",logicMedium1,false,iAbs+1);			
   }
 //--------------------------------------------------------------------------------
 //                                 Medium2
-  solidMedium2 = new G4Box("Medium 2",Absorber2Thickness/2,(1.0/2)*cm,(10./2)*cm);
+  solidMedium2 = new G4Box("Medium 2",Absorber2Thickness/2,(10.0/2)*cm,(10./2)*cm);
   logicMedium2 = new G4LogicalVolume(solidMedium2,Absorber2Material,"Medium 2");	
   physiMedium2 = new G4PVPlacement(0,
                G4ThreeVector(Absorber1Thickness+0.5*Absorber2Thickness,0.,0.),
@@ -144,18 +144,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
                                 // Layers of Medium2
   LayerThichness2 = Absorber2Thickness/NbOfLayersOfMedium2;
-  solidLayerMedium2 = new G4Box("LayerMedium 2",LayerThichness2/2,(1.0/2)*cm,(10./2)*cm);
+  solidLayerMedium2 = new G4Box("LayerMedium 2",LayerThichness2/2,(10.0/2)*cm,(10./2)*cm);
   logicLayerMedium2 = new G4LogicalVolume(solidLayerMedium2,Absorber2Material,"LayerMedium 2");	
   
   for (G4int iAb=0; iAb<NbOfLayersOfMedium2; iAb++) 
   {
-  physiLayerMedium2 = new G4PVPlacement(0,G4ThreeVector(
-  ((LayerThichness2-Absorber2Thickness)/2 + iAb * LayerThichness2)  
-  ,0.,0.),logicLayerMedium2,"LayerMedium 2",logicMedium2,false,iAb+1);			
+    physiLayerMedium2 = new G4PVPlacement(0,
+	      G4ThreeVector(((LayerThichness2-Absorber2Thickness)/2 + iAb * LayerThichness2)  
+			    ,0.,0.),logicLayerMedium2,"LayerMedium 2",logicMedium2,false,iAb+1);			
   }
 //--------------------------------------------------------------------------------
 //                                 Medium3
-  solidMedium3 = new G4Box("Medium 3",Absorber3Thickness/2,(1.0/2)*cm,(10./2)*cm);
+  solidMedium3 = new G4Box("Medium 3",Absorber3Thickness/2,(10.0/2)*cm,(10./2)*cm);
   logicMedium3 = new G4LogicalVolume(solidMedium3,Absorber3Material,"Medium 3");	
   physiMedium3 = new G4PVPlacement(0,
                G4ThreeVector(Absorber1Thickness+Absorber2Thickness+0.5*Absorber3Thickness,0.,0.),
@@ -168,28 +168,27 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   for (G4int iAb=0; iAb<NbOfLayersOfMedium3; iAb++) 
   {
-  physiLayerMedium3 = new G4PVPlacement(0,G4ThreeVector(
-  ((LayerThichness3-Absorber3Thickness)/2 + iAb * LayerThichness3)  
-  ,0.,0.),logicLayerMedium3,"LayerMedium 3",logicMedium3,false,iAb+1);			
+    physiLayerMedium3 = new G4PVPlacement(0,
+               G4ThreeVector(((LayerThichness3-Absorber3Thickness)/2 + iAb * LayerThichness3)  
+			     ,0.,0.),logicLayerMedium3,"LayerMedium 3",logicMedium3,false,iAb+1);			
   }
-/*
+
 //--------- Visualization attributes -------------------------------
 
-//  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  G4VisAttributes* Zero= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   logicWorld  ->SetVisAttributes(G4VisAttributes::Invisible);  
         
   G4VisAttributes* One = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicMedium1  ->SetVisAttributes(One); 
+  logicMedium1  ->SetVisAttributes(Zero); 
   logicLayerMedium1  ->SetVisAttributes(One); 
 
   G4VisAttributes* Two = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
-  logicMedium2  ->SetVisAttributes(Two);
+  logicMedium2  ->SetVisAttributes(Zero);
+  logicMedium3  ->SetVisAttributes(Zero);
   logicLayerMedium2  ->SetVisAttributes(Two);
-  logicLayerMedium3  ->SetVisAttributes(Two);
+  logicLayerMedium3  ->SetVisAttributes(One);
 
 //-------------------------------------------------------------------
-*/  
-
 
   return physiWorld;
 }
@@ -197,7 +196,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
   if (pttoMaterial) WorldMaterial = pttoMaterial;
 }
 
@@ -205,7 +205,8 @@ void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
 void DetectorConstruction::SetAbsorber1Material(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
   if (pttoMaterial) Absorber1Material = pttoMaterial;                  
 }
 
@@ -213,14 +214,16 @@ void DetectorConstruction::SetAbsorber1Material(const G4String& materialChoice)
 void DetectorConstruction::SetAbsorber2Material(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
   if (pttoMaterial) Absorber2Material = pttoMaterial;                  
 }
 
 void DetectorConstruction::SetAbsorber3Material(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);     
   if (pttoMaterial) Absorber3Material = pttoMaterial;                  
 }
 
@@ -254,7 +257,6 @@ void DetectorConstruction::SetNbOfLayersOfMedium3(G4int val)
 {
   NbOfLayersOfMedium3 = val;
 }
-
 
 #include "G4RunManager.hh" 
  

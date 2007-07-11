@@ -21,3 +21,9 @@ source ${dir}run_single.csh ${phys} ${work} ${dir}
 setenv PHYSLIST    standardSS
 set    phys = "optS"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
+
+$G4MY/reader_test37 Al     $1
+$G4MY/reader_test37 Mo     $1
+$G4MY/reader_test37 Ta     $1
+$G4MY/reader_test37 TaAl   $1
+$G4MY/reader_test37 AlAuAl $1

@@ -1,6 +1,7 @@
 /run/verbose 1
 /testem/det/setMat1 G4_Mo
-/testem/det/setThick1 184.49217 um
+#/testem/det/setThick1 184.49217 um
+/testem/det/setThick1 274.95 um
 /testem/det/setNbOfLayers1 100 
 
 /testem/phys/addPhysics  PHYSLIST
@@ -15,7 +16,7 @@
 
 /gun/particle e- 
 
-/gun/energy 0.521 MeV
+/gun/energy 0.5 MeV
 #/gun/energy 0.314 MeV
 #/gun/energy 1.033 MeV
 
