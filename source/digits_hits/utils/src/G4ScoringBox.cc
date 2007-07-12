@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.1 2007-07-12 05:16:46 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.2 2007-07-12 05:20:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,5 +52,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 
 }
 
-
+void G4ScoringBox::List() const
+{
+}
 

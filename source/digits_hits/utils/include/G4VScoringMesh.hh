@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.2 2007-07-12 04:25:06 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.3 2007-07-12 05:20:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,7 @@ class G4VScoringMesh
 
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+      virtual void List() const=0;
 
   public:
       enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
