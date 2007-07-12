@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.35 2007-07-12 14:23:25 tnikitin Exp $
+// $Id: G4Polyhedra.cc,v 1.36 2007-07-12 15:52:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -685,7 +685,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   std::vector<G4double> aVector3;
 
    totalPhi= (phiIsOpen) ? (endPhi-startPhi) : twopi;
-   ksi = totalPhi/(double)numSide;
+   ksi = totalPhi/numSide;
    G4double cosksi = std::cos(ksi/2.);
 
   // below we generate the areas relevant to our solid
