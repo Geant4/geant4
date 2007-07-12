@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.2 2007-07-12 05:20:42 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.3 2007-07-12 05:37:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringBox.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4MultiFunctionalDetector.hh"
 
 G4ScoringBox::G4ScoringBox(G4String wName)
 :G4VScoringMesh(wName)
@@ -50,6 +51,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
   }
   fConstructed = true;
 
+  G4MultiFunctionalDetector* mfd = new G4MultiFunctionalDetector(fWorldName);
 }
 
 void G4ScoringBox::List() const
