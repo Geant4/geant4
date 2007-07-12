@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.1 2007-07-12 02:46:27 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.2 2007-07-12 04:25:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,13 +40,13 @@ G4VScoringMesh::~G4VScoringMesh()
 {
 }
 
-void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) 
-  {
-    G4cerr << fWorldPhys->GetName() << G4endl;
-    G4Exception(fWorldName+" has already been built.");
-  }
-  fConstructed = true;
-
-}
+//void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
+//{
+//  if(fConstructed) 
+//  {
+//    G4cerr << fWorldPhys->GetName() << G4endl;
+//    G4Exception(fWorldName+" has already been built.");
+//  }
+//  fConstructed = true;
+//
+//}

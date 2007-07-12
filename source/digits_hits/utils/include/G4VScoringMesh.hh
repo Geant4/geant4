@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.1 2007-07-12 02:46:27 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.2 2007-07-12 04:25:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,7 +46,10 @@ class G4VScoringMesh
       ~G4VScoringMesh();
 
   public:
-      void Construct(G4VPhysicalVolume* fWorldPhys);
+      virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+
+  public:
+      enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
 
   public:
       inline const G4String& GetWorldName() const
@@ -55,11 +58,14 @@ class G4VScoringMesh
       { return fActive; }
       inline void Activate(G4bool vl = true)
       { fActive = vl; }
+      inline G4int GetShape() const
+      { return fShape; }
 
-  private:
-      G4String fWorldName;
-      G4bool   fConstructed;
-      G4bool   fActive;
+  protected:
+      G4String  fWorldName;
+      G4bool    fConstructed;
+      G4bool    fActive;
+      G4int     fShape;
 };
 
 
