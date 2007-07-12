@@ -24,23 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringWorld.cc,v 1.1 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.1 2007-07-12 02:46:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4ScoringWorld.hh"
+#include "G4VScoringMesh.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4ScoringWorld::G4ScoringWorld(G4String wName)
-:fWorldName(wName),fConstructed(false)
+G4VScoringMesh::G4VScoringMesh(G4String wName)
+:fWorldName(wName),fConstructed(false),fActive(true)
 {
 }
 
-G4ScoringWorld::~G4ScoringWorld()
+G4VScoringMesh::~G4VScoringMesh()
 {
 }
 
-void G4ScoringWorld::Construct(G4VPhysicalVolume* fWorldPhys)
+void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) 
   {

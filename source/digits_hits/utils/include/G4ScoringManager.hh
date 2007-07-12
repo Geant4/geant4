@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.2 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.3 2007-07-12 02:46:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 #define G4ScoringManager_h 1
 
 #include "globals.hh"
-#include "G4ScoringWorld.hh"
+#include "G4VScoringMesh.hh"
 #include <vector>
 class G4ScoringMessenger;
 
@@ -45,8 +45,8 @@ class G4ScoringMessenger;
 // the singleton object.
 //
 
-typedef std::vector<G4ScoringWorld*> WorldVec;
-typedef std::vector<G4ScoringWorld*>::iterator WorldVecItr;
+typedef std::vector<G4VScoringMesh*> MeshVec;
+typedef std::vector<G4VScoringMesh*>::iterator MeshVecItr;
 
 class G4ScoringManager 
 {
@@ -70,7 +70,7 @@ class G4ScoringManager
       G4int verboseLevel;
       G4ScoringMessenger* fMessenger;
 
-      WorldVec fWorldVec;
+      MeshVec fMeshVec;
 
   public:
       inline void SetVerboseLevel(G4int vl) 
@@ -78,11 +78,11 @@ class G4ScoringManager
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
       inline size_t GetNumberOfWorlds() const
-      { return fWorldVec.size(); }
-      inline G4ScoringWorld* GetWorld(G4int i) const
-      { return fWorldVec[i]; }
+      { return fMeshVec.size(); }
+      inline G4VScoringMesh* GetMesh(G4int i) const
+      { return fMeshVec[i]; }
       inline G4String GetWorldName(G4int i) const
-      { return fWorldVec[i]->GetWorldName(); }
+      { return fMeshVec[i]->GetWorldName(); }
 };
 
 

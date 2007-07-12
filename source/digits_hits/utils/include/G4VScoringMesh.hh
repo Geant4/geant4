@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringWorld.hh,v 1.1 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.1 2007-07-12 02:46:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringWorld_h
-#define G4ScoringWorld_h 1
+#ifndef G4VScoringMesh_h
+#define G4VScoringMesh_h 1
 
 #include "globals.hh"
 class G4VPhysicalVolume;
@@ -39,11 +39,11 @@ class G4VPhysicalVolume;
 //  This class represents a parallel world for interactive scoring purposes.
 //
 
-class G4ScoringWorld 
+class G4VScoringMesh 
 {
   public:
-      G4ScoringWorld(G4String wName);
-      ~G4ScoringWorld();
+      G4VScoringMesh(G4String wName);
+      ~G4VScoringMesh();
 
   public:
       void Construct(G4VPhysicalVolume* fWorldPhys);
@@ -51,10 +51,15 @@ class G4ScoringWorld
   public:
       inline const G4String& GetWorldName() const
       { return fWorldName; }
+      inline G4bool IsActive() const
+      { return fActive; }
+      inline void Activate(G4bool vl = true)
+      { fActive = vl; }
 
   private:
       G4String fWorldName;
       G4bool   fConstructed;
+      G4bool   fActive;
 };
 
 
