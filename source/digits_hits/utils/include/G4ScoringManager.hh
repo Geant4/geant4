@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.3 2007-07-12 02:46:27 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.4 2007-07-12 05:50:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4VScoringMesh.hh"
 #include <vector>
 class G4ScoringMessenger;
+class G4THitsMap;
 
 // class description:
 //
@@ -63,6 +64,8 @@ class G4ScoringManager
       ~G4ScoringManager();
 
   public:
+      void Accumulate(G4THitsMap* map);
+      G4VScoringMesh* FindMesh(G4String) const;
       void List() const;
 
   private: 
