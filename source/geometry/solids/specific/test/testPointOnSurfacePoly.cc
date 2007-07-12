@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPointOnSurfacePoly.cc,v 1.1 2007-04-26 12:34:19 tnikitin Exp $
+// $Id: testPointOnSurfacePoly.cc,v 1.2 2007-07-12 14:11:19 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,33 +68,41 @@ G4bool checkPolycone(G4int N)
   //-------------------------------------------
   // Original Polycone Test
   //-------------------------------------------    
-  //G4double zPlanes[5] = {0., 1., 3.,  5., 10.};
-  //G4double rInner[5]  = {6., 7., 2.,  2., 10.};
-  //G4double rOuter[5]  = {8., 8., 10.,10., 15.};    
-  //G4Polycone t1("aPcone",  
+  // G4double zPlanes[5] = {0., 1., 3.,  5., 10.};
+  // G4double rInner[5]  = {6., 7., 2.,  2., 10.};
+  // G4double rOuter[5]  = {8., 8., 10.,10., 15.};    
+  // G4Polycone t1("aPcone",  
   //		0., 2.*pi,       
   //		5,zPlanes,rInner,rOuter); 
   
   //-------------------------------------------
   // Polycone Test Z1=Z2
   //-------------------------------------------    
-  //G4double zPlanes[4] = {0. ,27.5, 27.5, 59.};
-  //G4double rInner[4]  = {555.,555., 572.,  572.};
-  //G4double rOuter[4]  = {669., 669., 652.,652.};    
-  //G4Polycone t1("aPcone",  
+  // G4double zPlanes[4] = {0. ,27.5, 27.5, 59.};
+  // G4double rInner[4]  = {555.,555., 572.,  572.};
+  // G4double rOuter[4]  = {669., 669., 652.,652.};    
+  // G4Polycone t1("aPcone",  
   //		0., 2.*pi,       
   //		4,zPlanes,rInner,rOuter);  
   //-------------------------------------------
   // More Complex  Polycone Test Z1=Z2
   //-------------------------------------------    
-    G4double zPlanes[6] = {0., 61., 61.,  72.3, 124.2,153.0};
-    G4double rInner[6]  = {291., 291., 2016.,  2016., 2044.,2044.};
-    //G4double rInner[6]  = {291., 2016., 2016.,  2016., 2044.,2044.};
-   G4double rOuter[6]  = {2070.,2070.,2070.,2070.,2070.,2070.};    
-   G4Polycone t1("aPcone",  
+  // G4double zPlanes[6] = {0., 61., 61.,  72.3, 124.2,153.0};
+  // G4double rInner[6]  = {291., 291., 2016.,  2016., 2044.,2044.};
+  // //G4double rInner[6]  = {291., 2016., 2016.,  2016., 2044.,2044.};
+  // G4double rOuter[6]  = {2070.,2070.,2070.,2070.,2070.,2070.};    
+  // G4Polycone t1("aPcone",  
+  // 		0., 2.*pi,       
+  // 		6,zPlanes,rInner,rOuter); 
+  //----------------------------------------------------------------
+  // Complex Polycone Example from CMS DetectorDescription via GDML 
+  //----------------------------------------------------------------    
+    G4double zPlanes[6] = {-5541.,-3750.,-3750.,3750.,3750.,5541.};
+    G4double rInner[6]  = {89.3,82.2452,1775.,1775.,82.2452,89.3};
+    G4double rOuter[6]  = {2950.,2950.,2950.,2950.,2950.,2950.};    
+    G4Polycone t1("aPcone",  
    		0., 2.*pi,       
    		6,zPlanes,rInner,rOuter); 
-  
   G4Timer time;
   time.Start();
    
@@ -129,14 +137,14 @@ G4bool checkPolyhedra(G4int N)
   //-------------------------------------------
   // Original Polyhedra Test 
   //-------------------------------------------         
-  //G4double zPlanes[5] = {-1., 10., 15., 25., 30.};
-  //G4double rInner[5]  = {0., 5., 0.,  7., 1.};
-  //G4double rOuter[5]  = {21., 6., 15., 15., 38.}; 
+  // G4double zPlanes[5] = {-1., 10., 15., 25., 30.};
+  // G4double rInner[5]  = {0., 5., 0.,  7., 1.};
+  // G4double rOuter[5]  = {21., 6., 15., 15., 38.}; 
     
   ////   G4double z[10] = {30.,25.,15.,10.,-1.,-1.,10.,15.,25.,30.};
   ////   G4double r[10] = {1.,7.,0.,5.,0.,21.,6.,15.,15.,38.};
     
-  //G4Polyhedra t1("aPhedra",  
+  // G4Polyhedra t1("aPhedra",  
   //		53.*deg, 163.*deg,         
   //    	8,5,zPlanes,rInner,rOuter); 
      
@@ -144,15 +152,38 @@ G4bool checkPolyhedra(G4int N)
   //// 		 53.*deg, 163.*deg,         
   //// 		 8, 10, r, z);
   //-------------------------------------------
-  // Polyhedra Test Z1=Z2
+  // More Complex Polyhedra with  Z1=Z2
   //-------------------------------------------  
-  G4double zPlanes[5] = {-1., 15., 15., 25., 30.};
-  G4double rInner[5]  = {0., 5., 0.,  7., 1.};
-  G4double rOuter[5]  = {21., 6., 15., 15., 38.}; 
-  G4Polyhedra t1("aPhedra",  
-		53.*deg, 163.*deg,         
-		8,5,zPlanes,rInner,rOuter); 
-
+  // G4double zPlanes[5] = {-1., 15., 15., 25., 30.};
+  // G4double rInner[5]  = {0., 5., 0.,  7., 1.};
+  // G4double rOuter[5]  = {21., 6., 15., 15., 38.}; 
+  // G4Polyhedra t1("aPhedra",  
+  //		53.*deg, 163.*deg,         
+  //		8,5,zPlanes,rInner,rOuter); 
+  //--------------------------------------------------------
+  // Complex Polyhedra from CMS Detector Description via GDML
+  //---------------------------------------------------------
+  //
+  // Example with numSide=1
+  //  
+  // 
+  // G4double zPlanes[6] = {3240., 3704.6, 3750.22, 4460.79,4491.27, 5541.};
+  // G4double rInner[6]  = { 1775., 1775.,1775.,2770.71, 2813.42,2813.42};
+  // G4double rOuter[6]  = {1866.5,1866.5,1927.03, 2870., 2870., 2870.}; 
+  // G4Polyhedra t1("aPhedra",  
+  //		350.*deg, 20.*deg,         
+  //	1,6,zPlanes,rInner,rOuter); 
+  //
+  // Example with startPhi<0 and phiTotal=twopi
+  //  
+     G4double zPlanes[8] = {3893.58, 3980.58, 3980.58, 4461.93,5167.08, 5167.08,5515.08,5541};
+     G4double rInner[8]  = { 1712.1,1750.11,399.902,447.946,518.33,518.33,553.065,553.065};
+     G4double rOuter[8]  = {1884.78,2000.23,2000.23,2639,2639,2459,2459,2459}; 
+     
+     G4Polyhedra t1("aPhedra",  
+  		-10.*deg,360.*deg,         
+  	18,8,zPlanes,rInner,rOuter); 
+    
    
   G4Timer time;
   time.Start();
@@ -161,7 +192,7 @@ G4bool checkPolyhedra(G4int N)
   {  G4cout <<"I="<<i<<" stil to check = "<<N-i<<G4endl;
     
     point = t1.GetPointOnSurface();
-    //if(point.z()==15.0)G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;  
+      
     surf  = t1.Inside(point);
     if(surf != kSurface)
     { 
@@ -181,7 +212,7 @@ int main()
 { 
   G4bool what;    
   //G4int N = 10000000;
-    G4int N = 5000;
+    G4int N = 50000;
   
   G4cout <<G4endl;
   G4cout <<"********************************************************************************"<<G4endl;
