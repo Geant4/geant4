@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2007-06-07 15:15:14 japost Exp $
+$Id: History,v 1.133 2007-07-12 11:16:18 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 6th, 2007, G.Cosmo  transport-V08-03-14
+July 12th, 2007, J.Apostolakis  transport-V09-00-00
+------------------------------
+- Retagged to enable testing of new developments 
+     (which were not included in release 9.0)
+
+June  6th, 2007, G.Cosmo        transport-V08-03-14
 -----------------------
 - Includes G4Transportation and G4CoupledTransportation implementations
   as in tag "transport-V08-03-11":
@@ -26,7 +31,7 @@ June 6th, 2007, G.Cosmo  transport-V08-03-14
   o Should fix the problem seen in test33 and reported by system testing.
 - All the rest is kept as in tag "transport-V08-03-12".
 
-June 1st, 2007, A.Howard      transport-V08-03-13
+June  1st, 2007, A.Howard       transport-V08-03-13
 ------------------------
 - Renamed classes associated with old biasing scheme with suffix 8:
   G4ProcessPlacer8, G4VProcessPlacer8, G4VSamplerConfigurator8,
@@ -34,6 +39,7 @@ June 1st, 2007, A.Howard      transport-V08-03-13
   G4WeightCutOffConfigurator8
 - Includes same G4CoupledTransportation as transport-V08-03-12
 
+********** transport-V08-03-12 was used for Geant4 9.0 ***************
 
 May 31st, 2007, A.Howard      transport-V08-03-12
 ------------------------
