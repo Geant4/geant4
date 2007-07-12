@@ -72,6 +72,7 @@ class App(Frame):
        self.particleListBox.insert(END, item)
     scrollbar2.config(command=self.particleListBox.yview)
     particleFrame.grid(row=3, column=0)
+    self.particleListBox.select_set(0)
 
 # separator frame
     fblank = Frame(self,width = 40)
@@ -90,6 +91,7 @@ class App(Frame):
        self.materialListBox.insert(END, item)
     scrollbar.config(command=self.materialListBox.yview)
     materialFrame.grid(row=3, column=2)
+    self.materialListBox.select_set(0)
 
 # separator frame
     fblank = Frame(self,width = 40)
@@ -112,6 +114,7 @@ class App(Frame):
         self.energyListBox.insert(END, item)
     scrollbarEnergy.config(command=self.energyListBox.yview)
     fEnergy.grid(row = 3, column = 4 )
+    self.energyListBox.select_set(0)
 
 # separator frame
     fblank = Frame(self,width = 40)
@@ -134,6 +137,7 @@ class App(Frame):
         self.cutsListBox.insert(END, item)
     scrollbarCuts.config(command=self.cutsListBox.yview)
     fCuts.grid(row = 3, column = 6 )
+    self.cutsListBox.select_set(0)
 
 # separator frame
     fblank = Frame(self,height = 40)
