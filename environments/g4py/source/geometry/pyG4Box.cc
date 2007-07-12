@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Box.cc,v 1.5 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Box.cc,v 1.6 2007-07-12 10:01:53 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Box.cc
@@ -34,6 +34,21 @@
 #include "G4Box.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Box {
+
+G4Box* CreateBox(const G4String& name, G4double pX, G4double pY,
+                   G4double pZ)
+{
+  return new G4Box(name, pX, pY, pZ);
+}
+
+}
+
+using namespace pyG4Box;
 
 // ====================================================================
 // module definition
@@ -51,9 +66,12 @@ void export_G4Box()
     .def("SetXHalfLength",   &G4Box::SetXHalfLength)
     .def("SetYHalfLength",   &G4Box::SetYHalfLength)
     .def("SetZHalfLength",   &G4Box::SetZHalfLength)
-
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateBox", CreateBox, return_value_policy<manage_new_object>());
+
 }
 
