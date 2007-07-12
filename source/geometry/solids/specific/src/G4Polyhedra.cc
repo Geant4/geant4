@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.34 2007-07-05 15:02:45 tnikitin Exp $
+// $Id: G4Polyhedra.cc,v 1.35 2007-07-12 14:23:25 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -677,14 +677,16 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   G4double chose, totArea=0., Achose1, Achose2,
            rad1, rad2, sinphi1, sinphi2, cosphi1, cosphi2; 
   G4double a, b, l2, rang,
-           ksi = (endPhi-startPhi)/(double)numSide,
+           totalPhi,ksi,
            area, aTop=0., aBottom=0.,zVal=0.;
   G4ThreeVector p0, p1, p2, p3;
   std::vector<G4double> aVector1;
   std::vector<G4double> aVector2;
   std::vector<G4double> aVector3;
 
-  G4double cosksi = std::cos(ksi/2.);
+   totalPhi= (phiIsOpen) ? (endPhi-startPhi) : twopi;
+   ksi = totalPhi/(double)numSide;
+   G4double cosksi = std::cos(ksi/2.);
 
   // below we generate the areas relevant to our solid
   //
@@ -750,7 +752,8 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   chose = RandFlat::shoot(0.,totArea+aTop+aBottom);
   if( (chose >= 0.) && (chose < aTop + aBottom) )
   {  
-    chose = RandFlat::shoot(startPhi,endPhi);
+    
+    chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
     rang = std::floor((chose-startPhi)/ksi-0.01);
     if(rang<0)rang=0;
     rang = std::fabs(rang);  
@@ -798,7 +801,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   
   if( (chose>=0.) && (chose<numSide*aVector1[j]) )
   {
-    chose = RandFlat::shoot(startPhi,endPhi);
+    chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
     rang = std::floor((chose-startPhi)/ksi-0.01);
     if(rang<0)rang=0;
     rang = std::fabs(rang);
@@ -822,7 +825,8 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   else if ( (chose >= numSide*aVector1[j])
          && (chose <= numSide*(aVector1[j]+aVector2[j])) )
   {
-    chose = RandFlat::shoot(startPhi,endPhi);
+    
+    chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
     rang = std::floor((chose-startPhi)/ksi-0.01);
     if(rang<0)rang=0;
     rang = std::fabs(rang);
@@ -1060,7 +1064,8 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
       nFaces = numSide * numCorner;;
       xyz = new double3[nNodes];
       faces_vec = new int4[nFaces];
-      const G4double dPhi = (endPhi - startPhi) / numSide;
+      // const G4double dPhi = (endPhi - startPhi) / numSide;
+      const G4double dPhi = twopi / numSide; // !phiIsOpen endPhi-startPhi = 360 degrees.
       G4double phi = startPhi;
       G4int ixyz = 0, iface = 0;
       for (G4int iSide = 0; iSide < numSide; ++iSide)
