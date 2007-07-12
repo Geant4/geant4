@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.3 2007-07-12 05:20:42 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.4 2007-07-12 07:57:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,10 @@
 #define G4VScoringMesh_h 1
 
 #include "globals.hh"
+#include "G4THitsMap.hh"
 class G4VPhysicalVolume;
+
+enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
 
 // class description:
 //
@@ -49,8 +52,6 @@ class G4VScoringMesh
       virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
       virtual void List() const=0;
 
-  public:
-      enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
 
   public:
       inline const G4String& GetWorldName() const
@@ -59,14 +60,17 @@ class G4VScoringMesh
       { return fActive; }
       inline void Activate(G4bool vl = true)
       { fActive = vl; }
-      inline G4int GetShape() const
+      inline MeshShape GetShape() const
       { return fShape; }
+      inline void Accumulate(G4THitsMap<G4double> * map) const
+      { fMap += *map; }
 
   protected:
       G4String  fWorldName;
       G4bool    fConstructed;
       G4bool    fActive;
-      G4int     fShape;
+      MeshShape fShape;
+      G4THitsMap<G4double> fMap;
 };
 
 

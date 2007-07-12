@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.3 2007-07-12 05:50:28 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.4 2007-07-12 07:57:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,16 +57,25 @@ G4ScoringManager::~G4ScoringManager()
   fSManager = 0;
 }
 
-void G4ScoringManager::Accumulate(G4THitsMap* map)
+void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
-  G4String wName = map->....
+  G4String wName = map->GetName();
   G4VScoringMesh* sm = FindMesh(wName);
-  sm->Accumulate(map);
+  if(sm == NULL) return;
+  sm->Accumulate(static_cast<G4THitsMap<double>*>(map));
 }
 
-G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName) const
+G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
 {
   G4VScoringMesh* sm = 0;
+  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+    G4String smName = (*itr)->GetWorldName();
+    if(wName == smName) {
+      sm = *itr;
+      break;
+    }
+  }
+  return sm;
 }
 void G4ScoringManager::List() const
 {
