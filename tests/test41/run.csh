@@ -21,3 +21,5 @@ source ${dir}run_single.csh ${phys} ${work} ${dir}
 setenv PHYSLIST    standardSS
 set    phys = "optS"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
+
+source plot.csh $1
