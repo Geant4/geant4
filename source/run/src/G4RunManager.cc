@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.103 2007-06-20 17:00:23 asaim Exp $
+// $Id: G4RunManager.cc,v 1.104 2007-07-12 06:54:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,6 +135,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   if(cond)
   {
     numberOfEventToBeProcessed = n_event;
+    ConstructScoringWorlds();
     RunInitialization();
     if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
@@ -233,6 +234,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     currentEvent = GenerateEvent(i_event);
     eventManager->ProcessOneEvent(currentEvent);
     AnalyzeEvent(currentEvent);
+    UpdateScoring();
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
     StackPreviousEvent(currentEvent);
     currentEvent = 0;
@@ -475,6 +477,67 @@ void G4RunManager::DumpRegion(G4Region* region) const
 {
   kernel->UpdateRegion();
   kernel->DumpRegion(region);
+}
+
+#include "G4ScoringManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4VScoringMesh.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParallelWorldScoringProcess.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4VHitsCollection.hh"
+
+void G4RunManager::ConstructScoringWorlds()
+{
+  G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
+  if(!ScM) return;
+  G4int nPar = ScM->GetNumberOfWorlds();
+  if(nPar<1) return;
+
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator
+   = G4ParticleTable::GetParticleTable()->GetIterator();
+  for(G4int iw=0;iw<nPar;iw++)
+  {
+    G4VScoringMesh* mesh = ScM->GetMesh(iw);
+    G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
+         ->GetParallelWorld(ScM->GetWorldName(iw));
+    pWorld->SetName(ScM->GetWorldName(iw));
+    mesh->Construct(pWorld);
+
+    G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
+      = new G4ParallelWorldScoringProcess(ScM->GetWorldName(iw));
+    theParallelWorldScoringProcess->SetParallelWorld(ScM->GetWorldName(iw));
+
+    theParticleIterator->reset();
+    while( (*theParticleIterator)() ){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      pmanager->AddProcess(theParallelWorldScoringProcess);
+      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+      pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
+      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+    }
+  }
+}
+
+void G4RunManager::UpdateScoring()
+{
+  G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
+  if(!ScM) return;
+  G4int nPar = ScM->GetNumberOfWorlds();
+  if(nPar<1) return;
+
+  G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
+  if(!HCE) return;
+  G4int nColl = HCE->GetCapacity();
+  for(G4int i=0;i<nColl;i++)
+  {
+    G4VHitsCollection* HC = HCE->GetHC(i);
+    if(HC) ScM->Accumulate(HC);
+  }
 }
 
 
