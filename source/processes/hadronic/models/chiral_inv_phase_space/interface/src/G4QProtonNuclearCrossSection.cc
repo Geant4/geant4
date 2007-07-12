@@ -240,10 +240,10 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
 {
   static const G4double THmin=0.;  // minimum Energy Threshold
   //static const G4double dP=1.;     // step for the LEN table
-  static const G4int    nL=105;    // A#of LENesonance points in E (each MeV from 2 to 106)
+  ///static const G4int    nL=105;    // A#of LENesonance points in E (each MeV from 2 to 106)
   //static const G4double Pmin=THmin+(nL-1)*dP; // minE for the HighE part
   //static const G4double Pmax=50000.;       // maxE for the HighE part
-  static const G4int    nH=224;            // A#of HResonance points in lnE
+  ///static const G4int    nH=224;            // A#of HResonance points in lnE
   //static const G4double milP=log(Pmin);    // Low logarithm energy for the HighE part
   //static const G4double malP=log(Pmax);    // High logarithm energy (each 2.75 percent)
   //static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HighE part
@@ -253,45 +253,46 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   static std::vector <G4double*> LEN;    // Vector of pointers to LowEnProtonCrossSection
   static std::vector <G4double*> HEN;    // Vector of pointers to HighEnProtonCrossSection
 #ifdef debug
-  G4cout<<"G4QProtonNuclearCrossSection::CalcCS: N="<<tN<<",Z="<<tZ<<",E="<<Energy<<G4endl;
+  G4cout<<"G4QProtonNuclearCS::CalcCS: N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<G4endl;
 #endif
-  if (Momentum<THmin) return 0.;      // @@ This can be dangerouse for the heaviest nuc.!
+  if (Momentum<THmin) return 0.;       // @@ This can be dangerouse for the heaviest nuc.!
   G4double sigma=0.;
+  if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;
-  if(F<=0)                           // This isotope was not the last used isotop
-  {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
-      lastLEN=LEN[I];                // Pointer to prepared LowEnergy cross sections
-      lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
-      lastSP =spA[I];                // Shadowing coefficient for UHE
-    }
-	   else                             // This isotope wasn't calculated previously => CREATE
-	   {
-      G4double lnA=std::log(A);           // The nucleus is not found in DB. It is new.
-      if(A==1.) lastSP=1.;           // @@ The Reggeon shadowing (A=1)
-      else      lastSP=lnA;          // @@ The Reggeon shadowing
+  //if(F<=0)                           // This isotope was not the last used isotop
+  //{
+  //  if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
+		//		{
+  //    lastLEN=LEN[I];                // Pointer to prepared LowEnergy cross sections
+  //    lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
+  //    lastSP =spA[I];                // Shadowing coefficient for UHE
+  //  }
+	 //  else                             // This isotope wasn't calculated previously => CREATE
+	 //  {
+  //    G4double lnA=std::log(A);           // The nucleus is not found in DB. It is new.
+  //    if(A==1.) lastSP=1.;           // @@ The Reggeon shadowing (A=1)
+  //    else      lastSP=lnA;          // @@ The Reggeon shadowing
 #ifdef debug
-      G4cout<<"G4QProtonNuclearCrossSection::CalcCS:lnA="<<lnA<<",lastSP="<<lastSP<<G4endl;
+  //    G4cout<<"G4QProtonNuclearCrossSection::CalcCS:lnA="<<lnA<<",lastSP="<<lastSP<<G4endl;
 #endif
 #ifdef debug3
-      if(A==3) G4cout<<"G4QProtonNuclearCrossSection::CalcCS: lastSP="<<lastSP<<G4endl;
+  //    if(A==3) G4cout<<"G4QProtonNuclearCrossSection::CalcCS: lastSP="<<lastSP<<G4endl;
 #endif
-      lastLEN = new G4double[nL];        // Allocate memory for the new LEN cross sections
-      lastHEN = new G4double[nH];        // Allocate memory for the new HEN cross sections
-      G4int er=GetFunctions(A,lastLEN,lastHEN);// set newZeroPosition and fill theFunctions
-	     if(er<1) G4cerr<<"***G4QProtNucCroSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
+  //    lastLEN = new G4double[nL];        // Allocate memory for the new LEN cross sections
+  //    lastHEN = new G4double[nH];        // Allocate memory for the new HEN cross sections
+  //    G4int er=GetFunctions(A,lastLEN,lastHEN);// set newZeroPosition and fill theFunctions
+	 //    if(er<1) G4cerr<<"***G4QProtNucCroSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
 #ifdef debug
-      G4cout<<"G4QProtonNuclearCrossSection::CalcCS: GetFunctions er="<<er<<G4endl;
+  //    G4cout<<"G4QProtonNuclearCrossSection::CalcCS: GetFunctions er="<<er<<G4endl;
 #endif
-      // *** The synchronization check ***
-      G4int sync=LEN.size();
-      if(sync!=I) G4cerr<<"***G4PhoronNuclCS::CalcCrossSect: Sync="<<sync<<"#"<<I<<G4endl;
-      LEN.push_back(lastLEN);          // added LEN, found by AH 10/7/02
-      HEN.push_back(lastHEN);          // added HEN, found by AH 10/7/02
-      spA.push_back(lastSP);           // Pomeron Shadowing
-	   } // End of creation of the new set of parameters
-  } // End of parameters udate
+  //    // *** The synchronization check ***
+  //    G4int sync=LEN.size();
+  //    if(sync!=I) G4cerr<<"***G4PhoronNuclCS::CalcCrossSect: Sync="<<sync<<"#"<<I<<G4endl;
+  //    LEN.push_back(lastLEN);          // added LEN, found by AH 10/7/02
+  //    HEN.push_back(lastHEN);          // added HEN, found by AH 10/7/02
+  //    spA.push_back(lastSP);           // Pomeron Shadowing
+	 //  } // End of creation of the new set of parameters
+  //} // End of parameters udate
   // ============================== NOW the Magic Formula =================================
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
 		// else if (Momentum<Pmin)              // LEN region (approximated in E, not in lnE)
@@ -333,6 +334,12 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
       G4double ds=lP-4.;
       sigma=7.4818/(.000656+P*P)+(.6*ds*ds+72.8+9.7/P)/(1+std::exp(-(.22+lP)/.299));
     }
+    else if(targZ<93&&targN<239)             // @@ Temporary (fake) solution
+    {
+      G4double ds=lP-4.;
+      sigma=7.4818/(.000656+P*P)+(.6*ds*ds+72.8+9.7/P)/(1+std::exp(-(.22+lP)/.299));
+      sigma*=std::pow(A*.5,0.72);
+    }
     else
     {
       G4cerr<<"G4ProtonNucCroSect::CalcCS:only pp, pn, pd;Z="<<targZ<<",N="<<targN<<G4endl;
@@ -348,7 +355,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
 
 // Linear fit for YN[N] tabulated (from X0 with fixed step DX) function to X point
 
-// Calculate the functions for the log(A)
+// Calculate the functions for the log(A) *** Now it is a fake function ***
 G4int G4QProtonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
 {
   static const G4int nLA=1;           // A#of Low Energy basic nuclei

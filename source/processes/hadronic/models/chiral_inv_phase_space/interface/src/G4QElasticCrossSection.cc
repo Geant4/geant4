@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.29 2007-06-15 16:43:39 gcosmo Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.30 2007-07-12 13:17:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,17 +84,17 @@ G4double  G4QElasticCrossSection::lastTH=0.;  // Last threshold momentum
 G4double  G4QElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
 G4int     G4QElasticCrossSection::lastI=0;    // The last position in the DAMDB
 
-std::vector<G4double*> G4QElasticCrossSection::PAR;   // Vector of parameters for functional calculations
-std::vector<G4double*> G4QElasticCrossSection::CST;   // Vector of cross-section table
-std::vector<G4double*> G4QElasticCrossSection::SST;   // Vector of the first squared slope
-std::vector<G4double*> G4QElasticCrossSection::S1T;   // Vector of the first mantissa
-std::vector<G4double*> G4QElasticCrossSection::B1T;   // Vector of the first slope
-std::vector<G4double*> G4QElasticCrossSection::S2T;   // Vector of the secon mantissa
-std::vector<G4double*> G4QElasticCrossSection::B2T;   // Vector of the second slope
-std::vector<G4double*> G4QElasticCrossSection::S3T;   // Vector of the third mantissa
-std::vector<G4double*> G4QElasticCrossSection::B3T;   // Vector of the third slope
-std::vector<G4double*> G4QElasticCrossSection::S4T;   // Vector of the 4-th mantissa (gloria)
-std::vector<G4double*> G4QElasticCrossSection::B4T;   // Vector of the 4-th slope    (gloria)
+std::vector<G4double*> G4QElasticCrossSection::PAR; // Vector of parameters for functCalcul
+std::vector<G4double*> G4QElasticCrossSection::CST; // Vector of cross-section table
+std::vector<G4double*> G4QElasticCrossSection::SST; // Vector of the first squared slope
+std::vector<G4double*> G4QElasticCrossSection::S1T; // Vector of the first mantissa
+std::vector<G4double*> G4QElasticCrossSection::B1T; // Vector of the first slope
+std::vector<G4double*> G4QElasticCrossSection::S2T; // Vector of the secon mantissa
+std::vector<G4double*> G4QElasticCrossSection::B2T; // Vector of the second slope
+std::vector<G4double*> G4QElasticCrossSection::S3T; // Vector of the third mantissa
+std::vector<G4double*> G4QElasticCrossSection::B3T; // Vector of the third slope
+std::vector<G4double*> G4QElasticCrossSection::S4T; // Vector of the 4-th mantissa (gloria)
+std::vector<G4double*> G4QElasticCrossSection::B4T; // Vector of the 4-th slope    (gloria)
 
 G4QElasticCrossSection::G4QElasticCrossSection()
 {
@@ -1071,7 +1071,13 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   }
   if(q2<0.) q2=0.;
   if(!(q2>-1.||q2<1.)) G4cout<<"*NAN*G4QElasticCrossSect::GetExT: -t="<<q2<<G4endl;
-  if(q2>lastTM)G4cout<<"*Warning*G4QElasticCrossSect::GetExT:-t="<<q2<<">"<<lastTM<<G4endl;
+  if(q2>lastTM)
+  {
+#ifdef tdebug
+    G4cout<<"*Warning*G4QElasticCrossSect::GetExT:-t="<<q2<<">"<<lastTM<<G4endl;
+#endif
+    q2=lastTM;
+  }
   return q2*GeVSQ;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.19 2007-05-02 14:59:57 gunter Exp $
+// $Id: G4QCollision.cc,v 1.20 2007-07-12 13:17:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -314,7 +314,7 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(      G4Electron::Electron()      )) return true;
   else if (particle == *(      G4Positron::Positron()      )) return true;
   else if (particle == *(         G4Gamma::Gamma()         )) return true;
-  //else if (particle == *(        G4Proton::Proton()        )) return true;
+  else if (particle == *(        G4Proton::Proton()        )) return true;
   else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
   else if (particle == *(   G4NeutrinoMu::NeutrinoMu()   )) return true;
   //else if (particle == *(       G4Neutron::Neutron()       )) return true;
