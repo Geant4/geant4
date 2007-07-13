@@ -1,4 +1,4 @@
-$Id: History,v 1.317 2007-06-19 18:19:38 vnivanch Exp $
+$Id: History,v 1.318 2007-07-13 11:01:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 July 07: V.Ivant (emstand-V09-00-00)
+- G4UniversalFluctuation - add protection for low-density materials 
+  or very small steps - mean energy loss below minimal excitation
+  energy - no fluctuation sampling but mean energy loss
+   
 19 June 07: V.Ivant (emstand-V08-03-10)
 - G4UrbanMscModel for skin > 0 use range instead of TrueStepLimit
   for computation of distance to boundary, this provides stable
