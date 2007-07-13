@@ -226,7 +226,16 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
                              40.*cm, 30.*cm, 40.*cm,
                              16.*cm, 10.*cm, 14.*cm, 10.*deg)
     self.lv_object.SetSolid(sld_twtrp)
-    self.lv_object.SetVisAttributes(self.va_cyan)
+    self.lv_object.SetVisAttributes(self.va_blue)
+    gRunManager.GeometryHasBeenModified()
+
+  # -----------------------------------------------------------------
+  def ConstructTwistedTrd(self):
+    global sld_twtrd
+    sld_twtrd= G4TwistedTrd("twistedtrd", 30.*cm, 10.*cm,
+                            40.*cm, 15.*cm, 60.*cm, 30.*deg)
+    self.lv_object.SetSolid(sld_twtrd)
+    self.lv_object.SetVisAttributes(self.va_green)
     gRunManager.GeometryHasBeenModified()
 
   # -----------------------------------------------------------------
@@ -235,7 +244,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     sld_twt= G4TwistedTubs("twistedtube", 60.*deg,
                            10.*cm, 15.*cm, 20.*cm, 90.*deg)
     self.lv_object.SetSolid(sld_twt)
-    self.lv_object.SetVisAttributes(self.va_cyan)
+    self.lv_object.SetVisAttributes(self.va_magenta)
     gRunManager.GeometryHasBeenModified()
 
   # -----------------------------------------------------------------
@@ -286,6 +295,7 @@ f_list= (
   ("g4tet",            myDC.ConstructTet),
   ("g4twistedbox",     myDC.ConstructTwistedBox),
   ("g4twistedtrap",    myDC.ConstructTwistedTrap),
+  ("g4twistedtrd",     myDC.ConstructTwistedTrd),
   ("g4twistedtubs",    myDC.ConstructTwistedTubs)
   )
 
