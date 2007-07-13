@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.2 2007-07-12 04:25:06 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.3 2007-07-13 11:04:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,3 +50,4 @@ G4VScoringMesh::~G4VScoringMesh()
 //  fConstructed = true;
 //
 //}
+

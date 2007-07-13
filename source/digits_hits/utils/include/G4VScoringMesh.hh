@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.4 2007-07-12 07:57:16 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.5 2007-07-13 11:04:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@
 #include "globals.hh"
 #include "G4THitsMap.hh"
 class G4VPhysicalVolume;
+#include <map>
 
 enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
 
@@ -62,17 +63,22 @@ class G4VScoringMesh
       { fActive = vl; }
       inline MeshShape GetShape() const
       { return fShape; }
-      inline void Accumulate(G4THitsMap<G4double> * map) const
-      { fMap += *map; }
+      inline void Accumulate(G4THitsMap<G4double> * map) const;
 
   protected:
       G4String  fWorldName;
       G4bool    fConstructed;
       G4bool    fActive;
       MeshShape fShape;
-      G4THitsMap<G4double> fMap;
+      std::map<G4String, G4THitsMap<G4double> > fMap;
 };
 
+void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const
+{ 
+  G4String psName = map->GetName();
+  std::map<G4String, G4THitsMap<G4double> >::const_iterator fMapItr = fMap.find(psName);
+  fMapItr->second += *map;
+}
 
 
 

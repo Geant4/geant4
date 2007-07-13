@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.4 2007-07-12 07:57:16 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.5 2007-07-13 11:04:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringMessenger.hh"
+#include "G4VScoringMesh.hh"
 #include "G4THitsMap.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
@@ -59,7 +60,7 @@ G4ScoringManager::~G4ScoringManager()
 
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
-  G4String wName = map->GetName();
+  G4String wName = map->GetSDname();
   G4VScoringMesh* sm = FindMesh(wName);
   if(sm == NULL) return;
   sm->Accumulate(static_cast<G4THitsMap<double>*>(map));
