@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EllipticalTube.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4EllipticalTube.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4EllipticalTube.cc
@@ -34,6 +34,23 @@
 #include "G4EllipticalTube.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4EllipticalTube {
+
+G4EllipticalTube* CreateEllipticalTube(const G4String& name,
+                                       G4double theDx,
+                                       G4double theDy,
+                                       G4double theDz)
+{
+  return new G4EllipticalTube(name, theDx, theDy, theDz);
+}
+
+}
+
+using namespace pyG4EllipticalTube;
 
 // ====================================================================
 // module definition
@@ -55,5 +72,10 @@ void export_G4EllipticalTube()
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateEllipticalTube", CreateEllipticalTube,
+        return_value_policy<manage_new_object>());
+
 }
 

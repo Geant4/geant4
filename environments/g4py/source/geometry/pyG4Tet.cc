@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Tet.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Tet.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Tet.cc
@@ -34,6 +34,21 @@
 #include "G4Tet.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Tet {
+
+G4Tet* CreateTet(const G4String& name, G4ThreeVector anchor, G4ThreeVector p2,
+                 G4ThreeVector p3, G4ThreeVector p4)
+{
+  return new G4Tet(name, anchor, p2, p3, p4);
+}
+
+}
+
+using namespace pyG4Tet;
 
 // ====================================================================
 // module definition
@@ -48,5 +63,8 @@ void export_G4Tet()
     // operators
     .def(self_ns::str(self))
     ;
-}
 
+    // Create solid
+    def("CreateTet", CreateTet, return_value_policy<manage_new_object>());
+
+}

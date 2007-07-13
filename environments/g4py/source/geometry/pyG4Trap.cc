@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Trap.cc,v 1.5 2007-07-12 10:01:53 kmura Exp $
+// $Id: pyG4Trap.cc,v 1.6 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Trap.cc
@@ -127,7 +127,6 @@ void export_G4Trap()
     .def("GetSidePlane",     &G4Trap::GetSidePlane)
     .def("GetSymAxis",       &G4Trap::GetSymAxis)
     .def("SetAllParameters", &G4Trap::SetAllParameters)
-    .def("GetCubicVolume",   &G4Trap::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;

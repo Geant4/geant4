@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Hype.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Hype.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Hype.cc
@@ -34,6 +34,28 @@
 #include "G4Hype.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Hype {
+
+G4Hype* CreateHype(const G4String& name, 
+                   G4double  newInnerRadius,
+                   G4double  newOuterRadius,
+                   G4double  newInnerStereo,
+                   G4double  newOuterStereo,
+                   G4double  newHalfLenZ)
+{
+
+  return new G4Hype(name, newInnerRadius, newOuterRadius,
+                    newInnerStereo, newOuterStereo,
+                    newHalfLenZ);
+}
+
+}
+
+using namespace pyG4Hype;
 
 // ====================================================================
 // module definition
@@ -56,9 +78,12 @@ void export_G4Hype()
     .def("SetZHalfLength",   &G4Hype::SetZHalfLength)
     .def("SetInnerStereo",   &G4Hype::SetInnerStereo)
     .def("SetOuterStereo",   &G4Hype::SetOuterStereo)
-
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateHype", CreateHype, return_value_policy<manage_new_object>());
+
 }
 

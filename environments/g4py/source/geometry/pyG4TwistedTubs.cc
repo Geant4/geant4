@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwistedTubs.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4TwistedTubs.cc,v 1.2 2007-07-13 04:57:51 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4TwistedTubs.cc
@@ -52,6 +52,57 @@ G4double (G4TwistedTubs::*f1_GetEndOuterRadius)(G4int) const
   = &G4TwistedTubs::GetEndOuterRadius;
 G4double (G4TwistedTubs::*f2_GetEndOuterRadius)() const
   = &G4TwistedTubs::GetEndOuterRadius;
+
+
+// Create Solid
+G4TwistedTubs* f1_CreateTwistedTubs(const G4String& name,
+                                    G4double  twistedangle,
+                                    G4double  endinnerrad,
+                                    G4double  endouterrad,
+                                    G4double  halfzlen,
+                                    G4double  dphi)
+{
+  return new G4TwistedTubs(name, twistedangle, endinnerrad,
+                           endouterrad, halfzlen, dphi);
+}
+
+G4TwistedTubs* f2_CreateTwistedTubs(const G4String& name,
+                                    G4double  twistedangle,
+                                    G4double  endinnerrad,
+                                    G4double  endouterrad,
+                                    G4double  halfzlen,
+                                    G4int     nseg,
+                                    G4double  totphi)
+{
+  return new G4TwistedTubs(name, twistedangle, endinnerrad,
+                           endouterrad, halfzlen, nseg, totphi);
+}
+
+G4TwistedTubs* f3_CreateTwistedTubs(const G4String& name,
+                                    G4double  twistedangle,
+                                    G4double  innerrad,
+                                    G4double  outerrad,
+                                    G4double  negativeEndz,
+                                    G4double  positiveEndz,
+                                    G4double  dphi)
+{
+  return new G4TwistedTubs(name, twistedangle, innerrad, outerrad,
+                           negativeEndz, positiveEndz, dphi);
+}
+
+G4TwistedTubs* f4_CreateTwistedTubs(const G4String& name,
+                                    G4double  twistedangle,
+                                    G4double  innerrad,
+                                    G4double  outerrad,
+                                    G4double  negativeEndz,
+                                    G4double  positiveEndz,
+                                    G4int     nseg,
+                                    G4double  totphi)
+{
+  return new G4TwistedTubs(name, twistedangle, innerrad, outerrad,
+                           negativeEndz, positiveEndz, nseg, totphi);
+}
+
 
 }
 
@@ -92,9 +143,19 @@ void export_G4TwistedTubs()
     .def("GetEndInnerRadius",  f2_GetEndInnerRadius)
     .def("GetEndOuterRadius",  f1_GetEndOuterRadius)
     .def("GetEndOuterRadius",  f2_GetEndOuterRadius)
-
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateTwistedTubs", f1_CreateTwistedTubs,
+        return_value_policy<manage_new_object>());
+    def("CreateTwistedTubs", f2_CreateTwistedTubs,
+        return_value_policy<manage_new_object>());
+    def("CreateTwistedTubs", f3_CreateTwistedTubs,
+        return_value_policy<manage_new_object>());
+    def("CreateTwistedTubs", f4_CreateTwistedTubs,
+        return_value_policy<manage_new_object>());
+
 }
 

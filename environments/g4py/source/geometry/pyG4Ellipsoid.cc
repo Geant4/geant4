@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Ellipsoid.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4Ellipsoid.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Ellipsoid.cc
@@ -34,6 +34,28 @@
 #include "G4Ellipsoid.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4Ellipsoid {
+
+G4Ellipsoid* CreateEllipsoid(const G4String& name,
+                             G4double  pxSemiAxis,
+                             G4double  pySemiAxis,
+                             G4double  pzSemiAxis,
+                             G4double  pzBottomCut=0,
+                             G4double  pzTopCut=0)
+{
+  return new G4Ellipsoid(name, pxSemiAxis, pySemiAxis, pzSemiAxis,
+                         pzBottomCut, pzTopCut);
+}
+
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_CreateEllipsoid, CreateEllipsoid, 4,6); 
+
+}
+
+using namespace pyG4Ellipsoid;
 
 // ====================================================================
 // module definition
@@ -53,9 +75,12 @@ void export_G4Ellipsoid()
     .def("GetZTopCut",     &G4Ellipsoid::GetZTopCut)
     .def("SetSemiAxis",  &G4Ellipsoid::SetSemiAxis)
     .def("SetZCuts",  &G4Ellipsoid::SetZCuts)
-
     // operators
     .def(self_ns::str(self))
     ;
+  
+    // Create solid
+    def("CreateEllipsoid", CreateEllipsoid,
+        f_CreateEllipsoid()[return_value_policy<manage_new_object>()]);
 }
 

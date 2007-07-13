@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EllipticalCone.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4EllipticalCone.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4EllipticalCone.cc
@@ -34,6 +34,24 @@
 #include "G4EllipticalCone.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4EllipticalCone {
+
+G4EllipticalCone* CreateEllipticalCone(const G4String& name, 
+                                       G4double  pxSemiAxis,
+                                       G4double  pySemiAxis,
+                                       G4double  zMax,
+                                       G4double  pzTopCut)
+{
+  new G4EllipticalCone(name, pxSemiAxis,pySemiAxis, zMax, pzTopCut);
+}
+
+}
+
+using namespace pyG4EllipticalCone;
 
 // ====================================================================
 // module definition
@@ -49,9 +67,13 @@ void export_G4EllipticalCone()
     .def("GetZTopCut",      &G4EllipticalCone::GetZTopCut)
     .def("SetSemiAxis",     &G4EllipticalCone::SetSemiAxis)
     .def("SetZCut",         &G4EllipticalCone::SetZCut)
-
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateEllipticalCone", CreateEllipticalCone,
+        return_value_policy<manage_new_object>());
+
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwistedBox.cc,v 1.1 2007-07-11 10:02:22 kmura Exp $
+// $Id: pyG4TwistedBox.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4TwistedBox.cc
@@ -34,6 +34,24 @@
 #include "G4TwistedBox.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4TwistedBox {
+
+G4TwistedBox* CreateTwistedBox(const G4String& name,
+                               G4double  pPhiTwist,
+                               G4double  pDx, G4double  pDy, G4double  pDz)
+{
+
+  return new G4TwistedBox(name, pPhiTwist, pDx, pDy, pDz );
+
+}
+
+}
+
+using namespace pyG4TwistedBox;
 
 // ====================================================================
 // module definition
@@ -49,9 +67,13 @@ void export_G4TwistedBox()
     .def("GetYHalfLength",   &G4TwistedBox::GetYHalfLength)
     .def("GetZHalfLength",   &G4TwistedBox::GetZHalfLength)
     .def("GetPhiTwist",      &G4TwistedBox::GetPhiTwist)
-
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateTwistedBox", CreateTwistedBox, 
+        return_value_policy<manage_new_object>());
+
 }
 
