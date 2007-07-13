@@ -11,7 +11,7 @@ Viewpoint {
 	Shape {
 		appearance Appearance {
 			material Material {
-				diffuseColor 0 1 1
+				diffuseColor 1 0 1
 				transparency 0.7
 			}
 		}
