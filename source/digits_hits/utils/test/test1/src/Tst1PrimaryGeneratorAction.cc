@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1PrimaryGeneratorAction.cc,v 1.1 2007-07-13 05:55:34 asaim Exp $
+// $Id: Tst1PrimaryGeneratorAction.cc,v 1.2 2007-07-13 06:15:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@ Tst1PrimaryGeneratorAction::Tst1PrimaryGeneratorAction()
                     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1.01*m));
   particleGun->SetParticleEnergy(1.*GeV);
 }
 
