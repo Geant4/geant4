@@ -308,7 +308,7 @@ void G4FluoData::PrintData()
       
       for (size_t k = 0; k<NumberOfTransitions(i); k++)
 	{ 
-	  G4int id = StartShellId(k+1,i);
+	  G4int id = StartShellId(k,i);
 	// let's start from 1 because the first (index = 0) element of the vector
 	// is the id of the intial vacancy
 	  G4double e = StartShellEnergy(k,i) /MeV;
