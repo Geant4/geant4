@@ -47,6 +47,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,6 +86,8 @@ void PhysicsList::ConstructParticle()
 // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
+
+  G4Proton::ProtonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
