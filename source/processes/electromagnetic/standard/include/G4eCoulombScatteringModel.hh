@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.6 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.7 2007-07-16 08:45:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 #include "globals.hh"
 
 class G4ParticleChangeForGamma;
+class G4ParticleDefinition;
 
 class G4eCoulombScatteringModel : public G4VEmModel
 {
@@ -98,11 +99,17 @@ protected:
   G4double ScreeningParameter(G4double Z, G4double q2,
 			      G4double mom2, G4double invbeta2);
 
-private:
+  G4double NuclearSizeParameter(G4double A, G4double mom2);
+
+  G4double CalculateECrossSectionPerAtom(const G4ParticleDefinition*, 
+					 G4double kinEnergy, 
+					 G4double Z, G4double ecut);
 
   G4double CalculateCrossSectionPerAtom(const G4ParticleDefinition*, 
 					G4double kinEnergy, 
-					G4double Z);
+					G4double Z, G4double A);
+
+private:
 
   // hide assignment operator
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
@@ -113,12 +120,20 @@ protected:
   G4ParticleChangeForGamma* fParticleChange;
 
   G4double                  coeff;
+  G4double                  constn;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
+  G4double                  cosTetMaxNuc;
+  G4double                  cosTetMaxElec;
   G4double                  q2Limit;
-
+  G4double                  nucXS[100];
+  G4double                  elXS[100];
 
 private:
+
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
+  const G4ParticleDefinition* theProton;
 
   G4PhysicsTable*           theCrossSectionTable; 
 
@@ -141,19 +156,22 @@ private:
 inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
                 const G4ParticleDefinition* p,
 		G4double kinEnergy,
-		G4double Z, G4double,
-		G4double, G4double)
+		G4double Z, G4double A,
+		G4double ecut, G4double)
 {
-  G4double x;
+  G4int iz = G4int(Z);
   G4bool b;
   if(theCrossSectionTable) {
-    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
+    nucXS[iz] = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
       ->GetValue(kinEnergy, b));
-  } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z);
+  } else nucXS[iz] = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
 
-  //  G4cout << "G4eCoulombScatteringModel: e= " << kinEnergy 
-  //         << "  cs= " << x << G4endl;
-  return x;
+  elXS[iz] = CalculateECrossSectionPerAtom(p, kinEnergy, Z, ecut);
+
+  //  G4cout << "G4eCoulombScatteringModel:ComputeCSPerAtom e= " << kinEnergy 
+  //	 << " Z= " << Z
+  //       << "  CS= " << x << G4endl;
+  return nucXS[iz] + elXS[iz];
 }
 
 inline G4double G4eCoulombScatteringModel::ScreeningParameter(
@@ -164,6 +182,13 @@ inline G4double G4eCoulombScatteringModel::ScreeningParameter(
 {
   G4double a = invbeta2*Z*Z*q2*alpha2;
   return std::pow(Z,0.6666667)*a0*(1.13 + 3.76*a)/mom2;
+}
+
+inline G4double G4eCoulombScatteringModel::NuclearSizeParameter(
+		G4double A, G4double mom2)
+{
+  // A.V. Butkevich et al., NIM A 488 (2002) 282
+  return mom2*constn*std::pow(A, 0.54); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

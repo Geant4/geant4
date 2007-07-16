@@ -1,4 +1,4 @@
-$Id: History,v 1.319 2007-07-13 15:26:23 vnivanch Exp $
+$Id: History,v 1.320 2007-07-16 08:45:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-
+16 July 07: V.Ivant (emstand-V09-00-01)
+- G4CoulombScattering - update InitialiseProcess and PrintInfo methods 
+  to ensure parameters of models change between runs and more clear cout
+- G4eCoulombScatteringModel, G4CoulombScatteringModel - added nuclear size
+  effect; added separate simulation of scattering on atomic electrons taking
+  into account cuts; fixed cross section for compounds. 
 
 13 July 07: V.Ivant (emstand-V09-00-00)
 - G4UniversalFluctuation - add protection for low-density materials 
