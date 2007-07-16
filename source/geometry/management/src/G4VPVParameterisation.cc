@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc,v 1.7 2006-06-29 18:34:04 gunter Exp $
+// $Id: G4VPVParameterisation.cc,v 1.8 2007-07-16 08:40:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Default implementations for Parameterisations that do not
@@ -35,6 +35,14 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VVolumeMaterialScanner.hh"
+
+G4VPVParameterisation::G4VPVParameterisation()
+{
+}
+
+G4VPVParameterisation::~G4VPVParameterisation()
+{
+}
 
 G4VSolid*
 G4VPVParameterisation::ComputeSolid(const G4int,

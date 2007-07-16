@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.12 2006-06-29 18:32:33 gunter Exp $
+// $Id: G4VPVParameterisation.hh,v 1.13 2007-07-16 08:40:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -72,6 +72,11 @@ class G4VVolumeMaterialScanner;
 class G4VPVParameterisation
 {
   public:
+
+    G4VPVParameterisation();
+    virtual ~G4VPVParameterisation();
+
+  public:  // with description
 
     virtual void ComputeTransformation(const G4int,
                                        G4VPhysicalVolume * ) const = 0;
