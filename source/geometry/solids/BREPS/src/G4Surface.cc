@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.16 2007-05-11 13:49:32 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.17 2007-07-16 08:06:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,8 +44,8 @@ G4Surface::G4Surface()
   AdvancedFace=0;
   active = 1;
   distance = 1.0e20;
-  Type=0;
-  bbox = (G4BoundingBox3D*)0;
+  Type = 0;
+  bbox = 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
