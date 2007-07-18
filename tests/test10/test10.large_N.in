@@ -16,6 +16,10 @@
 /mydet/SelectDetector Cone
 /run/beamOn 25
 #
+# Paraboloid
+/mydet/SelectDetector Paraboloid
+/run/beamOn 25
+#
 # Box
 /mydet/SelectDetector Box
 /run/beamOn 25

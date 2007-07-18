@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.13 2007-04-21 08:33:19 ahoward Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.14 2007-07-18 14:29:54 tnikitin Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -46,6 +46,7 @@
 #include "G4Cons.hh"
 #include "G4Hype.hh"
 #include "G4Para.hh"
+#include "G4Paraboloid.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
 #include "G4Polyhedra.hh"
@@ -127,6 +128,8 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
     aVolume = new G4Torus ("aTorus", 10*cm, 15*cm, 20*cm, 0*deg, 60*deg);
   else if (val == "Para")
     aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
+  else if (val == "Paraboloid")
+    aVolume = new G4Paraboloid ("aParaboloid", 8*cm, 1*cm, 12*cm);
   else if (val == "Trd")
     aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
   else if (val == "Polyhedra")
