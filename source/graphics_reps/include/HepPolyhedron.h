@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.21 2006-06-29 19:06:32 gunter Exp $
+// $Id: HepPolyhedron.h,v 1.22 2007-07-18 13:57:04 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -398,6 +398,17 @@ public:
   HepPolyhedronPara(double Dx, double Dy, double Dz,
                     double Alpha, double Theta, double Phi);
   virtual ~HepPolyhedronPara();
+};
+
+class HepPolyhedronParaboloid : public HepPolyhedron
+{
+public:
+  HepPolyhedronParaboloid(double r1,
+                                                   double r2,
+                                                   double dz,
+                                                   double Phi1,
+                                                   double Dphi);
+  virtual ~HepPolyhedronParaboloid();
 };
 
 class HepPolyhedronCons : public HepPolyhedron {
