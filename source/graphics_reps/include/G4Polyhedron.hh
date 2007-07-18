@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.18 2006-06-29 19:05:45 gunter Exp $
+// $Id: G4Polyhedron.hh,v 1.19 2007-07-18 14:00:02 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -224,6 +224,13 @@ public:
   G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
                     G4double Phi1, G4double Dphi);
   virtual ~G4PolyhedronTubs ();
+};
+
+class G4PolyhedronParaboloid: public G4Polyhedron {
+ public:
+  G4PolyhedronParaboloid(G4double r1, G4double r2, G4double dz,
+                        G4double sPhi, G4double dPhi);
+  virtual ~G4PolyhedronParaboloid ();
 };
 
 class G4PolyhedronEllipsoid : public G4Polyhedron {
