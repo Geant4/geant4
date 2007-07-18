@@ -1,0 +1,113 @@
+inline 
+G4double G4Paraboloid::GetZHalfLength() const
+{
+  return dz;
+}
+
+inline 
+G4double G4Paraboloid::GetRadiusPlusZ() const
+{
+  return r2;
+}
+
+inline
+G4double G4Paraboloid::GetRadiusMinusZ() const
+{
+  return r1;
+}
+
+inline
+void G4Paraboloid::SetZHalfLength(G4double pDz)
+{
+  if(pDz <= 0)
+  {
+    G4Exception("G4Paraboloid::SetZHalfLength()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    dz = pDz;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea and GetCubicVolume that it needs to recalculate buffered value.
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+void G4Paraboloid::SetRadiusPlusZ(G4double pR2)
+{
+  if(pR2 <= 0 || pR2 <= r1)
+  {
+    G4Exception("G4Paraboloid::SetRadiusPlusZ()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    r2 = pR2;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea and GetCubicVolume that it needs to recalculate buffered value.
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+void G4Paraboloid::SetRadiusMinusZ(G4double pR1)
+{
+  if(pR1 < 0 || pR1 >= r2)
+  {
+    G4Exception("G4Paraboloid::SetRadiusMinusZ()", "InvalidSetup", 
+                FatalException, "Invalid dimensions.");
+  }
+  else
+  {
+    r1 = pR1;
+    k1 = (sqr(r2) - sqr(r1)) / (2 * dz);
+    k2 = (sqr(r2) + sqr(r1)) / 2;
+
+    // This informs GetSurfaceArea and GetCubicVolume that it needs to recalculate buffered value.
+    fSurfaceArea = 0.; 
+    fCubicVolume = 0.;
+  }
+}
+
+inline
+G4double G4Paraboloid::GetCubicVolume()
+{
+  if(fCubicVolume != 0 ) {;}
+  else
+  {
+    fCubicVolume = pi * 2. * k2 * dz;
+  }
+  return fCubicVolume;
+}
+
+inline
+G4double G4Paraboloid::CalculateSurfaceArea() const
+{
+    G4double h1, h2, A1, A2;
+    h1 = k2/k1 + dz;
+    h2 = k2/k1 - dz;
+    A1 = sqr(r2) + 4 * sqr(h1);
+    A1 *= A1;
+    A1 *= A1;
+    A1 = pi * r2 /6 / sqr(h2) * ( std::sqrt(A1) - r2 * r2 * r2);
+    A2 = sqr(r1) + 4 * sqr(h2);
+    A2 *= A2;
+    A2 *= A2;
+    A2 = pi * r1 /6 / sqr(h1) * ( std::sqrt(A2) - r1 * r1 * r1);
+    return fSurfaceArea = A1 - A2 + (sqr(r1) + sqr(r2))*pi;
+}
+
+inline
+G4double G4Paraboloid::GetSurfaceArea()
+{
+  if(fSurfaceArea == 0.) CalculateSurfaceArea();
+
+  return fSurfaceArea;
+}
