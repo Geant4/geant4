@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.8 2006-12-13 15:43:48 gunter Exp $
+// $Id: SCDetectorConstruction.cc,v 1.9 2007-07-18 14:38:48 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -44,6 +44,7 @@
 #include "G4Cons.hh"
 #include "G4Hype.hh"
 #include "G4Para.hh"
+#include "G4Paraboloid.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
 #include "G4Ellipsoid.hh"
@@ -389,6 +390,10 @@ else if (val == "Q6Shell")
   else if (val == "Para")
   {
     aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
+  }
+  else if (val == "Paraboloid")
+  {
+    aVolume = new G4Paraboloid ("aParaboloid", 8*cm, 1*cm, 12*cm);
   }
   else if (val == "Trd")
   {

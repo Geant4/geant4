@@ -1,4 +1,4 @@
-# $Id: run1.mac,v 1.6 2005-12-19 14:00:38 link Exp $
+# $Id: run1.mac,v 1.7 2007-07-18 14:38:34 tnikitin Exp $
 #
 #
 
@@ -11,6 +11,7 @@
 #/mydet/SelectDetector Tube
 #/mydet/SelectDetector Orb
 #/mydet/SelectDetector Cone
+/mydet/SelectDetector Paraboloid
 #/mydet/SelectDetector TwistedTubs 
 #/mydet/SelectDetector TwistedBox
 #/mydet/SelectDetector TwistedTrd
@@ -21,7 +22,7 @@
 #/mydet/SelectDetector Q1Shell
 #/mydet/SelectDetector Ring
 #/mydet/SelectDetector Shell
-/mydet/SelectDetector EllipticalCone
+#/mydet/SelectDetector EllipticalCone
 
 /gun/particle geantino
 /run/beamOn 5
