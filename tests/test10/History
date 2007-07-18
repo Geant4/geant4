@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2007-05-25 10:17:47 gcosmo Exp $
+$Id: History,v 1.21 2007-07-18 16:07:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 18, 2007  Tatiana Nikitina (test10-V09-00-00)
+- Added G4Paraboloid solid to the test suite.
+  Requires tag "geom-specific-V09-00-02".
 
 May 25, 2007  Gabriele Cosmo (test10-V08-02-02)
 - Reduced statistics for twisted solids in both normal and large-N runs.
