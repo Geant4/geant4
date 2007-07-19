@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2007-07-19 08:18:22 gcosmo Exp $
+$Id: History,v 1.118 2007-07-19 12:57:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,8 @@ committal in the CVS repository !
 
 18-Jul-2007, G.Cosmo (geom-specific-V09-00-02)
 - New specific G4Paraboloid with cuts along the Z axis (by L.Lindroos).
-- Fixed dummy constructor of G4Polycone for initialisation of 'corners'.
+- Fixed dummy constructors of G4Polycone and G4PolyPhiFace for initialisation
+  of 'edges' and 'corners'.
 - Coworks with tag "greps-V09-00-01".
 
 12-Jul-2007, T.Nikitina (geom-specific-V09-00-01)
