@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.125 2007-07-18 14:20:31 gcosmo Exp $
+# $Id: binmake.gmk,v 1.126 2007-07-19 07:32:05 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -190,12 +190,12 @@ ifdef G4EXLIB
   # Unix
     TARGETLIB  := -l$(G4TARGET)
     TARGOBJEXT := o
-    OUT        := '-o '
+    OUT        := -o 
   else
   # Windows
     TARGETLIB  := lib$(G4TARGET).a   
     TARGOBJEXT := OBJ   
-    OUT        := '/Fe'
+    OUT        := /Fe
   endif
 endif
 
