@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.12 2007-05-31 13:52:48 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.13 2007-07-19 12:57:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -269,6 +269,7 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
 //                            for usage restricted to object persistency.
 //
 G4PolyPhiFace::G4PolyPhiFace( __void__&)
+  : edges(0), corners(0)
 {
 }
 
