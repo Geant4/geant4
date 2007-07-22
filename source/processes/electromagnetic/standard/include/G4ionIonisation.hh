@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.46 2007-05-23 08:47:34 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.47 2007-07-22 13:30:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 11-04-05 Move MaxSecondary energy to model (V.Ivanchneko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
+// 22-07-06 Remove obsolete method (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -113,11 +114,6 @@ protected:
 			    const G4Material*, G4double cut);
 
 private:
-
-  void DefineMassCharge(const G4ParticleDefinition* pd,
-			const G4Material* mat,
-			G4double mass,
-			G4double kinEnergy);
 
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
