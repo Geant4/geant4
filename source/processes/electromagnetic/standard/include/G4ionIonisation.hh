@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.47 2007-07-22 13:30:16 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.48 2007-07-22 13:34:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,8 +58,9 @@
 //
 // Class Description:
 //
-// This class manages the ionisation process for ions.
-// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
+// This class manages the ionisation process for ions. Effective charge,
+// nuclear stopping power, energy loss corrections are taken into account.
+// It inherites from G4VEnergyLossLoss.
 //
 
 // -------------------------------------------------------------------
