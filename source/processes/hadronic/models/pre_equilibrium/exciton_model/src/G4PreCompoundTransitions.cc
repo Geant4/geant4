@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.10 2007-07-23 09:56:40 ahoward Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.11 2007-07-23 12:07:20 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -192,8 +192,8 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
   // result.SetNumberOfHoles was here
 
   // With weight Z/A, number of charged particles is decreased on +1
-  //  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) && // AH/JMQ check is now in initialize within G4VPreCompoundFragment
-  if ( ( deltaN > 0 ) &&
+  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) && // AH/JMQ check is now in initialize within G4VPreCompoundFragment
+  //AH this doesn't work...  if ( ( deltaN > 0 ) &&
       (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
 		  std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))
     {
