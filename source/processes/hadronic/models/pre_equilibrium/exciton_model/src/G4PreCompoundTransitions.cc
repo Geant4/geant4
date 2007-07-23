@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.12 2007-07-23 12:18:04 ahoward Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.13 2007-07-23 12:48:54 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -190,6 +190,9 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
 
   // result.SetNumberOfParticles was here
   // result.SetNumberOfHoles was here
+  // the following lines have to be before SetNumberOfCharged, otherwise the check on number of charged vs. number of particles fails
+  result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
+  result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
 
   // With weight Z/A, number of charged particles is decreased on +1
   //  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) && // AH/JMQ check is now in initialize within G4VPreCompoundFragment
@@ -207,8 +210,8 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
     }
   
   // moved from above to make code more readable
-  result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
-  result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
+  //  result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
+  //  result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
 
   return result;
 }
