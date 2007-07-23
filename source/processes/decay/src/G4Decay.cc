@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.24 2007-05-07 12:05:45 kurasige Exp $
+// $Id: G4Decay.cc,v 1.25 2007-07-23 23:13:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -281,6 +281,10 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection);
   }
 
+   // set polarization for daughter particles
+   DaughterPolarization(aTrack, products);
+
+
   //add products in fParticleChangeForDecay
   G4int numberOfSecondaries = products->entries();
   fParticleChangeForDecay.SetNumberOfSecondaries(numberOfSecondaries);
@@ -324,6 +328,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   return &fParticleChangeForDecay ;
 } 
+
+void G4Decay::DaughterPolarization(const G4Track& , G4DecayProducts* )
+{
+}
+
 
 
 void G4Decay::StartTracking(G4Track*)
