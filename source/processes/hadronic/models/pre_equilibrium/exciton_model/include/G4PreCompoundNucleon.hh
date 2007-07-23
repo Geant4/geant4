@@ -75,6 +75,8 @@ public:
     
 protected:
 
+// added Rj method according to literature and JMQ
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0; 
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
   virtual G4bool IsItPossible(const G4Fragment&) = 0;     

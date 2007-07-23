@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.8 2006-06-29 20:59:25 gunter Exp $
+// $Id: G4PreCompoundModel.cc,v 1.9 2007-07-23 09:56:40 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -85,9 +85,14 @@ G4HadFinalState * G4PreCompoundModel::ApplyYourself(const G4HadProjectile & theP
   anInitialState.SetNumberOfParticles(1+thePrimary.GetDefinition()->GetBaryonNumber());
   
   // Number of Charged Excited Particles
-  anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 
-				    static_cast<G4int>(0.5+G4UniformRand()));
-  
+  if(G4UniformRand() <= aZ/anA) 
+      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 1);
+  else
+      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01));
+    
+//AH     anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 
+//AH 				    static_cast<G4int>(0.5+G4UniformRand()));
+
   // Number of Holes 
   anInitialState.SetNumberOfHoles(1);
   
