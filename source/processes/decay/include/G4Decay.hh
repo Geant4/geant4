@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.16 2007-07-23 03:23:49 kurasige Exp $
+// $Id: G4Decay.hh,v 1.17 2007-07-23 03:33:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,8 +115,8 @@ class G4Decay : public G4VRestDiscreteProcess
 
     // Set daughter polarization
     //  NO OPERATION in the base class of G4Decay 
-    void DaughterPolarization(const G4Track& aTrack,
-			      G4DecayProducts* products){};
+    virtual void DaughterPolarization(const G4Track& aTrack,
+			      G4DecayProducts* products) {}
 
  public:
     virtual G4double AtRestGetPhysicalInteractionLength(
