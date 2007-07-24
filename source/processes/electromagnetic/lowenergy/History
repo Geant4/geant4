@@ -1,4 +1,4 @@
-$Id: History,v 1.258 2007-06-07 13:57:26 pia Exp $
+$Id: History,v 1.259 2007-07-24 12:36:23 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23.07.2007   MGP, tag emlowen-V09-00-00
+             Deleted tag emlowen-V09-00-01 made by A.M. (no V-09-00-00 existed)
+             Fixes by A.M. to handle Z=100 in the Livermore library
+             and to correct Problem Report 933 (the latter fixes are not
+             documented)
 
 04.06.2007   MGP, tag emlowen-V08-03-03
              Tag on top of emlowen-V08-03-00a
