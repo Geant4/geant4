@@ -54,7 +54,7 @@ G4QStringChipsParticleLevelInterface::G4QStringChipsParticleLevelInterface()
   temperature = 180.;
   halfTheStrangenessOfSee = 0.3; // = s/d = s/u
   etaToEtaPrime = 0.3;
-  fusionToExchange = 100.;
+  fusionToExchange = 1.;
   theInnerCoreDensityCut = 50.;
   
   if(getenv("ChipsParameterTuning"))

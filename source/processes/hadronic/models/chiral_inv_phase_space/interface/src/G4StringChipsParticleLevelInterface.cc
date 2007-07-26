@@ -72,7 +72,7 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   temperature = 180.;
   halfTheStrangenessOfSee = 0.3; // = s/d = s/u
   etaToEtaPrime = 0.3;
-  fusionToExchange = 100.;
+  fusionToExchange = 1.;
   //theInnerCoreDensityCut = 50.;
   theInnerCoreDensityCut = 70.;
   
