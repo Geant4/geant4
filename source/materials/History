@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2007-06-20 09:21:45 vnivanch Exp $
+$Id: History,v 1.88 2007-07-26 18:52:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-07-07 V.Ivanchenko (materials-V09-00-00)
+- G4Nistmanager provide destruction of all materials and elements
+- G4NistElementBuilder - for given Z build only one Nist element
+     and allow user create other elements with given Z (HP physics
+     requirement)
 
 19-06-07 V.Ivanchenko (materials-V08-03-02)
 - G4SandiaTable - comment out destruction of G4OrderedTable
