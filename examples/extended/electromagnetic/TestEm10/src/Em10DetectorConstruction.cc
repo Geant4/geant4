@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.31 2006-06-29 16:38:36 gunter Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.32 2007-07-27 17:52:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 Em10DetectorConstruction::~Em10DetectorConstruction()
 { 
   delete fDetectorMessenger;
+  delete fMat;
 }
 
 //////////////////////////////////////////////////////////////////////////
