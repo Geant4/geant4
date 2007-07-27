@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.12 2007-07-05 17:11:40 maire Exp $
+// $Id: TrackingAction.cc,v 1.13 2007-07-27 18:28:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,8 +145,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //projected position at exit
   //
   if (transmit && charged) {
-    histoManager->FillHisto(7, position.y());
-    histoManager->FillHisto(7, position.z());
+    G4double y = position.y();
+    G4double z = position.z();
+    histoManager->FillHisto(7, std::sqrt(y*y + z*z));
+    //histoManager->FillHisto(7, position.y());
+    //  histoManager->FillHisto(7, position.z());
+  }
+  //projected position at exit
+  //
+  if (reflect && charged) {
+    G4double y = position.y();
+    G4double z = position.z();
+    histoManager->FillHisto(21, std::sqrt(y*y + z*z));
   }
 }
 

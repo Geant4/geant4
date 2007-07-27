@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.17 2007-07-05 17:11:40 maire Exp $
+// $Id: HistoManager.cc,v 1.18 2007-07-27 18:28:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,7 +174,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(transmit, charged) : kinetic energy at exit",	//4
 		  "(transmit, charged) : space angle: dN/dOmega",	//5
 		  "(transmit, charged) : projected angle at exit",	//6
-		  "(transmit, charged) : projected position at exit",	//7
+		  "(transmit, charged) : projected radius at exit",	//7
 		  "(transmit, neutral) : kinetic energy at exit",	//8
 		  "(transmit, neutral) : space angle: dN/dOmega",	//9
 		  "(transmit, neutral) : projected angle at exit",	//10
@@ -188,6 +188,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",	//18
 		  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",	//19
 		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//20
+		  "(reflect , charged) : projected radius at exit",	//21
                  };
 
   G4String titl = title[ih];
