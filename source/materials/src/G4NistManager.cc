@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.10 2007-07-26 18:52:12 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.11 2007-07-27 11:17:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 26.07.07 V.Ivanchneko modify destructor to provide complete destruction
 //                       of all elements and materials
+// 27-07-07, improve destructor (V.Ivanchenko) 
 //
 // -------------------------------------------------------------------
 //
@@ -90,19 +91,23 @@ G4NistManager::G4NistManager()
 
 G4NistManager::~G4NistManager()
 {
+  //  G4cout << "NistManager: start material destruction" << G4endl;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   size_t nmat = theMaterialTable->size();
   for(size_t i=0; i<nmat; i++) {
     if((*theMaterialTable)[i]) delete (*theMaterialTable)[i];
   }
+  //  G4cout << "NistManager: start element destruction" << G4endl;
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
   for(size_t i=0; i<nelm; i++) {
     if((*theElementTable)[i]) delete (*theElementTable)[i];
   }
+  //  G4cout << "NistManager: end element destruction" << G4endl;
   delete messenger;
   delete matBuilder;
   delete elmBuilder;  
+  // G4cout << "NistManager: end destruction" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

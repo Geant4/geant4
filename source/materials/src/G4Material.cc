@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.35 2007-01-10 12:00:29 vnivanch Exp $
+// $Id: G4Material.cc,v 1.36 2007-07-27 11:17:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,8 @@
 // 30-03-05, warning in GetMaterial(materialName) 
 // 09-03-06, minor change of printout (V.Ivanchenko) 
 // 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
+// 27-07-07, improve destructor (V.Ivanchenko) 
+// 
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,14 +230,6 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 
 void G4Material::AddElement(G4Element* element, G4double fraction)
 {
-  // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
-  /*
-  if (fAtomsVector) {
-      G4cerr << "This material is already being defined via elements by"
-             << "atoms." << G4endl;
-      G4Exception ("You are mixing apples and oranges ...");
-  }
-  */     
   // initialization
   if (fNumberOfComponents == 0) {
     fMassFractionVector = new G4double[50];
@@ -296,14 +290,6 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 
 void G4Material::AddMaterial(G4Material* material, G4double fraction)
 {
-  /*
-  // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
-  if (fAtomsVector) {
-      G4cerr << "This material is already being defined via elements by"
-                "atoms." << G4endl;
-      G4Exception ("You are mixing apples and oranges ...");
-  }
-  */
   // initialization
   if (fNumberOfComponents == 0) {
     fMassFractionVector = new G4double[50];
@@ -482,10 +468,11 @@ G4Material::G4Material(const G4Material& right)
 
 G4Material::~G4Material()
 {
-  for (size_t i=0; i<fNumberOfElements; i++)
-                  (*theElementVector)[i]->decreaseCountUse();
-		  
-  if (fImplicitElement)       delete    ((*theElementVector)[0]);
+  //  G4cout << "### Destruction of material " << fName << " started" <<G4endl;
+  // for (size_t i=0; i<fNumberOfElements; i++) {
+  //  (*theElementVector)[i]->decreaseCountUse();
+  // }
+  // if (fImplicitElement)       delete    ((*theElementVector)[0]);
   if (theElementVector)       delete    theElementVector;
   if (fMassFractionVector)    delete [] fMassFractionVector;
   if (fAtomsVector)           delete [] fAtomsVector;

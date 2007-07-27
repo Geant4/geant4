@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2007-07-26 18:52:12 vnivanch Exp $
+$Id: History,v 1.89 2007-07-27 11:17:10 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-07-07 V.Ivanchenko (materials-V09-00-01)
+G4Material, G4Element - fix destructors, now all materials and elements
+  are deleted at the end of a run
 
 26-07-07 V.Ivanchenko (materials-V09-00-00)
 - G4Nistmanager provide destruction of all materials and elements

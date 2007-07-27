@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.24 2006-10-17 15:15:46 vnivanch Exp $
+// $Id: G4Element.cc,v 1.25 2007-07-27 11:17:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,7 @@
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
 // 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
+// 27-07-07, improve destructor (V.Ivanchenko) 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -213,11 +214,14 @@ G4Element::G4Element( __void__& )
 
 G4Element::~G4Element()
 {
+  //  G4cout << "### Destruction of element " << fName << " started" <<G4endl;
+
+  /*
   if (fCountUse != 0)
     G4cout << "--> warning from ~G4Element(): the element " << fName
            << " is still referenced by " << fCountUse << " G4Materials \n" 
 	   << G4endl;
-	   
+  */   
   if (theIsotopeVector)
     { for (size_t i=0; i<fNumberOfIsotopes; i++)
                           (*theIsotopeVector)[i]->decreaseCountUse();         
