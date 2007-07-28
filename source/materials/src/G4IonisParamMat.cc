@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.18 2006-06-29 19:12:45 gunter Exp $
+// $Id: G4IonisParamMat.cc,v 1.19 2007-07-28 16:10:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -220,14 +220,12 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
   if(value == fMeanExcitationEnergy || value <= 0.0) return;
 
-  if (fMeanExcitationEnergy > 0.0 &&
-      G4NistManager::Instance()->GetVerbose() > 0) {
+  if (G4NistManager::Instance()->GetVerbose() > 0) 
     G4cout << "G4Material: Mean excitation energy is changed for "
            << fMaterial->GetName()
            << " Iold= " << fMeanExcitationEnergy/eV
            << "eV; Inew= " << value/eV << " eV;"
            << G4endl;
-  }
 
   fMeanExcitationEnergy = value;
   fLogMeanExcEnergy = std::log(value);
