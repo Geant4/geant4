@@ -1,4 +1,4 @@
-$Id: History,v 1.291 2007-07-11 17:55:01 vnivanch Exp $
+$Id: History,v 1.292 2007-07-28 13:18:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 July 07: V.Ivant (emutils-V09-00-02)
+- G4VEnergyLossProcess - use stl vector of G4VEmModel instead of array
+- G4VEmProcess - added cut to ComputeCrossSectionPerAtom method;
+                 added vector of cuts per material for secondaries,
+                 which are needed for single scattering process
+
+16 July 07: V.Ivant (emutils-V09-00-01)
+- G4VEmProcess - integral option coupled with buildLambdaTable option:
+  integral cannot be true if buildLambdaTable is false
 
 11 July 07: V.Ivant (emutils-V09-00-00)
 - G4VEmModel - fixed SelectRandomAtom method (last element of compound

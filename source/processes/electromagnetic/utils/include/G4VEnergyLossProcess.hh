@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.68 2007-06-12 11:29:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.69 2007-07-28 13:18:32 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@
 // 15-01-07 Add separate ionisation tables and reorganise get/set methods for
 //          dedx tables (V.Ivanchenko)
 // 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
+// 27-07-07 use stl vector for emModels instead of C-array (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -419,7 +420,7 @@ protected:
 private:
 
   G4EmModelManager*                     modelManager;
-  G4VEmModel*                           emModel[5];
+  std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
@@ -1069,14 +1070,18 @@ inline G4int G4VEnergyLossProcess::NumberOfModels()
 
 inline void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
 {
-  emModel[index] = p;
+  G4int n = emModels.size();
+  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  emModels[index] = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
 {
-  return emModel[index];
+  G4VEmModel* p = 0;
+  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

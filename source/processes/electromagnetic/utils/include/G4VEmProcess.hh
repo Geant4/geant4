@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.37 2007-05-23 08:43:46 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.38 2007-07-28 13:18:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,7 +145,8 @@ public:
   // It returns the cross section of the process for energy/ material
 
   inline G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-					     G4double Z, G4double A=0.);
+					     G4double Z, G4double A=0., 
+					     G4double cut=0.0);
   // It returns the cross section of the process per atom
 
   inline G4double MeanFreePath(const G4Track& track);
@@ -297,6 +298,7 @@ private:
   const G4ParticleDefinition*  theElectron;
   const G4ParticleDefinition*  thePositron;
 
+  const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
   const std::vector<G4double>* theCutsElectron;
   const std::vector<G4double>* theCutsPositron;
@@ -384,7 +386,8 @@ inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
   G4VEmModel* currentModel = SelectModel(e);
   G4double x = 0.0;
   if(currentModel) 
-    x = currentModel->CrossSectionPerVolume(currentMaterial,particle,e);
+    x = currentModel->CrossSectionPerVolume(currentMaterial,particle,
+					    e,(*theCuts)[currentMaterialIndex]);
   return x;
 }
 
@@ -588,10 +591,10 @@ inline void G4VEmProcess::UpdateEmModel(const G4String& nam,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::ComputeCrossSectionPerAtom(
-			G4double kineticEnergy, G4double Z, G4double A)
+		 G4double kineticEnergy, G4double Z, G4double A, G4double cut)
 {
   G4VEmModel* model = SelectModel(kineticEnergy);
-  return model->ComputeCrossSectionPerAtom(particle,kineticEnergy,Z,A);
+  return model->ComputeCrossSectionPerAtom(particle,kineticEnergy,Z,A,cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -668,6 +671,7 @@ inline G4bool G4VEmProcess::IsIntegral() const
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
   buildLambdaTable = val;
+  if(!val) integral = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

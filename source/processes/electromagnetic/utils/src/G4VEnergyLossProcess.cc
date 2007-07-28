@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.109 2007-06-20 12:43:55 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.110 2007-07-28 13:18:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -205,7 +205,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   // initialise model
   (G4LossTableManager::Instance())->Register(this);
-  emModel[0]=emModel[1]=emModel[2]=emModel[3]=emModel[4]=0;
   fluctModel = 0;
 
   scoffRegions.clear();
@@ -597,7 +596,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(length <= DBL_MIN) return &fParticleChange;
   G4double eloss  = 0.0;
 
-  /*  
+  /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "

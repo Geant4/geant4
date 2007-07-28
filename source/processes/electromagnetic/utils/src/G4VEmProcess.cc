@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.40 2007-05-23 08:43:46 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.41 2007-07-28 13:18:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,8 +139,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if(particle == &part) {
     Clear();
     InitialiseProcess(particle);
-    theCutsGamma =
-        modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
+    theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
