@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2007-07-28 14:35:05 vnivanch Exp $
+$Id: History,v 1.91 2007-07-28 15:58:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 27-07-07 V.Ivanchenko (materials-V09-00-01)
+G4NistManager - simplified logic of Print methods
+G4NistElementBuilder  - added protection to Print method
 G4NistMaterialBuilder - modified FindOrBuildMaterial method - NIST
                         material is built even user create a material
                         with the same name, so NIST materials 

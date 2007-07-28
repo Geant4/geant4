@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.15 2007-07-26 18:52:12 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.16 2007-07-28 15:58:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,6 +175,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
     imin = 1;
     imax = maxNumElements;
   }
+  if(imax > maxNumElements) imax = maxNumElements;
 
   for(G4int i=imin; i<imax; i++) {
     G4int nc = nIsotopes[i];

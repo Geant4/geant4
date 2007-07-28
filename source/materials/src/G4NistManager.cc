@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.12 2007-07-28 14:35:05 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.13 2007-07-28 15:58:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,8 @@
 // 26.07.07 V.Ivanchneko modify destructor to provide complete destruction
 //                       of all elements and materials
 // 27-07-07, improve destructor (V.Ivanchenko) 
+// 28.07.07 V.Ivanchneko make simple methods inline
+// 28.07.07 V.Ivanchneko simplify Print methods
 //
 // -------------------------------------------------------------------
 //
@@ -56,8 +58,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4NistManager.hh"
-
-#include "G4NistMaterialBuilder.hh"
 #include "G4NistMessenger.hh"
 
 G4NistManager* G4NistManager::instance = 0;
@@ -112,28 +112,6 @@ G4NistManager::~G4NistManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::RegisterElement(G4Element* elm)
-{
-  if(elm) {
-    elements.push_back(elm);
-    nElements++;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistManager::DeRegisterElement(G4Element* elm)
-{
-  for(size_t i=0; i<nElements; i++) {
-    if(elm == elements[i]) {
-      elements[i] = 0;
-      return;
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4NistManager::PrintElement(const G4String& symbol)
 {
   if (symbol == "all") elmBuilder->PrintElement(0);
@@ -142,112 +120,32 @@ void G4NistManager::PrintElement(const G4String& symbol)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintElement(G4int Z)
-{
-  elmBuilder->PrintElement(Z);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4NistManager::PrintG4Element(const G4String& name)
 {
- for (size_t i=0; i<nElements; i++) {
-  if ((name==(elements[i])->GetName()) || (name==(elements[i])->GetSymbol())) {
-     G4cout << *(elements[i]) << G4endl;
-     return;
+  const G4ElementTable* theElementTable = G4Element::GetElementTable();
+  size_t nelm = theElementTable->size();
+  for(size_t i=0; i<nelm; i++) {
+    G4Element* elm = (*theElementTable)[i];
+    if ( name == elm->GetName() || "all" == name) {
+      G4cout << *elm << G4endl;
+      return;
     }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistManager::RegisterMaterial(G4Material* mat)
-{
-  if(mat) {
-    materials.push_back(mat);
-    nMaterials++;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistManager::DeRegisterMaterial(G4Material* mat)
-{
-  for (size_t i=0; i<nMaterials; i++) {
-    if (mat == materials[i]) { materials[i] = 0; return; }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
-					       G4bool isotopes,
-					       G4bool warning)
-{
-  if (verbose>1) G4cout << "G4NistManager::FindMaterial " << name 
-                        << G4endl;
-
-  // search the material in the list of user 
-  G4Material* mat =  G4Material::GetMaterial(name, warning);
-
-  if (!mat) mat = matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
-  return mat;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material* G4NistManager::ConstructNewMaterial(
-                                      const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4int>& nbAtoms,
-				      G4double dens, G4bool isotopes)
-{
-  return matBuilder->ConstructNewMaterial(name,elm,nbAtoms,dens,isotopes);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material* G4NistManager::ConstructNewMaterial(
-                                      const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& w,
-				      G4double dens, G4bool isotopes)
-{
-  return matBuilder->ConstructNewMaterial(name,elm,w,dens,isotopes);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material* G4NistManager::ConstructNewGasMaterial(
-				      const G4String& name,
-                                      const G4String& nameNist,
-				      G4double temp, G4double pres, 
-				      G4bool isotopes)
-{
-  return matBuilder->ConstructNewGasMaterial(name,nameNist,
-					     temp,pres,isotopes);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistManager::ListMaterials(const G4String& list)
-{
-  matBuilder->ListMaterials(list);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistManager::PrintG4Material(const G4String& name)
 {
-  for (size_t i=0; i<nMaterials; i++) {
-    if (name == (materials[i])->GetName()) {
-      G4cout << *(materials[i]) << G4endl;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  size_t nmat = theMaterialTable->size();
+  for(size_t i=0; i<nmat; i++) {
+    G4Material* mat = (*theMaterialTable)[i];
+    if ( name == mat->GetName() || "all" == name) {
+      G4cout << *mat << G4endl;
       return;
     }
   }
-  // search the material in the list of user 
-  G4Material* mat =  G4Material::GetMaterial(name, true);
-  if(mat) G4cout << *mat << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -257,13 +155,6 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
-{
-  return matBuilder->GetMaterialNames();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

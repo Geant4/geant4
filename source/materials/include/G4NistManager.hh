@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.12 2007-05-02 11:22:35 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.13 2007-07-28 15:58:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,7 @@
 // 17.10.06 V.Ivanchneko add methods: GetAtomicMass, GetNistElementNames,
 //                       GetNistMaterialNames
 // 02.05.07 V.Ivanchneko add GetNistFirstIsotopeN and GetNumberOfNistIsotopes 
+// 28.07.07 V.Ivanchneko make simple methods inline
 //
 // Class Description:
 //
@@ -66,8 +67,8 @@
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4NistElementBuilder.hh"
+#include "G4NistMaterialBuilder.hh"
 
-class G4NistMaterialBuilder;
 class G4NistMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,10 +82,8 @@ public:
   static G4NistManager* Instance();
   ~G4NistManager();
 
- // Elements
- //
-  void RegisterElement  (G4Element*);
-  void DeRegisterElement(G4Element*);
+  // Elements
+  //
 
   G4Element* GetElement(size_t index);
   
@@ -119,8 +118,6 @@ public:
 
   // Materials
   //
-  void RegisterMaterial  (G4Material*);
-  void DeRegisterMaterial(G4Material*);
 
   G4Material* GetMaterial(size_t index);
   
@@ -193,8 +190,9 @@ size_t G4NistManager::GetNumberOfMaterials()
 inline 
 G4Element* G4NistManager::GetElement(size_t index)
 {
-  G4Element* elm = 0;
-  if(index < nElements) elm = elements[index];
+  G4Element* elm = 0; 
+  const G4ElementTable* theElementTable = G4Element::GetElementTable();
+  if(index < theElementTable->size()) elm = (*theElementTable)[index];
   return elm;
 }
 
@@ -289,11 +287,20 @@ const std::vector<G4String>& G4NistManager::GetNistElementNames() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline 
+void G4NistManager::PrintElement(G4int Z)
+{
+  elmBuilder->PrintElement(Z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline
 G4Material* G4NistManager::GetMaterial(size_t index)
 {
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4Material* mat = 0;
-  if(index < nMaterials) mat = materials[index];
+  if(index < theMaterialTable->size()) mat = (*theMaterialTable)[index];
   return mat;
 }
 
@@ -303,6 +310,69 @@ inline
 G4int G4NistManager::GetVerbose()
 {
   return verbose;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
+					       G4bool isotopes,
+					       G4bool warning)
+{
+  return matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4Material* G4NistManager::ConstructNewMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4int>& nbAtoms,
+				      G4double dens, G4bool isotopes)
+{
+  return matBuilder->ConstructNewMaterial(name,elm,nbAtoms,dens,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4Material* G4NistManager::ConstructNewMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4double>& w,
+				      G4double dens, G4bool isotopes)
+{
+  return matBuilder->ConstructNewMaterial(name,elm,w,dens,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4Material* G4NistManager::ConstructNewGasMaterial(
+				      const G4String& name,
+                                      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes)
+{
+  return matBuilder->ConstructNewGasMaterial(name,nameNist,
+					     temp,pres,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4NistManager::ListMaterials(const G4String& list)
+{
+  matBuilder->ListMaterials(list);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
+{
+  return matBuilder->GetMaterialNames();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
