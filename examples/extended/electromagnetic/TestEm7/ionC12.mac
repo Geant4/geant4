@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.17 2007-07-28 16:39:31 vnivanch Exp $
+# $Id: ionC12.mac,v 1.18 2007-07-28 16:40:18 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -21,12 +21,13 @@
 #
 /testem/phys/addPhysics  standard	#em physics
 #/testem/phys/addPhysics  emstandard	#em physics
+#/testem/phys/addPhysics  standardIG	#em physics
 #
 /run/initialize
 #
 /gun/particle ion
-#/gun/ion 6 12 6
-/gun/ion 6 12 1
+/gun/ion 6 12 6
+#/gun/ion 6 12 1
 /gun/energy 3.5 GeV
 #
 # beam size

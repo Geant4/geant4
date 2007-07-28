@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.cc,v 1.9 2007-07-28 16:39:31 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.1 2007-07-28 16:39:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "PhysListEmStandard.hh"
+#include "PhysListEmStandardIG.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -39,7 +38,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -50,24 +48,23 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-
-#include "G4EmProcessOptions.hh"
+#include "G4ionGasIonisation.hh"
+#include "G4CoulombScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(const G4String& name)
+PhysListEmStandardIG::PhysListEmStandardIG(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
+PhysListEmStandardIG::~PhysListEmStandardIG()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmStandard::ConstructProcess()
+void PhysListEmStandardIG::ConstructProcess()
 {
   // Add standard EM Processes
 
@@ -78,47 +75,51 @@ void PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      // gamma         
+      // gamma
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-      
-    } else if( particleName == "mu+" || 
+            
+    } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
       pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);       
-     
-    } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);
+             
+    } else if (particleName == "alpha" || particleName == "He3") {
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
 
+    } else if (particleName == "GenericIon" ) { 
+
+      G4CoulombScattering* cs = new G4CoulombScattering("CoulombScat");
+      cs->SetBuildTableFlag(false);
+      pmanager->AddDiscreteProcess(cs);
+      pmanager->AddProcess(new G4ionGasIonisation,      -1, 2,2);
+     
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
       pmanager->AddProcess(new G4hIonisation,        -1,2,2);
     }
   }
-  G4EmProcessOptions opt;
-  opt.SetStepFunction(0.2, 100*um);
-  opt.SetSkin(1.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
