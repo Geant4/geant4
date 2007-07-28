@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.11 2007-07-27 11:17:10 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.12 2007-07-28 14:35:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,7 +82,7 @@ G4NistManager::G4NistManager()
   verbose    = 0;
 
   elmBuilder = new G4NistElementBuilder(verbose);
-  matBuilder = new G4NistMaterialBuilder(this,elmBuilder,verbose);
+  matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
   
   messenger  = new G4NistMessenger(this);  
 }

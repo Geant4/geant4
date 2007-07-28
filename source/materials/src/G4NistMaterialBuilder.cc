@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.15 2007-01-10 12:25:56 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.16 2007-07-28 14:35:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,7 @@
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 27.06.06 V.Ivanchneko fix graphite description
+// 27.07.07 V.Ivanchneko remove dependence on NistManager
 //
 // -------------------------------------------------------------------
 //
@@ -53,16 +54,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4NistManager.hh"
 #include "G4NistMaterialBuilder.hh"
 #include "G4NistElementBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistManager* mm,
-    G4NistElementBuilder* eb, G4int vb)
-: matManager(mm),
-  elmBuilder(eb),
+G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
+: elmBuilder(eb),
   verbose(vb),
   nMaterials(0),
   nComponents(0),
@@ -93,35 +91,41 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
   if (verbose > 1)
     G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
 
-  //already existing in NistMaterialManager ?
-  //
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int nmat = theMaterialTable->size();
+
+  // Check if name inside NIST DB?
   G4Material* mat = 0;
-  size_t nm = 0;
-  if (matManager) nm = matManager->GetNumberOfMaterials();
-  if (nm > 0) {
-    for (size_t i=0; i<nm; i++) {
-      if(name == matManager->GetMaterial(i)->GetName()) {
-        mat = matManager->GetMaterial(i);
-	break;
+
+  for (G4int i=0; i<nMaterials; i++) {
+
+    // Is inside NIST DB?
+    if (name == names[i]) {
+
+      // Build new Nist material 
+      if(matIndex[i] == -1) mat = BuildMaterial(i, isotopes);
+      // Nist material was already built
+      else                  mat = (*theMaterialTable)[matIndex[i]];
+
+      return mat;
+
+    }
+  }
+
+  // Check the list of all materials
+  if (nmat > 0) {
+    for (G4int i=0; i<nmat; i++) {
+      if(name == ((*theMaterialTable)[i])->GetName()) {
+        mat = (*theMaterialTable)[i];
+	return mat;
       }
     }
   }
 
-  //if not, build it
-  //
-  if(!mat) mat = BuildMaterial(name, isotopes);
-
-  if (mat) {
-    if( verbose > 1) 
-      G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial material "
-             << name << " is available"
-	     << G4endl;
-  } else {
-    if( (verbose == 1 && warning) || verbose > 1) 
-      G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
-	     << " material <" << name
-	     << "> is not found out" << G4endl;
-  }
+  if( (verbose == 1 && warning) || verbose > 1) 
+    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
+	   << " material <" << name
+	   << "> is not found out" << G4endl;
 
   return mat;
 }
@@ -140,34 +144,51 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
 
   for (G4int i=0; i<nMaterials; i++) {
     if (name == names[i]) {
-      G4int nc = components[i];
-      mat = new G4Material(names[i],densities[i],nc,
-                                    states[i],temperatures[i], presures[i]);
-
-      if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
-      if (nc > 0) {
-	G4int idx = indexes[i];
-	for (G4int j=0; j<nc; j++) {
-	  G4int Z = elements[idx+j];
-	  G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
-	  mat->AddElement(elm,fractions[idx+j]);
-	}
-      }
-
-      if (chFormulas[i] != "") {
-	mat->SetChemicalFormula(chFormulas[i]);
-        G4double exc = mat->GetIonisation()
-	                  ->FindMeanExcitationEnergy(chFormulas[i]);
-        mat->GetIonisation()->SetMeanExcitationEnergy(exc);
-      }
-
-      if (ionPotentials[i] != 0.0)
-        mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[i]);
-
-      if (matManager) matManager->RegisterMaterial(mat);
+      mat = BuildMaterial(i, isotopes);
       break;
-      }
     }
+  }
+  return mat;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i,
+                                                 G4bool isotopes)
+
+{
+  if (verbose > 1) G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
+                          << G4endl;
+
+  G4Material* mat = 0;
+  if (nMaterials == 0)  return mat;
+
+  G4int nc = components[i];
+  mat = new G4Material(names[i],densities[i],nc,
+		       states[i],temperatures[i], presures[i]);
+
+  if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
+  if (nc > 0) {
+    G4int idx = indexes[i];
+    for (G4int j=0; j<nc; j++) {
+      G4int Z = elements[idx+j];
+      G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
+      mat->AddElement(elm,fractions[idx+j]);
+    }
+  }
+
+  if (chFormulas[i] != "") {
+    mat->SetChemicalFormula(chFormulas[i]);
+    G4double exc = 
+      mat->GetIonisation()->FindMeanExcitationEnergy(chFormulas[i]);
+    mat->GetIonisation()->SetMeanExcitationEnergy(exc);
+  }
+
+  if (ionPotentials[i] != 0.0)
+    mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[i]);
+
+  matIndex[i] = mat->GetIndex();
+
   return mat;
 }
 
@@ -295,7 +316,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
   if (ionPotentials[idx] != 0.0)
     mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[idx]);
 
-  if (matManager) matManager->RegisterMaterial(mat);
+  matIndex[idx] = mat->GetIndex();
+
   return mat;
 }
 
@@ -412,6 +434,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   indexes.push_back(nComponents);
   temperatures.push_back(temp);
   presures.push_back(pres);
+  matIndex.push_back(-1);
 
   if (ncomp == 1) {
     elements.push_back(Z);
@@ -544,12 +567,6 @@ void G4NistMaterialBuilder::Initialise()
 {
   if (verbose > 0)
     G4cout << "### G4NistMaterialBuilder::Initialise()" << G4endl;
-
-  if (!matManager) {
-    G4cout << "G4NistMaterialBuilder::Initialise(): Warning : "
-           << "G4NistManager do not exist" << G4endl;
-    ///exit(1);
-  }
 
   NistSimpleMaterials();
   NistCompoundMaterials();
