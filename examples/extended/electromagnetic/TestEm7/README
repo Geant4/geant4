@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2007-07-26 14:13:48 maire Exp $
+$Id: README,v 1.16 2007-07-28 16:39:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -39,6 +39,12 @@ $Id: README,v 1.15 2007-07-26 14:13:48 maire Exp $
     - "standard"     standard EM physics (default)
     - "livermore"    low-energy EM physics using Livermore data
     - "penelope"     low-energy EM physics implementing Penelope models
+    - "standardSS"   standard EM physics with single Coulomb scattering 
+                     instead of multiple scattering
+    - "standardIG"   standard EM physics with single Coulomb scattering 
+                     instead of multiple scattering; in Coulomb scattering
+                     the recoil is taken into account; G4ionIonisation is 
+                     substituted by G4ionGasIonisation
     
     Alternatively, the user may use predefined Geant4 builders:
     - "emstandard"        G4EmStandardPhysics builder
