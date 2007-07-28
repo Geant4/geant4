@@ -98,24 +98,26 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 
 G4PAIModel::~G4PAIModel()
 {
+  //  G4cout << "PAI: start destruction" << G4endl;
   if(fParticleEnergyVector) delete fParticleEnergyVector;
-  if(fdEdxVector)         delete fdEdxVector ;
-  if ( fLambdaVector)     delete fLambdaVector;
-  if ( fdNdxCutVector)    delete fdNdxCutVector;
+  if(fdEdxVector)           delete fdEdxVector ;
+  if(fLambdaVector)         delete fLambdaVector;
+  if(fdNdxCutVector)        delete fdNdxCutVector;
 
   if( fPAItransferTable )
-  {
-        fPAItransferTable->clearAndDestroy();
-        delete fPAItransferTable ;
-  }
-  if(fSandiaPhotoAbsCof)
-  {
-    for(G4int i=0;i<fSandiaIntervalNumber;i++)
     {
-        delete[] fSandiaPhotoAbsCof[i];
+      fPAItransferTable->clearAndDestroy();
+      delete fPAItransferTable ;
     }
-    delete[] fSandiaPhotoAbsCof;
-  }
+  if(fSandiaPhotoAbsCof)
+    {
+      for(G4int i=0;i<fSandiaIntervalNumber;i++)
+	{
+	  delete[] fSandiaPhotoAbsCof[i];
+	}
+      delete[] fSandiaPhotoAbsCof;
+    }
+  //G4cout << "PAI: end destruction" << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

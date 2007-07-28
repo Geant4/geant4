@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.7 2007-07-16 08:45:34 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.8 2007-07-28 13:30:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -180,8 +180,9 @@ inline G4double G4eCoulombScatteringModel::ScreeningParameter(
 		G4double mom2, 
 		G4double invbeta2)
 {
-  G4double a = invbeta2*Z*Z*q2*alpha2;
-  return std::pow(Z,0.6666667)*a0*(1.13 + 3.76*a)/mom2;
+  G4double R = a0/mom2;
+  if(Z > 1.5) R *= std::pow(Z,0.6666667)*(1.13 + 3.76*invbeta2*Z*Z*q2*alpha2);
+  return R;
 }
 
 inline G4double G4eCoulombScatteringModel::NuclearSizeParameter(
