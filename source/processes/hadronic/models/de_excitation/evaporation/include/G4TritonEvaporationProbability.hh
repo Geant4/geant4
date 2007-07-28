@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationProbability.hh,v 1.3 2006-06-29 20:10:13 gunter Exp $
+// $Id: G4TritonEvaporationProbability.hh,v 1.4 2007-07-28 12:43:19 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,6 +36,7 @@
 #ifndef G4TritonEvaporationProbability_h
 #define G4TritonEvaporationProbability_h 1
 
+#include "G4TritonCoulombBarrier.hh"
 
 #include "G4EvaporationProbability.hh"
 
@@ -63,6 +64,8 @@ private:
 	
   virtual G4double CalcBetaParam(const G4Fragment & ) const 
   { return 0.0; }
+
+  G4TritonCoulombBarrier theCoulombBarrier;
 
   G4double CCoeficient(const G4double aZ) const;
 

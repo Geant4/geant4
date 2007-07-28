@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.hh,v 1.3 2006-06-29 20:09:57 gunter Exp $
+// $Id: G4EvaporationProbability.hh,v 1.4 2007-07-28 12:43:18 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -41,15 +41,18 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 
+#include "G4VCoulombBarrier.hh"
+
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
   // Only available constructor
-  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma) : 
+  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma, G4VCoulombBarrier * aCoulombBarrier) : 
     theA(anA),
     theZ(aZ),
-    Gamma(aGamma) 
+    Gamma(aGamma),
+    theCoulombBarrierptr(aCoulombBarrier)
   {
     theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   }
@@ -111,6 +114,8 @@ private:
 
   //
   std::vector<G4int> * ExcitationSpins;
+
+  G4VCoulombBarrier * theCoulombBarrierptr;
 
 };
 

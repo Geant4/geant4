@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.5 2006-06-29 20:10:31 gunter Exp $
+// $Id: G4EvaporationProbability.cc,v 1.6 2007-07-28 12:43:19 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -109,16 +109,22 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
     // compute the integrated probability of evaporation channel
     G4double RN = 1.5*fermi;
 
+    G4double exEnergy = U - delta0;
+    G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),exEnergy);
+
     G4double Alpha = CalcAlphaParam(fragment);
-    G4double Beta = CalcBetaParam(fragment);
+    G4double Beta = CalcBetaParam(fragment) - CoulombBarrier;
 	
-    G4double Rmax = MaximalKineticEnergy;
+    G4double Rmax = MaximalKineticEnergy; // this is "Emax - CoulombBarrier" (corrected already - within G4EvaporationChannel)
     G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),
 						      static_cast<G4int>(ResidualZ),
-						      Rmax);
+						      Rmax); // Rmax or U?
+    //					      exEnergy); // Rmax or U?
+
     G4double GlobalFactor = static_cast<G4double>(Gamma) * (Alpha/(a*a)) *
 	(NuclearMass*RN*RN*std::pow(ResidualA,2./3.))/
 	(2.*pi* hbar_Planck*hbar_Planck);
+
     G4double Term1 = (2.0*Beta*a-3.0)/2.0 + Rmax*a;
     G4double Term2 = (2.0*Beta*a-3.0)*std::sqrt(Rmax*a) + 2.0*a*Rmax;
 	

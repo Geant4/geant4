@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationProbability.hh,v 1.3 2006-06-29 20:09:45 gunter Exp $
+// $Id: G4AlphaEvaporationProbability.hh,v 1.4 2007-07-28 12:43:18 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,6 +36,7 @@
 #ifndef G4AlphaEvaporationProbability_h
 #define G4AlphaEvaporationProbability_h 1
 
+#include "G4AlphaCoulombBarrier.hh"
 
 #include "G4EvaporationProbability.hh"
 
@@ -64,6 +65,7 @@ private:
   virtual G4double CalcBetaParam(const G4Fragment & ) const 
   { return 0.0; }
 
+  G4AlphaCoulombBarrier theCoulombBarrier;
 	
   G4double CCoeficient(const G4double ) const;
 

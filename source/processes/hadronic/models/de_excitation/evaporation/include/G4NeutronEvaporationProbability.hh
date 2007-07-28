@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationProbability.hh,v 1.4 2006-06-29 20:10:05 gunter Exp $
+// $Id: G4NeutronEvaporationProbability.hh,v 1.5 2007-07-28 12:43:19 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,6 +36,7 @@
 #ifndef G4NeutronEvaporationProbability_h
 #define G4NeutronEvaporationProbability_h 1
 
+#include "G4NeutronCoulombBarrier.hh"
 
 #include "G4EvaporationProbability.hh"
 
@@ -64,6 +65,8 @@ private:
   virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
   { return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0) - 0.05)*MeV/
       CalcAlphaParam(fragment); }
+
+  G4NeutronCoulombBarrier theCoulombBarrier;
 
   // Excitation energy levels 
   std::vector<G4double> ExcitEnergies;

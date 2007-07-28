@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 28 July 2007 Alex Howard (hadr-deex-V09-00-00)
+-----------------------------------------------
+- Added Coulomb Barrier to Beta parameter for inverse channel
+cross-section. Needs verification.  Required additions and changes to the
+following files:
+G4EvaporationProbability.hh, G4EvaporationProbability.cc, 
+G4AlphaEvaporationProbability.hh, G4DeuteronEvaporationProbability.hh, 
+G4He3EvaporationProbability.hh, G4NeutronEvaporationProbability.hh, 
+G4ProtonEvaporationProbability.hh, G4TritonEvaporationProbability.hh, 
+G4AlphaEvaporationProbability.cc, G4DeuteronEvaporationProbability.cc, 
+G4He3EvaporationProbability.cc, G4NeutronEvaporationProbability.cc, 
+G4ProtonEvaporationProbability.cc, G4TritonEvaporationProbability.cc
+
+
  5 June 2007 Alex Howard (hadr-deex-V08-03-01)
 -----------------------------------------------
 - Fixed bug in fix "hadr-deex-V08-03-00" - deleted pointers and iterators were
