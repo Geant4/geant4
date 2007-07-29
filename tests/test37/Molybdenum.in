@@ -1,7 +1,8 @@
 /run/verbose 1
 /testem/det/setMat1 G4_Mo
 #/testem/det/setThick1 184.49217 um
-/testem/det/setThick1 274.95 um
+#/testem/det/setThick1 274.95 um
+/testem/det/setThick1  203 um
 /testem/det/setNbOfLayers1 100 
 
 /testem/phys/addPhysics  PHYSLIST

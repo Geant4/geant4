@@ -1,15 +1,18 @@
 /run/verbose 1
 /testem/det/setMat1 G4_Al
 #/testem/det/setThick1 161.27825 um
-/testem/det/setThick1 183.73 um
+#/testem/det/setThick1 183.73 um
+/testem/det/setThick1 171 um
 /testem/det/setNbOfLayers1 9 
 /testem/det/setMat2 G4_Au
 #/testem/det/setThick2 20.37888 um
-/testem/det/setThick2 19.98 um
+#/testem/det/setThick2 19.98 um
+/testem/det/setThick2 22 um
 /testem/det/setNbOfLayers2 5
 /testem/det/setMat3 G4_Al
 #/testem/det/setThick3 1247.35458 um
-/testem/det/setThick3 1.7557 mm
+#/testem/det/setThick3 1.7557 mm
+/testem/det/setThick3 1.517 mm
 /testem/det/setNbOfLayers3 86 
 
 /testem/phys/addPhysics  PHYSLIST
