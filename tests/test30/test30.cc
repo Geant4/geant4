@@ -103,7 +103,9 @@
 #include "G4StateManager.hh"
 #include "G4NistManager.hh"
 
-#include "AIDA/AIDA.h"
+#include "Histo.hh"
+
+//#include "AIDA/AIDA.h"
 
 #include "G4Timer.hh"
 
@@ -113,10 +115,11 @@ int main(int argc, char** argv)
   G4cout << "======        Cascade Test (test30) Start       ========" << G4endl;
   G4cout << "========================================================" << G4endl;
 
+  Histo     histo;
   G4NistManager::Instance()->SetVerbose(2);
   G4String  namePart = "proton";
   G4bool    ionParticle = false;
-  G4bool    Shen = false;
+  G4bool    Shen     = false;
   G4int     ionZ(0), ionA(0);
   G4String  nameMat  = "G4_Al";
   G4String  nameGen  = "binary";
@@ -127,6 +130,7 @@ int main(int argc, char** argv)
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
   G4double  elim     = 30.*MeV;
+  G4double  energyg  = 50.*MeV;
   G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
@@ -135,6 +139,7 @@ int main(int argc, char** argv)
   G4int     nbinsd   = 20;
   G4int     nbinspi  = 20;
   G4int     nangl    = 0;
+  G4int     nanglpr  = 0;
   G4int     nanglpi  = 0;
   G4int     modu     = 10000;
   G4String hFile     = "hbook.paw";
@@ -155,6 +160,10 @@ int main(int argc, char** argv)
   G4double bng1[20] = {0.0};
   G4double bng2[20] = {0.0};
   G4double cng[20] = {0.0};
+  G4double angpr[20] = {0.0};
+  G4double bng1pr[20] = {0.0};
+  G4double bng2pr[20] = {0.0};
+  G4double cngpr[20] = {0.0};
   G4double angpi[20] = {0.0};
   G4double bngpi1[20] = {0.0};
   G4double bngpi2[20] = {0.0};
@@ -271,6 +280,7 @@ int main(int argc, char** argv)
   G4cout << "#eBound" << G4endl;
   G4cout << "#kBound" << G4endl;
 
+  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
@@ -305,6 +315,9 @@ int main(int argc, char** argv)
       } else if(line == "#emax(MeV)") {
         (*fin) >> emax;
         emax *= MeV;
+      } else if(line == "#emaxg(MeV)") {
+        (*fin) >> energyg;
+        energyg *= MeV;
       } else if(line == "#emaxpi(MeV)") {
         (*fin) >> emaxpi;
         emaxpi *= MeV;
@@ -333,6 +346,8 @@ int main(int argc, char** argv)
         (*fin) >> nbinspi;
       } else if(line == "#nangle") {
         (*fin) >> nangl;
+      } else if(line == "#nanglepr") {
+        (*fin) >> nanglpr;
       } else if(line == "#nanglepi") {
         (*fin) >> nanglpi;
       } else if(line == "#anglespi") {
@@ -341,6 +356,8 @@ int main(int argc, char** argv)
         (*fin) >> dangl;
       } else if(line == "#angles") {
         for(int k=0; k<nangl; k++) {(*fin) >> ang[k];}
+      } else if(line == "#anglespr") {
+        for(int k=0; k<nanglpr; k++) {(*fin) >> angpr[k];}
       } else if(line == "#range(mm)") {
         (*fin) >> range;
         range *= mm;
@@ -457,25 +474,6 @@ int main(int argc, char** argv)
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
 
-    // -------------------------------------------------------------------
-
-    // Creating the analysis factory
-    AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
-    // Creating the tree factory
-    AIDA::ITreeFactory* tf = af->createTreeFactory();
-
-    G4String option = "--noErrors uncompress";
-
-    // Creating a tree mapped to a new hbook file.
-    AIDA::ITree* tree = tf->create( hFile, "hbook", false, true, option);
-
-    std::cout << "Tree store : " << tree->storeName() << std::endl;
-    delete tf;
-
-    const G4int nhisto = 63;
-    AIDA::IHistogram1D* h[nhisto];
-
     G4double mass = part->GetPDGMass();
     G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
     G4double bine = emax/(G4double)nbinse;
@@ -494,127 +492,131 @@ int main(int argc, char** argv)
 
     if(usepaw) {
 
-      // Creating a histogram factory, whose histograms 
-      // will be handled by the tree
-      AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
-
-      // Creating an 1-dimensional histogram in the root directory of the tree
-
       // ---- Book a histogram and ntuples
       G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
       G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
       G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
       G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
 
-      h[0]=hf->createHistogram1D("1","Number of Secondaries",50,-0.5,49.5);
-      h[1]=hf->createHistogram1D("2","Type of secondary",10,-0.5,9.5);
-      h[2]=hf->createHistogram1D("3","Phi(degrees) of Secondaries",
-				 90,-180.0,180.0);
-      h[3]=hf->createHistogram1D("4","Pz (MeV) for protons",100,-pmax,pmax);
-      h[4]=hf->createHistogram1D("5","Pz (MeV) for pi-",100,-pmax,pmax);
-      h[5]=hf->createHistogram1D("6","Pz (MeV) for pi+",100,-pmax,pmax);
-      h[6]=hf->createHistogram1D("7","Pz (MeV) for neutrons",100,-pmax,pmax);
-      h[7]=hf->createHistogram1D("8","Pt (MeV) for protons",100,0.,pmax);
-      h[8]=hf->createHistogram1D("9","Pt (MeV) for pi-",100,0.,pmax);
-      h[9]=hf->createHistogram1D("10","Pt (MeV) for pi+",100,0.,pmax);
-      h[10]=hf->createHistogram1D("11","Pt (MeV) for neutrons",100,0.,pmax);
-      h[11]=hf->createHistogram1D("12","E (MeV) for protons",100,0.,energy);
-      h[12]=hf->createHistogram1D("13","E (MeV) for pi-",100,0.,energy);
-      h[13]=hf->createHistogram1D("14","E (MeV) for pi+",100,0.,energy);
-      h[14]=hf->createHistogram1D("15","E (MeV) for neutrons",100,0.,energy);
-      h[15]=hf->createHistogram1D("16","delta E (MeV)",20,-1.,1.);
-      h[16]=hf->createHistogram1D("17","delta Pz (GeV)",20,-1.,1.);
-      h[17]=hf->createHistogram1D("18","delta Pt (GeV)",20,-1.,1.);
+      histo.add1D("1","Number of Secondaries",50,-0.5,49.5);
+      histo.add1D("2","Type of secondary",10,-0.5,9.5);
+      histo.add1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
 
-      h[18]=hf->createHistogram1D("19","E (MeV) for pi0",100,0.,energy);
-      h[19]=hf->createHistogram1D("20","Pz (MeV) for pi0",100,-pmax,pmax);
-      h[20]=hf->createHistogram1D("21","Pt (MeV) for pi0",100,0.,pmax);
+      if(nanglpr>0)
+	histo.add1D("4","ds/dE for protons at theta = 0",nbinsd,0.,emax);
+      if(nanglpr>1)
+	histo.add1D("5","ds/dE for protons at theta = 1",nbinsd,0.,emax);
+      if(nanglpr>2)
+	histo.add1D("6","ds/dE for protons at theta = 2",nbinsd,0.,emax);
+      if(nanglpr>3)
+	histo.add1D("7","ds/dE for protons at theta = 3",nbinsd,0.,emax);
+      if(nanglpr>4)
+	histo.add1D("8","ds/dE for protons at theta = 4",nbinsd,0.,emax);
+      if(nanglpr>5)
+	histo.add1D("9","ds/dE for protons at theta = 5",nbinsd,0.,emax);
+      if(nanglpr>6)
+	histo.add1D("10","ds/dE for protons at theta = 6",nbinsd,0.,emax);
+      if(nanglpr>7)
+	histo.add1D("11","ds/dE for protons at theta = 7",nbinsd,0.,emax);
+      if(nanglpr>8)
+	histo.add1D("12","ds/dE for protons at theta = 8",nbinsd,0.,emax);
+      if(nanglpr>9)
+	histo.add1D("13","ds/dE for protons at theta = 9",nbinsd,0.,emax);
+      if(nanglpr>10)
+	histo.add1D("14","ds/dE for protons at theta = 10",nbinsd,0.,emax);
 
-      h[21]=hf->createHistogram1D("22","E(MeV) protons",nbinse,0.,emax);
-      h[22]=hf->createHistogram1D("23","E(MeV) neutrons",nbinse,0.,emax);
+      histo.add1D("15","E(MeV) for gamma",100,0.,energyg);
+      histo.add1D("16","delta E (MeV)",20,-1.,1.);
+      histo.add1D("17","delta Pz (GeV)",20,-1.,1.);
+      histo.add1D("18","delta Pt (GeV)",20,-1.,1.);
 
-      h[23]=hf->createHistogram1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
+      histo.add1D("19","E(MeV) for pi0",nbinse,0.,emax);
+      histo.add1D("20","E(MeV) for pi+",nbinse,0.,emax);
+      histo.add1D("21","E(MeV) for pi-",nbinse,0.,emax);
+      histo.add1D("22","E(MeV) protons",nbinse,0.,emax);
+      histo.add1D("23","E(MeV) neutrons",nbinse,0.,emax);
 
-      h[24]=hf->createHistogram1D("25","cos(theta) protons",nbinsa,-1.,1.);
-      h[25]=hf->createHistogram1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
+      histo.add1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
 
-      h[26]=hf->createHistogram1D("27","Baryon number (mbn)",
-				  maxn,-0.5,(G4double)maxn + 0.5);
+      histo.add1D("25","cos(theta) protons",nbinsa,-1.,1.);
+      histo.add1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
+
+      histo.add1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
 
       if(nangl>0)
-       h[27]=hf->createHistogram1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
+	histo.add1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
       if(nangl>1)
-       h[28]=hf->createHistogram1D("29","ds/dE for neutrons at theta = 1",nbinsd,0.,emax);
+	histo.add1D("29","ds/dE for neutrons at theta = 1",nbinsd,0.,emax);
       if(nangl>2)
-       h[29]=hf->createHistogram1D("30","ds/dE for neutrons at theta = 2",nbinsd,0.,emax);
+	histo.add1D("30","ds/dE for neutrons at theta = 2",nbinsd,0.,emax);
       if(nangl>3)
-       h[30]=hf->createHistogram1D("31","ds/dE for neutrons at theta = 3",nbinsd,0.,emax);
+	histo.add1D("31","ds/dE for neutrons at theta = 3",nbinsd,0.,emax);
       if(nangl>4)
-       h[31]=hf->createHistogram1D("32","ds/dE for neutrons at theta = 4",nbinsd,0.,emax);
+	histo.add1D("32","ds/dE for neutrons at theta = 4",nbinsd,0.,emax);
       if(nangl>5)
-       h[32]=hf->createHistogram1D("33","ds/dE for neutrons at theta = 5",nbinsd,0.,emax);
+	histo.add1D("33","ds/dE for neutrons at theta = 5",nbinsd,0.,emax);
       if(nangl>6)
-       h[33]=hf->createHistogram1D("34","ds/dE for neutrons at theta = 6",nbinsd,0.,emax);
+	histo.add1D("34","ds/dE for neutrons at theta = 6",nbinsd,0.,emax);
       if(nangl>7)
-       h[34]=hf->createHistogram1D("35","ds/dE for neutrons at theta = 7",nbinsd,0.,emax);
+	histo.add1D("35","ds/dE for neutrons at theta = 7",nbinsd,0.,emax);
       if(nangl>8)
-       h[35]=hf->createHistogram1D("36","ds/dE for neutrons at theta = 8",nbinsd,0.,emax);
+	histo.add1D("36","ds/dE for neutrons at theta = 8",nbinsd,0.,emax);
       if(nangl>9)
-       h[36]=hf->createHistogram1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
+	histo.add1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
       if(nangl>10)
-	h[37]=hf->createHistogram1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
+	histo.add1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
       if(nangl>11)
-       h[38]=hf->createHistogram1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
+	histo.add1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
       if(nangl>12)
-       h[39]=hf->createHistogram1D("40","ds/dE for neutrons at theta = 12",nbinsd,0.,emax);
+	histo.add1D("40","ds/dE for neutrons at theta = 12",nbinsd,0.,emax);
 
       if(nanglpi>0)
-       h[40]=hf->createHistogram1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
+	histo.add1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
       if(nanglpi>1)
-       h[41]=hf->createHistogram1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
+	histo.add1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
       if(nanglpi>2)
-       h[42]=hf->createHistogram1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
+	histo.add1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
       if(nanglpi>3)
-       h[43]=hf->createHistogram1D("44","ds/dE for pi- at theta = 3",nbinspi,0.,emaxpi);
+	histo.add1D("44","ds/dE for pi- at theta = 3",nbinspi,0.,emaxpi);
       if(nanglpi>4)
-       h[44]=hf->createHistogram1D("45","ds/dE for pi- at theta = 4",nbinspi,0.,emaxpi);
+	histo.add1D("45","ds/dE for pi- at theta = 4",nbinspi,0.,emaxpi);
       if(nanglpi>0)
-       h[45]=hf->createHistogram1D("46","ds/dE for pi+ at theta = 0",nbinspi,0.,emaxpi);
+	histo.add1D("46","ds/dE for pi+ at theta = 0",nbinspi,0.,emaxpi);
       if(nanglpi>1)
-       h[46]=hf->createHistogram1D("47","ds/dE for pi+ at theta = 1",nbinspi,0.,emaxpi);
+	histo.add1D("47","ds/dE for pi+ at theta = 1",nbinspi,0.,emaxpi);
       if(nanglpi>2)
-       h[47]=hf->createHistogram1D("48","ds/dE for pi+ at theta = 2",nbinspi,0.,emaxpi);
+	histo.add1D("48","ds/dE for pi+ at theta = 2",nbinspi,0.,emaxpi);
       if(nanglpi>3)
-       h[48]=hf->createHistogram1D("49","ds/dE for pi+ at theta = 3",nbinspi,0.,emaxpi);
+	histo.add1D("49","ds/dE for pi+ at theta = 3",nbinspi,0.,emaxpi);
       if(nanglpi>4)
-       h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
+	histo.add1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-      h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,-1.,logmax);
+      histo.add1D("51","E(MeV) neutrons",nbinlog,-1.,logmax);
       if(nangl>0)
-	h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,-1.,logmax);
+	histo.add1D("52","ds/dE for neutrons at theta = 0",nbinlog,-1.,logmax);
       if(nangl>1)
-	h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,-1.,logmax);
+	histo.add1D("53","ds/dE for neutrons at theta = 1",nbinlog,-1.,logmax);
       if(nangl>2)
-	h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,-1.,logmax);
+	histo.add1D("54","ds/dE for neutrons at theta = 2",nbinlog,-1.,logmax);
       if(nangl>3)
-	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,-1.,logmax);
+	histo.add1D("55","ds/dE for neutrons at theta = 3",nbinlog,-1.,logmax);
       if(nangl>4)
-	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,-1.,logmax);
+	histo.add1D("56","ds/dE for neutrons at theta = 4",nbinlog,-1.,logmax);
       if(nangl>5)
-	h[56]=hf->createHistogram1D("57","ds/dE for neutrons at theta = 5",nbinlog,-1.,logmax);
+	histo.add1D("57","ds/dE for neutrons at theta = 5",nbinlog,-1.,logmax);
 
-      h[57]=hf->createHistogram1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
-      h[58]=hf->createHistogram1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
-      h[59]=hf->createHistogram1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,-1.,1.);
-      h[60]=hf->createHistogram1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,-1.,1.);
-      h[61]=hf->createHistogram1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
-      h[62]=hf->createHistogram1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
+      histo.add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
+      histo.add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
+      histo.add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,-1.,1.);
+      histo.add1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,-1.,1.);
+      histo.add1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
+      histo.add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
 
-      delete hf;
-      G4cout << "Histograms is initialised nbins=" << nbins
-             << G4endl;
+      //      delete hf;
+      // G4cout << "Histograms is initialised nbins=" << nbins
+      //       << G4endl;
     }
-    delete af;
+    //    delete af;
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
@@ -671,6 +673,11 @@ int main(int argc, char** argv)
            << "### factorb = " << factorb
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
+    // Limit number of angles
+    if(nangl   > 13) nangl   = 13;
+    if(nanglpr > 11) nanglpr = 11;
+    if(nanglpi >  5) nanglpi = 5;
+
     if(nangl > 0) {
       for(G4int k=0; k<nangl; k++) {
 
@@ -690,6 +697,29 @@ int main(int argc, char** argv)
 
         cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
          (twopi*(std::cos(degree*bng1[k]) - std::cos(degree*bng2[k]))*
+                barn*emax*(G4double)nevt);
+      }
+    }
+
+    if(nanglpr > 0) {
+      for(G4int k=0; k<nanglpr; k++) {
+
+        if(nanglpr == 1) {
+          bng1pr[0] = std::max(0.0,angpr[0] - dangl);
+          bng2pr[0] = std::min(180., angpr[0] + dangl);
+        } else if(k == 0) {
+          bng1pr[0] = std::max(0.0,angpr[0] - dangl);
+          bng2pr[0] = std::min(0.5*(angpr[0] + angpr[1]), angpr[0] + dangl);
+        } else if(k < nanglpr-1) {
+          bng1pr[k] = std::max(bng2pr[k-1], angpr[k]-dangl);
+          bng2pr[k] = std::min(0.5*(angpr[k] + angpr[k+1]), angpr[k] + dangl);
+        } else {
+          bng1pr[k] = std::max(bng2pr[k-1], angpr[k]-dangl);
+          bng2pr[k] = std::min(180., angpr[k] + dangl);
+        }
+
+        cngpr[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
+         (twopi*(std::cos(degree*bng1pr[k]) - std::cos(degree*bng2pr[k]))*
                 barn*emax*(G4double)nevt);
       }
     }
@@ -823,17 +853,17 @@ int main(int argc, char** argv)
 
 	if(usepaw) {
 	  if(i==0)  {
-	    h[57]->fill(e/MeV,1.0);
-	    h[59]->fill(cost,factora);
-	    h[61]->fill(costcm,factora);
+	    histo.fill(57,e/MeV,1.0);
+	    histo.fill(59,cost,factora);
+	    histo.fill(61,costcm,factora);
 	  } else if(i==1) {
-	    h[58]->fill(e/MeV,1.0);
-	    h[60]->fill(cost,factora);
-	    h[62]->fill(costcm,factora);
+	    histo.fill(58,e/MeV,1.0);
+	    histo.fill(60,cost,factora);
+	    histo.fill(62,costcm,factora);
 	  }
 
-          h[2]->fill(mom.phi()/degree,1.0);
-          if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
+          histo.fill(2,mom.phi()/degree,1.0);
+          if(pd == neutron) histo.fill(23,mom.phi()/degree,1.0);
 	}
 
 	if( (e == 0.0 || pt == 0.0) && warn < 50 ) {
@@ -867,58 +897,52 @@ int main(int argc, char** argv)
             float N = pd->GetBaryonNumber();
             float Z = pd->GetPDGCharge()/eplus;
             float Z0= bestZ[(int)N];
-            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
+            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) histo.fill(26,N, factorb);
 	  }
 
           if(pd == proton) {
 
-            h[1]->fill(1.0, 1.0);
-            h[3]->fill(pz/MeV, 1.0);
-            h[7]->fill(pt/MeV, 1.0);
-            h[11]->fill(e/MeV, 1.0);
-	    h[21]->fill(e/MeV, factor);
-	    h[24]->fill(cost, factora);
+            histo.fill(1,1.0, 1.0);
+	    histo.fill(21,e/MeV, factor);
+	    histo.fill(24,cost, factora);
+            for(G4int kk=0; kk<nanglpr; kk++) {
+              if(bng1pr[kk] <= thetad && thetad <= bng2pr[kk]) {
+                histo.fill(3+kk,e/MeV, cngpr[kk]);
+                break;
+	      }
+	    }
 
           } else if(pd == pin) {
 
-	    h[1]->fill(4.0, 1.0);
-            h[4]->fill(pz/MeV, 1.0);
-            h[8]->fill(pt/MeV, 1.0);
-            h[12]->fill(e/MeV, 1.0);
+	    histo.fill(1,4.0, 1.0);
+            histo.fill(20,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                h[40+kk]->fill(e/MeV, cngpi[kk]);
+                histo.fill(40+kk,e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
 
           } else if(pd == pip) {
 
-	    h[1]->fill(3.0, 1.0);
-            h[5]->fill(pz/MeV, 1.0);
-            h[9]->fill(pt/MeV, 1.0);
-            h[13]->fill(e/MeV, 1.0);
+	    histo.fill(1,3.0, 1.0);
+            histo.fill(19,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                h[45+kk]->fill(e/MeV, cngpi[kk]);
+                histo.fill(45+kk,e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
 
 	  } else if(pd == pi0) {
 
-	    h[1]->fill(5.0, 1.0);
-	    h[18]->fill(e/MeV, 1.0);
-	    h[19]->fill(pz/MeV, 1.0);
-	    h[20]->fill(pt/MeV, 1.0);
+	    histo.fill(1,5.0, 1.0);
+	    histo.fill(18,e/MeV, 1.0);
 
 	  } else if(pd == neutron) {
 
-	    h[1]->fill(2.0, 1.0);
-            h[6]->fill(pz/MeV, 1.0);
-            h[10]->fill(pt/MeV, 1.0);
-            h[14]->fill(e/MeV, 1.0);
-	    h[22]->fill(e/MeV, factor);
+	    histo.fill(1,2.0, 1.0);
+	    histo.fill(22,e/MeV, factor);
             G4double ee = std::log10(e/MeV);
             G4int    nbb= (G4int)((ee + 1.0)/binlog);
             G4double e1 = binlog*nbb;
@@ -926,24 +950,27 @@ int main(int argc, char** argv)
             e1 = std::pow(10., e1);
             e2 = std::pow(10., e2) - e1;
             G4double f  = factor*bine/e2;
-	    h[50]->fill(ee, f);
-	    if(e >= elim) h[25]->fill(cost, factora);
+	    histo.fill(50,ee, f);
+	    if(e >= elim) histo.fill(25,cost, factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
-                h[27+kk]->fill(e/MeV, cng[kk]);
-                if(kk < 6) h[51+kk]->fill(ee, cng[kk]*bind/e2);
+                histo.fill(27+kk,e/MeV, cng[kk]);
+                if(kk < 6) histo.fill(51+kk,ee, cng[kk]*bind/e2);
                 break;
 	      }
 	    }
 
+	  } else if(pd == gamma) {
+	    histo.fill(14,e/MeV, 1.0);
+
 	  } else if(pd == deu) {
-	    h[1]->fill(6.0, 1.0);
+	    histo.fill(1,6.0, 1.0);
 	  } else if(pd == tri) {
-	    h[1]->fill(7.0, 1.0);
+	    histo.fill(1,7.0, 1.0);
 	  } else if(pd == alp) {
-	    h[1]->fill(8.0, 1.0);
+	    histo.fill(1,8.0, 1.0);
 	  } else {
-	    h[1]->fill(9.0, 1.0);
+	    histo.fill(1,9.0, 1.0);
 	  }
 	}
 	//	delete sec;       	 
@@ -960,10 +987,10 @@ int main(int argc, char** argv)
       pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
-        h[0]->fill((double)n,1.0);
-	h[15]->fill(labv.e()/MeV, 1.0);
-	h[16]->fill(pz/GeV, 1.0);
-	h[17]->fill(pt/GeV, 1.0);
+        histo.fill(0,(double)n,1.0);
+	histo.fill(15,labv.e()/MeV, 1.0);
+	histo.fill(16,pz/GeV, 1.0);
+	histo.fill(17,pt/GeV, 1.0);
       }
       aChange->Clear();
 
@@ -975,13 +1002,9 @@ int main(int argc, char** argv)
 
     // Committing the transaction with the tree
     if(usepaw) {
-      std::cout << "Committing..." << std::endl;
-      tree->commit();
-      std::cout << "Closing the tree..." << std::endl;
-      tree->close();
+      std::cout << "###### Save histograms" << std::endl;
+      histo.save();
     }
-    delete tree;
-
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
   } while(end);
