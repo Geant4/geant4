@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.62 2007-07-30 07:45:35 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.63 2007-07-30 13:32:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -584,7 +584,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	        tgeom = geomlimit/facgeom;
 	      else
 	        tgeom = 2.*geomlimit/facgeom;
-	    if(tlimit > tgeom) tlimit = tgeom;
+
+	      if(tlimit > tgeom) tlimit = tgeom;
 	    }
 	}
 
@@ -628,7 +629,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
-    else if(steppingAlgorithm == fUseSafety)
+  else if(steppingAlgorithm == fUseSafety)
     {
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
@@ -835,14 +836,13 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
   G4double y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*charge*sqrt(y)/betacp;
-           y = log(y);
- if(mass == electron_mass_c2)
+  y = log(y);
+  if(mass == electron_mass_c2)
     theta0 *= 1.+0.049*y;
   else
     theta0 *= 1.+0.044*y;
     
   return theta0;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1026,7 +1026,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       // sampling of costheta
       if (G4UniformRand() < prob)
          cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
-        else
+      else
          cth = b-bp1*bm1/(bm1+2.*G4UniformRand()) ;
     }
   }  

@@ -1,4 +1,4 @@
-$Id: History,v 1.323 2007-07-30 13:25:37 urban Exp $
+$Id: History,v 1.324 2007-07-30 13:32:08 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 July 07: V.Ivant (emstand-V09-00-03)
 30 July 07: L.Urban
 - G4UrbanMscModel - new, simpler model functions to describe the angular
-   distribution;
-   theta0 has been changed too (now the form of theta0
-   is the same as in the Highland formula, but the parameter values are
-   different for e+/e- and the other (heavy) particles ;
-   some changes for the steplimit type 2 case : tlimitmin = 10 stepmin +
+   distribution; theta0 of this distribution has been changed too (now 
+   the form of theta0 is the same as in the Highland formula, but the 
+   parameter values are different for e+/e- and the other (heavy) particles;
+   the change for the UseDistanseToBoundary case: tlimitmin = 10 stepmin;
    some cosmetics in ComputeTruePathLengthLimit.
 
 28 July 07: V.Ivant (emstand-V09-00-02)
