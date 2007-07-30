@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.61 2007-06-19 12:10:26 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.62 2007-07-30 07:45:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,8 +137,8 @@
 // 10-04-07 optimize logic of ComputeTruePathLengthLimit, remove
 //          unused members, use unique G4SafetyHelper (V.Ivanchenko)
 // 01-05-07 optimization for skin > 0 (L.Urban)
-// 19-06-07 modification for skin > 0 in order to get facgeom 
-//          working properly (L.Urban)
+// 05-07-07 modified model functions in SampleCosineTheta (L.Urban)
+// 06-07-07 theta0 is not the same for e-/e+ as for heavy particles (L.Urban)
 //
 
 // Class Description:
@@ -207,6 +207,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -568,8 +569,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	  skindepth = skin*stepmin;
 
 	  //define tlimitmin
-	  tlimitmin = lambda0/nstepmax;
-	  if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
+          tlimitmin = 10.*stepmin;
 	  if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
 
 	  //lower limit for tlimit
@@ -577,14 +577,14 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
 	  // constraint from the geometry (if tlimit above is too big)
 	  G4double tgeom = geombig; 
+
 	  if((geomlimit < geombig) && (geomlimit > geommin))
 	    {
 	      if(stepStatus == fGeomBoundary)  
-		tgeom = geomlimit/facgeom;
+	        tgeom = geomlimit/facgeom;
 	      else
-		tgeom = 2.*geomlimit/facgeom;
-
-	      if(tlimit > tgeom) tlimit = tgeom;
+	        tgeom = 2.*geomlimit/facgeom;
+	    if(tlimit > tgeom) tlimit = tgeom;
 	    }
 	}
 
@@ -601,7 +601,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       G4double tnow = tlimit;
       // optimization ...
       if(geomlimit < geombig) tnow = max(tlimit,facsafety*geomlimit);
-   
+
       // step reduction near to boundary
       if(smallstep < skin)
 	{
@@ -625,11 +625,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tnow < stepmin) tnow = stepmin;
 
       if(tPathLength > tnow) tPathLength = tnow ; 
-
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
-  else if(steppingAlgorithm == fUseSafety)
+    else if(steppingAlgorithm == fUseSafety)
     {
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
@@ -694,8 +693,7 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
   if((track.GetVolume() != 0) &&
      (track.GetVolume() != safetyHelper->GetWorldVolume()))  
   {
-    // in order to define tgeom cstep = range shold be used
-    G4double  cstep = currentRange;
+    G4double cstep = currentRange;
 
     geomlimit = safetyHelper->CheckNextStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
@@ -838,13 +836,11 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   G4double y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*charge*sqrt(y)/betacp;
            y = log(y);
-           theta0 *= sqrt(1.+y*(0.105+0.0035*y));
-
-  //correction for small Zeff (based on high energy
-  // proton scattering  data)
-  // see G.Shen at al. Phys.Rev.D20(1979) p.1584
-  theta0 *= 1.-0.24/(Zeff*(Zeff+1.));
-
+ if(mass == electron_mass_c2)
+    theta0 *= 1.+0.049*y;
+  else
+    theta0 *= 1.+0.044*y;
+    
   return theta0;
 
 }
@@ -961,7 +957,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     if(n > 0)
     {
       G4double tm = KineticEnergy/electron_mass_c2;
-      // ascr - screening parameter
+     // ascr - screening parameter
       G4double ascr = exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
       G4double ascr1 = 1.+0.5*ascr*ascr;
       G4double bp1=ascr1+1.;
@@ -1000,80 +996,40 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
-      G4double b,bx,b1,ebx,eb1;
-      G4double prob = 0., qprob = 1. ;
+      G4double b=2.,bp1=3.,bm1=1.;
+      G4double prob = 0. ;
       G4double a = 1., ea = 0., eaa = 1.;
       G4double xmean1 = 1., xmean2 = 0.;
-      G4double xsi = 3.;
+                                                      
+      tau *= 1.+1./Zeff;
+      G4double xmeanth = exp(-tau);
 
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       if(theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
       else                a = 1.0/(theta0*theta0) ;
 
-      G4double xmeanth = exp(-tau);
+      ea = exp(-2.*a);
+      eaa = 1.-ea ; 
+      xmean1 = (1.+ea)/eaa-1./a;
 
-      G4double c = 3. ;         
-      G4double c1 = c-1.;
+      if(xmean1 <= xmeanth)
+        xmean1 = 0.50*(1.+xmeanth);
 
-      G4double x0 = 1.-xsi/a ;
-      if(x0 < 0.)
-      {
-        // 1 model function
-        b = exp(tau);
-        bx = b-1.;
-        b1 = b+1.;
-        ebx=exp((c1)*log(bx)) ;
-        eb1=exp((c1)*log(b1)) ;
-      }
-      else
-      {
-        //empirical tail parameter 
-        // based some exp. data
-        c = 2.40-0.027*exp(2.*log(Zeff)/3.);
+      b = 1./xmeanth;
+      bp1 = b+1.;
+      bm1 = b-1.;
+      xmean2 = b-0.5*bp1*bm1*log(bp1/bm1);
 
-        if(c == 2.) c = 2.+taulim ;
-        if(c <= 1.) c = 1.+taulim ;
-        c1 = c-1.;
-
-        ea = exp(-xsi) ;
-        eaa = 1.-ea ;
-        xmean1 = 1.-(1.-(1.+xsi)*ea)/(eaa*a) ; 
-
-        // from the continuity of the 1st derivative at x=x0
-        b = 1.+(c-xsi)/a ;
-
-        b1 = b+1. ;
-        bx = c/a ;
-        eb1=exp((c1)*log(b1)) ;
-        ebx=exp((c1)*log(bx)) ;
-        xmean2 = (x0*eb1+ebx-(eb1*bx-b1*ebx)/(c-2.))/(eb1-ebx) ;
-
-        G4double f1x0 = a*ea/eaa ;
-        G4double f2x0 = c1*eb1*ebx/(eb1-ebx)/exp(c*log(bx)) ;
-
-        // from continuity at x=x0
-        prob = f2x0/(f1x0+f2x0) ;
-
-        // from xmean = xmeanth
-        qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
-      }
+      prob = (xmeanth-xmean2)/(xmean1-xmean2);
 
       // sampling of costheta
-      if (G4UniformRand() < qprob)
-      {
-        if (G4UniformRand() < prob)
-           cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+      if (G4UniformRand() < prob)
+         cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
         else
-           cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/c1) ;
-      }
-      else
-      {
-        cth = -1.+2.*G4UniformRand();
-      }
+         cth = b-bp1*bm1/(bm1+2.*G4UniformRand()) ;
     }
   }  
-
   return cth ;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
