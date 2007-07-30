@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2007-07-28 16:39:31 vnivanch Exp $
+$Id: History,v 1.53 2007-07-30 16:37:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+30-07-07 mma (testem7-V09-00-02)
+- PhysListStandardSS and PhysListStandardIG: review process ordering
 
 28-07-07 V.Ivant (testem7-V09-00-01)
 - add PhysListStandardIG - ion G4ionIonisation process is
