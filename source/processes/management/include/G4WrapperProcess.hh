@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.7 2007-03-25 23:20:03 kurasige Exp $
+// $Id: G4WrapperProcess.hh,v 1.8 2007-07-30 17:33:37 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,7 +140,7 @@ class G4WrapperProcess  :public G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
  
-      virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+      virtual void PreparePhysicsTable(const G4ParticleDefinition&);
       // Messaged by the Particle definition (via the Process manager)
       // whenever cross section tables have to be prepare for rebuilt 
       // (i.e. if new materials have been defined). 
