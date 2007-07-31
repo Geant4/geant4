@@ -28,6 +28,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
+#include "PhysListEmStandardIG.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -37,7 +38,7 @@
 #include "PhysListEmPenelope.hh"
 
 #include "StepMax.hh"
-#include "G4Decay.hh"
+#include "G4DecayPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -47,7 +48,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,8 +64,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new PhysListEmStandard(emName = "standard");
-  emName = "standard";
+  emPhysicsList = new PhysListEmStandard();
+  decayPhysics  = new G4DecayPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,32 +80,17 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-// gamma
-  G4Gamma::GammaDefinition();
-  
-// leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-
-  G4Proton::ProtonDefinition();
+  decayPhysics->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-  // transportation
-  //
   AddTransportation();
-  
-  // electromagnetic physics list
-  //
   emPhysicsList->ConstructProcess();
-  
-  // decay process
-  //
-  AddDecay();
-
+  decayPhysics->ConstructProcess();
+  AddMaxStep();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,6 +133,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
+  } else if (name == "standardIG") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardIG(name);
+
   } else if (name == "livermore") {
 
     emName = name;
@@ -170,11 +161,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::AddDecay()
+void PhysicsList::AddMaxStep()
 {
   // decay process
   //
-  G4Decay* fDecayProcess = new G4Decay();
   StepMax* fStepMax = new StepMax();
 
   theParticleIterator->reset();
@@ -182,15 +172,6 @@ void PhysicsList::AddDecay()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
     if(fStepMax->IsApplicable(*particle)  && !particle->IsShortLived())
       pmanager ->AddDiscreteProcess(fStepMax);
   }

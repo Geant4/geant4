@@ -14,5 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+29-07-07  V.Ivanchenko (test37-V09-00-00)
+- add PhysList standardIG with standardIG physics builder
+- update thicknesses inside macro files accourding to O.Kadri
+  investigation in litrature
+
 30-05-07  V.Ivanchenko (test37-V08-03-00)
 - first commit

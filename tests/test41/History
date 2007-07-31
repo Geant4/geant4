@@ -15,7 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 29-07-07  V.Ivanchenko (test41-V09-00-01)
-- add PhysList standardIG
+- add PhysList standardIG with standardIG physics builder
 
 12-07-07  V.Ivanchenko (test41-V09-00-00)
 - prepared for production
