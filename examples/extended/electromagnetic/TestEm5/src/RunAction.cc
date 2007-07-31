@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.23 2006-06-29 16:56:14 gunter Exp $
+// $Id: RunAction.cc,v 1.24 2007-07-31 16:51:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -223,7 +223,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // compute width of the Gaussian central part of the MultipleScattering
   //
-  if (histoManager->HistoExist(6)) {
+  if (histoManager->HistoExist(13)) {
     G4cout << "\n MultipleScattering:" 
            << "\n  rms proj angle of transmit primary particle = "
            << rmsMsc/mrad << " mrad (central part only)" << G4endl;

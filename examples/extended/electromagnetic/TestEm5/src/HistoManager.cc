@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.18 2007-07-27 18:28:06 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.19 2007-07-31 16:51:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,7 +155,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::SetHisto(G4int ih,
-                 G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
+            G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
 {
   if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
@@ -165,30 +165,39 @@ void HistoManager::SetHisto(G4int ih,
 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
-			 "20" };
+			 "20","21","22","23","24","25","26","27","28","29",
+			 "30","31","32","33","34","35","36","37","38","39",
+			 "40","41","42","43","44","45","46","47","48","49" 
+			};
+			
   const G4String title[] =
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
                   "energy of gammas at creation (std::log10(ekin/MeV))",//3
-		  "(transmit, charged) : kinetic energy at exit",	//4
-		  "(transmit, charged) : space angle: dN/dOmega",	//5
-		  "(transmit, charged) : projected angle at exit",	//6
-		  "(transmit, charged) : projected radius at exit",	//7
-		  "(transmit, neutral) : kinetic energy at exit",	//8
-		  "(transmit, neutral) : space angle: dN/dOmega",	//9
-		  "(transmit, neutral) : projected angle at exit",	//10
-		  "(reflect , charged) : kinetic energy at exit",	//11
-		  "(reflect , charged) : space angle: dN/dOmega",	//12
-		  "(reflect , charged) : projected angle at exit",	//13
-		  "(reflect , neutral) : kinetic energy at exit",	//14
-		  "(reflect , neutral) : space angle: dN/dOmega",	//15
-		  "(reflect , neutral) : projected angle at exit",	//16
-		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//17
-		  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",	//18
-		  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",	//19
-		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//20
-		  "(reflect , charged) : projected radius at exit",	//21
+		  "dummy","dummy","dummy","dummy","dummy","dummy",	//4-9
+		  "(transmit, charged) : kinetic energy at exit",	//10
+		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//11
+		  "(transmit, charged) : space angle: dN/dOmega",	//12
+		  "(transmit, charged) : projected angle at exit",	//13
+		  "(transmit, charged) : projected position at exit",	//14
+		  "(transmit, charged) : radius at exit",		//15
+		  "dummy","dummy","dummy","dummy",			//16-19
+		  "(transmit, neutral) : kinetic energy at exit",	//20
+		  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",	//21
+		  "(transmit, neutral) : space angle: dN/dOmega",	//22
+		  "(transmit, neutral) : projected angle at exit",	//23
+		  "dummy","dummy","dummy","dummy","dummy","dummy",	//24-29
+		  "(reflect , charged) : kinetic energy at exit",	//30
+		  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",	//31
+		  "(reflect , charged) : space angle: dN/dOmega",	//32
+		  "(reflect , charged) : projected angle at exit",	//33
+		  "dummy","dummy","dummy","dummy","dummy","dummy",	//34-39
+		  "(reflect , neutral) : kinetic energy at exit",	//40
+		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//41
+		  "(reflect , neutral) : space angle: dN/dOmega",	//42
+		  "(reflect , neutral) : projected angle at exit",	//43
+		  "dummy","dummy","dummy","dummy","dummy","dummy"	//44-49
                  };
 
   G4String titl = title[ih];
