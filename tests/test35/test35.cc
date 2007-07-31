@@ -44,8 +44,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
-#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
@@ -95,13 +93,14 @@
 
 #include "G4StateManager.hh"
 
-#include "AIDA/AIDA.h"
+#include "Histo.hh"
 #include "G4Timer.hh"
 
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -110,12 +109,15 @@ int main(int argc, char** argv)
   cout << "========================================================" << endl;
   cout << "======             HARP Test Start           ========" << endl;
   cout << "========================================================" << endl;
+
+  Histo  histo;
  
   G4String  namePart = "proton";
   G4String  nameMat  = "G4_Al";
   G4String  nameGen  = "Binary";
   G4bool    logx     = false;
   G4bool    usepaw   = false;
+  G4bool    isInitH  = false;
   G4bool    inclusive= true;
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
@@ -406,22 +408,6 @@ int main(int argc, char** argv)
     cout << "The direction: " << aDirection << endl;
     cout << "The time:      " << aTime/ns << " ns" << endl;
 
-    // Creating the analysis factory
-    AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
-    // Creating the tree factory
-    AIDA::ITreeFactory* tf = af->createTreeFactory();
-
-    G4String option = "--noErrors uncompress";
-
-    // Creating a tree mapped to a new hbook file.
-    AIDA::ITree* tree = tf->create( hFile+".paw", "hbook", false, true, option);
-    std::cout << "Tree store : " << tree->storeName() << std::endl;
-    delete tf;
-
-    const G4int nhisto = 10;
-    AIDA::IHistogram1D* h[nhisto];
-
     G4double mass = part->GetPDGMass();
     if(m_pmax == 0.0) m_pmax = emax;
     else              emax   = m_pmax;
@@ -439,35 +425,33 @@ int main(int argc, char** argv)
     double cosmin = cos(m_thetamax*0.001);
     double cosmax = cos(m_thetamin*0.001);
 
-    if(usepaw) {
+    cout << "energy = " << energy/GeV << " GeV" << endl;
+    cout << "emax   = " << emax/GeV << " GeV" << endl;
+    cout << "pmax   = " << m_pmax/GeV << " GeV" << endl;
 
-      // Creating a histogram factory, whose histograms will be handled by the tree
-      AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
+    if(usepaw && !isInitH) {
 
-      // Creating an 1-dimensional histogram in the root directory of the tree
+      isInitH = true;
 
-      // ---- Book a histogram and ntuples
-      cout << "Hbook file name: <" << hFile << ">" << endl;
-      cout << "energy = " << energy/GeV << " GeV" << endl;
-      cout << "emax   = " << emax/GeV << " GeV" << endl;
-      cout << "pmax   = " << m_pmax/GeV << " GeV" << endl;
-
-      h[0]=hf->createHistogram1D("10","Number of protons",10,-0.5,9.5);
-      h[1]=hf->createHistogram1D("11","Number of pions",10,-0.5,9.5);
-      h[2]=hf->createHistogram1D("12","Proton momentum",nbins,m_pmin/GeV,m_pmax/GeV);
-      h[3]=hf->createHistogram1D("13","Pion momentum",nbins,m_pmin/GeV,m_pmax/GeV);
-      h[4]=hf->createHistogram1D("14","Proton Pt",m_binp,0.0,m_ptmax/GeV);
-      h[5]=hf->createHistogram1D("15","Pion Pt",m_binp,0.0,m_ptmax/GeV);
-      h[6]=hf->createHistogram1D("16","Proton theta",m_bint,0.0,m_thetamax);
-      h[7]=hf->createHistogram1D("17","Pion theta",m_bint,0.0,m_thetamax);
-      h[8]=hf->createHistogram1D("18","Proton cos(theta)",m_bint,cosmin,1.0);
-      h[9]=hf->createHistogram1D("19","Proton cos(theta)",m_bint,cosmin,1.0);
-
-      delete hf;
-      cout << "Histograms is initialised nbins=" << nbins
-	   << endl;
+      histo.add1D("10","Number of protons",10,-0.5,9.5);
+      histo.add1D("11","Number of pions",10,-0.5,9.5);
+      histo.add1D("12","Proton momentum",nbins,m_pmin/GeV,m_pmax/GeV);
+      histo.add1D("13","Pion momentum",nbins,m_pmin/GeV,m_pmax/GeV);
+      histo.add1D("14","Proton Pt",m_binp,0.0,m_ptmax/GeV);
+      histo.add1D("15","Pion Pt",m_binp,0.0,m_ptmax/GeV);
+      histo.add1D("16","Proton theta",m_bint,0.0,m_thetamax);
+      histo.add1D("17","Pion theta",m_bint,0.0,m_thetamax);
+      histo.add1D("18","Proton cos(theta)",m_bint,cosmin,1.0);
+      histo.add1D("19","Proton cos(theta)",m_bint,cosmin,1.0);
     }
-    delete af;
+   
+    if(usepaw) {
+      G4String namef = hFile + "hbook";
+      histo.setFileName(namef);
+      histo.book();
+      G4cout << "Histograms are booked output file <" << hFile << "> "
+	     << G4endl;
+    }
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
@@ -632,24 +616,24 @@ int main(int argc, char** argv)
 
 	if(usepaw && cost > cosmin && cost <= cosmax && p>m_pth) {
           if(pd == proton) {
-            h[2]->fill(float(p/GeV),1.0);
-            h[4]->fill(float(pt/GeV),1.0);
+            histo.fill(2,p/GeV,1.0);
+            histo.fill(4,pt/GeV,1.0);
             if(p>m_pth) {
-              h[6]->fill(float(thetamr),1.0);
-              h[8]->fill(float(cost),1.0);
+              histo.fill(6,thetamr,1.0);
+              histo.fill(8,cost,1.0);
               n_pr++;
             }
 	  } else if(pd == pip || pd == pin ) {
-            h[3]->fill(float(p/GeV),1.0);
-            h[5]->fill(float(pt/GeV),1.0);
+            histo.fill(3,p/GeV,1.0);
+            histo.fill(5,pt/GeV,1.0);
             if(p>m_pth) {
-              h[7]->fill(float(thetamr),1.0);
-              h[9]->fill(float(cost),1.0);
+              histo.fill(7,thetamr,1.0);
+              histo.fill(9,cost,1.0);
               n_pi++;
             }
           }
-          h[0]->fill(float(n_pr),1.0);
-          h[1]->fill(float(n_pi),1.0);
+          histo.fill(0,n_pr,1.0);
+          histo.fill(1,n_pi,1.0);
 
 	}
 	if((verbose >1) ||
@@ -687,12 +671,9 @@ int main(int argc, char** argv)
 
     // Committing the transaction with the tree
     if(usepaw) {
-      std::cout << "Committing..." << std::endl;
-      tree->commit();
-      std::cout << "Closing the tree..." << std::endl;
-      tree->close();
+      std::cout << "###### Save histograms" << std::endl;
+      histo.save();
     }
-    delete tree;
 
     cout.setf(std::ios::fixed);
     G4int prec = cout.precision(6);

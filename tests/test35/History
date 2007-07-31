@@ -14,7 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24-05-07  V.Ivanchenko (test35-V08-03-00)
+test30-V09-00-00  31 July 2007 V.Ivanchenko
+- add Histo class
+
+test35-V08-03-00 24 May 2007  V.Ivanchenko 
 - substitute autoptr by normal pointers in Histo to avoid crash
 
 test35-V08-02-01  24 April 2007 V.Ivanchenko
