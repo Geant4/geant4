@@ -50,6 +50,8 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  ptot  = 172.*MeV;
+  sigma = MeV;
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
