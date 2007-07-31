@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2007-07-31 16:51:29 maire Exp $
+$Id: README,v 1.19 2007-07-31 17:00:33 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -87,7 +87,7 @@ $Id: README,v 1.18 2007-07-31 16:51:29 maire Exp $
  7- List of the built-in histograms
  ----------------------------------
         
- The test contains 21 built-in 1D histograms, which are managed by the
+ The test contains more than 20 built-in 1D histograms, which are managed by the
  HistoManager class and its Messenger. The histos can be individually activated
  with the command :
  /testem/histo/setHisto id nbBins  valMin valMax unit 
