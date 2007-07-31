@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.13 2007-07-31 17:24:05 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.14 2007-07-31 17:26:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -262,13 +262,10 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
   
   G4double mass      = dp->GetMass();
   G4double kinEnergy = dp->GetKineticEnergy();
-  G4double mom2      = kinEnergy*(kinEnergy + 2.0*mass);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = elm->GetN();
-  G4double q  = p->GetPDGCharge()/eplus;
-  G4double q2 = q*q;
 
   G4double costm = cosThetaMax;
   G4double Cn = 0.0;
