@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.12 2007-07-16 08:45:34 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.13 2007-07-31 17:24:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,11 +172,14 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   if(p == theProton && Z < 1.5 && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0; 
 
   if(cosTetMaxNuc < cosThetaMin) {
+    G4int iz = G4int(Z);
     G4double q        = p->GetPDGCharge()/eplus;
     G4double q2       = q*q;
     G4double invbeta2 = 1.0 +  m*m/mom2;
     G4double Ae = 2.0*ScreeningParameter(Z, q2, mom2, invbeta2);
     G4double Cn = NuclearSizeParameter(A, mom2);
+    ae[iz]  = Ae;
+    nuc[iz] = Cn;
     G4double x1 = 1.0 - cosThetaMin + Ae;
     G4double x2 = 1.0 - cosTetMaxNuc + Ae;
     cross = coeff*Z*Z*q2*invbeta2*(1./x1 - 1./x2 - Cn*(2.*log(x2/x1) - 1.))/mom2;
@@ -278,14 +281,13 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
   if(G4UniformRand()*(nucXS[iz] + elXS[iz]) > nucXS[iz]) {
     costm = cosTetMaxElec;
   } else {
-    Cn = NuclearSizeParameter(A, mom2);
+    Cn = nuc[iz];
     costm = cosTetMaxNuc;
   }
 
   if(costm >= cosThetaMin) return; 
 
-  G4double invbeta2  = 1.0 + mass*mass/mom2;
-  G4double Ae = 2.0*ScreeningParameter(Z, q2, mom2, invbeta2);
+  G4double Ae = ae[iz];
   G4double x1 = 1. - cosThetaMin + Ae;
   G4double x2 = 1. - costm;
   G4double x3 = cosThetaMin - costm;
@@ -296,7 +298,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
     if(z1 < 0.0) z1 = 0.0;
     else if(z1 > 2.0) z1 = 2.0;
     cost = 1.0 - z1;
-    st2  = z1*(1.0 + cost);
+    st2  = z1*(2.0 - z1);
     grej = 1.0/(1.0 + Cn*st2);
   } while ( G4UniformRand() > grej*grej );  
   

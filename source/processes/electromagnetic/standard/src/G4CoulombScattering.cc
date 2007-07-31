@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.8 2007-07-16 08:45:34 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.9 2007-07-31 17:24:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,12 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetIntegral(true);
   SetMinKinEnergy(keV);
   SetMaxKinEnergy(PeV);
+  thEnergy = PeV;
+  thEnergyElec = PeV;
+  if(name == "CoulombScat") {
+    thEnergy = 10.*MeV;
+    thEnergyElec = 10.*GeV;
+  }
   SetLambdaBinning(120);
   SetSecondaryParticle(G4Electron::Electron());
   buildElmTableFlag = true;
@@ -83,7 +89,8 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   if(!isInitialised) {
     isInitialised = true;
     aParticle = p;
-    if (p->GetParticleType() == "nucleus") {
+    G4double mass = p->GetPDGMass();
+    if (mass > GeV) {
       buildElmTableFlag = false;
       verboseLevel = 0;
     } else {
@@ -95,18 +102,21 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    if(GetProcessName() == "eCoulombScat") {
+    G4double eth  = thEnergy;
+    if(mass < MeV) eth  = thEnergyElec; 
+    if(eth > emin) {
       G4eCoulombScatteringModel* model = 
 	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
       model->SetLowEnergyLimit(emin);
-      model->SetHighEnergyLimit(emax);
+      model->SetHighEnergyLimit(eth);
       AddEmModel(1, model);
-    } else {
+    }
+    if(eth < emax) {
       G4CoulombScatteringModel* model = 
 	new G4CoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
-      model->SetLowEnergyLimit(emin);
+      model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
-      AddEmModel(1, model);
+      AddEmModel(2, model);
     }
   }
 }
@@ -117,7 +127,11 @@ void G4CoulombScattering::PrintInfo()
 {
   G4cout << " Scattering of " << aParticle->GetParticleName()
 	 << " with   " << thetaMin/degree
-	 << " < Theta(degree) < " << thetaMax/degree;
+	 << " < Theta(degree) < " << thetaMax/degree
+	 << "; Eth(MeV)= ";
+  if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
+  else                              G4cout << thEnergy;
+
   if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
   G4cout << G4endl;
 }

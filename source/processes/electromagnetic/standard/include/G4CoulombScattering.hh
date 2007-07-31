@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.7 2007-07-16 08:45:34 vnivanch Exp $
+// $Id: G4CoulombScattering.hh,v 1.8 2007-07-31 17:24:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,6 +89,8 @@ private:
   G4double thetaMin;
   G4double thetaMax;
   G4double q2Max;
+  G4double thEnergy;
+  G4double thEnergyElec;
   G4bool isInitialised;
   G4bool buildElmTableFlag;
   const G4ParticleDefinition* aParticle;
