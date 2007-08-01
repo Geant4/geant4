@@ -1,4 +1,4 @@
-FILE  testem5.paw
+FILE  testem5.hbook
 LIST
 ABSOR  23 (silicon) 20.5e-4 (thicknX) 0.1 (sizeYZ)  0. (field)
 LOSS   1

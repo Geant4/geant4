@@ -1,4 +1,4 @@
-FILE  berger.paw
+FILE  berger.hbook
 LIST
 ABSOR  23 (silicon)  61.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
 C  ABSOR  23 (silicon) 105.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
