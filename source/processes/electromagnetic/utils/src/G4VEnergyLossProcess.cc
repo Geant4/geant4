@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.110 2007-07-28 13:18:32 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.111 2007-08-02 14:29:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -622,19 +622,17 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Short step
   eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
 
-  //  if( length <= linLossLimit * fRange ) {
-  //  eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
-
   // Long step
   //} else {
   if(eloss > preStepKinEnergy*linLossLimit) {
-    G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
-    G4double x = r - length/reduceFactor;
-    eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
+    G4double x = 
+      GetScaledRangeForScaledEnergy(preStepScaledEnergy) - length/reduceFactor;
+    eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
     /*
     if(-1 < verboseLevel) 
-      G4cout << "Long STEP: rPre(mm)= " << r/mm
+      G4cout << "Long STEP: rPre(mm)= " 
+             << GetScaledRangeForScaledEnergy(preStepScaledEnergy)/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
@@ -711,7 +709,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
         cut = (*theSubCuts)[currentMaterialIndex];
  	eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
-	if(eloss < 0.0) eloss = 0.0;
 	scTracks.clear();
 	SampleSubCutSecondaries(scTracks, step, 
 				currentModel,currentMaterialIndex, 
@@ -768,6 +765,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   // add low-energy subcutoff particles
   eloss += esecdep;
+  if(eloss < 0.0) eloss = 0.0;
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;
