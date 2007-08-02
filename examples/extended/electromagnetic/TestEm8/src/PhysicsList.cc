@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.11 2007-08-02 13:18:02 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.12 2007-08-02 13:23:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,9 +35,8 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListParticles.hh"
-#include "PhysListGeneral.hh"
-#include "PhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4DecayPhysics.hh"
 
 #include "PhysListEmModelPai.hh"
 #include "PhysListEmPaiPhoton.hh"
@@ -71,15 +70,12 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-   // Particles
-  particleList = new PhysListParticles("particles");
-
-  // General Physics
-  generalPhysicsList = new PhysListGeneral("general");
+  // Decay Physics is always defined
+  generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emName = G4String("emstandard");
+  emPhysicsList = new G4EmStandardPhysics();
 
 }
 
@@ -98,7 +94,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+  generalPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,8 +102,8 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
+  generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddStepMax();
 }
