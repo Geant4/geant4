@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.63 2007-07-30 13:32:08 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.64 2007-08-02 13:37:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,6 +139,7 @@
 // 01-05-07 optimization for skin > 0 (L.Urban)
 // 05-07-07 modified model functions in SampleCosineTheta (L.Urban)
 // 06-07-07 theta0 is not the same for e-/e+ as for heavy particles (L.Urban)
+// 02-08-07 compare safety not with 0,0 but with tlimitminfix (V.Ivanchenko)
 //
 
 // Class Description:
@@ -633,7 +634,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     {
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
-      if((stepStatus != fGeomBoundary) && (presafety <= 0.)) 
+      if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
         presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
 
       // is far from boundary
@@ -867,7 +868,7 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
 
-  if (latDisplasment && safety > 0.0) {
+  if (latDisplasment && safety > tlimitminfix) {
 
     G4double r = SampleDisplacement();
 /*
@@ -914,16 +915,14 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 
 	  // definetly not on boundary
 	  if(1. == fac) {
-	    //if(0. < fac) {
 	    safetyHelper->ReLocateWithinVolume(newPosition);
-
 	    
 	  } else {
             // check safety after displacement
 	    G4double postsafety = safetyHelper->ComputeSafety(newPosition);
 
 	    // displacement to boundary
-            if(postsafety <= 0.) {
+            if(postsafety <= tlimitminfix) {
 	      safetyHelper->Locate(newPosition, newDirection);
 
 	    // not on the boundary
