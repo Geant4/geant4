@@ -23,79 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRMultiObserverTriggerT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRGenerator.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRMULTIOBSERVERTRIGGERT_HH
-#define G4GPRMULTIOBSERVERTRIGGERT_HH
+#ifndef G4GPRGENERATOR_HH
+#define G4GPRGENERATOR_HH
 
-#include "G4GPRObserverCollectionT.hh"
+#include "G4GPRElementSuperStore.hh"
+#include "G4GPRCacheSuperStore.hh"
+#include "G4GPRKeySuperStore.hh"
+#include "G4GPRUtils.hh"
 
-template <typename Scope>
-class G4GPRMultiObserverTriggerT {
+class G4GPRGenerator {
 
 public:
+
+  G4GPRGenerator()
+  {
+    pElementSuperStore = G4GPRElementSuperStore::Instance();
+    pCacheSuperStore = G4GPRCacheSuperStore::Instance();
+    pKeySuperStore = G4GPRKeySuperStore::Instance();
+  }
+
+  template <typename List, typename Result>
+  void Generate(Result*& result) 
+  {
+    typedef typename G4GPRCacheManagerT<List>::Cache Cache;
+
+    result = 0;
+
+    if (!pKeySuperStore->G4GPRKeyManagerT<List>::KeyChanged() && (pCacheSuperStore->G4GPRCacheManagerT<List>::GetMostRecent(result))) return;
     
-  template <typename Ptr, typename PtrToMfn>
-  G4GPRMultiObserverTriggerT(Ptr* ptr, PtrToMfn mfn)
-    :fWrapper("tst", ptr, mfn)
-    ,fCached(true)
-  {}
+    G4cout<<"jane generate 1 "<<result<<G4endl;
+    pKeySuperStore->G4GPRKeyManagerT<List>::ResetKeyChanged();
+    
+    if (pCacheSuperStore->G4GPRCacheManagerT<List>::Retrieve(pKeySuperStore->G4GPRKeyManagerT<List>::GetKey(), result)) return;
 
-  template <typename Input>
-  G4GPRMultiObserverTriggerT(Input* input)
-    :fWrapper("tst", input)
-    ,fCached(true)
-  {}
+    G4cout<<"jane generate 2 "<<result<<G4endl;
+    result = new Result;
 
-  ~G4GPRMultiObserverTriggerT() {}
-  
-  template <typename Pointer, typename PointerToMfn>
-  void AddObserver(Pointer* pointer, PointerToMfn mfn) 
-  {
-    fObserverCollection.RegisterObserver("tmp", pointer, mfn);
-  }
-  
-  void Fire() 
-  {
-    G4bool result = fWrapper();
-    if (result == fCached) return;
+    G4GPRElementStoreT<List>* store = pElementSuperStore;
+    
+    G4GPRUtils::Operator(result, store);
 
-    fCached = result;
-    fObserverCollection();    
-  }
+    G4cout<<"jane generate 3 "<<result<<G4endl;
+    
+    pCacheSuperStore->G4GPRCacheManagerT<List>::Register(pKeySuperStore->G4GPRKeyManagerT<List>::GetKey(), result);
 
-  template <typename Arg1>
-  void Fire(const Arg1& a1) 
-  {
-    G4bool result = fWrapper(a1);
-    //    G4cout<<"jane here multitrigger::fire 1 arg size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
+    return;
 
-    if (result == fCached) return;
-
-    fCached = result;
-    fObserverCollection();     
-  }
-
-  template <typename Arg1, typename Arg2>
-  void Fire(const Arg1& a1, const Arg2& a2) 
-  {
-    G4bool result = fWrapper(a1, a2);
-    //    G4cout<<"jane here multitrigger::fire 2 args size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
-    if (result == fCached) return;
-
-    fCached = result;
-    fObserverCollection();     
   }
 
 private:
 
-  G4GPRObserverCollectionT<G4GPRNullType, G4String> fObserverCollection;
-  typename Scope::TriggerWrapper fWrapper;
-  G4bool fCached;
-  
+  G4GPRElementSuperStore* pElementSuperStore;
+  G4GPRCacheSuperStore* pCacheSuperStore;
+  G4GPRKeySuperStore* pKeySuperStore;
+
 };
 
 #endif

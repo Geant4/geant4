@@ -23,23 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerSuperStore.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRCacheSuperStore.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRTRIGGERSUPERSTORE_HH
-#define G4GPRTRIGGERSUPERSTORE_HH
+#ifndef G4GPRCACHESUPERSTORE_HH
+#define G4GPRCACHESUPERSTORE_HH
 
 #include "G4GPRSingletonHierarchyT.hh"
-#include "G4GPRTriggerManagerT.hh"
-#include "G4GPRScopes.hh"
+#include "G4GPRCacheManagerT.hh"
+#include "G4GPRProcessLists.hh"
 
 namespace {
-  typedef G4GPRTypeList_2(G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>, 
-		       G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>) Types;
+  
+  typedef G4GPRTypeList_1(G4GPRCacheManagerT<G4GPRProcessLists::DiscreteDoIt>) CacheTypes;
 }
 
-typedef G4GPRSingletonHierarchyT<Types> G4GPRTriggerSuperStore;
+typedef G4GPRSingletonHierarchyT<CacheTypes>  G4GPRCacheSuperStore;
 
 #endif

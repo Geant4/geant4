@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSingletonHierarchyT.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRSingletonHierarchyT.hh,v 1.2 2007-08-02 18:12:05 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007
@@ -43,7 +43,7 @@ public:
   unsigned Size() {return G4GPRLinearHierarchyT<TList>::Size; }
   static G4GPRSingletonHierarchyT* Instance()
   {
-    G4cout<<"jane "<<fInstance<<G4endl;
+//    G4cout<<"jane "<<fInstance<<G4endl;
     if (0 == fInstance) fInstance = new G4GPRSingletonHierarchyT();
     return fInstance;
   }

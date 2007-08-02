@@ -23,41 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSimpleGenerator.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRKeyManagerT.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRSIMPLeGENERATOR_HH
-#define G4GPRSIMPLEGENERATOR_HH
+#ifndef G4GPRKEYMANAGER_HH
+#define G4GPRKEYMANAGER_HH
 
-#include "G4GPRElementSuperStore.hh"
-#include "G4GPRUtils.hh"
+#include <map>
+#include <vector>
+#include <deque>
+#include "G4GPRKeyNode.hh"
 
-class G4GPRSimpleGenerator {
+template <typename List>
+class G4GPRKeyManagerT {
 
 public:
 
-  G4GPRSimpleGenerator()
-  {
-    fSuperStore = G4GPRElementSuperStore::Instance();
-    //    pCacheManager = G4GPRCacheManagerSuperStore::Instance();
-  }
+  G4GPRKeyManagerT():fKeyChanged(true) {}
 
-  template <typename T, typename Result>
-  void Generate(Result*& result) 
-  {
-    result = new Result;
+  typedef std::deque<G4bool> Key;
+  typedef std::map<G4GPRKeyNode*, G4bool*> Map;
 
-    G4GPRElementStoreT<T>* store = fSuperStore;
+  void ChangeState(G4GPRKeyNode* node) {
+    G4cout<<"jane change state"<<G4endl;
+    Map::iterator iter = fMap.find(node);
+    *(iter->second) = !(*(iter->second));
     
-    G4GPRUtils::Operator(result, store);
+    fKeyChanged = true;
+  }
+  
+  G4bool KeyChanged() {return fKeyChanged;}
+
+  void ResetKeyChanged() {fKeyChanged = false;}
+
+  void AddNode(G4GPRKeyNode* node) 
+  {
+    fNodeList.push_back(node);
+    fKey.push_back(node->GetState());
+    fMap[node] = &fKey.back();
+
+    node->AddObserver(this, &G4GPRKeyManagerT::ChangeState);
+  }
+  
+  const Key& GetKey() {
+    return fKey;
   }
 
 private:
 
-  G4GPRElementSuperStore* fSuperStore;
-
+  G4bool fKeyChanged;
+  Key fKey;
+  std::vector<G4GPRKeyNode*> fNodeList;
+  Map fMap;
+ 
 };
 
 #endif

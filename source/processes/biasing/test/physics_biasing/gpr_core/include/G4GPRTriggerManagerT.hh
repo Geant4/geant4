@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerManagerT.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRTriggerManagerT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -55,13 +55,13 @@ public:
     Trigger* trigger(0);
 
     if (!fRegistry.FuncAssoc::Retrieve(func, trigger)) {
-      G4cout<<"jane didn't find func trigger"<<G4endl;
+      //      G4cout<<"jane didn't find func trigger"<<G4endl;
       trigger = new Trigger(func);
       fTriggerList.push_back(trigger);
       fRegistry.FuncAssoc::Register(func, trigger);
     }
     else {
-      G4cout<<"jane did find func trigger"<<G4endl;
+      //      G4cout<<"jane did find func trigger"<<G4endl;
     }
     trigger->AddObserver(observer, mfn);
   }
@@ -72,14 +72,14 @@ public:
     Trigger* trigger(0);
 
     if (!fRegistry.PointerAssoc::Retrieve(triggerPtr, trigger)) {
-      G4cout<<"jane didn't find ptr trigger"<<G4endl;
+      //      G4cout<<"jane didn't find ptr trigger"<<G4endl;
       typename Scope::template TriggerMfn<TriggerPtr>::PtrToMfn mfn = &TriggerPtr::operator();
       trigger = new Trigger(triggerPtr, mfn);
       fTriggerList.push_back(trigger);
       fRegistry.PointerAssoc::Register(triggerPtr, trigger);
     }
     else {
-      G4cout<<"jane did find ptr trigger"<<G4endl;
+      //      G4cout<<"jane did find ptr trigger"<<G4endl;
     }
     trigger->AddObserver(observer, mfn);    
   }
@@ -94,7 +94,7 @@ public:
   template <typename Arg1>
   void Fire(const Arg1& a1) 
   {
-    G4cout<<"jane triggermgr::fire 1 arg size "<<fTriggerList.size()<<G4endl;
+    //    G4cout<<"jane triggermgr::fire 1 arg size "<<fTriggerList.size()<<G4endl;
     for (typename TriggerList::iterator iter = fTriggerList.begin(); iter != fTriggerList.end(); ++iter) {
       (*iter)->Fire(a1);
     }
@@ -103,7 +103,7 @@ public:
   template <typename Arg1, typename Arg2>
   void Fire(const Arg1& a1, const Arg2& a2) 
   {
-    G4cout<<"jane triggermgr::fire 2 args size "<<fTriggerList.size()<<G4endl;
+    //    G4cout<<"jane triggermgr::fire 2 args size "<<fTriggerList.size()<<G4endl;
     for (typename TriggerList::iterator iter = fTriggerList.begin(); iter != fTriggerList.end(); ++iter) {
       (*iter)->Fire(a1, a2);
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSeedT.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRSeedT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -33,11 +33,12 @@
 
 #include "G4GPRWrapItUp.hh"
 
-template <typename List>
+template <typename L>
 class G4GPRSeedT {
 
 public:
-
+  
+  typedef L List;
   typedef typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper Wrapper;
 
   template <typename Pointer, typename MemberFunc>
@@ -64,13 +65,9 @@ public:
 
   G4bool IsActive() {return fActive;}
 
-  void SetActive(G4bool active) 
+  void ChangeState() 
   {
-    G4cout<<"jane seed active "<<active<<" "<<fActive<<G4endl;
-    if (active == fActive) return;
-
-    fActive = active;
-
+    fActive = !fActive;
     // Notify observers that something changed
     //    fObserverCollection();
   }
@@ -80,6 +77,7 @@ public:
   Wrapper GetWrapper() {return fWrapped;}
 
   G4String GetName() {return fName;}
+
 private:
 
   G4String fName;

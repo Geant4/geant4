@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: triggerTest.cc,v 1.1 2007-07-27 22:13:09 tinslay Exp $
+// $Id: triggerTest.cc,v 1.2 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -130,8 +130,8 @@ int main(int argc, char** argv) {
   // Elements 1 and 2 are on the same trigger. They're only active 
   // when tracking a primary (track id = 0). Should be evaluated
   // when starting to track a track.
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::SetActive);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::SetActive);
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
   // Elements 3 and 4 are on the same trigger. They only become active when track energy falls below 50 MeV. 
   // Should be evaluated at the start of each step.
@@ -142,8 +142,8 @@ int main(int argc, char** argv) {
   // trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::SetActive);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::SetActive);
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
 
 
   // Pretend to process two tracks - a primary and a secondary.

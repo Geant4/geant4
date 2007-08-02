@@ -23,79 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRMultiObserverTriggerT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRCacheManagerT.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRMULTIOBSERVERTRIGGERT_HH
-#define G4GPRMULTIOBSERVERTRIGGERT_HH
+#ifndef G4GPRCACHEMANAGERT_HH
+#define G4GPRCACHEMANAGERT_HH
 
-#include "G4GPRObserverCollectionT.hh"
+#include "G4GPRKeyManagerT.hh"
+#include "G4GPRProcessWrappers.hh"
+#include "G4GPRAssocT.hh"
 
-template <typename Scope>
-class G4GPRMultiObserverTriggerT {
+template <typename List>
+class G4GPRCacheManagerT {
 
 public:
-    
-  template <typename Ptr, typename PtrToMfn>
-  G4GPRMultiObserverTriggerT(Ptr* ptr, PtrToMfn mfn)
-    :fWrapper("tst", ptr, mfn)
-    ,fCached(true)
-  {}
+  typedef typename G4GPRKeyManagerT<List>::Key Key;
+  typedef std::vector<typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper>* Value;
+  typedef G4GPRAssocT<Key, Value> Cache;
 
-  template <typename Input>
-  G4GPRMultiObserverTriggerT(Input* input)
-    :fWrapper("tst", input)
-    ,fCached(true)
-  {}
+  G4GPRCacheManagerT():fLastRetrieved(0) {}
 
-  ~G4GPRMultiObserverTriggerT() {}
-  
-  template <typename Pointer, typename PointerToMfn>
-  void AddObserver(Pointer* pointer, PointerToMfn mfn) 
+  void Register(const Key& key, const Value& value)
   {
-    fObserverCollection.RegisterObserver("tmp", pointer, mfn);
-  }
-  
-  void Fire() 
-  {
-    G4bool result = fWrapper();
-    if (result == fCached) return;
-
-    fCached = result;
-    fObserverCollection();    
+    fCache.Register(key, value);
   }
 
-  template <typename Arg1>
-  void Fire(const Arg1& a1) 
-  {
-    G4bool result = fWrapper(a1);
-    //    G4cout<<"jane here multitrigger::fire 1 arg size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
-
-    if (result == fCached) return;
-
-    fCached = result;
-    fObserverCollection();     
+  G4bool GetMostRecent(Value& value) {
+    value = fLastRetrieved;
+    return (0 != fLastRetrieved);
   }
 
-  template <typename Arg1, typename Arg2>
-  void Fire(const Arg1& a1, const Arg2& a2) 
+  G4bool Retrieve(const Key& key, Value& value)
   {
-    G4bool result = fWrapper(a1, a2);
-    //    G4cout<<"jane here multitrigger::fire 2 args size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
-    if (result == fCached) return;
+    G4bool result = fCache.Retrieve(key, value);
+    fLastRetrieved = value;
 
-    fCached = result;
-    fObserverCollection();     
+    return result;
   }
-
 private:
 
-  G4GPRObserverCollectionT<G4GPRNullType, G4String> fObserverCollection;
-  typename Scope::TriggerWrapper fWrapper;
-  G4bool fCached;
-  
+  Cache fCache;
+  Value fLastRetrieved;
+
 };
 
 #endif
