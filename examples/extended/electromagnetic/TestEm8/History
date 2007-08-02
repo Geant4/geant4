@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2007-07-27 15:29:38 vnivanch Exp $
+$Id: History,v 1.24 2007-08-02 13:18:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-08-07 V.Ivant  (testem8-V09-00-01)
+- Use components of Physics Lists from physics_list subdirectory
+- Fix PAI physics constructors: enegry loss processes should be 
+  active post step
 
 27-07-07 V.Ivant  (testem8-V09-00-00)
 - Create VisManager only for interactive session, improve destructor

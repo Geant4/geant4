@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.10 2007-07-27 15:29:38 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.11 2007-08-02 13:18:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,8 +41,6 @@
 
 #include "PhysListEmModelPai.hh"
 #include "PhysListEmPaiPhoton.hh"
-
-#include "PhysListEmPAI.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
