@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.63 2007-05-18 07:38:01 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.64 2007-08-02 08:54:43 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,8 @@
 //
 // History:
 //
-//
+// 02.08.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for negative value under sqrt
+//                      for the case: p on the surface and v is tangent to the surface
 // 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
@@ -424,7 +425,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 {
   G4double r2,pPhi,tolRMin,tolRMax;
   EInside in = kOutside ;
-
+  
   if (std::fabs(p.z()) <= fDz - kCarTolerance*0.5)
   {
     r2 = p.x()*p.x() + p.y()*p.y() ;
@@ -581,8 +582,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
 
 G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
-{
-  G4int noSurfaces = 0;
+{ G4int noSurfaces = 0;
   G4double rho, pPhi;
   G4double delta   = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4double distZ, distRMin, distRMax;
@@ -669,8 +669,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 // for points not on the surface
 
 G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{
-  ENorm side ;
+{ ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
   G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
@@ -1150,8 +1149,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 // - Return 0 if point inside
 
 G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
-{
-  G4double safe=0.0, rho, safe1, safe2, safe3 ;
+{ G4double safe=0.0, rho, safe1, safe2, safe3 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
 
   rho   = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
@@ -1203,7 +1201,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
                                 const G4bool calcNorm,
                                       G4bool *validNorm,
                                       G4ThreeVector *n    ) const
-{
+{  
   ESide side = kNull , sider = kNull, sidephi = kNull ;
   G4double snxt, sr = kInfinity, sphi = kInfinity, pdist ;
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
@@ -1213,7 +1211,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi ;
   G4double cPhi, sinCPhi, cosCPhi ;
   G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, vphi, roi2 ;
-
+ 
   // Z plane intersection
 
   if (v.z() > 0 )
@@ -1294,7 +1292,9 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       {
         b     = t2/t1 ;
         c     = deltaR/t1 ;
-        sr    = -b + std::sqrt(b*b - c);
+        d2= b*b-c;
+        if(d2>=0.){sr    = -b + std::sqrt(d2);}
+        else{sr=0.;};
         sider = kRMax ;
       }
       else
@@ -1348,9 +1348,20 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         else    // No rmin intersect -> must be rmax intersect
         {
           deltaR = t3 - fRMax*fRMax ;
-          c      = deltaR/t1 ;
-          sr     = -b + std::sqrt(b*b - c) ;
-          sider  = kRMax ;
+           c     = deltaR/t1 ;
+           d2    = b*b-c;
+           if(d2>=0.){
+            sr     = -b + std::sqrt(d2) ;
+            sider  = kRMax ;
+           }
+           else//Case :On the border+t2<kRadTolerance(v is perpendiculair to the surface)
+           {
+	    if (calcNorm) {*n = G4ThreeVector(p.x()/fRMax,p.y()/fRMax,0) ;
+                           *validNorm = true ;
+	                  }
+             return snxt  = 0.0;
+           }
+
         }
       }
       else if ( roi2 > fRMax*(fRMax + kRadTolerance) )
@@ -1359,8 +1370,18 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         deltaR = t3 - fRMax*fRMax ;
         b      = t2/t1 ;
         c      = deltaR/t1;
-        sr     = -b + std::sqrt(b*b - c) ;
-        sider  = kRMax ;
+        d2     = b*b-c;
+        if(d2>=0.){
+          sr     = -b + std::sqrt(d2) ;
+          sider  = kRMax ;
+        }
+        else//Case :On the border+t2<kRadTolerance(v is perpendiculair to the surface)
+        {
+	  if (calcNorm) {*n = G4ThreeVector(p.x()/fRMax,p.y()/fRMax,0) ;
+                         *validNorm = true ;
+	                }
+          return snxt  = 0.0;
+        }
       }
     }
     
