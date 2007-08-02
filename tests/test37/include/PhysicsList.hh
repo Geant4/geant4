@@ -51,8 +51,6 @@ public:
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
     
-  void AddDecay();
-
 private:
   G4double cutForGamma;
   G4double cutForElectron;
@@ -60,6 +58,7 @@ private:
        
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;    
+  G4VPhysicsConstructor*               decayPhysics;    
     
   PhysicsListMessenger* pMessenger;
 };

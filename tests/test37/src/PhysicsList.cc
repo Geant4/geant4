@@ -90,7 +90,6 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   emPhysicsList->ConstructProcess();
   decayPhysics->ConstructProcess();
-  AddMaxStep();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,24 +155,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::AddMaxStep()
-{
-  // decay process
-  //
-  StepMax* fStepMax = new StepMax();
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if(fStepMax->IsApplicable(*particle)  && !particle->IsShortLived())
-      pmanager ->AddDiscreteProcess(fStepMax);
   }
 }
 
