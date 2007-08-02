@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.12 2007-08-02 13:23:05 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2007-08-02 13:27:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -118,15 +118,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") 
-  {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
-    G4cout<<"PhysListEmStandard is called"<<G4endl;
-  } 
-
-  else if (name == "pai") 
+  if (name == "pai") 
   {
     emName = name;
     delete emPhysicsList;
