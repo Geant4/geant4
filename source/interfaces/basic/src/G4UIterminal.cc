@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.25 2007-06-19 10:38:29 gcosmo Exp $
+// $Id: G4UIterminal.cc,v 1.26 2007-08-02 06:04:01 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -53,6 +53,8 @@ static G4VUIshell* theshell= 0;
 
 #ifndef WIN32
 
+extern "C" {
+
 ////////////////////////////////
 static void SignalHandler(G4int)
 ////////////////////////////////
@@ -75,6 +77,8 @@ static void SignalHandler(G4int)
 
   // for original Unix / System V
   signal(SIGINT, SignalHandler);
+}
+
 }
 #endif
 
