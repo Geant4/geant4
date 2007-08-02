@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2007-06-19 10:38:28 gcosmo Exp $
+$Id: History,v 1.83 2007-08-02 06:06:01 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 August 2007, Koichi Murakami (interfaces-V09-00-00)
+- Fix compilation warning on SUN-CC in G4UIterminal.cc
 
 19 June 2007, Gabriele Cosmo (interfaces-V08-03-02)
 - Fix compilation error on Windows ('theShell' not declared).
