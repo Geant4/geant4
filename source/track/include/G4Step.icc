@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.16 2007-03-25 22:54:52 kurasige Exp $
+// $Id: G4Step.icc,v 1.17 2007-08-07 15:14:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,9 +112,21 @@ inline
  }
 
 inline 
- void G4Step::AddTotalEnergyDeposit(G4double value)
+ G4double G4Step::GetNonIonizingEnergyDeposit() const
  { 
-   fTotalEnergyDeposit += value;   
+   return fTotalEnergyDeposit; 
+ }
+
+inline 
+ void G4Step::SetNonIonizingEnergyDeposit(G4double value)
+ { 
+   fNonIonizingEnergyDeposit = value;   
+ }
+
+inline 
+ void G4Step::AddTotalEnergyDeposit(G4double value)
+ {
+   fNonIonizingEnergyDeposit += value;   
  }
 
 inline 

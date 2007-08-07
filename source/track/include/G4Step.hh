@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.17 2007-03-25 22:54:52 kurasige Exp $
+// $Id: G4Step.hh,v 1.18 2007-08-07 15:14:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,6 +107,10 @@ class G4Step
   // total energy deposit 
    G4double GetTotalEnergyDeposit() const;
    void SetTotalEnergyDeposit(G4double value);
+
+   // total non-ionizing energy deposit 
+   G4double GetNonIonizingEnergyDeposit() const;
+   void SetNonIonizingEnergyDeposit(G4double value);
 
    // cotrole flag for stepping
    G4SteppingControl GetControlFlag() const;
