@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.6 2003-12-15 12:28:40 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.7 2007-08-07 20:51:20 dennis Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -68,7 +71,7 @@ public:
 			    const G4KineticTrack& trk2) const;
   void AddComponent(G4VCollision * aC) {components.push_back(aC);}
 
-protected:
+public:
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return 0; }
   virtual const G4VAngularDistribution* GetAngularDistribution() const { return 0; }
 
@@ -82,19 +85,25 @@ protected:
   };
   struct Resolve
   {
-    template <class t1, int t2, int t3, int t4, int t5> 
-    void operator()(INT4(t1,t2,t3,t4,t5) * , G4CollisionComposite * aC)
+//     template <class t1, int t2, int t3, int t4, int t5> 
+    template <class T> 
+    void operator()(T * , G4CollisionComposite * aC)
     {
       G4ParticleDefinition * p2, *p3, *p4, *p5;
-      p2=G4ParticleTable::GetParticleTable()->FindParticle(t2);
-      p3=G4ParticleTable::GetParticleTable()->FindParticle(t3);
-      p4=G4ParticleTable::GetParticleTable()->FindParticle(t4);
-      p5=G4ParticleTable::GetParticleTable()->FindParticle(t5);
+      G4int pdg = 0;
+      pdg = T::i1;
+      p2=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i2;
+      p3=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i3;
+      p4=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i4;
+      p5=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
       if(p2->GetPDGCharge()+p3->GetPDGCharge() != p4->GetPDGCharge()+p5->GetPDGCharge())
       {
         G4cerr << "charge-unbalance in collision composite"<<G4endl;
       }
-      aC->AddComponent(new t1(p2, p3, p4, p5));  
+      aC->AddComponent(new typename T::it(p2, p3, p4, p5));  
     }
   };
 
