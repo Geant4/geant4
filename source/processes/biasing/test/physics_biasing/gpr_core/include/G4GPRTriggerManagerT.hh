@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerManagerT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRTriggerManagerT.hh,v 1.3 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -94,7 +94,7 @@ public:
   template <typename Arg1>
   void Fire(const Arg1& a1) 
   {
-    //    G4cout<<"jane triggermgr::fire 1 arg size "<<fTriggerList.size()<<G4endl;
+    G4cout<<"jane triggermgr::fire 1 arg size "<<fTriggerList.size()<<G4endl;
     for (typename TriggerList::iterator iter = fTriggerList.begin(); iter != fTriggerList.end(); ++iter) {
       (*iter)->Fire(a1);
     }

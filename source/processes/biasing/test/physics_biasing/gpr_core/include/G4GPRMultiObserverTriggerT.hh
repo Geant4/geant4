@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRMultiObserverTriggerT.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRMultiObserverTriggerT.hh,v 1.3 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -71,7 +71,7 @@ public:
   void Fire(const Arg1& a1) 
   {
     G4bool result = fWrapper(a1);
-    //    G4cout<<"jane here multitrigger::fire 1 arg size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
+    G4cout<<"jane here multitrigger::fire 1 arg size "<<fObserverCollection.GetNumberOfObservers()<<" "<<result<<" "<<fCached<<G4endl;
 
     if (result == fCached) return;
 

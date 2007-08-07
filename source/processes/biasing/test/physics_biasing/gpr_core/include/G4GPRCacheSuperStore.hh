@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRCacheSuperStore.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRCacheSuperStore.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -35,11 +35,11 @@
 #include "G4GPRCacheManagerT.hh"
 #include "G4GPRProcessLists.hh"
 
-namespace {
-  
-  typedef G4GPRTypeList_1(G4GPRCacheManagerT<G4GPRProcessLists::DiscreteDoIt>) CacheTypes;
-}
-
-typedef G4GPRSingletonHierarchyT<CacheTypes>  G4GPRCacheSuperStore;
+typedef G4GPRSingletonHierarchyT< G4GPRTypeList_6(G4GPRCacheManagerT<G4GPRProcessLists::AtRestDoIt>, 
+						  G4GPRCacheManagerT<G4GPRProcessLists::AtRestGPIL>,
+						  G4GPRCacheManagerT<G4GPRProcessLists::ContinuousDoIt>, 
+						  G4GPRCacheManagerT<G4GPRProcessLists::ContinuousGPIL>,
+						  G4GPRCacheManagerT<G4GPRProcessLists::DiscreteDoIt>, 
+						  G4GPRCacheManagerT<G4GPRProcessLists::DiscreteGPIL>) >  G4GPRCacheSuperStore;
 
 #endif

@@ -1,6 +1,8 @@
 #ifndef TESTSETUP_HH
 #define TESTSETUP_HH
 
+#include <deque>
+
 namespace TestSetup {
 
   G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
@@ -58,6 +60,12 @@ namespace TestSetup {
   {
     //  G4cout<<"jane executing MyTrigger "<<track->GetTrackID()<<G4endl;
     return (track->GetTrackID() == 0 ? true : false);
+  }
+
+  G4bool VolumeTrigger(const G4Track& track, const G4Step& step) 
+  {
+    //  G4cout<<"jane executing MyTrigger "<<track->GetTrackID()<<G4endl;
+    return (track.GetTrackID() == 0 ? true : false);
   }
   
   class MaxEnergyTrigger {

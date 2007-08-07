@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerSuperStore.hh,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRTriggerSuperStore.hh,v 1.3 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -35,11 +35,12 @@
 #include "G4GPRTriggerManagerT.hh"
 #include "G4GPRScopes.hh"
 
-namespace {
-  typedef G4GPRTypeList_2(G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>, 
-		       G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>) Types;
-}
-
-typedef G4GPRSingletonHierarchyT<Types> G4GPRTriggerSuperStore;
+typedef G4GPRSingletonHierarchyT< G4GPRTypeList_7(G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>, 
+						  G4GPRTriggerManagerT<G4GPRScopes::Tracking::EndTracking>,
+						  G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>, 
+						  G4GPRTriggerManagerT<G4GPRScopes::Stepping::EndStep>,
+						  G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>, 
+						  G4GPRTriggerManagerT<G4GPRScopes::Geometry::EndBoundary>,
+						  G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>) > G4GPRTriggerSuperStore;
 
 #endif

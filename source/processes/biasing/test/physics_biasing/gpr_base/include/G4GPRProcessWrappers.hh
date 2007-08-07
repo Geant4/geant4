@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRProcessWrappers.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRProcessWrappers.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation - wrapper definitions.
@@ -44,7 +44,7 @@ class G4VParticleChange;
 
 namespace G4GPRProcessWrappers {
     
-  // Rest, continuous and discrete "DoIt" methods have same signature
+  // AtRest, continuous and discrete "DoIt" methods have same signature
   // I.e : G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&)
   //       G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&)
   //       G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&)
@@ -57,7 +57,7 @@ namespace G4GPRProcessWrappers {
   // Formal wrapper definitions for rest, continuous and discrete processes, for both "DoIt" and "GPIL" methods
   template <typename List> struct Wrappers {};
   
-  template <> struct Wrappers<G4GPRProcessLists::RestDoIt> 
+  template <> struct Wrappers<G4GPRProcessLists::AtRestDoIt> 
   {
     typedef DoItWrapper SeedWrapper;
     typedef DoItRelayWrapper RelayWrapper;
@@ -76,7 +76,7 @@ namespace G4GPRProcessWrappers {
   };
   
 
-  // Rest, continuous and discrete GPIL signatures are all different :
+  // AtRest, continuous and discrete GPIL signatures are all different :
   //        G4double AtRestGPIL(const G4Track& track, G4ForceCondition* condition)
   //        G4double AlongStepGPIL(const G4Track& track,       
   //                               G4double previousStepSize,     
@@ -89,7 +89,7 @@ namespace G4GPRProcessWrappers {
   //
   // GPIL relays defined as :
   //       G4double func(SeedWrapper&, SeedArgs) 
-  template <> struct Wrappers<G4GPRProcessLists::RestGPIL> 
+  template <> struct Wrappers<G4GPRProcessLists::AtRestGPIL> 
   {
     typedef G4GPRTypeList_2(G4Track, G4ForceCondition*) SeedArgs;
     typedef G4GPRFunctor<G4double, G4String, SeedArgs> SeedWrapper;
@@ -118,11 +118,11 @@ namespace G4GPRProcessWrappers {
 }
 
 // Convenient typedefs
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::RestGPIL>::SeedWrapper G4RestGPILWrapper;
+typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestGPIL>::SeedWrapper G4AtRestGPILWrapper;
 typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousGPIL>::SeedWrapper G4ContinuousGPILWrapper;
 typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteGPIL>::SeedWrapper G4DiscreteGPILWrapper;
 
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::RestDoIt>::SeedWrapper G4RestDoItWrapper;
+typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper G4AtRestDoItWrapper;
 typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousDoIt>::SeedWrapper G4ContinuousDoItWrapper;
 typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper G4DiscreteDoItWrapper;
 

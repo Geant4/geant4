@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRKeySuperStore.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRKeySuperStore.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -35,10 +35,11 @@
 #include "G4GPRKeyManagerT.hh"
 #include "G4GPRProcessLists.hh"
 
-namespace {
-  typedef G4GPRTypeList_2(G4GPRKeyManagerT<G4GPRProcessLists::DiscreteDoIt>, 
-			  G4GPRKeyManagerT<G4GPRProcessLists::DiscreteGPIL>) KeyTypes;
-}
-typedef G4GPRSingletonHierarchyT<KeyTypes> G4GPRKeySuperStore;
+typedef G4GPRSingletonHierarchyT< G4GPRTypeList_6(G4GPRKeyManagerT<G4GPRProcessLists::AtRestDoIt>, 
+						  G4GPRKeyManagerT<G4GPRProcessLists::AtRestGPIL>,
+						  G4GPRKeyManagerT<G4GPRProcessLists::ContinuousDoIt>, 
+						  G4GPRKeyManagerT<G4GPRProcessLists::ContinuousGPIL>,
+						  G4GPRKeyManagerT<G4GPRProcessLists::DiscreteDoIt>, 
+						  G4GPRKeyManagerT<G4GPRProcessLists::DiscreteGPIL>) > G4GPRKeySuperStore;
 
 #endif

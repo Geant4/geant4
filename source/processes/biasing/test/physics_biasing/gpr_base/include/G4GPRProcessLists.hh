@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRProcessLists.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRProcessLists.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation - process list definitions.
@@ -33,8 +33,8 @@
 
 namespace G4GPRProcessLists  {
 
-  struct RestGPIL {};
-  struct RestDoIt {};
+  struct AtRestGPIL {};
+  struct AtRestDoIt {};
   
   struct ContinuousGPIL {};
   struct ContinuousDoIt {};
