@@ -272,7 +272,10 @@ ParticleGun.Construct()
 gRunManager.Initialize()
 
 # visualization
-gControlExecute("vrml.mac")
+gApplyUICommand("/vis/open VRML2FILE")
+gApplyUICommand("/vis/scene/create")
+gApplyUICommand("/vis/scene/add/volume")
+gApplyUICommand("/vis/sceneHandler/attach")
 gApplyUICommand("/vis/scene/add/axes 0. 0. 0. 10. cm")
 
 # create a vrml file for each solid type
