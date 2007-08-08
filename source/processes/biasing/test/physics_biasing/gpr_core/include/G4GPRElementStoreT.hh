@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRElementStoreT.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
+// $Id: G4GPRElementStoreT.hh,v 1.3 2007-08-08 20:50:55 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -35,9 +35,13 @@
 #include "G4GPRProcessLists.hh"
 #include "G4GPRTypeList.hh"
 #include "G4GPRSeedManagerT.hh"
+#include "G4GPRRelayManagerT.hh"
 #include "G4GPRSeedT.hh"
+#include "G4GPRRelayT.hh"
+#include "G4GPRBinderFirst.hh"
 
 template <typename List>
-struct G4GPRElementStoreT : G4GPRLinearHierarchyT< G4GPRTypeList_1(G4GPRManagerT< G4GPRSeedT<List> >) > {};
+struct G4GPRElementStoreT : G4GPRLinearHierarchyT< G4GPRTypeList_2(G4GPRManagerT< G4GPRSeedT<List> >,
+								   G4GPRManagerT< G4GPRRelayT<List> >) > {};
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRBinderFirst.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRBinderFirst.hh,v 1.2 2007-08-08 20:50:55 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation. Variation on Loki style binder 
@@ -33,17 +33,17 @@
 #ifndef G4GPRBINDERFIRST_HH
 #define G4GPRBINDERFIRST_HH
 
-template <typename A, typename B, typename C> G4GPRFunctor;
+  template <typename A, typename B, typename C> class G4GPRFunctor;
 
 namespace {
-
+  
   template <typename Functor> struct BinderFirstTraits;
-
+  
   template <typename Result, typename Id, class TList>
   struct BinderFirstTraits< G4GPRFunctor<Result, Id, TList> >
   {
     typedef G4GPRFunctor<Result, Id, TList> OriginalFunctor;
-
+    
     typedef typename TList::Tail ParmList;
     
     typedef typename G4GPRTypeAtNonStrict<TList, 0>::Result OriginalParm1;
@@ -137,13 +137,6 @@ private:
   Bound fBound;
 
 };
-
-template <typename Func>
-G4GPRBinderFirst<Func>*
-G4GPRBindFirst(const typename Func::Identifier& id, Func func, typename Func::Parm1 bound) 
-{
-  return new G4GPRBinderFirst<Func>(id, func, bound);
-}
 
 #endif
 

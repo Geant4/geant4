@@ -23,65 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSeedT.hh,v 1.3 2007-08-08 20:50:55 tinslay Exp $
+// $Id: G4GPRRelayManagerT.hh,v 1.1 2007-08-08 20:50:55 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRSEEDT_HH
-#define G4GPRSEEDT_HH
+#ifndef G4GPRRELAYMANAGERT_HH
+#define G4GPRRELAYMANAGERT_HH
 
-#include "G4GPRWrapItUp.hh"
+#include "G4GPRPlacement.hh"
+#include "G4GPRManagerT.hh"
+#include "G4GPRRelayT.hh"
+#include "G4GPRBinderFirst.hh"
+#include <vector>
 
-template <typename L>
-class G4GPRSeedT {
+template <>
+template <typename List>
+class G4GPRManagerT< G4GPRRelayT<List> > {
 
 public:
+
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper SeedWrapper;
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::RelayWrapper RelayWrapper;
+  typedef std::vector<typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper> Result;
   
-  typedef L List;
-  typedef typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper Wrapper;
+  typedef std::vector< G4GPRRelayT<List>* > Store;
 
-  template <typename Pointer, typename MemberFunc>
-  G4GPRSeedT(const G4String& name, const Pointer& pointer,
-	     MemberFunc memberFunc, G4int placement)
-    :fName(name),
-     fActive(true) 
-    ,fPlacement(placement)
+
+  void Register(G4GPRRelayT<List>* component)
   {
-    fWrapped = Wrapper(name, pointer, memberFunc);
+    fStore.push_back(component);
   }
-
-  // Construct with either a regular pointer or function pointer.
-  // Need to figure out which it is so can do correct wrapping
-  template <typename Pointer>
-  G4GPRSeedT(const G4String& name, const Pointer& pointer, G4int placement)
-    :fName(name)
-    ,fActive(true)
-    ,fPlacement(placement)
+  
+  void operator()(Result*& result) 
   {
-    G4GPRWrapItUp<Wrapper, Pointer> doWrapping;  
-    fWrapped = doWrapping.Wrap(name, pointer);
+    typename Store::iterator iter = fStore.begin();
+
+    while (iter != fStore.end()) {
+
+      if ((*iter)->IsActive()) {
+	G4int idx = (*iter)->Placement();
+	
+	G4GPRBinderFirst<RelayWrapper>* handle = new G4GPRBinderFirst<RelayWrapper>((*iter)->GetName(), (*iter)->GetWrapper(), (*result)[idx]);
+	
+	SeedWrapper newWrapper(handle);
+
+	(*result)[idx] = newWrapper;
+      }
+      ++iter;
+    }
   }
-
-  G4bool IsActive() {return fActive;}
-
-  void ChangeState() 
+    
+  unsigned Size() 
   {
-    fActive = !fActive;
+    return fStore.size();
   }
-
-  G4int Placement() {return fPlacement;}
-
-  Wrapper GetWrapper() {return fWrapped;}
-
-  G4String GetName() {return fName;}
 
 private:
+  
+  Store fStore;
 
-  G4String fName;
-  G4bool fActive;
-  G4int fPlacement;
-  Wrapper fWrapped;
 };
 
 #endif

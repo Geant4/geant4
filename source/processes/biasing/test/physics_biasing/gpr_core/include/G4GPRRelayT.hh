@@ -23,26 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSeedT.hh,v 1.3 2007-08-08 20:50:55 tinslay Exp $
+// $Id: G4GPRRelayT.hh,v 1.1 2007-08-08 20:50:55 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRSEEDT_HH
-#define G4GPRSEEDT_HH
+#ifndef G4GPRRELAYT_HH
+#define G4GPRRELAYT_HH
 
 #include "G4GPRWrapItUp.hh"
 
 template <typename L>
-class G4GPRSeedT {
+class G4GPRRelayT {
 
 public:
   
   typedef L List;
-  typedef typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper Wrapper;
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::RelayWrapper Wrapper;
 
   template <typename Pointer, typename MemberFunc>
-  G4GPRSeedT(const G4String& name, const Pointer& pointer,
+  G4GPRRelayT(const G4String& name, const Pointer& pointer,
 	     MemberFunc memberFunc, G4int placement)
     :fName(name),
      fActive(true) 
@@ -54,7 +54,7 @@ public:
   // Construct with either a regular pointer or function pointer.
   // Need to figure out which it is so can do correct wrapping
   template <typename Pointer>
-  G4GPRSeedT(const G4String& name, const Pointer& pointer, G4int placement)
+  G4GPRRelayT(const G4String& name, const Pointer& pointer, G4int placement)
     :fName(name)
     ,fActive(true)
     ,fPlacement(placement)
