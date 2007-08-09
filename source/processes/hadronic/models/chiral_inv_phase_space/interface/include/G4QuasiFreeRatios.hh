@@ -80,6 +80,9 @@ class G4QuasiFreeRatios
   // Mean hN El and Tot XS(IU) for the isotopic (Z,N): on p -> (Z=1,N=0), on n -> (Z=0,N=1)
   std::pair<G4double,G4double> GetElTot(G4double pIU, G4int hPDG, G4int Z, G4int N); //(IU)
 
+  // Calculate ChEx/El ratio coefficient (p is in independent units, (Z,N) is a target)
+  G4double ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG);
+
  private:
   // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)

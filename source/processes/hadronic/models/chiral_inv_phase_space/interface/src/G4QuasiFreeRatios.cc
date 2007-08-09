@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.15 2007-07-16 13:50:51 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.16 2007-08-09 13:04:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,7 @@ std::vector<std::pair<G4double,G4double>*> G4QuasiFreeRatios::vX; // ETPointers 
 
 G4QuasiFreeRatios::G4QuasiFreeRatios()
 {
-#ifdef ppdebug
+#ifdef pdebug
 		G4cout<<"***^^^*** G4QuasiFreeRatios singletone is created ***^^^***"<<G4endl;
 #endif
 }
@@ -143,7 +143,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   if(!nDB || !found)                    // Create new line in the AMDB
 	 {
     lastA = A;
-#ifdef ppdebug
+#ifdef pdebug
 				G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewT, A="<<A<<", nDB="<<nDB<<G4endl;
 #endif
     lastT = new G4double[mps];          // Create the linear Table
@@ -163,7 +163,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     }
     if(s>sma)                           // Initialize the logarithmic Table
     {
-#ifdef ppdebug
+#ifdef pdebug
 				G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewL, A="<<A<<", nDB="<<nDB<<G4endl;
 #endif
       lastL=new G4double[mls];          // Create the logarithmic Table
@@ -630,7 +630,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
 #endif
   if(!nDB || !found)                            // Create new line in the AMDB
 	 {
-#ifdef ppdebug
+#ifdef pdebug
 				G4cout<<"G4QuasiFreeRatios::FetchElTot: NewX, ind="<<ind<<", nDB="<<nDB<<G4endl;
 #endif
     lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
@@ -743,13 +743,13 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetChExFactor(G4double pIU, G4in
   G4double A=Z+N;
   G4double pf=0.;                              // Possibility to interact with a proton
   G4double nf=0.;                              // Possibility to interact with a neutron
-  if   (hPDG==-211||hPDG==-321||hPDG==3112||hPDG==3212||hPDG==3312) pf=Z/A;
-  else if(hPDG==211||hPDG==321||hPDG==3222||hPDG==3212||hPDG==3322) nf=N/A;
+  if   (hPDG==-211||hPDG==-321||hPDG==3112||hPDG==3212||hPDG==3312) pf=Z/(A+N);
+  else if(hPDG==211||hPDG==321||hPDG==3222||hPDG==3212||hPDG==3322) nf=N/(A+Z);
   else if(hPDG==-311||hPDG==311||hPDG==130||hPDG==310)
   {
     G4double dA=A+A;
-    pf=Z/dA;
-    nf=N/dA;
+    pf=Z/(dA+N+N);
+    nf=N/(dA+Z+Z);
   }
   G4double mult=1.;  // Factor of increasing multiplicity ( ? @@)
   if(pGeV>.5)
@@ -777,19 +777,47 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 {
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);// Mass of deuteron
+  static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0);// Mass of tritium
+  static const G4double mHel3= G4QPDGCode(2112).GetNuclMass(2,1,0);// Mass of Helium3
+  static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);// Mass of alpha
   G4LorentzVector pr4M=p4M/megaelectronvolt;   // Convert 4-momenta in MeV (keep p4M)
   N4M/=megaelectronvolt;
   G4LorentzVector tot4M=N4M+p4M;
   G4double mT=mNeut;
   G4int Z=0;
   G4int N=1;
-  if(NPDG==2212)
+  if(NPDG==2212||NPDG==90001000)
   {
     mT=mProt;
     Z=1;
     N=0;
   }
-  else if(NPDG!=2112)
+  else if(NPDG==90001001)
+  {
+    mT=mDeut;
+    Z=1;
+    N=1;
+  }
+  else if(NPDG==90002001)
+  {
+    mT=mHel3;
+    Z=2;
+    N=1;
+  }
+  else if(NPDG==90001002)
+  {
+    mT=mTrit;
+    Z=1;
+    N=2;
+  }
+  else if(NPDG==90002002)
+  {
+    mT=mAlph;
+    Z=2;
+    N=2;
+  }
+  else if(NPDG!=2112&&NPDG!=90000001)
   {
     G4cout<<"Error:G4QuasiFreeRatios::Scatter:NPDG="<<NPDG<<" is not 2212 or 2112"<<G4endl;
     G4Exception("G4QuasiFreeRatios::Scatter:","21",FatalException,"CHIPScomplain");
@@ -798,6 +826,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   G4double mT2=mT*mT;
   G4double mP2=pr4M.m2();
   G4double E=(tot4M.m2()-mT2-mP2)/(mT+mT);
+#ifdef pdebug
+  G4cerr<<"G4QFR::Scat:qM="<<mT<<",qM2="<<mT2<<",pM2="<<mP2<<",totM2="<<tot4M.m2()<<G4endl;
+#endif
   G4double E2=E*E;
   if(E<0. || E2<mP2)
   {
@@ -814,6 +845,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   // @@ Temporary NN t-dependence for all hadrons
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QElast::Scatter: pPDG="<<pPDG<<G4endl;
   G4int PDG=2212;                                                // *TMP* instead of pPDG
+  if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
   G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
   //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
 #ifdef debug
@@ -833,16 +865,17 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   }
   G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
   //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
-#ifdef pdebug
-  G4cout<<"G4QFR::Scat:PDG="<<pPDG<<", P="<<Momentum<<", CS="<<xSec<<", -t="<<mint<<G4endl;
+  G4double maxt=CSmanager->GetHMaxT();            // max possible -t
+#ifdef ppdebug
+  G4cout<<"G4QFR::Scat:PDG="<<pPDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QFR::Scat: -t="<<mint<<G4endl;
 #endif
-  G4double cost=1.-mint/CSmanager->GetHMaxT(); // cos(theta) in CMS
-#ifdef pdebug
-  G4cout<<"G4QFR::Scat:-t="<<mint<<",dpc2="<<CSmanager->GetHMaxT()<<",cost="<<cost<<G4endl;
+  G4double cost=1.-(mint+mint)/maxt; // cos(theta) in CMS
+#ifdef ppdebug
+  G4cout<<"G4QFR::Scat:-t="<<mint<<"<"<<maxt<<", cost="<<cost<<", Z="<<Z<<",N="<<N<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
   {
@@ -862,8 +895,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
     //G4Exception("G4QFR::Scat:","009",FatalException,"Decay of ElasticComp");
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
-#ifdef debug
-		G4cout<<"G4QFR::Scat:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<"="<<tot4M<<G4endl;
+#ifdef ppdebug
+		G4cout<<"G4QFR::Scat:p4M="<<pr4M<<"+r4M="<<reco4M<<",dr="<<dir4M<<",t4M="<<tot4M<<G4endl;
 #endif
 		return std::make_pair(reco4M*megaelectronvolt,pr4M*megaelectronvolt); // Result
 } // End of Scatter
@@ -966,7 +999,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
   G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
   //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
 #ifdef pdebug
-  G4cout<<"G4QFR::ChEx:PDG="<<pPDG<<", P="<<Momentum<<", CS="<<xSec<<", -t="<<mint<<G4endl;
+  G4cout<<"G4QFR::ChEx:PDG="<<pPDG<<", P="<<P<<", CS="<<xSec<<", -t="<<mint<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);
@@ -996,7 +1029,29 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
 #ifdef debug
-		G4cout<<"G4QFR::ChEx:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<"="<<tot4M<<G4endl;
+		G4cout<<"G4QFR::ChEx:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<p4M+reco4M<<"="<<tot4M<<G4endl;
 #endif
 		return std::make_pair(reco4M*megaelectronvolt,pr4M*megaelectronvolt); // Result
 } // End of ChExer
+
+// Calculate ChEx/El ratio (p is in independent units, (Z,N) is target, pPDG is projectile)
+G4double G4QuasiFreeRatios::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG) 
+{
+  p/=MeV;                                // Converted from independent units
+  G4double A=Z+N;
+  if(A<1.5) return 0.;
+  G4double C=0.;
+  if     (pPDG==2212) C=N/(A+Z);
+  else if(pPDG==2112) C=Z/(A+N);
+  else G4cout<<"*Warning*G4QCohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
+  C*=C;                         // Coherent processes squares the amplitude
+  // @@ This is true only for nucleons: other projectiles must be treated differently
+  G4double sp=std::sqrt(p);
+  G4double p2=p*p;            
+  G4double p4=p2*p2;
+		G4double dl1=std::log(p)-5.;
+  G4double T=(6.75+.14*dl1*dl1+13./p)/(1.+.14/p4)+.6/(p4+.00013);
+  G4double U=(6.25+8.33e-5/p4/p)*(p*sp+.34)/p2/p; 
+  G4double R=U/T;
+  return C*R*R;
+}
