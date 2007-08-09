@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.76 2007-07-06 07:38:36 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.77 2007-08-09 13:07:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -369,7 +369,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
 // End of "InitByPDG"
 
 // Calculate probabilities of clusters and return the maximum baryon number of clusters
-G4int G4QNucleus::UpdateClusters(G4bool din)
+G4int G4QNucleus::UpdateClusters(G4bool din) // din true means use only dense nuclear part
 {//   ======================================
   //static const G4double r0 = 1.1;          // fm, for nuclear radius: r=r0*A^(1/3)
   //static const G4double del= .55;          // fm, for a difused surface of the nucleus
@@ -379,7 +379,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   //static const G4double clustProb = 4.0;   // clusterization probability in dense region
   //static const G4double prQ = 1.0;         // relative probability for a Quasmon
   //static const G4double prQ = 0.;          //@@for pi@@relative probability for Quasmon
-  G4double probSInt[254];                    // integrated static probabilities
+  G4double probSInt[254];                    // integrated static probabilities @@ not used
   for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinit to avoid the postinit
   probSInt[0]=0;                             // integrated static probabilities
   dZ=0;

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.123 2007-05-03 07:35:27 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.124 2007-08-09 13:07:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -35,15 +35,15 @@
 //  class for Multy Quasmon Environment used by the CHIPS Model
 // ------------------------------------------------------------
  
-//#define chdebug
 //#define debug
+//#define pdebug
+//#define chdebug
 //#define sdebug
 //#define ppdebug
 //#define cdebug
 //#define cldebug
 //#define edebug
 //#define fdebug
-//#define pdebug
 //#define rdebug
 //#define ffdebug
 //#define pcdebug
@@ -199,7 +199,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
             theQHadrons.push_back(photon);      // (delete equivalent)
             theEnvironment.InitByPDG(90000000); // Create nuclear environment
 #ifdef pdebug
-            G4cout<<"G4QEnv::Const:Fill proton and photon from gam+p"<<nuPDG<<nu4m<<G4endl;
+            G4cout<<"G4QEnv::Const:Fill gamma and N from gam+N"<<targPDG<<prot4m<<G4endl;
 #endif      
             return;
           }
@@ -741,6 +741,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     G4cout<<G4endl;
 #endif
     theEnvironment.PrepareCandidates(theQCandidates,piF,gaF,proj4M);//Calc.Clust's probab's
+    G4QNucleus memEnviron=theEnvironment;
 #ifdef pdebug
 	   G4cout<<"G4QE::CrQ:ClusterProbabCalculation tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
 #endif
@@ -900,9 +901,6 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       if(!efFlag)                                  // =>NotEnergyFlux=MultyQuasmon Case ^
 	     {
         G4int noh = theQHadrons.size();            // a#oh hadrons in Output UpToNow    ^
-#ifdef pdebug
-        G4cout<<"G4QEnv::CreateQ:*******#ofH="<<noh<<" is found *******"<<G4endl; //    ^
-#endif
         if(noh) for(G4int kh=0; kh<noh; kh++)      // One can escape it but...          ^
 								{                                          //                                   ^
 #ifdef pdebug
@@ -1099,6 +1097,17 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
+    //else if(projPDG>2000)             // Bad for ions! Only for baryons !
+	   //{
+    //  q4Mom=proj4M;      // 4M: QUASMON=Projectile
+    //  valQ=EnFlQC;        // qc: QUASMON=Projectile
+    //  theEnvironment=memEnviron;
+#ifdef pdebug
+    //  G4cout<<"G4QEnv::CreQAll: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
+#endif
+    //  G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
+    //  theQuasmons.push_back(curQuasmon); // Insert Quasmon (even hadron/gamma) (del.eq.)
+	   //}
     else
 	   {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);//Projectile + BoundCluster
@@ -1160,6 +1169,7 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4double fact=1./pow(2.,d);
       if (qC<-1) probab=0.;     
       //else if(pPDG==-211&&AP<152.&&cBN<2) probab=0.; // PionCaptureByCluster
+      //else if(pPDG==22&&AP<152. || pPDG>90000000)
       else if(pPDG==22&&AP<152.)
       {
         if(cBN<2)probab=nOfCl*cBN*fact; //Gamma Under Pi Threshold (QuarkCapture)
@@ -1583,9 +1593,9 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     }
 #endif
     //G4int   c3Max = 27;
-    //G4int   c3Max = 9;                    // Max # for the no hadrons steps
-    //G4int   c3Max = 3;
-    G4int   c3Max = 1;
+    //G4int   c3Max = 9;                    // Max#of "no hadrons" steps (reduced below?)
+    G4int   c3Max = 3;
+    //G4int   c3Max = 1;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
@@ -1608,6 +1618,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
     //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
     //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4bool first=true;                     // Flag of the first interaction (only NucMedia)
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
 	   {
 #ifdef chdebug
@@ -1751,7 +1762,12 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
           if(status)                          // Skip dead Quasmons                     ^
           {                                   //                                        ^
- 	          G4QHadronVector* output=pQ->Fragment(theEnvironment,eCount);//*!DEST* <--<--^-+
+            G4int nQuas=eCount;
+            if(nQuas==1&&first) nQuas=-nQuas;
+ 	          G4QHadronVector* output=pQ->Fragment(theEnvironment,nQuas);//<DESTRUCT<--<--^-+
+#ifdef pdebug
+	           G4cout<<"G4QE::HQE:Q#"<<jq<<",*afterFragm* Env="<<theEnvironment<<G4endl;// ^ ^
+#endif
             envM =theEnvironment.GetMass();   // new mass of Nuclear Environment        ^ ^
             status = pQ->GetStatus();         // NewStatus after FragmentationAttempt   ^ ^
             if(!status) eCount--;             // Dec. ExistingQuasmonsCounter for Q=0   ^ ^
@@ -1874,6 +1890,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 				            }                             // ==> End of the LOOP over outQHadrons   ^ ^
                 pQ->ClearOutput();            // Hadrons are filled, Clear Frag-out <-<-^ ^
                 count3=0;                     // Reset counter of empty hadronizations    ^
+                //c3Max=1;                    // Reduce repetition Max to accelerate      ^
+                first=false;                  // First hadronization is for sure is over  ^
 	             }                               //                                          ^
               else count3++;                  // Increment counter of empty hadronizations^
 			         }                                 //                                          ^
@@ -1901,7 +1919,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                 delete output;                // >========================================^
                 throw G4QException("G4QEnvironment::HadronizeQEnvironment:DoNothingEr");//^
 			           }                               //                                          ^
-              else if(status==2)              // Treat PANIC for stat=2 (NothingWasDone)  ^
+              else if(status==2&&nCount>nCnMax)// Treat PANIC for stat=2 (NothingWasDone) ^
               {                               //                                          ^
                 G4QContent qQC=pQ->GetQC();   // QuarkContent of the Quasmon              ^
                 G4int      pqC=qQC.GetCharge(); // Charge (nP) of the Current Quasmon     ^
