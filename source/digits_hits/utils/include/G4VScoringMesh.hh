@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.5 2007-07-13 11:04:31 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.6 2007-08-10 08:36:47 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,8 @@
 #include "globals.hh"
 #include "G4THitsMap.hh"
 class G4VPhysicalVolume;
+class G4MultiFunctionalDetector;
+class G4VPrimitiveScorer;
 #include <map>
 
 enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
@@ -43,14 +45,14 @@ enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
 //  This class represents a parallel world for interactive scoring purposes.
 //
 
-class G4VScoringMesh 
+class G4VScoringMesh
 {
   public:
-      G4VScoringMesh(G4String wName);
-      ~G4VScoringMesh();
+  G4VScoringMesh(G4String wName);
+  ~G4VScoringMesh();
 
   public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+  virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
       virtual void List() const=0;
 
 
@@ -65,12 +67,19 @@ class G4VScoringMesh
       { return fShape; }
       inline void Accumulate(G4THitsMap<G4double> * map) const;
 
+  inline G4String SetScoringMeshName(G4String & name)
+  { return fScoringMeshName = name; }
+
   protected:
       G4String  fWorldName;
       G4bool    fConstructed;
       G4bool    fActive;
       MeshShape fShape;
       std::map<G4String, G4THitsMap<G4double> > fMap;
+  G4MultiFunctionalDetector * fMFD;
+  std::vector<G4VPrimitiveScorer *> fPS;
+
+      G4String  fScoringMeshName;
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.2 2007-07-12 05:20:42 asaim Exp $
+// $Id: G4ScoringBox.hh,v 1.3 2007-08-10 08:36:47 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,12 @@
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
+#include "G4RotationMatrix.hh"
 class G4VPhysicalVolume;
+class G4LogicalVolume;
+class G4VPrimitiveScorer;
+
+#include <vector>
 
 class G4ScoringBox : public G4VScoringMesh
 {
@@ -45,6 +50,43 @@ class G4ScoringBox : public G4VScoringMesh
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
 
+  void SetSize(G4double size[3]) {
+    for(int i = 0; i < 3; i++) fSize[i] = size[i];
+  }
+  void SetXSize(G4double xSize) {fSize[0] = xSize;}
+  void SetYSize(G4double ySize) {fSize[1] = ySize;}
+  void SetZSize(G4double zSize) {fSize[2] = zSize;}
+
+  void SetCenterPosition(G4double centerPosition[3]) {
+    for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
+  }
+  void SetXCenterPosition(G4double xCenterPosition) {fCenterPosition[0] = xCenterPosition;}
+  void SetYCenterPosition(G4double yCenterPosition) {fCenterPosition[1] = yCenterPosition;}
+  void SetZCenterPosition(G4double zCenterPosition) {fCenterPosition[2] = zCenterPosition;}
+
+  void SetNumberOfSegment(G4int nSegment[3]) {
+    for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
+}
+  void SetNumberOfXSegment(G4int nXSegment) {fNSegment[0] = nXSegment;}
+  void SetNumberOfYSegment(G4int nYSegment) {fNSegment[1] = nYSegment;}
+  void SetNumberOfZSegment(G4int nZSegment) {fNSegment[2] = nZSegment;}
+
+  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+  void SetRotationMatrix(G4RotationMatrix * rmat) {fRotationMatrix = rmat;}
+  void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
+  void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
+
+private:
+  G4double fSize[3];
+  G4double fCenterPosition[3];
+  G4RotationMatrix * fRotationMatrix;
+  G4int fNSegment[3];
+  G4int fSegmentDirection; // 0: x, 1: y, 2: z
+  std::vector<G4double> fSegmentPositions;
+  G4LogicalVolume * fMeshElementLogical;
+  
+  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
+  void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
 };
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.3 2007-07-13 11:04:31 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.4 2007-08-10 08:36:47 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 #include "G4VPhysicalVolume.hh"
 
 G4VScoringMesh::G4VScoringMesh(G4String wName)
-:fWorldName(wName),fConstructed(false),fActive(true)
+  : fWorldName(wName),fConstructed(false),fActive(true),fMFD(0),fScoringMeshName(wName) 
 {
 }
 
