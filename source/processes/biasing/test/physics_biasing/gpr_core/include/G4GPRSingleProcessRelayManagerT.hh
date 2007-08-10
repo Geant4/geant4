@@ -23,31 +23,75 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRElementStoreT.hh,v 1.4 2007-08-10 22:23:04 tinslay Exp $
+// $Id: G4GPRSingleProcessRelayManagerT.hh,v 1.1 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRELEMENTSTORET_HH
-#define G4GPRELEMENTSTORET_HH
+#ifndef G4GPRSINGLEPROCESSRELAYMANAGERT_HH
+#define G4GPRSINGLEPROCESSRELAYMANAGERT_HH
 
-#include "G4GPRLinearHierarchyT.hh"
-#include "G4GPRProcessLists.hh"
-#include "G4GPRTypeList.hh"
-#include "G4GPRSeedManagerT.hh"
-#include "G4GPRSingleProcessRelayManagerT.hh"
-#include "G4GPRMultiProcessRelayManagerT.hh"
-#include "G4GPRSeedT.hh"
+#include "G4GPRPlacement.hh"
+#include "G4GPRManagerT.hh"
 #include "G4GPRSingleProcessRelayT.hh"
-#include "G4GPRMultiProcessRelayT.hh"
 #include "G4GPRBinderFirst.hh"
+#include <vector>
 
+template <>
 template <typename List>
-struct G4GPRElementStoreT : G4GPRLinearHierarchyT< G4GPRTypeList_3(G4GPRManagerT< G4GPRSeedT<List> >,
-								   G4GPRManagerT< G4GPRSingleProcessRelayT<List> >,
-								   G4GPRManagerT< G4GPRMultiProcessRelayT<List> >) > {};
+class G4GPRManagerT< G4GPRSingleProcessRelayT<List> > {
 
-/*struct G4GPRElementStoreT : G4GPRLinearHierarchyT< G4GPRTypeList_2(G4GPRManagerT< G4GPRSeedT<List> >,
-								   G4GPRManagerT< G4GPRSingleProcessRelayT<List> > ) > {};
-*/
+public:
+
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper SeedWrapper;
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::SingleProcessRelayWrapper SingleProcessRelayWrapper;
+  typedef std::vector<typename G4GPRProcessWrappers::Wrappers<List>::SeedWrapper> Result;
+  
+  typedef std::vector< G4GPRSingleProcessRelayT<List>* > Store;
+
+
+  void Register(G4GPRSingleProcessRelayT<List>* component)
+  {
+    fStore.push_back(component);
+  }
+  
+  void operator()(Result*& result) 
+  {
+    G4cout<<"jane lala"<<G4endl;
+    typename Store::iterator iter = fStore.begin();
+
+    while (iter != fStore.end()) {
+      G4cout<<"jane lala2"<<G4endl;
+      if ((*iter)->IsActive()) {
+	G4int idx = (*iter)->Placement();
+	
+	G4GPRBinderFirst<SingleProcessRelayWrapper, SeedWrapper, typename SeedWrapper::Impl>* handle = new G4GPRBinderFirst<SingleProcessRelayWrapper, SeedWrapper, typename SeedWrapper::Impl>((*iter)->GetName(), (*iter)->GetWrapper(), (*result)[idx]);
+	
+	SeedWrapper newWrapper(handle);
+	
+	G4Track* dummyTrk = new G4Track; 
+	G4Step* dummyStep = new G4Step;
+	
+	//	G4cout<<"jane tsting "<<G4endl;
+	//	newWrapper(*dummyTrk, *dummyStep);
+	//	G4cout<<"jane done tsting "<<G4endl;
+	(*result)[idx] = newWrapper;
+	//	((*result)[idx])(*dummyTrk, *dummyStep);
+	//	G4cout<<"jane done tsting2"<<G4endl;
+      }
+      ++iter;
+    }
+  }
+    
+  unsigned Size() 
+  {
+    return fStore.size();
+  }
+
+private:
+  
+  Store fStore;
+
+};
+
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRFunctor.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRFunctor.hh,v 1.2 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation. Variation on Loki style functors:
@@ -71,10 +71,14 @@ public:
  
   //jane - gpr only deals with pointers & pointers to functions
   template <typename Fun> G4GPRFunctor(const Id& id, Fun* const & fun) 
-    :pImpl(new G4GPRFunctorHandler<G4GPRFunctor, Fun*>(id, fun)) {}
+    :pImpl(new G4GPRFunctorHandler<G4GPRFunctor, Fun*>(id, fun)) {
+    G4cout<<"jane construct fctr ptr"<<G4endl;
+  }
   
   G4GPRFunctor(Impl* impl) 
-    :pImpl(impl) {}
+    :pImpl(impl) {
+    G4cout<<"jane construct fctr with impl "<<impl->GetIdentifier()<<G4endl;
+}
   
   template <typename PtrObj, typename MemFn>
   G4GPRFunctor(const Id& id,  PtrObj* const &p, MemFn memFn)
@@ -83,11 +87,6 @@ public:
   const Id& GetIdentifier() const {
     return pImpl->GetIdentifier();
   }
-  /*
-    //jane - to be implemented
-  Id GetCompositeIdentifier() const 
-  {}
-  */
 
   Result operator()()
   {

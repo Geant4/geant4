@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: relayTest.cc,v 1.1 2007-08-08 20:50:55 tinslay Exp $
+// $Id: singleProcessRelayTest.cc,v 1.1 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, May 2007. Functor demonstration.
@@ -36,7 +36,7 @@
 #include "G4GPRElementSuperStore.hh"
 #include "G4GPRSimpleGenerator.hh"
 
-#include "G4GPRRelayT.hh"
+#include "G4GPRSingleProcessRelayT.hh"
 
 // Process function
 G4VParticleChange* SeedFunction(const G4Track&, const G4Step&) {
@@ -46,6 +46,7 @@ G4VParticleChange* SeedFunction(const G4Track&, const G4Step&) {
 
 G4VParticleChange* RelayFunction(G4GPRDoItWrapper& wrappedSeedFunction, const G4Track& track, const G4Step& step) {
   G4cout<<"Execute RelayFunction"<<G4endl;
+  G4cout<<"jane "<<wrappedSeedFunction.GetIdentifier();
   wrappedSeedFunction(track, step);
   return 0;
 }
@@ -53,7 +54,7 @@ G4VParticleChange* RelayFunction(G4GPRDoItWrapper& wrappedSeedFunction, const G4
 int main(int argc, char** argv) {
 
   typedef G4GPRSeedT<G4GPRProcessLists::DiscreteDoIt> Seed;
-  typedef G4GPRRelayT<G4GPRProcessLists::DiscreteDoIt> Relay;
+  typedef G4GPRSingleProcessRelayT<G4GPRProcessLists::DiscreteDoIt> Relay;
 
   Seed* seed = new Seed("Seed", &SeedFunction, G4GPRPlacement::First);
   Relay* relay = new Relay("Relay", &RelayFunction, G4GPRPlacement::First);
@@ -76,6 +77,7 @@ int main(int argc, char** argv) {
   generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
   
   // Iterate over process list
+  G4cout<<"jane proc list length "<<result->size()<<G4endl;
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); iter++) {
     G4cout<<"Executing functor :" <<iter->GetIdentifier();
     (*iter)(*dummyTrk, *dummyStep);

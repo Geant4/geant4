@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRProcessWrappers.hh,v 1.3 2007-08-08 20:50:55 tinslay Exp $
+// $Id: G4GPRProcessWrappers.hh,v 1.4 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation - wrapper definitions.
@@ -37,6 +37,7 @@
 #include "G4GPILSelection.hh"
 #include "G4GPRProcessLists.hh"
 #include "G4GPRTypeList.hh"
+#include <vector>
 
 class G4Step;
 class G4Track;
@@ -52,7 +53,8 @@ namespace G4GPRProcessWrappers {
   
   // DoIt relay signature defined as: 
   //       G4VParticleChange* func(DoItWrapper&, const G4Track&, const G4Step&)
-  typedef G4GPRFunctor<G4VParticleChange*, G4String, G4GPRTypeList_3(DoItWrapper&, G4Track, G4Step)> DoItRelayWrapper;
+  typedef G4GPRFunctor<G4VParticleChange*, G4String, G4GPRTypeList_3(DoItWrapper&, G4Track, G4Step)> DoItSingleProcessRelayWrapper;
+  typedef G4GPRFunctor<G4VParticleChange*, G4String, G4GPRTypeList_3(std::vector<DoItWrapper>&, G4Track, G4Step)> DoItMultiProcessRelayWrapper;
 
   // Formal wrapper definitions for rest, continuous and discrete processes, for both "DoIt" and "GPIL" methods
   template <typename List> struct Wrappers {};
@@ -60,19 +62,22 @@ namespace G4GPRProcessWrappers {
   template <> struct Wrappers<G4GPRProcessLists::AtRestDoIt> 
   {
     typedef DoItWrapper SeedWrapper;
-    typedef DoItRelayWrapper RelayWrapper;
+    typedef DoItSingleProcessRelayWrapper SingleProcessRelayWrapper;
+    typedef DoItMultiProcessRelayWrapper MultiProcessRelayWrapper;
   };
   
   template <> struct Wrappers<G4GPRProcessLists::ContinuousDoIt> 
   {
     typedef DoItWrapper SeedWrapper;
-    typedef DoItRelayWrapper RelayWrapper;
+    typedef DoItSingleProcessRelayWrapper SingleProcessRelayWrapper;
+    typedef DoItMultiProcessRelayWrapper MultiProcessRelayWrapper;
   };
 
   template <> struct Wrappers<G4GPRProcessLists::DiscreteDoIt> 
   {
     typedef DoItWrapper SeedWrapper;
-    typedef DoItRelayWrapper RelayWrapper;
+    typedef DoItSingleProcessRelayWrapper SingleProcessRelayWrapper;
+    typedef DoItMultiProcessRelayWrapper MultiProcessRelayWrapper;
   };
   
 
@@ -95,7 +100,9 @@ namespace G4GPRProcessWrappers {
     typedef G4GPRFunctor<G4double, G4String, SeedArgs> SeedWrapper;
 
     typedef G4GPRTypeList_3(SeedWrapper&, G4Track, G4ForceCondition*) RelayArgs;
-    typedef G4GPRFunctor<G4double, G4String, RelayArgs> RelayWrapper;
+    typedef G4GPRFunctor<G4double, G4String, RelayArgs> SingleProcessRelayWrapper;
+    typedef G4GPRFunctor< G4double, G4String, G4GPRTypeList_3(std::vector<SeedWrapper>&, G4Track, G4ForceCondition*) > MultiProcessRelayWrapper;
+
   };
 
   template <> struct Wrappers<G4GPRProcessLists::ContinuousGPIL> 
@@ -104,7 +111,8 @@ namespace G4GPRProcessWrappers {
     typedef G4GPRFunctor<G4double, G4String, SeedArgs> SeedWrapper;
 
     typedef G4GPRTypeList_6(SeedWrapper&, G4Track, G4double, G4double, G4double&, G4GPILSelection*) RelayArgs;
-    typedef G4GPRFunctor<G4double, G4String, RelayArgs> RelayWrapper;
+    typedef G4GPRFunctor<G4double, G4String, RelayArgs> SingleProcessRelayWrapper;
+    typedef G4GPRFunctor<G4double, G4String, G4GPRTypeList_6(std::vector<SeedWrapper>&, G4Track, G4double, G4double, G4double&, G4GPILSelection*) > MultiProcessRelayWrapper;
   };
 
   template <> struct Wrappers<G4GPRProcessLists::DiscreteGPIL> 
@@ -113,7 +121,8 @@ namespace G4GPRProcessWrappers {
     typedef G4GPRFunctor<G4double, G4String, SeedArgs> SeedWrapper;
 
     typedef G4GPRTypeList_4(SeedWrapper&, G4Track, G4double, G4ForceCondition*) RelayArgs;
-    typedef G4GPRFunctor<G4double, G4String, RelayArgs> RelayWrapper;
+    typedef G4GPRFunctor<G4double, G4String, RelayArgs> SingleProcessRelayWrapper;
+    typedef G4GPRFunctor< G4double, G4String, G4GPRTypeList_4(std::vector<SeedWrapper>&, G4Track, G4double, G4ForceCondition*) > MultiProcessRelayWrapper;
   };
 }
 

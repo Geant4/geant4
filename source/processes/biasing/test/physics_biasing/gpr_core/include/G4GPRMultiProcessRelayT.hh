@@ -23,30 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRRelayT.hh,v 1.1 2007-08-08 20:50:55 tinslay Exp $
+// $Id: G4GPRMultiProcessRelayT.hh,v 1.1 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
 //
-#ifndef G4GPRRELAYT_HH
-#define G4GPRRELAYT_HH
+#ifndef G4GPRMULTIPROCESSRELAYT_HH
+#define G4GPRMULTIPROCESSRELAYT_HH
 
 #include "G4GPRWrapItUp.hh"
 
 template <typename L>
-class G4GPRRelayT {
+class G4GPRMultiProcessRelayT {
 
 public:
   
   typedef L List;
-  typedef typename G4GPRProcessWrappers::Wrappers<List>::RelayWrapper Wrapper;
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::MultiProcessRelayWrapper Wrapper;
 
   template <typename Pointer, typename MemberFunc>
-  G4GPRRelayT(const G4String& name, const Pointer& pointer,
-	     MemberFunc memberFunc, G4int placement)
-    :fName(name),
-     fActive(true) 
+  G4GPRMultiProcessRelayT(const G4String& name, const Pointer& pointer,
+			  MemberFunc memberFunc, std::vector<unsigned> processIndices, G4int placement)
+    :fName(name)
+    ,fActive(true) 
     ,fPlacement(placement)
+    ,fProcessIndices(processIndices)
   {
     fWrapped = Wrapper(name, pointer, memberFunc);
   }
@@ -54,10 +55,11 @@ public:
   // Construct with either a regular pointer or function pointer.
   // Need to figure out which it is so can do correct wrapping
   template <typename Pointer>
-  G4GPRRelayT(const G4String& name, const Pointer& pointer, G4int placement)
+  G4GPRMultiProcessRelayT(const G4String& name, const Pointer& pointer, std::vector<unsigned> processIndices, G4int placement)
     :fName(name)
     ,fActive(true)
     ,fPlacement(placement)
+    ,fProcessIndices(processIndices)
   {
     G4GPRWrapItUp<Wrapper, Pointer> doWrapping;  
     fWrapped = doWrapping.Wrap(name, pointer);
@@ -68,6 +70,11 @@ public:
   void ChangeState() 
   {
     fActive = !fActive;
+  }
+
+  const std::vector<unsigned>& GetProcessIndices() 
+  {
+    return fProcessIndices;
   }
 
   G4int Placement() {return fPlacement;}
@@ -82,6 +89,7 @@ private:
   G4bool fActive;
   G4int fPlacement;
   Wrapper fWrapped;
+  std::vector<unsigned> fProcessIndices;
 };
 
 #endif

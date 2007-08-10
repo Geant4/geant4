@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRBinderFirst.hh,v 1.2 2007-08-08 20:50:55 tinslay Exp $
+// $Id: G4GPRBinderFirst.hh,v 1.3 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation. Variation on Loki style binder 
@@ -33,29 +33,8 @@
 #ifndef G4GPRBINDERFIRST_HH
 #define G4GPRBINDERFIRST_HH
 
-  template <typename A, typename B, typename C> class G4GPRFunctor;
-
-namespace {
-  
-  template <typename Functor> struct BinderFirstTraits;
-  
-  template <typename Result, typename Id, class TList>
-  struct BinderFirstTraits< G4GPRFunctor<Result, Id, TList> >
-  {
-    typedef G4GPRFunctor<Result, Id, TList> OriginalFunctor;
-    
-    typedef typename TList::Tail ParmList;
-    
-    typedef typename G4GPRTypeAtNonStrict<TList, 0>::Result OriginalParm1;
-    typedef G4GPRFunctor<Result, Id, ParmList> Bound;
-    typedef typename Bound::Impl Impl;
-    typedef typename Bound::Identifier Identifier;
-    
-  };
-}
-
-template <typename Incoming>
-class G4GPRBinderFirst : public BinderFirstTraits<Incoming>::Impl {
+template <typename Incoming, typename Bound, typename Impl>
+class G4GPRBinderFirst : public Impl {
 
   typedef typename Incoming::Parm2 Parm1;
   typedef typename Incoming::Parm3 Parm2;
@@ -63,23 +42,20 @@ class G4GPRBinderFirst : public BinderFirstTraits<Incoming>::Impl {
   typedef typename Incoming::Parm5 Parm4;
   typedef typename Incoming::Parm6 Parm5;
   typedef  G4GPREmptyType Parm6;
-  typedef typename BinderFirstTraits<Incoming>::Impl Base;
+  typedef Impl Base;
+
   typedef typename Incoming::ResultType ResultType;
-  typedef typename BinderFirstTraits<Incoming>::Bound Bound;
-  typedef typename BinderFirstTraits<Incoming>::Identifier Identifier;
+  typedef typename Incoming::Identifier Identifier;
 
 public:
 
   G4GPRBinderFirst(const Identifier& id, const Incoming& fun, Bound bound)
-    :BinderFirstTraits<Incoming>::Impl(id)
+    :Impl(id)
     ,fFun(fun)
     ,fBound(bound) 
-  {}
-  
-  /* jane - fixme. To be implemented
-  Identifier GetCompositeIdentifier() const
-  {}
-  */
+  {
+    //    G4cout<<"jane bound "<<fBound.GetIdentifier()<<G4endl;
+  }
 
   ResultType operator()()
   {
@@ -94,6 +70,7 @@ public:
   ResultType operator()(Parm1 p1, 
 			Parm2 p2)
   {
+    //    G4cout<<"jane lala3 "<<fBound.GetIdentifier()<<G4endl;
     return fFun(fBound, p1, p2);
   }
 

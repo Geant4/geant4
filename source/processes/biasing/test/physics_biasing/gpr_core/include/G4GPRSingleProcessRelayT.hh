@@ -23,39 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRUtils.hh,v 1.2 2007-08-10 22:23:04 tinslay Exp $
+// $Id: G4GPRSingleProcessRelayT.hh,v 1.1 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRUTILS_HH
-#define G4GPRUTILS_HH
+#ifndef G4GPRSINGLEPROCESSRELAYT_HH
+#define G4GPRSINGLEPROCESSRELAYT_HH
 
-#include "G4GPRLinearHierarchyT.hh"
-#include "G4GPRTypeList.hh"
+#include "G4GPRWrapItUp.hh"
 
-namespace G4GPRUtils {
+template <typename L>
+class G4GPRSingleProcessRelayT {
 
-  template <typename Result, typename A1>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_1(A1)>* input)
-  {
-    input->A1::operator()(result);
-  }
+public:
   
-  template <typename Result, typename A1, typename A2>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_2(A1, A2)>* input)
+  typedef L List;
+  typedef typename G4GPRProcessWrappers::Wrappers<List>::SingleProcessRelayWrapper Wrapper;
+
+  template <typename Pointer, typename MemberFunc>
+  G4GPRSingleProcessRelayT(const G4String& name, const Pointer& pointer,
+	     MemberFunc memberFunc, G4int placement)
+    :fName(name),
+     fActive(true) 
+    ,fPlacement(placement)
   {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
+    fWrapped = Wrapper(name, pointer, memberFunc);
   }
 
-  template <typename Result, typename A1, typename A2, typename A3>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_3(A1, A2, A3)>* input)
+  // Construct with either a regular pointer or function pointer.
+  // Need to figure out which it is so can do correct wrapping
+  template <typename Pointer>
+  G4GPRSingleProcessRelayT(const G4String& name, const Pointer& pointer, G4int placement)
+    :fName(name)
+    ,fActive(true)
+    ,fPlacement(placement)
   {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-    input->A3::operator()(result);
+    G4GPRWrapItUp<Wrapper, Pointer> doWrapping;  
+    fWrapped = doWrapping.Wrap(name, pointer);
   }
-}
+
+  G4bool IsActive() {return fActive;}
+
+  void ChangeState() 
+  {
+    fActive = !fActive;
+  }
+
+  G4int Placement() {return fPlacement;}
+
+  Wrapper GetWrapper() {return fWrapped;}
+
+  G4String GetName() {return fName;}
+
+private:
+
+  G4String fName;
+  G4bool fActive;
+  G4int fPlacement;
+  Wrapper fWrapped;
+};
 
 #endif

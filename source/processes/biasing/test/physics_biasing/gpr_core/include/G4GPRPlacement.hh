@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRPlacement.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRPlacement.hh,v 1.2 2007-08-10 22:23:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -32,6 +32,6 @@
 #define G4GPRPLACEMENT_HH
 
 namespace G4GPRPlacement {
-  enum {First=0, Append=-1, Last=-9};
+  enum {First=0, Second = 1, Append=-1, Last=-9};
 }
 #endif
