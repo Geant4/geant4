@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc,v 1.15 2007-07-16 10:15:12 kmura Exp $
+// $Id: G4UIbatch.cc,v 1.16 2007-08-10 09:46:10 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -138,7 +138,7 @@ G4String G4UIbatch::ReadCommand()
   cmdtotal= cmdtotal.strip(G4String::both);
 
   // '#' is treated as echoing something
-  if(cmdtotal[0]=='#') return cmdtotal;
+  if(cmdtotal[(size_t)0]=='#') return cmdtotal;
 
   // normally something after # is treated just as comment and ignored
   str_size ic= cmdtotal.find_first_of('#');
@@ -198,7 +198,7 @@ G4UIsession * G4UIbatch::SessionStart()
     }
 
     // just echo something
-    if( newCommand[0] == '#') { 
+    if( newCommand[(size_t)0] == '#') { 
       if(G4UImanager::GetUIpointer()-> GetVerboseLevel()==2) {
         G4cout << newCommand << G4endl; 
       }
