@@ -39,10 +39,7 @@
 #include "Histo.hh"
 
 #ifdef G4ANALYSIS_USE
-
 #include "AIDA/AIDA.h"
-//#include "HistoMessenger.hh"
-
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,11 +51,11 @@ Histo::Histo()
   histName   = "test30.hbook";
   histType   = "hbook";
   nHisto     = 0;
-  defaultAct = 1;
+  defaultAct = true;
   tupleName  = "tuple";
   tupleId    = "100";
   tupleList  = "";
-  ntup = 0;
+  ntup       = 0;
   //  messenger  = 0;
 
 #ifdef G4ANALYSIS_USE
@@ -134,6 +131,16 @@ void Histo::save()
     delete tree;
     tree = 0;
   }
+  for(G4int i=0; i<nHisto; i++) {
+    if(histo[i]) {
+      delete histo[i];
+      histo[i] = 0;
+    } 
+  }
+  if(ntup) {
+    delete ntup;
+    ntup = 0;
+  }
 #endif
 } 
 
@@ -208,11 +215,22 @@ void Histo::scale(G4int i, G4double x)
 #ifdef G4ANALYSIS_USE  
   if(!tree) return;
   if(i>=0 && i<nHisto) {
-    histo[i]->scale(x);
+    if(active[i]) histo[i]->scale(x);
   } else {
     G4cout << "Histo::scale: WARNING! wrong histogram index " << i << G4endl;
   }
 #endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::activate(G4int i, G4bool val)
+{
+  if(i>=0 && i<nHisto) {
+    active[i] = val;
+  } else {
+    G4cout << "Histo::activate: WARNING! wrong histogram index " << i << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

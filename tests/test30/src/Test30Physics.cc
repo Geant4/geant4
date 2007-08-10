@@ -103,6 +103,9 @@
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4StringChipsParticleLevelInterface.hh"
 
+#include "HsQGSPInterface.hh"
+#include "HsQGSCInterface.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test30Physics::Test30Physics()
@@ -288,6 +291,20 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     stringmodel->SetFragmentationModel(stringDecay);
     model->SetTransport(cascade);
     sg = new Test30VSecondaryGenerator(model, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "qgsp") {
+    HsQGSPInterface* qgsp = new HsQGSPInterface();
+    qgsp->SetMinEnergy(GeV);
+    sg = new Test30VSecondaryGenerator(qgsp, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "qgsc") {
+    HsQGSCInterface* qgsc = new HsQGSCInterface();
+    qgsc->SetMinEnergy(GeV);
+    sg = new Test30VSecondaryGenerator(qgsc, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
