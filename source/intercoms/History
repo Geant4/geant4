@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2007-07-16 10:13:48 kmura Exp $
+$Id: History,v 1.70 2007-08-10 09:47:43 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 10, 2007 K.Murakami (intercoms-V09-00-01)
+- G4UIbatch.cc : fixed the problem on 32bit-Linux.
 
 July 16, 2007 K.Murakami (intercoms-V09-00-00)
 - G4UImanager.cc : a bug fixed. (invalid returned object)
