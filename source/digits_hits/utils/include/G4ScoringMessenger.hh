@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.1 2007-07-11 07:00:52 asaim Exp $
+// $Id: G4ScoringMessenger.hh,v 1.2 2007-08-11 00:25:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,10 @@
 class G4ScoringManager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWith3VectorAndUnit;
+class G4UIcommand;
 
 // class description:
 //
@@ -57,6 +60,45 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIdirectory*           scoreDir;
     G4UIcmdWithoutParameter* listCmd;
     G4UIcmdWithAnInteger*    verboseCmd;
+
+    // Mesh commands
+    G4UIdirectory*             meshDir;
+    G4UIcmdWithAString*        meshOpnCmd;
+    G4UIcmdWithoutParameter*   meshClsCmd;
+    G4UIcmdWithAString*        meshDelCmd;
+    //   Shape commands
+    G4UIdirectory*             mShapeDir;
+    G4UIcmdWith3VectorAndUnit* mSBoxCmd;
+    G4UIcmdWith3VectorAndUnit* mSTubsCmd;
+    G4UIcommand*               mSSphereCmd;
+    //   Division command
+    G4UIdirectory*             mBinDir;
+    G4UIcommand*               mBinCmd;
+    //   Placement command
+    G4UIdirectory*             mTransDir;
+    G4UIcmdWith3VectorAndUnit* mTSetCmd;
+    G4UIcmdWith3VectorAndUnit* mTAddCmd;
+    G4UIdirectory*             mRotDir;
+    G4UIcmdWith3VectorAndUnit* mRSetCmd;
+    G4UIcmdWith3VectorAndUnit* mRAddCmd;
+
+    // Quantity commands
+    G4UIdirectory*           quantityDir;
+    G4UIcmdWithAString*      quantityOpnCmd;
+    G4UIcmdWithoutParameter* quantityClsCmd;
+    G4UIcmdWithAString* quantityDelCmd;
+    //    Type Command
+    G4UIcommand*             qTypeCmd;
+
+    // Filter commands 
+    G4UIdirectory*           filterDir;
+    G4UIcmdWithAString*      filterOpnCmd;
+    G4UIcmdWithoutParameter* filterClsCmd;
+    G4UIcmdWithAString*      filterDelCmd;
+    //    Type Command
+    G4UIcommand*             fTypeCmd;
+    G4UIcmdWithAString*      fAttachCmd;
+
 };
 
 
