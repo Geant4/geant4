@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.48 2007-07-22 13:34:00 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.49 2007-08-13 06:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,7 +86,7 @@ public:
 
   virtual ~G4ionIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  inline G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -100,28 +100,33 @@ public:
 
 protected:
 
-  void CorrectionsAlongStep(
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*);
+
+  inline void CorrectionsAlongStep(
                            const G4MaterialCutsCouple*,
 	             	   const G4DynamicParticle*,
 			         G4double& eloss,
 			         G4double& length);
 
-  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-				   const G4ParticleDefinition*);
+  inline void InitialiseMassCharge(const G4Track&);
 
-  void InitialiseMassCharge(const G4Track&);
+  inline G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				   const G4Material*, G4double cut);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
+  inline G4double BetheBlochEnergyThreshold();
+
+  inline G4bool NuclearStoppingFlag();
+
+  // protected pointers 
+  G4ionEffectiveCharge*       effCharge;
+  G4EmCorrections*            corr;
 
 private:
 
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
-
-  G4ionEffectiveCharge*       effCharge;
-  G4EmCorrections*            corr;
 
   // cash
   const G4Material*           curMaterial;
@@ -209,6 +214,20 @@ inline void G4ionIonisation::ActivateStoppingData(G4bool val)
 inline void G4ionIonisation::ActivateNuclearStopping(G4bool val)
 {
   nuclearStopping = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4ionIonisation::BetheBlochEnergyThreshold()
+{
+  return eth;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4ionIonisation::NuclearStoppingFlag()
+{
+  return nuclearStopping;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.hh,v 1.1 2007-07-28 13:30:53 vnivanch Exp $
+// $Id: G4ionGasIonisation.hh,v 1.2 2007-08-13 06:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,7 @@ private:
   G4double                    basePartMass;
   G4double                    currMassRatio;
   G4double                    atomXS;
+  G4double                    preStepKinEnergy;
 
   G4int                       currentIonZ;
   G4int                       ionZ;

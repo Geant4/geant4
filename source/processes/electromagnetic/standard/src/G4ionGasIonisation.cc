@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.1 2007-07-28 13:30:53 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.2 2007-08-13 06:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,6 +113,7 @@ void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
   // any step 
   G4double q = eplus*currentIonZ;
   SetDynamicMassCharge(currMassRatio, q*q);
+  preStepKinEnergy = track.GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -121,18 +122,30 @@ void G4ionGasIonisation::CorrectionsAlongStep(
 			   const G4MaterialCutsCouple* couple,
                            const G4DynamicParticle* dp,
                                  G4double& eloss,
-                                 G4double& length)
+                                 G4double& s)
 {
-  // standard energy loss corrections
-  G4ionIonisation::CorrectionsAlongStep(couple, dp, eloss, length);
+  // add corrections
+  if(eloss < preStepKinEnergy) {
+    const G4ParticleDefinition* part = dp->GetDefinition();
+    const G4Material* mat = couple->GetMaterial();
 
-  // effective number of collisions
-  G4double x = couple->GetMaterial()->GetElectronDensity()*length*atomXS;
-  // equilibrium charge
-  G4double q = fParticleChange.GetProposedCharge(); 
+    // use Bethe-Bloch with corrections
+    if(preStepKinEnergy*currMassRatio > BetheBlochEnergyThreshold())
+      eloss += s*corr->HighOrderCorrections(part,mat,preStepKinEnergy);
+
+    // use nuclear stopping 
+    else if(NuclearStoppingFlag()) {
+      eloss += s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
+    }
+
+    // effective number of collisions
+    G4double x = mat->GetElectronDensity()*s*atomXS;
+    // equilibrium charge
+    G4double q = fParticleChange.GetProposedCharge(); 
   
-  // sample charge change during the step
-  fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
+    // sample charge change during the step
+    fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
