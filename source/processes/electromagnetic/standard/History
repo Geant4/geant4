@@ -1,4 +1,4 @@
-$Id: History,v 1.328 2007-08-13 06:14:43 vnivanch Exp $
+$Id: History,v 1.329 2007-08-13 07:44:11 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13 August 07: L.Urban
+- G4UrbanMscModel - tail of angular distribution modified 
 
 13 August 07: V.Ivant (emstand-V09-00-06)
 - G4ionIonisation - add protected methods BetheBlochEnergyThreshold()
