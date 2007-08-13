@@ -23,48 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRUtils.hh,v 1.3 2007-08-13 20:04:08 tinslay Exp $
+// $Id: G4GPRMaskManagerT.hh,v 1.1 2007-08-13 20:04:08 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
 //
-#ifndef G4GPRUTILS_HH
-#define G4GPRUTILS_HH
+#ifndef G4GPRMASKMANAGERT_HH
+#define G4GPRMASKMANAGERT_HH
 
-#include "G4GPRLinearHierarchyT.hh"
-#include "G4GPRTypeList.hh"
+#include "G4GPRPlacement.hh"
+#include "G4GPRManagerT.hh"
+#include "G4GPRMask.hh"
+#include <vector>
+#include <algorithm>
 
-namespace G4GPRUtils {
+template <>
+class G4GPRManagerT< G4GPRMask > {
 
-  template <typename Result, typename A1>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_1(A1)>* input)
+public:
+
+  typedef std::vector< G4GPRMask* > Store;
+
+  void Register(G4GPRMask* component)
   {
-    input->A1::operator()(result);
+    fStore.push_back(component);
   }
   
-  template <typename Result, typename A1, typename A2>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_2(A1, A2)>* input)
+  template <typename Result>
+  void operator()(Result*& result) 
   {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
+    typename Store::iterator iter = fStore.begin();
+
+    while (iter != fStore.end()) {
+      
+      if ((*iter)->IsActive()) {
+
+	 std::vector<unsigned> indices = (*iter)->GetProcessIndices();
+	
+	// Sort into ascending order
+	std::sort(indices.begin(), indices.end());
+
+	// Erase masked out processes
+	for (std::vector<unsigned>::reverse_iterator iterErase = indices.rbegin(); iterErase != indices.rend(); ++iterErase) {
+	  G4cout<<"jane mask erasing "<<*iterErase<<G4endl;
+	  result->erase(result->begin() + *iterErase);
+	}
+      }
+
+      ++iter;
+    }
+      G4cout<<"jane erased size "<<result->size()<<G4endl;
   }
 
-  template <typename Result, typename A1, typename A2, typename A3>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_3(A1, A2, A3)>* input)
+  unsigned Size() 
   {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-    input->A3::operator()(result);
+    return fStore.size();
   }
 
-  template <typename Result, typename A1, typename A2, typename A3, typename A4>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_4(A1, A2, A3, A4)>* input)
-  {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-    input->A3::operator()(result);
-    input->A4::operator()(result);
-  }
-}
+private:
+  
+  Store fStore;
+
+};
 
 #endif

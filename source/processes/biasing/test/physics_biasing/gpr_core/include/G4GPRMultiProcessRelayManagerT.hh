@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRMultiProcessRelayManagerT.hh,v 1.1 2007-08-10 22:23:04 tinslay Exp $
+// $Id: G4GPRMultiProcessRelayManagerT.hh,v 1.2 2007-08-13 20:04:08 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -36,6 +36,7 @@
 #include "G4GPRMultiProcessRelayT.hh"
 #include "G4GPRBinderFirst.hh"
 #include <vector>
+#include <algorithm>
 
 template <>
 template <typename List>
@@ -67,7 +68,7 @@ public:
 	
 	std::vector<SeedWrapper> processes;
 
-	for (std::vector<unsigned>::iterator iterIdx = indices.begin(); iterIdx != indices.end(); ++iterIdx) {
+	for (std::vector<unsigned>::const_iterator iterIdx = indices.begin(); iterIdx != indices.end(); ++iterIdx) {
 	  processes.push_back((*result)[*iterIdx]);
 	  G4cout<<"jane adding proc "<<*iterIdx<<G4endl;
 	}
@@ -76,7 +77,11 @@ public:
 	  new G4GPRBinderFirst<MultiProcessRelayWrapper, std::vector<SeedWrapper>, typename SeedWrapper::Impl>((*iter)->GetName(), (*iter)->GetWrapper(), processes);
 
 	// Multiple process relay is to be used in place of original processes, so erase them
-	for (std::vector<unsigned>::iterator iterErase = indices.begin(); iterErase != indices.end(); ++iterErase) {
+	// Sort into ascending order first
+	std::sort(indices.begin(), indices.end());
+
+	for (std::vector<unsigned>::reverse_iterator iterErase = indices.rbegin(); iterErase != indices.rend(); ++iterErase) {
+	  G4cout<<"jane erasing "<<*iterErase<<G4endl;
 	  result->erase(result->begin() + *iterErase);
 	}
 	

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: multiProcessRelayTest.cc,v 1.2 2007-08-13 20:04:08 tinslay Exp $
+// $Id: maskTest.cc,v 1.1 2007-08-13 20:04:08 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -36,7 +36,7 @@
 #include "G4GPRElementSuperStore.hh"
 #include "G4GPRSimpleGenerator.hh"
 
-#include "G4GPRMultiProcessRelayT.hh"
+#include "G4GPRMask.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -62,23 +62,23 @@ G4double DiscreteGPIL2(const G4Track& track,
   return 2.0;
 }
 
-G4double MyMultiRelay(std::vector<G4DiscreteGPILWrapper>& input, const G4Track& track,
-		      G4double previousStepSize,
-		      G4ForceCondition* condition)
+G4double DiscreteGPIL3(const G4Track& track,
+		       G4double previousStepSize,
+		       G4ForceCondition* condition) 
 {
-  typedef std::vector<G4DiscreteGPILWrapper> Vect;
-
-  G4double sum = 0;
-  G4cout<<"jane input length "<<input.size()<<G4endl;
-
-  for (Vect::iterator iter = input.begin(); iter != input.end(); ++iter) {
-    sum += (*iter)(track, previousStepSize, condition);
-  }
   
-  return sum;
+  return 3.0;
 }
 
-G4bool MultiRelayTrigger(const G4Track& track, const G4Step& step) 
+G4double DiscreteGPIL4(const G4Track& track,
+		       G4double previousStepSize,
+		       G4ForceCondition* condition) 
+{
+  
+  return 4.0;
+}
+
+G4bool MaskTrigger(const G4Track& track, const G4Step& step) 
 {
   G4cout<<"jane vol "<<track.GetVolume()->GetName()<<G4endl;
   //  G4cout<<"jane executing MyTrigger "<<track->GetTrackID()<<G4endl;
@@ -129,27 +129,32 @@ int main(int argc, char** argv) {
   G4GRSVolume* touchable_B = new G4GRSVolume(volB_phys,NULL,G4ThreeVector(0,0,0)); 
 
   typedef G4GPRSeedT<G4GPRProcessLists::DiscreteGPIL> Seed;
-  typedef G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL> MultiRelay;
 
   Seed* seed1 = new Seed("Seed1", &DiscreteGPIL1, G4GPRPlacement::First);
   Seed* seed2 = new Seed("Seed2", &DiscreteGPIL2, G4GPRPlacement::Second);
+  Seed* seed3 = new Seed("Seed3", &DiscreteGPIL3, G4GPRPlacement::Third);
+  Seed* seed4 = new Seed("Seed4", &DiscreteGPIL4, G4GPRPlacement::Fourth);
 
   std::vector<unsigned> processes;
   processes.push_back(G4GPRPlacement::First);
-  processes.push_back(G4GPRPlacement::Second);
+  processes.push_back(G4GPRPlacement::Third);
 
-  MultiRelay* relay = new MultiRelay("MultiRelay", &MyMultiRelay, processes, G4GPRPlacement::First);
+  G4GPRMask* mask = new G4GPRMask("Mask",  processes);
   
   G4GPRElementSuperStore* superStore = G4GPRElementSuperStore::Instance();
 
   superStore->G4GPRManagerT<Seed>::Register(seed1);
   superStore->G4GPRManagerT<Seed>::Register(seed2);
+  superStore->G4GPRManagerT<Seed>::Register(seed3);
+  superStore->G4GPRManagerT<Seed>::Register(seed4);
 
-  superStore->G4GPRManagerT<MultiRelay>::Register(relay);
+  G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>* store(superStore);
+  store->G4GPRManagerT<G4GPRMask>::Register(mask);
+  //  superStore->template G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>::G4GPRManagerT<G4GPRMask>::Register(mask);
 
   G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
-											  &G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL>::ChangeState);
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MaskTrigger, mask, 
+											  &G4GPRMask::ChangeState);
 
 
   // Generate process list
@@ -165,7 +170,7 @@ int main(int argc, char** argv) {
 
   ProcessList* result(0);
   generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
-  G4cout<<"jane generated size should be 2 and is: "<<result->size()<<G4endl;
+  G4cout<<"jane generated size should be 4 and is: "<<result->size()<<G4endl;
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); ++iter) {
     G4cout<<"Executing functor :" <<iter->GetIdentifier()<<" : ";
@@ -178,7 +183,7 @@ int main(int argc, char** argv) {
   triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Fire(*track, *step);  
   generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
 
-  G4cout<<"jane generated size should be 1 and is: "<<result->size()<<G4endl;
+  G4cout<<"jane generated size should be 2 and is: "<<result->size()<<G4endl;
 
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); ++iter) {

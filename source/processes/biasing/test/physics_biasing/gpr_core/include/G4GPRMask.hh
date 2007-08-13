@@ -23,48 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRUtils.hh,v 1.3 2007-08-13 20:04:08 tinslay Exp $
+// $Id: G4GPRMask.hh,v 1.1 2007-08-13 20:04:08 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, July 2007. 
+// J. Tinslay, August 2007. 
 //
-#ifndef G4GPRUTILS_HH
-#define G4GPRUTILS_HH
+#ifndef G4GPRMASK_HH
+#define G4GPRMASK_HH
 
-#include "G4GPRLinearHierarchyT.hh"
-#include "G4GPRTypeList.hh"
+class G4GPRMask {
 
-namespace G4GPRUtils {
+public:
 
-  template <typename Result, typename A1>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_1(A1)>* input)
+  G4GPRMask(const G4String& name, std::vector<unsigned> processIndices)
+    :fName(name)
+    ,fActive(true) 
+    ,fProcessIndices(processIndices)
+  {}
+
+  G4bool IsActive() {return fActive;}
+
+  void ChangeState() 
   {
-    input->A1::operator()(result);
-  }
-  
-  template <typename Result, typename A1, typename A2>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_2(A1, A2)>* input)
-  {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-  }
-
-  template <typename Result, typename A1, typename A2, typename A3>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_3(A1, A2, A3)>* input)
-  {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-    input->A3::operator()(result);
+    fActive = !fActive;
   }
 
-  template <typename Result, typename A1, typename A2, typename A3, typename A4>
-  void Operator(Result* result, G4GPRLinearHierarchyT<G4GPRTypeList_4(A1, A2, A3, A4)>* input)
+  const std::vector<unsigned>& GetProcessIndices() 
   {
-    input->A1::operator()(result);
-    input->A2::operator()(result);
-    input->A3::operator()(result);
-    input->A4::operator()(result);
+    return fProcessIndices;
   }
-}
+
+  G4String GetName() {return fName;}
+
+private:
+
+  G4String fName;
+  G4bool fActive;
+  std::vector<unsigned> fProcessIndices;
+};
 
 #endif
