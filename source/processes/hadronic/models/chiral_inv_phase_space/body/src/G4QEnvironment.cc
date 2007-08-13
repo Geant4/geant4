@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.124 2007-08-09 13:07:47 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.125 2007-08-13 14:47:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1097,17 +1097,17 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
-    //else if(projPDG>2000)             // Bad for ions! Only for baryons !
-	   //{
-    //  q4Mom=proj4M;      // 4M: QUASMON=Projectile
-    //  valQ=EnFlQC;        // qc: QUASMON=Projectile
-    //  theEnvironment=memEnviron;
+    else if(projPDG>2000 && G4UniformRand()>.5) // Bad for ions! Only for baryons !
+	   {
+      q4Mom=proj4M;       // 4M: QUASMON=Projectile
+      valQ=EnFlQC;        // qc: QUASMON=Projectile
+      theEnvironment=memEnviron;
 #ifdef pdebug
-    //  G4cout<<"G4QEnv::CreQAll: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
+      G4cout<<"G4QEnv::CreQAll: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
 #endif
-    //  G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
-    //  theQuasmons.push_back(curQuasmon); // Insert Quasmon (even hadron/gamma) (del.eq.)
-	   //}
+      G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
+      theQuasmons.push_back(curQuasmon); // Insert Quasmon (even hadron/gamma) (del.eq.)
+	   }
     else
 	   {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);//Projectile + BoundCluster
@@ -1174,6 +1174,13 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       {
         if(cBN<2)probab=nOfCl*cBN*fact; //Gamma Under Pi Threshold (QuarkCapture)
         else probab=0.;
+      }
+      else if(pPDG==2212)
+      {
+        //if(cBN<2)probab=nOfCl*cBN*fact; // Moving nucleons hits only nucleons
+        //else probab=0.;
+        probab=nOfCl*cBN*fact; // Moving nucleons hits composed clusters
+        //probab=nOfCl*fact; // Moving nucleons hits compact clusters
       }
       ////////////////////////else if((pPDG==-211&&AP<10.)&&cBN<2) probab=0;//PiCapAtRst(D)
       //else if((pPDG==-211||pPDG==-13)&&AP<27.)probab=dOfCl*cBN*fact;//Pi/Mu-CaptureAtRest

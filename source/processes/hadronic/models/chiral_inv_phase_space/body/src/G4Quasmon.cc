@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.95 2007-08-09 13:07:48 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.96 2007-08-13 14:47:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -550,7 +550,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4cout<<"G4Q::HQ:eN="<<envN<<",eZ="<<envZ<<",Q="<<rsPDG<<cQ<<",piF="<<piF<<",gaF="<<gaF
          <<G4endl;
 #endif
-    ////////G4int nCL=theEnvironment.UpdateClusters(false);// New A-clusters are calculated
+    theEnvironment.UpdateClusters(false);// New A-clusters are calculated
     //theEnvironment.PrepareCandidates(theQCandidates,false,false);//Calc.PrePreprob's of C
     //G4bool fF=piF||gaF;
 	   // piF,piF or gaF,gaF is correct. Made to avoid theSpecificInteractionTimeClusterChoice
@@ -769,6 +769,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         G4double kpow=static_cast<double>(nOfQ-2); // n-3+1 because of integration
         if(kpow<1.) kpow=1.;
         G4double xmi=(momPhoton-addPhoton)*quasM; // Minimum residual mass 2kM
+        if(xmi<0.) xmi=0.;
         // While must be commented from here and down __________________________
         //G4bool frat=true;//[k/(k+p) factor of QuarkExch]*[p/k factor of fixed ct]=p/(p+k)
         //G4int cMax=27;//For m_gam=0:*[k/(k+p) factor 1/s{m<<k,s=m^2*(1+p/k)}]*[p/k(ct=0)]
@@ -834,19 +835,19 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 		      gaF=false;                         // GammaFirstAct flag is only for the gamma-q
 	       gintFlag=false;
         // ==== Probabiliti proportional to k (without 1/k factor of hadronization)
-        if(!miM2) miM2=(minK+minK)*quasM; // Make minimum mass for randomization
-        if(qM2<.0001) kMom=0.;
-        else kMom = GetQPartonMomentum(maxK,miM2); // Calculate value of primary qParton
+        //if(!miM2) miM2=(minK+minK)*quasM; // Make minimum mass for randomization
+        //if(qM2<.0001) kMom=0.;
+        //else kMom = GetQPartonMomentum(maxK,miM2); // Calculate value of primary qParton
         // ==== Direct calculation of the quark spectrum
-        //G4double kpow=static_cast<double>(nOfQ-2);
-        //G4double kst=0.;
-		      //if(maxK+maxK<quasM+.1) kst=pow((1.-(maxK+maxK)/quasM),kpow);
-        //if(maxK>minK)
-        //{
-        //  G4double rn=(pow((1.-(minK+minK)/quasM),kpow)-kst)*G4UniformRand();
-        //  kMom=(1.-pow(kst+rn,1./kpow))*quasM/2.;
-        //}
-        //else kMom=(minK+maxK);
+        G4double kpow=static_cast<double>(nOfQ-2);
+        G4double kst=0.;
+		      if(maxK+maxK<quasM+.1) kst=pow((1.-(maxK+maxK)/quasM),kpow);
+        if(maxK>minK)
+        {
+          G4double rn=(pow((1.-(minK+minK)/quasM),kpow)-kst)*G4UniformRand();
+          kMom=(1.-pow(kst+rn,1./kpow))*quasM/2.;
+        }
+        else kMom=(minK+maxK);
         //^^^ Direct calculation
         G4double rnc=G4UniformRand();
         cost = 1.-rnc-rnc;
@@ -854,7 +855,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4double cQM2=qM2-(kMom+kMom)*quasM;
       if(cQM2<0.)
 	     {
-        if(cQM2<-.0001)G4cerr<<"---Warning---G4Q::HQ:(PhBack) cQM2="<<cQM2<<" < 0"<<G4endl;
+        //if(cQM2<-.0001)G4cerr<<"-Warning-G4Q::HQ:(Phot)cM2="<<cQM2<<"<0,qM2="<<qm2<<",k="
+        //                     <<kMom<<G4endl; // @@
         cQM2=0.;
 	     }
       G4double cQM=sqrt(cQM2);             // Mass of the coloured residual Quasmom
@@ -4584,7 +4586,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
 				                //if(abs(dS)<4||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//StrongFor1(<4)
 				                //if(baryn>1||abs(dS)<4||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//SIFF1
 				                //if(!piF&&abs(dS)<4 || piF&&abs(dS)<3) // UniversalIsoFocusing
-				                if(!piF&&first&&abs(dS)<4 || (!piF&&!first||piF)&&abs(dS)<3)// ExpIsoF
+				                //if(!piF&&first&&abs(dS)<4 || (!piF&&!first||piF)&&abs(dS)<3)//ExpIsoF
+				                if(!piF&&first || (!piF&&!first||piF)&&abs(dS)<3)// ExperIsoFocusing2
 				                //if(!qIso&&!dC||qIso>0&&dC<0||qIso<0&&dC>0)//MediumIsoFocusingForAll
 				                //if(abs(dS)<3) // Universal IsotopeFocusing(<3) (Best for pi-capture)
 				                //if(abs(dS)<4) // Never try this (**)
@@ -4834,8 +4837,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   //if(minM2>rQ2&&!piF) // ==> Check of Residual Quasmon
 					                   //if(minM2>rQ2&&baryn>3) //=>CheckResidQuasmon *** The Best ***
 					                   //if(minM2>rQ2 && (!piF || piF &&
-					                   //if(minM2>rQ2 && (!piF&&baryn>4 || piF &&
-					                   if(minM2>rQ2 && (!piF&&baryn>3 || piF &&
+                        //if(minM2>rQ2 && (!piF&&baryn>3 || piF &&
+					                   if(minM2>rQ2 && (!piF&&baryn>4 || piF &&
                             (cPDG!=90000001||G4UniformRand()>.3333333) && cPDG!=90001001) )
                             //cPDG!=90001001) )
 																								//if(minM2>rQ2)            // ==> Check of Residual Quasmon
@@ -4968,7 +4971,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                           kf*=boundM/kLS/cNQ;    // Final value of kinematical (i,o) factor
                           G4int noc=cQPDG.GetNumOfComb(iq, oq);
                           //probab=qFact*kf*nqInQ*pPP*noc; // Without wing suppresion
-                          probab=qFact*kf*nqInQ*pPP*noc/pUD;//With wing suppresion
+                          probab=qFact*kf*nqInQ*pPP*noc/pUD; // With wing suppresion
                           //probab=baryn*qFact*kf*nqInQ*pPP*noc/pUD;//WingSuppresion&*BaryN
                           // qFact - squared charge for photons & u-quark, for others =1
                           // kf    - the phase space integral

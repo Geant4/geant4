@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.77 2007-08-09 13:07:48 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.78 2007-08-13 14:47:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2985,7 +2985,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           curCand->SetPreProbability(pos);
           curCand->SetDenseProbability(pos*dense);
 #ifdef cldebug
-	         G4cout<<"G4QN::PrepC: ClasterPDG="<<cPDG<<",preProb="<<pos<<",d="<<dense<<G4endl;
+	         G4cout<<"G4QN::PrepC: ClusterPDG="<<cPDG<<",preProb="<<pos<<",d="<<dense<<G4endl;
 #endif
         }
 	       else                                       // => "Cluster is too big" case
