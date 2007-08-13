@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.4 2007-08-10 08:36:47 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.5 2007-08-13 06:47:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,6 +36,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+#include "G4PVParameterised.hh"
+#include "G4ScoringBoxParameterisation.hh"
 
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
@@ -140,12 +142,28 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // mesh elements
   G4String elementName = boxName +"_element";
-  G4VSolid * elementSolid = new G4Box(elementName, fSize[0]/fNSegment[0]/fsegment[2][0],
+  G4VSolid * elementSolid = new G4Box(elementName, fSize[0]/fsegment[2][0],
 				      fSize[1]/fsegment[2][1], fSize[2]/fsegment[2][2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[segOrder[2]] > 1) 
-    new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], axis[segOrder[2]],
-		    fNSegment[segOrder[2]], fSize[segOrder[2]]/fsegment[2][segOrder[2]]);
+    if(fSegmentPositions.size() > 0) {
+      G4double motherDims[3] ={fSize[0]/fsegment[2][0],
+			       fSize[1]/fsegment[2][1],
+			       fSize[2]/fsegment[2][2]};
+      G4int nelement = fSegmentPositions.size() + 1;
+      //G4ScoringBoxParameterisation * param =
+      G4VPVParameterisation * param =
+	new G4ScoringBoxParameterisation(axis[2], motherDims, fSegmentPositions);
+      new G4PVParameterised(elementName,
+			    fMeshElementLogical,
+			    layerLogical[1],
+			    axis[2],
+			    nelement,
+			    param);
+    } else {
+      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], axis[segOrder[2]],
+		      fNSegment[segOrder[2]], fSize[segOrder[2]]/fsegment[2][segOrder[2]]);
+    }
   else if(fNSegment[segOrder[2]] == 1)
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
   else
@@ -179,7 +197,7 @@ void G4ScoringBox::List() const {
 
 void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]) {
 
-  if(segDir == -1 || segDir == 0) { // in x direction, it segments z -> y -> x directions by turns.
+  if(segDir == -1 || segDir == 1) { // in x direction, it segments z -> y -> x directions by turns.
     segOrd[0] = 2;
     segOrd[1] = 1;
     segOrd[2] = 0;
@@ -193,7 +211,7 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
     segfact[2][1] = G4double(nseg[1]);
     segfact[2][2] = G4double(nseg[2]);
 
-  } else if(segDir == 1) { // in y direction, it segments x -> z -> y directions by turns.
+  } else if(segDir == 2) { // in y direction, it segments x -> z -> y directions by turns.
     segOrd[0] = 0;
     segOrd[1] = 2;
     segOrd[2] = 1;
@@ -207,7 +225,7 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
     segfact[2][1] = G4double(nseg[1]);
     segfact[2][2] = G4double(nseg[2]);
 
-  } else if(segDir == 2) { // in z direction, it segments y -> x -> z directions by turns.
+  } else if(segDir == 3) { // in z direction, it segments y -> x -> z directions by turns.
     segOrd[0] = 1;
     segOrd[1] = 0;
     segOrd[2] = 2;

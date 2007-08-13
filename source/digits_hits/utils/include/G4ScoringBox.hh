@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.3 2007-08-10 08:36:47 akimura Exp $
+// $Id: G4ScoringBox.hh,v 1.4 2007-08-13 06:47:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -81,7 +81,7 @@ private:
   G4double fCenterPosition[3];
   G4RotationMatrix * fRotationMatrix;
   G4int fNSegment[3];
-  G4int fSegmentDirection; // 0: x, 1: y, 2: z
+  G4int fSegmentDirection; // 1: x, 2: y, 3: z
   std::vector<G4double> fSegmentPositions;
   G4LogicalVolume * fMeshElementLogical;
   

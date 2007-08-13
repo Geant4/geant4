@@ -28,7 +28,9 @@
 #define G4ScoringBoxParametrisation_H 1
 
 #include "globals.hh"
+#include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4Box;
@@ -46,10 +48,14 @@ class G4Hype;
 class G4Polycone;
 class G4Polyhedra;
 
+
+
 class G4ScoringBoxParameterisation : public G4VPVParameterisation { 
 public:
   
-  G4ScoringBoxParameterisation();
+  G4ScoringBoxParameterisation(EAxis & segaxis,
+			       G4double motherDimension[3],
+			       std::vector<G4double> & segpos);
   virtual ~G4ScoringBoxParameterisation();
 
   void ComputeTransformation(const G4int copyNo,
@@ -73,7 +79,9 @@ public:
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
 
   private:
-
+  EAxis fSegmentAxis;
+  G4double fMotherDimensions[3];
+  std::vector<G4double> fSegmentPositions;
 
 };
 

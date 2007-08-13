@@ -30,31 +30,57 @@
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 
-G4ScoringBoxParameterisation::G4ScoringBoxParameterisation() {
-  ;
+G4ScoringBoxParameterisation::G4ScoringBoxParameterisation(EAxis & segaxis,
+							   G4double motherDimension[3],
+							   std::vector<G4double> & segpos)
+  : fSegmentAxis(segaxis), fSegmentPositions(segpos) {
+
+  for(int i = 0; i < 3; i++) fMotherDimensions[i] = motherDimension[i];
 }
 
 G4ScoringBoxParameterisation::~G4ScoringBoxParameterisation() {
   ;
 }
 
-void G4ScoringBoxParameterisation::ComputeTransformation(const G4int,
+void G4ScoringBoxParameterisation::ComputeTransformation(const G4int copyNo,
 							G4VPhysicalVolume *physVol) const {
-  G4ThreeVector origin;
-  physVol->SetTranslation(origin);
+  G4ThreeVector trans;
+
+  G4double pos = (fSegmentPositions[copyNo-1] + fSegmentPositions[copyNo])/2.;
+
+  if(fSegmentAxis == kXAxis) {
+    trans[0] = pos - fMotherDimensions[0];
+  }
+  if(fSegmentAxis == kYAxis) {
+    trans[1] = pos - fMotherDimensions[1];
+  }
+  if(fSegmentAxis == kZAxis) {
+    trans[2] = pos - fMotherDimensions[2];
+  }
+
+  physVol->SetTranslation(trans);
+
 }
 
 void G4ScoringBoxParameterisation::ComputeDimensions(G4Box & meshElement,
 						    const G4int copyNo,
 						    const G4VPhysicalVolume*) const {
 
-  /*
-  G4double innerRad = caloTubs_rmin
-              + copyNo*(absorber_thick+scinti_thick);
-  calorimeterLayer.SetInnerRadius(innerRad);
-  calorimeterLayer.SetOuterRadius(innerRad+absorber_thick);
-  calorimeterLayer.SetZHalfLength(caloTubs_dz);
-  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi);
-  calorimeterLayer.SetDeltaPhiAngle(caloTubs_dphi);
-  */
+  G4double dims[3] = {fMotherDimensions[0],fMotherDimensions[1],fMotherDimensions[2]};
+
+  G4double dim = (fSegmentPositions[copyNo] - fSegmentPositions[copyNo-1])/2.;
+
+  if(fSegmentAxis == kXAxis) {
+    dims[0] = dim;
+  }
+  if(fSegmentAxis == kYAxis) {
+    dims[1] = dim;
+  }
+  if(fSegmentAxis == kZAxis) {
+    dims[2] = dim;
+  }
+
+  meshElement.SetXHalfLength(dims[0]);
+  meshElement.SetYHalfLength(dims[1]);
+  meshElement.SetZHalfLength(dims[2]);
 }
