@@ -4,7 +4,7 @@
 ifeq ($(G4SYSTEM),SUN-CC)
   CXX       := CC
   ifdef G4OPTIMISE
-    CXXFLAGS  := -O
+    CXXFLAGS  := -xO2
   else
     ifdef G4DEBUG
       CXXFLAGS  := -g
