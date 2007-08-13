@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.65 2007-08-13 07:41:32 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.66 2007-08-13 09:02:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -925,7 +925,8 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 	    G4double postsafety = safetyHelper->ComputeSafety(newPosition);
 
 	    // displacement to boundary
-            if(postsafety <= tlimitminfix) {
+	    // if(postsafety < tlimitminfix) {
+            if(postsafety <= 0.0) {
 	      safetyHelper->Locate(newPosition, newDirection);
 
 	    // not on the boundary

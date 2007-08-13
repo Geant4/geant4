@@ -1,4 +1,4 @@
-$Id: History,v 1.330 2007-08-13 08:47:39 vnivanch Exp $
+$Id: History,v 1.331 2007-08-13 09:02:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,7 +22,8 @@ committal in the CVS repository !
                     and NuclearStoppingFlag()
 - G4ionGasIonisation - added complete implementation of the method
                        CorrectionsAlongStep() and do not call base class
-- G4UrbanMscModel - tail of angular distribution modified 
+- G4UrbanMscModel - tail of angular distribution modified; compare (L.Urban) 
+                    safety with zero after lateral displacement (VI)
 
 02 August 07: V.Ivant (emstand-V09-00-05)
 -  G4UrbanMscModel - compare safety not with 0 but with tlimitminfix
