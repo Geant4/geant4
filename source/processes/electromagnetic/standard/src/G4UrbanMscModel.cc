@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.64 2007-08-02 13:37:11 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.65 2007-08-13 07:41:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,7 +139,8 @@
 // 01-05-07 optimization for skin > 0 (L.Urban)
 // 05-07-07 modified model functions in SampleCosineTheta (L.Urban)
 // 06-07-07 theta0 is not the same for e-/e+ as for heavy particles (L.Urban)
-// 02-08-07 compare safety not with 0,0 but with tlimitminfix (V.Ivanchenko)
+// 02-08-07 compare safety not with 0. but with tlimitminfix (V.Ivanchenko)
+// 09-08-07 tail of angular distribution has been modified (L.Urban)
 //
 
 // Class Description:
@@ -858,6 +859,9 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
   if((kineticEnergy <= 0.0) || (truestep <= tlimitminfix)) return;
 
   G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
+  // protection against 'bad' cth values
+  if(cth > 1.)  cth =  1.;
+  if(cth < -1.) cth = -1.;
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);
@@ -903,7 +907,6 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
         if(r >  safety) {
           //  ******* so safety is computed at boundary too ************
 	  G4double newsafety = safetyHelper->ComputeSafety(Position);
-          //G4double newsafety = safety;
           if(r > newsafety)
             fac = newsafety/r ;
         }  
@@ -913,7 +916,7 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-	  // definetly not on boundary
+	  // definitely not on boundary
 	  if(1. == fac) {
 	    safetyHelper->ReLocateWithinVolume(newPosition);
 	    
@@ -1000,7 +1003,6 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       G4double a = 1., ea = 0., eaa = 1.;
       G4double xmean1 = 1., xmean2 = 0.;
                                                       
-      tau *= 1.+1./Zeff;
       G4double xmeanth = exp(-tau);
 
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
@@ -1015,7 +1017,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       if(xmean1 <= xmeanth)
         xmean1 = 0.50*(1.+xmeanth);
 
-      b = 1./xmeanth;
+      // material i.e. Zeff dependent tail
+      b = 1.+(1.-0.15*log(Zeff))*(1./xmeanth-1.) ;
       bp1 = b+1.;
       bm1 = b-1.;
       xmean2 = b-0.5*bp1*bm1*log(bp1/bm1);
