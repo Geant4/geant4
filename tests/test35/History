@@ -15,7 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 test35-V09-00-01  14 August 2007 V.Ivanchenko
-- Histo.hh - use bool vector of active histograms
+- Histo - use bool vector of active histograms, fix destructor
 
 test35-V09-00-00  31 July 2007 V.Ivanchenko
 - add Histo class

@@ -131,16 +131,6 @@ void Histo::save()
     delete tree;
     tree = 0;
   }
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) {
-      delete histo[i];
-      histo[i] = 0;
-    } 
-  }
-  if(ntup) {
-    delete ntup;
-    ntup = 0;
-  }
 #endif
 } 
 

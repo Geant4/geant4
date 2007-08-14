@@ -128,7 +128,7 @@ int main(int argc, char** argv)
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
   G4double  elim     = 30.*MeV;
-  G4double  energyg  = 50.*MeV;
+  G4double  energyg  = 40.*MeV;
   G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
@@ -499,7 +499,7 @@ int main(int argc, char** argv)
 
       isInitH = true;
 
-      histo.add1D("1","Number of Secondaries",50,-0.5,49.5);
+      histo.add1D("1","Number of Secondaries",100,-0.5,99.5);
       histo.add1D("2","Type of secondary",10,-0.5,9.5);
       histo.add1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
 
@@ -519,10 +519,10 @@ int main(int argc, char** argv)
       // proton double differencial histograms are active by request
       for(i=nanglpr; i<11; i++) {histo.activate(3+i, false);}
 
-      histo.add1D("15","E(MeV) for gamma",100,0.,energyg);
-      histo.add1D("16","delta E (MeV)",20,-1.,1.);
-      histo.add1D("17","delta Pz (GeV)",20,-1.,1.);
-      histo.add1D("18","delta Pt (GeV)",20,-1.,1.);
+      histo.add1D("15","E(MeV) for gamma",200,0.,energyg);
+      histo.add1D("16","delta E (MeV) ",100,-0.5,0.5);
+      histo.add1D("17","delta Pz (GeV)",100,-0.5,0.5);
+      histo.add1D("18","delta Pt (GeV)",100,-0.5,0.5);
 
       histo.add1D("19","E(MeV) for pi0",nbinse,0.,emax);
       histo.add1D("20","E(MeV) for pi+",nbinse,0.,emax);
@@ -643,8 +643,10 @@ int main(int argc, char** argv)
         GetInelasticCrossSection(&dParticle, elm);
     }
 
-    G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
-    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
+    G4double factor  = 
+      cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
+    G4double factora = 
+      cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factora
@@ -854,7 +856,8 @@ int main(int argc, char** argv)
 		 << G4endl;
 	}
 	de += e;
-        if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && warn < 50) {
+        if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && 
+	   warn < 50) {
           warn++;
           G4cout << "Warning! evt# " << iter 
                  << "  " << i << "-th sec  "
@@ -872,10 +875,11 @@ int main(int argc, char** argv)
 	if(usepaw) {
 
           if(pd) {
-            float N = pd->GetBaryonNumber();
-            float Z = pd->GetPDGCharge()/eplus;
-            float Z0= bestZ[(int)N];
-            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) histo.fill(26,N, factorb);
+            G4double N = pd->GetBaryonNumber();
+            G4double Z = pd->GetPDGCharge()/eplus;
+            G4double Z0= bestZ[(G4int)N];
+            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) 
+	      histo.fill(26, N, factorb);
 	  }
 
           if(pd == proton) {
@@ -965,13 +969,12 @@ int main(int argc, char** argv)
       pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
-        histo.fill(0,(double)n,1.0);
+        histo.fill(0,(G4double)n,1.0);
 	histo.fill(15,labv.e()/MeV, 1.0);
 	histo.fill(16,pz/GeV, 1.0);
 	histo.fill(17,pt/GeV, 1.0);
       }
       aChange->Clear();
-
     }
 
     timer->Stop();
@@ -980,11 +983,10 @@ int main(int argc, char** argv)
 
     // Committing the transaction with the tree
     if(usepaw) {
-      std::cout << "###### Save histograms" << std::endl;
+      G4cout << "###### Save histograms" << G4endl;
       histo.save();
     }
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
-
   }
 
   delete mate;
