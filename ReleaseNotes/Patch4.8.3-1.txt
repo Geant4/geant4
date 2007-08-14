@@ -28,14 +28,10 @@ List of fixes included in this public patch since the public release 8.3:
 
   o Hadronic Processes:
     ------------------
-    + cross_sections:
-      o Fixed memory leak at initialisation in classes
-        G4ElectroNuclearCrossSection and G4PhotoNuclearCrossSection.
     + models/chiral_inv_phase_space:
-      o Memory leak fix in G4StringChipsParticleLevelInterface,
-        G4QuasiFreeRatios and G4QElasticCrossSection.
-      o Fixed DB filling (ID update) in G4QuasiFreeRatios, responsible for
-        excessive growth of memory in long runs.
+      o G4QuasiFreeRatios: fixed DB filling (ID update), responsible for
+        excessive growth of memory in long runs. Corrected indexing and
+        computation of cos(theta).
     + util:
       o Three bug fixes in G4ReactionDynamics::TwoCluster(): removed a sharp
         peak at 180 degrees by fixing a units error and fixed an error in
