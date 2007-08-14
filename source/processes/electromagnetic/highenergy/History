@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2007-08-14 09:47:58 vnivanch Exp $
+$Id: History,v 1.21 2007-08-14 09:48:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14 August 07:  V.Ivanchenko (emhighenergy-V08-09-00)
+14 August 07:  V.Ivanchenko (emhighenergy-V09-00-00)
 - G4mplIonisationModel - fixed low-energy parameterization of monopole
        energy loss; verified mean energy loss (M.Vladymirov)
 

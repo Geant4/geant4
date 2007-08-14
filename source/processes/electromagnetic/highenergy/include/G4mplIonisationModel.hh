@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
+// $Id: G4mplIonisationModel.hh,v 1.5 2007-08-14 09:47:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,7 @@
 // Creation date: 06.09.2005
 //
 // Modifications:
-//
+// 12.08.2007 ComputeDEDXAhlen function added (M. Vladymyrov)
 //
 // Class Description:
 //
@@ -92,6 +92,7 @@ public:
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
+  G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2);
 
   // hide assignment operator
   G4mplIonisationModel & operator=(const  G4mplIonisationModel &right);
@@ -102,13 +103,17 @@ private:
 
   G4double mass;
   G4double magCharge;
-  G4double chargeSquare;
   G4double twoln10;
   G4double beta2low;
   G4double beta2lim;
   G4double bg2lim;
   G4double factlow;
+  G4double chargeSquare;
   G4int    nmpl;
+  G4double pi_hbarc2_over_mc2;
+  G4double approxConst;
+  G4Material* lastMatelial;
+
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.3 2006-12-13 15:44:27 gunter Exp $
+// $Id: G4mplIonisationModel.cc,v 1.4 2007-08-14 09:47:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,10 +38,13 @@
 // Creation date: 06.09.2005
 //
 // Modifications:
+// 12.08.2007 Changing low energy approximation and extrapolation. Small bug fixing and refactoring (M. Vladymyrov)
 //
 //
 // -------------------------------------------------------------------
-//
+// References
+// [1] Steven P. Ahlen: Energy loss of relativistic heavy ionizing particles, Rev. Mod. Phys 52(1980), p121
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,21 +59,20 @@
 
 using namespace std;
 
-G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, 
-					   const G4String& nam)
+G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
-  twoln10(2.0*log(10.0)),
-  beta2low(0.0001),
-  beta2lim(0.01),
-  bg2lim(beta2lim*(1.0 + beta2lim))
+  twoln10(log(100.0)),
+  beta2low(0.004),
+  beta2lim(0.02),
+  bg2lim(beta2lim*(1.0 + beta2lim)),
+  lastMatelial(0)
 {
-  nmpl         = G4int(abs(magCharge)/68.0);
+  nmpl         = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
   if(nmpl > 6)      nmpl = 6;
   else if(nmpl < 1) nmpl = 1;
-  G4double x   = 45.0*GeV*G4double(nmpl)/cm;
-  factlow      = x*x;
-  chargeSquare = magCharge*magCharge;
+  pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
+  chargeSquare = magCharge * magCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -99,60 +101,81 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 						    G4double kineticEnergy,
 						    G4double)
 {
-  G4double tau   = kineticEnergy/mass;
+  G4double tau   = kineticEnergy / mass;
   G4double gam   = tau + 1.0;
-  G4double bg2   = tau * (tau+2.0);
-  G4double beta2 = bg2/(gam*gam);
+  G4double bg2   = tau * (tau + 2.0);
+  G4double beta2 = bg2 / (gam * gam);
 
-  G4double dedx0 = factlow*abs(beta2);
+  // approximation in low energy region
+  G4double dedx0 = 0, dedx = 0;
 
   if(beta2 > beta2low) {
-
-    G4double b2 = beta2;
-    if(beta2 < beta2lim) {
-      beta2= beta2lim;
-      bg2  = bg2lim;
-    }
-
-    G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
-    G4double cden  = material->GetIonisation()->GetCdensity();
-    G4double mden  = material->GetIonisation()->GetMdensity();
-    G4double aden  = material->GetIonisation()->GetAdensity();
-    G4double x0den = material->GetIonisation()->GetX0density();
-    G4double x1den = material->GetIonisation()->GetX1density();
-
-    G4double eDensity = material->GetElectronDensity();
-
-    G4double dedx = 2.0*log(2.0*electron_mass_c2*bg2/eexc) - 1.0;
-
-    G4double  k = 0.406;
-    if(nmpl > 1) k = 0.346;
-    const G4double B[7] = { 0.0, 0.248, 0.672, 1.022,  1.243, 1.464,  1.685}; 
-
-    dedx += k - B[nmpl];
-
-    // density correction
-    G4double x = log(bg2)/twoln10;
-    if ( x >= x0den ) {
-      dedx -= twoln10*x - cden ;
-      if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-    }
-
-    // now compute the total ionization loss
-
-    if (dedx < 0.0) dedx = 0.0 ;
-
-    dedx *= twopi_mc2_rcl2*chargeSquare*eDensity;
-
-    // extrapolate between two formula
-    if(beta2 < beta2lim) {
-      x = log(dedx0) + log(dedx/dedx0)*log(b2/beta2low)/log(beta2lim/beta2low);
-      dedx = exp(x);
-    }
-    dedx0 = dedx;
+    dedx = ComputeDEDXAhlen(material, bg2);
   }
 
-  return dedx0;
+  if(beta2 < beta2lim) {
+    if(lastMatelial != material){
+      approxConst = ComputeDEDXAhlen(material, bg2lim);
+      lastMatelial = (G4Material *)material;
+    };
+    dedx = dedx0 = approxConst * sqrt(sqrt(abs(beta2 / bg2lim)));
+
+    // extrapolation between two formula 
+    if(beta2 > beta2low) {
+   
+      G4double kapa1 = sqrt(abs(beta2)), kapa2 = kapa1;
+      kapa1 -= sqrt(beta2low);
+      kapa2 -= sqrt(beta2lim);
+      kapa1 *= kapa1;
+      kapa2 *= kapa2;
+
+      G4double x = kapa1 * dedx + kapa2 * dedx0;
+      x /= kapa1 + kapa2;
+      dedx = x;
+    }
+  }
+  return dedx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4double bg2)
+{
+
+  G4double eDensity = material->GetElectronDensity();
+  G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double cden  = material->GetIonisation()->GetCdensity();
+  G4double mden  = material->GetIonisation()->GetMdensity();
+  G4double aden  = material->GetIonisation()->GetAdensity();
+  G4double x0den = material->GetIonisation()->GetX0density();
+  G4double x1den = material->GetIonisation()->GetX1density();
+
+  // Ahlen's formula for nonconductors, [1]p157, f(5.7)
+  G4double dedx = log(2.0 * electron_mass_c2 * bg2 / eexc) - 0.5;
+
+  // Kazama et al. cross-section correction
+  G4double  k = 0.406;
+  if(nmpl > 1) k = 0.346;
+
+  // Bloch correction
+  const G4double B[7] = { 0.0, 0.248, 0.672, 1.022, 1.243, 1.464, 1.685}; 
+
+  dedx += 0.5 * k - B[nmpl];
+
+  // density effect correction
+  G4double deltam;
+  G4double x = log(bg2) / twoln10;
+  if ( x >= x0den ) {
+    deltam = twoln10 * x - cden;
+    if ( x < x1den ) deltam += aden * pow((x1den-x), mden);
+    dedx -= 0.5 * deltam;
+  }
+
+  // now compute the total ionization loss
+  dedx *=  pi_hbarc2_over_mc2 * eDensity * nmpl * nmpl;
+
+  if (dedx < 0.0) dedx = 0;
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -180,9 +203,5 @@ G4double G4mplIonisationModel::SampleFluctuations(
       loss = G4RandGauss::shoot(meanLoss,siga);
     } while (0.0 > loss || loss > twomeanLoss);
   }
-  //G4cout << "G4mplIonisationModel::SampleFluctuations:  loss= " << loss 
-  //<< "  siga= " << siga << G4endl;
   return loss;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
