@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSPassageCellCurrent.hh,v 1.1 2007-08-14 21:30:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4PSPassageCurrent_h
-#define G4PSPassageCurrent_h 1
+#ifndef G4PSPassageCellCurrent_h
+#define G4PSPassageCellCurrent_h 1
 
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
@@ -45,12 +45,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class G4PSPassageCurrent : public G4VPrimitiveScorer
+class G4PSPassageCellCurrent : public G4VPrimitiveScorer
 {
  
   public: // with description
-      G4PSPassageCurrent(G4String name, G4int depth=0);
-      virtual ~G4PSPassageCurrent();
+      G4PSPassageCellCurrent(G4String name, G4int depth=0);
+      virtual ~G4PSPassageCellCurrent();
 
   inline void Weighted(G4bool flg=true) { weighted = flg; }
   // Multiply track weight

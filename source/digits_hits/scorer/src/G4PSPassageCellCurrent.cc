@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.cc,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSPassageCellCurrent.cc,v 1.1 2007-08-14 21:30:46 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4PSPassageCurrent
-#include "G4PSPassageCurrent.hh"
+// G4PSPassageCellCurrent
+#include "G4PSPassageCellCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
@@ -43,15 +43,15 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCurrent::G4PSPassageCurrent(G4String name, G4int depth)
+G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
      weighted(true)
 {;}
 
-G4PSPassageCurrent::~G4PSPassageCurrent()
+G4PSPassageCellCurrent::~G4PSPassageCellCurrent()
 {;}
 
-G4bool G4PSPassageCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
@@ -63,7 +63,7 @@ G4bool G4PSPassageCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   return TRUE;
 }
 
-G4bool G4PSPassageCurrent::IsPassed(G4Step* aStep){
+G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep){
   G4bool Passed = FALSE;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
@@ -86,7 +86,7 @@ G4bool G4PSPassageCurrent::IsPassed(G4Step* aStep){
   return Passed;
 }
 
-void G4PSPassageCurrent::Initialize(G4HCofThisEvent* HCE)
+void G4PSPassageCellCurrent::Initialize(G4HCofThisEvent* HCE)
 {
   fCurrentTrkID = -1;
 
@@ -97,18 +97,18 @@ void G4PSPassageCurrent::Initialize(G4HCofThisEvent* HCE)
 
 }
 
-void G4PSPassageCurrent::EndOfEvent(G4HCofThisEvent*)
+void G4PSPassageCellCurrent::EndOfEvent(G4HCofThisEvent*)
 {
 }
 
-void G4PSPassageCurrent::clear(){
+void G4PSPassageCellCurrent::clear(){
   EvtMap->clear();
 }
 
-void G4PSPassageCurrent::DrawAll()
+void G4PSPassageCellCurrent::DrawAll()
 {;}
 
-void G4PSPassageCurrent::PrintAll()
+void G4PSPassageCellCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
