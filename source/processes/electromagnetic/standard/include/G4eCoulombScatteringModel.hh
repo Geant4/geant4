@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.9 2007-07-31 17:24:05 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.10 2007-08-14 09:43:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,19 +96,14 @@ public:
 
 protected:
 
-  G4double ScreeningParameter(G4double Z, G4double q2,
-			      G4double mom2, G4double invbeta2);
-
-  G4double NuclearSizeParameter(G4double A, G4double mom2);
-
-  G4double CalculateECrossSectionPerAtom(const G4ParticleDefinition*, 
-					 G4double kinEnergy, 
-					 G4double Z, G4double ecut);
-
   virtual G4double CalculateCrossSectionPerAtom(
                                          const G4ParticleDefinition*, 
 					 G4double kinEnergy, 
 					 G4double Z, G4double A);
+
+  inline void SetupKinematic(const G4ParticleDefinition*, G4double kinEnergy);
+  
+  inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy); 
 
 private:
 
@@ -125,12 +120,24 @@ protected:
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
   G4double                  cosTetMaxNuc;
-  G4double                  cosTetMaxElec;
   G4double                  q2Limit;
   G4double                  nucXS[100];
-  G4double                  elXS[100];
-  G4double                  nuc[100];
-  G4double                  ae[100];
+
+  // projectile
+  const G4ParticleDefinition* particle;
+
+  G4double                  chargeSquare;
+  G4double                  mass;
+  G4double                  tkin;
+  G4double                  mom2;
+  G4double                  invbeta2;
+
+  // target
+  G4double                  kineticEnergy;
+  G4double                  targetZ;
+  G4double                  targetA;
+  G4double                  screenZ;
+  G4double                  formfactA;
 
 private:
 
@@ -160,40 +167,58 @@ inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
                 const G4ParticleDefinition* p,
 		G4double kinEnergy,
 		G4double Z, G4double A,
-		G4double ecut, G4double)
+		G4double, G4double)
 {
   G4int iz = G4int(Z);
   G4bool b;
+  G4double x = 0.0;
   if(theCrossSectionTable) {
-    nucXS[iz] = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
-      ->GetValue(kinEnergy, b));
-  } else nucXS[iz] = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
+    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
+		 ->GetValue(kinEnergy, b));
+  } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
 
-  elXS[iz] = CalculateECrossSectionPerAtom(p, kinEnergy, Z, ecut);
+  nucXS[iz] = x;
 
   //  G4cout << "G4eCoulombScatteringModel:ComputeCSPerAtom e= " << kinEnergy 
   //	 << " Z= " << Z
   //       << "  CS= " << x << G4endl;
-  return nucXS[iz] + elXS[iz];
+  return x;
 }
 
-inline G4double G4eCoulombScatteringModel::ScreeningParameter(
-                G4double Z, 
-                G4double q2, 
-		G4double mom2, 
-		G4double invbeta2)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eCoulombScatteringModel::SetupKinematic(
+		const G4ParticleDefinition* p, 
+		G4double ekin)
 {
-  G4double R = a0/mom2;
-  if(Z > 1.5) R *= std::pow(Z,0.6666667)*(1.13 + 3.76*invbeta2*Z*Z*q2*alpha2);
-  return R;
+  if(ekin != tkin || p != particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    tkin  = ekin;
+    mom2  = tkin*(tkin + 2.0*mass);
+    invbeta2 = 1.0 +  mass*mass/mom2;
+    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+  } 
 }
 
-inline G4double G4eCoulombScatteringModel::NuclearSizeParameter(
-		G4double A, G4double mom2)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A, 
+						   G4double e)
 {
-  // A.V. Butkevich et al., NIM A 488 (2002) 282
-  return mom2*constn*std::pow(A, 0.54); 
-}
+  if(Z != targetZ || A != targetA || e != kineticEnergy) {
+    targetZ = Z;
+    targetA = A;
+    kineticEnergy = e;
+    screenZ = a0/mom2;
+    if(Z > 1.5) screenZ *= std::pow(Z,0.6666667)
+		  *(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
+    // A.V. Butkevich et al., NIM A 488 (2002) 282
+    formfactA = mom2*constn*std::pow(A, 0.54);
+  } 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

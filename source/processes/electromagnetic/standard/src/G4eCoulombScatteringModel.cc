@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.15 2007-07-31 17:27:26 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.16 2007-08-14 09:43:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,11 +84,12 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
-  cosTetMaxElec = 0.0;
   a0 = alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   constn = 6.937e-6/(MeV*MeV);
+  tkin = targetZ = targetA = mom2 = DBL_MIN;
+  particle = 0;
   for(size_t j=0; j<100; j++) {index[j] = -1;} 
 }
 
@@ -162,90 +163,23 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double Z, G4double A)
 {
   G4double cross = 0.0;
-  G4double m     = p->GetPDGMass();
-  G4double tkin  = std::max(keV, kinEnergy);
-  G4double mom2  = tkin*(tkin + 2.0*m);
-
-  cosTetMaxNuc   = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+  SetupKinematic(p, std::max(keV, kinEnergy));
 
   // special case of pp scattering
   if(p == theProton && Z < 1.5 && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0; 
 
   if(cosTetMaxNuc < cosThetaMin) {
-    G4int iz = G4int(Z);
-    G4double q        = p->GetPDGCharge()/eplus;
-    G4double q2       = q*q;
-    G4double invbeta2 = 1.0 +  m*m/mom2;
-    G4double Ae = 2.0*ScreeningParameter(Z, q2, mom2, invbeta2);
-    G4double Cn = NuclearSizeParameter(A, mom2);
-    ae[iz]  = Ae;
-    nuc[iz] = Cn;
-    G4double x1 = 1.0 - cosThetaMin + Ae;
-    G4double x2 = 1.0 - cosTetMaxNuc + Ae;
-    cross = coeff*Z*Z*q2*invbeta2*(1./x1 - 1./x2 - Cn*(2.*log(x2/x1) - 1.))/mom2;
-
-    /*    
-      if(Z == 13 || Z == 79) {
-      G4cout << "## e= " << kinEnergy << "  beta= " << sqrt (1.0/invbeta2)
-	     <<"  Z= " << Z 
-	     << " sig(bn)= " << cross/barn 
-	     << "  cosMax= " <<  costm 
-	     << "  cosMin= " <<  cosThetaMin 
-	     << "  Ae= " <<  Ae
-	     << G4endl;
-      //      G4double atommass = 27.0;
-      // if(Z == 79) atommass = 197.0;
-      // G4double u0 = 1.e+6*atommass*cm2/(cross*Avogadro);
-      // G4double u1 = 0.5*u0/( A* ( (1.0 + A)*log(1.0 + 1.0/A) -1.0 ) );
-      //G4cout << "  l0= " << u0 << "  l1= " << u1 
-      //	     << "   A= " << A << G4endl;
-      //}
-    */
+    SetupTarget(Z, A, tkin);
+    G4double x1 = 1.0 - cosThetaMin  + screenZ;
+    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
+    cross = coeff*Z*Z*chargeSquare*invbeta2
+      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/mom2;
   }
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eCoulombScatteringModel::CalculateECrossSectionPerAtom(
-		             const G4ParticleDefinition* p,      
-			     G4double kinEnergy, 
-			     G4double Z,
-                             G4double ecut)
-{
-  G4double cross = 0.0;
-  G4double m     = p->GetPDGMass();
-  G4double tkin  = std::max(keV, kinEnergy);
-  G4double mom2  = tkin*(tkin + 2.0*m);
-  cosTetMaxElec  = cosThetaMax;
-
-  G4double tmax = tkin;
-
-  if(p == theElectron) {
-    tmax *= 0.5;  
-  } else if(p != thePositron) {
-    tmax = 2.0*electron_mass_c2*mom2 /
-      (m*m + (2.0*(tkin + m) + electron_mass_c2)*electron_mass_c2);
-  }
-  if(ecut < tmax) tmax = ecut;
-
-  // define limit on electron scattering angle
-  if(tkin > tmax) {
-    G4double mom12 = (tkin - tmax)*(2.*m + tkin - tmax);
-    G4double mom22 = tmax*(2.*electron_mass_c2 + tmax);
-    G4double ctet  = (mom2 + mom12 - mom22)*0.5/sqrt(mom2*mom12); 
-    if(ctet > cosTetMaxElec) cosTetMaxElec = ctet;
-  }
-
-  if(cosTetMaxElec < cosThetaMin) {
-    G4double q        = p->GetPDGCharge()/eplus;
-    G4double q2       = q*q;
-    G4double invbeta2 = 1.0 +  m*m/mom2;
-    G4double Ae = 2.0*ScreeningParameter(Z, q2, mom2, invbeta2);
-    G4double x1 = 1.0 - cosThetaMin + Ae;
-    G4double x2 = 1.0 - cosTetMaxElec + Ae;
-    cross = coeff*Z*q2*invbeta2*(1./x1 - 1./x2)/mom2;
-  }
+  //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
+  //	 << " cross(b)= " << cross/barn
+  //	 << " ctmin= " << cosThetaMin
+  //	 << " ctmax= " << cosTetMaxNuc       
+  //	 << G4endl;
   return cross;
 }
 
@@ -254,54 +188,49 @@ G4double G4eCoulombScatteringModel::CalculateECrossSectionPerAtom(
 void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 						  const G4MaterialCutsCouple* couple,
 						  const G4DynamicParticle* dp,
-						  G4double ecut,
+						  G4double,
 						  G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
   
   G4double kinEnergy = dp->GetKineticEnergy();
+  SetupKinematic(p, kinEnergy);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = elm->GetN();
 
-  G4double costm = cosThetaMax;
-  G4double Cn = 0.0;
+  //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries: e(MeV)= " << tkin 
+  //	 << " ctmin= " << cosThetaMin
+  //	 << " ctmax= " << cosTetMaxNuc 
+  //	 << " Z= " << Z << " A= " << A
+  //	 << G4endl;
 
-  // recompute cross sections
-  ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, ecut, kinEnergy);
+  if(cosTetMaxNuc >= cosThetaMin) return; 
 
-  // is scattering on nucleaus or on electron?
-  G4int iz = G4int(Z);
-  if(G4UniformRand()*(nucXS[iz] + elXS[iz]) > nucXS[iz]) {
-    costm = cosTetMaxElec;
-  } else {
-    Cn = nuc[iz];
-    costm = cosTetMaxNuc;
-  }
+  SetupTarget(Z, A, kinEnergy);
 
-  if(costm >= cosThetaMin) return; 
-
-  G4double Ae = ae[iz];
-  G4double x1 = 1. - cosThetaMin + Ae;
-  G4double x2 = 1. - costm;
-  G4double x3 = cosThetaMin - costm;
+  G4double x1 = 1. - cosThetaMin + screenZ;
+  G4double x2 = 1. - cosTetMaxNuc;
+  G4double x3 = cosThetaMin - cosTetMaxNuc;
   G4double cost, st2, grej,  z, z1; 
   do {
     z  = G4UniformRand()*x3;
-    z1 = (x1*x2 - Ae*z)/(x1 + z);
+    z1 = (x1*x2 - screenZ*z)/(x1 + z);
     if(z1 < 0.0) z1 = 0.0;
     else if(z1 > 2.0) z1 = 2.0;
     cost = 1.0 - z1;
     st2  = z1*(2.0 - z1);
-    grej = 1.0/(1.0 + Cn*st2);
+    grej = 1.0/(1.0 + formfactA*st2);
   } while ( G4UniformRand() > grej*grej );  
   
   G4double sint= sqrt(st2);
 
-  // G4cout<<"G4eCoulombScatteringModel::SampleSecondaries: e(MeV)= " << kinEnergy
-  //	<< " theta= " << tet << "  Z= " << Z << "  a= " << a << G4endl;
+  //  G4cout<<"SampleSecondaries: e(MeV)= " << kinEnergy
+  //	<< " cost= " << cost << "  Z= " << Z << "  a= " << screenZ 
+  //	<< " cn= " << formfactA
+  //	<< G4endl;
 
   G4double phi  = twopi * G4UniformRand();
 

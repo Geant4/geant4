@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.11 2007-08-13 10:07:23 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.12 2007-08-14 09:43:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,15 +85,11 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double Z, G4double A)
 {
   G4double cross= 0.0;
-  //  G4cout << " G4CoulombScatteringModel::CalculateCrossSectionPerAtom for "
-  //	 << p->GetParticleName() << G4endl;
-  G4int iz      = G4int(Z);
-  G4double m    = p->GetPDGMass();
-  G4double tkin = std::max(keV, kinEnergy);
-  G4double mom2 = tkin*(tkin + 2.0*m);
+  SetupKinematic(p, std::max(keV, kinEnergy));
 
-  G4double mass2= m*m;
+  G4int iz      = G4int(Z);
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
+
   G4double etot = tkin + m;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
@@ -105,28 +101,22 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
   // G4cout << " CM. mom= " << momCM  << " m= " << m 
   // << " m1= " << m1 << " iz= " << iz <<G4endl;
 
-  G4double momCM2 = momCM*momCM;
-  cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
+  mom2 = momCM*momCM;
+  cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(1 == iz && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
   //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
   // Cross section in CM system 
   if(cosTetMaxNuc < cosThetaMin) {
-    G4double q        = p->GetPDGCharge()/eplus;
-    G4double q2       = q*q;
-    G4double invbeta2 = 1.0 +  mass2/momCM2;
+    mass *= m1/(mass + m1);
+    invbeta2 = 1.0 +  mass*mass/mom2;
+    SetupTarget(Z, A, tkin);
 
-    // screening parameters in lab system
-    G4double Ae = 2.0*ScreeningParameter(Z, q2, momCM2, invbeta2);
-    G4double Cn = NuclearSizeParameter(A, momCM2);
-    ae[iz] = Ae;
-    nuc[iz]= Cn;
-
-    G4double x1 = 1.0 - cosThetaMin + Ae;
-    G4double x2 = 1.0 - cosTetMaxNuc + Ae;
-    G4double fq = q * m1 /(m + m1);
-    cross = coeff*Z*Z*fq*fq*invbeta2*(1./x1 - 1./x2 - Cn*(2.*log(x2/x1) - 1.))/momCM2;
+    G4double x1 = 1.0 - cosThetaMin + screenZ;
+    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
+    cross = coeff*Z*Z*chargeSquare*invbeta2
+      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/mom2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
-    //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 << " coeff= " << coeff << G4endl;
+    //G4cout << "momCM2= " << mom2 << " invbeta2= " << invbeta2 << " coeff= " << coeff << G4endl;
   }
   //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM << "  Z= " << Z << "  A= " << A 
   //	 << " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
@@ -163,7 +153,7 @@ G4double G4CoulombScatteringModel::SelectIsotope(const G4Element* elm)
 void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 						 const G4MaterialCutsCouple* couple,
 						 const G4DynamicParticle* dp,
-						 G4double ecut,
+						 G4double,
 						 G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
@@ -171,64 +161,44 @@ void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
   // kinematic in lab system
   G4double kinEnergy = dp->GetKineticEnergy();
+  SetupKinematic(p, kinEnergy);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = SelectIsotope(elm);
+  G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
+  G4double m1 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
 
   //  G4cout << "SampleSec: Ekin= " << kinEnergy << " m1= " << m1 
   // << " Z= "<< Z << " A= " <<A<< G4endl; 
 
-  G4double costm = cosThetaMax;
-  G4double Cn = 0.0;
 
-  // recompute cross sections
-  ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, ecut, kinEnergy);
+  if(cosTetMaxNuc >= cosThetaMin) return; 
 
-  // is scattering on nucleaus or on electron?
-  G4int iz = G4int(Z);
-  G4double m1;
-  if(G4UniformRand()*(nucXS[iz] + elXS[iz]) > nucXS[iz]) {
-    costm = cosTetMaxElec;
-    m1 = electron_mass_c2;
-  } else {
-    Cn = nuc[iz];
-    costm = cosTetMaxNuc;
-    m1 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
-  }
-
-  if(costm >= cosThetaMin) return; 
+  SetupTarget(Z, A, tkin);
 
   G4ThreeVector dir = dp->GetMomentumDirection(); 
 
-  //
-  G4double m    = p->GetPDGMass();
-  G4double mom2 = kinEnergy*(kinEnergy + 2.0*m);
-
-  G4double etot = kinEnergy + m;
+  G4double etot = kinEnergy + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
   G4double pCM  = gam*(ptot - bet*etot);
   G4double eCM  = gam*(etot - bet*ptot);
 
-  //  G4cout << "momCM= " << p1tot << G4endl;
-
-  G4double Ae = ae[iz];
-
-  G4double x1 = 1. - cosThetaMin + Ae;
-  G4double x2 = 1. - costm;
-  G4double x3 = cosThetaMin - costm;
+  G4double x1 = 1. - cosThetaMin + screenZ;
+  G4double x2 = 1. - cosTetMaxNuc;
+  G4double x3 = cosThetaMin - cosTetMaxNuc;
   G4double cost, st2, grej,  z, z1; 
   do {
     z  = G4UniformRand()*x3;
-    z1 = (x1*x2 - Ae*z)/(x1 + z);
+    z1 = (x1*x2 - screenZ*z)/(x1 + z);
     if(z1 < 0.0) z1 = 0.0;
     else if(z1 > 2.0) z1 = 2.0;
     cost = 1.0 - z1;
     st2  = z1*(2.0 - z1);
-    grej = 1.0/(1.0 + Cn*st2);
+    grej = 1.0/(1.0 + formfactA*st2);
     //G4cout << "majorant= " << grej << " cost= " << cost << G4endl;
   } while ( G4UniformRand() > grej*grej );  
 
@@ -246,9 +216,9 @@ void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
   G4double elab = gam*(eCM + bet*pzCM);
-  if(elab < m) elab = m;
-  G4double plab = sqrt((elab - m)*(elab + m));
-  fParticleChange->SetProposedKineticEnergy(elab - m);
+  if(elab < mass) elab = mass;
+  G4double plab = sqrt((elab - mass)*(elab + mass));
+  fParticleChange->SetProposedKineticEnergy(elab - mass);
 
   // recoil
   G4double ekin = etot - elab;
