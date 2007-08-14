@@ -50,7 +50,7 @@ namespace AIDA{
   class ITree; 
   class IAnalysisFactory;
   class ITreeFactory;
-};
+}
 
 class HadrontherapyAnalysisManager
 {
@@ -141,6 +141,4 @@ private:
 };
 #endif
 #endif
-
-
 
