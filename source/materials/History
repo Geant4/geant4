@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2007-08-14 14:49:48 vnivanch Exp $
+$Id: History,v 1.93 2007-08-14 15:04:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -39,11 +39,10 @@ G4Material, G4Element - fix destructors, now all materials and elements
 15-06-07 V.Ivanchenko (materials-V08-03-01)
 - G4SandiaTable - fixed non-initilised pointer in constructor, int -> G4int
 
-14-08-07 V.Ivanchenko (materials-V08-03-00a)
-- only fix in G4NistElementBuilder included into patch
-
 14-06-07 V.Ivanchenko (materials-V08-03-00)
 - G4SandiaTable - added deletion of elements of the table in destructor
+
+14-08-07 V.Ivanchenko (materials-V08-03-00a)
 - G4NistElementBuilder - protection (Z>=limitNumElements) inside BuildElement
                          (Mokka request)
 
