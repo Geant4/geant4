@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.1 2007-07-31 09:45:38 vnivanch Exp $
+// $Id: Histo.hh,v 1.2 2007-08-14 15:08:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -83,6 +83,8 @@ public:
 
   void scale(G4int, G4double);
 
+  void activate(G4int, G4bool);
+
   void addTuple(const G4String&, const G4String&, const G4String&);
   // In this method nTuple is booked
 
@@ -112,7 +114,7 @@ private:
   AIDA::ITuple*   ntup;
   AIDA::ITree*    tree;
   //  HistoMessenger* messenger;
-  std::vector<G4int>     active;
+  std::vector<G4bool>    active;
   std::vector<G4int>     bins;
   std::vector<G4double>  xmin;
   std::vector<G4double>  xmax;
