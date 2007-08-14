@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.8 2007-08-14 09:43:00 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.hh,v 1.9 2007-08-14 17:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,8 +98,6 @@ private:
 
   G4ParticleTable*            theParticleTable; 
   const G4NistManager*        theMatManager;
-  const G4ParticleDefinition* theProton;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

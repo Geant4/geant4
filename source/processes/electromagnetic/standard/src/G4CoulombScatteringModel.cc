@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.13 2007-08-14 16:14:24 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.14 2007-08-14 17:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,7 +69,6 @@ G4CoulombScatteringModel::G4CoulombScatteringModel(
 {
   theMatManager    = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theProton        = G4Proton::Proton();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -152,11 +151,11 @@ G4double G4CoulombScatteringModel::SelectIsotope(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-						 const G4MaterialCutsCouple* couple,
-						 const G4DynamicParticle* dp,
-						 G4double,
-						 G4double)
+void G4CoulombScatteringModel::SampleSecondaries(
+			       std::vector<G4DynamicParticle*>* fvect,
+			       const G4MaterialCutsCouple* couple,
+			       const G4DynamicParticle* dp,
+			       G4double, G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -229,7 +228,7 @@ void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   // recoil
   ekin = kinEnergy - ekin;
   if(ekin > Z*aMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
-    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
+    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, ekin);
     fvect->push_back(newdp);

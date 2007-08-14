@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.11 2007-08-14 16:14:24 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.12 2007-08-14 17:10:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,6 +113,7 @@ private:
 
 protected:
 
+  const G4ParticleDefinition* theProton;
   G4ParticleChangeForGamma* fParticleChange;
 
   G4double                  coeff;
@@ -121,7 +122,6 @@ protected:
   G4double                  cosThetaMax;
   G4double                  cosTetMaxNuc;
   G4double                  q2Limit;
-  G4double                  nucXS[100];
 
   // projectile
   const G4ParticleDefinition* particle;
@@ -143,7 +143,6 @@ private:
 
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
-  const G4ParticleDefinition* theProton;
 
   G4PhysicsTable*           theCrossSectionTable; 
 
@@ -169,15 +168,12 @@ inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double A,
 		G4double, G4double)
 {
-  G4int iz = G4int(Z);
   G4bool b;
   G4double x = 0.0;
   if(theCrossSectionTable) {
     x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
 		 ->GetValue(kinEnergy, b));
   } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
-
-  nucXS[iz] = x;
 
   //  G4cout << "G4eCoulombScatteringModel:ComputeCSPerAtom e= " << kinEnergy 
   //	 << " Z= " << Z
