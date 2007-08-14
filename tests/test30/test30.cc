@@ -985,7 +985,7 @@ int main(int argc, char** argv)
     }
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
-  } while(end);
+  }
 
   delete mate;
   delete fin;

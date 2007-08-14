@@ -14,8 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-00-02  14 August 2007 V.Ivanchenko
+- test30 - fix end of run
+
 test30-V09-00-01  11 August 2007 V.Ivanchenko
-- add QGSP and QDSC
+- add QGSP and QGSC
 
 test30-V09-00-00  30 July 2007 V.Ivanchenko
 - add Histo class, gamma energy, proton double differential
