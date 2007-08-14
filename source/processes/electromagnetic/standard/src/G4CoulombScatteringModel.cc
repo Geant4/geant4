@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.12 2007-08-14 09:43:00 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.13 2007-08-14 16:14:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,11 +86,12 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
 {
   G4double cross= 0.0;
   SetupKinematic(p, std::max(keV, kinEnergy));
+  SetupTarget(Z, A, tkin);
 
   G4int iz      = G4int(Z);
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
 
-  G4double etot = tkin + m;
+  G4double etot = tkin + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
@@ -101,25 +102,26 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
   // G4cout << " CM. mom= " << momCM  << " m= " << m 
   // << " m1= " << m1 << " iz= " << iz <<G4endl;
 
-  mom2 = momCM*momCM;
-  cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+  G4double momCM2 = momCM*momCM;
+  cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
   if(1 == iz && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
   //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
   // Cross section in CM system 
   if(cosTetMaxNuc < cosThetaMin) {
-    mass *= m1/(mass + m1);
-    invbeta2 = 1.0 +  mass*mass/mom2;
-    SetupTarget(Z, A, tkin);
+    G4double effmass = mass*m1/(mass + m1);
+    invbeta2 = 1.0 +  effmass*effmass/momCM2;
 
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
     cross = coeff*Z*Z*chargeSquare*invbeta2
-      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/mom2;
+      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
-    //G4cout << "momCM2= " << mom2 << " invbeta2= " << invbeta2 << " coeff= " << coeff << G4endl;
+    //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
+    //       << " coeff= " << coeff << G4endl;
   }
-  //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM << "  Z= " << Z << "  A= " << A 
-  //	 << " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
+  //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM 
+  //         << "  Z= " << Z << "  A= " << A 
+  //	     << " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
   return cross;
 }
 
@@ -169,22 +171,25 @@ void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
   G4double m1 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
+  SetupTarget(Z, A, tkin);
 
   //  G4cout << "SampleSec: Ekin= " << kinEnergy << " m1= " << m1 
   // << " Z= "<< Z << " A= " <<A<< G4endl; 
-
-
-  if(cosTetMaxNuc >= cosThetaMin) return; 
-
-  SetupTarget(Z, A, tkin);
-
-  G4ThreeVector dir = dp->GetMomentumDirection(); 
 
   G4double etot = kinEnergy + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
   G4double pCM  = gam*(ptot - bet*etot);
+
+  G4double momCM2 = pCM*pCM;
+  cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
+  if(1 == iz && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
+
+  if(cosTetMaxNuc >= cosThetaMin) return; 
+
+  G4ThreeVector dir = dp->GetMomentumDirection(); 
+
   G4double eCM  = gam*(etot - bet*ptot);
 
   G4double x1 = 1. - cosThetaMin + screenZ;
@@ -210,18 +215,19 @@ void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4ThreeVector mom(ptot*dir.x(),ptot*dir.y(),ptot*dir.z());
 
   // projectile after scattering
-  G4double pzCM = ptot*cost;
+  G4double pzCM = pCM*cost;
   G4ThreeVector v1(pCM*cos(phi)*sint,pCM*sin(phi)*sint,gam*(pzCM + bet*eCM));
   G4ThreeVector newDirection = v1.unit();
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
   G4double elab = gam*(eCM + bet*pzCM);
-  if(elab < mass) elab = mass;
-  G4double plab = sqrt((elab - mass)*(elab + mass));
-  fParticleChange->SetProposedKineticEnergy(elab - mass);
+  G4double ekin = elab - mass;
+  if(ekin < 0.0) ekin = 0.0;
+  G4double plab = sqrt(ekin*(elab + mass));
+  fParticleChange->SetProposedKineticEnergy(ekin);
 
   // recoil
-  G4double ekin = etot - elab;
+  ekin = kinEnergy - ekin;
   if(ekin > Z*aMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
     G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
