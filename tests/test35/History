@@ -14,7 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-test30-V09-00-00  31 July 2007 V.Ivanchenko
+test35-V09-00-01  14 August 2007 V.Ivanchenko
+- Histo.hh - use bool vector of active histograms
+
+test35-V09-00-00  31 July 2007 V.Ivanchenko
 - add Histo class
 
 test35-V08-03-00 24 May 2007  V.Ivanchenko 
