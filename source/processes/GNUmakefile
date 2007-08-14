@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.38 2007-05-31 08:12:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.39 2007-08-14 17:30:54 dennis Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -68,6 +68,7 @@ SUBDIRS += hadronic/models/isotope_production
 SUBDIRS += hadronic/models/leading_particle
 SUBDIRS += hadronic/models/lll_fission
 SUBDIRS += hadronic/models/low_energy
+SUBDIRS += hadronic/models/rpg
 SUBDIRS += hadronic/models/management
 SUBDIRS += hadronic/models/neutron_hp
 SUBDIRS += hadronic/models/parton_string/diffraction
@@ -96,6 +97,7 @@ SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
+SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
