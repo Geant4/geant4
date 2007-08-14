@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// $Id: G4PSPassageCurrent.cc,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCurrent
@@ -44,7 +44,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCurrent::G4PSPassageCurrent(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
+     weighted(true)
 {;}
 
 G4PSPassageCurrent::~G4PSPassageCurrent()
@@ -54,7 +55,7 @@ G4bool G4PSPassageCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
-    fCurrent = aStep->GetPreStepPoint()->GetWeight();
+    if(weighted) fCurrent = aStep->GetPreStepPoint()->GetWeight();
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCurrent);
   }

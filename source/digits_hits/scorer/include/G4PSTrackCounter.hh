@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackCounter.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSTrackCounter.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,15 +36,13 @@
 
 #include "G4PSDirectionFlag.hh"
 
-
-//////////////////////////////////////////////////////////////////////////////////
-// (Description)
-//   This is a primitive scorer class for scoring Number of Steps in the cell.
-// 
-// Created: 2007-02-02 Tsukasa ASO, Akinori Kimura.
-// 
 ///////////////////////////////////////////////////////////////////////////////
-
+// (Description)
+//   This is a primitive scorer class for scoring number of tracks in a cell.
+//
+// Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+//
+///////////////////////////////////////////////////////////////////////////////
 
 class G4PSTrackCounter : public G4VPrimitiveScorer
 {

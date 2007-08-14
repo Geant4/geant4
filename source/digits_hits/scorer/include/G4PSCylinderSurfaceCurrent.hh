@@ -24,66 +24,69 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSCylinderSurfaceCurrent.hh,v 1.1 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4PSNofSecondary_h
-#define G4PSNofSecondary_h 1
+#ifndef G4PSCylinderSurfaceCurrent_h
+#define G4PSCylinderSurfaceCurrent_h 1
 
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
-#include "G4ParticleTable.hh"
 
+#include "G4Tubs.hh"
+#include "G4PSDirectionFlag.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring Number of particles
-// generated in the geometry.
-// 
-// Created: 2005-11-18  Tsukasa ASO, Akinori Kimura.
-// Modified: 2007-03-23  Tsukasa ASO, Introduce SetSecondary() method for
-//                       specifying a particluar secondary. If the pointer
-//                       particleDef is not set, it accepts all secondaies.
-//                       But onece user sets it, it accepts only the particle.
+//   This is a primitive scorer class for scoring Surface Current.
+//  Current version assumes only for G4Tubs shape, and the surface
+//  is defined at the inner plane of the tubs.
+//   The current is given in the unit of area. 
+//    e.g.  (Number of tracks)/mm2.
 //
+// Surface is defined at the  inner surface of the tube. 
+// Direction                   R    R+dR
+//   0  IN || OUT            ->|<-  |      fCurrent_InOut
+//   1  IN                   ->|    |      fCurrent_In
+//   2  OUT                    |<-  |      fCurrent_Out
+//
+//
+// Created: 2007-03-21  Tsukasa ASO
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-class G4PSNofSecondary : public G4VPrimitiveScorer
+class G4PSCylinderSurfaceCurrent : public G4VPrimitiveScorer
 {
  
- public: // with description
-      G4PSNofSecondary(G4String name, G4int depth=0);
+  public: // with description
+      G4PSCylinderSurfaceCurrent(G4String name ,G4int direction, G4int depth=0);
+      virtual ~G4PSCylinderSurfaceCurrent();
 
-    // Scoring option
-      void SetParticle(const G4String& particleName);
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
+
+      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
+      // Divided by Area.
+
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-
-  public:
-      virtual ~G4PSNofSecondary();
+      G4int IsSelectedSurface(G4Step*,G4Tubs*);
 
   public: 
       virtual void Initialize(G4HCofThisEvent*);
       virtual void EndOfEvent(G4HCofThisEvent*);
       virtual void clear();
-
-  public:
       virtual void DrawAll();
       virtual void PrintAll();
 
   private:
-      G4int HCID;
+      G4int  HCID;
+      G4int  fDirection;
       G4THitsMap<G4double>* EvtMap;
-      G4ParticleDefinition* particleDef;
-
-  public:
-
-
+      G4bool weighted;
+      G4bool divideByArea;
 };
 
-
-
 #endif
+

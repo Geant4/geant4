@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2 2007-08-14 21:23:52 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
@@ -50,7 +50,8 @@
 
 G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
 {;}
 
 G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent()
@@ -69,18 +70,20 @@ G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
   if ( dirFlag > 0 ) {
-
-    G4double radi   = sphereSolid->GetInsideRadius();
-    G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
-    G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
-    G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
-    G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
-
-    G4double current = preStep->GetWeight(); // Current (Particle Weight)
-    current = current/square;  // Current with angle.
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
-      G4int index = GetIndex(aStep);
-      EvtMap->add(index,current);
+	G4double radi   = sphereSolid->GetInsideRadius();
+	G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
+	G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
+	G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
+	G4double current = 1.0;
+	if ( weighted) current = preStep->GetWeight(); // Current (Particle Weight)
+	if ( divideByArea ){
+	    G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
+	    current = current/square;  // Current with angle.
+	}
+
+	G4int index = GetIndex(aStep);
+	EvtMap->add(index,current);
     }
   }
 
@@ -150,9 +153,10 @@ void G4PSSphereSurfaceCurrent::PrintAll()
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
-    G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << *(itr->second)
-	   << G4endl;
+    G4cout << "  copy no.: " << itr->first  << "  current  : " ;
+    if ( divideByArea ) G4cout << *(itr->second)*cm*cm << " [/cm2]" ;
+    else G4cout << *(itr->second)*cm*cm << " [track]" ;
+    G4cout  << G4endl;
   }
 }
 

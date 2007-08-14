@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPopulation.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSPopulation.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,12 +37,12 @@
 
 #include "G4TrackLogger.hh"
 
-//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring Number of Steps in the cell.
-// 
+//   This is a primitive scorer class for scoring population in a cell.
+//
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 

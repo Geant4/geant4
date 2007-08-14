@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSMinKinEAtGeneration.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,10 +36,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring Number of particles
-// generated in the geometry.
-// 
-// Created: 2005-11-18  Tsukasa ASO, Akinori Kimura.
+//   This is a primitive scorer class for scoring minimum energy of
+//  newly produced particles in the geometry.
+//
+// Created: 2005-11-17  Tsukasa ASO, Akinori Kimura.
+//
 // 
 ///////////////////////////////////////////////////////////////////////////////
 

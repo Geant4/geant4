@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSTrackLength.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@
 // 
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
-// Modified: 2007-02-02 Tsukasa ASO, Add MultiolyKineticEnergy() 
+// Modified: 2007-02-02 Tsukasa ASO, Add MultiplyKineticEnergy() 
 //                                  and DivideByVelocity(). 
 //
 // 

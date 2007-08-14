@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSPassageCurrent.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,9 +50,10 @@ class G4PSPassageCurrent : public G4VPrimitiveScorer
  
   public: // with description
       G4PSPassageCurrent(G4String name, G4int depth=0);
-
-  public:
       virtual ~G4PSPassageCurrent();
+
+  inline void Weighted(G4bool flg=true) { weighted = flg; }
+  // Multiply track weight
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -72,8 +73,8 @@ class G4PSPassageCurrent : public G4VPrimitiveScorer
       G4int HCID;
       G4int fCurrentTrkID;
       G4double fCurrent;
-      G4double fCurrentSquare;
       G4THitsMap<G4double>* EvtMap;
+      G4bool  weighted;
 
 };
 

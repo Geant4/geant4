@@ -24,66 +24,63 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4SDCreatorProcessFilter.hh,v 1.1 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4PSNofSecondary_h
-#define G4PSNofSecondary_h 1
+#ifndef G4SDCreatorProcessFilter_h
+#define G4SDCreatorProcessFilter_h 1
 
-#include "G4VPrimitiveScorer.hh"
-#include "G4THitsMap.hh"
-#include "G4ParticleTable.hh"
+class G4Step;
+class G4VProcess;
+class G4ParticleDefinition;
+#include "globals.hh"
+#include "G4VSDFilter.hh"
+
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////
-// (Description)
-//   This is a primitive scorer class for scoring Number of particles
-// generated in the geometry.
-// 
-// Created: 2005-11-18  Tsukasa ASO, Akinori Kimura.
-// Modified: 2007-03-23  Tsukasa ASO, Introduce SetSecondary() method for
-//                       specifying a particluar secondary. If the pointer
-//                       particleDef is not set, it accepts all secondaies.
-//                       But onece user sets it, it accepts only the particle.
+// class description:
 //
+//  This is the class of a filter to be associated with a
+// sensitive detector. 
+//  This class filters steps by creator process of  partilce.
+// The acceptable process are given at constructor or add() method.
+//
+// Created: 2007-03-22  Tsukasa ASO.
+// Modified: 2007-08-14 T.Aso Process should be given as an G4VProcess Object
+//                      rather than processName because of dependency of 
+//                      category. 
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-class G4PSNofSecondary : public G4VPrimitiveScorer
+class G4SDCreatorProcessFilter : public G4VSDFilter 
 {
- 
- public: // with description
-      G4PSNofSecondary(G4String name, G4int depth=0);
 
-    // Scoring option
-      void SetParticle(const G4String& particleName);
+  public: // with description
+      G4SDCreatorProcessFilter(G4String name);
+      G4SDCreatorProcessFilter(G4String name,
+			const G4VProcess* process, const G4String& particleName );
+    // Constructors. Filter name and process's name.
+    //
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-
-  public:
-      virtual ~G4PSNofSecondary();
-
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
+      virtual ~G4SDCreatorProcessFilter();
+  // Destrcutor
 
   public:
-      virtual void DrawAll();
-      virtual void PrintAll();
+     void add(const G4VProcess* process, const G4String& particleName); 
+  
+  public: // with description
+      virtual G4bool Accept(const G4Step*) const;
+
+      void show();
 
   private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
-      G4ParticleDefinition* particleDef;
-
-  public:
-
-
+     typedef std::vector<const G4VProcess*>  G4SDProcessCollection; 
+     G4SDProcessCollection  theProcessDef;
+     typedef std::vector<G4ParticleDefinition*> G4SDParticleCollection;
+     G4SDParticleCollection theParticleDef;
 };
 
-
-
 #endif
+

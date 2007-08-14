@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// $Id: G4PSNofSecondary.cc,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofSecondary
@@ -38,7 +38,7 @@
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),particleDef(0)
 {;}
 
 G4PSNofSecondary::~G4PSNofSecondary()
@@ -50,12 +50,28 @@ G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   if ( aStep->GetTrack()->GetCurrentStepNumber() != 1) return FALSE;
   //- check for this is not a primary particle. e.g. ParentID > 0 .
   if ( aStep->GetTrack()->GetParentID() == 0 ) return FALSE;
+  //- check the particle if the partifle definition is given.
+  if ( particleDef && particleDef != aStep->GetTrack()->GetDefinition() )
+      return FALSE;
   //
   //- This is a newly produced secondary particle.
   G4int  index = GetIndex(aStep);
   G4double weight = aStep->GetPreStepPoint()->GetWeight();
   EvtMap->add(index,weight);  
   return TRUE;
+}
+
+void G4PSNofSecondary::SetParticle(const G4String& particleName){
+  G4ParticleDefinition* pd =
+      G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+  if(!pd) {
+      G4String msg = "Particle <";
+      msg += particleName;
+      msg += "> not found.";
+      G4Exception("G4SDParticleFilter::add()",
+		  "DetUtil0002",FatalException,msg);
+  }
+  particleDef = pd;
 }
 
 void G4PSNofSecondary::Initialize(G4HCofThisEvent* HCE)

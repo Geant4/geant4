@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSSphereSurfaceCurrent.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,6 +52,7 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 //   17-Nov-2005 Bug fix. square definition.
+// 31-Mar-2007 T.Aso, Add option for normalizing by the area.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,6 +62,11 @@ class G4PSSphereSurfaceCurrent : public G4VPrimitiveScorer
   public: // with description
       G4PSSphereSurfaceCurrent(G4String name, G4int direction, G4int depth=0);
       virtual ~G4PSSphereSurfaceCurrent();
+
+     inline void Weighted(G4bool flg=true) { weighted = flg; }
+     // Multiply track weight
+     inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
+     // Divided by Area.
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -77,6 +83,8 @@ class G4PSSphereSurfaceCurrent : public G4VPrimitiveScorer
       G4int  HCID;
       G4int  fDirection;
       G4THitsMap<G4double>* EvtMap;
+      G4bool weighted;
+      G4bool divideByArea;
 
 };
 

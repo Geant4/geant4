@@ -24,66 +24,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux.hh,v 1.1 2007-08-14 21:23:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4PSNofSecondary_h
-#define G4PSNofSecondary_h 1
+#ifndef G4PSCylinderSurfaceFlux_h
+#define G4PSCylinderSurfaceFlux_h 1
 
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
-#include "G4ParticleTable.hh"
-
+#include "G4Tubs.hh"
+#include "G4PSDirectionFlag.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring Number of particles
-// generated in the geometry.
-// 
-// Created: 2005-11-18  Tsukasa ASO, Akinori Kimura.
-// Modified: 2007-03-23  Tsukasa ASO, Introduce SetSecondary() method for
-//                       specifying a particluar secondary. If the pointer
-//                       particleDef is not set, it accepts all secondaies.
-//                       But onece user sets it, it accepts only the particle.
+//   This is a primitive scorer class for scoring Surface Flux.
+//  Current version assumes only for G4Tubs shape, and the surface
+//  is defined at the inner plane of the tube.
+//   The surface flux is given in the unit of area. 
+//    e.g.  sum of 1/cos(T)/mm2,  where T is a incident angle of the
+//                                track on the surface.
 //
+//
+// Surface is defined at the inner surface of the tubs.
+// Direction                   R   R+dR
+//   0  IN || OUT            ->|<-  |        fFlux_InOut
+//   1  IN                   ->|    |        fFlux_In
+//   2  OUT                    |<-  |        fFlux_Out
+//
+// Created: 2007-03-29  Tsukasa ASO
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-class G4PSNofSecondary : public G4VPrimitiveScorer
+class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
 {
- 
- public: // with description
-      G4PSNofSecondary(G4String name, G4int depth=0);
-
-    // Scoring option
-      void SetParticle(const G4String& particleName);
+  public: // with description
+      G4PSCylinderSurfaceFlux(G4String name,G4int direction, G4int depth=0);
+      virtual ~G4PSCylinderSurfaceFlux();
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-
-  public:
-      virtual ~G4PSNofSecondary();
+      G4int IsSelectedSurface(G4Step*,G4Tubs*);
 
   public: 
       virtual void Initialize(G4HCofThisEvent*);
       virtual void EndOfEvent(G4HCofThisEvent*);
       virtual void clear();
-
-  public:
       virtual void DrawAll();
       virtual void PrintAll();
 
   private:
-      G4int HCID;
+      G4int  HCID;
+      G4int  fDirection;
       G4THitsMap<G4double>* EvtMap;
-      G4ParticleDefinition* particleDef;
-
-  public:
-
 
 };
 
-
-
 #endif
+
