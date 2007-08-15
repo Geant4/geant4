@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.14 2007-08-14 17:10:33 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.15 2007-08-15 09:24:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,8 +84,7 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double Z, G4double A)
 {
   G4double cross= 0.0;
-  SetupKinematic(p, std::max(keV, kinEnergy));
-  SetupTarget(Z, A, tkin);
+  SetupTarget(Z, A, std::max(keV, kinEnergy));
 
   G4int iz      = G4int(Z);
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
@@ -112,8 +111,8 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
 
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*Z*chargeSquare*invbeta2
-      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
+    cross = coeff*Z*(Z + 1.0)*chargeSquare*invbeta2
+      *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
     //       << " coeff= " << coeff << G4endl;
@@ -162,7 +161,6 @@ void G4CoulombScatteringModel::SampleSecondaries(
 
   // kinematic in lab system
   G4double kinEnergy = dp->GetKineticEnergy();
-  SetupKinematic(p, kinEnergy);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
@@ -170,7 +168,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
   G4double m1 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
-  SetupTarget(Z, A, tkin);
+  SetupTarget(Z, A, kinEnergy);
 
   //  G4cout << "SampleSec: Ekin= " << kinEnergy << " m1= " << m1 
   // << " Z= "<< Z << " A= " <<A<< G4endl; 

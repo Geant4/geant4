@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.17 2007-08-14 16:14:24 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.18 2007-08-15 09:24:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,6 +119,14 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
       fParticleChange = new G4ParticleChangeForGamma();
   }
 
+  // Initialise mass and charge
+  if(p != particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+  }
+
   if(!buildTable || p->GetParticleName() == "GenericIon") return;
 
   // Compute log cross section table
@@ -163,14 +171,13 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double Z, G4double A)
 {
   G4double cross = 0.0;
-  SetupKinematic(p, std::max(keV, kinEnergy));
-  SetupTarget(Z, A, tkin);
+  SetupTarget(Z, A, std::max(keV, kinEnergy));
 
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*Z*chargeSquare*invbeta2
-      *((1./x1 - 1./x2)*(1.0 + 1.0/Z) - formfactA*(2.*log(x2/x1) - 1.))/mom2;
+    cross = coeff*Z*(Z + 1.)*chargeSquare*invbeta2
+      *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/mom2;
   }
   //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
   //	 << " cross(b)= " << cross/barn
@@ -192,7 +199,6 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
   const G4ParticleDefinition* p = dp->GetDefinition();
   
   G4double kinEnergy = dp->GetKineticEnergy();
-  SetupKinematic(p, kinEnergy);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();

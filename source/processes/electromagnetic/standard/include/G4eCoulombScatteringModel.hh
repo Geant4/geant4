@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.12 2007-08-14 17:10:33 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.13 2007-08-15 09:24:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,7 +101,7 @@ protected:
 					 G4double kinEnergy, 
 					 G4double Z, G4double A);
 
-  inline void SetupKinematic(const G4ParticleDefinition*, G4double kinEnergy);
+  inline void SetupKinematic(G4double kinEnergy);
   
   inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy); 
 
@@ -133,7 +133,6 @@ protected:
   G4double                  invbeta2;
 
   // target
-  G4double                  kineticEnergy;
   G4double                  targetZ;
   G4double                  targetA;
   G4double                  screenZ;
@@ -174,24 +173,14 @@ inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
     x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
 		 ->GetValue(kinEnergy, b));
   } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
-
-  //  G4cout << "G4eCoulombScatteringModel:ComputeCSPerAtom e= " << kinEnergy 
-  //	 << " Z= " << Z
-  //       << "  CS= " << x << G4endl;
   return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4eCoulombScatteringModel::SetupKinematic(
-		const G4ParticleDefinition* p, 
-		G4double ekin)
+inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin)
 {
-  if(ekin != tkin || p != particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
+  if(ekin != tkin) {
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
@@ -203,10 +192,10 @@ inline void G4eCoulombScatteringModel::SetupKinematic(
 inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A, 
 						   G4double e)
 {
-  if(Z != targetZ || A != targetA || e != kineticEnergy) {
+  if(e != tkin || Z != targetZ || A != targetA) {
     targetZ = Z;
     targetA = A;
-    kineticEnergy = e;
+    SetupKinematic(e);
     screenZ = a0/mom2;
     cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
     if(Z > 1.5) screenZ *= std::pow(Z,0.6666667)
