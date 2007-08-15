@@ -6,6 +6,15 @@
 
 List of fixes included in this public patch since the public release 8.3:
 
+  o Configuration:
+    -------------
+    + liblist.c: fixed problem affecting recent CygWin installations on
+      Windows in parsing the buffer for the generation of libname.map.
+    + binmake.gmk: defined OUT internal variable specifying the proper
+      compilation/linking option to Unix or Windows compilers: '-o '
+      and '/Fe' respectively. Cleared <TAB> characters where not necessary.
+    + SUN-CC.gmk: forced -xO2 as optimisation level.
+
   o Geometry:
     --------
     + magneticfield:
@@ -43,14 +52,9 @@ List of fixes included in this public patch since the public release 8.3:
         sampling the momentum transfer. Fixed array bound violation which
         caused in some rare occasions an infinite loop.
 
-  o Configuration:
+  o Physics Lists:
     -------------
-    + liblist.c: fixed problem affecting recent CygWin installations on
-      Windows in parsing the buffer for the generation of libname.map.
-    + binmake.gmk: defined OUT internal variable specifying the proper
-      compilation/linking option to Unix or Windows compilers: '-o '
-      and '/Fe' respectively. Cleared <TAB> characters where not necessary.
-    + SUN-CC.gmk: forced -xO2 as optimisation level.
+    + Correct use of QElasticPhysics in QGSP_QEL list.
 
  ----------------------------------------------------------------------------
 
