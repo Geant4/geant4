@@ -16,6 +16,7 @@ track of all tags.
 
 test30-V09-00-02  14 August 2007 V.Ivanchenko
 - test30 - fix end of run
+- Histo - fix destructor
 
 test30-V09-00-01  11 August 2007 V.Ivanchenko
 - add QGSP and QGSC
