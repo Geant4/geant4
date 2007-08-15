@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
+// $Id: G4RPGInelastic.cc,v 1.2 2007-08-15 20:38:25 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -279,7 +279,7 @@ void G4RPGInelastic::CalculateMomenta(
                                   targetParticle, targetHasChanged,
                                   targetNucleus, currentParticle,
                                   vec, vecLen,
-                                  false, leadingStrangeParticle);
+                                  leadFlag, leadingStrangeParticle);
 
   if( finishedGenXPt )
   {
@@ -327,7 +327,7 @@ void G4RPGInelastic::CalculateMomenta(
                                  targetParticle, targetHasChanged,
                                  targetNucleus, currentParticle,
                                  vec, vecLen,
-                                 false, leadingStrangeParticle);
+                                 leadFlag, leadingStrangeParticle);
     }
      catch(G4HadReentrentException aC)
     {

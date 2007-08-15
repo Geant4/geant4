@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
+// $Id: G4RPGTwoBody.cc,v 1.2 2007-08-15 20:38:37 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
               G4bool& /*incidentHasChanged*/,
               const G4DynamicParticle* originalTarget,
               G4ReactionProduct& targetParticle,
-              G4bool& targetHasChanged,
+              G4bool& /*targetHasChanged*/,
               const G4Nucleus& targetNucleus,
               G4ReactionProduct& currentParticle,
               G4FastVector<G4ReactionProduct,256>& vec,

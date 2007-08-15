@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
+// $Id: G4RPGFragmentation.cc,v 1.2 2007-08-15 20:38:01 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -913,16 +913,13 @@ ReactionStage(const G4HadProjectile* originalIncident,
     targetParticle.Lorentz( targetParticle, pseudoParticle[1] );    
     for( i=0; i<vecLen; ++i ) vec[i]->Lorentz( *vec[i], pseudoParticle[1] );
 
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-    //
-    // leadFlag will be true
-    //  iff original particle is at least as heavy as K+ and not a proton or 
-    //  neutron AND if incident particle is at least as heavy as K+ and it is 
-    //  not a proton or neutron leadFlag is set to the incident particle
-    //  or
-    //  target particle is at least as heavy as K+ and it is not a proton or 
-    //  neutron leadFlag is set to the target particle
-    //
+    // leadFlag will be true if original particle and incident particle are
+    // both strange, in which case the incident particle becomes the leading 
+    // particle. 
+    // leadFlag will also be true if the target particle is strange, but the
+    // incident particle is not, in which case the target particle becomes the 
+    // leading particle.
+
     G4bool leadingStrangeParticleHasChanged = true;
     if( leadFlag )
     {
@@ -1145,7 +1142,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
       const G4double kineticFactor = -0.010;
       G4double sprob = 0.0; // sprob = probability of self-absorption in heavy molecules
       const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
-      // DHW      if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
+      if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
       if( epnb >= pnCutOff )
       {
         npnb = G4Poisson((1.5+1.25*numberofFinalStateNucleons)*epnb/(epnb+edta));

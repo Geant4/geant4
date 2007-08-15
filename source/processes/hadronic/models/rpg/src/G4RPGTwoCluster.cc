@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoCluster.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
+// $Id: G4RPGTwoCluster.cc,v 1.2 2007-08-15 20:38:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -554,13 +554,11 @@ ReactionStage(const G4HadProjectile* originalIncident,
   if( leadFlag )
   {
     // leadFlag will be true
-    //  iff original particle is at least as heavy as K+ and not a proton or 
-    //  neutron AND if incident particle is at least as heavy as K+ and it is
-    //  not a proton or neutron leadFlag is set to the incident particle
+    //  iff original particle is strange AND if incident particle is strange
+    //  leadFlag is set to the incident particle
     //  or
-    //  target particle is at least as heavy as K+ and it is not a proton or 
-    //  neutron leadFlag is set to the target particle
-    //
+    //  target particle is strange leadFlag is set to the target particle
+
     if( currentParticle.GetDefinition() == leadingStrangeParticle.GetDefinition() )
       dum = false;
     else if( targetParticle.GetDefinition() == leadingStrangeParticle.GetDefinition() )
@@ -786,7 +784,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     G4double sprob = 0.0;   // sprob = probability of self-absorption in 
                             // heavy molecules
     const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
-    //     if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
+    if( ekIncident >= 5.0 )sprob = std::min( 1.0, 0.6*std::log(ekIncident-4.0) );
       
     if( epnb >= pnCutOff )
     {
