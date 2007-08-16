@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.78 2007-08-13 14:47:48 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.79 2007-08-16 14:03:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -89,7 +89,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000
   G4LorentzVector p(0.,0.,0.,mass);
   Set4Momentum(p);
   SetNFragments(0);
-#ifdef pardeb
+#ifdef pdebug
   G4cout<<"G4QNucleus::Constructor:(2) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
         <<", R="<<mediRatio<<G4endl;
 #endif
@@ -380,7 +380,8 @@ G4int G4QNucleus::UpdateClusters(G4bool din) // din true means use only dense nu
   //static const G4double prQ = 1.0;         // relative probability for a Quasmon
   //static const G4double prQ = 0.;          //@@for pi@@relative probability for Quasmon
   G4double probSInt[254];                    // integrated static probabilities @@ not used
-  for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinit to avoid the postinit
+  probVect[0]=mediRatio;
+  for (G4int in=1; in<256; in++) probVect[in]=0.; // Make preinit to avoid the postinit
   probSInt[0]=0;                             // integrated static probabilities
   dZ=0;
   dN=0;
@@ -2731,6 +2732,9 @@ void G4QNucleus::InitCandidateVector(G4QCandidateVector& theQCandidates,
 #ifdef debug
   G4int ind=0;
 #endif
+  G4int iQC = theQCandidates.size();
+  if(iQC) for(G4int jq=0; jq<iQC; jq++) delete theQCandidates[jq];
+  theQCandidates.clear();
   if(maxMes>nOfMesons) maxMes=nOfMesons;
   if(maxMes>=0) for (i=0; i<maxMes; i++) 
   {
@@ -3130,6 +3134,9 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   //if(!B) wD=0.;
   // ^^^^^^^---> End of Themporary 3
   G4double GSM=GetGSMass();
+#ifdef debug
+		G4cout<<"G4QNucl::CBPenProb:GSM="<<GSM<<",Z="<<Z<<",N="<<N<<",C="<<C<<",B="<<B<<G4endl;
+#endif
   if(2>3);
   // @@ Temporary "Mass Barrier for mesons" @@ __________________
   //else if(!B) wD=40.;
@@ -3169,10 +3176,17 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   ////else if(B>4)  return 1.;
   //else if(B>4)wD=G4QNucleus(Z-C,N-B+C,S).GetGSMass()+G4QNucleus(C,B-C,S).GetGSMass()-GSM;
   if(wD<0.) wD=0.;
+#ifdef debug
+		G4cout<<"G4QNucl::CBPenProb: wD="<<wD<<",E="<<E<<",CB="<<CB<<G4endl;
+#endif
   // @@ Temporary "Virial factor" @@ __________________
   wD=wD+wD;
 		// @@ End of Temporary^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   G4double sR=0.;
+  G4double CBD=CB+wD;
+  G4double ED=E+wD;
+  if(CBD<0.) return 1.;
+  if(ED<0.)  return 0.;
   //if(nA<27) sR=sqrt(wD/(E+wD));
   //else      sR=sqrt((CB+wD)/(E+wD));
   sR=sqrt((CB+wD)/(E+wD));
