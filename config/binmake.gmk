@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.128 2007-08-16 09:34:51 gcosmo Exp $
+# $Id: binmake.gmk,v 1.129 2007-08-16 09:46:02 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -264,16 +264,6 @@ LDLIBS3 += $(ANALYSISLIBS)
 
 endif # ifndef USER_DEFINED_LDLIBS
 
-# Define link option according to architecture
-#
-ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-# Unix
-  OUT        := -o 
-else
-# Windows
-  OUT        := /Fe
-endif
-
 # LDLIBS4 contains the next set of low level libraries which historically
 # (why?) the user is not supposed to be able to define...
 #
@@ -294,6 +284,7 @@ LDLIBS_PREFINAL += $(LDLIBS4)
 LDLIBS_KERNEL   += $(LDLIBS4)
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Windows
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
@@ -308,8 +299,11 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   else
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
+  OUT   := /Fe
 else
+  # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
+  OUT   := -o 
 endif
 
 ifdef transform-RPath
