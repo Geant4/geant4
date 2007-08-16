@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.111 2007-08-02 14:29:31 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.112 2007-08-16 14:51:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -828,7 +828,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
   G4ThreeVector prepoint = preStepPoint->GetPosition();
   G4ThreeVector dr = step.GetPostStepPoint()->GetPosition() - prepoint;
   G4double pretime = preStepPoint->GetGlobalTime();
-  G4double dt = length/preStepPoint->GetVelocity();
+  //  G4double dt = length/preStepPoint->GetVelocity();
   G4double fragment = 0.0;
 
   do {
@@ -838,7 +838,8 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 
     // sample secondaries
     secParticles.clear();
-    model->SampleSecondaries(&secParticles,track->GetMaterialCutsCouple(),dp,subcut,cut);
+    model->SampleSecondaries(&secParticles,track->GetMaterialCutsCouple(),
+			     dp,subcut,cut);
 
     // position of subcutoff particles
     G4ThreeVector r = prepoint + fragment*dr;
@@ -859,7 +860,8 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 	}
       }
       if(addSec) {
-	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
+	//	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
+	G4Track* t = new G4Track((*it), pretime, r);
 	t->SetTouchableHandle(track->GetTouchableHandle());
 	tracks.push_back(t);
 
