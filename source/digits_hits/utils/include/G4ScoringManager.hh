@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.5 2007-07-12 07:57:16 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.6 2007-08-16 12:00:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,6 +82,8 @@ class G4ScoringManager
       { return verboseLevel; }
       inline size_t GetNumberOfWorlds() const
       { return fMeshVec.size(); }
+      inline void RegisterScoringMesh(G4VScoringMesh * sc)
+      {fMeshVec.push_back(sc);}
       inline G4VScoringMesh* GetMesh(G4int i) const
       { return fMeshVec[i]; }
       inline G4String GetWorldName(G4int i) const
