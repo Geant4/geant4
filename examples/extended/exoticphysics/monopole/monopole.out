@@ -1,0 +1,84 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+<<< Geant4 Physics List engine packaging library: PACK 5.3
+<<< Geant4 Physics List simulation engine: QGSP 3.3
+
+
+***** Table : Nb of materials = 2 *****
+
+ Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: Galactic     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
+User actions are instantiated
+/run/verbose 0
+/testex/run/verbose 1
+/tracking/verbose 0
+/testex/det/setMat G4_Si
+/testex/det/setSizeX 10 cm
+/testex/det/setSizeYZ 20 cm
+/testex/det/setStepSize 0.2 mm
+/testex/run/binSize 0.2 mm
+/run/initialize
+
+---------------------------------------------------------
+---> The Absorber is 10 cm  of G4_Si
+
+---------------------------------------------------------
+### Adding Neutron tracking cut for neutron
+###  cut value is 10 microseconds
+G4MonopolePhysics::ConstructProcess
+/process/eLoss/verbose 0
+/testex/event/printModulo 10
+/gun/particle monopole
+/gun/energy 100 GeV
+/run/beamOn 100
+
+G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 19  Elowest(eV)= 0
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 920957765, 580137259
+----------------------------------------
+
+---> Begin of Event: 0
+
+---> Begin of Event: 10
+
+---> Begin of Event: 20
+
+---> Begin of Event: 30
+
+---> Begin of Event: 40
+
+---> Begin of Event: 50
+
+---> Begin of Event: 60
+
+---> Begin of Event: 70
+
+---> Begin of Event: 80
+
+---> Begin of Event: 90
+
+ The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
+
+ projected Range= 7.6273 cm    rms= 221.61 um 
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1960403491, 168857775
+----------------------------------------
