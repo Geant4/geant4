@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.127 2007-08-15 08:59:51 gcosmo Exp $
+# $Id: binmake.gmk,v 1.128 2007-08-16 09:34:51 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -191,12 +191,10 @@ ifdef G4EXLIB
   # Unix
     TARGETLIB  := -l$(G4TARGET)
     TARGOBJEXT := o
-    OUT        := -o 
   else
   # Windows
     TARGETLIB  := lib$(G4TARGET).a   
     TARGOBJEXT := OBJ   
-    OUT        := /Fe
   endif
 endif
 
@@ -265,6 +263,16 @@ LDLIBS3 += $(INTYLIBS)
 LDLIBS3 += $(ANALYSISLIBS)
 
 endif # ifndef USER_DEFINED_LDLIBS
+
+# Define link option according to architecture
+#
+ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+# Unix
+  OUT        := -o 
+else
+# Windows
+  OUT        := /Fe
+endif
 
 # LDLIBS4 contains the next set of low level libraries which historically
 # (why?) the user is not supposed to be able to define...

@@ -1,4 +1,4 @@
-$Id: History,v 1.299 2007-08-15 08:59:51 gcosmo Exp $
+$Id: History,v 1.300 2007-08-16 09:34:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th August 2007  Gabriele Cosmo (config-V09-00-04)
+- Corrected definition of OUT internal variable to allow for proper
+  linking also of unit tests.
 
 15th August 2007  Gabriele Cosmo (config-V09-00-03)
 - Added "rpg" hadronic model module to binmake.gmk.
