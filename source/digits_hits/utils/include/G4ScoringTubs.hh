@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.5 2007-08-18 05:16:53 akimura Exp $
+// $Id: G4ScoringTubs.hh,v 1.1 2007-08-18 05:16:53 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringBox_h
-#define G4ScoringBox_h 1
+#ifndef G4ScoringTubs_h
+#define G4ScoringTubs_h 1
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
@@ -40,22 +40,25 @@ class G4VPrimitiveScorer;
 
 #include <vector>
 
-class G4ScoringBox : public G4VScoringMesh
+class G4ScoringTubs : public G4VScoringMesh
 {
   public:
-      G4ScoringBox(G4String wName);
-      ~G4ScoringBox();
+      G4ScoringTubs(G4String wName);
+      ~G4ScoringTubs();
 
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
 
+  void SetRMinMax(G4double rMinMax[2]) {
+    for(int i = 0; i < 2; i++) fSize[i] = rMinMax[i];
+  }
+  void SetRMin(G4double rMin) {fSize[0] = rMin;}
+  void SetRMax(G4double rMax) {fSize[1] = rMax;}
+  void SetZSize(G4double zSize) {fSize[2] = zSize;}
   void SetSize(G4double size[3]) {
     for(int i = 0; i < 3; i++) fSize[i] = size[i];
   }
-  void SetXSize(G4double xSize) {fSize[0] = xSize;}
-  void SetYSize(G4double ySize) {fSize[1] = ySize;}
-  void SetZSize(G4double zSize) {fSize[2] = zSize;}
 
   void SetCenterPosition(G4double centerPosition[3]) {
     for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
@@ -66,30 +69,28 @@ class G4ScoringBox : public G4VScoringMesh
 
   void SetNumberOfSegment(G4int nSegment[3]) {
     for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
-}
-  void SetNumberOfXSegment(G4int nXSegment) {fNSegment[0] = nXSegment;}
-  void SetNumberOfYSegment(G4int nYSegment) {fNSegment[1] = nYSegment;}
+  }
+  void SetNumberOfRSegment(G4int nRSegment) {fNSegment[0] = nRSegment;}
+  void SetNumberOfPhiSegment(G4int nPhiSegment) {fNSegment[1] = nPhiSegment;}
   void SetNumberOfZSegment(G4int nZSegment) {fNSegment[2] = nZSegment;}
 
-  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;} // supports the r-direction only at present.
   void SetRotationMatrix(G4RotationMatrix * rmat) {fRotationMatrix = rmat;}
   void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
 
 private:
-  G4double fSize[3];
+  G4double fSize[3];  // 0: r-min., 1: r-max., 2: z-half length
   G4double fCenterPosition[3];
+  G4int fNSegment[3]; // 0: r , 1: phi, 2: z
+  G4int fSegmentDirection; // =1: r, =2: phi, =3: z
   G4RotationMatrix * fRotationMatrix;
-  G4int fNSegment[3];
-  G4int fSegmentDirection; // =1: x, =2: y, =3: z
   std::vector<G4double> fSegmentPositions;
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
-  void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
+  void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segParam[3][3]);
 };
-
-
 
 
 #endif
