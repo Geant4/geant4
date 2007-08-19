@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2007-04-27 10:38:11 maire Exp $
+// $Id: HistoManager.hh,v 1.5 2007-08-19 20:57:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,7 @@ class HistoManager
     void SetFileName   (const G4String& name) { fileName[0] = name;};
     void SetFileType   (const G4String& name) { fileType    = name;};
     void SetFileOption (const G4String& name) { fileOption  = name;};
-    void book(G4double);
+    void book();
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
@@ -71,7 +71,7 @@ class HistoManager
     
     void     SetcsdaRange(G4double val) {csdaRange = val;};
     G4double GetcsdaRange()             {return csdaRange;};
-    G4double GetStepMax()               {return stepMax;};
+    G4double ComputeStepMax(G4double);
     
   private:
 
@@ -92,8 +92,8 @@ class HistoManager
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
     
+    G4bool                   rangeFlag;    
     G4double                 csdaRange;
-    G4double                 stepMax; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

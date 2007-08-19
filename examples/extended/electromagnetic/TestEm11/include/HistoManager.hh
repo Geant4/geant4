@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2006-06-29 16:39:29 gunter Exp $
+// $Id: HistoManager.hh,v 1.4 2007-08-19 20:52:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 8;
+const G4int MaxHisto = 9;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,7 +69,9 @@ class HistoManager
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
     G4double  GetBinWidth (G4int id) {return Width[id];}
     
-    G4double  GetStepMax()           {return stepMax;};
+    void     SetcsdaRange(G4double val) {csdaRange = val; rangeFlag = true;};
+    G4double GetcsdaRange()             {return csdaRange;};    
+    G4double ComputeStepMax(G4double);
     
   private:
 
@@ -90,7 +92,8 @@ class HistoManager
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
     
-    G4double                 stepMax;
+    G4bool                   rangeFlag;
+    G4double                 csdaRange;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

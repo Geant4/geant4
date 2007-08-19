@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2006-06-29 16:39:54 gunter Exp $
+// $Id: RunAction.hh,v 1.3 2007-08-19 20:52:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +74,8 @@ class RunAction : public G4UserRunAction
     G4int                   nbOfSteps, nbOfSteps2;
     G4double                stepSize,  stepSize2;
     G4int                   status[3];
+    
+    G4double                csdaRange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
