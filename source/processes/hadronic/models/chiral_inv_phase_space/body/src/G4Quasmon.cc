@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.97 2007-08-16 14:03:16 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.98 2007-08-20 17:01:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4023,7 +4023,6 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   G4double qMass = q4Mom.m();                // Mass of the Quasmon (M_Q)
   G4double kLim  = qMass/2.;                 // Kinematikal limit for "k"
   G4double twM   = qMass+qMass;              // two masses of Quasmon
-  if(kLim<kMax) kMax  = kLim;                // Limit the k-simulatiom by maxK=kMax
   G4double kMin  = mC2/twM;                  // mC2=2*kMin*M_Q
   //if(mR2) // (HYistorical) Previously the mR2 was an input parameter...
   //{
@@ -4037,7 +4036,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   //  kMin  = (Mmum-sqM)/frM;                // kMin=0.
   //  kMax  = (Mmum+sqM)/frM;                // kMax=2*(QM**2-mR2)/4QM
   //}
-  if (kMin<0 || kMax<0 || kMax>kLim || qMass<=0. || nOfQ<2)
+  if (kLim<kMax) kMax  = kLim;                // Limit the k-simulatiom by maxK=kMax
+  if (kMin<0 || kMax<0 || qMass<=0. || nOfQ<2)
   {
     G4cerr<<"***G4Q::GetQPM: kMax="<<kMax<<", kMin="<<kMin<<", kLim="<<kLim<<", MQ="<<qMass
           <<", n="<<nOfQ<<G4endl;
@@ -4614,7 +4614,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
 				                //if(baryn>1||abs(dS)<4||(qIso>0&&dC<0||qIso<0&&dC>0)&&baryn==1)//SIFF1
 				                //if(!piF&&abs(dS)<4 || piF&&abs(dS)<3) // UniversalIsoFocusing
 				                //if(!piF&&first&&abs(dS)<4 || (!piF&&!first||piF)&&abs(dS)<3)//ExpIsoF
-				                if(!piF&&first&&baryn<3 || (!piF&&!first||piF)&&abs(dS)<3)// ExpIsoFoc
+				                if(!piF&&first&&baryn<3 || !piF&&!first || piF&&abs(dS)<3) // ExpIsoFoc
 				                //if(!qIso&&!dC||qIso>0&&dC<0||qIso<0&&dC>0)//MediumIsoFocusingForAll
 				                //if(abs(dS)<3) // Universal IsotopeFocusing(<3) (Best for pi-capture)
 				                //if(abs(dS)<4) // Never try this (**)

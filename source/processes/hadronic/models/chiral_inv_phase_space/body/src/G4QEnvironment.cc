@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.126 2007-08-16 14:03:16 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.127 2007-08-20 17:01:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1103,17 +1103,17 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
-    //else if(projPDG==2212 && G4UniformRand()>.5) // Bad for ions! Only for baryons !
-	   //{
-    //  q4Mom=proj4M;       // 4M: QUASMON=Projectile
-    //  valQ=EnFlQC;        // qc: QUASMON=Projectile
-    //  theEnvironment=memEnviron;
+    else if(projPDG==2212 && G4UniformRand()>.5) // Bad for ions! Only for baryons !
+	   {
+      q4Mom=proj4M;       // 4M: QUASMON=Projectile
+      valQ=EnFlQC;        // qc: QUASMON=Projectile
+      theEnvironment=memEnviron;
 #ifdef pdebug
-    //  G4cout<<"G4QEnv::CreQAll: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
+      G4cout<<"G4QEnv::CreQAll: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
 #endif
-    //  G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
-    //  theQuasmons.push_back(curQuasmon); // Insert Quasmon (even hadron/gamma) (del.eq.)
-	   //}
+      G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
+      theQuasmons.push_back(curQuasmon); // Insert Quasmon (even hadron/gamma) (del.eq.)
+	   }
     else
 	   {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);//Projectile + BoundCluster
