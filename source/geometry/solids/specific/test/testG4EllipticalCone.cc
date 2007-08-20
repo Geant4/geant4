@@ -137,6 +137,44 @@ G4bool testDistanceToIn()
 
   return true;
 }
+G4bool testDistanceToOut() 
+{    
+  G4EllipticalCone t1("Solid EllipticalCone #1", 
+		      2*cm,       // xSemiAxis
+		      1*cm,       // ySemiAxis  
+		      15*cm,      // zheight
+		      10*cm) ;    // zTopCut 
+  
+  G4int N = 10000;
+  G4int n = 0;
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+  for(G4int i=0; i<N; i++)
+  {
+    G4ThreeVector point = t1.GetPointOnSurface();
+    point.setX(std::fabs(point.x()));
+    point.setY(std::fabs(point.y()));
+    
+    G4ThreeVector out (0*cm, 0*cm, 0*cm);
+    
+    G4ThreeVector dir = point - out;
+    G4double dist2 = dir.mag();
+    dir /= dist2;
+    
+    G4double dist1 = t1.DistanceToOut(point,dir);
+    G4double diff = std::fabs(dist1 - dist2);
+    
+    if(diff < 2.*kCarTolerance)
+      n++;      
+  }
+
+  G4cout <<" ************   For testG4EllipticalCone   ******************"<<G4endl<<G4endl;
+  G4cout <<" Number of inconsistencies for testDistanceToOut was: "<< n <<" ..."<<G4endl
+	 <<" ... For a total of "<<N<<" trials."<< G4endl <<G4endl;
+
+  return true;
+}
 
  
 int main() 
@@ -175,7 +213,7 @@ int main()
     
   G4bool what;
   what = testDistanceToIn();
-
+  what = testDistanceToOut();
   G4cout << G4endl;
   G4cout << "*********************************************************************" <<G4endl;
   G4cout << "******************* END OF TEST - THANK YOU!!! **********************" <<G4endl;
