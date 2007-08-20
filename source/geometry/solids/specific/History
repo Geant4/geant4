@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2007-08-13 10:35:52 gcosmo Exp $
+$Id: History,v 1.120 2007-08-20 15:29:39 tnikitin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20-Aug-2007, T.Nikitina
+- Revision of G4EllipticalCone
+- DistanceToIn(p): correct answer for p.z()<-zTopCut and 
+                    for the point p on the Surface
+- DistanceToOut(p,v): has to return positive solution or zero
+   when crossing elliptical surface    
+- DitanceToOut(p) was giving always zero, correct it 
+- Correct visualisation error of solid in graphics_reps/src/HepPolyHedron.cc
+- Add some formulas how to calculate SemiAxis and zheight  in header file
+- Add checkDistanceToOut() method to testG4EllipticalCone.cc
 
 
 13-Aug-2007, W.Pokorski (geom-specific-V09-00-03)
