@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.24 2007-07-18 14:06:09 tnikitin Exp $
+//<<<<<<< HepPolyhedron.cc
+// $Id: HepPolyhedron.cc,v 1.25 2007-08-20 15:42:54 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//=======
+// $Id: HepPolyhedron.cc,v 1.25 2007-08-20 15:42:54 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//>>>>>>> 1.24
 //
 // 
 //
@@ -2162,8 +2167,11 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(double ax,
  {
    Point3D<double> * p= pV;
    for (int i=0; i<nvert; i++, p++) {
-     p->setX( p->x() * ax / h);
-     p->setY( p->y() * ay / h);
+     //  p->setX( p->x() * ax / h);
+     // p->setY( p->y() * ay / h);
+       p->setX( p->x() * ax );
+       p->setY( p->y() * ay );
+      
    }
  }
 }
