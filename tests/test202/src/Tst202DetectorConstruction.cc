@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorConstruction.cc,v 1.2 2007-05-21 10:38:12 allison Exp $
+// $Id: Tst202DetectorConstruction.cc,v 1.3 2007-08-20 15:59:15 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -662,7 +662,10 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
 
   //-------------------------------------------- Elliptical Cone
   if (volumeSelection["Elliptical_Cone"]) {
-    G4VSolid* eCone = new G4EllipticalCone("e-cone",50.*cm,100.*cm,100.*cm,50.*cm);
+    //Creating EllipticalCone with Dx=50*cm and Dy=100.*cm at z=-50.*cm
+    
+    G4VSolid* eCone = new G4EllipticalCone("e-cone",1./3.,2./3.,100.*cm,50.*cm);
+    //G4VSolid* eCone = new G4EllipticalCone("e-cone",50.*cm,100.*cm,100.*cm,50.*cm);
     //G4VSolid* eCone = new G4EllipticalCone("e-cone",1.*mm,0.5*mm,40.*mm,20.*mm);
     G4LogicalVolume* eConeLog = new G4LogicalVolume(eCone,Ar,"e-cone-log");
     new G4PVPlacement(G4Translate3D(G4ThreeVector(-500.*cm,400.*cm,0)),
