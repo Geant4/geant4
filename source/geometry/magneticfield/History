@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2007-08-17 12:30:51 gcosmo Exp $
+$Id: History,v 1.124 2007-08-21 14:31:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 21st, 2007    T.Nikitina - field-V09-00-01
+-------------------------------
+- Fix to DistChord() method for Helical Steppers: adopt 'special' case
+  also for Ang<2pi not only for Ang<pi; use cos() in place of tan(), to
+  improve CPU performance.
+- Improved AdvanceHelix() to be able to make half step and full step
+  in one call.
+- In G4HelixMixedStepper added possibility to call different steppers for
+  small steps and add some statistics how offen different steppers are called.
+- G4RKG3_Stepper: improved internal algorithm to use pre-computed values;
+  the stepper now gives comparable CPU performance as ClassicalRK4. 
+- Updated unit tests.
 
 August 17th, 2007    G.Cosmo - field-V09-00-00
 ----------------------------
