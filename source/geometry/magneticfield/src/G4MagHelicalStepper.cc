@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.20 2007-06-20 15:06:47 tnikitin Exp $
+//<<<<<<< G4MagHelicalStepper.cc
+// $Id: G4MagHelicalStepper.cc,v 1.21 2007-08-21 09:37:45 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//=======
+// $Id: G4MagHelicalStepper.cc,v 1.21 2007-08-21 09:37:45 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//>>>>>>> 1.20
 //
 // --------------------------------------------------------------------
 
@@ -68,6 +73,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4ThreeVector  Bnorm, B_x_P, vperp, vpar;
   // G4double norm;
   G4double B_d_P;  // B_perp;
+  G4double B_v_P;
   G4double Theta;  // , Theta_1;
   G4double R_1;
   G4double R_Helix;
@@ -79,7 +85,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
   G4double      velocityVal = initVelocity.mag();
   G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;  // .unit();  
-
+  
    R_1=GetInverseCurve(velocityVal,Bmag);
 
   // for too small magnetic fields there is no curvature
@@ -108,12 +114,14 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
     vpar = B_d_P * Bnorm;       // the component parallel      to B
     vperp= initTangent - vpar;  // the component perpendicular to B
     
-    // B_v_P  = std::sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
+     B_v_P  = std::sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
 
     // calculate  the stepping angle
   
       Theta   = R_1 * h; // * B_v_P;
 
+      // Trigonometrix
+      
       // Trigonometrix
       
       if( std::fabs(Theta) > approc_limit ) {
@@ -127,23 +135,23 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 	CosT     = 1 - 0.5 * Theta2 + 1.0/24.0 * Theta4;
         
       }
-
       // the actual "rotation"
 
-      G4double R = 1.0 / R_1; 
-      // positionMove  = h * ( CosT2 * vperp + SinT2 * B_x_P + vpar );
-      positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
-      endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
+      G4double R = 1.0 / R_1;
+        // G4cout<<"RcurveHelix="<<R<<" UnitVelocity="<<initVelocity<<G4endl; 
+        // positionMove  = h * ( CosT2 * vperp + SinT2 * B_x_P + vpar );
+       positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
+       endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
 
       // Store the resulting position and tangent
-      yHelix[0]   = yIn[0] + positionMove.x(); 
-      yHelix[1]   = yIn[1] + positionMove.y(); 
-      yHelix[2]   = yIn[2] + positionMove.z(); 
+         yHelix[0]   = yIn[0] + positionMove.x(); 
+         yHelix[1]   = yIn[1] + positionMove.y(); 
+         yHelix[2]   = yIn[2] + positionMove.z(); 
 				
-      yHelix[3] = velocityVal * endTangent.x();
-      yHelix[4] = velocityVal * endTangent.y();
-      yHelix[5] = velocityVal * endTangent.z();
-      // Store 2*h step Helix
+         yHelix[3] = velocityVal * endTangent.x();
+         yHelix[4] = velocityVal * endTangent.y();
+         yHelix[5] = velocityVal * endTangent.z();
+      // Store 2*h step Helix if exist
       if(yHelix2){
 
 	SinT2     = 2.0 * SinT * CosT;
@@ -151,18 +159,23 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
         endTangent    = (CosT2 * vperp + SinT2 * B_x_P + vpar);
         positionMove  = R * ( SinT2 * vperp + (1-CosT2) * B_x_P) + h*2 * vpar;
       
-       yHelix2[0]   = yIn[0] + positionMove.x(); 
-       yHelix2[1]   = yIn[1] + positionMove.y(); 
-       yHelix2[2]   = yIn[2] + positionMove.z(); 
+         yHelix2[0]   = yIn[0] + positionMove.x(); 
+         yHelix2[1]   = yIn[1] + positionMove.y(); 
+         yHelix2[2]   = yIn[2] + positionMove.z(); 
       
-       yHelix2[3] = velocityVal * endTangent.x();
-       yHelix2[4] = velocityVal * endTangent.y();
-       yHelix2[5] = velocityVal * endTangent.z();
+         yHelix2[3] = velocityVal * endTangent.x();
+         yHelix2[4] = velocityVal * endTangent.y();
+         yHelix2[5] = velocityVal * endTangent.z();
       }
+     
+
       // Store and/or calculate parameters for chord distance.
            
-       G4ThreeVector B_x_P_x_B = B_x_P.cross(Bnorm); 
-       G4double ptan=B_x_P_x_B.dot(initVelocity);
+      
+
+      G4double ptan=velocityVal*B_v_P;
+
+      // G4cout<<"Rcurve="<<R<<" h="<<h<<" teta="<<Theta<<"PosMove="<<positionMove<<" ptan="<<ptan<<G4endl; 
        G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
        R_Helix =std::abs( ptan/(fUnitConstant  * particleCharge*Bmag));
        
@@ -202,43 +215,20 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    G4double h = hstep * 0.5; 
 
    MagFieldEvaluate(yIn, Bfld_initial) ;      
-    if(IntegratorOrder()==1){
-     G4double yTemp2[7];
-     AdvanceHelix(yIn,   Bfld_initial,  h, yTemp2,yTemp);
-     MagFieldEvaluate(yTemp2, Bfld_midpoint) ;  
-     yMidPoint = G4ThreeVector( yTemp2[0],  yTemp2[1],  yTemp2[2]);    
-     AdvanceHelix(yTemp2, Bfld_midpoint, h, yOut); 
-   }
-   else{
-   // Do two half steps
-   DumbStepper(yIn,   Bfld_initial,  h, yTemp);
-   MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
-   DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
 
-   // Store midpoint, to aid distance-from-chord calculation
-   yMidPoint = G4ThreeVector( yTemp[0],  yTemp[1],  yTemp[2]); 
+   // Do two half steps
+     DumbStepper(yIn,   Bfld_initial,  h, yTemp);
+     MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
+     DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
 
    // Do a full Step
-   h = hstep ;
-   DumbStepper(yIn, Bfld_initial, h, yTemp); 
-   }
+     h = hstep ;
+     DumbStepper(yIn, Bfld_initial, h, yTemp);
+   // Error estimation
 
    for(i=0;i<nvar;i++) {
      yErr[i] = yOut[i] - yTemp[i] ;
    }
-
-#if G4HELICAL_USE_RICHARDSON_EXTRAPOLATION
-   if( IntegratorOrder() > 1 ) {
-       // It is unclear whether it is possible to 
-       //  use the Richardson Extrapolation to increase accuracey by 1 order
-     for(i=0;i<nvar;i++) {
-       yOut[i] += yErr[i]*correction ;    
-     }
-   }
-#endif
-
-   yInitial = G4ThreeVector( yIn[0],   yIn[1],   yIn[2]);
-   yFinal   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
    
    return ;
 }
@@ -251,16 +241,16 @@ G4MagHelicalStepper::DistChord() const
   //  Method DistLine is good only for <  pi
 
   G4double Ang=GetAngCurve();
-  
-   if(Ang<pi){
-     return G4LineSection::Distline( yMidPoint, yInitial, yFinal );
-    //  This is a class method that gives distance of Mid 
-    //  from the Chord between the Initial and Final points.
-
-  }
-  else{
-    
-    return GetRadHelix();
-  }
- 
+   if(Ang<=pi){
+     return GetRadHelix()*(1-std::cos(0.5*Ang));
+    }
+   else
+     if(Ang<twopi){
+       return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
+     }
+    else{
+           return 2*GetRadHelix();
+      // return Diameter of projected circle
+    }
 }
+
