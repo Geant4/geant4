@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofCollision3D.hh,v 1.1 2007-08-14 16:51:10 taso Exp $
+// $Id: G4PSNofCollision3D.hh,v 1.2 2007-08-21 05:41:20 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,8 +47,8 @@ class G4PSNofCollision3D : public G4PSNofCollision
  
  public: // with description
       G4PSNofCollision3D(G4String name, 
-		     G4int nx,G4int ny, G4int nz,
-		     G4int depX=2, G4int depY=1, G4int depZ=0);
+		     G4int ni,G4int nj, G4int nk,
+		     G4int depi=2, G4int depj=1, G4int depk=0);
 
   public:
       virtual ~G4PSNofCollision3D();
@@ -57,8 +57,8 @@ class G4PSNofCollision3D : public G4PSNofCollision
       virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNx, fNy, fNz;
-      G4int fDepthX, fDepthY, fDepthZ;
+      G4int fNi, fNj, fNk;
+      G4int fDepthi, fDepthj, fDepthk;
 };
 
 

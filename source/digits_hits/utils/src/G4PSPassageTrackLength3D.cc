@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength3D.cc,v 1.1 2007-08-14 16:51:10 taso Exp $
+// $Id: G4PSPassageTrackLength3D.cc,v 1.2 2007-08-21 05:41:21 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageTrackLength3D
@@ -41,10 +41,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name,
-			       G4int nx, G4int ny, G4int nz,
-			       G4int depX, G4int depY, G4int depZ)
-    :G4PSPassageTrackLength(name),fNx(nx),fNy(ny),fNz(nz),
-     fDepthX(depX),fDepthY(depY),fDepthZ(depZ)
+						   G4int ni, G4int nj, G4int nk,
+						   G4int depi, G4int depj, G4int depk)
+    :G4PSPassageTrackLength(name),fNi(ni),fNj(nj),fNk(nk),
+     fDepthi(depi),fDepthj(depj),fDepthk(depk)
 {;}
 
 G4PSPassageTrackLength3D::~G4PSPassageTrackLength3D()
@@ -53,9 +53,9 @@ G4PSPassageTrackLength3D::~G4PSPassageTrackLength3D()
 G4int G4PSPassageTrackLength3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int ix = touchable->GetReplicaNumber(fDepthX);
-  G4int iy = touchable->GetReplicaNumber(fDepthY);
-  G4int iz = touchable->GetReplicaNumber(fDepthZ);
+  G4int i = touchable->GetReplicaNumber(fDepthi);
+  G4int j = touchable->GetReplicaNumber(fDepthj);
+  G4int k = touchable->GetReplicaNumber(fDepthk);
   
-  return iy*fNx*fNz+ix*fNz+iz;
+  return j*fNi*fNk+i*fNk+k;
 }

@@ -24,42 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.1 2007-08-14 22:00:40 taso Exp $
+// $Id: G4PSCylinderSurfaceCurrent3D.cc,v 1.1 2007-08-21 05:41:20 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4PSCylinderSurfaceFlux3D
-#include "G4PSCylinderSurfaceFlux3D.hh"
+// G4PSCylinderSurfaceCurrent3D
+#include "G4PSCylinderSurfaceCurrent3D.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring Surface Flux.
-//  This Flux version assumes only for G4Tubs shape, and the surface
-//  is defined at the Rmin plane of the box.
+//   This is a primitive scorer class for scoring Surface Current.
+//  Current version assumes only for G4Tubs shape, and the surface
+//  is defined at the Rmin plane of the Tubs.
 //   The current is given in the unit of area.
 //    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined at the -Z surface.
-// Direction                  Rmin Rmax
-//   0  IN || OUT            ->|<-  |      fFlux_InOut
-//   1  IN                   ->|    |      fFlux_In
-//   2  OUT                    |<-  |      fFlux_Out
+// Direction                  Rmin Rmax 
+//   0  IN || OUT            ->|<-  |      fCurrent_InOut
+//   1  IN                   ->|    |      fCurrent_In
+//   2  OUT                    |<-  |      fCurrent_Out
 //
 //
 // Created: 2008-08-14  Tsukasa ASO
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCylinderSurfaceFlux3D::G4PSCylinderSurfaceFlux3D(G4String name,
-						     G4int direction,
+G4PSCylinderSurfaceCurrent3D::G4PSCylinderSurfaceCurrent3D(G4String name,
+							   G4int direction,
 					     G4int ni, G4int nj, G4int nk,
 					     G4int di, G4int dj, G4int dk)
-    :G4PSCylinderSurfaceFlux(name,direction),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSCylinderSurfaceCurrent(name,direction),fNi(ni),fNj(nj),fNk(nk),
      fDepthi(di),fDepthj(dj),fDepthk(dk)
 {;}
 
-G4PSCylinderSurfaceFlux3D::~G4PSCylinderSurfaceFlux3D()
+G4PSCylinderSurfaceCurrent3D::~G4PSCylinderSurfaceCurrent3D()
 {;}
 
-G4int G4PSCylinderSurfaceFlux3D::GetIndex(G4Step* aStep)
+G4int G4PSCylinderSurfaceCurrent3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
   G4int i = touchable->GetReplicaNumber(fDepthi);

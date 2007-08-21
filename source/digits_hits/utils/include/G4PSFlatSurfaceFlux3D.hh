@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux3D.hh,v 1.1 2007-08-14 16:51:10 taso Exp $
+// $Id: G4PSFlatSurfaceFlux3D.hh,v 1.2 2007-08-21 05:41:20 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,16 +57,16 @@ class G4PSFlatSurfaceFlux3D : public G4PSFlatSurfaceFlux
 {
    public: // with description
       G4PSFlatSurfaceFlux3D(G4String name, G4int direction, 
-			    G4int nx,G4int ny, G4int nz,
-			    G4int depX=2, G4int depY=1, G4int depZ=0);
+			    G4int ni,G4int nj, G4int nk,
+			    G4int depi=2, G4int depj=1, G4int depk=0);
       virtual ~G4PSFlatSurfaceFlux3D();
 
   protected: // with description
       virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNx, fNy, fNz;
-      G4int fDepthX, fDepthY, fDepthZ;
+      G4int fNi, fNj, fNk;
+      G4int fDepthi, fDepthj, fDepthk;
 };
 #endif
 

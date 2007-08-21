@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit3D.cc,v 1.1 2007-08-14 16:51:10 taso Exp $
+// $Id: G4PSDoseDeposit3D.cc,v 1.2 2007-08-21 05:41:20 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit3D
@@ -39,10 +39,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name,
-			       G4int nx, G4int ny, G4int nz,
-			       G4int depX, G4int depY, G4int depZ)
-    :G4PSDoseDeposit(name),fNx(nx),fNy(ny),fNz(nz),
-     fDepthX(depX),fDepthY(depY),fDepthZ(depZ)
+				     G4int ni, G4int nj, G4int nk,
+				     G4int di, G4int dj, G4int dk)
+    :G4PSDoseDeposit(name),fNi(ni),fNj(nj),fNk(nk),
+     fDepthi(di),fDepthj(dj),fDepthk(dk)
 {;}
 
 G4PSDoseDeposit3D::~G4PSDoseDeposit3D()
@@ -51,9 +51,9 @@ G4PSDoseDeposit3D::~G4PSDoseDeposit3D()
 G4int G4PSDoseDeposit3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int ix = touchable->GetReplicaNumber(fDepthX);
-  G4int iy = touchable->GetReplicaNumber(fDepthY);
-  G4int iz = touchable->GetReplicaNumber(fDepthZ);
+  G4int i = touchable->GetReplicaNumber(fDepthi);
+  G4int j = touchable->GetReplicaNumber(fDepthj);
+  G4int k = touchable->GetReplicaNumber(fDepthk);
   
-  return iy*fNx*fNz+ix*fNz+iz;
+  return j*fNi*fNk+i*fNk+k;
 }
