@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateX.cc,v 1.12 2006-08-14 12:07:19 allison Exp $
+// $Id: G4OpenGLImmediateX.cc,v 1.13 2007-08-21 14:05:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 #include "G4OpenGLImmediateX.hh"
 #include "G4OpenGLImmediateXViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
-#include "G4OpenGLXViewerMessenger.hh"
 
 G4OpenGLImmediateX::G4OpenGLImmediateX ():
   G4VGraphicsSystem ("OpenGLImmediateX",
@@ -49,7 +48,6 @@ G4OpenGLImmediateX::G4OpenGLImmediateX ():
 		     G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
-  G4OpenGLXViewerMessenger::GetInstance();
 }
 
 G4OpenGLImmediateX::~G4OpenGLImmediateX () {}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.23 2006-06-29 21:20:16 gunter Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.24 2007-08-21 14:05:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -615,7 +615,7 @@ dolly_high (fVP.GetDolly() + 1000.0),
 fov (0.0),
 rot_sens_limit (90.),
 pan_sens_limit (100.),
-rot_sens (4.),
+rot_sens (1.),
 wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
 frameNo (0),
