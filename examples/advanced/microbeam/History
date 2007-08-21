@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2007-07-06 06:52:54 sincerti Exp $
+$Id: History,v 1.13 2007-08-21 07:56:44 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.12 2007-07-06 06:52:54 sincerti Exp $
 
                        Package History file
                        --------------------
+
+21 August 2007 - S. Incerti
+- Changed number of incident alpha particles in microbeam.mac
 
 05 July 2007 - S. Incerti
 - Added protection against scattering at large angles in collimators in src/MicrobeamEMField.cc
