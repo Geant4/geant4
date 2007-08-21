@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.icc,v 1.3 2007-08-21 08:19:06 tnikitin Exp $
+// $Id: G4Paraboloid.icc,v 1.4 2007-08-21 12:58:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,19 +140,23 @@ G4double G4Paraboloid::CalculateSurfaceArea() const
   h1 = k2/k1 + dz;
   h2 = k2/k1 - dz;
 
-  // Calculate surface area for the paraboloid full paraboloid cutoff at z = dz (not the cutoff area thou).
+  // Calculate surface area for the paraboloid full paraboloid
+  // cutoff at z = dz (not the cutoff area though).
+
   A1 = sqr(r2) + 4 * sqr(h1);
   A1 *= sqr(A1); // Sets A1 = A1^3
   A1 = pi * r2 /6 / sqr(h1) * ( std::sqrt(A1) - r2 * r2 * r2);
 
-  // Calculate surface area for the paraboloid full paraboloid cutoff at z = -dz (not the cutoff area thou).
+  // Calculate surface area for the paraboloid full paraboloid
+  // cutoff at z = -dz (not the cutoff area though).
+
   A2 = sqr(r1) + 4 * sqr(h2);
   A2 *= sqr(A2);// Sets A2 = A2^3
 
   if(h2 != 0)
-    A2 = pi * r1 /6 / sqr(h2) * ( std::sqrt(A2) - r1 * r1 * r1);
+    { A2 = pi * r1 /6 / sqr(h2) * ( std::sqrt(A2) - r1 * r1 * r1); }
   else
-    A2 = 0.;
+    { A2 = 0.; }
 
   return fSurfaceArea = A1 - A2 + (sqr(r1) + sqr(r2))*pi;
 }

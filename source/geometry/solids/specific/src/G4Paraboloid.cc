@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.3 2007-08-21 08:20:52 tnikitin Exp $
+// $Id: G4Paraboloid.cc,v 1.4 2007-08-21 12:58:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Paraboloid
@@ -90,7 +90,6 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
   k2 = (r2 * r2 + r1 * r1) / 2;
 
   fSurfaceArea = 0.;
- 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,7 +100,6 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 G4Paraboloid::G4Paraboloid( __void__& a )
   : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
 {
-   
  fSurfaceArea = 0.;
 }
 

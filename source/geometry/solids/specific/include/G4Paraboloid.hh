@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh,v 1.2 2007-07-18 16:03:17 gcosmo Exp $
+// $Id: G4Paraboloid.hh,v 1.3 2007-08-21 12:58:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,10 +116,10 @@ class G4Paraboloid : public G4VSolid
 
     // Visualisation functions
 
-  void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-  G4Polyhedron* CreatePolyhedron() const;
-  G4Polyhedron* GetPolyhedron () const;
-  G4NURBS*      CreateNURBS() const;
+    void DescribeYourselfTo(G4VGraphicsScene& scene) const;
+    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* GetPolyhedron () const;
+    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
 
