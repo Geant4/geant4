@@ -46,7 +46,11 @@ void G4ScoringBoxParameterisation::ComputeTransformation(const G4int copyNo,
 							G4VPhysicalVolume *physVol) const {
   G4ThreeVector trans;
 
-  G4double pos = (fSegmentPositions[copyNo-1] + fSegmentPositions[copyNo])/2.;
+  G4double pos;
+  if(copyNo == 0)
+    pos = fSegmentPositions[copyNo]/2.;
+  else
+    pos = (fSegmentPositions[copyNo-1] + fSegmentPositions[copyNo])/2.;
 
   if(fSegmentAxis == kXAxis) {
     trans[0] = pos - fMotherDimensions[0];
@@ -68,7 +72,11 @@ void G4ScoringBoxParameterisation::ComputeDimensions(G4Box & meshElement,
 
   G4double dims[3] = {fMotherDimensions[0],fMotherDimensions[1],fMotherDimensions[2]};
 
-  G4double dim = (fSegmentPositions[copyNo] - fSegmentPositions[copyNo-1])/2.;
+  G4double dim;
+  if(copyNo == 0) 
+    dim = fSegmentPositions[copyNo]/2.;
+  else
+    dim = (fSegmentPositions[copyNo] - fSegmentPositions[copyNo-1])/2.;
 
   if(fSegmentAxis == kXAxis) {
     dims[0] = dim;

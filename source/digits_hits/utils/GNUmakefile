@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2007-08-10 17:30:25 asaim Exp $
+# $Id: GNUmakefile,v 1.8 2007-08-21 09:29:57 akimura Exp $
 # --------------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # --------------------------------------------------------------
@@ -27,7 +27,8 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/detector/include \
             -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/digits_hits/scorer/include \
-            -I$(G4BASE)/intercoms/include
+            -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/graphics_reps/include
 
 include $(G4INSTALL)/config/common.gmk
 
