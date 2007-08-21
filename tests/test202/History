@@ -1,8 +1,11 @@
-$Id: History,v 1.3 2007-05-21 10:38:12 allison Exp $
+$Id: History,v 1.4 2007-08-21 14:16:39 gcosmo Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+
+21st August 2007  Tatiana Nikitina  (test202-V09-00-00)
+- Correction in definition of G4EllipticalCone.
 
 21st May 2007  John Allison  (test202-V08-03-00)
 - Fix compiler warnings.
