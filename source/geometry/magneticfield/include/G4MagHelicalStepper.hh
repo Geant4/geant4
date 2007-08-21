@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.14 2007-06-20 15:03:16 tnikitin Exp $
+//
+// $Id: G4MagHelicalStepper.hh,v 1.15 2007-08-21 08:48:28 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 //
 // class G4MagHelicalStepper
