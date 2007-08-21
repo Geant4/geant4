@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.2 2007-07-18 16:03:17 gcosmo Exp $
+// $Id: G4Paraboloid.cc,v 1.3 2007-08-21 08:20:52 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Paraboloid
@@ -63,7 +63,8 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
                                G4double pDz,
                                G4double pR1,
                                G4double pR2)
-  : G4VSolid(pName), fCubicVolume(0.)
+ : G4VSolid(pName),fpPolyhedron(0), fCubicVolume(0.) 
+
 {
   if(pDz > 0. && pR2 > pR1 && pR1 >= 0.)
   {
@@ -74,7 +75,7 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
   else
   {
     G4cerr << "Error - G4Paraboloid::G4Paraboloid(): " << GetName() << G4endl
-           << "Z half-length must be larger than zero! " << G4endl;
+           << "Z half-length must be larger than zero or R1>=R2 " << G4endl;
     G4Exception("G4Paraboloid::G4Paraboloid()", "InvalidSetup", 
                 FatalException,
                 "Invalid dimensions. Negative Input Values or R1>=R2.");
@@ -89,6 +90,7 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
   k2 = (r2 * r2 + r1 * r1) / 2;
 
   fSurfaceArea = 0.;
+ 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,7 +101,8 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 G4Paraboloid::G4Paraboloid( __void__& a )
   : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.)
 {
-  fSurfaceArea = 0.;
+   
+ fSurfaceArea = 0.;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
