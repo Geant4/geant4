@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.6 2007-08-21 09:29:57 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.7 2007-08-22 01:40:29 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -109,7 +109,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   G4String layerName[2] = {boxName + "_nest1",  boxName + "_nest2"};
   G4VSolid * layerSolid[2]; 
-  G4LogicalVolume * layerLogical[3];
+  G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer
   //G4cout << "layer 1 :" << G4endl;
@@ -214,10 +214,9 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   */
 
   //
-  layerLogical[2] = fMeshElementLogical;
   G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
   visatt->SetVisibility(true);
-  for(int i = 0; i < 3; i++) layerLogical[i]->SetVisAttributes(visatt);
+  fMeshElementLogical->SetVisAttributes(visatt);
 }
 
 void G4ScoringBox::RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps) {
