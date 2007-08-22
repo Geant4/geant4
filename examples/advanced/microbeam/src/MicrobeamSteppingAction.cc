@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.7 2007-07-06 06:52:54 sincerti Exp $
+// $Id: MicrobeamSteppingAction.cc,v 1.8 2007-08-22 13:58:33 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
@@ -154,40 +154,7 @@ if (
 
 // TOTAL DOSE DEPOSIT AND DOSE DEPOSIT WITHIN A PHANTOM VOXEL
 
-if ( 	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalNucleus")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "alpha") 
-	)
-	
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalNucleus")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e-") 
-	)
-
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalNucleus")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "gamma") 
-	)
-
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalNucleus")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e+") 
-	)
-
-			
-   )
-
+if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalNucleus")
 
 	{ 
    	 G4double dose = (e_SI*(aStep->GetTotalEnergyDeposit()/eV))/(Run->GetMassNucleus());
@@ -199,42 +166,7 @@ if (
 	}
 
 
-if ( 	 
-
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "alpha") 
-	)
-	
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e-") 
-	)
-
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "gamma") 
-	)
-
-	||
-	
-	(
-	   (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
-  	&& (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-  	&& (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e+") 
-	)
-
-
-  	
-    )
-
+if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()  == "physicalCytoplasm")
 
 	{ 
    	 G4double dose = (e_SI*(aStep->GetTotalEnergyDeposit()/eV))/(Run->GetMassCytoplasm());

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2007-08-21 07:56:44 sincerti Exp $
+$Id: History,v 1.14 2007-08-22 13:58:33 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,10 @@ $Id: History,v 1.13 2007-08-21 07:56:44 sincerti Exp $
                        Package History file
                        --------------------
 
-21 August 2007 - S. Incerti
+22 August 2007 - tag microbeam-V09-00-02 - S. Incerti
+- Updated dose computation to take into account volume edges in src/MicrobeamSteppingAction.cc 
+
+21 August 2007 - tag microbeam-V09-00-01 - S. Incerti
 - Changed number of incident alpha particles in microbeam.mac
 
 05 July 2007 - S. Incerti
