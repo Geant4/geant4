@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2007-08-22 13:12:13 gcosmo Exp $
+$Id: History,v 1.54 2007-08-22 13:15:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ track of all tags.
 - Fixed implementation of ExN02MagneticField class in way field is set...
 
 25-06-07 M.Maire (exampleN02-V08-03-01, exampleN02-V09-00-00)
-- cosmetic in exampleN02.cc
+- Cosmetics in main().
 
 11-05-07 G.Cosmo (exampleN02-V08-03-00)
 - Show usage of G4GeometryTolerance tuned for the geometry topology.
