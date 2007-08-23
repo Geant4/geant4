@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.8 2007-08-23 00:30:54 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.9 2007-08-23 02:21:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -178,11 +178,11 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
       fSegmentPositions.push_back(fSize[segOrder[2]]*2.);
       //G4ScoringBoxParameterisation * param =
       G4VPVParameterisation * param =
-	new G4ScoringBoxParameterisation(axis[2], motherDims, fSegmentPositions);
+	new G4ScoringBoxParameterisation(axis[segOrder[2]], motherDims, fSegmentPositions);
       new G4PVParameterised(elementName,
 			    fMeshElementLogical,
 			    layerLogical[1],
-			    axis[2],
+			    axis[segOrder[2]],
 			    nelement,
 			    param);
 
