@@ -45,6 +45,7 @@
 //#include "G4NucleiProperties.hh"
 //#include "G4NucleiPropertiesTable.hh"
 #include "G4QPDGCode.hh"
+#include "G4QEnvironment.hh"
 #include "G4Quasmon.hh"
 #include "G4QHadronVector.hh"
 #include "G4VCrossSectionDataSet.hh"
@@ -68,9 +69,14 @@ class G4QDiffractionRatio
   G4double GetRatio(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
 
   // ==> The following ill be a protected function for internal CHIPS usage
-  // Fragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
+  // ProjFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
   // Whoeve uses this member function is responsible for DEL/DESTROY of the G4QHadronVector
-  G4QHadronVector* Fragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
+  G4QHadronVector* ProjFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
+
+  // ==> The following ill be a protected function for internal CHIPS usage
+  // TargFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
+  // Whoeve uses this member function is responsible for DEL/DESTROY of the G4QHadronVector
+  G4QHadronVector* TargFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
 
  private:
   // These working member functions are in CHIPS units and must not be used externally

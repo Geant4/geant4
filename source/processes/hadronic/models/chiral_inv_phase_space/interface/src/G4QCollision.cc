@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.21 2007-08-09 13:04:37 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.22 2007-08-23 15:58:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -158,7 +158,12 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
   G4VQCrossSection* CSmanager=0;
   G4int pPDG=0;
-  if(incidentParticleDefinition == G4Gamma::Gamma())
+  if(incidentParticleDefinition == G4Proton::Proton())
+  {
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+    pPDG=2212;
+  }
+  else if(incidentParticleDefinition == G4Gamma::Gamma())
   {
     CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
     pPDG=22;
@@ -170,11 +175,6 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     leptoNuc=true;
     pPDG=11;
   }
-  //else if(incidentParticleDefinition == G4Proton::Proton())
-  //{
-  //  CSmanager=G4QProtonNuclearCrossSection::GetPointer();
-  //  pPDG=2212;
-  //}
   else if(incidentParticleDefinition == G4MuonPlus::MuonPlus() ||
           incidentParticleDefinition == G4MuonMinus::MuonMinus())
   {
@@ -315,10 +315,10 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(      G4Electron::Electron()      )) return true;
   else if (particle == *(      G4Positron::Positron()      )) return true;
   else if (particle == *(         G4Gamma::Gamma()         )) return true;
-  //else if (particle == *(        G4Proton::Proton()        )) return true;
-  //else if (particle == *(       G4Neutron::Neutron()       )) return true;
+  else if (particle == *(        G4Proton::Proton()        )) return true;
   else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
   else if (particle == *(   G4NeutrinoMu::NeutrinoMu()   )) return true;
+  //else if (particle == *(       G4Neutron::Neutron()       )) return true;
   //else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
   //else if (particle == *(      G4PionPlus::PionPlus()      )) return true;
   //else if (particle == *(      G4KaonPlus::KaonPlus()      )) return true;
@@ -880,8 +880,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.);
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
   }
-		//else if(Z>0 && N>0) // quasi-elastic *** experimental ***
-  else if(2>3)
+		else if(aProjPDG==2212 && Z>0 && N>0) // quasi-elastic for pA(Z,N)
+		//else if(2>3)
 		{
     G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
     std::pair<G4double,G4double> fief=qfMan->GetRatios(momentum, aProjPDG, Z, N);
@@ -896,7 +896,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       if(Z>1||N>1) dmom=286.2*std::pow(-std::log(G4UniformRand()),third);// p_max=250 MeV/c
       // Calculate cluster probabilities (n,p,d,t,he3,he4 now only, can use UpdateClusters)
       const G4int lCl=3; // The last clProb[lCl]==1. by definition, MUST be increasing
-      G4double clProb[lCl]={.65,.75,.8}; // N,D,3,A, integrated prob for .65,.1,.05,.2
+      G4double clProb[lCl]={.6,.7,.8}; // N/P,D,t/He3,Al, integrated prob for .6,.1,.1,.2
       G4double base=1.;  // Base for randomization (can be reduced by totZ & totN)
       G4int max=lCl;   // Number of boundaries (can be reduced by totZ & totN)
       // Take into account that at least one nucleon must be left !
@@ -905,7 +905,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       if(Z>1&&N<2||Z<2&&N>1) base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
       if(Z<2&&N<2||A<4) base=clProb[max--]; // Both He3 and t clusters are impossible
       if(A<3)           base=clProb[max--]; // Deuteron cluster is impossible
-      G4int cln=0;                          // Cluster # (Default for the selected nucleon)
+      G4int cln=0;                          // Cluster#0 (Default for the selected nucleon)
       if(max)                               // Not only nucleons are possible
       //if(2>3)
       {
@@ -928,7 +928,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       if(!cln || cp1)                       // Split in nucleon + (A-1) with Fermi momentum
       {
         G4int nln=0;
-        if(cln==2) nln=1;                         // @@ only for t/He3 choice from A=4
+        if(cln==2) nln=1;                         // @@ only for cp1: t/He3 choice from A=4
         // mass(A)=tM. Calculate masses of A-1 (rM) and mN (mNeut or mProt bounded mass)
         if((!cln||cln==2)&&G4UniformRand()*(A-cln)>(N-nln) || (cln==3||cln==1)&&Z>N)
         {
@@ -954,7 +954,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
           throw G4QException("G4QCollision::HadronizeQuasm:Can'tDec totNuc->QENuc+ResNuc");
         }
 #ifdef qedebug
-		      G4cout<<"G4QCol::PStDoIt:QE,pRN="<<r4M.rho()<<r4M<<",pQN="<<n4M.rho()<<n4M<<G4endl;
+		      G4cout<<"G4QCol::PStDoIt:QE-N,RA="<<r4M.rho()<<r4M<<",QN="<<n4M.rho()<<n4M<<G4endl;
 #endif
         if(cp1 && cln)                           // Quasi-cluster case: swap the output
         {
@@ -973,7 +973,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
           rA=nln;
         }
       }
-      else // It is necessary to split a cluster (without Fermi motion and Fermi decay)
+      else // Split a cluster (w or w/o "Fermi motion" and "Fermi decay")
       {
         if(cln==1)
         {
@@ -1011,9 +1011,30 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         }
         rA=A-nA;
         rZ=Z-nZ;
+        // This is a simple case of cluster at rest
+        //G4double rM=G4QPDGCode(restPDG).GetMass();// Mass of the residual nucleus
+        //r4M=G4LorentzVector(0.,0.,0.,rM);         // 4mom of the residual nucleus
+        //n4M=G4LorentzVector(0.,0.,0.,tM-rM);      // 4mom of the quasi-free cluster
+        // --- End of the "simple case of cluster at rest"
+        // Make a fake quasi-Fermi distribution for clusters (clusters are not at rest) 
+        G4LorentzVector t4M(0.,0.,0.,tM);         // 4m of the target nucleus to be decayed
         G4double rM=G4QPDGCode(restPDG).GetMass();// Mass of the residual nucleus
         r4M=G4LorentzVector(0.,0.,0.,rM);         // 4mom of the residual nucleus
-        n4M=G4LorentzVector(0.,0.,0.,tM-rM);      // 4mom of the quasi-free cluster
+        G4double rM2=rM*rM;
+        G4double nM=std::sqrt(rM2+tM*tM-(tM+tM)*std::sqrt(rM2+dmom*dmom));// M of q-cluster
+        n4M=G4LorentzVector(0.,0.,0.,nM);         // 4mom of the quasi-nucleon
+#ifdef qedebug
+		      G4cout<<"G4QCollis::PStDoIt:QEC,p="<<dmom<<",T="<<tM<<",R="<<rM<<",N="<<nM<<G4endl;
+#endif
+        if(!G4QHadron(t4M).DecayIn2(r4M, n4M))
+        {
+          G4cerr<<"G4QCol::PostStDoIt: M="<<tM<<"<rM="<<rM<<"+cM="<<nM<<"="<<rM+nM<<G4endl;
+          throw G4QException("G4QCollision::HadronizeQuasm:Can'tDec totNuc->QEClu+ResNuc");
+        }
+        // --- End of the moving cluster implementation ---
+#ifdef qedebug
+		      G4cout<<"G4QCol::PStDoIt:QEC,RN="<<r4M.rho()<<r4M<<",QCl="<<n4M.rho()<<n4M<<G4endl;
+#endif
       }
       G4LorentzVector s4M=n4M+proj4M;             // Tot 4-momentum for scattering
       G4double prjM2 = proj4M.m2();
@@ -1022,12 +1043,18 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4double cmM2 =s4M.m2();
       if(cmM2>minM*minM)
       {
+#ifdef qedebug
+		      G4cout<<"G4QCol::PStDoIt:***Enter***,cmM2="<<cmM2<<" > minM2="<<minM*minM<<G4endl;
+#endif
         // Estimate and randomize charge-exchange with quasi-free cluster
         G4bool chex=false;                        // Flag of the charge exchange scattering
         G4ParticleDefinition* projpt=G4Proton::Proton(); // Prototype, only for chex=true
-        if(cln&&!cp1 &&(projPDG==2212&&rA>rZ || projPDG==2112&&rZ>1))// @@ Use projCharge
-	       //if(2>3)
+        //if(cln&&!cp1 &&(projPDG==2212&&rA>rZ || projPDG==2112&&rZ>1))// @@ Use proj chex
+	       if(2>3)
         {
+#ifdef qedebug
+		        G4cout<<"G4QCol::PStDoIt:-Enter,P="<<projPDG<<",cln="<<cln<<",cp1="<<cp1<<G4endl;
+#endif
           G4double tprM=mProt;
           G4double tprM2=mProt2;
           G4int tprPDG=2212;
