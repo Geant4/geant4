@@ -61,8 +61,10 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
-  G4double E1 = std::max(0.0,GetMaximalKineticEnergy() + GetCoulombBarrier() - eKin - A1);
-  G4double Ej = std::max(0.0,U + GetBindingEnergy() - Aj);
+  //  G4double E1 = std::max(0.0,GetMaximalKineticEnergy() + GetCoulombBarrier() - eKin - A1);
+  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1))/g1; //JMQ fix
+  //  G4double Ej = std::max(0.0,U + GetBindingEnergy() - Aj);
+  G4double Ej = std::max(0.0,eKin + GetBindingEnergy() - Aj); //JMQ fix
 
   G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
       GetAlpha()*(eKin+GetBeta())/(r0*std::pow(GetRestA(),1.0/3.0)) *
@@ -70,9 +72,10 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
 
-  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
+  //  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
+  G4double pC = std::pow((g1*Ej)/(g0*E0),GetA()-1.0)*(g1/g0)/E0; //JMQ fix
 
-  G4double Probability = pA * pB * pC;
+  G4double Probability = pA * pB * pC * GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged());
 
   return Probability;
 }

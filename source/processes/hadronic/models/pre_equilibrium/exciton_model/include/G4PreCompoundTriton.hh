@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTriton.hh,v 1.4 2007-07-23 09:56:40 ahoward Exp $
+// $Id: G4PreCompoundTriton.hh,v 1.5 2007-08-23 12:30:43 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -82,7 +82,7 @@ private:
 // added Rj method according to literature and JMQ
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
   {
-    return 1.0;
+    return 3.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))/static_cast<G4double>(NumberParticles*(NumberParticles-1)*(NumberParticles-2)); //JMQ 23/8/07
   }
 
   virtual G4double GetAlpha()
