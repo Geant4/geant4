@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.28 2007-02-28 14:26:25 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.29 2007-08-23 16:00:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -40,6 +40,7 @@
 class G4QEnvironment 
 {
 public:
+  G4QEnvironment(const G4QNucleus theEnv);             // Create Env and add Quasmons later
   G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG);
   G4QEnvironment(const G4QEnvironment& right);         // copy QEnvironment by value
   G4QEnvironment(G4QEnvironment* right);               // copy QEnvironment by pointer
@@ -57,6 +58,7 @@ public:
   G4QHadronVector* GetProjectiles();        // User is responsible for Destroy/Clear/Delete
 
   // Modifiers
+  void AddQuasmon(G4Quasmon* Q);            // Add aQuasmon to theEnvironment
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
 
   // Static functions

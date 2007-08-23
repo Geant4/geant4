@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.98 2007-08-20 17:01:40 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.99 2007-08-23 16:00:51 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -580,10 +580,10 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4int kCountMax=1;                     // "No reson to increase it"
     //G4int kCountMax=0;                   //@@ *** Close search for the minimum k ***
     //
-    //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
+    G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
     //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
     //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
-    G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
     //
     //G4int pCountMax=27;                   //Try differentHadrons(Parents) forBetterRecoil
     //G4int pCountMax=9;                    //Try differentHadrons(Parents) forBetterRecoil

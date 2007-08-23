@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.127 2007-08-20 17:01:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.128 2007-08-23 16:00:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -53,6 +53,20 @@
 #include <cmath>
 #include <cstdlib>
 using namespace std;
+
+G4QEnvironment::G4QEnvironment(const G4QNucleus theEnv) : theEnvironment(theEnv)
+{
+  G4int envPDG=theEnv.GetPDG();
+  G4QPDGCode envQPDG(envPDG);
+  G4int    envA=envQPDG.GetBaryNum();
+  G4double envM=envQPDG.GetMass();
+  totCharge=envQPDG.GetCharge();
+  totBaryoN=envA;
+  tot4Mom=G4LorentzVector(0.,0.,0.,envM);
+#ifdef debug
+		G4cout<<"G4QEnviron::Const: t4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
+#endif
+}
 
 G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG) :
   theEnvironment(90000000)                   // User is responsible for projHadrons(Vector)
@@ -1104,6 +1118,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
     else if(projPDG==2212 && G4UniformRand()>.5) // Bad for ions! Only for baryons !
+    //else if(2>3)                          // free flying proton is closed
 	   {
       q4Mom=proj4M;       // 4M: QUASMON=Projectile
       valQ=EnFlQC;        // qc: QUASMON=Projectile
@@ -1390,7 +1405,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 	     {
         G4QHadronVector* output=theQuasmons[iq]->Fragment(vE,1);//!!!DESTROY!!! <---------+
         G4int ast=theQuasmons[iq]->GetStatus();  // Quasmon's Status after fragmentation  ^
-        if(!ast) nlq--;                          // Reduce nlq is Quasmon decayed         ^
+        if(!ast) nlq--;                          // Reduce nlq if Quasmon decayed         ^
         G4int nHadrons = output->size();         // A#of output Hadrons in the Quasmon    ^
 #ifdef pdebug
         G4cout<<"G4QEnv::HadrQE: ***Vacuum*** Q#"<<iq<<", nHadr="<<nHadrons<<G4endl; //   ^
@@ -1607,8 +1622,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
     //G4int   c3Max = 27;
     //G4int   c3Max = 9;                    // Max#of "no hadrons" steps (reduced below?)
-    G4int   c3Max = 3;
-    //G4int   c3Max = 1;
+    //G4int   c3Max = 3;
+    G4int   c3Max = 1;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
@@ -1616,7 +1631,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //if(envA>1&&envA<13) premC = 24/envA;
     //if(envA>1&&envA<19) premC = 36/envA;
     //if(envA>1&&envA<25) premC = 48/envA;
-    if(envA>1&&envA<31) premC = 60/envA;
+    if(envA>1&&envA<41) premC = 80/envA;
     G4int  sumstat= 2;                     // Sum of statuses of all Quasmons
     G4bool force  = false;                 // Prototype of the Force Major Flag
     G4int cbR     =0;                      // Counter of the "Stoped by Coulomb Barrier"
@@ -2662,8 +2677,48 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
       }
       else if(totMass>totM+.001)                // ==> "Try Evaporate or decay" case
 	     {
-      // @@@@ For 1 livingQuasmon & totMass>minRQ+mREnv -> decay in RE+RQ (in RQ direction)
 #ifdef edebug
+		      G4cout<<"G4QEnv::HadrQE: NQ="<<nQuasmons<<",tM="<<totMass<<",tPDG="<<totPDG<<",tB="
+              <<totBN<<",GSM="<<totM<<",dM="<<totMass-totM<<",totQC="<<totQC<<G4endl;
+#endif
+		      //if(nQuasmons==1)
+        if(2>3)                                 // ** closed, because doesn't make a diff
+		      {
+          G4QContent quasQC=totQC-envQC;        // Total QuarkContent of the Only Quasmon
+          G4int resQPDG=quasQC.GetSPDGCode();   // GS mass for the Only Quasmon-hadron
+          G4int resQB=quasQC.GetBaryonNumber(); // Baryon number of the Only Quasmon
+          G4int resQCh=quasQC.GetCharge();      // Charge of the Only Quasmon
+          //G4int resQS=quasQC.GetStrangeness();  // Strangeness of the Only Quasmon
+          if((resQPDG==0 || resQPDG==10) && resQB>0) resQPDG=quasQC.GetZNSPDGCode();
+          G4double resQM=G4QPDGCode(resQPDG).GetMass();// GS Mass of the Only Quasmon
+          G4double qCB=theEnvironment.CoulombBarrier(resQCh,resQB); // CoulombBarrier
+          G4double de=totMass-envM-resQM-qCB;
+#ifdef debug
+		        G4cout<<"G4QEnv::HadrQE:NQ==1,tM="<<totMass<<",qM="<<resQM<<",eM="<<envM<<",CB="
+                <<qCB<<",dE="<<totMass-envM-resQM-qCB<<G4endl;
+#endif
+          if(de>0.)                             // Make DecayIn2 conserving Q-direction
+          {
+            G4LorentzVector fq4M=G4LorentzVector(0.,0.,0.,resQM); // Prot. for outQuasmon
+            G4LorentzVector fe4M=env4M;         // Prototype for outEnvironment
+            G4LorentzVector dir4M=tot4M-env4M;  // Internall quasmon 4-momentum
+	           if(!G4QHadron(tot4M).RelDecayIn2(fe4M,fq4M,dir4M,1.,1.))
+            {
+              G4cerr<<"***G4QEnv::HadrQE: Can't decay Q+E, t4M="<<tot4M<<",d="<<de<<G4endl;
+              throw G4QException("G4QEnvironment::HadronizeQEnvironment: Q+E RelDecayIn2");
+            }
+              G4QHadron* hQua = new G4QHadron(resQPDG,fq4M);
+              theQHadrons.push_back(hQua);      // Fill the hadron-quasmon (delete equiv.)
+              G4int envPDG=theEnvironment.GetPDGCode();
+              G4QHadron* hEnv = new G4QHadron(envPDG,fe4M);
+              theQHadrons.push_back(hEnv);      // Fill the hadron-environ (delete equiv.)
+#ifdef debug
+			           G4cout<<"G4QEnv::HadrQEnv:fQ="<<resQPDG<<fq4M<<", fE="<<envPDG<<fe4M<<G4endl;
+#endif
+              return theQHadrons;
+          }
+        }
+#ifdef debug
 		      G4cout<<"G4QEnv::HadrQE: M="<<totMass<<",PDG="<<totPDG<<",B="<<totBN<<",GSM="<<totM
               <<",dM="<<totMass-totM<<",totQC="<<totQC<<G4endl;
 #endif
@@ -11336,6 +11391,17 @@ G4bool G4QEnvironment::DecayInEnvQ(G4Quasmon* quasm)
   return true;
 } // End of "DecayInEnvQ"
 
+// Add a Quasmon to the Environment
+void G4QEnvironment::AddQuasmon(G4Quasmon* Q)
+{ // ========================================
+  theQuasmons.push_back(Q);
+  totCharge+=Q->GetCharge();
+  totBaryoN+=Q->GetBaryonNumber();
+  tot4Mom  +=Q->Get4Momentum();
+#ifdef debug
+		G4cout<<"G4QEnv::AddQuasmon:t4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
+#endif
+}
 //General function makes Random Unit 3D-Vector
 G4ThreeVector RndmDir()
 {//  -------- =========

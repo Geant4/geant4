@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.79 2007-08-16 14:03:16 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.80 2007-08-23 16:00:51 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -818,7 +818,6 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   //static const G4double   uWell=7.;               // EffectiveDepth of potential well B
   static const G4double   uWell=1.7;              // EffectiveDepth of potential well B
   //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B
-  //static const G4double   evalph=7.2;              // Probability for alpha to evaporate
   //////////static const G4double   gunA=80.;       // Switch A-parameter for BaryonGun
   //static const G4double   gunB=exp(1)/gunA;
   ///////////////////static const G4double   gunB=exp(2)/4/gunA/gunA;
@@ -868,8 +867,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4bool barf=true;                               // Take into account CB in limits
   G4double uW=uWell;
   G4int    a = GetA();
-  G4double evalph=0.;                                // NO alpha evaporation
-  //G4double evalph=1.;
+  G4double  evalph=0.;                            // Probability for alpha to evaporate
+  //if(a>4.5) evalph=2.7/sqrt(a-4.);                // Probability for alpha to evaporate
   //G4double evalph=clustProb*clustProb*clustProb;
 #ifdef ppdebug
   G4cout<<"G4QNucleus::EvaporBaryon: *Called*, a="<<a<<GetThis()<<",alph="<<evalph<<G4endl;
