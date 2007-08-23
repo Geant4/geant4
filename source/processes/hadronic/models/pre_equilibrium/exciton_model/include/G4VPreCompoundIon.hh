@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.4 2007-08-23 16:19:35 ahoward Exp $
+// $Id: G4VPreCompoundIon.hh,v 1.5 2007-08-23 16:29:01 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -83,7 +83,7 @@ protected:
 
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;
-  virtual G4double GetRj() = 0;
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
     
