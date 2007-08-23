@@ -17,14 +17,14 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * subject DEFCON 705 IPR conditions.                               *
+// * and is subject to DEFCON 705 IPR conditions.                               *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.7 2007-02-12 11:51:25 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.8 2007-08-23 14:49:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,6 +121,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include <map>
 
 class G4TessellatedSolid : public G4VSolid
@@ -207,6 +208,8 @@ class G4TessellatedSolid : public G4VSolid
     mutable G4Polyhedron* fpPolyhedron;
 
     std::vector<G4VFacet *>  facets;
+    std::set<G4VFacet *>     extremeFacets; // Does all other facets lie
+                                            // on or behind this surface?
     G4GeometryType           geometryType;
     G4double                 cubicVolume;
     G4double                 surfaceArea;

@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.cc,v 1.5 2007-02-15 17:04:10 gcosmo Exp $
+// $Id: G4QuadrangularFacet.cc,v 1.6 2007-08-23 14:49:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -123,7 +123,7 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector Pt0,
     surfaceNormal = normal1;
     
     G4ThreeVector vtmp = 0.5 * (E[0] + E[1]);
-    centroid           = P0 + vtmp;
+    circumcentre       = P0 + vtmp;
     radiusSqr          = vtmp.mag2();
     radius             = std::sqrt(radiusSqr);
   

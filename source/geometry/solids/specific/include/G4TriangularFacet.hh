@@ -17,14 +17,14 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * subject DEFCON 705 IPR conditions.                               *
+// * and is subject to DEFCON 705 IPR conditions.                               *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.hh,v 1.6 2007-02-26 08:39:40 gcosmo Exp $
+// $Id: G4TriangularFacet.hh,v 1.7 2007-08-23 14:49:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,9 +68,10 @@
 #ifndef G4TriangularFacet_hh
 #define G4TriangularFacet_hh 1
 
+#include "globals.hh"
 #include "G4VFacet.hh"
 #include "G4ThreeVector.hh"
-#include "globals.hh"
+#include "G4TessellatedGeometryAlgorithms.hh"
 
 class G4TriangularFacet : public G4VFacet
 {
@@ -106,6 +107,10 @@ class G4TriangularFacet : public G4VFacet
     
     G4double sMin, sMax;
     G4double tMin;
+
+    G4double sqrDist;
+
+    G4TessellatedGeometryAlgorithms *tGeomAlg;
 };
 
 #endif
