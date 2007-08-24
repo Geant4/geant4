@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorConstruction.hh,v 1.6 2007-05-26 00:06:45 tkoi Exp $
+// $Id: Tst11DetectorConstruction.hh,v 1.7 2007-08-24 13:04:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,8 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4Isotope;
+class G4Element;
 class G4Material;
 class Tst11DetectorMessenger;
 
@@ -60,6 +62,10 @@ class Tst11DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* Al;
      G4Material* Pb;
      G4Material* U;
+     G4Element* elN;
+     G4Element* elO;
+     G4Element* elU;
+     G4Isotope* isoU;
      G4String materialChoice;
      Tst11DetectorMessenger * detectorMessenger;
 };

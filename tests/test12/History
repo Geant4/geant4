@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2007-08-24 10:20:26 gcosmo Exp $
+$Id: History,v 1.11 2007-08-24 13:06:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,8 @@ track of all tags.
      ----------------------------------------------------------
 
 24th August 2007  Gabriele Cosmo (test12-V09-00-00)
-- Delete allocated memory in Tst11DetectorMessenger.
+- Delete allocated memory in Tst12DetectorMessenger
+  and in Tst12DetectorConstruction.
 
 6th December 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

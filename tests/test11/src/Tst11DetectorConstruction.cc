@@ -43,7 +43,8 @@
 #include "G4ios.hh"
 
 Tst11DetectorConstruction::Tst11DetectorConstruction()
-:simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0)
+  : simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0),
+    elN(0),elO(0),elU(0),isoU(0)
 {
   detectorMessenger = new Tst11DetectorMessenger(this);
   materialChoice = "Pb";
@@ -53,6 +54,8 @@ Tst11DetectorConstruction::Tst11DetectorConstruction()
 Tst11DetectorConstruction::~Tst11DetectorConstruction()
 {
   delete detectorMessenger;
+  delete Pb;  delete Al;  delete Air;  delete U;
+  delete isoU;  delete elU;  delete elO;  delete elN;
 }
 
 void Tst11DetectorConstruction::SelectMaterial(G4String val)
@@ -73,9 +76,9 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
   if(!Air)
   {
     a = 14.01*g/mole;
-    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
+    elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
     a = 16.00*g/mole;
-    G4Element* elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
+    elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
     density = 1.29e-03*g/cm3;
     Air = new G4Material(name="Air", density, nel=2);
     Air->AddElement(elN, .7);
@@ -101,8 +104,8 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
     a = 238.*g/mole;
     density = 21.*g/cm3;
     U  = new G4Material(name="Uranium", density, 1);
-    G4Element * elU = new G4Element(name="Uranium", "U138", 1);
-    G4Isotope * isoU = new G4Isotope("U238", 92, 238, a);
+    elU = new G4Element(name="Uranium", "U138", 1);
+    isoU = new G4Isotope("U238", 92, 238, a);
     elU->AddIsotope(isoU, 100.0);
     U->AddElement(elU, 1);
   }
@@ -117,7 +120,7 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
   else
   { 
     SetMaterial( materialChoice ); 
-    if ( selectedMaterial == NULL ) selectedMaterial = U; 
+    if ( selectedMaterial == 0 ) { selectedMaterial = U; }
   }
 
   if(simpleBoxLog)
