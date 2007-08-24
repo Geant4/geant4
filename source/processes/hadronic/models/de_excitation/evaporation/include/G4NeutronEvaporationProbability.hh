@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationProbability.hh,v 1.6 2007-08-23 16:14:02 ahoward Exp $
+// $Id: G4NeutronEvaporationProbability.hh,v 1.7 2007-08-24 08:50:32 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -65,8 +65,9 @@ private:
   { return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0) - 0.05)*MeV/
       CalcAlphaParam(fragment); }
 
-  virtual G4double CalcRjParam(const G4Fragment & ) const 
-  { return 1.0; }
+  virtual G4double CalcRjParam(const G4Fragment & fragment) const 
+  { G4int NumberCharged = fragment.GetNumberOfCharged(); G4int NumberParticles = fragment.GetNumberOfParticles();
+    return static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles); }  // taken from PreCompound correction - justified? AH 24/8/07
 
 
   // Excitation energy levels 
