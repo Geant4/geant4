@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst13DetectorMessenger.cc,v 1.5 2006-06-29 21:40:02 gunter Exp $
+// $Id: Tst13DetectorMessenger.cc,v 1.6 2007-08-24 13:54:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,12 @@ Tst13DetectorMessenger::Tst13DetectorMessenger(Tst13DetectorConstruction * myDC)
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");
+}
+
+Tst13DetectorMessenger::~Tst13DetectorMessenger()
+{
+  delete selMatCmd;
+  delete mydetDir;
 }
 
 void Tst13DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
