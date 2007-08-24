@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorMessenger.hh,v 1.4 2006-06-29 21:38:50 gunter Exp $
+// $Id: Tst11DetectorMessenger.hh,v 1.5 2007-08-24 09:53:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,7 @@ class Tst11DetectorMessenger: public G4UImessenger
 {
   public:
     Tst11DetectorMessenger(Tst11DetectorConstruction * myDC);
+   ~Tst11DetectorMessenger();
     void SetNewValue(G4UIcommand * command,G4String newValues);
   private:
     Tst11DetectorConstruction * myDetector;
