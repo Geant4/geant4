@@ -20,10 +20,10 @@ code and to keep track of all tags.
   inverse cross-section formula and is introduced in terms of the energy limit
   of the integration.
 - Introduced missing Rj factor in the following files (evaporation module):
-  G4EvaporationProbability.cc, G4AlphaEvaporationProbability.hh,
-  G4DeuteronEvaporationProbability.hh, G4He3EvaporationProbability.hh,
-  G4NeutronEvaporationProbability.hh, G4ProtonEvaporationProbability.hh,
-  G4TritonEvaporationProbability.hh
+  G4EvaporationProbability.cc, G4EvaporationProbability.hh, 
+  G4AlphaEvaporationProbability.hh, G4DeuteronEvaporationProbability.hh, 
+  G4He3EvaporationProbability.hh, G4NeutronEvaporationProbability.hh, 
+  G4ProtonEvaporationProbability.hh, G4TritonEvaporationProbability.hh
 
 
  28 July 2007 Alex Howard (hadr-deex-V09-00-00)
