@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst15DetectorConstruction.cc,v 1.6 2006-06-29 21:42:48 gunter Exp $
+// $Id: Tst15DetectorConstruction.cc,v 1.7 2007-08-24 14:02:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 Tst15DetectorConstruction::Tst15DetectorConstruction()
-  :simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0)
+  : simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0),elN(0),elO(0)
 {
   detectorMessenger = new Tst15DetectorMessenger(this);
   materialChoice = "Pb";
@@ -53,6 +53,8 @@ Tst15DetectorConstruction::Tst15DetectorConstruction()
 Tst15DetectorConstruction::~Tst15DetectorConstruction()
 {
   delete detectorMessenger;
+  delete Pb;  delete Al;  delete Air;  delete U;
+  delete elO;  delete elN;
 }
 
 void Tst15DetectorConstruction::SelectMaterial(G4String val)
@@ -73,9 +75,9 @@ void Tst15DetectorConstruction::SelectMaterialPointer()
   if(!Air)
   {
     a = 14.01*g/mole;
-    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
+    elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
     a = 16.00*g/mole;
-    G4Element* elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
+    elO = new G4Element(name="Oxigen", symbol="O", iz=8., a);
     density = 1.29e-03*g/cm3;
     Air = new G4Material(name="Air", density, nel=2);
     Air->AddElement(elN, .7);

@@ -1,11 +1,11 @@
-$Id: History,v 1.9 2007-06-01 14:33:16 gcosmo Exp $
+$Id: History,v 1.10 2007-08-24 14:02:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Test 02 History file
+                    Test 15 History file
                     --------------------
 This file should be used by the test developer to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 24th, 2007  Gabriele Cosmo (test15-V09-00-00)
+- Delete allocated memory in Tst15DetectorMessenger
+  and in Tst15DetectorConstruction.
 
 Jun 1st, 2007  Gabriele Cosmo (test15-V08-03-00)
 - Removed useless setup for fast-parameterisation in physics list !
