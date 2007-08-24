@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16DetectorConstruction.hh,v 1.5 2006-06-29 21:43:04 gunter Exp $
+// $Id: Tst16DetectorConstruction.hh,v 1.6 2007-08-24 12:43:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4Element;
 class G4Material;
 class Tst16DetectorMessenger;
 
@@ -57,6 +58,8 @@ class Tst16DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* Air;
      G4Material* Al;
      G4Material* Pb;
+     G4Element* elN;
+     G4Element* elO;
      G4String materialChoice;
      Tst16DetectorMessenger * detectorMessenger;
 };
