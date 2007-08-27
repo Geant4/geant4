@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.14 2007-08-22 13:58:33 sincerti Exp $
+$Id: History,v 1.15 2007-08-27 15:53:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.14 2007-08-22 13:58:33 sincerti Exp $
 
                        Package History file
                        --------------------
+
+27 August 2007 - tag microbeam-V09-00-03 - G. Cosmo
+- Replaced M_PI constants with CLHEP::pi to allow for compilation on WIN32-VC systems.
 
 22 August 2007 - tag microbeam-V09-00-02 - S. Incerti
 - Updated dose computation to take into account volume edges in src/MicrobeamSteppingAction.cc 
