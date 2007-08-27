@@ -6,7 +6,7 @@
 
 List of fixes included in this public patch since the public release 9.0:
 
-  o Configuration:
+  o Configuration:  (*)
     -------------
     + liblist.c: fixed problem affecting recent CygWin installations on
       Windows in parsing the buffer for the generation of libname.map.
@@ -28,7 +28,7 @@ List of fixes included in this public patch since the public release 9.0:
       o G4RKG3_Stepper: improved internal algorithm to use pre-computed values;
         the stepper now gives comparable CPU performance as ClassicalRK4.
       o Changed FatalException to EventMustBeAborted in AccurateAdvance()
-        if proposed integration step is negative.
+        if proposed integration step is negative.  (*)
     + management:
       o Added dummy constructor and destructor to G4VPVParameterisation.
     + solids/BREPS:
@@ -40,7 +40,7 @@ List of fixes included in this public patch since the public release 9.0:
         sqrt() for the case of point p on the surface and v tangent to the
         surface. Responsible for rare cases of NaN.
     + solids/specific:
-      o Fixes in G4Polyhedra::GetPointOnSurface():
+      o Fixes in G4Polyhedra::GetPointOnSurface():  (*)
         Correctly treat 'totalPhi' instead of 'endPhi' for the case of open
         shapes and 'twopi' for not open shapes.
         Introduced fix for the case when number of sectors (numSide) is equal
@@ -92,7 +92,7 @@ List of fixes included in this public patch since the public release 9.0:
 
   o Hadronic Processes:
     ------------------
-    + models/chiral_inv_phase_space:
+    + models/chiral_inv_phase_space:  (*)
       o G4QuasiFreeRatios: fixed DB filling (ID update), responsible for
         excessive growth of memory in long runs. Corrected indexing and
         computation of cos(theta).
@@ -144,6 +144,8 @@ List of fixes included in this public patch since the public release 9.0:
     + novice/N02:
       - Fixed implementation of ExN02MagneticField class in way field is set.
 
+
+ (*) Fixes also included in the patched release 8.3.p01.
 
  ----------------------------------------------------------------------------
 
