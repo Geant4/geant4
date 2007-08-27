@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007-08-27 10:02:06 vnivanch Exp $
+$Id: History,v 1.26 2007-08-27 10:04:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-08-07 V.Ivant  (testem8-V09-00-02)
+- Recover head
+
+02-08-07 V.Ivant  (testem8-V09-00-01)
+ Use components of Physics Lists from physics_list subdirectory
 
 27-08-07 V.Ivant  (testem8-V09-00-00a)
 - Fix PAI physics constructors: enegry loss processes should be 
