@@ -85,6 +85,10 @@ List of fixes included in this public patch since the public release 9.0:
       o Removed/renamed obsolete methods and local variables in
         classes G4VPolarizedCrossSection, G4eplusPolarizedAnnihilation,
         and G4PolarizedAnnihilationModel to clear "shadow" warnings on SUN-CC.
+    + Standard:
+      o G4UniversalFluctuation: added protection for low-density materials
+        or very small steps - mean energy loss below minimal excitation
+        energy - no fluctuation sampling but mean energy loss.
     + Utils:
       o G4VEmModel: fixed SelectRandomAtom() method for the selection of
         elements in a compound material.
