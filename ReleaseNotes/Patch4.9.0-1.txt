@@ -78,7 +78,7 @@ List of fixes included in this public patch since the public release 9.0:
       - White spaces at the head of a line are allowed.
       - Fixed problem on 32bit-Linux.
     + G4UImanager: fixed bug concerning invalid returned object.
-    + Introduced "/control/getEnv" and "/control/echo commands".
+    + Introduced "/control/getEnv" and "/control/echo" commands.
 
   o Electromagnetic Processes:
     -------------------------
