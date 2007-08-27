@@ -80,10 +80,15 @@ int main(int argc,char** argv)
 
   if (argc==1)   // Define UI terminal for interactive mode  
   { 
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-    //  UI->ApplyCommand("/control/execute test.mac");    
+    // G4UIterminal is a (dumb) terminal.
+    G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif    
     session->SessionStart();
-    //delete session;
+    delete session;
   }
   else           // Batch mode
   { 
