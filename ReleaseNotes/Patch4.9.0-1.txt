@@ -71,11 +71,11 @@ List of fixes included in this public patch since the public release 9.0:
   o Intercoms:
     ---------
     + G4UIbatch:
-      - Bug fixed for the treatment of the last line.
-      - Added support for continued line by '\', '_'.
-      - String after '#' is treated as comment.
-      - White spaces at the head of a line are allowed.
-      - Fixed problem on 32bit-Linux.
+      o Bug fixed for the treatment of the last line.
+      o Added support for continued line by '\', '_'.
+      o String after '#' is treated as comment.
+      o White spaces at the head of a line are allowed.
+      o Fixed problem on 32bit-Linux.
     + G4UImanager: fixed bug concerning invalid returned object.
     + Introduced "/control/getEnv" and "/control/echo" commands.
 
@@ -85,6 +85,9 @@ List of fixes included in this public patch since the public release 9.0:
       o Removed/renamed obsolete methods and local variables in
         classes G4VPolarizedCrossSection, G4eplusPolarizedAnnihilation,
         and G4PolarizedAnnihilationModel to clear "shadow" warnings on SUN-CC.
+    + Utils:
+      o G4VEmModel: fixed SelectRandomAtom() method for the selection of
+        elements in a compound material.
     + Xrays:
       o G4VXTRenergyLoss: fixed Valgrind run-time errors for wrong memory
         allocation by removing internal initialisation of Sandia table and
@@ -118,31 +121,45 @@ List of fixes included in this public patch since the public release 9.0:
   o Examples:
     --------
     + advanced/medical_linac:
-      - Fixed problem report #880 in DetectorConstruction class.
-      - Updated macros; reviewed seed initialisation and modified to use
+      o Fixed problem report #880 in DetectorConstruction class.
+      o Updated macros; reviewed seed initialisation and modified to use
         default multiple-scattering class instead of MultipleScattering52.
     + advanced/microbeam:
-      - Improved dose calculation in the code in order to take into account
+      o Improved dose calculation in the code in order to take into account
         small energy deposits by any particle around the phantom edge voxels,
         by suppressing a selection condition on the PostStep. The total result
         of the dose calculation does not change significantly.
-      - Added protection against scattering at large angles in collimators.
-      - Suppressed field manager in zones with zero field.
-      - Use 'kUndefined' optimization in cell phantom implementation.
-      - Changed number of incident alpha particles in microbeam.mac.
+      o Added protection against scattering at large angles in collimators.
+      o Suppressed field manager in zones with zero field.
+      o Use 'kUndefined' optimization in cell phantom implementation.
+      o Changed number of incident alpha particles in microbeam.mac.
     + advanced/underground_physics:
-      - Added missing header file G4hIonisation.hh to DMXPhysicsLists
+      o Added missing header file G4hIonisation.hh to DMXPhysicsLists
         translation unit.
-      - Added G4StepLimiter to physics list as correction of migration
+      o Added G4StepLimiter to physics list as correction of migration
         required since Geant4 release 7.0.
+    + extended/electromagnetic/TestEm7:
+      o Updated README for physics-list names.
+    + extended/electromagnetic/TestEm8:
+      o Fixed PAI physics constructors: energy loss processes should be
+        active post step.
+      o Create VisManager only for interactive session, improved destructor
+        of Em8DetectorConstruction class.
     + extended/electromagnetic/TestEm10:
-      - Create VisManager only for interactive session, improved destructor
+      o Create VisManager only for interactive session, improved destructor
         of Em10DetectorConstruction class.
+    + extended/electromagnetic/TestEm13:
+    + extended/electromagnetic/TestEm14:
+      o SteppingAction : modify logic to take into account low energy packages.
+    + extended/medical/fanoCavity:
+      o Use 'fUseDistanceToBoundary' in physics-list for 'emOptions'. Cleanup.
+    + extended/medical/GammaTherapy:
+      o Provide possibility to change cuts between runs.
     + extended/radioactivedecay/exrdm:
-      - Removed obsolete hadronic builders and use only QGSP_BIC,
+      o Removed obsolete hadronic builders and use only QGSP_BIC,
         QGSP_BIC_HP, QGSP_BERT, QGSP_BERT_HP instead.
     + novice/N02:
-      - Fixed implementation of ExN02MagneticField class in way field is set.
+      o Fixed implementation of ExN02MagneticField class in way field is set.
 
 
  (*) Fixes also included in the patched release 8.3.p01.
