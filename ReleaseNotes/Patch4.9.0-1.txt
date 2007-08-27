@@ -56,8 +56,7 @@ List of fixes included in this public patch since the public release 9.0:
         - DistanceToOut(p,v): now returning positive solution or zero when
           crossing the elliptical surface.
         - Fix in DistanceToOut(p) which was giving always zero.
-        - Added some formulas on how to pre-calculate 'SemiAxis' and
-          'zheight'.
+        - Added some formulas on how to pre-calculate 'SemiAxis' and 'zheight'.
 
   o Global:
     ------
