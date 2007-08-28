@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.7 2007-08-28 04:50:10 taso Exp $
+// $Id: G4ScoringManager.hh,v 1.8 2007-08-28 05:21:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,7 +67,7 @@ class G4ScoringManager
       void Accumulate(G4VHitsCollection* map);
       G4VScoringMesh* FindMesh(G4String);
       void List() const;
-      G4VScoringMesh* OpenMesh(MeshShape type, G4String& name); 
+      G4VScoringMesh* CreateMesh(MeshShape type, G4String& name); 
 
   private: 
       static G4ScoringManager * fSManager;
@@ -84,7 +84,7 @@ class G4ScoringManager
       inline size_t GetNumberOfWorlds() const
       { return fMeshVec.size(); }
       inline void RegisterScoringMesh(G4VScoringMesh * sc)
-      {fMeshVec.push_back(sc);}
+      { fMeshVec.push_back(sc); }
       inline G4VScoringMesh* GetMesh(G4int i) const
       { return fMeshVec[i]; }
       inline G4String GetWorldName(G4int i) const

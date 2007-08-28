@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.4 2007-08-28 04:50:10 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.5 2007-08-28 05:21:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -40,7 +40,8 @@
 #include "G4UIcommand.hh"
 #include "G4Tokenizer.hh"
 
-G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager):fSMan(SManager)
+G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
+:fSMan(SManager),fcurrentMesh(0)
 {
   scoreDir = new G4UIdirectory("/score/");
   scoreDir->SetGuidance("Interactive scoring commands.");
@@ -210,11 +211,11 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshOpnBoxCmd) {
-      fSMan->OpenMesh(boxMesh,newVal);
+      fcurrentMesh = fSMan->CreateMesh(boxMesh,newVal);
   } else if(command==meshOpnTubsCmd) {
-      fSMan->OpenMesh(cylinderMesh,newVal);
+      fcurrentMesh = fSMan->CreateMesh(cylinderMesh,newVal);
   } else if(command==meshOpnSphereCmd) {
-      fSMan->OpenMesh(sphereMesh,newVal);
+      fcurrentMesh = fSMan->CreateMesh(sphereMesh,newVal);
   } else if(command==meshClsCmd) {
 
   } else if(command==meshDelCmd) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.6 2007-08-28 04:50:10 taso Exp $
+// $Id: G4ScoringManager.cc,v 1.7 2007-08-28 05:21:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -85,24 +85,27 @@ void G4ScoringManager::List() const
   G4cout << "G4ScoringManager" << G4endl;
 }
 
-G4VScoringMesh* G4ScoringManager::OpenMesh(MeshShape type, G4String& name)
+G4VScoringMesh* G4ScoringManager::CreateMesh(MeshShape type, G4String& name)
 {
-  G4cout << "G4ScoringManager::OpenMesh" << G4endl;
+  G4cout << "G4ScoringManager::CreateMesh" << G4endl;
 
   // For existing Mesh
   G4VScoringMesh* mesh = FindMesh(name);
-
-  // Creating New Mesh
-  if ( !mesh ){
-      if ( type == boxMesh ){
-	 mesh = new G4ScoringBox(name);
-      } else if ( type == cylinderMesh ){
-      } else if ( type == sphereMesh   ){
-      } else {
-	  G4Exception("G4ScoringManager::OpenMesh: Mesh type is not supported.");
-      }    
-      G4cout << "G4ScoringManager::OpenMesh: Created new ScroingMesh" <<G4endl;
+  if(mesh)
+  {
+    G4cerr << "G4ScoringManager::CreateMesh: Mesh <" << name << "> already exists. command ignored." 
+           << G4endl;
+    return NULL;
   }
+  // Creating New Mesh
+  if ( type == boxMesh ){
+	 mesh = new G4ScoringBox(name);
+  } else if ( type == cylinderMesh ){
+  } else if ( type == sphereMesh   ){
+  } else {
+	  G4Exception("G4ScoringManager::CreateMesh: Mesh type is not supported.");
+  }    
+  G4cout << "G4ScoringManager::OpenMesh: Created new ScroingMesh" <<G4endl;
 
   RegisterScoringMesh(mesh);
 
