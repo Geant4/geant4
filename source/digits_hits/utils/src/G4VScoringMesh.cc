@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.5 2007-08-28 05:26:56 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.6 2007-08-28 07:09:03 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VScoringMesh.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4MultiFunctionalDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VSDFilter.hh"
 
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
@@ -58,64 +60,6 @@ G4VScoringMesh::~G4VScoringMesh()
 //
 //}
 
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSDoseDeposit.hh"
-
-void G4VScoringMesh::CreatePrimitiveScorer(PS psType, G4String & name) {
-
-  G4VPrimitiveScorer * ps;
-  switch(psType) {
-  case EnergyDeposit:
-    ps = new G4PSEnergyDeposit(name);
-    break;
-  case DoseDeposit: 
-    ps = new G4PSDoseDeposit(name);
-    break;
-  default:
-    return;
-  }
-  fMFD->RegisterPrimitive(ps);
-  
-}
-
-#include "G4SDParticleFilter.hh"
-#include "G4SDChargedFilter.hh"
-
-void G4VScoringMesh::CreateSDFilter(G4String & psName,
-				    FILTER filterType,
-				    G4String & filterName,
-				    std::vector<G4String> & parameter) {
-
-  G4VSDFilter * filter;
-  switch(filterType) {
-  case Particle:
-    filter = new G4SDParticleFilter(filterName, parameter);
-  case Charged:
-    filter = new G4SDChargedFilter(filterName);
-  default:
-    return;
-  }
-
-  G4VPrimitiveScorer * ps = GetPrimitiveScorer(psName);
-  if(ps == NULL) return;
-
-  ps->SetFilter(filter);
-  
-}
-
-G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
-  if(fMFD == NULL) return NULL;
-
-  G4int nps = fMFD->GetNumberOfPrimitives();
-  for(G4int i = 0; i < nps; i++) {
-    G4VPrimitiveScorer * ps = fMFD->GetPrimitive(i);
-    if(name == ps->GetName()) return ps;
-  }
-
-  return NULL;
-}
-
-
 void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
 }
@@ -139,5 +83,46 @@ void G4VScoringMesh::RotateY(G4double delta) {
 void G4VScoringMesh::RotateZ(G4double delta) {
   if(fRotationMatrix == NULL) fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateZ(delta);
+}
+
+void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
+
+  fCurrentPS = ps;
+  fMFD->RegisterPrimitive(ps);
+}
+
+void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
+
+  if(fCurrentPS == NULL) {
+    //G4Exception("G4VScoringMesh::SetSDFilter() : Current primitive scorer has not been set.");
+  }
+
+  fCurrentPS->SetFilter(filter);
+}
+
+void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
+  fCurrentPS = GetPrimitiveScorer(name);
+  if(fCurrentPS == NULL) {
+    //G4Execption("G4VScoringMesh::SetCurrentPrimitiveScorer() :  The primitive scorer ", name, " was not exist.");
+  }
+}
+
+G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
+  if(fMFD == NULL) return NULL;
+
+  G4int nps = fMFD->GetNumberOfPrimitives();
+  for(G4int i = 0; i < nps; i++) {
+    G4VPrimitiveScorer * ps = fMFD->GetPrimitive(i);
+    if(name == ps->GetName()) return ps;
+  }
+
+  return NULL;
+}
+
+void G4VScoringMesh::Dump() {
+  G4cout << "G4ScoringBox : " << fScoringMeshName << G4endl;
+
+  
+
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.7 2007-08-28 05:26:56 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.8 2007-08-28 07:09:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@
 class G4VPhysicalVolume;
 class G4MultiFunctionalDetector;
 class G4VPrimitiveScorer;
+class G4VSDFilter;
 
 #include <map>
 
@@ -56,9 +57,8 @@ class G4VScoringMesh
 
   public:
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
-      virtual void List() const=0;
-
-
+  virtual void List() const=0;
+  
 public:
   inline const G4String& GetWorldName() const
   { return fWorldName; }
@@ -69,6 +69,7 @@ public:
   inline MeshShape GetShape() const
   { return fShape; }
   inline void Accumulate(G4THitsMap<G4double> * map) const;
+  void Dump();
 
   inline G4String SetScoringMeshName(G4String & name)
   { return fScoringMeshName = name; }
@@ -82,17 +83,16 @@ public:
   inline void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
 
 
-  enum PS {EnergyDeposit, DoseDeposit};
-  void CreatePrimitiveScorer(PS psTame, G4String & name);
-  enum FILTER {Particle, Charged};
-  void CreateSDFilter(G4String & psName, FILTER filterType,
-		      G4String & filterName, std::vector<G4String> & parameter);
+  void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
+  void SetFilter(G4VSDFilter * filter);
+  void SetCurrentPrimitiveScorer(G4String & name);
 
 protected:
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
 
 protected:
   G4String  fWorldName;
+  G4VPrimitiveScorer * fCurrentPS;
   G4bool    fConstructed;
   G4bool    fActive;
   MeshShape fShape;
@@ -110,7 +110,7 @@ protected:
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const
-{ 
+{
   G4String psName = map->GetName();
   std::map<G4String, G4THitsMap<G4double> >::const_iterator fMapItr = fMap.find(psName);
   fMapItr->second += *map;

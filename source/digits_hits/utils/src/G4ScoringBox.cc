@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.10 2007-08-28 05:26:56 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.11 2007-08-28 07:09:03 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -217,7 +217,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 
 void G4ScoringBox::List() const {
-  G4cout << "G4ScoringBox" << G4endl;
+  G4cout << "G4ScoringBox : " << fScoringMeshName << G4endl;
 }
 
 
