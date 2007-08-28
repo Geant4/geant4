@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.12 2007-08-28 08:06:48 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.13 2007-08-28 10:51:41 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,16 +84,16 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  //G4cout << "box mesh" << G4endl;
+  G4cout << "box mesh" << G4endl;
   G4String boxName = fWorldName;
 
+  G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
 						   fCenterPosition[1],
 						   fCenterPosition[2]),
 		    boxLogical, boxName+"0", worldLogical, false, 0);
-  //G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
 
   G4double fsegment[3][3];
   G4int segOrder[3];
@@ -107,7 +107,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer
-  //G4cout << "layer 1 :" << G4endl;
+  G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fsegment[0][0],
 			    fSize[1]/fsegment[0][1],
