@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-08-07  V.Ivanchenko (test41-V09-00-02)
+- add README
+
 29-07-07  V.Ivanchenko (test41-V09-00-01)
 - add PhysList standardIG with standardIG physics builder
 

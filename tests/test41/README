@@ -1,0 +1,24 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test41
+                            ------
+                     Author V.Ivanchenko
+
+
+The purpose of this test is to validate multiple and single Coulomb 
+scattering of muons versus MuScat experimental data (D.Attwood et. al.
+NIM B251 (2006) 41). Scattering of 172 MeV/c muons on different foils 
+is simulated. The results of simulation ASCII file with probabilities 
+is created, the bin sizes are the same as in experiment. The macro 
+files for ten foils are prepared. Different electromagnetic Physics 
+Lists are available.  
+
+
+
+
+
+
+
