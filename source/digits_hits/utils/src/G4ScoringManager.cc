@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.8 2007-08-28 07:08:02 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.9 2007-08-28 08:21:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,14 +86,14 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
 void G4ScoringManager::List() const
 {
   G4cout << "G4ScoringManager has " << GetNumberOfMesh() << " scoring meshes." << G4endl;
-  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+  for(MeshVecConstItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
    (*itr)->List();
   }
 }
 
 void G4ScoringManager::Dump() const
 {
-  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+  for(MeshVecConstItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
    (*itr)->Dump();
   }
 }

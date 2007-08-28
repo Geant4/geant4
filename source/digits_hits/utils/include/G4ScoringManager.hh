@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.9 2007-08-28 07:07:39 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.10 2007-08-28 08:21:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,6 +48,7 @@ class G4VHitsCollection;
 
 typedef std::vector<G4VScoringMesh*> MeshVec;
 typedef std::vector<G4VScoringMesh*>::iterator MeshVecItr;
+typedef std::vector<G4VScoringMesh*>::const_iterator MeshVecConstItr;
 
 class G4ScoringManager 
 {
