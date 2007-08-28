@@ -142,6 +142,8 @@ examples/extended
     exgps                    flei@space.qinetiq.com          Fan Lei
     HepMCEx01,02             Koichi.Murakami@kek.jp          Koichi Murakami
     MCTruth                  Witold.Pokorski@cern.ch         Witold Pokorski
+  exoticphysics:
+    monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   field:
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
   g3tog4:
@@ -209,6 +211,7 @@ tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
       test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test41                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
