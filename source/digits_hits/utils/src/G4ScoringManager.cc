@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.7 2007-08-28 05:21:37 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.8 2007-08-28 07:08:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,7 +49,8 @@ G4ScoringManager* G4ScoringManager::GetScoringManager()
 G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 { return fSManager; }
 
-G4ScoringManager::G4ScoringManager():verboseLevel(0)
+G4ScoringManager::G4ScoringManager()
+:verboseLevel(0),fCurrentMesh(0)
 {
   fMessenger = new G4ScoringMessenger(this);
 }
@@ -78,37 +79,21 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
       break;
     }
   }
+  SetCurrentMesh(sm);
   return sm;
 }
+
 void G4ScoringManager::List() const
 {
-  G4cout << "G4ScoringManager" << G4endl;
-}
-
-G4VScoringMesh* G4ScoringManager::CreateMesh(MeshShape type, G4String& name)
-{
-  G4cout << "G4ScoringManager::CreateMesh" << G4endl;
-
-  // For existing Mesh
-  G4VScoringMesh* mesh = FindMesh(name);
-  if(mesh)
-  {
-    G4cerr << "G4ScoringManager::CreateMesh: Mesh <" << name << "> already exists. command ignored." 
-           << G4endl;
-    return NULL;
+  G4cout << "G4ScoringManager has " << GetNumberOfMesh() << " scoring meshes." << G4endl;
+  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+   (*itr)->List();
   }
-  // Creating New Mesh
-  if ( type == boxMesh ){
-	 mesh = new G4ScoringBox(name);
-  } else if ( type == cylinderMesh ){
-  } else if ( type == sphereMesh   ){
-  } else {
-	  G4Exception("G4ScoringManager::CreateMesh: Mesh type is not supported.");
-  }    
-  G4cout << "G4ScoringManager::OpenMesh: Created new ScroingMesh" <<G4endl;
-
-  RegisterScoringMesh(mesh);
-
-  return mesh;
 }
 
+void G4ScoringManager::Dump() const
+{
+  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+   (*itr)->Dump();
+  }
+}

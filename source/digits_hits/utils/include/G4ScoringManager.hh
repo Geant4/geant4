@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.8 2007-08-28 05:21:37 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.9 2007-08-28 07:07:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,7 +67,7 @@ class G4ScoringManager
       void Accumulate(G4VHitsCollection* map);
       G4VScoringMesh* FindMesh(G4String);
       void List() const;
-      G4VScoringMesh* CreateMesh(MeshShape type, G4String& name); 
+      void Dump() const;
 
   private: 
       static G4ScoringManager * fSManager;
@@ -75,20 +75,33 @@ class G4ScoringManager
       G4ScoringMessenger* fMessenger;
 
       MeshVec fMeshVec;
+      G4VScoringMesh* fCurrentMesh;
+
+  private:
+      inline void SetCurrentMesh(G4VScoringMesh* cm)
+      { fCurrentMesh = cm; }
 
   public:
+      inline G4VScoringMesh* GetCurrentMesh() const
+      { return fCurrentMesh; }
+      inline void CloseCurrentMesh()
+      { fCurrentMesh = 0; }
       inline void SetVerboseLevel(G4int vl) 
       { verboseLevel = vl; }
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
-      inline size_t GetNumberOfWorlds() const
+      inline size_t GetNumberOfMesh() const
       { return fMeshVec.size(); }
-      inline void RegisterScoringMesh(G4VScoringMesh * sc)
-      { fMeshVec.push_back(sc); }
+      inline void RegisterScoringMesh(G4VScoringMesh * sm)
+      {
+        fMeshVec.push_back(sm);
+        SetCurrentMesh(sm);
+      }
       inline G4VScoringMesh* GetMesh(G4int i) const
       { return fMeshVec[i]; }
       inline G4String GetWorldName(G4int i) const
       { return fMeshVec[i]->GetWorldName(); }
+
 };
 
 
