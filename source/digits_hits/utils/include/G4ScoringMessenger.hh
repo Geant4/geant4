@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.3 2007-08-28 04:50:10 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.4 2007-08-28 08:10:36 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,18 +62,23 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIdirectory*           scoreDir;
     G4UIcmdWithoutParameter* listCmd;
     G4UIcmdWithAnInteger*    verboseCmd;
-
+    //
+    G4UIdirectory*             meshCreateDir;
+    G4UIcmdWithAString*        meshBoxCreateCmd;
+    G4UIcmdWithAString*        meshTubsCreateCmd;
+    G4UIcmdWithAString*        meshSphereCreateCmd;
+    //
     // Mesh commands
     G4UIdirectory*             meshDir;
-    G4UIcmdWithAString*        meshOpnBoxCmd;
-    G4UIcmdWithAString*        meshOpnTubsCmd;
-    G4UIcmdWithAString*        meshOpnSphereCmd;
+    G4UIcmdWithAString*        meshOpnCmd;
     //
     G4UIcmdWithoutParameter*   meshClsCmd;
     G4UIcmdWithAString*        meshDelCmd;
     //
     //   Size commands
-    G4UIcmdWith3VectorAndUnit* mSizeCmd;
+    G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
+    G4UIcmdWith3VectorAndUnit* mTubsSizeCmd;
+    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
     //
     //   Division command
     G4UIdirectory*             mBinDir;
@@ -89,23 +94,18 @@ class G4ScoringMessenger: public G4UImessenger
 
     // Quantity commands
     G4UIdirectory*           quantityDir;
-    G4UIcmdWithAString*      quantityOpnCmd;
-    G4UIcmdWithoutParameter* quantityClsCmd;
-    G4UIcmdWithAString* quantityDelCmd;
-    //    Type Command
-    G4UIcommand*             qTypeCmd;
+    G4UIcmdWithAString*      qeDepCmd;
 
     // Filter commands 
     G4UIdirectory*           filterDir;
     G4UIcmdWithAString*      filterOpnCmd;
     G4UIcmdWithoutParameter* filterClsCmd;
     G4UIcmdWithAString*      filterDelCmd;
-    //    Type Command
-    G4UIcommand*             fTypeCmd;
+    //
     G4UIcmdWithAString*      fAttachCmd;
 
-    // Current Mesh
-    G4VScoringMesh*          fcurrentMesh;
+    //dump Command
+    G4UIcmdWithAString*       fdumpCmd;
 };
 
 

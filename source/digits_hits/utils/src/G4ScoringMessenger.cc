@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.5 2007-08-28 05:21:37 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.6 2007-08-28 08:10:51 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -32,6 +32,9 @@
 #include "G4ScoringMessenger.hh"
 #include "G4ScoringManager.hh"
 #include "G4VScoringMesh.hh"
+
+#include "G4PSEnergyDeposit3D.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -52,22 +55,25 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   verboseCmd = new G4UIcmdWithAnInteger("/score/verbose",this);
   verboseCmd->SetGuidance("Verbosity");
 
+  meshCreateDir = new G4UIdirectory("/score/create/");
+  meshCreateDir->SetGuidance("Interactive scoring commands.");
   //
   // Mesh commands
-  meshDir  = new G4UIdirectory("/score/open/");
-  meshDir->SetGuidance("Scoring mesh commands.");
+  meshBoxCreateCmd = new G4UIcmdWithAString("/score/create/boxMesh",this);
+  meshBoxCreateCmd->SetGuidance("Open scoring mesh.");
+  meshBoxCreateCmd->SetParameterName("MeshName",false);
   //
-  meshOpnBoxCmd = new G4UIcmdWithAString("/score/open/boxMesh",this);
-  meshOpnBoxCmd->SetGuidance("Open scoring mesh.");
-  meshOpnBoxCmd->SetParameterName("MeshName",false);
+  meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
+  meshTubsCreateCmd->SetGuidance("Open scoring mesh.");
+  meshTubsCreateCmd->SetParameterName("MeshName",false);
   //
-  meshOpnTubsCmd = new G4UIcmdWithAString("/score/open/tubsMesh",this);
-  meshOpnTubsCmd->SetGuidance("Open scoring mesh.");
-  meshOpnTubsCmd->SetParameterName("MeshName",false);
+  meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
+  meshSpherCreateCmd->SetGuidance("Open scoring mesh.");
+  meshSphereCreateCmd->SetParameterName("MeshName",false);
   //
-  meshOpnSphereCmd = new G4UIcmdWithAString("/score/open/sphereMesh",this);
-  meshOpnSphereCmd->SetGuidance("Open scoring mesh.");
-  meshOpnSphereCmd->SetParameterName("MeshName",false);
+  meshOpnCmd = new G4UIcmdWithAString("/score/open",this);
+  meshOpnCmd->SetGuidance("Open scoring mesh.");
+  meshOpnCmd->SetParameterName("MeshName",false);
   //
   meshClsCmd = new G4UIcmdWithoutParameter("/score/close",this);
   meshClsCmd->SetGuidance("Close scoring mesh.");
@@ -77,18 +83,15 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshDelCmd->SetParameterName("MeshName",false);
   //
   //
-  mSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/size",this);
-  mSizeCmd->SetGuidance("Define Size of scoring mesh.");
-  mSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
-  mSizeCmd->SetDefaultUnit("mm");
+  mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxsize",this);
+  mBoxSizeCmd->SetGuidance("Define Size of scoring mesh.");
+  mBoxSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
+  mBoxSizeCmd->SetDefaultUnit("mm");
   //
   //   Division command
-  mBinDir = new G4UIdirectory("/score/mesh/bin/");
-  mBinDir->SetGuidance("Binning of scoring mesh");
-  //
-  mBinCmd = new G4UIcommand("/score/mesh/bin/numberOfBin",this);
+  mBinCmd = new G4UIcommand("/score/mesh/nbin",this);
   mBinCmd->SetGuidance("Define segmentation of scoring mesh.");
-  mBinCmd->SetGuidance("[usage] /score/mesh/bin/numberOfBin");
+  mBinCmd->SetGuidance("[usage] /score/mesh/nbin");
   mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
   mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
   mBinCmd->SetGuidance("  Nk  :(int) Number of bins k ");
@@ -134,18 +137,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   quantityDir = new G4UIdirectory("/score/quantity/");
   quantityDir->SetGuidance("Scoring quantity of the mesh");
   //
-  quantityOpnCmd = new G4UIcmdWithAString("/score/quantity/open",this);
-  quantityOpnCmd->SetGuidance("Open quantity of scoring mesh.");
-  quantityOpnCmd->SetParameterName("QuantityName",false);
-  quantityClsCmd = new G4UIcmdWithoutParameter("/score/quantity/close",this);
-  quantityClsCmd->SetGuidance("Close quantity of scoring mesh.");
-  quantityDelCmd = new G4UIcmdWithAString("/score/quantity/delete",this);
-  quantityDelCmd->SetGuidance("Delete quantity of scoring mesh.");
-  quantityDelCmd->SetParameterName("QuantityName",false);
+  qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep");
+  qeDepCmd->SetGuidance("Energy Deposit Scorer");
   //
-  //    Type Command
-  qTypeCmd = new G4UIcommand("/score/quantity/type",this);
-  qTypeCmd->SetGuidance("Quantity type of the scorer.");
   //
   // Filter commands 
   filterDir = new G4UIdirectory("/score/filter/");
@@ -163,9 +157,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fAttachCmd->SetGuidance("Attach previously defined filter into a mesh or quantity,");
   fAttachCmd->SetParameterName("FilterName",false);
   //
-  //    Type Command
-  fTypeCmd = new G4UIcommand("/score/filter/type",this);
-  fTypeCmd->SetGuidance("Filter type of the scorer.");
+
+  fdumpCmd = new G4UIcmdWitAString("/score/dump",this);
+  fdumpCmd->SetGuidance("Dump scorer results ");
 
 }
 
@@ -173,12 +167,13 @@ G4ScoringMessenger::~G4ScoringMessenger()
 {
   delete listCmd;
   delete scoreDir;
-  delete meshOpnBoxCmd;
-  delete meshOpnTubsCmd;
-  delete meshOpnSphereCmd;
+
+  delete meshBoxCreateCmd;
+  delete meshTubsCreateCmd;
+  delete meshSphereCreateCmd;
   delete meshClsCmd;
   delete meshDelCmd;
-  delete mSizeCmd;
+  delete mBoxSizeCmd;
   delete mBinCmd;
   delete mBinDir;
   delete mTSetCmd;
@@ -187,18 +182,15 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete mRSetCmd;
   delete mRAddCmd;
   delete mRotDir;
+  delete fdumpDir;
   delete meshDir;
 
-  delete quantityOpnCmd;
-  delete quantityClsCmd;
-  delete quantityDelCmd;
-  delete qTypeCmd;
+  delete qeDepCmd;
   delete quantityDir;
 
   delete filterOpnCmd;
   delete filterClsCmd;
   delete filterDelCmd;
-  delete fTypeCmd;
   delete fAttachCmd;
   delete filterDir;
 
@@ -210,32 +202,53 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       fSMan->List(); 
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
-  } else if(command==meshOpnBoxCmd) {
-      fcurrentMesh = fSMan->CreateMesh(boxMesh,newVal);
-  } else if(command==meshOpnTubsCmd) {
-      fcurrentMesh = fSMan->CreateMesh(cylinderMesh,newVal);
-  } else if(command==meshOpnSphereCmd) {
-      fcurrentMesh = fSMan->CreateMesh(sphereMesh,newVal);
+  } else if(command==meshCreateBoxCmd) {
+      G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
+      if ( !mesh ){
+	  mesh = new G4ScoringBox(newVal);
+	  fSMan->RegisterScoringMesh(mesh);
+      }else{
+	  G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
+      }
+  } else if(command==meshOpnCmd) {
+      G4VScoringMesh* mesh = fSman->FindMesh(newVal); 
+      if ( !mesh ){
+ 	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
+      }
   } else if(command==meshClsCmd) {
-
+      G4VScoringMesh* mesh = fSman->GetCurrentMesh();
+      if ( !mesh ){
+ 	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
+      }else{
+	  mesh->CloseCurrentMesh();
+      }
   } else if(command==meshDelCmd) {
-  } else if(command==mSizeCmd) {
-      //fSMan->SetMeshSize(mSizeCmd->GetNew3VectorValue(newVal));
+  } else if(command==mBoxSizeCmd) {
+      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
+      if ( !mesh ){
+ 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+      }
+      MeshShape shape = mesh->GetShape();
+      if ( shape == boxMesh ){
+	  mesh->SetMeshSize(mBoxSizeCmd->GetNew3VectorValue(newVal));
+      } else {
+ 	  G4Exception("G4ScroingMessenger:: Current Mesh is not Box type. Error!");
+      }
   } else if(command==mBinCmd) {
       MeshBinCommand(newVal);
   } else if(command==mTSetCmd) {
   } else if(command==mTAddCmd) {
   } else if(command==mRSetCmd) {
   } else if(command==mRAddCmd) {
-  } else if(command==quantityOpnCmd) {
-  } else if(command==quantityClsCmd) {
-  } else if(command==quantityDelCmd) {
-  } else if(command==qTypeCmd) {
-
+  } else if(command==qeDepCmd) {
+      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
+      if ( !mesh ){
+ 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+      }
+      mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
   } else if(command==filterOpnCmd) {
   } else if(command==filterClsCmd) {
   } else if(command==filterDelCmd) {
-  } else if(command==fTypeCmd) {
   } else if(command==fAttachCmd) {
   }
 
@@ -256,6 +269,19 @@ void G4ScoringMessenger::MeshBinCommand(G4String newVal){
     G4int Ni = StoI(next());
     G4int Nj = StoI(next());
     G4int Nk = StoI(next());
+    G4int nSegment[3];
+    nSegment[0] = Ni;
+    nSegment[1] = Nj;
+    nSegment[2] = Nk;
+    //
+    G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
+    if ( !mesh ){
+	G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+    }
+    mesh->SetNumberOfSegments(nSegment);
+    //
+    //
+    /*
     G4int iAxis = 3;
     G4String Axis = next();
     if ( Axis.isNull() ) {
@@ -266,4 +292,5 @@ void G4ScoringMessenger::MeshBinCommand(G4String newVal){
 	//
 	//  .........
     }
+    */
 }
