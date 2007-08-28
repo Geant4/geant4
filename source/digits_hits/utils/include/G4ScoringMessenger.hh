@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.4 2007-08-28 08:10:36 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.5 2007-08-28 10:14:12 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,19 +93,19 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWith3VectorAndUnit* mRAddCmd;
 
     // Quantity commands
-    G4UIdirectory*           quantityDir;
-    G4UIcmdWithAString*      qeDepCmd;
+    G4UIdirectory*             quantityDir;
+    G4UIcmdWithoutParameter*   qeDepCmd;
 
     // Filter commands 
-    G4UIdirectory*           filterDir;
-    G4UIcmdWithAString*      filterOpnCmd;
-    G4UIcmdWithoutParameter* filterClsCmd;
-    G4UIcmdWithAString*      filterDelCmd;
+    G4UIdirectory*             filterDir;
+    G4UIcmdWithAString*        filterOpnCmd;
+    G4UIcmdWithoutParameter*   filterClsCmd;
+    G4UIcmdWithAString*        filterDelCmd;
     //
-    G4UIcmdWithAString*      fAttachCmd;
+    G4UIcmdWithAString*        fAttachCmd;
 
     //dump Command
-    G4UIcmdWithAString*       fdumpCmd;
+    G4UIcmdWithAString*        fdumpCmd;
 };
 
 

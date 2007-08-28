@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.6 2007-08-28 08:10:51 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.7 2007-08-28 10:14:26 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -32,6 +32,7 @@
 #include "G4ScoringMessenger.hh"
 #include "G4ScoringManager.hh"
 #include "G4VScoringMesh.hh"
+#include "G4ScoringBox.hh"
 
 #include "G4PSEnergyDeposit3D.hh"
 
@@ -44,7 +45,7 @@
 #include "G4Tokenizer.hh"
 
 G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
-:fSMan(SManager),fcurrentMesh(0)
+:fSMan(SManager)
 {
   scoreDir = new G4UIdirectory("/score/");
   scoreDir->SetGuidance("Interactive scoring commands.");
@@ -68,7 +69,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshTubsCreateCmd->SetParameterName("MeshName",false);
   //
   meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
-  meshSpherCreateCmd->SetGuidance("Open scoring mesh.");
+  meshSphereCreateCmd->SetGuidance("Open scoring mesh.");
   meshSphereCreateCmd->SetParameterName("MeshName",false);
   //
   meshOpnCmd = new G4UIcmdWithAString("/score/open",this);
@@ -137,7 +138,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   quantityDir = new G4UIdirectory("/score/quantity/");
   quantityDir->SetGuidance("Scoring quantity of the mesh");
   //
-  qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep");
+  qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
   //
   //
@@ -158,7 +159,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fAttachCmd->SetParameterName("FilterName",false);
   //
 
-  fdumpCmd = new G4UIcmdWitAString("/score/dump",this);
+  fdumpCmd = new G4UIcmdWithAString("/score/dump",this);
   fdumpCmd->SetGuidance("Dump scorer results ");
 
 }
@@ -182,7 +183,6 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete mRSetCmd;
   delete mRAddCmd;
   delete mRotDir;
-  delete fdumpDir;
   delete meshDir;
 
   delete qeDepCmd;
@@ -202,7 +202,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       fSMan->List(); 
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
-  } else if(command==meshCreateBoxCmd) {
+  } else if(command==meshBoxCreateCmd) {
       G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
       if ( !mesh ){
 	  mesh = new G4ScoringBox(newVal);
@@ -211,16 +211,16 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
       }
   } else if(command==meshOpnCmd) {
-      G4VScoringMesh* mesh = fSman->FindMesh(newVal); 
+      G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
       if ( !mesh ){
  	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
       }
   } else if(command==meshClsCmd) {
-      G4VScoringMesh* mesh = fSman->GetCurrentMesh();
+      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
       if ( !mesh ){
  	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
       }else{
-	  mesh->CloseCurrentMesh();
+	  fSMan->CloseCurrentMesh();
       }
   } else if(command==meshDelCmd) {
   } else if(command==mBoxSizeCmd) {
@@ -230,7 +230,12 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       }
       MeshShape shape = mesh->GetShape();
       if ( shape == boxMesh ){
-	  mesh->SetMeshSize(mBoxSizeCmd->GetNew3VectorValue(newVal));
+	  G4ThreeVector size = mBoxSizeCmd->GetNew3VectorValue(newVal);
+	  G4double vsize[3];
+	  vsize[0] = size.x();
+	  vsize[1] = size.y();
+	  vsize[2] = size.z();
+	  mesh->SetSize(vsize);
       } else {
  	  G4Exception("G4ScroingMessenger:: Current Mesh is not Box type. Error!");
       }
