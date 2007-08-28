@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.hh,v 1.1 2007-08-18 05:16:53 akimura Exp $
+// $Id: G4ScoringTubs.hh,v 1.2 2007-08-28 05:26:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,6 @@
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
-#include "G4RotationMatrix.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VPrimitiveScorer;
@@ -75,7 +74,6 @@ class G4ScoringTubs : public G4VScoringMesh
   void SetNumberOfZSegment(G4int nZSegment) {fNSegment[2] = nZSegment;}
 
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;} // supports the r-direction only at present.
-  void SetRotationMatrix(G4RotationMatrix * rmat) {fRotationMatrix = rmat;}
   void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
 
@@ -84,7 +82,6 @@ private:
   G4double fCenterPosition[3];
   G4int fNSegment[3]; // 0: r , 1: phi, 2: z
   G4int fSegmentDirection; // =1: r, =2: phi, =3: z
-  G4RotationMatrix * fRotationMatrix;
   std::vector<G4double> fSegmentPositions;
   G4LogicalVolume * fMeshElementLogical;
   

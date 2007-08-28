@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.cc,v 1.2 2007-08-22 01:40:29 akimura Exp $
+// $Id: G4ScoringTubs.cc,v 1.3 2007-08-28 05:26:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@
 
 
 G4ScoringTubs::G4ScoringTubs(G4String wName)
-  :G4VScoringMesh(wName), fSegmentDirection(-1), fRotationMatrix(0),
+  :G4VScoringMesh(wName), fSegmentDirection(-1), 
    fMeshElementLogical(0)
 {
   fShape = cylinderMesh;
@@ -218,22 +218,6 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
   visatt->SetVisibility(true);
   fMeshElementLogical->SetVisAttributes(visatt);
-}
-
-void G4ScoringTubs::RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps) {
-
-
-  if(fMFD == 0) fMFD = new G4MultiFunctionalDetector(fWorldName);
-
-  std::vector<G4VPrimitiveScorer *>::iterator itr = vps.begin();
-  for(; itr != vps.end(); itr++) {
-    fMFD->RegisterPrimitive(*itr);
-
-    fPS.push_back(*itr);
-  }
-
-  G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
-  fMeshElementLogical->SetSensitiveDetector(fMFD);
 }
 
 void G4ScoringTubs::List() const {

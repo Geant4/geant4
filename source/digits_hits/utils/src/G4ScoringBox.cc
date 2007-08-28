@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.9 2007-08-23 02:21:22 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.10 2007-08-28 05:26:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,14 +49,10 @@
 
 
 G4ScoringBox::G4ScoringBox(G4String wName)
-  :G4VScoringMesh(wName), fRotationMatrix(0), fSegmentDirection(-1),
+  :G4VScoringMesh(wName), fSegmentDirection(-1),
    fMeshElementLogical(0)
 {
   fShape = boxMesh;
-
-  fSize[0] = fSize[1] = fSize[2] = 1.*cm;
-  fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
-  fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
 }
 
 G4ScoringBox::~G4ScoringBox()
@@ -219,21 +215,6 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   fMeshElementLogical->SetVisAttributes(visatt);
 }
 
-void G4ScoringBox::RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps) {
-
-
-  if(fMFD == 0) fMFD = new G4MultiFunctionalDetector(fWorldName);
-
-  std::vector<G4VPrimitiveScorer *>::iterator itr = vps.begin();
-  for(; itr != vps.end(); itr++) {
-    fMFD->RegisterPrimitive(*itr);
-
-    fPS.push_back(*itr);
-  }
-
-  G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
-  fMeshElementLogical->SetSensitiveDetector(fMFD);
-}
 
 void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox" << G4endl;

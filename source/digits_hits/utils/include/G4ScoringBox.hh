@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.5 2007-08-18 05:16:53 akimura Exp $
+// $Id: G4ScoringBox.hh,v 1.6 2007-08-28 05:26:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,39 +50,11 @@ class G4ScoringBox : public G4VScoringMesh
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
 
-  void SetSize(G4double size[3]) {
-    for(int i = 0; i < 3; i++) fSize[i] = size[i];
-  }
-  void SetXSize(G4double xSize) {fSize[0] = xSize;}
-  void SetYSize(G4double ySize) {fSize[1] = ySize;}
-  void SetZSize(G4double zSize) {fSize[2] = zSize;}
-
-  void SetCenterPosition(G4double centerPosition[3]) {
-    for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
-  }
-  void SetXCenterPosition(G4double xCenterPosition) {fCenterPosition[0] = xCenterPosition;}
-  void SetYCenterPosition(G4double yCenterPosition) {fCenterPosition[1] = yCenterPosition;}
-  void SetZCenterPosition(G4double zCenterPosition) {fCenterPosition[2] = zCenterPosition;}
-
-  void SetNumberOfSegment(G4int nSegment[3]) {
-    for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
-}
-  void SetNumberOfXSegment(G4int nXSegment) {fNSegment[0] = nXSegment;}
-  void SetNumberOfYSegment(G4int nYSegment) {fNSegment[1] = nYSegment;}
-  void SetNumberOfZSegment(G4int nZSegment) {fNSegment[2] = nZSegment;}
 
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
-  void SetRotationMatrix(G4RotationMatrix * rmat) {fRotationMatrix = rmat;}
-  void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
-  void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
 
 private:
-  G4double fSize[3];
-  G4double fCenterPosition[3];
-  G4RotationMatrix * fRotationMatrix;
-  G4int fNSegment[3];
   G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  std::vector<G4double> fSegmentPositions;
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
