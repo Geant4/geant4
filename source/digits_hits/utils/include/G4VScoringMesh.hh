@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.8 2007-08-28 07:09:01 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.9 2007-08-28 08:06:48 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,8 +71,6 @@ public:
   inline void Accumulate(G4THitsMap<G4double> * map) const;
   void Dump();
 
-  inline G4String SetScoringMeshName(G4String & name)
-  { return fScoringMeshName = name; }
 
   void SetSize(G4double size[3]);
   void SetCenterPosition(G4double centerPosition[3]);
@@ -106,7 +104,6 @@ protected:
   std::map<G4String, G4THitsMap<G4double> > fMap;
   G4MultiFunctionalDetector * fMFD;
 
-  G4String  fScoringMeshName;
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const

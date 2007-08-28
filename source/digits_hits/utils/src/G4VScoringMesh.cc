@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.6 2007-08-28 07:09:03 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.7 2007-08-28 08:06:49 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,8 +36,7 @@
 
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
-    fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName)),
-    fScoringMeshName(wName) 
+    fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName))
 {
   fSize[0] = fSize[1] = fSize[2] = 0.*cm;
   fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
@@ -87,6 +86,7 @@ void G4VScoringMesh::RotateZ(G4double delta) {
 
 void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
+  ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
 }
@@ -120,9 +120,17 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
 }
 
 void G4VScoringMesh::Dump() {
-  G4cout << "G4ScoringBox : " << fScoringMeshName << G4endl;
+  G4cout << "G4ScoringBox : " << fWorldName << G4endl;
 
-  
-
+  std::map<G4String, G4THitsMap<G4double> >::iterator itr = fMap.begin();
+  for(; itr != fMap.end(); itr++) {
+    G4cout << "[" << itr->first << "]" << G4endl;
+    std::map<G4int, double*> * map = itr->second.GetMap();
+    std::map<G4int, double*>::iterator itrMap  = map->begin();
+    for(; itrMap != map->end(); itrMap++) {
+      G4cout << itrMap->second << ", ";
+    }
+    G4cout << G4endl << G4endl;
+  }
 }
 

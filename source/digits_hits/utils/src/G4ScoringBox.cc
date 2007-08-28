@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.11 2007-08-28 07:09:03 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.12 2007-08-28 08:06:48 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -85,15 +85,14 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // Scoring Mesh
   //G4cout << "box mesh" << G4endl;
-  G4String boxName("boxMesh");
-  if(fScoringMeshName.size() > 0) boxName = fScoringMeshName;
+  G4String boxName = fWorldName;
 
-  G4VSolid * boxSolid = new G4Box(boxName, fSize[0], fSize[1], fSize[2]);
+  G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
 						   fCenterPosition[1],
 						   fCenterPosition[2]),
-		    boxLogical, boxName, worldLogical, false, 0);
+		    boxLogical, boxName+"0", worldLogical, false, 0);
   //G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
 
   G4double fsegment[3][3];
@@ -103,7 +102,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 
 
-  G4String layerName[2] = {boxName + "_nest1",  boxName + "_nest2"};
+  G4String layerName[2] = {boxName + "1",  boxName + "2"};
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
@@ -161,7 +160,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // mesh elements
   //G4cout << "mesh elements :" << G4endl;
-  G4String elementName = boxName +"_element";
+  G4String elementName = boxName +"3";
   G4VSolid * elementSolid = new G4Box(elementName, fSize[0]/fsegment[2][0],
 				      fSize[1]/fsegment[2][1], fSize[2]/fsegment[2][2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
@@ -217,7 +216,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 
 void G4ScoringBox::List() const {
-  G4cout << "G4ScoringBox : " << fScoringMeshName << G4endl;
+  G4cout << "G4ScoringBox : " << fWorldName << G4endl;
 }
 
 

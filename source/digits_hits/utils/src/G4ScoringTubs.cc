@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.cc,v 1.3 2007-08-28 05:26:56 akimura Exp $
+// $Id: G4ScoringTubs.cc,v 1.4 2007-08-28 08:06:49 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,16 +90,15 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  G4String tubsName("tubsMesh");
-  if(fScoringMeshName.size() > 0) tubsName = fScoringMeshName;
+  G4String tubsName = fWorldName;
 
-  G4VSolid * tubsSolid = new G4Tubs(tubsName, fSize[0], fSize[1], fSize[2],
+  G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", fSize[0], fSize[1], fSize[2],
 				    0., 360.*deg);
   G4LogicalVolume *  tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
 						   fCenterPosition[1],
 						   fCenterPosition[2]),
-		    tubsLogical, tubsName, worldLogical, false, 0);
+		    tubsLogical, tubsName+"0", worldLogical, false, 0);
 
 
   G4double fsegParam[3][3];
@@ -110,7 +109,7 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 
 
-  G4String layerName[2] = {tubsName + "_nest1",  tubsName + "_nest2"};
+  G4String layerName[2] = {tubsName + "1",  tubsName + "2"};
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
@@ -170,7 +169,7 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // mesh elements
   //G4cout << "mesh elements :" << G4endl;
-  G4String elementName = tubsName +"_element";
+  G4String elementName = tubsName +"3";
   G4VSolid * elementSolid = new G4Tubs(elementName,
 				       fSize[0],
 				       fSize[0]+fsegParam[2][0],
