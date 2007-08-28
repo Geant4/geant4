@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.2 2007-08-28 01:07:25 akimura Exp $
+// $Id: test1.cc,v 1.3 2007-08-28 10:50:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,8 @@
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringBox.hh"
+#include "G4PSEnergyDeposit3D.hh"
+#include "G4SDParticleFilter.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -87,9 +89,17 @@ int main(int argc,char** argv)
  G4double size[3] = {90.*cm,90.*cm,90.*cm};
  boxMesh->SetSize(size);
  G4int nseg[3] = {4,5,6};
- boxMesh->SetNumberOfSegment(nseg);
+ boxMesh->SetNumberOfSegments(nseg);
+
+ G4PSEnergyDeposit3D * ps = new G4PSEnergyDeposit3D("eDep");
+ boxMesh->SetPrimitiveScorer(ps);
+ G4SDParticleFilter * filter = new G4SDParticleFilter("e-");
+ boxMesh->SetFilter(filter);
+
  scManager->RegisterScoringMesh(boxMesh);
 
+ 
+ 
 
 
 
