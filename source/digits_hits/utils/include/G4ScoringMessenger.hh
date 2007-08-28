@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.2 2007-08-11 00:25:51 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.3 2007-08-28 04:50:10 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@
 #include "G4UImessenger.hh"
 
 class G4ScoringManager;
+class G4VScoringMesh;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
@@ -54,6 +55,7 @@ class G4ScoringMessenger: public G4UImessenger
     ~G4ScoringMessenger();
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
+    void MeshBinCommand(G4String newValues);
   
   private:
     G4ScoringManager*        fSMan;
@@ -63,17 +65,20 @@ class G4ScoringMessenger: public G4UImessenger
 
     // Mesh commands
     G4UIdirectory*             meshDir;
-    G4UIcmdWithAString*        meshOpnCmd;
+    G4UIcmdWithAString*        meshOpnBoxCmd;
+    G4UIcmdWithAString*        meshOpnTubsCmd;
+    G4UIcmdWithAString*        meshOpnSphereCmd;
+    //
     G4UIcmdWithoutParameter*   meshClsCmd;
     G4UIcmdWithAString*        meshDelCmd;
-    //   Shape commands
-    G4UIdirectory*             mShapeDir;
-    G4UIcmdWith3VectorAndUnit* mSBoxCmd;
-    G4UIcmdWith3VectorAndUnit* mSTubsCmd;
-    G4UIcommand*               mSSphereCmd;
+    //
+    //   Size commands
+    G4UIcmdWith3VectorAndUnit* mSizeCmd;
+    //
     //   Division command
     G4UIdirectory*             mBinDir;
     G4UIcommand*               mBinCmd;
+    //
     //   Placement command
     G4UIdirectory*             mTransDir;
     G4UIcmdWith3VectorAndUnit* mTSetCmd;
@@ -99,6 +104,8 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcommand*             fTypeCmd;
     G4UIcmdWithAString*      fAttachCmd;
 
+    // Current Mesh
+    G4VScoringMesh*          fcurrentMesh;
 };
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.6 2007-08-16 12:00:35 akimura Exp $
+// $Id: G4ScoringManager.hh,v 1.7 2007-08-28 04:50:10 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,6 +67,7 @@ class G4ScoringManager
       void Accumulate(G4VHitsCollection* map);
       G4VScoringMesh* FindMesh(G4String);
       void List() const;
+      G4VScoringMesh* OpenMesh(MeshShape type, G4String& name); 
 
   private: 
       static G4ScoringManager * fSManager;

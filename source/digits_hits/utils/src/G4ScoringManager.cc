@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.5 2007-07-13 11:04:31 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.6 2007-08-28 04:50:10 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringMessenger.hh"
 #include "G4VScoringMesh.hh"
+#include "G4ScoringBox.hh"
+#include "G4ScoringTubs.hh"
 #include "G4THitsMap.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
@@ -82,3 +84,28 @@ void G4ScoringManager::List() const
 {
   G4cout << "G4ScoringManager" << G4endl;
 }
+
+G4VScoringMesh* G4ScoringManager::OpenMesh(MeshShape type, G4String& name)
+{
+  G4cout << "G4ScoringManager::OpenMesh" << G4endl;
+
+  // For existing Mesh
+  G4VScoringMesh* mesh = FindMesh(name);
+
+  // Creating New Mesh
+  if ( !mesh ){
+      if ( type == boxMesh ){
+	 mesh = new G4ScoringBox(name);
+      } else if ( type == cylinderMesh ){
+      } else if ( type == sphereMesh   ){
+      } else {
+	  G4Exception("G4ScoringManager::OpenMesh: Mesh type is not supported.");
+      }    
+      G4cout << "G4ScoringManager::OpenMesh: Created new ScroingMesh" <<G4endl;
+  }
+
+  RegisterScoringMesh(mesh);
+
+  return mesh;
+}
+

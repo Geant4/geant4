@@ -24,19 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.3 2007-08-14 16:51:10 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.4 2007-08-28 04:50:10 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
 
 #include "G4ScoringMessenger.hh"
 #include "G4ScoringManager.hh"
+#include "G4VScoringMesh.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
+#include "G4Tokenizer.hh"
 
 G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager):fSMan(SManager)
 {
@@ -51,41 +53,55 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager):fSMan(SManage
 
   //
   // Mesh commands
-  meshDir  = new G4UIdirectory("/score/mesh/");
+  meshDir  = new G4UIdirectory("/score/open/");
   meshDir->SetGuidance("Scoring mesh commands.");
   //
-  meshOpnCmd = new G4UIcmdWithAString("/score/mesh/open",this);
-  meshOpnCmd->SetGuidance("Open scoring mesh.");
-  meshOpnCmd->SetParameterName("MeshName",false);
-  meshClsCmd = new G4UIcmdWithoutParameter("/score/mesh/close",this);
+  meshOpnBoxCmd = new G4UIcmdWithAString("/score/open/boxMesh",this);
+  meshOpnBoxCmd->SetGuidance("Open scoring mesh.");
+  meshOpnBoxCmd->SetParameterName("MeshName",false);
+  //
+  meshOpnTubsCmd = new G4UIcmdWithAString("/score/open/tubsMesh",this);
+  meshOpnTubsCmd->SetGuidance("Open scoring mesh.");
+  meshOpnTubsCmd->SetParameterName("MeshName",false);
+  //
+  meshOpnSphereCmd = new G4UIcmdWithAString("/score/open/sphereMesh",this);
+  meshOpnSphereCmd->SetGuidance("Open scoring mesh.");
+  meshOpnSphereCmd->SetParameterName("MeshName",false);
+  //
+  meshClsCmd = new G4UIcmdWithoutParameter("/score/close",this);
   meshClsCmd->SetGuidance("Close scoring mesh.");
+  //
   meshDelCmd = new G4UIcmdWithAString("/score/mesh/delete",this);
   meshDelCmd->SetGuidance("Delete scoring mesh.");
   meshDelCmd->SetParameterName("MeshName",false);
   //
-  //   Shape commands
-  mShapeDir = new G4UIdirectory("/score/mesh/shape/");
-  mShapeDir->SetGuidance("Shape commands for scoring mesh");
   //
-  mSBoxCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/shape/box",this);
-  mSBoxCmd->SetGuidance("Define Box type scoring mesh.");
-  mSBoxCmd->SetParameterName("dX","dY","dZ",false,false);
-  mSBoxCmd->SetDefaultUnit("mm");
-  mSTubsCmd= new G4UIcmdWith3VectorAndUnit("/score/mesh/shape/tubs",this);
-  mSTubsCmd->SetGuidance("Define Tubs type scoring mesh.");
-  mSTubsCmd->SetParameterName("Rin","Rout","dZ",false,false);
-  mSTubsCmd->SetDefaultUnit("mm");
-  mSSphereCmd = new G4UIcommand("/score/mesh/shape/sphere",this);
-  mSSphereCmd->SetGuidance("Define Sphere type scoring mesh.");
-  //mSSphereCmd->SetParameterName("Rin","Rout",false,false);
-  //mSSphereCmd->SetDefaultUnit("mm");
+  mSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/size",this);
+  mSizeCmd->SetGuidance("Define Size of scoring mesh.");
+  mSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
+  mSizeCmd->SetDefaultUnit("mm");
   //
   //   Division command
   mBinDir = new G4UIdirectory("/score/mesh/bin/");
-  mShapeDir->SetGuidance("Binning of scoring mesh");
+  mBinDir->SetGuidance("Binning of scoring mesh");
   //
   mBinCmd = new G4UIcommand("/score/mesh/bin/numberOfBin",this);
   mBinCmd->SetGuidance("Define segmentation of scoring mesh.");
+  mBinCmd->SetGuidance("[usage] /score/mesh/bin/numberOfBin");
+  mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
+  mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
+  mBinCmd->SetGuidance("  Nk  :(int) Number of bins k ");
+  mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
+  mBinCmd->SetGuidance("  P1..Pn-1  :(double) paramter from P1 to Pn-1 for division.");
+  G4UIparameter* param;
+  param = new G4UIparameter("Ni",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Nj",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Nk",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Axis",'i',false);
+  param->SetDefaultValue("2");
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
@@ -156,14 +172,12 @@ G4ScoringMessenger::~G4ScoringMessenger()
 {
   delete listCmd;
   delete scoreDir;
-
-  delete meshOpnCmd;
+  delete meshOpnBoxCmd;
+  delete meshOpnTubsCmd;
+  delete meshOpnSphereCmd;
   delete meshClsCmd;
   delete meshDelCmd;
-  delete mSBoxCmd;
-  delete mSTubsCmd;
-  delete mSSphereCmd;
-  delete mShapeDir;
+  delete mSizeCmd;
   delete mBinCmd;
   delete mBinDir;
   delete mTSetCmd;
@@ -195,13 +209,19 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       fSMan->List(); 
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
-  } else if(command==meshOpnCmd) {
+  } else if(command==meshOpnBoxCmd) {
+      fSMan->OpenMesh(boxMesh,newVal);
+  } else if(command==meshOpnTubsCmd) {
+      fSMan->OpenMesh(cylinderMesh,newVal);
+  } else if(command==meshOpnSphereCmd) {
+      fSMan->OpenMesh(sphereMesh,newVal);
   } else if(command==meshClsCmd) {
+
   } else if(command==meshDelCmd) {
-  } else if(command==mSBoxCmd) {
-  } else if(command==mSTubsCmd) {
-  } else if(command==mSSphereCmd) {
+  } else if(command==mSizeCmd) {
+      //fSMan->SetMeshSize(mSizeCmd->GetNew3VectorValue(newVal));
   } else if(command==mBinCmd) {
+      MeshBinCommand(newVal);
   } else if(command==mTSetCmd) {
   } else if(command==mTAddCmd) {
   } else if(command==mRSetCmd) {
@@ -230,3 +250,19 @@ G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand * command)
   return val;
 }
 
+void G4ScoringMessenger::MeshBinCommand(G4String newVal){
+    G4Tokenizer next(newVal);
+    G4int Ni = StoI(next());
+    G4int Nj = StoI(next());
+    G4int Nk = StoI(next());
+    G4int iAxis = 3;
+    G4String Axis = next();
+    if ( Axis.isNull() ) {
+    } else {
+	iAxis = StoI(Axis);
+	//
+	//==== Implementation for variable bin size Here
+	//
+	//  .........
+    }
+}
