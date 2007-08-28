@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux3D.hh,v 1.1 2007-08-22 23:30:47 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux3D.hh,v 1.2 2007-08-28 08:01:55 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ class G4PSCylinderSurfaceFlux3D : public G4PSCylinderSurfaceFlux
 {
    public: // with description
       G4PSCylinderSurfaceFlux3D(G4String name, G4int direction,
-			       G4int ni,G4int nj, G4int nk,
+			       G4int ni=1,G4int nj=1, G4int nk=1,
 			       G4int di=2, G4int dj=1, G4int dk=0);
       virtual ~G4PSCylinderSurfaceFlux3D();
 
@@ -63,7 +63,6 @@ class G4PSCylinderSurfaceFlux3D : public G4PSCylinderSurfaceFlux
       virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNi, fNj, fNk;
       G4int fDepthi, fDepthj, fDepthk;
 };
 #endif

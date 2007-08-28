@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellCharge3D.cc,v 1.1 2007-08-22 23:30:50 taso Exp $
+// $Id: G4PSCellCharge3D.cc,v 1.2 2007-08-28 08:01:55 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCellCharge3D
@@ -45,9 +45,13 @@
 G4PSCellCharge3D::G4PSCellCharge3D(G4String name,
 			       G4int ni, G4int nj, G4int nk,
 			       G4int depi, G4int depj, G4int depk)
-    :G4PSCellCharge(name),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSCellCharge(name),
      fDepthi(depi),fDepthj(depj),fDepthk(depk)
-{;}
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+}
 
 G4PSCellCharge3D::~G4PSCellCharge3D()
 {;}

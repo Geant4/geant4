@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux3D.hh,v 1.1 2007-08-22 23:30:47 taso Exp $
+// $Id: G4PSCellFlux3D.hh,v 1.2 2007-08-28 08:01:55 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ class G4PSCellFlux3D : public G4PSCellFlux
 {
    public: // with description
       G4PSCellFlux3D(G4String name,
-		     G4int ni,G4int nj, G4int nk,
+		     G4int ni=1,G4int nj=1, G4int nk=1,
 		     G4int depi=2, G4int depj=1, G4int depk=0);
       virtual ~G4PSCellFlux3D();
 
@@ -61,7 +61,6 @@ class G4PSCellFlux3D : public G4PSCellFlux
       virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNi, fNj, fNk;
       G4int fDepthi, fDepthj, fDepthk;
 };
 #endif

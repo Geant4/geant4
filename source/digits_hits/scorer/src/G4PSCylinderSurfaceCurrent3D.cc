@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent3D.cc,v 1.1 2007-08-22 23:30:50 taso Exp $
+// $Id: G4PSCylinderSurfaceCurrent3D.cc,v 1.2 2007-08-28 08:01:55 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCylinderSurfaceCurrent3D
@@ -52,9 +52,13 @@ G4PSCylinderSurfaceCurrent3D::G4PSCylinderSurfaceCurrent3D(G4String name,
 							   G4int direction,
 					     G4int ni, G4int nj, G4int nk,
 					     G4int di, G4int dj, G4int dk)
-    :G4PSCylinderSurfaceCurrent(name,direction),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSCylinderSurfaceCurrent(name,direction),
      fDepthi(di),fDepthj(dj),fDepthk(dk)
-{;}
+{
+    fNi=ni;
+    fNj=nj;
+    fNk=nk;
+}
 
 G4PSCylinderSurfaceCurrent3D::~G4PSCylinderSurfaceCurrent3D()
 {;}
