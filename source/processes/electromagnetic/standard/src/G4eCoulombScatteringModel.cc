@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.18 2007-08-15 09:24:55 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.19 2007-08-28 14:05:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,7 +166,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
-		             const G4ParticleDefinition* p,      
+		             const G4ParticleDefinition*,      
 			     G4double kinEnergy, 
 			     G4double Z, G4double A)
 {
