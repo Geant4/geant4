@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.13 2007-08-28 10:51:41 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.14 2007-08-28 11:36:15 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -217,6 +217,31 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox : " << fWorldName << G4endl;
+  G4cout << " Shape: Box mesh" << G4endl;
+  G4cout << " Size: " << G4endl;
+  G4cout << " # of segments: " << G4endl;
+  G4cout << " displacement: " << G4endl;
+  G4cout << " rotation matrix: "
+	 << fRotationMatrix->xx() << "  "
+	 << fRotationMatrix->xy() << "  "
+	 << fRotationMatrix->xz() << G4endl
+	 << "                  "
+	 << fRotationMatrix->yx() << "  "
+	 << fRotationMatrix->yy() << "  "
+	 << fRotationMatrix->yz() << G4endl
+	 << "                  "
+	 << fRotationMatrix->zx() << "  "
+	 << fRotationMatrix->zy() << "  "
+	 << fRotationMatrix->zz() << G4endl;
+  G4cout << " registered primitve scorers : ";
+  G4int nps = fMFD->GetNumberOfPrimitives();
+  G4VPrimitiveScorer * ps;
+  for(int i = 0; i < nps; i++) {
+    ps = fMFD->GetPrimitive(i);
+    G4cout << " " << ps->GetName() << G4endl;
+    if(ps->GetFilter() != NULL)
+      G4cout << "     with a filter : " << ps->GetFilter()->GetName() << G4endl;
+  }
 }
 
 
