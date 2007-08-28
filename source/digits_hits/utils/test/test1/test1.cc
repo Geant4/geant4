@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.1 2007-07-13 05:55:34 asaim Exp $
+// $Id: test1.cc,v 1.2 2007-08-28 01:07:25 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 #include "G4UItcsh.hh"
 
 #include "G4ScoringManager.hh"
+#include "G4ScoringBox.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -80,6 +81,42 @@ int main(int argc,char** argv)
  //
  runManager->Initialize();
   
+
+
+ G4ScoringBox * boxMesh = new G4ScoringBox(G4String("boxMesh"));
+ G4double size[3] = {90.*cm,90.*cm,90.*cm};
+ boxMesh->SetSize(size);
+ G4int nseg[3] = {4,5,6};
+ boxMesh->SetNumberOfSegment(nseg);
+ scManager->RegisterScoringMesh(boxMesh);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  // Get the pointer to the User Interface manager
  //
  G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -96,7 +133,7 @@ int main(int argc,char** argv)
    session = new G4UIterminal();
 #endif    
       
-   UI->ApplyCommand("/control/execute vis.mac");    
+//   UI->ApplyCommand("/control/execute vis.mac");    
    session->SessionStart();
 
    delete session;
