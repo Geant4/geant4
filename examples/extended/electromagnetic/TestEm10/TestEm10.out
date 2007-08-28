@@ -1,40 +1,10 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
 
  hist file = g4.p11
  Nb of bins in Edep plot = 65
@@ -107,16 +77,16 @@ eBrem:   tables are built for  e-
 Lorentz Factor	XTR photon number
 
 107.6	0.0003511
-123.4	0.0006268
+123.4	0.0006267
 141.5	0.00108
 162.3	0.001512
 186.2	0.002884
 213.7	0.004693
 245.2	0.006089
-281.3	0.009624
+281.3	0.009623
 322.9	0.01836
 370.5	0.03094
-425.3	0.04305
+425.3	0.04304
 488.2	0.05196
 560.3	0.06382
 643.2	0.08555
@@ -157,7 +127,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.94 s
+total time for build X-ray TR energy loss tables = 1.01 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -182,16 +152,16 @@ annihil:       Sampling according eplus2gg model
 Lorentz Factor	XTR photon number
 
 107.6	0.0003511
-123.4	0.0006268
+123.4	0.0006267
 141.5	0.00108
 162.3	0.001512
 186.2	0.002884
 213.7	0.004693
 245.2	0.006089
-281.3	0.009624
+281.3	0.009623
 322.9	0.01836
 370.5	0.03094
-425.3	0.04305
+425.3	0.04304
 488.2	0.05196
 560.3	0.06382
 643.2	0.08555
@@ -232,7 +202,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.94 s
+total time for build X-ray TR energy loss tables = 1.01 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -338,34 +308,32 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-WARNING: Scene "refresh" not found.
-  /vis/scene/list to see scenes.
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=58.9s Real=62.83s Sys=3.91s
+  User=59.46s Real=63.28s Sys=3.78s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=102.367 +- 1.84321  mm  
+    mean charged track length   in absorber=104.008 +- 2.05285  mm  
 
-            mean energy deposit in absorber=0.0509725 +- 0.000788754  MeV 
+            mean energy deposit in absorber=0.051941 +- 0.000891732  MeV 
 
- mean number of steps in absorber (charged) =49.275 +- 1.3154      
- mean number of steps in absorber (neutral) =2.909 +- 0.0538398      
+ mean number of steps in absorber (charged) =48.508 +- 1.25036      
+ mean number of steps in absorber (neutral) =2.931 +- 0.0544815      
 
-   mean number of charged secondaries = 3.616 +- 0.0743811
+   mean number of charged secondaries = 3.594 +- 0.0776863
 
-   mean number of neutral secondaries = 0.135 +- 0.0115228
+   mean number of neutral secondaries = 0.158 +- 0.0130014
 
-   mean number of e-s =3.616  and e+s =0
+   mean number of e-s =3.594  and e+s =0
 
-(number) transmission coeff=0.542  reflection coeff=0.07
+(number) transmission coeff=0.551  reflection coeff=0.066
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=50
+#entries=1000    #underflows=0    #overflows=56
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -375,71 +343,70 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           3       0.003
-    9   13.8462           1       0.001
-   10   15.3846           4       0.004
-   11   16.9231          10        0.01
-   12   18.4615          21       0.021
-   13        20          21       0.021
-   14   21.5385          18       0.018
-   15   23.0769          22       0.022
-   16   24.6154          21       0.021
-   17   26.1538          32       0.032
-   18   27.6923          30        0.03
-   19   29.2308          23       0.023
-   20   30.7692          25       0.025
-   21   32.3077          35       0.035
-   22   33.8462          26       0.026
-   23   35.3846          32       0.032
+    8   12.3077           1       0.001
+    9   13.8462           5       0.005
+   10   15.3846           5       0.005
+   11   16.9231          12       0.012
+   12   18.4615          13       0.013
+   13        20          16       0.016
+   14   21.5385          16       0.016
+   15   23.0769          23       0.023
+   16   24.6154          26       0.026
+   17   26.1538          24       0.024
+   18   27.6923          22       0.022
+   19   29.2308          28       0.028
+   20   30.7692          41       0.041
+   21   32.3077          34       0.034
+   22   33.8462          40        0.04
+   23   35.3846          29       0.029
    24   36.9231          30        0.03
-   25   38.4615          27       0.027
-   26        40          32       0.032
-   27   41.5385          27       0.027
-   28   43.0769          25       0.025
-   29   44.6154          28       0.028
-   30   46.1538          37       0.037
-   31   47.6923          25       0.025
-   32   49.2308          31       0.031
-   33   50.7692          23       0.023
-   34   52.3077          31       0.031
-   35   53.8462          16       0.016
-   36   55.3846          22       0.022
-   37   56.9231          28       0.028
-   38   58.4615          17       0.017
-   39        60          19       0.019
-   40   61.5385          16       0.016
+   25   38.4615          33       0.033
+   26        40          30        0.03
+   27   41.5385          33       0.033
+   28   43.0769          30        0.03
+   29   44.6154          18       0.018
+   30   46.1538          19       0.019
+   31   47.6923          29       0.029
+   32   49.2308          18       0.018
+   33   50.7692          21       0.021
+   34   52.3077          29       0.029
+   35   53.8462          19       0.019
+   36   55.3846          25       0.025
+   37   56.9231          27       0.027
+   38   58.4615          15       0.015
+   39        60          27       0.027
+   40   61.5385          11       0.011
    41   63.0769          17       0.017
    42   64.6154          17       0.017
-   43   66.1538          10        0.01
-   44   67.6923           7       0.007
-   45   69.2308          11       0.011
-   46   70.7692          12       0.012
-   47   72.3077           8       0.008
-   48   73.8462           7       0.007
-   49   75.3846          14       0.014
-   50   76.9231          11       0.011
-   51   78.4615          10        0.01
-   52        80           6       0.006
-   53   81.5385           7       0.007
-   54   83.0769           8       0.008
-   55   84.6154           4       0.004
-   56   86.1538           8       0.008
-   57   87.6923           5       0.005
-   58   89.2308           6       0.006
-   59   90.7692           2       0.002
-   60   92.3077           5       0.005
+   43   66.1538          14       0.014
+   44   67.6923          12       0.012
+   45   69.2308           9       0.009
+   46   70.7692          11       0.011
+   47   72.3077          11       0.011
+   48   73.8462          14       0.014
+   49   75.3846           8       0.008
+   50   76.9231           9       0.009
+   51   78.4615           6       0.006
+   52        80          14       0.014
+   53   81.5385           8       0.008
+   54   83.0769           6       0.006
+   55   84.6154          11       0.011
+   56   86.1538           4       0.004
+   57   87.6923           2       0.002
+   58   89.2308           5       0.005
+   59   90.7692           5       0.005
+   60   92.3077           1       0.001
    61   93.8462           3       0.003
-   62   95.3846           8       0.008
-   63   96.9231           3       0.003
-   64   98.4615           3       0.003
+   62   95.3846           1       0.001
+   63   96.9231           5       0.005
+   64   98.4615           2       0.002
 
- Emp =       0.0461538   width=      0.0415385  MeV 
+ Emp =       0.0307692   width=      0.0369231  MeV 
 
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1121803273, 1592404030
+ Current couple of seeds = 2140977624, 1103120000
 ----------------------------------------
 
 ========= Table of registered couples ==============================
@@ -467,6 +434,4 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Graphics systems deleted.
-Visualization Manager deleting...
 G4 kernel has come to Quit state.

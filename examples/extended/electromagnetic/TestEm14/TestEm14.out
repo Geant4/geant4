@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -59,36 +59,6 @@
  Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
    --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
 
 /run/verbose 2
 #
@@ -283,7 +253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=32s Real=32s Sys=0s
+  User=33s Real=33s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -292,7 +262,7 @@ Run Summary
  MeanFreePath:	6.0496 cm  +- 6.0503 cm 	massic: 6.0496 g/cm2 
  CrossSection:	0.1653 cm^-1 			massic: 0.1653 cm2/g
 
- mean energy of charged secondaries: 15.218 keV	mass_energy_transfer coef: 0.025156 cm2/g
+ mean energy of charged secondaries: 15.209 keV	mass_energy_transfer coef: 0.025141 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16498 cm2/g
@@ -372,8 +342,6 @@ Run Summary
  Initial seed (index) = 0
  Current couple of seeds = 679237908, 105871640
 ----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

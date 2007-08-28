@@ -1,40 +1,10 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
 
 
 The materials defined are : 
@@ -2569,5 +2539,3 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0 trajectories stored in this event.
 >>> Event 99
     0 trajectories stored in this event.
-Graphics systems deleted.
-Visualization Manager deleting...

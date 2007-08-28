@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,14 +9,14 @@
 /run/verbose 1
 /tracking/verbose 0
 #
-/testhadr/TargetMat        G4_Al 
-/testhadr/TargetRadius     1  cm
-/testhadr/TargetLength     10 cm
-/testhadr/NumberDivZ       100
-/testhadr/PrintModulo      10
+/testhadr/TargetMat G4_Al
+/testhadr/TargetRadius 1 cm
+/testhadr/TargetLength 10 cm
+/testhadr/NumberDivZ 100
+/testhadr/PrintModulo 10
 #
-/testhadr/CutsAll          1 mm
-/testhadr/Physics          QBBC
+/testhadr/CutsAll 1 mm
+/testhadr/Physics QBBC
 PhysicsList::AddPhysicsList: <QBBC>
 ### HadronInelasticQBBC
 #
@@ -136,7 +136,7 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.4s Real=14.4s Sys=0.63s
+  User=13.65s Real=14.54s Sys=0.57s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

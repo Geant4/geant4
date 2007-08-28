@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,7 +42,7 @@ Registered filter factories:
 
 ### Adding Neutron tracking cut for neutron
 ###  cut value is 10 microseconds
-/run/verbose      1
+/run/verbose 1
 /tracking/verbose 0
 /run/beamOn 3
 
@@ -256,7 +256,7 @@ Stage 1->2 : 1 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=10.12s Real=10.7s Sys=0.23s
+  User=10.29s Real=11.05s Sys=0.25s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

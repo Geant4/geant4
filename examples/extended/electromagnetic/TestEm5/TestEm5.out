@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,15 +10,15 @@
 #
 /testem/det/setAbsMat Silicon
 /testem/det/setAbsThick 20 um
-/testem/det/setAbsYZ    50 um
+/testem/det/setAbsYZ 50 um
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics standard
 PhysicsList::AddPhysicsList: <standard>
-### /testem/phys/addPhysics  g4v71
+### /testem/phys/addPhysics g4v71
 #
 /testem/phys/setGCut 2.13 mm
-/testem/phys/setECut 7.0  um
-/testem/phys/setPCut 7.0  um
+/testem/phys/setECut 7.0 um
+/testem/phys/setPCut 7.0 um
 #
 /run/initialize
 userDetector->Construct() start.
@@ -39,12 +39,12 @@ physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /testem/gun/setDefault
-/gun/particle pi+ 
+/gun/particle pi+
 /gun/energy 5 GeV
 #
 /testem/histo/setFileName testem5
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 6 100 -0.25 0.25 mrad 
+/testem/histo/setHisto 6 100 -0.25 0.25 mrad
 ----> SetHisto 6: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
 #
 /run/beamOn 100000
@@ -251,7 +251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=191.63s Real=1838s Sys=220.01s
+  User=196.38s Real=925.06s Sys=71.8s
 
  ======================== run summary ======================
 

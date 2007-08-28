@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -239,7 +239,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -305,7 +305,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -338,7 +338,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -371,7 +371,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm

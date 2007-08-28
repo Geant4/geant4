@@ -1,62 +1,32 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
 /run/verbose 2
 #/tracking/verbose 2
 #
-#  select EM PhysicsList
+# select EM PhysicsList
 #
-#/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  pai
+#/testem/phys/addPhysics standard
+/testem/phys/addPhysics pai
 PhysicsList::AddPhysicsList: <pai>
 PhysListEmModelPai is called
-#/testem/phys/addPhysics  pai_photon
+#/testem/phys/addPhysics pai_photon
 #
-/testem/phys/setCuts    1 mm
-#/testem/stepMax         10 mm
+/testem/phys/setCuts 1 mm
+#/testem/stepMax 10 mm
 #
-#  PLOT: energy deposit distribution in absorber
+# PLOT: energy deposit distribution in absorber
 #
 /plots/setnbinEn 20
  Nb of bins in Edep plot = 20
 /plots/setEnlow 0.0 MeV
  Elow  in the  Edep plot = 0
-/plots/setEnhigh 0.060  MeV  
+/plots/setEnhigh 0.060 MeV
  Ehigh in the  Edep plot = 0.06
 /plots/sethistName g4.p11
  hist file = g4.p11
@@ -80,7 +50,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle proton
 #
 #/gun/particle mu-
-# 
+#
 /gun/energy 200000.00 MeV
 #
 #/gun/energy 200.0 MeV
@@ -274,9 +244,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-/vis/scene/notifyHandlers
-WARNING: Scene "refresh" not found.
-  /vis/scene/list to see scenes.
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -301,7 +268,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.37s Real=9.41s Sys=0.01s
+  User=9.47s Real=9.49s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=23.5696 +- 0.221368  mm  
@@ -345,16 +312,12 @@ Run Summary
 
  Emp =           0.009   width=          0.006  MeV 
 
-/vis/viewer/update
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 718165562, 201856785
 ----------------------------------------
 #
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

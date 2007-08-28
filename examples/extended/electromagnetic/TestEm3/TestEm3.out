@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -8,7 +8,7 @@
 
 /run/verbose 2
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics standard
 #
 /run/initialize
 userDetector->Construct() start.
@@ -47,17 +47,17 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileName testem3
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
+/testem/histo/setHisto 1 100 700. 1000. MeV 
 ----> SetHisto 1: Edep in absorber 1 (MeV);  100 bins from 700 MeV to 1000 MeV
-/testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
+/testem/histo/setHisto 2 100 0. 300. MeV 
 ----> SetHisto 2: Edep in absorber 2 (MeV);  100 bins from 0 MeV to 300 MeV
-/testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
+/testem/histo/setHisto 11 52 0. 52. none 
 ----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
+/testem/histo/setHisto 12 52 0. 52. none 
 ----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 21 102  0.   102. none	#energy flow
+/testem/histo/setHisto 21 102 0. 102. none 
 ----> SetHisto 21: energy flow (MeV/event);  102 bins from 0 none to 102 none
-/testem/histo/setHisto 22 102  0.   102. none	#lateral energy leakage
+/testem/histo/setHisto 22 102 0. 102. none 
 ----> SetHisto 22: lateral energy leak (MeV/event);  102 bins from 0 none to 102 none
 #
 /testem/event/printModulo 50
@@ -269,7 +269,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=185.5s Real=186.77s Sys=0.04s
+  User=184.2s Real=190.44s Sys=0.05s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
