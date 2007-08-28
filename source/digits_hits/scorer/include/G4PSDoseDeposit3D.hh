@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit3D.hh,v 1.1 2007-08-22 23:30:48 taso Exp $
+// $Id: G4PSDoseDeposit3D.hh,v 1.2 2007-08-28 10:11:29 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ class G4PSDoseDeposit3D : public G4PSDoseDeposit
 {
  public: // with description
       G4PSDoseDeposit3D(G4String name, 
-			G4int ni,G4int nj, G4int nk,
+			G4int ni=1,G4int nj=1, G4int nk=1,
 			G4int depi=2, G4int depj=1, G4int depk=0);
 
       virtual ~G4PSDoseDeposit3D();
@@ -54,7 +54,6 @@ class G4PSDoseDeposit3D : public G4PSDoseDeposit
       virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNi, fNj, fNk;
       G4int fDepthi, fDepthj, fDepthk;
 
 };

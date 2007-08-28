@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination3D.cc,v 1.1 2007-08-22 23:30:53 taso Exp $
+// $Id: G4PSTermination3D.cc,v 1.2 2007-08-28 10:11:29 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSTermination3D
@@ -52,9 +52,13 @@
 G4PSTermination3D::G4PSTermination3D(G4String name, 
 				     G4int ni, G4int nj, G4int nk,
 				     G4int di, G4int dj, G4int dk)
-    :G4PSTermination(name),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSTermination(name),
      fDepthi(di),fDepthj(dj),fDepthk(dk)
-{;}
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+}
 
 G4PSTermination3D::~G4PSTermination3D()
 {;}

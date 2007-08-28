@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux3D.cc,v 1.1 2007-08-22 23:30:53 taso Exp $
+// $Id: G4PSSphereSurfaceFlux3D.cc,v 1.2 2007-08-28 10:11:29 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceFlux3D
@@ -50,9 +50,13 @@
 G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
 			       G4int ni, G4int nj, G4int nk,
 			       G4int depi, G4int depj, G4int depk)
-    :G4PSSphereSurfaceFlux(name,direction),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSSphereSurfaceFlux(name,direction),
      fDepthi(depi),fDepthj(depj),fDepthk(depk)
-{;}
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+}
 
 G4PSSphereSurfaceFlux3D::~G4PSSphereSurfaceFlux3D()
 {;}

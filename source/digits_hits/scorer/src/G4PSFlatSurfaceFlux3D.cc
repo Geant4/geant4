@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux3D.cc,v 1.1 2007-08-22 23:30:51 taso Exp $
+// $Id: G4PSFlatSurfaceFlux3D.cc,v 1.2 2007-08-28 10:11:29 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux3D
@@ -53,9 +53,13 @@
 G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(G4String name, G4int direction,
 					     G4int ni, G4int nj, G4int nk,
 					     G4int di, G4int dj, G4int dk)
-    :G4PSFlatSurfaceFlux(name,direction),fNi(ni),fNj(nj),fNk(nk),
+    :G4PSFlatSurfaceFlux(name,direction),
      fDepthi(di),fDepthj(dj),fDepthk(dk)
-{;}
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+}
 
 G4PSFlatSurfaceFlux3D::~G4PSFlatSurfaceFlux3D()
 {;}
