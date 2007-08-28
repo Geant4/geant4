@@ -86,6 +86,10 @@ List of fixes included in this public patch since the public release 9.0:
         classes G4VPolarizedCrossSection, G4eplusPolarizedAnnihilation,
         and G4PolarizedAnnihilationModel to clear "shadow" warnings on SUN-CC.
     + Standard:
+      o G4UniversalFluctuation: added protection such that no sampling of
+        fluctuations is done if mean energy loss at the step is below minimal
+        excitation energy of the media. The fix is important for cases of
+        low-dense gases and very small steps.
       o G4UniversalFluctuation: added protection for low-density materials
         or very small steps - mean energy loss below minimal excitation
         energy - no fluctuation sampling but mean energy loss.
