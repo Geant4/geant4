@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.13 2007-08-29 01:42:17 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.14 2007-08-29 01:55:53 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,12 +33,15 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4VSDFilter.hh"
+#include "G4SDManager.hh"
 
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
     fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0)
 {
+  G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
+
   fSize[0] = fSize[1] = fSize[2] = 0.*cm;
   fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
   fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
