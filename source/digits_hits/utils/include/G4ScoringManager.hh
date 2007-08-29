@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.10 2007-08-28 08:21:42 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.11 2007-08-29 01:20:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,13 +88,19 @@ class G4ScoringManager
       inline void CloseCurrentMesh()
       { fCurrentMesh = 0; }
       inline void SetVerboseLevel(G4int vl) 
-      { verboseLevel = vl; }
+      {
+        verboseLevel = vl;
+        for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
+         (*itr)->SetVerboseLevel(vl);
+        }
+      }
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
       inline size_t GetNumberOfMesh() const
       { return fMeshVec.size(); }
       inline void RegisterScoringMesh(G4VScoringMesh * sm)
       {
+        sm->SetVerboseLevel(verboseLevel);
         fMeshVec.push_back(sm);
         SetCurrentMesh(sm);
       }
