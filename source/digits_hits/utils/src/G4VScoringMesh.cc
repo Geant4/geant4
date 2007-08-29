@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.12 2007-08-29 01:37:25 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.13 2007-08-29 01:42:17 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,8 +90,7 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
   ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
-  //G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
-  G4THitsMap<G4double> map(fWorldName, ps->GetName());
+  G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
   fMap[ps->GetName()] = map;
   if(verboseLevel > 9) G4cout << fMFD->GetNumberOfPrimitives() << G4endl;;
 }
@@ -146,10 +145,10 @@ void G4VScoringMesh::Dump() {
   G4cout << "scoring mesh name: " << fWorldName << G4endl;
 
   G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
-  std::map<G4String, G4THitsMap<G4double> >::iterator itr = fMap.begin();
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     G4cout << "[" << itr->first << "]" << G4endl;
-    std::map<G4int, double*> * map = itr->second.GetMap();
+    std::map<G4int, double*> * map = itr->second->GetMap();
     std::map<G4int, double*>::iterator itrMap  = map->begin();
     for(; itrMap != map->end(); itrMap++) {
       G4cout << itrMap->second << ", ";

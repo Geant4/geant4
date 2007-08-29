@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.11 2007-08-29 01:07:21 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.12 2007-08-29 01:42:17 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -104,7 +104,7 @@ protected:
   G4int fNSegment[3];
   std::vector<G4double> fSegmentPositions;
 
-  std::map<G4String, G4THitsMap<G4double> > fMap;
+  std::map<G4String, G4THitsMap<G4double>* > fMap;
   G4MultiFunctionalDetector * fMFD;
 
   G4int verboseLevel;
@@ -113,8 +113,8 @@ protected:
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const
 {
   G4String psName = map->GetName();
-  std::map<G4String, G4THitsMap<G4double> >::const_iterator fMapItr = fMap.find(psName);
-  fMapItr->second += *map;
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  *(fMapItr->second) += *map;
 }
 
 
