@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.6 2007-08-29 00:24:44 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.7 2007-08-29 02:43:30 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,7 +56,11 @@ class G4ScoringMessenger: public G4UImessenger
     ~G4ScoringMessenger();
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
+
     void MeshBinCommand(G4String newValues);
+
+    void FParticleCommand(G4String newValues);
+
   
   private:
     G4ScoringManager*        fSMan;
@@ -87,7 +91,7 @@ class G4ScoringMessenger: public G4UImessenger
     //   Placement command
     G4UIdirectory*             mTransDir;
     G4UIcmdWithoutParameter*   mTResetCmd;
-    G4UIcmdWith3VectorAndUnit* mTAddCmd;
+    G4UIcmdWith3VectorAndUnit* mTXyzCmd;
     G4UIdirectory*             mRotDir;
     G4UIcmdWithoutParameter*   mRResetCmd;
     G4UIcmdWithADoubleAndUnit* mRotXCmd;
@@ -100,7 +104,14 @@ class G4ScoringMessenger: public G4UImessenger
     // Quantity commands
     G4UIdirectory*             quantityDir;
     G4UIcmdWithAString*        qAttachCmd;
+    //
+    G4UIcmdWithoutParameter*   qCellChgCmd;
+    G4UIcmdWithoutParameter*   qCellFluxCmd;
+    G4UIcmdWithoutParameter*   qPassCellFluxCmd;
     G4UIcmdWithoutParameter*   qeDepCmd;
+    G4UIcmdWithoutParameter*   qdoseDepCmd;
+    G4UIcmdWithoutParameter*   qnOfStepCmd;
+    G4UIcmdWithoutParameter*   qnOfSecondaryCmd;
 
     //
     // Filter commands 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.8 2007-08-29 00:24:59 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.9 2007-08-29 02:43:47 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -34,7 +34,15 @@
 #include "G4VScoringMesh.hh"
 #include "G4ScoringBox.hh"
 
+#include "G4PSCellCharge3D.hh"
+#include "G4PSCellFlux3D.hh"
+#include "G4PSPassageCellFlux3D.hh"
 #include "G4PSEnergyDeposit3D.hh"
+#include "G4PSDoseDeposit3D.hh"
+#include "G4PSNofStep3D.hh"
+#include "G4PSNofSecondary3D.hh"
+
+#include "G4SDParticleFilter.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -102,12 +110,16 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   G4UIparameter* param;
   param = new G4UIparameter("Ni",'i',false);
   param->SetDefaultValue("1");
+  mBinCmd->SetParameter(param);
   param = new G4UIparameter("Nj",'i',false);
   param->SetDefaultValue("1");
+  mBinCmd->SetParameter(param);
   param = new G4UIparameter("Nk",'i',false);
   param->SetDefaultValue("1");
-  param = new G4UIparameter("Axis",'i',false);
-  param->SetDefaultValue("2");
+  mBinCmd->SetParameter(param);
+  param = new G4UIparameter("Axis",'i',true);
+  param->SetDefaultValue("3");
+  mBinCmd->SetParameter(param);
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
@@ -116,10 +128,10 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mTResetCmd = new G4UIcmdWithoutParameter("/score/mesh/translate/reset",this);
   mTResetCmd->SetGuidance("Reset translation of scoring mesh placement.");
   //
-  mTAddCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/translate/add",this);
-  mTAddCmd->SetGuidance("Add translation to the current scoring mesh position.");
-  mTAddCmd->SetParameterName("DX","DY","DZ",false,false);
-  mTAddCmd->SetDefaultUnit("mm");
+  mTXyzCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/translate/xyz",this);
+  mTXyzCmd->SetGuidance("Translation the current scoring mesh to the position.");
+  mTXyzCmd->SetParameterName("X","Y","Z",false,false);
+  mTXyzCmd->SetDefaultUnit("mm");
   //
   mRotDir = new G4UIdirectory("/score/mesh/rotate/");
   mRotDir->SetGuidance("Placement of scoring mesh");
@@ -159,31 +171,29 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
+  qCellChgCmd  = new G4UIcmdWithoutParameter("/score/quantity/cellCharge",this);
+  qCellChgCmd->SetGuidance("Cell Charge Scorer");
+  qCellFluxCmd = new G4UIcmdWithoutParameter("/score/quantity/cellFlux",this);
+  qCellFluxCmd->SetGuidance("Cell Flux Scorer");
+  qPassCellFluxCmd = new G4UIcmdWithoutParameter("/score/quantity/passageCellFlux",this);
+  qPassCellFluxCmd->SetGuidance("Passage Cell Flux Scorer");
+  qdoseDepCmd = new G4UIcmdWithoutParameter("/score/quantity/doseDeposit",this);
+  qdoseDepCmd->SetGuidance("Dose Deposit Scorer");
+  qnOfStepCmd = new G4UIcmdWithoutParameter("/score/quantity/nOfStep",this);
+  qnOfStepCmd->SetGuidance("Number of Step Scorer ");
+  qnOfSecondaryCmd = new G4UIcmdWithoutParameter("/score/quantity/nOfSecondary",this);
+  qnOfSecondaryCmd->SetGuidance("Number of Secondary Scorer ");
   //
   //
   // Filter commands 
   filterDir = new G4UIdirectory("/score/filter/");
   filterDir->SetGuidance("Filter for scoring");
   //
-  /*
-  fparticleCmd = new G4UIcommand("/score/filter/particle");
+  fparticleCmd = new G4UIcommand("/score/filter/particle",this);
   fparticleCmd->SetGuidance("Attach particle filter into current quantity");
-  fparticleCmd->SetGuidance("[usage] /score/filter/particle fname cname p0 .. pn");
+  fparticleCmd->SetGuidance("[usage] /score/filter/particle fname p0 .. pn");
   fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
-  fparticleCmd->SetGuidance("  cname     :(String) Class Name of Filter ");
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names ");
-  mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
-  mBinCmd->SetGuidance("  P1..Pn-1  :(double) paramter from P1 to Pn-1 for division.");
-  G4UIparameter* param;
-  param = new G4UIparameter("Ni",'i',false);
-  param->SetDefaultValue("1");
-  param = new G4UIparameter("Nj",'i',false);
-  param->SetDefaultValue("1");
-  param = new G4UIparameter("Nk",'i',false);
-  param->SetDefaultValue("1");
-  param = new G4UIparameter("Axis",'i',false);
-  param->SetDefaultValue("2");
-  */
   //
   filterDelCmd = new G4UIcmdWithAString("/score/filter/delete",this);
   filterDelCmd->SetGuidance("Delete filter of scoring mesh.");
@@ -209,7 +219,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete mBinCmd;
 
   delete mTResetCmd;
-  delete mTAddCmd;
+  delete mTXyzCmd;
   delete mTransDir;
   delete mRResetCmd;
   delete mRotXCmd;
@@ -217,10 +227,19 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete mRotZCmd;
   delete mRotDir;
   delete meshDir;
+ 
+  delete   qCellChgCmd;
+  delete   qCellFluxCmd;
+  delete   qPassCellFluxCmd;
+  delete   qeDepCmd;
+  delete   qdoseDepCmd;
+  delete   qnOfStepCmd;
+  delete   qnOfSecondaryCmd;
 
-  delete qeDepCmd;
   delete qAttachCmd;
   delete quantityDir;
+
+  delete fparticleCmd;
 
   delete filterDelCmd;
   delete filterDir;
@@ -244,53 +263,83 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
       }
   } else if(command==meshOpnCmd) {
+      G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
+      if ( currentmesh ){
+ 	  G4Exception("G4ScroingMessenger:: Close current mesh first!. Error!");
+      }
       G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
       if ( !mesh ){
  	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
       }
-  } else if(command==meshClsCmd) {
+  } else {
+      //
+      // Get Current Mesh
+      //
       G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-      if ( !mesh ){
- 	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
+      //
+      // Commands for Current Mesh
+      if ( mesh ){
+	  if(command==meshClsCmd) {
+	      fSMan->CloseCurrentMesh();
+	  } else if(command==meshDelCmd) {
+	  } else if(command==mBoxSizeCmd) {
+	      MeshShape shape = mesh->GetShape();
+	      if ( shape == boxMesh ){
+		  G4ThreeVector size = mBoxSizeCmd->GetNew3VectorValue(newVal);
+		  G4double vsize[3];
+		  vsize[0] = size.x();
+		  vsize[1] = size.y();
+		  vsize[2] = size.z();
+		  mesh->SetSize(vsize);
+	      } else {
+		  G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
+	      }
+	  } else if(command==mBinCmd) {
+	      MeshBinCommand(newVal);
+	  } else if(command==mTResetCmd) {
+	      G4double centerPosition[3] ={ 0., 0., 0.};
+	      mesh->SetCenterPosition(centerPosition);
+	  } else if(command==mTXyzCmd) {
+	      G4ThreeVector xyz = mTXyzCmd->GetNew3VectorValue(newVal);
+	      G4double centerPosition[3];
+	      centerPosition[0] = xyz.x();
+	      centerPosition[1] = xyz.y();
+	      centerPosition[2] = xyz.z();
+	      mesh->SetCenterPosition(centerPosition);
+	  } else if(command==mRResetCmd) {
+	  } else if(command==mRotXCmd) {
+	      G4double value = mRotXCmd->GetNewDoubleValue(newVal);
+	      mesh->RotateX(value);
+	  } else if(command==mRotYCmd) {
+	      G4double value = mRotYCmd->GetNewDoubleValue(newVal);
+	      mesh->RotateY(value);
+	  } else if(command==mRotZCmd) {
+	      G4double value = mRotZCmd->GetNewDoubleValue(newVal);
+	      mesh->RotateZ(value);
+	  } else if(command==qAttachCmd) {
+	      mesh->SetCurrentPrimitiveScorer(newVal);
+	  } else if(command== qCellChgCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSCellCharge3D(newVal));
+	  } else if(command== qCellFluxCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSCellFlux3D(newVal));
+	  } else if(command== qPassCellFluxCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSPassageCellFlux3D(newVal));
+	  } else if(command==qeDepCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
+	  } else if(command== qdoseDepCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSDoseDeposit3D(newVal));
+	  } else if(command== qnOfStepCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSNofStep3D(newVal));
+	  } else if(command== qnOfSecondaryCmd) {
+	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
+	  } else if(command==fparticleCmd) {
+	      FParticleCommand(newVal);
+	  } else if(command==filterDelCmd) {
+	  }
       }else{
-	  fSMan->CloseCurrentMesh();
+	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
       }
-  } else if(command==meshDelCmd) {
-  } else if(command==mBoxSizeCmd) {
-      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-      if ( !mesh ){
- 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
-      }
-      MeshShape shape = mesh->GetShape();
-      if ( shape == boxMesh ){
-	  G4ThreeVector size = mBoxSizeCmd->GetNew3VectorValue(newVal);
-	  G4double vsize[3];
-	  vsize[0] = size.x();
-	  vsize[1] = size.y();
-	  vsize[2] = size.z();
-	  mesh->SetSize(vsize);
-      } else {
- 	  G4Exception("G4ScroingMessenger:: Current Mesh is not Box type. Error!");
-      }
-  } else if(command==mBinCmd) {
-      MeshBinCommand(newVal);
-  } else if(command==mTResetCmd) {
-  } else if(command==mTAddCmd) {
-  } else if(command==mRResetCmd) {
-  } else if(command==mRotXCmd) {
-  } else if(command==mRotYCmd) {
-  } else if(command==mRotZCmd) {
-  } else if(command==qAttachCmd) {
-  } else if(command==qeDepCmd) {
-      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-      if ( !mesh ){
- 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
-      }
-      mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
-  } else if(command==filterDelCmd) {
   }
-
-
 }
 
 G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand * command)
@@ -332,3 +381,23 @@ void G4ScoringMessenger::MeshBinCommand(G4String newVal){
     }
     */
 }
+
+void G4ScoringMessenger::FParticleCommand(G4String newVal){
+    G4Tokenizer next(newVal);
+    //
+    G4String name = next();
+    G4String p = next();
+    std::vector<G4String> pnames;
+    if ( ! p.isNull() ) {
+	do {
+	    pnames.push_back(p);
+	} while (!p.isNull());
+    }
+    G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
+    if ( !mesh ){
+	G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+    }
+    mesh->SetFilter(new G4SDParticleFilter(name,pnames));
+
+}    
+
