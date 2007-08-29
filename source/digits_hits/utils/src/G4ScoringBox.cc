@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.20 2007-08-29 07:44:59 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.21 2007-08-29 14:28:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -106,19 +106,21 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
-  // fisrt nested layer
+  // fisrt nested layer (replicated to x direction)
   if(verboseLevel > 10) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fNSegment[0],
 			    fSize[1],
 			    fSize[2]);
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
-  if(fNSegment[0] > 1) 
+  if(fNSegment[0] > 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to x direction" << G4endl;
     new G4PVReplica(layerName[0], layerLogical[0], boxLogical, kXAxis,
 		    fNSegment[0], fSize[0]/fNSegment[0]*2.);
-  else if(fNSegment[0] == 1)
+  } else if(fNSegment[0] == 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[0], layerName[0], boxLogical, false, 0);
-  else
+  } else
     G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
 	   << fNSegment[0] << ") "
 	   << "in placement of the first nested layer." << G4endl;
@@ -129,22 +131,24 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fSize[2] << G4endl;
     G4cout << layerName[0] << ": kXAxis, "
 	   << fNSegment[0] << ", "
-	   << fSize[0]/fNSegment[0] << G4endl;
+	   << 2.*fSize[0]/fNSegment[0] << G4endl;
   }
 
-  // second nested layer
+  // second nested layer (replicated to y direction)
   if(verboseLevel > 10) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Box(layerName[1],
 			    fSize[0]/fNSegment[0],
 			    fSize[1]/fNSegment[1],
 			    fSize[2]);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
-  if(fNSegment[1] > 1) 
+  if(fNSegment[1] > 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to y direction" << G4endl;
     new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
 		    fNSegment[1], fSize[1]/fNSegment[1]*2.);
-  else if(fNSegment[1] == 1)
+  } else if(fNSegment[1] == 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[1], layerName[1], layerLogical[0], false, 0);
-  else
+  } else
     G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
 	   << fNSegment[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
@@ -155,10 +159,10 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fSize[2] << G4endl;
     G4cout << layerName[1] << ": kYAxis, "
 	   << fNSegment[1] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
+	   << 2.*fSize[1]/fNSegment[1] << G4endl;
   }
 
-  // mesh elements
+  // mesh elements (replicated to z direction)
   if(verboseLevel > 10) G4cout << "mesh elements :" << G4endl;
   G4String elementName = boxName +"3";
   G4VSolid * elementSolid = new G4Box(elementName,
@@ -168,6 +172,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) 
     if(fSegmentPositions.size() > 0) {
+      if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Parameterise to z direction" << G4endl;
       G4double motherDims[3] ={fSize[0]/fNSegment[0],
 			       fSize[1]/fNSegment[1],
 			       fSize[2]/fNSegment[2]};
@@ -191,12 +196,15 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
       }
 
     } else {
+      if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to z direction" << G4endl;
+
       new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
-		      fNSegment[2], fSize[2]/fNSegment[2]*2.);
+		      fNSegment[2], 2.*fSize[2]/static_cast<G4double>(fNSegment[2]));
     }
-  else if(fNSegment[2] == 1)
+  else if(fNSegment[2] == 1) {
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
-  else
+  } else
     G4cerr << "G4ScoringBox::SetupGeometry() : "
 	   << "invalid parameter (" << fNSegment[2] << ") "
 	   << "in mesh element placement." << G4endl;
@@ -207,7 +215,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fSize[2]/fNSegment[2] << G4endl;
     G4cout << elementName << ": kZAxis, "
 	   << fNSegment[2] << ", "
-	   << fSize[2]/fNSegment[2] << G4endl;
+	   << 2.*fSize[2]/fNSegment[2] << G4endl;
   }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.19 2007-08-29 08:01:15 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.20 2007-08-29 14:28:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -102,18 +102,16 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
 			      << ps->GetName() << " is registered."
-			      << " size: ("
+			      << " 3D size: ("
 			      << fNSegment[0] << ", "
 			      << fNSegment[1] << ", "
 			      << fNSegment[2] << ")" << G4endl;
+
   ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
   G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
   fMap[ps->GetName()] = map;
-  if(verboseLevel > 9) {
-    G4cout << "" << G4endl;
-  }
 }
 
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
