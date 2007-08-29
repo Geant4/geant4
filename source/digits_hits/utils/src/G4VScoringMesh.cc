@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.18 2007-08-29 07:29:16 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.19 2007-08-29 08:01:15 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,9 +64,13 @@ G4VScoringMesh::~G4VScoringMesh()
 //}
 
 void G4VScoringMesh::ResetScore() {
+  if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore() is called." << G4endl;
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
+    if(verboseLevel > 9) G4cout << itr->first << G4endl;
+    G4cout << itr->second->entries() << G4endl;
     itr->second->clear();
+    G4cout << itr->second->entries() << G4endl;
   }
 }
 void G4VScoringMesh::SetSize(G4double size[3]) {
