@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.19 2007-08-29 07:29:16 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.20 2007-08-29 07:44:59 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,17 +77,17 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
-  if(verboseLevel > 19) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
+  if(verboseLevel > 10) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
 
   // World
   G4VPhysicalVolume * scoringWorld = fWorldPhys;
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  if(verboseLevel > 19) G4cout << fWorldName << G4endl;
+  if(verboseLevel > 10) G4cout << fWorldName << G4endl;
   G4String boxName = fWorldName;
 
-  if(verboseLevel > 19) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
+  if(verboseLevel > 10) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
@@ -95,10 +95,10 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 						   fCenterPosition[2]),
 		    boxLogical, boxName+"0", worldLogical, false, 0);
 
-  G4double fsegment[3][3];
-  G4int segOrder[3];
-  GetSegmentOrder(fSegmentDirection, fNSegment, segOrder, fsegment);
-  EAxis axis[3] = {kXAxis, kYAxis, kZAxis};
+  //G4double fsegment[3][3];
+  //G4int segOrder[3];
+  //GetSegmentOrder(fSegmentDirection, fNSegment, segOrder, fsegment);
+  //EAxis axis[3] = {kXAxis, kYAxis, kZAxis};
 
 
 
@@ -107,81 +107,83 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer
-  if(verboseLevel > 19) G4cout << "layer 1 :" << G4endl;
+  if(verboseLevel > 10) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
-			    fSize[0]/fsegment[0][0],
-			    fSize[1]/fsegment[0][1],
-			    fSize[2]/fsegment[0][2]);
+			    fSize[0]/fNSegment[0],
+			    fSize[1],
+			    fSize[2]);
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
-  if(fNSegment[segOrder[0]] > 1) 
-    new G4PVReplica(layerName[0], layerLogical[0], boxLogical, axis[segOrder[0]],
-		    fNSegment[segOrder[0]], fSize[segOrder[0]]/fsegment[0][segOrder[0]]*2.);
-  else if(fNSegment[segOrder[0]] == 1)
+  if(fNSegment[0] > 1) 
+    new G4PVReplica(layerName[0], layerLogical[0], boxLogical, kXAxis,
+		    fNSegment[0], fSize[0]/fNSegment[0]*2.);
+  else if(fNSegment[0] == 1)
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[0], layerName[0], boxLogical, false, 0);
   else
     G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
-	   << fNSegment[segOrder[0]] << "," << segOrder[0] << ") "
+	   << fNSegment[0] << ") "
 	   << "in placement of the first nested layer." << G4endl;
 
-  if(verboseLevel > 19) {
-    G4cout << fSize[0]/fsegment[0][0] << ", "
-	   << fSize[1]/fsegment[0][1] << ", "
-	   << fSize[2]/fsegment[0][2] << G4endl;
-    G4cout << layerName[0] << ": " << axis[segOrder[0]] << ", "
-	   << fNSegment[segOrder[0]] << ", "
-	   << fSize[segOrder[0]]/fsegment[0][segOrder[0]] << G4endl;
+  if(verboseLevel > 10) {
+    G4cout << fSize[0]/fNSegment[0] << ", "
+	   << fSize[1] << ", "
+	   << fSize[2] << G4endl;
+    G4cout << layerName[0] << ": kXAxis, "
+	   << fNSegment[0] << ", "
+	   << fSize[0]/fNSegment[0] << G4endl;
   }
 
   // second nested layer
-  if(verboseLevel > 19) G4cout << "layer 2 :" << G4endl;
+  if(verboseLevel > 10) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Box(layerName[1],
-			    fSize[0]/fsegment[1][0],
-			    fSize[1]/fsegment[1][1],
-			    fSize[2]/fsegment[1][2]);
+			    fSize[0]/fNSegment[0],
+			    fSize[1]/fNSegment[1],
+			    fSize[2]);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
-  if(fNSegment[segOrder[1]] > 1) 
-    new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], axis[segOrder[1]],
-		    fNSegment[segOrder[1]], fSize[segOrder[1]]/fsegment[1][segOrder[1]]*2.);
-  else if(fNSegment[segOrder[1]] == 1)
+  if(fNSegment[1] > 1) 
+    new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
+		    fNSegment[1], fSize[1]/fNSegment[1]*2.);
+  else if(fNSegment[1] == 1)
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[1], layerName[1], layerLogical[0], false, 0);
   else
     G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
-	   << fNSegment[segOrder[1]] << "," << segOrder[1] << ") "
+	   << fNSegment[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
 
-  if(verboseLevel > 19) {
-    G4cout << fSize[0]/fsegment[1][0] << ", "
-	   << fSize[1]/fsegment[1][1] << ", "
-	   << fSize[2]/fsegment[1][2] << G4endl;
-    G4cout << layerName[1] << ": " << axis[segOrder[1]] << ", "
-	   << fNSegment[segOrder[1]] << ", "
-	   << fSize[segOrder[1]]/fsegment[1][segOrder[1]] << G4endl;
+  if(verboseLevel > 10) {
+    G4cout << fSize[0]/fNSegment[0] << ", "
+	   << fSize[1]/fNSegment[1] << ", "
+	   << fSize[2] << G4endl;
+    G4cout << layerName[1] << ": kYAxis, "
+	   << fNSegment[1] << ", "
+	   << fSize[1]/fNSegment[1] << G4endl;
   }
 
   // mesh elements
-  if(verboseLevel > 19) G4cout << "mesh elements :" << G4endl;
+  if(verboseLevel > 10) G4cout << "mesh elements :" << G4endl;
   G4String elementName = boxName +"3";
-  G4VSolid * elementSolid = new G4Box(elementName, fSize[0]/fsegment[2][0],
-				      fSize[1]/fsegment[2][1], fSize[2]/fsegment[2][2]);
+  G4VSolid * elementSolid = new G4Box(elementName,
+				      fSize[0]/fNSegment[0],
+				      fSize[1]/fNSegment[1],
+				      fSize[2]/fNSegment[2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
-  if(fNSegment[segOrder[2]] > 1) 
+  if(fNSegment[2] > 1) 
     if(fSegmentPositions.size() > 0) {
-      G4double motherDims[3] ={fSize[0]/fsegment[1][0],
-			       fSize[1]/fsegment[1][1],
-			       fSize[2]/fsegment[1][2]};
-      G4int nelement = fNSegment[segOrder[2]];
-      fSegmentPositions.push_back(fSize[segOrder[2]]*2.);
+      G4double motherDims[3] ={fSize[0]/fNSegment[0],
+			       fSize[1]/fNSegment[1],
+			       fSize[2]/fNSegment[2]};
+      G4int nelement = fNSegment[2];
+      fSegmentPositions.push_back(fSize[2]*2.);
       //G4ScoringBoxParameterisation * param =
       G4VPVParameterisation * param =
-	new G4ScoringBoxParameterisation(axis[segOrder[2]], motherDims, fSegmentPositions);
+	new G4ScoringBoxParameterisation(kZAxis, motherDims, fSegmentPositions);
       new G4PVParameterised(elementName,
 			    fMeshElementLogical,
 			    layerLogical[1],
-			    axis[segOrder[2]],
+			    kZAxis,
 			    nelement,
 			    param);
 
-      if(verboseLevel > 19) {
+      if(verboseLevel > 10) {
 	G4cout << motherDims[0] << ", " << motherDims[1] << ", " << motherDims[2] << G4endl;
 	for(int i = 0; i < (int)fSegmentPositions.size(); i++)
 	  G4cout << fSegmentPositions[i] << ", ";
@@ -189,23 +191,23 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
       }
 
     } else {
-      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], axis[segOrder[2]],
-		      fNSegment[segOrder[2]], fSize[segOrder[2]]/fsegment[2][segOrder[2]]*2.);
+      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
+		      fNSegment[2], fSize[2]/fNSegment[2]*2.);
     }
-  else if(fNSegment[segOrder[2]] == 1)
+  else if(fNSegment[2] == 1)
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
   else
     G4cerr << "G4ScoringBox::SetupGeometry() : "
-	   << "invalid parameter (" << fNSegment[segOrder[2]] << ") "
+	   << "invalid parameter (" << fNSegment[2] << ") "
 	   << "in mesh element placement." << G4endl;
 
-  if(verboseLevel > 19) {
-    G4cout << fSize[0]/fsegment[2][0] << ", "
-	   << fSize[1]/fsegment[2][1] << ", "
-	   << fSize[2]/fsegment[2][2] << G4endl;
-    G4cout << elementName << ": " << axis[segOrder[2]] << ", "
-	   << fNSegment[segOrder[2]] << ", "
-	   << fSize[segOrder[2]]/fsegment[2][segOrder[2]] << G4endl;
+  if(verboseLevel > 10) {
+    G4cout << fSize[0]/fNSegment[0] << ", "
+	   << fSize[1]/fNSegment[1] << ", "
+	   << fSize[2]/fNSegment[2] << G4endl;
+    G4cout << elementName << ": kZAxis, "
+	   << fNSegment[2] << ", "
+	   << fSize[2]/fNSegment[2] << G4endl;
   }
 
 
@@ -250,6 +252,7 @@ void G4ScoringBox::List() const {
 }
 
 
+/*
 void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]) {
 
   if(segDir == 1) { // in x direction, it segments z -> y -> x directions by turns.
@@ -305,6 +308,7 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
       segfact[2][0] = segfact[2][1] = segfact[2][2] =  1.;
   }
 }
+*/
 
 void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 

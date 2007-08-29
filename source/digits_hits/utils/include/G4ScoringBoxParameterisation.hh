@@ -53,7 +53,7 @@ class G4Polyhedra;
 class G4ScoringBoxParameterisation : public G4VPVParameterisation { 
 public:
   
-  G4ScoringBoxParameterisation(EAxis & segaxis,
+  G4ScoringBoxParameterisation(EAxis segaxis,
 			       G4double motherDimension[3],
 			       std::vector<G4double> & segpos);
   virtual ~G4ScoringBoxParameterisation();

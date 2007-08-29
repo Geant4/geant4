@@ -30,7 +30,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 
-G4ScoringBoxParameterisation::G4ScoringBoxParameterisation(EAxis & segaxis,
+G4ScoringBoxParameterisation::G4ScoringBoxParameterisation(EAxis segaxis,
 							   G4double motherDimension[3],
 							   std::vector<G4double> & segpos)
   : fSegmentAxis(segaxis), fSegmentPositions(segpos) {
