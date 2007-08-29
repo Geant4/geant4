@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.10 2007-08-29 01:20:07 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.11 2007-08-29 02:14:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,14 +63,12 @@ G4ScoringManager::~G4ScoringManager()
 
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
-  if(verboseLevel>9)
-  { G4cout << "G4ScoringManager::Accumulate() for " << map->GetSDname() << " / " << map->GetName() << G4endl; }
-    
   G4String wName = map->GetSDname();
   G4VScoringMesh* sm = FindMesh(wName);
   if(sm == NULL) return;
   if(verboseLevel>9)
-  { G4cout << "  is calling G4VScoringMesh::Accumulate() of " << sm->GetWorldName() << G4endl; }
+  { G4cout << "G4ScoringManager::Accumulate() for " << map->GetSDname() << " / " << map->GetName() << G4endl;
+    G4cout << "  is calling G4VScoringMesh::Accumulate() of " << sm->GetWorldName() << G4endl; }
   sm->Accumulate(static_cast<G4THitsMap<double>*>(map));
 }
 
@@ -84,7 +82,7 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
       break;
     }
   }
-  if(!sm && verboseLevel>9)
+  if(!sm && verboseLevel>19)
   { G4cout << "G4ScoringManager::FindMesh() --- <" << wName << "> is not found. Null returned." << G4endl; }
   SetCurrentMesh(sm);
   return sm;
