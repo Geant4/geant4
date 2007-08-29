@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.5 2007-08-28 10:14:12 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.6 2007-08-29 00:24:44 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,7 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcommand;
 
@@ -81,31 +82,34 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
     //
     //   Division command
-    G4UIdirectory*             mBinDir;
     G4UIcommand*               mBinCmd;
     //
     //   Placement command
     G4UIdirectory*             mTransDir;
-    G4UIcmdWith3VectorAndUnit* mTSetCmd;
+    G4UIcmdWithoutParameter*   mTResetCmd;
     G4UIcmdWith3VectorAndUnit* mTAddCmd;
     G4UIdirectory*             mRotDir;
-    G4UIcmdWith3VectorAndUnit* mRSetCmd;
-    G4UIcmdWith3VectorAndUnit* mRAddCmd;
-
+    G4UIcmdWithoutParameter*   mRResetCmd;
+    G4UIcmdWithADoubleAndUnit* mRotXCmd;
+    G4UIcmdWithADoubleAndUnit* mRotYCmd;
+    G4UIcmdWithADoubleAndUnit* mRotZCmd;
+    //
+    //dump Command
+    G4UIcmdWithAString*        dumpCmd;
+    //
     // Quantity commands
     G4UIdirectory*             quantityDir;
+    G4UIcmdWithAString*        qAttachCmd;
     G4UIcmdWithoutParameter*   qeDepCmd;
 
+    //
     // Filter commands 
     G4UIdirectory*             filterDir;
-    G4UIcmdWithAString*        filterOpnCmd;
-    G4UIcmdWithoutParameter*   filterClsCmd;
+    G4UIcommand*               fparticleCmd;
     G4UIcmdWithAString*        filterDelCmd;
     //
-    G4UIcmdWithAString*        fAttachCmd;
 
-    //dump Command
-    G4UIcmdWithAString*        fdumpCmd;
+
 };
 
 

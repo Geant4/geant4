@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.7 2007-08-28 10:14:26 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.8 2007-08-29 00:24:59 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
 #include "G4Tokenizer.hh"
@@ -61,15 +62,15 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   // Mesh commands
   meshBoxCreateCmd = new G4UIcmdWithAString("/score/create/boxMesh",this);
-  meshBoxCreateCmd->SetGuidance("Open scoring mesh.");
+  meshBoxCreateCmd->SetGuidance("Create scoring mesh.");
   meshBoxCreateCmd->SetParameterName("MeshName",false);
   //
   meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
-  meshTubsCreateCmd->SetGuidance("Open scoring mesh.");
+  meshTubsCreateCmd->SetGuidance("Create scoring mesh.");
   meshTubsCreateCmd->SetParameterName("MeshName",false);
   //
   meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
-  meshSphereCreateCmd->SetGuidance("Open scoring mesh.");
+  meshSphereCreateCmd->SetGuidance("Create scoring mesh.");
   meshSphereCreateCmd->SetParameterName("MeshName",false);
   //
   meshOpnCmd = new G4UIcmdWithAString("/score/open",this);
@@ -112,10 +113,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
   mTransDir->SetGuidance("Placement of scoring mesh");
   //
-  mTSetCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/translate/set",this);
-  mTSetCmd->SetGuidance("Set translation of scoring mesh placement.");
-  mTSetCmd->SetParameterName("X","Y","Z",false,false);
-  mTSetCmd->SetDefaultUnit("mm");
+  mTResetCmd = new G4UIcmdWithoutParameter("/score/mesh/translate/reset",this);
+  mTResetCmd->SetGuidance("Reset translation of scoring mesh placement.");
+  //
   mTAddCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/translate/add",this);
   mTAddCmd->SetGuidance("Add translation to the current scoring mesh position.");
   mTAddCmd->SetParameterName("DX","DY","DZ",false,false);
@@ -124,19 +124,38 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mRotDir = new G4UIdirectory("/score/mesh/rotate/");
   mRotDir->SetGuidance("Placement of scoring mesh");
   //
-  mRSetCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/rotate/set",this);
-  mRSetCmd->SetGuidance("Set rotation of scoring mesh placement.");
-  mRSetCmd->SetParameterName("Rx","Ry","Rz",false,false);
-  mRSetCmd->SetDefaultUnit("deg");
-  mRAddCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/rotate/add",this);
-  mRAddCmd->SetGuidance("Add rotation to the current scoring mesh position.");
-  mRAddCmd->SetParameterName("DRx","DRy","DRz",false,false);
-  mRAddCmd->SetDefaultUnit("deg");
+  mRResetCmd = new G4UIcmdWithoutParameter("/score/mesh/rotate/reset",this);
+  mRResetCmd->SetGuidance("Reset rotation of scoring mesh placement.");
+  //
+  mRotXCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotX",this);
+  mRotXCmd->SetGuidance("Add rotation to the current scoring mesh in X.");
+  mRotXCmd->SetParameterName("Rx",false);
+  mRotXCmd->SetDefaultUnit("deg");
+  //
+  mRotYCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotY",this);
+  mRotYCmd->SetGuidance("Add rotation to the current scoring mesh in Y.");
+  mRotYCmd->SetParameterName("Ry",false);
+  mRotYCmd->SetDefaultUnit("deg");
+  //
+  mRotZCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotZ",this);
+  mRotZCmd->SetGuidance("Add rotation to the current scoring mesh in Z.");
+  mRotZCmd->SetParameterName("Rz",false);
+  mRotZCmd->SetDefaultUnit("deg");
+  //
+
+  // Dump Scoring result
+  dumpCmd = new G4UIcmdWithAString("/score/dump",this);
+  dumpCmd->SetGuidance("Dump scorer results ");
+  dumpCmd->SetParameterName("qname",true);
 
   //
   // Quantity commands
   quantityDir = new G4UIdirectory("/score/quantity/");
   quantityDir->SetGuidance("Scoring quantity of the mesh");
+  //
+  qAttachCmd= new G4UIcmdWithAString("/score/quantity/attach",this);
+  qAttachCmd->SetGuidance("Assign previously defined quantity to current quantity.");
+  qAttachCmd->SetParameterName("qName",false);
   //
   qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
@@ -146,21 +165,30 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   filterDir = new G4UIdirectory("/score/filter/");
   filterDir->SetGuidance("Filter for scoring");
   //
-  filterOpnCmd = new G4UIcmdWithAString("/score/filter/open",this);
-  filterOpnCmd->SetGuidance("Open filter of scoring mesh.");
-  filterOpnCmd->SetParameterName("FilterName",false);
-  filterClsCmd = new G4UIcmdWithoutParameter("/score/filter/close",this);
-  filterClsCmd->SetGuidance("Close filter of scoring mesh.");
+  /*
+  fparticleCmd = new G4UIcommand("/score/filter/particle");
+  fparticleCmd->SetGuidance("Attach particle filter into current quantity");
+  fparticleCmd->SetGuidance("[usage] /score/filter/particle fname cname p0 .. pn");
+  fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
+  fparticleCmd->SetGuidance("  cname     :(String) Class Name of Filter ");
+  fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names ");
+  mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
+  mBinCmd->SetGuidance("  P1..Pn-1  :(double) paramter from P1 to Pn-1 for division.");
+  G4UIparameter* param;
+  param = new G4UIparameter("Ni",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Nj",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Nk",'i',false);
+  param->SetDefaultValue("1");
+  param = new G4UIparameter("Axis",'i',false);
+  param->SetDefaultValue("2");
+  */
+  //
   filterDelCmd = new G4UIcmdWithAString("/score/filter/delete",this);
   filterDelCmd->SetGuidance("Delete filter of scoring mesh.");
   filterDelCmd->SetParameterName("FilterName",false);
-  fAttachCmd= new G4UIcmdWithAString("/score/filter/attach",this);
-  fAttachCmd->SetGuidance("Attach previously defined filter into a mesh or quantity,");
-  fAttachCmd->SetParameterName("FilterName",false);
   //
-
-  fdumpCmd = new G4UIcmdWithAString("/score/dump",this);
-  fdumpCmd->SetGuidance("Dump scorer results ");
 
 }
 
@@ -170,28 +198,31 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete scoreDir;
 
   delete meshBoxCreateCmd;
+  delete mBoxSizeCmd;
+
   delete meshTubsCreateCmd;
   delete meshSphereCreateCmd;
+
   delete meshClsCmd;
   delete meshDelCmd;
-  delete mBoxSizeCmd;
+
   delete mBinCmd;
-  delete mBinDir;
-  delete mTSetCmd;
+
+  delete mTResetCmd;
   delete mTAddCmd;
   delete mTransDir;
-  delete mRSetCmd;
-  delete mRAddCmd;
+  delete mRResetCmd;
+  delete mRotXCmd;
+  delete mRotYCmd;
+  delete mRotZCmd;
   delete mRotDir;
   delete meshDir;
 
   delete qeDepCmd;
+  delete qAttachCmd;
   delete quantityDir;
 
-  delete filterOpnCmd;
-  delete filterClsCmd;
   delete filterDelCmd;
-  delete fAttachCmd;
   delete filterDir;
 
 }
@@ -200,6 +231,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 {
   if(command==listCmd) { 
       fSMan->List(); 
+  } else if(command==dumpCmd) { 
+      fSMan->Dump(); 
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {
@@ -241,20 +274,20 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       }
   } else if(command==mBinCmd) {
       MeshBinCommand(newVal);
-  } else if(command==mTSetCmd) {
+  } else if(command==mTResetCmd) {
   } else if(command==mTAddCmd) {
-  } else if(command==mRSetCmd) {
-  } else if(command==mRAddCmd) {
+  } else if(command==mRResetCmd) {
+  } else if(command==mRotXCmd) {
+  } else if(command==mRotYCmd) {
+  } else if(command==mRotZCmd) {
+  } else if(command==qAttachCmd) {
   } else if(command==qeDepCmd) {
       G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
       if ( !mesh ){
  	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
       }
       mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
-  } else if(command==filterOpnCmd) {
-  } else if(command==filterClsCmd) {
   } else if(command==filterDelCmd) {
-  } else if(command==fAttachCmd) {
   }
 
 
