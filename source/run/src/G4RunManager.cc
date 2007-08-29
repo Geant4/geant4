@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.104 2007-07-12 06:54:31 asaim Exp $
+// $Id: G4RunManager.cc,v 1.105 2007-08-29 04:29:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -493,7 +493,7 @@ void G4RunManager::ConstructScoringWorlds()
 {
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
-  G4int nPar = ScM->GetNumberOfWorlds();
+  G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
   G4ParticleTable::G4PTblDicIterator* theParticleIterator
@@ -527,7 +527,7 @@ void G4RunManager::UpdateScoring()
 {
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
-  G4int nPar = ScM->GetNumberOfWorlds();
+  G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
