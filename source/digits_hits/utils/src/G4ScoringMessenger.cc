@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.11 2007-08-29 05:14:40 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.12 2007-08-29 07:49:05 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -41,6 +41,8 @@
 #include "G4PSDoseDeposit3D.hh"
 #include "G4PSNofStep3D.hh"
 #include "G4PSNofSecondary3D.hh"
+//
+#include "G4PSTrackLength3D.hh"
 
 #include "G4SDParticleFilter.hh"
 
@@ -117,9 +119,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("Nk",'i',false);
   param->SetDefaultValue("1");
   mBinCmd->SetParameter(param);
-  param = new G4UIparameter("Axis",'i',true);
-  param->SetDefaultValue("3");
-  mBinCmd->SetParameter(param);
+  //param = new G4UIparameter("Axis",'i',true);
+  //param->SetDefaultValue("3");
+  //mBinCmd->SetParameter(param);
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
@@ -191,6 +193,26 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   qnOfSecondaryCmd->SetGuidance("Number of Secondary Scorer ");
   qnOfSecondaryCmd->SetParameterName("name",false);
   //
+  qTrackLengthCmd = new G4UIcommand("/score/quantity/trackLength",this);
+  qTrackLengthCmd->SetGuidance("TrackLength Scorer");
+  qTrackLengthCmd->
+      SetGuidance("[usage] /score/quantiy/trackLength wname wflag kflag vflag ");
+  qTrackLengthCmd->SetGuidance("  wname  :(String) scorer name");
+  qTrackLengthCmd->SetGuidance("  wflag  :(Bool) Weighted");
+  qTrackLengthCmd->SetGuidance("  kflag  :(Bool) MultiplyKineticEnergy");
+  qTrackLengthCmd->SetGuidance("  vflag  :(Bool) DivideByVelocity");
+  G4UIparameter* pTLparam;
+  pTLparam = new G4UIparameter("wname",'s',false);
+  qTrackLengthCmd->SetParameter(pTLparam);
+  pTLparam = new G4UIparameter("wflag",'b',true);
+  pTLparam->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(pTLparam);
+  pTLparam = new G4UIparameter("kflag",'b',true);
+  pTLparam->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(pTLparam);
+  pTLparam = new G4UIparameter("vflag",'b',true);
+  pTLparam->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(pTLparam);
   //
   // Filter commands 
   filterDir = new G4UIdirectory("/score/filter/");
@@ -243,6 +265,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete   qdoseDepCmd;
   delete   qnOfStepCmd;
   delete   qnOfSecondaryCmd;
+  delete   qTrackLengthCmd;
 
   delete qTouchCmd;
   delete quantityDir;
@@ -303,7 +326,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
 	      }
 	  } else if(command==mBinCmd) {
-	      MeshBinCommand(newVal);
+	      MeshBinCommand(mesh,newVal);
 	  } else if(command==mTResetCmd) {
 	      G4double centerPosition[3] ={ 0., 0., 0.};
 	      mesh->SetCenterPosition(centerPosition);
@@ -338,10 +361,12 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->SetPrimitiveScorer(new G4PSDoseDeposit3D(newVal));
 	  } else if(command== qnOfStepCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSNofStep3D(newVal));
+	  } else if(command== qTrackLengthCmd) {
+	      PSTrackLength(mesh,newVal);
 	  } else if(command== qnOfSecondaryCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
 	  } else if(command==fparticleCmd) {
-	      FParticleCommand(newVal);
+	      FParticleCommand(mesh,newVal);
 	  }
       }else{
 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
@@ -358,7 +383,7 @@ G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand * command)
   return val;
 }
 
-void G4ScoringMessenger::MeshBinCommand(G4String newVal){
+void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4String newVal){
     G4Tokenizer next(newVal);
     G4int Ni = StoI(next());
     G4int Nj = StoI(next());
@@ -368,10 +393,6 @@ void G4ScoringMessenger::MeshBinCommand(G4String newVal){
     nSegment[1] = Nj;
     nSegment[2] = Nk;
     //
-    G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-    if ( !mesh ){
-	G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
-    }
     mesh->SetNumberOfSegments(nSegment);
     //
     //
@@ -389,14 +410,33 @@ void G4ScoringMessenger::MeshBinCommand(G4String newVal){
     */
 }
 
-void G4ScoringMessenger::FParticleCommand(G4String newVal){
+void G4ScoringMessenger::PSTrackLength(G4VScoringMesh* mesh, G4String newValues){
+    G4Tokenizer next(newValues);
+    //
+    G4String name = next();
+    //
+    G4bool weighted              = StoB(next());
+    G4bool multiplyKineticEnergy = StoB(next());
+    G4bool divideByVelocity      = StoB(next());
+    //
+    G4PSTrackLength3D* ps = new G4PSTrackLength3D(name);
+    ps->Weighted(weighted);
+    ps->MultiplyKineticEnergy(multiplyKineticEnergy);
+    ps->DivideByVelocity(divideByVelocity);
+    mesh->SetPrimitiveScorer(ps);
+}
+
+void G4ScoringMessenger::FParticleCommand(G4VScoringMesh* mesh, G4String newVal){
     G4Tokenizer next(newVal);
     //
     G4String name = next();
     //
     G4String p = next();
     std::vector<G4String> pnames;
-    pnames.push_back(p);
+    if ( !p.isNull() ) {
+	pnames.push_back(p);
+    }
+
     //G4cout << " XXX " << name << "   XXX  " << p << G4endl;
     /*
     if ( ! p.isNull() ) {
@@ -407,10 +447,6 @@ void G4ScoringMessenger::FParticleCommand(G4String newVal){
 	} while (!p.isNull());
     }
     */
-    G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-    if ( !mesh ){
-	G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
-    }
     mesh->SetFilter(new G4SDParticleFilter(name,pnames));
 
 }    

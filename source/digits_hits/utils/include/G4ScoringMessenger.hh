@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.8 2007-08-29 04:51:46 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.9 2007-08-29 07:48:50 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,9 +58,11 @@ class G4ScoringMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
 
-    void MeshBinCommand(G4String newValues);
+    void MeshBinCommand(G4VScoringMesh* mesh, G4String newValues);
 
-    void FParticleCommand(G4String newValues);
+    void PSTrackLength(G4VScoringMesh* mesh,  G4String newValues); 
+
+    void FParticleCommand(G4VScoringMesh* mesh, G4String newValues);
 
   
   private:
@@ -113,6 +115,8 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithAString*   qdoseDepCmd;
     G4UIcmdWithAString*   qnOfStepCmd;
     G4UIcmdWithAString*   qnOfSecondaryCmd;
+    //
+    G4UIcommand*          qTrackLengthCmd;
 
     //
     // Filter commands 
