@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh,v 1.6 2006-06-29 18:06:36 gunter Exp $
+// $Id: G4THitsMap.hh,v 1.7 2007-08-29 02:26:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4THitsMap_h
@@ -192,7 +192,14 @@ template <typename T> void G4THitsMap<T>::DrawAllHits()
 {;}
 
 template <typename T> void G4THitsMap<T>::PrintAllHits() 
-{;}
+{
+ G4cout << "G4THitsMap " << SDname << " / " << collectionName << " --- " << entries() << " entries" << G4endl;
+ std::map<G4int,T*> * theHitsMap = GetMap();
+ typename std::map<G4int, T*>::iterator itr = theHitsMap->begin();
+ for(; itr != theHitsMap->end(); itr++) {
+  G4cout << "  " << itr->first << " : " << *(itr->second) << G4endl;
+ }
+}
 
 template <typename T> void G4THitsMap<T>::clear() {
 
