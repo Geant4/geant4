@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.15 2007-08-29 00:24:22 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.16 2007-08-29 02:05:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -219,7 +219,7 @@ void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox : " << fWorldName << G4endl;
   G4cout << " Shape: Box mesh" << G4endl;
 
-  static_cast<const G4VScoringMesh*>(this)->List();
+  G4VScoringMesh::List();
 
   G4cout << " registered primitve scorers : ";
   G4int nps = fMFD->GetNumberOfPrimitives();
