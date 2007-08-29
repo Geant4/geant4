@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.10 2007-08-29 04:51:59 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.11 2007-08-29 05:14:40 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -201,9 +201,13 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fparticleCmd->SetGuidance("[usage] /score/filter/particle fname p0 .. pn");
   fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names ");
+  G4UIparameter* particleParam;
+  particleParam = new G4UIparameter("name",'s',false);
+  fparticleCmd->SetParameter(particleParam);
+  particleParam = new G4UIparameter("particlelist",'s',false);
+  fparticleCmd->SetParameter(particleParam);
   //
   //
-
 }
 
 G4ScoringMessenger::~G4ScoringMessenger()
@@ -389,13 +393,20 @@ void G4ScoringMessenger::FParticleCommand(G4String newVal){
     G4Tokenizer next(newVal);
     //
     G4String name = next();
+    //
     G4String p = next();
     std::vector<G4String> pnames;
+    pnames.push_back(p);
+    //G4cout << " XXX " << name << "   XXX  " << p << G4endl;
+    /*
     if ( ! p.isNull() ) {
+	pnames.push_back(p);
 	do {
+	    G4String p = next();
 	    pnames.push_back(p);
 	} while (!p.isNull());
     }
+    */
     G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
     if ( !mesh ){
 	G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
