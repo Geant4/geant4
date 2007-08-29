@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.8 2007-08-29 00:24:22 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.9 2007-08-29 00:56:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -138,8 +138,9 @@ void G4VScoringMesh::List() const {
 }
 
 void G4VScoringMesh::Dump() {
-  G4cout << "G4ScoringBox : " << fWorldName << G4endl;
+  G4cout << "scoring mesh name: " << fWorldName << G4endl;
 
+  G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
   std::map<G4String, G4THitsMap<G4double> >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     G4cout << "[" << itr->first << "]" << G4endl;
