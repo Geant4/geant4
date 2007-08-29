@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.17 2007-08-29 02:40:51 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.18 2007-08-29 04:53:11 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -208,12 +208,15 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   */
 
 
+  // set the sensitive detector
   fMeshElementLogical->SetSensitiveDetector(fMFD);
   
 
-  //
+  // vis. attributes
   G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
   visatt->SetVisibility(true);
+  layerLogical[0]->SetVisAttributes(visatt);
+  layerLogical[1]->SetVisAttributes(visatt);
   fMeshElementLogical->SetVisAttributes(visatt);
 }
 
@@ -224,15 +227,22 @@ void G4ScoringBox::List() const {
 
   G4VScoringMesh::List();
 
-  G4cout << " registered primitve scorers : ";
-  G4int nps = fMFD->GetNumberOfPrimitives();
-  G4VPrimitiveScorer * ps;
-  for(int i = 0; i < nps; i++) {
-    ps = fMFD->GetPrimitive(i);
-    G4cout << " " << ps->GetName() << G4endl;
-    if(ps->GetFilter() != NULL)
-      G4cout << "     with a filter : " << ps->GetFilter()->GetName() << G4endl;
+  G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
+  /*
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
+  for(; itr != fMap.end(); itr++) {
+    G4cout << "[" << itr->first << "]" << G4endl;
+    G4THitsMap<G4double> * map = itr->second->GetMap();
+    G4THitsMap<G4double>::iterator itrMap = map->begin();
+    for(; itrMap != map->end(); itrMap++) {
+      G4int q[3];
+      GetXYZ(itrMap->first, q);
+      G4cout << "  (" << q[0] << ", " << q[1] << ", " << q[2] << ") "
+	     << *(itrMap->second) G4endl;
+    }
   }
+  G4cout << G4endl;
+  */
 }
 
 
@@ -292,3 +302,22 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
   }
 }
 
+void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) {
+
+  if(fSegmentDirection == 1 || fSegmentDirection == -1) {
+    q[2] = index/(fNSegment[0]*fNSegment[1]);
+    q[1] = (index - q[2]*fNSegment[0]*fNSegment[1])/fNSegment[1];
+    q[0] = index - q[1]*fNSegment[0] - q[2]*fNSegment[0]*fNSegment[1];
+
+  } else if(fSegmentDirection == 2) {
+    q[0] = index/(fNSegment[1]*fNSegment[2]);
+    q[2] = (index - q[1]*fNSegment[1]*fNSegment[2])/fNSegment[2];
+    q[1] = index - q[0]*fNSegment[1] - q[1]*fNSegment[1]*fNSegment[2];
+    
+  } else if(fSegmentDirection == 3) {
+    q[1] = index/(fNSegment[2]*fNSegment[0]);
+    q[0] = (index - q[1]*fNSegment[2]*fNSegment[0])/fNSegment[0];
+    q[2] = index - q[0]*fNSegment[2] - q[1]*fNSegment[2]*fNSegment[0];
+    
+  }
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.16 2007-08-29 02:40:51 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.17 2007-08-29 04:53:11 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,6 +90,8 @@ void G4VScoringMesh::RotateZ(G4double delta) {
 
 void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
+  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
+			      << ps->GetName() << " was registered." << G4endl;
   ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
@@ -101,6 +103,11 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 }
 
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
+
+  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
+			      << filter->GetName()
+			      << " was set to "
+			      << fCurrentPS->GetName() << G4endl;
 
   if(fCurrentPS == NULL) {
     //G4Exception("G4VScoringMesh::SetSDFilter() : Current primitive scorer has not been set.");
@@ -130,9 +137,9 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
 
 void G4VScoringMesh::List() const {
   G4cout << " Size: ("
-	 << fSize[0] << ", "
-	 << fSize[1] << ", "
-	 << fSize[2] << ")"
+	 << fSize[0]/cm << ", "
+	 << fSize[1]/cm << ", "
+	 << fSize[2]/cm << ") [cm]"
 	 << G4endl;
   G4cout << " # of segments: ("
 	 << fNSegment[0] << ", "
@@ -140,9 +147,9 @@ void G4VScoringMesh::List() const {
 	 << fNSegment[2] << ")"
 	 << G4endl;
   G4cout << " displacement: ("
-	 << fCenterPosition[0] << ", "
-	 << fCenterPosition[1] << ", "
-	 << fCenterPosition[2] << ")"
+	 << fCenterPosition[0]/cm << ", "
+	 << fCenterPosition[1]/cm << ", "
+	 << fCenterPosition[2]/cm << ") [cm]"
 	 << G4endl;
   if(fRotationMatrix != 0) {
     G4cout << " rotation matrix: "
@@ -157,6 +164,17 @@ void G4VScoringMesh::List() const {
 	   << fRotationMatrix->zx() << "  "
 	   << fRotationMatrix->zy() << "  "
 	   << fRotationMatrix->zz() << G4endl;
+  }
+
+
+  G4cout << " registered primitve scorers : ";
+  G4int nps = fMFD->GetNumberOfPrimitives();
+  G4VPrimitiveScorer * ps;
+  for(int i = 0; i < nps; i++) {
+    ps = fMFD->GetPrimitive(i);
+    G4cout << " " << ps->GetName() << G4endl;
+    if(ps->GetFilter() != NULL)
+      G4cout << "     with a filter : " << ps->GetFilter()->GetName() << G4endl;
   }
 }
 
