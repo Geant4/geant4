@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.9 2007-08-29 02:43:47 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.10 2007-08-29 04:51:59 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
@@ -88,10 +89,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshClsCmd = new G4UIcmdWithoutParameter("/score/close",this);
   meshClsCmd->SetGuidance("Close scoring mesh.");
   //
-  meshDelCmd = new G4UIcmdWithAString("/score/mesh/delete",this);
-  meshDelCmd->SetGuidance("Delete scoring mesh.");
-  meshDelCmd->SetParameterName("MeshName",false);
-  //
+  meshActCmd = new G4UIcmdWithABool("/score/mesh/activate",this);
+  meshActCmd->SetGuidance("Activate scoring mesh.");
+  meshActCmd->SetParameterName("MeshName",false);
   //
   mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxsize",this);
   mBoxSizeCmd->SetGuidance("Define Size of scoring mesh.");
@@ -165,24 +165,31 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   quantityDir = new G4UIdirectory("/score/quantity/");
   quantityDir->SetGuidance("Scoring quantity of the mesh");
   //
-  qAttachCmd= new G4UIcmdWithAString("/score/quantity/attach",this);
-  qAttachCmd->SetGuidance("Assign previously defined quantity to current quantity.");
-  qAttachCmd->SetParameterName("qName",false);
+  qTouchCmd= new G4UIcmdWithAString("/score/quantity/touch",this);
+  qTouchCmd->SetGuidance("Assign previously defined quantity to current quantity.");
+  qTouchCmd->SetParameterName("qName",false);
   //
-  qeDepCmd = new G4UIcmdWithoutParameter("/score/quantity/eDep",this);
+  qeDepCmd = new G4UIcmdWithAString("/score/quantity/eDep",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
-  qCellChgCmd  = new G4UIcmdWithoutParameter("/score/quantity/cellCharge",this);
+  qeDepCmd->SetParameterName("name",false);
+  qCellChgCmd  = new G4UIcmdWithAString("/score/quantity/cellCharge",this);
   qCellChgCmd->SetGuidance("Cell Charge Scorer");
-  qCellFluxCmd = new G4UIcmdWithoutParameter("/score/quantity/cellFlux",this);
+  qCellChgCmd->SetParameterName("name",false);
+  qCellFluxCmd = new G4UIcmdWithAString("/score/quantity/cellFlux",this);
   qCellFluxCmd->SetGuidance("Cell Flux Scorer");
-  qPassCellFluxCmd = new G4UIcmdWithoutParameter("/score/quantity/passageCellFlux",this);
+  qCellFluxCmd->SetParameterName("name",false);
+  qPassCellFluxCmd = new G4UIcmdWithAString("/score/quantity/passageCellFlux",this);
   qPassCellFluxCmd->SetGuidance("Passage Cell Flux Scorer");
-  qdoseDepCmd = new G4UIcmdWithoutParameter("/score/quantity/doseDeposit",this);
+  qPassCellFluxCmd->SetParameterName("name",false);
+  qdoseDepCmd = new G4UIcmdWithAString("/score/quantity/doseDeposit",this);
   qdoseDepCmd->SetGuidance("Dose Deposit Scorer");
-  qnOfStepCmd = new G4UIcmdWithoutParameter("/score/quantity/nOfStep",this);
+  qdoseDepCmd->SetParameterName("name",false);
+  qnOfStepCmd = new G4UIcmdWithAString("/score/quantity/nOfStep",this);
   qnOfStepCmd->SetGuidance("Number of Step Scorer ");
-  qnOfSecondaryCmd = new G4UIcmdWithoutParameter("/score/quantity/nOfSecondary",this);
+  qnOfStepCmd->SetParameterName("name",false);
+  qnOfSecondaryCmd = new G4UIcmdWithAString("/score/quantity/nOfSecondary",this);
   qnOfSecondaryCmd->SetGuidance("Number of Secondary Scorer ");
+  qnOfSecondaryCmd->SetParameterName("name",false);
   //
   //
   // Filter commands 
@@ -190,14 +197,11 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   filterDir->SetGuidance("Filter for scoring");
   //
   fparticleCmd = new G4UIcommand("/score/filter/particle",this);
-  fparticleCmd->SetGuidance("Attach particle filter into current quantity");
+  fparticleCmd->SetGuidance("Touch particle filter into current quantity");
   fparticleCmd->SetGuidance("[usage] /score/filter/particle fname p0 .. pn");
   fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names ");
   //
-  filterDelCmd = new G4UIcmdWithAString("/score/filter/delete",this);
-  filterDelCmd->SetGuidance("Delete filter of scoring mesh.");
-  filterDelCmd->SetParameterName("FilterName",false);
   //
 
 }
@@ -214,7 +218,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete meshSphereCreateCmd;
 
   delete meshClsCmd;
-  delete meshDelCmd;
+  delete meshActCmd;
 
   delete mBinCmd;
 
@@ -236,12 +240,11 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete   qnOfStepCmd;
   delete   qnOfSecondaryCmd;
 
-  delete qAttachCmd;
+  delete qTouchCmd;
   delete quantityDir;
 
   delete fparticleCmd;
 
-  delete filterDelCmd;
   delete filterDir;
 
 }
@@ -281,7 +284,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       if ( mesh ){
 	  if(command==meshClsCmd) {
 	      fSMan->CloseCurrentMesh();
-	  } else if(command==meshDelCmd) {
+	  } else if(command==meshActCmd) {
+	      mesh->Activate(meshActCmd->GetNewBoolValue(newVal)); 
 	  } else if(command==mBoxSizeCmd) {
 	      MeshShape shape = mesh->GetShape();
 	      if ( shape == boxMesh ){
@@ -316,7 +320,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  } else if(command==mRotZCmd) {
 	      G4double value = mRotZCmd->GetNewDoubleValue(newVal);
 	      mesh->RotateZ(value);
-	  } else if(command==qAttachCmd) {
+	  } else if(command==qTouchCmd) {
 	      mesh->SetCurrentPrimitiveScorer(newVal);
 	  } else if(command== qCellChgCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSCellCharge3D(newVal));
@@ -334,7 +338,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
 	  } else if(command==fparticleCmd) {
 	      FParticleCommand(newVal);
-	  } else if(command==filterDelCmd) {
 	  }
       }else{
 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");

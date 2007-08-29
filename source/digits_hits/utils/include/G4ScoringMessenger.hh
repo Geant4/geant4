@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.7 2007-08-29 02:43:30 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.8 2007-08-29 04:51:46 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@ class G4VScoringMesh;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
@@ -78,7 +79,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithAString*        meshOpnCmd;
     //
     G4UIcmdWithoutParameter*   meshClsCmd;
-    G4UIcmdWithAString*        meshDelCmd;
+    G4UIcmdWithABool*        meshActCmd;
     //
     //   Size commands
     G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
@@ -103,21 +104,20 @@ class G4ScoringMessenger: public G4UImessenger
     //
     // Quantity commands
     G4UIdirectory*             quantityDir;
-    G4UIcmdWithAString*        qAttachCmd;
+    G4UIcmdWithAString*        qTouchCmd;
     //
-    G4UIcmdWithoutParameter*   qCellChgCmd;
-    G4UIcmdWithoutParameter*   qCellFluxCmd;
-    G4UIcmdWithoutParameter*   qPassCellFluxCmd;
-    G4UIcmdWithoutParameter*   qeDepCmd;
-    G4UIcmdWithoutParameter*   qdoseDepCmd;
-    G4UIcmdWithoutParameter*   qnOfStepCmd;
-    G4UIcmdWithoutParameter*   qnOfSecondaryCmd;
+    G4UIcmdWithAString*   qCellChgCmd;
+    G4UIcmdWithAString*   qCellFluxCmd;
+    G4UIcmdWithAString*   qPassCellFluxCmd;
+    G4UIcmdWithAString*   qeDepCmd;
+    G4UIcmdWithAString*   qdoseDepCmd;
+    G4UIcmdWithAString*   qnOfStepCmd;
+    G4UIcmdWithAString*   qnOfSecondaryCmd;
 
     //
     // Filter commands 
     G4UIdirectory*             filterDir;
     G4UIcommand*               fparticleCmd;
-    G4UIcmdWithAString*        filterDelCmd;
     //
 
 
