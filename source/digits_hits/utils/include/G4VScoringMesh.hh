@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.9 2007-08-28 08:06:48 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.10 2007-08-29 00:24:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,7 @@ class G4VScoringMesh
 
   public:
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
-  virtual void List() const=0;
+  virtual void List() const;
   
 public:
   inline const G4String& GetWorldName() const

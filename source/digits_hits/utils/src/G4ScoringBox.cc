@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.14 2007-08-28 11:36:15 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.15 2007-08-29 00:24:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,10 +84,10 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  G4cout << "box mesh" << G4endl;
+  //G4cout << "box mesh" << G4endl;
   G4String boxName = fWorldName;
 
-  G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
+  //G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
@@ -107,7 +107,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer
-  G4cout << "layer 1 :" << G4endl;
+  //G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fsegment[0][0],
 			    fSize[1]/fsegment[0][1],
@@ -218,21 +218,9 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox : " << fWorldName << G4endl;
   G4cout << " Shape: Box mesh" << G4endl;
-  G4cout << " Size: " << G4endl;
-  G4cout << " # of segments: " << G4endl;
-  G4cout << " displacement: " << G4endl;
-  G4cout << " rotation matrix: "
-	 << fRotationMatrix->xx() << "  "
-	 << fRotationMatrix->xy() << "  "
-	 << fRotationMatrix->xz() << G4endl
-	 << "                  "
-	 << fRotationMatrix->yx() << "  "
-	 << fRotationMatrix->yy() << "  "
-	 << fRotationMatrix->yz() << G4endl
-	 << "                  "
-	 << fRotationMatrix->zx() << "  "
-	 << fRotationMatrix->zy() << "  "
-	 << fRotationMatrix->zz() << G4endl;
+
+  static_cast<const G4VScoringMesh*>(this)->List();
+
   G4cout << " registered primitve scorers : ";
   G4int nps = fMFD->GetNumberOfPrimitives();
   G4VPrimitiveScorer * ps;

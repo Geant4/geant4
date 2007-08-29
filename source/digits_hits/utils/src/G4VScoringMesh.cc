@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.7 2007-08-28 08:06:49 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.8 2007-08-29 00:24:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -117,6 +117,24 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
   }
 
   return NULL;
+}
+
+void G4VScoringMesh::List() const {
+  G4cout << " Size: " << G4endl;
+  G4cout << " # of segments: " << G4endl;
+  G4cout << " displacement: " << G4endl;
+  G4cout << " rotation matrix: "
+	 << fRotationMatrix->xx() << "  "
+	 << fRotationMatrix->xy() << "  "
+	 << fRotationMatrix->xz() << G4endl
+	 << "                  "
+	 << fRotationMatrix->yx() << "  "
+	 << fRotationMatrix->yy() << "  "
+	 << fRotationMatrix->yz() << G4endl
+	 << "                  "
+	 << fRotationMatrix->zx() << "  "
+	 << fRotationMatrix->zy() << "  "
+	 << fRotationMatrix->zz() << G4endl;
 }
 
 void G4VScoringMesh::Dump() {
