@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// $Id: G4PSNofStep.cc,v 1.2 2007-08-29 06:36:42 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofStep
@@ -38,7 +38,7 @@
 //
 
 G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),boundaryFlag(false)
 {;}
 
 G4PSNofStep::~G4PSNofStep()
@@ -46,6 +46,9 @@ G4PSNofStep::~G4PSNofStep()
 
 G4bool G4PSNofStep::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
+  if ( boundaryFlag ) {
+      if ( aStep->GetStepLength() == 0. ) return FALSE;
+  }
   G4int  index = GetIndex(aStep);
   G4double val = 1.0;
   EvtMap->add(index,val);  

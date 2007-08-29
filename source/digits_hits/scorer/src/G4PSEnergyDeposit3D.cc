@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit3D.cc,v 1.2 2007-08-28 08:01:55 taso Exp $
+// $Id: G4PSEnergyDeposit3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSEnergyDeposit3D
@@ -58,5 +58,5 @@ G4int G4PSEnergyDeposit3D::GetIndex(G4Step* aStep)
   G4int j = touchable->GetReplicaNumber(fDepthj);
   G4int k = touchable->GetReplicaNumber(fDepthk);
   
-  return j*fNi*fNk+i*fNk+k;
+  return i*fNj*fNk+j*fNk+k;
 }

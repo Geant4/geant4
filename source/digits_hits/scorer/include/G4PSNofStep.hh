@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSNofStep.hh,v 1.2 2007-08-29 06:36:41 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,9 +64,15 @@ class G4PSNofStep : public G4VPrimitiveScorer
       virtual void DrawAll();
       virtual void PrintAll();
 
+  public: 
+      void  SetBoundaryFlag(G4bool flg=true)
+	{boundaryFlag = flg;}
+
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
+
+      G4bool boundaryFlag;
 
   public:
 
