@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.11 2007-08-29 01:20:17 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.12 2007-08-29 01:37:25 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,8 +90,9 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
   ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
-  G4THitsMap<G4double> * map = new G4THitsMap<G4double>();
-  fMap[ps->GetName()] = *map;
+  //G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
+  G4THitsMap<G4double> map(fWorldName, ps->GetName());
+  fMap[ps->GetName()] = map;
   if(verboseLevel > 9) G4cout << fMFD->GetNumberOfPrimitives() << G4endl;;
 }
 
