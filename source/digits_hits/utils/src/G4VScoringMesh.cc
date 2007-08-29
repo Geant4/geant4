@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.17 2007-08-29 04:53:11 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.18 2007-08-29 07:29:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,6 +63,12 @@ G4VScoringMesh::~G4VScoringMesh()
 //
 //}
 
+void G4VScoringMesh::ResetScore() {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
+  for(; itr != fMap.end(); itr++) {
+    itr->second->clear();
+  }
+}
 void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
 }
@@ -91,7 +97,11 @@ void G4VScoringMesh::RotateZ(G4double delta) {
 void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
-			      << ps->GetName() << " was registered." << G4endl;
+			      << ps->GetName() << " is registered."
+			      << " size: ("
+			      << fNSegment[0] << ", "
+			      << fNSegment[1] << ", "
+			      << fNSegment[2] << ")" << G4endl;
   ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = ps;
   fMFD->RegisterPrimitive(ps);
@@ -106,7 +116,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
-			      << " was set to "
+			      << " is set to "
 			      << fCurrentPS->GetName() << G4endl;
 
   if(fCurrentPS == NULL) {

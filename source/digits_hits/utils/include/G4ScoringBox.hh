@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.7 2007-08-29 04:54:04 akimura Exp $
+// $Id: G4ScoringBox.hh,v 1.8 2007-08-29 07:29:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ private:
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
   void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
-  void GetXYZ(G4int index, G4int q[3]);
+  void GetXYZ(G4int index, G4int q[3]) const;
 };
 
 

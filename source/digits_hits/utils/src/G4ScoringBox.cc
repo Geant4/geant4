@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.18 2007-08-29 04:53:11 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.19 2007-08-29 07:29:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,6 +64,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 
     G4cerr << fWorldPhys->GetName() << G4endl;
 //////////////////////////////////////    G4Exception(fWorldName+" has already been built.");
+    ResetScore();
 
   } else {
     fConstructed = true;
@@ -76,17 +77,17 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
-  //G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
+  if(verboseLevel > 19) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
 
   // World
   G4VPhysicalVolume * scoringWorld = fWorldPhys;
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  //G4cout << "box mesh" << G4endl;
+  if(verboseLevel > 19) G4cout << fWorldName << G4endl;
   G4String boxName = fWorldName;
 
-  //G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
+  if(verboseLevel > 19) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
@@ -106,7 +107,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer
-  //G4cout << "layer 1 :" << G4endl;
+  if(verboseLevel > 19) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fsegment[0][0],
 			    fSize[1]/fsegment[0][1],
@@ -122,17 +123,17 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fNSegment[segOrder[0]] << "," << segOrder[0] << ") "
 	   << "in placement of the first nested layer." << G4endl;
 
-  /*
-  G4cout << fSize[0]/fsegment[0][0] << ", "
-	 << fSize[1]/fsegment[0][1] << ", "
-	 << fSize[2]/fsegment[0][2] << G4endl;
-  G4cout << layerName[0] << ": " << axis[segOrder[0]] << ", "
-	 << fNSegment[segOrder[0]] << ", "
-	 << fSize[segOrder[0]]/fsegment[0][segOrder[0]] << G4endl;
-  */
+  if(verboseLevel > 19) {
+    G4cout << fSize[0]/fsegment[0][0] << ", "
+	   << fSize[1]/fsegment[0][1] << ", "
+	   << fSize[2]/fsegment[0][2] << G4endl;
+    G4cout << layerName[0] << ": " << axis[segOrder[0]] << ", "
+	   << fNSegment[segOrder[0]] << ", "
+	   << fSize[segOrder[0]]/fsegment[0][segOrder[0]] << G4endl;
+  }
 
   // second nested layer
-  //G4cout << "layer 2 :" << G4endl;
+  if(verboseLevel > 19) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Box(layerName[1],
 			    fSize[0]/fsegment[1][0],
 			    fSize[1]/fsegment[1][1],
@@ -148,17 +149,17 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fNSegment[segOrder[1]] << "," << segOrder[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
 
-  /*
-  G4cout << fSize[0]/fsegment[1][0] << ", "
-	 << fSize[1]/fsegment[1][1] << ", "
-	 << fSize[2]/fsegment[1][2] << G4endl;
-  G4cout << layerName[1] << ": " << axis[segOrder[1]] << ", "
-	 << fNSegment[segOrder[1]] << ", "
-	 << fSize[segOrder[1]]/fsegment[1][segOrder[1]] << G4endl;
-  */
+  if(verboseLevel > 19) {
+    G4cout << fSize[0]/fsegment[1][0] << ", "
+	   << fSize[1]/fsegment[1][1] << ", "
+	   << fSize[2]/fsegment[1][2] << G4endl;
+    G4cout << layerName[1] << ": " << axis[segOrder[1]] << ", "
+	   << fNSegment[segOrder[1]] << ", "
+	   << fSize[segOrder[1]]/fsegment[1][segOrder[1]] << G4endl;
+  }
 
   // mesh elements
-  //G4cout << "mesh elements :" << G4endl;
+  if(verboseLevel > 19) G4cout << "mesh elements :" << G4endl;
   G4String elementName = boxName +"3";
   G4VSolid * elementSolid = new G4Box(elementName, fSize[0]/fsegment[2][0],
 				      fSize[1]/fsegment[2][1], fSize[2]/fsegment[2][2]);
@@ -180,12 +181,12 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 			    nelement,
 			    param);
 
-      /*
-      G4cout << motherDims[0] << ", " << motherDims[1] << ", " << motherDims[2] << G4endl;
-      for(int i = 0; i < (int)fSegmentPositions.size(); i++)
-	G4cout << fSegmentPositions[i] << ", ";
-      G4cout << G4endl;
-      */
+      if(verboseLevel > 19) {
+	G4cout << motherDims[0] << ", " << motherDims[1] << ", " << motherDims[2] << G4endl;
+	for(int i = 0; i < (int)fSegmentPositions.size(); i++)
+	  G4cout << fSegmentPositions[i] << ", ";
+	G4cout << G4endl;
+      }
 
     } else {
       new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], axis[segOrder[2]],
@@ -198,14 +199,14 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << "invalid parameter (" << fNSegment[segOrder[2]] << ") "
 	   << "in mesh element placement." << G4endl;
 
-  /*
-  G4cout << fSize[0]/fsegment[2][0] << ", "
-	 << fSize[1]/fsegment[2][1] << ", "
-	 << fSize[2]/fsegment[2][2] << G4endl;
-  G4cout << elementName << ": " << axis[segOrder[2]] << ", "
-	 << fNSegment[segOrder[2]] << ", "
-	 << fSize[segOrder[2]]/fsegment[2][segOrder[2]] << G4endl;
-  */
+  if(verboseLevel > 19) {
+    G4cout << fSize[0]/fsegment[2][0] << ", "
+	   << fSize[1]/fsegment[2][1] << ", "
+	   << fSize[2]/fsegment[2][2] << G4endl;
+    G4cout << elementName << ": " << axis[segOrder[2]] << ", "
+	   << fNSegment[segOrder[2]] << ", "
+	   << fSize[segOrder[2]]/fsegment[2][segOrder[2]] << G4endl;
+  }
 
 
   // set the sensitive detector
@@ -228,27 +229,30 @@ void G4ScoringBox::List() const {
   G4VScoringMesh::List();
 
   G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
-  /*
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
+
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     G4cout << "[" << itr->first << "]" << G4endl;
-    G4THitsMap<G4double> * map = itr->second->GetMap();
-    G4THitsMap<G4double>::iterator itrMap = map->begin();
-    for(; itrMap != map->end(); itrMap++) {
-      G4int q[3];
-      GetXYZ(itrMap->first, q);
-      G4cout << "  (" << q[0] << ", " << q[1] << ", " << q[2] << ") "
-	     << *(itrMap->second) G4endl;
+    G4THitsMap<G4double> * map = itr->second;
+    std::map<G4int, G4double*>::iterator itrMap = map->GetMap()->begin();
+    G4int q[3], idx;
+    G4cout << "    position       value" << G4endl;
+    for(; itrMap != map->GetMap()->end(); itrMap++) {
+      idx = itrMap->first;
+      GetXYZ(idx, q);
+      G4cout << "  (" << std::setw(3) << q[0] << ","
+	     << std::setw(3) << q[1] << ","
+	     << std::setw(3) << q[2] << ")     "
+	     << *(itrMap->second) << G4endl;
     }
   }
   G4cout << G4endl;
-  */
 }
 
 
 void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]) {
 
-  if(segDir == -1 || segDir == 1) { // in x direction, it segments z -> y -> x directions by turns.
+  if(segDir == 1) { // in x direction, it segments z -> y -> x directions by turns.
     segOrd[0] = 2;
     segOrd[1] = 1;
     segOrd[2] = 0;
@@ -276,12 +280,12 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
     segfact[2][1] = G4double(nseg[1]);
     segfact[2][2] = G4double(nseg[2]);
 
-  } else if(segDir == 3) { // in z direction, it segments y -> x -> z directions by turns.
-    segOrd[0] = 1;
-    segOrd[1] = 0;
+  } else if(segDir == -1 || segDir == 3) { // in z direction, it segments x -> y -> z directions by turns.
+    segOrd[0] = 0;
+    segOrd[1] = 1;
     segOrd[2] = 2;
-    segfact[0][0] = 1.;
-    segfact[0][1] = G4double(nseg[1]);
+    segfact[0][0] = G4double(nseg[0]);
+    segfact[0][1] = 1.;
     segfact[0][2] = 1.;
     segfact[1][0] = G4double(nseg[0]);
     segfact[1][1] = G4double(nseg[1]);
@@ -302,22 +306,22 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
   }
 }
 
-void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) {
+void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 
-  if(fSegmentDirection == 1 || fSegmentDirection == -1) {
+  if(fSegmentDirection == 3 || fSegmentDirection == -1) {
     q[2] = index/(fNSegment[0]*fNSegment[1]);
     q[1] = (index - q[2]*fNSegment[0]*fNSegment[1])/fNSegment[1];
     q[0] = index - q[1]*fNSegment[0] - q[2]*fNSegment[0]*fNSegment[1];
 
   } else if(fSegmentDirection == 2) {
-    q[0] = index/(fNSegment[1]*fNSegment[2]);
-    q[2] = (index - q[1]*fNSegment[1]*fNSegment[2])/fNSegment[2];
-    q[1] = index - q[0]*fNSegment[1] - q[1]*fNSegment[1]*fNSegment[2];
+    q[1] = index/(fNSegment[0]*fNSegment[2]);
+    q[2] = (index - q[1]*fNSegment[0]*fNSegment[2])/fNSegment[2];
+    q[0] = index - q[2]*fNSegment[0] - q[1]*fNSegment[0]*fNSegment[2];
     
-  } else if(fSegmentDirection == 3) {
-    q[1] = index/(fNSegment[2]*fNSegment[0]);
-    q[0] = (index - q[1]*fNSegment[2]*fNSegment[0])/fNSegment[0];
-    q[2] = index - q[0]*fNSegment[2] - q[1]*fNSegment[2]*fNSegment[0];
+  } else if(fSegmentDirection == 1) {
+    q[0] = index/(fNSegment[2]*fNSegment[1]);
+    q[1] = (index - q[0]*fNSegment[2]*fNSegment[1])/fNSegment[1];
+    q[2] = index - q[1]*fNSegment[2] - q[0]*fNSegment[2]*fNSegment[1];
     
   }
 }

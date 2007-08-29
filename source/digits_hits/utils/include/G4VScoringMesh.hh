@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.13 2007-08-29 02:40:51 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.14 2007-08-29 07:29:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,6 +71,7 @@ public:
   inline void Accumulate(G4THitsMap<G4double> * map) const;
   void Dump();
 
+  void ResetScore();
 
   void SetSize(G4double size[3]);
   void SetCenterPosition(G4double centerPosition[3]);
@@ -80,7 +81,7 @@ public:
   void SetNumberOfSegments(G4int nSegment[3]);
   inline void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
 
-
+  
   void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
   void SetFilter(G4VSDFilter * filter);
   void SetCurrentPrimitiveScorer(G4String & name);

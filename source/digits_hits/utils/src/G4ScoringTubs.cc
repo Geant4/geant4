@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.cc,v 1.4 2007-08-28 08:06:49 akimura Exp $
+// $Id: G4ScoringTubs.cc,v 1.5 2007-08-29 07:29:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,13 +54,6 @@ G4ScoringTubs::G4ScoringTubs(G4String wName)
    fMeshElementLogical(0)
 {
   fShape = cylinderMesh;
-
-  fSize[0] = 0.*cm;
-  fSize[1] = 1.*cm;
-  fSize[2] = 1.*cm;
-  fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
-  fNSegment[0] = fNSegment[2] = 1;
-  fNSegment[1] = 10;
 }
 
 G4ScoringTubs::~G4ScoringTubs()
@@ -213,9 +206,15 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4cout << fNSegment[segOrder[2]] << ", " <<  fsegParam[2][segOrder[2]] << G4endl;
   */
 
-  //
+  // set the sensitive detector
+  fMeshElementLogical->SetSensitiveDetector(fMFD);
+  
+
+  // vis. attributes
   G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
   visatt->SetVisibility(true);
+  layerLogical[0]->SetVisAttributes(visatt);
+  layerLogical[1]->SetVisAttributes(visatt);
   fMeshElementLogical->SetVisAttributes(visatt);
 }
 
