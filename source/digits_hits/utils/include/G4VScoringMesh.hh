@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.10 2007-08-29 00:24:22 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.11 2007-08-29 01:07:21 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -85,6 +85,9 @@ public:
   void SetFilter(G4VSDFilter * filter);
   void SetCurrentPrimitiveScorer(G4String & name);
 
+  inline void SetVerboseLevel(G4int vl) 
+  { verboseLevel = vl; }
+
 protected:
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
 
@@ -104,6 +107,7 @@ protected:
   std::map<G4String, G4THitsMap<G4double> > fMap;
   G4MultiFunctionalDetector * fMFD;
 
+  G4int verboseLevel;
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const

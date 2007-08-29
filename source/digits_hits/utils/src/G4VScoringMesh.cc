@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.9 2007-08-29 00:56:30 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.10 2007-08-29 01:07:21 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,8 @@
 
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
-    fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName))
+    fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName)),
+    verboseLevel(0)
 {
   fSize[0] = fSize[1] = fSize[2] = 0.*cm;
   fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
