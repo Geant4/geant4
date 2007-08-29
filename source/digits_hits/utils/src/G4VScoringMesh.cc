@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.14 2007-08-29 01:55:53 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.15 2007-08-29 02:10:36 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,7 +95,9 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
   fMFD->RegisterPrimitive(ps);
   G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
   fMap[ps->GetName()] = map;
-  if(verboseLevel > 9) G4cout << fMFD->GetNumberOfPrimitives() << G4endl;;
+  if(verboseLevel > 9) {
+    G4cout << "" << G4endl;
+  }
 }
 
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
@@ -127,21 +129,35 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
 }
 
 void G4VScoringMesh::List() const {
-  G4cout << " Size: " << G4endl;
-  G4cout << " # of segments: " << G4endl;
-  G4cout << " displacement: " << G4endl;
-  G4cout << " rotation matrix: "
-	 << fRotationMatrix->xx() << "  "
-	 << fRotationMatrix->xy() << "  "
-	 << fRotationMatrix->xz() << G4endl
-	 << "                  "
-	 << fRotationMatrix->yx() << "  "
-	 << fRotationMatrix->yy() << "  "
-	 << fRotationMatrix->yz() << G4endl
-	 << "                  "
-	 << fRotationMatrix->zx() << "  "
-	 << fRotationMatrix->zy() << "  "
-	 << fRotationMatrix->zz() << G4endl;
+  G4cout << " Size: ("
+	 << fSize[0] << ", "
+	 << fSize[1] << ", "
+	 << fSize[2] << ")"
+	 << G4endl;
+  G4cout << " # of segments: ("
+	 << fNSegment[0] << ", "
+	 << fNSegment[1] << ", "
+	 << fNSegment[2] << ")"
+	 << G4endl;
+  G4cout << " displacement: ("
+	 << fCenterPosition[0] << ", "
+	 << fCenterPosition[1] << ", "
+	 << fCenterPosition[2] << ")"
+	 << G4endl;
+  if(fRotationMatrix != 0) {
+    G4cout << " rotation matrix: "
+	   << fRotationMatrix->xx() << "  "
+	   << fRotationMatrix->xy() << "  "
+	   << fRotationMatrix->xz() << G4endl
+	   << "                  "
+	   << fRotationMatrix->yx() << "  "
+	   << fRotationMatrix->yy() << "  "
+	   << fRotationMatrix->yz() << G4endl
+	   << "                  "
+	   << fRotationMatrix->zx() << "  "
+	   << fRotationMatrix->zy() << "  "
+	   << fRotationMatrix->zz() << G4endl;
+  }
 }
 
 void G4VScoringMesh::Dump() {
