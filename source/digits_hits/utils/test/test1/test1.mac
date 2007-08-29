@@ -1,0 +1,20 @@
+/score/verbose 10
+#
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxsize 100. 100. 100. cm
+/score/mesh/nbin 40 50 60
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinus e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlus e+
+#
+/score/close
+#
+/score/list
+#
+/run/beamOn 2
+#
+/score/dump

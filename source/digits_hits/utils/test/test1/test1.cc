@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.4 2007-08-29 00:56:30 akimura Exp $
+// $Id: test1.cc,v 1.5 2007-08-29 04:55:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,50 +83,6 @@ int main(int argc,char** argv)
  //
  runManager->Initialize();
   
-
-
- G4ScoringBox * boxMesh = new G4ScoringBox(G4String("boxMesh"));
- G4double size[3] = {90.*cm,90.*cm,90.*cm};
- boxMesh->SetSize(size);
- G4int nseg[3] = {4,5,6};
- boxMesh->SetNumberOfSegments(nseg);
-
- G4PSEnergyDeposit3D * ps = new G4PSEnergyDeposit3D("eDep");
- boxMesh->SetPrimitiveScorer(ps);
- //G4SDParticleFilter * filter = new G4SDParticleFilter("e-", "e-");
- //boxMesh->SetFilter(filter);
-
- scManager->RegisterScoringMesh(boxMesh);
-
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  // Get the pointer to the User Interface manager
  //
  G4UImanager* UI = G4UImanager::GetUIpointer();  
