@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.12 2007-08-29 01:42:17 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.13 2007-08-29 02:40:51 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -115,6 +115,20 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map) const
   G4String psName = map->GetName();
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
   *(fMapItr->second) += *map;
+
+  if(verboseLevel > 9) {
+    G4cout << G4endl;
+    G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
+    G4cout << "  PS name : " << psName << G4endl;
+    if(fMapItr == fMap.end()) {
+      G4cout << "  "
+	     << psName << " was not found." << G4endl;
+    } else {
+      G4cout << "  map size : " << map->GetSize() << G4endl;
+      map->PrintAllHits();
+    }
+    G4cout << G4endl;
+  }
 }
 
 

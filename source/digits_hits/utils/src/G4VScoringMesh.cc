@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.15 2007-08-29 02:10:36 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.16 2007-08-29 02:40:51 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -167,12 +167,8 @@ void G4VScoringMesh::Dump() {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     G4cout << "[" << itr->first << "]" << G4endl;
-    std::map<G4int, double*> * map = itr->second->GetMap();
-    std::map<G4int, double*>::iterator itrMap  = map->begin();
-    for(; itrMap != map->end(); itrMap++) {
-      G4cout << itrMap->second << ", ";
-    }
-    G4cout << G4endl << G4endl;
+    itr->second->PrintAllHits();
   }
+  G4cout << G4endl;
 }
 

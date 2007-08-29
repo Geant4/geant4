@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.16 2007-08-29 02:05:35 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.17 2007-08-29 02:40:51 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,6 @@
 #include "G4VisAttributes.hh"
 #include "G4ScoringBoxParameterisation.hh"
 
-#include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -207,6 +206,10 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	 << fNSegment[segOrder[2]] << ", "
 	 << fSize[segOrder[2]]/fsegment[2][segOrder[2]] << G4endl;
   */
+
+
+  fMeshElementLogical->SetSensitiveDetector(fMFD);
+  
 
   //
   G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
