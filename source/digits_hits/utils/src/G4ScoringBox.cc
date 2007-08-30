@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.22 2007-08-30 02:28:15 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.23 2007-08-30 04:54:39 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -243,6 +243,7 @@ void G4ScoringBox::List() const {
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     G4cout << "[" << itr->first << "]" << G4endl;
+    /*
     G4THitsMap<G4double> * map = itr->second;
     std::map<G4int, G4double*>::iterator itrMap = map->GetMap()->begin();
     G4int q[3], idx;
@@ -258,8 +259,9 @@ void G4ScoringBox::List() const {
       tot += *(itrMap->second);
     }
     G4cout << "       total :    " << tot << G4endl;
+    */
   }
-  G4cout << G4endl;
+  //G4cout << G4endl;
 }
 
 
