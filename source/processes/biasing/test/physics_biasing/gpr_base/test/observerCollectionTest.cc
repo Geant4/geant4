@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: observerCollectionTest.cc,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: observerCollectionTest.cc,v 1.2 2007-08-30 19:33:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. ObserverCollectionT demonstration.
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
   OtherProcess* otherProcess = new OtherProcess();
 
   // Create observer collection
-  G4GPRScopes::Tracking::StartTracking::ObserverCollection observerCollection;
+  G4GPRObserverCollectionT<G4GPRTypeList_1(G4Track*)> observerCollection;
 
   // Register demo observers
   observerCollection.RegisterObserver("VProcess", vProcess, &G4VProcess::StartTracking);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRGenerator.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRProcessListGenerator.hh,v 1.1 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -36,15 +36,17 @@
 #include "G4GPRKeySuperStore.hh"
 #include "G4GPRUtils.hh"
 
-class G4GPRGenerator {
+class G4GPRProcessListGenerator {
 
 public:
 
-  G4GPRGenerator()
+
+  G4GPRProcessListGenerator(G4ParticleDefinition* def, G4GPRPhysicsList* physicsList)
   {
-    pElementSuperStore = G4GPRElementSuperStore::Instance();
-    pCacheSuperStore = G4GPRCacheSuperStore::Instance();
-    pKeySuperStore = G4GPRKeySuperStore::Instance();
+    pElementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
+    pKeyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
+
+    pCacheSuperStore = new G4GPRCacheSuperStore;
   }
 
   template <typename List, typename Result>
@@ -53,24 +55,23 @@ public:
     typedef typename G4GPRCacheManagerT<List>::Cache Cache;
 
     result = 0;
-
-    if (!pKeySuperStore->G4GPRKeyManagerT<List>::KeyChanged() && (pCacheSuperStore->G4GPRCacheManagerT<List>::GetMostRecent(result))) return;
+    if (!pKeyStore->G4GPRKeyManagerT<List>::KeyChanged() && (pCacheSuperStore->G4GPRCacheManagerT<List>::GetMostRecent(result))) return;
     
     G4cout<<"jane generate 1 "<<result<<G4endl;
-    pKeySuperStore->G4GPRKeyManagerT<List>::ResetKeyChanged();
+    pKeyStore->G4GPRKeyManagerT<List>::ResetKeyChanged();
     
-    if (pCacheSuperStore->G4GPRCacheManagerT<List>::Retrieve(pKeySuperStore->G4GPRKeyManagerT<List>::GetKey(), result)) return;
+    if (pCacheSuperStore->G4GPRCacheManagerT<List>::Retrieve(pKeyStore->G4GPRKeyManagerT<List>::GetKey(), result)) return;
 
     G4cout<<"jane generate 2 "<<result<<G4endl;
     result = new Result;
 
-    G4GPRElementStoreT<List>* store = pElementSuperStore;
+    G4GPRElementStoreT<List>* store(pElementStore);
     
     G4GPRUtils::Operator(result, store);
 
     G4cout<<"jane generate 3 "<<result<<G4endl;
     
-    pCacheSuperStore->G4GPRCacheManagerT<List>::Register(pKeySuperStore->G4GPRKeyManagerT<List>::GetKey(), result);
+    pCacheSuperStore->G4GPRCacheManagerT<List>::Register(pKeyStore->G4GPRKeyManagerT<List>::GetKey(), result);
 
     return;
 
@@ -78,9 +79,9 @@ public:
 
 private:
 
-  G4GPRElementSuperStore* pElementSuperStore;
+  G4GPRElementStore* pElementStore;
   G4GPRCacheSuperStore* pCacheSuperStore;
-  G4GPRKeySuperStore* pKeySuperStore;
+  G4GPRKeyStore* pKeyStore;
 
 };
 

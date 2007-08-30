@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: singleProcessRelayTest.cc,v 1.1 2007-08-10 22:23:04 tinslay Exp $
+// $Id: singleProcessRelayTest.cc,v 1.2 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Jane Tinslay, May 2007. Functor demonstration.
+// J. Tinslay, May 2007. Functor demonstration.
 //
 #include "G4GPRProcessWrappers.hh"
 #include "G4VDiscreteProcess.hh"
@@ -38,6 +38,10 @@
 
 #include "G4GPRSingleProcessRelayT.hh"
 
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRNode.hh"
+#include "G4GPRManager.hh"
+#include "G4Gamma.hh"
 // Process function
 G4VParticleChange* SeedFunction(const G4Track&, const G4Step&) {
   G4cout<<"Execute SeedFunction"<<G4endl;
@@ -59,11 +63,16 @@ int main(int argc, char** argv) {
   Seed* seed = new Seed("Seed", &SeedFunction, G4GPRPlacement::First);
   Relay* relay = new Relay("Relay", &RelayFunction, G4GPRPlacement::First);
   
-  // Register element with super store which takes ownership
-  G4GPRElementSuperStore* superStore = G4GPRElementSuperStore::Instance();
+  G4ParticleDefinition* def = G4Gamma::Definition();
 
-  superStore->G4GPRManagerT<Seed>::Register(seed);
-  superStore->G4GPRManagerT<Relay>::Register(relay);
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
+
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
+
+
+  elementStore->G4GPRManagerT<Seed>::Register(seed);
+  elementStore->G4GPRManagerT<Relay>::Register(relay);
 
   // Generate process list
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper > ProcessList;
@@ -71,10 +80,10 @@ int main(int argc, char** argv) {
   G4Track* dummyTrk = new G4Track; 
   G4Step* dummyStep = new G4Step;
 
-  G4GPRSimpleGenerator generator;  
+  G4GPRManager gprManager(def);
 
   ProcessList* result(0);
-  generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
   
   // Iterate over process list
   G4cout<<"jane proc list length "<<result->size()<<G4endl;

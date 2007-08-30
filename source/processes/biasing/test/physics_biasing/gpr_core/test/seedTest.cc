@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: seedTest.cc,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: seedTest.cc,v 1.3 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Jane Tinslay, May 2007. Functor demonstration.
+// J. Tinslay, May 2007. Functor demonstration.
 //
 #include "G4GPRProcessWrappers.hh"
 #include "G4VDiscreteProcess.hh"
@@ -35,6 +35,10 @@
 #include "G4GPRSeedT.hh"
 #include "G4GPRElementSuperStore.hh"
 #include "G4GPRSimpleGenerator.hh"
+#include "G4Gamma.hh"
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRNode.hh"
+#include "G4GPRManager.hh"
 
 // Regular G4VProcess
 struct VProcess : public G4VDiscreteProcess
@@ -81,24 +85,26 @@ int main(int argc, char** argv) {
   Element* element2 = new Element("Element2", vProcess, &G4VProcess::PostStepDoIt, 2);
   Element* element3 = new Element("Element3", &MyFunction, 3);
   
-  // Register element with super store which takes ownership
-  G4GPRElementSuperStore* superStore = G4GPRElementSuperStore::Instance();
-  G4cout<<"jane "<<superStore<<G4endl;
+  G4ParticleDefinition* def = G4Gamma::Definition();
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
 
-  superStore->G4GPRManagerT<Element>::Register(element3);
-  superStore->G4GPRManagerT<Element>::Register(element1);
-  superStore->G4GPRManagerT<Element>::Register(element0);
-  superStore->G4GPRManagerT<Element>::Register(element2);
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
+
+
+  elementStore->G4GPRManagerT<Element>::Register(element3);
+  elementStore->G4GPRManagerT<Element>::Register(element1);
+  elementStore->G4GPRManagerT<Element>::Register(element0);
+  elementStore->G4GPRManagerT<Element>::Register(element2);
 
 
   // Generate process list
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper > ProcessList;
 
-
-  G4GPRSimpleGenerator generator;  
+  G4GPRManager gprManager(def);
    
   ProcessList* result(0);
-  generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
   
   G4Track* dummyTrk = new G4Track; 
   G4Step* dummyStep = new G4Step;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRKeyManagerT.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRKeyManagerT.hh,v 1.2 2007-08-30 19:37:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -34,7 +34,7 @@
 #include <map>
 #include <vector>
 #include <deque>
-#include "G4GPRKeyNode.hh"
+#include "G4GPRNode.hh"
 
 template <typename List>
 class G4GPRKeyManagerT {
@@ -44,9 +44,9 @@ public:
   G4GPRKeyManagerT():fKeyChanged(true) {}
 
   typedef std::deque<G4bool> Key;
-  typedef std::map<G4GPRKeyNode*, G4bool*> Map;
+  typedef std::map<G4GPRNode*, G4bool*> Map;
 
-  void ChangeState(G4GPRKeyNode* node) {
+  void ChangeState(G4GPRNode* node) {
     G4cout<<"jane change state"<<G4endl;
     Map::iterator iter = fMap.find(node);
     *(iter->second) = !(*(iter->second));
@@ -58,7 +58,7 @@ public:
 
   void ResetKeyChanged() {fKeyChanged = false;}
 
-  void AddNode(G4GPRKeyNode* node) 
+  void AddNode(G4GPRNode* node) 
   {
     fNodeList.push_back(node);
     fKey.push_back(node->GetState());
@@ -75,7 +75,7 @@ private:
 
   G4bool fKeyChanged;
   Key fKey;
-  std::vector<G4GPRKeyNode*> fNodeList;
+  std::vector<G4GPRNode*> fNodeList;
   Map fMap;
  
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerManagerT.hh,v 1.3 2007-08-07 22:43:17 tinslay Exp $
+// $Id: G4GPRTriggerManagerT.hh,v 1.4 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -49,14 +49,14 @@ public:
   typedef G4GPRLinearHierarchyT< G4GPRTypeList_2(PointerAssoc, FuncAssoc) > Registry;
 
   template <typename ObserverPtr, typename PointerToMfn>
-  void Register(const TriggerFunc& func, ObserverPtr* observer, PointerToMfn mfn) 
+  void Register(const TriggerFunc& func, ObserverPtr* observer, PointerToMfn mfn, G4bool initialActivation=true) 
   {
     
     Trigger* trigger(0);
 
     if (!fRegistry.FuncAssoc::Retrieve(func, trigger)) {
       //      G4cout<<"jane didn't find func trigger"<<G4endl;
-      trigger = new Trigger(func);
+      trigger = new Trigger(func, initialActivation);
       fTriggerList.push_back(trigger);
       fRegistry.FuncAssoc::Register(func, trigger);
     }
@@ -67,14 +67,14 @@ public:
   }
 
   template <typename TriggerPtr, typename ObserverPtr, typename PointerToMfn>
-  void Register(TriggerPtr*const & triggerPtr, ObserverPtr* observer, PointerToMfn mfn) 
+  void Register(TriggerPtr*const & triggerPtr, ObserverPtr* observer, PointerToMfn mfn, G4bool initialActivation=true) 
   {
     Trigger* trigger(0);
 
     if (!fRegistry.PointerAssoc::Retrieve(triggerPtr, trigger)) {
       //      G4cout<<"jane didn't find ptr trigger"<<G4endl;
       typename Scope::template TriggerMfn<TriggerPtr>::PtrToMfn mfn = &TriggerPtr::operator();
-      trigger = new Trigger(triggerPtr, mfn);
+      trigger = new Trigger(triggerPtr, mfn, initialActivation);
       fTriggerList.push_back(trigger);
       fRegistry.PointerAssoc::Register(triggerPtr, trigger);
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: multiProcessRelayTest.cc,v 1.2 2007-08-13 20:04:08 tinslay Exp $
+// $Id: multiProcessRelayTest.cc,v 1.3 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -33,8 +33,8 @@
 #include "G4VParticleChange.hh"
 
 #include "G4GPRSeedT.hh"
+
 #include "G4GPRElementSuperStore.hh"
-#include "G4GPRSimpleGenerator.hh"
 
 #include "G4GPRMultiProcessRelayT.hh"
 
@@ -45,6 +45,11 @@
 #include "G4GRSVolume.hh"
 #include "G4GPRTriggerSuperStore.hh"
 #include "TestSetup.hh"
+#include "G4Gamma.hh"
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRNode.hh"
+#include "G4GPRManager.hh"
+
 // Process function
 G4double DiscreteGPIL1(const G4Track& track,
 		       G4double previousStepSize,
@@ -92,13 +97,13 @@ int main(int argc, char** argv) {
                                       G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic"),
                                       "World");
   
-  G4VPhysicalVolume* world = new G4PVPlacement(0,
-                                               G4ThreeVector(),
-                                               logicalWorld,
-                                               "World",
-                                               0,   
-                                               false,
-                                               0);
+  new G4PVPlacement(0,
+		    G4ThreeVector(),
+		    logicalWorld,
+		    "World",
+		    0,   
+		    false,
+		    0);
 
   G4LogicalVolume* volA_log = new G4LogicalVolume(new G4Box("World", 1.0*m, 1.0*m, 1.0*m),
                                       G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic"),
@@ -140,17 +145,31 @@ int main(int argc, char** argv) {
 
   MultiRelay* relay = new MultiRelay("MultiRelay", &MyMultiRelay, processes, G4GPRPlacement::First);
   
-  G4GPRElementSuperStore* superStore = G4GPRElementSuperStore::Instance();
+  G4ParticleDefinition* def = G4Gamma::Definition();
 
-  superStore->G4GPRManagerT<Seed>::Register(seed1);
-  superStore->G4GPRManagerT<Seed>::Register(seed2);
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
 
-  superStore->G4GPRManagerT<MultiRelay>::Register(relay);
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
 
-  G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
-											  &G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL>::ChangeState);
 
+  elementStore->G4GPRManagerT<Seed>::Register(seed1);
+  elementStore->G4GPRManagerT<Seed>::Register(seed2);
+  elementStore->G4GPRManagerT<MultiRelay>::Register(relay);
+
+  G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
+
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
+										     &G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL>::ChangeState);
+
+  // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
+  G4GPRNode* node1 = new G4GPRNode;
+
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, node1, &G4GPRNode::FlipState);
+
+  G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
+
+  keyStore->G4GPRKeyManagerT<Seed::List>::AddNode(node1);
 
   // Generate process list
   typedef std::vector< G4DiscreteGPILWrapper > ProcessList;
@@ -160,11 +179,12 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_A);
 
-  G4GPRSimpleGenerator generator;  
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Fire(*track, *step);  
+  // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
+  G4GPRManager gprManager(def);
+  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
 
   ProcessList* result(0);
-  generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
   G4cout<<"jane generated size should be 2 and is: "<<result->size()<<G4endl;
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); ++iter) {
@@ -175,8 +195,8 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_B);
 
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Fire(*track, *step);  
-  generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
+  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
+  gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
 
   G4cout<<"jane generated size should be 1 and is: "<<result->size()<<G4endl;
 

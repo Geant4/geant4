@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: keyTest.cc,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: keyTest.cc,v 1.2 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -39,9 +39,12 @@
 #include "G4Gamma.hh"
 #include "G4DynamicParticle.hh"
 #include "G4GPRKeyManagerT.hh"
-#include "G4GPRKeyNode.hh"
+#include "G4GPRNode.hh"
 #include "G4GPRKeySuperStore.hh"
 #include "TestSetup.hh"
+
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRManager.hh"
 
 using namespace TestSetup;
 
@@ -58,64 +61,84 @@ int main(int argc, char** argv) {
   Element* element3 = new Element("Element3", &MyFunction, G4GPRPlacement::Last);
 
   // Register element with super store which takes ownership
-  G4GPRElementSuperStore* elementSuperStore = G4GPRElementSuperStore::Instance();
+  G4ParticleDefinition* def = G4Gamma::Definition();
+
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
+
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
 
   // Random register to test placement
-  elementSuperStore->G4GPRManagerT<Element>::Register(element1);
-  elementSuperStore->G4GPRManagerT<Element>::Register(element3);  
-  elementSuperStore->G4GPRManagerT<Element>::Register(element0);
-  elementSuperStore->G4GPRManagerT<Element>::Register(element2);
+  elementStore->G4GPRManagerT<Element>::Register(element1);
+  elementStore->G4GPRManagerT<Element>::Register(element3);  
+  elementStore->G4GPRManagerT<Element>::Register(element0);
+  elementStore->G4GPRManagerT<Element>::Register(element2);
 
-  G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
+  G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
   // Elements 1 and 2 are on the same trigger.
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
 
   // Elements 3 and 4 are on the same trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
  
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
-  G4GPRKeyNode* node1 = new G4GPRKeyNode;
-  G4GPRKeyNode* node2 = new G4GPRKeyNode;
+  G4GPRNode* node1 = new G4GPRNode;
+  G4GPRNode* node2 = new G4GPRNode;
 
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRKeyNode::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
 
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRKeyNode::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
 
   // Add nodes to key manager. Key manager be notified when an elements state has changed, so the current "key" changes.
   // This means the process list needs to be changed.
-  G4GPRKeySuperStore* keySuperStore = G4GPRKeySuperStore::Instance();
-  keySuperStore->G4GPRKeyManagerT<Element::List>::AddNode(node1);
-  keySuperStore->G4GPRKeyManagerT<Element::List>::AddNode(node2);
+
+  G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
+
+  keyStore->G4GPRKeyManagerT<Element::List>::AddNode(node1);
+  keyStore->G4GPRKeyManagerT<Element::List>::AddNode(node2);
 
   // Dummy track and step
-  G4DynamicParticle* dynamic= new G4DynamicParticle(G4Gamma::Gamma(), 0, G4ThreeVector(0, 0, 0));
-  G4Track* dummyTrk = new G4Track(dynamic, 0, G4ThreeVector(0,0,0)); 
-  G4Step* dummyStep = new G4Step;
+  G4DynamicParticle* dynamic= new G4DynamicParticle(def, 0, G4ThreeVector(0, 0, 0));
+  G4Track* trk = new G4Track(dynamic, 0, G4ThreeVector(0,0,0)); 
+  G4Step* step = new G4Step;
 
-  G4GPRSimpleGenerator generator;
+  G4GPRManager gprManager(def);
+  typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper > ProcessList;
 
   ProcessList* listA(0);
   ProcessList* listB(0);
   ProcessList* listC(0);
 
   // Generate lists. Key should change depending on which processes have been triggered.
-  GenerateList(generator, &ConditionsA, listA, dummyTrk, dummyStep);
+  ConditionsA(trk);
+  gprManager.Fire<G4GPRScopes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listA);    
+
   G4cout<<"Jane, key should be : 1 0"<<G4endl;
-  Print(keySuperStore->G4GPRKeyManagerT<Element::List>::GetKey());
+  Print(keyStore->G4GPRKeyManagerT<Element::List>::GetKey());
 
-  GenerateList(generator, &ConditionsB, listB, dummyTrk, dummyStep);
+  ConditionsB(trk);
+  gprManager.Fire<G4GPRScopes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listB);    
+
   G4cout<<"Jane, key should be : 1 1"<<G4endl;
-  Print(keySuperStore->G4GPRKeyManagerT<Element::List>::GetKey());
+  Print(keyStore->G4GPRKeyManagerT<Element::List>::GetKey());
 
-  GenerateList(generator, &ConditionsC, listC, dummyTrk, dummyStep);
+  ConditionsC(trk);
+  gprManager.Fire<G4GPRScopes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listC);    
+
   G4cout<<"Jane, key should be : 0 1"<<G4endl;
-  Print(keySuperStore->G4GPRKeyManagerT<Element::List>::GetKey());
+  Print(keyStore->G4GPRKeyManagerT<Element::List>::GetKey());
 
   return 0;
 }

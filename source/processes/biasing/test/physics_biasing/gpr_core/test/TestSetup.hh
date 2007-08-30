@@ -4,26 +4,12 @@
 #include <deque>
 
 namespace TestSetup {
-
-  G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
-
-  typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper > ProcessList;
   
-  template <typename Generator>
-  void GenerateList(Generator& generator, void (*config)(G4Track*), ProcessList*& result, G4Track* trk, G4Step* step) {
-
-    config(trk);
-    G4cout<<"jane generating"<<G4endl;
-    triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Fire(trk);
-    triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Fire(*trk, *step);
-    
-    generator.template Generate<G4GPRProcessLists::DiscreteDoIt>(result);    
-  }
-
+  template <typename ProcessList>
   void PrintList(ProcessList*& list) 
   {
     // Iterate over process list
-    for (ProcessList::iterator iter = list->begin(); iter != list->end(); iter++) {
+    for (typename ProcessList::iterator iter = list->begin(); iter != list->end(); iter++) {
       G4cout<<iter->GetIdentifier()<<" ";
     }
     G4cout<<G4endl;
@@ -46,6 +32,7 @@ namespace TestSetup {
   {
     G4VParticleChange* Method(const G4Track&, const G4Step&)
     {
+      return 0;
       //    G4cout<<"Execute OtherProcess::Method"<<G4endl;
     }
     
@@ -84,6 +71,7 @@ namespace TestSetup {
     }
     
   G4bool operator()(const G4Track& track) {
+    return false;
     //      G4cout<<"jane track energy "<<track.GetKineticEnergy()<<G4endl;
     //return (track.GetKineticEnergy() < fMaxEnergy ? true : false);
   }

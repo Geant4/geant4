@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: maskTest.cc,v 1.1 2007-08-13 20:04:08 tinslay Exp $
+// $Id: maskTest.cc,v 1.2 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -45,6 +45,11 @@
 #include "G4GRSVolume.hh"
 #include "G4GPRTriggerSuperStore.hh"
 #include "TestSetup.hh"
+#include "G4Gamma.hh"
+
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRNode.hh"
+#include "G4GPRManager.hh"
 // Process function
 G4double DiscreteGPIL1(const G4Track& track,
 		       G4double previousStepSize,
@@ -141,21 +146,34 @@ int main(int argc, char** argv) {
 
   G4GPRMask* mask = new G4GPRMask("Mask",  processes);
   
-  G4GPRElementSuperStore* superStore = G4GPRElementSuperStore::Instance();
+  G4ParticleDefinition* def = G4Gamma::Definition();
 
-  superStore->G4GPRManagerT<Seed>::Register(seed1);
-  superStore->G4GPRManagerT<Seed>::Register(seed2);
-  superStore->G4GPRManagerT<Seed>::Register(seed3);
-  superStore->G4GPRManagerT<Seed>::Register(seed4);
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
 
-  G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>* store(superStore);
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
+
+  elementStore->G4GPRManagerT<Seed>::Register(seed1);
+  elementStore->G4GPRManagerT<Seed>::Register(seed2);
+  elementStore->G4GPRManagerT<Seed>::Register(seed3);
+  elementStore->G4GPRManagerT<Seed>::Register(seed4);
+
+  G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>* store(elementStore);
   store->G4GPRManagerT<G4GPRMask>::Register(mask);
-  //  superStore->template G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>::G4GPRManagerT<G4GPRMask>::Register(mask);
 
-  G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MaskTrigger, mask, 
-											  &G4GPRMask::ChangeState);
+  G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MaskTrigger, mask, 
+										     &G4GPRMask::ChangeState);
+  
+    // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
+  G4GPRNode* node1 = new G4GPRNode;
+
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MaskTrigger, node1, &G4GPRNode::FlipState);
+
+  G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
+
+  keyStore->G4GPRKeyManagerT<Seed::List>::AddNode(node1);
 
   // Generate process list
   typedef std::vector< G4DiscreteGPILWrapper > ProcessList;
@@ -165,11 +183,12 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_A);
 
-  G4GPRSimpleGenerator generator;  
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Fire(*track, *step);  
+  // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
+  G4GPRManager gprManager(def);
+  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
 
   ProcessList* result(0);
-  generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
   G4cout<<"jane generated size should be 4 and is: "<<result->size()<<G4endl;
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); ++iter) {
@@ -180,8 +199,8 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_B);
 
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Fire(*track, *step);  
-  generator.Generate<G4GPRProcessLists::DiscreteGPIL>(result);
+  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
+  gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
 
   G4cout<<"jane generated size should be 2 and is: "<<result->size()<<G4endl;
 

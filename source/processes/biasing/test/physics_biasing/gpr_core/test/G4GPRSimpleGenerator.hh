@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSimpleGenerator.hh,v 1.1 2007-08-02 18:12:06 tinslay Exp $
+// $Id: G4GPRSimpleGenerator.hh,v 1.2 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -33,15 +33,18 @@
 
 #include "G4GPRElementSuperStore.hh"
 #include "G4GPRUtils.hh"
+#include "G4GPRPhysicsListManagerSuperStore.hh"
 
 class G4GPRSimpleGenerator {
 
 public:
 
-  G4GPRSimpleGenerator()
+  G4GPRSimpleGenerator(G4ParticleDefinition* def)
   {
-    fSuperStore = G4GPRElementSuperStore::Instance();
-    //    pCacheManager = G4GPRCacheManagerSuperStore::Instance();
+    G4GPRPhysicsList* physicsList = (*G4GPRPhysicsListManagerSuperStore::Instance())[def].GetPhysicsList("Default");
+
+    fStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
+
   }
 
   template <typename T, typename Result>
@@ -49,14 +52,14 @@ public:
   {
     result = new Result;
 
-    G4GPRElementStoreT<T>* store = fSuperStore;
+    G4GPRElementStoreT<T>* store = fStore;
     
     G4GPRUtils::Operator(result, store);
   }
 
 private:
 
-  G4GPRElementSuperStore* fSuperStore;
+  G4GPRElementStore* fStore;
 
 };
 

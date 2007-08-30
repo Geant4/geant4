@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRElementSuperStore.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
+// $Id: G4GPRElementSuperStore.hh,v 1.3 2007-08-30 19:37:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -31,14 +31,24 @@
 #ifndef G4GPRELEMENTSUPERSTORE_HH
 #define G4GPRELEMENTSUPERSTORE_HH
 
-#include "G4GPRSingletonHierarchyT.hh"
+#include "G4GPRLinearHierarchyT.hh"
+#include "G4GPRSingletonhierarchyT.hh"
 #include "G4GPRElementStoreT.hh"
+#include "G4GPRAssocT.hh"
+#include "G4GPRPhysicsList.hh"
 
-typedef G4GPRSingletonHierarchyT< G4GPRTypeList_6(G4GPRElementStoreT<G4GPRProcessLists::AtRestDoIt>, 
-						  G4GPRElementStoreT<G4GPRProcessLists::AtRestGPIL>,
-						  G4GPRElementStoreT<G4GPRProcessLists::ContinuousDoIt>, 
-						  G4GPRElementStoreT<G4GPRProcessLists::ContinuousGPIL>,
-						  G4GPRElementStoreT<G4GPRProcessLists::DiscreteDoIt>, 
-						  G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>) > G4GPRElementSuperStore;
+#include "G4ParticleDefinition.hh"
+
+typedef G4GPRLinearHierarchyT< G4GPRTypeList_6(G4GPRElementStoreT<G4GPRProcessLists::AtRestDoIt>, 
+					       G4GPRElementStoreT<G4GPRProcessLists::AtRestGPIL>,
+					       G4GPRElementStoreT<G4GPRProcessLists::ContinuousDoIt>, 
+					       G4GPRElementStoreT<G4GPRProcessLists::ContinuousGPIL>,
+					       G4GPRElementStoreT<G4GPRProcessLists::DiscreteDoIt>, 
+					       G4GPRElementStoreT<G4GPRProcessLists::DiscreteGPIL>) > G4GPRElementStore;
+
+typedef G4GPRAssocT<G4GPRPhysicsList*, G4GPRElementStore> G4GPRPhysicsListsAndProcesses;
+typedef G4GPRAssocT<G4ParticleDefinition*, G4GPRPhysicsListsAndProcesses>  G4GPRParticleAndProcesses;
+
+typedef G4GPRSingletonHierarchyT< G4GPRTypeList_1( G4GPRParticleAndProcesses ) > G4GPRElementSuperStore;
 
 #endif

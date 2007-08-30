@@ -23,31 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRKeySuperStore.hh,v 1.3 2007-08-30 19:37:44 tinslay Exp $
+// $Id: G4GPRNode.hh,v 1.1 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
 //
-#ifndef G4GPRKEYSUPERSTORE_HH
-#define G4GPRKEYSUPERSTORE_HH
+#ifndef G4GPRNODE_HH
+#define G4GPRNODE_HH
 
-#include "G4GPRAssocT.hh"
-#include "G4GPRSingletonHierarchyT.hh"
-#include "G4GPRLinearHierarchyT.hh"
-#include "G4GPRKeyManagerT.hh"
-#include "G4GPRProcessLists.hh"
+#include "G4GPRObserverCollectionT.hh"
 
-typedef G4GPRLinearHierarchyT< G4GPRTypeList_6(G4GPRKeyManagerT<G4GPRProcessLists::AtRestDoIt>, 
-					       G4GPRKeyManagerT<G4GPRProcessLists::AtRestGPIL>,
-					       G4GPRKeyManagerT<G4GPRProcessLists::ContinuousDoIt>, 
-					       G4GPRKeyManagerT<G4GPRProcessLists::ContinuousGPIL>,
-					       G4GPRKeyManagerT<G4GPRProcessLists::DiscreteDoIt>, 
-					       G4GPRKeyManagerT<G4GPRProcessLists::DiscreteGPIL>) > G4GPRKeyStore;
+class G4GPRNode {
 
-typedef G4GPRAssocT<G4GPRPhysicsList*, G4GPRKeyStore> G4GPRPhysicsListAndKey;
-typedef G4GPRAssocT<G4ParticleDefinition*, G4GPRPhysicsListAndKey> G4GPRParticleAndKey;
+public:
 
-typedef G4GPRSingletonHierarchyT< G4GPRTypeList_1(G4GPRParticleAndKey) > G4GPRKeySuperStore;
+  G4GPRNode(const G4String& id = "", G4bool initialState=true)
+    :fId(id)
+    ,fState(initialState) {}
 
+  void FlipState() 
+  {
+    G4cout<<"jane node flipstate "<<fId<<" "<<!fState<<G4endl;
+    fState = !fState;
+    fObserverCollection(this);
+  }
+
+  G4bool GetState() {return fState;}
+  const G4String& GetName() {return fId;}
+
+  template <typename Pointer, typename PointerToMfn>
+  void AddObserver(Pointer* pointer, PointerToMfn mfn) 
+  {
+    fObserverCollection.RegisterObserver("tmp", pointer, mfn);
+  }
+
+private:
+  G4String fId;
+  G4bool fState;
+  
+  G4GPRObserverCollectionT<G4GPRTypeList_1(G4GPRNode*), G4String> fObserverCollection;
+};
 
 #endif

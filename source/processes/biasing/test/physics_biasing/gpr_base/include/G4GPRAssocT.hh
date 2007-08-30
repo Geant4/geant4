@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRAssocT.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRAssocT.hh,v 1.2 2007-08-30 19:33:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007
@@ -54,6 +54,11 @@ public:
     result = iter->second;
 
     return true;
+  }
+
+  B& operator[](const A& a)
+  {
+    return fAssoc[a]; 
   }
 
 private:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: triggerTest.cc,v 1.2 2007-08-02 18:12:06 tinslay Exp $
+// $Id: triggerTest.cc,v 1.3 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -38,6 +38,9 @@
 #include "G4GPRTriggerSuperStore.hh"
 #include "G4Gamma.hh"
 #include "G4DynamicParticle.hh"
+#include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRNode.hh"
+#include "G4GPRManager.hh"
 
 // Regular G4VProcess
 struct VProcess : public G4VDiscreteProcess
@@ -115,23 +118,26 @@ int main(int argc, char** argv) {
   Element* element2 = new Element("Element2", vProcess, &G4VProcess::PostStepDoIt, G4GPRPlacement::Append);
   Element* element3 = new Element("Element3", &MyFunction, G4GPRPlacement::Last);
 
-  // Register element with super store which takes ownership
-  G4GPRElementSuperStore* elementSuperStore = G4GPRElementSuperStore::Instance();
+  G4ParticleDefinition* def = G4Gamma::Definition();
+
+  G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
+  G4GPRPhysicsList* physicsList = physicsListManager->GetDefaultList();
+
+  G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
 
   // Random register to test placement
-  elementSuperStore->G4GPRManagerT<Element>::Register(element1);
-  elementSuperStore->G4GPRManagerT<Element>::Register(element3);  
-  elementSuperStore->G4GPRManagerT<Element>::Register(element0);
-  elementSuperStore->G4GPRManagerT<Element>::Register(element2);
+  elementStore->G4GPRManagerT<Element>::Register(element1);
+  elementStore->G4GPRManagerT<Element>::Register(element3);  
+  elementStore->G4GPRManagerT<Element>::Register(element0);
+  elementStore->G4GPRManagerT<Element>::Register(element2);
 
-
-  G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
+  G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
   // Elements 1 and 2 are on the same trigger. They're only active 
   // when tracking a primary (track id = 0). Should be evaluated
   // when starting to track a track.
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
   // Elements 3 and 4 are on the same trigger. They only become active when track energy falls below 50 MeV. 
   // Should be evaluated at the start of each step.
@@ -142,48 +148,58 @@ int main(int argc, char** argv) {
   // trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
 
+  G4GPRNode* node1 = new G4GPRNode;
+  G4GPRNode* node2 = new G4GPRNode;
+
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
+
+  G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
+
+  keyStore->G4GPRKeyManagerT<G4GPRProcessLists::DiscreteDoIt>::AddNode(node1);
+  keyStore->G4GPRKeyManagerT<G4GPRProcessLists::DiscreteDoIt>::AddNode(node2);
 
   // Pretend to process two tracks - a primary and a secondary.
   // Test with simple generator : *final lists aren't cached*
-  G4GPRSimpleGenerator generator;  
-
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper > ProcessList;
   ProcessList* result(0);
 
-  G4DynamicParticle* dynamic= new G4DynamicParticle(G4Gamma::Gamma(), 0, G4ThreeVector(0, 0, 0));
-  G4Track* dummyTrk = new G4Track(dynamic, 0, G4ThreeVector(0,0,0)); 
-  dummyTrk->SetKineticEnergy(99*MeV);
+  G4DynamicParticle* dynamic= new G4DynamicParticle(def, 0, G4ThreeVector(0, 0, 0));
+  G4Track* trk = new G4Track(dynamic, 0, G4ThreeVector(0,0,0)); 
+  trk->SetKineticEnergy(99*MeV);
 
-  G4Step* dummyStep = new G4Step;
+  G4Step* step = new G4Step;
+
+  G4GPRManager gprManager(def);
 
   // Start tracking primary
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Fire(dummyTrk);
+  gprManager.Fire<G4GPRScopes::Tracking::StartTracking>(trk);  
 
   // Start Step
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Fire(*dummyTrk, *dummyStep);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
   
   // Generate process list
-  generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
   
   G4cout<<"Jane, list should be : "<<element0->GetName()<<":"<<element1->GetName()<<G4endl;
 
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); iter++) {
     G4cout<<"jane "<<iter->GetIdentifier()<<G4endl;
-    (*iter)(*dummyTrk, *dummyStep);
+    (*iter)(*trk, *step);
   }
-
+  
   // Track energy decreased by 50MeV in this step
-  dummyTrk->SetKineticEnergy(49*MeV);
+  trk->SetKineticEnergy(49*MeV);
 
   // Start new step
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Fire(*dummyTrk, *dummyStep);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
 
   // Generate new list
-  generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
 
   G4cout<<"jane, list should be : "<<element0->GetName()<<":"<<element1->GetName()<<":"
 	<<element2->GetName()<<":"<<element3->GetName()<<G4endl;
@@ -191,28 +207,28 @@ int main(int argc, char** argv) {
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); iter++) {
     G4cout<<"jane "<<iter->GetIdentifier()<<G4endl;
-    (*iter)(*dummyTrk, *dummyStep);
+    (*iter)(*trk, *step);
   }
 
   // Pretend done processing primary track, and move onto processing secondary with energy 30MeV
-  dummyTrk->SetTrackID(1);
-  dummyTrk->SetKineticEnergy(30*MeV);
+  trk->SetTrackID(1);
+  trk->SetKineticEnergy(30*MeV);
 
   // Start tracking secondary 
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>::Fire(dummyTrk);
+  gprManager.Fire<G4GPRScopes::Tracking::StartTracking>(trk);  
 
   // Start Step
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>::Fire(*dummyTrk, *dummyStep);
+  gprManager.Fire<G4GPRScopes::Stepping::StartStep>(*trk, *step);  
   
   // Generate list
-  generator.Generate<G4GPRProcessLists::DiscreteDoIt>(result);
-  
+  gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
+
   G4cout<<"Jane, list should be : "<<element2->GetName()<<":"<<element3->GetName()<<G4endl;
 
   // Iterate over process list
   for (ProcessList::iterator iter = result->begin(); iter != result->end(); iter++) {
     G4cout<<"jane "<<iter->GetIdentifier()<<G4endl;
-    (*iter)(*dummyTrk, *dummyStep);
+    (*iter)(*trk, *step);
   }
 
   // Cleanup

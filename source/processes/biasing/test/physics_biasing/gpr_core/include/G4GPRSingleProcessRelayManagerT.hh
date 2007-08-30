@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSingleProcessRelayManagerT.hh,v 1.1 2007-08-10 22:23:04 tinslay Exp $
+// $Id: G4GPRSingleProcessRelayManagerT.hh,v 1.2 2007-08-30 19:37:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -69,8 +69,8 @@ public:
 	
 	SeedWrapper newWrapper(handle);
 	
-	G4Track* dummyTrk = new G4Track; 
-	G4Step* dummyStep = new G4Step;
+	//	G4Track* dummyTrk = new G4Track; 
+	//	G4Step* dummyStep = new G4Step;
 	
 	//	G4cout<<"jane tsting "<<G4endl;
 	//	newWrapper(*dummyTrk, *dummyStep);

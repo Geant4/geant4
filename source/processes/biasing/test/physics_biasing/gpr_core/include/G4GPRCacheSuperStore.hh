@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRCacheSuperStore.hh,v 1.2 2007-08-07 22:43:17 tinslay Exp $
+// $Id: G4GPRCacheSuperStore.hh,v 1.3 2007-08-30 19:37:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -31,15 +31,15 @@
 #ifndef G4GPRCACHESUPERSTORE_HH
 #define G4GPRCACHESUPERSTORE_HH
 
-#include "G4GPRSingletonHierarchyT.hh"
+#include "G4GPRLinearHierarchyT.hh"
 #include "G4GPRCacheManagerT.hh"
 #include "G4GPRProcessLists.hh"
 
-typedef G4GPRSingletonHierarchyT< G4GPRTypeList_6(G4GPRCacheManagerT<G4GPRProcessLists::AtRestDoIt>, 
-						  G4GPRCacheManagerT<G4GPRProcessLists::AtRestGPIL>,
-						  G4GPRCacheManagerT<G4GPRProcessLists::ContinuousDoIt>, 
-						  G4GPRCacheManagerT<G4GPRProcessLists::ContinuousGPIL>,
-						  G4GPRCacheManagerT<G4GPRProcessLists::DiscreteDoIt>, 
-						  G4GPRCacheManagerT<G4GPRProcessLists::DiscreteGPIL>) >  G4GPRCacheSuperStore;
+typedef G4GPRLinearHierarchyT< G4GPRTypeList_6(G4GPRCacheManagerT<G4GPRProcessLists::AtRestDoIt>, 
+					       G4GPRCacheManagerT<G4GPRProcessLists::AtRestGPIL>,
+					       G4GPRCacheManagerT<G4GPRProcessLists::ContinuousDoIt>, 
+					       G4GPRCacheManagerT<G4GPRProcessLists::ContinuousGPIL>,
+					       G4GPRCacheManagerT<G4GPRProcessLists::DiscreteDoIt>, 
+					       G4GPRCacheManagerT<G4GPRProcessLists::DiscreteGPIL>) >  G4GPRCacheSuperStore;
 
 #endif
