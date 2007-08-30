@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.105 2007-08-29 04:29:25 asaim Exp $
+// $Id: G4RunManager.cc,v 1.106 2007-08-30 02:31:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -503,24 +503,31 @@ void G4RunManager::ConstructScoringWorlds()
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
+         ->IsWorldExisting(ScM->GetWorldName(iw));
+    if(!pWorld)
+    {
+      G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
          ->GetParallelWorld(ScM->GetWorldName(iw));
-    pWorld->SetName(ScM->GetWorldName(iw));
-    mesh->Construct(pWorld);
+      pWorld->SetName(ScM->GetWorldName(iw));
 
-    G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
-      = new G4ParallelWorldScoringProcess(ScM->GetWorldName(iw));
-    theParallelWorldScoringProcess->SetParallelWorld(ScM->GetWorldName(iw));
+      G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
+        = new G4ParallelWorldScoringProcess(ScM->GetWorldName(iw));
+      theParallelWorldScoringProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      pmanager->AddProcess(theParallelWorldScoringProcess);
-      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
-      pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+      theParticleIterator->reset();
+      while( (*theParticleIterator)() ){
+        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        pmanager->AddProcess(theParallelWorldScoringProcess);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+        pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+      }
     }
+    mesh->Construct(pWorld);
   }
+  GeometryHasBeenModified();
 }
 
 void G4RunManager::UpdateScoring()
