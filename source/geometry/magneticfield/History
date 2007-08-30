@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2007-08-21 14:31:42 gcosmo Exp $
+$Id: History,v 1.125 2007-08-30 23:32:40 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 30th, 2007    P.Gumplinger - field-V09-00-02
+- Add G4EqEMFieldWithSpin class to allow tracking of spin also in
+  G4ElectroMagneticFields
 
 August 21st, 2007    T.Nikitina - field-V09-00-01
 -------------------------------
