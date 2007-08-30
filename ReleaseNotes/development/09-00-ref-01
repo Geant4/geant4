@@ -1,0 +1,395 @@
+
+                       geant4-09-00-ref-01
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+  o Extended destructors to G4Element and G4Material, now all materials
+    and elements are automatically deleted at the end of a run.
+  o NIST material are now built even if user creates a material with the
+    same name, therefore NIST materials parameters can no longer be
+    substituted.
+  o New specific shape G4Paraboloid with cuts along the Z axis.
+  o In G4HelixMixedStepper added possibility to call different steppers
+    for small steps and added some statistics how offen different steppers
+    are being called.
+  o New, simpler model functions in G4UrbanMscModel to describe the angular
+    distribution.
+  o New ion ionisation process G4ionGasIonisation with discrete ion charge
+    and no equilibrium between ion and media.
+  o Bug fix in quasi-elastic, which may influence the shower shape, which
+    should be now a bit shorter and wider when using QGSC/QGSP physics lists.
+  o Created new module "scorer" in digits_hits, now including all scorer
+    and filter classes.
+  o Fixed problem affecting recent CygWin installations on Windows in
+    parsing the buffer for the generation of the libname.map file.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 8.3.p01 and 9.0.p01
+(**) Fixes included in release 9.0.p01
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-00-04
+------
+- liblist.c: fixed problem affecting recent CygWin installations on  (*)
+  Windows in parsing the buffer for the generation of libname.map.
+- binmake.gmk:
+  o Defined OUT internal variable specifying the proper              (*)
+    compilation/linking option to Unix or Windows compilers: '-o '
+    and '/Fe' respectively.
+  o Added new modules to INCLUDE list: digits_hits/scorer and
+    processes/hadronic/models/rpg.
+- SUN-CC.gmk: forced -xO2 as optimisation level.                     (*)
+
+digits_hits                                      digits_hits-V09-00-00
+-----------
+- Created new module "scorer" now including all scorer and filter classes.
+  The module "utils" is now used for interactive scoring utilities.
+
+geometry/magneticfield                           field-V09-00-01     (*)
+----------------------
+- Fix to DistChord() method for Helical Steppers: adopt 'special' case
+  also for Ang<2pi not only for Ang<pi; use cos() in place of tan(), to
+  improve CPU performance.
+- Improved AdvanceHelix() to be able to make half step and full step
+  in one call.
+- In G4HelixMixedStepper added possibility to call different steppers for
+  small steps and add some statistics how offen different steppers are called.
+- G4RKG3_Stepper: improved internal algorithm to use pre-computed values;
+  the stepper now gives comparable CPU performance as ClassicalRK4. 
+- Changed 'FatalException' to 'EventMustBeAborted' in
+  G4MagIntegratorDriver::AccurateAdvance() if proposed integration step
+  is negative.
+
+geometry/management                              geommng-V09-00-00   (**)
+-------------------
+- Added dummy constructor and destructor to G4VPVParameterisation.
+
+geometry/solids/BREPS                            breps-V09-00-00     (**)
+---------------------
+- Added missing initialisations of kCarTolerance in alternative constructors
+  for G4BoundingBox3D, G4Curve, G4CurveRayIntersection, G4KnotVector.
+  Addressing problem report #959.
+
+geometry/solids/CSG                              geom-csg-V09-00-00  (**)
+-------------------
+- G4Tubs: fixed bug in DistanceToOut(p,v,..) for negative value under sqrt()
+  for the case of point p on the surface and v tangent to the surface.
+  Responsible for rare cases of NaN.
+
+geometry/solids/specific                         geom-specific-V09-00-04
+------------------------
+- G4Polyhedra:                                                       (*)
+  o Fix in GetPointOnSurface() to correctly treat 'totalPhi' instead of
+    'endPhi' for the case of open shapes and 'twopi' for not open shapes.
+    Fix also for the case when number of sectors (numSide) is equal to 1.
+    At the origin of problems observed when checking overlaps for polyhedra
+    solids defined as such.
+- Revision of G4EllipticalCone:                                      (**)
+  o DistanceToIn(p): corrected answer for p.z()<-zTopCut and for the point
+    p on the surface.
+  o DistanceToOut(p,v): now returning positive solution or zero when crossing
+    the elliptical surface.
+  o Fix in DistanceToOut(p) which was giving always zero. 
+  o Corrected visualisation error of solid in graphics_reps.
+  o Added some formulas on how to pre-calculate 'SemiAxis' and 'zheight'.
+  o Added checkDistanceToOut() method to unit test.
+- G4PolyconeSide: added workaround to initialisation of 'corners'    (**)
+  vector, to allow for object persistency with Root-I/O.
+- Fixed dummy constructors of G4Polycone and G4PolyPhiFace for       (**)
+  initialisation of 'edges' and 'corners'.
+- New specific shape G4Paraboloid with cuts along the Z axis.
+
+global                                           global-V09-00-00    (**)
+------
+- Changed date for release 9.0.p01.
+
+graphics_reps                                    greps-V09-00-02
+-------------
+- Added G4Paraboloid to HepPolyhedron and G4Polyhedron.
+- Fixed bug in scaling parameter for G4EllipticalCone representation (**)
+  in HepPolyhedron class.
+- G4VGraphicsScene: Added constructor and virtual destructor.        (**)
+
+intercoms                                        intercoms-V09-00-01 (**)
+---------
+- G4UImanager: fixed bug for invalid returned object.
+- G4UIcontrolMessenger: introduced new commands:
+  /control/getEnv and /control/echo.
+- G4UIbatch:
+  o Fixed bug for the treatment of the last line.
+  o Added support for continued line by \, _
+  o String after '#' is now treated as comment.
+  o White spaces at the head of a line are now allowed. 
+  o Fixed problem on 32bit-Linux.
+
+materials                                        materials-V09-00-01
+---------
+- G4NistManager:
+  o Simplified logic of Print() methods.
+  o Providing destruction of all materials and elements.
+- G4NistElementBuilder:
+  o Added protection to Print method.
+  o For given Z, build only one Nist element and allow user to create
+    other elements with given Z (HP physics requirement).
+- G4NistMaterialBuilder:
+  o Modified FindOrBuildMaterial() method: NIST materials are now built even
+    if user creates a material with the same name, therefore NIST materials 
+    parameters -cannot- be substituted.
+- G4Material, G4Element:
+  o Extended destructors, now all materials and elements are deleted at the
+    end of a run.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-00-00
+------------------------------------
+- G4mplIonisationModel: fixed low-energy parameterization of monopole
+  energy loss; verified mean energy loss.
+
+processes/electromagnetic/muons                  emmuons-V09-00-00
+-------------------------------
+- G4EnergyLossForExtrapolator: added 'maxEnergyTransfer' parameter for
+  the computation of energy loss.
+
+processes/electromagnetic/polarisation           empolar-V09-00-00    (**)
+--------------------------------------
+- Removed/renamed obsolete methods and local variables in classes
+  G4VPolarizedCrossSection, G4eplusPolarizedAnnihilation, and
+  G4PolarizedAnnihilationModel to clear "shadow" warnings on SUN-CC.
+
+processes/electromagnetic/standard               emstand-V09-00-08
+----------------------------------
+- G4UniversalFluctuation:                                             (**)
+  o Added protection such that no sampling of fluctuations is done if mean
+    energy loss at the step is below minimal excitation energy of the media.
+    The fix is important for cases of low-dense gases and very small steps.
+- G4UrbanMscModel:
+  o For skin greater than 0 use range instead of 'TrueStepLimit' for the
+    computation of the distance to a boundary. This provides more stable
+    step limitation by 'GeomFactor'.
+  o New, simpler model functions to describe the angular distribution.
+    theta0 of this distribution has been changed too; now the form of theta0
+    is the same as in the Highland formula, but the  parameter values are
+    different for e+/e- and the other (heavy) particles; the change concerns
+    the UseDistanceToBoundary case: tlimitmin = 10 stepmin.
+    Some cosmetics in ComputeTruePathLengthLimit().
+  o Modified tail of angular distribution. Compare safety with zero after
+    lateral displacement.
+- G4CoulombScattering:
+  o Updated InitialiseProcess() and PrintInfo() methods to ensure that
+    the parameters of models change between runs and to provide more clear
+    information.
+- G4eCoulombScatteringModel, G4CoulombScatteringModel:
+  o Added nuclear size effect; added separate simulation of scattering on
+    atomic electrons taking into account cuts; fixed cross section for
+    compounds. 
+  o Fixed bug in computation of screening parameters in SampleSecondary()
+    method; reorganised initialisation of kinematics and screening parameters;
+    used Z(Z+1) factor to take into account scattering of electrons.
+- G4CoulombScatteringModel:
+  o Introduced energy threshold between models with and without nuclear recoil.
+  o Fixed bug in SamplingSecondaries().
+  o Fixed bug in kinematic of the final state.
+- G4eCoulombScatteringModel:
+  o Added array to cash screen parameters.
+  o Updated screen radius model.
+- G4BraggModel, G4BraggIonModel:
+  o More safe computation of scattering angle.
+- G4ionIonisation:
+  o Removed obsolete method DefineMassCharge()
+  o Added protected methods BetheBlochEnergyThreshold() and
+    NuclearStoppingFlag().
+- G4ionGasIonisation:
+  o New ion ionisation process with discrete ion charge and no equilibrium
+    between ion and media.
+
+processes/electromagnetic/utils                  emutils-V09-00-04
+-------------------------------
+- G4VEnergyLossProcess:
+  o Use prestep time for subcutoff secondaries and avoid use
+    of the GetVelocity() method.
+  o Simplified energy loss computation for the case of big step,
+    allowing for slight improvent in CPU performance.
+  o Use STL vectors of G4VEmModel instead of local arrays.
+- G4VEmProcess:
+  o Added cut to ComputeCrossSectionPerAtom() method.
+  o Added vector of cuts per material for secondaries, which are needed for
+    single scattering process.
+  o Integral option now coupled with 'buildLambdaTable' option:
+    integral cannot be activated if 'buildLambdaTable' is not activated.
+- G4VEmModel:                                                          (**)
+  o Fixed SelectRandomAtom() method for the selection of elements in a
+    compound material.
+- G4EmCalculator: fixed default region name.
+
+processes/electromagnetic/xrays                  xrays-V09-00-00       (**)
+-------------------------------
+- G4VXTRenergyLoss: fixed Valgrind run-time errors for wrong memory
+  allocation by removing internal initialisation of Sandia table and
+  using Sandia table from materials.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-00-04)
+  o Chain of bug-fixes in G4Quasmon, G4QEnvironment, G4QNucl* classes.
+  o Photon absorption p<0 correction in G4Quasmon.
+  o Associated changes connected with the quasi-elastic bug fix introduced
+    in the underlying 'interface' module.
+  o Some renaming of variables in G4QNucleus and G4QString.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-00-04)
+  o G4QuasiFreeRatios: fixed DB filling (ID update), responsible for    (*)
+    excessive growth of memory in long runs. Corrected indexing and
+    computation of cos(theta).
+  o Bug fix in quasi-elastic, which may influence the shower shape, which
+    should be now a bit shorter and wider when using QGSC/QGSP physics lists.
+  o Warning printout for very low energy removed in G4QElasticCrossSection.
+- models/neutron_hp (hadr-hpn-V09-00-00)                                (**)
+  o G4NeutronHPThermalScattering: removed duplicate declaration of 'dirName'
+    local variable which is already a class member.
+- models/rpg (hadr-rpg-V09-00-01)
+  o First version of the 'Re-Parameterized Gheisha-style' model. This 
+    version is essentially a re-factored copy of the low energy parameterized 
+    model which also contains several bug fixes and physics improvements.
+- models/util (hadr-mod-util-V09-00-00)                                 (**)
+  o G4KineticTrack: changed variable names to avoid compilation warnings
+    on SUN-CC about variable hiding.
+- models/stopping (hadr-stopping-V09-00-01)
+  o Fixed signature of G4MuMinusCaptureCascade::DoCascade() expecting
+    'const' as arguments for A and Z.
+    Resolves linking problems on SUN-CC.                                (**)
+  o Removed old-style copyright from all headers and fixed Software
+    Reference Manual tags.
+
+processes/management                             procman-V09-00-00
+--------------------
+- Added SetProcessOrderingToSecond() method for G4ProcessManager.
+
+run                                              run-V09-00-00
+---
+- Added ability to handle G4ScoringManager in G4RunManager.
+
+track                                            track-V09-00-01
+-----
+- Added accessor for non-ionizing energy deposit in G4Step.
+
+visualization                                    vis-V09-00-00
+-------------
+- management                                                         (**)
+  o Removed redundant method declarations and minor tidies.
+- OpenGL (opengl-V09-00-00)
+  o Removed redundant G4OpenGLXViewerMessenger class.
+
+environments                                     envs-V09-00-00        (**)
+------------
+- Minor bug fixes to G4Py module; updated geometry wrappers and TestEm0
+  example.
+
+examples                                         examples-V09-00-01
+--------
+- Updated reference outputs.
+- advanced/medical_linac (medical_linac-V08-03-02)                     (**)
+  o Fixed problem report #880 in DetectorConstruction class.
+  o Updated macros; reviewed seed initialisation and modified to use
+    default multiple-scattering class instead of MultipleScattering52.
+- advanced/microbeam (microbeam-V09-00-03)                             (**)
+  o Improved dose calculation in the code in order to take into account
+    small energy deposits by any particle around the phantom edge voxels,
+    by suppressing a selection condition on the PostStep. The total result
+    of the dose calculation does not change significantly.
+  o Added protection against scattering at large angles in collimators.
+  o Suppressed field manager in zones with zero field.
+  o Use 'kUndefined' optimization in cell phantom implementation.
+  o Changed number of incident alpha particles in microbeam.mac.
+  o Replaced M_PI constants with CLHEP::pi and protected usage of
+    G4UItcsh to allow for compilation on WIN32-VC systems.
+- advanced/underground_physics (DMX-V09-00-01)                         (**)
+  o Added missing header file G4hIonisation.hh to DMXPhysicsLists
+    translation unit.
+  o Added G4StepLimiter to physics list as correction of migration
+    required since Geant4 release 7.0.
+- extended/electromagnetic/TestEm1 (testem1-V09-00-00)
+  o Added material CO2 at 10^-6 atm.
+- extended/electromagnetic/TestEm2 (testem2-V09-00-00)
+  o PhysicsLists: added options from physics_lists library.
+  o TestEm2.in update to provide the same reference output as before.
+- extended/electromagnetic/TestEm3 (testem3-V09-00-00)
+  o Updated TestEm3.in macro.
+- extended/electromagnetic/TestEm5 (testem5-V09-00-01)
+  o New histogram numbering (see README). Changed all macros accordingly,
+    also in Geant3 version.
+  o Reordered processes in PhysListEmStandardSS.
+  o Added histos 17->20: energy fluence.
+- extended/electromagnetic/TestEm7 (testem7-V09-00-02)
+  o PhysListStandardSS: reviewed process ordering.
+  o Added PhysListStandardIG, ion G4ionIonisation process is substituted
+    by G4ionGasIonisation and for Coulomb scattering the model taking into
+    account the recoil is used.
+  o Updated README for physicsList names.                             (**)
+- extended/electromagnetic/TestEm8 (testem8-V09-00-02)
+  o Use components of Physics Lists from physics_list subdirectory
+  o Fixed PAI physics constructors: energy loss processes should be   (**)
+    active post step.
+  o Create VisManager only for interactive session, improved          (**)
+    destructor of Em8DetectorConstruction class.
+- extended/electromagnetic/TestEm10 (testem10-V09-00-00)              (**)
+  o Create VisManager only for interactive session, improved destructor
+    of Em10DetectorConstruction class.
+- extended/electromagnetic/TestEm11 (testem11-V09-00-00)
+  o Added histo 8: energy profile as function of x/range.
+  o Added input macro sandia.mac.
+- extended/electromagnetic/TestEm12 (testem12-V09-00-00)
+  o HistoManager: modified way to get 'csdaRange' from G4EmCalculator 
+    and compute 'stepMax' for histo 8.
+- extended/electromagnetic/TestEm13 (testem13-V09-00-00)              (**)
+- extended/electromagnetic/TestEm14 (testem14-V09-00-00)              (**)
+  o SteppingAction : modify logic to take into account low energy packages.
+- extended/exoticphysics/monopole (monopole-V09-00-00)
+  o New example demostrating simulation of a classical magnetic monopole and
+    computeation of the energy deposited.
+- extended/medical/fanoCavity (fano-V09-00-01)                        (**)
+  o Use 'fUseDistanceToBoundary' in physics-list for 'emOptions'. Cleanup.
+- extended/medical/GammaTherapy (gtherapy-V09-00-00)                  (**)
+  o Provide possibility to change cuts between runs.
+- extended/radioactivedecay/exrdm (exrdm-V09-00-00)                   (**)
+  o Removed obsolete hadronic builders and use only QGSP_BIC,
+    QGSP_BIC_HP, QGSP_BERT, QGSP_BERT_HP instead.
+- novice/N02 (exampleN02-V09-00-01)                                   (**)
+  o Fixed implementation of ExN02MagneticField class in way field is set.
+  o Some cosmetics in main() function.
+- novice/N03 (exampleN03-V09-00-00)
+- novice/N04 (exampleN04-V09-00-00)
+  o Some cosmetics.
+
+tests                                            tests-V09-00-01
+-----
+- Updated reference outputs and tools.
+- test02 (test02-V09-00-00)
+  o Delete allocated memory in Tst02DetectorMessenger and in
+    Tst02DetectorConstruction.
+- test10 (test10-V09-00-00)
+  o Added G4Paraboloid solid to the test suite.
+- test11 (test11-V09-00-00)
+- test12 (test12-V09-00-00)
+- test13 (test13-V09-00-00)
+- test15 (test15-V09-00-00)
+- test16 (test16-V09-00-00)
+  o Delete allocated memory in Tst02DetectorMessenger and in
+    Tst02DetectorConstruction.
+- test30 (test30-V09-00-02)
+  o Fix in end of a run.
+  o Added QGSP and QGSC physics.
+  o Added Histo class, gamma energy, proton double differential.
+- test34 (test34-V09-00-00)
+  o Protected use of G4UItcsh class to allow testing on WIN32-VC..
+- test35 (test35-V09-00-01)
+  o Added Histo class.
+- test37 (test37-V09-00-00)
+  o Added PhysList standardIG with standardIG physics builder.
+  o Updated thicknesses inside macro files accourding to investigation
+    in literature.
+- test41 (test41-V09-00-02)
+  o New test for validation of multiple-scattering. Reproducing the MUSCAT
+    experimental setup.
+- test202 (test202-V09-00-00)
+  o Corrected definition of G4EllipticalCone in setup.
