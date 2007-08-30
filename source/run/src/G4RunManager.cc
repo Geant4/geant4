@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.106 2007-08-30 02:31:29 asaim Exp $
+// $Id: G4RunManager.cc,v 1.107 2007-08-30 04:05:48 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -506,8 +506,7 @@ void G4RunManager::ConstructScoringWorlds()
          ->IsWorldExisting(ScM->GetWorldName(iw));
     if(!pWorld)
     {
-      G4VPhysicalVolume* pWorld
-       = G4TransportationManager::GetTransportationManager()
+      pWorld = G4TransportationManager::GetTransportationManager()
          ->GetParallelWorld(ScM->GetWorldName(iw));
       pWorld->SetName(ScM->GetWorldName(iw));
 
