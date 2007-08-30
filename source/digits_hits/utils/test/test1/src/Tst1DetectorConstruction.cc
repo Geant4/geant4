@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1DetectorConstruction.cc,v 1.1 2007-07-13 05:55:34 asaim Exp $
+// $Id: Tst1DetectorConstruction.cc,v 1.2 2007-08-30 05:13:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,7 +128,7 @@ void Tst1DetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+//  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);
