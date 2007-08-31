@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.53 2006-11-27 10:44:55 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.54 2007-08-31 09:38:32 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -1733,12 +1733,12 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   }
   else if(Bn==3)
   {
-    if(!S) return mT;    // Bn=3
+    if(!S)                                      // Bn=3
     {
       if     (Z==1 && N== 2) return mT;         // tritium
       else if(Z==2 && N== 1) return mHe3;       // hetrium
     }
-    if(S== 1 && Z==-1 && N== 3) return dnS;     // nnSig-
+    if(S== 1 && Z==-1 && N== 3)                 // nnSig-
     {
       if     (Z==-1 && N== 3) return dnS;       // nnSig-
       else if(Z== 3 && N==-1) return dpS;       // ppSig+
@@ -1974,9 +1974,9 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   if(S>0)
   {
     G4double bs=0.;
-    if     (S==2) bs=a2;
-    else if(S==3) bs=a3;
-    else if(S>3)  bs=b7*exp(-b8/(A+1.));
+    if     (A==2) bs=a2;
+    else if(A==3) bs=a3;
+    else if(A>3)  bs=b7*exp(-b8/(A+1.));
     m+=S*(mL-bs);
   }  
 #ifdef debug

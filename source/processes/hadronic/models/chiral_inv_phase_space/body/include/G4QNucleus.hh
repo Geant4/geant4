@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.31 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.32 2007-08-31 09:38:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -37,6 +37,7 @@
 
 #include "G4QCandidateVector.hh"
 #include "G4QHadronVector.hh"
+#include "G4QChipolino.hh"
 #include <utility>
 #include <vector>
 #include "globals.hh"
@@ -97,6 +98,15 @@ public:
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
+  void       EvaporateNucleus(G4QHadron* hA, G4QHadronVector* oHV);// Evaporate Nucleus
+  //void DecayBaryon(G4QHadron* dB, G4QHadronVector* oHV); // gamma+N or Delt->N+Pi @@later
+  void       DecayDibaryon(G4QHadron* dB, G4QHadronVector* oHV);   // deuteron is kept
+  void       DecayIsonucleus(G4QHadron* dB, G4QHadronVector* oHV); // nP+(Pi+) or nN+(Pi-)
+  void       DecayMultyBaryon(G4QHadron* dB, G4QHadronVector* oHV);// A*p, A*n or A*L
+  void       DecayAntiStrange(G4QHadron* dB, G4QHadronVector* oHV);// nuclei with K+/K0
+  void       DecayAlphaBar(G4QHadron* dB, G4QHadronVector* oHV);   // alpha+p or alpha+n
+  void       DecayAlphaDiN(G4QHadron* dB, G4QHadronVector* oHV);   // alpha+p+p
+  void       DecayAlphaAlpha(G4QHadron* dB, G4QHadronVector* oHV); // alpha+alpha
   G4int      SplitBaryon();                         // Is it possible to split baryon/alpha
   G4int      HadrToNucPDG(G4int hPDG);              // Converts hadronic PDGCode to nuclear
   G4int      NucToHadrPDG(G4int nPDG);              // Converts nuclear PDGCode to hadronic

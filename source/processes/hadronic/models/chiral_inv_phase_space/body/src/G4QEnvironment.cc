@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.128 2007-08-23 16:00:50 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.129 2007-08-31 09:38:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -3854,8 +3854,8 @@ void G4QEnvironment::CleanUp()
 } // End of CleanUp
 
 //Evaporate Residual Nucleus
-void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
-{//  ================================================================
+void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
+{//  ================================================
   static const G4double mHel6 = G4QPDGCode(2112).GetNuclMass(2,4,0);
   static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0);
   static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0);
@@ -4279,7 +4279,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
 	     G4cout<<"G4QE::EvaR:SplitBar, s="<<bsCond<<",M="<<totMass<<" > GSM="<<GSMass<<G4endl;
 #endif
       G4int nOfOUT = theQHadrons.size();       // Total#of QHadrons in Vector at this point
-      while(nOfOUT && corFlag)                 // Try BackFusionDecays till something is in
+      while(nOfOUT)                            // Try BackFusionDecays till something is in
 	     {
         G4QHadron*     theLast = theQHadrons[nOfOUT-1];
         G4int          lastBN = theLast->GetBaryonNumber();
@@ -4377,30 +4377,27 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
           nOfOUT--;                        // Update the value of OUTPUT entries
 		      }
 	     }
-      if(!nOfOUT || !corFlag)
+      G4LorentzVector h4Mom(0.,0.,0.,GSMass);//GSMass must be updated inPreviousWhileLOOP
+      G4LorentzVector g4Mom(0.,0.,0.,0.);
+      if(!G4QHadron(q4M).DecayIn2(h4Mom, g4Mom))
       {
-        G4LorentzVector h4Mom(0.,0.,0.,GSMass);//GSMass must be updated inPreviousWhileLOOP
-        G4LorentzVector g4Mom(0.,0.,0.,0.);
-        if(!G4QHadron(q4M).DecayIn2(h4Mom, g4Mom))
-        {
-          G4cerr<<"***G4QE::EvaR: h="<<thePDG<<"(GSM="<<GSMass<<")+g>tM="<<totMass<<G4endl;
-          throw G4QException("G4QEnvironment::EvaporateResidual: Decay in Gamma failed");
-        }
+        G4cerr<<"***G4QE::EvaR: h="<<thePDG<<"(GSM="<<GSMass<<")+g>tM="<<totMass<<G4endl;
+        throw G4QException("G4QEnvironment::EvaporateResidual: Decay in Gamma failed");
+      }
 #ifdef debug
-	       G4cout<<"G4QE::EvaRes: "<<q4M<<"->totResN="<<thePDG<<h4Mom<<"+gam="<<g4Mom<<G4endl;
+	     G4cout<<"G4QE::EvaRes: "<<q4M<<"->totResN="<<thePDG<<h4Mom<<"+gam="<<g4Mom<<G4endl;
 #endif
-        G4QHadron* curH = new G4QHadron(thePDG,h4Mom);
+      G4QHadron* curH = new G4QHadron(thePDG,h4Mom);
 #ifdef pdebug
-        G4cout<<"G4QE::EvaRes:FillFragment="<<thePDG<<h4Mom<<G4endl;
+      G4cout<<"G4QE::EvaRes:FillFragment="<<thePDG<<h4Mom<<G4endl;
 #endif
-        if(thePDG==92000000||thePDG==90002000||thePDG==90000002) DecayDibaryon(curH);//(DE)
-        else theQHadrons.push_back(curH);  // Fill the TotalResidualNucleus (del.equiv.)
-        G4QHadron* curG = new G4QHadron(22,g4Mom);
+      if(thePDG==92000000||thePDG==90002000||thePDG==90000002) DecayDibaryon(curH);//(DE)
+      else theQHadrons.push_back(curH);  // Fill the TotalResidualNucleus (del.equiv.)
+      G4QHadron* curG = new G4QHadron(22,g4Mom);
 #ifdef pdebug
-        G4cout<<"G4QE::EvaRes:FillGamma="<<g4Mom<<G4endl;
+      G4cout<<"G4QE::EvaRes:FillGamma="<<g4Mom<<G4endl;
 #endif
-        theQHadrons.push_back(curG);       // Fill the gamma (delete equivalent)
-	     }
+      theQHadrons.push_back(curG);       // Fill the gamma (delete equivalent)
       delete qH;
 	   }
     else if(bA==2) DecayDibaryon(qH);      // Decay the residual dibaryon (del.equivalent)

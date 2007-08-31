@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.80 2007-08-23 16:00:51 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.81 2007-08-31 09:38:32 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -867,7 +867,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4bool barf=true;                               // Take into account CB in limits
   G4double uW=uWell;
   G4int    a = GetA();
-  G4double  evalph=0.;                            // Probability for alpha to evaporate
+  G4double  evalph=0.1;                            // Probability for alpha to evaporate
   //if(a>4.5) evalph=2.7/sqrt(a-4.);                // Probability for alpha to evaporate
   //G4double evalph=clustProb*clustProb*clustProb;
 #ifdef ppdebug
@@ -3697,3 +3697,2458 @@ G4int G4QNucleus::NucToHadrPDG(G4int nPDG)
   else if(nPDG==92998999) hPDG=3334; // Omega-
   return hPDG;
 } 
+
+//Evaporate Residual Nucleus
+void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  =======================================================================
+  static const G4double mHel6 = G4QPDGCode(2112).GetNuclMass(2,4,0);
+  static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0);
+  static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0);
+  static const G4double mNeut = G4QPDGCode(2112).GetMass();
+  static const G4double mProt = G4QPDGCode(2212).GetMass();
+  static const G4double mLamb = G4QPDGCode(3122).GetMass();
+  static const G4double mPi   = G4QPDGCode(211).GetMass();
+  static const G4double mPi0  = G4QPDGCode(111).GetMass();
+  static const G4double mK    = G4QPDGCode(321).GetMass();
+  static const G4double mK0   = G4QPDGCode(311).GetMass();
+  static const G4QContent neutQC(2,1,0,0,0,0);
+  static const G4QContent protQC(1,2,0,0,0,0);
+  static const G4QContent lambQC(1,1,1,0,0,0);
+  static const G4QContent deutQC(3,3,0,0,0,0);
+  static const G4QContent alphQC(6,6,0,0,0,0);
+  G4int      thePDG = qH->GetPDGCode();     // Get PDG code of the Residual Nucleus
+  G4int      theBN  = qH->GetBaryonNumber();// Baryon number of the nucleus
+  G4QContent theQC  = qH->GetQC();          // Quark Content of the hadron
+  if((thePDG || thePDG==10) && theQC.GetBaryonNumber()>0) thePDG=theQC.GetZNSPDGCode();
+  G4LorentzVector q4M = qH->Get4Momentum();// Get 4-momentum of theTotalNucleus
+  if(theBN<1 || thePDG<80000000 || thePDG==90000000) // Hadron, anti-nucleous, or vacuum
+  {
+#ifdef pdebug
+    G4cout<<"G4QNucleus::EvaporateNucleus: Nucleus="<<thePDG<<qH->Get4Momentum()<<G4endl;
+#endif
+    if(thePDG==90000000)
+    {
+      //#ifdef pdebug
+      G4cout<<"-Warning-G4QNucleus::EvaporateNucl:theNucleus is vacuum,4Mom="<<q4M<<G4endl;
+      //#endif
+    }
+    evaHV->push_back(qH);                  // Put input to the output (delete equivalent)
+    return;
+  }
+  G4int    theC=theQC.GetCharge();         // P
+  G4int    theS=theQC.GetStrangeness();    // S
+  G4int    theN=theBN-theC-theS;           // N
+  G4double totGSM = G4QNucleus(thePDG).GetGSMass();// TheGroundStateMass of theTotalNucleus
+  G4double totMass = q4M.m();              // Get the Real(Excited?)Mass of theTotalNucleus
+#ifdef pdebug
+  G4cout<<"G4QNucleus::EvaporateNucleus(EVA):===IN==> PDG="<<thePDG<<",4Mom="<<q4M<<", B="
+        <<theBN<<", Z="<<theC<<", N="<<theN<<", S="<<theS<<G4endl;
+#endif
+  if(thePDG==89999003||thePDG==90002999)   //=> "ISO-dibarion" (analyse and decay)
+  {
+    // @@ Check that it never comes here !!
+    G4int  nucPDG = 2112;
+    G4double nucM = mNeut;
+    G4int   piPDG = -211;
+    if(thePDG==90002999)
+	   {
+      nucPDG = 2212;
+      nucM   = mProt;
+      piPDG  = 211;
+	   }
+    if(totMass>mPi+nucM+nucM)
+	   {
+      G4LorentzVector n14M(0.,0.,0.,nucM);
+      G4LorentzVector n24M(0.,0.,0.,nucM);
+      G4LorentzVector pi4M(0.,0.,0.,mPi);
+      if(!G4QHadron(q4M).DecayIn3(n14M,n24M,pi4M))
+	     {
+        G4cerr<<"***G4QNucleus::EvaporateNucleus: tM="<<totMass<<"-> 2N="<<nucPDG<<"(M="
+              <<nucM<<") + pi="<<piPDG<<"(M="<<mPi<<")"<<G4endl;
+		      throw G4QException("G4QNucleus::EvaporateNucleus: ISO-Dibaryon DecayIn3 error");
+	     }
+      delete qH;
+      G4QHadron* h1H = new G4QHadron(nucPDG,n14M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Bar1="<<nucPDG<<n14M<<G4endl;
+#endif
+      evaHV->push_back(h1H);                // (delete equivalent)
+      G4QHadron* h2H = new G4QHadron(nucPDG,n24M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Bar2="<<nucPDG<<n24M<<G4endl;
+#endif
+      evaHV->push_back(h2H);                // (delete equivalent)
+      G4QHadron* piH = new G4QHadron(piPDG,pi4M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Pi="<<piPDG<<pi4M<<G4endl;
+#endif
+      evaHV->push_back(piH);                // (delete equivalent)
+	   }
+	   else
+	   {
+      delete qH;
+      G4cerr<<"***G4QNucleus::EvapNucleus: IdPDG="<<thePDG<<", q4M="<<q4M<<", M="<<totMass
+            <<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
+      throw G4QException("G4QNucleus::EvaporateNucleus:ISO-DiBaryon is under MassShell");
+	   }
+  }
+  else if((thePDG==90000002||thePDG==90001001||thePDG==90002000)&&totMass>2020.) //=> IsoDB
+  {
+    // @@ Pi0 can be taken into account !
+    G4int  n1PDG = 2212;
+    G4int  n2PDG = 2112;
+    G4int  piPDG = -211;
+    G4double n1M = mProt;
+    G4double n2M = mNeut;
+    if     (thePDG==90002000) piPDG  =  211;      // pp -> np + pi-
+    else if(thePDG==90000002) piPDG  = -211;      // nn -> np + pi-
+    else                                          // np -> 50%(nnpi+) 50%(pppi-)
+    {
+      if(G4UniformRand()>.5)
+						{
+        n1PDG=2112;
+        n1M=mNeut;
+        piPDG  =  211;
+      }
+      else
+						{
+        n2PDG=2212;
+        n2M=mProt;
+        piPDG  = -211;
+      }
+    }
+    if(totMass>mPi+n1M+n2M)
+	   {
+      G4LorentzVector n14M(0.,0.,0.,n1M);
+      G4LorentzVector n24M(0.,0.,0.,n2M);
+      G4LorentzVector pi4M(0.,0.,0.,mPi);
+      if(!G4QHadron(q4M).DecayIn3(n14M,n24M,pi4M))
+	     {
+        G4cerr<<"***G4QNucl::EvapNucleus:IsoDN, tM="<<totMass<<"-> N1="<<n1PDG<<"(M="<<n1M
+              <<") + N2="<<n2PDG<<"(M="<<n2M<<") + pi="<<piPDG<<" (Mpi="<<mPi<<")"<<G4endl;
+		      throw G4QException("G4QNucl::EvaporateNucleus:ISO-dibaryon excit. DecayIn3 error");
+	     }
+      delete qH;
+      G4QHadron* h1H = new G4QHadron(n1PDG,n14M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Bar1="<<n1PDG<<n14M<<G4endl;
+#endif
+      evaHV->push_back(h1H);                // (delete equivalent)
+      G4QHadron* h2H = new G4QHadron(n2PDG,n24M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Bar2="<<n2PDG<<n24M<<G4endl;
+#endif
+      evaHV->push_back(h2H);                // (delete equivalent)
+      G4QHadron* piH = new G4QHadron(piPDG,pi4M);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Pi="<<piPDG<<pi4M<<G4endl;
+#endif
+      evaHV->push_back(piH);                // (delete equivalent)
+	   }
+	   else
+	   {
+      delete qH;
+      G4cerr<<"***G4QNuc::EvaporateNucleus: IdPDG="<<thePDG<<", q4M="<<q4M<<", M="<<totMass
+            <<" < M1+M2+Pi, d="<<totMass-n1M-n2M-mPi<<G4endl;
+      throw G4QException("G4QNucleus::EvaporateNucleus:IsoDiBarState is under MassShell");
+	   }
+  }
+  else if(fabs(totMass-totGSM)<.001)  // Fill as it is or decay Be8, He5, Li5 (@@ add more)
+  {
+#ifdef pdebug
+    G4cout<<"G4QNucleus::EvaNuc:GS "<<qH->GetQC()<<qH->Get4Momentum()<<" FillAsIs"<<G4endl;
+#endif
+    if(thePDG==90004004) DecayAlphaAlpha(qH,evaHV); // "Alpha+Alpha Decay" case (del eq.)
+    else if(thePDG==90004002) DecayAlphaDiN(qH,evaHV);// Decay alpha+2p(alpha+2n is stable)
+    else if((theC==theBN||theN==theBN||theS==theBN)&&theBN>1) DecayMultyBaryon(qH,evaHV); 
+    else if(theBN==5)    DecayAlphaBar(qH,evaHV);   // Decay unstable A5 system (del eq.)
+    else                 evaHV->push_back(qH);       // Fill as it is (del eq.)
+    //return;
+  }
+  else if(theBN>1&&thePDG>88000000&&thePDG<89000000)//==> 2antiK in the nucleus (!Comment!)
+  {
+    G4cout<<"---Warning---G4QNucl::EvaNuc:MustNotBeHere.PDG="<<thePDG<<",S="<<theS<<G4endl;
+    G4int bZ=theQC.GetCharge();
+    G4int bN=theBN-bZ;
+    G4int k1PDG = 321;
+    G4double mK1= mK;
+    G4int k2PDG = 321;
+    G4double mK2= mK;
+    G4int  nucPDG = thePDG;
+    if(bZ>=bN) nucPDG+=999000;
+    else
+    {
+      nucPDG+=999999;
+      k1PDG = 311;
+      mK1= mK0;
+    }
+    if(bZ>bN) nucPDG+=999000;
+    else
+    {
+      nucPDG+=999999;
+      k2PDG = 311;
+      mK2= mK0;
+    }
+    G4double nucM = G4QNucleus(nucPDG).GetGSMass();
+    G4cout<<"-Warning-G4QN::EvN:M="<<nucM<<","<<nucPDG<<",1="<<k1PDG<<",2="<<k2PDG<<G4endl;
+    G4LorentzVector n4M(0.,0.,0.,nucM);
+    G4LorentzVector k14M(0.,0.,0.,mK1);
+    G4LorentzVector k24M(0.,0.,0.,mK2);
+    if(!G4QHadron(q4M).DecayIn3(n4M,k14M,k24M))
+	   {
+      G4cout<<"***G4QNucleus::EvaNuc:tM="<<totMass<<"-> N="<<nucPDG<<"(M="<<nucM<<") + k1="
+            <<k1PDG<<"(M="<<mK1<<") + k2="<<k2PDG<<"(M="<<mK2<<")"<<G4endl;
+	     throw G4QException("G4QNucleus::EvaporateNucleus: Nucleus+2antiK DecayIn3 error");
+	   }
+    delete qH;
+    G4QHadron* k1H = new G4QHadron(k1PDG,k14M);
+#ifdef pdebug
+    G4cout<<"G4QNucleus::EvaporateNucleus: k1="<<k1PDG<<k14M<<G4endl;
+#endif
+    evaHV->push_back(k1H);                // (delete equivalent)
+    G4QHadron* k2H = new G4QHadron(k2PDG,k24M);
+#ifdef pdebug
+    G4cout<<"G4QNucleus::EvaporateNucleus: k2="<<k2PDG<<k24M<<G4endl;
+#endif
+    evaHV->push_back(k2H);                // (delete equivalent)
+    G4QHadron* nH = new G4QHadron(nucPDG,n4M);
+#ifdef pdebug
+    G4cout<<"G4QNucleus::EvaporateNucleus: Nuc="<<nucPDG<<n4M<<G4endl;
+#endif
+    evaHV->push_back(nH);                 // (delete equivalent)
+  }
+  // **>>> From here the EVA code starts (baryons/hyperons can be excited) <<<**
+  else if(thePDG>80000000&&thePDG!=90000000 || thePDG==2112 || thePDG==2212 ||thePDG==3122)
+  { // @@ Improve for Sigma+, Sigma-, Ksi0 & Ksi- content in the Total Np/Nn Nuclei
+    if(thePDG<80000000)                        // Switch from QHadronCode to QNuclearCode
+    {
+      if     (thePDG==2112) thePDG=90000001;   // n
+      else if(thePDG==2212) thePDG=90001000;   // p
+      else if(thePDG==3122) thePDG=91000000;   // lambda
+	   }
+    G4QNucleus qNuc(q4M,thePDG);               // Make a Nucleus for theTotalResidNucleus
+    G4double GSMass =qNuc.GetGSMass();         // GSMass of the Total Residual Nucleus
+    G4QContent totQC=qNuc.GetQCZNS();          // QuarkCont of theTotalResidNucleus (theQC)
+    G4int    bA     =qNuc.GetA();              // A#of baryons in theTotal Residual Nucleus
+    G4int    bZ     =qNuc.GetZ();              // A#of protons in theTotal Residual Nucleus
+    G4int    bN     =qNuc.GetN();              // A#of neutrons in theTotal ResidualNucleus
+    G4int    bS     =qNuc.GetS();              // A#of lambdas in theTotal Residual Nucleus
+#ifdef fdebug
+    if(bZ==2&&bN==5)G4cout<<"G4QNucleus::EvaNucl: (2,5) GSM="<<GSMass<<" > "
+						                    <<G4QPDGCode(2112).GetNuclMass(2,4,0)+mNeut<<G4endl;
+    if(bZ==1&&bN==3)G4cout<<"G4QNucl::EvaNucl: (1,3) GSM="<<GSMass<<" > "
+						                    <<G4QPDGCode(2112).GetNuclMass(1,2,0)+mNeut<<G4endl;
+    G4double dM=totMass-GSMass;
+	   G4cout<<"G4QNucl::EvaNuc:"<<qNuc<<",PDG="<<thePDG<<",M="<<totMass<<",dM="<<dM<<G4endl;
+    ////////if(dM>7.) throw G4QException("G4QNucleus::EvaporateNucleus: Big Excitation");
+#endif
+    G4int   bsCond =qNuc.SplitBaryon();        // (Bary/Deut/Alph)SeparCond for TotResNucl
+    G4bool  dbsCond=qNuc.Split2Baryons();      // (Two Baryons)SeparCond for TotResidNucl
+#ifdef debug
+	   G4cout<<"G4QNucleus::EvaporateNuc: bs="<<bsCond<<", dbs="<<dbsCond<<", A="<<bA<<G4endl;
+#endif
+    if(fabs(totMass-GSMass)<.003&&!bsCond&&!dbsCond) // GS or can't split 1(2)B FillAsItIs
+    {
+#ifdef pdebug
+      G4cout<<"G4QN::EvaNuc: GS direct "<<qH->GetQC()<<qH->Get4Momentum()<<" AsIs"<<G4endl;
+#endif
+      evaHV->push_back(qH);
+      return;
+    }
+    else if((bA==1||!bsCond&&!dbsCond)&&totMass>GSMass+.003)//==>Fuse&DecayTech (no gamDec)
+	   //if(2>3)                                  // Close "Fuse&Decay Technology" ***@@@***
+	   {
+#ifdef debug
+	     G4cout<<"G4QN::EvaN:SplitBar, s="<<bsCond<<",M="<<totMass<<" > GSM="<<GSMass<<G4endl;
+#endif
+      G4int nOfOUT = evaHV->size();       // Total#of QHadrons in Vector at this point
+      while(nOfOUT)                            // Try BackFusionDecays till something is in
+	     {
+        G4QHadron*     theLast = (*evaHV)[nOfOUT-1];
+        G4int          lastBN = theLast->GetBaryonNumber();
+        G4int          nFragm = theLast->GetNFragments();
+        //////////////////G4int          gam    = theLast->GetPDGCode();
+#ifdef debug
+		      G4cout<<"G4QN::EvaNuc:*BackFus,BN="<<lastBN<<",nF="<<nFragm<<",n="<<nOfOUT<<G4endl;
+#endif
+		      while(nFragm)                            // => "Delete Decayed Hadrons" case
+		      {
+          G4QHadron* thePrev = (*evaHV)[nOfOUT-2];
+          nFragm = thePrev->GetNFragments();
+#ifdef debug
+          G4int          prevPDG = thePrev->GetPDGCode();
+		        G4cout<<"G4QNucl::EvaNucl: DelTheLast, nFr="<<nFragm<<", pPDG="<<prevPDG<<G4endl;
+#endif
+          evaHV->pop_back();          // the prev QHadron is excluded from OUTPUT
+          delete theLast;//!!When kill,DON'T forget to del. theLastQHadron as an instance!!
+          theLast = thePrev;               // Update theLastPntr(Prev instead of Last)
+		        nOfOUT--;
+		      }
+        if(nOfOUT)
+		      {
+          if(lastBN<1&&nOfOUT>1)           // => "Skip Meson/Gams & Antibaryons" case
+		        {
+            G4QHadron* thePrev = (*evaHV)[nOfOUT-2];//***Exchange between Last & Prev***
+            evaHV->pop_back();        // the last QHadron is excluded from OUTPUT
+            evaHV->pop_back();        // the prev QHadron is excluded from OUTPUT
+            evaHV->push_back(theLast);// the Last becomes the Prev (1st part of exch.)
+            evaHV->push_back(thePrev);// the Prev becomes the Last (2nd part of exch.)
+            theLast = thePrev;             // Update theLastPointer (Prev instead of Last)
+		        }
+          G4LorentzVector last4M = theLast->Get4Momentum();
+          G4QContent  lastQC = theLast->GetQC();
+          G4double lastM  = last4M.m();    // Mass of the BackFused Fragment
+          totQC+=lastQC;                   // Update (increase) the total QC
+          q4M+=last4M;                     // Update (increase) the total 4-momentum
+          totMass=q4M.m();                 // Calculate new real total mass
+          G4int totPDG=totQC.GetSPDGCode();// The updated PDG for the TotalResidualNucleus
+          if(totPDG==10&&totQC.GetBaryonNumber()>0) totPDG=totQC.GetZNSPDGCode();
+          G4int totBN=totQC.GetBaryonNumber();// BaryonNumber of the Total Residual Nucleus
+          G4double dM=totMass-GSMass -lastM;
+#ifdef debug
+		        G4cout<<"G4QN::EvaNuc: tM="<<totMass<<"-LM="<<lastM<<lastQC<<"-GSM="<<GSMass<<"="
+                <<dM<<G4endl;
+#endif
+          if(dM>-0.001)
+		        {
+            G4QHadron* evH = new G4QHadron(totPDG,q4M);// Create QHadron for TotalResidNucl
+            if(dM<=0.)
+            {
+              evaHV->pop_back();    // lastQHadron is excluded from QHadrV asIs in TRN
+              delete theLast; //When kill, DON'T forget to delete lastQHadron asAnInstance!
+#ifdef pdebug
+              G4cout<<"G4QNucleus::EvaporateNucl: EVH "<<totPDG<<q4M<<" fill AsIs"<<G4endl;
+#endif
+              if(totBN==2)DecayDibaryon(evH,evaHV); // Fill dibaryon (with decay products)
+              else evaHV->push_back(evH);// Fill TRN to HVect asIs (delete equivalent)
+		          }
+            else                        // Decay TotalResidualNucleus in GSM+Last and Break
+		          {
+              G4LorentzVector r4Mom(0.,0.,0.,GSMass);
+              if(!G4QHadron(q4M).DecayIn2(last4M,r4Mom))
+              {
+                evaHV->pop_back(); // lastQHadron is excluded from QHadrV as is in TRN
+                delete theLast; //When kill,DON'T forget to delete lastQHadron asAnInstance
+#ifdef pdebug
+                G4cout<<"***G4QNucleus::EvaNucl: EVH "<<totPDG<<q4M<<" fill AsIs"<<G4endl;
+#endif
+                evaHV->push_back(evH);// Fill TRN to Vect as it is (delete equivalent)
+#ifdef debug
+                G4cout<<"***G4QN::EvaN:DecayIn L"<<lastQC<<"+RN"<<totQC<<" failed"<<G4endl;
+#endif
+	             }
+              else
+              {
+                delete evH;                // Delete theHadron of the TotalResidualNucleus
+                theLast->Set4Momentum(last4M);// Already exists:don't create&fill,->set4Mom
+                G4QHadron* nuclH = new G4QHadron(thePDG,r4Mom);
+#ifdef pdebug
+                G4cout<<"G4QNucleus::EvaNuc:fill NH "<<totPDG<<r4Mom<<" inAnyForm"<<G4endl;
+#endif
+                // @@ What about others, not DB possibilities?
+                if(thePDG==92000000||thePDG==90002000||thePDG==90000002)
+                                                DecayDibaryon(nuclH,evaHV);//DekayDibarions
+                else evaHV->push_back(nuclH);// Fill the Residual Nucleus (del.eq.)
+              }
+              break;
+		          }
+		        }
+          thePDG=totPDG;                   // Make ResidualNucleus outOf theTotResidualNucl
+		        GSMass=G4QPDGCode(thePDG).GetMass();// Update the Total Residual Nucleus mass
+          evaHV->pop_back();               // the last QHadron is excluded from OUTPUT
+          delete theLast;//!!When kill,DON'T forget to delete theLastQHadron asAnInstance!!
+          nOfOUT--;                        // Update the value of OUTPUT entries
+		      }
+	     }
+      G4LorentzVector h4Mom(0.,0.,0.,GSMass);//GSMass must be updated inPreviousWhileLOOP
+      G4LorentzVector g4Mom(0.,0.,0.,0.);
+      if(!G4QHadron(q4M).DecayIn2(h4Mom, g4Mom))
+      {
+        G4cerr<<"***G4QN::EvaNuc: h="<<thePDG<<"(GSM="<<GSMass<<")+g>tM="<<totMass<<G4endl;
+        throw G4QException("G4QNucleus::EvaporateNucleus: Decay in Gamma failed");
+      }
+#ifdef debug
+	     G4cout<<"G4QNuc::EvaNuc: "<<q4M<<"->totResN="<<thePDG<<h4Mom<<"+gam="<<g4Mom<<G4endl;
+#endif
+      G4QHadron* curH = new G4QHadron(thePDG,h4Mom);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Fill a Fragment="<<thePDG<<h4Mom<<G4endl;
+#endif
+      if(thePDG==92000000||thePDG==90002000||thePDG==90000002) DecayDibaryon(curH,evaHV);
+      else evaHV->push_back(curH);  // Fill the TotalResidualNucleus (del.equiv.)
+      G4QHadron* curG = new G4QHadron(22,g4Mom);
+#ifdef pdebug
+      G4cout<<"G4QNucleus::EvaporateNucleus: Fill  a Gamma="<<g4Mom<<G4endl;
+#endif
+      evaHV->push_back(curG);       // Fill the gamma (delete equivalent)
+      delete qH;
+	   }
+    else if(bA==2) DecayDibaryon(qH,evaHV); // Decay the residual dibaryon (del.equivalent)
+    else if(bA>0&&bS<0) DecayAntiStrange(qH,evaHV);// Decay nucleus with antistrangeness
+    else if(totMass<GSMass+.003&&(bsCond||dbsCond))//==>" M<GSM but decay is possible" case
+    {
+#ifdef debug
+	     G4cout<<"G4QN::EvN:2B="<<dbsCond<<",B="<<bsCond<<",M="<<totMass<<"<"<<GSMass<<G4endl;
+#endif
+      G4double gResM  =1000000.;           // Prototype of mass of residual for a gamma
+      G4int    gResPDG=0;                  // Prototype of residualPDGCode for a gamma
+      if(bN==4&&bZ==2&&!bS)                // It's He6 nucleus
+	     {
+        gResPDG= thePDG;                   // PDG of the Residual Nucleus
+        gResM  = mHel6;                    // min mass of the Residual Nucleus
+	     }
+      G4double nResM  =1000000.;           // Prototype of mass of residual for a neutron
+      G4int    nResPDG=0;                  // Prototype of ResidualPDGCode for a neutron
+      if(bsCond==2112&&bN>0&&bA>1)         // There's aNeutr in theNucl, which can be split
+	     {
+        G4QContent resQC=totQC-neutQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        nResPDG=resN.GetPDG();             // PDG of the Residual Nucleus
+        if     (nResPDG==90000001) nResM=mNeut;
+        else if(nResPDG==90001000) nResM=mProt;
+        else if(nResPDG==91000000) nResM=mLamb;
+        else nResM=resN.GetMZNS();         // min mass of the Residual Nucleus
+	     }
+      G4double pResM  =1000000.;           // Prototype of mass of residual for a proton
+      G4int    pResPDG=0;                  // Prototype of PDGCode of residual for a proton
+      if(bsCond==2212&&bZ>0&&bA>1)         // There's aProton in Nucl, which can be split
+	     {
+        G4QContent resQC=totQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        pResPDG=resN.GetPDG();             // PDG of the Residual Nucleus
+        if     (pResPDG==90000001) pResM=mNeut;
+        else if(pResPDG==90001000) pResM=mProt;
+        else if(pResPDG==91000000) pResM=mLamb;
+        else pResM  =resN.GetMZNS();       // min mass of the Residual Nucleus
+	     }
+      G4double lResM  =1000000.;           // Prototype of mass of residual for a Lambda
+      G4int    lResPDG=0;                  // Prototype of PDGCode of residual for a Lambda
+      if(bsCond==3122&&bS>0&&bA>1)         // There's aLambd in theNucl, which can be split
+	     {
+        G4QContent resQC=totQC-lambQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        lResPDG=resN.GetPDG();             // PDG of the Residual Nucleus
+        if     (lResPDG==90000001) lResM=mNeut;
+        else if(lResPDG==90001000) lResM=mProt;
+        else if(lResPDG==91000000) lResM=mLamb;
+        else lResM  =resN.GetMZNS();       // min mass of the Residual Nucleus
+	     }
+      G4double dResM  =1000000.;           // Prototype of mass of residual for a Alpha
+      G4int    dResPDG=0;                  // Prototype of PDGCode of residual for a Alpha
+      if(bsCond==90001001&&bN>0&&bZ>0&&bA>2)// There's aDeuter in Nucl, which canBeRadiated
+	     {
+        G4QContent resQC=totQC-deutQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        dResPDG=resN.GetPDG();             // PDG of the Residual Nucleus
+        if     (dResPDG==90000001) dResM=mNeut;
+        else if(dResPDG==90001000) dResM=mProt;
+        else if(dResPDG==91000000) dResM=mLamb;
+        else dResM  =resN.GetMZNS();       // minMass of the Residual Nucleus
+	     }
+      G4double aResM  =1000000.;           // Prototype of mass of residual for a Alpha
+      G4int    aResPDG=0;                  // Prototype of PDGCode of residual for a Alpha
+      if(bsCond==90002002&&bN>1&&bZ>1&&bA>4)// There's Alpha in theNucl, which can be split
+	     {
+        G4QContent resQC=totQC-alphQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        aResPDG=resN.GetPDG();             // PDG of the Residual Nucleus
+        if     (aResPDG==90000001) aResM=mNeut;
+        else if(aResPDG==90001000) aResM=mProt;
+        else if(aResPDG==91000000) aResM=mLamb;
+        else aResM  =resN.GetMZNS();       // minMass of the Residual Nucleus
+	     }
+      G4double nnResM  =1000000.;          // Prototype of mass of residual for a dineutron
+      G4int    nnResPDG=0;                 // Prototype of ResidualPDGCode for a dineutron
+      if(dbsCond&&bN>1&&bA>2)              // It's nucleus and there is a dineutron
+	     {
+        G4QContent resQC=totQC-neutQC-neutQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        nnResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (nnResPDG==90000001) nnResM=mNeut;
+        else if(nnResPDG==90001000) nnResM=mProt;
+        else if(nnResPDG==91000000) nnResM=mLamb;
+        else nnResM  =resN.GetMZNS();      // min mass of the Residual Nucleus
+	     }
+      G4double ppResM  =1000000.;          // Prototype of mass of residual for a diproton
+      G4int    ppResPDG=0;                 // Prototype of ResidualPDGCode for a diproton
+      if(dbsCond&&bZ>1&&bA>2)              // It's nucleus and there is a diproton
+	     {
+        G4QContent resQC=totQC-protQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        ppResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (ppResPDG==90000001) ppResM=mNeut;
+        else if(ppResPDG==90001000) ppResM=mProt;
+        else if(ppResPDG==91000000) ppResM=mLamb;
+        else ppResM  =resN.GetMZNS();      // min mass of the Residual Nucleus
+	     }
+      G4double npResM  =1000000.;          // Prototype of ResidualMass for proton+neutron
+      G4int    npResPDG=0;                 // Prototype of ResidualPDGCode for a prot+neut
+      if(dbsCond&&bN>0&&bZ>0&&bA>2)        // It's nucleus and there is aProton & aNeutron
+	     {
+        G4QContent resQC=totQC-neutQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        npResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (npResPDG==90000001) npResM=mNeut;
+        else if(npResPDG==90001000) npResM=mProt;
+        else if(npResPDG==91000000) npResM=mLamb;
+        else npResM  =resN.GetMZNS();      // min mass of the Residual Nucleus
+	     }
+      G4double lnResM  =1000000.;          // Prototype of residualMass for lambda+neutron
+      G4int    lnResPDG=0;                 // Prototype of ResidualPDGCode for aLambda+Neut
+      if(dbsCond&&bN>0&&bS>0&&bA>2)        // It's nucleus and there is aLambda & aNeutron
+	     {
+        G4QContent resQC=totQC-lambQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        lnResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (lnResPDG==90000001) lnResM=mNeut;
+        else if(lnResPDG==90001000) lnResM=mProt;
+        else if(lnResPDG==91000000) lnResM=mLamb;
+        else lnResM  =resN.GetMZNS();      // min mass of the Residual Nucleus
+	     }
+      G4double lpResM  =1000000.;          // Prototype of residualMass for a proton+lambda
+      G4int    lpResPDG=0;                 // Prototype of ResidualPDGCode for theProt+lamb
+      if(dbsCond&&bS>0&&bZ>0&&bA>2)        // It's nucleus and there is aProton and aLambda
+	     {
+        G4QContent resQC=totQC-neutQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        lpResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (lpResPDG==90000001) lpResM=mNeut;
+        else if(lpResPDG==90001000) lpResM=mProt;
+        else if(lpResPDG==91000000) lpResM=mLamb;
+        else lpResM  =resN.GetMZNS();      // minMass of the Residual Nucleus
+	     }
+      G4double llResM  =1000000.;          // Prototype of mass of residual for a di-lambda
+      G4int    llResPDG=0;                 // Prototype of ResidPDGCode for the di-lambda
+      if(dbsCond&&bS>1&&bA>2)              // It's nucleus and there is a di-lambda
+	     {
+        G4QContent resQC=totQC-neutQC-protQC;
+        G4QNucleus resN(resQC);            // Pseudo nucleus for the Residual Nucleus
+        llResPDG=resN.GetPDG();            // PDG of the Residual Nucleus
+        if     (llResPDG==90000001) llResM=mNeut;
+        else if(llResPDG==90001000) llResM=mProt;
+        else if(llResPDG==91000000) llResM=mLamb;
+        else llResM  =resN.GetMZNS();      // min mass of the Residual Nucleus
+	     }
+#ifdef debug
+      G4cout<<"G4QNucleus::EvaNucl: rP="<<pResPDG<<",rN="<<nResPDG<<",rL="<<lResPDG<<",N="
+            <<bN<<",Z="<<bZ<<",nL="<<bS<<",totM="<<totMass<<",n="<<totMass-nResM-mNeut
+            <<",p="<<totMass-pResM-mProt<<",l="<<totMass-lResM-mLamb<<G4endl;
+#endif
+      if(   thePDG==90004004 || thePDG==90002004 && totMass>mHel6+.003
+         || bA>4 && bsCond && bN>1 && bZ>1 && totMass>aResM+mAlph
+         || bA>1 && bsCond && (   bN>0&&totMass>nResM+mNeut
+                               || bZ>0&&totMass>pResM+mProt
+							  || bS>0&&totMass>lResM+mLamb)
+         ||bA>2&&(bN>0&&bZ>0&&(bsCond&&totMass>dResM+mDeut||dbsCond && totMass>dResM+mDeut)
+				               ||dbsCond && (   bN>1&&totMass>nnResM+mNeut+mNeut
+                                             || bZ>1&&totMass>ppResM+mProt+mProt
+                                             || bS>1&&totMass>llResM+mLamb+mLamb
+                                             || bN&&bS&&totMass>lnResM+mLamb+mNeut
+                                             || bZ&&bS&&totMass>lpResM+mLamb+mProt)))
+	     {
+        G4int barPDG = 90002002;           // Just for the default case of Be8->alpha+alpha
+        G4int resPDG = 90002002;
+        G4int thdPDG = 0;
+        G4double barM= mAlph;
+        G4double resM= mAlph;
+        G4double thdM= mNeut;              // This default value is used in the IF
+        G4double tMC=totMass+.0002;
+		      if(gResPDG&&tMC>mHel6+.003)        // Can make radiative decay of He6 (priority 0)
+		      {
+          barPDG=90002004;
+          resPDG=22;
+          barM  =mHel6;
+          resM  =0.;
+		      }
+		      else if(nResPDG&&tMC>nResM+mNeut)  // Can radiate a neutron (priority 1)
+		      {
+          barPDG=90000001;
+          resPDG=nResPDG;
+          barM  =mNeut;
+          resM  =nResM;
+		      }
+		      else if(pResPDG&&totMass+.001>pResM+mProt)   // Can radiate a proton (priority 2)
+		      {
+          barPDG=90001000;
+          resPDG=pResPDG;
+          barM  =mProt;
+          resM  =pResM;
+		      }
+		      else if(lResPDG&&tMC>lResM+mLamb)  // Can radiate a Lambda (priority 3) @@ Sigma0
+		      {
+          barPDG=91000000;
+          resPDG=lResPDG;
+          barM  =mLamb;
+          resM  =lResM;
+		      }
+        else if(thePDG!=90004004&&bN>1&&bZ>1&&bA>4&&tMC>aResM+mAlph)// Decay in alpha (p4)
+		      {
+          barPDG=90002002;
+          resPDG=aResPDG;
+          barM  =mAlph;
+          resM  =aResM;
+		      }
+		      else if(dResPDG&&tMC>dResM+mDeut)  // Can radiate a Deuteron (priority 5)
+		      {
+          barPDG=90001001;
+          resPDG=dResPDG;
+          barM  =mDeut;
+          resM  =dResM;
+		      }
+		      else if(ppResPDG&&tMC>ppResM+mProt+mProt)// Can radiate a DiProton (priority 6)
+		      {
+          barPDG=90001000;
+          resPDG=ppResPDG;
+          thdPDG=90001000;
+          barM  =mProt;
+          resM  =ppResM;
+          thdM  =mProt;
+		      }
+		      else if(nnResPDG&&tMC>nnResM+mNeut+mNeut)// Can radiate a DiNeutron (priority 7)
+		      {
+          barPDG=90000001;
+          resPDG=nnResPDG;
+          thdPDG=90000001;
+          barM  =mNeut;
+          resM  =nnResM;
+		      }
+		      else if(npResPDG&&tMC>npResM+mProt+mNeut)// Can radiate a neutron+proton (prior 8)
+		      {
+          barPDG=90001000;
+          resPDG=npResPDG;
+          thdPDG=90000001;
+          barM  =mProt;
+          resM  =npResM;
+		      }
+		      else if(lnResPDG&&tMC>lnResM+mLamb+mNeut)// Can radiate a Lambda+neutron (prior 9)
+		      {
+          barPDG=91000000; // @@ Sigma0
+          resPDG=lnResPDG;
+          thdPDG=90000001;
+          barM  =mLamb;
+          resM  =lnResM;
+		      }
+		      else if(lpResPDG&&tMC>lpResM+mLamb+mProt)// Can radiate a Lambda+proton (prior 10)
+		      {
+          barPDG=91000000; // @@ Sigma0
+          resPDG=lpResPDG;
+          thdPDG=90001000;
+          barM  =mLamb;
+          resM  =lpResM;
+          thdM  =mProt;
+		      }
+		      else if(llResPDG&&tMC>llResM+mLamb+mLamb)// Can radiate a DiLambda (priority 11)
+		      {
+          barPDG=91000000; // @@ Sigma0
+          resPDG=llResPDG;
+          thdPDG=91000000; // @@ Sigma0
+          barM  =mLamb;
+          resM  =llResM;
+          thdM  =mLamb;
+		      }
+        else if(thePDG!=90004004&&tMC>GSMass)// If it's not Be8 decay in gamma & GSM
+		      {
+          barPDG=thePDG;
+          resPDG=22;
+          barM  =GSMass;
+          resM  =0.;
+		      }
+        else if(thePDG!=90004004)
+		      {
+          G4cerr<<"***G4QNuc::EvaN:PDG="<<thePDG<<",M="<<totMass<<"< GSM="<<GSMass<<G4endl;
+          throw G4QException("G4QNucleus::EvaporateNucleus: M<GSM & can't decayInPNL");
+		      }
+        G4LorentzVector a4Mom(0.,0.,0.,barM);
+        G4LorentzVector b4Mom(0.,0.,0.,resM);
+        if(!thdPDG)
+        {
+          if(!qH->DecayIn2(a4Mom,b4Mom))
+          {
+            evaHV->push_back(qH);          // Fill as it is (delete equivalent)
+            G4cout<<"---Warning---G4QNucleus::EvaNuc:rP="<<pResPDG<<",rN="<<nResPDG<<",rL="
+                  <<lResPDG<<",N="<<bN<<",Z="<<bZ<<",L="<<bS<<",totM="<<totMass<<",n="
+                  <<totMass-nResM-mNeut<<",p="<<totMass-pResM-mProt<<",l="
+                  <<totMass-lResM-mLamb<<G4endl;
+            G4cout<<"---Warning---G4QN::EvN:DecIn2Error b="<<barPDG<<",r="<<resPDG<<G4endl;
+            return;
+	         }
+          else
+          {
+            delete qH;
+            G4QHadron* HadrB = new G4QHadron(barPDG,a4Mom);
+#ifdef pdebug
+            G4cout<<"G4QNucleus::EvaNucleus:(1) Baryon="<<barPDG<<a4Mom<<G4endl;
+#endif
+            evaHV->push_back(HadrB);       // Fill the baryon (delete equivalent)
+            G4QHadron* HadrR = new G4QHadron(resPDG,b4Mom);
+#ifdef pdebug
+            G4cout<<"G4QNucleus::EvaNucleus:(1) Residual="<<resPDG<<b4Mom<<G4endl;
+#endif
+            // @@ Self-call !!
+            if(HadrR->GetBaryonNumber()>1) EvaporateNucleus(HadrR,evaHV);//ContinueDecay
+            else evaHV->push_back(HadrR);  // Fill ResidNucl=Baryon to OutHadronVector
+          }
+        }
+        else
+        {
+          G4LorentzVector c4Mom(0.,0.,0.,thdM);
+          if(!qH->DecayIn3(a4Mom,b4Mom,c4Mom))
+          {
+            evaHV->push_back(qH);          // Fill as it is (delete equivalent)
+            G4cout<<"---Warning---G4QN::EvN:rNN="<<nnResPDG<<",rNP="<<npResPDG<<",rPP="
+                  <<ppResPDG<<",N="<<bN<<",Z="<<bZ<<",L="<<bS<<",tM="<<totMass<<",nn="
+                  <<totMass-nnResM-mNeut-mNeut<<",np="<<totMass-npResM-mProt-mNeut<<",pp="
+                  <<totMass-ppResM-mProt-mProt<<G4endl;
+            G4cout<<"---Warning---G4QN::EvN:DecIn2Error,b="<<barPDG<<",r="<<resPDG<<G4endl;
+            return;
+	         }
+          else
+          {
+            delete qH;
+            G4QHadron* HadrB = new G4QHadron(barPDG,a4Mom);
+#ifdef pdebug
+            G4cout<<"G4QNucleus::EvaporateNucleus:(2) Baryon1="<<barPDG<<a4Mom<<G4endl;
+#endif
+            evaHV->push_back(HadrB);       // Fill the first baryon (del.equiv.)
+            G4QHadron* HadrC = new G4QHadron(thdPDG,c4Mom);
+#ifdef pdebug
+            G4cout<<"G4QNucleus::EvaporateNucleus:(2) Baryon2="<<thdPDG<<c4Mom<<G4endl;
+#endif
+            evaHV->push_back(HadrC);       // Fill the second baryon (del.equiv.)
+            G4QHadron* HadrR = new G4QHadron(resPDG,b4Mom);
+#ifdef pdebug
+            G4cout<<"G4QNucleus::EvaporateNucleus:(2) Residual="<<resPDG<<b4Mom<<G4endl;
+#endif
+            // @@ Self-call !!
+            if(HadrR->GetBaryonNumber()>1) EvaporateNucleus(HadrR,evaHV); // Continue decay
+            else evaHV->push_back(HadrR); // Fill ResidNucl=Baryon to OutputHadrVector
+          }
+        }
+	     }
+      else if (fabs(totMass-GSMass)<.003) // @@ Looks like a duplication of the prev. check
+      {
+#ifdef pdebug
+        G4cout<<"*|*|*|*G4QNucleus::EvaporateNuc: fill AsIs. Should never be here"<<G4endl;
+#endif
+        evaHV->push_back(qH);     // FillAsItIs (del.eq.)
+        return;
+      }
+      else                             // "System is below mass shell and can't decay" case
+	     {
+#ifdef pdebug
+        G4cout<<"***G4QNucl::EvaNuc: tM="<<totMass<<"("<<thePDG<<") < GSM="<<GSMass<<", d="
+              <<totMass-GSMass<<", QC="<<qH->GetQC()<<qH->Get4Momentum()<<"*AsIs*"<<G4endl;
+#endif
+        evaHV->push_back(qH); // Correct or fill as it is
+        return;
+      }
+    }
+    else                                        // ===> Evaporation of excited system
+	   {
+#ifdef pdebug
+      G4cout<<"G4QN::EvaNuc:***EVA***tPDG="<<thePDG<<",M="<<totMass<<">GSM="<<GSMass<<",d="
+            <<totMass-GSMass<<", N="<<qNuc.Get4Momentum()<<qNuc.Get4Momentum().m()<<G4endl;
+#endif
+      G4LorentzVector b4M;
+      G4LorentzVector r4M;
+      G4bool evC=true;                  // @@ It makes only one attempt to be possible
+      G4int bPDG=0;
+      G4int rPDG=0;
+      G4double bM = 0.;                 // Prototype of Real Mass of the EvaporatedDibaryon
+      G4double rM = 0.;                 // Prototype of Real Mass of the residual nucleus
+      G4int bB=0;                       // Proto of Baryon Number of the evaporated baryon
+      G4int rB=0;                       // Proto of Baryon Number of the residual nucleus
+      G4QHadron* bHadron = new G4QHadron;// Proto of the evaporated baryon @@where deleted?
+      G4QHadron* rHadron = new G4QHadron;// Proto of the residual nucleus @@where deleted?
+      G4int evcn=0;
+      //G4int evcm=27;
+      G4int evcm=9;                     // Max numder of attempts to evaporate
+      // @@ Does not look like it can make two attempts @@ Improve, Simplify @@
+      while(evC&&evcn<evcm)
+      {
+        evC=true;
+        evcn++;
+        if(!qNuc.EvaporateBaryon(bHadron,rHadron)) // Evaporation did not succeed
+	       {
+#ifdef pdebug
+          G4cout<<"***G4QNuc::EvaNuc:***EVA Failed***PDG="<<thePDG<<",M="<<totMass<<G4endl;
+#endif
+          delete bHadron;
+          delete rHadron;
+#ifdef pdebug
+          G4cout<<"***G4QNucl::EvaNuc: Residual="<<qH->GetQC()<<qH->Get4Momentum()<<G4endl;
+#endif
+		        evaHV->push_back(qH);          // fill AsItIs
+          return;
+	       }
+        evC=false;
+        b4M=bHadron->Get4Momentum();
+        r4M=rHadron->Get4Momentum();
+        bM   = b4M.m();                       // Real mass of the evaporated dibaryon
+        rM   = r4M.m();                       // Real mass of the residual nucleus
+        bB=bHadron->GetBaryonNumber();        // Baryon number of the evaporated baryon
+        rB=rHadron->GetBaryonNumber();        // Baryon number of the residual nucleus
+        bPDG=bHadron->GetPDGCode();
+        rPDG=rHadron->GetPDGCode();
+#ifdef debug
+        G4int bC=bHadron->GetCharge();        // Baryon number of the evaporated baryon
+        //G4int rC=rHadron->GetCharge();       // Baryon number of the residual nucleus
+        G4double bCB=qNuc.CoulombBarrier(bC,bB);
+        //G4double rCB=qNuc.CoulombBarrier(rC,rB);
+        G4cout<<"G4QNucl::EvaNuc:Attempt #"<<evcn<<" > "<<evcm<<", rPDG="<<rPDG<<", bPDG="
+              <<bPDG<<", bE="<<b4M.e()-b4M.m()<<" > bCB="<<bCB<<G4endl;
+#endif
+        //if(b4M.e()-b4M.m()<bCB&&evcn<evcm) evC=true;
+	     }  // End of while
+#ifdef debug
+      G4cout<<"G4QNucl::EvaNuc:*** EVA IS DONE *** F="<<bPDG<<b4M<<",bB="<<bB<<", ResNuc="
+            <<rPDG<<r4M<<",rB="<<rB<<G4endl;
+#endif
+      delete qH;
+      if(bB<2) evaHV->push_back(bHadron);         // Fill EvaporatedBaryon (del.equivalent)
+      else if(bB==2) DecayDibaryon(bHadron,evaHV);// => "Dibaryon" case needs decay
+      else if(bB==4) evaHV->push_back(bHadron);   // "Alpha radiation" case (del.eq.)
+      else if(bB==5) DecayAlphaBar(bHadron,evaHV);// "Alpha+Baryon Decay" case (del.equiv.)
+      else if(bPDG==90004002) DecayAlphaDiN(bHadron,evaHV); // alph+2p(alph+2n is stable)
+      else if(bPDG==90004004) DecayAlphaAlpha(bHadron,evaHV);// Alph+Alph Decay (del.eq.)
+      else
+	     {
+        delete bHadron;
+        G4cerr<<"***G4QNuc::EvaNuc:bB="<<bB<<">2 - unexpected evaporated fragment"<<G4endl;
+        throw G4QException("G4QNucleus::EvaporateNucleus: Wrong evaporation act");
+	     }
+      if(rB>2) EvaporateNucleus(rHadron,evaHV);    // Continue evaporation (@@ Self-call)
+      else if(rB==2)                   // => "Dibaryon" case needs decay @@ DecayDibaryon
+	     {
+        G4double rGSM = rHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
+#ifdef debug
+		      G4cout<<"G4QNuc::EvaNuc:ResidDibM="<<rM<<",GSM="<<rGSM<<",M-GSM="<<rM-rGSM<<G4endl;
+#endif
+        if(rM<=rGSM-0.01)
+		      {
+          delete rHadron;
+          G4cerr<<"***G4QNucleus::EvaporNucl: <residual> M="<<rM<<" < GSM="<<rGSM<<G4endl;
+          throw G4QException("G4QNucleus::EvaporateNucleus: Evaporation below MassShell");
+		      }
+        else if(fabs(rM-rGSM)<0.01&&rPDG==90001001) evaHV->push_back(rHadron); // (DE)
+        else DecayDibaryon(rHadron,evaHV);   // => "Dibaryon Decay" case (del.equivalent)
+	     }
+      else if(rB==5) DecayAlphaBar(rHadron,evaHV);// "Alpha+Baryon Decay" case (del.equiv.)
+      else if(rPDG==90004002) DecayAlphaDiN(rHadron,evaHV);//alph+2p (alph+2n is stable)
+      else if(rPDG==90004004) DecayAlphaAlpha(rHadron,evaHV);//Alpha+Alpha Decay (delEq)
+      else evaHV->push_back(rHadron);         // Fill ResidNucl=Baryon to OutputHadronVector
+	   } // End of Evaporation of excited system
+#ifdef debug
+    G4cout<<"G4QNucleus::EvaporateNucleus: === End of the evaporation attempt"<<G4endl;
+#endif
+  }
+  else                                          // => "Decay if impossible evaporate" case
+  {
+#ifdef debug
+    G4cout<<"*G4QNucleus::EvaporateNucleus: InputHadron4M="<<q4M<<", PDG="<<thePDG<<G4endl;
+#endif
+    if(thePDG)
+    {
+      if(thePDG==10)                            // "Chipolino decay" case 
+	     {
+        G4QContent totQC = qH->GetQC();         // Quark content of the hadron
+        G4QChipolino resChip(totQC);            // define the Residual as a Chipolino
+        G4QPDGCode h1=resChip.GetQPDG1();
+        G4double m1  =h1.GetMass();             // Mass of the first hadron
+        G4QPDGCode h2=resChip.GetQPDG2();
+        G4double m2  =h2.GetMass();             // Mass of the second hadron
+        if(totMass+.0001>m1+m2)
+        {
+          delete qH;                            // Chipolino should not be in a sequence
+          G4LorentzVector fq4M(0.,0.,0.,m1);
+          G4LorentzVector qe4M(0.,0.,0.,m2);
+          if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
+		        {
+            G4cerr<<"***G4QNuc::EvaNuc:tM="<<totMass<<"-> h1M="<<m1<<" + h2M="<<m2<<G4endl;
+		          throw G4QException("G4QNucleus::EvaporateNucleus: Chipol->h1+h2 DecIn2 error");
+	         }
+          G4QHadron* H2 = new G4QHadron(h2.GetPDGCode(),qe4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(2) h2="<<h2.GetPDGCode()<<qe4M<<G4endl;
+#endif
+          evaHV->push_back(H2);            // (delete equivalent)
+          G4QHadron* H1 = new G4QHadron(h1.GetPDGCode(),fq4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(2) h1="<<h1.GetPDGCode()<<fq4M<<G4endl;
+#endif
+          evaHV->push_back(H1);            // (delete equivalent)
+		      }
+        else
+	       {
+          delete qH;
+          G4cerr<<"**G4QN::EN:M="<<totMass<<"<"<<m1<<"+"<<m2<<",d="<<m1+m2-totMass<<G4endl;
+          throw G4QException("G4QNucleus::EvaporateNucleus: Chipolino is under MassShell");
+	       }
+	     }
+      else                                      // "Hadron" case
+	     {
+        G4double totM=G4QPDGCode(thePDG).GetMass();
+        if(fabs(totMass-totM)<0.001||abs(thePDG)-10*(abs(thePDG)/10)>2)
+								{
+#ifdef pdebug
+          G4cout<<"**G4QNuc::EvaNuc:EmerFill(2) "<<qH->GetQC()<<qH->Get4Momentum()<<G4endl;
+#endif
+          evaHV->push_back(qH);
+        }
+        else if ((thePDG==221||thePDG==331)&&totMass>mPi+mPi) // "Decay in pipi" case
+	       {
+          G4LorentzVector fq4M(0.,0.,0.,mPi);
+          G4LorentzVector qe4M(0.,0.,0.,mPi);
+          if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
+		        {
+            G4cerr<<"***G4QNucleus::EvaporateNucleus:tM="<<totMass<<"-> pi+ + pi-"<<G4endl;
+		          throw G4QException("G4QNucleus::EvaporateNucleus: H->Pi+Pi DecayIn2 error");
+	         }
+          delete qH;
+          G4QHadron* H1 = new G4QHadron(211,fq4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(3) PiPlus="<<fq4M<<G4endl;
+#endif
+          evaHV->push_back(H1);            // (delete equivalent)
+          G4QHadron* H2 = new G4QHadron(-211,qe4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(3) PiMinus="<<qe4M<<G4endl;
+#endif
+          evaHV->push_back(H2);            // (delete equivalent)
+	       }
+        else if ((thePDG==221||thePDG==331)&&totMass>mPi0+mPi0) // "Decay in 2pi0" case
+	       {
+          G4LorentzVector fq4M(0.,0.,0.,mPi0);
+          G4LorentzVector qe4M(0.,0.,0.,mPi0);
+          if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
+		        {
+            G4cerr<<"***G4QNucleus::EvaporateNucleus:tM="<<totMass<<"-> pi0 + pi0"<<G4endl;
+		          throw G4QException("G4QNucleus::EvaporateNucleus: H->Pi+Pi DecayIn2 error");
+	         }
+          delete qH;
+          G4QHadron* H1 = new G4QHadron(111,fq4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(4) Pi01="<<fq4M<<G4endl;
+#endif
+          evaHV->push_back(H1);            // (delete equivalent)
+          G4QHadron* H2 = new G4QHadron(111,qe4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(4) Pi02="<<qe4M<<G4endl;
+#endif
+          evaHV->push_back(H2);            // (delete equivalent)
+	       }
+        else if (totMass>totM)                  // "Radiative Hadron decay" case
+	       {
+          G4LorentzVector fq4M(0.,0.,0.,0.);
+          G4LorentzVector qe4M(0.,0.,0.,totM);
+          if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
+		        {
+            G4cerr<<"***G4QNuc::EvaporateNuc:tM="<<totMass<<"->h1M="<<totM<<"+gam"<<G4endl;
+		          throw G4QException("G4QNucleus::EvaporateNucleus: H*->H+gamma DecIn2 error");
+	         }
+          delete qH;
+          G4QHadron* H2 = new G4QHadron(thePDG,qe4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(5) tot="<<thePDG<<qe4M<<G4endl;
+#endif
+          evaHV->push_back(H2);            // (delete equivalent)
+          G4QHadron* H1 = new G4QHadron(22,fq4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(5) GamFortot="<<fq4M<<G4endl;
+#endif
+          evaHV->push_back(H1);            // (delete equivalent)
+	       }
+        else if (thePDG==111||thePDG==221||thePDG==331) // "Gamma+Gamma decay" case
+	       {
+          G4LorentzVector fq4M(0.,0.,0.,0.);
+          G4LorentzVector qe4M(0.,0.,0.,0.);
+          if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
+		        {
+            G4cerr<<"***G4QNucl::EvaporateNucleus:tM="<<totMass<<"->gamma + gamma"<<G4endl;
+		          throw G4QException("G4QNucleus::EvaporateNucleus: pi/eta->g+g DecIn2 error");
+	         }
+          delete qH;
+          G4QHadron* H2 = new G4QHadron(22,qe4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(6) gam1="<<qe4M<<G4endl;
+#endif
+          evaHV->push_back(H2);            // (delete equivalent)
+          G4QHadron* H1 = new G4QHadron(22,fq4M);
+#ifdef pdebug
+          G4cout<<"G4QNucleus::EvaporateNucleus:(6) gam2="<<fq4M<<G4endl;
+#endif
+          evaHV->push_back(H1);            // (delete equivalent)
+	       }
+        else
+	       {
+          G4cerr<<"***G4QNucl::EvaNuc: Nuc="<<thePDG<<theQC<<", q4M="<<q4M<<", M="<<totMass
+                <<" < GSM="<<totM<<", 2Pi="<<mPi+mPi<<", 2Pi0="<<mPi0+mPi0<<G4endl;
+          throw G4QException("G4QNucleus::EvaporateNucleus: Hadron is under MassShell");
+	       }
+	     }
+	   }
+    else
+    {
+      G4cerr<<"**G4QNuc::EvaNuc:RN="<<thePDG<<theQC<<",q4M="<<q4M<<",qM="<<totMass<<G4endl;
+      throw G4QException("G4QNucleus::EvaporateNucleus: This is not aNucleus nor aHadron");
+    }
+  }
+#ifdef pdebug
+  G4cout<<"G4QNucleus::EvaporateNucleus: ===>>>> End. "<<G4endl;
+#endif
+  return;
+} // End of EvaporateNucleus
+
+//Unavoidable decay of the Isonucleus in nP+(Pi+) or nN+(Pi-)
+void G4QNucleus::DecayIsonucleus(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ============================================
+  static const G4double mPi  = G4QPDGCode(211).GetMass();
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  //static const G4double mSigZ= G4QPDGCode(3212).GetMass();
+  static const G4double mSigP= G4QPDGCode(3222).GetMass();
+  static const G4double mSigM= G4QPDGCode(3112).GetMass();
+  static const G4double eps  = 0.003;
+  G4LorentzVector q4M = qH->Get4Momentum();      // Get 4-momentum of the Isonucleus
+  G4double qM=q4M.m();                           // Real mass of the Isonucleus
+  G4QContent qQC = qH->GetQC();                  // Get QuarcContent of the Isonucleus
+  G4int qBN=qQC.GetBaryonNumber();               // Baryon number of the IsoNucleus
+  G4int qC=qQC.GetCharge();                      // Charge of the IsoNucleus
+  G4int qS=qQC.GetStrangeness();                 // Strangness of the IsoNucleus
+#ifdef pdebug
+  G4cout<<"G4QNuc:DecayIson:QC="<<qQC<<",M="<<qM<<",B="<<qBN<<",S="<<qS<<",C="<<qC<<G4endl;
+#endif
+  if(qS<0||qS>qBN)                               // *** Should not be here ***
+  {
+    G4cout<<"--Warning(Upgrade)--G4QNuc::DecIsonuc:FillAsIs,4M="<<q4M<<",QC="<<qQC<<G4endl;
+   	evaHV->push_back(qH);                        // fill as it is (delete equivalent)
+    return;
+  }
+  G4int          qPN=qC-qBN;                     // Number of pions in the Isonucleus
+  G4int          fPDG = 2212;                    // Prototype for nP+(Pi+) case
+  G4int          sPDG = 211;
+  G4int          tPDG = 3122;                    // @@ Sigma0 (?)
+  G4double       fMass= mProt;
+  G4double       sMass= mPi;
+  G4double       tMass= mLamb;                   // @@ Sigma0 (?)
+  // ========= Negative state ======
+  if(qC<0)                                       // ====== Only Pi- can help
+  {
+    if(qS&&qBN==qS)                              // --- n*Lamb + k*(Pi-) State ---
+    {
+      sPDG = -211;
+      if(-qC==qS && qS==1)                       // Only one Sigma- like (qBN=1)
+      {
+        if(fabs(qM-mSigM)<eps)
+		      {
+          evaHV->push_back(qH);                  // Fill Sigma- as it is
+          return;
+        }
+        else if(qM>mLamb+mPi)                    //(2) Sigma- => Lambda + Pi- decay
+        {
+          fPDG = 3122;
+          fMass= mLamb;
+        }
+        else if(qM>mSigM)                        //(2) Sigma+ => Sigma+ + gamma decay
+        {
+          fPDG = 3112;
+          fMass= mSigM;
+          sPDG = 22;
+          sMass= 0.;
+        }
+        else                                      //(2) Sigma- => Neutron + Pi- decay
+        {
+          fPDG = 2112;
+          fMass= mNeut;
+        }
+        qPN  = 1;                                 // #of (Pi+ or gamma)'s = 1
+      }
+      else if(-qC==qS)                            //(2) a few Sigma- like
+      {
+        qPN  = 1;                                 // One separated Sigma-
+        fPDG = 3112;
+        sPDG = 3112;
+        sMass= mSigM;
+        qBN--;
+        fMass= mSigM;
+      }
+      else if(-qC>qS)                             //(2) n*(Sigma-)+m*(Pi-)
+      {
+        qPN  = -qC-qS;                            // #of Pi-'s
+        fPDG = 3112;
+        fMass= mSigM;
+      }
+      else                                        //(2) n*(Sigma-)+m*Lambda (-qC<qS)
+      {
+        qBN += qC;                                // #of Lambda's
+        fPDG = 3122;
+        fMass= mLamb;
+        qPN  = -qC;                               // #of Sigma+'s
+        sPDG = 3112;
+        sMass= mSigM;
+      }
+      qS   = 0;                                   // Only decays in two are above
+    }
+    else if(qS)                                   // ->n*Lamb+m*Neut+k*(Pi-) State (qS<qBN)
+    {
+      qBN -= qS;                                  // #of neutrons
+      fPDG = 2112;
+      fMass= mNeut;
+      G4int nPin = -qC;                           // #of Pi-'s                    
+      if(qS==nPin)                                //(2) m*Neut+n*Sigma-
+      {
+        qPN  = qS;                                // #of Sigma-
+        sPDG = 3112;
+        sMass= mSigM;
+        qS   = 0;
+      }
+      else if(qS>nPin)                            //(3) m*P+n*(Sigma+)+k*Lambda
+      {
+        qS-=nPin;                                 // #of Lambdas
+        qPN  = nPin;                              // #of Sigma+
+        sPDG = 3112;
+        sMass= mSigM;
+      }
+      else                                        //(3) m*N+n*(Sigma-)+k*(Pi-) (qS<nPin)
+      {
+        qPN  = nPin-qS;                           // #of Pi-
+        sPDG = -211;
+        tPDG = 3112;
+        tMass= mSigM;
+      }
+    }
+    else                                          //(2) n*N+m*(Pi-)   (qS=0)
+	   {
+      sPDG = -211;
+      qPN  = -qC;
+      fPDG = 2112;
+      fMass= mNeut;
+    }
+  }
+  else if(!qC)                                   // *** Should not be here ***
+  {
+    if(qS && qS<qBN)                             //(2) n*Lamb+m*N ***Should not be here***
+    {
+      qPN  = qS;
+      fPDG = 2112;                               // mN+nL case
+      sPDG = 3122;
+      sMass= mLamb;
+      qBN -= qS;
+      fMass= mNeut;
+      qS   = 0;
+    }
+    else if(qS>1 && qBN==qS)                     //(2) m*Lamb(m>1) ***Should not be here***
+    {
+      qPN  = 1;
+      fPDG = 3122;
+      sPDG = 3122;
+      sMass= mLamb;
+      qBN--;
+      fMass= mLamb;
+    }
+    else if(!qS && qBN>1)                        //(2) n*Neut(n>1) ***Should not be here***
+    {
+      qPN  = 1;
+      fPDG = 2112;
+      sPDG = 2112;
+      sMass= mNeut;
+      qBN--;
+      fMass= mNeut;
+    }
+    else G4cout<<"*?*G4QNuc::DecayIsonucleus: (1) QC="<<qQC<<G4endl;
+  }
+  else if(qC>0)                                  // n*Lamb+(m*P)+(k*Pi+)
+  {
+    if(qS && qS+qC==qBN)                         //(2) n*Lamb+m*P ***Should not be here***
+    {
+      qPN  = qS;
+      qS   = 0;
+      fPDG = 2212;
+      sPDG = 3122;
+      sMass= mLamb;
+      qBN  = qC;
+      fMass= mProt;
+	   }
+    else if(qS  && qC<qBN-qS)                     //(3)n*L+m*P+k*N ***Should not be here***
+    {
+      qPN  = qC;                                  // #of protons
+      fPDG = 2112;                                // mP+nL case
+      sPDG = 2212;
+      sMass= mProt;
+      qBN -= qS+qC;                               // #of neutrons
+      fMass= mNeut;
+    }
+    else if(qS  && qBN==qS)                       // ---> n*L+m*Pi+ State
+    {
+      if(qC==qS && qS==1)                         // Only one Sigma+ like State
+      {
+        if(fabs(qM-mSigP)<eps)                    // Fill Sigma+ as it is
+		      {
+          evaHV->push_back(qH);
+          return;
+        }
+        else if(qM>mLamb+mPi)                     //(2) Sigma+ => Lambda + Pi+ decay
+        {
+          fPDG = 3122;
+          fMass= mLamb;
+        }
+        else if(qM>mNeut+mPi)                     //(2) Sigma+ => Neutron + Pi+ decay
+        {
+          fPDG = 2112;
+          fMass= mNeut;
+        }
+        else if(qM>mSigP)                         //(2) Sigma+ => Sigma+ + gamma decay
+        {
+          fPDG = 3222;
+          fMass= mSigP;
+          sPDG = 22;
+          sMass= 0.;
+        }
+        else                                      //(2) Sigma+ => Proton + gamma decay
+        {
+          fPDG = 2212;
+          fMass= mProt;
+          sPDG = 22;
+          sMass= 0.;
+        }
+        qPN  = 1;                                 // #of (Pi+ or gamma)'s = 1
+      }
+      else if(qC==qS)                             //(2) a few Sigma+ like hyperons
+      {
+        qPN  = 1;
+        fPDG = 3222;
+        sPDG = 3222;
+        sMass= mSigP;
+        qBN--;
+        fMass= mSigP;
+      }
+      else if(qC>qS)                              //(2) n*(Sigma+)+m*(Pi+)
+      {
+        qPN  = qC-qS;                             // #of Pi+'s
+        fPDG = 3222;
+        qBN  = qS;                                // #of Sigma+'s
+        fMass= mSigP;
+      }
+      else                                        //(2) n*(Sigma+)+m*Lambda
+      {
+        qBN -= qC;                                // #of Lambda's
+        fPDG = 3122;
+        fMass= mLamb;
+        qPN  = qC;                                // #of Sigma+'s
+        sPDG = 3222;
+        sMass= mSigP;
+      }
+      qS   = 0;                                   // All above are decays in 2
+    }
+    else if(qS && qC>qBN-qS)                      // n*Lamb+m*P+k*Pi+
+    {
+      qBN -= qS;                                  // #of protons
+      G4int nPip = qC-qBN;                        // #of Pi+'s                    
+      if(qS==nPip)                                //(2) m*P+n*Sigma+
+      {
+        qPN  = qS;                                // #of Sigma+
+        sPDG = 3222;
+        sMass= mSigP;
+        qS   = 0;
+      }
+      else if(qS>nPip)                            //(3) m*P+n*(Sigma+)+k*Lambda
+      {
+        qS  -= nPip;                              // #of Lambdas
+        qPN  = nPip;                              // #of Sigma+
+        sPDG = 3222;
+        sMass= mSigP;
+      }
+      else                                        //(3) m*P+n*(Sigma+)+k*(Pi+)
+      {
+        qPN  = nPip-qS;                           // #of Pi+
+        tPDG = 3222;
+        tMass= mSigP;
+      }
+    }
+    if(qC<qBN)                                    //(2) n*P+m*N ***Should not be here***
+    {
+      fPDG = 2112;
+      fMass= mNeut;
+      qPN  = qC;
+      sPDG = 2212;
+      sMass= mProt;
+    }
+    else if(qBN==qC && qC>1)                     //(2) m*Prot(m>1) ***Should not be here***
+    {
+      qPN  = 1;
+      fPDG = 2212;
+      sPDG = 2212;
+      sMass= mProt;
+      qBN--;
+      fMass= mProt;
+    }
+    else if(qC<=qBN||!qBN) G4cout<<"*?*G4QNuc::DecayIsonucleus: (2) QC="<<qQC<<G4endl;
+    // !qS && qC>qBN                             //(2) Default condition n*P+m*(Pi+)
+  }
+  G4double tfM=qBN*fMass;
+  G4double tsM=qPN*sMass;
+  G4double ttM=0.;
+  if(qS) ttM=qS*tMass;
+  G4LorentzVector f4Mom(0.,0.,0.,tfM);
+  G4LorentzVector s4Mom(0.,0.,0.,tsM);
+  G4LorentzVector t4Mom(0.,0.,0.,ttM);
+  G4double sum=tfM+tsM+ttM;
+  if(fabs(qM-sum)<eps)
+  {
+    f4Mom=q4M*(tfM/sum);
+    s4Mom=q4M*(tsM/sum);
+    if(qS) t4Mom=q4M*(ttM/sum);
+  }
+  else if(!qS && (qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom)))
+  {
+#ifdef pdebug
+    G4cout<<"***G4QNuc::DecIsonuc:fPDG="<<fPDG<<"*"<<qBN<<"(fM="<<fMass<<")+sPDG="<<sPDG
+          <<"*"<<qPN<<"(sM="<<sMass<<")"<<"="<<sum<<" > TotM="<<qM<<q4M<<qQC<<qS<<G4endl;
+#endif
+    evaHV->push_back(qH);                  // fill as it is (delete equivalent)
+    return;
+  }
+  else if(qS && (qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom)))
+  {
+#ifdef pdebug
+    G4cout<<"***G4QNuc::DecIsonuc: "<<fPDG<<"*"<<qBN<<"("<<fMass<<")+"<<sPDG<<"*"<<qPN<<"("
+          <<sMass<<")+Lamb*"<<qS<<"="<<sum<<" > TotM="<<qM<<q4M<<qQC<<G4endl;
+#endif
+    evaHV->push_back(qH);                  // fill as it is (delete equivalent)
+    return;
+  }
+#ifdef pdebug
+  G4cout<<"G4QNuc::DecayIsonucleus: *DONE* n="<<qPN<<f4Mom<<fPDG<<", m="<<qPN<<s4Mom<<sPDG
+        <<", l="<<qS<<t4Mom<<G4endl;
+#endif
+  delete qH;
+  if(qBN)
+  {
+    f4Mom/=qBN;
+    for(G4int ih=0; ih<qBN; ih++)
+    {
+      G4QHadron* Hi = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the hyperon
+      evaHV->push_back(Hi);                 // Fill "Hi" (delete equivalent)
+    }
+  }
+  if(qPN)
+  {
+    s4Mom/=qPN;
+    for(G4int ip=0; ip<qPN; ip++)
+    {
+      G4QHadron* Hj = new G4QHadron(sPDG,s4Mom); // Create a Hadron for the meson
+      evaHV->push_back(Hj);                 // Fill "Hj" (delete equivalent)
+    }
+  }
+  if(qS)
+  {
+    t4Mom/=qS;
+    for(G4int il=0; il<qS; il++)
+    {
+      G4QHadron* Hk = new G4QHadron(tPDG,t4Mom); // Create a Hadron for the lambda
+      evaHV->push_back(Hk);                 // Fill "Hk" (delete equivalent)
+    }
+  }
+} // End of DecayIsonucleus
+
+//Decay of the excited dibaryon in two baryons
+void G4QNucleus::DecayDibaryon(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ============================================
+  static const G4double mPi  = G4QPDGCode(211).GetMass();
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mSigM= G4QPDGCode(3112).GetMass();
+  static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  static const G4double mSigP= G4QPDGCode(3222).GetMass();
+  static const G4double mKsiM= G4QPDGCode(3312).GetMass();
+  static const G4double mKsiZ= G4QPDGCode(3322).GetMass();
+  static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
+  static const G4double mPiN = mPi+mNeut;
+  static const G4double mPiP = mPi+mProt;
+  static const G4double dmPiN= mPiN+mPiN;
+  static const G4double dmPiP= mPiP+mPiP;
+  static const G4double nnPi = mNeut+mPiN;
+  static const G4double ppPi = mProt+mPiP;
+  static const G4double lnPi = mLamb+mPiN;
+  static const G4double lpPi = mLamb+mPiP;
+  static const G4double dNeut= mNeut+mNeut;
+  static const G4double dProt= mProt+mProt;
+  static const G4double dLamb= mLamb+mLamb;
+  static const G4double dLaNe= mLamb+mNeut;
+  static const G4double dLaPr= mLamb+mProt;
+  static const G4double dSiPr= mSigP+mProt;
+  static const G4double dSiNe= mSigM+mNeut;
+  static const G4double dKsPr= mKsiZ+mProt;
+  static const G4double dKsNe= mKsiM+mNeut;
+  static const G4double eps  = 0.003;
+  static const G4QNucleus vacuum(90000000);
+#ifdef ppdebug
+  G4cerr<<"***G4QNucleus::DecayDibaryon: *** TEST OF EXCEPTION ***"<<G4endl;
+  throw G4QException("G4QNucl::DecayDibaryon:Unknown DBary PDG code or small Mass of DB");
+#endif
+  G4bool four=false;                           // defFALSE for 4-particle decay of diDelta
+  G4LorentzVector q4M = qH->Get4Momentum();    // Get 4-momentum of the Dibaryon
+  G4int          qPDG = qH->GetPDGCode();      // PDG Code of the decaying dybaryon
+  G4double         qM = q4M.m();
+  G4double         rM = qM+eps;                // Just to avoid the computer accuracy
+#ifdef pdebug
+  G4cout<<"G4QNucl::DecayDibaryon: *Called* PDG="<<qPDG<<",4Mom="<<q4M<<", M="<<qM<<G4endl;
+#endif
+  // Select a chanel of the dibaryon decay (including Delta+Delta-> 4 particle decay
+  G4int          fPDG = 2212;                  // Prototype for pp case
+  G4int          sPDG = 2212;
+  G4int          tPDG = 0;                     // Zero prototype to separate 3 from 2 
+  G4double       fMass= mProt;
+  G4double       sMass= mProt;
+  G4double       tMass= mPi;
+  if     (qPDG==90003998 && rM>=dmPiP)         // "diDelta++" case
+  {
+    sPDG = 211;
+    sMass= mPi;
+    four = true;
+  }
+  else if(qPDG==89998004 && rM>=dmPiN)         // "diDelta--" case
+  {
+    sPDG = -211;
+    fPDG = 2112;
+    sMass= mPi;
+    fMass= mNeut;
+    four = true;
+  }
+  else if(qPDG==90000002 && rM>=dNeut)         // "dineutron" case
+  {
+    fPDG = 2112;
+    sPDG = 2112;
+    fMass= mNeut;
+    sMass= mNeut;    
+  }
+  else if(qPDG==90001001 && rM>=mDeut)         // "exited deutron" case
+  {
+    if(fabs(qM-mDeut)<eps)
+	   {
+      evaHV->push_back(qH);               // Fill as it is (delete equivalent)
+      return;
+	   }
+    else if(mProt+mNeut<rM)
+    {
+      fPDG = 2112;
+      fMass= mNeut;    
+    }
+    else
+    {
+      fPDG = 22;
+      sPDG = 90001001;
+      fMass= 0.;
+      sMass= mDeut;    
+    }
+  }
+  else if(qPDG==91000001 && rM>=dLaNe)         // "Lambda-neutron" case
+  {
+    fPDG = 2112;
+    sPDG = 3122;
+    fMass= mNeut;
+    sMass= mLamb;    
+  }
+  else if(qPDG==91001000 && rM>=dLaPr)         // "Lambda-proton" case
+  {
+    sPDG = 3122;
+    sMass= mLamb;    
+  }
+  else if(qPDG==89999003 && rM>=nnPi)         // "neutron/Delta-" case
+  {
+    fPDG = 2112;
+    sPDG = 2112;
+    tPDG = -211;
+    fMass= mNeut;
+    sMass= mNeut;    
+  }
+  else if(qPDG==90002999 && rM>=ppPi)         // "proton/Delta++" case
+  {
+    tPDG = 211;
+  }
+  else if(qPDG==90999002 && rM>=lnPi)         // "lambda/Delta-" case
+  {
+    fPDG = 2112;
+    sPDG = 3122;
+    tPDG = -211;
+    fMass= mNeut;
+    sMass= mLamb;    
+  }
+  else if(qPDG==91001999 && rM>=lpPi)         // "lambda/Delta+" case
+  {
+    sPDG = 3122;
+    tPDG = 211;
+    sMass= mLamb;    
+  }
+  else if(qPDG==90999002 && rM>=dSiNe)         // "Sigma-/neutron" case
+  {
+    fPDG = 2112;
+    sPDG = 3112;
+    fMass= mNeut;
+    sMass= mSigM;    
+  }
+  else if(qPDG==91001999 && rM>=dSiPr)         // "Sigma+/proton" case
+  {
+    sPDG = 3222;
+    sMass= mSigP;    
+  }
+  else if(qPDG==92000000 && rM>=dLamb)         // "diLambda" case
+  {
+    fPDG = 3122;
+    sPDG = 3122;
+    fMass= mLamb;
+    sMass= mLamb;    
+  }
+  else if(qPDG==91999001 && rM>=dKsNe)         // "Ksi-/neutron" case
+  {
+    fPDG = 2112;
+    sPDG = 3312;
+    fMass= mNeut;
+    sMass= mKsiM;    
+  }
+  else if(qPDG==92000999 && rM>=dKsPr)         // "Ksi0/proton" case
+  {
+    sPDG = 3322;
+    sMass= mKsiZ;    
+  }
+  else if(qPDG!=90002000|| rM<dProt)           // Other possibilities (if not a default)
+  {
+    G4int qS = qH->GetStrangeness();
+    G4int qB = qH->GetBaryonNumber();
+    if(qB>0&&qS<0)                             // Antistrange diBarion
+    {
+      DecayAntiStrange(qH,evaHV);
+      return;
+    }
+    else
+    {
+      G4cerr<<"***G4QN::DecayDiBaryon: Should not be here (Bad PDG or small M)"<<G4endl;
+      throw G4QException("G4QNucleus::DecayDibar: Unknown PDG code or small Mass of DB");
+    }
+  }
+  G4LorentzVector f4Mom(0.,0.,0.,fMass);
+  G4LorentzVector s4Mom(0.,0.,0.,sMass);
+  G4LorentzVector t4Mom(0.,0.,0.,tMass);
+  if(!tPDG&&!four)
+  {
+    G4double sum=fMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"---Warning---G4QN::DecDib:fPDG="<<fPDG<<"(M="<<fMass<<")+sPDG="<<sPDG<<"(M="
+            <<sMass<<")="<<sum<<" >? TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QNucl::DecayDiBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("***G4QNucleus::DecayDibaryon: DiBaryon DecayIn2 error");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::DecayDibaryon:(2) *DONE* f4M="<<f4Mom<<",fPDG="<<fPDG
+          <<", s4M="<<s4Mom<<",sPDG="<<sPDG<<G4endl;
+#endif
+    delete qH;
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                 // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom); // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                 // Fill "H2" (delete equivalent)
+  }
+  else if(four)
+  {
+    q4M=q4M/2.;                                // Divided in 2 !!!
+    qM/=2.;                                    // Divide the mass in 2 !
+    G4double sum=fMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"---Warning---G4QN::DecDib:fPDG="<<fPDG<<"(M="<<fMass<<")+sPDG="<<sPDG<<"(M="
+            <<sMass<<")"<<"="<<sum<<">tM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QN::DecayDibaryon: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("***G4QNucleus::DecDibaryon: Dibaryon DecayIn2 error");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::DecayDibaryon:(3) *DONE* f4M="<<f4Mom<<",fPDG="<<fPDG
+          <<", s4M="<<s4Mom<<",sPDG="<<sPDG<<G4endl;
+#endif
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                 // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom); // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                 // Fill "H2" (delete equivalent)
+    // Now the second pair mus be decayed
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(!G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      // Should not be here as sum was already compared with qM above for the first delta
+      G4cerr<<"***G4QNucl::DecDibar:fPDG="<<fPDG<<"(fM="<<fMass<<") + sPDG="<<sPDG<<"(sM="
+            <<sMass<<")="<<sum<<" >? (DD2,Can't be here) TotM="<<q4M.m()<<q4M<<G4endl;
+      throw G4QException("G4QNucleus::DecayDibaryon: General DecayIn2 error");
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucl::DecayDibaryon:(4) *DONE* f4M="<<f4Mom<<",fPDG="<<fPDG
+          <<", s4M="<<s4Mom<<",sPDG="<<sPDG<<G4endl;
+#endif
+    G4QHadron* H3 = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H3);                 // Fill "H1" (delete equivalent)
+    G4QHadron* H4 = new G4QHadron(sPDG,s4Mom); // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H4);                 // Fill "H2" (delete equivalent)
+    delete qH;
+  }
+  else
+  {
+    G4double sum=fMass+sMass+tMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+      t4Mom=q4M*(tMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom))
+    {
+      G4cout<<"---Warning---G4QN::DecDib:fPDG="<<fPDG<<"(M="<<fMass<<")+sPDG="<<sPDG<<"(M="
+            <<sMass<<")+tPDG="<<tPDG<<"(tM="<<tMass<<")="<<sum<<">TotM="<<q4M.m()<<G4endl;
+      //G4cerr<<"***G4QNuc::DecayDibaryon:qM="<<qM<<"" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucleus::DecayDibaryon: diBar DecayIn3 error");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNuc::DecayDibaryon:(5) *DONE* f4M="<<f4Mom<<",fPDG="<<fPDG<<", s4M="<<s4Mom
+          <<",sPDG="<<sPDG<<", t4M="<<t4Mom<<",tPDG="<<tPDG<<G4endl;
+#endif
+    //qH->SetNFragments(2);                    // Fill a#of fragments to decaying Dibaryon
+    //evaHV->push_back(qH);               // Fill hadron with nf=2 (delete equivalent)
+    // Instead
+    delete qH;
+    //
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                 // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom); // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                 // Fill "H2" (delete equivalent)
+    G4QHadron* H3 = new G4QHadron(tPDG,t4Mom); // Create a Hadron for the meson
+    evaHV->push_back(H3);                 // Fill "H3" (delete equivalent)
+  }
+} // End of DecayDibaryon
+
+//Decay of the nuclear states with antistrangeness (K:/K0)
+void G4QNucleus::DecayAntiStrange(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ===============================================
+  static const G4double mK    = G4QPDGCode(321).GetMass();
+  static const G4double mK0   = G4QPDGCode(311).GetMass();
+  static const G4double eps   = 0.003;
+  G4LorentzVector q4M = qH->Get4Momentum();    // Get 4-mom of the AntiStrangeNuclearState
+  G4double         qM = q4M.m();               // Real mass of the AntiStrangeNuclearState
+  G4QContent       qQC= qH->GetQC();           // PDGCode of theDecayingAntiStrangeNuclSt.
+  G4int            qS = qH->GetStrangeness();  // Strangness of the AntiStrangeNuclearState
+  G4int            qB = qH->GetBaryonNumber(); // BaryonNumber of the AntiStrangeNuclearSt.
+  G4int            qP = qH->GetCharge();       // Charge of the AntiStranNuclState (a#of p)
+#ifdef pdebug
+  G4cout<<"G4QNuc::DecAntS:QC="<<qQC<<",S="<<qS<<",B="<<qB<<",C="<<qP<<",4M="<<q4M<<G4endl;
+#endif
+  G4int            qN = qB-qP-qS;              // a#of neuterons
+  if(qS>=0 || qB<1)
+  {
+    G4cerr<<"G4QNuc::DecayAntiStrange:QC="<<qQC<<",S="<<qS<<",B="<<qB<<",4M="<<q4M<<G4endl;
+    throw G4QException("G4QNucleus::DecayAntiStrange: not an Anti Strange Nucleus");
+  }
+  G4int n1=1;         // prototype of a#of K0's
+  G4double k1M=mK0;
+  G4int k1PDG=311;    // K0 (as a prototype)
+  G4int n2=0;         // prototype of a#of K+'s
+  G4double k2M=mK;
+  G4int k2PDG=321;    // K+
+  G4int aS=-qS;       // -Strangness = antistrangeness
+  G4int sH=aS/2;     // a small half of the antistrangeness
+  G4int bH=aS-sH;    // a big half to take into account all the antistrangeness
+  if(qP>0 && qP>qN)  // a#of protons > a#of neutrons
+  {
+    if(qP>=bH)                       // => "Enough protons in nucleus" case
+    {
+      if(qN>=sH)
+      {
+        n1=sH;
+        n2=bH;
+      }
+      else
+      {
+        G4int dN=qP-qN;
+        if(dN>=aS)
+        {
+          n1=0;
+          n2=aS;
+        }
+        else
+        {
+          G4int sS=(aS-dN)/2;
+          G4int bS=aS-dN-sS;
+          sS+=dN;
+          if(qP>=sS&&qN>=bS)
+          {
+            n1=bS;
+            n2=sS;
+          }
+          else if(qP<sS)
+          {
+            G4int dS=aS-qP;
+            n1=dS;
+            n2=qP;
+          }
+          else
+          {
+            G4int dS=aS-qN;
+            n1=qN;
+            n2=dS;
+          }
+        }
+      }
+    }
+  }
+  else if(qN>=bH)
+  {
+    if(qP>=sH)
+    {
+      n2=sH;
+      n1=bH;
+    }
+    else
+    {
+      G4int dN=qN-qP;
+      if(dN>=aS)
+      {
+        n1=aS;
+        n2=0;
+      }
+      else
+      {
+        G4int sS=(aS-dN)/2;
+        G4int bS=aS-sS;
+        if(qN>=bS&&qP>=sS)
+        {
+          n1=bS;
+          n2=sS;
+        }
+        else if(qN<bS)
+        {
+          G4int dS=aS-qN;
+          n1=qN;
+          n2=dS;
+        }
+        else
+        {
+          G4int dS=aS-qP;
+          n1=dS;
+          n2=qP;
+        }
+      }
+    }
+  }
+  G4int qPDG=90000000+(qP-n2)*1000+(qN-n1);     // PDG of the Residual Nucleus
+  G4double nucM = G4QNucleus(qPDG).GetGSMass(); // Mass of the Residual Nucleus
+#ifdef pdebug
+  G4cout<<"G4QNucleus::DecayAnStran:nK0="<<n1<<",nK+="<<n2<<", nucM="<<nucM<<G4endl;
+#endif
+  G4int m1=0;                        // prototype of a#of K0's
+  G4int m2=qP;                       // prototype of a#of K+'s
+  if(qP>=-qS)   m2=-qS;              // Enough charge for K+'s
+  else if(qP>0) m1=-qS-qP;           // Anti-Lambdas are partially compensated by neutrons
+  G4int sPDG=90000000+(qP-m2)*1000+(qN-m1);     // PDG of the Residual Nucleus
+  G4double mucM = G4QNucleus(sPDG).GetGSMass(); // Mass of the Residual Nucleus
+  if(mucM+m1*mK+m2*mK0<nucM+n1*mK+n2*mK0)       // New is smaller
+  {
+    qPDG=sPDG;
+    nucM=mucM;
+    n1=m1;
+    n2=m2;
+  }
+#ifdef pdebug
+  G4cout<<"G4QNucleus::DecayAnStran: n1="<<n1<<", n2="<<n2<<", nM="<<nucM<<G4endl;
+#endif
+  if(!n1||!n2)                            // AntiKaons of only one sort are found
+  {
+    if(!n1)                               // No K0's only K+'s
+	   {
+      if(n2==1 && mK+nucM>qM+.0001)  // Mass limit: switch to K0
+	     {
+        k1M=mK0;
+        n1=1;
+        qPDG=90000000+qP*1000+qN-1;       // PDG of the Residual Nucleus
+        nucM = G4QNucleus(qPDG).GetGSMass(); // Mass of the Residual Nucleus
+      }
+      else
+      {
+        k1M=mK;
+        k1PDG=321;                        // Only K+'s (default K0's)
+        n1=n2;                            // only n1 is used
+	     }
+	   }
+    else                                  // No K+'s only K0's
+    {
+      if(n1==1 && mK0+nucM>qM+.0001) // Mass limit: switch to K+
+	     {
+        k1M=mK;
+        k1PDG=321;                        // K+ instead of K0
+        qPDG=90000000+(qP-1)*1000+qN;     // PDG of the Residual Nucleus
+        nucM = G4QNucleus(qPDG).GetGSMass(); // Mass of the Residual Nucleus
+      }
+      else k1M=mK0;                      // Only anti-K0's (default k1PDG)
+    }
+#ifdef pdebug
+    G4int naPDG=90000000+(qP-1)*1000+qN; // Prot PDG of the Alternative Residual Nucleus
+    G4double naM=G4QNucleus(naPDG).GetGSMass(); // Prot Mass of the Alt. Residual Nucleus
+    G4double kaM=mK;                     // Prot Mass of the Alternative kaon (K+)
+    if(k1PDG==321)                       // Calculate alternative to K+
+    {
+      naPDG=90000000+qP*1000+qN-1;       // PDG of the Alternative Residual Nucleus
+      naM=G4QNucleus(naPDG).GetGSMass(); // Mass of the Alt. Residual Nucleus
+      kaM=mK0;                           // Prot Mass of the Alternative kaon (K0)
+    }
+    G4cout<<"G4QNucleus::DecayAnStran:M="<<qM<<",kM="<<k1M<<"+nM="<<nucM<<"="<<k1M+nucM
+          <<",m="<<kaM<<"+n="<<naM<<"="<<kaM+naM<<G4endl;
+#endif
+    G4double n1M=n1*k1M;
+    G4LorentzVector f4Mom(0.,0.,0.,n1M);
+    G4LorentzVector s4Mom(0.,0.,0.,nucM);
+    G4double sum=nucM+n1M;
+    if(sum>qM+eps && n1==1)              // Try to use another K if this is the only kaon
+    {
+      G4int naPDG=90000000+(qP-1)*1000+qN; // Prot PDG of the Alternative Residual Nucleus
+      G4double naM=G4QNucleus(naPDG).GetGSMass(); // Prot Mass of the Alt. Residual Nucleus
+      G4int akPDG=321;                   // Prototype PDGCode of the AlternativeKaon (K+)
+      G4double kaM=mK;                   // Prototype Mass of the AlternativeKaon (K+)
+      if(k1PDG==321)                     // Calculate alternative to the K+ meson
+      {
+        naPDG=90000000+qP*1000+qN-1;     // PDG of the Alternative Residual Nucleus
+        naM=G4QNucleus(naPDG).GetGSMass(); // Mass of the Alt. Residual Nucleus
+        akPDG=311;                       // PDG Code of the Alternative kaon (K0)
+        kaM=mK0;                         // Mass of the Alternative kaon (K0)
+      }
+      G4double asum=naM+kaM;
+      if(asum<sum)                       // Make a KSwap correction
+      {
+        nucM=naM;
+        n1M=kaM;
+        k1M=kaM;
+        k1PDG=akPDG;
+        qPDG=naPDG;
+        f4Mom=G4LorentzVector(0.,0.,0.,n1M);
+        s4Mom=G4LorentzVector(0.,0.,0.,nucM);
+      }
+    }
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(n1M/sum);
+      s4Mom=q4M*(nucM/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+#ifdef pdebug
+      G4cout<<"--Warning--G4QNuc::DASt:AsItIs, H="<<qQC<<q4M<<qM<<" < sum="<<sum<<"=(F)"
+            <<nucM<<"+(kK)"<<n1M<<G4endl;
+#endif
+      evaHV->push_back(qH);  // @@ Can cause problems with particle conversion in G4
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNuc::DecAntiS: nK+N "<<n1<<"*K="<<k1PDG<<f4Mom<<",N="<<qPDG<<s4Mom<<G4endl;
+#endif
+    delete qH;
+    //
+    f4Mom/=n1;
+    for(G4int i1=0; i1<n1; i1++)
+    {
+      G4QHadron* H1 = new G4QHadron(k1PDG,f4Mom); // Create a Hadron for the Kaon
+      evaHV->push_back(H1);                       // Fill "H1" (delete equivalent)
+	   }
+    G4QHadron* H2 = new G4QHadron(qPDG,s4Mom);    // Create a Hadron for the Nucleus
+    //evaHV->push_back(H2);                       // Fill "H2" (delete equivalent)
+    EvaporateNucleus(H2,evaHV);                   // Fill "H2" (delete equivalent)
+#ifdef debug
+    G4cout<<"G4QNucleus::DecAntiStr:*** After EvaporateNucleus nH="<<evaHV->size()<<G4endl;
+#endif
+  }
+  else
+  {
+    G4double n1M=n1*k1M;
+    G4double n2M=n2*k2M;
+    G4LorentzVector f4Mom(0.,0.,0.,n1M);
+    G4LorentzVector s4Mom(0.,0.,0.,n2M);
+    G4LorentzVector t4Mom(0.,0.,0.,nucM);
+    G4double sum=nucM+n1M+n2M;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(n1M/sum);
+      s4Mom=q4M*(n2M/sum);
+      t4Mom=q4M*(nucM/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom))
+    {
+      G4cout<<"---Warning---G4QN::DASt:nPDG="<<qPDG<<"(M="<<nucM<<")+1="<<k1PDG<<"(M="<<k1M
+            <<")+2="<<k2PDG<<"(M="<<k2M<<")="<<nucM+n1*k1M+n2*k2M<<">tM="<<qM<<q4M<<G4endl;
+      evaHV->push_back(qH); // @@ Can cause problems with particle conversion in G4
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNuc::DecAntiS:*DONE* nPDG="<<qPDG<<",1="<<f4Mom<<",2="<<s4Mom<<",n="<<t4Mom
+          <<G4endl;
+#endif
+    delete qH;
+    //
+    f4Mom/=n1;
+    for(G4int i1=0; i1<n1; i1++)
+    {
+      G4QHadron* H1 = new G4QHadron(k1PDG,f4Mom); // Create a Hadron for the K0
+      evaHV->push_back(H1);                       // Fill "H1" (delete equivalent)
+	   }
+    s4Mom/=n2;
+    for(G4int i2=0; i2<n2; i2++)
+    {
+      G4QHadron* H2 = new G4QHadron(k2PDG,s4Mom); // Create a Hadron for the K+
+      evaHV->push_back(H2);                       // Fill "H2" (delete equivalent)
+	   }
+    G4QHadron* H3 = new G4QHadron(qPDG,t4Mom);    // Create a Hadron for the nucleus
+    //evaHV->push_back(H3);                       // Fill "H3" (delete equivalent)
+    EvaporateNucleus(H3,evaHV);                   // Fill "H3" (delete equivalent)
+  }
+#ifdef debug
+  G4cout<<"G4QNucleus::DecayAntiStrange: ===> End of DecayAntiStrangness"<<G4endl;
+#endif
+} // End of DecayAntiStrange
+
+//Decay of the excited 3p or 3n systems in three baryons
+void G4QNucleus::DecayMultyBaryon(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ===============================================
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  static const G4double eps=0.003;
+  G4LorentzVector q4M = qH->Get4Momentum();       // Get 4-momentum of the MultyBaryon
+  G4double         qM = q4M.m();                  // Mass of the Multybaryon
+  G4int          qPDG = qH->GetPDGCode();         // PDG Code of the decaying multybar
+  G4QContent      qQC = qH->GetQC();              // PDG Code of the decaying multibar
+#ifdef pdebug
+  G4cout<<"G4QNuc::DecayMultyBaryon: *Called* PDG="<<qPDG<<",4M="<<q4M<<qQC<<G4endl;
+#endif
+  G4int totS=qQC.GetStrangeness();  //  Total Strangeness       (L)                ^
+  G4int totC=qQC.GetCharge();       //  Total Charge            (p)                ^
+  G4int totBN=qQC.GetBaryonNumber();// Total Baryon Number      (A)                ^
+  G4int totN=totBN-totS-totC;       // Total Number of Neutrons (n)                ^
+  G4int          fPDG = 3122;       // Prototype for A lambdas case
+  G4double       fMass= mLamb;
+  if     (totN==totBN)              // "A-neutron" case
+  {
+    fPDG = 2112;
+    fMass= mNeut;
+  }
+  else if(totC==totBN)              // "A-protons" case
+  {
+    fPDG = 2212;
+    fMass= mProt;
+  }
+  else if(totS!=totBN)            // "Bad call" case
+  {
+    G4cerr<<"***G4QNuc::DecayMultyBaryon: PDG="<<qPDG<<G4endl;
+    throw G4QException("***G4QNuc::DecayMultyBaryon: Can not decay this PDG Code");
+  }
+#ifdef pdebug
+  else
+  {
+    G4cerr<<"**G4QNucleus::DecayMultyBaryon: PDG="<<qPDG<<G4endl;
+    throw G4QException("***G4QNuc::DecayMultyBaryon: Unknown PDG code of the MultiBaryon");
+  }
+#endif
+  if(totBN==1)
+  {
+    evaHV->push_back(qH);
+    //return;
+  }
+  else if(totBN==2)
+  {
+    G4LorentzVector f4Mom(0.,0.,0.,fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,fMass);
+    G4double sum=fMass+fMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M/2.;
+      s4Mom=f4Mom;
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"---Warning---G4QNucl::DecayMultyBar:fPDG="<<fPDG<<"(fM="<<fMass<<")*2="<<sum
+            <<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QNuc::DecayMultyBaryon:qM="<<qM<<"<sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNuc::DecayMultyBaryon:diBaryon DecayIn2 didn't succeed");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::DecMulBar:*DONE* fPDG="<<fPDG<<",f="<<f4Mom<<",s="<<s4Mom<<G4endl;
+#endif
+    delete qH;
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);   // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                   // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(fPDG,s4Mom);   // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                   // Fill "H2" (delete equivalent)
+  }
+  else if(totBN==3)
+  {
+    G4LorentzVector f4Mom(0.,0.,0.,fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,fMass);
+    G4LorentzVector t4Mom(0.,0.,0.,fMass);
+    G4double sum=fMass+fMass+fMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M/3.;
+      s4Mom=f4Mom;
+      t4Mom=f4Mom;
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom))
+    {
+      G4cout<<"---Warning---G4QNuc::DecayMultyBaryon: fPDG="<<fPDG<<"(fM="<<fMass<<")*3 = "
+            <<3*fMass<<" >? TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QN::DecayMultyBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucleus::DecayMultyBar:ThreeBaryonDecayIn3 didn't succeed");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNuc::DecMBar:*DONE*, fPDG="<<fPDG<<",f="<<f4Mom<<",s="<<s4Mom<<",t="
+          <<t4Mom<<G4endl;
+#endif
+    delete qH;
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);   // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                   // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(fPDG,s4Mom);   // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                   // Fill "H2" (delete equivalent)
+    G4QHadron* H3 = new G4QHadron(fPDG,t4Mom);   // Create a Hadron for the 3-d baryon
+    evaHV->push_back(H3);                   // Fill "H3" (delete equivalent)
+  }
+  else
+  {
+    // @@It must be checked, that they are not under the mass shell
+    // !! OK !! Checked by the warning print that they are mostly in the Ground State !!
+    G4LorentzVector f4Mom=q4M/totBN; // @@ Too simple solution (split in two parts!)
+#ifdef pdebug
+    // Warning for the future development
+    G4cout<<"*G4QNul::DecMulBar:SplitMultiBar inEqParts M="<<totBN<<"*"<<f4Mom.m()<<G4endl;
+    G4cout<<"G4QNucleus::DecMultyBaryon: *DONE* fPDG="<<fPDG<<", f="<<f4Mom<<G4endl;
+#endif
+    delete qH;
+    for(G4int h=0; h<totBN; h++)
+    {
+      G4QHadron* H1 = new G4QHadron(fPDG,f4Mom); // Create a Hadron for the baryon
+      evaHV->push_back(H1);                 // Fill "H1" (delete equivalent)
+	   }
+  }
+} // End of DecayMultyBaryon
+
+//Decay of the excited alpha+2p or alpha+2n systems
+void G4QNucleus::DecayAlphaDiN(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ============================================
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
+  static const G4double mHel6= G4QPDGCode(2112).GetNuclMass(2,4,0);
+  static const G4double eps=0.003;
+  G4LorentzVector q4M = qH->Get4Momentum();      // Get 4-momentum of the AlphaDibaryon
+  G4double         qM = q4M.m();                 // Real mass of the AlphaDibaryon
+  G4int          qPDG = qH->GetPDGCode();        // PDG Code of the decayin AlphaDybaryon
+#ifdef pdebug
+  G4cout<<"G4QNuc::DecayAlphaDiN: *Called* PDG="<<qPDG<<",4M="<<q4M<<G4endl;
+#endif
+  G4int          fPDG = 2212;                    // Prototype for alpha+pp case
+  G4double       fMass= mProt;
+  G4int          sPDG = 90002002;
+  G4double       sMass= mAlph;
+  if     (qPDG==90002004)                        // "alpha+2neutrons" case
+  {
+    if(fabs(qM-mHel6)<eps)
+	   {
+      evaHV->push_back(qH);                 // Fill as it is (delete equivalent)
+      return;
+	   }
+    else if(mNeut+mNeut+mAlph<qM)
+    {
+      fPDG = 2112;
+      fMass= mNeut;
+	   }
+    else
+    {
+      G4cerr<<"***G4QNu::DecAlDiN:M(He6="<<mHel6<<")="<<qM<<"<"<<mNeut+mNeut+mAlph<<G4endl;
+      throw G4QException("G4QNuc::DecayAlphaDiN: Cannot decay excited He6 with this mass");
+    }
+  }
+  else if(qPDG!=90004002)                         // "Bad call" case
+  {
+    G4cerr<<"***G4QNuc::DecayAlphaDiN: PDG="<<qPDG<<G4endl;
+    throw G4QException("G4QNuc::DecayAlphaDiN: Can not decay this PDG Code");
+  }
+  G4LorentzVector f4Mom(0.,0.,0.,fMass);
+  G4LorentzVector s4Mom(0.,0.,0.,fMass);
+  G4LorentzVector t4Mom(0.,0.,0.,sMass);
+  G4double sum=fMass+fMass+sMass;
+  if(fabs(qM-sum)<eps)
+  {
+    f4Mom=q4M*(fMass/sum);
+    s4Mom=f4Mom;
+    t4Mom=q4M*(sMass/sum);
+  }
+  else if(qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom))
+  {
+    G4cout<<"---Warning---G4QNuc::DecayAlphaDiN:fPDG="<<fPDG<<"(M="<<fMass<<")*2+mAlpha = "
+          <<sum<<" >? TotM="<<qM<<q4M<<", d="<<sum-qM<<G4endl;
+    //G4cerr<<"***G4QNuc::DecayAlphaDiN: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+    //throw G4QException("G4QNuc::DecayAlphaDiN: Alpha+N+N DecayIn3 error");
+    evaHV->push_back(qH);
+    return;
+  }
+#ifdef pdebug
+  G4cout<<"G4QNuc::DecAl2N: fPDG="<<fPDG<<",f="<<f4Mom<<",s="<<s4Mom<<",t="<<t4Mom<<G4endl;
+#endif
+  delete qH;
+  G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);    // Create a Hadron for the 1-st baryon
+  evaHV->push_back(H1);                    // Fill "H1" (delete equivalent)
+  G4QHadron* H2 = new G4QHadron(fPDG,s4Mom);    // Create a Hadron for the 2-nd baryon
+  evaHV->push_back(H2);                    // Fill "H2" (delete equivalent)
+  G4QHadron* H3 = new G4QHadron(sPDG,t4Mom);    // Create a Hadron for the alpha
+  evaHV->push_back(H3);                    // Fill "H3" (delete equivalent)
+} // End of DecayAlphaDiN
+
+//Decay of the excited alpha+bayon state in alpha and baryons
+void G4QNucleus::DecayAlphaBar(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ============================================
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
+  static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0);
+  static const G4double mHe3 = G4QPDGCode(2112).GetNuclMass(2,1,0);
+  static const G4double eps=0.003;
+  G4LorentzVector q4M = qH->Get4Momentum();     // Get 4-momentum of the Alpha-Baryon
+  G4double         qM = q4M.m();                // Mass of Alpha-Baryon
+  G4int          qPDG = qH->GetPDGCode();       // PDG Code of the decayin Alpha-Baryon
+  G4QContent      qQC = qH->GetQC();            // PDG Code of the decaying Alpha-Bar
+#ifdef pdebug
+  G4cout<<"G4QNucleus::DecayAlphaBar: *Called* PDG="<<qPDG<<",4M="<<q4M<<qQC<<G4endl;
+#endif
+  G4int totS=qQC.GetStrangeness();              //  Total Strangeness       (L)
+  G4int totC=qQC.GetCharge();                   //  Total Charge            (p)
+  G4int totBN=qQC.GetBaryonNumber();            // Total Baryon Number      (A)
+  if((!totS&&!totC||totC==totBN||totS==totBN)&&totBN>1)
+  {
+    DecayMultyBaryon(qH,evaHV);
+    //return;
+  }
+  else if(qPDG==92001002||qPDG==92002001||qPDG==91003001||qPDG==91001003||qPDG==93001001)
+  {
+    evaHV->push_back(qH);
+    //return;
+  }
+  else if(qPDG==92000003||qPDG==92003000||qPDG==93000002||qPDG==93002000)
+  {
+    G4int          fPDG = 3122;                 // 1st Prototype for 2L+3n case
+    G4double       fMass= mLamb;
+    G4int          sPDG = 2112;
+    G4double       sMass= mNeut;
+    if     (qPDG==92003000)                     // "2L+3p" case
+    {
+      sPDG = 2212;
+      sMass= mProt;
+    }
+    else if(qPDG==93000002)                     // "2n+3L" case
+    {
+      fPDG = 2112;
+      fMass= mNeut;
+      sPDG = 3122;
+      sMass= mLamb;
+    }
+    else if(qPDG==93002000)                     // "2p+3L" case
+    {
+      fPDG = 2212;
+      fMass= mProt;
+      sPDG = 3122;
+      sMass= mLamb;
+    }
+    G4double tfM=fMass+fMass;
+    G4double tsM=sMass+sMass+sMass;
+    G4LorentzVector f4Mom(0.,0.,0.,tfM);
+    G4LorentzVector s4Mom(0.,0.,0.,tsM);
+    G4double sum=tfM+tsM;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(tfM/sum);
+      s4Mom=q4M*(tsM/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"--Warning--G4QNuc::DecAlB:fPDG="<<fPDG<<"(M="<<fMass<<")*2="<<2*fMass<<",s="
+            <<sPDG<<"(sM="<<sMass<<")*3="<<3*sMass<<"="<<sum<<">M="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QN::DecayAlphaBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucleus::DecayAlphaBar: DecayIn2 didn't succeed for 3/2");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::DecAlB:*DONE*, fPDG="<<fPDG<<f4Mom<<",sPDG="<<sPDG<<s4Mom<<G4endl;
+#endif
+    delete qH;
+    G4LorentzVector rf4Mom=f4Mom/2;
+    G4QHadron* H1 = new G4QHadron(fPDG,rf4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    G4LorentzVector rs4Mom=s4Mom/3;
+    G4QHadron* H2 = new G4QHadron(sPDG,rs4Mom); // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                  // Fill "H2" (delete equivalent)
+    evaHV->push_back(H2);                  // Fill "H2" (delete equivalent)
+    evaHV->push_back(H2);                  // Fill "H2" (delete equivalent)
+  }
+  else if(qPDG==90004001||qPDG==90001004)
+  {
+    G4int          fPDG = 90002001;             // Prototype for "He3+2p" case
+    G4double       fMass= mHe3;
+    G4int          sPDG = 2212;
+    G4double       sMass= mProt;
+    if     (qPDG==90001004)                     // "t+2n" case
+    {
+      fPDG = 90001002;
+      fMass= mTrit;
+      sPDG = 2112;
+      sMass= mNeut;
+    }
+    G4LorentzVector f4Mom(0.,0.,0.,fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,sMass);
+    G4LorentzVector t4Mom(0.,0.,0.,sMass);
+    G4double sum=fMass+sMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+      t4Mom=s4Mom;
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom))
+    {
+      G4cout<<"--Warning--G4QNuc::DecAlB:fPDG="<<fPDG<<",M="<<fMass<<",sPDG="<<sPDG<<",sM="
+            <<sMass<<",2sM+fM="<<2*sMass+fMass<<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"*G4QNuc::DecayAlphaBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucleus::DecayAlphaBar: t/nn,He3/pp DecayIn3 didn't");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucl::DecAlB: *DONE*, f="<<fPDG<<f4Mom<<", s="<<sPDG<<s4Mom<<t4Mom<<G4endl;
+#endif
+    delete qH;
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);   // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                   // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom);   // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                   // Fill "H2" (delete equivalent)
+    G4QHadron* H3 = new G4QHadron(sPDG,t4Mom);   // Create a Hadron for the 3-d baryon
+    evaHV->push_back(H3);                   // Fill "H3" (delete equivalent)
+  }
+  else if(qPDG==94000001||qPDG==94001000||qPDG==91000004||qPDG==91004000)
+  {
+    G4int          fPDG = 3122;                 // Prototype for "4L+n" case
+    G4double       fMass= mLamb+mLamb;
+    G4int          sPDG = 2112;
+    G4double       sMass= mNeut;
+    if     (qPDG==94001000)                     // "4L+p" case
+    {
+      sPDG = 2212;
+      sMass= mProt;
+    }
+    else if(qPDG==91000004)                     // "4n+L" case
+    {
+      fPDG = 2112;
+      fMass= mNeut+mNeut;
+      sPDG = 3122;
+      sMass= mLamb;
+    }
+    else if(qPDG==91004000)                     // "4p+L" case
+    {
+      fPDG = 2212;
+      fMass= mProt+mProt;
+      sPDG = 3122;
+      sMass= mLamb;
+    }
+    G4LorentzVector f4Mom(0.,0.,0.,fMass+fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,sMass);
+    G4double sum=fMass+fMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*((fMass+fMass)/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"--Warning--G4QNucl::DecAlphBar:fPDG="<<fPDG<<"(2*fM="<<fMass<<")*2="<<2*fMass
+            <<",sPDG="<<sPDG<<"(sM="<<sMass<<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"*G4QNuc::DecayAlphaBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucl::DecayAlphaBar:QuintBaryon DecayIn2 didn't succeed");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNuc::DecAlphaB: *DONE*, fPDG="<<fPDG<<f4Mom<<",sPDG="<<sPDG<<s4Mom<<G4endl;
+#endif
+    delete qH;
+    G4LorentzVector rf4Mom=f4Mom/4;
+    G4QHadron* H1 = new G4QHadron(fPDG,rf4Mom); // Create a Hadron for the 1-st baryon
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    evaHV->push_back(H1);                  // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom);  // Create a Hadron for the 2-nd baryon
+    evaHV->push_back(H2);                  // Fill "H2" (delete equivalent)
+  }
+  else if(qPDG==90003002||qPDG==90002003||qPDG==91002002)
+  {
+    G4int          fPDG = 90002002;             // Prototype for "alpha+n" case
+    G4int          sPDG = 2112;
+    G4double       fMass= mAlph;
+    G4double       sMass= mNeut;
+    if(qPDG==90003002)                          // "alpha+p" case
+    {
+      sPDG = 2212;
+      sMass= mProt;    
+    }
+    else if(qPDG==9100202)                      // "alpha+l" case
+    {
+      sPDG = 3122;
+      sMass= mLamb;    
+    }
+    else if(qPDG!=90002003)
+    {
+      evaHV->push_back(qH);                     // Fill hadron as it is (delete equivalent)
+      //EvaporateNucleus(qH, evaHV);            // Evaporate Nucleus (delete equivivalent)
+      return;
+    }
+    G4double dM=fMass+sMass-qM;
+    if(dM>0.&&dM<1.)
+    {
+#ifdef pdebug
+      G4cout<<"***Corrected***G4QNuc::DecayAlphaBar:fPDG="<<fPDG<<"(fM="<<fMass<<")+ sPDG="
+            <<sPDG<<"(sM="<<sMass<<")="<<fMass+sMass<<" > TotM="<<qM<<q4M<<G4endl;
+#endif
+      G4double hdM=dM/2;
+      fMass-=hdM;
+      sMass-=hdM;
+    }
+    G4LorentzVector f4Mom(0.,0.,0.,fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,sMass);      // Mass is random since probab. time
+    G4double sum=fMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"--Warning--G4QNuc::DecAlphaBar:fPDG="<<fPDG<<"(fM="<<fMass<<")+sPDG="<<sPDG
+            <<"(sM="<<sMass<<")="<<fMass+sMass<<"="<<sum<<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cout<<"*G4QNuc::DecayAlphaBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("***G4QNucl::DecayAlphaBar:Alpha+Baryon DecIn2 didn't succeed");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucl::DecAlBar:*DONE*a4M="<<f4Mom<<",s4M="<<s4Mom<<",sPDG="<<sPDG<<G4endl;
+#endif
+    delete qH;
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);      // Create a Hadron for the alpha
+    evaHV->push_back(H1);                      // Fill "H1" (delete equivalent)
+    G4QHadron* H2 = new G4QHadron(sPDG,s4Mom);      // Create a Hadron for the baryon
+    evaHV->push_back(H2);                      // Fill "H2" (delete equivalent)
+  }
+  else G4cout<<"---Warning---G4QNucleus::DecayAlphaBar: Unknown PDG="<<qPDG<<G4endl;
+} // End of DecayAlphaBar
+
+//Decay of the excited alpha+alpha state in 2 alphas
+void G4QNucleus::DecayAlphaAlpha(G4QHadron* qH, G4QHadronVector* evaHV)
+{//  ==============================================
+  static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
+  static const G4double aaGSM= G4QPDGCode(2112).GetNuclMass(4,4,0);
+  static const G4double eps=0.003;
+  G4int          qPDG = qH->GetPDGCode();         // PDG Code of the decayin dialpha
+  if(qPDG!=90004004)
+  {
+    G4cerr<<"***G4QNucleus::DecayAlphaAlpha: qPDG="<<qPDG<<G4endl;
+    throw G4QException("***G4QNucleus::DecayAlphaAlpha: Not Be8 state decais in 2 alphas");
+  }
+  G4LorentzVector q4M = qH->Get4Momentum();       // Get 4-momentum of the Dibaryon
+  G4double qM=q4M.m();
+#ifdef pdebug
+  G4cout<<"G4QNucleus::DecayAlAl: *Called* PDG="<<qPDG<<",M="<<qM<<q4M<<">"<<aaGSM<<G4endl;
+#endif
+  //if(qM>aaGSM+.01)  // @@ Be8*->gamma+Be8 (as in evaporation)
+  if(2>3)
+  {
+    G4int          fPDG = 22;
+    G4int          sPDG = 90004004;
+    G4double       fMass= 0.;
+    G4double       sMass= aaGSM;
+    G4LorentzVector f4Mom(0.,0.,0.,fMass);
+    G4LorentzVector s4Mom(0.,0.,0.,sMass);          // Mass is random since probab. time
+    G4double sum=fMass+sMass;
+    if(fabs(qM-sum)<eps)
+	   {
+      f4Mom=q4M*(fMass/sum);
+      s4Mom=q4M*(sMass/sum);
+    }
+    else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+    {
+      G4cout<<"---Warning---G4QNuc::DecayAlphaAlpha:gPDG="<<fPDG<<"(gM="<<fMass<<")+PDG="
+            <<sPDG<<"(sM="<<sMass<<")="<<sum<<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      //G4cerr<<"***G4QNuc::DecayAlphAlph: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //throw G4QException("G4QNucleus::DecayAlphaAlpha:g+diAlph DecayIn2 didn't succeed");
+      evaHV->push_back(qH);
+      return;
+    }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::DecayAlphaAlpha: *DONE* gam4M="<<f4Mom<<", aa4M="<<s4Mom<<G4endl;
+#endif
+    G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);      // Create a Hadron for the 1-st alpha
+    evaHV->push_back(H1);                      // Fill "H1" (delete equivalent)
+    qH->Set4Momentum(s4Mom);
+    q4M=s4Mom;
+  }
+  G4int          fPDG = 90002002;
+  G4int          sPDG = 90002002;
+  G4double       fMass= mAlph;
+  G4LorentzVector f4Mom(0.,0.,0.,fMass);
+  G4LorentzVector s4Mom(0.,0.,0.,fMass);
+  G4double sum=fMass+fMass;
+  if(fabs(qM-sum)<eps)
+  {
+    f4Mom=q4M*(fMass/sum);
+    s4Mom=f4Mom;
+  }
+  else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+  {
+    G4cout<<"---Warning---G4QNucl::DecayAlphaAlpha:fPDG="<<fPDG<<"(fM="<<fMass<<")*2="<<sum
+          <<" > TotM="<<q4M.m()<<q4M<<G4endl;
+    //G4cerr<<"***G4QNuc::DecayAlphAlph: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+    //throw G4QException("G4QNucleus::DecayAlphaAlpha: diAlpha DecayIn2 didn't succeed");
+    evaHV->push_back(qH);
+    return;
+  }
+#ifdef pdebug
+  G4cout<<"G4QNucleus::DecayAlphaAlpha: *DONE* fal4M="<<f4Mom<<", sal4M="<<s4Mom<<G4endl;
+#endif
+  delete qH;
+  G4QHadron* H1 = new G4QHadron(fPDG,f4Mom);      // Create a Hadron for the 1-st alpha
+  evaHV->push_back(H1);                      // Fill "H1" (delete equivalent)
+  G4QHadron* H2 = new G4QHadron(sPDG,s4Mom);      // Create a Hadron for the 2-nd alpha
+  evaHV->push_back(H2);                      // Fill "H2" (delete equivalent)
+} // End of DecayAlphaAlpha
