@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,6 @@
 #
 /testem/phys/addPhysics standard
 PhysicsList::AddPhysicsList: <standard>
-### /testem/phys/addPhysics g4v71
 #
 /testem/phys/setGCut 2.13 mm
 /testem/phys/setECut 7.0 um
@@ -44,8 +43,8 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileName testem5
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 6 100 -0.25 0.25 mrad
-----> SetHisto 6: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
+/testem/histo/setHisto 13 100 -0.25 0.25 mrad
+----> SetHisto 13: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
 #
 /run/beamOn 100000
 
@@ -251,26 +250,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=196.38s Real=925.06s Sys=71.8s
+  User=188.56s Real=1149.77s Sys=63.99s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.301 keV +- 16.44 eV 
- -----> Mean dE/dx = 3.15 MeV/cm	(1.352 MeV*cm2/g)
+ Total energy deposit in absorber per event = 6.306 keV +- 16.58 eV 
+ -----> Mean dE/dx = 3.153 MeV/cm	(1.353 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 2.936 MeV/cm	(1.26 MeV*cm2/g)
    full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.27 um  +- 7.825 nm 
- Total track length (neutral) in absorber per event = 6.457 Ang +- 3.871 Ang
+ Total track length (charged) in absorber per event = 20.26 um  +- 7.851 nm 
+ Total track length (neutral) in absorber per event = 1.845 Ang +- 1.755 Ang
 
- Number of steps (charged) in absorber per event = 6.121 +- 8.846e-06
- Number of steps (neutral) in absorber per event = 3e-05 +- 8.846e-06
+ Number of steps (charged) in absorber per event = 6.138 +- 8.86e-06
+ Number of steps (neutral) in absorber per event = 2e-05 +- 8.86e-06
 
- Number of secondaries per event : Gammas = 3e-05;   electrons = 0.01746;   positrons = 0
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.01664;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -279,13 +278,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02377 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02341 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.276 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.007 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 651349949, 1204961610
+ Current couple of seeds = 112833642, 2140969345
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

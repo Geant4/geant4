@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -8,7 +8,7 @@
 
 /run/verbose 2
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics emstandard
 #
 /run/initialize
 userDetector->Construct() start.
@@ -41,6 +41,9 @@ physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
+/process/eLoss/verbose 1
+/process/msc/Skin 1
+/run/physicsModified
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -115,7 +118,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -150,7 +153,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -197,7 +200,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -269,28 +272,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=184.2s Real=190.44s Sys=0.05s
+  User=180.64s Real=181.83s Sys=0.08s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 781.05 MeV +- 17.85 MeV     2.285 +- 0.2285 %      53.7 cm  +- 1.33 cm 
-   liquidArgon: 207.34 MeV +- 15.88 MeV     7.657 +- 0.7657 %      1.02 m   +- 8.16 cm 
+          Lead: 786.31 MeV +- 14.37 MeV     1.828 +- 0.1828 %      54.1 cm  +- 1.11 cm 
+   liquidArgon: 204.07 MeV +- 13.81 MeV     6.767 +- 0.6767 %         1 m   +- 6.96 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 781.048 MeV
-liquidArgon:	 207.339 MeV
+      Lead:	 786.31 MeV
+liquidArgon:	 204.065 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 596130632, 1069559193
+ Current couple of seeds = 1324293858, 379564867
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

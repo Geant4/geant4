@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,8 +51,8 @@
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 /testem/run/acceptance 0.949 0.0082 3.0
-/testem/phys/addPhysics standard
-PhysicsList::AddPhysicsList: <standard>
+/testem/phys/addPhysics emstandard
+PhysicsList::AddPhysicsList: <emstandard>
 /testem/phys/setCuts 1.0 mm
 /run/initialize
 Absorber is 17.848 cm  of PbWO4
@@ -61,6 +61,7 @@ Absorber is 17.848 cm  of PbWO4
    --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
    --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 PhysicsList::SetCuts:CutLength : 1 mm 
+/process/eLoss/verbose 1
 /gun/particle e-
 /gun/energy 5 GeV
 /testem/event/printModulo 20
@@ -117,7 +118,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -152,7 +153,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -199,7 +200,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -240,24 +241,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=240.57s Real=254.49s Sys=0.07s
+  User=229.15s Real=230.68s Sys=0.07s
 
  SUMMARY 
 
- energy deposit :   94.66 % E0 +-    1.16 % E0
- charged traklen:  478.38 radl +-    5.95 radl
- neutral traklen: 4443.67 radl +-  122.78 radl
+ energy deposit :   94.79 % E0 +-    1.42 % E0
+ charged traklen:  478.95 radl +-    7.37 radl
+ neutral traklen: 4433.68 radl +-  116.57 radl
 
- 90.00 % confinement: radius = 3.10 radl  (2.77 cm )
+ 90.00 % confinement: radius = 3.00 radl  (2.68 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1583448758, 1480928536
+ Current couple of seeds = 555099151, 989551461
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94655506  delEdep= -0.002444939 nrms= -2.9816329
-Erms: 0.011557799  delErms= 0.0033577985 nrms= 4.0948763
-<<<<END>>>>   IS ACCEPTED
+Edep: 0.94792786  delEdep= -0.0010721356 nrms= -1.3074825
+Erms: 0.014161915  delErms= 0.0059619146 nrms= 7.2706275
+<<<<END>>>>   IS NOT ACCEPTED
 
 G4 kernel has come to Quit state.

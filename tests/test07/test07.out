@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -269,7 +269,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /calor/setNbOfLayers 30
 
  The calorimeter is made of 30 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
-/calor/setSizeYZ   1.5 m
+/calor/setSizeYZ 1.5 m
 
  The calorimeter is made of 30 layers of: [ 20mm of Lead + 50mm of Aerogel ] 
 /calor/update

@@ -1,13 +1,13 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 9 *****
+***** Table : Nb of materials = 12 *****
 
  Material:    G4_Al     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -21,6 +21,12 @@
  Material:    G4_Ge     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
    --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
+ Material:    G4_Mo     density: 10.220 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.591 mm 
+   --->  Element: Mo (Mo)   Z = 42.0   N =  95.9   A =  95.93 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:    G4_Ta     density: 16.654 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   4.094 mm 
+   --->  Element: Ta (Ta)   Z = 73.0   N = 180.9   A = 180.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
  Material:     G4_W     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
    --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
@@ -29,6 +35,11 @@
 
  Material:    G4_Pb     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.613 mm 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.925 mm 
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction:  45.54 %  ElmAbundance  16.67 %
+   --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 
  Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
@@ -101,7 +112,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileName testem11
 /testem/histo/setHisto 1 100 0. 1. mm 
 ----> SetHisto 1: Edep (MeV/mm) along absorber (mm);  100 bins from 0 mm to 1 mm
-      stepMax = 10 um 
 /testem/histo/setHisto 2 102 0. 510. keV 
 ----> SetHisto 2: total Energy deposited in absorber (keV);  102 bins from 0 keV to 510 keV
 /testem/histo/setHisto 3 100 0. 2. mm 
@@ -295,6 +305,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
+
+---> stepMax from HistoManager = 10 um 
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -303,7 +315,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=313.21s Real=588.9s Sys=16.44s
+  User=309.16s Real=601.28s Sys=62.24s
 
  ======================== run summary ======================
 
@@ -311,20 +323,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 449.883 keV +- 102.538 keV
+ Total Energy deposited        = 451.036 keV +- 101.014 keV
 
- Track length of primary track = 877.459 um  +- 187.170 um 
+ Track length of primary track = 878.611 um  +- 185.031 um 
  Range from EmCalculator       = 937.365 um  (from full dE/dx)
 
- Projected range               = 337.189 um  +- 204.671 um 
+ Projected range               = 340.538 um  +- 206.533 um 
 
- Nb of steps of primary track  = 88.26 +- 18.70	 Step size= 9.933 um  +- 93.084 nm 
+ Nb of steps of primary track  = 88.38 +- 18.49	 Step size= 9.934 um  +- 83.983 nm 
 
- absorbed = 78.62 %   transmit = 5.64 %   reflected = 15.74 %
+ absorbed = 78.98 %   transmit = 5.45 %   reflected = 15.57 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1888543794, 1916470412
+ Current couple of seeds = 1798097556, 1550232543
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

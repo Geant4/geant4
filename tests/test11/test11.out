@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,6 +12,7 @@ SimpleBox is now made of Pb
 /run/initialize
 NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/8_17_Oxygen
 NeutronHP: /Elastic/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/6_nat_Carbon
+NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/8_17_Oxygen
 NeutronHP: /Elastic/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
 NeutronHP: /Elastic/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
 NeutronHP: /Elastic/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
@@ -26,6 +27,9 @@ NeutronHP: /Inelastic file for Z = 2, A = 4 is not found and NeutronHP will use 
 NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/8_17_Oxygen
 NeutronHP: /Capture file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
 NeutronHP: /Elastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
 NeutronHP: /Inelastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
@@ -45,6 +49,7 @@ NeutronHP: /Inelastic file for Z = 30, A = 70 is not found and NeutronHP will us
 NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/8_17_Oxygen
 NeutronHP: /Capture/ file for Z = 2, A = 4 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/2_3_Helium
 NeutronHP: /Capture/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/6_nat_Carbon
+NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/8_17_Oxygen
 NeutronHP: /Capture/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
 NeutronHP: /Capture/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
 NeutronHP: /Capture/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
@@ -829,26 +834,26 @@ SimpleBox is now made of G4_H
 SimpleBox is now made of G4_H
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_H
+# neutron at 100 eV in G4_H
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_H
+# neutron at 10 eV in G4_H
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_H
+# neutron at 1 eV in G4_H
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
 /run/beamOn 1
@@ -1026,26 +1031,26 @@ SimpleBox is now made of G4_He
 SimpleBox is now made of G4_He
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_He
+# neutron at 100 eV in G4_He
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_He
+# neutron at 10 eV in G4_He
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_He
+# neutron at 1 eV in G4_He
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
 /run/beamOn 1
@@ -1223,26 +1228,26 @@ SimpleBox is now made of G4_Li
 SimpleBox is now made of G4_Li
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Li
+# neutron at 100 eV in G4_Li
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Li
+# neutron at 10 eV in G4_Li
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Li
+# neutron at 1 eV in G4_Li
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
 /run/beamOn 1
@@ -1420,26 +1425,26 @@ SimpleBox is now made of G4_Be
 SimpleBox is now made of G4_Be
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Be
+# neutron at 100 eV in G4_Be
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Be
+# neutron at 10 eV in G4_Be
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Be
+# neutron at 1 eV in G4_Be
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
 /run/beamOn 1
@@ -1617,26 +1622,26 @@ SimpleBox is now made of G4_B
 SimpleBox is now made of G4_B
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_B
+# neutron at 100 eV in G4_B
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_B
+# neutron at 10 eV in G4_B
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_B
+# neutron at 1 eV in G4_B
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
 /run/beamOn 1
@@ -1814,26 +1819,26 @@ SimpleBox is now made of G4_C
 SimpleBox is now made of G4_C
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_C
+# neutron at 100 eV in G4_C
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_C
+# neutron at 10 eV in G4_C
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_C
+# neutron at 1 eV in G4_C
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
 /run/beamOn 1
@@ -2011,26 +2016,26 @@ SimpleBox is now made of G4_N
 SimpleBox is now made of G4_N
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_N
+# neutron at 100 eV in G4_N
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_N
+# neutron at 10 eV in G4_N
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_N
+# neutron at 1 eV in G4_N
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
 /run/beamOn 1
@@ -2208,26 +2213,26 @@ SimpleBox is now made of G4_O
 SimpleBox is now made of G4_O
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_O
+# neutron at 100 eV in G4_O
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_O
+# neutron at 10 eV in G4_O
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_O
+# neutron at 1 eV in G4_O
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
 /run/beamOn 1
@@ -2408,26 +2413,26 @@ SimpleBox is now made of G4_Al
 SimpleBox is now made of G4_Al
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Al
+# neutron at 100 eV in G4_Al
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Al
+# neutron at 10 eV in G4_Al
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Al
+# neutron at 1 eV in G4_Al
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
 /run/beamOn 1
@@ -2608,26 +2613,26 @@ SimpleBox is now made of G4_Fe
 SimpleBox is now made of G4_Fe
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Fe
+# neutron at 100 eV in G4_Fe
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Fe
+# neutron at 10 eV in G4_Fe
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Fe
+# neutron at 1 eV in G4_Fe
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
 /run/beamOn 1
@@ -2808,26 +2813,26 @@ SimpleBox is now made of G4_Cu
 SimpleBox is now made of G4_Cu
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Cu
+# neutron at 100 eV in G4_Cu
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Cu
+# neutron at 10 eV in G4_Cu
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Cu
+# neutron at 1 eV in G4_Cu
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
 /run/beamOn 1
@@ -3008,26 +3013,26 @@ SimpleBox is now made of G4_Zn
 SimpleBox is now made of G4_Zn
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Zn
+# neutron at 100 eV in G4_Zn
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Zn
+# neutron at 10 eV in G4_Zn
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Zn
+# neutron at 1 eV in G4_Zn
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
 /run/beamOn 1
@@ -3208,26 +3213,26 @@ SimpleBox is now made of G4_Ge
 SimpleBox is now made of G4_Ge
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Ge
+# neutron at 100 eV in G4_Ge
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Ge
+# neutron at 10 eV in G4_Ge
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Ge
+# neutron at 1 eV in G4_Ge
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
 /run/beamOn 1
@@ -3414,26 +3419,26 @@ SimpleBox is now made of G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Ag
+# neutron at 100 eV in G4_Ag
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Ag
+# neutron at 10 eV in G4_Ag
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Ag
+# neutron at 1 eV in G4_Ag
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
@@ -3620,26 +3625,26 @@ SimpleBox is now made of G4_Au
 SimpleBox is now made of G4_Au
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_Au
+# neutron at 100 eV in G4_Au
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_Au
+# neutron at 10 eV in G4_Au
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_Au
+# neutron at 1 eV in G4_Au
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
 /run/beamOn 1
@@ -3826,26 +3831,28 @@ SimpleBox is now made of G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
 #
-# neutron at 100 eV  in G4_U
+# neutron at 100 eV in G4_U
 #
 /gun/particle neutron
-/gun/energy 100 eV 
+/gun/energy 100 eV
 /mydet/SelectMaterial G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
 #
-# neutron at 10 eV  in G4_U
+# neutron at 10 eV in G4_U
 #
 /gun/particle neutron
-/gun/energy 10 eV 
+/gun/energy 10 eV
 /mydet/SelectMaterial G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
 #
-# neutron at 1 eV  in G4_U
+# neutron at 1 eV in G4_U
 #
 /gun/particle neutron
-/gun/energy 1 eV 
+/gun/energy 1 eV
 /mydet/SelectMaterial G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
+--> warning from ~G4Isotope(): the isotope U238 is still referenced by 1 G4Elements 
+

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -206,29 +206,25 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (52,138) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,90) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (49,131) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,88) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (45,115) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,106) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (49,129) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,124) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (45,120) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (93,234) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (50,134) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (17,44) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,120) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (52,137) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,88) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,91) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,139) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,118) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,126) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,140) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,86) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (37,95) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (58,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,89) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (36,94) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=27s Real=28s Sys=0.15s
+  User=26s Real=26s Sys=0.18s
 #
-# deuteron at 1 GeV/nucleon on H 
+# deuteron at 1 GeV/nucleon on H
 #
 /gun/particle deuteron
 /gun/energy 1.0 GeV
@@ -402,7 +398,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# deuteron at 1 GeV/nucleon on Silicon 
+# deuteron at 1 GeV/nucleon on Silicon
 #
 /gun/particle deuteron
 /gun/energy 1.0 GeV
@@ -582,7 +578,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.11s Real=6.15s Sys=0.03s
+  User=5.76s Real=5.81s Sys=0.05s
 #
 #
 # deuteron at 200 MeV in U
@@ -626,13 +622,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (47,121) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.34s Sys=0s
+  User=0.81s Real=0.83s Sys=0.01s
 #
-# deuteron at 200 MeV/nucleon on H 
+# deuteron at 200 MeV/nucleon on H
 #
 /gun/particle deuteron
 /gun/energy 200 MeV
@@ -678,7 +673,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# deuteron at 200 MeV/nucleon on Silicon 
+# deuteron at 200 MeV/nucleon on Silicon
 #
 /gun/particle deuteron
 /gun/energy 200 MeV
@@ -722,9 +717,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.67s Real=0.69s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 #
-#  .....end deuteron.............
+# .....end deuteron.............
 #
 # alpha at 1 GeV/nucleon in U
 #
@@ -767,19 +762,17 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (53,139) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (41,98) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,125) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,140) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,87) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,89) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,222) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,141) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (43,111) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (23,58) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.9s Real=10s Sys=0.02s
+  User=5.5s Real=5.7s Sys=0.05s
 #
-# alpha at 1 GeV/nucleon on H 
+# alpha at 1 GeV/nucleon on H
 #
 /gun/particle alpha
 /gun/energy 1.0 GeV
@@ -825,7 +818,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# alpha at 1 GeV/nucleon on Silicon 
+# alpha at 1 GeV/nucleon on Silicon
 #
 /gun/particle alpha
 /gun/energy 1.0 GeV
@@ -869,7 +862,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.4s Real=1.4s Sys=0s
+  User=2.6s Real=2.7s Sys=0.02s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -917,7 +910,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.02s Sys=0.01s
 #
-# alpha at 200 MeV/nucleon on H 
+# alpha at 200 MeV/nucleon on H
 #
 /gun/particle alpha
 /gun/energy 200 MeV
@@ -963,7 +956,7 @@ Run Summary
   Number of events processed : 20
   User=0.02s Real=0.02s Sys=0s
 #
-# alpha at 200 MeV/nucleon on Silicon 
+# alpha at 200 MeV/nucleon on Silicon
 #
 /gun/particle alpha
 /gun/energy 200 MeV
@@ -1007,9 +1000,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.03s Sys=0.01s
 #
-#  .....end alpha............
+# .....end alpha............
 #
 # C(12,6)++ at 1 GeV/nucleon in U
 #
@@ -1053,43 +1046,62 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (46,119) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,123) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,113) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,138) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (42,111) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,85) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (56,149) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (17,41) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (19,51) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,118) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (41,109) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (35,86) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (57,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (27,71) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,226) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (43,112) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (90,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (39,103) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,124) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (45,117) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,114) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (37,96) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (57,149) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (18,45) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (31,82) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,117) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (14,35) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (39,106) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,85) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,214) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,145) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,226) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (48,125) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,86) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,115) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,119) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,144) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,113) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,91) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (30,75) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (33,84) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,121) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (40,105) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (33,85) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,39) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (11,29) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (42,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,120) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (51,135) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,122) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (59,156) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (37,96) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,89) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (49,120) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (43,111) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,125) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (41,108) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (43,113) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (24,57) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,123) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (45,116) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (58,151) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (49,122) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,117) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,40) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,87) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=67s Real=69s Sys=0.76s
+  User=75s Real=77s Sys=0.69s
 #
-# C(12,6)++ at 1 GeV/nucleon on H 
+# C(12,6)++ at 1 GeV/nucleon on H
 #
 /gun/particle ion
 /gun/ion 6 12 2
@@ -1136,7 +1148,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# C(12,6)++ at 1 GeV/nucleon on Silicon 
+# C(12,6)++ at 1 GeV/nucleon on Silicon
 #
 /gun/particle ion
 /gun/ion 6 12 2
@@ -1181,9 +1193,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=17.75s Real=18.99s Sys=1.22s
+  User=16.36s Real=17.25s Sys=0.89s
 #
-# C(12,6)++ at 1 GeV/nucleon on Water 
+# C(12,6)++ at 1 GeV/nucleon on Water
 #
 /gun/particle ion
 /gun/ion 6 12 2
@@ -1366,7 +1378,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.83s Real=10.85s Sys=1.01s
+  User=6.58s Real=7.36s Sys=0.76s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1416,12 +1428,23 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (15,43) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,38) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,138) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (36,95) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,147) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,88) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,116) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (67,175) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (43,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,118) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.06s Sys=0.01s
+  User=15s Real=15s Sys=0.08s
 #
-# C(12,6)++ at 200 MeV/nucleon on H 
+# C(12,6)++ at 200 MeV/nucleon on H
 #
 /gun/particle ion
 /gun/ion 6 12 2
@@ -1473,7 +1496,7 @@ Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
 #
-# C(12,6)++ at 200 MeV/nucleon on Silicon 
+# C(12,6)++ at 200 MeV/nucleon on Silicon
 #
 /gun/particle ion
 /gun/ion 6 12 2
@@ -1523,9 +1546,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.41s Real=10.31s Sys=0.86s
+  User=4.82s Real=5.18s Sys=0.36s
 #
-#  .....end C(12,6)++............
+# .....end C(12,6)++............
 #
 # beyond what we really can do.... we think.
 # Fe(56,26) charge 5 at 2 GeV in Lead
@@ -1725,7 +1748,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.6s Real=8s Sys=0.16s
+  User=4s Real=4.1s Sys=0.14s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

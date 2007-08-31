@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: global-V09-00-00    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -162,7 +162,6 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
- G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (79,201) does not have a gamma levels file
 #
 # proton at 400 GeV in Pb
@@ -172,6 +171,7 @@ hIoni:   tables are built for  pi-
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
+ G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
 #
 # proton at 1 TeV in Pb
 #
@@ -180,8 +180,8 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
- G4NuclearLevelManager: nuclide (79,203) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (77,197) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (79,203) does not have a gamma levels file
 #
 # proton at 100 GeV in Al
 #
