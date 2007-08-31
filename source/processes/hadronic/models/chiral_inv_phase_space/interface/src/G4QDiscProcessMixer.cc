@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.1 2007-08-28 15:48:15 mkossov Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.2 2007-08-31 09:36:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer class -----------------
@@ -39,15 +39,6 @@
 #include "G4QDiscProcessMixer.hh"
 
 // Constructor
-G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name):
-  G4VDiscreteProcess(name), DPParticle(G4Gamma::Gamma())
-{
-#ifdef debug
-  G4cout<<"G4QDiscProcessMixer::VConstructor is called processName="<<name<<G4endl;
-#endif
-  if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created "<<G4endl;
-}
-
 G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
                                          const G4ParticleDefinition* particle,
                                          G4ProcessType pType):

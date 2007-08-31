@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.1 2007-08-28 15:48:15 mkossov Exp $
+// $Id: G4QLowEnergy.hh,v 1.2 2007-08-31 09:36:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy header ----------------
@@ -47,6 +47,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
@@ -55,6 +56,7 @@
 #include "G4LorentzVector.hh"
 
 // CHIPS Headers
+#include "G4QNucleus.hh"
 #include "G4QIonIonCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QPDGToG4Particle.hh"
@@ -89,10 +91,13 @@ public:
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
-
   G4LorentzVector GetEnegryMomentumConservation();
 
   G4int GetNumberOfNeutronsInTarget();
+
+  void SwitchOnEvaporation() {evaporate=true;}   // Evaporation instead of gammas (default)
+
+  void SwitchOffEvaporation() {evaporate=false;} // Gammas instead of evaporation
 
 private:
 
@@ -110,6 +115,7 @@ private:
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------
   // Working parameters
+  G4bool evaporate;
   G4VQCrossSection* theCS;
   G4LorentzVector EnMomConservation;                  // Residual of Energy/Momentum Cons.
   G4int nOfNeutrons;                                  // #of neutrons in the target nucleus

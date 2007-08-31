@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.hh,v 1.1 2007-08-28 15:48:15 mkossov Exp $
+// $Id: G4QDiscProcessMixer.hh,v 1.2 2007-08-31 09:36:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer header ----------------
@@ -64,8 +64,6 @@ class G4QDiscProcessMixer : public G4VDiscreteProcess
 public:
 
   // Constructor
-  G4QDiscProcessMixer(const G4String& processName = "Mixed Discrete Process");
-
   G4QDiscProcessMixer(const G4String& processName = "Mixed Discrete Process",
                       const G4ParticleDefinition* proj = G4Gamma::Gamma(),
                       G4ProcessType pType = fNotDefined );

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.1 2007-08-28 15:48:15 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.2 2007-08-31 09:36:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -50,7 +50,8 @@ std::vector<std::vector<G4int>*> G4QLowEnergy::ElIsoN;// N of isotope(j), E(i)
 std::vector<std::vector<G4double>*>G4QLowEnergy::IsoProbInEl;//SumProbIsotE(i)
 
 // Constructor
-G4QLowEnergy::G4QLowEnergy(const G4String& processName):G4VDiscreteProcess(processName)
+G4QLowEnergy::G4QLowEnergy(const G4String& processName):
+  G4VDiscreteProcess(processName), evaporate(true)
 {
 #ifdef debug
   G4cout<<"G4QLowEnergy::Constructor is called processName="<<processName<<G4endl;
@@ -257,6 +258,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   static G4ParticleDefinition* aHe3      = G4He3::He3();
   static G4ParticleDefinition* anAlpha   = G4Alpha::Alpha();
   static const G4int nCh=26;                         // #of combinations
+  static G4QNucleus Nuc;                             // A fake nucleus to call Evaporation
   //
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
@@ -466,7 +468,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI: Projectile track is killed"<<G4endl;
 #endif
-  // CASP algorithm implementation --- STARTS HERE --- All calculations are in IU --------
+  // algorithm implementation --- STARTS HERE --- All calculations are in IU --------
   G4double totM=tot4M.m(); // total CMS mass of the reaction
 		G4int totN=tN+pN;
   G4int totZ=tZ+pZ;
@@ -520,7 +522,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   G4double prA=prD*prD;
   G4double prH=prD*prZ;
   G4double prT=prD*prN;
-  G4double fhe3=6.*pow(tA,.33333333);
+  G4double fhe3=6.*std::sqrt(tA);
   G4double prL=0.;
   if(pL>0) prL=pL/pA;
   G4double qval[nCh]={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
@@ -597,72 +599,162 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   G4DynamicParticle* FstSec = new G4DynamicParticle;
   G4DynamicParticle* SecSec = new G4DynamicParticle;
 #ifdef debug
-  G4cout<<"G4QLowEn::PSDI: Dynamic particles are created"<<G4endl;
+  G4cout<<"G4QLowEn::PSDI: Dynamic particles are created pL="<<pL<<G4endl;
 #endif
 
   G4LorentzVector res4Mom(zeroMom,mass[index]*MeV); // The recoil nucleus prototype
   G4double mF=0.;
   G4double mS=0.;
-  G4int rA=totZ+totN;
-  G4int rZ=totZ;
-  G4int rL=pL;
+  G4int    rA=totZ+totN;
+  G4int    rZ=totZ;
+  G4int    rL=pL;
+  G4int complete=3;
+  G4ParticleDefinition* theDefinition;  // Prototype for qfNucleon
   switch( index )
   {
    case 0:
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
-     FstSec->SetDefinition( aGamma );
-     SecSec->SetDefinition( aGamma );
+     if(!evaporate || rA<2)
+     {
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       FstSec->SetDefinition( aGamma );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete FstSec;
+       delete SecSec;
+       complete=0;
+     }
      break;
    case 1:
      rA-=1;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( aNeutron );
-     SecSec->SetDefinition( aGamma );
      mF=mNeut; // First hadron 4-momentum
      break;
    case 2:
-     rZ-=1;
      rA-=1;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       rZ-=1;
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( aProton );
-     SecSec->SetDefinition( aGamma );
      mF=mProt; // First hadron 4-momentum
      break;
    case 3:
-     rZ-=1;
      rA-=2;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       rZ-=1;
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( aDeuteron );
-     SecSec->SetDefinition( aGamma );
      mF=mDeut; // First hadron 4-momentum
      break;
    case 4:
-     rZ-=1;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       rZ-=1;
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( aTriton );
-     SecSec->SetDefinition( aGamma );
      mF=mTrit; // First hadron 4-momentum
      break;
    case 5:
-     rZ-=2;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       rZ-=2;
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( aHe3);
-     SecSec->SetDefinition( aGamma );
      mF=mHel3; // First hadron 4-momentum
      break;
    case 6:
-     rZ-=2;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     if(!evaporate || rA<2)
+     {
+       rZ-=2;
+       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!theDefinition)
+         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       ResSec->SetDefinition( theDefinition );
+       SecSec->SetDefinition( aGamma );
+     }
+     else
+     {
+       delete ResSec;
+       delete SecSec;
+       complete=1;
+     }
      FstSec->SetDefinition( anAlpha );
-     SecSec->SetDefinition( aGamma );
      mF=mAlph; // First hadron 4-momentum
      break;
    case 7:
      rA-=2;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aNeutron );
      mF=mNeut; // First hadron 4-momentum
@@ -671,7 +763,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 8:
      rZ-=1;
      rA-=2;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aProton );
      mF=mNeut; // First hadron 4-momentum
@@ -680,7 +775,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 9:
      rZ-=2;
      rA-=2;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aProton );
      mF=mProt; // First hadron 4-momentum
@@ -689,7 +787,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 10:
      rZ-=2;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aDeuteron );
      mF=mProt; // First hadron 4-momentum
@@ -698,7 +799,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 11:
      rZ-=1;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aDeuteron );
      mF=mNeut; // First hadron 4-momentum
@@ -707,7 +811,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 12:
      rZ-=2;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
      SecSec->SetDefinition( aDeuteron );
      mF=mDeut; // First hadron 4-momentum
@@ -716,7 +823,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 13:
      rZ-=2;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aTriton );
      mF=mProt; // First hadron 4-momentum
@@ -725,7 +835,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 14:
      rZ-=1;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aTriton );
      mF=mNeut; // First hadron 4-momentum
@@ -734,7 +847,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 15:
      rZ-=3;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton);
      SecSec->SetDefinition( aHe3 );
      mF=mProt; // First hadron 4-momentum
@@ -743,7 +859,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 16:
      rZ-=2;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aHe3 );
      mF=mNeut; // First hadron 4-momentum
@@ -752,7 +871,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 17:
      rZ-=3;
      rA-=5;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( anAlpha );
      mF=mProt; // First hadron 4-momentum
@@ -761,14 +883,20 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 18:
      rZ-=2;
      rA-=5;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,pL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( anAlpha );
      mF=mNeut; // First hadron 4-momentum
      mS=mAlph; // Second hadron 4-momentum
      break;
    case 19:
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aLambda );
      SecSec->SetDefinition( aGamma );
      mF=mLamb; // First hadron 4-momentum
@@ -776,7 +904,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 20:
      rZ-=1;
      rA-=1;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aLambda );
      mF=mProt; // First hadron 4-momentum
@@ -784,7 +915,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 21:
      rA-=1;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aLambda );
      mF=mNeut; // First hadron 4-momentum
@@ -793,7 +927,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 22:
      rZ-=1;
      rA-=2;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
      SecSec->SetDefinition( aLambda );
      mF=mDeut; // First hadron 4-momentum
@@ -802,7 +939,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 23:
      rZ-=1;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aTriton );
      SecSec->SetDefinition( aLambda );
      mF=mTrit; // First hadron 4-momentum
@@ -811,7 +951,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 24:
      rZ-=2;
      rA-=3;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aHe3 );
      SecSec->SetDefinition( aLambda );
      mF=mHel3; // First hadron 4-momentum
@@ -820,7 +963,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 25:
      rZ-=2;
      rA-=4;
-     ResSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,0) );
+     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     if(!theDefinition)
+       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( anAlpha );
      SecSec->SetDefinition( aLambda );
      mF=mAlph; // First hadron 4-momentum
@@ -828,7 +974,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
   }
 #ifdef debug
-  G4cout<<"G4QLowEn::PSDI: mF="<<mF<<", mS="<<mS<<G4endl;
+  G4cout<<"G4QLowEn::PSDI:F="<<mF<<",S="<<mS<<",com="<<complete<<",ev="<<evaporate<<G4endl;
 #endif
   G4LorentzVector fst4Mom(zeroMom,mF); // Prototype of the first hadron 4-momentum
   G4LorentzVector snd4Mom(zeroMom,mS); // Prototype of the second hadron 4-momentum
@@ -844,20 +990,77 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI:r4M="<<res4Mom<<",f4M="<<fst4Mom<<",s4M="<<snd4Mom<<G4endl;
 #endif
-  ResSec->Set4Momentum(res4Mom);
-  FstSec->Set4Momentum(fst4Mom);
-  SecSec->Set4Momentum(snd4Mom);
-  //
-  G4Track* aNewTrack = new G4Track(ResSec, localtime, position );
-  aNewTrack->SetTouchableHandle(trTouchable);
-  aParticleChange.AddSecondary( aNewTrack );
-  aNewTrack = new G4Track(FstSec, localtime, position );
-  aNewTrack->SetTouchableHandle(trTouchable);
-  aParticleChange.AddSecondary( aNewTrack );
-  aNewTrack = new G4Track(SecSec, localtime, position );
-  aNewTrack->SetTouchableHandle(trTouchable);
-  aParticleChange.AddSecondary( aNewTrack );
-  // CASP algorithm implementation --- STOPS HERE
+  G4Track* aNewTrack = 0;
+  if(complete)
+  {
+    FstSec->Set4Momentum(fst4Mom);
+    aNewTrack = new G4Track(FstSec, localtime, position );
+    aNewTrack->SetTouchableHandle(trTouchable);
+    aParticleChange.AddSecondary( aNewTrack );
+    EnMomConservation-=fst4Mom;
+#ifdef debug
+    G4cout<<"G4QLowEn::PSDI: ***Filled*** 1stH4M="<<fst4Mom<<G4endl;
+#endif
+    if(complete>2)                     // Final solution
+    {
+      ResSec->Set4Momentum(res4Mom);
+      aNewTrack = new G4Track(ResSec, localtime, position );
+      aNewTrack->SetTouchableHandle(trTouchable);
+      aParticleChange.AddSecondary( aNewTrack );
+      EnMomConservation-=res4Mom;
+#ifdef debug
+      G4cout<<"G4QLowEn::PSDI: ***Filled*** rA4M="<<res4Mom<<",rZ="<<rZ<<",rA="<<rA<<",rL="
+            <<rL<<G4endl;
+#endif
+      SecSec->Set4Momentum(snd4Mom);
+      aNewTrack = new G4Track(SecSec, localtime, position );
+      aNewTrack->SetTouchableHandle(trTouchable);
+      aParticleChange.AddSecondary( aNewTrack );
+      EnMomConservation-=snd4Mom;
+#ifdef debug
+      G4cout<<"G4QLowEn::PSDI: ***Filled*** 2ndH4M="<<snd4Mom<<G4endl;
+#endif
+    }
+    else res4Mom+=snd4Mom;
+  }
+  else res4Mom=tot4M;
+  if(complete<3)                        // Evaporation of the residual must be done
+  {
+    G4QHadron* rHadron = new G4QHadron(90000000+999*rZ+rA,res4Mom); // Input hadron-nucleus
+    G4QHadronVector* evaHV = new G4QHadronVector; // Output vector of hadrons (delete!)
+    Nuc.EvaporateNucleus(rHadron, evaHV);
+    G4int nOut=evaHV->size();
+    for(G4int i=0; i<nOut; i++)
+    {
+      G4QHadron* curH = (*evaHV)[i];
+      G4int hPDG=curH->GetPDGCode();
+      G4LorentzVector h4Mom=curH->Get4Momentum();
+      EnMomConservation-=h4Mom;
+#ifdef debug
+      G4cout<<"G4QLowEn::PSDI: ***FillingCand#"<<i<<"*** evaH="<<hPDG<<h4Mom<<G4endl;
+#endif
+      if     (hPDG==90000001 || hPDG==2112) theDefinition = aNeutron;
+      else if(hPDG==90001000 || hPDG==2212) theDefinition = aProton;
+      else if(hPDG==91000000 || hPDG==3122) theDefinition = aLambda;
+      else if(hPDG==     22 )               theDefinition = aGamma;
+      else
+      {
+        G4int hZ=curH->GetCharge();
+        G4int hA=curH->GetBaryonNumber();
+        G4int hS=curH->GetStrangeness();
+        theDefinition = G4ParticleTable::GetParticleTable()->FindIon(hZ,hA,hS,0); // ion
+      }
+      if(theDefinition)
+      {
+        G4DynamicParticle* theEQH = new G4DynamicParticle(theDefinition,h4Mom);
+        G4Track* evaQH = new G4Track(theEQH, localtime, position );
+        evaQH->SetTouchableHandle(trTouchable);
+        aParticleChange.AddSecondary( evaQH );
+      }
+      else G4cerr<<"-Warning-G4QLowEnergy::PostStepDoIt: Bad secondary PDG="<<hPDG<<G4endl;
+    }
+  }
+  // algorithm implementation --- STOPS HERE
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt:*** PostStepDoIt is done ***"<<G4endl;
 #endif
