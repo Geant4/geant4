@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.hh,v 1.2 2007-08-28 05:26:56 akimura Exp $
+// $Id: G4ScoringTubs.hh,v 1.3 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,34 +55,13 @@ class G4ScoringTubs : public G4VScoringMesh
   void SetRMin(G4double rMin) {fSize[0] = rMin;}
   void SetRMax(G4double rMax) {fSize[1] = rMax;}
   void SetZSize(G4double zSize) {fSize[2] = zSize;}
-  void SetSize(G4double size[3]) {
-    for(int i = 0; i < 3; i++) fSize[i] = size[i];
-  }
-
-  void SetCenterPosition(G4double centerPosition[3]) {
-    for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
-  }
-  void SetXCenterPosition(G4double xCenterPosition) {fCenterPosition[0] = xCenterPosition;}
-  void SetYCenterPosition(G4double yCenterPosition) {fCenterPosition[1] = yCenterPosition;}
-  void SetZCenterPosition(G4double zCenterPosition) {fCenterPosition[2] = zCenterPosition;}
-
-  void SetNumberOfSegment(G4int nSegment[3]) {
-    for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
-  }
-  void SetNumberOfRSegment(G4int nRSegment) {fNSegment[0] = nRSegment;}
-  void SetNumberOfPhiSegment(G4int nPhiSegment) {fNSegment[1] = nPhiSegment;}
-  void SetNumberOfZSegment(G4int nZSegment) {fNSegment[2] = nZSegment;}
 
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;} // supports the r-direction only at present.
-  void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
+
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
 
 private:
-  G4double fSize[3];  // 0: r-min., 1: r-max., 2: z-half length
-  G4double fCenterPosition[3];
-  G4int fNSegment[3]; // 0: r , 1: phi, 2: z
   G4int fSegmentDirection; // =1: r, =2: phi, =3: z
-  std::vector<G4double> fSegmentPositions;
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);

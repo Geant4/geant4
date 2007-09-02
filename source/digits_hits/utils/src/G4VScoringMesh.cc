@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.20 2007-08-29 14:28:01 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.21 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,8 +42,6 @@ G4VScoringMesh::G4VScoringMesh(G4String wName)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
-  fSize[0] = fSize[1] = fSize[2] = 0.*cm;
-  fCenterPosition[0] = fCenterPosition[1] = fCenterPosition[2] = 0.*cm;
   fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
 }
 
@@ -77,7 +75,8 @@ void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
 }
 void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
-  for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
+  fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
+  //for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
 }
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
@@ -159,9 +158,9 @@ void G4VScoringMesh::List() const {
 	 << fNSegment[2] << ")"
 	 << G4endl;
   G4cout << " displacement: ("
-	 << fCenterPosition[0]/cm << ", "
-	 << fCenterPosition[1]/cm << ", "
-	 << fCenterPosition[2]/cm << ") [cm]"
+	 << fCenterPosition.x()/cm << ", "
+	 << fCenterPosition.y()/cm << ", "
+	 << fCenterPosition.z()/cm << ") [cm]"
 	 << G4endl;
   if(fRotationMatrix != 0) {
     G4cout << " rotation matrix: "
@@ -188,6 +187,8 @@ void G4VScoringMesh::List() const {
     if(ps->GetFilter() != NULL)
       G4cout << "     with a filter : " << ps->GetFilter()->GetName() << G4endl;
   }
+
+
 }
 
 void G4VScoringMesh::Dump() {
@@ -200,5 +201,6 @@ void G4VScoringMesh::Dump() {
     itr->second->PrintAllHits();
   }
   G4cout << G4endl;
+
 }
 

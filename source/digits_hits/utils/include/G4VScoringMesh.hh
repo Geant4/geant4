@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.14 2007-08-29 07:29:16 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.15 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,6 +70,7 @@ public:
   { return fShape; }
   inline void Accumulate(G4THitsMap<G4double> * map) const;
   void Dump();
+  virtual void Draw() = 0;
 
   void ResetScore();
 
@@ -100,7 +101,7 @@ protected:
   MeshShape fShape;
 
   G4double fSize[3];
-  G4double fCenterPosition[3];
+  G4ThreeVector fCenterPosition;
   G4RotationMatrix * fRotationMatrix;
   G4int fNSegment[3];
   std::vector<G4double> fSegmentPositions;

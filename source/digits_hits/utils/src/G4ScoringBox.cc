@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.23 2007-08-30 04:54:39 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.24 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@
 #include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
 #include "G4ScoringBoxParameterisation.hh"
+#include "G4VVisManager.hh"
 
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
@@ -90,9 +91,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   if(verboseLevel > 10) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
-  new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
-						   fCenterPosition[1],
-						   fCenterPosition[2]),
+  new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    boxLogical, boxName+"0", worldLogical, false, 0);
 
   //G4double fsegment[3][3];
@@ -262,8 +261,37 @@ void G4ScoringBox::List() const {
     */
   }
   //G4cout << G4endl;
+
+
 }
 
+void G4ScoringBox::Draw() {
+  G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
+  if(pVisManager && (1)) {
+    G4Box box("dummy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+    G4VisAttributes att;
+    att.SetColour(1., 0., 0.);
+    att.SetForceSolid(true);
+    for(int z = 0; z < fNSegment[2]; z++) {
+      for(int y = 0; y < fNSegment[1]; y++) {
+	for(int x = 0; x < fNSegment[0]; x++) {
+	  G4ThreeVector pos(GetReplicaPosition(x, y, z) - fCenterPosition);
+	  G4Transform3D trans(*fRotationMatrix, pos);
+	  pVisManager->Draw(box, att, trans);
+	}
+      }
+    }
+  }
+}
+
+G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
+  G4ThreeVector width(fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+  G4ThreeVector pos(-width.x()*(x-1)*0.5 + x*width.x(),
+		    -width.y()*(y-1)*0.5 + y*width.y(),
+		    -width.z()*(z-1)*0.5 + z*width.z());
+
+  return pos;
+}
 
 /*
 void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]) {

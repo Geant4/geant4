@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.9 2007-08-29 07:44:58 akimura Exp $
+// $Id: G4ScoringBox.hh,v 1.10 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,8 +49,8 @@ class G4ScoringBox : public G4VScoringMesh
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
-
-
+  void Draw();
+  
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
 
 private:
@@ -58,6 +58,7 @@ private:
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
+  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
   //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
   void GetXYZ(G4int index, G4int q[3]) const;
 };

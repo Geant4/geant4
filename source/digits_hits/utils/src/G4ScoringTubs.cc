@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.cc,v 1.5 2007-08-29 07:29:16 akimura Exp $
+// $Id: G4ScoringTubs.cc,v 1.6 2007-09-02 10:37:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,9 +88,7 @@ void G4ScoringTubs::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", fSize[0], fSize[1], fSize[2],
 				    0., 360.*deg);
   G4LogicalVolume *  tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
-  new G4PVPlacement(fRotationMatrix, G4ThreeVector(fCenterPosition[0],
-						   fCenterPosition[1],
-						   fCenterPosition[2]),
+  new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    tubsLogical, tubsName+"0", worldLogical, false, 0);
 
 
