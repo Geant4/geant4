@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.24 2007-09-02 10:37:31 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.25 2007-09-03 10:51:53 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,9 +43,7 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSTrackLength.hh"
-#include "G4PSNofStep.hh"
+#include "G4PSEnergyDeposit3D.hh"
 
 
 G4ScoringBox::G4ScoringBox(G4String wName)
@@ -266,29 +264,137 @@ void G4ScoringBox::List() const {
 }
 
 void G4ScoringBox::Draw() {
+
+  G4int nps = fMFD->GetNumberOfPrimitives(); 
+  G4PSEnergyDeposit3D * ed3d;
+  for(int i = 0; i < nps; i++) {
+    G4VPrimitiveScorer * ps = fMFD->GetPrimitive(i);
+    ed3d = dynamic_cast<G4PSEnergyDeposit3D*>(ps);
+    if(ed3d != NULL) break;
+  }
+
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager && (1)) {
-    G4Box box("dummy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+  if(pVisManager && ed3d) {
+    
+    // edep vectors
+    std::vector<std::vector<std::vector<double> > > edep; // edep[X][Y][Z]
+    std::vector<double> ez;
+    for(int z = 0; z < fNSegment[2]; z++) ez.push_back(0.);
+    std::vector<std::vector<double> > eyz;
+    for(int y = 0; y < fNSegment[1]; y++) eyz.push_back(ez);
+    for(int x = 0; x < fNSegment[0]; x++) edep.push_back(eyz);
+
+    std::vector<std::vector<double> > xyedep; // xyedep[X][Y]
+    std::vector<double> ey;
+    for(int y = 0; y < fNSegment[1]; y++) ey.push_back(0.);
+    for(int x = 0; x < fNSegment[0]; x++) xyedep.push_back(ey);
+
+    std::vector<std::vector<double> > yzedep; // yzedep[Y][Z]
+    for(int y = 0; y < fNSegment[1]; y++) yzedep.push_back(ez);
+
+    std::vector<std::vector<double> > xzedep; // xzedep[X][Z]
+    for(int x = 0; x < fNSegment[0]; x++) xzedep.push_back(ez);
+
+
+    std::map<G4int, G4double*> * map = fMap.find(ed3d->GetName())->second->GetMap();
+    G4double xymax = 0., yzmax = 0., xzmax = 0.;
+    G4int q[3];
+    std::map<G4int, G4double*>::iterator itr = map->begin();
+    for(; itr != map->end(); itr++) {
+      GetXYZ(itr->first, q);
+
+      xyedep[q[0]][q[1]] += *(itr->second);
+      if(xymax < xyedep[q[0]][q[1]]) xymax = xyedep[q[0]][q[1]];
+
+      yzedep[q[1]][q[2]] += *(itr->second);
+      if(yzmax < yzedep[q[1]][q[2]]) yzmax = yzedep[q[1]][q[2]];
+
+      xzedep[q[0]][q[2]] += *(itr->second);
+      if(xzmax < xzedep[q[0]][q[1]]) xzmax = xzedep[q[1]][q[2]];
+    }  
+    
+    G4Box box("hitsbox", fSize[0]/fNSegment[0]*0.99,
+	               fSize[1]/fNSegment[1]*0.99,
+                       fSize[2]/fNSegment[2]*0.99);
     G4VisAttributes att;
-    att.SetColour(1., 0., 0.);
     att.SetForceSolid(true);
-    for(int z = 0; z < fNSegment[2]; z++) {
+    att.SetForceAuxEdgeVisible(true);
+
+    // xy plane
+    for(int x = 0; x < fNSegment[0]; x++) {
       for(int y = 0; y < fNSegment[1]; y++) {
-	for(int x = 0; x < fNSegment[0]; x++) {
-	  G4ThreeVector pos(GetReplicaPosition(x, y, z) - fCenterPosition);
-	  G4Transform3D trans(*fRotationMatrix, pos);
-	  pVisManager->Draw(box, att, trans);
-	}
+        G4ThreeVector pos(GetReplicaPosition(x, y, 0) - fCenterPosition);
+        G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) - fCenterPosition);
+        G4Transform3D trans, trans2;
+        if(fRotationMatrix) {
+          trans = G4Transform3D(*fRotationMatrix, pos);
+          trans2 = G4Transform3D(*fRotationMatrix, pos2);
+        } else {
+          trans = G4Translate3D(pos);
+          trans2 = G4Translate3D(pos2);
+        }
+	G4double c[4];
+	GetMapColor(xyedep[x][y]/xymax, c);
+	att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	pVisManager->Draw(box, att, trans);
+	pVisManager->Draw(box, att, trans2);
+
       }
     }
+
+    // yz plane
+    for(int y = 0; y < fNSegment[1]; y++) {
+      for(int z = 0; z < fNSegment[2]; z++) {
+        G4ThreeVector pos(GetReplicaPosition(0, y, z) - fCenterPosition);
+        G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) - fCenterPosition);
+        G4Transform3D trans, trans2;
+        if(fRotationMatrix) {
+          trans = G4Transform3D(*fRotationMatrix, pos);
+          trans2 = G4Transform3D(*fRotationMatrix, pos2);
+        } else {
+          trans = G4Translate3D(pos);
+          trans2 = G4Translate3D(pos2);
+        }
+	G4double c[4];
+	GetMapColor(yzedep[y][z]/yzmax, c);
+	att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	pVisManager->Draw(box, att, trans);
+	pVisManager->Draw(box, att, trans2);
+
+      }
+    }
+
+    // xz plane
+    for(int x = 0; x < fNSegment[0]; x++) {
+      for(int z = 0; z < fNSegment[2]; z++) {
+        G4ThreeVector pos(GetReplicaPosition(x, 0, z) - fCenterPosition );
+        G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) - fCenterPosition);
+        G4Transform3D trans, trans2;
+        if(fRotationMatrix) {
+          trans = G4Transform3D(*fRotationMatrix, pos);
+          trans2 = G4Transform3D(*fRotationMatrix, pos2);
+        } else {
+          trans = G4Translate3D(pos);
+          trans2 = G4Translate3D(pos2);
+        }
+	G4double c[4];
+	GetMapColor(xzedep[x][z]/xzmax, c);
+	att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	pVisManager->Draw(box, att, trans);
+	pVisManager->Draw(box, att, trans2);
+
+      }
+    }
+
+
   }
 }
 
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
   G4ThreeVector width(fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
-  G4ThreeVector pos(-width.x()*(x-1)*0.5 + x*width.x(),
-		    -width.y()*(y-1)*0.5 + y*width.y(),
-		    -width.z()*(z-1)*0.5 + z*width.z());
+  G4ThreeVector pos(-fSize[0] + 2*(x+0.5)*width.x(),
+		    -fSize[1] + 2*(y+0.5)*width.y(),
+		    -fSize[2] + 2*(z+0.5)*width.z());
 
   return pos;
 }
@@ -353,6 +459,10 @@ void G4ScoringBox::GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3],
 
 void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 
+  q[0] = index/(fNSegment[2]*fNSegment[1]);
+  q[1] = (index - q[0]*fNSegment[2]*fNSegment[1])/fNSegment[1];
+  q[2] = index - q[1]*fNSegment[1] - q[0]*fNSegment[2]*fNSegment[1];
+  /*
   if(fSegmentDirection == 3 || fSegmentDirection == -1) {
     q[2] = index/(fNSegment[0]*fNSegment[1]);
     q[1] = (index - q[2]*fNSegment[0]*fNSegment[1])/fNSegment[1];
@@ -368,5 +478,30 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
     q[1] = (index - q[0]*fNSegment[2]*fNSegment[1])/fNSegment[1];
     q[2] = index - q[1]*fNSegment[2] - q[0]*fNSegment[2]*fNSegment[1];
     
+  }
+  */
+  G4cout << "GetXYZ: " << index << ": "
+	 << q[0] << ", " << q[1] << ", " << q[2] << G4endl;
+}
+
+void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
+  color[0] = color[1] = color[2] = 0.;
+  color[4] = 1.;
+
+  if(value > 0.8) {
+    color[0] = 1.;
+    color[1] = 1.-(value-0.7)/0.3;
+  } else if(value > 0.6) {
+    color[0] = (value-0.6)/0.2;
+    color[1] = 1.;
+  } else if(value > 0.4) {
+    color[1] = 1.;
+    color[2] = 1.-(value-0.4)/0.2;
+  } else if(value > 0.2) {
+    color[2] = 1.;
+    color[0] = color[1] = 1. - (value-0.2)/0.2;
+  } else {
+    color[2] = 1.;
+    color[0] = color[1] = 1. - value/0.2;
   }
 }

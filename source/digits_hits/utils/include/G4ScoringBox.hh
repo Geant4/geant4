@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.10 2007-09-02 10:37:31 akimura Exp $
+// $Id: G4ScoringBox.hh,v 1.11 2007-09-03 10:51:53 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,6 +61,7 @@ private:
   G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
   //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
   void GetXYZ(G4int index, G4int q[3]) const;
+  void GetMapColor(G4double value, G4double color[3]);
 };
 
 

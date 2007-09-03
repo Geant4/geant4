@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.21 2007-09-02 10:37:31 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.22 2007-09-03 10:51:53 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -202,5 +202,6 @@ void G4VScoringMesh::Dump() {
   }
   G4cout << G4endl;
 
+  Draw();
 }
 
