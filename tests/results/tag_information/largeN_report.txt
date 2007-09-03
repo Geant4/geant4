@@ -1,7 +1,0 @@
-
-Moved to:
-
-http://wwwinfo.cern.ch/asd/geant4/working_groups/testing/restricted/geant4/tests/results/tag_information
-
-Please, update your link !
-
