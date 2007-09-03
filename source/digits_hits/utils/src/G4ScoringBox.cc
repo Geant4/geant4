@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.25 2007-09-03 10:51:53 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.26 2007-09-03 13:32:16 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -386,7 +386,6 @@ void G4ScoringBox::Draw() {
       }
     }
 
-
   }
 }
 
@@ -480,8 +479,9 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
     
   }
   */
-  G4cout << "GetXYZ: " << index << ": "
-	 << q[0] << ", " << q[1] << ", " << q[2] << G4endl;
+
+  //G4cout << "GetXYZ: " << index << ": "
+  //<< q[0] << ", " << q[1] << ", " << q[2] << G4endl;
 }
 
 void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
