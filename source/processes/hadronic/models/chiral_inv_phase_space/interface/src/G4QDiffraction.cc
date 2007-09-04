@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.1 2007-08-23 15:58:43 mkossov Exp $
+// $Id: G4QDiffraction.cc,v 1.2 2007-09-04 14:23:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction class -----------------
@@ -558,11 +558,13 @@ G4double G4QDiffraction::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
     diffRatio=G4QDiffractionRatio::GetPointer();
     first=false;
   }
-  G4double pIU=p*GeV;                                        // Momentum in IndependentUnit
-  G4double x=CSmanager->GetCrossSection(true, p, Z, N, PDG); // XS for the isotope
-  G4double r=diffRatio->GetRatio(pIU, PDG, Z, N);
+  //G4double x=CSmanager->GetCrossSection(true, p, Z, N, PDG); // inelastic XS
+  //G4double pIU=p*GeV;                                        // IndependentUnistMomentum
+  //G4double r=diffRatio->GetRatio(pIU, PDG, Z, N);            // Proj. Diffraction Part
+  //G4double s=x*r;                                            // XS for proj. diffraction
+  G4double s=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
 #ifdef debug
-		G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",X="<<x<<",R="<<r<<G4endl;
+		G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<s<<G4endl;
 #endif
-  return x*r;
+  return s;
 }

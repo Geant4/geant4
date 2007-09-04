@@ -237,8 +237,8 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
 G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I, G4int pPDG,
                                                      G4int tZ, G4int tN, G4double Momentum)
 {
-  static const G4double third=1./3.; // power for A^P->R conversion [R=1.1*A^(1/3)]
-  static const G4double conv=38.; // coefficient R2->sig=c*(pR+tR)^2, c=pi*10(mb/fm^2)*1.21
+  //static const G4double third=1./3.; // power for A^P->R conversion [R=1.1*A^(1/3)]
+  //static const G4double conv=38.; // coeff. R2->sig=c*(pR+tR)^2, c=pi*10(mb/fm^2)*1.21
   static const G4double THmin=0.;  // minimum Energy Threshold
   //static const G4double dP=1.;     // step for the LEN table
   ///static const G4int    nL=105; // A#of LENesonance points in E (each MeV from 2 to 106)
@@ -325,9 +325,31 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I, 
   //}
   else                                      // UHE region (calculation, not frequent)
   {
-    //G4double P=0.001*Momentum;              // Approximation formula is for P in GeV/c
-    //G4double lP=std::log(P);
-    sigma=conv*(std::pow(pA,third)+std::pow(tA,third));
+    //sigma=conv*(std::pow(pA,third)+std::pow(tA,third)); // Simple solution
+    G4double P=0.001*Momentum;              // Approximation formula is for P in GeV/c
+    G4double lP=std::log(P);
+    G4double tal=std::log(tA*pA);
+    G4double AB=pA+tA;
+    G4double al=std::log(AB);
+    G4double e=std::pow(pA,0.1)+std::pow(tA,0.1);
+    G4double d=e-1.55/std::pow(al,0.2);
+    G4double f=4;
+    if(pA>4.1 && tA>4.1) f=3.3+130./AB/AB+2.25/e;
+    G4double c=(385.+11.*AB/(1.+.02*AB*al)+(.5*AB+500./al/al)/al)*std::pow(d,f);
+    G4double r=lP-3.-4./tal;
+    G4double tot=c+d*r*r;
+    r=lP-3.92-1.73/tal;
+    d=.00166/(1.+.002*std::exp(tal*1.33333));
+				e=1.+.235*(std::fabs(tal-5.78));
+    if(tA<2.5 || pA<2.5) e=2.32;
+    if(std::fabs(tA-2.)<.1 || std::fabs(pA-2.)<.1) e=2.18;
+    if(std::fabs(tA-2.)<.1 || std::fabs(pA-4.)<.1) e=1.65;
+    if(std::fabs(tA-4.)<.1 || std::fabs(pA-2.)<.1) e=1.65;
+    if(std::fabs(tA-4.)<.1 || std::fabs(pA-4.)<.1) e=1.;
+    f=.37+.0188*al;
+    c=f/(1.+e/std::pow((std::log(std::pow(tA,.35)+std::pow(pA,.35))),4));
+    G4double e2t=c+d*r*r;
+    sigma=tot*(1.-e2t);
   }
 #ifdef debug
   G4cout<<"G4IonIonCrossSection::CalculateCrossSection: sigma="<<sigma<<G4endl;

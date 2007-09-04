@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.2 2007-08-31 09:36:58 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.3 2007-09-04 14:23:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -651,9 +651,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 2:
      rA-=1;
+     rZ-=1;
      if(!evaporate || rA<2)
      {
-       rZ-=1;
        theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
          G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
@@ -671,9 +671,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 3:
      rA-=2;
+     rZ-=1;
      if(!evaporate || rA<2)
      {
-       rZ-=1;
        theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
          G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
@@ -691,9 +691,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 4:
      rA-=3;
+     rZ-=1;
      if(!evaporate || rA<2)
      {
-       rZ-=1;
        theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
          G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
@@ -711,9 +711,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 5:
      rA-=3;
+     rZ-=2;
      if(!evaporate || rA<2)
      {
-       rZ-=2;
        theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
          G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
@@ -731,9 +731,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 6:
      rA-=4;
+     rZ-=2;
      if(!evaporate || rA<2)
      {
-       rZ-=2;
        theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
          G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;

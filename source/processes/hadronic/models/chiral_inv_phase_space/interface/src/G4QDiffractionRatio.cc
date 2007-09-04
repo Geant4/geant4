@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.4 2007-08-23 15:58:43 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.5 2007-09-04 14:23:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -321,6 +321,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   //static const G4double mSigM= G4QPDGCode(3112).GetMass();
   //static const G4double mSigP= G4QPDGCode(3222).GetMass();
   //static const G4double eps=.003;
+  static const G4double third=1./3.;
   //
   G4LorentzVector pr4M=p4M/megaelectronvolt;   // Convert 4-momenta in MeV (keep p4M)
   // prepare the DONOTHING answer
@@ -374,7 +375,9 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   if(mP<.1)mP=mPi0;                        // For photons minDiffraction is gam+P->P+Pi0
   G4double dmP=mP+mP;                      // Doubled mass of the projectile
   G4double mMin=mP+mPi0;                   // Minimum diffractive mass
-  mMin+=mPi0+G4UniformRand()*(mP+mP+mPi0); // *Experimental*
+  G4double tA=tgA;                         // Real A of the target
+  G4double sA=5./std::pow(tA,third);       // Mass-screaning
+  mMin+=mPi0+G4UniformRand()*(mP*sA+mPi0); // *Experimental*
   G4double ss=std::sqrt(s);                // CM compound mass (sqrt(s))
   G4double mMax=ss-mP;                     // Maximum diffraction mass of the projectile
   if(mMax>maxDM) mMax=maxDM;               // Restriction to avoid too big masses
@@ -1296,4 +1299,15 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
 		G4cout<<"G4QDiffractionRatio::ProjFragment: *End* Sum="<<sum4M<<" =?= d4M="<<d4M<<G4endl;
 #endif
 		return ResHV; // Result
+} // End of ProjFragment
+
+// Calculates Single Diffraction Taarget Excitation Cross-Section (independent Units)
+G4double G4QDiffractionRatio::GetTargSingDiffXS(G4double pIU, G4int pPDG, G4int Z, G4int N)
+{
+  G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
+  if(mom<1. || pPDG!=2212 && pPDG!=2112)
+    G4cerr<<"G4QDiffractionRatio::GetTargSingDiffXS isn't applicable p="<<mom<<" GeV, PDG="
+         <<pPDG<<G4endl;
+  G4double A=Z+N;                        // A of the target
+		return 4.5*std::pow(A,.364)*millibarn; // Result
 } // End of ProjFragment
