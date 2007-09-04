@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.9 2007-08-29 07:48:50 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.10 2007-09-04 09:39:34 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -117,11 +117,27 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithAString*   qnOfSecondaryCmd;
     //
     G4UIcommand*          qTrackLengthCmd;
+    G4UIcommand*          qPassCellCurrCmd;
+    G4UIcommand*          qPassTrackLengthCmd;
+    G4UIcommand*          qFlatSurfCurrCmd;
+    G4UIcommand*          qFlatSurfFluxCmd;
+    G4UIcommand*          qSphereSurfCurrCmd;
+    G4UIcommand*          qSphereSurfFluxCmd;
+    G4UIcommand*          qCylSurfCurrCmd;
+    G4UIcommand*          qCylSurfFluxCmd;
+    G4UIcommand*          qNofCollisionCmd;
+    G4UIcommand*          qPopulationCmd;
+    G4UIcommand*          qTrackCountCmd;
+    G4UIcommand*          qTerminationCmd;
 
     //
     // Filter commands 
     G4UIdirectory*             filterDir;
+    G4UIcmdWithAString*        fchargedCmd;
+    G4UIcmdWithAString*        fneutralCmd;
+    G4UIcommand*               fkinECmd;
     G4UIcommand*               fparticleCmd;
+    G4UIcommand*               fparticleKinECmd;
     //
 
 
