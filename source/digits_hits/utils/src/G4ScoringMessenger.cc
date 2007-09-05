@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.13 2007-09-04 09:39:53 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.14 2007-09-05 06:14:19 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -56,8 +56,11 @@
 #include "G4PSTrackCounter3D.hh"
 #include "G4PSTermination3D.hh"
 
-
+#include "G4SDChargedFilter.hh"
+#include "G4SDNeutralFilter.hh"
+#include "G4SDKineticEnergyFilter.hh"
 #include "G4SDParticleFilter.hh"
+#include "G4SDParticleWithEnergyFilter.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -68,6 +71,7 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
 #include "G4Tokenizer.hh"
+#include "G4UnitsTable.hh"
 
 G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 :fSMan(SManager)
@@ -133,9 +137,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("Nk",'i',false);
   param->SetDefaultValue("1");
   mBinCmd->SetParameter(param);
-  //param = new G4UIparameter("Axis",'i',true);
-  //param->SetDefaultValue("3");
-  //mBinCmd->SetParameter(param);
+  param = new G4UIparameter("Axis",'i',true);
+  param->SetDefaultValue("3");
+  mBinCmd->SetParameter(param);
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
@@ -188,21 +192,27 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   qeDepCmd = new G4UIcmdWithAString("/score/quantity/eDep",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
   qeDepCmd->SetParameterName("qname",false);
+  //
   qCellChgCmd  = new G4UIcmdWithAString("/score/quantity/cellCharge",this);
   qCellChgCmd->SetGuidance("Cell Charge Scorer");
   qCellChgCmd->SetParameterName("qname",false);
+  //
   qCellFluxCmd = new G4UIcmdWithAString("/score/quantity/cellFlux",this);
   qCellFluxCmd->SetGuidance("Cell Flux Scorer");
   qCellFluxCmd->SetParameterName("qname",false);
+  //
   qPassCellFluxCmd = new G4UIcmdWithAString("/score/quantity/passageCellFlux",this);
   qPassCellFluxCmd->SetGuidance("Passage Cell Flux Scorer");
   qPassCellFluxCmd->SetParameterName("qname",false);
+  //
   qdoseDepCmd = new G4UIcmdWithAString("/score/quantity/doseDeposit",this);
   qdoseDepCmd->SetGuidance("Dose Deposit Scorer");
   qdoseDepCmd->SetParameterName("qname",false);
+  //
   qnOfStepCmd = new G4UIcmdWithAString("/score/quantity/nOfStep",this);
   qnOfStepCmd->SetGuidance("Number of Step Scorer ");
   qnOfStepCmd->SetParameterName("qname",false);
+  //
   qnOfSecondaryCmd = new G4UIcmdWithAString("/score/quantity/nOfSecondary",this);
   qnOfSecondaryCmd->SetGuidance("Number of Secondary Scorer ");
   qnOfSecondaryCmd->SetParameterName("qname",false);
@@ -215,7 +225,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   qTrackLengthCmd->SetGuidance("  wflag  :(Bool) Weighted");
   qTrackLengthCmd->SetGuidance("  kflag  :(Bool) MultiplyKineticEnergy");
   qTrackLengthCmd->SetGuidance("  vflag  :(Bool) DivideByVelocity");
-
   param = new G4UIparameter("qname",'s',false);
   qTrackLengthCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
@@ -237,9 +246,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("qname",'s',false);
   qPassCellCurrCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
-  param->SetDefaultValue("false");
+  param->SetDefaultValue("true");
   qPassCellCurrCmd->SetParameter(param);
-
   //
   qPassTrackLengthCmd = new G4UIcommand("/score/quantity/passageTrackLength",this);
   qPassTrackLengthCmd->SetGuidance("PassageTrackLength Scorer");
@@ -250,9 +258,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("qname",'s',false);
   qPassTrackLengthCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
-  param->SetDefaultValue("false");
+  param->SetDefaultValue("true");
   qPassTrackLengthCmd->SetParameter(param);
-
   //
   qFlatSurfCurrCmd = new G4UIcommand("/score/quantity/flatSurfCurrent",this);
   qFlatSurfCurrCmd->SetGuidance("Flat surface current Scorer");
@@ -274,9 +281,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("true");
   qFlatSurfCurrCmd->SetParameter(param);
   param = new G4UIparameter("aflag",'b',true);
-  param->SetDefaultValue("truey");
+  param->SetDefaultValue("true");
   qFlatSurfCurrCmd->SetParameter(param);
-
   //
   qFlatSurfFluxCmd = new G4UIcommand("/score/quantity/flatSurfFlux",this);
   qFlatSurfFluxCmd->SetGuidance("Flat surface Flux Scorer");
@@ -313,7 +319,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("true");
   qSphereSurfCurrCmd->SetParameter(param);
   param = new G4UIparameter("aflag",'b',true);
-  param->SetDefaultValue("truey");
+  param->SetDefaultValue("true");
   qSphereSurfCurrCmd->SetParameter(param);
 
   //
@@ -353,9 +359,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("true");
   qCylSurfCurrCmd->SetParameter(param);
   param = new G4UIparameter("aflag",'b',true);
-  param->SetDefaultValue("truey");
+  param->SetDefaultValue("true");
   qCylSurfCurrCmd->SetParameter(param);
-
   //
   qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylSurfFlux",this);
   qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer");
@@ -372,7 +377,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("0");
   qCylSurfFluxCmd->SetParameter(param);
   //
-      
   qNofCollisionCmd = new G4UIcommand("/score/quantity/nOfCollision",this);
   qNofCollisionCmd->SetGuidance("Number of Collision Scorer");
   qNofCollisionCmd->
@@ -384,7 +388,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("wflag",'b',true);
   param->SetDefaultValue("false");
   qNofCollisionCmd->SetParameter(param);
-
   //
   qPopulationCmd = new G4UIcommand("/score/quantity/population",this);
   qPopulationCmd->SetGuidance("Population Scorer");
@@ -402,10 +405,17 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   qTrackCountCmd = new G4UIcommand("/score/quantity/trackCounter",this);
   qTrackCountCmd->SetGuidance("Number of Track Counter Scorer");
   qTrackCountCmd->
-      SetGuidance("[usage] /score/quantiy/trackCounter qname wflag");
+      SetGuidance("[usage] /score/quantiy/trackCounter qname dflag wflag");
   qTrackCountCmd->SetGuidance("  qname  :(String) scorer name");
+  qTrackCountCmd->SetGuidance("  dflag  :(Int) Direction");
+  qTrackCountCmd->SetGuidance("         : 0 = Both In and Out");
+  qTrackCountCmd->SetGuidance("         : 1 = In only");
+  qTrackCountCmd->SetGuidance("         : 2 = Out only");
   qTrackCountCmd->SetGuidance("  wflag  :(Bool) Weighted");
   param = new G4UIparameter("qname",'s',false);
+  qTrackCountCmd->SetParameter(param);
+  param = new G4UIparameter("dflag",'i',true);
+  param->SetDefaultValue("0");
   qTrackCountCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
   param->SetDefaultValue("false");
@@ -446,11 +456,15 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fkinECmd->SetGuidance("  unit      :(String) unit of given kinetic energy");
   param = new G4UIparameter("fname",'s',false);
   fkinECmd->SetParameter(param);
-  param = new G4UIparameter("elow",'d',false);
+  param = new G4UIparameter("elow",'d',true);
+  param->SetDefaultValue("0.0");
   fkinECmd->SetParameter(param);
   param = new G4UIparameter("ehigh",'d',false);
   fkinECmd->SetParameter(param);
+  G4String smax = DtoS(DBL_MAX);
+  param->SetDefaultValue(smax);
   param = new G4UIparameter("unit",'s',false);
+  param->SetDefaultValue("keV");
   fkinECmd->SetParameter(param);
   //
   fparticleCmd = new G4UIcommand("/score/filter/particle",this);
@@ -460,7 +474,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names");
   param = new G4UIparameter("fname",'s',false);
   fparticleCmd->SetParameter(param);
-  param = new G4UIparameter("particlelist",'s',false);
+  param = new G4UIparameter("particlelist",'s',true);
+  param->SetDefaultValue("");
   fparticleCmd->SetParameter(param);
   //
   //
@@ -476,14 +491,16 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("fname",'s',false);
   fparticleKinECmd->SetParameter(param);
   param = new G4UIparameter("elow",'d',false);
+  param->SetDefaultValue("0.0");
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("ehigh",'d',false);
+  param = new G4UIparameter("ehigh",'d',true);
+  param->SetDefaultValue(smax);
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("unit",'s',false);
-  fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("name",'s',false);
+  param = new G4UIparameter("unit",'s',true);
+  param->SetDefaultValue("keV");
   fparticleKinECmd->SetParameter(param);
   param = new G4UIparameter("particlelist",'s',false);
+  param->SetDefaultValue("");
   fparticleKinECmd->SetParameter(param);
   //
   //
@@ -583,6 +600,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
  	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
       }
   } else {
+      // Tokens
+      G4TokenVec token;
+      FillTokenVec(newVal,token);
       //
       // Get Current Mesh
       //
@@ -590,6 +610,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       //
       // Commands for Current Mesh
       if ( mesh ){
+	  // 
+	  // Mesh Geometry
+	  //
 	  if(command==meshClsCmd) {
 	      fSMan->CloseCurrentMesh();
 	  } else if(command==meshActCmd) {
@@ -607,7 +630,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
 	      }
 	  } else if(command==mBinCmd) {
-	      MeshBinCommand(mesh,newVal);
+	      MeshBinCommand(mesh,token);
 	  } else if(command==mTResetCmd) {
 	      G4double centerPosition[3] ={ 0., 0., 0.};
 	      mesh->SetCenterPosition(centerPosition);
@@ -630,6 +653,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->RotateZ(value);
 	  } else if(command==qTouchCmd) {
 	      mesh->SetCurrentPrimitiveScorer(newVal);
+	  //
+	  // Quantity
+          //    
 	  } else if(command== qCellChgCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSCellCharge3D(newVal));
 	  } else if(command== qCellFluxCmd) {
@@ -642,12 +668,81 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->SetPrimitiveScorer(new G4PSDoseDeposit3D(newVal));
 	  } else if(command== qnOfStepCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSNofStep3D(newVal));
-	  } else if(command== qTrackLengthCmd) {
-	      PSTrackLength(mesh,newVal);
 	  } else if(command== qnOfSecondaryCmd) {
 	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
+	  } else if(command== qTrackLengthCmd) {
+	      G4PSTrackLength3D* ps = new G4PSTrackLength3D(token[0]);
+	      ps->Weighted(StoB(token[1]));
+	      ps->MultiplyKineticEnergy(StoB(token[2]));
+	      ps->DivideByVelocity(StoB(token[3]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qPassCellCurrCmd){
+	      G4PSPassageCellCurrent* ps = new G4PSPassageCellCurrent3D(token[0]);
+	      ps->Weighted(StoB(token[1]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qPassTrackLengthCmd){
+	      G4PSPassageTrackLength* ps = new G4PSPassageTrackLength3D(token[0]);
+	      ps->Weighted(StoB(token[1]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qFlatSurfCurrCmd){
+	      G4PSFlatSurfaceCurrent3D* ps = 
+		  new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1]));
+	      ps->Weighted(StoB(token[2]));
+	      ps->DivideByArea(StoB(token[3]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qFlatSurfFluxCmd){
+	      mesh->SetPrimitiveScorer(
+		  new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])));
+          } else if(command== qSphereSurfCurrCmd){
+	      G4PSSphereSurfaceCurrent3D* ps = 
+		  new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
+	      ps->Weighted(StoB(token[2]));
+	      ps->DivideByArea(StoB(token[3]));
+	      mesh->SetPrimitiveScorer(ps);
+	  } else if(command== qSphereSurfFluxCmd){
+	      mesh->SetPrimitiveScorer(
+		  new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
+          } else if(command== qCylSurfCurrCmd){
+	      G4PSCylinderSurfaceCurrent3D* ps = 
+		  new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
+	      ps->Weighted(StoB(token[2]));
+	      ps->DivideByArea(StoB(token[3]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qCylSurfFluxCmd){
+	      mesh->SetPrimitiveScorer(
+		  new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
+          } else if(command== qNofCollisionCmd){
+	      G4PSNofCollision3D* ps =new G4PSNofCollision3D(token[0]); 
+	      ps->Weighted(StoB(token[1]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qPopulationCmd){
+	      G4PSPopulation3D* ps =new G4PSPopulation3D(token[0]); 
+	      ps->Weighted(StoB(token[1]));
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qTrackCountCmd){
+	      G4PSTrackCounter3D* ps =new G4PSTrackCounter3D(token[0],StoI(token[1])); 
+	      mesh->SetPrimitiveScorer(ps);
+          } else if(command== qTerminationCmd){
+	      G4PSTermination3D* ps =new G4PSTermination3D(token[0]); 
+	      ps->Weighted(StoB(token[1]));
+	      mesh->SetPrimitiveScorer(ps);
+
+         //
+         // Filters 
+         // 
+	  }else if(command== fchargedCmd){
+	      mesh->SetFilter(new G4SDChargedFilter(token[0])); 
+          }else if(command== fneutralCmd){
+	      mesh->SetFilter(new G4SDNeutralFilter(token[0])); 
+          }else if(command== fkinECmd){
+	      G4String& name = token[0];
+	      G4double elow  = StoD(token[1]);
+	      G4double ehigh = StoD(token[2]);
+	      mesh->SetFilter(new G4SDKineticEnergyFilter(name,elow,ehigh));
+          }else if(command== fparticleKinECmd){
+	      FParticleWithEnergyCommand(mesh,token); 
 	  } else if(command==fparticleCmd) {
-	      FParticleCommand(mesh,newVal);
+	      FParticleCommand(mesh,token);
 	  }
       }else{
 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
@@ -664,11 +759,31 @@ G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand * command)
   return val;
 }
 
-void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4String newVal){
-    G4Tokenizer next(newVal);
-    G4int Ni = StoI(next());
-    G4int Nj = StoI(next());
-    G4int Nk = StoI(next());
+void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token){
+
+    G4Tokenizer next(newValues);
+    G4String val;
+    while ( !(val = next()).isNull() ) {
+	//if ( val.first('"')==0 ) {
+	//     val.remove(0,1);
+	//}
+	//if ( (val.last('"')) == (G4int)(val.length()-1) ){
+	//    val.remove(val.length()-1,1);
+	//}
+	token.push_back(val);
+
+//      G4cout << "@GetToken:"
+//	       << val
+//	       << "::"
+//	       << G4endl;
+    }
+}
+
+
+void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
+    G4int Ni = StoI(token[0]);
+    G4int Nj = StoI(token[1]);
+    G4int Nk = StoI(token[2]);
     G4int nSegment[3];
     nSegment[0] = Ni;
     nSegment[1] = Nj;
@@ -679,56 +794,42 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4String newVal){
     //
     /*
     G4int iAxis = 3;
-    G4String Axis = next();
-    if ( Axis.isNull() ) {
-    } else {
-	iAxis = StoI(Axis);
-	//
-	//==== Implementation for variable bin size Here
-	//
-	//  .........
+    G4String Axis = token[3];
+    if ( ! Axis.isNull() ){
+       iAxis = StoI(Axis);
+       //
+       //==== Implementation for variable bin size Here
+       //
+       //  .........
     }
     */
 }
 
-void G4ScoringMessenger::PSTrackLength(G4VScoringMesh* mesh, G4String newValues){
-    G4Tokenizer next(newValues);
-    //
-    G4String name = next();
-    //
-    G4bool weighted              = StoB(next());
-    G4bool multiplyKineticEnergy = StoB(next());
-    G4bool divideByVelocity      = StoB(next());
-    //
-    G4PSTrackLength3D* ps = new G4PSTrackLength3D(name);
-    ps->Weighted(weighted);
-    ps->MultiplyKineticEnergy(multiplyKineticEnergy);
-    ps->DivideByVelocity(divideByVelocity);
-    mesh->SetPrimitiveScorer(ps);
-}
-
-void G4ScoringMessenger::FParticleCommand(G4VScoringMesh* mesh, G4String newVal){
-    G4cout << "####"<<newVal<<"#####"<<G4endl;
-    G4Tokenizer next(newVal);
+void G4ScoringMessenger::FParticleCommand(G4VScoringMesh* mesh, G4TokenVec& token){
     //
     // Filter name
-    G4String name = next();
+    G4String name = token[0];
     //
     // particle list
     std::vector<G4String> pnames;
-    G4String pname;
-    while ( !(pname = next()).isNull() ) {
-	if ( pname.first('"')==0 ) {
-	    G4cout << "  Hit first " <<G4endl;
-	    pname.remove(0,1);
-	}
-	if ( (pname.last('"')) == (G4int)(pname.length()-1) ){
-	    pname.remove(pname.length()-1,1);
-	}
-	pnames.push_back(pname);
+    for ( G4int i = 1; i<(G4int)token.size(); i++){
+	pnames.push_back(token[i]);
     }
     //
     // Attach Filter
     mesh->SetFilter(new G4SDParticleFilter(name,pnames));
 }    
 
+void G4ScoringMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token){
+    G4String& name = token[0];
+    G4double  elow = StoD(token[1]);
+    G4double  ehigh= StoD(token[2]);
+    G4double  unitVal = G4UnitDefinition::GetValueOf(token[3]);
+    G4SDParticleWithEnergyFilter* filter = 
+	new G4SDParticleWithEnergyFilter(name,elow*unitVal,ehigh*unitVal);
+    for ( G4int i = 4; i < (G4int)token.size(); i++){
+	filter->add(token[i]);
+    }
+    mesh->SetFilter(filter);
+}
+ 

@@ -24,14 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.10 2007-09-04 09:39:34 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.11 2007-09-05 06:14:02 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// (HISTORY)
+//  03-Sep-2007  T.Aso Command definitions are introduced.
+
 
 #ifndef G4ScoringMessenger_h
 #define G4ScoringMessenger_h 1
 
 #include "G4UImessenger.hh"
+
+#include <vector>
+#include "G4String.hh"
 
 class G4ScoringManager;
 class G4VScoringMesh;
@@ -44,6 +50,8 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcommand;
 
+typedef std::vector<G4String> G4TokenVec;
+
 // class description:
 //
 //  This is a concrete class of G4UImessenger which handles the commands for
@@ -52,18 +60,24 @@ class G4UIcommand;
 
 class G4ScoringMessenger: public G4UImessenger
 {
+
   public:
     G4ScoringMessenger(G4ScoringManager * SManager);
+
     ~G4ScoringMessenger();
+
     void SetNewValue(G4UIcommand * command,G4String newValues);
+
     G4String GetCurrentValue(G4UIcommand * command);
 
-    void MeshBinCommand(G4VScoringMesh* mesh, G4String newValues);
+  protected:    
 
-    void PSTrackLength(G4VScoringMesh* mesh,  G4String newValues); 
+    void FillTokenVec(G4String newValues,G4TokenVec& token);
 
-    void FParticleCommand(G4VScoringMesh* mesh, G4String newValues);
+    void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
 
+    void FParticleCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
+    void FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
   
   private:
     G4ScoringManager*        fSMan;
