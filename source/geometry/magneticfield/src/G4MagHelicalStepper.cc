@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.22 2007-09-05 12:17:12 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.23 2007-09-05 12:20:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -48,7 +48,6 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
                                        // position & velocity
 {
   fPtrMagEqOfMot = EqRhs;
-  
 }
 
 G4MagHelicalStepper::~G4MagHelicalStepper()
@@ -119,7 +118,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
     // calculate  the stepping angle
   
-     Theta   = R_1 * h; // * B_v_P;
+    Theta   = R_1 * h; // * B_v_P;
 
     // Trigonometrix
       
@@ -142,7 +141,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
     G4double R = 1.0 / R_1;
 
     positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
-    endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
+    endTangent    = CosT * vperp + SinT * B_x_P + vpar;
 
     // Store the resulting position and tangent
 
@@ -207,7 +206,7 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    
    //  Saving yInput because yInput and yOut can be aliases for same array
 
-   for(i=0;i<nvar;i++) yIn[i]=yInput[i];
+   for(i=0;i<nvar;i++) { yIn[i]=yInput[i]; }
 
    G4double h = hstep * 0.5; 
 
