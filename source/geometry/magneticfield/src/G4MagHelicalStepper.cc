@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-//<<<<<<< G4MagHelicalStepper.cc
-// $Id: G4MagHelicalStepper.cc,v 1.21 2007-08-21 09:37:45 tnikitin Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.22 2007-09-05 12:17:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//=======
-// $Id: G4MagHelicalStepper.cc,v 1.21 2007-08-21 09:37:45 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//>>>>>>> 1.20
 //
 // --------------------------------------------------------------------
 
@@ -41,6 +36,12 @@
 // given a purely magnetic field a better approach than adding a straight line
 // (as in the normal runge-kutta-methods) is to add helix segments to the
 // current position
+
+
+// Constant for determining unit conversion when using normal as integrand.
+//
+const G4double G4MagHelicalStepper::fUnitConstant = 0.299792458*(GeV/(tesla*m));
+
 
 G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
    : G4MagIntegratorStepper(EqRhs, 6)  // integrate over 6 variables only !!
@@ -54,27 +55,25 @@ G4MagHelicalStepper::~G4MagHelicalStepper()
 {
 }
 
-// Constant for determining unit conversion when using normal as integrand.
-const G4double G4MagHelicalStepper::fUnitConstant = 0.299792458 * (GeV/(tesla*m));
-
 void
 G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
-				   G4ThreeVector   Bfld,    
-				   G4double  h,
-				   G4double  yHelix[],G4double yHelix2[])
+                                   G4ThreeVector   Bfld,    
+                                   G4double  h,
+                                   G4double  yHelix[],
+                                   G4double  yHelix2[] )
 {
   // const G4int    nvar = 6;
  
-  //OLD  const G4double approc_limit = 0.05;
+  // OLD  const G4double approc_limit = 0.05;
   // OLD  approc_limit = 0.05 gives max.error=x^5/5!=(0.05)^5/5!=2.6*e-9
   // NEW  approc_limit = 0.005 gives max.error=x^5/5!=2.6*e-14
 
   const G4double approc_limit = 0.005;
   G4ThreeVector  Bnorm, B_x_P, vperp, vpar;
-  // G4double norm;
-  G4double B_d_P;  // B_perp;
+
+  G4double B_d_P;
   G4double B_v_P;
-  G4double Theta;  // , Theta_1;
+  G4double Theta;
   G4double R_1;
   G4double R_Helix;
   G4double CosT2, SinT2, CosT, SinT;
@@ -84,23 +83,25 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   const G4double *pIn = yIn+3;
   G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
   G4double      velocityVal = initVelocity.mag();
-  G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;  // .unit();  
+  G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;
   
-   R_1=GetInverseCurve(velocityVal,Bmag);
+  R_1=GetInverseCurve(velocityVal,Bmag);
 
   // for too small magnetic fields there is no curvature
   // (include momentum here) FIXME
 
-   if( (std::fabs(R_1) < 1e-10)||(Bmag<1e-12) ) {
-      LinearStep( yIn, h, yHelix );
-      // Store and/or calculate parameters for chord distance.
-     
-         SetAngCurve(1.);     
-         SetCurve(h);
-         SetRadHelix(0.);  
- 
-  } else {
-    // Bnorm = Bfld.unit();
+  if( (std::fabs(R_1) < 1e-10)||(Bmag<1e-12) )
+  {
+    LinearStep( yIn, h, yHelix );
+
+    // Store and/or calculate parameters for chord distance
+
+    SetAngCurve(1.);     
+    SetCurve(h);
+    SetRadHelix(0.);
+  }
+  else
+  {
     Bnorm = (1.0/Bmag)*Bfld;
 
     // calculate the direction of the force
@@ -114,76 +115,71 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
     vpar = B_d_P * Bnorm;       // the component parallel      to B
     vperp= initTangent - vpar;  // the component perpendicular to B
     
-     B_v_P  = std::sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
+    B_v_P  = std::sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
 
     // calculate  the stepping angle
   
-      Theta   = R_1 * h; // * B_v_P;
+     Theta   = R_1 * h; // * B_v_P;
 
-      // Trigonometrix
+    // Trigonometrix
       
-      // Trigonometrix
+    if( std::fabs(Theta) > approc_limit )
+    {
+       SinT     = std::sin(Theta);
+       CosT     = std::cos(Theta);
+    }
+    else
+    {
+      G4double Theta2 = Theta*Theta;
+      G4double Theta3 = Theta2 * Theta;
+      G4double Theta4 = Theta2 * Theta2;
+      SinT     = Theta - 1.0/6.0 * Theta3;
+      CosT     = 1 - 0.5 * Theta2 + 1.0/24.0 * Theta4;
+    }
+
+    // the actual "rotation"
+
+    G4double R = 1.0 / R_1;
+
+    positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
+    endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
+
+    // Store the resulting position and tangent
+
+    yHelix[0]   = yIn[0] + positionMove.x(); 
+    yHelix[1]   = yIn[1] + positionMove.y(); 
+    yHelix[2]   = yIn[2] + positionMove.z();
+    yHelix[3] = velocityVal * endTangent.x();
+    yHelix[4] = velocityVal * endTangent.y();
+    yHelix[5] = velocityVal * endTangent.z();
+
+    // Store 2*h step Helix if exist
+
+    if(yHelix2)
+    {
+      SinT2     = 2.0 * SinT * CosT;
+      CosT2     = 1.0 - 2.0 * SinT * SinT;
+      endTangent    = (CosT2 * vperp + SinT2 * B_x_P + vpar);
+      positionMove  = R * ( SinT2 * vperp + (1-CosT2) * B_x_P) + h*2 * vpar;
       
-      if( std::fabs(Theta) > approc_limit ) {
-	 SinT     = std::sin(Theta);
-	 CosT     = std::cos(Theta);
-      } else {
-	G4double Theta2 = Theta*Theta;
-	G4double Theta3 = Theta2 * Theta;
-	G4double Theta4 = Theta2 * Theta2;
-	SinT     = Theta - 1.0/6.0 * Theta3;
-	CosT     = 1 - 0.5 * Theta2 + 1.0/24.0 * Theta4;
-        
-      }
-      // the actual "rotation"
+      yHelix2[0]   = yIn[0] + positionMove.x(); 
+      yHelix2[1]   = yIn[1] + positionMove.y(); 
+      yHelix2[2]   = yIn[2] + positionMove.z(); 
+      yHelix2[3] = velocityVal * endTangent.x();
+      yHelix2[4] = velocityVal * endTangent.y();
+      yHelix2[5] = velocityVal * endTangent.z();
+    }
 
-      G4double R = 1.0 / R_1;
-        // G4cout<<"RcurveHelix="<<R<<" UnitVelocity="<<initVelocity<<G4endl; 
-        // positionMove  = h * ( CosT2 * vperp + SinT2 * B_x_P + vpar );
-       positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
-       endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
+    // Store and/or calculate parameters for chord distance
 
-      // Store the resulting position and tangent
-         yHelix[0]   = yIn[0] + positionMove.x(); 
-         yHelix[1]   = yIn[1] + positionMove.y(); 
-         yHelix[2]   = yIn[2] + positionMove.z(); 
-				
-         yHelix[3] = velocityVal * endTangent.x();
-         yHelix[4] = velocityVal * endTangent.y();
-         yHelix[5] = velocityVal * endTangent.z();
-      // Store 2*h step Helix if exist
-      if(yHelix2){
+    G4double ptan=velocityVal*B_v_P;
 
-	SinT2     = 2.0 * SinT * CosT;
-	CosT2     = 1.0 - 2.0 * SinT * SinT;
-        endTangent    = (CosT2 * vperp + SinT2 * B_x_P + vpar);
-        positionMove  = R * ( SinT2 * vperp + (1-CosT2) * B_x_P) + h*2 * vpar;
-      
-         yHelix2[0]   = yIn[0] + positionMove.x(); 
-         yHelix2[1]   = yIn[1] + positionMove.y(); 
-         yHelix2[2]   = yIn[2] + positionMove.z(); 
-      
-         yHelix2[3] = velocityVal * endTangent.x();
-         yHelix2[4] = velocityVal * endTangent.y();
-         yHelix2[5] = velocityVal * endTangent.z();
-      }
-     
-
-      // Store and/or calculate parameters for chord distance.
-           
-      
-
-      G4double ptan=velocityVal*B_v_P;
-
-      // G4cout<<"Rcurve="<<R<<" h="<<h<<" teta="<<Theta<<"PosMove="<<positionMove<<" ptan="<<ptan<<G4endl; 
-       G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
-       R_Helix =std::abs( ptan/(fUnitConstant  * particleCharge*Bmag));
+    G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+    R_Helix =std::abs( ptan/(fUnitConstant  * particleCharge*Bmag));
        
-       SetAngCurve(std::abs(Theta));
-       SetCurve(std::abs(R));
-       SetRadHelix(R_Helix);  
- 
-    
+    SetAngCurve(std::abs(Theta));
+    SetCurve(std::abs(R));
+    SetRadHelix(R_Helix);
   }
 }
 
@@ -194,14 +190,15 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
 void
 G4MagHelicalStepper::Stepper( const G4double yInput[],
-		              const G4double*,
-		                    G4double hstep,
-		                    G4double yOut[],
-		                    G4double yErr[]      )
+                              const G4double*,
+                                    G4double hstep,
+                                    G4double yOut[],
+                                    G4double yErr[]  )
 {  
-   const G4int nvar = 6 ;
+   const G4int nvar = 6;
 
    G4int i;
+
    // correction for Richardson Extrapolation.
    // G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
@@ -217,40 +214,46 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    MagFieldEvaluate(yIn, Bfld_initial) ;      
 
    // Do two half steps
-     DumbStepper(yIn,   Bfld_initial,  h, yTemp);
-     MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
-     DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
+
+   DumbStepper(yIn,   Bfld_initial,  h, yTemp);
+   MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
+   DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
 
    // Do a full Step
-     h = hstep ;
-     DumbStepper(yIn, Bfld_initial, h, yTemp);
+
+   h = hstep ;
+   DumbStepper(yIn, Bfld_initial, h, yTemp);
+
    // Error estimation
 
-   for(i=0;i<nvar;i++) {
+   for(i=0;i<nvar;i++)
+   {
      yErr[i] = yOut[i] - yTemp[i] ;
    }
    
-   return ;
+   return;
 }
-
 
 G4double
 G4MagHelicalStepper::DistChord() const 
 {
   // Check whether h/R >  pi  !!
-  //  Method DistLine is good only for <  pi
+  // Method DistLine is good only for <  pi
 
   G4double Ang=GetAngCurve();
-   if(Ang<=pi){
-     return GetRadHelix()*(1-std::cos(0.5*Ang));
+  if(Ang<=pi)
+  {
+    return GetRadHelix()*(1-std::cos(0.5*Ang));
+  }
+  else
+  {
+    if(Ang<twopi)
+    {
+      return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
     }
-   else
-     if(Ang<twopi){
-       return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
-     }
-    else{
-           return 2*GetRadHelix();
-      // return Diameter of projected circle
+    else  // return Diameter of projected circle
+    {
+      return 2*GetRadHelix();
     }
+  }
 }
-
