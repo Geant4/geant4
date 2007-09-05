@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.7 2007-06-12 14:46:26 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.8 2007-09-05 16:18:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -274,6 +274,36 @@ G4DiffuseElastic::GetDiffuseElasticXsc( const G4ParticleDefinition* particle,
 
 ////////////////////////////////////////////////////////////////////////////
 //
+// return differential elastic cross section d(sigma)/d(omega) with Coulomb
+// correction
+
+G4double 
+G4DiffuseElastic::GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle, 
+                                        G4double theta, 
+			                G4double momentum, 
+                                        G4double A, G4double Z         )
+{
+  fParticle      = particle;
+  fWaveVector    = momentum/hbarc;
+  fAtomicWeight  = A;
+  fAtomicNumber  = Z;
+  G4double z             = particle->GetPDGCharge();
+  fBeta          = CalculateParticleBeta( particle, momentum);
+  fZommerfeld    = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+  fAm            = CalculateAm( momentum, fZommerfeld, fAtomicNumber);
+  
+  G4double r0;
+  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  else        r0  = 1.1*fermi;
+  fNuclearRadius = r0*std::pow(A, 1./3.);
+
+  G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticSumProb(theta);
+
+  return sigma;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
 // return differential elastic probability d(probability)/d(omega) 
 
 G4double 
@@ -334,6 +364,83 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   sigma *= bzero2;
   sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
   sigma += kr2*bonebyarg2;
+  sigma *= damp2;          // *rad*rad;
+
+  return sigma;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return differential elastic probability d(probability)/d(omega) with 
+// Coulomb correction
+
+G4double 
+G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle, 
+                                        G4double theta 
+					//  G4double momentum, 
+					// G4double A         
+                                     )
+{
+  G4double sigma, bzero, bzero2, bonebyarg, bonebyarg2, damp, damp2;
+  G4double delta, diffuse, gamma;
+  G4double e1, e2, bone, bone2;
+
+  // G4double wavek = momentum/hbarc;  // wave vector
+  // G4double r0    = 1.08*fermi;
+  // G4double rad   = r0*std::pow(A, 1./3.);
+  G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
+  G4double kr2   = kr*kr;
+  G4double krt   = kr*theta;
+
+  bzero      = BesselJzero(krt);
+  bzero2     = bzero*bzero;    
+  bone       = BesselJone(krt);
+  bone2      = bone*bone;
+  bonebyarg  = BesselOneByArg(krt);
+  bonebyarg2 = bonebyarg*bonebyarg;  
+
+  if (fParticle == theProton)
+  {
+    diffuse = 0.63*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
+  }
+  else // as proton, if were not defined 
+  {
+    diffuse = 0.63*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
+  }
+  G4double kg    = fWaveVector*gamma;   // wavek*delta;
+
+  G4double sinHalfTheta  = std::sin(0.5*theta);
+  G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
+
+  kg -= 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+
+
+  G4double kg2   = kg*kg;
+  G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
+  G4double dk2t2 = dk2t*dk2t;
+  G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+
+  G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
+  G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
+
+
+  damp           = DampFactor(pikdt);
+  damp2          = damp*damp;
+
+  sigma  = kg2 + dk2t2;
+  sigma *= bzero2;
+  sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
+
+  sigma += kr2*(1 + 8.*fZommerfeld*fZommerfeld/kr2)*bonebyarg2;  // correction at J1()/()
+
   sigma *= damp2;          // *rad*rad;
 
   return sigma;
@@ -437,6 +544,14 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
     }
   }
   if (i > iMax ) result = 0.5*(theta1 + theta2);
+
+  G4double sigma = pi*thetaMax/iMax;
+
+  result += G4RandGauss::shoot(0.,sigma);
+
+  if(result < 0.) result = 0.;
+  if(result > thetaMax) result = thetaMax;
+
   return result;
 }
 
@@ -462,9 +577,9 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
   lv1.boost(-bst);
 
   G4ThreeVector p1 = lv1.vect();
-  G4double ptot = p1.mag();
-  G4double tmax = 4.0*ptot*ptot;
-  G4double t = 0.0;
+  G4double ptot    = p1.mag();
+  G4double tmax    = 4.0*ptot*ptot;
+  G4double t       = 0.0;
 
 
   //

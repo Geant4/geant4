@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.7 2007-06-12 14:46:26 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.8 2007-09-05 16:18:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,8 @@
 // Class Description - End
 //
 //
-// 24.05.07 V. Grichine first implementation for proton elastic scattering
+// 24.05.07 V. Grichine first implementation for hadron (no Coulomb) elastic scattering
+// 04.09.07 V. Grichine implementation for Coulomb elastic scattering
 
 
 #ifndef G4DiffuseElastic_h
@@ -84,17 +85,46 @@ public:
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double A         );
+
+  G4double GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double A, G4double Z );
+
   G4double IntegralElasticProb( const G4ParticleDefinition* particle, 
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double A            );
   
+  G4double GetCoulombElasticXsc( const G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double Z         );
+
+
+  G4double GetCoulombTotalXsc( const G4ParticleDefinition* particle,  
+			         G4double momentum, G4double Z         );
+
+
+  G4double CalculateParticleBeta( const G4ParticleDefinition* particle, 
+                                 	G4double momentum    );
+
+  G4double CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 );
+
+  G4double CalculateAm( G4double momentum, G4double n, G4double Z);
+
+
+
+
+
+
   G4double BesselJzero(G4double z);
   G4double BesselJone(G4double z);
   G4double DampFactor(G4double z);
   G4double BesselOneByArg(G4double z);
 
   G4double GetDiffElasticProb(G4double theta);
+  G4double GetDiffElasticSumProb(G4double theta);
   G4double GetIntegrandFunction(G4double theta);
 
 
@@ -120,7 +150,12 @@ private:
   const G4ParticleDefinition* fParticle;
   G4double fWaveVector;
   G4double fAtomicWeight;
+  G4double fAtomicNumber;
   G4double fNuclearRadius;
+  G4double fBeta;
+  G4double fZommerfeld;
+  G4double fAm;
+
 
 };
 
@@ -257,7 +292,7 @@ inline G4double G4DiffuseElastic::BesselJone(G4double value)
 
 ////////////////////////////////////////////////////////////////////
 //
-// damp factor in diffraction x*pi/sh(x*pi)
+// damp factor in diffraction x/sh(x), x was already *pi
 
 inline G4double G4DiffuseElastic::DampFactor(G4double x)
 {
@@ -298,5 +333,94 @@ inline G4double G4DiffuseElastic::BesselOneByArg(G4double x)
   }
   return result;
 }
+
+////////////////////////////////////////////////////////////////////
+//
+// return particle beta
+
+inline  G4double G4DiffuseElastic::CalculateParticleBeta( const G4ParticleDefinition* particle, 
+                                 	G4double momentum    )
+{
+  G4double mass = particle->GetPDGMass();
+  G4double a    = momentum/mass;
+  fBeta         = a/std::sqrt(1+a*a);
+
+  return fBeta; 
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// return Zommerfeld parameter for Coulomb scattering
+
+inline  G4double G4DiffuseElastic::CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 )
+{
+  fZommerfeld = fine_structure_const*Z1*Z2/beta;
+
+  return fZommerfeld; 
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// return Wentzel correction for Coulomb scattering
+
+inline  G4double G4DiffuseElastic::CalculateAm( G4double momentum, G4double n, G4double Z)
+{
+  G4double k   = momentum/hbarc;
+  G4double ch  = 1.13 + 3.76*n*n;
+  G4double zn  = 1.77*k*std::pow(Z,-1./3.)*Bohr_radius;
+  G4double zn2 = zn*zn;
+  fAm          = ch/zn2;
+
+  return fAm;
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// return Coulomb scattering differential xsc with Wentzel correction  
+
+inline  G4double G4DiffuseElastic::GetCoulombElasticXsc( const G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double Z         )
+{
+  G4double sinHalfTheta  = std::sin(0.5*theta);
+  G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
+  G4double beta          = CalculateParticleBeta( particle, momentum);
+  G4double z             = particle->GetPDGCharge();
+  G4double n             = CalculateZommerfeld( beta, z, Z );
+  G4double am            = CalculateAm( momentum, n, Z);
+  G4double k             = momentum/hbarc;
+  G4double ch            = 0.5*n/k;
+  G4double ch2           = ch*ch;
+  G4double xsc           = ch2/(sinHalfTheta2+am)/(sinHalfTheta2+am);
+
+  return xsc;
+}
+
+
+////////////////////////////////////////////////////////////////////
+//
+// return Coulomb scattering differential xsc with Wentzel correction  
+
+inline  G4double G4DiffuseElastic::GetCoulombTotalXsc( const G4ParticleDefinition* particle,  
+			                                     G4double momentum, G4double Z  )
+{
+  G4double beta          = CalculateParticleBeta( particle, momentum);
+  G4cout<<"beta = "<<beta<<G4endl;
+  G4double z             = particle->GetPDGCharge();
+  G4double n             = CalculateZommerfeld( beta, z, Z );
+  G4cout<<"fZomerfeld = "<<n<<G4endl;
+  G4double am            = CalculateAm( momentum, n, Z);
+  G4cout<<"cof Am = "<<am<<G4endl;
+  G4double k             = momentum/hbarc;
+  G4cout<<"k = "<<k*fermi<<" 1/fermi"<<G4endl;
+  G4cout<<"k*Bohr_radius = "<<k*Bohr_radius<<G4endl;
+  G4double ch            = n/k;
+  G4double ch2           = ch*ch;
+  G4double xsc           = ch2*pi/(am +am*am);
+
+  return xsc;
+}
+
 
 #endif

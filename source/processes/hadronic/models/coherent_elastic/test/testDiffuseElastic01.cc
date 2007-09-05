@@ -106,7 +106,7 @@ int main()
   G4int choice;
   // G4cin >> choice;
 
-  choice = 8;
+  choice = 82;
 
 
   switch (choice)
@@ -214,13 +214,13 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 4;
+  choice = 1;
 
   G4ParticleDefinition* theParticleDefinition;
 
-  // G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
+  G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
 
-  G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
+  // G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
 
   switch (choice)
   {
@@ -331,10 +331,10 @@ int main()
 
   // Angle sampling
 
-  G4int  numberOfSimPoints =0;
+  G4int  numberOfSimPoints = 0;
   G4double pData, sData, dData, tData[200];
   std::ifstream simRead;
-  simRead.open("pOT1GeV.dat");
+  simRead.open("pPbT1GeV.dat");
 
   simRead>>numberOfSimPoints;
 
@@ -442,7 +442,7 @@ int main()
   G4double rad = diffelastic->GetNuclearRadius();
 
   integral *= rad*rad;
-
+  G4cout<<G4endl;
   G4cout<<integral/millibarn<<"\t"<<sig/millibarn<<"\t"<<integral/sig<<G4endl;
   /*
   G4double sum = 0;
@@ -467,6 +467,41 @@ int main()
   
   */
 
+  std::ofstream writec("coulomb.dat", std::ios::out ) ;
+  writes.setf( std::ios::scientific, std::ios::floatfield );
+
+  iMax = 200;
+
+
+  G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta, sumsigma;
+
+  thetaMin    = 1.0e-4*degree;
+  thetaMax    = 16*degree;
+  logThetaMin = std::log10(thetaMin);
+  logThetaMax = std::log10(thetaMax);
+  dLogTheta   = (logThetaMax - logThetaMin)/iMax;
+
+  writec << iMax  << G4endl;
+  G4cout<<G4endl;
+  G4cout<<"theta"<<"\t\t"<<"Coulomb xsc"<<G4endl;
+  G4cout<<G4endl;
+
+  for( i = 0; i < iMax; i++)
+  {
+    logTheta = logThetaMin + dLogTheta*i;
+    theta    = std::pow(10.,logTheta);
+
+    sigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
+
+    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+
+    G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
+    writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+  }
+  sigma = diffelastic->GetCoulombTotalXsc( theParticleDefinition, plab, Z);
+  G4cout << "Total Coulomb xsc = " << sigma/millibarn  << " millibarn" << G4endl;
+  G4cout << "Coulomb length = " 
+         << 1./(sigma*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
   G4cout << " elastic cross section for " <<
             theParticleDefinition->GetParticleName() <<
