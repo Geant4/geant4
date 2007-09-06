@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.24 2007-03-08 23:54:04 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.25 2007-09-06 06:45:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -227,6 +227,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandOld->SetDefaultValue("currentRun.rndm");
   restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
 
+  constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
+  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
+  constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
+  constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
+  constScoreCmd->AvailableForStates(G4State_Idle);
+
   materialScanner = new G4MaterialScanner();
 }
 
@@ -248,6 +254,7 @@ G4RunMessenger::~G4RunMessenger()
   delete cutCmd;
   delete randEvtCmd;
   delete randDirOld; delete storeRandOld; delete restoreRandOld; 
+  delete constScoreCmd;
   delete runDirectory;
   
   delete randDirCmd;
@@ -332,6 +339,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
            << G4endl;  
    runManager->RestoreRandomNumberStatus(newValue); }  
+  else if( command==constScoreCmd )
+  { runManager->ConstructScoringWorlds(); }
+
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)

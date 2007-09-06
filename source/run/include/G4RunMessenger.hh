@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.15 2007-03-08 23:54:04 asaim Exp $
+// $Id: G4RunMessenger.hh,v 1.16 2007-09-06 06:45:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@
 //           (and rebuilding physics table will be invoked)
 //    storeRandomNumberStatus *   Set the flag for storing random number status
 //    restoreRandomNumberStatus * Restore the stored random number status
+//    constructScoringWorlds * Constrct scoring world(s) if defined
 // 
 
 #ifndef G4RunMessenger_h
@@ -108,6 +109,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithAString *        randDirOld;
     G4UIcmdWithAnInteger *      storeRandOld;
     G4UIcmdWithAString *        restoreRandOld;  
+
+    G4UIcmdWithoutParameter *   constScoreCmd;
 
     G4MaterialScanner *         materialScanner;
 };

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.49 2007-07-12 06:54:30 asaim Exp $
+// $Id: G4RunManager.hh,v 1.50 2007-09-06 06:45:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -434,8 +434,9 @@ class G4RunManager
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
 
-  private:
+  public:
     void ConstructScoringWorlds();
+  private:
     void UpdateScoring();
 };
 
