@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.27 2007-09-04 12:52:08 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.28 2007-09-06 05:23:57 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -299,7 +299,7 @@ void G4ScoringBox::Draw() {
     att.SetForceAuxEdgeVisible(true);
 
 
-    //G4VSolid * drawBox = G4Box("drawBox", fSize[0], fSize[1], fSize[2]);
+    //G4VSolid * drawBox = new G4Box("drawBox", fSize[0], fSize[1], fSize[2]);
     //G4LogicalVolume * drawBoxLV = new G4LogicalVolume(drawBox, 0 ,"drawBoxLV");
 
     G4Scale3D scale;
@@ -308,15 +308,19 @@ void G4ScoringBox::Draw() {
     G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
     for(int x = 0; x < fNSegment[0]; x++) {
       for(int y = 0; y < fNSegment[1]; y++) {
-        G4ThreeVector pos(GetReplicaPosition(x, y, 0) + fCenterPosition - zhalf);
-        G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + fCenterPosition + zhalf);
+	//G4ThreeVector pos(GetReplicaPosition(x, y, 0) + fCenterPosition - zhalf);
+        //G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + fCenterPosition + zhalf);
+	G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
+        G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
         G4Transform3D trans, trans2;
         if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos);
-          trans2 = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos2);
+          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	  trans = G4Translate3D(fCenterPosition)*trans;
+          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	  trans2 = G4Translate3D(fCenterPosition)*trans2;
         } else {
-          trans = G4Translate3D(pos);
-          trans2 = G4Translate3D(pos2);
+          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
         }
 	G4double c[4];
 	GetMapColor(xyedep[x][y]/xymax, c);
@@ -332,15 +336,19 @@ void G4ScoringBox::Draw() {
     G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
     for(int y = 0; y < fNSegment[1]; y++) {
       for(int z = 0; z < fNSegment[2]; z++) {
-        G4ThreeVector pos(GetReplicaPosition(0, y, z) + fCenterPosition - xhalf);
-        G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + fCenterPosition + xhalf);
+        //G4ThreeVector pos(GetReplicaPosition(0, y, z) + fCenterPosition - xhalf);
+        //G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + fCenterPosition + xhalf);
+        G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
+        G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + xhalf);
         G4Transform3D trans, trans2;
         if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos);
-          trans2 = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos2);
+          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	  trans = G4Translate3D(fCenterPosition)*trans;
+          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	  trans2 = G4Translate3D(fCenterPosition)*trans2;
         } else {
-          trans = G4Translate3D(pos);
-          trans2 = G4Translate3D(pos2);
+          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
         }
 	G4double c[4];
 	GetMapColor(yzedep[y][z]/yzmax, c);
@@ -356,15 +364,19 @@ void G4ScoringBox::Draw() {
     G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
     for(int x = 0; x < fNSegment[0]; x++) {
       for(int z = 0; z < fNSegment[2]; z++) {
-        G4ThreeVector pos(GetReplicaPosition(x, 0, z) + fCenterPosition - yhalf);
-        G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + fCenterPosition + yhalf);
+        //G4ThreeVector pos(GetReplicaPosition(x, 0, z) + fCenterPosition - yhalf);
+        //G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + fCenterPosition + yhalf);
+        G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
+        G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + yhalf);
         G4Transform3D trans, trans2;
         if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos);
-          trans2 = G4Rotate3D(*fRotationMatrix)*G4Translate3D(pos2);
+          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	  trans = G4Translate3D(fCenterPosition)*trans;
+          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	  trans2 = G4Translate3D(fCenterPosition)*trans2;
         } else {
-          trans = G4Translate3D(pos);
-          trans2 = G4Translate3D(pos2);
+          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
 	}
 	G4double c[4];
 	GetMapColor(xzedep[x][z]/xzmax, c);
