@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTypeList.hh,v 1.3 2007-09-06 22:00:40 tinslay Exp $
+// $Id: G4GPRTypeList.hh,v 1.4 2007-09-06 22:07:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation. Loki style typelists:

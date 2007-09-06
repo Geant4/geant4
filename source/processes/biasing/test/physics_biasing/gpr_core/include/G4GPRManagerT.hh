@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRManagerT.hh,v 1.1 2007-07-27 22:13:08 tinslay Exp $
+// $Id: G4GPRManagerT.hh,v 1.2 2007-09-06 22:10:09 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 

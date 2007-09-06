@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRProcessWrappers.hh,v 1.4 2007-08-10 22:23:04 tinslay Exp $
+// $Id: G4GPRProcessWrappers.hh,v 1.5 2007-09-06 22:07:04 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation - wrapper definitions.
@@ -124,17 +124,17 @@ namespace G4GPRProcessWrappers {
     typedef G4GPRFunctor<G4double, G4String, RelayArgs> SingleProcessRelayWrapper;
     typedef G4GPRFunctor< G4double, G4String, G4GPRTypeList_4(std::vector<SeedWrapper>&, G4Track, G4double, G4ForceCondition*) > MultiProcessRelayWrapper;
   };
-}
 
-// Convenient typedefs
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestGPIL>::SeedWrapper G4AtRestGPILWrapper;
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousGPIL>::SeedWrapper G4ContinuousGPILWrapper;
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteGPIL>::SeedWrapper G4DiscreteGPILWrapper;
+  // Convenient typedefs
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestGPIL>::SeedWrapper G4GPRAtRestGPIL;
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousGPIL>::SeedWrapper G4GPRContinuousGPIL;
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteGPIL>::SeedWrapper G4GPRDiscreteGPIL;
 
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper G4AtRestDoItWrapper;
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousDoIt>::SeedWrapper G4ContinuousDoItWrapper;
-typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper G4DiscreteDoItWrapper;
-
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper G4GPRAtRestDoIt;
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::ContinuousDoIt>::SeedWrapper G4GPRContinuousDoIt;
+  typedef G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::DiscreteDoIt>::SeedWrapper G4GPRDiscreteDoIt;
+  
 typedef G4GPRProcessWrappers::DoItWrapper G4GPRDoItWrapper;
+}
 
 #endif

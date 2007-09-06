@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: multiProcessRelayTest.cc,v 1.3 2007-08-30 19:37:45 tinslay Exp $
+// $Id: multiProcessRelayTest.cc,v 1.4 2007-09-06 22:10:10 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -159,13 +159,13 @@ int main(int argc, char** argv) {
 
   G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
 										     &G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL>::ChangeState);
 
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
   G4GPRNode* node1 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::StartBoundary>::Register(&MultiRelayTrigger, node1, &G4GPRNode::FlipState);
 
   G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
 
@@ -181,7 +181,7 @@ int main(int argc, char** argv) {
 
   // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
   G4GPRManager gprManager(def);
-  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
+  gprManager.Fire<G4GPRTriggering::Geometry::StartBoundary>(*track, *step);  
 
   ProcessList* result(0);
   gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
@@ -195,7 +195,7 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_B);
 
-  gprManager.Fire<G4GPRScopes::Geometry::StartBoundary>(*track, *step);  
+  gprManager.Fire<G4GPRTriggering::Geometry::StartBoundary>(*track, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
 
   G4cout<<"jane generated size should be 1 and is: "<<result->size()<<G4endl;

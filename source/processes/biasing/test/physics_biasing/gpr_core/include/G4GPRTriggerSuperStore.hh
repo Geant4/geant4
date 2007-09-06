@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerSuperStore.hh,v 1.4 2007-08-30 19:37:45 tinslay Exp $
+// $Id: G4GPRTriggerSuperStore.hh,v 1.5 2007-09-06 22:10:09 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -35,15 +35,15 @@
 #include "G4GPRLinearHierarchyT.hh"
 #include "G4GPRSingletonHierarchyT.hh"
 #include "G4GPRTriggerManagerT.hh"
-#include "G4GPRScopes.hh"
+#include "G4GPRTriggering.hh"
 
-typedef G4GPRLinearHierarchyT< G4GPRTypeList_7(G4GPRTriggerManagerT<G4GPRScopes::Tracking::StartTracking>, 
-					       G4GPRTriggerManagerT<G4GPRScopes::Tracking::EndTracking>,
-					       G4GPRTriggerManagerT<G4GPRScopes::Stepping::StartStep>, 
-					       G4GPRTriggerManagerT<G4GPRScopes::Stepping::EndStep>,
-					       G4GPRTriggerManagerT<G4GPRScopes::Geometry::StartBoundary>, 
-					       G4GPRTriggerManagerT<G4GPRScopes::Geometry::EndBoundary>,
-					       G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>) > G4GPRTriggerStore;
+typedef G4GPRLinearHierarchyT< G4GPRTypeList_7(G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>, 
+					       G4GPRTriggerManagerT<G4GPRTriggering::Tracking::EndTracking>,
+					       G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>, 
+					       G4GPRTriggerManagerT<G4GPRTriggering::Stepping::EndStep>,
+					       G4GPRTriggerManagerT<G4GPRTriggering::Geometry::StartBoundary>, 
+					       G4GPRTriggerManagerT<G4GPRTriggering::Geometry::EndBoundary>,
+					       G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>) > G4GPRTriggerStore;
 
 typedef G4GPRAssocT<G4GPRPhysicsList*, G4GPRTriggerStore> G4GPRPhysicsListAndTriggerAssoc;
 typedef G4GPRAssocT<G4ParticleDefinition*, G4GPRPhysicsListAndTriggerAssoc> G4GPRParticleAndTriggerAssoc;

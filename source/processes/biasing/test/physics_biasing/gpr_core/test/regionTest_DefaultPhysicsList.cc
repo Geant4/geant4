@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: regionTest_DefaultPhysicsList.cc,v 1.1 2007-08-30 19:37:45 tinslay Exp $
+// $Id: regionTest_DefaultPhysicsList.cc,v 1.2 2007-09-06 22:10:10 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007.
@@ -212,17 +212,17 @@ int main(int argc, char** argv) {
 
   G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsListManager->GetDefaultList()];
   
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionA::Trigger, atRestDoIt_A, 
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionA::Trigger, atRestDoIt_A, 
 										 &G4GPRSeedT<G4GPRProcessLists::AtRestDoIt>::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionB::Trigger, atRestDoIt_B, 
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionB::Trigger, atRestDoIt_B, 
 										 &G4GPRSeedT<G4GPRProcessLists::AtRestDoIt>::ChangeState);
   
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
   G4GPRNode* node1 = new G4GPRNode;
   G4GPRNode* node2 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionA::Trigger, node1, &G4GPRNode::FlipState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionB::Trigger, node2, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionA::Trigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionB::Trigger, node2, &G4GPRNode::FlipState);
 
   // Add nodes to key manager. Key manager be notified when an elements state has changed, so the current "key" changes.
   // This means the process list needs to be changed.
@@ -250,7 +250,7 @@ int main(int argc, char** argv) {
   // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
   G4GPRManager gprManager(def);
   
-  gprManager.Fire<G4GPRScopes::Geometry::NewRegion>(*track);
+  gprManager.Fire<G4GPRTriggering::Geometry::NewRegion>(*track);
 
   // Generate list in region A
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper > ProcessList;
@@ -263,7 +263,7 @@ int main(int argc, char** argv) {
   // Swith to region B
   track->SetTouchableHandle(touchable_B);
 
-  gprManager.Fire<G4GPRScopes::Geometry::NewRegion>(*track);
+  gprManager.Fire<G4GPRTriggering::Geometry::NewRegion>(*track);
 
   gprManager.GetList<G4GPRProcessLists::AtRestDoIt>(result);
   G4cout<<"jane process list for region B"<<G4endl;

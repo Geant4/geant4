@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: seedTest.cc,v 1.3 2007-08-30 19:37:45 tinslay Exp $
+// $Id: seedTest.cc,v 1.4 2007-09-06 22:10:10 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Functor demonstration.

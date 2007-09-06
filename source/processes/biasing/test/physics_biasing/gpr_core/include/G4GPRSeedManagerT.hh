@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRSeedManagerT.hh,v 1.3 2007-08-30 19:37:45 tinslay Exp $
+// $Id: G4GPRSeedManagerT.hh,v 1.4 2007-09-06 22:10:09 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -64,7 +64,7 @@ public:
       
       if ((*iter)->IsActive()) {
 	G4int idx = (*iter)->Placement();
-	
+	G4cout<<"jane seed manager "<<fStore.size()<<" "<<idx<<G4endl;
 	switch (idx) {
 	  
 	case G4GPRPlacement::First :

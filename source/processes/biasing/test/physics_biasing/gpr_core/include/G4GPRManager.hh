@@ -53,7 +53,7 @@ public:
   void GetList(Result*& result) 
   {
     UpdateCaches();
-    return pCachedGenerator->Generate<List>(result);
+    pCachedGenerator->Generate<List>(result);
   }
   //jane make inline  
   void UpdateCaches()

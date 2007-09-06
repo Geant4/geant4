@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: regionTest.cc,v 1.1 2007-08-07 22:43:17 tinslay Exp $
+// $Id: regionTest.cc,v 1.2 2007-09-06 22:10:10 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, May 2007. Functor demonstration.
@@ -207,9 +207,9 @@ int main(int argc, char** argv) {
     new G4GPRSeedT<G4GPRProcessLists::AtRestDoIt>("AtRestDoIt_B", &RegionB::AtRestDoIt, G4GPRPlacement::First);
   
   G4GPRTriggerSuperStore* triggerSuperStore = G4GPRTriggerSuperStore::Instance();
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionA::Trigger, atRestDoIt_A, 
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionA::Trigger, atRestDoIt_A, 
 										      &G4GPRSeedT<G4GPRProcessLists::AtRestDoIt>::ChangeState);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Register(&RegionB::Trigger, atRestDoIt_B, 
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionB::Trigger, atRestDoIt_B, 
 										      &G4GPRSeedT<G4GPRProcessLists::AtRestDoIt>::ChangeState);
 
   // Register element with super store which takes ownership
@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
   
   // In regular processing could keep a pointer to the previous region so know when region has changed.
   // Anyway, manually trigger change in region here.
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Fire(*track);  
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Fire(*track);  
 
   // Generate list in region A
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper > ProcessList;
@@ -244,7 +244,7 @@ int main(int argc, char** argv) {
 
   // Swith to region B
   track->SetTouchableHandle(touchable_B);
-  triggerSuperStore->G4GPRTriggerManagerT<G4GPRScopes::Geometry::NewRegion>::Fire(*track); 
+  triggerSuperStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Fire(*track); 
 
   generator.Generate<G4GPRProcessLists::AtRestDoIt>(result);
   G4cout<<"jane process list for region B"<<G4endl;
