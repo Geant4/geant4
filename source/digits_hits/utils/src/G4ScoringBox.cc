@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.29 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.30 2007-09-07 13:20:11 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,7 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4PSEnergyDeposit3D.hh"
 
+#include <map>
 
 G4ScoringBox::G4ScoringBox(G4String wName)
   :G4VScoringMesh(wName), fSegmentDirection(-1),
@@ -399,23 +400,43 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 }
 
 void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
-  color[0] = color[1] = color[2] = 0.;
-  color[4] = 1.;
 
-  if(value > 0.8) {
+
+  if(value > 1.) {
+    G4cerr << "Error : G4ScoringBox::GetMapColor() : 'value' argument needs to be <= 1." << G4endl;
     color[0] = 1.;
-    color[1] = 1.-(value-0.7)/0.3;
-  } else if(value > 0.6) {
-    color[0] = (value-0.6)/0.2;
-    color[1] = 1.;
-  } else if(value > 0.4) {
-    color[1] = 1.;
-    color[2] = 1.-(value-0.4)/0.2;
-  } else if(value > 0.2) {
-    color[2] = 1.;
-    color[0] = color[1] = 1. - (value-0.2)/0.2;
-  } else {
-    color[2] = 1.;
-    color[0] = color[1] = 1. - value/0.2;
+    color[1] = color[2] = color[3] = 0.;
+    return;
   }
+
+  // color map
+  const int NCOLOR = 6;
+  struct ColorMap {
+    G4double val;
+    G4double rgb[3];
+  } colormap[NCOLOR] = {{0.0, 1., 1., 1.},
+			{0.2, 0., 0., 1.},
+			{0.4, 0., 1., 1.},
+			{0.6, 0., 1., 0.},
+			{0.8, 1., 1., 0.},
+			{1.0, 1., 0., 0.}};
+  
+  // search
+  G4int during[2] = {0, 0};
+  for(int i = 1; i < NCOLOR; i++) {
+    if(colormap[i].val >= value) {
+      during[0] = i-1;
+      during[1] = i;
+      break;
+    }
+  }
+
+  // interpolate
+  G4double a = std::fabs(value - colormap[during[0]].val);
+  G4double b = std::fabs(value - colormap[during[1]].val);
+  for(int i = 0; i < 3; i++) {
+    color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
+      /(colormap[during[1]].val - colormap[during[0]].val);
+  } 
+  
 }
