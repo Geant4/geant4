@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.11 2007-08-29 02:14:14 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.12 2007-09-07 01:21:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -101,4 +101,10 @@ void G4ScoringManager::Dump() const
   for(MeshVecConstItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
    (*itr)->Dump();
   }
+}
+
+void G4ScoringManager::DrawMesh(G4String meshName,G4String psName)
+{
+  G4VScoringMesh* mesh = FindMesh(meshName);
+  if(mesh) mesh->DrawMesh(psName);
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.14 2007-09-05 06:14:19 taso Exp $
+// $Id: G4ScoringMessenger.cc,v 1.15 2007-09-07 01:21:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -83,6 +83,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 
   listCmd = new G4UIcmdWithoutParameter("/score/list",this);
   listCmd->SetGuidance("List scoring worlds.");
+
+  dumpCmd = new G4UIcmdWithoutParameter("/score/dump",this);
+  dumpCmd->SetGuidance("Dump scorer results ");
 
   verboseCmd = new G4UIcmdWithAnInteger("/score/verbose",this);
   verboseCmd->SetGuidance("Verbosity");
@@ -175,10 +178,13 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mRotZCmd->SetDefaultUnit("deg");
   //
 
-  // Dump Scoring result
-  dumpCmd = new G4UIcmdWithAString("/score/dump",this);
-  dumpCmd->SetGuidance("Dump scorer results ");
-  dumpCmd->SetParameterName("qname",true);
+  // Draw Scoring result
+  drawCmd = new G4UIcommand("/score/draw",this);
+  drawCmd->SetGuidance("Dump scorer results ");
+  param = new G4UIparameter("meshName",'s',false);
+  drawCmd->SetParameter(param);
+  param = new G4UIparameter("psName",'s',false);
+  drawCmd->SetParameter(param);
 
   //
   // Quantity commands
@@ -540,6 +546,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete   mRotZCmd;
     //
     delete     dumpCmd;
+    delete     drawCmd;
     //
     delete         quantityDir;
     delete         qTouchCmd;
@@ -580,6 +587,11 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       fSMan->List(); 
   } else if(command==dumpCmd) { 
       fSMan->Dump(); 
+  } else if(command==drawCmd) { 
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String psName = next();
+      fSMan->DrawMesh(meshName,psName);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {

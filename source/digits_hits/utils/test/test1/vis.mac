@@ -16,8 +16,8 @@
 ###/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
 ###/vis/geometry/set/colour Calor-BP_LayerLog ! yellow
 ###/vis/geometry/set/colour Calor-CP_LayerLog ! yellow
-###/vis/viewer/zoom 3.2
-/vis/viewer/flush
+/vis/viewer/zoom 2.0
+##############/vis/viewer/flush
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)

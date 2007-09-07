@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.22 2007-09-03 10:51:53 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.23 2007-09-07 01:21:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -178,14 +178,14 @@ void G4VScoringMesh::List() const {
   }
 
 
-  G4cout << " registered primitve scorers : ";
+  G4cout << " registered primitve scorers : " << G4endl;
   G4int nps = fMFD->GetNumberOfPrimitives();
   G4VPrimitiveScorer * ps;
   for(int i = 0; i < nps; i++) {
     ps = fMFD->GetPrimitive(i);
-    G4cout << " " << ps->GetName() << G4endl;
-    if(ps->GetFilter() != NULL)
-      G4cout << "     with a filter : " << ps->GetFilter()->GetName() << G4endl;
+    G4cout << "   " << i << "  " << ps->GetName();
+    if(ps->GetFilter() != NULL) G4cout << "     with a filter : " << ps->GetFilter()->GetName();
+    G4cout << G4endl;
   }
 
 
@@ -202,6 +202,6 @@ void G4VScoringMesh::Dump() {
   }
   G4cout << G4endl;
 
-  Draw();
+//////////////  Draw();
 }
 

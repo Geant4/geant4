@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.28 2007-09-06 05:23:57 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.29 2007-09-07 01:21:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -244,18 +244,10 @@ void G4ScoringBox::List() const {
   }
 }
 
-void G4ScoringBox::Draw() {
-
-  G4int nps = fMFD->GetNumberOfPrimitives(); 
-  G4PSEnergyDeposit3D * ed3d;
-  for(int i = 0; i < nps; i++) {
-    G4VPrimitiveScorer * ps = fMFD->GetPrimitive(i);
-    ed3d = dynamic_cast<G4PSEnergyDeposit3D*>(ps);
-    if(ed3d) break;
-  }
+void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager && ed3d) {
+  if(pVisManager) {
     
     // edep vectors
     std::vector<std::vector<std::vector<double> > > edep; // edep[X][Y][Z]
@@ -276,8 +268,6 @@ void G4ScoringBox::Draw() {
     std::vector<std::vector<double> > xzedep; // xzedep[X][Z]
     for(int x = 0; x < fNSegment[0]; x++) xzedep.push_back(ez);
 
-
-    std::map<G4int, G4double*> * map = fMap.find(ed3d->GetName())->second->GetMap();
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();

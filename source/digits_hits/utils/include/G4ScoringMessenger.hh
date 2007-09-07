@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.11 2007-09-05 06:14:02 taso Exp $
+// $Id: G4ScoringMessenger.hh,v 1.12 2007-09-07 01:21:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -83,6 +83,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4ScoringManager*        fSMan;
     G4UIdirectory*           scoreDir;
     G4UIcmdWithoutParameter* listCmd;
+    G4UIcmdWithoutParameter* dumpCmd;
     G4UIcmdWithAnInteger*    verboseCmd;
     //
     G4UIdirectory*             meshCreateDir;
@@ -115,8 +116,8 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* mRotYCmd;
     G4UIcmdWithADoubleAndUnit* mRotZCmd;
     //
-    //dump Command
-    G4UIcmdWithAString*        dumpCmd;
+    //Draw Command
+    G4UIcommand *        drawCmd;
     //
     // Quantity commands
     G4UIdirectory*             quantityDir;
