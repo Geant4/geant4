@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.8 2007-09-05 16:18:11 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.9 2007-09-07 15:02:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,7 +265,10 @@ G4DiffuseElastic::GetDiffuseElasticXsc( const G4ParticleDefinition* particle,
   G4double r0;
   if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
   else        r0  = 1.1*fermi;
-  fNuclearRadius = r0*std::pow(A, 1./3.);
+
+  r0 = 1.7*fermi;
+  // fNuclearRadius = r0*std::pow(A, 1./3.);
+  fNuclearRadius = r0*std::pow(A, 0.27);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticProb(theta);
 
@@ -295,7 +298,9 @@ G4DiffuseElastic::GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle,
   G4double r0;
   if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
   else        r0  = 1.1*fermi;
-  fNuclearRadius = r0*std::pow(A, 1./3.);
+  r0 = 1.7*fermi;
+  // fNuclearRadius = r0*std::pow(A, 1./3.);
+  fNuclearRadius = r0*std::pow(A, 0.27);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticSumProb(theta);
 
@@ -401,7 +406,8 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
 
   if (fParticle == theProton)
   {
-    diffuse = 0.63*fermi;
+    // diffuse = 0.63*fermi;
+    diffuse = 0.6*fermi;
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
     e1      = 0.3*fermi;
@@ -420,7 +426,8 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
   G4double sinHalfTheta  = std::sin(0.5*theta);
   G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
 
-  kg -= 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  // kg += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  kg += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
 
 
   G4double kg2   = kg*kg;
@@ -439,7 +446,8 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
   sigma *= bzero2;
   sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
 
-  sigma += kr2*(1 + 8.*fZommerfeld*fZommerfeld/kr2)*bonebyarg2;  // correction at J1()/()
+  // sigma += kr2*(1 + 8.*fZommerfeld*fZommerfeld/kr2)*bonebyarg2;  // correction at J1()/()
+  sigma += kr2*bonebyarg2;  // correction at J1()/()
 
   sigma *= damp2;          // *rad*rad;
 
