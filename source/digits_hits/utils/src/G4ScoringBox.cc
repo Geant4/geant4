@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.30 2007-09-07 13:20:11 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.31 2007-09-07 14:25:11 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -413,13 +413,13 @@ void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
   const int NCOLOR = 6;
   struct ColorMap {
     G4double val;
-    G4double rgb[3];
-  } colormap[NCOLOR] = {{0.0, 1., 1., 1.},
-			{0.2, 0., 0., 1.},
-			{0.4, 0., 1., 1.},
-			{0.6, 0., 1., 0.},
-			{0.8, 1., 1., 0.},
-			{1.0, 1., 0., 0.}};
+    G4double rgb[4];
+  } colormap[NCOLOR] = {{0.0, 1., 1., 1., 1.}, // value, r, g, b, alpha
+			{0.2, 0., 0., 1., 1.},
+			{0.4, 0., 1., 1., 1.},
+			{0.6, 0., 1., 0., 1.},
+			{0.8, 1., 1., 0., 1.},
+			{1.0, 1., 0., 0., 1.}};
   
   // search
   G4int during[2] = {0, 0};
@@ -434,9 +434,9 @@ void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
   // interpolate
   G4double a = std::fabs(value - colormap[during[0]].val);
   G4double b = std::fabs(value - colormap[during[1]].val);
-  for(int i = 0; i < 3; i++) {
+  for(int i = 0; i < 4; i++) {
     color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
       /(colormap[during[1]].val - colormap[during[0]].val);
   } 
-  
+
 }
