@@ -332,7 +332,7 @@ int main()
   // Angle sampling
 
   G4int  numberOfSimPoints = 0;
-  G4double pData, sData, dData, tData[200];
+  G4double pData, sData, dData, tData[200], sumsigma;
 
   std::ifstream simRead;
 
@@ -374,23 +374,32 @@ int main()
     // theta = std::sqrt(tData[i]/plab/plab);
     theta = tData[i]*degree;
 
-    sigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+    // sigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
 
     // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
+    // integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
     // sigma *= 4*pi/tmax;
 
     // G4cout << theta/milliradian << "\t" << "\t" << sigma/barn  << "\t"<< integral << G4endl;
     // writes << theta/milliradian << "\t" << "\t" << sigma/barn << "\t"<< integral << G4endl;
 
-   G4cout << theta/degree << "\t" << "\t" << sigma/millibarn  << "\t"<< integral << G4endl;
-   writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t"<< integral << G4endl;
+    // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn  << "\t"<< integral << G4endl;
+    // writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t"<< integral << G4endl;
 
     // G4cout << theta/milliradian << "\t"<< "\t"<< tData[i]/GeV/GeV << "\t" << "\t" 
     //        << sigma*GeV*GeV/millibarn << "\t"<< integral << G4endl;
 
     // writes << tData[i]/GeV/GeV << "\t" << "\t" 
     //        << sigma*GeV*GeV/millibarn  << "\t"<< integral << G4endl;
+
+    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
+    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+
+    G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+
+
+
 
   /*
     if(!swave) 
@@ -479,7 +488,7 @@ int main()
   iMax = 200;
 
 
-  G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta, sumsigma;
+  G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta;
 
   thetaMin    = 1.0e-1*degree;
   thetaMax    = 16*degree;
@@ -506,6 +515,7 @@ int main()
     G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
     writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
   }
+  G4cout<<G4endl;
 
   sigma = diffelastic->GetCoulombTotalXsc( theParticleDefinition, plab, Z);
 
@@ -513,6 +523,20 @@ int main()
 
   G4cout << "Coulomb length = " 
          << 1./(sigma*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
+
+  G4cout << "Nuclear length = " 
+         << 1./(sig*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
+
+  G4cout<<G4endl;
+
+  sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 0., 0.01*degree);
+
+  G4cout << "0-1*degree Coulomb xsc = " << sigma/millibarn  << " millibarn" << G4endl;
+
+  G4cout << "0-1*degree Coulomb length = " 
+         << 1./(sigma*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
+
+  G4cout<<G4endl;
 
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
   G4cout << " elastic cross section for " <<

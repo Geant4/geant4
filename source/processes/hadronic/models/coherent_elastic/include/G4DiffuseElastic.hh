@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.8 2007-09-05 16:18:11 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.9 2007-09-08 12:02:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,7 +103,11 @@ public:
 
 
   G4double GetCoulombTotalXsc( const G4ParticleDefinition* particle,  
-			         G4double momentum, G4double Z         );
+			         G4double momentum, G4double Z       );
+
+  G4double GetCoulombIntegralXsc( const G4ParticleDefinition* particle,  
+			         G4double momentum, G4double Z, 
+                                 G4double theta1, G4double theta2         );
 
 
   G4double CalculateParticleBeta( const G4ParticleDefinition* particle, 
@@ -400,7 +404,7 @@ inline  G4double G4DiffuseElastic::GetCoulombElasticXsc( const G4ParticleDefinit
 
 ////////////////////////////////////////////////////////////////////
 //
-// return Coulomb scattering differential xsc with Wentzel correction  
+// return Coulomb scattering total xsc with Wentzel correction  
 
 inline  G4double G4DiffuseElastic::GetCoulombTotalXsc( const G4ParticleDefinition* particle,  
 			                                     G4double momentum, G4double Z  )
@@ -422,5 +426,36 @@ inline  G4double G4DiffuseElastic::GetCoulombTotalXsc( const G4ParticleDefinitio
   return xsc;
 }
 
+////////////////////////////////////////////////////////////////////
+//
+// return Coulomb scattering xsc with Wentzel correction  integrated between
+// theta1 and < theta2
+
+inline  G4double G4DiffuseElastic::GetCoulombIntegralXsc( const G4ParticleDefinition* particle,  
+			         G4double momentum, G4double Z, 
+                                 G4double theta1, G4double theta2 )
+{
+  G4double c1 = std::cos(theta1);
+  G4cout<<"c1 = "<<c1<<G4endl;
+  G4double c2 = std::cos(theta2);
+  G4cout<<"c2 = "<<c2<<G4endl;
+  G4double beta          = CalculateParticleBeta( particle, momentum);
+  // G4cout<<"beta = "<<beta<<G4endl;
+  G4double z             = particle->GetPDGCharge();
+  G4double n             = CalculateZommerfeld( beta, z, Z );
+  // G4cout<<"fZomerfeld = "<<n<<G4endl;
+  G4double am            = CalculateAm( momentum, n, Z);
+  // G4cout<<"cof Am = "<<am<<G4endl;
+  G4double k             = momentum/hbarc;
+  // G4cout<<"k = "<<k*fermi<<" 1/fermi"<<G4endl;
+  // G4cout<<"k*Bohr_radius = "<<k*Bohr_radius<<G4endl;
+  G4double ch            = n/k;
+  G4double ch2           = ch*ch;
+  am *= 2.;
+  G4double xsc           = ch2*twopi*(c1-c2);
+           xsc          /= (1 - c1 + am)*(1 - c2 + am);
+
+  return xsc;
+}
 
 #endif
