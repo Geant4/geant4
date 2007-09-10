@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: functorTest.cc,v 1.2 2007-09-06 22:07:04 tinslay Exp $
+// $Id: functorTest.cc,v 1.3 2007-09-10 22:05:01 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Functor demonstration.
@@ -33,6 +33,7 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4VParticleChange.hh"
 
+using namespace G4GPRProcessWrappers;
 // Regular G4VProcess
 struct VProcess : public G4VDiscreteProcess
 {

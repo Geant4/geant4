@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggering.hh,v 1.1 2007-09-06 22:07:04 tinslay Exp $
+// $Id: G4GPRTriggerTypes.hh,v 1.1 2007-09-10 22:05:01 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J. Tinslay, May 2007. Creation - scope definitions.
 //
-#ifndef G4GPRTRIGGERING_HH
-#define G4GPRTRIGGERING_HH
+#ifndef G4GPRTRIGGERTYPES_HH
+#define G4GPRTRIGGERTYPES_HH
    
 #include "G4String.hh"
 #include "G4GPRObserverCollectionT.hh"
@@ -37,7 +37,7 @@
 class G4Track;
 class G4Step;
     
-namespace G4GPRTriggering {
+namespace G4GPRTriggerTypes {
     
   namespace {
   
