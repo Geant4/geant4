@@ -276,9 +276,9 @@ int main()
 
   G4double thetaMax  = 15.*degree; 
 
-  // G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
+  G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
 
-  G4double kinEnergy = 1.*GeV;
+  // G4double kinEnergy = 1.*GeV;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -336,7 +336,8 @@ int main()
 
   std::ifstream simRead;
 
-  simRead.open("pPbT1GeV.dat");
+  simRead.open("pPb9p92GeVc.dat");
+  // simRead.open("pPbT1GeV.dat");
 
   simRead>>numberOfSimPoints;
 
@@ -344,14 +345,17 @@ int main()
   {
     tData[i] = 0.0 ;
   }
+  G4cout <<G4endl; 
+
   for( i = 0; i < numberOfSimPoints; i++ )
   {
     // simRead>>pData>>sData>>dData;
     // tData[i] = pData*GeV*GeV;
-    simRead>>tData[i]>>sData;
+    simRead >> tData[i] >> sData;
+    G4cout << tData[i] << "\t" << sData <<G4endl;
   }
   simRead.close();
-
+  G4cout <<G4endl;
 
   std::ofstream writes("sigma.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
@@ -360,91 +364,29 @@ int main()
 
   iMax = numberOfSimPoints;
 
+  G4cout<< "iMax = " << iMax <<G4endl;
+  G4cout <<G4endl;
+
   writes << iMax  << G4endl;
 
 
   for( i = 0; i < iMax; i++)
   {
-    // normal sampling in CMS
 
-    // theta = (4.5 + 1.*i)*milliradian;
+    // theta = tData[i]*degree;
+    theta = tData[i]*milliradian;
 
-    // theta = std::acos(1-2*tData[i]/tmax);
-
-    // theta = std::sqrt(tData[i]/plab/plab);
-    theta = tData[i]*degree;
-
-    // sigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
-
-    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    // integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
-    // sigma *= 4*pi/tmax;
-
-    // G4cout << theta/milliradian << "\t" << "\t" << sigma/barn  << "\t"<< integral << G4endl;
-    // writes << theta/milliradian << "\t" << "\t" << sigma/barn << "\t"<< integral << G4endl;
-
-    // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn  << "\t"<< integral << G4endl;
-    // writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t"<< integral << G4endl;
-
-    // G4cout << theta/milliradian << "\t"<< "\t"<< tData[i]/GeV/GeV << "\t" << "\t" 
-    //        << sigma*GeV*GeV/millibarn << "\t"<< integral << G4endl;
-
-    // writes << tData[i]/GeV/GeV << "\t" << "\t" 
-    //        << sigma*GeV*GeV/millibarn  << "\t"<< integral << G4endl;
 
     sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
     sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
 
-    G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
-    writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    // writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+
+ G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+ writes << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
 
 
-
-
-  /*
-    if(!swave) 
-    {
-      // t = diffelastic->SampleT( theParticleDefinition, plab, Z, A );
-
-      if( t > tmax ) swave = true;
-    }
-    if(swave) t = G4UniformRand()*tmax;
-
-    G4double phi  = G4UniformRand()*twopi;
-    G4double cost = 1. - 2.0*t/tmax;
-    G4double sint;
-
-    if( cost >= 1.0 ) 
-    {
-      cost = 1.0;
-      sint = 0.0;
-    }
-    else if( cost <= -1.0) 
-    {
-      cost = -1.0;
-      sint =  0.0;
-    }
-    else  
-    {
-      sint = std::sqrt((1.0-cost)*(1.0+cost));
-    }  
-    G4ThreeVector v1( sint*std::cos(phi), sint*std::sin(phi), cost);
-
-    v1 *= ptot;
-    G4LorentzVector nlv1( v1.x(), v1.y(), v1.z(), std::sqrt(ptot*ptot + m1*m1));
-
-    nlv1.boost(bst); 
-
-    G4ThreeVector np1 = nlv1.vect();
-
-    // G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
-    // G4double theta = np1.theta();
-
-
-    // k = G4int(theta*kAngle/thetaMax);
-    k = G4int(t*kAngle*100/tmax);
-    angleDistr[k] += 1;
-  */
 
   }
   G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
@@ -458,29 +400,7 @@ int main()
   G4cout<<G4endl;
   G4cout<<integral/millibarn<<"\t"<<sig/millibarn<<"\t"<<integral/sig<<G4endl;
 
-
-  /*
-  G4double sum = 0;
-
-  for( k = 0; k < kAngle; k++) sum += angleDistr[k];
-  
-  G4cout<<"relative number of event inside array = "<<sum/iMax<<G4endl;
- 
-
-  std::ofstream writef("angle.dat", std::ios::out ) ;
-  writef.setf( std::ios::scientific, std::ios::floatfield );
-
-  for( k = 0; k < kAngle; k++) 
-  {
-    // angleDistr[k] *= sig/iMax/(2*pi)/std::sin(k*thetaMax/kAngle);
-    // angleDistr[k] *= steradian/millibarn;
-    // G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
-    // writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
-    // G4cout <<k<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
-    // writef <<k<<"\t"<<angleDistr[k]<<G4endl;
-  }
-  
-  */
+  /////////////////////////////////////////////////////////////
 
   std::ofstream writec("coulomb.dat", std::ios::out ) ;
   writec.setf( std::ios::scientific, std::ios::floatfield );
@@ -490,8 +410,13 @@ int main()
 
   G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta;
 
-  thetaMin    = 1.0e-1*degree;
-  thetaMax    = 16*degree;
+  // thetaMin    = 1.0e-1*degree;
+  // thetaMax    = 16*degree;
+
+  thetaMin    = 1.0e-1*milliradian;
+  thetaMax    = 36*milliradian;
+
+
   logThetaMin = std::log10(thetaMin);
   logThetaMax = std::log10(thetaMax);
   dLogTheta   = (logThetaMax - logThetaMin)/iMax;
@@ -511,9 +436,13 @@ int main()
 
     sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
     sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+    
 
-    G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
-    writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
+    // writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+
+ G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+ writec << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
   }
   G4cout<<G4endl;
 
@@ -529,7 +458,9 @@ int main()
 
   G4cout<<G4endl;
 
-  sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 0., 0.01*degree);
+  sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 2.*degree, 16*degree);
+  // sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 4*milliradian, 
+  // 40*milliradian);
 
   G4cout << "0-1*degree Coulomb xsc = " << sigma/millibarn  << " millibarn" << G4endl;
 
