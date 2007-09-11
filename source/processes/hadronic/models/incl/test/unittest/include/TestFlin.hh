@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestFlin.hh,v 1.1 2007-05-23 09:55:56 miheikki Exp $ 
+// $Id: TestFlin.hh,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)

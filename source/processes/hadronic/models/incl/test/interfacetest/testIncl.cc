@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: testIncl.cc,v 1.2 2007-05-25 06:01:14 miheikki Exp $
+// $Id: testIncl.cc,v 1.3 2007-09-11 13:28:42 miheikki Exp $
 
 #include <vector>
 
@@ -77,6 +77,8 @@
 
 #include "G4InclCascadeInterface.hh"
 #include "G4InclAblaCascadeInterface.hh"
+
+#include "G4RunManager.hh"
 
 void test(std::string, int);
 
@@ -169,10 +171,10 @@ int tCascadeInterface() {
   G4Nucleus targetNucleus;                                        
 //   G4double a(10);
 //   G4double z(10);
-//   G4double a(207);
-//   G4double z(82);
-     G4double a(27);
-     G4double z(13);
+   G4double a(207);
+   G4double z(82);
+   //   G4double a(27);
+   //   G4double z(13);
 
   targetNucleus.SetParameters(a, z);
 

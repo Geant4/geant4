@@ -2,7 +2,7 @@
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * The Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestRibm.cc,v 1.1 2007-05-23 09:56:26 miheikki Exp $ 
+// $Id: TestRibm.cc,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -99,11 +99,11 @@ void TestRibm::runMe()
   const Int_t histogramBins = 100;
 		          
   // Set same random seeds for both C++ and FORTRAN random number generators.
-  int seed = 38457;
+  long seed = 38457;
   double rndm; //Random numbers
 
   // For FORTRAN code
-  int fseed = seed;
+  int fseed = 38457;
   float rndmf;
 
   // Histograms for random numbers:

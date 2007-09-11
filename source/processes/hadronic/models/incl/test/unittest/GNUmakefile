@@ -18,7 +18,7 @@ ROOTLIBS := $(shell root-config --libs)
 
 # Compiler flags
 CXXFLAGS = -I. -Iinclheaders/ -I$(ROOTINC) -I./include -Wall -I../../include -Ireference/include
-CXXFLAGS += -I$(G4HEADERS) -I$(CLHEPHEADERS)
+CXXFLAGS += -I$(G4HEADERS) -I$(CLHEPHEADERS) -DG4IOS_EXPORT
 
 # Debug
 #CXXFLAGS += -g
@@ -84,7 +84,7 @@ dictionary : $(HDRFILES) $(LINKFILES)
 	$(CXX) $(CXXFLAGS) -c -o dict/$(PACKAGE)_dict.o dict/$(PACKAGE)_dict.cc
 
 RootMap:
-	rlibmap -f -r rootmap -l $(SO) -d libCore.so -c $(LINKFILES)
+	rlibmap -f -r inclabla.rootmap -l $(SO) -d libCore.so -c $(LINKFILES)
 
 # For Emacs
 tags:

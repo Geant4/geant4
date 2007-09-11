@@ -4,24 +4,24 @@
 #define CommonWrapper_hh 1
 
 // Constants:
-#define FSIZE 15
-#define IGRAINESIZE 19
-#define MATSIZE 500
-#define MATGEOSIZE 6
-#define LGNSIZE 9
-#define LNSIZE 30
-#define SAXWROWS 30 
-#define SAXWCOLS 500
-#define DTONSIZE 13
-#define SPL2SIZE 100
-#define BL1SIZE 300
-#define BL2CROISSIZE 19900
-#define BL2INDSIZE 19900
-#define BL3SIZE 300
-#define BL5SIZE 300
-#define BL9SIZE 300
-#define VARSIZE 3
-#define VAEPSSIZE 250
+#define FSIZEF 15
+#define IGRAINESIZEF 19
+#define MATSIZEF 500
+#define MATGEOSIZEF 6
+#define LGNSIZEF 9
+#define LNSIZEF 30
+#define SAXWROWSF 30 
+#define SAXWCOLSF 500
+#define DTONSIZEF 13
+#define SPL2SIZEF 100
+#define BL1SIZEF 300
+#define BL2CROISSIZEF 19900
+#define BL2INDSIZEF 19900
+#define BL3SIZEF 300
+#define BL5SIZEF 300
+#define BL9SIZEF 300
+#define VARSIZEF 3
+#define VAEPSSIZEF 250
 #define VAAVM 1000
 
 extern "C" {
@@ -32,9 +32,9 @@ extern "C" {
   extern struct hazard_common hazard_; 
 
   struct mat_common {
-    int zmat[MATSIZE];
-    int amat[MATSIZE];
-    float bmax_geo[MATSIZE][MATGEOSIZE];
+    int zmat[MATSIZEF];
+    int amat[MATSIZEF];
+    float bmax_geo[MATSIZEF][MATGEOSIZEF];
     int nbmat;
   };
   extern struct mat_common mat_;
@@ -49,26 +49,26 @@ extern "C" {
   extern struct ws_common ws_;
 
   struct saxw_common {
-    float x[SAXWCOLS][SAXWROWS];
-    float y[SAXWCOLS][SAXWROWS];
-    float s[SAXWCOLS][SAXWROWS];
+    float x[SAXWCOLSF][SAXWROWSF];
+    float y[SAXWCOLSF][SAXWROWSF];
+    float s[SAXWCOLSF][SAXWROWSF];
     int n;
     int k;
   };
   extern struct saxw_common saxw_;
 
   struct light_gaus_nuc_common {
-    float rms1t[LGNSIZE];
-    float pf1t[LGNSIZE];
-    float pfln[LGNSIZE];
-    float tfln[LGNSIZE];
-    float vnuc[LGNSIZE];
+    float rms1t[LGNSIZEF];
+    float pf1t[LGNSIZEF];
+    float pfln[LGNSIZEF];
+    float tfln[LGNSIZEF];
+    float vnuc[LGNSIZEF];
   };
   extern struct light_gaus_nuc_common light_gaus_nuc__;
 
   struct light_nuc_common {
-    float r[LNSIZE];
-    float a[LNSIZE];
+    float r[LNSIZEF];
+    float a[LNSIZEF];
   };
   extern struct light_nuc_common light_nuc__;
 
@@ -78,26 +78,26 @@ extern "C" {
   };
   extern struct calincl_common calincl_;
 
-//     float xsp[SPL2SIZE];
-//     float ysp[SPL2SIZE];
-//     float a[SPL2SIZE];
-//     float b[SPL2SIZE];
-//     float cc[SPL2SIZE];
+//     float xsp[SPL2SIZEF];
+//     float ysp[SPL2SIZEF];
+//     float a[SPL2SIZEF];
+//     float b[SPL2SIZEF];
+//     float cc[SPL2SIZEF];
 //     float nbp;
 
   struct spl2_common {
-    float x[SPL2SIZE];
-    float y[SPL2SIZE];
-    float a[SPL2SIZE];
-    float b[SPL2SIZE];
-    float c[SPL2SIZE];
+    float x[SPL2SIZEF];
+    float y[SPL2SIZEF];
+    float a[SPL2SIZEF];
+    float b[SPL2SIZEF];
+    float c[SPL2SIZEF];
     int n;
   };
   extern spl2_common spl2_;
 
   struct dton_common {
-    double c[DTONSIZE];
-    double d[DTONSIZE];
+    double c[DTONSIZEF];
+    double d[DTONSIZEF];
     double fn;
   };
   extern dton_common dton_;

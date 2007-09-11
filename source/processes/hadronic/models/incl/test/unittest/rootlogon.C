@@ -160,6 +160,8 @@ gStyle->SetLabelSize(0.035,"y");  // fY2NDC
 gStyle->SetTitleSize(0.035,"X"); 
 gStyle->SetTitleSize(0.035,"y"); 
 
+cout <<"Loading libTGX11TTF.so required by ROOT 5.16.00" << endl;
+gSystem->Load("libGX11TTF.so");
 cout <<"Done setting up plotting style." << endl;
 cout << endl;
 

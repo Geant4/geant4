@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2007-05-25 06:01:14 miheikki Exp $
+# $Id: GNUmakefile,v 1.3 2007-09-11 13:28:42 miheikki Exp $
 #G4TARGET := cascade
 #G4TARGET := benchmarks
 G4TARGET := testIncl
