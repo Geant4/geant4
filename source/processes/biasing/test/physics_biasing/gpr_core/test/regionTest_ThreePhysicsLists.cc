@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: regionTest_ThreePhysicsLists.cc,v 1.2 2007-09-06 22:10:10 tinslay Exp $
+// $Id: regionTest_ThreePhysicsLists.cc,v 1.3 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. 
@@ -262,10 +262,10 @@ int main(int argc, char** argv) {
   // Register physics list triggers with physics list trigger manager
   G4GPRTriggerStore* physicsListTrigger = &(*G4GPRPhysicsListTriggerSuperStore::Instance())[def];
 
-  physicsListTrigger->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionA::Trigger, listA, 
+  physicsListTrigger->G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::NewRegion>::Register(&RegionA::Trigger, listA, 
 										       &G4GPRPhysicsList::FlipState, listA->GetState());
   
-  physicsListTrigger->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::NewRegion>::Register(&RegionB::Trigger, listB, 
+  physicsListTrigger->G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::NewRegion>::Register(&RegionB::Trigger, listB, 
 										       &G4GPRPhysicsList::FlipState, listA->GetState());
    
   // Register elements with appropriate stores
@@ -288,7 +288,7 @@ int main(int argc, char** argv) {
   // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
   G4GPRManager gprManager(def);
   
-  gprManager.Fire<G4GPRTriggering::Geometry::NewRegion>(*track);
+  gprManager.Fire<G4GPRTriggerTypes::Geometry::NewRegion>(*track);
   
   // Generate list in region A
   typedef std::vector< G4GPRProcessWrappers::Wrappers<G4GPRProcessLists::AtRestDoIt>::SeedWrapper > ProcessList;
@@ -309,7 +309,7 @@ int main(int argc, char** argv) {
 
   // Switch to region B
   track->SetTouchableHandle(touchable_B);
-  gprManager.Fire<G4GPRTriggering::Geometry::NewRegion>(*track);
+  gprManager.Fire<G4GPRTriggerTypes::Geometry::NewRegion>(*track);
 
   gprManager.GetList<G4GPRProcessLists::AtRestDoIt>(result1);
   G4cout<<"jane process list for region B "<<result1<<G4endl;
@@ -323,7 +323,7 @@ int main(int argc, char** argv) {
 
   // Switch to region C, default physics list should be used
   track->SetTouchableHandle(touchable_C);
-  gprManager.Fire<G4GPRTriggering::Geometry::NewRegion>(*track);
+  gprManager.Fire<G4GPRTriggerTypes::Geometry::NewRegion>(*track);
 
   gprManager.GetList<G4GPRProcessLists::AtRestDoIt>(result1);
   G4cout<<"jane process list for region C"<<G4endl;

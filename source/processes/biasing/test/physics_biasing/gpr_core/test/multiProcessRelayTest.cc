@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: multiProcessRelayTest.cc,v 1.4 2007-09-06 22:10:10 tinslay Exp $
+// $Id: multiProcessRelayTest.cc,v 1.5 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -50,6 +50,8 @@
 #include "G4GPRNode.hh"
 #include "G4GPRManager.hh"
 
+using namespace G4GPRProcessWrappers;
+
 // Process function
 G4double DiscreteGPIL1(const G4Track& track,
 		       G4double previousStepSize,
@@ -67,11 +69,11 @@ G4double DiscreteGPIL2(const G4Track& track,
   return 2.0;
 }
 
-G4double MyMultiRelay(std::vector<G4DiscreteGPILWrapper>& input, const G4Track& track,
+G4double MyMultiRelay(std::vector<G4GPRDiscreteGPIL>& input, const G4Track& track,
 		      G4double previousStepSize,
 		      G4ForceCondition* condition)
 {
-  typedef std::vector<G4DiscreteGPILWrapper> Vect;
+  typedef std::vector<G4GPRDiscreteGPIL> Vect;
 
   G4double sum = 0;
   G4cout<<"jane input length "<<input.size()<<G4endl;
@@ -159,20 +161,20 @@ int main(int argc, char** argv) {
 
   G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, relay, 
 										     &G4GPRMultiProcessRelayT<G4GPRProcessLists::DiscreteGPIL>::ChangeState);
 
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
   G4GPRNode* node1 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Geometry::StartBoundary>::Register(&MultiRelayTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::StartBoundary>::Register(&MultiRelayTrigger, node1, &G4GPRNode::FlipState);
 
   G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
 
   keyStore->G4GPRKeyManagerT<Seed::List>::AddNode(node1);
 
   // Generate process list
-  typedef std::vector< G4DiscreteGPILWrapper > ProcessList;
+  typedef std::vector< G4GPRDiscreteGPIL > ProcessList;
 
   G4Track* track = new G4Track; 
   G4Step* step = new G4Step;
@@ -181,7 +183,7 @@ int main(int argc, char** argv) {
 
   // Each G4ParticleDefinition will have its own G4GPRManager to make processing quicker
   G4GPRManager gprManager(def);
-  gprManager.Fire<G4GPRTriggering::Geometry::StartBoundary>(*track, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Geometry::StartBoundary>(*track, *step);  
 
   ProcessList* result(0);
   gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
@@ -195,7 +197,7 @@ int main(int argc, char** argv) {
 
   track->SetTouchableHandle(touchable_B);
 
-  gprManager.Fire<G4GPRTriggering::Geometry::StartBoundary>(*track, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Geometry::StartBoundary>(*track, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteGPIL>(result);
 
   G4cout<<"jane generated size should be 1 and is: "<<result->size()<<G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: keyTest.cc,v 1.4 2007-09-06 22:10:10 tinslay Exp $
+// $Id: keyTest.cc,v 1.5 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -77,23 +77,23 @@ int main(int argc, char** argv) {
   G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
   // Elements 1 and 2 are on the same trigger.
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
 
   // Elements 3 and 4 are on the same trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
  
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
   G4GPRNode* node1 = new G4GPRNode;
   G4GPRNode* node2 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
 
   // Add nodes to key manager. Key manager be notified when an elements state has changed, so the current "key" changes.
   // This means the process list needs to be changed.
@@ -117,24 +117,24 @@ int main(int argc, char** argv) {
 
   // Generate lists. Key should change depending on which processes have been triggered.
   ConditionsA(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listA);    
 
   G4cout<<"Jane, key should be : 1 0"<<G4endl;
   Print(keyStore->G4GPRKeyManagerT<Element::List>::GetKey());
 
   ConditionsB(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listB);    
 
   G4cout<<"Jane, key should be : 1 1"<<G4endl;
   Print(keyStore->G4GPRKeyManagerT<Element::List>::GetKey());
 
   ConditionsC(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listC);    
 
   G4cout<<"Jane, key should be : 0 1"<<G4endl;

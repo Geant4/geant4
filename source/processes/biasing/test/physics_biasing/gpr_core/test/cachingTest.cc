@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: cachingTest.cc,v 1.3 2007-09-06 22:10:10 tinslay Exp $
+// $Id: cachingTest.cc,v 1.4 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -77,22 +77,22 @@ int main(int argc, char** argv) {
   G4GPRTriggerStore* triggerStore = &(*G4GPRTriggerSuperStore::Instance())[def][physicsList];
 
   // Elements 1 and 2 are on the same trigger.
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
   // Elements 3 and 4 are on the same trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
  
   // Create and register key nodes with trigger manager so that know when an element has been activated or deactivated
   G4GPRNode* node1 = new G4GPRNode;
   G4GPRNode* node2 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
 
   G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
 
@@ -115,18 +115,18 @@ int main(int argc, char** argv) {
 
   // Generate first lists
   ConditionsA(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listA);    
 
   ConditionsB(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listB);    
 
   ConditionsC(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(listC);    
 
   // Generated all lists, now test caching
@@ -135,18 +135,18 @@ int main(int argc, char** argv) {
   ProcessList* cachedListC(0);
 
   ConditionsC(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(cachedListC);    
 
   ConditionsA(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(cachedListA);    
 
   ConditionsB(trk);
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(cachedListB);    
 
   G4cout<<"jane list ptrs A: "<<listA<<" "<<cachedListA<<G4endl;

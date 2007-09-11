@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: triggerTest.cc,v 1.4 2007-09-06 22:10:10 tinslay Exp $
+// $Id: triggerTest.cc,v 1.5 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -136,8 +136,8 @@ int main(int argc, char** argv) {
   // Elements 1 and 2 are on the same trigger. They're only active 
   // when tracking a primary (track id = 0). Should be evaluated
   // when starting to track a track.
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element0, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, element1, &Element::ChangeState);
 
   // Elements 3 and 4 are on the same trigger. They only become active when track energy falls below 50 MeV. 
   // Should be evaluated at the start of each step.
@@ -148,14 +148,14 @@ int main(int argc, char** argv) {
   // trigger.
   MaxEnergyTrigger* maxEnergyTrigger = new MaxEnergyTrigger;
   maxEnergyTrigger->SetMaxEnergy(50*MeV);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element2, &Element::ChangeState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, element3, &Element::ChangeState);
 
   G4GPRNode* node1 = new G4GPRNode;
   G4GPRNode* node2 = new G4GPRNode;
 
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
-  triggerStore->G4GPRTriggerManagerT<G4GPRTriggering::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>::Register(&PrimaryTrackTrigger, node1, &G4GPRNode::FlipState);
+  triggerStore->G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>::Register(maxEnergyTrigger, node2, &G4GPRNode::FlipState);
 
   G4GPRKeyStore* keyStore = &(*G4GPRKeySuperStore::Instance())[def][physicsList];
 
@@ -176,10 +176,10 @@ int main(int argc, char** argv) {
   G4GPRManager gprManager(def);
 
   // Start tracking primary
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);  
 
   // Start Step
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   
   // Generate process list
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
   trk->SetKineticEnergy(49*MeV);
 
   // Start new step
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
 
   // Generate new list
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);
@@ -215,10 +215,10 @@ int main(int argc, char** argv) {
   trk->SetKineticEnergy(30*MeV);
 
   // Start tracking secondary 
-  gprManager.Fire<G4GPRTriggering::Tracking::StartTracking>(trk);  
+  gprManager.Fire<G4GPRTriggerTypes::Tracking::StartTracking>(trk);  
 
   // Start Step
-  gprManager.Fire<G4GPRTriggering::Stepping::StartStep>(*trk, *step);  
+  gprManager.Fire<G4GPRTriggerTypes::Stepping::StartStep>(*trk, *step);  
   
   // Generate list
   gprManager.GetList<G4GPRProcessLists::DiscreteDoIt>(result);

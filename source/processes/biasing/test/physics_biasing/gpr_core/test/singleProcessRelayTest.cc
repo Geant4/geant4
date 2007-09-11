@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: singleProcessRelayTest.cc,v 1.3 2007-09-06 22:10:10 tinslay Exp $
+// $Id: singleProcessRelayTest.cc,v 1.4 2007-09-11 03:01:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Functor demonstration.
@@ -42,6 +42,9 @@
 #include "G4GPRNode.hh"
 #include "G4GPRManager.hh"
 #include "G4Gamma.hh"
+
+using namespace G4GPRProcessWrappers;
+
 // Process function
 G4VParticleChange* SeedFunction(const G4Track&, const G4Step&) {
   G4cout<<"Execute SeedFunction"<<G4endl;
