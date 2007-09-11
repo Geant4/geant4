@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.1 2007-05-23 10:25:37 miheikki Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.2 2007-09-11 13:19:25 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -47,12 +47,12 @@ G4InclAblaLightIonInterface::~G4InclAblaLightIonInterface()
 G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectile& aTrack, 
 			       G4Nucleus& theNucleus)
 {
-  G4Hazard *hazard = (G4Hazard*) malloc(sizeof(G4Hazard));
-  G4VarNtp *varntp = (G4VarNtp*) malloc(sizeof(G4VarNtp));
-  G4Calincl *calincl = (G4Calincl*) malloc(sizeof(G4Calincl));
-  G4Ws *ws = (G4Ws*) malloc(sizeof(G4Ws));
-  G4Mat *mat = (G4Mat*) malloc(sizeof(G4Mat));
-  
+  G4Hazard *hazard = new G4Hazard();
+  G4VarNtp *varntp = new G4VarNtp();
+  G4Calincl *calincl = new G4Calincl();
+  G4Ws *ws = new G4Ws();
+  G4Mat *mat = new G4Mat();
+
   G4Incl *incl = new G4Incl(hazard, calincl, ws, mat, varntp);
 
   G4int maxTries = 200;
@@ -74,11 +74,11 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
   //  cppinterface_.cppevent = eventNumber;
 
   if (verboseLevel > 0) {
-    G4cout << " >>> G4InclAblaColliderInterface::ApplyYourself called" << G4endl;
+    G4cout << " >>> G4InclAblaLightIonInterface::ApplyYourself called" << G4endl;
   }
 
   if(verboseLevel > 1) {
-    G4cout <<"G4InclAblaColliderInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
+    G4cout <<"G4InclAblaLightIonInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
   }
 
   // INCL4 needs the energy in units MeV
@@ -127,11 +127,10 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
                            pionMinus = 5, deuteron = 6, triton = 7, he3 = 8, he4 = 9};
 
   // Coding particles for use with INCL4 and ABLA 
-  if (aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
-  if (aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
-  if (aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
-  if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
-  if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+  if (aTrack.GetDefinition() == G4Deuteron::Deuteron()   ) bulletType = deuteron;
+  if (aTrack.GetDefinition() == G4Triton::Triton()       ) bulletType = triton;
+  if (aTrack.GetDefinition() == G4He3::He3()             ) bulletType = he3;
+  if (aTrack.GetDefinition() == G4Alpha::Alpha()         ) bulletType = he4;
 
   // Clean up FINPUT
   for(int i = 0; i < 15; i++) {
@@ -185,8 +184,8 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 
     // Loop until we produce real cascade
     mat->nbmat = 1;
-    mat->amat[0] = calincl->f[0];
-    mat->zmat[0] = calincl->f[1];
+    mat->amat[0] = int(calincl->f[0]);
+    mat->zmat[0] = int(calincl->f[1]);
 
     while((varntp->ntrack <= 0) && (tries < maxTries)) {
       if(verboseLevel > 1) {
@@ -205,7 +204,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
         // Call INCL4+ABLA
 	//        incl->applyincl4abla(doinit);
 	incl->initIncl(true);
-	incl->processEventWithEvaporation();
+	incl->processEventInclAbla(eventNumber);
       }
       else {
         if(tries != 0) {
@@ -214,7 +213,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
         // Call just INCL4
 	//	incl->applyincl4(hazard.ial, doinit);
 	incl->initIncl(true);
-	incl->processEventWithEvaporation();
+	incl->processEventInclAbla(eventNumber);
       }
       tries++;
       if(verboseLevel > 1) {
@@ -263,7 +262,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     // original bullet particle with the same momentum.
     if(varntp->ntrack <= 0) {
       if(verboseLevel > 0) {
-        G4cout <<"G4InclAblaColliderInterface: No cascade. Returning original particle with original momentum." << G4endl;
+        G4cout <<"G4InclAblaLightIonInterface: No cascade. Returning original particle with original momentum." << G4endl;
       }
 
       theResult.SetStatusChange(stopAndKill);
@@ -282,6 +281,18 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       }
       if(bulletType == pionMinus) {
         aParticleDefinition = G4PionMinus::PionMinusDefinition();
+      }
+      if(bulletType == deuteron) {
+	aParticleDefinition = G4Deuteron::DeuteronDefinition();
+      }
+      if(bulletType == triton) {
+	aParticleDefinition = G4Triton::TritonDefinition();
+      }
+      if(bulletType == he3) {
+	aParticleDefinition = G4He3::He3Definition();
+      }
+      if(bulletType == he4) {
+	aParticleDefinition = G4Alpha::AlphaDefinition();
       }
 
       cascadeParticle = new G4DynamicParticle();
@@ -376,7 +387,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       else {
         // Particle was identified as more than one particle type. 
         if(particleIdentified > 1) {
-          G4cout <<"G4InclAblaColliderInterface: One outcoming particle was identified as";
+          G4cout <<"G4InclAblaLightIonInterface: One outcoming particle was identified as";
           G4cout <<"more than one particle type. This is probably due to a bug in the interface." << G4endl;
           G4cout <<"Particle A:" << varntp->avv[particleI] << "Z: " << varntp->zvv[particleI] << G4endl;
           G4cout << "(particleIdentified =" << particleIdentified << ")"  << G4endl;
@@ -403,10 +414,10 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     theResult.AddSecondary(cascadeParticle);
 
     // Unsupported bullets
-    G4cout <<"G4InclAblaColliderInterface: Error processing event number (internal) " << eventNumber << G4endl;
+    G4cout <<"G4InclAblaLightIonInterface: Error processing event number (internal) " << eventNumber << G4endl;
 
     if(verboseLevel > 3) {
-      diagdata <<"G4InclAblaColliderInterface: Error processing event number (internal) " << eventNumber << G4endl;
+      diagdata <<"G4InclAblaLightIonInterface: Error processing event number (internal) " << eventNumber << G4endl;
     }
 
     if(bulletType == 0) {
@@ -442,18 +453,18 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     }
   
     G4cout <<"Failover: returning the original bullet with original energy back to Geant4." << G4endl;
-    G4cout <<"G4InclAblaColliderInterface: End of Error message." << G4endl;
+    G4cout <<"G4InclAblaLightIonInterface: End of Error message." << G4endl;
 
     if(verboseLevel > 3) {
       diagdata <<"Failover: returning the original bullet with original energy back to Geant4." << G4endl;
-      diagdata <<"G4InclAblaColliderInterface: End of Error message." << G4endl;
+      diagdata <<"G4InclAblaLightIonInterface: End of Error message." << G4endl;
     }
   }
 
   // Free allocated memory
-  free(varntp);
-  free(calincl);
-  free(ws);
+  delete varntp;
+  delete calincl;
+  delete ws;
   delete incl;
   
   return &theResult;

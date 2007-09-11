@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.1 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.2 2007-09-11 13:18:43 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -39,7 +39,11 @@
 /**
  * Initial values of a hadronic cascade problem.
  */
-typedef struct {
+class G4Calincl {
+public:
+  G4Calincl() {};
+  ~G4Calincl() {};
+  
   /**
    * Here f is an array containing the following initial values:
    * - f[0] : target mass number
@@ -64,7 +68,7 @@ typedef struct {
    * Number of events to be processed.
    */
   G4int icoup;
-} G4Calincl;
+};
 
 #define IGRAINESIZE 19
 /**
@@ -72,24 +76,32 @@ typedef struct {
  * @see G4Incl::standardRandom
  * @see G4Incl::gaussianRandom
  */
-typedef struct {
+class G4Hazard{
+public:
+  G4Hazard() {};
+  ~G4Hazard() {};
+
   /**
    * Random seed
    */ 
-  G4int ial;
+  G4long ial;
 
   /**
    * An array of random seeds.
    */
-  G4int igraine[IGRAINESIZE];
-} G4Hazard;
+  G4long igraine[IGRAINESIZE];
+};
 
 #define MATSIZE 500
 #define MATGEOSIZE 6
 /**
  * Target nuclei to be taken into account in the cascade problem.
  */
-typedef struct {
+class G4Mat {
+public:
+  G4Mat() { };
+  ~G4Mat() { };
+
   /**
    * Charge numbers.
    */
@@ -109,25 +121,33 @@ typedef struct {
    * Number of materials.
    */
   G4int nbmat;
-} G4Mat;
+};
 
 #define LGNSIZE 9
 /**
  * Properties of light nucleus used as a bullet.
  */
-typedef struct {
+class G4LightGausNuc {
+public:
+  G4LightGausNuc() {};
+  ~G4LightGausNuc() {};
+  
   G4double rms1t[LGNSIZE];
   G4double pf1t[LGNSIZE];
   G4double pfln[LGNSIZE];
   G4double tfln[LGNSIZE];
   G4double vnuc[LGNSIZE];
-} G4LightGausNuc;
+};
 
 #define LNSIZE 30
 /**
  * Data of light nuclei.
  */
-typedef struct {
+class G4LightNuc {
+public:
+  G4LightNuc() {};
+  ~G4LightNuc() {};
+
   /**
    * r
    */
@@ -137,14 +157,18 @@ typedef struct {
    * a
    */
   G4double a[LNSIZE];
-} G4LightNuc;
+};
 
 #define SAXWROWS 30 
 #define SAXWCOLS 500
 /**
  * Woods-Saxon density and its first derivative.
  */
-typedef struct {
+class G4Saxw {
+public:
+  G4Saxw() {};
+  ~G4Saxw() {};
+  
   /**
    * x
    */
@@ -174,12 +198,16 @@ typedef struct {
    * k
    */
   G4int k;
-} G4Saxw;
+};
 
 /**
  * Parameters for INCL4 model.
  */
-typedef struct {
+class G4Ws {
+public:
+  G4Ws() {};
+  ~G4Ws() {};
+  
   /**
    * r0
    */
@@ -227,7 +255,7 @@ typedef struct {
    * Maximum impact parameter
    */
   G4double bmax;
-} G4Ws;
+};
 
 #define DTONSIZE 13
 /**
@@ -235,11 +263,15 @@ typedef struct {
  * @see G4Incl::standardRandom
  * @see G4Incl::gaussianRandom
  */
-typedef struct {
+class G4Dton {
+public:
+  G4Dton() {};
+  ~G4Dton() {};
+  
   G4double c[DTONSIZE];
   G4double d[DTONSIZE];
   G4double fn;
-} G4Dton;
+};
 
 #define SPL2SIZE 100
 /**
@@ -247,40 +279,53 @@ typedef struct {
  * @see G4Incl::standardRandom
  * @see G4Incl::gaussianRandom
  */
-typedef struct {
+class G4Spl2 {
+public:
+  G4Spl2() {};
+  ~G4Spl2() {};
+  
   G4double x[SPL2SIZE];
   G4double y[SPL2SIZE];
   G4double a[SPL2SIZE];
   G4double b[SPL2SIZE];
   G4double c[SPL2SIZE];
   G4int n;
-} G4Spl2;
+};
 
 // incl4.2.cc:
 
-#define BL1SIZE 300
+//#define BL1SIZE 300
+#define BL1SIZE 3000
 /**
  * Random seeds used by internal random number generators.
  * @see G4Incl::standardRandom
  * @see G4Incl::gaussianRandom
  */
-typedef struct {
+class G4Bl1 {
+public:
+  G4Bl1() {};
+  ~G4Bl1() {};
+  
   G4double p1[BL1SIZE],p2[BL1SIZE],p3[BL1SIZE];
   G4double eps[BL1SIZE];
   G4int ind1[BL1SIZE],ind2[BL1SIZE];
   G4double ta;
-} G4Bl1;
+};
 
 #define BL2CROISSIZE 19900
 #define BL2INDSIZE 19900
 /**
  * 
  */
-typedef struct {
+class G4Bl2 {
+public:
+  G4Bl2() {};
+  ~G4Bl2() {};
+  
   /**
    * 
    */
-  G4double crois[19900];
+  G4double crois[BL2CROISSIZE];
 
   /**
    *
@@ -296,13 +341,18 @@ typedef struct {
    *
    */
   G4int jnd[BL2INDSIZE];
-} G4Bl2;
+};
 
-#define BL3SIZE 300
+//#define BL3SIZE 300
+#define BL3SIZE 3000
 /**
  *
  */
-typedef struct {
+class G4Bl3 {
+public:
+  G4Bl3() {};
+  ~G4Bl3() {};
+  
   /**
    * r1 and r2
    */
@@ -322,23 +372,32 @@ typedef struct {
    * rab2
    */
   G4double rab2;
-} G4Bl3;
+};
 
 /**
  * G4Bl4
  */
-typedef struct {
+class G4Bl4 {
+public:
+  G4Bl4() {};
+  ~G4Bl4() {};
+
   /**
    * tmax5
    */
   G4double tmax5;
-} G4Bl4;
+};
 
-#define BL5SIZE 300
+//#define BL5SIZE 300
+#define BL5SIZE 3000
 /**
  * G4Bl5
  */
-typedef struct {
+class G4Bl5 {
+public:
+  G4Bl5() {};
+  ~G4Bl5() {};
+  
   /**
    * tlg
    */
@@ -348,12 +407,16 @@ typedef struct {
    * nesc
    */
   G4int nesc[BL5SIZE];
-} G4Bl5;
+};
 
 /**
  * G4Bl6
  */
-typedef struct {
+class G4Bl6 {
+public:
+  G4Bl6() {};
+  ~G4Bl6() {};
+  
   /**
    * xx10
    */
@@ -363,12 +426,16 @@ typedef struct {
    * isa
    */
   G4double isa;
-} G4Bl6;
+};
 
 /**
  * G4Bl8
  */
-typedef struct {
+class G4Bl8 {
+public:
+  G4Bl8() {};
+  ~G4Bl8() {};
+
   /**
    * rathr
    */
@@ -378,13 +445,21 @@ typedef struct {
    * ramass
    */
   G4double ramass;
-} G4Bl8;
+};
 
-#define BL9SIZE 300
+//#define BL9SIZE 300
+#define BL9SIZE 3000
 /**
  * G4Bl9
  */
-typedef struct {
+class G4Bl9 {
+public:
+  G4Bl9() {
+    l1 = 0;
+    l2 = 0;
+  };
+  ~G4Bl9() {};
+
   /**
    * hel
    */
@@ -394,27 +469,35 @@ typedef struct {
    * l1 and l2
    */
   G4int l1,l2;
-} G4Bl9;
+};
 
 /**
  * G4Bl10
  */
-typedef struct {
+class G4Bl10 {
+public:
+  G4Bl10() {};
+  ~G4Bl10() {};
+
   /**
    * ri4, rs4, r2i, r2s, pdummy, pf
    */
   G4double ri4,rs4,r2i,r2s,pdummy,pf;
-} G4Bl10;
+};
 
 /**
  * G4Kind
  */
-typedef struct {
+class G4Kind {
+public:
+  G4Kind() {};
+  ~G4Kind() {};
+
   /**
    * kindf7
    */
   G4int kindf7;
-} G4Kind;
+};
 
 #define VARSIZE 3
 #define VAEPSSIZE 250
@@ -422,7 +505,11 @@ typedef struct {
 /**
  * Extra information on collisions between nucleons.
  */
-typedef struct {
+class G4VarAvat {
+public:
+  G4VarAvat() {};
+  ~G4VarAvat() {};
+
   /**
    *
    */
@@ -467,10 +554,14 @@ typedef struct {
    *
    */
   G4double bloc_paul[VAAVM],bloc_cdpp[VAAVM],go_out[VAAVM];
-} G4VarAvat;
+};
 
 #define VARNTPSIZE 255
-typedef struct {
+class G4VarNtp {
+public:
+  G4VarNtp() {};
+  ~G4VarNtp() {};
+
   /**
    * A of the remnant.
    */
@@ -571,12 +662,16 @@ typedef struct {
    * Phi angle.
    */
   G4double philab[VARNTPSIZE];
-} G4VarNtp;
+};
 
 /**
  * Pauli blocking.
  */
-typedef struct {
+class G4Paul {
+public:
+  G4Paul() {};
+  ~G4Paul() {};
+  
   /**
    *
    */
@@ -586,7 +681,7 @@ typedef struct {
    *
    */
   G4double cp0,cp1,cp2,cp3,cp4,cp5,cp6;
-} G4Paul;
+};
 
 
 #endif

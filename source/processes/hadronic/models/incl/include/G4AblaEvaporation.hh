@@ -23,92 +23,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaVirtualData.hh,v 1.2 2007-09-11 13:18:43 miheikki Exp $ 
-// Translation of INCL4.2/ABLA V3 
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
-// Alain Boudard, CEA (contact person INCL/ABLA)
-// Aatos Heikkinen, HIP (project coordination)
-
-#ifndef G4InclAblaVirtualData_hh
-#define G4InclAblaVirtualData_hh 1
+// $Id: G4AblaEvaporation.hh,v 1.1 2007-09-11 13:18:42 miheikki Exp $
+// Defines an interface to evaporation models of Bertini cascase (BERT)
+// based on INUCL code.
+//
+#ifndef G4ABLAEVAPORATION_h
+#define G4ABLAEVAPORATION_h 1
 
 #include "globals.hh"
+#include "G4VEvaporation.hh"
+#include "G4Fragment.hh"
+#include "G4DynamicParticle.hh"
+
+#include "G4Abla.hh"
+
+//#include "G4VCoulombBarrier.hh"
+
+//#define DEBUG
 
 /**
- * An interface to data used by INCL and ABLA. This interface allows
- * us to abstract the actual source of data. At this time all needed
- * data is hardcoded into class G4InclAblaHardcodedData.
-
- * @see G4InclAblaHardcodedData
+ * Geant4 interface to the ABLA evaporation code.
  */
 
-class G4InclAblaVirtualData {
-protected:
-
-  /**
-   * Constructor
-   */
-  G4InclAblaVirtualData();
-
+class G4AblaEvaporation : public G4VEvaporation {
 public:
   /**
-   * Set the value of Alpha.
+   * Constructor.
    */
-  G4bool setAlpha(G4int A, G4int Z, G4double value);
+  G4AblaEvaporation();
 
   /**
-   * Set the value of Ecnz.
+   * Destructor.
    */
-  G4bool setEcnz(G4int A, G4int Z, G4double value);
+  ~G4AblaEvaporation();
 
-  /**
-   * Set the value of Vgsld.
-   */
-  G4bool setVgsld(G4int A, G4int Z, G4double value);
-
-  /**
-   * Set the value of Pace2.
-   */
-  G4bool setPace2(G4int A, G4int Z, G4double value);
-
-  G4double getAlpha(G4int A, G4int Z);
-
-  /**
-   * Get the value of Alpha.
-   */
-  G4double getEcnz(G4int A, G4int Z);
-
-  /**
-   * Get the value of Vgsld.
-   */
-  G4double getVgsld(G4int A, G4int Z);
-
-  /**
-   * Get the value of Pace2.
-   */
-  G4double getPace2(G4int A, G4int Z);
-
-  G4int getAlphaRows();
-  G4int getAlphaCols();
-
-  G4int getPaceRows();
-  G4int getPaceCols();
-
-  virtual G4bool readData() = 0;
-	
 private:
+  G4AblaEvaporation(const G4AblaEvaporation &right);
 
-  static const G4int alphaRows = 155;
-  static const G4int alphaCols = 100;
+  const G4AblaEvaporation & operator=(const G4AblaEvaporation &right);
+  G4bool operator==(const G4AblaEvaporation &right) const;
+  G4bool operator!=(const G4AblaEvaporation &right) const;
+  void fillResult( std::vector<G4DynamicParticle *> secondaryParticleVector,
+		   G4FragmentVector * aResult );
 
-  static const G4int paceRows = 500;
-  static const G4int paceCols = 500;
+public:
 
-  G4double alpha[alphaRows][alphaCols];
-  G4double ecnz[alphaRows][alphaCols];
-  G4double vgsld[alphaRows][alphaCols];
-  G4double pace2[paceRows][paceCols];
+  /**
+   * The method for calling
+   */
+  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+       
+  void setVerboseLevel( const G4int verbose );
+
+private:
+  /**
+   * Seeds for the random number generator.
+   */
+  G4Hazard *hazard; 
+
+  /**
+   * The verbosity of the interface class.
+   */
+  G4int verboseLevel;
+
+  /**
+   * Event number used in the ABLA code.
+   */
+  G4int eventNumber;
+  
+  // For Coulomb Barrier calculation
+  //  G4VCoulombBarrier * theCoulombBarrierPtr;
+  G4double CoulombBarrier;
+
+#ifdef DEBUG
+
+#endif
+
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.2 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4Abla.hh,v 1.3 2007-09-11 13:18:42 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -36,7 +36,7 @@
 #include "G4InclDataDefs.hh"
 
 /**
- *  Class containing ABLA
+ *  Class containing ABLA de-excitation code.
  */
 
 class G4Abla {
@@ -51,23 +51,51 @@ public:
 
   /**
    * A constructor.
-   * A more elaborate description of the constructor.
    */
-
   G4Abla();
 
+  /**
+   * This constructor is used by standalone test driver and the Geant4 interface.
+   *
+   * @param aHazard random seeds
+   * @param aVolant data structure for ABLA output
+   * @param aVarNtp data structure for transfering ABLA output to Geant4 interface
+   */
+  G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp);
+
+  /**
+   *
+   */
   G4Abla(G4Hazard *hazard, G4Volant *volant);
+
   /**
    * A destructor.
    * A more elaborate description of the destructor.
    */
-
   ~G4Abla();
 
   /**
    *
    */
   void setVerboseLevel(G4int level);
+
+  /**
+   * Main interface to the de-excitation code.
+   *
+   * @param nucleusA mass number of the nucleus
+   * @param nucleusZ charge number of the nucleus
+   * @param nucleusMass mass of the nucleus
+   * @param excitationEnergy excitation energy of the nucleus
+   * @param angularMomentum angular momentum of the nucleus (produced as output by INCL4)
+   * @param recoilEnergy recoil energy of the nucleus
+   * @param momX momentum x-component
+   * @param momY momentum y-component
+   * @param momZ momentum z-component
+   * @param eventnumber number of the event
+   */
+  void breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+		 G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
+		 G4int eventnumber);
 
   // Evaporation
 public:
@@ -111,7 +139,7 @@ public:
   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
-	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
+	       G4int *ff_par, G4int *inttype_par, G4int *inum_par);
 
   /**
    * Calculation of particle emission probabilities.
@@ -248,15 +276,26 @@ public:
   void even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out);
   G4double umass(G4double z,G4double n,G4double beta);
   G4double ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double n2,G4double beta2,G4double d);
-  void fissionDistri(G4double a,G4double z,G4double e,
-			   G4double &a1,G4double &z1,G4double &e1,G4double &v1,
-			     G4double &a2,G4double &z2,G4double &e2,G4double &v2);
-  void standardRandom(G4double *rndm, G4int *seed);
+  void fissionDistri(G4double &a,G4double &z,G4double &e,
+		     G4double &a1,G4double &z1,G4double &e1,G4double &v1,
+		     G4double &a2,G4double &z2,G4double &e2,G4double &v2);
+  void standardRandom(G4double *rndm, G4long *seed);
   G4double haz(G4int k);
   G4double gausshaz(int k, double xmoy, double sig);
 
     
 public:
+  // Coordinate system transformations:
+  void lorab(G4double gam, G4double eta, G4double ein, G4double pin[],
+	     G4double *eout, G4double pout[]);
+
+  void translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int nopart, G4int ndec);
+  void translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet1,
+		  G4double phi1, G4double gamrem, G4double etrem, G4double R[][4],
+		  G4double *plab1, G4double *gam1, G4double *eta1, G4double csdir[]);
+
+  void rotab(G4double R[4][4], G4double pin[4], G4double pout[4]);
+
   // Utils
   G4int min(G4int a, G4int b);
   G4double min(G4double a, G4double b);
@@ -266,9 +305,10 @@ public:
   G4int nint(G4double number);
   G4int secnds(G4int x);
   G4int mod(G4int a, G4int b);
+  G4double dmod(G4double a, G4double b);
   G4double dint(G4double a);
   G4int idint(G4double a);
-  G4int idnint(G4double a);
+  G4int idnint(G4double value);
   G4double utilabs(G4double a);
   G4double dmin1(G4double a, G4double b, G4double c);
 
@@ -287,5 +327,5 @@ private:
   G4Fiss *fiss;
   G4Opt *opt;
   G4Volant *volant;
-  
+  G4VarNtp *varntp;  
 };

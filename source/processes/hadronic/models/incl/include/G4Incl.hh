@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.1 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4Incl.hh,v 1.2 2007-09-11 13:18:42 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -38,6 +38,9 @@
 #include "G4InclDataDefs.hh"
 #include "G4Abla.hh"
 
+#include <fstream>
+
+using namespace std;
 /**
  *  Class containing INCL4 hadronic cascade algorithm.
  */
@@ -75,6 +78,37 @@ public:
    * A more elaborate description of the destructor.
    */
   ~G4Incl();
+
+  /**
+   * Test the energy of particle i. This allows us to test
+   * e.g. whether we get NaN value as energy or not.
+   */
+  G4double energyTest(G4int i);
+
+  /**
+   * Dump the contents of G4Bl5.
+   */
+  void dumpBl5(std::ofstream& dumpOut);
+
+  /**
+   * Dump the contents of G4Saxw.
+   */
+  void dumpSaxw(std::ofstream& dumpOut);
+
+  /**
+   * Dump the contents of G4Bl1.
+   */
+  void dumpBl1(std::ofstream& dumpOut);
+
+  /**
+   * Dump the contents of G4Bl2.
+   */
+  void dumpBl2(std::ofstream& dumpOut);
+
+  /**
+   * Dump the contents of G4Bl3.
+   */
+  void dumpBl3(std::ofstream& dumpOut);
 
   /**
    *
@@ -191,7 +225,7 @@ public: // For Geant4
    * Process one event with INCL4 and built-in ABLA de-excitation.
    * Connection between INCL and ABLA not implemented yet.
    */ 
-  void processEventInclAbla();
+  void processEventInclAbla(G4int eventnumber);
 
 public: // Methods used to initialize INCL
   /**
@@ -536,8 +570,8 @@ public: // Main INCL routines
   /**
    * ForceAbsor
    */
-  void forceAbsor(G4int nopart, G4double iarem, G4double izrem, G4double esrem, G4double erecrem, 
-		  G4double alrem, G4double berem, G4double garem, G4double jrem);
+  void forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esrem, G4double *erecrem,
+		  G4double *alrem, G4double *berem, G4double *garem, G4int *jrem);
 
   /**
    * ForceAbs
@@ -572,7 +606,7 @@ public: // Main INCL routines
    * @param *rndm pointer to the variable reserved for random number
    * @param *seed pointer to the random seed
    */
-  void standardRandom(G4double *rndm, G4int *seed);
+  void standardRandom(G4double *rndm, G4long *seed);
 
   /**
    * First derivative of a gaussian potential.
@@ -804,6 +838,11 @@ public: // Utilities
    * Cascade output.
    */
   G4VarNtp *varntp;
+
+  /**
+   * For storing the results of the evaporation.
+   */
+  G4VarNtp *evaporationResult;
 
   /** 
    * Defines the verbosity of console output. Values can be between 0

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.1 2007-05-23 10:25:37 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.2 2007-09-11 13:19:24 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,10 +34,14 @@
 
 #include <iostream>
 
+#include <assert.h>
+
+//#define NODEBUG 1
+
 G4Incl::G4Incl()
-  :verboseLevel(0)
 {
   // ID codes for each function to be used for integration routine.
+  verboseLevel = 0;
   wsaxFunction = 0;
   derivWsaxFunction = 1;
   dmhoFunction = 2;
@@ -46,44 +50,151 @@ G4Incl::G4Incl()
   densFunction = 5;
 }
 
-G4Incl::G4Incl(G4Hazard *hazard, G4Dton *dton, G4Saxw *saxw, G4Ws *ws)
-  :verboseLevel(0),
-   hazard(hazard), dton(dton), saxw(saxw), ws(ws)
+G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
 {
+  wsaxFunction = 0;
+  derivWsaxFunction = 1;
+  dmhoFunction = 2;
+  derivMhoFunction = 3;
+  derivGausFunction = 4;
+  densFunction = 5;
 
+  verboseLevel = 0;
+  hazard = aHazard;
+  dton = aDton;
+  saxw = aSaxw;
+  ws = aWs;
 }
 
-G4Incl::G4Incl(G4Hazard *hazard, G4Calincl *calincl, G4Ws *ws, G4Mat *mat, G4VarNtp *varntp)
-  :verboseLevel(0),
-   hazard(hazard), calincl(calincl), ws(ws), mat(mat), varntp(varntp)
+G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
 {
-  light_gaus_nuc = (G4LightGausNuc*) malloc(sizeof(G4LightGausNuc));
-  light_nuc = (G4LightNuc*) malloc(sizeof(G4LightNuc));
-  spl2 = (G4Spl2*) malloc(sizeof(G4Spl2));
-  saxw = (G4Saxw*) malloc(sizeof(G4Saxw));
-  dton = (G4Dton*) malloc(sizeof(G4Dton));
-  bl1 = (G4Bl1*) malloc(sizeof(G4Bl1));
-  bl2 = (G4Bl2*) malloc(sizeof(G4Bl2));
-  bl3 = (G4Bl3*) malloc(sizeof(G4Bl3));
-  bl4 = (G4Bl4*) malloc(sizeof(G4Bl4));
-  bl5 = (G4Bl5*) malloc(sizeof(G4Bl5));
-  bl6 = (G4Bl6*) malloc(sizeof(G4Bl6));
-  bl8 = (G4Bl8*) malloc(sizeof(G4Bl8));
-  bl9 = (G4Bl9*) malloc(sizeof(G4Bl9));
-  bl10 = (G4Bl10*) malloc(sizeof(G4Bl10));
-  kindstruct = (G4Kind*) malloc(sizeof(G4Kind));
-  paul = (G4Paul*) malloc(sizeof(G4Paul));
-  varavat = (G4VarAvat*) malloc(sizeof(G4VarAvat));
+  wsaxFunction = 0;
+  derivWsaxFunction = 1;
+  dmhoFunction = 2;
+  derivMhoFunction = 3;
+  derivGausFunction = 4;
+  densFunction = 5;
 
-  volant = (G4Volant*) malloc(sizeof(G4Volant));
-  abla = new G4Abla(hazard, volant);
+  verboseLevel = 0;
+  hazard = aHazard;
+  calincl = aCalincl;
+  ws = aWs;
+  mat = aMat;
+  varntp = aVarntp;
+
+  light_gaus_nuc = new G4LightGausNuc();
+  light_nuc = new G4LightNuc();
+  spl2 = new G4Spl2();
+  saxw = new G4Saxw();
+  dton = new G4Dton();
+  bl1 = new G4Bl1();
+  bl2 = new G4Bl2();
+  bl3 = new G4Bl3();
+  bl4 = new G4Bl4();
+  bl5 = new G4Bl5();
+  bl6 = new G4Bl6();
+  bl8 = new G4Bl8();
+  bl9 = new G4Bl9();
+  bl10 = new G4Bl10();
+  kindstruct = new G4Kind();
+  paul = new G4Paul();
+  varavat = new G4VarAvat();
+  varavat->kveux = 0;
+
+  volant = new G4Volant();
+  volant->iv = 0;
+  evaporationResult = new G4VarNtp();
+  evaporationResult->ntrack = -1;
+  abla = new G4Abla(hazard, volant, evaporationResult);
   abla->initEvapora();
 }
 
 G4Incl::~G4Incl()
 {
+  delete light_gaus_nuc;
+  delete light_nuc;
+  delete spl2;
+  delete saxw;
+  delete dton;
+  delete bl1;
+  delete bl2;
+  delete bl3;
+  delete bl4;
+  delete bl5;
+  delete bl6;
+  delete bl8;
+  delete bl9;
+  delete bl10;
+  delete kindstruct;
+  delete paul;
+  delete varavat;
 
+  delete abla;
+  delete evaporationResult;
+  delete volant;
 }
+
+// For debug
+G4double G4Incl::energyTest(G4int i)
+{
+  return am(bl1->p1[i]+bl1->p1[i],bl1->p2[i]+bl1->p2[i],bl1->p3[i]+bl1->p3[i],bl1->eps[i]+bl1->eps[i]);
+}
+
+void G4Incl::dumpBl5(std::ofstream& dumpOut)
+{
+  dumpOut <<"Dumping G4Bl5:" << G4endl;
+  for(G4int i = 0; i < 300; i++) {
+    dumpOut <<"i = " << i << " nesc[i] = " << bl5->nesc[i] << G4endl;
+  }
+}
+void G4Incl::dumpSaxw(std::ofstream& dumpOut)
+{
+  dumpOut << "Dumping G4Saxw" << G4endl;
+  dumpOut << "saxw->k = " << saxw->k << G4endl;
+  dumpOut << "saxw->n = " << saxw->n << G4endl;
+  dumpOut << "saxw->imat = " << saxw->imat << G4endl;
+  for(G4int i = 0; i < 30; i++) {
+    dumpOut <<"i = " << i << " x = " << saxw->x[i][0] << " y = " << saxw->y[i][0];
+    dumpOut << " s = " << saxw->s[i][0] << G4endl; 
+  }
+}
+
+void G4Incl::dumpBl1(std::ofstream& dumpOut)
+{
+  dumpOut <<"Dumping Bl1: " << G4endl;
+  dumpOut <<"bl1->ta = " << bl1->ta << G4endl;
+  for(G4int i = 0; i <= bl2->k; i++) {
+    dumpOut <<"i = " << i;
+    dumpOut <<" bl1->p1 " << bl1->p1[i] << " bl1->p2 = " << bl1->p2[i] <<" bl1->p3 = " << bl1->p3[i] <<" bl1->eps = " << bl1->eps[i];
+    dumpOut <<" bl1->ind1 = " << bl1->ind1[i]  <<" bl1->ind2 = " << bl1->ind2[i] << G4endl;
+  }
+  dumpOut <<"End of Bl1 dump." << G4endl << G4endl;
+}
+
+void G4Incl::dumpBl2(std::ofstream& dumpOut)
+{
+  dumpOut <<"Dumping Bl2: bl2->k = " << bl2->k << G4endl;
+  for(G4int i = 0; i <= bl2->k; i++) {
+    dumpOut <<"i = " << i;
+    dumpOut <<" bl2->ind " << bl2->ind[i] << " bl2->jnd = " << bl2->jnd[i] <<" bl2->crois = " << bl2->crois[i] << G4endl;
+  }
+  dumpOut <<"End of Bl2 dump." << G4endl << G4endl;}
+
+
+void G4Incl::dumpBl3(std::ofstream& dumpOut)
+{
+  dumpOut <<"Dumping Bl3:" << G4endl;
+  dumpOut <<"r1 = " << bl3->r1 << " r2 = " << bl3->r2 << G4endl;
+  dumpOut <<"ia1 = " << bl3->ia1 << " ia2 = " << bl3->ia2 << G4endl;
+  dumpOut <<"rab2 = " << bl3->rab2 << G4endl;
+  for(G4int i = 0; i <= bl2->k; i++) {
+    dumpOut <<"i = " << i;
+    dumpOut <<" bl3->x1 = " << bl3->x1[i] << " bl3->x2 = " << bl3->x2[i] <<" bl3->x3 = " << bl3->x3[i] << G4endl;
+  }
+  dumpOut <<"End of Bl2 dump." << G4endl << G4endl;
+}
+
+// End debug functions
 
 void G4Incl::setVerboseLevel(G4int level)
 {
@@ -190,43 +301,19 @@ void G4Incl::setKindData(G4Kind *newKind)
   kindstruct = newKind;
 }
 
-// INCL main routine for event processing
+// INCL main routines for event processing
 
-void G4Incl::processEventWithEvaporation()
+void G4Incl::processEventIncl()
 {
   const G4double uma = 931.4942;
   const G4double melec = 0.511;
-  const G4double fmp = 938.2723;
-  const G4double fmn = 939.56563;
-  
-  int ntrans = 0;
-  int nabs = 0;
-  int nretir = 0;
-  int nfis = 0;
-  double muln_t = 0.0;
-  double muln_2 = 0.0;
-  double ener_2 = 0.0;
-  double muln_20 = 0.0;
-  double ener_20 = 0.0;
-  double muln_max = 0.0;
-  double ener_max = 0.0;
-  int nbevhbk = 0;
 
-  int impulse1 = 0; // conservation d'impulsion fausse sans fission
-  int impulse2 = 0;
-  int impulse3 = 0;
-  int imp_f1 = 0; //      ! conservation d'impulsion fausse avec fission
-  int imp_f2 = 0;
-  int imp_f3 = 0;
-        
-  double S1x = 0.0;
-  double S2x = 0.0;
-  double S1y = 0.0;
-  double S2y = 0.0;
-  double S1z = 0.0;
-  double S2z = 0.0;
-  
-  double ap, zp, mprojo, pbeam;
+  G4double   pcorem;
+  G4double   pxrem;
+  G4double   pyrem;
+  G4double   pzrem;
+
+  G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
 
   // pi+
   if(calincl->f[6] == 3.0) { 
@@ -295,107 +382,52 @@ void G4Incl::processEventWithEvaporation()
 
   pbeam = sqrt(calincl->f[2]*(calincl->f[2] + 2.0*mprojo));         
 
-  double at = calincl->f[0];
-  double zt = calincl->f[1];
-  double eap = calincl->f[2];
-        
+  G4double at = calincl->f[0];
+       
   calincl->f[3] = 0.0;    //     !seuil sortie proton
   calincl->f[7] = 0.0;  //       !seuil sortie neutron
 
-  double proba_trans;
+  G4int ibert = 1;
+
+  G4int nopart;
+  G4int izrem;
+  G4int iarem;
+  G4double esrem;
+  G4double erecrem;
+  G4double berem;
+  G4double garem;
+  G4double bimpac;
+  G4int jrem;
+  G4double alrem;
+
+  // Coulomb barrier
   
+  G4double probaTrans;
+  G4double rndm;
+
   if((calincl->f[6] == 1.0) || (calincl->f[6] >= 6.0)) {
-    proba_trans = coulombTransm(calincl->f[2],ap,zp,calincl->f[0],calincl->f[1]);
+    //    probaTrans = coulombTransm(calincl->f[2],apro,zpro,calincl->f[0],calincl->f[1]);
+    probaTrans = coulombTransm(calincl->f[2],ap,zp,calincl->f[0],calincl->f[1]);
+    standardRandom(&rndm, &(hazard->ial));
+    if(rndm <= (1.0 - probaTrans)) {
+      varntp->ntrack = -1;
+      return;
+    }
   }
 
-  double ntrans_coul = calincl->icoup*(1.0 - proba_trans);
-  calincl->icoup = calincl->icoup - ntrans_coul;
-  std::cout <<"icoup, proba_trans " << calincl->icoup << " " << proba_trans << std::endl;
+  // Call the actual INCL routine:
+  pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem);
 
-  // old main loop
-//   if(i == ievtest) then
-//             write(6,*) 'le tir selectionne commence: i=',i
-//         endif
-        
-// 990     continue        !retirage si nopart= -100 (void event)
-            
-// c stockage des generateurs pour reproduire les bugs...
-//            ialview = ial
-//                 do ihaz=1,19
-//                    iyv(ihaz)=iy(ihaz)
-//                 enddo
-                
-// c          write(6,*)'event',i
-
-  double mtota = 0.0; // counters of a masses emitted as alpha                             
-  double malpha1 = 0.0;                             
-  double malpha2 = 0.0;
-                                  
-  int ap1 = idnint(ap);                                                  
-  int zp1 = idnint(zp);                                                  
-//C*********************** Appel de la CASCADE ****************************
-  int ibert = 1;
-//   if(i == 1) {
-//     ibert = 0;
-//     ibert = i;
-//   }           
-
-  int nopart;
-  int izrem;
-  int iarem;
-  double esrem;
-  double erecrem;
-  double berem;
-  double garem;
-  double bimpac;
-  int jrem;
-  double alrem;
-
-  std::cout <<"Calling pnu..." << std::endl;
-  pnu(&ibert, &nopart,&izrem,
-            &iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem);
-  std::cout <<"returned from pnu..." << std::endl;
-
-  //  C Absorption forc%Gï¿½%@ pour p (10-100 MeV) et n (20-100MeV)
-  forceAbsor(nopart, iarem, izrem, esrem, erecrem, alrem, berem, garem, jrem);
-//         IF(nopart.eq.-1)THEN
-//                 ntrans=ntrans+1
-//                 go to 99        ! tirage non exploite, au suivant!
-//         ENDIF
-        
-//         IF(nopart.eq.0)THEN
-//                 nabs=nabs+1
-
-
-// C               go to 99        ! tirage non exploite, au suivant!
-// C Et si! Il faut evaporer une absorption... (Important a basse energie 
-// C                                           en dessous de 200 MeV)
-//         ENDIF
-        
-//         IF(nopart.eq.-100)THEN
-//                 nretir=nretir+1 
-//                 go to 990       ! Retirage
-//         ENDIF
-
-
-
-// C ----------------- OK, valuable cascade, we can continue --------------
-
-
-// Generate output data:
-//  C ----------------- OK, valuable cascade, we can continue --------------
-
-  G4double zprf = double(izrem);    // nuclear charge of the prefragment
+  forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
   G4double aprf = double(iarem);    // mass number of the prefragment
-  G4double ee = double(esrem);        // excitation energy of the prefragment
   G4double jprf = 0.0;                // angular momentum of the prefragment
 
   // mean angular momentum of prefragment                                  
-
   jprf = 0.165 * pow(at,(2.0/3.0)) * aprf*(at - aprf)/(at - 1.0);                               
   if (jprf < 0) {
     jprf = 0.0;
   }
+
   // check m.de jong, ignatyuk, schmidt nuc.phys a 613, pg442, 7th line
   jprf = sqrt(2*jprf);
 
@@ -412,7 +444,347 @@ void G4Incl::processEventWithEvaporation()
   varntp->mzini = izrem;
   varntp->exini = esrem;
   varntp->bimpact = bimpac;
-  std::cout <<"Bimpact: " << varntp->bimpact << std::endl;
+  
+  //  three ways to compute the mass of the remnant: 
+  //                -from the output of the cascade and the canonic mass
+  //                -from energy balance (input - all emitted energies)
+  //                -following the approximations of the cugnon code (esrem...)
+  G4double mcorem = mprojo + calincl->f[2] + abla->pace2(double(calincl->f[0]),double(calincl->f[1]))
+    + calincl->f[0]*uma - calincl->f[1]*melec;
+//  G4double mcorem = 100.0;
+  G4double pxbil = 0.0;
+  G4double pybil = 0.0;
+  G4double pzbil = 0.0;         
+
+  if(nopart > -1) {
+    for(G4int j = 0; j < nopart; j++) {
+      varntp->itypcasc[j] = 1;
+      // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
+      if(kind[j] == 1) { 
+	varntp->avv[j] = 1;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
+	multp = multp + 1;
+	mcorem = mcorem - ep[j] - 938.27231;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Proton produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 2) { 
+	varntp->avv[j] = 1;
+	varntp->zvv[j] = 0;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
+	multn = multn + 1;
+	mcorem = mcorem - ep[j] - 939.56563;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Neutron produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 3) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 139.56995;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi+ produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 4) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = 0;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 134.9764;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi0 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 5) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = -1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 139.56995;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi+ produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 6) { 
+	varntp->avv[j] = 2;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*1874.34)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2806.359;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Deuteron produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 7) { 
+	varntp->avv[j] = 3;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*2806.359)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2806.359;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Triton produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 8) { 
+	varntp->avv[j] = 3;
+	varntp->zvv[j] = 2;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*2807.119)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2807.119;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: He3 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 9) { 
+	varntp->avv[j] = 4;
+	varntp->zvv[j] = 2;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*3724.818)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 3724.818;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: He3 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      varntp->enerj[j] = ep[j];
+      varntp->tetlab[j] = 180.0*acos(gam[j])/3.141592654;
+      varntp->philab[j] = 180.0*atan2(beta[j],alpha[j])/3.141592654;
+      pxbil = pxbil + varntp->plab[j]*alpha[j];
+      pybil = pybil + varntp->plab[j]*beta[j];
+      pzbil = pzbil + varntp->plab[j]*gam[j];
+
+      if(verboseLevel > 3) {
+	G4cout <<"Momentum: " << varntp->plab[j] << G4endl;
+	G4cout <<"Theta: " << varntp->tetlab[j] << G4endl;
+	G4cout <<"Phi: " << varntp->philab[j] << G4endl;
+      }
+      // 900   continue
+    }
+
+    // calcul de la masse (impulsion) du remnant coherente avec la conservation d'energie:
+    pcorem=sqrt(erecrem*(erecrem +2.*938.2796*iarem));   // cugnon
+    mcorem = 938.2796*iarem;                               // cugnon
+                
+    // Note: Il faut negliger l'energie d'excitation (ESREM) pour que le bilan 
+    // d'impulsion soit correct a la sortie de la cascade.....et prendre la
+    // masse MCOREM comme ci-dessus (fausse de ~1GeV par rapport aux tables...)        
+    pxrem=pcorem*alrem;
+    pyrem=pcorem*berem;
+    pzrem=pcorem*garem;
+        
+    pxbil=pxbil+pxrem;
+    pybil=pybil+pyrem;
+    pzbil=pzbil+pzrem;
+
+    if((fabs(pzbil-pbeam) > 5.0) || (sqrt(pow(pxbil,2)+pow(pybil,2)) >= 3.0)) {
+      if(verboseLevel > 3) {
+	G4cout <<"bad momentum conservation after incl:" << G4endl;
+      }
+    }
+       
+    volant->iv = 0;   // init du compteur des part evaporees
+    varntp->kfis = 0;  //drapeau de fission copie dans le ntuple
+    varntp->estfis = 0.0;
+    varntp->izfis = 0;
+    varntp->iafis = 0;
+
+    //  varntp->ntrack = varntp->ntrack + 1;  // on recopie le remnant dans le ntuple
+    varntp->massini = iarem;
+    varntp->mzini = izrem;
+    varntp->exini = esrem;
+    varntp->itypcasc[varntp->ntrack] = 1;
+    varntp->avv[varntp->ntrack] = iarem;
+    varntp->zvv[varntp->ntrack]= izrem;
+    varntp->plab[varntp->ntrack] = pcorem;
+    varntp->enerj[varntp->ntrack] = sqrt(pow(pcorem,2) + pow(mcorem,2)) - mcorem;
+    varntp->tetlab[varntp->ntrack] = 180.0*acos(garem)/3.141592654;
+    varntp->philab[varntp->ntrack] = 180.0*atan2(berem,alrem)/3.141592654;
+    varntp->ntrack++;
+    varntp->mulncasc = varntp->ntrack;
+    varntp->mulnevap = 0;
+    varntp->mulntot = varntp->mulncasc + varntp->mulnevap;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: Returning nucleus fragment. " << G4endl;
+      G4cout <<"G4Incl: Fragment A = " << varntp->avv[varntp->ntrack] << " Z = " << varntp->zvv[varntp->ntrack] << G4endl;
+      G4cout <<"Energy: " << varntp->enerj[varntp->ntrack] << G4endl;
+      G4cout <<"Momentum: " << varntp->plab[varntp->ntrack] << G4endl;
+      G4cout <<"Theta: " << varntp->tetlab[varntp->ntrack] << G4endl;
+      G4cout <<"Phi: " << varntp->philab[varntp->ntrack] << G4endl;
+    }
+  }
+  else {
+    varntp->ntrack = -1;
+  }
+}
+
+
+void G4Incl::processEventInclAbla(G4int eventnumber)
+{
+  const G4double uma = 931.4942;
+  const G4double melec = 0.511;
+
+  G4double pcorem;
+  G4double pxrem;
+  G4double pyrem;
+  G4double pzrem;
+
+  G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
+
+  // pi+
+  if(calincl->f[6] == 3.0) { 
+    mprojo = 139.56995;
+    ap = 0.0;
+    zp = 1.0;
+  }
+
+  // pi0
+  if(calincl->f[6] == 4.0) {
+    mprojo = 134.9764;
+    ap = 0.0;
+    zp = 0.0;
+  }
+
+  // pi-
+  if(calincl->f[6] == 5.0) {
+    mprojo = 139.56995;
+    ap = 0.0;
+    zp = -1.0;
+  }
+
+  // coulomb en entree seulement pour les particules ci-dessous
+
+  // proton
+  if(calincl->f[6] == 1.0) {
+    mprojo = 938.27231;
+    ap = 1.0;
+    zp = 1.0;
+  }
+
+  // neutron  
+  if(calincl->f[6] == 2.0) {
+    mprojo = 939.56563;
+    ap = 1.0;
+    zp = 0.0;
+  }
+
+  // deuteron
+  if(calincl->f[6] == 6.0) {
+    mprojo = 1875.61276;
+    ap = 2.0;
+    zp = 1.0;
+  }
+
+  // triton
+  if(calincl->f[6] == 7.0) {
+    mprojo = 2808.95;
+    ap = 3.0;
+    zp = 1.0;
+  }
+
+  // He3
+  if(calincl->f[6] == 8.0) {
+    mprojo = 2808.42;
+    ap = 3.0;
+    zp = 2.0;
+  }
+
+  // Alpha
+  if(calincl->f[6] == 9.0) {
+    mprojo = 3727.42;
+    ap = 4.0;
+    zp = 2.0;
+  }
+
+  pbeam = sqrt(calincl->f[2]*(calincl->f[2] + 2.0*mprojo));         
+
+  G4double at = calincl->f[0];
+       
+  calincl->f[3] = 0.0;    //     !seuil sortie proton
+  calincl->f[7] = 0.0;  //       !seuil sortie neutron
+
+  G4int ibert = 1;
+
+  G4int nopart;
+  G4int izrem;
+  G4int iarem;
+  G4double esrem;
+  G4double erecrem;
+  G4double berem;
+  G4double garem;
+  G4double bimpac;
+  G4int jrem;
+  G4double alrem;
+
+  // Coulomb barrier
+  
+  G4double probaTrans;
+  G4double rndm;
+
+  if((calincl->f[6] == 1.0) || (calincl->f[6] >= 6.0)) {
+    //    probaTrans = coulombTransm(calincl->f[2],apro,zpro,calincl->f[0],calincl->f[1]);
+    probaTrans = coulombTransm(calincl->f[2],ap,zp,calincl->f[0],calincl->f[1]);
+    standardRandom(&rndm, &(hazard->ial));
+    if(rndm <= (1.0 - probaTrans)) {
+      varntp->ntrack = -1;
+      return;
+    }
+  }
+
+  // Call the actual INCL routine:
+  pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem);
+
+  forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
+  G4double aprf = double(iarem);    // mass number of the prefragment
+  G4double jprf = 0.0;                // angular momentum of the prefragment
+
+  // mean angular momentum of prefragment                                  
+  jprf = 0.165 * pow(at,(2.0/3.0)) * aprf*(at - aprf)/(at - 1.0);                               
+  if (jprf < 0) {
+    jprf = 0.0;
+  }
+
+  // check m.de jong, ignatyuk, schmidt nuc.phys a 613, pg442, 7th line
+  jprf = sqrt(2*jprf);
+
+  jprf = jrem;
+  varntp->jremn = jrem;      // jrem copie dans le ntuple
+
+  G4double numpi = 0;  // compteurs de pions, neutrons protons
+  G4double multn = 0; 
+  G4double multp = 0;
+
+  // ecriture dans le ntuple des particules de cascade (sauf remnant)      
+  varntp->ntrack = nopart;          // nombre de particules pour ce tir
+  if(varntp->ntrack >= VARNTPSIZE) {
+    G4cout <<"Error! Output data structure not big enough!" << G4endl;
+    exit(0);
+  }
+  varntp->massini = iarem;
+  varntp->mzini = izrem;
+  varntp->exini = esrem;
+  varntp->bimpact = bimpac;
   
   //  three ways to compute the mass of the remnant: 
   //                -from the output of the cascade and the canonic mass
@@ -425,92 +797,198 @@ void G4Incl::processEventWithEvaporation()
   G4double pybil = 0.0;
   G4double pzbil = 0.0;         
 
-  std::cout <<"Number of particles: " << nopart << std::endl;
-  
-  for(G4int j = 0; j < nopart; j++) {
-    varntp->itypcasc[j] = 1;
-    // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
-    if(kind[j] == 1) { 
-      varntp->avv[j] = 1;
-      varntp->zvv[j] = 1;
-      varntp->plab[j] = sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
-      multp = multp + 1;
-      mcorem = mcorem - ep[j] - 938.27231;
-      std::cout <<"Proton produced! " << std::endl;
-      std::cout <<"Momentum: "<< varntp->plab[j] << std::endl;
+  if(nopart > -1) {
+    for(G4int j = 0; j < nopart; j++) {
+      varntp->itypcasc[j] = 1;
+      // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
+      if(kind[j] == 1) { 
+	varntp->avv[j] = 1;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
+	multp = multp + 1;
+	mcorem = mcorem - ep[j] - 938.27231;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Proton produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 2) { 
+	varntp->avv[j] = 1;
+	varntp->zvv[j] = 0;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
+	multn = multn + 1;
+	mcorem = mcorem - ep[j] - 939.56563;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Neutron produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 3) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 139.56995;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi+ produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 4) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = 0;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 134.9764;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi0 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 5) { 
+	varntp->avv[j] = -1;
+	varntp->zvv[j] = -1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j]+276.0)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 139.56995;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Pi+ produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 6) { 
+	varntp->avv[j] = 2;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*1874.34)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2806.359;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Deuteron produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 7) { 
+	varntp->avv[j] = 3;
+	varntp->zvv[j] = 1;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*2806.359)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2806.359;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: Triton produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 8) { 
+	varntp->avv[j] = 3;
+	varntp->zvv[j] = 2;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*2807.119)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 2807.119;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: He3 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      if(kind[j] == 9) { 
+	varntp->avv[j] = 4;
+	varntp->zvv[j] = 2;
+	varntp->plab[j] = sqrt(ep[j]*(ep[j] + 2.0*3724.818)); // cugnon
+	numpi = numpi + 1;
+	mcorem = mcorem - ep[j] - 3724.818;
+	if(verboseLevel > 3) {
+	  G4cout <<"G4Incl: He3 produced! " << G4endl;
+	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
+	}
+      }
+
+      varntp->enerj[j] = ep[j];
+      varntp->tetlab[j] = 180.0*acos(gam[j])/3.141592654;
+      varntp->philab[j] = 180.0*atan2(beta[j],alpha[j])/3.141592654;
+      pxbil = pxbil + varntp->plab[j]*alpha[j];
+      pybil = pybil + varntp->plab[j]*beta[j];
+      pzbil = pzbil + varntp->plab[j]*gam[j];
+
+      if(verboseLevel > 3) {
+	G4cout <<"Momentum: " << varntp->plab[j] << G4endl;
+	G4cout <<"Theta: " << varntp->tetlab[j] << G4endl;
+	G4cout <<"Phi: " << varntp->philab[j] << G4endl;
+      }
+      // 900   continue
     }
-//         if(kind(j).eq.2) then
-//                 avv(j)=1
-//                 zvv(j)=0
-// c               plab(j)=sqrt(ep(j)*(ep(j)+1879.13126))     !ok  
-//                     plab(j)=sqrt(ep(j)*(ep(j)+1876.5592))  !cugnon
-//                 multn=multn+1
-//                 mcorem=mcorem -ep(j) -939.56563
-//         endif   
-//         if(kind(j).eq.3) then
-//                 avv(j)=-1
-//                 zvv(j)=1
-// c               plab(j)=sqrt(ep(j)*(ep(j)+279.1399))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+276.0))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -139.56995
-//         endif
-//         if(kind(j).eq.4) then
-//                 avv(j)=-1
-//                 zvv(j)=0
-// c               plab(j)=sqrt(ep(j)*(ep(j)+269.9528))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+276.0))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -134.9764
-//         endif
-//         if(kind(j).eq.5) then
-//                 avv(j)=-1
-//                 zvv(j)=-1
-// c               plab(j)=sqrt(ep(j)*(ep(j)+279.1399))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+276.0))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -139.56995
-//         endif
-//         if(kind(j).eq.6) then
-//                 avv(j)=2
-//                 zvv(j)=1
-// c               plab(j)=sqrt(ep(j)*(ep(j)+279.1399))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+2.*1874.34))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -1874.34
-//         endif
-//         if(kind(j).eq.7) then
-//                 avv(j)=3
-//                 zvv(j)=1
-// c               plab(j)=sqrt(ep(j)*(ep(j)+279.1399))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+2.*2806.359))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -2806.359
-//         endif
-//         if(kind(j).eq.8) then
-//                 avv(j)=3
-//                 zvv(j)=2
-// c               plab(j)=sqrt(ep(j)*(ep(j)+279.1399))       !ok
-//                     plab(j)=sqrt(ep(j)*(ep(j)+2.*2807.119))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -2807.119
-//         endif
-//         if(kind(j).eq.9) then
-//                 avv(j)=4
-//                 zvv(j)=2
-// 			   plab(j)=sqrt(ep(j)*(ep(j)+2.*3724.818))      !cugnon
-//                 numpi=numpi+1
-//                 mcorem=mcorem -ep(j) -3724.818
-//         endif
-//         enerj(j)=ep(j)
-//         tetlab(j)=180.*acos(gam(j))/3.141592654
-//         philab(j)=180.*atan2(beta2(j),alpha(j))/3.141592654
+
+    // calcul de la masse (impulsion) du remnant coherente avec la conservation d'energie:
+    pcorem=sqrt(erecrem*(erecrem +2.*938.2796*iarem));   // cugnon
+    mcorem = 938.2796*iarem;                               // cugnon
+                
+    // Note: Il faut negliger l'energie d'excitation (ESREM) pour que le bilan 
+    // d'impulsion soit correct a la sortie de la cascade.....et prendre la
+    // masse MCOREM comme ci-dessus (fausse de ~1GeV par rapport aux tables...)        
+    pxrem=pcorem*alrem;
+    pyrem=pcorem*berem;
+    pzrem=pcorem*garem;
         
-//         pxbil = pxbil+plab(j)*alpha(j)
-//         pybil = pybil+plab(j)*beta2(j)
-//         pzbil = pzbil+plab(j)*gam(j)
-        
-// 900   continue
+    pxbil=pxbil+pxrem;
+    pybil=pybil+pyrem;
+    pzbil=pzbil+pzrem;
+
+    if((fabs(pzbil-pbeam) > 5.0) || (sqrt(pow(pxbil,2)+pow(pybil,2)) >= 3.0)) {
+      if(verboseLevel > 3) {
+	G4cout <<"bad momentum conservation after incl:" << G4endl;
+      }
+    }
+       
+    volant->iv = 0;   // init du compteur des part evaporees
+    varntp->kfis = 0;  //drapeau de fission copie dans le ntuple
+    varntp->estfis = 0.0;
+    varntp->izfis = 0;
+    varntp->iafis = 0;
+
+    //  varntp->ntrack = varntp->ntrack + 1;  // on recopie le remnant dans le ntuple
+    varntp->massini = iarem;
+    varntp->mzini = izrem;
+    varntp->exini = esrem;
+
+    abla->breakItUp(varntp->massini, varntp->mzini, mcorem, varntp->exini, varntp->jremn,
+		    erecrem, pxrem, pyrem, pzrem, eventnumber);
+
+    G4cout <<"Extracting needed data from ABLA output... " << G4endl;
+    for(G4int evaporatedParticle = 1; evaporatedParticle <= evaporationResult->ntrack; evaporatedParticle++) {
+      varntp->itypcasc[varntp->ntrack] = 0;
+      varntp->avv[varntp->ntrack] = evaporationResult->avv[evaporatedParticle];
+      varntp->zvv[varntp->ntrack]= evaporationResult->zvv[evaporatedParticle];
+      varntp->plab[varntp->ntrack] = evaporationResult->plab[evaporatedParticle];
+      varntp->enerj[varntp->ntrack] = evaporationResult->enerj[evaporatedParticle];
+      varntp->tetlab[varntp->ntrack] = evaporationResult->tetlab[evaporatedParticle];
+      varntp->philab[varntp->ntrack] = evaporationResult->philab[evaporatedParticle];
+      varntp->ntrack++;
+      if(varntp->ntrack >= VARNTPSIZE) {
+	G4cout <<"Error! Output data structure not big enough!" << G4endl;
+	exit(0);
+      }
+      if(verboseLevel > 3) {
+	G4cout <<"G4Incl: Returning evaporation result" << G4endl;
+	G4cout <<"G4Incl: A = " << varntp->avv[varntp->ntrack] << " Z = " << varntp->zvv[varntp->ntrack] << G4endl;
+	
+	G4cout <<"Energy: " << varntp->enerj[varntp->ntrack] << G4endl;
+	G4cout <<"Momentum: " << varntp->plab[varntp->ntrack] << G4endl;
+	G4cout <<"Theta: " << varntp->tetlab[varntp->ntrack] << G4endl;
+	G4cout <<"Phi: " << varntp->philab[varntp->ntrack] << G4endl;
+      }
+    }
+    G4cout <<"ntrack = " << varntp->ntrack << G4endl;
+    G4cout <<"Done extracting..." << G4endl;
+  }
+  else {
+    varntp->ntrack = -1;
+    evaporationResult->ntrack = -1;
   }
 }
 
@@ -538,72 +1016,13 @@ void G4Incl::initIncl(G4bool initRandomSeed)
   G4int nbtirhaz[IGRAINESIZE] = {38,82,76,18,39,31,41,59,26,54,
 				 14,84,13,15,91,89,10,6,52};
 
-  std::cout << " " << std::endl;	
-  std::cout <<"*************** version incl 4.2 (C++)*********************" << std::endl;
-  std::cout << "* stopping time and potential can be changed     ****" << std::endl;
-  std::cout << "* input of first random numbers                  ****" << std::endl;
-  std::cout << "* bimpact is output instead of sepa as in incl 3.0 **" << std::endl;
-  std::cout << "* implementation of surface w.s.          4/2000  ***" << std::endl;
-  std::cout << "* interaction only with \"participants\"    4/2000  ***" << std::endl;
-  std::cout << "* cdpp:coherent dynamical pauli principle 5/2001  ***" << std::endl;
-  std::cout <<"* paris momentum density for the deuteron 4/2001  ***" << std::endl;
-  std::cout << "* nd-nn (*3) and phase space delta width  4/2001  ***" << std::endl;
-  std::cout << "************* incl 4.0 -> incl4.1 *******************" << std::endl;
-  std::cout <<"* no lower cut on pi-n interaction	   2/2002  ****" << std::endl;       
-  std::cout <<"* init of first avatars for participants  2/2002  ***" << std::endl;     
-  std::cout <<"* output of excit energy for absorption   2/2002  ***" << std::endl;
-  std::cout <<"************* incl 4.1 -> incl4.2 *******************" << std::endl;
-  std::cout <<"* increased absorption below 100 mev 	   5/2002  ****" << std::endl;       
-  std::cout <<"* coulomb transmis. on projo from lahet  5/2002  ****" << std::endl;       
-  std::cout <<"* light targets(gaussian a<5 mho 4<a<19) 6/2002  ****" << std::endl;       
-  std::cout <<"*****************************************************" << std::endl;
-  std::cout <<"* corrections 11/2003 numerical from j hendricks    *" << std::endl;
-  std::cout <<"*           l of the remnant (from actual c.m.)     *" << std::endl;
-  std::cout <<"*****************************************************" << std::endl;
-  std::cout <<" " << std::endl;
-
   // specific parameters for incl:	 
   // espace de phases test (r et p) pour pauli: 
   // valeur recommandee par j.c. v-test=0.592 h**3:
   G4double rbl = 2.;
-  G4double pbl = 200.;
 
   // valeur pour avoir v-test=2 h**3 (avec pbl=200)
   rbl = 3.1848;
-
-  // constants and derived data
-  G4double hc = 197.328;
-  G4double fmp = 938.2796;
-  G4double pf = 1.37*hc;  
-  G4double tf = sqrt(pf*pf+fmp*fmp) - fmp;
-  G4double binding = calincl->f[4] - tf; // Orig: f(5)
-  std::cout <<"v0 nuclear potential (a>5) " << calincl->f[4] << "(mev) and scaling" << " stopping time factor: " << calincl->f[5] << std::endl; //Orig f(6)
-  std::cout <<"fermi momentum: " << pf << " binding energy: " << binding << std::endl;
-  std::cout <<"r*p cell for pauli stat: " << rbl << " " << pbl << std::endl;
-  std::cout <<"pauli strict (1) or statistic (0): your choice: " << ws->npaulstr << std::endl;
-  std::cout <<" " << std::endl;
-  std::cout <<"your choice, nosurf=  " << ws->nosurf << "means" << std::endl;
-  std::cout <<"nosurf=-2, with w.s. density and incl4 stopping time" << std::endl;
-  std::cout <<"nosurf=1, sharp surface" << std::endl;
-  std::cout <<"nosurf=0, with w.s. density, time without b dep" << std::endl;
-  std::cout <<"nosurf=-1, with w.s. density, time with b dep." << std::endl;
-  std::cout <<"rmaxws=ro+xfoisa*a, xfoisa= " << ws->xfoisa << " above a=19" << std::endl;
-
-  G4int k1 = 5;
-  G4int k2 = 0;
-  G4int k3 = 0;
-  G4int k4 = 2;
-  G4int k5 = 1;
-  G4int k6 = 0;
-
-  std::cout << " " << std::endl;
-  std::cout <<"k1,k2,k3,k4,k5,k6 " << k1 << " " << k2 << " " << k3 << " " << k4 << " " << k5 << " " << k6 << std::endl;
-  std::cout <<"meaning: k1=5, reference frame = lab system" << std::endl;
-  std::cout <<"k2=0, relativistic kinematics" << std::endl;
-  std::cout <<"k3=0, deltas are produced" << std::endl;
-  std::cout <<"k4=2, delta has a exponentially random lifetime" << std::endl;
-  std::cout <<"k5=1, delta-nucleon=delta-delta = nucleon-nucleon elastic x-section" << std::endl;
-  std::cout <<" " << std::endl;
 
   // preparation of 19 other seeds (can also be initialized from outside):
   if(initRandomSeed) {
@@ -636,7 +1055,7 @@ void G4Incl::initIncl(G4bool initRandomSeed)
   if (ws->nosurf <= 0) {
     // prepare nucleus density for nbmat nucleus defined in struct mat
     if(mat->nbmat >= 500) {
-      std::cout <<"You need " << mat->nbmat << " nuclei in your problem. The maximum number of nuclei is 500 " << std::endl;
+      G4cout <<"You need " << mat->nbmat << " nuclei in your problem. The maximum number of nuclei is 500 " << G4endl;
       return;
     }
 
@@ -644,10 +1063,6 @@ void G4Incl::initIncl(G4bool initRandomSeed)
       imat=i;
       izmat = int(mat->zmat[i]);
       iamat = int(mat->amat[i]);
-      std::cout <<"Initializing material with values:" << std::endl;
-      std::cout <<"imat = " << i << std::endl;
-      std::cout <<"izmat = " << izmat << std::endl;
-      std::cout <<"iamat = " << iamat << std::endl;
 
       initMaterial(izmat, iamat, imat);
     }
@@ -694,9 +1109,11 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
     light_nuc->a[i] = dataaln[i];
   }
 
-  std::cout <<"***************************************************" << std::endl;
-  std::cout <<"Nuclear density for nucleus (z, a): " << izmat << " " << iamat << " " << imat << std::endl;
-
+  if(verboseLevel > 3) {
+    G4cout <<"***************************************************" << G4endl;
+    G4cout <<"Nuclear density for nucleus (z, a): " << izmat << " " << iamat << " " << imat << G4endl;
+  }
+  
   const G4double fmp = 938.2796;
 
   // parametres moyens de densite de la cible (fermi 2 parametres)
@@ -721,28 +1138,28 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
       light_gaus_nuc->pfln[5] = light_gaus_nuc->pf1t[5]*1.291;  // Orig [6], sqrt(5/3)=1.291
       light_gaus_nuc->tfln[5] = sqrt(pow(light_gaus_nuc->pfln[5],2) + fmp*fmp) - fmp;
       light_gaus_nuc->vnuc[5] = light_gaus_nuc->tfln[5] + 2.22;
-      std::cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[5] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[5] << " " << light_gaus_nuc->tfln[5] << std::endl;
+      G4cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[5] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[5] << " " << light_gaus_nuc->tfln[5] << G4endl;
     }
     if(iamat == 3 && izmat == 1) {
       ws->r0=light_gaus_nuc->rms1t[6]; // Orig: rms1t(7)
       light_gaus_nuc->pfln[6] = light_gaus_nuc->pf1t[6]*1.291;  // Orig [7], sqrt(5/3)=1.291
       light_gaus_nuc->tfln[6] = sqrt(pow(light_gaus_nuc->pfln[6],2) + fmp*fmp) - fmp;
       light_gaus_nuc->vnuc[6] = light_gaus_nuc->tfln[6] + 4.24;
-      std::cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[6] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[6] << " " << light_gaus_nuc->tfln[6] << std::endl;
+      G4cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[6] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[6] << " " << light_gaus_nuc->tfln[6] << G4endl;
     }
     if(iamat == 3 && izmat == 2) {
       ws->r0 = light_gaus_nuc->rms1t[7]; // Orig: rms1t(8)
       light_gaus_nuc->pfln[7] = light_gaus_nuc->pf1t[7]*1.291;   //!sqrt(5/3)=1.291
       light_gaus_nuc->tfln[7] = sqrt(pow(light_gaus_nuc->pfln[7],2) + fmp*fmp) - fmp;
       light_gaus_nuc->vnuc[7] = light_gaus_nuc->tfln[7] + 3.86;
-      std::cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[7] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[7] << " " << light_gaus_nuc->tfln[7] << std::endl;
+      G4cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[7] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[7] << " " << light_gaus_nuc->tfln[7] << G4endl;
     }
     if(iamat == 4) {
       ws->r0 = light_gaus_nuc->rms1t[8]; // Orig: rms1t(9)
       light_gaus_nuc->pfln[8] = light_gaus_nuc->pf1t[8]*1.291;   // !sqrt(5/3)=1.291
       light_gaus_nuc->tfln[8] = sqrt(pow(light_gaus_nuc->pfln[8],2) + fmp*fmp) - fmp;
       light_gaus_nuc->vnuc[8] = light_gaus_nuc->tfln[8] + 9.43;
-      std::cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[8] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[8] << " " << light_gaus_nuc->tfln[8] << std::endl;
+      G4cout <<"Nuclear potential: " << light_gaus_nuc->vnuc[8] << "MeV, Fermi momentum and energy: " << light_gaus_nuc->pfln[8] << " " << light_gaus_nuc->tfln[8] << G4endl;
     }
     ws->adif = 0.57735*ws->r0;
     ws->rmaxws = ws->r0 + 2.5;
@@ -817,7 +1234,6 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
       //       }
       if(f_r >= 0.0)  {
 	f_r = pow(f_r,(1./3.));
-	std::cout <<"j = " << j << std::endl;
 	saxw->x[j][imat] = f_r;
 	saxw->y[j][imat] = rcour;
       }
@@ -830,24 +1246,30 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
   // interpolation de f_inv(r) (fonction inverse de f(r))       
   // flin2(imat, saxw, ws);
   firstDerivative(imat);
-     
-  if(iamat >= 19) {
-    std::cout <<"Wood-Saxon density, r0 = " << ws->r0 << " a = " << ws->adif << std::endl;
-  }
-  if(iamat >= 6 && iamat <= 19) {
-    std::cout <<"Modif. harm. oscil. density, alpha = " << ws->r0 << " a = " << ws->adif << std::endl;
-  }
-  if(iamat >= 2 && iamat <= 6) {
-    std::cout <<"Gaussian density, r.m.s = " << ws->r0 << " sigma = " << ws->adif << std::endl;
-  }
-  geom = 31.41592653*pow(ws->rmaxws,2);
-  std::cout <<"For incident nucleons or pions rmax = " << ws->rmaxws << " and geometrical (pi*rmaxws*rmaxws) reaction cross section (mb) is " << geom << std::endl;
-  for(G4int k = 2; k < MATGEOSIZE; k++) {
-    std::cout << "Rmaxws for d/t/3he/4he = " << mat->bmax_geo[k][imat] << std::endl;
-  }
 
-  std::cout <<"Exact calculation of the r(q) function for the target nucleus density q/pf  r(q/pf)" << std::endl;
-  std::cout <<"*********************************************" << std::endl;
+  if(verboseLevel > 3) {
+    if(iamat >= 19) {
+      G4cout <<"Wood-Saxon density, r0 = " << ws->r0 << " a = " << ws->adif << G4endl;
+    }
+    if(iamat >= 6 && iamat <= 19) {
+      G4cout <<"Modif. harm. oscil. density, alpha = " << ws->r0 << " a = " << ws->adif << G4endl;
+    }
+    if(iamat >= 2 && iamat <= 6) {
+      G4cout <<"Gaussian density, r.m.s = " << ws->r0 << " sigma = " << ws->adif << G4endl;
+    }
+  }
+  
+  geom = 31.41592653*pow(ws->rmaxws,2);
+
+  if(verboseLevel > 3) {
+    G4cout <<"For incident nucleons or pions rmax = " << ws->rmaxws << " and geometrical (pi*rmaxws*rmaxws) reaction cross section (mb) is " << geom << G4endl;
+    for(G4int k = 2; k < MATGEOSIZE; k++) {
+      G4cout << "Rmaxws for d/t/3he/4he = " << mat->bmax_geo[k][imat] << G4endl;
+    }
+
+    G4cout <<"Exact calculation of the r(q) function for the target nucleus density q/pf  r(q/pf)" << G4endl;
+    G4cout <<"*********************************************" << G4endl;
+  }
 }
 
 G4double G4Incl::deutv(G4int l, G4double q)
@@ -884,30 +1306,75 @@ G4double G4Incl::interpolateFunction(G4double xv)
   // evaluees par l'appel prealable de flin2                              
   // les indices vont de 1 a n
 
-  G4double tz = xv - saxw->x[0][saxw->k];
+  // saxw->k -> saxw->imat
+//   G4double tz = xv - saxw->x[0][saxw->imat];
+//   G4int j = 0;
+    
+//   if(tz < 0) {
+//     return (saxw->y[0][saxw->imat] + saxw->s[0][saxw->imat]*tz);
+//   }
+//   else if(tz == 0) {
+//     return (saxw->y[0][saxw->imat]);
+//   }
+//   else {
+//     for(G4int i = 1; i < saxw->n; i++) {
+//       j = i - 1;
+//       tz = xv - saxw->x[j][saxw->imat];
+//       if(tz < 0) {
+// 	break;
+//       }
+//       else if(tz == 0) {
+// 	return saxw->y[j][saxw->imat];
+//       }
+//     }
+//   }
 
-  if(tz < 0) {
-    return (saxw->y[0][saxw->k] + saxw->s[0][saxw->k]*tz);
-  }
-  else if(tz == 0) {
-    return (saxw->y[0][saxw->k]);
-  }
-  else {
-    G4int j;
-    for(G4int i = 1; i < saxw->n; i++) {
-      j = i - 1;
-      tz = xv - saxw->x[j][saxw->k];
-      if(tz < 0) {
-	G4double dgx = xv - saxw->x[j][saxw->k];
-	return(saxw->y[j][saxw->k] + saxw->s[j][saxw->k]*dgx);
-      }
-      else if(tz == 0) {
-	return saxw->y[j][saxw->k];
-      }
-    }
-  }
+//   G4double dgx = xv - saxw->x[j][saxw->imat];
+//   return(saxw->y[j][saxw->imat] + saxw->s[j][saxw->imat]*dgx);
+  G4double flinresult = 0.0;
+  G4double dgx;
+  G4int j = 0;
+  
+  G4double tz = xv - saxw->x[1][saxw->imat];
+  //  if(tz)1,2,3                                                       
+  if(tz < 0)
+    goto flin1;
+  if(tz == 0)
+    goto flin2;
+  if(tz > 0)
+    goto flin3;
+  
+ flin1:
+  flinresult = saxw->y[0][saxw->imat] + saxw->s[0][saxw->imat]*tz;
+  return flinresult;
 
-  return 0.0;
+ flin2:
+  flinresult = saxw->y[1][saxw->imat];                                                       
+  return flinresult;                                             
+ flin3: //     continue
+
+  for(G4int i = 1; i < saxw->n; i++) { // do 10 i=2,n
+    j = i;
+    tz = xv - saxw->x[i][saxw->imat];                                  
+    //    if(tz)8,9,10                                                     
+    if(tz < 0)
+      goto flin8;
+    if(tz == 0)
+      goto flin9;
+    if(tz > 0)
+      continue;
+  }
+  goto flin8; 
+                                                        
+  flin9:
+  flinresult = saxw->y[j][saxw->imat];                                                     
+  return flinresult;
+                                                                
+ flin8:
+  j = j - 1;                                                             
+  dgx = xv - saxw->x[j][saxw->imat];
+  flinresult = saxw->y[j][saxw->imat] + saxw->s[j][saxw->imat]*dgx;                   
+  return flinresult;                       
 }
 
 void G4Incl::firstDerivative(G4int k)
@@ -1018,8 +1485,10 @@ void G4Incl::densDeut()
 
   spl2ab();
 
-  std::cout << "deuteron density in q space from Paris potential: " << spl2->n << " Exact values from 0 to " 
-	    << q[spl2->n-1] << " fm-1 " << std::endl;
+  if(verboseLevel > 3) {
+    G4cout << "deuteron density in q space from Paris potential: " << spl2->n << " Exact values from 0 to " 
+	      << q[spl2->n-1] << " fm-1 " << G4endl;
+  }
 }
 
 G4double G4Incl::integrate(G4double ami, G4double ama, G4double step, G4int functionChoice)
@@ -1028,8 +1497,9 @@ G4double G4Incl::integrate(G4double ami, G4double ama, G4double step, G4int func
   G4double x1[5];
   G4double ri = ami;
   G4double ra = ama;
-  G4double nb;
+  G4int nb;
   G4double acont = 1.0;
+  G4double dr = step;
 
   if(ama <= ami) {
     acont = -1.0;
@@ -1042,30 +1512,54 @@ G4double G4Incl::integrate(G4double ami, G4double ama, G4double step, G4int func
   x1[2] = 23.0/30.0;
   x1[3] = 793.0/720.0;
   x1[4] = 157.0/160.0;
-  nb = ((ra - ri)/step) + 1.0000000001;
-  G4double dr = (ra - ri)/(nb - 1);
+  nb = int(floor(((ra - ri)/step + 1.0000000001))); // 1.0000000001 -> 0.0
+  //  G4double dr = (ra - ri)/(nb - 1);
+  dr = (ra - ri)/(double(nb - 1)); // 1.0 -> 0.0
   res = 0.0;
 
-  if(nb >= 10) {
-    for(G4int i=0; i < 5; i++) {
-      res = res + (callFunction(functionChoice, ri) + callFunction(functionChoice, ra))*x1[i];
-      ri = ri + dr;
-      ra = ra - dr;
-    }
+  if(nb < 10) {
+    G4cout <<"pas assez de points d'integration" << G4endl;
+    return 0.0;
   }
-  else {
-    std::cout <<"pas assez de points d|integration" << std::endl;
-    return (res*step*acont);
-  }
-  nb = nb - 10;
-  if(nb != 0) {
-    for(G4int i = 1; i < nb; i++) {
-      res = res + callFunction(functionChoice, ri);
-      ri = ri + dr;
-    }
+  
+  for(G4int i = 0; i < 5; i++) {
+    res = res + (callFunction(functionChoice, ri) + callFunction(functionChoice, ra))*x1[i];
+    ri = ri + dr;
+    ra = ra - dr;
   }
 
-  return (res*step*acont);
+  nb = nb - 10;
+
+  if(nb == 0) {
+    return (res*dr*acont);
+  }
+
+  for(G4int i = 0; i < nb; i++) {
+    res = res + callFunction(functionChoice, ri);
+    ri = ri + dr;
+  }
+
+  return(res*dr*acont);
+//   if(nb >= 10) {
+//     for(G4int i=0; i < 5; i++) {
+//       res = res + (callFunction(functionChoice, ri) + callFunction(functionChoice, ra))*x1[i];
+//       ri = ri + dr;
+//       ra = ra - dr;
+//     }
+//   }
+//   else {
+//     G4cout <<"pas assez de points d|integration" << G4endl;
+//     return (res*step*acont);
+//   }
+//   nb = nb - 10;
+//   if(nb != 0) {
+//     for(G4int i = 1; i < nb; i++) {
+//       res = res + callFunction(functionChoice, ri);
+//       ri = ri + dr;
+//     }
+//   }
+
+//   return (res*step*acont);
 }
 
 
@@ -1157,6 +1651,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double bimpact = (*bimpact_p);
   G4int l = (*l_p);
 
+  G4double minus_b1, minus_b2, minus_b3;
   //alog 
   G4double aml1;
   G4double aml2; 
@@ -1230,36 +1725,36 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int iejp; 
   G4int i_emax; 
   G4int iflag; 
-  G4int iflag20; 
-  G4int iflag40; 
-  G4int iflag60; 
-  G4int ilm; 
+  G4int iflag20 = 0; 
+  G4int iflag40 = 0; 
+  G4int iflag60 = 0; 
+  G4int ilm = 0; 
   G4int imin; 
-  G4int indic[2000]; 
+  G4int indic[3000]; 
   G4int inrem; 
   G4int ip; 
   G4int ipi[2000]; 
   G4int iqe; 
   G4int irem; 
   G4int irst_avatar; 
-  G4int isos; 
+  G4int isos = 0; 
   G4int itch; 
   G4int iteste; 
   G4int itt; 
   G4int ixr1; 
   G4int ixr2; 
   G4int ixr3; 
-  G4int k; 
+  //  G4int k; 
   G4int kcol; 
   G4int kd; 
-  G4int klm; 
+  //  G4int klm = 0; 
   G4int l1; 
   G4int l2; 
   G4int ldel; 
   G4int lead; 
   G4int led; 
   G4int lnew; 
-  G4int lp; 
+  G4int lp = 0; 
   G4int lp1; 
   G4double mcdd; 
   //G4double mg; 
@@ -1283,7 +1778,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int nmiss; 
   G4int np; 
   G4int npidir; 
-  G4int npion; 
+  G4int npion = 0; 
   G4int npproj[300]; 
   G4int npx; 
   G4int nsum_col; 
@@ -1309,10 +1804,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double psf; 
   G4double pspr; 
   G4double ptotl; 
-  G4double q1[BL1SIZE]; 
-  G4double q2[BL1SIZE]; 
-  G4double q3[BL1SIZE]; 
-  G4double q4[BL1SIZE]; 
   G4double qdeut; 
   G4double qqq; 
   G4double r22; 
@@ -1335,7 +1826,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double sp1t1; 
   G4double sp2t1; 
   G4double sp3t1; 
-  G4double sq; 
+  G4double sq = 0.0; 
   G4double sueps; 
   G4double t[50]; 
   G4double t0; 
@@ -1371,15 +1862,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double x; 
   G4double x1l1; 
   G4double x1l2; 
-  G4double x1_target; 
+  G4double x1_target = 0.0; 
+  G4double x2_target = 0.0; 
+  G4double x3_target = 0.0; 
   G4double x2cour; 
   G4double x2l1; 
   G4double x2l2; 
-  G4double x2_target; 
-  //G4double x3; 
   G4double x3l1; 
   G4double x3l2; 
-  G4double x3_target; 
   G4double xapres; 
   G4double xavant; 
   G4double xbl1; 
@@ -1410,22 +1900,27 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double xy2; 
   G4double xy3; 
   G4double xye; 
-  G4double y; 
+  G4double y;
+  G4double q1[BL1SIZE]; 
+  G4double q2[BL1SIZE]; 
+  G4double q3[BL1SIZE]; 
+  G4double q4[BL1SIZE]; 
   G4double y1[BL3SIZE];
   G4double y2[BL3SIZE]; 
   G4double y3[BL3SIZE]; 
-  G4double ym[2000]; 
+  //  G4double ym[2000];
+  G4double ym[BL1SIZE]; 
   G4double z; 
   G4double za_i; 
   G4double zai2; 
   G4double zshif; 
-  G4double ztouch; 
+  G4double ztouch = 0.0; 
   G4double ztu; 
 
   // LIEGE INC-model as a subroutine 
 
   // The Liege INC model has been applied to several systems and in
-  // several conditions. Refinements are still in progress
+  // several conditions. Refinements are still in progress.
 
   // PLEASE refer to this version as INCL4.1 in order to avoid
   // confusion when comparing to the results of your colleagues.
@@ -1649,7 +2144,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //    266	     -938.2796,938.2796,138.0,138.0,138.0,1874.35,2806.8,2806.8,3727.
   G4int ia1t[9] = {1,1,0,0,0,2,3,3,4};
   G4int iz1t[9] = {1,0,1,0,-1,1,1,2,2};
-  G4double fmpinct[9] = {-938.2796,938.2796,138.0,138.0,138.0,1874.35,2806.8,2806.8,3727.};
+  G4double fmpinct[9] = {938.2796,938.2796,138.0,138.0,138.0,1874.35,2806.8,2806.8,3727.};
   //    266	     
   //    267	c      data rms1t,pf1t/0.,0.,0.,0.,0.,2.10,1.80,1.80,1.63,
   //    268	c     -0.,0.,0.,0.,0.,77.,110.,110.,153./
@@ -1735,33 +2230,38 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //    464	c       (ntm,ncase,xp,...,sn are not used here)
   //    465	c-----------------------------------------------------------------------p-n02440
 
-  G4int jparticip[300];
+  // for logging
+  //  std::ofstream dumpOut("inclDump.txt");
+  // end for logging
+
+  //  G4int jparticip[300];
+  G4int jparticip[BL1SIZE];
   G4double beproj = 0.;
   bl3->ia2 = G4int(calincl->f[0]); // f(1)->f[0] and so on..., calincl added
   G4int iz2 = G4int(calincl->f[1]);
   G4double r02 = 1.12;
-  kindstruct->kindf7 = G4int(calincl->f[6] + 0.1);
+  kindstruct->kindf7 = int(floor(calincl->f[6] + 0.1));
 
-  bl3->ia1 = ia1t[G4int(kindstruct->kindf7)];
-  G4int iz1 = iz1t[G4int(kindstruct->kindf7)];
-  G4double fmpinc = fmpinct[G4int(kindstruct->kindf7)];
-  G4double rms1 = light_gaus_nuc->rms1t[G4int(kindstruct->kindf7)];
-  G4double pf1 = light_gaus_nuc->pf1t[G4int(kindstruct->kindf7)];
+  bl3->ia1 = ia1t[G4int(kindstruct->kindf7)-1];
+  G4int iz1 = iz1t[G4int(kindstruct->kindf7)-1];
+  G4double fmpinc = fmpinct[G4int(kindstruct->kindf7)-1];
+  G4double rms1 = light_gaus_nuc->rms1t[G4int(kindstruct->kindf7)-1];
+  G4double pf1 = light_gaus_nuc->pf1t[G4int(kindstruct->kindf7)-1];
   G4double tlab = calincl->f[2];
 
-  G4int k1 = 5;
   G4int k2 = 0;
   G4int k3 = 0;
+  //  G4int k3 = 1; // No deltas!
   G4int k4 = 2;
   G4int k5 = 1;
   G4int k6 = 0;
 
   // material number:      
-  saxw->imat = G4int(calincl->f[8] + 0.5); // f(9) -> f[8]
+  saxw->imat = G4int(floor(calincl->f[8] + 0.5)); // f(9) -> f[8]
   // espace de phases test (r et p) pour pauli: 
   // valeur recommandee par j.c. v-test=0.589 h**3:
   G4double rbl = 2.0;
-  G4double pbl=200.;
+  G4double pbl=200.0;
 
   paul->xrr = rbl;
   paul->xrr2 = (paul->xrr) * (paul->xrr);
@@ -1841,14 +2341,34 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // on impose le rayon du noyau:
   // ....voir coherence function wsax(r) et derivwsax(r)
   bl3->r2 = ws->r0;
-
+  if(verboseLevel > 3) {
+    G4cout <<"Radius bl3->r2 = " << bl3->r2 << G4endl;
+  }
+  
   G4double tnr = tlab;
+  assert((tnr*tnr + 2.0*tlab*fmpinc) >= 0);
+  assert((tnr+fmpinc) != 0);
   G4double binc = sqrt(tnr*tnr + 2.0*tlab*fmpinc)/(tnr+fmpinc);
+  assert((1.0 - binc*binc) > 0);
   G4double ginc=1.0/sqrt(1.0 - binc*binc);
   G4double pinc = fmpinc*binc*ginc;
 
-  for(G4int i = 0; i < ia; i++) {
-    jparticip[i]=0;
+//   for(G4int i = 0; i < ia; i++) {
+//     jparticip[i]=0;
+//   }
+  for(G4int i = 0; i < 300; i++) {
+    jparticip[i] = 0;
+  }
+
+  for(G4int bli = 0; bli < BL1SIZE; bli++) {
+    bl1->eps[bli] = 0.0;
+    bl1->p1[bli] = 0.0;
+    bl1->p2[bli] = 0.0;
+    bl1->p3[bli] = 0.0;
+    q1[bli] = 0.0;
+    q2[bli] = 0.0;
+    q3[bli] = 0.0;
+    q4[bli] = 0.0;
   }
 
   // skip initialisations
@@ -1992,28 +2512,32 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // deutons
   if (bl3->ia1 == 1) { //then
-    bl5->nesc[0] = 0; // nesc(1)->nesc[0] and so on...
-    bl1->ind2[0] = 2*iz1 - 1;
-    bl1->ind1[0] = 0; 
-    bl3->x1[0] = 0.0;
-    bl3->x2[0] = 0.0;
-    bl3->x3[0] = 0.0;
-    bl1->p1[0] = 0.0;
-    bl1->p2[0] = 0.0;
-    bl1->p3[0] = 0.0;
+    //    bl5->nesc[0] = 0; // nesc(1)->nesc[0] and so on...
+    bl5->nesc[1] = 0;
+    //    bl1->ind2[0] = 2*iz1 - 1;
+    bl1->ind2[1] = 2*iz1 - 1;
+    bl1->ind1[1] = 0;
+    bl3->x1[1] = 0.0;
+    bl3->x2[1] = 0.0;
+    bl3->x3[1] = 0.0;
+    bl1->p1[1] = 0.0;
+    bl1->p2[1] = 0.0;
+    bl1->p3[1] = 0.0;
     bl9->hel[0] = 0.0;
-    jparticip[0] = 1;
+    bl9->hel[1] = 0.0;
+    jparticip[0] = 0;
+    jparticip[1] = 1;
   }
   else {
     npion = 1;
-    ipi[0] = 8 - 2*(kindstruct->kindf7);
-    y1[0] = 0.0;
-    y2[0] = 0.0;
-    y3[0] = 0.0;
-    q1[0] = 0.0;
-    q2[0] = 0.0;
-    q3[0] = 0.0;
-    q4[0] = fmpi;
+    ipi[1] = 8 - 2*(kindstruct->kindf7);
+    y1[1] = 0.0;
+    y2[1] = 0.0;
+    y3[1] = 0.0;
+    q1[1] = 0.0;
+    q2[1] = 0.0;
+    q3[1] = 0.0;
+    q4[1] = fmpi;
   }
 
   // deutons
@@ -2026,7 +2550,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   sp1t1 = 0.0;
   sp2t1 = 0.0;
   sp3t1 = 0.0;
-  for(G4int i = 0; i < (bl3->ia1-1); i++) {
+  for(G4int i = 1; i <= (bl3->ia1-1); i++) {
+  //  for(G4int i = 1; i < (bl3->ia1-1); i++) {
     bl9->hel[i] = 0;
     bl5->nesc[i] = 0;
     bl1->ind2[i] = 1;
@@ -2036,7 +2561,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl1->ind1[i] = 0;
     // deutons
     jparticip[i] = 1;
-    std::cout <<"Particle " << i << " is now participant." << std::endl;
+
     // deutons 
     gaussianRandom(&xga);
     bl3->x1[i] = xga*rms1*0.57735;
@@ -2054,6 +2579,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       qdeut = splineab(xq) * 197.3289;
       standardRandom(&u, &(hazard->igraine[10]));
       cstet = u*2 - 1;
+      assert((1.0 - pow(cstet,2)) >= 0);
       sitet = sqrt(1.0 - pow(cstet,2));
       standardRandom(&v, &(hazard->igraine[11]));
       phi = 2.0*3.141592654*v;
@@ -2073,6 +2599,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
 
     bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);
+    assert(isnan(bl1->eps[i]) == false);
+    assert(isnan(energyTest(i)) == false);
 
     sp1t1 = sp1t1 + bl1->p1[i];
     sp2t1 = sp2t1 + bl1->p2[i];
@@ -2090,16 +2618,17 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[bl3->ia1] = -sp2t1;
   bl1->p3[bl3->ia1] = -sp3t1;
   bl1->eps[bl3->ia1] = w(bl1->p1[bl3->ia1],bl1->p2[bl3->ia1],bl1->p3[bl3->ia1],fmp);
-
-  std::cout <<"Reached line 1746" << std::endl;
+  assert(isnan(bl1->eps[bl3->ia1]) == false);
+  assert(isnan(energyTest(bl3->ia1)) == false);
   
   // deutons
   jparticip[bl3->ia1] = 1;
-    std::cout <<"Particle " << bl3->ia1 << " is now participant." << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"Particle " << bl3->ia1-1 << " is now participant." << G4endl;
+  }
  pnu9: // continue
   // deutons
   // target preparation for 1 < a < 5 (with sum of momentum =0)
-  std::cout <<"Placing nucleons into the nucleus..." << std::endl;
   if(bl3->ia2 >= 2 && bl3->ia2 <= 4) {
   pnu1633:  
     s1t1 = 0.0;
@@ -2109,7 +2638,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     sp2t1 = 0.0;
     sp3t1 = 0.0;
     efer = 0.0;
-    for(G4int i = bl3->ia1+1; i < ia-1; i++) {
+    for(G4int i = bl3->ia1+1; i <= ia-1; i++) {
+    //    for(G4int i = bl3->ia1; i < ia-1; i++) {
+    //    for(G4int i = bl3->ia1; i < ia; i++) {
       bl1->ind2[i] = 1;
       bl5->nesc[i] = 0;
       if (i > (iz2+bl3->ia1)) {
@@ -2124,10 +2655,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       t[4] = -1.0 + 2.0*t[4];     // t(5)->t[4]                                  
       t[5] = 6.283185*t[5];   // t(6) -> t[5]                                      
       t1 = t[1];              // t(2)->t[1]                                           
+      assert((1.0 - t1*t1) >= 0);
       t2 = sqrt(1.0 - t1*t1);                                       
       t3 = cos(t[2]);  //t(3)->t[2]                                            
       t4 = sin(t[2]);   //t(3)->t[2]                                                                                      
       t5 = t[4];       // t(5)->t[4]                                                 
+      assert((1.0 - t5*t5) >= 0);
       t6 = sqrt(1.0 - t5*t5);                                         
       t7 = cos(t[5]);   //t(6) -> t[5]                                             
       t8 = sin(t[5]);   // t(6)->t[5]                                          
@@ -2158,6 +2691,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       sp3t1 = sp3t1+bl1->p3[i];
       bl1->ind1[i] = 0;                                                      
       bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);                            
+      assert(isnan(bl1->eps[i]) == false);
+      assert(isnan(energyTest(i)) == false);
       bl9->hel[i] = 0.0;
       efer = efer + bl1->eps[i] - fmp;                                        
     }
@@ -2169,23 +2704,21 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl3->x1[ia] = -s1t1;
     bl3->x2[ia] = -s2t1;
     bl3->x3[ia] = -s3t1;
+    assert(isnan(bl3->x3[ia]) == false);
     bl1->p1[ia] = -sp1t1;
     bl1->p2[ia] = -sp2t1;
     bl1->p3[ia] = -sp3t1;
+
+    assert((pow(bl1->p1[ia],2) + pow(bl1->p2[ia],2) + pow(bl1->p3[ia],2)) >= 0);
     p_mod = sqrt(pow(bl1->p1[ia],2) + pow(bl1->p2[ia],2) + pow(bl1->p3[ia],2));
     if(p_mod > ((bl10->pf)+0.05)) {
       goto pnu1633;
     }
-    bl1->eps[ia] = w(bl1->p1[ia],bl1->p2[ia],bl1->p3[ia],fmp);
-    efer = efer + bl1->eps[ia]-fmp;                                        
-    //    998	c for rho(r),rho(q) checking
-    //    999	c      do i=bl3->ia1+1,ia
-    //   1000	c      r_dist = sqrt(x1(i)*x1(i)+x2(i)*x2(i)+x3(i)*x3(i))
-    //   1001	c      call hfill(3,r_dist,0.,1.)
-    //   1002	c      p_mod = sqrt(p1(i)**2+p2(i)**2+p3(i)**2)
-    //   1003	c      call hfill(4,p_mod,0.,1.)
-    //   1004	c      enddo
 
+    bl1->eps[ia] = w(bl1->p1[ia],bl1->p2[ia],bl1->p3[ia],fmp);
+    assert(isnan(energyTest(ia)) == false);
+    
+    efer = efer + bl1->eps[ia]-fmp;                                        
 
   } //end if       !(bl3->ia2 >= 2 && bl3->ia2 <= 4)
 
@@ -2194,7 +2727,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     x1_target = 0.0;
     x2_target = 0.0;
     x3_target = 0.0;
-    for(G4int i = bl3->ia1; i < ia; i++) { //do 1 i=bl3->ia1+1,ia
+    for(G4int i = bl3->ia1+1; i <= ia; i++) { //do 1 i=bl3->ia1+1,ia
       bl5->nesc[i] = 0;
       bl1->ind2[i] = 1;
       if (i > (iz2+bl3->ia1)) {
@@ -2204,19 +2737,23 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       for(G4int j = 0; j < 7; j++) {
 	standardRandom(&t[j], &(hazard->ial));
       }
+
       //    pnu6: // continue
       t[1] = -1.0 + 2.0*t[1]; //t(2)->t[1]
       t[2] = 6.283185*t[2];
       t[4] = -1.0 + 2.0*t[4]; // t(5)->t[4]
       t[5] = 6.283185*t[5]; //t(6)->t[5]
       t1 = t[1]; // t(2)->t[1]
+      assert((1.0 - t1*t1) >= 0);
       t2 = sqrt(1.0 - t1*t1);
       t3 = cos(t[2]);  //t(3)->t[2]
       t4 = sin(t[2]); //t(3)->t[2]
       t5 = t[4]; //t(5)->t[4]
-      t6 = sqrt(1.-t5*t5);
+      assert((1.0 - t5*t5) >= 0);
+      t6 = sqrt(1.0 - t5*t5);
       t7 = cos(t[5]);  //t(6)->t[5]
       t8 = sin(t[5]);   // t(6)->t[5]
+
       if (ws->nosurf == 1) {
 	x = bl3->r2*pow(t[0],0.33333333); // t(1)->t[0]
 	y = bl10->pf*pow(t[3],0.33333333); // t(4)->t3
@@ -2224,10 +2761,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       else {
 	// surface..w.s.: impulsion (sphere dure), puis r(q)
 	t33 = pow(t[6],0.33333333); // t(7)->t[6]
-	std::cout <<"t33 = " << t33 << std::endl;
 	y=bl10->pf*t33;
 	rr=interpolateFunction(t33);
-	std::cout <<"rr = " << rr << std::endl;
 	x=rr*pow(t[3],0.33333333); // t(4)->t[3]       
 	// fin surface on a redefini x et y
       }
@@ -2242,14 +2777,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       x3_target = x3_target + bl3->x3[i];
       bl1->ind1[i] = 0;
       bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);
+      assert(isnan(energyTest(i)) == false);
+
       bl9->hel[i] = 0.0;
       efer = efer + bl1->eps[i] - fmp;
     }
-
     x1_target = x1_target/bl3->ia2;
     x2_target = x2_target/bl3->ia2;
     x3_target = x3_target/bl3->ia2;
-
   }
 
   efrun = efrun + efer;
@@ -2262,30 +2797,34 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     z=0.0;
   }
 
+  assert(z >= 0);
   z = sqrt(z);
   // random azimuthal direction of the impact parameter (sept 99)
 
   if (kindstruct->kindf7 <= 2) {
-    standardRandom(&tbid, &(hazard->igraine[13]));
+    G4long testseed = hazard->igraine[13];
+    //    standardRandom(&tbid, &(hazard->igraine[13]));
+    standardRandom(&tbid, &testseed);
+    hazard->igraine[13] = testseed;
     tbid = tbid*6.283185;
-    bl3->x1[0] = bl3->x1[0] + b*cos(tbid);  //x1(1)->x1[0]                                        
-    bl3->x2[0] = bl3->x2[0] + b*sin(tbid); //x2(1)->x2[0]
-    bl3->x3[0] = bl3->x3[0] - z;
+    bl3->x1[1] = bl3->x1[1] + b*cos(tbid);  //x1(1)->x1[1]                                        
+    bl3->x2[1] = bl3->x2[1] + b*sin(tbid); //x2(1)->x2[1]
+    bl3->x3[1] = bl3->x3[1] - z;
     // pour le ntuple des avatars:
     if(varavat->kveux == 1) {
-      varavat->r1_in[0] = bl3->x1[0]; //r1_in(1)->r1_in[0] and x1(1)->x1[0]
-      varavat->r1_in[1] = bl3->x2[0]; //r1_in(2)->r1_in[1] and x1(2)->x1[1]
-      varavat->r1_in[2] = bl3->x3[0]; //r1_in(3)->r1_in[2] and x1(3)->x1[2]
+      varavat->r1_in[0] = bl3->x1[1]; //r1_in(1)->r1_in[0] and x1(1)->x1[0]
+      varavat->r1_in[1] = bl3->x2[1]; //r1_in(2)->r1_in[1] and x1(2)->x1[1]
+      varavat->r1_in[2] = bl3->x3[1]; //r1_in(3)->r1_in[2] and x1(3)->x1[2]
     } //endif
   }
   else {
-    if (kindstruct->kindf7 > 6) { //then ! pour les pions on laisse
+    if (kindstruct->kindf7 < 6) { //then ! pour les pions on laisse
       //call standardRandom(tbid,iy14)
       standardRandom(&tbid, &(hazard->igraine[13]));
       tbid = tbid*6.283185;
-      y1[0] = y1[0] + b*cos(tbid); //y1(1)->y1[0]
-      y2[0] = y2[0] + b*sin(tbid); //y2(1)->y2[0]
-      y3[0] = y3[0] - z;
+      y1[1] = y1[1] + b*cos(tbid); //y1(1)->y1[0]
+      y2[1] = y2[1] + b*sin(tbid); //y2(1)->y2[0]
+      y3[1] = y3[1] - z;
     }
     else {
       // deutons
@@ -2293,10 +2832,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       nmiss = 0;
       xlengm=1000.0;
       
-      for(G4int i = 0; i < bl3->ia1; i++) {
+      for(G4int i = 1; i <= bl3->ia1; i++) {
+      //      for(G4int i = 1; i < bl3->ia1; i++) {
+	assert(isnan(ginc) == false);
+	assert(ginc != 0);
 	bl3->x3[i] = bl3->x3[i]/ginc;
+	assert(isnan(bl3->x3[i]) == false);
 	zai2 = ws->rmaxws*(ws->rmaxws) - pow((b+bl3->x1[i]),2) - pow(bl3->x2[i],2);
-	if (zai2 > 0.0) {
+	if (zai2 < 0.0) {
 	  goto pnu22;
 	}
 	ztu = -sqrt(zai2);
@@ -2304,42 +2847,51 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	za_i = 2.0*(ws->rmaxws) + ztu;
 	xleng = za_i - bl3->x3[i];
 	if (xleng > xlengm) {
-	  goto pnu21;
+	  //  goto pnu21;
+	  continue;
 	}
 	ilm = i;
 	xlengm = xleng;
+	assert(isnan(ztu) == false);
 	ztouch = ztu;
-	goto pnu21;
+	//	goto pnu21;
+	continue;
       pnu22:
 	nmiss = nmiss + 1; 
       }
-    pnu21:
+      //    pnu21:
       if (nmiss == bl3->ia1) { //then
 	nopart = -1;
 	//	return;
-	std::cout <<"nmiss == bl3->ia1" << std::endl;
+	if(verboseLevel > 3) {
+	  G4cout <<"nmiss == bl3->ia1" << G4endl;
+	  G4cout <<"End of algorithm after pnu21." << G4endl;
+	}
 	goto pnureturn;
       }
       else {
 	zshif = bl3->x3[ilm] - ztouch;
+	assert(isnan(bl3->x3[ilm]) == false);
+	assert(isnan(ztouch) == false);
 	standardRandom(&tbid, &(hazard->igraine[13]));
 	tbid = tbid*6.283185;
-	for(G4int i = 0; i < bl3->ia1; i++) {
+	for(G4int i = 1; i <= bl3->ia1; i++) {
+	//	for(G4int i = 1; i < bl3->ia1; i++) {
 	  xxx = bl3->x1[i] + b;
 	  bl3->x1[i] = xxx*cos(tbid) - bl3->x2[i]*sin(tbid);
 	  bl3->x2[i] = xxx*sin(tbid) + bl3->x2[i]*cos(tbid);
 	  bl3->x3[i] = bl3->x3[i] - zshif;
+	  assert(isnan(zshif) == false);
+	  assert(isnan(bl3->x3[i]) == false);
 	  //   1135	c           x1(i)=x1(i)+b
 	  //   1136	c           x3(i)=x3(i)-zshif
 	} //enddo
 	if (fabs(pow(bl3->x1[ilm],2)+pow(bl3->x2[ilm],2)+pow(bl3->x3[ilm],2)-ws->rmaxws*(ws->rmaxws)) > 0.01) {
-	  std::cout <<"wrong position" << std::endl;
+	  G4cout <<"wrong position" << G4endl;
 	}
       } //endif
     } //endif         
   } //endif  
-
-  std::cout <<"Reached line 1986..." << std::endl;
 
   // initial momentum for all type of incident particles:
   xl1 = b*pinc*sin(tbid);                                  
@@ -2353,19 +2905,22 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   ge = 1.0;
   b1 = (binc - be)/(1.0 - be*binc);
   b2 = -be;
+  assert((1.0 - b1*b1) > 0);
   g1 = 1.0/sqrt(1.0 - b1*b1);
   g2 = 1.0;
   // deutons
   // here for nucleons
   if (kindstruct->kindf7 <= 2) {
-    bl1->eps[0] = g1*fmp + v0; // eps(1)->eps[0]
-    bl1->p3[0] = sqrt(pow(bl1->eps[0],2) - pow(fmp,2)); //p3(1)->p3(0), eps(1)->eps(0)
+    bl1->eps[1] = g1*fmp + v0; // eps(1)->eps[0]
+    assert((pow(bl1->eps[1],2) - pow(fmp,2)) >= 0);
+    bl1->p3[1] = sqrt(pow(bl1->eps[1],2) - pow(fmp,2));
+    assert(isnan(energyTest(1)) == false);
   }
   else {
     // here for pions
-    if (kindstruct->kindf7 > 6) { //then
-      q4[0] = g1*fmpi; // q4(1)->q4[0]
-      q3[0] = b1*q4[0];
+    if (kindstruct->kindf7 < 6) { //then
+      q4[1] = g1*fmpi; // q4(1)->q4[0]
+      q3[1] = b1*q4[1];
     }
     else {
       // here for composite projectiles:
@@ -2373,16 +2928,17 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       // fermi momentum to 0... projectile nucleons not on shell!
       energie_in = tlab + fmpinc;
       if((energie_in) <= (bl3->ia1*fmp)) {
-	for(G4int i = 0; i < bl3->ia1; i++) {
+	for(G4int i = 1; i <= bl3->ia1; i++) {
 	  bl1->eps[i] = energie_in/bl3->ia1;
 	  bl1->p1[i] = 0.0;
 	  bl1->p2[i] = 0.0;
 	  bl1->p3[i] = pinc/bl3->ia1;
+	  assert(isnan(energyTest(i)) == false);
 	}
 	goto pnu1871;
       }
       // here the composit is above threshold
-      for(G4int i = 0; i < bl3->ia1; i++) { //do i=1,bl3->ia1	!save e,p in the composit rest frame
+      for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1	!save e,p in the composit rest frame
 	eps_c[i] = bl1->eps[i];
 	p3_c[i] = bl1->p3[i];
       } //enddo
@@ -2397,19 +2953,21 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
       iflag = iflag + 1;
 
-      for(G4int i = 0; i < bl3->ia1; i++) { //do i=1,bl3->ia1
+      for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1
 	tte = eps_c[i];
 	bl1->eps[i] = g1*(eps_c[i] + b1*p3_c[i]);
 	bl1->p3[i] = g1*(b1*tte + p3_c[i]);
+	assert(isnan(energyTest(i)) == false);
 	sueps = sueps + bl1->eps[i];
       } //enddo
 
+      assert(sueps != 0);
       cobe = (tlab + fmpinc)/sueps;
 
       // off shell problem for incident clusters (a.b. 2/2002)
 
       if(iflag == nbtest) { // too much..all momentum to 0
-	for(G4int klm = 0; klm < bl3->ia1; klm++) { //do klm=1,bl3->ia1
+	for(G4int klm = 1; klm <= bl3->ia1; klm++) { //do klm=1,bl3->ia1
 	  eps_c[klm] = fmp;
 	  bl1->p1[klm] = 0.0;
 	  bl1->p2[klm] = 0.0;
@@ -2417,12 +2975,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	}
 	goto pnu1870;
       }
-      for(G4int i = 0; i < bl3->ia1; i++) { //do i=1,bl3->ia1
+      for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1
+	assert(isnan(energyTest(i)) == false);
 	arg = pow((cobe*(bl1->eps[i])),2)-pm2;
 	if (arg <= 0.) { //then	! put maximum momentum to 0. 
 	  i_emax = 1; //	!find maximum
 	  ener_max = bl1->eps[0]; //eps(1)->eps[0]
-	  for(G4int i = 1; i < bl3->ia1; i++) { //do klm=2,bl3->ia1	
+	  for(G4int klm = 1; klm <= bl3->ia1; klm++) { //do klm=2,bl3->ia1	
 	    if(bl1->eps[klm] > ener_max) {
 	      ener_max = bl1->eps[klm];
 	      i_emax = klm;
@@ -2438,11 +2997,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	    p1v = bl1->p1[bl3->ia1];
 	    p2v = bl1->p2[bl3->ia1];
 	    p3v = p3_c[bl3->ia1];
-	    for(G4int k = bl3->ia1-1; k >= 0; k--) { //do k=bl3->ia1-1,1,-1
-	      eps_c[k+1] = eps_c[k];
-	      bl1->p1[k+1] = bl1->p1[k];
-	      bl1->p2[k+1] = bl1->p2[k];
-	      p3_c[k+1] = p3_c[k];
+	    for(bl2->k = bl3->ia1-1; bl2->k >= 1; bl2->k = bl2->k - 1) { //do k=bl3->ia1-1,1,-1
+	      eps_c[bl2->k+1] = eps_c[bl2->k];
+	      bl1->p1[bl2->k+1] = bl1->p1[bl2->k];
+	      bl1->p2[bl2->k+1] = bl1->p2[bl2->k];
+	      p3_c[bl2->k+1] = p3_c[bl2->k];
 	    }
 	    eps_c[0] = epsv;  //eps_c(1)->eps_c[0]
 	    bl1->p1[0] = p1v;  //p1(1)->p1[0]
@@ -2452,7 +3011,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  sp1t1 = 0.0;   // re-compute the last one 
 	  sp2t1 = 0.0;
 	  sp3t1 = 0.0;
-	  for(G4int j = 0; j < bl3->ia1-1; j++) { //do j=1,bl3->ia1-1
+	  for(G4int j = 1; j <= bl3->ia1-1; j++) { //do j=1,bl3->ia1-1
 	    sp1t1 = sp1t1 + bl1->p1[j];
 	    sp2t1 = sp2t1 + bl1->p2[j];
 	    sp3t1 = sp3t1 + p3_c[j];
@@ -2466,47 +3025,54 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	}
       }
 
-      for(G4int i = 0; i < bl3->ia1; i++) { //do i=1,bl3->ia1
+      for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1
+      //      for(G4int i = 1; i < bl3->ia1; i++) { //do i=1,bl3->ia1
+	assert(isnan(energyTest(i)) == false);
 	arg = pow((cobe*(bl1->eps[i])),2) - pm2;
 	comom = sqrt(arg/(pow(bl1->eps[i],2) - pm2));
+	assert(isnan(comom) == false);
 	bl1->p1[i] = comom*(bl1->p1[i]);
 	bl1->p2[i] = comom*(bl1->p2[i]);
 	bl1->p3[i] = comom*(bl1->p3[i]);
 	bl1->eps[i] = bl1->eps[i]*cobe;
+	assert(isnan(energyTest(i)) == false);
 	if (fabs(am(bl1->p1[i],bl1->p2[i],bl1->p3[i],bl1->eps[i])-fmp) > 0.01) {
-	  std::cout <<"wrong correction " << i << std::endl;                  
+	  G4cout <<"wrong correction " << i << G4endl;                  
 	}
       }
       bl1->eps[ilm] = bl1->eps[ilm] + v0;  
-
+      assert(isnan(energyTest(ilm)) == false);
     }
   }
 
  pnu1871:
   // evaluation of the times t(a,b)
-  k = 0;
+  bl2->k = 0; // bugfix k belongs to struct bl2!
   kcol = 0;
-  std::cout <<"Evaluating times..." << std::endl;
   if (kindstruct->kindf7 <= 2) {
     // modif s.vuillier tient compte propagation projectile,1e collision
     // imposee pour lui (c'est une maniere de faire!!)
-    for(G4int i = 0; i < ia; i++) { //do 40 i=1,ia
+    //    for(G4int i = 0; i < ia; i++) { //do 40 i=1,ia
+    G4int ioldk = 0;
+    for(G4int i = 1; i <= ia; i++) { //do 40 i=1,ia
+      ioldk = bl2->k;
+      //   bl2->k = bl2->k + 1;
       //		tref=ref(x1(i),x2(i),x3(i),p1(i),p2(i),p3(i),eps(i),r22)          p-n04740
+      assert(isnan(energyTest(i)) == false);
       tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
+      assert(isnan(tref) == false);
       if (tref > bl4->tmax5) {
-	std::cout <<"tref > bl4->tmax5" << std::endl;
-	std::cout <<"tref = " << tref << " \t \t bl4->tmax5 = " << bl4->tmax5 << std::endl;
 	goto pnu45;
       }
-      k=k+1;
-      bl2->crois[k]=tref;
-      bl2->ind[k]=i;
-      bl2->jnd[k]=-1;
+
+      bl2->k = bl2->k + 1;
+      assert((bl2->k >= 0) && (bl2->k < BL2INDSIZE));
+      bl2->crois[bl2->k]=tref;
+      bl2->ind[bl2->k]=i;
+      bl2->jnd[bl2->k]=-1;
     pnu45:
       i1=i-1;
-      //	  if (i == 1) 
-      if (i == 0) {
-	std::cout <<"i == 0 near pnu45" << std::endl;
+      if (i == 1) {
 	//goto pnu40;
 	continue;
       }
@@ -2515,103 +3081,143 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	i1=bl3->ia1;
       }
       //   1328	c**********************************************************************               
-      for(G4int j = 0; j < i1; j++) { //do 41 j=1,i1
-	//   1330	c    no collisions before the first collision of the incident particle
-	//   1331	c      do 41 j=1,1
-	//call time (i,j)
+      //      G4cout <<"entering loop: i1 = " << i1 << G4endl;
+      for(G4int j = 1; j <= i1; j++) { //do 41 j=1,i1
+	// no collisions before the first collision of the incident particle
+	//	G4cout <<"calculating time for collicions between particles i = " << i << " j = " << j << G4endl;
 	time (i, j);
-	if (bl1->ta < 0.) {
+	if (bl1->ta < 0.0) {
 	  continue;
 	}
 	if(bl1->ta > bl4->tmax5) {
 	  continue;
 	}
 	eij=am(bl1->p1[i]+bl1->p1[j],bl1->p2[i]+bl1->p2[j],bl1->p3[i]+bl1->p3[j],bl1->eps[i]+bl1->eps[j]);
-	if (eij < 1925.) {
+	assert(isnan(eij) == false);
+	if (eij < 1925.0) {
 	  continue;
 	}
 	isos=bl1->ind2[i]+bl1->ind2[j];
-	if (31.*(bl3->rab2) > totalCrossSection(eij,0,isos)) {
+
+	assert(isnan(eij) == false);
+	assert(isnan(isos) == false);
+	if (31.0*(bl3->rab2) > totalCrossSection(eij,0,isos)) {
 	  continue;
 	}
-	k=k+1;
-	//if (j == 1) 
-	if (j == 0) {
-	  kcol=kcol+1;
+
+	bl2->k = bl2->k + 1;
+	assert((bl2->k >= 0) && (bl2->k < BL2INDSIZE));
+	if (j == 1) {
+	  kcol = kcol + 1;
 	}
-	bl2->crois[k]=bl1->ta;
-	bl2->ind[k]=i;
-	bl2->jnd[k]=j;
+	bl2->crois[bl2->k]=bl1->ta;
+	bl2->ind[bl2->k]=i;
+	bl2->jnd[bl2->k]=j;
       }
-      continue;
+      if(verboseLevel > 3) {
+	if(bl2->k == (ioldk + 2)) {
+	  G4cout <<"bl2->k incremented twice!" << G4endl;
+	}
+      }
     }
   }
   else {
     // deutons
     if (kindstruct->kindf7 < 6) { //then
       // here for incoming pions:
-      std::cout <<"Incoming pions..." << std::endl;
-      for(G4int i = bl3->ia1+1; i < ia; i++) { //do i=ia1+1,ia
+      for(G4int i = bl3->ia1+1; i <= ia; i++) { //do i=ia1+1,ia
+	assert(isnan(energyTest(i)) == false);
 	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
+	assert(isnan(tref) == false);
+	assert(isnan(tref) == false);
 	if (tref < bl4->tmax5) {
-	  k=k+1;
-	  bl2->crois[k]=tref;
-	  bl2->ind[k]=i;
-	  bl2->jnd[k]=-1;
+	  bl2->k = bl2->k + 1;
+	  assert((bl2->k >= 0) && (bl2->k < BL2INDSIZE));
+	  bl2->crois[bl2->k] = tref;
+	  bl2->ind[bl2->k] = i;
+	  bl2->jnd[bl2->k] = -1;
 	}
       }
-      new2(y1[0], y2[0], y3[0], q1[0], q2[0], q3[0], q4[0], 1, 0);
+      new2(y1[1], y2[1], y3[1], q1[1], q2[1], q3[1], q4[1], 1, 0);
 
       //   modif a.b. 21/06/2002: should check at least one valid collision
       //   1361	c    with incoming pion.
       //   1362	c      kcol=1
-      if(k != 0) {
+      if(bl2->k != 0) {
 	kcol = 1;
       }
     }
     else {
-      for(G4int i = 0; i < bl3->ia1; i++) { //do 38 i=1,ia1
+      for(G4int i = 1; i <= bl3->ia1; i++) { //do 38 i=1,ia1
 	bl5->nesc[i] = 1;
 	if (i != ilm) { 
 	  goto pnu36;
 	}
 	//   1371	      tref=ref(x1(i),x2(i),x3(i),p1(i),p2(i),p3(i),eps(i),r22)
-	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
+	assert(isnan(energyTest(i)) == false);
+	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); // line 2579 
+	assert(isnan(tref) == false);
+	if(verboseLevel > 3) {
+	  if(tref < 0.0) {
+	    G4cout <<"G4Incl: Reflection time < 0! (line 2579)" << G4endl;
+	  }
+	}
+
 	bl5->nesc[i] = 0;
 	npproj[i] = 0;
 	goto pnu37;
       pnu36:
 	t1 = bl3->x1[i]*(bl1->p1[i])+bl3->x2[i]*(bl1->p2[i])+bl3->x3[i]*(bl1->p3[i]);                      
 	t2 = bl1->p1[i]*(bl1->p1[i])+bl1->p2[i]*(bl1->p2[i])+bl1->p3[i]*(bl1->p3[i]);               
+	assert(t2 != 0);
 	t3 = t1/t2;
 	t4 = bl3->x1[i]*(bl3->x1[i])+bl3->x2[i]*(bl3->x2[i])+bl3->x3[i]*(bl3->x3[i]); 
 	//   1379	c incoming nucleons enter potential at maximum radius (modif. 13/06/01)
 	t5 = t3*t3 + ((ws->rmaxws)*(ws->rmaxws) - t4)/t2;
+	if(verboseLevel > 3) {
+	  G4cout <<"x1 = " << bl3->x1[i] <<" x2 = " << bl3->x2[i] <<" x3 = " << bl3->x3[i] << G4endl; 
+	  G4cout <<"t1 = " << t1 << G4endl;
+	  G4cout <<"t2 = " << t2 << G4endl;
+	  G4cout <<"t3 = " << t3 << G4endl;
+	  G4cout <<"t4 = " << t4 << G4endl;
+	  G4cout <<"rmaxws = " << ws->rmaxws << G4endl;
+	  G4cout <<"t5 = " << t5 << G4endl;
+	}
 	if (t5 < 0.) {
 	  continue;
 	}
 	tref = (-1*t3 - sqrt(t5))*(bl1->eps[i]);  
+	assert(isnan(tref) == false);
 	if (tref > bl4->tmax5) {
 	  continue;
 	}
 	npproj[i] = 1;
       pnu37:
-	k = k + 1; 
-	bl2->crois[k] = tref; 
-	bl2->ind[k] = i; 
-	bl2->jnd[k] = -1;
+	bl2->k = bl2->k + 1; 
+	assert((bl2->k >= 0) && (bl2->k < BL2INDSIZE));
+	bl2->crois[bl2->k] = tref; 
+	bl2->ind[bl2->k] = i; 
+	bl2->jnd[bl2->k] = -1;
       }
       kcol = 1;
       
-      for(G4int i = bl3->ia1+1; i < ia; i++) { //do  39 i=ia1+1,ia
+      //      for(G4int i = bl3->ia1+1; i < ia; i++) { //do  39 i=ia1+1,ia
+      for(G4int i = bl3->ia1+1; i <= ia; i++) { //do  39 i=ia1+1,ia
 	npproj[i] = 0;
-	//   1394	      tref=ref(x1(i),x2(i),x3(i),p1(i),p2(i),p3(i),eps(i),r22)
-	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
+	assert(isnan(energyTest(i)) == false);
+	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); // line 2609 
+	assert(isnan(tref) == false);
+	if(verboseLevel > 3) {
+	  if(tref < 0.0) {
+	    G4cout <<"G4Incl: Reflection time < 0! (line 2609)" << G4endl;
+	  }
+	}
+
 	if (tref < bl4->tmax5) { //then
-	  k=k+1;
-	  bl2->crois[k]=tref;
-	  bl2->ind[k]=i;
-	  bl2->jnd[k]=-1;
+	  bl2->k = bl2->k + 1;
+	  bl2->crois[bl2->k]=tref;
+	  bl2->ind[bl2->k]=i;
+	  bl2->jnd[bl2->k]=-1;
 	} //endif
 
 	time (i, ilm);
@@ -2622,23 +3228,56 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  continue;
 	}
 	eij=am(bl1->p1[i]+bl1->p1[ilm],bl1->p2[i]+bl1->p2[ilm],bl1->p3[i]+bl1->p3[ilm],bl1->eps[i]+bl1->eps[ilm]);
-	if (eij < 1925.) {
+	assert(isnan(eij) == false);
+	if (eij < 1925.0) {
 	  continue;
 	}
 	isos=bl1->ind2[i]+bl1->ind2[ilm];                                             
+	assert(isnan(eij) == false);
+	assert(isnan(isos) == false);
 	if (31.*(bl3->rab2) > totalCrossSection(eij,0,isos)) {
 	  continue;
 	}								
-	k=k+1;                                                             
+	bl2->k = bl2->k + 1;                                                             
 	kcol=kcol+1; 
-	bl2->crois[k]=bl1->ta;                                                      
-	bl2->ind[k]=i; 
-	bl2->jnd[k]=ilm;
+	bl2->crois[bl2->k]=bl1->ta;                                                      
+	bl2->ind[bl2->k]=i; 
+	bl2->jnd[bl2->k]=ilm;
       }
     }
   }
+
+  //  dumpBl3(dumpOut);
+
+  if(verboseLevel > 3) {
+    G4cout <<"Variables after time evaluation:" << G4endl;
+
+    G4cout <<"bl3->ia1 + bl3->ia2 = ia " << G4endl;
+    G4cout << bl3->ia1 << "         " << bl3->ia2 << "          " << ia << G4endl; 
+    G4cout <<"B11" << G4endl;
+
+    for(G4int idebugtest = 0; idebugtest <= bl2->k; idebugtest++) {
+      G4cout <<"index = " << idebugtest << " ind1 = " << bl1->ind1[idebugtest] << " ind2 = " << bl1->ind2[idebugtest] << " p1 = " << bl1->p1[idebugtest] << " p2 = " << bl1->p2[idebugtest] << " p3 = " << bl1->p3[idebugtest] << " bl1->eps = " << bl1->eps[idebugtest] << G4endl;
+    }
+    
+    G4cout <<"Bl2" << G4endl;
+    for(G4int idebugtest = 0; idebugtest <= bl2->k; idebugtest++) {
+      G4cout <<"index = " << idebugtest << " ind = " << bl2->ind[idebugtest] << " jnd = " << bl2->jnd[idebugtest] << " crois = " << bl2->crois[idebugtest] << G4endl;
+    }
+
+    G4cout <<"jparticip[i]" << G4endl;
+    for(G4int idebugtest = 0; idebugtest < 300; idebugtest++) {
+      G4cout <<" " << jparticip[idebugtest];
+    }
+    G4cout << G4endl;
+  }
+  
+
   // deutons
   if (kcol != 0) {
+    if(verboseLevel > 3) {
+      G4cout <<"After time evaluation: kcol != 0!" << G4endl;
+    }
     goto pnu48;
   }
   nopart = -1;
@@ -2649,11 +3288,19 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   erecrem = 0.0;
   // fin ajout cv
   //   1425	      return
-  std::cout <<"kcol == 0" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"kcol == 0. No collisions..." << G4endl;
+    G4cout <<"End of algorithm because kcol == 0." << G4endl;
+    G4cout <<"kcol = " << kcol << G4endl;
+    G4cout <<"Return after pnu39." << G4endl;
+  }
   goto pnureturn;
 
   // initialization  at the beginning of the run
  pnu48:
+  if(verboseLevel > 3) {
+    G4cout <<"Beginning a run..." << G4endl;
+  }
   timi = 0.0;
   tim = 0.0;
   ncol = 0;
@@ -2661,7 +3308,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // compteur des collisions a deux corps (call collis acceptes par pauli)
   ncol_2c = 0;
 
-  // npion=0
+  //C  npion=0;
   mrnn = 0;
   mrnd = 0;
   mrdd = 0;
@@ -2674,7 +3321,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // approx. (not considering escaping protons of incident clusters) 11/03 a.b.
   itch = iz1 + iz2 - 1;
-  for(G4int i = 0; i < ia; i++)  { //do 47 i=1,ia
+  for(G4int i = 1; i <= ia; i++)  { //do 47 i=1,ia
     bl5->tlg[i] = 0.0;
     nc[i] = 0;
   }
@@ -2682,7 +3329,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // tableau des energies a l'initialisation
   if(varavat->kveux == 1) {
-    for(G4int i = bl3->ia1+1; i < ia; i++) {
+    for(G4int i = bl3->ia1+1; i <= ia; i++) {
       varavat->epsd[i] = bl1->eps[i];
     }
     iflag20 = 0;
@@ -2695,22 +3342,41 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //             =1 comme avant (reflexions autorisees). (a.b. 3/2002)
   irst_avatar = 1;
 
+  if(verboseLevel > 3) {
+    G4cout <<"Now arriving to label pnu449." << G4endl;
+  }
  pnu449:
-  std::cout <<"pnu 449..." << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"Now at 449" << G4endl;
+    G4cout <<"G4Incl: Now at label pnu449." << G4endl;
+  }
   next = 1;
   indic[next] = 1;
+  // indic[next-1] = 1;
+
  pnu44:
+  if(verboseLevel > 3) {
+    G4cout <<"Now at 44" << G4endl;
+    G4cout <<"Starting a new loop at pnu44..." << G4endl;
+  }
   if(next == 0) {
+    if(verboseLevel > 3) {
+      G4cout <<"next == 0. Returning to label pnu449." << G4endl;
+      G4cout <<"next == 0" << G4endl;
+    }
     goto pnu449;
   }
   
   idep = indic[next] + 1;
   tau = bl2->crois[idep-1];
-  if(idep > k) {
-    std::cout <<"going to pnu448" << std::endl;
+
+  if(idep > bl2->k) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: idep > bl2->k. Going to pnu448." << G4endl;
+    }
     goto pnu448;
   }
-  for(G4int i = idep; i < k; i++) { //do 42 i=idep,k
+  for(G4int i = idep; i <= bl2->k; i++) { //do 42 i=idep,k
     if (bl2->crois[i] > tau) {
       continue;
     }
@@ -2718,38 +3384,54 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     next = next + 1;
     indic[next] = i;
   }
+
+  assert(isnan(tau) == false);
+  if(verboseLevel > 3) {
+    G4cout <<"next = " << next << G4endl;
+  }
+  
+  if(isnan(tau)) {
+    G4cout <<"G4Incl error: Smallest possitle time is NaN!" << G4endl;
+     nopart = -1;
+     G4cout <<"End of algorithm because tau is NaN!" << G4endl;
+     exit(0);
+     goto pnureturn; // reject this event and try again
+  }
+  
  pnu448:
   imin = indic[next];
   l1 = bl2->ind[imin];
   l2 = bl2->jnd[imin];
 
   // test le 20/3/2003: tue sinon le dernier avatar?
-  if (k == 0) {
-    std::cout <<"going to pnu230" << std::endl;
+  if (bl2->k == 0) {
+    G4cout <<"k == 0. Going to the end of the avatar." << G4endl;
     goto pnu230;
   }
-  k = k - 1;
+  bl2->k = bl2->k - 1; // bugfix k belongs to struct bl2!
   next = next - 1;
 
   // correction s.vuillier 25/1/96 decalage temps correct
-  if (imin > k) {
-    std::cout <<"going to pnu46..." << std::endl;
+  if (imin > bl2->k) {
     goto pnu46;
   }
 
-  for(G4int i = imin; i < k; i++) { //do 43 i=imin,k
+  for(G4int i = imin; i <= bl2->k; i++) { //do 43 i=imin,k
     bl2->crois[i] = bl2->crois[i+1];
     bl2->ind[i] = bl2->ind[i+1];
     bl2->jnd[i] = bl2->jnd[i+1];
   }
  pnu46:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu46." << G4endl;
+  }
   tim = timi + tau;
 
   // tableau des energies a t=20,40,60 fm/c
   if(varavat->kveux == 1) {
     if(iflag20 == 0 && tim >= 20.0) {
       iflag20 = 1;
-      for(G4int i = 0; i < ia; i++) {
+      for(G4int i = 1; i <= ia; i++) {
 	if(bl5->nesc[i] == 0) {
 	  if(jparticip[i] == 1) {
 	    varavat->eps2[i] = bl1->eps[i];
@@ -2766,7 +3448,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     
     if(iflag40 == 0 && tim >= 40.0) {
       iflag40 = 1;
-      for(G4int i = 0; i < ia; i++) {
+      for(G4int i = 1; i <= ia; i++) {
 	if(bl5->nesc[i] == 0) {
 	  if(jparticip[i] == 1) {
 	    varavat->eps4[i] = bl1->eps[i];
@@ -2783,7 +3465,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     
     if(iflag60 == 0 && tim >= 60.) {
       iflag60=1;
-      for(G4int i = 0; i < ia; i++) {
+      for(G4int i = 1; i <= ia; i++) {
 	if(bl5->nesc[i] == 0) {
 	  if(jparticip[i] == 1) {
 	    varavat->eps6[i] = bl1->eps[i];
@@ -2803,55 +3485,83 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // celui-ci ne peut etre qu'une collision nn (ou pin)
 
   if((irst_avatar == 0) && (l2 == -1)) {
+  //  if((irst_avatar == 0) && (l2 == -2)) {
+    if(verboseLevel > 3) {
+      G4cout <<"Interaction type: reflection (l2 = " << l2 << "). No first interaction with a participant yet." << G4endl;
+    }
     goto pnu44;
   }
 
   irst_avatar = irst_avatar+1;
 
   if (tim < temfin) {
-    std::cout <<"tim = " << tim << " temfin = " << temfin << std::endl;
-    std::cout <<"tim < temfin, going to pnu49" << std::endl;
-    goto pnu49;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: tim < temfin. Going to pnu49 (line 2886)" << G4endl;
+    }
+    goto pnu49; // line 2886
   }
 
   goto pnu255;
  pnu49:
-  if (k == 0) {
-    std::cout <<"k == 0. going to pnu255" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu49. " << G4endl;
+  }
+  
+  if (bl2->k == 0) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: bl2->k == 0. Going to pnu255." << G4endl;
+    }
     goto pnu255;
   }
   // l1 va a la surface du noyau:
   if (l2 == -1) {
-    std::cout <<"l2 == -1. going to pnu220" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: l2 == -1. Going to pnu220." << G4endl;
+    }
     goto pnu220;
   }
 
   if((k4-1) <= 0) {
-    std::cout <<"k4-1 <= 0. going to pnu255" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: (k4 - 1) <= 0. Going to pnu803." << G4endl;
+    }
     goto pnu803;
   }
   if((k4-1) > 0) {
-    std::cout <<"k4-1 > 0. going to pnu255" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: (k4 - 1) > 0. Going to pnu830." << G4endl;
+    }
     goto pnu830;
   }
 
   // l1 est un delta: 
- pnu830: 
+ pnu830:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu830." << G4endl;
+  }
+  
   if(l2 == 0) {
     goto pnu220;
   }
   // interaction pi(l1-ia)-nucleon(l2)
-  if(l1 > ia) {
+  if(l1 > ia) { // line 2916
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: l1 > ia (line 2916)" << G4endl;
+    }
     goto pnu801;
   }
  pnu803:
-  std::cout <<"pnu803:" << std::endl;
   // pas de collision entre 2 non participants:
   if(jparticip[l1] == 0 && jparticip[l2] == 0) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: both particles are spectators. No collision. " << G4endl;
+    }
     goto pnu44;
   }
 
   // parameters for the next colliding pair
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
   t[9] = bl1->eps[l1] + bl1->eps[l2]; //t(10)->t[9] 
   t0 = 1.0/t[9]; // t(10)->t[9]
   b1 = (bl1->p1[l1] + bl1->p1[l2])*t0;
@@ -2861,13 +3571,25 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   sq = sqrt(s);
 
   if(sq < 1925.5) {
+    if(verboseLevel > 3) {
+      G4cout <<"sq < 1925.5" << G4endl;
+      G4cout <<"Particles: l1 = " << l1 << " l2 = " << l2 << G4endl;
+      G4cout <<"eps[l1] = " << bl1->eps[l1] << " eps[l2] = " << bl1->eps[l2] << G4endl;
+      G4cout <<"p1[l1] = " << bl1->p1[l1] << " p1[l2] = " << bl1->p1[l2] << G4endl;
+      G4cout <<"p2[l1] = " << bl1->p2[l1] << " p2[l2] = " << bl1->p2[l2] << G4endl;
+      G4cout <<"p3[l1] = " << bl1->p3[l1] << " p3[l2] = " << bl1->p3[l2] << G4endl;
+      G4cout <<"sq = " << sq << G4endl;
+    }
     goto pnu44;
   }
 
+  assert(bl1->eps[l1] != 0);
   bl1->ta = tau/bl1->eps[l1];
   x1l1 = bl3->x1[l1] + bl1->p1[l1]*(bl1->ta);
   x2l1 = bl3->x2[l1] + bl1->p2[l1]*(bl1->ta);
   x3l1 = bl3->x3[l1] + bl1->p3[l1]*(bl1->ta);
+
+  assert(bl1->eps[l2] != 0);
   bl1->ta = tau/bl1->eps[l2];
   x1l2 = bl3->x1[l2] + bl1->p1[l2]*(bl1->ta);
   x2l2 = bl3->x2[l2] + bl1->p2[l2]*(bl1->ta);
@@ -2882,6 +3604,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   t[15] = b1*b1 + b2*b2 + b3*b3; //t(16)->t[15]
   bb2 = t[13] + t[14]*t[14]/(1.0 - t[15]); //t(N)->t[N-1]
 
+  if(verboseLevel > 3) {
+    G4cout <<"Minimum dist. of approach tested..." << G4endl;
+  }
+  
   // Replaced goto structure:
   // if (k3 == 1) go to 260
   // if (k4 == 0) go to 260
@@ -2893,8 +3619,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     if(mg-bl1->ind1[l1] == 0) {
       ldel=l1;
     }
+    assert(isnan(energyTest(ldel)) == false);
     bl6->xx10 = sqrt(pow(bl1->eps[ldel],2) - pow(bl1->p1[ldel],2) - pow(bl1->p2[ldel],2) - pow(bl1->p3[ldel],2));
     bl6->isa = bl1->ind2[ldel];
+    assert(isnan(sq) == false);
+    assert(isnan(mg) == false);
+    assert(isnan(isos) == false);
     bmax2 = totalCrossSection(sq,mg,isos)/31.415926;
     if (k5 == 0 && mg != 0) {
       bmax2 = bmax2 - lowEnergy(sq,mg,isos)/31.415926;
@@ -2902,22 +3632,37 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     // go to 261
   }
   else {
+    assert(isnan(sq) == false);
+    assert(isnan(mg) == false);
+    assert(isnan(isos) == false);
     bmax2 = totalCrossSection(sq,mg,isos)/31.41592;
   }
 
   if (bb2 < bmax2) {
     goto pnu220;
   }
-  if (k == 0) {
+  if (bl2->k == 0) {
     goto pnu230;
+  }
+
+  if(verboseLevel > 3) {
+    G4cout <<"bb2 >= bmax2 or bl2->k == 0" << G4endl;
   }
   goto pnu44;
   // loop while((bb2 >= bmax2) && (k != 0)) (PK)
   // evaluation of the positions at time = tim
  pnu220:
-  std::cout <<"Starting pnu220..." << std::endl;
-  
   timi = tim;
+   if(verboseLevel > 3) {
+     G4cout <<"Evaluating positions at time = tim" << G4endl;
+     G4cout <<"tim = " << tim << G4endl;
+   }
+
+//   dumpSaxw(dumpOut);
+//   dumpBl1(dumpOut);
+//   dumpBl2(dumpOut);
+//   dumpBl3(dumpOut);
+
   if(varavat->kveux == 1) { //then
     iavat = iavat + 1;
     varavat->timeavat[iavat] = tim;
@@ -2942,18 +3687,25 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // gel des nucleons non participants sur le premier avatar (nn)=(l1,1)      
   if (irst_avatar == 1) {
-    for(G4int i = 0; i < l1; i = i + l1-0) {
+    for(G4int i = 1; i <= l1; i = i + l1 - 1) { // bugfix!
+      assert(bl1->eps[i] != 0);
+      assert(isnan(energyTest(i)) == false);
       bl1->ta = tau/bl1->eps[i];                                                
       bl3->x1[i] = bl3->x1[i] + bl1->p1[i]*(bl1->ta);                                     
       bl3->x2[i] = bl3->x2[i] + bl1->p2[i]*(bl1->ta);                                    
       bl3->x3[i] = bl3->x3[i] + bl1->p3[i]*(bl1->ta);
+      if(verboseLevel > 3) {
+	G4cout <<"G4Incl: i = " << G4endl;
+      }
     }
-    for(G4int i = 0; i < k; i++) {
+    for(G4int i = 1; i <= bl2->k; i++) {
       bl2->crois[i] = bl2->crois[i] + tau;
     }
   }
   else {
-    for(G4int i = 0; i < ia; i++) {
+    for(G4int i = 1; i <= ia; i++) {
+      assert(isnan(energyTest(i)) == false);
+      assert(bl1->eps[i] != 0);
       bl1->ta = tau/bl1->eps[i];
       bl3->x1[i] = bl3->x1[i] + bl1->p1[i]*(bl1->ta);
       bl3->x2[i] = bl3->x2[i] + bl1->p2[i]*(bl1->ta);
@@ -2961,9 +3713,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
   }
 
-  if(npion != 0) {
-    for(G4int i = 0; i < npion; i++) {
-      bl1->ta=tau/q4[i];
+  //  if(npion != 0) {
+  if(npion > 0) {
+    for(G4int i = 1; i <= npion; i++) {
+      bl1->ta = tau/q4[i];
       y1[i] = y1[i] + q1[i]*(bl1->ta);
       y2[i] = y2[i] + q2[i]*(bl1->ta);
       y3[i] = y3[i] + q3[i]*(bl1->ta);
@@ -2971,27 +3724,39 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   if(l2 == 0) {
-    std::cout <<"l2 == 0, going to pnu805..." << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: l2 == 0. Going to pnu805." << G4endl;
+    }
     goto pnu805;
   }
   // Candidate: if(l2!=0)...
 
   // reflexions sur le potentiel, sortie eventuelle de la particule:
   if (l2 == -1) {
-    std::cout <<"l2 == -1, going to pnu600..." << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: l2 == -1. Going to pnu600." << G4endl;
+    }
     goto pnu600;
   }
 
   if(l1 > ia) {
-    std::cout <<"l1 > ia, going to pnu831..." << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: l1 > ia. Going to pnu831." << G4endl;
+    }
     goto pnu831;
   }
 
   // collision of particles l1 and l2
+  if(verboseLevel > 3) {
+    G4cout <<"Particles l1 and l2 collide!" << G4endl;
+  }
+  
   ich1 = bl1->ind1[l1];
   ich2 = bl1->ind1[l2];
   ich3 = bl1->ind2[l1];
   ich4 = bl1->ind2[l2];
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
   aml1 = sqrt(pow(bl1->eps[l1],2) - pow(bl1->p1[l1],2) - pow(bl1->p2[l1],2) - pow(bl1->p3[l1],2));
   aml2 = sqrt(pow(bl1->eps[l2],2) - pow(bl1->p1[l2],2) - pow(bl1->p2[l2],2) - pow(bl1->p3[l2],2));
   gl1 = bl1->eps[l1]/aml1;
@@ -3027,23 +3792,54 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     varavat->del1avat[iavat] = bl1->ind1[l1];
     varavat->del2avat[iavat] = bl1->ind1[l2];                                               
   }
-  G4double minus_b1 = -1.0*b1;
-  G4double minus_b2 = -1.0*b2;
-  G4double minus_b3 = -1.0*b3;
+
+  minus_b1 = -1.0*b1;
+  minus_b2 = -1.0*b2;
+  minus_b3 = -1.0*b3;
   loren(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[l1]));
   loren(&(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[l2]));
 
-  std::cout <<"Calling collis" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"Calling collis..." << G4endl;
+    G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
+    G4cout <<"Momentum: p1 = " << bl1->p1[l1] << " p2 = " << bl1->p2[l1] << " p3 = " << bl1->p3[l1] << G4endl;
+    G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
+    G4cout <<"Momentum: p1 = " << bl1->p1[l2] << " p2 = " << bl1->p2[l2] << " p3 = " << bl1->p3[l2] << G4endl;
+  }
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
+  bl9->l1 = l1;
+  bl9->l2 = l2;
   collis(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]),
 	 &(bl1->eps[l1]), &(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &(bl1->eps[l2]),
 	 &(t[11]), &(t[12]), &(t[13]), &(t[14]), &np, &ip, &k2, &k3, &k4, &k5,
 	 &(bl1->ind1[l1]), &(bl1->ind1[l2]), &(bl1->ind2[l1]), &(bl1->ind2[l2]));
-  std::cout <<"Collis call complete. " << std::endl;
+  l1 = bl9->l1;
+  l2 = bl9->l2;
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
+  if(verboseLevel > 3) {
+    G4cout <<"End of collis call" << G4endl;
+    G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
+    G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
+    if(isnan(bl1->eps[l1]) || isnan(bl1->eps[l2])) {
+      G4cout <<"Fatal error: NaN enocuntered!" << G4endl;
+      G4cout <<"bl1->eps[" << l1 << "] = " << bl1->eps[l1] << G4endl;
+      G4cout <<"bl1->eps[" << l2 << "] = " << bl1->eps[l2] << G4endl;
+      exit(0);
+    }
+  }
+  
+  if(verboseLevel > 3) {
+    G4cout <<"Variables after collis call: "<< G4endl;
+    G4cout <<"bl1->p1[" << l1 <<"] = " << bl1->p1[l1] <<" bl1->p2[" << l1 <<"] = " << bl1->p2[l1] <<" bl1->p3[" << l1 <<"] = " << bl1->p3[l1] <<" bl1->eps[" << l1 <<"] = " << bl1->eps[l1] << G4endl;
+    G4cout <<"bl1->p1[" << l2 <<"] = " << bl1->p1[l2] <<" bl2->p2[" << l2 <<"] = " << bl1->p2[l2] <<" bl2->p3[" << l2 <<"] = " << bl1->p3[l2] <<" bl1->eps[" << l2 <<"] = " << bl1->eps[l2] << G4endl;
+  }
   
   loren(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &b1, &b2, &b3, &(bl1->eps[l1]));
   loren(&(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &b1, &b2, &b3, &(bl1->eps[l2]));
 
-  if (bl1->ind1[l1] == 1) {
+  if (bl1->ind1[l1] == 1) { // bugfix 1 -> 0
     goto pnu243;
   }
   xbl1 = pauliBlocking(l1, rbl, pbl);
@@ -3052,7 +3848,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     goto pnu248;
   }
  pnu243:
-  if (bl1->ind1[l2] == 1) {
+  if (bl1->ind1[l2] == 1) { // bugfix 1 -> 0
     goto pnu241;
   }
   xbl2 = pauliBlocking(l2, rbl, pbl);
@@ -3062,14 +3858,20 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
   goto pnu241;
  pnu248:
+  if(verboseLevel > 3) {
+    G4cout <<"Pauli blocked transition!" << G4endl;
+  }
+  
   mpaul1 = mpaul1 + 1;
   if(varavat->kveux == 1) {
     varavat->bloc_paul[iavat] = 1;
   }
   // restitution de l1 et l2 si rejet de la col. par pauli:
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
   bl1->p1[l1] = t[20]; //t(21)->t[20]
   bl1->p2[l1] = t[21]; //t(22)->t[21]
-  bl1->p3[l1] = t[23]; //t(23)->t[22]
+  bl1->p3[l1] = t[22]; //t(23)->t[22]
   bl1->eps[l1] = t[23]; //t(24)->t[23]
   bl1->p1[l2] = t[24]; //t(25)->t[24]
   bl1->p2[l2] = t[25]; //t(26)->t[25]
@@ -3079,14 +3881,20 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->ind1[l2] = ich2;
   bl1->ind2[l1] = ich3;
   bl1->ind2[l2] = ich4;
-  if (k == 0) {
+  assert(isnan(energyTest(l1)) == false);
+  assert(isnan(energyTest(l2)) == false);
+
+  if (bl2->k == 0) {
     goto pnu230;
   }
-  for(G4int i = 0; i < k; i++) {
+  for(G4int i = 1; i <= bl2->k; i++) {
     bl2->crois[i] = bl2->crois[i] - tau;
   }
 
   // pour le temps de calcul (a.b. 02/2002)
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: bl2->k != 0" << G4endl;
+  }
   goto pnu44;
 
  pnu241:
@@ -3112,9 +3920,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
     // pour le ntuple des avatars:
     if(varavat->kveux == 1) { //then
-      varavat->r1_first_avat[0] = bl3->x1[0]; //(N)->[N-1]
-      varavat->r1_first_avat[1] = bl3->x2[0]; //(N)->[N-1]
-      varavat->r1_first_avat[2] = bl3->x3[0]; //(N)->[N-1]
+      varavat->r1_first_avat[0] = bl3->x1[1]; //(N)->[N-1]
+      varavat->r1_first_avat[1] = bl3->x2[1]; //(N)->[N-1]
+      varavat->r1_first_avat[2] = bl3->x3[1]; //(N)->[N-1]
     } //endif
   }
   else {
@@ -3123,9 +3931,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     // efer-(ia2-nbalttf)*tf).
     egs = 0.0;
     nbalttf = 0;
-    for(G4int i = 0; i < ia; i++) {
+    //    for(G4int i = 1; i <= ia-1; i++) {
+    for(G4int i = 1; i <= ia; i++) {
       if(bl5->nesc[i] == 0) {
-	if(sqrt(pow(bl1->p1[i],2)+pow(bl1->p2[i],2)+pow(bl1->p3[i],2)) < bl10->pf) { //then
+	if(sqrt(pow(bl1->p1[i],2)+pow(bl1->p2[i],2)+pow(bl1->p3[i],2)) < bl10->pf) {
 	  nbalttf = nbalttf + 1;
 	  egs = egs + bl1->eps[i] - fmp;
 	}
@@ -3146,10 +3955,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   jparticip[l1] = 1;
-  std::cout <<"Particle " << l1 << " is now participant." << std::endl;
   jparticip[l2] = 1;
-  std::cout <<"Particle " << l2 << " is now participant." << std::endl;
-
+  if(verboseLevel > 3) {
+    G4cout <<"Particle " << l1 << " is now participant." << G4endl;
+    G4cout <<"Particle " << l2 << " is now participant." << G4endl;
+  }
+  
   if (ws->nosurf <= 0) {
     // surface
     pppp = sqrt(pow(bl1->p1[l1],2) + pow(bl1->p2[l1],2) + pow(bl1->p3[l1],2));
@@ -3181,7 +3992,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   npion = npion + 1;
-  loren(&t[11], &t[12], &t[13], &b1, &b2, &b3, &t[14]); //t(N)->t[N-1]
+  loren(&(t[11]), &(t[12]), &(t[13]), &b1, &b2, &b3, &(t[14])); //t(N)->t[N-1]
   q1[npion] = t[11]; //t(12)->t[11]
   q2[npion] = t[12]; //t(13)->t[12]
   q3[npion] = t[13]; //t(14)->t[13]
@@ -3216,6 +4027,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[l1] = bl1->p2[l2];
   bl1->p3[l1] = bl1->p3[l2];
   bl1->eps[l1] = bl1->eps[l2];
+  assert(isnan(energyTest(l1)) == false);
+
   bl3->x1[l1] = bl3->x1[l2];
   bl3->x2[l1] = bl3->x2[l2];
   bl3->x3[l1] = bl3->x3[l2];
@@ -3227,6 +4040,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[l2] = xr2;
   bl1->p3[l2] = xr3;
   bl1->eps[l2] = xr4;
+  assert(isnan(energyTest(l2)) == false);
+  
   bl3->x1[l2] = xr5;
   bl3->x2[l2] = xr6;
   bl3->x3[l2] = xr7;
@@ -3238,11 +4053,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(ich1 + ich2 - bl1->ind1[l1] - bl1->ind1[l2] != 0 || (ich1 + ich2) != 1) {
     goto pnu870;
   }
-  if (k == 0) {
+  if (bl2->k == 0) {
     goto pnu870;
   }
 
-  for(G4int i = 0; i < k; i++) {
+  for(G4int i = 1; i <= bl2->k; i++) {
     if((bl2->ind[i] != 1) || (bl2->jnd[i] != 0)) {
       if((bl2->ind[i] != l1) || (bl2->jnd[i] != 0)) {
 	continue;
@@ -3254,6 +4069,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl2->ind[i] = l1;
     break;
   }
+
   pnu870:
   bl5->tlg[l1] = th*(bl1->eps[l1])/sqrt(pow(bl1->eps[l1],2)-pow(bl1->p1[l1],2)-pow(bl1->p2[l1],2)-pow(bl1->p3[l1],2));
   bl5->tlg[l2] = th*(bl1->eps[l2])/sqrt(pow(bl1->eps[l2],2)-pow(bl1->p1[l2],2)-pow(bl1->p2[l2],2)-pow(bl1->p3[l2],2));
@@ -3288,6 +4104,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (k6 == 1) {
     aml1 = am(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1]);
     aml2 = am(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],bl1->eps[l2]);
+    assert(isnan(aml1) == false);
+    assert(isnan(aml2) == false);
+    
     t[36] = (aml2*(bl1->p1[l1]) - aml1*(bl1->p1[l2]))/(aml1+aml2); //t(37)->t[36]
     t[37] = (aml2*(bl1->p2[l1]) - aml1*(bl1->p2[l2]))/(aml1+aml2); //t(38)->t[37]
     t[38] = (aml2*(bl1->p3[l1]) - aml1*(bl1->p3[l2]))/(aml1+aml2); //t(39)->t[38]
@@ -3302,7 +4121,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     t[43] = t[43]/t[45]; //t(N)->t[N-1]
     t[45] = t[45]/t[46];
     cif = (t[33]*t[36] + t[34]*t[37] + t[35]*t[38])/t[39]/t[40]; //t(N)->t[N-1]
-
+   
     // trouble with forward scattering 22/3/95
     if(fabs(cif) > 1.) {
       cif = sign(1.0,cif);
@@ -3329,75 +4148,136 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl1->p2[l1] = aml1*tt35/(aml1 + aml2) + t[37]; //t(38)->t[37]
     bl1->p3[l1] = aml1*tt36/(aml1 + aml2) + t[38]; //t(39)->t[38]
     bl1->eps[l1] = w(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],aml1);
+    assert(isnan(energyTest(l1)) == false);
     bl1->p1[l2] = aml2*tt34/(aml1 + aml2) - t[36]; //t(37)->t[36]
     bl1->p2[l2] = aml2*tt35/(aml1 + aml2) - t[37]; //t(38)->t[37]
     bl1->p3[l2] = aml2*tt36/(aml1 + aml2) - t[38]; //t(39)->t[38]
     bl1->eps[l2] = w(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],aml2);
+    assert(isnan(energyTest(l2)) == false);
   }
   // l-conservation
 
-  if(k != 0) {
+  if(bl2->k != 0) {
     kd = 0;
     ccr = tau;
-    for(G4int i = 0; i < k; i++) {
-      i20 = i - kd;
-      if (k4 != 2 || led != 1) {
-	if((bl2->ind[i] == l1) || (bl2->ind[i] == l2) || (bl2->jnd[i] == l1) || (bl2->jnd[i] == l2)) {
-	  kd = kd + 1;
-	  continue;
-	}
-      }
-      else {
-	if(bl2->jnd[i] == 0) {
-	  if (bl2->ind[i] == l1 && bl1->ind1[l1] == 1) {
-	    bl2->crois[i]=(bl2->crois[i]-ccr)*(bl1->eps[l1])/sqrt(pow(bl1->eps[l1],2)-pow(bl1->p1[l1],2)-pow(bl1->p2[l1],2)-pow(bl1->p3[l1],2))/gl1+ccr;
-	  }
-	  if (bl2->ind[i] == l2 && bl1->ind1[l2] == 1) {
-	    bl2->crois[i]=(bl2->crois[i]-ccr)*(bl1->eps[l2])/sqrt(pow(bl1->eps[l2],2)-pow(bl1->p1[l2],2)-pow(bl1->p2[l2],2)-pow(bl1->p3[l2],2))/gl2+ccr;
-	  }
-	}
-      }
+//     for(G4int i = 1; i <= bl2->k; i++) {
+//       i20 = i - kd;
+//       if (k4 != 2 || led != 1) {
+// 	if((bl2->ind[i] == l1) || (bl2->ind[i] == l2) || (bl2->jnd[i] == l1) || (bl2->jnd[i] == l2)) {
+// 	  kd = kd + 1;
+// 	  continue;
+// 	}
+//       }
+//       else {
+// 	if(bl2->jnd[i] == 0) {
+// 	  if (bl2->ind[i] == l1 && bl1->ind1[l1] == 1) {
+// 	    bl2->crois[i]=(bl2->crois[i]-ccr)*(bl1->eps[l1])/sqrt(pow(bl1->eps[l1],2)-pow(bl1->p1[l1],2)-pow(bl1->p2[l1],2)-pow(bl1->p3[l1],2))/gl1+ccr;
+// 	  }
+// 	  if (bl2->ind[i] == l2 && bl1->ind1[l2] == 1) {
+// 	    bl2->crois[i]=(bl2->crois[i]-ccr)*(bl1->eps[l2])/sqrt(pow(bl1->eps[l2],2)-pow(bl1->p1[l2],2)-pow(bl1->p2[l2],2)-pow(bl1->p3[l2],2))/gl2+ccr;
+// 	  }
+// 	}
+//       }
     
+//       bl2->crois[i20]=bl2->crois[i]-ccr;
+//       bl2->ind[i20]=bl2->ind[i];
+//       bl2->jnd[i20]=bl2->jnd[i];
+//     }
+
+    for(G4int i = 1; i <= bl2->k; i++) { //do 50 i=1,k                                                       p-n09070
+      i20 = i - kd;
+      if(k4 != 2 || led != 1) { //if (k4.ne.2.or.led.ne.1) go to 512                                p-n09090
+	goto pnu512;
+      }
+      if(bl2->jnd[i] == 0) {//if (jnd(i).eq.0) go to 511                                        p-n09100
+	goto pnu511;
+      }
+    pnu512:
+      if(bl2->ind[i] == l1) {//if (ind(i).eq.l1) go to 52                                        p-n09120
+	goto pnu52; 
+
+      }
+      if(bl2->ind[i] == l2) {//if (ind(i).eq.l2) go to 52                                        p-n09130
+	goto pnu52;
+	}
+      if(bl2->jnd[i] == l2) {//if (jnd(i).eq.l2) go to 52                                        p-n09140
+	goto pnu52;
+      }
+      if(bl2->jnd[i] == l1) {//if (jnd(i).eq.l1) go to 52                                        p-n09150
+	goto pnu52;
+      }
+      goto pnu513;
+    pnu511:
+      //if (ind(i).eq.l1.and.ind1(l1).eq.1) crois(i)=(crois(i)-ccr)*eps(l1p-n09170
+      //-)/sqrt(eps(l1)**2-p1(l1)**2-p2(l1)**2-p3(l1)**2)/gl1+ccr          p-n09180
+      if(bl2->ind[i] == l1 && bl1->ind1[l1] == 1) {
+	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[l1]/sqrt(pow(bl1->eps[l1],2)-pow(bl1->p1[l1],2)-pow(bl1->p2[l1],2)-pow(bl1->p3[l1],2))/gl1+ccr;
+      }
+      //if (ind(i).eq.l2.and.ind1(l2).eq.1) crois(i)=(crois(i)-ccr)*eps(l2p-n09190
+      //-)/sqrt(eps(l2)**2-p1(l2)**2-p2(l2)**2-p3(l2)**2)/gl2+ccr          p-n09200
+      if(bl2->ind[i] == l2 && bl1->ind1[l2] == 1) {
+	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[l2]/sqrt(pow(bl1->eps[l2],2)-pow(bl1->p1[l2],2)-pow(bl1->p2[l2],2)-pow(bl1->p3[l2],2))/gl1+ccr;
+      }
+ pnu513:
       bl2->crois[i20]=bl2->crois[i]-ccr;
       bl2->ind[i20]=bl2->ind[i];
       bl2->jnd[i20]=bl2->jnd[i];
-      continue;
+      continue; // goto pnu50
+    pnu52:
+      kd=kd+1;
     }
   
-    k = k - kd;
+    bl2->k = bl2->k - kd;
   }
 
   newt(l1,l2);
-  std::cout <<"Line 3318..." << std::endl;
-  tref=ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22);
 
-  if(tref <= bl4->tmax5) {
-    k=k+1;
-    bl2->crois[k]=tref;
-    bl2->ind[k]=l1;
-    bl2->jnd[k]=-1;
+  tref=ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22); // line 3502
+  assert(isnan(tref) == false);
+  
+  if(verboseLevel > 3) {
+    if(tref < 0.0) {
+      G4cout <<"G4Incl: Reflection time < 0! (line 3502)" << G4endl;
+    }
   }
 
-  tref=ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22);
+  if(tref <= bl4->tmax5) {
+    bl2->k = bl2->k + 1;
+    bl2->crois[bl2->k] = tref;
+    bl2->ind[bl2->k] = l1;
+    bl2->jnd[bl2->k] = -1;
+  }
+
+  tref=ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22); // line 3516
+  assert(isnan(tref) == false);
+  
+  if(verboseLevel > 3) {
+    if(tref < 0.0) {
+      G4cout <<"G4Incl: Reflection time < 0! (line 3516)" << G4endl;
+    }
+  }
 
   if(tref <= bl4->tmax5) {
-    k=k+1;
-    bl2->crois[k]=tref;
-    bl2->ind[k]=l2;
-    bl2->jnd[k]=-1;
+    bl2->k = bl2->k + 1;
+    bl2->crois[bl2->k] = tref;
+    bl2->ind[bl2->k] = l2;
+    bl2->jnd[bl2->k] = -1;
   }
 
   if (k4 == 2) {
     goto pnu848;
   }
 
-  if(k < 0) {
+  if(bl2->k < 0) {
     goto pnu230;
   }
-  if(k == 0) {
+  if(bl2->k == 0) {
     goto pnu230;
   }
-  if(k > 0) {
+  if(bl2->k > 0) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: bl2->k > 0 at line 3488. Going back to label pnu449." << G4endl;
+    }
     goto pnu449;
   }
 
@@ -3408,14 +4288,23 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (bl1->ind1[l1] == 1) {
     goto pnu843;
   }
-  for(G4int k20 = 0; k20 < npion; k20++) {
+  for(G4int k20 = 1; k20 <= npion; k20++) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: calling G4Incl::new3" << G4endl;
+    }
     new3((y1[k20]), (y2[k20]), (y3[k20]), (q1[k20]), (q2[k20]), (q3[k20]), (q4[k20]), k20, l1);
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: After new3:" << G4endl;
+      G4cout <<"y1[" << k20 << "] = " << y1[k20] <<" y2[" << k20 << "] = " << y2[k20] <<" y3[" << k20 << "] = " << y3[k20] << G4endl;
+      G4cout <<"q1[" << k20 << "] = " << q1[k20] <<" q2[" << k20 << "] = " << q2[k20] <<" q3[" << k20 << "] = " << q3[k20] << G4endl;
+    }
   }
 
  pnu843:
   if(bl1->ind1[l2] != 1) {
-    for(G4int k20 = 0; k20 < npion; k20++) {
-      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], -k20, l2);
+    for(G4int k20 = 1; k20 <= npion; k20++) {
+      //new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], -k20, l2);
+      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l2);
     }
   }
  pnu844:
@@ -3438,21 +4327,29 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   standardRandom(&rndm,&(hazard->igraine[16]));
   // largeur variable du delta (phase space factor G4introduced 4/2001)
   amlnew = sqrt(pow(bl1->eps[lnew],2)-pow(bl1->p1[lnew],2)-pow(bl1->p2[lnew],2)-pow(bl1->p3[lnew],2)); 
+  assert(isnan(amlnew) == false);
+  
   geff = bl1->eps[lnew]/amlnew;
   qqq = sqrt((pow(amlnew,2) - pow((fmp+fmpi),2))*(pow(amlnew,2) - pow((fmp-fmpi),2)))/(2.0*amlnew);
+  assert(isnan(qqq) == false);
+  
   psf = pow(qqq,3)/(pow(qqq,3) + 5832000.0);
   tdel = -hc/(g0*psf)*log(rndm)*geff;                                  
-
+  assert(isnan(tdel) == false);
+  
   if(tdel <= bl4->tmax5) {
-    k = k + 1;
-    bl2->crois[k] = tdel;
-    bl2->ind[k] = lnew;
-    bl2->jnd[k] = 0;
+    bl2->k = bl2->k + 1;
+    bl2->crois[bl2->k] = tdel;
+    bl2->ind[bl2->k] = lnew;
+    bl2->jnd[bl2->k] = 0;
   }
 
  pnu849:
-  if (k == 0) { 
+  if (bl2->k == 0) { 
     goto pnu230;
+  }
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: bl2->k != 0. Going back to label pnu449." << G4endl;
   }
   goto pnu449;
 
@@ -3464,33 +4361,64 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   t[31] = bl1->p2[l1]; //t(32)->t[31]
   t[32] = bl1->p3[l1]; //t(33)->t[32]
   t[33] = bl1->eps[l1]; //t(34)->t[33]
+  assert(isnan(energyTest(l1)) == false);
   var_ab = pow(bl1->eps[l1],2) - pow(bl1->p1[l1],2) - pow(bl1->p2[l1],2) - pow(bl1->p3[l1],2);
+//   G4cout <<"var_ab:" << G4endl;
+//   G4cout <<"E = " << bl1->eps[l1] << " p1 = " << bl1->p1[l1] << " p2 = " << bl1->p2[l1] << " p3 = " << bl1->p3[l1] << G4endl;
+  assert(isnan(var_ab) == false); 
+  assert(var_ab > 0);
   ym[npion] = 0.0;
 
   if(var_ab > 0.0) {
     ym[npion] = sqrt(var_ab);
   }
 
+//   G4cout <<"ym[npion] = " << ym[npion] << G4endl;
+//   G4cout <<"fmp = " << fmp << G4endl;
+//   G4cout <<"fmpi = " << fmpi << G4endl;
+//   G4cout <<"pcm(ym[npion], fmp, fmpi) = " << pcm(ym[npion], fmp, fmpi) << G4endl; 
+
+  //PK: This workaround avoids a NaN problem encountered with
+  //geant4. The problem does not seem to exist if we run in standalone
+  //mode.
+  if(((pow(ym[npion],2)-pow(fmp+fmpi,2))*(pow(ym[npion],2)-pow(fmp-fmpi,2))) < 0) {
+    ym[npion] = ym[npion]+fmpi+100.0;
+  }
+  // PK
+  assert(isnan(ym[npion]) == false);
+  assert(ym[npion] != 0);
+  assert(isnan(pcm(ym[npion], fmp, fmpi)) == false);
   if(varavat->kveux == 1) {
     varavat->del1avat[iavat] = bl1->ind1[l1];
     varavat->energyavat[iavat] = ym[npion];
   }
 
-  std::cout <<"calling decay2" << std::endl;
-  decay2(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &(bl1->eps[l1]), &q1[npion], &q2[npion], &q3[npion],
-	 &q4[npion], &ym[npion], &fmp, &fmpi, &(bl9->hel[l1]));
-  std::cout <<"end of decay2 call" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"Calling decay2 from pnu" << G4endl;
+    G4cout <<"npion = " << npion << G4endl;
+    G4cout <<"q1 = " << q1[npion] << " q2 = " << q2[npion] << " q3 = " << q3[npion] << " q4 = " << q4[npion] << G4endl;
+  }
+  assert(isnan(q1[npion]) == false);
+  assert(isnan(q2[npion]) == false);
+  assert(isnan(q3[npion]) == false);
+  assert(isnan(q4[npion]) == false);
+  assert(isnan(ym[npion]) == false);
+  assert(ym[npion] != 0);
+  decay2(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &(bl1->eps[l1]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
+ 	 &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[l1]));
+
+  if(verboseLevel > 3) {
+    G4cout <<"Quantities after decay2: " << G4endl;
+    G4cout <<"l1 = " << l1 << " bl1->p1[l1] = " << bl1->p1[l1] << " bl1->p2[l1] = " << bl1->p2[l1] << " bl1->p3[l1] = " << bl1->p3[l1] << " bl1->eps[l1] = " << bl1->eps[l1] << G4endl;
+  }
+  
   // decay
   if (bl1->ind2[l1]*(bl1->ind2[l1]) == 9) {
-    std::cout <<"going to pnu806" << std::endl;
     goto pnu806;
   }
   
   standardRandom(&rndm, &(hazard->ial));
   if (rndm < 0.333333333) {
-    std::cout <<"rndm < (1/3) going to pnu837." << std::endl;
-    std::cout <<"npion (used as an index of array ipi (ipi[npion])) = " << npion << std::endl;
-    std::cout <<"l1 = " << l1 << " l2 = " << l2 << std::endl;
     goto pnu837;
   }
   
@@ -3527,7 +4455,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   egs = 0.0;
   nbalttf = 0;
   iteste = 1;
-  for(G4int i = 0; i < ia; i++) {
+  for(G4int i = 1; i <= ia; i++) {
     if(bl5->nesc[i] == 0) {
       if(sqrt(pow(bl1->p1[i],2)+pow(bl1->p2[i],2)+pow(bl1->p3[i],2)) < bl10->pf) {
 	nbalttf = nbalttf + 1;
@@ -3564,10 +4492,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   if(tdel <= bl4->tmax5) {
-    k = k + 1;
-    bl2->crois[k] = tdel;
-    bl2->ind[k] = l1;
-    bl2->jnd[k] = 0;
+    bl2->k = bl2->k + 1;
+    bl2->crois[bl2->k] = tdel;
+    bl2->ind[bl2->k] = l1;
+    bl2->jnd[bl2->k] = 0;
   }
 
   bl1->p1[l1] = t[30]; //t(31)->t[30]
@@ -3578,12 +4506,16 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->ind2[l1] = ichd;
   npion = npion - 1;
 
-  if (k == 0) {
+  if (bl2->k == 0) {
     goto pnu230;
   }
 
-  for(G4int i = 0; i < k; i++) {
+  for(G4int i = 1; i <= bl2->k; i++) {
     bl2->crois[i] = bl2->crois[i] - tau;
+  }
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Going back to label pnu449 after a loop from 1 to bl2->k" << G4endl;
   }
   goto pnu449;
 
@@ -3615,13 +4547,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   y2[npion] = bl3->x2[l1];
   y3[npion] = bl3->x3[l1];
 
-  if (k == 0) {
+  if (bl2->k == 0) {
     goto pnu4047;
   }
   
   kd = 0;
   ccr = tau;
-  for(G4int i = 0; i < k; i++) {
+  for(G4int i = 1; i <= bl2->k; i++) {
     i20 = i - kd;
 
     if((bl2->ind[i] == l1) || (bl2->jnd[i] == l1)) {
@@ -3633,34 +4565,48 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       bl2->jnd[i20] = bl2->jnd[i];
     }
   }
-  k = k - kd;
+  bl2->k = bl2->k - kd;
+  
  pnu4047:
   if (bl5->nesc[l1] != 0) {
     goto pnu845;
   }
 
   new1(l1);
-  k = k + 1;
-  bl2->crois[k] = ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22);
-  bl2->ind[k] = l1;
-  bl2->jnd[k] = -1;
+  bl2->k = bl2->k + 1;
+  bl2->crois[bl2->k] = ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22);
+  bl2->ind[bl2->k] = l1;
+  bl2->jnd[bl2->k] = -1;
+  if(verboseLevel > 3) {
+    if(bl2->crois[bl2->k] < 0.0) {
+      G4cout <<"G4Incl: Reflection time < 0! (line 3797)" << G4endl;
+    }
+  }
+
 
   if(npion > 1) {
     n20 = npion - 1;
-    for(G4int k20 = 0; k20 < n20; k20++) {
+    for(G4int k20 = 1; k20 <= n20; k20++) {
       new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l1);
     }
   }
 
  pnu845: 
   new2(y1[npion], y2[npion], y3[npion], q1[npion], q2[npion], q3[npion], q4[npion], npion, l1);
-  if(k == 0) {
+  if(bl2->k == 0) {
     goto pnu230;
+  }
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: bl2->k == 0 after a call to new2. Going back to label pnu449." << G4endl;
   }
   goto pnu449;
 
   // pion-nucleon collision
  pnu801:
+  if(verboseLevel > 3) {
+    G4cout <<"Pion-nucleon collision!" << G4endl;
+  }
   lp = l1 - ia;
   dis1 = bl3->x1[l2]-y1[lp] + (bl1->p1[l2]/bl1->eps[l2] - q1[lp]/q4[lp])*tau;
   dis2 = bl3->x2[l2]-y2[lp] + (bl1->p2[l2]/bl1->eps[l2] - q2[lp]/q4[lp])*tau;
@@ -3675,17 +4621,37 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   sq = sqrt(s);
   cg = 4+bl1->ind2[l2]*ipi[lp];
 
+  if(verboseLevel > 3) {
+    G4cout <<"Pion-Nucleon collision done! " << G4endl;
+  }
+  
   if(sq > 3000.0) {
+    if(verboseLevel > 3) {
+      G4cout <<"sq = " << sq << G4endl;
+    }
     goto pnu832;
   }
-  if(31.41592*dist > pionNucleonCrossSection(sq)*cg/6.) {
+  if(31.41592*dist > pionNucleonCrossSection(sq)*cg/6.0) {
     goto pnu832;
   }
+
+  if(verboseLevel > 3) {
+    G4cout <<"Going to pnu220!" << G4endl;
+  }
+  //  dumpBl1(dumpOut);
+  //  dumpBl2(dumpOut);
+  //  dumpBl3(dumpOut);
+  //  exit(0);
+  
   goto pnu220;
 
  pnu832:
-  if (k == 0) {
+  if (bl2->k == 0) {
     goto pnu230;
+  }
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: bl2->k != 0. Going back to pnu44." << G4endl;
   }
   goto pnu44;
  pnu831:
@@ -3698,6 +4664,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // largeur variable du delta (phase space factor G4introduced 4/2001)
   // (180.**3 = 5832000.)
+//   G4cout <<"sq = " << sq << G4endl;
+//   G4cout <<"fmp = " << fmp << G4endl;
+//   G4cout <<"fmpi = " << fmpi << G4endl;
+//   G4cout <<"fmp = " <<  (pow(sq,2) - pow((fmp+fmpi),2))*(pow(sq,2) - pow((fmp-fmpi),2)) << G4endl;
+  assert((pow(sq,2) - pow((fmp+fmpi),2))*(pow(sq,2) - pow((fmp-fmpi),2)) >= 0);
+  assert(sq != 0);
   qqq = sqrt((pow(sq,2) - pow((fmp+fmpi),2))*(pow(sq,2) - pow((fmp-fmpi),2)))/(2.0*sq);
   psf = pow(qqq,3)/(pow(qqq,3)+5832000.);
   tdel = -hc/(gg*psf)*log(rndm)*geff;         
@@ -3712,7 +4684,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // ce nucleon (ici delta) devient un participant:
   jparticip[l2] = 1;
-  std::cout <<"Particle " << l2 << " is now participant." << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"Particle " << l2 << " is now participant." << G4endl;
+  }
   
   if (ws->nosurf <= 0) {
     // surface
@@ -3734,8 +4708,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // the delta is located at the nucleon site to avoid problems
   // with the reflexion on the wall
   if(lp != npion) {
-    lp1 = lp+1;
-    for(G4int i10 = lp1; i10 < npion; lp1++) {
+    lp1 = lp + 1;
+    //    for(G4int i10 = lp1; i10 <= npion; lp1++) {
+    for(G4int i10 = lp1; i10 <= npion; i10++) {
       ipi[i10-1] = ipi[i10];
       ym[i10-1] = ym[i10];
       q1[i10-1] = q1[i10];
@@ -3751,10 +4726,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   ncol = ncol+1;
   mrpd = mrpd+1;
 
-  if(k != 0) {
+  if(bl2->k != 0) {
     kd = 0;
     ccr = tau;
-    for(G4int i = 0; i < k; i++) {
+    for(G4int i = 1; i <= bl2->k; i++) {
       i20 = i - kd;
 
       if((bl2->ind[i] == l1) || (bl2->ind[i] == l2) || (bl2->jnd[i] == l1) || (bl2->jnd[i] == l2)) {
@@ -3767,47 +4742,67 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       }
     }
 
-    k = k - kd;
-    for(G4int i10 = 0; i10 < k; i10++) {
+    bl2->k = bl2->k - kd;
+    for(G4int i10 = 1; i10 <= bl2->k; i10++) {
       if(bl2->ind[i10] <= l1) {
 	continue;
       }
-      bl2->ind[i10] = bl2->ind[i10] - 1;
+      else {
+	bl2->ind[i10] = bl2->ind[i10] - 1;
+      }
     }
   }
-  
+
   new1(l2);
 
   if(tdel <= bl4->tmax5) {
-    k = k + 1;
-    bl2->crois[k] = tdel;
-    bl2->ind[k] = l2;
-    bl2->jnd[k] = 0;
+    bl2->k = bl2->k + 1;
+    bl2->crois[bl2->k] = tdel;
+    bl2->ind[bl2->k] = l2;
+    bl2->jnd[bl2->k] = 0;
   }
 
-  k = k + 1;
-  bl2->crois[k] = ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22);
-  bl2->ind[k] = l2;
-  bl2->jnd[k] = -1;
-  goto pnu449;
+  bl2->k = bl2->k + 1;
+  bl2->crois[bl2->k] = ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22);
+  if(verboseLevel > 3) {
+    if(bl2->crois[bl2->k] < 0.0) {
+      G4cout <<"G4Incl: Reflection time < 0! (line 3955)" << G4endl;
+    }
+  }
+  bl2->ind[bl2->k] = l2;
+  bl2->jnd[bl2->k] = -1;
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Going back to pnu449 at line 3917." << G4endl;
+  }
+  goto pnu449; // Line 3917
 
   // reflection on or transmission through the potential wall
  pnu600:
   // deutons pas bien compris ici cv ?
   if (npproj[l1] == 0) {
-    std::cout <<"npproj[l1] == 0, going to pnu608" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: npproj[l1] == 0. Going to pnu608." << G4endl;
+    }
     goto pnu608;
   }
   
   if (bl1->ind1[l1] != 0) {
-    std::cout << "wrong reentering particle" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"wrong reentering particle (ind1[l1] != 0)" << G4endl;
+      G4cout <<"ind1[" << l1 << "] = " << bl1->ind1[l1] << G4endl;
+    }
   }
   
-  if (bl3->x1[l1]*(bl1->p1[l1])+bl3->x2[l1]*(bl1->p2[l1])+bl3->x3[l1]*(bl1->p3[l1]) > 0.) {
-    std::cout <<"wrong reentering particle" << std::endl;
+  if (bl3->x1[l1]*(bl1->p1[l1])+bl3->x2[l1]*(bl1->p2[l1])+bl3->x3[l1]*(bl1->p3[l1]) > 0.0) {
+    if(verboseLevel > 3) {
+      G4cout <<"wrong reentering particle" << G4endl;
+      G4cout <<"particle: l1 = " << l1 << G4endl;
+    }
   }
   
   var_ab = pow(bl1->p1[l1],2) + pow(bl1->p2[l1],2) + pow(bl1->p3[l1],2);
+  assert(var_ab > 0);
   gpsg = 0.0;
   if (var_ab > 0.0) {
     gpsg = sqrt((pow(bl1->eps[l1]+v0,2)-pm2)/var_ab); 
@@ -3822,7 +4817,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // reevaluation of the times tab after entrance of 2nd,..nucleon 
   // of the projectile (goto 602 instead of 607 modif. 13/06/01)
-  std::cout <<"Going to 602" << std::endl;
   goto pnu602;
 
   // deutons
@@ -3833,14 +4827,15 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     varavat->energyavat[iavat] = bl1->eps[l1] - fmp;
   }
   if(jparticip[l1] == 0) {
-    std::cout <<"jparticip[l1] == 0. going to pnu601." << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: jparticip[l1] == 0. Going to pnu601." << G4endl;
+    }
     goto pnu601;
   }
   if(varavat->kveux == 1) {
     varavat->go_out[iavat]=1;
   }
   if (bl1->ind1[l1] == 0) {
-    std::cout <<"bl1->ind1[l1] == 0. going to pnu605." << std::endl;
     goto pnu605;
   }
   fm = am(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1]);
@@ -3852,6 +4847,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   pot = v0;
 
  pnu606:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu606. Calculating transmission probability." << G4endl;
+  }
   tp = transmissionProb(bl1->eps[l1]-fm,bl1->ind2[l1],itch,bl3->r2,v0);
   if(varavat->kveux == 1) {
     varavat->energyavat[iavat] = bl1->eps[l1] - fm;
@@ -3859,7 +4857,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   standardRandom(&rndm,&(hazard->igraine[10]));
 
   if (rndm > tp) {
-    std::cout <<"rndm > tp, going to pnu601" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl:" << G4endl;
+    }
     goto pnu601;
   }
 
@@ -3868,6 +4868,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   nbquit = nbquit + 1;
   itch = itch - (1 + bl1->ind2[l1])/2;
   var_ab = pow(bl1->p1[l1],2) + pow(bl1->p2[l1],2) + pow(bl1->p3[l1],2);
+  assert(var_ab > 0);
   gpsg = 0.0;
   if(var_ab > 0.0) {
     gpsg = sqrt((pow(bl1->eps[l1]-pot,2) - fm*fm)/(var_ab));
@@ -3880,14 +4881,19 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // comptage des particules hors du noyau (7/6/2002):
   // (remnant minimum=1 nucleon)
   if(nbquit >= (ia-1)) {
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: nbquit >= (ia - 1). Going to pnu255." << G4endl;
+    }
     goto pnu255;
+  }
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Going to pnu 602." << G4endl;
   }
   goto pnu602;
 
   // here no transmission possible
  pnu601:
-  std::cout <<"pnu601:" << std::endl;
-
   pspr=bl3->x1[l1]*(bl1->p1[l1])+bl3->x2[l1]*(bl1->p2[l1])+bl3->x3[l1]*(bl1->p3[l1]);
   if(varavat->kveux == 1) {
     varavat->go_out[iavat]=0;
@@ -3902,13 +4908,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // fin modif surface a.b.             
 
  pnu602:
-  std::cout <<"pnu602:" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu602." << G4endl;
+  }
   
-  if(k != 0) {
-    std::cout <<"k != 0" << std::endl;
+  if(bl2->k != 0) {
     kd = 0;
     ccr = tau;
-    for(G4int i = 0; i < k; i++) {
+    for(G4int i = 1; i <= bl2->k; i++) {
       i20 = i - kd;
 
       if((bl2->jnd[i] == l1) || ((bl2->ind[i] == l1) && (bl2->jnd[i] != 0))) {
@@ -3920,76 +4927,119 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       bl2->ind[i20] = bl2->ind[i];
       bl2->jnd[i20] = bl2->jnd[i];
     }
-    k = k - kd;
-    std::cout <<"k != 0 done..." << std::endl;
+    bl2->k = bl2->k - kd;
+
+    if (bl5->nesc[l1] == 1) {
+      goto pnu613;
+    }
   }
 
-  if (bl5->nesc[l1] == 1) {
-    std::cout <<"bl5->nesc[l1] == 1. going to pnu613." << std::endl;
-    goto pnu613;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now calling new1(l1) (new1(" << l1 << "))" << G4endl;
   }
-
-  std::cout <<"Calling new1." << std::endl;
   new1(l1);
-  std::cout <<"End of new1 call..." << std::endl;
+
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now calling ref." << G4endl;
+    G4cout <<"x1 = " << bl3->x1[l1] <<" x2 = " << bl3->x2[l1] <<" x3 = " << bl3->x3[l1] << G4endl;
+    G4cout <<"p1 = " << bl1->p1[l1] <<" p2 = " << bl1->p2[l1] <<" p3 = " << bl1->p3[l1] <<" eps = " << bl1->eps[l1] << G4endl;
+  }
+  tref = ref(bl3->x1[l1],bl3->x2[l1],bl3->x3[l1],bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1],r22); // line 4101
+  if(verboseLevel > 3) {
+    G4cout <<"Returned from function ref. tref = " << tref << G4endl;
+  }
   
-  std::cout <<"Calling ref." << std::endl;
-  tref = ref(bl3->x1[l1],bl3->x2[l1],bl3->x3[l1],bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1],r22);
-  std::cout <<"End of ref call..." << std::endl;
+  if(verboseLevel > 3) {
+    if(tref < 0.0) {
+      G4cout <<"G4Incl: Reflection time < 0 (line 4101)!" << G4endl;
+      G4cout <<"G4Incl: bl1->eps[" << l1 << "] = " << bl1->eps[l1] << G4endl;
+      //      exit(0);
+    }
+  }
   
   if (tref > bl4->tmax5) {
-    std::cout <<"tref > bl4->tmax5. going to pnu615." << std::endl;
     goto pnu615;
   }
-  k = k + 1;
-  bl2->crois[k] = tref;
-  bl2->ind[k] = l1;
-  bl2->jnd[k] = -1;
+  bl2->k = bl2->k + 1;
+  bl2->crois[bl2->k] = tref;
+  bl2->ind[bl2->k] = l1;
+  bl2->jnd[bl2->k] = -1;
+
  pnu615:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu615." << G4endl;
+  }
+  
   if (npion == 0) {
-    std::cout <<"npion == 0. goig to pnu613. " << std::endl;
     goto pnu613;
   }
   if (bl1->ind1[l1] == 1) {
-    std::cout <<"bl1->ind1[l1] == 1. goig to pnu613. " << std::endl;
     goto pnu613;
   }
-  for(G4int k20 = 0; k20 < npion; k20++) { //do 614 k20=1,npion
-    std::cout <<"Calling new3 on line 3876" << std::endl;
+  for(G4int k20 = 1; k20 <= npion; k20++) { //do 614 k20=1,npion
     new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l1);
-    std::cout <<"Call to new3 complete! " << std::endl;
   }
  pnu613:
-  if (k == 0) {
-    std::cout <<"k == 0. going to pnu230" << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu613." << G4endl;
+  }
+
+  if (bl2->k == 0) {
     goto pnu230;
   }
 
-  std::cout <<"going to pnu 449..." << std::endl;
-  goto pnu449;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl. bl2->k != 0. Going back to pnu449 from line 4077." << G4endl;
+    G4cout <<"G4Incl: bl2->k = " << bl2->k << G4endl;
+    for(G4int myindex = 0; myindex <= bl2->k; myindex++) {
+      G4cout <<"index = " << myindex << " ind = " << bl2->ind[myindex] << " jnd = " << bl2->jnd[myindex] << " crois = " << bl2->crois[myindex] << G4endl;
+      if(bl2->crois[myindex] < 0.0) {
+	G4cout <<"Negative time!!! Dumping information on collision: " << G4endl;
+	G4int part1 = bl2->ind[myindex];
+	G4int part2 = bl2->jnd[myindex];
+	G4cout <<"particle 1 index = " << bl2->ind[myindex] << " \t particle 2 index = " << bl2->jnd[myindex] << G4endl;
+	if(part1 >= 0) {
+	  G4cout <<"Particle 1: " << G4endl;
+	  G4cout <<"p1 = " << bl1->p1[part1] <<"p2 = " << bl1->p2[part1] <<"p3 = " << bl1->p3[part1] <<" eps = " << bl1->eps[part1] << G4endl;
+	  G4cout <<"x1 = " << bl3->x1[part1] <<"x2 = " << bl3->x2[part1] <<"x3 = " << bl3->x3[part1] << G4endl;
+	}
+	if(part2 >= 0) {
+	  G4cout <<"Particle 2: " << G4endl;
+	  G4cout <<"p1 = " << bl1->p1[part2] <<"p2 = " << bl1->p2[part2] <<"p3 = " << bl1->p3[part2] <<" eps = " << bl1->eps[part2] << G4endl;
+	  G4cout <<"x1 = " << bl3->x1[part2] <<"x2 = " << bl3->x2[part2] <<"x3 = " << bl3->x3[part2] << G4endl;
+	}
+      }
+    }
+  }
+
+  goto pnu449; // Line 4077
 
   // decay of the surviving deltas
  pnu230:
- pnu255:
-  std::cout <<"pnu255: " << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu230." << G4endl;
+  }
+  // decay of the surviving deltas
+pnu255:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu6255." << G4endl;
+  }
+
   if (k3 == 1) {
-    std::cout <<"k3 == 1. going to pnu256" << std::endl;
     goto pnu256;
   }
   if (k4 == 0) {
-    std::cout <<"k4 == 0. going to pnu256" << std::endl;
     goto pnu256;
   }
 
-  std::cout <<"line 3911: neither of the above..." << std::endl;
   npidir = npion;
-  for(G4int i = 0; i < ia; i++) {
+  for(G4int i = 1; i <= ia; i++) {
     if (bl1->ind1[i] == 0) {
-      std::cout <<"bl1->ind1[i] == 0. continuing..." << std::endl;
       continue;
     }
     npion = npion + 1;
     var_ab = pow(bl1->eps[i],2) - pow(bl1->p1[i],2) - pow(bl1->p2[i],2) - pow(bl1->p3[i],2);
+    assert(var_ab > 0);
     ym[npion] = 0.0;
 
     if(var_ab > 0.0) {
@@ -4012,10 +5062,17 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       varavat->jpartl2[iavat] = 0;
     }
 
-    std::cout <<"Calling decay2..." << std::endl;
-    decay2(&(bl1->p1[i]), &(bl1->p2[i]), &(bl1->p3[i]), &(bl1->eps[i]), &q1[npion], &q2[npion], &q3[npion],
-	   &q4[npion], &ym[npion], &fmp, &fmpi, &(bl9->hel[i]));
-    std::cout <<"End of decay2 call..." << std::endl;
+    assert(isnan(q1[i]) == false);
+    assert(isnan(q2[i]) == false);
+    assert(isnan(q3[i]) == false);
+    assert(isnan(q4[i]) == false);
+    decay2(&(bl1->p1[i]), &(bl1->p2[i]), &(bl1->p3[i]), &(bl1->eps[i]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
+	   &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[i]));
+
+    if(verboseLevel > 3) {
+      G4cout <<"Quantities after decay2: " << G4endl;
+      G4cout <<"i = " << i << " bl1->p1[i] = " << bl1->p1[i] << " bl1->p2[i] = " << bl1->p2[i] << " bl1->p3[i] = " << bl1->p3[i] << " bl1->eps[i] = " << bl1->eps[i] << G4endl;
+    }
     
     if(bl5->nesc[i] == 0) {
       idecf = 1;
@@ -4023,7 +5080,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
     if (ws->nosurf <= 0) {
       // surface
-      if (bl5->nesc[i] == 0.) {
+      if (bl5->nesc[i] == 0.0) {
 	pppp = sqrt(pow(bl1->p1[i],2) + pow(bl1->p2[i],2) + pow(bl1->p3[i],2));
 	rrrr = sqrt(pow(bl3->x1[i],2) + pow(bl3->x2[i],2) + pow(bl3->x3[i],2));
 	if (pppp <= bl10->pf) {
@@ -4052,21 +5109,36 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     goto pnu285;
 
   pnu283:
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: Now at pnu283." << G4endl;
+    }
+
     ipi[npion] = bl1->ind2[i]*2;
     bl1->ind2[i] = -1*(bl1->ind2[i]);
     goto pnu285;
 
   pnu280:
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: Now at pnu280." << G4endl;
+    }
+
     bl1->ind2[i] = bl1->ind2[i]/3;
     ipi[npion] = 2*(bl1->ind2[i]);
 
   pnu285:
+    if(verboseLevel > 3) {
+      G4cout <<"G4Incl: Now at pnu285." << G4endl;
+    }
+
     y1[npion] = bl3->x1[i];
     y2[npion] = bl3->x2[i];
     y3[npion] = bl3->x3[i];
   }
-  std::cout <<"out of the loop..." << std::endl;
 
+  if(verboseLevel > 3) {
+    G4cout <<"out of the loop..." << G4endl;
+  }
+  
   if(varavat->kveux == 1) {
     varavat->bavat = b;
     varavat->nopartavat = nopart;
@@ -4079,7 +5151,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // tableau des energies a la fin (avatar.hbk)
   if(varavat->kveux == 1) {
-    for(G4int i = 0; i < ia; i++) {
+    for(G4int i = 1; i <= ia; i++) {
       if(bl5->nesc[i] == 0) {
 	if(jparticip[i] == 1) {
 	  varavat->epsf[i] = bl1->eps[i];
@@ -4095,7 +5167,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
  pnu256:
-  std::cout <<"Starting pnu256..." << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu256." << G4endl;
+  }
+
   elead = 0.0;
   lead = 0;
   npx = 0;
@@ -4117,19 +5192,25 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   if (kindstruct->kindf7 <= 2) {
     if (ncol == 0 || nc[0] == 0) { // then nc(1)->nc[0]
+      if(verboseLevel > 3) {
+	G4cout <<"no collisioms" << G4endl;
+      }
       goto pnu9100;
     }
   }
   else {
     if (kindstruct->kindf7 <= 5) {
       if (ncol == 0) {
+	if(verboseLevel > 3) {
+	  G4cout <<"no collisioms" << G4endl;
+	}
 	goto pnu9100;
       }
     }
     else {
       // ici faisceau composite: modif a.b. 2/2002 pour tous les composites:
       nsum_col = 0;
-      for(G4int i = 0; i < bl3->ia1; i++) {
+      for(G4int i = 1; i <= bl3->ia1; i++) {
 	nsum_col = nsum_col + nc[i];
       }
       if (ncol == 0 || nsum_col == 0) { //then
@@ -4147,17 +5228,20 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   erecrem = 0.0;
   nopart = -1;
   // fin ajout cv
-  //return
-  std::cout <<"Blah " << std::endl;
+  if(verboseLevel > 3) {
+    G4cout <<"End of algorithm after pnu9100." << G4endl;
+  }
   goto pnureturn;
 
  pnu9101:
+  if(verboseLevel > 3) {
+    G4cout <<"G4Incl: Now at pnu9101." << G4endl;
+  }
+
   nopart = 0;
   ekout = 0.0;
 
-  for(G4int i = 0; i < ia; i++) {
-    std::cout <<"Now we can get some particles out of this mess..." << std::endl;
-    
+  for(G4int i = 1; i <= ia; i++) {
     if(bl5->nesc[i] != 0) {
       xl1 = xl1-bl3->x2[i]*(bl1->p3[i]) + (bl3->x3[i])*(bl1->p2[i]);
       xl2 = xl2-bl3->x3[i]*(bl1->p1[i]) + bl3->x1[i]*(bl1->p3[i]);
@@ -4168,10 +5252,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       pout2 = pout2 + bl1->p2[i];
       pout3 = pout3 + bl1->p3[i];
       eout = eout+bl1->eps[i] - fmp;
+      //      ic33 = int((floor(double(bl1->ind2[i]+3))/double(2)));
       ic33 = (bl1->ind2[i]+3)/2;
 
-      nopart = nopart + 1;
       kind[nopart] = 3 - ic33;
+      if(verboseLevel > 3) {
+	G4cout <<"kind[" << nopart << "] = " << kind[nopart] << G4endl;
+      }
       ep[nopart] = bl1->eps[i] - fmp;
       bmass[nopart] = fmp;
       ekout = ekout + ep[nopart];
@@ -4179,12 +5266,15 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       alpha[nopart] = bl1->p1[i]/ptotl;
       beta[nopart] = bl1->p2[i]/ptotl;
       gam[nopart] = bl1->p3[i]/ptotl;
-
+      nopart = nopart + 1;
       continue;
     }
-    //  pnu254: 
+    
     t[3] = bl3->x1[i]*(bl3->x1[i]) + bl3->x2[i]*(bl3->x2[i]) + bl3->x3[i]*(bl3->x3[i]); //t(4)->t[3]
     erem = erem + bl1->eps[i] - fmp;
+    if(isinf(bl1->eps[i])) {
+      G4cout <<"G4Incl: energy of nucleon " << i << " is " << bl1->eps[i] << G4endl;
+    }
     rcm1 = rcm1 + bl3->x1[i];
     rcm2 = rcm2 + bl3->x2[i];
     rcm3 = rcm3 + bl3->x3[i];
@@ -4198,7 +5288,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //  correction pions 21/3/95 jc
   ichpion = 0;
   if(npion != 0) {
-    for(G4int ipion = 0; ipion < npion; ipion++) {
+    for(G4int ipion = 1; ipion <= npion; ipion++) {
       pout1 = pout1 + q1[ipion];
       pout2 = pout2 + q2[ipion];
       pout3 = pout3 + q3[ipion];
@@ -4207,7 +5297,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       xl2 = xl2 - y3[ipion]*q1[ipion] + y1[ipion]*q3[ipion];
       xl3 = xl3 - y1[ipion]*q2[ipion] + y2[ipion]*q1[ipion];
       ichpion = ichpion + ipi[ipion]/2;
-      nopart = nopart + 1;
+      //      nopart = nopart + 1;
       kind[nopart] = 4 - ipi[ipion]/2;
       ptotl = sqrt(pow(q1[ipion],2) + pow(q2[ipion],2) + pow(q3[ipion],2));
       ep[nopart] = q4[ipion] - fmpi;
@@ -4216,6 +5306,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       alpha[nopart] = q1[ipion]/ptotl;
       beta[nopart] = q2[ipion]/ptotl;
       gam[nopart] = q3[ipion]/ptotl;
+      nopart++;
     }
   }
   
@@ -4247,12 +5338,23 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   iej = bl3->ia2 - irem;
 
   eh5 = erem - pow(double(irem)/double(a2),1.666667)*efer;
+  if(verboseLevel > 3) {
+    G4cout <<"erem used for excitation energy calculation = " << erem << G4endl;
+    G4cout <<"irem used for excitation energy calculation = " << irem << G4endl;
+    G4cout <<"a2 used for excitation energy calculation = " << a2 << G4endl;
+    G4cout <<"eh5 used for excitation energy calculation = " << eh5 << G4endl;
+  }
   sepa = (bl3->ia2 - irem)*(v0 - tf);
   eh6 = eh5;
 
   // deutons ajout beproj ?????? on retire beproj (18/06/2002 ab cv)
   // eh5=erem-efer-beproj+(ia2-irem)*tf
   eh5 = erem - efer + (bl3->ia2 - irem)*tf;
+  if(isnan(eh5)) {
+    if(verboseLevel > 1) {
+      G4cout <<"G4Incl: Warning! variable eh5 used in excitation energy calculation has value NaN!" << G4endl;
+    }
+  }
   if (eh5 < 0.0) {
     eh5 = 0.00000001;
   }
@@ -4267,7 +5369,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     if (eh5 < 0.0) {
       if (npion == 0) {
 	nopart = -1;
-	std::cout <<"npion == 0" << std::endl;
+	if(verboseLevel > 3) {
+	  G4cout <<"npion == 0" << G4endl;
+	  G4cout <<"End of algorithm because npion == 0" << G4endl;
+	}
 	goto pnureturn;
       }
       else {
@@ -4307,7 +5412,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   esrem = eh5;
 
   if (ekout < 0.001) {
-    std::cout <<"ekout < 0.001" << std::endl;
+    if(verboseLevel > 3) {
+      G4cout <<"ekout < 0.001" << G4endl;
+      G4cout <<"End of algorithm because kout < 0.001" << G4endl;
+    }
     goto pnureturn;
   }
  
@@ -4360,12 +5468,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     esrem = 0.0;
   }
 
-  std::cout <<"Reached end of routine..." << std::endl;
-
+  if(verboseLevel > 3) {
+    G4cout <<"Reached end of routine..." << G4endl;
+  }
   goto pnureturn;
 
-  std::cout <<"ia1 > 1 ! " << std::endl;
+  G4cout <<"ia1 > 1 ! " << G4endl;
  pnureturn:
+  //  dumpOut.close();
   (*ibert_p) = ibert;
   //(*f_p) = f;
   //f_p = &f;
@@ -4398,6 +5508,10 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   G4double e1 = (*e1_p);
 
+  G4double debugOutput;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
+
   G4double pout11 = (*pout11_p);
   G4double pout12 = (*pout12_p);
   G4double pout13 = (*pout13_p);
@@ -4406,7 +5520,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   G4double q1 = (*q1_p);
   G4double q2 = (*q2_p);
   G4double q3 = (*q3_p);
-  G4double q4 = -1*(*q4_p);
+  //  G4double q4 = -1*(*q4_p);
+  G4double q4 = (*q4_p);
 
   G4int np = (*np_p);
   G4int ip = (*ip_p);
@@ -4454,7 +5569,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   G4double pin;
   G4double pl;
   G4double pnorm;
-  G4double pq;
+  //  G4double pq = 0.0;
   G4double psq;
   G4double qq[3];
   G4double qq4;
@@ -4493,8 +5608,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   //  2847	      data xm,xm2,xmdel,ezero,xpi/938.2796,8.8037e5,1232.,1876.6,138./  p-n17830
   G4double xm = 938.2796;
   G4double xm2 = 8.8037e5;
-  G4double xmdel = 1232.;
-  G4double xpi = 138.;
+  G4double xmdel = 1232.0;
+  G4double xpi = 138.0;
 
   //   2848	c      data iy1,iy2,iy3,iy4,iy5,iy6,iy7,iy8,iy10,iy11,iy12,iy13/         p-n17840
   //   2849	c     1 12345,22345,32345,42345,52345,62345,72345,82345,34567,47059,21033p-n17850
@@ -4505,8 +5620,11 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   G4int iso = is1 + is2;
   np = 0;
   psq = p1*p1 + p2*p2 + p3*p3;
+  assert(psq >= 0);
   pnorm = sqrt(psq);
   ecm = e1 + eout1;
+  assert(isnan(ecm) == false);
+  
   if(ecm < 1925.0) {
     goto collis160;
   }
@@ -4514,7 +5632,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   if (k3 == 1) {
     goto collis17;
   }
-  
+
+  assert(isnan(bl8->rathr) == false);
   if(ecm < (2065.0 + bl8->rathr)) {
     goto collis17;
   }
@@ -4541,6 +5660,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
  collis19:
+  assert(isnan(bl8->ramass) == false);
   if((ecm-2170.4-bl8->ramass) <= 0) {
     goto collis17;
   }
@@ -4566,20 +5686,31 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
   standardRandom(&rndm, &(hazard->igraine[10]));
-  s1 = lowEnergy(ecm, 1, iso);
 
+  assert(isnan(ecm) == false);
+  assert(isnan(iso) == false);
+  s1 = lowEnergy(ecm, 1, iso);
+  assert(isnan(s1) == false);
+  
   if(m1 != 0) {
+    assert((e1*e1 - psq) >= 0);
     bl6->xx10=sqrt(e1*e1-psq);
     bl6->isa=is1;
+    assert(isnan(bl6->isa) == false);
   }
   else {
+    assert((pow(eout1,2)-psq) >= 0);
     bl6->xx10 = sqrt(pow(eout1,2)-psq);
     bl6->isa = is2;
+    assert(isnan(bl6->isa) == false);
   }
 
-  s = s1 + srec(ecm,bl6->xx10,iso,bl6->isa);
+  s = s1 + srec(ecm,bl6->xx10, iso,int(bl6->isa));
+  assert(isnan(s) == false);
+  assert(s != 0);
   a = (s - s1)/s;
-
+  assert(isnan(a) == false);
+  
   if((rndm-a) <= 0) {
     goto collis170;
   }
@@ -4598,6 +5729,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
  collis18:
   standardRandom(&rndm, &(hazard->igraine[0]));
   s = lowEnergy(ecm,0,iso);
+  assert(isnan(ecm) == false);
+  assert(isnan(iso) == false);
   a = deltaProductionCrossSection(ecm,iso);
   a = s/(s+a);
   if(rndm > a) {
@@ -4610,8 +5743,11 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   // for pn :improvement of the backward scattering according
   // j.c et al, prc56(1997)2431
  collis17:
+  assert((pow(ecm,2) - 4.0*xm2) >= 0);
   pl = 0.5*ecm*sqrt(pow(ecm,2) - 4.0*xm2)/xm;
   x = 0.001*pl;
+  assert(isnan(x) == false);
+  
   if (iso == 0) {
     goto collis80;
   }
@@ -4642,11 +5778,15 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
  collis82:
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
+  
   btmax = 4.0*psq*b;
   z = exp(-btmax);
   standardRandom(&rndm, &(hazard->igraine[1]));
   ranres = rndm; 
   y = 1.0 - rndm*(1.0 - z);
+  assert(y >= 0);
   t = log(y)/b;
   iexpi = 0;
 
@@ -4672,7 +5812,9 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
       if (rndm > fracpn) {
 	z = exp(-4.0*psq*alphac);
 	iexpi = 1;
-	y = 1.0 - ranres*(10.0 - z);                                                 
+	//	y = 1.0 - ranres*(10.0 - z);
+	y = 1.0 - ranres*(1.0 - z);
+	assert(y >= 0);
 	t = log(y)/alphac;
       }
     }
@@ -4683,6 +5825,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     ctet = sign(1.0,ctet);
   }      
 
+  assert((1.0 - pow(ctet,2)) >= 0);
   stet = sqrt(1.0 - pow(ctet,2));
   standardRandom(&rndm, &(hazard->igraine[2]));
   fi = 6.2832*rndm;
@@ -4691,15 +5834,22 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   xx = p1*p1 + p2*p2;
   zz = p3*p3;    
 
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
+
   if(xx >= (zz*1.0e-8)) {
+    assert(xx >= 0);
     yn=sqrt(xx);
     zn=yn*pnorm;
+    assert(pnorm != 0);
     ez[0] = p1/pnorm; // ez(1) -> ez[0] and so on...
     ez[1] = p2/pnorm;
     ez[2] = p3/pnorm;
+    assert(yn != 0);
     ex[0] = p2/yn;
     ex[1] = -p1/yn;
-    ex[3] = 0.0;     
+    ex[2] = 0.0;     
+    assert(zn != 0);
     ey[0] = p1*p3/zn;
     ey[1] = p2*p3/zn;
     ey[2] = -xx/zn;
@@ -4715,6 +5865,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   pout11 = -p1;
   pout12 = -p2;
   pout13 = -p3;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
 
   // backward scattering according the parametrization of ref
   // prc56(1997)1
@@ -4732,6 +5884,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     }
   }
 
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
   // delta production
@@ -4762,10 +5916,12 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   // (see prc56(1997)2431)
   y = pow(ecm,2);
   q2 = (y - pow(1076.0,2))*(y - pow(800.0,2))/y/4.0;                                 
+  assert(q2 >= 0);
   q3 = pow((sqrt(q2)),3);                                                  
   f3max = q3/(q3 + pow(180.0,3));                                      
   y = pow(x,2);
   q2 = (y - pow(1076.0,2))*(y - pow(800.0,2))/y/4.0;                                 
+  assert(q2 >= 0);
   q3 = pow((sqrt(q2)),3);                                                 
   f3 = q3/(q3 + pow(180.0,3));
 
@@ -4778,6 +5934,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
  collis103:
   pin = pnorm;
   pnorm = pcm(ecm,xm,xmdel);
+  assert(isnan(pnorm) == false);
   if (pnorm <= 0) {
     pnorm = 0.000001;
   }
@@ -4797,6 +5954,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
   standardRandom(&rndm, &(hazard->igraine[5]));
+  assert((pow(ecm,2) - 4.0*xm2) >= 0);
   x = 0.001*0.5*ecm*sqrt(pow(ecm,2) - 4.0*xm2)/xm;
   if(x < 1.4) {
     b = (5.287/(1.0 + exp((1.3 - x)/0.05)))*1.e-6;
@@ -4811,6 +5969,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     ctet = sign(1.0,ctet);
   }
   
+  assert((1.0 - pow(ctet,2)) >= 0);
   stet = sqrt(1.0 - pow(ctet,2));
   standardRandom(&rndm, &(hazard->igraine[6]));
   fi = 6.2832*rndm;
@@ -4821,6 +5980,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   xx = p1*p1 + p2*p2;
   zz = p3*p3;
   if(xx >= (zz*1.0e-8)) {
+    assert(xx >= 0);
     yn = sqrt(xx);
     zn = yn*pin;
     ez[0] = p1/pin; // ez(1) -> ez[0] and so on...
@@ -4843,6 +6003,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
   // end of correction angular distribution of delta production
 
+  assert((xp1*xp1 + xp2*xp2 + xp3*xp3 + xm*xm) >= 0);
   e3 = sqrt(xp1*xp1 + xp2*xp2 + xp3*xp3 + xm*xm);
   if(k4 != 0) {
     goto collis161;
@@ -4854,8 +6015,15 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   qq[0] = xp1; //qq(1) -> qq[0]
   qq[1] = xp2;
   qq[2] = xp3;
+  assert((xp1*xp1 + xp2*xp2 + xp3*xp3 + xmdel*xmdel) >= 0);
   qq4 = sqrt(xp1*xp1 + xp2*xp2 + xp3*xp3 + xmdel*xmdel);
   heli = pow(ctet,2);
+
+  assert(isnan(q1) == false);
+  assert(isnan(q2) == false);
+  assert(isnan(q3) == false);
+  assert(isnan(q4) == false);
+  G4cout <<"Caling decay2 from collis" << G4endl;
   decay2(&qq[0],&qq[1],&qq[2],&qq4,&q1,&q2,&q3,&q4,&xmdel,&xm,&xpi,&heli);
 
   if(index != 0) {
@@ -4877,11 +6045,15 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     p3 = -xp3;
     e1 = e3;
   }
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
 
   if (iso == 0) {
     goto collis150;
   }
   if (rndm > 0.333333) {
+    debugOutput = am(p1,p2,p3,e1);
+    assert(isnan(debugOutput) == false);
     goto exitRoutine;
   }
 
@@ -4890,6 +6062,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
  collis150:
   if (index == 1) {
+    debugOutput = am(p1,p2,p3,e1);
+    assert(isnan(debugOutput) == false);
     goto exitRoutine;
   }
   if (rndm < 0.5) {
@@ -4898,18 +6072,24 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   is1 = 1;
   is2 = 1;
   ip = -2;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
  collis152: 
   is1 = -1;
   is2 = -1;
   ip = 2;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
  collis160:
   pout11 = -p1;
   pout12 = -p2;
   pout13 = -p3;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
   // long-lived delta
@@ -4930,6 +6110,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     e1=ecm-eout1;
     m1=1;
   }
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
 
   // symmetrization of charges in pn -> n delta
   // the test on "index" above symetrizes the excitation of one 
@@ -4957,11 +6139,13 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   // recombination process
  collis170: 
   pnorm = pcm(ecm,xm,xm);
+  assert(isnan(pnorm) == false);
   standardRandom(&rndm, &(hazard->igraine[11]));
   ctet = -1.0 + 2.0*rndm;
   if(fabs(ctet) > 1.0) {
     ctet = sign(1.0,ctet);
   }
+  assert((1.0 - ctet*ctet) >= 0);
   stet = sqrt(1.0 - ctet*ctet);
   standardRandom(&rndm, &(hazard->igraine[12]));
   fi = 6.2832*rndm;
@@ -4972,8 +6156,11 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   p3 = pnorm*ctet;
   m1 = 0;
   m2 = 0;
+  assert((p1*p1 + p2*p2 + p3*p3 + xm*xm) >= 0);
   e1 = sqrt(p1*p1 + p2*p2 + p3*p3 + xm*xm);
   eout1 = ecm - e1;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
 
   if (iso == 0) {
     goto collis160;
@@ -4983,12 +6170,16 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   goto collis160;
   
  exitRoutine:
-  (*p1_p) = pq;
+  debugOutput = am(p1,p2,p3,e1);
+  assert(isnan(debugOutput) == false);
+  (*p1_p) = p1;// Was pq
   (*p2_p) = p2;
   (*p3_p) = p3;
 
   (*e1_p) = e1;
 
+  debugOutput = am(pout11,pout12,pout13,eout1);
+  assert(isnan(debugOutput) == false);
   (*pout11_p) = pout11;
   (*pout12_p) = pout12;
   (*pout13_p) = pout13;
@@ -5027,6 +6218,7 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   // q1,q2,q3 is the momentum of particle x2
 
   // Temporary variables for input/output data:
+
   G4double p1 = (*p1_p);
   G4double p2 = (*p2_p);
   G4double p3 = (*p3_p);
@@ -5046,10 +6238,16 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   G4double rndm;
 
   G4double xe = wp;
-  G4double b1=p1/xe;
-  G4double b2=p2/xe;
-  G4double b3=p3/xe;                                                          
-  G4double xq=pcm(xi,x1,x2);                                                  
+  G4double b1 = p1/xe;
+  G4double b2 = p2/xe;
+  G4double b3 = p3/xe;                                                          
+  // PK: NaN workaround
+  if(((pow(xi,2)-pow(x1+x2,2))*(pow(xi,2)-pow(x1-x2,2))) < 0) {
+    xi = xi+x2+100.0;
+  }
+  // PK
+  G4double xq = pcm(xi,x1,x2);                                                  
+  assert(isnan(xq) == false);
   G4double ctet, stet;
 
   G4double fi, cfi, sfi;
@@ -5058,12 +6256,20 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   G4double w1;
   G4double beta;
 
+  if(verboseLevel > 3) {
+    G4cout <<"Delta decay in progress: " << G4endl;
+    G4cout <<"Starting values: " << G4endl;
+    G4cout <<"p1 = " << p1 << " p2 = " << p2 << " p3 = " << p3 << " wp = " << wp << G4endl;
+    G4cout <<"q1 = " << q1 << " q2 = " << q2 << " q3 = " << q3 << " wq = " << wq << G4endl;
+  }
+
   do {
     standardRandom(&rndm, &(hazard->igraine[7]));
     ctet = -1.0 + 2.0*rndm;
     if(fabs(ctet) > 1.0) {
       ctet = sign(1.0,ctet);
     }
+    assert((1.0 - pow(ctet,2)) >= 0);
     stet = sqrt(1.0 - pow(ctet,2));
     standardRandom(&rndm, &(hazard->igraine[9]));
   } while(rndm > ((1.0 + 3.0*hel*pow(ctet,2))/(1.0 + 3.0*hel)));
@@ -5072,13 +6278,18 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   fi = 6.2832*rndm;
   cfi = cos(fi);
   sfi = sin(fi);
+  assert((b1*b1+b2*b2+b3*b3) >= 0);
   beta = sqrt(b1*b1+b2*b2+b3*b3);
+  assert(isnan(beta) == false);
+  assert(beta != 0);
 
+  assert((pow(b1,2) + pow(b2,2)) >= 0);
   sal = sqrt(pow(b1,2) + pow(b2,2))/beta;
   cal = b3/beta;
 
   if((beta >= 1.0e-10) || (sal >= 1.0e-6)) {
     t1 = ctet + cal*stet*sfi/sal;
+    assert(sal != 0);
     t2 = stet/sal;                                                       
     q1 = xq*(b1*t1 + b2*t2*cfi)/beta;
     q2 = xq*(b2*t1 - b1*t2*cfi)/beta;
@@ -5092,13 +6303,21 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   
   hel = 0.0;                                                       
   w1 = q1*q1 + q2*q2 + q3*q3;
+  if(isnan(w1)) {
+    G4cout <<"q1 = " << q1 << " q2 = " << q2 << " q3 = " << q3 << " wq = " << wq << G4endl;
+    G4cout <<"w1 = " << w1 << G4endl;
+    G4cout <<"x2 = " << x2 << G4endl;
+    assert(isnan(w1) == false);
+  }
+  assert((w1 + x2*x2) >= 0);
   wq = sqrt(w1 + x2*x2);
   p1 = -q1;
   p2 = -q2;
   p3 = -q3;
+  assert((w1+x1*x1) >= 0);
   wp = sqrt(w1+x1*x1);
   loren(&q1, &q2, &q3, &b1, &b2, &b3, &wq);
-  loren(&p1, &p2, &p3, &b1, &b2, &b3, &wq);
+  loren(&p1, &p2, &p3, &b1, &b2, &b3, &wp);
 
   // Return calculated values:
   (*p1_p) = p1;
@@ -5129,6 +6348,7 @@ void G4Incl::time(G4int i, G4int j)
   t[3] = bl3->x1[i] - bl3->x1[j];
   t[4] = bl3->x2[i] - bl3->x2[j];
   t[5] = bl3->x3[i] - bl3->x3[j];
+
   t[6] = t[0]*t[3] + t[1]*t[4] + t[2]*t[5];
   t[9] = t[0]*t[0] + t[1]*t[1] + t[2]*t[2];
 
@@ -5136,7 +6356,7 @@ void G4Incl::time(G4int i, G4int j)
     bl1->ta = 100000;
   }
   else {	
-    bl1->ta = -t[6]/t[9];
+    bl1->ta = -1.0*t[6]/t[9];
   }
 
   bl3->rab2 = t[3]*t[3] + t[4]*t[4] + t[5]*t[5] + bl1->ta*t[6];
@@ -5149,7 +6369,7 @@ void G4Incl::newt(G4int l1, G4int l2)
   G4double E;
 
   G4int ia = bl3->ia1 + bl3->ia2;
-  for(G4int i = 0; i < ia; i++) { // do 52 i=1,ia
+  for(G4int i = 1; i <= ia; i++) { // do 52 i=1,ia
     if (bl5->nesc[i] != 0) {
       continue;
     }
@@ -5193,7 +6413,7 @@ void G4Incl::newt(G4int l1, G4int l2)
   newt55:
     //  call time(ig,id)
     time(ig, id);
-    if (bl1->ta < 0.) {
+    if (bl1->ta < 0.0) {
       goto newt50;
     }
     if(bl1->ta > bl4->tmax5) {
@@ -5206,7 +6426,19 @@ void G4Incl::newt(G4int l1, G4int l2)
       goto newt60;
     }
     E=am(bl1->p1[ig]+bl1->p1[id],bl1->p2[ig]+bl1->p2[id],bl1->p3[ig]+bl1->p3[id],bl1->eps[ig]+bl1->eps[id]);
-    if (E < 1925.) {
+    if(isnan(E)) {
+      G4cout <<"E = " << E << G4endl;
+      G4cout <<"ig = " << ig << G4endl;
+      G4cout <<"p1[ig] = " << bl1->p1[ig] << " p2[ig] = " << bl1->p2[ig] << " p3[ig] = " << bl1->p3[ig] << " eps[ig] = " << bl1->eps[ig] << G4endl;
+      G4cout <<"id = " << id << G4endl;
+      G4cout <<"p1[id] = " << bl1->p1[id] << " p2[id] = " << bl1->p2[id] << " p3[id] = " << bl1->p3[id] << " eps[id] = " << bl1->eps[id] << G4endl;
+//       ofstream out("newtDump.out");
+//       dumpBl1(out);
+//       out.close();
+    }
+    
+    assert(isnan(E) == false);
+    if (E < 1925.0) {
       goto newt50;
     }
     iy=bl1->ind1[ig]+bl1->ind1[id];
@@ -5217,6 +6449,10 @@ void G4Incl::newt(G4int l1, G4int l2)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   newt61:
+    assert(isnan(E) == false);
+    assert(isnan(iy) == false);
+    assert(isnan(bl1->ind2[ig]) == false);
+    assert(isnan(bl1->ind2[id]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[ig]+bl1->ind2[id])) {
       goto newt50;
     }
@@ -5251,6 +6487,10 @@ void G4Incl::newt(G4int l1, G4int l2)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   newt63: 
+    assert(isnan(E) == false);
+    assert(isnan(iy) == false);
+    assert(isnan(bl1->ind2[kg]) == false);
+    assert(isnan(bl1->ind2[kd]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[kg]+bl1->ind2[kd])) {
       continue;
     }
@@ -5268,7 +6508,7 @@ void G4Incl::new1(G4int l1)
   G4double E;
 
   ia=bl3->ia1+bl3->ia2;
-  for(G4int i = 0; i < ia; i++) {
+  for(G4int i = 1; i <= ia; i++) {
     if (bl5->nesc[i] != 0) {
       continue;
     }
@@ -5284,7 +6524,7 @@ void G4Incl::new1(G4int l1)
     }
   new153: 
     time(i, l1);
-    if(bl1->ta < 0.) {
+    if(bl1->ta < 0.0) {
       continue;
     }
     if(bl1->ta > bl4->tmax5) {
@@ -5294,7 +6534,7 @@ void G4Incl::new1(G4int l1)
       goto new160;
     }
     E=am(bl1->p1[i]+bl1->p1[l1],bl1->p2[i]+bl1->p2[l1],bl1->p3[i]+bl1->p3[l1],bl1->eps[i]+bl1->eps[l1]);
-    if (E < 1925.) {
+    if (E < 1925.0) {
       continue;
     }
     iy=bl1->ind1[i]+bl1->ind1[l1];
@@ -5305,6 +6545,10 @@ void G4Incl::new1(G4int l1)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   new161: 
+    assert(isnan(E) == false);
+    assert(isnan(iy) == false);
+    assert(isnan(bl1->ind2[i]) == false);
+    assert(isnan(bl1->ind2[l1]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E ,iy,bl1->ind2[i]+bl1->ind2[l1])) {
       continue;
     }
@@ -5326,7 +6570,7 @@ void G4Incl::new1(G4int l1)
       goto new170;
     }
     E=am(bl1->p1[i]+bl1->p1[l1],bl1->p2[i]+bl1->p2[l1],bl1->p3[i]+bl1->p3[l1],bl1->eps[i]+bl1->eps[l1]);
-    if (E < 1925.) {
+    if (E < 1925.0) {
       continue;
     }
     iy=bl1->ind1[i]+bl1->ind1[l1];
@@ -5337,7 +6581,11 @@ void G4Incl::new1(G4int l1)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   new171: 
-    if ((31.*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[i]+bl1->ind2[l1])) {
+    assert(isnan(E) == false);
+    assert(isnan(iy) == false);
+    assert(isnan(bl1->ind2[i]) == false);
+    assert(isnan(bl1->ind2[l1]) == false);
+    if ((31.0*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[i]+bl1->ind2[l1])) {
       continue;
     }
   new170: 
@@ -5346,6 +6594,11 @@ void G4Incl::new1(G4int l1)
     bl2->ind[bl2->k]=i;
     bl2->jnd[bl2->k]=l1;
   }
+  //  std::ofstream newout("new1Dump.out");
+  //  dumpBl2(newout);
+  //  dumpBl5(newout);
+  //  newout.close();
+  //  exit(0);
 }
 
 void G4Incl::new2(G4double y1, G4double y2, G4double y3, G4double q1, G4double q2, G4double q3, 
@@ -5354,7 +6607,7 @@ void G4Incl::new2(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
   G4double t[10];
 
   G4int ia = bl3->ia1 + bl3->ia2;
-  for(G4int i = 0; i < ia; i++) {
+  for(G4int i = 1; i <= ia; i++) {
     if (bl5->nesc[i] != 0) {
       continue;
     }
@@ -5365,6 +6618,8 @@ void G4Incl::new2(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
       continue;
     }
 
+    assert(q4 != 0);
+    assert(bl1->eps[i] != 0);
     t[0] = bl1->p1[i]/bl1->eps[i] - q1/q4;
     t[1] = bl1->p2[i]/bl1->eps[i] - q2/q4;
     t[2] = bl1->p3[i]/bl1->eps[i] - q3/q4;
@@ -5384,6 +6639,7 @@ void G4Incl::new2(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
     }
     G4double xx2 = t[3]*t[3] + t[4]*t[4] + t[5]*t[5] + (bl1->ta)*t[6];
     G4double E = sqrt(pow((bl1->eps[i]+q4),2) - pow((bl1->p1[i]+q1),2) - pow((bl1->p2[i]+q2),2) - pow((bl1->p3[i]+q3),2));
+    assert(isnan(E) == false);
     if ((31.0*xx2) > pionNucleonCrossSection(E)) {
       continue;
     }
@@ -5405,6 +6661,8 @@ void G4Incl::new3(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
     return;
   }
 
+  assert(q4 != 0);
+  assert(bl1->eps[l1] != 0);
   t[0] = bl1->p1[l1]/bl1->eps[l1] - q1/q4;
   t[1] = bl1->p2[l1]/bl1->eps[l1] - q2/q4;
   t[2] = bl1->p3[l1]/bl1->eps[l1] - q3/q4;
@@ -5427,6 +6685,7 @@ void G4Incl::new3(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
   }
   xx2 = t[3]*t[3] + t[4]*t[4] + t[5]*t[5] + (bl1->ta)*t[6];
   E = sqrt(pow((bl1->eps[l1]+q4),2) - pow((bl1->p1[l1]+q1),2) - pow((bl1->p2[l1]+q2),2) - pow((bl1->p3[l1]+q3),2));
+  assert(isnan(E) == false);
   if ((31.0*xx2) > pionNucleonCrossSection(E)) {
     return;
   }
@@ -5500,6 +6759,7 @@ G4double G4Incl::pauliBlocking(G4int l, G4double xr, G4double pr)
     pr2 = pr*pr;
     vol = pow((40.0*3.1415926/3.0),2) * (pow((xr*pr)/(2.0*3.1415926*197.13),3));
     rs = sqrt(bl3->x1[l]*bl3->x1[l] + bl3->x2[l]*bl3->x2[l] + bl3->x3[l]*bl3->x3[l]);
+    assert(isnan(rs) == false);
     if (ws->nosurf <= 0) {
       // modifs a.b.: r2 -> rmaxws pour la densite en w.s.
       rdeq = ws->rmaxws;
@@ -5516,7 +6776,7 @@ G4double G4Incl::pauliBlocking(G4int l, G4double xr, G4double pr)
       ia = bl3->ia1 + bl3->ia2;
       nl = 0;
 
-      for(G4int i = 0; i < ia; i++) {
+      for(G4int i = 1; i <= ia; i++) {
 	dx2 = pow((bl3->x1[l]-bl3->x1[i]),2) + pow((bl3->x2[l]-bl3->x2[i]),2) + pow((bl3->x3[l]-bl3->x3[i]),2);
 	dp2 = pow((bl1->p1[l]-bl1->p1[i]),2) + pow((bl1->p2[l]-bl1->p2[i]),2) + pow((bl1->p3[l]-bl1->p3[i]),2);
       
@@ -5597,14 +6857,16 @@ G4double G4Incl::totalCrossSection(G4double E, G4int m, G4int i)
   // m=0,1,2 for nucleon-nucleon,nucleon-delta,delta,delta
 
   G4double stotResult;
-  G4double sine;
+  G4double sine = 0.0;
 
   if((m-1) < 0) {
-    sine = deltaProductionCrossSection(E,i);
+    assert(isnan(E) == false);
+    assert(isnan(i) == false);
+    sine = deltaProductionCrossSection(E,int(i));
   }
 
   if((m-1) == 0) {
-    sine = srec(E,(bl6->xx10),i,(bl6->isa));
+    sine = srec(E,(bl6->xx10),i,int(bl6->isa));
   }
 
   if((m-1) > 0) {
@@ -5612,6 +6874,7 @@ G4double G4Incl::totalCrossSection(G4double E, G4int m, G4int i)
   }
 
   stotResult = sine + lowEnergy(E,m,i);
+  assert(isnan(stotResult) == false);
   return stotResult;
 }
 
@@ -5636,6 +6899,8 @@ G4double G4Incl::srec(G4double Ein, G4double d, G4int i, G4int isa)
     s = E*E;
     x = (s - 3.523e6)/(s - pow((938.3 + d),2));
     y = s/(s - pow((d - 938.3),2));
+    assert(isnan(E) == false);
+    assert(isnan(i) == false);
     srecResult = 0.5*x*y*deltaProductionCrossSection(E, i);
     srecResult = srecResult*(32.0 + i*i*(isa*isa - 5))/64.0;
     srecResult = srecResult/(1.0 + 0.25*i*i);
@@ -5651,66 +6916,118 @@ G4double G4Incl::deltaProductionCrossSection(G4double E, G4int i)
   // fit by j.vandermeulen
   // i = 2,0,-2  for pp,pn,nn
 
-  G4double scali = 1.0;
-  G4double plab;
-  G4double p1;
-  G4double sproResult;
+//   G4double scali = 1.0;
+//   G4double plab;
+//   G4double p1;
+//   G4double sproResult;
 
-  G4double EE = E - bl8->rathr;
+//   G4double EE = E - bl8->rathr;
 
+//   if(EE*EE-3.53e6 < 0) {
+//     return 0.0;
+//   }
+//   else {
+//     plab = EE*sqrt(EE*EE-3.52e6)/1876.6;
+//     p1 = 0.001*plab;
+//     if (plab > 800.0) {
+//       //goto spro1;
+//       //  spro1:
+//       if (i*i == 4) {
+// 	//	goto spro10;
+// 	//spro10:
+// 	if (plab < 2000.0) {
+// 	  //    goto spro11;
+// 	  //  spro11:
+// 	  if (plab < 1500.0) {
+// 	    //      goto spro12;
+// 	    // spro12:
+// 	    sproResult = 23.5 + 24.6/(1.0 + exp(-10.0*p1 + 12.0)) - 1250.0/(p1+50.0)+4.0*pow((p1-1.3),2);
+// 	    return (sproResult*scali);
+// 	  }
+// 	  else {
+// 	    sproResult = 41.0 + 60.0*(p1 - 0.9)*exp(-1.2*p1) - 1250.0/(p1+50.0) + 4.*pow((p1 - 1.3),2);
+// 	    return (sproResult*scali);
+// 	  }
+// 	}
+// 	else {
+// 	  return ((41.0 + (60.0*p1 - 54.0)*exp(-1.2*p1) - 77.0/(p1 + 1.5))*scali);
+// 	}
+//       }
+//       else {
+// 	if (plab < 2000.0) {
+// 	  //goto spro2;
+// 	  //  spro2:
+// 	  if (plab < 1000.0) {
+// 	    //goto spro3;
+// 	    //  spro3:
+// 	    return ((33.0 + 196.0*sqrt(pow(fabs(p1 - 0.95),5)) - 31.1/sqrt(p1))*scali);
+// 	  }
+// 	  else {
+// 	    return ((24.2 + 8.9*p1 - 31.1/sqrt(p1))*scali);
+// 	  }
+// 	}
+// 	else {
+// 	  return ((42.-77./(p1+1.5))*scali);
+// 	}
+//       }
+//     }
+//     // plab <= 800.0
+//     else {
+//       return 0.0;
+//     }
+//   }
+  double scali=1.0;
+  double plab;
+  double p1;
+  double sproResult;
+
+  double EE=E-(bl8->rathr);
+
+  assert(isnan(EE) == false);
   if(EE*EE-3.53e6 < 0) {
-    return 0.0;
+    goto spro22;
   }
-  else {
-    plab = EE*sqrt(EE*EE-3.52e6)/1876.6;
-    p1 = 0.001*plab;
-    if (plab > 800.0) {
-      //goto spro1;
-      //  spro1:
-      if (i*i == 4) {
-	//	goto spro10;
-	//spro10:
-	if (plab < 2000.0) {
-	  //    goto spro11;
-	  //  spro11:
-	  if (plab < 1500.0) {
-	    //      goto spro12;
-	    // spro12:
-	    sproResult = 23.5 + 24.6/(1.0 + exp(-10.0*p1 + 12.0)) - 1250.0/(p1+50.0)+4.0*pow((p1-1.3),2);
-	    return (sproResult*scali);
-	  }
-	  else {
-	    sproResult = 41.0 + 60.0*(p1 - 0.9)*exp(-1.2*p1) - 1250.0/(p1+50.0) + 4.*pow((p1 - 1.3),2);
-	    return (sproResult*scali);
-	  }
-	}
-	else {
-	  return ((41.0 + (60.0*p1 - 54.0)*exp(-1.2*p1) - 77.0/(p1 + 1.5))*scali);
-	}
-      }
-      else {
-	if (plab < 2000.0) {
-	  //goto spro2;
-	  //  spro2:
-	  if (plab < 1000.0) {
-	    //goto spro3;
-	    //  spro3:
-	    return ((33.0 + 196.0*sqrt(pow(fabs(p1 - 0.95),5)) - 31.1/sqrt(p1))*scali);
-	  }
-	  else {
-	    return ((24.2 + 8.9*p1 - 31.1/sqrt(p1))*scali);
-	  }
-	}
-	else {
-	  return ((42.-77./(p1+1.5))*scali);
-	}
-      }
-    }
-    // plab <= 800.0
-    else {
-      return 0.0;
-    }
+  plab=EE*sqrt(EE*EE-3.52e6)/1876.6;
+  assert(isnan(plab) == false);
+  p1=0.001*plab;
+  if (plab > 800.) {
+    goto spro1;
   }
+  spro22:
+  sproResult=0.0;
+  return sproResult;
+
+  spro1:
+  if (i*i == 4) {
+    goto spro10;
+  }
+  if (plab < 2000.) {
+    goto spro2;
+  }
+  sproResult=(42.-77./(p1+1.5))*scali;
+  return sproResult;
+  spro2: if (plab < 1000.) {
+    goto spro3;
+  }
+  sproResult=(24.2+8.9*p1-31.1/sqrt(p1))*scali;
+  return sproResult;
+  spro3: sproResult=(33.0 + 196.0*sqrt(pow(fabs(p1-0.95),5))-31.1/sqrt(p1))*scali;
+  return sproResult;
+  spro10: if (plab < 2000.) {
+    goto spro11;
+  }
+  sproResult=(41.+(60.*p1-54.)*exp(-1.2*p1)-77./(p1+1.5))*scali;
+  return sproResult;
+  spro11: if (plab < 1500.) {
+    goto spro12;
+  }
+  sproResult=41.+60.*(p1-0.9)*exp(-1.2*p1)-1250./(p1+50.)+4.*pow((p1-1.3),2);
+  sproResult=sproResult*scali;
+  return sproResult;
+ spro12: sproResult=23.5+24.6/(1.+exp(-10.*p1+12.))-1250./(p1+50.)+4.*pow((p1-1.3),2);
+  sproResult=sproResult*scali;
+  return sproResult;
+
 }
 
 G4double G4Incl::pionNucleonCrossSection(G4double x)
@@ -5720,7 +7037,8 @@ G4double G4Incl::pionNucleonCrossSection(G4double x)
   //   resonance
 
   G4double y = x*x;
-  G4double q2 = (y-pow(1076.,2))*(y-pow(800.,2))/y/4.;
+  G4double q2 = (y-pow(1076.0,2))*(y-pow(800.0,2))/y/4.0;
+  assert(q2 >= 0);
   G4double q3, f3;
   G4double spn;
 
@@ -5749,18 +7067,22 @@ G4double G4Incl::transmissionProb(G4double E, G4double iz, G4double izn, G4doubl
   // We need enough energy to escape from the potential well.
   if (E > v0) {
     x = sqrt(E*(E-v0));
+    assert(isnan(x) == false);
     barr = 4.*x/(E+E-v0+x+x);
+    assert(isnan(barr) == false);
     if (iz > 0) {
       G4double b = izn*1.44/r;
       G4double px = sqrt((E-v0)/b);
-
+      assert(isnan(px) == false);
+      
       if (px < 1.0) {
 	G4double g = izn/137.03*sqrt(2.*938.3/(E-v0))*(acos(px)-px*sqrt(1.-px*px));
+	assert(isnan(g) == false);
 	if (g > 35.){
 	  barr=0.0;
 	}
 	else {
-	  barr = barr*exp(-2.*g);
+	  barr = barr*exp(-2.0*g);
 	}
 	return barr;
       }
@@ -5777,62 +7099,59 @@ G4double G4Incl::transmissionProb(G4double E, G4double iz, G4double izn, G4doubl
   }
 }
 
-// Saxw, Ws, Bl10
 G4double G4Incl::ref(G4double x1, G4double x2, G4double x3, G4double p1, G4double p2, G4double p3, G4double E, G4double r2)
 {
   const G4double  pf = 270.339 , pf2 = 73083.4;
 
-  // surface : modif de ref
-  // ref=time necessary for a nucleon to reach the surface
-
+  G4double ref;
+  G4double t1, t3, t4, t5;
+  
   G4double t2 = p1*p1+p2*p2+p3*p3;
+  assert(t2 >= 0);
   G4double p = sqrt(t2);
   G4double r = r2;
   G4double xv;
-  G4double t1, t3, t4, t5;
   G4double s;
-
+  
   if (ws->nosurf <= 0) {
-    //  modif pour w.s.:
     xv = p/pf;
+    assert(isnan(xv) == false);
     r = interpolateFunction(xv);
+    assert(isnan(r) == false);
     r = r*r;
     if (t2 > pf2) {
       r = pow(ws->rmaxws,2);
     }
   }
 
-  do {
-    t4 = x1*x1+x2*x2+x3*x3;
-    if (t4 > r) {
-      std::cout <<"r = " << r << "t4 = " << t4 << std::endl;
-      s = sqrt(r*0.99/t4);
-      x1 = x1*s;
-      x2 = x2*s;
-      x3 = x3*s;
-    }
+  t4 = x1*x1 + x2*x2 + x3*x3;
+  while(t4 > r) {
+    s = sqrt(r*0.99/t4);
+    x1 = x1*s;
+    x2 = x2*s;
+    x3 = x3*s;
+    t4 = x1*x1 + x2*x2 + x3*x3;
   }
-  while(t4 > r);
   
-  t1 = x1*p1+x2*p2+x3*p3;
+  t1 = x1*p1 + x2*p2 + x3*p3;
   t3 = t1/t2;
-  t5 = t3*t3+(r-t4)/t2;   
 
-  std::cout <<"ref: t1 = " << t1 << std::endl;
-  std::cout <<"ref: t2 = " << t2 << std::endl;
-  std::cout <<"ref: t3 = " << t3 << std::endl;
-  std::cout <<"ref: t4 = " << t4 << std::endl;
-  std::cout <<"ref: t5 = " << t5 << std::endl;
+  t5 = t3*t3 + (r - t4)/t2;   
   if (t5 > 0) {
-    return ((-t3+sqrt(t5))*E);
+    ref = (-t3 + sqrt(t5))*E;
+    assert(isnan(ref) == false);
+    return ref;
   }
   else {
-    return 10000.0;
+    ref = 10000.0;
+    return ref;
   }
 }
 
-void G4Incl::forceAbsor(G4int nopart, G4double iarem, G4double izrem, G4double esrem, G4double erecrem,
-			G4double alrem, G4double berem, G4double garem, G4double jrem)
+// void G4Incl::forceAbsor(G4int nopart, G4double iarem, G4double izrem, G4double esrem, G4double erecrem,
+// 			G4double alrem, G4double berem, G4double garem, G4double jrem)
+void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esrem, G4double *erecrem,
+			G4double *alrem, G4double *berem, G4double *garem, G4int *jrem)
 { 
   //  4341        C------------------------------------------------------------------------------
   //   4342             SUBROUTINE FORCE_ABSOR(nopart,F,IAREM,IZREM,ESREM,ERECREM,
@@ -5849,19 +7168,17 @@ void G4Incl::forceAbsor(G4int nopart, G4double iarem, G4double izrem, G4double e
 
   G4int itg = 0;
   G4double sep = 0.0;
-  G4double ia1, iz1;
+  G4double iz1 = 0.0;
   G4double del = 0.0;
-  G4double bimpact;
-  G4double bmax, bmaxt;
+  G4double bmaxt = 0.0;
   G4double proba, proba_trans;
   G4double alea;
 
-  if(nopart != -1) {
+  if((*nopart) != -1) {
     return;
   }
 
-  const G4double fmp = 938.2796;
-  bl3->ia2 = calincl->f[0]; // f(1) -> f[0]
+  bl3->ia2 = int(calincl->f[0]); // f(1) -> f[0]
   sep = 6.8309;
 
   if(bl3->ia2 <= 4) {
@@ -5882,63 +7199,71 @@ void G4Incl::forceAbsor(G4int nopart, G4double iarem, G4double izrem, G4double e
 
   if((calincl->f[2] >= 10.0) && (calincl->f[2] <= 100.0)) {
     if(calincl->f[6] == 1.0) {
-      bl3->ia1 = 1.0;
+      bl3->ia1 = int(1.0);
       iz1 = 1.0;
       G4double fmpinc = 938.2796;
       G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
-      bmaxt = bmax;
-      proba_trans = coulombTransm(calincl->f[2],ia1,iz1,calincl->f[0],calincl->f[1]);
+      bmaxt = ws->bmax;
+      proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
+      assert(isnan(proba_trans) == false);
+      
       proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
-
+      assert(isnan(proba) == false);
+      
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
         return;
       }
 
-      iarem = calincl->f[0] + bl3->ia1;
-      izrem = calincl->f[1] + iz1;
+      (*iarem) = int(calincl->f[0]) + bl3->ia1;
+      (*izrem) = int(calincl->f[1]) + int(iz1);
       
       del = sqrt(pow(((calincl->f[0] + 1.0)*fmpinc + calincl->f[2]),2) - pbeam2);
-      erecrem = pbeam2/((calincl->f[0] + 1.0)*fmpinc+calincl->f[2] + del);
+      assert(isnan(del) == false);
+      
+      (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc+calincl->f[2] + del);
 
-      esrem = calincl->f[2] + sep - erecrem;
+      (*esrem) = calincl->f[2] + sep - (*erecrem);
 
-      alrem = 0.00001;
-      berem = 0.0;
-      garem = 0.99999;
-      bimpact = 0.0;
-      jrem = 0.0;
-      nopart = 0;
+      (*alrem) = 0.00001;
+      (*berem) = 0.0;
+      (*garem) = 0.99999;
+      (*jrem) = 0;
+      (*nopart) = 0;
       return;
     }
     else if((calincl->f[6] == 2) && (calincl->f[2] >= 20.0)) {
-      bl3->ia1 = 1.0;
+      bl3->ia1 = int(1.0);
       iz1 = 0.0;
       G4double fmpinc = 938.2796;
       G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
-      bmaxt = bmax;
-      proba_trans = coulombTransm(calincl->f[2],ia1,iz1,calincl->f[0],calincl->f[1]);
+      bmaxt = ws->bmax;
+      proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
+      assert(isnan(proba_trans) == false);
+      
       proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
-
+      assert(isnan(proba) == false);
+      
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
         return;
       }
 
-      iarem = calincl->f[0] + bl3->ia1;
-      izrem = calincl->f[1] + iz1;
+      (*iarem) = int(calincl->f[0]) + bl3->ia1;
+      (*izrem) = int(calincl->f[1]) + int(iz1);
       
       del = sqrt(pow(((calincl->f[0]+1.)*fmpinc+calincl->f[2]),2)-pbeam2);
-      erecrem = pbeam2/((calincl->f[0] + 1.0)*fmpinc + calincl->f[2] + del);
+      assert(isnan(del) == false);
+      
+      (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc + calincl->f[2] + del);
 
-      esrem = calincl->f[2] + sep - erecrem;
+      (*esrem) = calincl->f[2] + sep - (*erecrem);
 
-      alrem = 0.00001;
-      berem = 0.0;
-      garem = 0.99999;
-      bimpact = 0.0;
-      jrem = 0.0;
-      nopart = 0;
+      (*alrem) = 0.00001;
+      (*berem) = 0.0;
+      (*garem) = 0.99999;
+      (*jrem) = 0;
+      (*nopart) = 0;
       return;
     }
   } //      end if
@@ -5954,7 +7279,7 @@ G4double G4Incl::forceAbs(G4double iprojo, G4double at, G4double zt, G4double ep
   A=at;
   Z=zt;
   E=ep;
-  double sig_g=31.41592654*bmax*bmax;
+  double sig_g = 31.41592654*bmax*bmax;
   if(iprojo == 1) {
     ap = 1.0;
     zp = 1.0;
@@ -5965,10 +7290,13 @@ G4double G4Incl::forceAbs(G4double iprojo, G4double at, G4double zt, G4double ep
   }
 
   sig_exp = xabs2(zp, ap, zt, at, ep);
-  sig_incl = crossSection(iprojo, ep, at);
-
+  assert(isnan(sig_exp) == false);
+  
+  sig_incl = crossSection(int(iprojo), ep, at);
+  assert(isnan(sig_incl) == false);
+  
   proba = (sig_exp-pt*sig_incl)/(pt*(sig_g - sig_incl));
-  std::cout << "sig_exp : " << sig_exp << " \t \t sig_incl: " << sig_incl << std::endl;
+  //  G4cout << "sig_exp : " << sig_exp << " \t \t sig_incl: " << sig_incl << G4endl;
   if(proba <= 0.0) {
     proba = 0.0;
   }
@@ -5983,7 +7311,7 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 {	                                   
   G4double sig = 0.0;
   
-  G4double Const, xzt, xat, Const1, t1, gcm, bcm, plab, ecmp, ecmt, rela, ecm, rm, bigr, bigb;
+  G4double Const, xzt, xat, Const1 = 0.0, t1, gcm, bcm, plab, ecmp, ecmt, rela, ecm, rm, bigr, bigb;
   G4double xm, x1, sl, phst, ce, term1, delta, beta, twxsec;
   G4double xsec;
 
@@ -6041,7 +7369,10 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 
   gcm = (ap*(dp1 + E/938.0) + at)/(pow((pow(ap,2) + pow(at,2) + dp2*ap*(E + 938.0)*at/938.e0),dph));
   bcm = sqrt(dp1-dp1/(pow(gcm,2)));
-  plab = ap*sqrt(dp2*938.0*E+E*E);                                    
+  assert(isnan(bcm) == false);
+  
+  plab = ap*sqrt(dp2*938.0*E + E*E);                                    
+  assert(isnan(plab) == false);
   ecmp = gcm*(E+938.0)*ap - bcm*gcm*plab - ap*938.0;                     
   ecmt = gcm*938.0*at - at*938.0;
   rela = ecmp + ecmt;                                                    
@@ -6051,7 +7382,11 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   }                             
   rm = (197.32/137.01)*zp*zt/ecm;                                      
   bigr = rp + rt + 1.2*(pow(ap,dpth) + pow(at,dpth))/(pow(ecm,dpth));                   
+  assert(isnan(bigr) == false);
+
   bigb = 1.44*zp*zt/bigr;                                              
+  assert(isnan(bigb) == false);
+  
   if ((nint(zp) == 1) && (nint(at) > 56)) {
     bigb = 0.90*bigb;
   }              
@@ -6193,17 +7528,78 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   return sig;
 }
 
-void G4Incl::standardRandom(G4double *rndm, G4int *seed)
+// void G4Incl::standardRandom(G4double *rndm, G4long *seed)
+// {
+//   // IBM standard random number generator
+
+//   (*seed) = (*seed) * 65539;
+
+//   if((*seed) < 0) {
+//     (*seed) = (*seed) + 2147483647+1;
+//   }
+
+//   (*rndm) = (*seed) * 0.4656613e-9;
+//}
+
+void G4Incl::standardRandom(double *rndm, long *seed)
 {
-  // IBM standard random number generator
+  // Originally INCL uses very simple built-in random number
+  // generator. Due to some problems with C++ version of this
+  // algorithm it has been replaced here with Numerical Recipes Ran2
+  // generator for which there exist both C and FORTRAN versions which
+  // generate identical results.
 
-  (*seed) = (*seed) * 65539;
+  const long im1 = 2147483563;
+  const long im2 =  2147483399;
+  const double am = 1.0/im1;
+  const long imm1 = im1 - 1;
+  const long ia1 = 40014;
+  const long ia2 = 40692;
+  const long iq1 = 53668;
+  const long iq2 = 52774;
+  const long ir1 = 12211;
+  const long ir2 = 3791;
+  const long ntab = 32;
+  const long ndiv = (1+imm1/ntab);
+  const double eps = 1.2e-7;
+  const double rnmx = (1.0 - eps);
+  
+  int j;
+  long k;
+  static long seed2=123456789;
+  static long iy=0;
+  static long iv[ntab];
+  float temp;
 
-  if((*seed) < 0) {
-    (*seed) = (*seed) + 2147483647+1;
+  if (*seed <= 0) {
+    if (-(*seed) < 1) *seed=1;
+    else *seed = -(*seed);
+    seed2=(*seed);
+    for (j = ntab + 7;j >= 0; j--) {
+      k = (*seed)/iq1;
+      *seed = ia1*(*seed - k*iq1) - k*ir1;
+      if (*seed < 0) *seed += im1;
+      if (j < ntab) iv[j] = *seed;
+    }
+    iy = iv[0];
   }
 
-  (*rndm) = (*seed) * 0.4656613e-9;
+  k=(*seed)/iq1;
+  *seed=ia1*(*seed-k*iq1)-k*ir1;
+  if (*seed < 0) *seed += im1;
+  k=seed2/iq2;
+  seed2=ia2*(seed2-k*iq2)-k*ir2;
+  if (seed2 < 0) seed2 += im2;
+  j=iy/ndiv;
+  iy=iv[j]-seed2;
+  iv[j] = *seed;
+  if (iy < 1) iy += imm1;
+  if ((temp=am*iy) > rnmx) {
+    (*rndm) = rnmx;
+  }
+  else {
+    (*rndm) = temp;
+  }
 }
 
 void G4Incl::gaussianRandom(G4double *rndm)
@@ -6615,9 +8011,11 @@ G4double G4Incl::am(G4double a, G4double b, G4double c, G4double d)
   return sqrt(d*d-a*a-b*b-c*c);
 }
 
-G4double G4Incl::pcm(G4double e, G4double a, G4double c)
+G4double G4Incl::pcm(G4double E, G4double A, G4double C)
 {
-  return (0.5*sqrt((pow(e,2)-pow((a+c),2))*(pow(e,2)-pow((a-c),2)))/e);
+//   assert(((pow(E,2)-pow((A+C),2))*(pow(E,2)-pow((A-C),2))) >= 0);
+//   assert(E != 0);
+  return (0.5*sqrt((pow(E,2)-pow((A+C),2))*(pow(E,2)-pow((A-C),2)))/E);
 }
 
 G4double G4Incl::sign(G4double a, G4double b)
@@ -6626,10 +8024,10 @@ G4double G4Incl::sign(G4double a, G4double b)
     return utilabs(a);
   }
   if(b < 0) {
-    return (-utilabs(a));
+    return (-1.0*utilabs(a));
   }
 
-  std::cout <<"Error: sign function failed. " << std::endl;
+  G4cout <<"Error: sign function failed. " << G4endl;
   return a; // The algorithm is never supposed to reach this point.
 }
 
@@ -6639,13 +8037,13 @@ G4double G4Incl::utilabs(G4double a)
     return a;
   }
   if(a < 0) {
-    return (-1*a);
+    return (-1.0*a);
   }
   if(a == 0) {
     return a;
   }
 
-  std::cout <<"Error: utilabs function failed. " << std::endl;
+  G4cout <<"Error: utilabs function failed. " << G4endl;
 
   return a;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.cc,v 1.1 2007-05-23 10:25:37 miheikki Exp $ 
+// $Id: G4InclLightIonInterface.cc,v 1.2 2007-09-11 13:19:25 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,6 +35,29 @@
 
 G4InclLightIonInterface::G4InclLightIonInterface()
 {
+  hazard = new G4Hazard();
+  hazard->ial = 37723;
+  hazard->igraine[0] = 3997;
+  hazard->igraine[1] = 15573;
+  hazard->igraine[2] = 9971;
+  hazard->igraine[3] = 9821; 
+  hazard->igraine[4] = 99233; 
+  hazard->igraine[5] = 11167; 
+  hazard->igraine[6] = 12399;
+  hazard->igraine[7] = 11321; 
+  hazard->igraine[8] = 9825;
+  hazard->igraine[9] = 2587; 
+  hazard->igraine[10] = 1775;
+  hazard->igraine[11] = 56799; 
+  hazard->igraine[12] = 1156;
+  //  hazard->igraine[13] = 11207;
+  hazard->igraine[13] = 38957; 
+  hazard->igraine[14] = 35779; 
+  hazard->igraine[15] = 10055; 
+  hazard->igraine[16] = 76533; 
+  hazard->igraine[17] = 33759;
+  hazard->igraine[18] = 13227;
+
 }
 
 G4InclLightIonInterface::~G4InclLightIonInterface()
@@ -47,12 +70,11 @@ G4InclLightIonInterface::~G4InclLightIonInterface()
 G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& aTrack, 
 			       G4Nucleus& theNucleus)
 {
-  G4Hazard *hazard = (G4Hazard*) malloc(sizeof(G4Hazard));
-  G4VarNtp *varntp = (G4VarNtp*) malloc(sizeof(G4VarNtp));
-  G4Calincl *calincl = (G4Calincl*) malloc(sizeof(G4Calincl));
-  G4Ws *ws = (G4Ws*) malloc(sizeof(G4Ws));
-  G4Mat *mat = (G4Mat*) malloc(sizeof(G4Mat));
-  
+  G4VarNtp *varntp = new G4VarNtp();
+  G4Calincl *calincl = new G4Calincl();
+  G4Ws *ws = new G4Ws();
+  G4Mat *mat = new G4Mat();
+
   G4Incl *incl = new G4Incl(hazard, calincl, ws, mat, varntp);
 
   G4int maxTries = 200;
@@ -62,23 +84,18 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
 
   G4int bulletType = 0;
 
-  // Tell INCL4 whether to initialize or not:
-  G4int doinit;
-
   // Print diagnostic messages. 0 = silent, 1 and 2 = verbose
   //  verboseLevel = 3;
 
   // Increase the event number:
   eventNumber++;
 
-  //  cppinterface_.cppevent = eventNumber;
-
   if (verboseLevel > 0) {
-    G4cout << " >>> G4InclColliderInterface::ApplyYourself called" << G4endl;
+    G4cout << " >>> G4InclLightIonInterface::ApplyYourself called" << G4endl;
   }
 
   if(verboseLevel > 1) {
-    G4cout <<"G4InclColliderInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
+    G4cout <<"G4InclLightIonInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
   }
 
   // INCL4 needs the energy in units MeV
@@ -87,23 +104,6 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
   G4double targetA = theNucleus.GetN();
   G4double targetZ = theNucleus.GetZ();
 
-  if((targetA == previousTargetA) && (targetZ == previousTargetZ)) {
-    // If we are dealing with the same nucleus as with previous event
-    // there is no need to initialize INCL4+ABLA
-    doinit = 0;
-    if(verboseLevel > 0) {
-      G4cout <<"Same target as in last event. No initialization needed." << G4endl;
-    }
-  }
-  else {
-    // If the nucleus is not the same as before we need to initialize.
-    doinit = 1;
-    previousTargetZ = targetZ;
-    previousTargetA = targetA;
-    if(verboseLevel > 0) {
-      G4cout <<"Different target. INCL4+ABLA will be initialized. " << G4endl;
-    }
-  }
   G4double eKin;
   G4double momx, momy, momz;
   G4DynamicParticle *cascadeParticle = 0;
@@ -127,11 +127,10 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
                            pionMinus = 5, deuteron = 6, triton = 7, he3 = 8, he4 = 9};
 
   // Coding particles for use with INCL4 and ABLA 
-  if (aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
-  if (aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
-  if (aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
-  if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
-  if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+  if (aTrack.GetDefinition() == G4Deuteron::Deuteron()   ) bulletType = deuteron;
+  if (aTrack.GetDefinition() == G4Triton::Triton()       ) bulletType = triton;
+  if (aTrack.GetDefinition() == G4He3::He3()             ) bulletType = he3;
+  if (aTrack.GetDefinition() == G4Alpha::Alpha()         ) bulletType = he4;
 
   // Clean up FINPUT
   for(int i = 0; i < 15; i++) {
@@ -185,37 +184,18 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
 
     // Loop until we produce real cascade
     mat->nbmat = 1;
-    mat->amat[0] = calincl->f[0];
-    mat->zmat[0] = calincl->f[1];
+    mat->amat[0] = int(calincl->f[0]);
+    mat->zmat[0] = int(calincl->f[1]);
+
+    // Initialize INCL
+    incl->initIncl(true);
 
     while((varntp->ntrack <= 0) && (tries < maxTries)) {
       if(verboseLevel > 1) {
         round++;
         G4cout <<"Trying INCL4+ABLA. Round : " << round << G4endl; 
       }
-      // Do we want INCL4+ABLA or just INCL4?
-      // Default: INCL4+ABLA
-      if(enableAbla == 1) {
-        // If we are trying to create same collision again (because
-        // previous one was a transparency event) we do not need to
-        // initialize.
-        if(tries != 0) {
-          doinit = true;
-        }
-        // Call INCL4+ABLA
-	//        incl->applyincl4abla(doinit);
-	incl->initIncl(true);
-	incl->processEventWithEvaporation();
-      }
-      else {
-        if(tries != 0) {
-          doinit = false;
-        }
-        // Call just INCL4
-	//	incl->applyincl4(hazard.ial, doinit);
-	incl->initIncl(true);
-	incl->processEventWithEvaporation();
-      }
+      incl->processEventIncl();
       tries++;
       if(verboseLevel > 1) {
         G4cout <<"ntrack : " <<  varntp->ntrack <<G4endl;
@@ -263,7 +243,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     // original bullet particle with the same momentum.
     if(varntp->ntrack <= 0) {
       if(verboseLevel > 0) {
-        G4cout <<"G4InclColliderInterface: No cascade. Returning original particle with original momentum." << G4endl;
+        G4cout <<"G4InclLightIonInterface: No cascade. Returning original particle with original momentum." << G4endl;
       }
 
       theResult.SetStatusChange(stopAndKill);
@@ -282,6 +262,18 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
       }
       if(bulletType == pionMinus) {
         aParticleDefinition = G4PionMinus::PionMinusDefinition();
+      }
+      if(bulletType == deuteron) {
+	aParticleDefinition = G4Deuteron::DeuteronDefinition();
+      }
+      if(bulletType == triton) {
+	aParticleDefinition = G4Triton::TritonDefinition();
+      }
+      if(bulletType == he3) {
+	aParticleDefinition = G4He3::He3Definition();
+      }
+      if(bulletType == he4) {
+	aParticleDefinition = G4Alpha::AlphaDefinition();
       }
 
       cascadeParticle = new G4DynamicParticle();
@@ -359,11 +351,14 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
 
         G4int A = G4int(varntp->avv[particleI]);
         G4int Z = G4int(varntp->zvv[particleI]);
-        aIonDef = theTableOfParticles->FindIon(Z, A, 0, Z);
+        // aIonDef = theTableOfParticles->FindIon(Z, A, 0, Z);
+	aIonDef = theTableOfParticles->GetIon(Z, A, varntp->exini*MeV);
 
-        cascadeParticle = 
-          new G4DynamicParticle(aIonDef, momDirection, eKin);
-        particleIdentified++;
+	if(aIonDef != 0) {
+	  cascadeParticle = 
+	    new G4DynamicParticle(aIonDef, momDirection, eKin);
+	  particleIdentified++;
+	}
       }
 
       // Check that the particle was identified properly.
@@ -376,7 +371,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
       else {
         // Particle was identified as more than one particle type. 
         if(particleIdentified > 1) {
-          G4cout <<"G4InclColliderInterface: One outcoming particle was identified as";
+          G4cout <<"G4InclLightIonInterface: One outcoming particle was identified as";
           G4cout <<"more than one particle type. This is probably due to a bug in the interface." << G4endl;
           G4cout <<"Particle A:" << varntp->avv[particleI] << "Z: " << varntp->zvv[particleI] << G4endl;
           G4cout << "(particleIdentified =" << particleIdentified << ")"  << G4endl;
@@ -403,10 +398,10 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     theResult.AddSecondary(cascadeParticle);
 
     // Unsupported bullets
-    G4cout <<"G4InclColliderInterface: Error processing event number (internal) " << eventNumber << G4endl;
+    G4cout <<"G4InclLightIonInterface: Error processing event number (internal) " << eventNumber << G4endl;
 
     if(verboseLevel > 3) {
-      diagdata <<"G4InclColliderInterface: Error processing event number (internal) " << eventNumber << G4endl;
+      diagdata <<"G4InclLightIonInterface: Error processing event number (internal) " << eventNumber << G4endl;
     }
 
     if(bulletType == 0) {
@@ -428,7 +423,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
       if(verboseLevel > 3) {
         diagdata <<"Unsupported target: " << G4endl;
         diagdata <<"Target A: " << targetA << G4endl;
-	diagdata <<"TargetZ: " << targetZ << G4endl;
+       diagdata <<"TargetZ: " << targetZ << G4endl;
       }
     }
 
@@ -442,18 +437,18 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     }
   
     G4cout <<"Failover: returning the original bullet with original energy back to Geant4." << G4endl;
-    G4cout <<"G4InclColliderInterface: End of Error message." << G4endl;
+    G4cout <<"G4InclLightIonInterface: End of Error message." << G4endl;
 
     if(verboseLevel > 3) {
       diagdata <<"Failover: returning the original bullet with original energy back to Geant4." << G4endl;
-      diagdata <<"G4InclColliderInterface: End of Error message." << G4endl;
+      diagdata <<"G4InclLightIonInterface: End of Error message." << G4endl;
     }
   }
 
   // Free allocated memory
-  free(varntp);
-  free(calincl);
-  free(ws);
+  delete varntp;
+  delete calincl;
+  delete ws;
   delete incl;
   
   return &theResult;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.2 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.3 2007-09-11 13:18:42 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -37,76 +37,184 @@
 
 // ABLA
 
-typedef struct {
-	G4int ii;
-} G4Nevent;
+class G4Nevent {
+public:
+  G4Nevent() {};
+  ~G4Nevent() {};
+  
+  G4int ii;
+};
 
 // ABLA
 #define PACESIZEROWS 500
 #define PACESIZECOLS 500
-typedef struct {
-	G4double dm[PACESIZEROWS][PACESIZECOLS];
-} G4Pace;
+/**
+ * Masses.
+ */
+
+class G4Pace {
+
+public:
+  G4Pace() {};
+
+  ~G4Pace() {};
+  
+  G4double dm[PACESIZEROWS][PACESIZECOLS];
+};
 
 #define EC2SUBROWS 154
 #define EC2SUBCOLS 99
-typedef struct {
-	G4double ecnz[EC2SUBROWS][EC2SUBCOLS]; 
-} G4Ec2sub;
+  /**
+   *
+   */
 
-typedef struct {
-	G4double av,as,ak,optafan;
-} G4Ald;
+class G4Ec2sub {
+public:
+  G4Ec2sub() {};
 
-typedef struct {
-	G4double ap,zp,at,zt,eap,beta,bmaxnuc,crtot,crnuc,r_0, r_p,r_t,pi,bfpro,snpro,sppro,shell;
-	G4int imax, inum;
-} G4Ablamain;
+  ~G4Ec2sub() {};
+
+  G4double ecnz[EC2SUBROWS][EC2SUBCOLS]; 
+};
+
+class G4Ald {
+public:
+  /**
+   * 
+   */
+  G4Ald() {};
+  ~G4Ald() {};
+  
+  G4double av,as,ak,optafan;
+};
+
+class G4Ablamain {
+public:
+  G4Ablamain() {};
+  ~G4Ablamain() {};
+  
+  G4double ap,zp,at,zt,eap,beta,bmaxnuc,crtot,crnuc,r_0, r_p,r_t,pi,bfpro,snpro,sppro,shell;
+  G4int imax, inum;
+};
 
 #define ECLDROWS 154
 #define ECLDCOLS 99
-typedef struct {
-	G4double ecgnz[ECLDROWS][ECLDCOLS];
-	G4double ecfnz[ECLDROWS][ECLDCOLS];
-	G4double vgsld[ECLDROWS][ECLDCOLS]; 
-	G4double alpha[ECLDROWS][ECLDCOLS];
-} G4Ecld;
+/**
+ * Shell corrections and deformations.
+ */
 
-typedef struct {
-	G4double akap,bet,homega,koeff,ifis;
-	G4int optshp, optxfis,optles,optcol;
-} G4Fiss;
+class G4Ecld {
+
+public:
+  G4Ecld() {};
+  ~G4Ecld() {};
+
+  /**
+   * Ground state shell correction frldm for a spherical ground state.
+   */
+  G4double ecgnz[ECLDROWS][ECLDCOLS];
+
+  /**
+   * Shell correction for the saddle point (now: == 0).
+   */
+  G4double ecfnz[ECLDROWS][ECLDCOLS];
+
+  /**
+   * Difference between deformed ground state and ldm value.
+   */
+  G4double vgsld[ECLDROWS][ECLDCOLS]; 
+
+  /**
+   * Alpha ground state deformation (this is not beta2!)       
+   * beta2 = sqrt(5/(4pi)) * alpha 
+   */
+  G4double alpha[ECLDROWS][ECLDCOLS];
+};
+
+class G4Fiss {
+  /**
+   * Options and parameters for fission channel.
+   */
+
+public:
+  G4Fiss() {};
+  ~G4Fiss() {};
+  
+  G4double akap,bet,homega,koeff,ifis;
+  G4int optshp, optxfis,optles,optcol;
+};
 
 #define FBROWS 101
 #define FBCOLS 161
-typedef struct {
-	G4double efa[FBROWS][FBCOLS];
-} G4Fb;
+/**
+ * Fission barriers.
+ */
+ 
+class G4Fb {
+  
+public:
+  G4Fb() {};
+  ~G4Fb() {;}
+  
+  G4double efa[FBROWS][FBCOLS];
+};
 
-typedef struct {
+/**
+ * Options
+ */
+
+class G4Opt {
+
+public:
+  G4Opt() {};
+  ~G4Opt() {};
+  
   G4int optemd,optcha;
   G4double eefac;                                  
-} G4Opt;
+};
 
 #define EENUCSIZE 2002
 #define XHESIZE 50
-typedef struct {
+class G4Eenuc {
+public:
+  G4Eenuc() {};
+  ~G4Eenuc() {};
+  
   G4double she[EENUCSIZE],xhe[XHESIZE][EENUCSIZE];                                            
-} G4Eenuc;
+};
 
 #define EMDPARSIZE 1000
-typedef struct {
+/**
+ * Energies widths and cross sections for em excitation.
+ */
+
+class G4Emdpar {
+
+public:
+  G4Emdpar() {};
+  ~G4Emdpar() {};
+  
   G4double egdr,egqr,fwhmgdr,fwhmgqr,cremde1,cremde2;                  
   G4double ae1[EMDPARSIZE],be1[EMDPARSIZE],ce1[EMDPARSIZE],ae2[EMDPARSIZE];      
   G4double be2[EMDPARSIZE],ce2[EMDPARSIZE],sre1[EMDPARSIZE],sre2[EMDPARSIZE];
   G4double xre1[EMDPARSIZE],xre2[EMDPARSIZE],ds1,ds2;                             
-} G4Emdpar;
+};
 
-#define VOLANTSIZE 200
-typedef struct {
+//#define VOLANTSIZE 200
+#define VOLANTSIZE 2000
+/**
+ * Evaporation and fission output data.
+ */
+
+class G4Volant {
+  
+public:
+  G4Volant() {};
+  ~G4Volant() {};
+
   G4double acv[VOLANTSIZE],zpcv[VOLANTSIZE],pcv[VOLANTSIZE],xcv[VOLANTSIZE];
   G4double ycv[VOLANTSIZE],zcv[VOLANTSIZE];
   G4int iv; 
-} G4Volant;
+};
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaHardcodedData.cc,v 1.1 2007-05-23 10:25:37 miheikki Exp $ 
+// $Id: G4InclAblaHardcodedData.cc,v 1.2 2007-09-11 13:19:24 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -53,8 +53,8 @@ double pace2Data[500][501] = {{8071.37, 7289.03, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0
 for(int i = 0; i < getAlphaRows(); i++) {
 	for(int j = 0; j < getAlphaCols(); j++) {
 	   setAlpha(i,j, alphaData[i][j]);
-		setEcnz(i,j, ecnzData[i][j]);
-		setVgsld(i,j, vgsldData[i][j]);
+	   setEcnz(i,j, ecnzData[i][j]);
+	   setVgsld(i,j, vgsldData[i][j]);
 	}
 }
 
