@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.31 2007-09-07 14:25:11 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.32 2007-09-14 13:57:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -232,17 +232,16 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 
 void G4ScoringBox::List() const {
-  G4cout << "G4ScoringBox : " << fWorldName << G4endl;
-  G4cout << " Shape: Box mesh" << G4endl;
+  G4cout << "G4ScoringBox : " << fWorldName << " --- Shape: Box mesh" << G4endl;
 
   G4VScoringMesh::List();
 
-  G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
+//////  G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
 
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator itr = fMap.begin();
-  for(; itr != fMap.end(); itr++) {
-    G4cout << "[" << itr->first << "]" << G4endl;
-  }
+//////  std::map<G4String, G4THitsMap<G4double>* >::const_iterator itr = fMap.begin();
+//////  for(; itr != fMap.end(); itr++) {
+//////    G4cout << "[" << itr->first << "]" << G4endl;
+//////  }
 }
 
 void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {

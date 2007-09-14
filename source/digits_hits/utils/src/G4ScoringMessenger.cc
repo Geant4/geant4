@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.15 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.16 2007-09-14 13:57:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -600,17 +600,22 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  mesh = new G4ScoringBox(newVal);
 	  fSMan->RegisterScoringMesh(mesh);
       }else{
-	  G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
+	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
+          G4cerr << "Scoring mesh <" << newVal << "> already exists. Command ignored." << G4endl;
       }
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
- 	  G4Exception("G4ScroingMessenger:: Close current mesh first!. Error!");
+ 	  /////////////////////G4Exception("G4ScroingMessenger:: Close current mesh first!. Error!");
+          G4cerr << "Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
       }
       G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
       if ( !mesh ){
- 	  G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
+ 	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
+          G4cerr << "Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
       }
+  } else if(command==meshClsCmd) {
+      fSMan->CloseCurrentMesh();
   } else {
       // Tokens
       G4TokenVec token;
@@ -625,9 +630,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  // 
 	  // Mesh Geometry
 	  //
-	  if(command==meshClsCmd) {
-	      fSMan->CloseCurrentMesh();
-	  } else if(command==meshActCmd) {
+	  if(command==meshActCmd) {
 	      mesh->Activate(meshActCmd->GetNewBoolValue(newVal)); 
 	  } else if(command==mBoxSizeCmd) {
 	      MeshShape shape = mesh->GetShape();
