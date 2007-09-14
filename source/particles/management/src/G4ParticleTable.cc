@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.27 2006-06-29 19:26:05 gunter Exp $
+// $Id: G4ParticleTable.cc,v 1.28 2007-09-14 07:04:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -308,6 +308,17 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 }
 
 ////////////////////
+G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4double E)
+{
+   CheckReadiness();
+   if (Z<=0) return 0;
+   if (A-L<Z) return 0;
+   if (L<0) return 0; 
+   if (E<0.) return 0;
+   return fIonTable->GetIon(Z, A, L, E);
+}
+
+////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 {
    CheckReadiness();
@@ -315,6 +326,17 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
    if (A<Z) return 0;
    if (E<0.) return 0;
    return fIonTable->FindIon(Z, A, E);
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L, G4double E)
+{
+   CheckReadiness();
+   if (Z<=0) return 0;
+   if (A-L<Z) return 0;
+   if (L<0) return 0;
+   if (E<0.) return 0;
+   return fIonTable->FindIon(Z, A, L, E);
 }
 
 ////////////////////

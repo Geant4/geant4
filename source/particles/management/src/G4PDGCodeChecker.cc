@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.8 2006-06-29 19:25:50 gunter Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.9 2007-09-14 07:04:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,11 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode,
     theAntiQuarkContent[flavor] =0;
   }
 
+  // check code for nuclei
+  if (theParticleType == "nucleus"){
+    return CheckForNuclei();
+  }
+
   // get each digit number
   GetDigits(code);
 
@@ -81,6 +86,7 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode,
 
   } else if (theParticleType == "baryon"){
     return CheckForBaryons();
+
 
   }
   // No check
@@ -340,6 +346,44 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
   return true;
 }
 
+/////////////
+G4int G4PDGCodeChecker::CheckForNuclei()
+{
+  G4int pcode = code;
+  if (pcode < 1000000000) {
+    // anti particle   
+    return 0;
+  }
+
+  pcode -= 1000000000;
+  G4int L = pcode/10000000;
+  pcode -= 10000000*L;
+  G4int Z = pcode/10000;
+  pcode -= 10000*Z;
+  G4int A = pcode/10;
+  
+  if (A < 2 || Z > A-L || L>A || Z<=0 ) {
+#ifdef G4VERBOSE
+    if (verboseLevel>1) {
+      G4cout << " ???  Illegal PDG encoding for nucleus ";
+      G4cout << " PDG code=" << pcode <<G4endl;
+    }
+#endif
+    return 0;
+  }
+
+  G4int n_up   = 2*Z +   (A-Z-L) + L;
+  G4int n_down =   Z + 2*(A-Z-L) + L;
+  G4int n_s    =   L;
+
+  // Fill Quark contents
+  theQuarkContent[0] = n_up;
+  theQuarkContent[1] = n_down;
+  theQuarkContent[2] = n_s;
+
+  return code;
+}
+ 
 /////////////
 void G4PDGCodeChecker::GetDigits(G4int PDGcode)
 {
