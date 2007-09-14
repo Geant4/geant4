@@ -23,40 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRKeyNode.hh,v 1.3 2007-09-14 16:44:29 tinslay Exp $
+// $Id: G4GPRObserverSuperStore.hh,v 1.1 2007-09-14 16:44:29 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// J. Tinslay, August 2007. 
+// J. Tinslay, July 2007. 
 //
-#ifndef G4GPRKEYNODE_HH
-#define G4GPRKEYNODE_HH
+#ifndef G4GPROBSERVERSUPERSTORE_HH
+#define G4GPROBSERVERSUPERSTORE_HH
 
+#include "G4GPRLinearHierarchyT.hh"
+#include "G4GPRSingletonHierarchyT.hh"
 #include "G4GPRObserverCollectionT.hh"
+#include "G4GPRTriggerTypes.hh"
+#include "G4GPRObserverT.hh"
 
-class G4GPRKeyNode {
+typedef G4GPRLinearHierarchyT< G4GPRTypeList_6(G4GPRObserverT<G4GPRTriggerTypes::Initialisation::BuildPhysicsTable>,
+					       G4GPRObserverT<G4GPRTriggerTypes::Initialisation::PreparePhysicsTable>,
+					       G4GPRObserverT<G4GPRTriggerTypes::Initialisation::RetrievePhysicsTable>,
+					       G4GPRObserverT<G4GPRTriggerTypes::Tracking::StartTracking>,
+					       G4GPRObserverT<G4GPRTriggerTypes::Tracking::EndTracking>,
+					       G4GPRObserverT<G4GPRTriggerTypes::Stepping::StartStep>) > G4GPRObserverStore;
 
-public:
+typedef G4GPRAssocT<G4ParticleDefinition*, G4GPRObserverStore> G4GPRParticleAndObserverCollectionStore;
 
-  G4GPRKeyNode():fState(true) {}
-
-  void ChangeState() 
-  {
-    fState = !fState;
-    fObserverCollection(this);
-  }
-
-  G4bool GetState() {return fState;}
-
-  template <typename Pointer, typename PointerToMfn>
-  void AddObserver(Pointer* pointer, PointerToMfn mfn) 
-  {
-    fObserverCollection.RegisterObserver("tmp", pointer, mfn);
-  }
-
-private:
-  G4bool fState;
-  
-  G4GPRObserverCollectionT<G4GPRTypeList_1(G4GPRKeyNode*)> fObserverCollection;
-};
+typedef G4GPRSingletonHierarchyT< G4GPRTypeList_1(G4GPRParticleAndObserverCollectionStore) > G4GPRObserverSuperStore;
 
 #endif

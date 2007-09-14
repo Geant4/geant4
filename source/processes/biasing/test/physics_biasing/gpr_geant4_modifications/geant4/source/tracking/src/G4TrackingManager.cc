@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.1 2007-09-06 22:19:22 tinslay Exp $
+// $Id: G4TrackingManager.cc,v 1.2 2007-09-14 16:46:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -43,7 +43,7 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4RichTrajectory.hh"
 #include "G4ios.hh"
-#include "G4GPRTriggering.hh"
+#include "G4GPRTriggerTypes.hh"
 #include "G4GPRManager.hh"
 class G4VSteppingVerbose;
 
@@ -84,7 +84,6 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   if (0 != fpTrack->GetDefinition()->GetGPRManager()) {
     G4cout<<"jane gpr for "<<fpTrack->GetDefinition()->GetParticleName()<<G4endl;
     fpSteppingManager = fpGPRSteppingManager;
-    fpTrack->GetDefinition()->GetGPRManager()->Fire<G4GPRTriggering::Tracking::StartTracking>(fpTrack);
   }
   else {
     G4cout<<"jane vprocess for "<<fpTrack->GetDefinition()->GetParticleName()<<G4endl;
@@ -133,8 +132,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // Give track the pointer to the Step
   fpTrack->SetStep(fpSteppingManager->GetStep());
 
-  // Inform beginning of tracking to physics processes 
-  fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
+  // Inform beginning of tracking to physics processes
+  if (0 != fpTrack->GetDefinition()->GetGPRManager()) {
+    fpTrack->GetDefinition()->GetGPRManager()->Fire<G4GPRTriggerTypes::Tracking::StartTracking>(fpTrack);
+  } 
+  else {
+    fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
+  }
 
   // Track the particle Step-by-Step while it is alive
   G4StepStatus stepStatus;
@@ -154,7 +158,12 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
     }
   }
   // Inform end of tracking to physics processes 
-  fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
+  if (0 != fpTrack->GetDefinition()->GetGPRManager()) {
+    fpTrack->GetDefinition()->GetGPRManager()->Fire<G4GPRTriggerTypes::Tracking::EndTracking>();
+  }
+  else {
+    fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
+  }
 
   // Post tracking user intervention process.
   if( fpUserTrackingAction != NULL ) {

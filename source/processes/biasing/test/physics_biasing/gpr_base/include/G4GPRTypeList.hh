@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTypeList.hh,v 1.4 2007-09-06 22:07:04 tinslay Exp $
+// $Id: G4GPRTypeList.hh,v 1.5 2007-09-14 16:42:50 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, May 2007. Creation. Loki style typelists:
@@ -69,5 +69,6 @@ struct G4GPRTypeAtNonStrict<G4GPRTypeList<Head, Tail>, i, DefaultType>
 #define G4GPRTypeList_5(T1, T2, T3, T4, T5) G4GPRTypeList<T1, G4GPRTypeList_4(T2, T3, T4, T5)>
 #define G4GPRTypeList_6(T1, T2, T3, T4, T5, T6) G4GPRTypeList<T1, G4GPRTypeList_5(T2, T3, T4, T5, T6)>
 #define G4GPRTypeList_7(T1, T2, T3, T4, T5, T6, T7) G4GPRTypeList<T1, G4GPRTypeList_6(T2, T3, T4, T5, T6, T7)>
+#define G4GPRTypeList_8(T1, T2, T3, T4, T5, T6, T7, T8) G4GPRTypeList<T1, G4GPRTypeList_7(T2, T3, T4, T5, T6, T7, T8)>
 
 #endif

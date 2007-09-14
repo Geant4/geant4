@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerSuperStore.hh,v 1.6 2007-09-11 03:01:44 tinslay Exp $
+// $Id: G4GPRTriggerSuperStore.hh,v 1.7 2007-09-14 16:44:29 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -37,14 +37,19 @@
 #include "G4GPRTriggerManagerT.hh"
 #include "G4GPRTriggerTypes.hh"
 
-typedef G4GPRLinearHierarchyT< G4GPRTypeList_7(G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>, 
+typedef G4GPRLinearHierarchyT< G4GPRTypeList_8(G4GPRTriggerManagerT<G4GPRTriggerTypes::Initialisation::BuildPhysicsTable>,
+					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Initialisation::PreparePhysicsTable>,
+					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Initialisation::RetrievePhysicsTable>,
+					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::StartTracking>, 
 					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Tracking::EndTracking>,
+					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::NewVolume>,
 					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::StartStep>, 
-					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::EndStep>,
-					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::StartBoundary>, 
-					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::EndBoundary>,
-					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::NewRegion>) > G4GPRTriggerStore;
+					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Stepping::EndStep>) > G4GPRTriggerStore;
 
+//					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::StartBoundary>, 
+					       //					       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::EndBoundary>,
+					       //				       G4GPRTriggerManagerT<G4GPRTriggerTypes::Geometry::NewRegion>) > G4GPRTriggerStore;
+//
 typedef G4GPRAssocT<G4GPRPhysicsList*, G4GPRTriggerStore> G4GPRPhysicsListAndTriggerAssoc;
 typedef G4GPRAssocT<G4ParticleDefinition*, G4GPRPhysicsListAndTriggerAssoc> G4GPRParticleAndTriggerAssoc;
 

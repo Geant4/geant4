@@ -6,6 +6,7 @@
 #include "G4GPRTriggerSuperStore.hh"
 #include "G4GPRPhysicsListTriggerSuperStore.hh"
 #include "G4GPRPhysicsListManagerSuperStore.hh"
+#include "G4GPRObserverSuperStore.hh"
 
 class G4GPRManager {
 
@@ -14,6 +15,8 @@ public:
   G4GPRManager(G4ParticleDefinition* def)
     :pDef(def)
   {
+    pObserverStore = &(*G4GPRObserverSuperStore::Instance())[def];
+
     pPhysicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
     pPhysicsListTrigger = &(*G4GPRPhysicsListTriggerSuperStore::Instance())[def];
 
@@ -28,10 +31,24 @@ public:
   };
 
   G4GPRPhysicsList* GetActivePhysicsList() {return pPhysicsListManager->GetActiveList();}
+  
+  template <typename Scope>
+  void Fire() 
+  {
+    pObserverStore->G4GPRObserverT<Scope>::operator()();
+
+    pPhysicsListTrigger->G4GPRTriggerManagerT<Scope>::Fire();
+
+    UpdateCaches();
+    
+    pCachedElementTrigger->G4GPRTriggerManagerT<Scope>::Fire();
+  }
 
   template <typename Scope, typename Arg1>
   void Fire(const Arg1& arg1) 
   {
+    pObserverStore->G4GPRObserverT<Scope>::operator()(arg1);
+
     pPhysicsListTrigger->G4GPRTriggerManagerT<Scope>::Fire(arg1);
 
     UpdateCaches();
@@ -48,6 +65,19 @@ public:
     
     pCachedElementTrigger->G4GPRTriggerManagerT<Scope>::Fire(arg1, arg2);
   }
+
+  template <typename Scope, typename Arg1, typename Arg2, typename Arg3>
+  void Fire(const Arg1& arg1, const Arg2& arg2, const Arg3& arg3) 
+  {
+    pObserverStore->G4GPRObserverT<Scope>::operator()(arg1, arg2, arg3);
+    /*
+    pPhysicsListTrigger->G4GPRTriggerManagerT<Scope>::Fire(arg1, arg2);
+
+    UpdateCaches();
+    
+    pCachedElementTrigger->G4GPRTriggerManagerT<Scope>::Fire(arg1, arg2);
+    */
+  }
   
   template <typename List, typename Result>
   void GetList(Result*& result) 
@@ -61,6 +91,8 @@ public:
 
     if (pPhysicsListManager->ListChanged()) {
       G4GPRPhysicsList* newList = pPhysicsListManager->GetActiveList();
+
+      G4cout<<"jane physics list changed for "<<pDef->GetParticleName()<<" to "<<newList->GetName()<<G4endl;
       
       if (!fGenerators.Retrieve(newList, pCachedGenerator)) {
 	
@@ -81,7 +113,7 @@ private:
 
   G4GPRPhysicsListManager* pPhysicsListManager;
   G4GPRTriggerStore* pPhysicsListTrigger;
-
+  G4GPRObserverStore* pObserverStore;
   G4GPRTriggerStore* pCachedElementTrigger;
 
   G4GPRProcessListGenerator* pCachedGenerator;

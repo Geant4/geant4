@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRLinearHierarchyT.hh,v 1.3 2007-09-06 22:07:04 tinslay Exp $
+// $Id: G4GPRLinearHierarchyT.hh,v 1.4 2007-09-14 16:42:50 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007
@@ -57,6 +57,11 @@ struct G4GPRLinearHierarchyT<G4GPRTypeList_6(A1, A2, A3, A4, A5, A6)> : public A
 template <typename A1, typename A2, typename A3,
 	  typename A4, typename A5, typename A6, typename A7>
 struct G4GPRLinearHierarchyT<G4GPRTypeList_7(A1, A2, A3, A4, A5, A6, A7)> : public A1, public A2, public A3, public A4, public A5, public A6, public A7 {};
+
+
+template <typename A1, typename A2, typename A3,
+	  typename A4, typename A5, typename A6, typename A7, typename A8>
+struct G4GPRLinearHierarchyT<G4GPRTypeList_8(A1, A2, A3, A4, A5, A6, A7, A8)> : public A1, public A2, public A3, public A4, public A5, public A6, public A7, public A8 {};
 
 
 #endif

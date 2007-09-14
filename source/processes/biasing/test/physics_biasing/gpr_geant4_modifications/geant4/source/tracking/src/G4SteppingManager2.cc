@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.1 2007-09-06 22:19:22 tinslay Exp $
+// $Id: G4SteppingManager2.cc,v 1.2 2007-09-14 16:46:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -351,7 +351,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
-	   G4cout<<"jane at min"<<G4endl;
+	   //	   G4cout<<"jane at min"<<G4endl;
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -394,7 +394,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      if (fCurrentProcess== NULL) continue;
          // NULL means the process is inactivated by a user on fly.
 
-     G4cout<<"jane gpr along step "<<fCurrentProcess->GetProcessName()<<G4endl;
+     //     G4cout<<"jane gpr along step "<<fCurrentProcess->GetProcessName()<<G4endl;
      fParticleChange 
        = fCurrentProcess->AlongStepDoIt( *fTrack, *fStep );
 
@@ -427,7 +427,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
-	   G4cout<<"jane at min"<<G4endl;
+	   //	   G4cout<<"jane at min"<<G4endl;
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -504,7 +504,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          fCurrentProcess = (*fPostStepDoItVector)[np];
          fParticleChange 
             = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
-     G4cout<<"jane gpr discrete "<<fCurrentProcess->GetProcessName()<<G4endl;
+	 //     G4cout<<"jane gpr discrete "<<fCurrentProcess->GetProcessName()<<G4endl;
          // Update PostStepPoint of Step according to ParticleChange
 	 fParticleChange->UpdateStepForPostStep(fStep);
 #ifdef G4VERBOSE
@@ -522,7 +522,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          G4int    num2ndaries;
 
          num2ndaries = fParticleChange->GetNumberOfSecondaries();
-	 G4cout<<"jane gpr npoststep secondaries "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<num2ndaries<<G4endl;
+	 //	 G4cout<<"jane gpr npoststep secondaries "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<num2ndaries<<G4endl;
 
          fN2ndariesPostStepDoIt += num2ndaries;
 
@@ -541,7 +541,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
             // If this 2ndry particle has 'zero' kinetic energy, make sure
             // it invokes a rest process at the beginning of the tracking
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
-	   G4cout<<"jane at min"<<G4endl;
+	      //	   G4cout<<"jane at min"<<G4endl;
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.1 2007-09-06 22:19:22 tinslay Exp $
+// $Id: G4SteppingManager.cc,v 1.2 2007-09-14 16:46:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -153,7 +153,7 @@ G4StepStatus G4SteppingManager::Stepping()
 //-----------------
 // AtRest Processes
 //-----------------
-
+   G4cout<<"jane n at rest loops "<<fTrack->GetDefinition()->GetParticleName()<<" : "<<MAXofAtRestLoops<<G4endl;
    if( fTrack->GetTrackStatus() == fStopButAlive ){
      if( MAXofAtRestLoops>0 ){
         InvokeAtRestDoItProcs();
@@ -178,7 +178,7 @@ G4StepStatus G4SteppingManager::Stepping()
    else{
      // Find minimum Step length demanded by active disc./cont. processes
      DefinePhysicalStepLength();
-     G4cout<<"jane gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<physIntLength<<" "<<PhysicalStep<<G4endl;
+//     G4cout<<"jane gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<physIntLength<<" "<<PhysicalStep<<G4endl;
      // Store the Step length (geometrical length) to G4Step and G4Track
      fStep->SetStepLength( PhysicalStep );
      fTrack->SetStepLength( PhysicalStep );
@@ -290,9 +290,9 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // Set Touchable to track and a private attribute of G4SteppingManager
  
-   G4cout<<"jane set init  stepp "<< fTrack->GetDefinition()->GetParticleName()<<G4endl;
+//   G4cout<<"jane set init  stepp "<< fTrack->GetDefinition()->GetParticleName()<<G4endl;
   if ( ! fTrack->GetTouchableHandle() ) {
-    G4cout<<"jane set init  stepp didn't have touchable "<<G4endl;
+//    G4cout<<"jane set init  stepp didn't have touchable "<<G4endl;
      G4ThreeVector direction= fTrack->GetMomentumDirection();
      fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(),
                                             &direction, false, false );

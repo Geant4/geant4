@@ -29,7 +29,7 @@
 # Do runs 
 #/tracking/storeTrajectory 1
 # Run 10 events and store event displays
-/run/beamOn 10
+/run/beamOn 20
 #
 #/mydet/armAngle 60. deg
 #/mydet/fieldValue 2. tesla

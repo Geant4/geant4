@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.1 2007-09-06 22:26:28 tinslay Exp $
+// $Id: A01app.cc,v 1.2 2007-09-14 16:49:05 tinslay Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -43,7 +43,8 @@
 
 #include "A01DetectorConstruction.hh"
 #include "A01PhysicsList.hh"
-#include "A01Biasing.hh"
+#include "A01Biasing_New_Calorimeter_PhysicsLists.hh"
+#include "A01Biasing_Leading_Particle_Biasing.hh"
 #include "A01PrimaryGeneratorAction.hh"
 
 #include "A01EventAction.hh"
@@ -66,7 +67,8 @@ int main(int argc,char** argv)
   // mandatory user initialization classes
   runManager->SetUserInitialization(new A01DetectorConstruction);
   runManager->SetUserInitialization(new A01PhysicsList);
-  runManager->SetUserInitialization(new A01Biasing);
+  //  runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
+  runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
 
   // initialize Geant4 kernel
   runManager->Initialize();

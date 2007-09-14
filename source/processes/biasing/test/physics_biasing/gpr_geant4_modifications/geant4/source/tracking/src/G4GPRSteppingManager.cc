@@ -1,14 +1,22 @@
 #include "G4GPRSteppingManager.hh"
 #include "G4GPRManager.hh"
-#include "G4GPRTriggering.hh"
+#include "G4GPRTriggerTypes.hh"
 #include "G4VSensitiveDetector.hh"
 
 // try to just switch in gpr stuff & not change processing logic too much
 G4StepStatus G4GPRSteppingManager::Stepping()
 {
+   G4GPRManager* gprManager = fTrack->GetDefinition()->GetGPRManager();
+   G4cout<<"jane step number "<<fTrack->GetCurrentStepNumber()<<G4endl;
 // Store last PostStepPoint to PreStepPoint, and swap current and nex
 // volume information of G4Track. Reset total energy deposit in one Step. 
+  G4cout<<"jane prevol "<<fStep->GetPreStepPoint()->GetPhysicalVolume()<<" "<<fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<" : "<<fStep->GetPostStepPoint()->GetPhysicalVolume()<<" "<<fStep->GetPostStepPoint()->GetPhysicalVolume()->GetName()<<G4endl;
+
+  G4bool newVol(false);
+  if ((fTrack->GetCurrentStepNumber() == 1) || (fStep->GetPreStepPoint()->GetPhysicalVolume() != fStep->GetPostStepPoint()->GetPhysicalVolume())) newVol = true;
+
    fStep->CopyPostToPreStepPoint();
+
    fStep->ResetTotalEnergyDeposit();
 
 // Switch next touchable in track to current one
@@ -28,11 +36,19 @@ G4StepStatus G4GPRSteppingManager::Stepping()
 //-----------------
 // AtRest Processes
 //-----------------
-   G4GPRManager* gprManager = fTrack->GetDefinition()->GetGPRManager();
-   gprManager->Fire<G4GPRTriggering::Stepping::StartStep>(*fTrack, *fStep);
+
+   // jane fixme - pre or post ?
+   if (newVol) {
+     G4cout<<"jane firing new vol "<<G4endl;
+     gprManager->Fire<G4GPRTriggerTypes::Geometry::NewVolume>(*fTrack, *fStep);
+   }
+
+   // jane fixme - right place ?
+   gprManager->Fire<G4GPRTriggerTypes::Stepping::StartStep>(*fTrack, *fStep);
 
    gprManager->GetList<G4GPRProcessLists::AtRestGPIL>(pAtRestGPIL);
    MAXofAtRestLoops = pAtRestGPIL->size();
+   G4cout<<"jane n at rest loops "<<fTrack->GetDefinition()->GetParticleName()<<" : "<<MAXofAtRestLoops<<G4endl;
 
    if( fTrack->GetTrackStatus() == fStopButAlive ){
      if( MAXofAtRestLoops>0 ){
@@ -58,7 +74,7 @@ G4StepStatus G4GPRSteppingManager::Stepping()
    else{
      // Find minimum Step length demanded by active disc./cont. processes
      DefinePhysicalStepLength();
-     G4cout<<"jane gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<physIntLength<<" "<<PhysicalStep<<G4endl;
+     G4cout<<"jane gpr gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<physIntLength<<" "<<PhysicalStep<<G4endl;
      // Store the Step length (geometrical length) to G4Step and G4Track
      fStep->SetStepLength( PhysicalStep );
      fTrack->SetStepLength( PhysicalStep );
@@ -129,7 +145,7 @@ G4StepStatus G4GPRSteppingManager::Stepping()
 
 void G4GPRSteppingManager::DefinePhysicalStepLength()
 {
-  G4cout<<"jane G4GPRSteppingManager::DefinePhysicalStepLength()"<<G4endl;
+  G4cout<<"jane G4GPRSteppingManager::DefinePhysicalStepLength() "<<fTrack->GetDefinition()->GetParticleName()<<G4endl;
 
 // ReSet the counter etc.
    PhysicalStep  = DBL_MAX;          // Initialize by a huge number    
@@ -142,7 +158,15 @@ void G4GPRSteppingManager::DefinePhysicalStepLength()
    MAXofPostStepLoops = pDiscreteGPIL->size();
    fPostStepDoItProcTriggered = MAXofPostStepLoops;
 
-   for(size_t np=0; np < MAXofPostStepLoops; np++){
+   unsigned np = MAXofPostStepLoops;
+
+   for (std::vector<G4GPRProcessWrappers::G4GPRDiscreteGPIL>::reverse_iterator iter = pDiscreteGPIL->rbegin(); iter != pDiscreteGPIL->rend(); ++iter) {
+     np--;
+   //   for(size_t np=MAXofPostStepLoops-1; np > 0; np--){
+
+   //     for(size_t i=0; i < MAXofPostStepLoops; i++){
+
+   //  size_t np = MAXofPostStepLoops - i - 1;
 
      //     fCurrentProcess = (*fPostStepGetPhysIntVector)(np);
      //  pCurrentProcess = (*pDiscreteGPIL)(np);
@@ -153,11 +177,16 @@ void G4GPRSteppingManager::DefinePhysicalStepLength()
     //   (*fSelectedPostStepDoItVector)[np] = InActivated;
       // continue;
      //}   // NULL means the process is inactivated by a user on fly.
+     G4cout<<"Jane max post step "<<MAXofPostStepLoops<<" "<<np<<G4endl;
 
-     physIntLength = (*pDiscreteGPIL)[np].operator()( *fTrack,
-						      fPreviousStepSize,
-						      &fCondition );
+     physIntLength = (*iter).operator()( *fTrack,
+					 fPreviousStepSize,
+					 &fCondition );
+     //     physIntLength = (*pDiscreteGPIL)[np].operator()( *fTrack,
+     //					      fPreviousStepSize,
+     //					      &fCondition );
 
+     G4cout<<"jane discrete gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<iter->GetIdentifier()<<" "<<physIntLength<<G4endl;
      switch (fCondition) {
      case ExclusivelyForced:
        (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
@@ -210,19 +239,28 @@ void G4GPRSteppingManager::DefinePhysicalStepLength()
    gprManager->GetList<G4GPRProcessLists::ContinuousGPIL>(pContinuousGPIL);
 
    MAXofAlongStepLoops = pContinuousGPIL->size();
+   unsigned kp = MAXofAlongStepLoops;
 
-   for(size_t kp=0; kp < MAXofAlongStepLoops; kp++){
+   for (std::vector<G4GPRProcessWrappers::G4GPRContinuousGPIL>::reverse_iterator iter = pContinuousGPIL->rbegin(); iter != pContinuousGPIL->rend(); ++iter) {
+     kp--;
+     //   for(size_t kp=MAXofAlongStepLoops-1; kp > 0; kp--){
      //     fCurrentProcess = (*fAlongStepGetPhysIntVector)[kp];
      // pCurrentProcess = (*fAlongStepGetPhysIntVector)[kp];
      //     if (fCurrentProcess== NULL) continue; jane fixme somehow
          // NULL means the process is inactivated by a user on fly.
 
-     physIntLength = (*pContinuousGPIL)[kp].operator()(*fTrack,
-						       fPreviousStepSize,
-						       PhysicalStep,
-						       safetyProposedToAndByProcess,
-						       &fGPILSelection );
+     physIntLength = (*iter).operator()(*fTrack,
+					fPreviousStepSize,
+					PhysicalStep,
+					safetyProposedToAndByProcess,
+					&fGPILSelection );
 
+     //     physIntLength = (*pContinuousGPIL)[kp].operator()(*fTrack,
+     //					       fPreviousStepSize,
+     //					       PhysicalStep,
+     //					       safetyProposedToAndByProcess,
+     //					       &fGPILSelection );
+    G4cout<<"jane continuous gpil "<<fTrack->GetDefinition()->GetParticleName()<<" "<<iter->GetIdentifier()<<" "<<physIntLength<<G4endl;
      if(physIntLength < PhysicalStep){
        PhysicalStep = physIntLength;
 
@@ -234,12 +272,18 @@ void G4GPRSteppingManager::DefinePhysicalStepLength()
                ->SetProcessDefinedStep(fCurrentProcess);
        }
 
-    	  // Transportation is assumed to be the last process in the vector
-       if(kp == MAXofAlongStepLoops-1) {
-	   if (fTrack->GetNextVolume() != 0)
+    	  // Transportation is assumed to be the first process in the vector
+       //       if(kp == MAXofAlongStepLoops-1) {
+       if(kp == 0) {
+	 G4cout<<"jane testing boundary "<<fTrack->GetNextVolume()<<G4endl;
+	 if (fTrack->GetNextVolume() != 0) {
+	   //jane fixme - is this right ?
 	       fStepStatus = fGeomBoundary;
-	   else
+	       G4cout<<"jane next volume "<<fTrack->GetVolume()->GetName()<<" "<<fTrack->GetNextVolume()->GetName()<<G4endl;
+	 }
+	 else {
 	       fStepStatus = fWorldBoundary;	
+	 }
        }
      }
 
@@ -274,7 +318,14 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
    //   MAXofAtRestLoops = pAtRestGPIL->size();
 
    unsigned int NofInactiveProc=0;
-   for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
+   //jane - reverse iterating
+   //   for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
+   unsigned ri = MAXofAtRestLoops;
+
+   for (std::vector<G4GPRProcessWrappers::G4GPRAtRestGPIL>::reverse_iterator iter = pAtRestGPIL->rbegin(); iter != pAtRestGPIL->rend(); ++iter) {
+     ri--;
+     //   for( size_t ri=MAXofAtRestLoops-1 ; ri > 0 ; ri-- ){
+     //   for( size_t ri=MAXofAtRestLoops-1 ; ri > 0 ; ri-- ){
      
      //     fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
      //jane fixme 
@@ -285,8 +336,11 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
      //}   // NULL means the process is inactivated by a user on fly.
      G4cout<<"jane rest gpil"<<G4endl;
 
-     lifeTime = (*pAtRestGPIL)[ri].operator()(*fTrack,
-					      &fCondition );
+     //     lifeTime = (*pAtRestGPIL)[ri].operator()(*fTrack,
+     //					      &fCondition );
+
+     lifeTime = (*iter).operator()(*fTrack,
+				   &fCondition );
      G4cout<<"jane done rest gpil"<<G4endl;
      if(fCondition==Forced){
        (*fSelectedAtRestDoItVector)[ri] = Forced;
@@ -318,7 +372,8 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
    // Note: DoItVector has inverse order against GetPhysIntVector
    //       and SelectedAtRestDoItVector.
    //
-     if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated){
+     //     if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated){
+     if( (*fSelectedAtRestDoItVector)[np] != InActivated){
        G4cout<<"jane rest doit"<<G4endl;
        G4GPRManager* gprManager = fTrack->GetDefinition()->GetGPRManager();
        gprManager->GetList<G4GPRProcessLists::AtRestDoIt>(pAtRestDoIt);
@@ -341,7 +396,8 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
        G4int    num2ndaries;
 
        num2ndaries = fParticleChange->GetNumberOfSecondaries();
-       
+       	 G4cout<<"jane gpr natrest secondaries "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<num2ndaries<<G4endl;
+	 
        fN2ndariesAtRestDoIt += num2ndaries;
 
        for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
@@ -361,8 +417,10 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 // jane fixme, huh ?
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
-	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
-	   if (pm->GetAtRestProcessVector()->entries()>0){
+	   if (MAXofAtRestLoops > 0) {
+	     //	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	     //	   G4cout<<"jane at rest proc maybe killing secondary "<<pm->GetAtRestProcessVector()<<G4endl;
+	     //	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
 	   } else {
@@ -389,6 +447,7 @@ void G4GPRSteppingManager::InvokeAtRestDoItProcs()
 void G4GPRSteppingManager::InvokeAlongStepDoItProcs()
 /////////////////////////////////////////////////////////
 {
+  G4cout<<"jane gpr InvokeAlongStepDoItProcs "<<fTrack->GetDefinition()->GetParticleName()<<G4endl;
 
 // If the current Step is defined by a 'ExclusivelyForced' 
 // PostStepDoIt, then don't invoke any AlongStepDoIt
@@ -423,6 +482,7 @@ void G4GPRSteppingManager::InvokeAlongStepDoItProcs()
      G4int    num2ndaries;
 
      num2ndaries = fParticleChange->GetNumberOfSecondaries();
+     G4cout<<"jane gpr nalongstep secondaries "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<num2ndaries<<G4endl;
      fN2ndariesAlongStepDoIt += num2ndaries;
 
      for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
@@ -442,8 +502,10 @@ void G4GPRSteppingManager::InvokeAlongStepDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   //jane fixme
-	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
-	   if (pm->GetAtRestProcessVector()->entries()>0){
+	   if (MAXofAtRestLoops > 0) {
+	     //	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	     //	   G4cout<<"jane along step maybe killing secondary "<<pm->GetAtRestProcessVector()<<G4endl;
+	     //	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
 	   } else {
@@ -487,7 +549,8 @@ void G4GPRSteppingManager::InvokePostStepDoItProcs()
    // Note: DoItVector has inverse order against GetPhysIntVector
    //       and SelectedPostStepDoItVector.
    //
-     G4int Cond = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
+     G4int Cond = (*fSelectedPostStepDoItVector)[np];
+     //     G4int Cond = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
      if(Cond != InActivated){
        if( ((Cond == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
 	   ((Cond == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
@@ -540,7 +603,7 @@ void G4GPRSteppingManager::InvokePSDIP(size_t np)
 
          // Now Store the secondaries from ParticleChange to SecondaryList
          G4Track* tempSecondaryTrack;
-         G4int    num2ndaries;
+         G4int    num2ndaries(0);
 
          num2ndaries = fParticleChange->GetNumberOfSecondaries();
 	 G4cout<<"jane gpr npoststep secondaries "<<fTrack->GetDefinition()->GetParticleName()<<" "<<fTrack->GetTrackID()<<" "<<num2ndaries<<G4endl;
@@ -562,9 +625,12 @@ void G4GPRSteppingManager::InvokePSDIP(size_t np)
             // If this 2ndry particle has 'zero' kinetic energy, make sure
             // it invokes a rest process at the beginning of the tracking
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
-	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+
+	   if (MAXofAtRestLoops > 0) {
+	     //	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	     //	      G4cout<<"jane post step maybe killing secondary "<<pm->GetAtRestProcessVector()<<G4endl;
 	      //jane fixme
-	      if (pm->GetAtRestProcessVector()->entries()>0){
+	     //	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );
  	      } else {

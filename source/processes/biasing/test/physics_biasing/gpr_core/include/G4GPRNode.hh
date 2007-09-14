@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRNode.hh,v 1.2 2007-09-06 22:10:09 tinslay Exp $
+// $Id: G4GPRNode.hh,v 1.3 2007-09-14 16:44:29 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, August 2007. 
@@ -61,7 +61,7 @@ private:
   G4String fId;
   G4bool fState;
   
-  G4GPRObserverCollectionT<G4GPRTypeList_1(G4GPRNode*), G4String> fObserverCollection;
+  G4GPRObserverCollectionT<G4GPRTypeList_1(G4GPRNode*)> fObserverCollection;
 };
 
 #endif

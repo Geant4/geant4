@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRMultiObserverTriggerT.hh,v 1.5 2007-09-06 22:10:09 tinslay Exp $
+// $Id: G4GPRMultiObserverTriggerT.hh,v 1.6 2007-09-14 16:44:29 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // J. Tinslay, July 2007. 
@@ -92,7 +92,7 @@ public:
 
 private:
 
-  G4GPRObserverCollectionT<G4GPRNullType, G4String> fObserverCollection;
+  G4GPRObserverCollectionT<G4GPRNullType> fObserverCollection;
   typename Scope::TriggerWrapper fWrapper;
   G4bool fCached;
   

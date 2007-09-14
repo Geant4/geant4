@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRObserverCollectionT.hh,v 1.2 2007-09-06 22:07:04 tinslay Exp $
+// $Id: G4GPRObserverCollectionT.hh,v 1.3 2007-09-14 16:42:50 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Responsible for storing a list of observers and notifying the 
@@ -46,12 +46,13 @@
 #include "G4String.hh"
 #include <vector>
 
-template <typename TList, typename Identifier=G4String>
+template <typename TList, typename Result=void>
 class G4GPRObserverCollectionT {
   
   // Wrapper definition - void return value since we're just notifying
   // observers that "something" happened which caused them to be notified.
-  typedef G4GPRFunctor<void, Identifier, TList> Wrapper;
+  typedef G4String Identifier;
+  typedef G4GPRFunctor<Result, Identifier, TList> Wrapper;
   
 public:
   
@@ -93,6 +94,14 @@ public:
   {
     for (iter = fObserverCollection.begin(); iter != fObserverCollection.end(); ++iter) {
       (*iter)(a1, a2);
+    }
+  }
+
+  template <typename Arg1, typename Arg2, typename Arg3>
+  void operator()(const Arg1& a1, const Arg2& a2, const Arg3& a3)
+  {
+    for (iter = fObserverCollection.begin(); iter != fObserverCollection.end(); ++iter) {
+      (*iter)(a1, a2, a3);
     }
   }
   

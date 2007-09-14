@@ -11,11 +11,40 @@
 #include "G4GPRElementSuperStore.hh"
 #include "G4GPRManager.hh"
 #include "G4GPRSeedT.hh"
+#include "G4GPRObserverSuperStore.hh"
 
 namespace G4GPRConverter {
 
+  void LoadObservers(G4GPRObserverStore* store, G4VProcess* process)
+  {
+    store->G4GPRObserverT<G4GPRTriggerTypes::Initialisation::BuildPhysicsTable>::RegisterObserver("BuildPhysicsTable", process, &G4VProcess::BuildPhysicsTable);
+    store->G4GPRObserverT<G4GPRTriggerTypes::Initialisation::PreparePhysicsTable>::RegisterObserver("PreparePhysicsTable", process, &G4VProcess::PreparePhysicsTable);
+    store->G4GPRObserverT<G4GPRTriggerTypes::Initialisation::RetrievePhysicsTable>::RegisterObserver("RetrievePhysicsTable", process, &G4VProcess::RetrievePhysicsTable);
+  store->G4GPRObserverT<G4GPRTriggerTypes::Tracking::StartTracking>::RegisterObserver("StartTracking", process, &G4VProcess::StartTracking);
+  store->G4GPRObserverT<G4GPRTriggerTypes::Tracking::EndTracking>::RegisterObserver("EndTracking", process, &G4VProcess::EndTracking);
+
+
+  }
+
   template <typename List, typename Mfn>
-  void LoadList(G4GPRElementStore* store, G4ProcessVector* vect, Mfn mfn) 
+  void LoadGPIL(G4GPRElementStore* store, G4ProcessVector* vect, Mfn mfn) 
+  {
+    typedef G4GPRSeedT<List> Seed;
+
+    G4int size = vect->size();
+    G4int i = size;
+
+    // jane want to load it in reverse
+    for (i=0; i<size; i++) {
+      G4int idx = size - 1 - i;
+      //    for (i=0; i<size; i++) {
+      G4cout<<"jane adding seed for idx "<<i<<" "<<idx<<" "<<size<<G4endl;
+      store->G4GPRManagerT<Seed>::Register(new Seed((*vect)[i]->GetProcessName(), (*vect)[i], mfn, idx));
+    }
+  }
+
+  template <typename List, typename Mfn>
+  void LoadDoIt(G4GPRElementStore* store, G4ProcessVector* vect, Mfn mfn) 
   {
     typedef G4GPRSeedT<List> Seed;
 
@@ -25,6 +54,16 @@ namespace G4GPRConverter {
     for (i=0; i<size; i++) {
       G4cout<<"jane adding seed for idx "<<i<<" "<<size<<G4endl;
       store->G4GPRManagerT<Seed>::Register(new Seed((*vect)[i]->GetProcessName(), (*vect)[i], mfn, i));
+    }
+  }
+
+  void LoadObservers(G4GPRObserverStore* store, G4ProcessVector* vect)
+  {
+    G4int i(0);
+    G4int size = vect->size();
+    
+    for (i=0; i<size; i++) {
+      LoadObservers(store, (*vect)[i]);
     }
   }
 
@@ -42,18 +81,21 @@ namespace G4GPRConverter {
     
     G4GPRElementStore* store = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
  
-    LoadList<G4GPRProcessLists::AtRestGPIL>(store, processManager->GetAtRestProcessVector(typeGPIL), &G4VProcess::AtRestGPIL);
-    LoadList<G4GPRProcessLists::AtRestDoIt>(store, processManager->GetAtRestProcessVector(typeDoIt), &G4VProcess::AtRestDoIt);
+    LoadObservers(&(*G4GPRObserverSuperStore::Instance())[def], processManager->GetProcessList());
 
-    LoadList<G4GPRProcessLists::ContinuousGPIL>(store, processManager->GetAlongStepProcessVector(typeGPIL), &G4VProcess::AlongStepGPIL);
-    LoadList<G4GPRProcessLists::ContinuousDoIt>(store, processManager->GetAlongStepProcessVector(typeDoIt), &G4VProcess::AlongStepDoIt);   
+    LoadGPIL<G4GPRProcessLists::AtRestGPIL>(store, processManager->GetAtRestProcessVector(typeGPIL), &G4VProcess::AtRestGPIL);
+    LoadDoIt<G4GPRProcessLists::AtRestDoIt>(store, processManager->GetAtRestProcessVector(typeDoIt), &G4VProcess::AtRestDoIt);
 
-    LoadList<G4GPRProcessLists::DiscreteGPIL>(store, processManager->GetPostStepProcessVector(typeGPIL), &G4VProcess::PostStepGPIL);
-    LoadList<G4GPRProcessLists::DiscreteDoIt>(store, processManager->GetPostStepProcessVector(typeDoIt), &G4VProcess::PostStepDoIt);
+    LoadGPIL<G4GPRProcessLists::ContinuousGPIL>(store, processManager->GetAlongStepProcessVector(typeGPIL), &G4VProcess::AlongStepGPIL);
+    LoadDoIt<G4GPRProcessLists::ContinuousDoIt>(store, processManager->GetAlongStepProcessVector(typeDoIt), &G4VProcess::AlongStepDoIt);   
+
+    LoadGPIL<G4GPRProcessLists::DiscreteGPIL>(store, processManager->GetPostStepProcessVector(typeGPIL), &G4VProcess::PostStepGPIL);
+    LoadDoIt<G4GPRProcessLists::DiscreteDoIt>(store, processManager->GetPostStepProcessVector(typeDoIt), &G4VProcess::PostStepDoIt);
 
     G4GPRManager* gprManager = new G4GPRManager(def);
     def->SetGPRManager(gprManager);
   }
+
 
   template <typename List>
   void CrossCheck(G4ProcessVector* pm, List* gm)

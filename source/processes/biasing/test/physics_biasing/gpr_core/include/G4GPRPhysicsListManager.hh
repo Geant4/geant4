@@ -19,10 +19,13 @@ public:
   
   G4GPRPhysicsList* GetPhysicsList(const G4String& name)
   {
+    // jane fixme
+    if (name == "") return pDefaultList;
     std::vector<G4GPRPhysicsList*>::iterator iter = fLists.begin();
     
     while (iter != fLists.end()) {
       if ((*iter)->GetName() == name) return *iter;
+      iter++;
     }
     
     return 0;

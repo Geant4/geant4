@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GPRTriggerTypes.hh,v 1.1 2007-09-10 22:05:01 tinslay Exp $
+// $Id: G4GPRTriggerTypes.hh,v 1.2 2007-09-14 16:42:50 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J. Tinslay, May 2007. Creation - scope definitions.
@@ -68,6 +68,57 @@ namespace G4GPRTriggerTypes {
     typedef G4bool (*ActivatorFunc)();
     typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
   };
+  
+  struct Initialisation {
+    struct BuildPhysicsTable {
+      typedef G4GPRTypeList_1(G4ParticleDefinition) Arg;
+
+      typedef G4GPRFunctor<G4bool, G4String, Arg> TriggerWrapper;
+      typedef G4bool (*TriggerFunc)(const G4ParticleDefinition&);
+      
+      template <typename T>
+      struct TriggerMfn {
+	typedef G4bool (T::*PtrToMfn)(const G4ParticleDefinition&);
+      };
+      
+      typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
+    };
+    
+    struct PreparePhysicsTable {
+      typedef G4GPRTypeList_1(G4ParticleDefinition) Arg;
+
+      typedef G4GPRFunctor<G4bool, G4String, Arg> TriggerWrapper;
+      typedef G4bool (*TriggerFunc)(const G4ParticleDefinition&);
+
+      template <typename T>
+      struct TriggerMfn {
+	typedef G4bool (T::*PtrToMfn)(const G4ParticleDefinition&);
+      };
+
+      typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
+    };
+
+    struct RetrievePhysicsTable {
+      typedef G4GPRTypeList_3(const G4ParticleDefinition* ,
+			      G4String,
+			      G4bool) Arg;
+
+      typedef G4GPRFunctor<G4bool, G4String, Arg> TriggerWrapper;
+      typedef G4bool (*TriggerFunc)(const G4ParticleDefinition* ,
+				    const G4String&,
+				    G4bool);
+
+      template <typename T>
+      struct TriggerMfn {
+	typedef G4bool (T::*PtrToMfn)(const G4ParticleDefinition*,
+				      const G4String&,
+				      G4bool);
+      };
+
+      typedef G4GPRObserverCollectionT<Arg, G4bool> ObserverCollection;
+    };
+
+  };
 
   struct Tracking {
     struct StartTracking {
@@ -79,17 +130,21 @@ namespace G4GPRTriggerTypes {
       struct TriggerMfn {
 	typedef G4bool (T::*PtrToMfn)(G4Track*);
       };
+
+      typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
     };
 
     struct EndTracking {
-      typedef G4GPRTypeList_1(G4Track) Arg;
-      typedef G4GPRFunctor<G4bool, G4String, Arg> ActivatorDef;
-      typedef G4bool (*TriggerFunc)(const G4Track&);
+      typedef G4GPRNullType Arg;
+      typedef G4GPRFunctor<G4bool, G4String, Arg> TriggerWrapper;
+      typedef G4bool (*TriggerFunc)();
 
       template <typename T>
       struct TriggerMfn {
-	typedef G4bool (T::*PtrToMfn)(const G4Track&);
+	typedef G4bool (T::*PtrToMfn)();
       };
+
+      typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
     };
   };
      
@@ -103,6 +158,8 @@ namespace G4GPRTriggerTypes {
       struct TriggerMfn {
 	typedef G4bool (T::*PtrToMfn)(const G4Track&, const G4Step&);
       };
+
+      typedef G4GPRObserverCollectionT<Arg> ObserverCollection;
     };
       
     struct EndStep {
@@ -118,7 +175,7 @@ namespace G4GPRTriggerTypes {
     };
   };
   struct Geometry {
-    struct StartBoundary {
+    struct NewVolume {
       typedef G4GPRTypeList_2(G4Track, G4Step) Arg;
       typedef G4GPRFunctor<G4bool, G4String, Arg> TriggerWrapper;
       typedef G4bool (*TriggerFunc)(const G4Track&, const G4Step&);
