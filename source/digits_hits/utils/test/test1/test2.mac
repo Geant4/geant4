@@ -1,0 +1,70 @@
+#
+/control/execute vis.mac
+#
+########################################
+#
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxsize 30. 30. 20. cm
+/score/mesh/translate/xyz 0. 0. -80. cm
+/score/mesh/nbin 20 20 20
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/score/create/boxMesh boxMesh_2
+#
+/score/mesh/boxsize 60. 60. 30. cm
+/score/mesh/translate/xyz 0. 0. -30. cm
+/score/mesh/nbin 50 50 25
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/score/create/boxMesh boxMesh_3
+#
+/score/mesh/boxsize 100. 100. 50. cm
+/score/mesh/translate/xyz 0. 0. 50. cm
+/score/mesh/nbin 50 50 25
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/run/constructScoringWorlds
+/score/list
+#
+/run/beamOn 100
+#
+########################################
+#
+/score/draw boxMesh_3 nOfStepPSgamma
+/score/draw boxMesh_2 nOfStepPSgamma
+/score/draw boxMesh_1 nOfStepPSgamma
+#
