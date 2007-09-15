@@ -2,7 +2,7 @@
 /score/create/boxMesh boxMesh_1
 #
 /score/mesh/boxsize 100. 100. 100. cm
-#########/score/mesh/nbin 2 2 3
+/score/mesh/translate/xyz 0. 0. 0. cm
 /score/mesh/nbin 50 50 50
 #
 /score/quantity/eDep eDepPS
@@ -14,7 +14,6 @@
 /score/filter/particle ePlusFilter e+
 #
 /score/close
-/score/list
 #
 /run/constructScoringWorlds
 #

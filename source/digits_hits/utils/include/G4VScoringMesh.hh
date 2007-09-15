@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.16 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.17 2007-09-15 11:21:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,8 +70,8 @@ public:
   { return fShape; }
   inline void Accumulate(G4THitsMap<G4double> * map);
   void Dump();
-  inline void DrawMesh(G4String psName);
-  virtual void Draw(std::map<G4int, G4double*> * map) = 0;
+  inline void DrawMesh(G4String psName,G4int axflg=111);
+  virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111) = 0;
 
   void ResetScore();
 
@@ -134,10 +134,10 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
   }
 }
 
-void G4VScoringMesh::DrawMesh(G4String psName)
+void G4VScoringMesh::DrawMesh(G4String psName,G4int axflg)
 {
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end()) Draw(fMapItr->second->GetMap());
+  if(fMapItr!=fMap.end()) Draw(fMapItr->second->GetMap(),axflg);
 }
 
 #endif

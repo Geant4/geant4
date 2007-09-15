@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.32 2007-09-14 13:57:36 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.33 2007-09-15 11:21:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -244,7 +244,7 @@ void G4ScoringBox::List() const {
 //////  }
 }
 
-void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
+void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -293,6 +293,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
     //G4LogicalVolume * drawBoxLV = new G4LogicalVolume(drawBox, 0 ,"drawBoxLV");
 
     G4Scale3D scale;
+    if(axflg/100==1) {
     // xy plane
     G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
     G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
@@ -320,7 +321,9 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
 
       }
     }
-
+    }
+    axflg = axflg%100;
+    if(axflg/10==1) {
     // yz plane
     G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
     G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
@@ -348,7 +351,9 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
 
       }
     }
-
+    }
+    axflg = axflg%10;
+    if(axflg==1) {
     // xz plane
     G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
     G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
@@ -376,6 +381,9 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map) {
 
       }
     }
+    }
+
+
   }
 }
 

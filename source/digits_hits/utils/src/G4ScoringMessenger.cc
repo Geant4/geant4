@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.16 2007-09-14 13:57:37 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.17 2007-09-15 11:21:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -184,6 +184,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
+  drawCmd->SetParameter(param);
+  param = new G4UIparameter("proj",'i',true);
+  param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
 
   //
@@ -591,7 +594,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4Tokenizer next(newVal);
       G4String meshName = next();
       G4String psName = next();
-      fSMan->DrawMesh(meshName,psName);
+      G4int axflg = StoI(next());
+      fSMan->DrawMesh(meshName,psName,axflg);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {

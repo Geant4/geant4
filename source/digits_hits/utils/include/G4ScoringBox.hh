@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.12 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4ScoringBox.hh,v 1.13 2007-09-15 11:21:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,7 +49,7 @@ class G4ScoringBox : public G4VScoringMesh
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map);
+      virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111);
   
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
 

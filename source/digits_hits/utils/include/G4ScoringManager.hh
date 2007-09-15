@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.12 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.13 2007-09-15 11:21:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ class G4ScoringManager
       G4VScoringMesh* FindMesh(G4String);
       void List() const;
       void Dump() const;
-      void DrawMesh(G4String meshName,G4String psName);
+      void DrawMesh(G4String meshName,G4String psName,G4int axflg=111);
 
   private: 
       static G4ScoringManager * fSManager;

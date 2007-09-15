@@ -1,0 +1,49 @@
+#
+/control/execute vis.mac
+#
+########################################
+#
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxsize 1. 1. 1. m
+/score/mesh/nbin 10 10 10
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/score/create/boxMesh boxMesh_2
+#
+/score/mesh/boxsize 100. 100. 20. cm
+/score/mesh/nbin 50 50 20
+#
+/score/quantity/eDep eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/run/constructScoringWorlds
+/score/list
+#
+/run/beamOn 100
+#
+########################################
+#
+/score/draw boxMesh_1 nOfStepPSgamma
+/score/draw boxMesh_2 nOfStepPSgamma 11
+#
