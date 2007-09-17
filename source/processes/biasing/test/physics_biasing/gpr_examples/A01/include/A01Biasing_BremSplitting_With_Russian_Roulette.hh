@@ -25,13 +25,14 @@ public:
   
   void ConstructBiasing() 
   {
-    // Simple case 
+    // AddBiasing<Process list>(Name, Biasing function, Process placement)
     G4GPRBiasingConfig electronCfg;
     electronCfg.SelectVProcess<G4eBremsstrahlung>();
     electronCfg.SelectParticle<G4Electron>();
 
     AddBiasing<G4GPRProcessLists::DiscreteDoIt>("Uniform Brem Splitting", 
-						&A01BremSplittingFunctions::BremSplitting, electronCfg);
+						&A01BremSplittingFunctions::BremSplitting, 
+						electronCfg);
 
     G4GPRBiasingConfig gammaCfg;
     gammaCfg.SelectVProcess<G4GammaConversion>();
@@ -40,7 +41,8 @@ public:
     gammaCfg.SelectParticle<G4Gamma>();
 
     AddBiasing<G4GPRProcessLists::DiscreteDoIt>("Roulette", 
-						&A01BremSplittingFunctions::Roulette, gammaCfg);
+						&A01BremSplittingFunctions::Roulette, 
+						gammaCfg);
 
   }
 };

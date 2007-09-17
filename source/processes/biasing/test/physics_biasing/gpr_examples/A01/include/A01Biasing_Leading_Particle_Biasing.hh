@@ -24,9 +24,9 @@ class A01Biasing_Leading_Particle_Biasing : public G4VUserPhysicsBiasing {
 public:
   
   void ConstructBiasing() 
-  {/*
-    // Simple case 
-    //AddBiasingWithTrigger<Particle, Process list, Trigger Type>(Name, Process Index, biasing function, trigger function)
+  {
+    // AddTriggeredBiasing<Particle, Process list, Trigger type>
+    //   (Name, Process index, Biasing function, Trigger function)
     AddTriggeredBiasing<G4Gamma, G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Geometry::NewVolume>
       ("LeadingParticlebiasing", 1, &A01LeadingParticleBiasing_EM::SimpleEM_Conv, &CalorimeterTrigger);
 
@@ -35,19 +35,48 @@ public:
 
     AddTriggeredBiasing<G4Positron, G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Geometry::NewVolume>
       ("LeadingParticlebiasing", 3, &A01LeadingParticleBiasing_EM::SimpleEM, &CalorimeterTrigger);
-   */
+    
     // Slightly more complex configuration case - want to bias all G4HadronicProcess's
     G4GPRBiasingConfig hadronicConfig;
     hadronicConfig.SelectAllParticles();
     hadronicConfig.SelectVProcess<G4HadronicProcess>();
     
-    AddTriggeredBiasing<G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Stepping::StartStep>
+    // AddTriggeredBiasing<Process list, Trigger type>
+    //   (Name, Biasing function, Trigger function, biasing placement configuration)
+    AddTriggeredBiasing<G4GPRProcessLists::DiscreteDoIt, 
+                        G4GPRTriggerTypes::Stepping::StartStep>
       ("LeadingParticlebiasing_Hadronic", 
        &A01LeadingParticleBiasing_Hadronic::Biasing, 
        &Hadronic_LeadingParticleBiasing_Trigger, hadronicConfig);
-      
   }
 
 };
 #endif
+/*
+class A01Biasing_Leading_Particle_Biasing : public G4VUserPhysicsBiasing {
 
+public:
+  
+  void ConstructBiasing() 
+  {
+    // AddTriggeredBiasing<Particle, Process list, Trigger type>
+    //   (Name, Process index, Biasing function, Trigger function)
+    AddTriggeredBiasing<G4Electron, G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Geometry::NewVolume>
+      ("LeadingParticlebiasing", 3, &A01LeadingParticleBiasing_EM::SimpleEM, &CalorimeterTrigger);
+    
+...
+    // Slightly more complex configuration case - want to bias all G4HadronicProcess's
+    G4GPRBiasingConfig hadronicConfig;
+    hadronicConfig.SelectAllParticles();
+    hadronicConfig.SelectVProcess<G4HadronicProcess>();
+    
+    // AddTriggeredBiasing<Process list, Trigger type>
+    //   (Name, Biasing function, Trigger function, biasing placement configuration)
+    AddTriggeredBiasing<G4GPRProcessLists::DiscreteDoIt, 
+                        G4GPRTriggerTypes::Stepping::StartStep>
+      ("LeadingParticlebiasing_Hadronic", 
+       &A01LeadingParticleBiasing_Hadronic::Biasing, 
+       &Hadronic_LeadingParticleBiasing_Trigger, hadronicConfig);
+  }
+
+*/

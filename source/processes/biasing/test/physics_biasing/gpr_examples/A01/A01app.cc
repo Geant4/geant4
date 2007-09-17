@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.3 2007-09-17 08:48:06 tinslay Exp $
+// $Id: A01app.cc,v 1.4 2007-09-17 16:16:11 tinslay Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "A01Biasing_New_Calorimeter_PhysicsLists.hh"
 #include "A01Biasing_Leading_Particle_Biasing.hh"
 #include "A01Biasing_BremSplitting_With_Russian_Roulette.hh"
-#include "A01Biasing_BremSplitting_PrimaryElectron_Only.hh"
+#include "A01Biasing_BremSplitting_DaughterOfPrimary_Only.hh"
 #include "A01PrimaryGeneratorAction.hh"
 
 #include "A01EventAction.hh"
@@ -60,19 +60,26 @@ int main(int argc,char** argv)
   // RunManager construction
   G4RunManager* runManager = new G4RunManager;
 
+  runManager->SetUserInitialization(new A01DetectorConstruction);
+  //runManager->SetUserInitialization(new A01PhysicsList);
+  //runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
+  //  runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
+  //  runManager->SetUserInitialization(new A01Biasing_BremSplitting_With_Russian_Roulette);
+
 #ifdef G4VIS_USE
   // Visualization manager construction
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
+
   // mandatory user initialization classes
   runManager->SetUserInitialization(new A01DetectorConstruction);
   runManager->SetUserInitialization(new A01PhysicsList);
-  //  runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
+  runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
   //runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
-  //  runManager->SetUserInitialization(new A01Biasing_BremSplitting_With_Russian_Roulette);
-  runManager->SetUserInitialization(new A01Biasing_BremSplitting_PrimaryElectron_Only);
+  //runManager->SetUserInitialization(new A01Biasing_BremSplitting_With_Russian_Roulette);
+  // runManager->SetUserInitialization(new A01Biasing_BremSplitting_DaugherOfPrimary_Only);
 
   // initialize Geant4 kernel
   runManager->Initialize();

@@ -3,22 +3,23 @@
 
 namespace A01Triggers {
 
-  G4bool PrimaryTrackTrigger(G4Track* track)
+  // Return true if track is the daughter of a primary
+  G4bool DaughterOfPrimaryTrigger(G4Track* track)
   {
-    G4cout<<"jane primary track "<<track->GetTrackID()<<G4endl;
-    return (track->GetTrackID() == 1);
+    return (track->GetParentID() == 1);
   }
 
+  // Return true if in calorimeter volume
   G4bool CalorimeterTrigger(const G4Track& track, const G4Step& step)
   {
-    G4cout<<"jane cal trigger "<<track.GetVolume()->GetName()<<G4endl;
     return track.GetVolume()->GetName() == "cellPhysical";
   }
 
+  // Return true if track energy is less than 5 GeV
   G4bool Hadronic_LeadingParticleBiasing_Trigger(const G4Track& track, const G4Step& step)
   {
-    G4cout<<"jane had lead particle trigger "<<track.GetDefinition()->GetParticleName()<<" "<<track.GetKineticEnergy()<<G4endl;
     return (track.GetKineticEnergy() < 5*GeV);
   }
 }
+
 #endif

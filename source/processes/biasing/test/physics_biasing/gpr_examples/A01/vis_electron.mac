@@ -24,4 +24,4 @@
 /mydet/randomizePrimary FALSE
 /gun/particle e-
 
-/run/beamOn 3
+/run/beamOn 1

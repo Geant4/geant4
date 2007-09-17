@@ -1,5 +1,5 @@
-#ifndef A0BIASING_BREMSPLITTING_PRIMARY_ELECTRON_ONLY_HH
-#define A0BIASING_BREMSPLITTING_PRIMARY_ELECTRON_ONLY_HH
+#ifndef A0BIASING_BREMSPLITTING_DAUGHTEROFPRIMARY_ONLY_HH
+#define A0BIASING_BREMSPLITTING_DAUGHTEROFPRIMARY_ONLY_HH
 
 #include "A01Triggers.hh"
 
@@ -15,7 +15,7 @@
 
 using namespace G4GPRBuilder;
 
-class A01Biasing_BremSplitting_PrimaryElectron_Only : public G4VUserPhysicsBiasing {
+class A01Biasing_BremSplitting_DaugherOfPrimary_Only : public G4VUserPhysicsBiasing {
 
 public:
   
@@ -27,7 +27,7 @@ public:
     electronCfg.SelectParticle<G4Electron>();
 
     AddTriggeredBiasing<G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Tracking::StartTracking>
-      ("Splitting For Primary Electron", &A01BremSplittingFunctions::BremSplitting, &A01Triggers::PrimaryTrackTrigger, electronCfg);
+      ("Splitting For Primary Electron", &A01BremSplittingFunctions::BremSplitting, &A01Triggers::DaughterOfPrimaryTrigger, electronCfg);
 
   }
 };
