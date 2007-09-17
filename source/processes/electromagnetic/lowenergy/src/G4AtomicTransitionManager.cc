@@ -59,9 +59,10 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ,
   for (G4int Z = zMin; Z<= zMax; Z++)
     {
       std::vector<G4AtomicShell*> vectorOfShells;  
-    
+      size_t shellIndex = 0; 
+
       size_t numberOfShells=shellManager->NumberOfShells(Z);
-      for (size_t shellIndex = 0; shellIndex<numberOfShells; shellIndex++)
+      for (shellIndex = 0; shellIndex<numberOfShells; shellIndex++) 
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
 	  G4double bindingEnergy = shellManager->BindingEnergy(Z,shellIndex);

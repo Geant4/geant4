@@ -56,14 +56,17 @@ G4AtomicDeexcitation::~G4AtomicDeexcitation()
 
 std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int givenShellId)
 { 
-  std::vector<G4DynamicParticle*>* vectorOfParticles = new std::vector<G4DynamicParticle*>;
+
+  std::vector<G4DynamicParticle*>* vectorOfParticles;
+  
+  vectorOfParticles = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
   
   // The aim of this loop is to generate more than one fluorecence photon 
   // from the same ionizing event 
-do
+  do
     {
       if (counter == 0) 
 	// First call to GenerateParticles(...):
@@ -96,7 +99,7 @@ do
 	  else if ( provShellId == -1)
 	    {
 	      aParticle = GenerateAuger(Z, newShellId);
-	      }
+	    }
 	  else
 	    {
 	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
@@ -106,10 +109,10 @@ do
       if (aParticle != 0) {vectorOfParticles->push_back(aParticle);}
       else {provShellId = -2;}
     }
-
-// Look this in a particular way: only one auger emitted! //
- while (provShellId > -2); 
- 
+  
+  // Look this in a particular way: only one auger emitted! //
+  while (provShellId > -2); 
+  
   return vectorOfParticles;
 }
 
