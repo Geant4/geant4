@@ -1,9 +1,9 @@
 
-#ifndef A01LEADINGPARTICLEBIASING_HH
-#define A01LEADINGPARTICLEBIASING_HH
+#ifndef A01LEADINGPARTICLEBIASING_EM_HH
+#define A01LEADINGPARTICLEBIASING_EM_HH
 
 
-namespace A01LeadingParticleBiasing {
+namespace A01LeadingParticleBiasing_EM {
 
   G4VParticleChange* SimpleEM_Conv(G4GPRProcessWrappers::G4GPRDiscreteDoIt& original,
 				   const G4Track& track, const G4Step& step)
@@ -68,64 +68,8 @@ namespace A01LeadingParticleBiasing {
   }
 
   G4VParticleChange* SimpleEM(G4GPRProcessWrappers::G4GPRDiscreteDoIt& original,
-				   const G4Track& track, const G4Step& step)
-  {
-    /*
-    G4VParticleChange* particleChange = oldProcess(track, step);
-    
-    G4int nSecondaries = particleChange->GetNumberOfSecondaries();
-    G4cout<<"jane leading particle biasing nsecondaries "<<track.GetDefinition()->GetParticleName()<<" "<<oldProcess.GetIdentifier()<<" "<<nSecondaries<<" "<<G4endl;
-
-    if (nSecondaries < 1) || (nSecondaries == 1 && (step->GetTrackStatus == fStopAndKill) return particleChange;
-    
-    assert (nSecondaries == 2);
-      
-    G4Track* secondary0 = particleChange->GetSecondary(0);
-    G4Track* secondary1 = particleChange->GetSecondary(1);
-
-    G4Track* lowerEnergy(0);
-    G4Track* higherEnergy(0);
-
-    if (secondary0->GetKineticEnergy() < secondary1->GetKineticEnergy()) {
-      lowerEnergy = secondary0;
-      higherEnergy = secondary1;
-    }
-    else {
-      lowerEnergy = secondary1;
-      higherEnergy = secondary0;
-    }
-    
-    G4double eLow = lowerEnergy->GetKineticEnergy();
-    G4double eHigh = higherEnergy->GetKineticEnergy();
-    
-    G4cout<<"jane em lpb "<<eLow<<" "<<eHigh<<G4endl;
-
-    G4double fraction = eLow/(eHigh+eLow);
-      
-    G4double rand = G4UniformRand();
-    G4double weight(0);
-    
-    if (rand < fraction) {
-      result = new G4Track(*lowerEnergy);
-      weight = (eLow+eHigh)/eLow;
-      G4cout<<"jane lpb selected lower"<<G4endl;
-    }
-    else {
-      result = new G4Track(*higherEnergy);
-      weight = (eLow+eHigh)/eHigh;
-      G4cout<<"jane lpb selected higher"<<G4endl;
-    }
-    
-    result->SetWeight(weight);
-    particleChange->SetNumberOfSecondaries(1);
-    particleChange->SetSecondaryWeightByProcess(true);
-    particleChange->AddSecondary(result);
-
-    nSecondaries = particleChange->GetNumberOfSecondaries();
-    G4cout<<"jane new secondaires "<<nSecondaries<<G4endl;
-    return particleChange;
-    */
-
+			      const G4Track& track, const G4Step& step)
+  {    
     G4cout<<"jane lead particle selection - original functor id "<<original.GetIdentifier()<<" "<<track.GetVolume()->GetName()<<G4endl;
 
     G4VParticleChange* particleChange = original(track, step);

@@ -35,10 +35,29 @@ namespace G4GPRBuilder {
     G4GPRBuilderUtils::CreatePhysicsListWithTrigger<Particle, TriggerType>(id, trigger);
   }
 
-  template <typename Particle, typename ProcessList, typename TriggerType, typename Biasing, typename Trigger>
-  void AddRelayWithTrigger(const G4String id, G4int idx, const Biasing& biasing, const Trigger& trigger, const G4String& physicsList="")
+  template <typename Particle, typename ProcessList, typename TriggerType, 
+	    typename Biasing, typename Trigger>
+  void AddTriggeredBiasing(const G4String id, G4int idx, const Biasing& biasing, 
+			   const Trigger& trigger, const G4String& physicsList="")
   {
     G4GPRBuilderUtils::AddRelayWithTrigger<Particle, ProcessList, Biasing, TriggerType, Trigger>(id, idx, biasing, trigger, physicsList);
+  }
+
+  template <typename ProcessList, typename TriggerType, 
+	    typename Biasing, typename Trigger>
+  void AddTriggeredBiasing(const G4String id, const Biasing& biasing, 
+			   const Trigger& trigger, G4GPRBiasingConfig& cfg, 
+			   const G4String& physicsList="")
+  {
+    G4GPRBuilderUtils::AddRelayWithTrigger<ProcessList, TriggerType, Biasing, Trigger>
+      (id, biasing, trigger, cfg, physicsList);
+  }
+
+  template <typename ProcessList, typename Biasing>
+  void AddBiasing(const G4String id, const Biasing& biasing, G4GPRBiasingConfig& cfg, 
+		  const G4String& physicsList="")
+  {
+    G4GPRBuilderUtils::AddRelay<ProcessList, Biasing>(id, biasing, cfg, physicsList);
   }
 
 }

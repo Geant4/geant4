@@ -7,6 +7,7 @@
 #include "G4GPRPhysicsList.hh"
 #include "G4GPRSingleProcessRelayT.hh"
 #include "G4GPRKeySuperStore.hh"
+#include "G4GPRBiasingConfig.hh"
 //jane fixme - memory management for processes
 
 namespace G4GPRBuilderUtils {
@@ -58,11 +59,8 @@ namespace G4GPRBuilderUtils {
     G4cout<<"jane done triggered physics list"<<G4endl;
   }
 
-  template <typename Particle>
-  G4GPRElementStore* GetStore(const G4String& physicsListName="")
+  G4GPRElementStore* GetStore(G4ParticleDefinition* def, const G4String& physicsListName="")
   {
-    G4ParticleDefinition* def = Particle::Definition();
-    
     G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
 
     G4GPRPhysicsList* physicsList = physicsListManager->GetPhysicsList(physicsListName);
@@ -72,6 +70,12 @@ namespace G4GPRBuilderUtils {
     G4GPRElementStore* elementStore = &(*G4GPRElementSuperStore::Instance())[def][physicsList];
 
     return elementStore;
+  }
+
+  template <typename Particle>
+  G4GPRElementStore* GetStore(const G4String& physicsListName="")
+  {
+    return GetStore(Particle::Definition(), physicsListName);
   }
 
   template <typename Particle>
@@ -113,8 +117,12 @@ namespace G4GPRBuilderUtils {
   template <typename Particle, typename TriggerType, typename BiasingType, typename Mfn, typename Trigger>
   void RegisterTrigger(BiasingType*& biasing, Mfn mfn, const Trigger& trigger, const G4String& physicsListName="")
   {
-    G4ParticleDefinition* def = Particle::Definition();
-
+    RegisterTrigger<TriggerType>(Particle::Definition(), biasing, mfn, trigger, physicsListName);
+  }
+  
+  template <typename TriggerType, typename BiasingType, typename Mfn, typename Trigger>
+  void RegisterTrigger(G4ParticleDefinition* def, BiasingType*& biasing, Mfn mfn, const Trigger& trigger, const G4String& physicsListName="")
+  {
     G4GPRPhysicsListManager* physicsListManager = &(*G4GPRPhysicsListManagerSuperStore::Instance())[def];
     G4GPRPhysicsList* physicsList = physicsListManager->GetPhysicsList(physicsListName);
     
@@ -131,10 +139,99 @@ namespace G4GPRBuilderUtils {
     
     keyStore->G4GPRKeyManagerT<typename BiasingType::List>::AddNode(node1);
   }
+
+  template <typename ProcessList, typename Biasing, typename TriggerType, typename Trigger>
+  void AddRelayWithTrigger(G4ParticleDefinition* def, const G4String& id, 
+			   G4int idx, const Biasing& biasing, 
+			   const Trigger& trigger, const G4String& physicsListName="")
+  {
+    G4cout<<"jane adding relay for "<<def->GetParticleName()<<" "<<idx<<G4endl;
+    G4GPRConverter::LoadGPR(def);
+
+    typedef G4GPRSingleProcessRelayT<ProcessList> Relay; 
+
+    Relay* relay = new Relay(id, biasing, idx);
+    G4GPRElementStore* store = GetStore(def, physicsListName);
+
+    store->G4GPRManagerT<Relay>::Register(relay);
+    
+    RegisterTrigger<TriggerType>(def, relay, &G4GPRSingleProcessRelayT<ProcessList>::ChangeState, trigger, physicsListName);
+
+  }
+
+
+  template <typename ProcessList, typename Biasing>
+  void AddRelay(G4ParticleDefinition* def, const G4String& id, 
+		G4int idx, const Biasing& biasing, const G4String& physicsListName="")
+  {
+    G4cout<<"jane adding relay for "<<def->GetParticleName()<<" "<<idx<<G4endl;
+    G4GPRConverter::LoadGPR(def);
+
+    typedef G4GPRSingleProcessRelayT<ProcessList> Relay; 
+
+    Relay* relay = new Relay(id, biasing, idx);
+    G4GPRElementStore* store = GetStore(def, physicsListName);
+
+    store->G4GPRManagerT<Relay>::Register(relay);
+  }
+
   template <typename Particle, typename ProcessList, typename Biasing, typename TriggerType, typename Trigger>
   void AddRelayWithTrigger(const G4String& id, G4int idx, const Biasing& biasing, 
 			   const Trigger& trigger, const G4String& physicsListName="")
   {
+    AddRelayWithTrigger<ProcessList, Biasing, TriggerType, Trigger>(Particle::Definition(), id, idx, biasing, trigger, physicsListName);
+  }
+
+  template <typename ProcessList, typename TriggerType, typename Biasing, typename Trigger>
+  void AddRelayWithTrigger(const G4String& id, const Biasing& biasing, 
+			   const Trigger& trigger, G4GPRBiasingConfig& cfg, const G4String& physicsListName="")
+  {
+    typedef std::map<G4ParticleDefinition*, std::vector<unsigned> > Map;
+
+    Map myMap = cfg.GetConfig<ProcessList>();
+
+    Map::iterator iter = myMap.begin();
+    while (iter != myMap.end()) {
+
+      G4ParticleDefinition* def = iter->first;     
+      std::vector<unsigned> indices = iter->second;
+
+      std::vector<unsigned>::iterator iter2 = indices.begin();
+
+      while (iter2 != indices.end()) {
+	AddRelayWithTrigger<ProcessList, Biasing, TriggerType, Trigger>(def, id, *iter2, biasing, trigger, physicsListName);
+	iter2++;
+      }
+      iter++;
+    };
+
+  }
+
+
+  template <typename ProcessList, typename Biasing>
+  void AddRelay(const G4String& id, const Biasing& biasing, G4GPRBiasingConfig& cfg, const G4String& physicsListName="")
+  {
+    typedef std::map<G4ParticleDefinition*, std::vector<unsigned> > Map;
+
+    Map myMap = cfg.GetConfig<ProcessList>();
+
+    Map::iterator iter = myMap.begin();
+    while (iter != myMap.end()) {
+      
+      G4ParticleDefinition* def = iter->first;     
+      std::vector<unsigned> indices = iter->second;
+      
+      std::vector<unsigned>::iterator iter2 = indices.begin();
+      
+      while (iter2 != indices.end()) {
+	AddRelay<ProcessList, Biasing>(def, id, *iter2, biasing, physicsListName);
+	iter2++;
+      }
+      iter++;
+    };
+    
+  }
+    /*
     G4ParticleDefinition* def = Particle::Definition();
 
     G4GPRConverter::LoadGPR(def);
@@ -147,8 +244,8 @@ namespace G4GPRBuilderUtils {
     store->G4GPRManagerT<Relay>::Register(relay);
     
     RegisterTrigger<Particle, TriggerType>(relay, &G4GPRSingleProcessRelayT<ProcessList>::ChangeState, trigger, physicsListName);
-
-  }
+    */
+  //}
   
 
 }
