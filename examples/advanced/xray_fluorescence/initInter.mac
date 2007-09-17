@@ -10,30 +10,31 @@
 #
 # create empty scene
 #
-/vis/scene/create
+#/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
 
-/vis/open OGLIX
+#/vis/open OGLIX
+#/vis/open VRML2FILE
 
 #
 # draw scene
 #
 #
-/vis/viewer/flush
+#/vis/viewer/flush
 
 
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
 
-/tracking/storeTrajectory 1
-/vis/viewer/set/viewpointThetaPhi  60 30
+#/tracking/storeTrajectory 1
+#/vis/viewer/set/viewpointThetaPhi  60 30
 
 # this is not to redraw every single event
 
-/vis/scene/endOfEventAction accumulate
+#/vis/scene/endOfEventAction accumulate
 
 
 

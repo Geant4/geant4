@@ -100,7 +100,7 @@ void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
   particleEnergies = analysis->GetEmittedParticleEnergies();
   particleTypes = analysis->GetEmittedParticleTypes();
   detectorPosition = XrayFluoDetector->GetDetectorPosition();
-  detectorPosition.setR(detectorPosition.r()-(5.*cm)); // 5 cm dietro
+  detectorPosition.setR(detectorPosition.r()-(5.*cm)); // 5 cm before the detector, so in front of it.
 #endif
 
 }
@@ -232,6 +232,7 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       
     }
 
+  // using prevoiously genereated emissions from sample.....
 
   if (phaseSpaceGunFlag){
 
@@ -253,10 +254,9 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
 
     particleGun->SetParticleEnergy(energy);
-
-
-
     particleGun->SetParticleDefinition(particle);
+
+
   }
 
 #ifdef G4ANALYSIS_USE 

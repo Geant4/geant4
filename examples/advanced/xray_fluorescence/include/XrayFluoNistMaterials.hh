@@ -67,16 +67,25 @@ private:
 
   G4Material*        dolorite;
   G4Material*        HPGe;
+  G4Material*        SiLi;
   G4Material*        mars1;
+  G4Material*        hawaiianWD;
+  G4Material*        hawaiianRF;
   G4Material*        anorthosite;
   G4Material*        basalt;
+  G4Material*        gabbro;
+  G4Material*        gabbroWD;
+  G4Material*        gabbroRF;
   G4Material*        Air;
   G4Material*        Sci;
   G4Material*        Vacuum;
   G4Material*        madaBasalt;
   G4Material*        icelandicBasalt;
+  G4Material*        icelandicWD;
+  G4Material*        icelandicRF;
   G4Material*        GaAs;
   G4Material*        galactic;
+  G4Material*        copper;            
 
 };
 

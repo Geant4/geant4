@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.19 2005-12-09 22:15:52 mantero Exp $
+# $Id: GNUmakefile,v 1.20 2007-09-17 16:43:41 mantero Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -20,7 +20,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_USE
  CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
+ LDFLAGS  += `aida-config --libs`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

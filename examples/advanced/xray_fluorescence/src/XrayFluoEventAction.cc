@@ -253,6 +253,6 @@ G4double XrayFluoEventAction::RandomCut(G4double energy)
     else {EdepDetect = 0.;}
     return   EdepDetect;
     
-};
+}
 
 

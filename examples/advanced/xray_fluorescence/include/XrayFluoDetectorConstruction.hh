@@ -47,6 +47,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
+#include "G4Navigator.hh"
 
 #include "XrayFluoGeometry.hh"
 
@@ -142,7 +143,9 @@ public:
   const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
   
 private:
-  
+
+  G4Navigator* aNavigator;  
+
   XrayFluoDetectorConstruction();
 
   static XrayFluoDetectorConstruction* instance;
@@ -225,6 +228,15 @@ public:
   G4Material* GetPixelMaterial()  {return pixelMaterial;}; 
   G4Material* GetDia1Material()  {return Dia1Material;}; 
   G4Material* GetDia3Material()  {return Dia3Material;}; 
+  
+  // GetSampleIlluminatedFacecoord();
+  // GetSampleShadowedFaceCoord();
+  // GetSampleXplusFaceCoord();
+  // GetSampleXminusFaceCoord();
+  // GetSampleYplusFaceCoord();
+  // GetSampleYminusFaceCoord();
+
+  G4Navigator* GetGeometryNavigator() {return aNavigator;};
   
 private:
 
