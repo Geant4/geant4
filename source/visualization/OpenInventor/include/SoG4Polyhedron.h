@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoG4Polyhedron.h,v 1.2 2006-12-13 15:49:56 gunter Exp $
+// $Id: SoG4Polyhedron.h,v 1.3 2007-09-17 16:08:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // John Allison  26th October 2006
@@ -34,7 +34,7 @@
 #define SoG4Polyhedron_h
 
 // Inheritance :
-#include <Geant4_SoPolyhedron.h>
+#include "Geant4_SoPolyhedron.h"
 #include "G4AttHolder.hh"
 
 class G4Polyhedron;
