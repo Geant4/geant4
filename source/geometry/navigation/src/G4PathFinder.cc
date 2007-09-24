@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.47 2007-09-21 15:25:35 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.48 2007-09-24 09:28:05 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -803,6 +803,8 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      fullSafety = fPreSafetyMinValue - MagShift;
   }
 
+#ifdef G4PATHFINDER_OPTIMISATION
+
   if( proposedStepLength < fullSafety ) 
   {
      // Move is smaller than all safeties
@@ -831,6 +833,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #endif
   }
   else
+#endif   // End of G4PATHFINDER_OPTIMISATION 1
   {
      // Move is larger than at least one of the safeties
      //  -> so we must move the safety center!
@@ -843,6 +846,8 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) 
      {
         safety = std::max( 0.0,  fPreSafetyValues[num] - MagShift); 
+
+#ifdef G4PATHFINDER_OPTIMISATION
         if( proposedStepLength <= safety )  // Should be just < safety ?
         {
            // The Step is guaranteed to be taken
@@ -858,6 +863,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #endif
         }
         else
+#endif   // End of G4PATHFINDER_OPTIMISATION 2
         {
 #ifdef G4DEBUG_PATHFINDER
            G4double previousSafety= safety; 
