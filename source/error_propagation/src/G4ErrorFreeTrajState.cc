@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.6 2007-06-21 15:04:04 gunter Exp $
+// $Id: G4ErrorFreeTrajState.cc,v 1.7 2007-09-24 16:25:57 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -440,7 +440,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
       ANV*( -sinThetaAver*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            ) +
             OMcosThetaAver*(vUPre.x()*AN2.x()+vUPre.y()*AN2.y()             ) -
             TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) );
-    transf[1][2] = sinpPre*transf[1][3];
+    transf[1][2] = sinpPre*transf[1][2];
     
     transf[1][3] = -QAver*ANV*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            );
     
