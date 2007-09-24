@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.33 2007-09-15 11:21:57 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.34 2007-09-24 17:39:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -421,12 +421,12 @@ void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
   struct ColorMap {
     G4double val;
     G4double rgb[4];
-  } colormap[NCOLOR] = {{0.0, 1., 1., 1., 1.}, // value, r, g, b, alpha
-			{0.2, 0., 0., 1., 1.},
-			{0.4, 0., 1., 1., 1.},
-			{0.6, 0., 1., 0., 1.},
-			{0.8, 1., 1., 0., 1.},
-			{1.0, 1., 0., 0., 1.}};
+  } colormap[NCOLOR] = {{0.0, {1., 1., 1., 1.}}, // value, r, g, b, alpha
+			{0.2, {0., 0., 1., 1.}},
+			{0.4, {0., 1., 1., 1.}},
+			{0.6, {0., 1., 0., 1.}},
+			{0.8, {1., 1., 0., 1.}},
+			{1.0, {1., 0., 0., 1.}}};
   
   // search
   G4int during[2] = {0, 0};
