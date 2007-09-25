@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.42 2007-09-25 15:52:02 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.43 2007-09-25 17:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -259,8 +259,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
       ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN && 
-	      currentInteractionLength < DBL_MAX) {
+    } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
       SubtractNumberOfInteractionLengthLeft(previousStepSize);
       if(theNumberOfInteractionLengthLeft < 0.)
@@ -285,6 +284,12 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
     // zero cross section case
   } else {
+    if(currentInteractionLength < DBL_MAX) {
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.)
+	theNumberOfInteractionLengthLeft = perMillion;
+    }
     currentInteractionLength = DBL_MAX;
   }
   return x;

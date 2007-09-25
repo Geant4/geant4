@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.113 2007-09-25 15:52:02 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.114 2007-09-25 17:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -633,6 +633,12 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 
     // zero cross section case
   } else {
+    if(currentInteractionLength < DBL_MAX) {
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.)
+	theNumberOfInteractionLengthLeft = perMillion;
+    }
     currentInteractionLength = DBL_MAX;
   }
   return x;
