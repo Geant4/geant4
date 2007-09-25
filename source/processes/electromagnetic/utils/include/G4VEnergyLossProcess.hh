@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.69 2007-07-28 13:18:32 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.70 2007-09-25 10:20:00 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,8 @@
 //          dedx tables (V.Ivanchenko)
 // 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
 // 27-07-07 use stl vector for emModels instead of C-array (V.Ivanchenko)
+// 25-09-07 More accurate handling zero xsect in 
+//          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -825,21 +827,25 @@ inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
   }
 
-  if(preStepLambda > DBL_MIN) {
+  if (theNumberOfInteractionLengthLeft < 0.0) {
+    // beggining of tracking (or just after DoIt of this process)
+    ResetNumberOfInteractionLengthLeft();
+  } else if(previousStepSize > DBL_MIN) {
+    // subtract NumberOfInteractionLengthLeft
+    SubtractNumberOfInteractionLengthLeft(previousStepSize);
+    if(theNumberOfInteractionLengthLeft<0.)
+      theNumberOfInteractionLengthLeft=perMillion;
+  }
 
-    if (theNumberOfInteractionLengthLeft < 0.0) {
-      // beggining of tracking (or just after DoIt of this process)
-      ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN) {
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft<0.)
-	theNumberOfInteractionLengthLeft=perMillion;
-    }
-
-    // get mean free path
+  // get mean free path and step limit
+  if(preStepLambda > DBL_MIN) { 
     currentInteractionLength = 1.0/preStepLambda;
     x = theNumberOfInteractionLengthLeft * currentInteractionLength;
+  } else {
+    currentInteractionLength = DBL_MAX;
+    x = DBL_MAX;
+  }
+
 #ifdef G4VERBOSE
     if (verboseLevel>2){
       G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
@@ -852,7 +858,6 @@ inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
     }
 #endif
-  }
   return x;
 }
 
