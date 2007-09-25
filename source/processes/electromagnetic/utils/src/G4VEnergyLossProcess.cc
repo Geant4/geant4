@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.114 2007-09-25 17:12:41 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.115 2007-09-25 17:28:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -606,8 +606,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
       ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN && 
-	      currentInteractionLength < DBL_MAX) {
+    } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
       SubtractNumberOfInteractionLengthLeft(previousStepSize);
       if(theNumberOfInteractionLengthLeft < 0.)
@@ -633,7 +632,8 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 
     // zero cross section case
   } else {
-    if(currentInteractionLength < DBL_MAX) {
+    if(theNumberOfInteractionLengthLeft > DBL_MIN && 
+       currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
       SubtractNumberOfInteractionLengthLeft(previousStepSize);
       if(theNumberOfInteractionLengthLeft < 0.)
