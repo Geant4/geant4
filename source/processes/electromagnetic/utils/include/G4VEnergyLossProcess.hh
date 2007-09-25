@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.70 2007-09-25 10:20:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.71 2007-09-25 11:29:35 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -827,23 +827,22 @@ inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
   }
 
-  if (theNumberOfInteractionLengthLeft < 0.0) {
-    // beggining of tracking (or just after DoIt of this process)
-    ResetNumberOfInteractionLengthLeft();
-  } else if(previousStepSize > DBL_MIN) {
-    // subtract NumberOfInteractionLengthLeft
-    SubtractNumberOfInteractionLengthLeft(previousStepSize);
-    if(theNumberOfInteractionLengthLeft<0.)
-      theNumberOfInteractionLengthLeft=perMillion;
-  }
-
-  // get mean free path and step limit
   if(preStepLambda > DBL_MIN) { 
+    if (theNumberOfInteractionLengthLeft < 0.0) {
+      // beggining of tracking (or just after DoIt of this process)
+      ResetNumberOfInteractionLengthLeft();
+    } else if(previousStepSize > DBL_MIN) {
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.)
+	theNumberOfInteractionLengthLeft = perMillion;
+    }
+
+    // get mean free path and step limit
     currentInteractionLength = 1.0/preStepLambda;
     x = theNumberOfInteractionLengthLeft * currentInteractionLength;
   } else {
     currentInteractionLength = DBL_MAX;
-    x = DBL_MAX;
   }
 
 #ifdef G4VERBOSE
