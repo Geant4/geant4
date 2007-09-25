@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2007-09-25 08:00:13 arce Exp $
+$Id: History,v 1.11 2007-09-25 08:07:01 arce Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 24 September 2007 - P.Arce (error_propagation-V09-00-01)
-- G4ErrorFreeTrajState: correct bug in one of the transformation matrix terms
+- G4ErrorFreeTrajState: correct bug in one of the transformation matrix terms ( g4bug=971 )
 - G4ErrorFreeTrajParam: correct normalization of Y and Z coordinates
 
 5 June 2007 - G.Cosmo (error_propagation-V08-03-09)
