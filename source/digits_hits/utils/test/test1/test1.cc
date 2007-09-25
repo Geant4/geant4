@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.5 2007-08-29 04:55:26 asaim Exp $
+// $Id: test1.cc,v 1.6 2007-09-25 00:36:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,6 @@ int main(int argc,char** argv)
  runManager->SetUserInitialization(detector);
  //
  G4VUserPhysicsList* physics = new Tst1PhysicsList;
- physics->UseCoupledTransportation();
  runManager->SetUserInitialization(physics);
     
  // Set user action classes
