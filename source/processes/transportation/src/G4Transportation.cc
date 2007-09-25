@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.69 2007-05-30 15:32:29 japost Exp $
+// $Id: G4Transportation.cc,v 1.70 2007-09-25 16:06:24 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -213,7 +213,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( !fieldExertsForce ) 
   {
      G4double linearStepLength ;
-     if( currentMinimumStep <= currentSafety )
+     G4bool faststep = false;
+     //     faststep = true;  // Enable optimisation - old default 
+     if( faststep && currentMinimumStep <= currentSafety )
      {
        // The Step is guaranteed to be taken
        //
