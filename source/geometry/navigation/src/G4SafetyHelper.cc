@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.12 2007-05-09 12:57:31 japost Exp $
+// $Id: G4SafetyHelper.cc,v 1.13 2007-09-25 13:04:40 ahoward Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -44,7 +44,8 @@ G4SafetyHelper::G4SafetyHelper() :
   fFirstCall(true),
   fLastSafetyPosition(0.0,0.0,0.0),
   fLastSafety(0.0),
-  fRecomputeFactor(0.2)
+  fRecomputeFactor(0.0)
+  //  fRecomputeFactor(0.2)
 {
   fpPathFinder= 0; //  Cannot initialise this yet - a loop results
 
