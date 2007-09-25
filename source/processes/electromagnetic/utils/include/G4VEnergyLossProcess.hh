@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.71 2007-09-25 11:29:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.72 2007-09-25 15:52:02 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -216,7 +216,7 @@ public:
                              G4GPILSelection* selection
                             );
 
-  inline G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
@@ -302,10 +302,10 @@ public:
                                 const G4Region* region = 0);
 
   // Assign a model to a process
-  inline void SetEmModel(G4VEmModel*, G4int index=1);
+  inline void SetEmModel(G4VEmModel*, G4int index=0);
   
   // return the assigned model
-  inline G4VEmModel* EmModel(G4int index=1);
+  inline G4VEmModel* EmModel(G4int index=0);
   
   // Assign a fluctuation model to a process
   inline void SetFluctModel(G4VEmFluctuationModel*);
@@ -731,7 +731,7 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaForScaledEnergy(e);
-    //   mfpKinEnergy = 0.0;
+
   } else {
     G4double e1 = e*lambdaFactor;
     if(e1 > mfpKinEnergy) {
@@ -745,7 +745,6 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
       preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
     }
   }
-  //  theNumberOfInteractionLengthLeft = -1.;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -783,8 +782,7 @@ inline G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     x = fRange;
     G4double y = x*dRoverRange;
 
-    //    G4double safety = track.GetStep()->GetPreStepPoint()->GetSafety();
-    if(x > finalRange && y < currentMinStep) { // && x > safety) {
+    if(x > finalRange && y < currentMinStep) { 
       x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
     } else if (rndmStepFlag) x = SampleRange();
     //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
@@ -806,58 +804,6 @@ inline G4double G4VEnergyLossProcess::SampleRange()
   G4double x = fRange + G4RandGauss::shoot(0.0,s);
   if(x > 0.0) fRange = x;
   return fRange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
-  InitialiseStep(track);
-
-  if(preStepScaledEnergy < mfpKinEnergy) {
-    if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
-    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
-  }
-
-  if(preStepLambda > DBL_MIN) { 
-    if (theNumberOfInteractionLengthLeft < 0.0) {
-      // beggining of tracking (or just after DoIt of this process)
-      ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN) {
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
-	theNumberOfInteractionLengthLeft = perMillion;
-    }
-
-    // get mean free path and step limit
-    currentInteractionLength = 1.0/preStepLambda;
-    x = theNumberOfInteractionLengthLeft * currentInteractionLength;
-  } else {
-    currentInteractionLength = DBL_MAX;
-  }
-
-#ifdef G4VERBOSE
-    if (verboseLevel>2){
-      G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
-      G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-      G4cout << " for " << particle->GetParticleName() 
-             << " in Material  " <<  currentMaterial->GetName()
-	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
-	     <<G4endl;
-      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
-	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
-    }
-#endif
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

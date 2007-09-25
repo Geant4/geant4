@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.40 2007-09-25 11:29:35 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.41 2007-09-25 15:52:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -157,7 +157,7 @@ public:
   // Specific methods for post step simulation 
   //------------------------------------------------------------------------
 
-  G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
@@ -408,7 +408,7 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaFromTable(e);
-    //    mfpKinEnergy = 0.0;
+
   } else {
     G4double e1 = e*lambdaFactor;
     if(e1 > mfpKinEnergy) {
@@ -422,58 +422,6 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
       preStepLambda = theCrossSectionMax[currentMaterialIndex];
     }
   }
-  //  theNumberOfInteractionLengthLeft = -1.;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
-  InitialiseStep(track);
-
-  if(preStepKinEnergy < mfpKinEnergy) {
-    if (integral) ComputeIntegralLambda(preStepKinEnergy);
-    else  preStepLambda = GetCurrentLambda(preStepKinEnergy);
-    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
-  }
-
-  if(preStepLambda > DBL_MIN) { 
-    if (theNumberOfInteractionLengthLeft < 0.0) {
-      // beggining of tracking (or just after DoIt of this process)
-      ResetNumberOfInteractionLengthLeft();
-    } else if(previousStepSize > DBL_MIN) {
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
-	theNumberOfInteractionLengthLeft = perMillion;
-    }
-
-    // get mean free path and step limit
-    currentInteractionLength = 1.0/preStepLambda;
-    x = theNumberOfInteractionLengthLeft * currentInteractionLength;
-  } else {
-    currentInteractionLength = DBL_MAX;
-  }
-#ifdef G4VERBOSE
-  if (verboseLevel>2){
-    G4cout << "G4VEmProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-    G4cout << " for " << particle->GetParticleName() 
-	   << " in Material  " <<  currentMaterial->GetName()
-	   << " Ekin(MeV)= " << preStepKinEnergy/MeV 
-	   <<G4endl;
-    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
-	   << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
-  }
-#endif
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
