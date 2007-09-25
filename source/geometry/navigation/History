@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2007-07-12 16:34:33 japost Exp $
+$Id: History,v 1.98 2007-09-25 13:43:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,30 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-July 12th, 2007 - J.Apostolakis geomnav-V09-00-01
--------------------------------
-Restores fixes/improvements of geomnav-V08-03-07
-G4PathFinder
-- Includes fix for result of ObtainSafety()  (Used in CoupledTransportation)
 
-July 12th, 2007 - J.Apostolakis geomnav-V09-00-00
+September 25th, 2007 - G.Cosmo (geomnav-V09-00-02)
+------------------------------
+- Some code cleanup in G4PathFinder. Switch off additional optimisation
+  for safety in method DoNextLinearStep().
+- Set 'fRecomputeFactor' in G4SafetyHelper to 0.0, to switch off internal
+  optimisation and allow for reproducibility of steps (A.Howard).
+
+July 12th, 2007 - J.Apostolakis (geomnav-V09-00-01)
 -------------------------------
-Based on geomnav-V08-03-06  
-G4PathFinder: 
-- Include correction to signature of method PrepareNewTrack(). 
-   (This was done on a branch for this class only 
-      in order to keep only development of geomnav-V08-03-06) 
-G4PropagatorInField:
-- Included revisions and fixes for G4PropagatorInField of June 8th
+- Restores fixes/improvements of geomnav-V08-03-07
+- G4PathFinder: includes fix for result of ObtainSafety(), used in
+  CoupledTransportation.
+
+July 12th, 2007 - J.Apostolakis (geomnav-V09-00-00)
+-------------------------------
+- G4PathFinder: 
+  o Include correction to signature of method PrepareNewTrack(). 
+    (This was done on a branch for this class in order to keep only
+     development of geomnav-V08-03-06) 
+- G4PropagatorInField:
+  o Included revisions and fixes for G4PropagatorInField of June 8th.
 
 ******* NOTE  This is based on geomnav-V08-03-06  **********
         ****  Does NOT include the revisions of geomnav-V08-03-07
 
 July 5th, 2007 - G.Cosmo
 ------------------------
-G4PathFinder: 
-- Corrected signature to method PrepareNewTrack(). Resolves linking
-  problems detected on SUN-CC platform.
+- G4PathFinder: 
+  o Corrected signature to method PrepareNewTrack().
+    Resolves linking problems detected on SUN-CC platform.
 - Changes included in tag  "geomnav-V08-03-02c".
 
 *** Note: Geant4 release 9.0 utilised "geomnav-V08-03-02b". *****
@@ -60,38 +67,41 @@ June 8th, 2007 - T.Nikitina
 
 June 5th, 2007 - J.Apostolakis (geomnav-V08-03-07)
 ------------------------------
-G4PathFinder: 
-   - New method to return the safety sphere last calculated for
-      a PreStep point (it could be a previous one - due to optimasation).
-      >> If last step(s) were smaller than safety, then for a linear
-      track (no field or no charge) Navigator's ComputeSafety is not
-      called.  The older PreStep (previous step or some steps back 
-      in case of many small steps) is stored for this - and provided.
-   - ComputeStep still returns current PreStep point's safety (must)
-   - Revisions are to make this (used by CoupledTransportation) more
-   compatible with the old direct use of Navigator (by Tranportation)
+- G4PathFinder: 
+  o New method to return the safety sphere last calculated for
+    a PreStep point (it could be a previous one - due to optimasation).
+    >> If last step(s) were smaller than safety, then for a linear
+    track (no field or no charge) Navigator's ComputeSafety is not
+    called.  The older PreStep (previous step or some steps back 
+    in case of many small steps) is stored for this - and provided.
+  o ComputeStep() still returns current PreStep point's safety (must).
+  o Revisions are to make this (used by CoupledTransportation) more
+    compatible with the old direct use of G4Navigator by G4Transportation.
 
 May 29th, 2007 - J.Apostolakis (geomnav-V08-03-06)   
 ------------------------------
-G4Navigator
-  - Fixed **ComputeSafety**: wrong coordinates used (last tag only). 
-      For certainty reinstated LocateGlobalPointWithinVolume (for now).
-  - Corrected calculation of fStepEndPoint (in ComputeStep)
-      for case of step not limited by geometry
-G4PathFinder
-  - PrepareNewTrack: calls to re-initialise SafetyHelper (reset safety)
-  - ReLocate:  Corrected check of move (avoid one side effect on stored safety)
-                --> ComputeSafety still results individual navigators' values
+- G4Navigator
+  o Fixed **ComputeSafety**: wrong coordinates used (last tag only). 
+    For certainty reinstated LocateGlobalPointWithinVolume (for now).
+  o Corrected calculation of fStepEndPoint (in ComputeStep)
+    for case of step not limited by geometry
+- G4PathFinder
+  o PrepareNewTrack: calls to re-initialise SafetyHelper (reset safety)
+  o ReLocate: Corrected check of move (avoid one side effect on stored safety)
+              --> ComputeSafety still results individual navigators' values.
 
 May 24th, 2007 - J.Apostolakis (geomnav-V08-03-05)
 ------------------------------
-G4PathFinder: 1 correction and 2 optimisations:
- - PrepareNewTrack clear safety - to avoid potential problems in overlaps
- - DoNextLinearStep only calls ComputeStep for a navigator whose safety > step
- - DoNextCurvedStep, if there's 1 geometry, no longer calls ComputeSafety at start
-G4Navigator ComputeSafety: 
- - Corrected it to address use at non-endpoint
- - Replaced call to LocateGlobalPointWithinVolume with calls to sub-navigators
+- G4PathFinder: 1 correction and 2 optimisations:
+  o PrepareNewTrack() clear safety - to avoid potential problems in overlaps.
+  o DoNextLinearStep() only calls ComputeStep() for a navigator whose safety
+    greater than the step.
+  o DoNextCurvedStep(), if there's one geometry, no longer calls
+    ComputeSafety() at start.
+- G4Navigator ComputeSafety: 
+  o Corrected it to address use at non-endpoint
+  o Replaced call to LocateGlobalPointWithinVolume() with calls to
+    sub-navigators.
 
 May 21st, 2007 - G.Cosmo
 ------------------------
