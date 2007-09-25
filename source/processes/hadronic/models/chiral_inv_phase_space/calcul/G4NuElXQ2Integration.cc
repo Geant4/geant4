@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4 Tools program: NuMu DIS (x,Q2) approximation is integrated over x
+// G4 Tools program: NuE DIS (x,Q2) approximation is integrated over x
 // .....................................................
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 30-Sept-05
 // 
@@ -155,12 +155,12 @@ int main()
   //const double mpi=.1349766;    // pi0 meson mass in GeV
   //const double mpi=.13957018;   // charged pi meson mass in GeV
   //const double mpi2=mpi*mpi;    // m_pi^2 in GeV^2
-  //const double me=.00051099892; // electron mass in GeV
-  //const double me2=me*me;       // m_e^2 in GeV^2
-  //const double hme2=me2/2;      // .5*m_e^2 in GeV^2
-  const double mmu=.105658369;  // mu meson mass in GeV
-  const double mmu2=mmu*mmu;    // m_mu^2 in GeV^2
-  const double hmmu2=mmu2/2;    // .5*m_mu^2 in GeV^2
+  const double me=.00051099892; // electron mass in GeV
+  const double me2=me*me;       // m_e^2 in GeV^2
+  const double hme2=me2/2;      // .5*m_e^2 in GeV^2
+  //const double mmu=.105658369;  // mu meson mass in GeV
+  //const double mmu2=mmu*mmu;    // m_mu^2 in GeV^2
+  //const double hmmu2=mmu2/2;    // .5*m_mu^2 in GeV^2
   //const double mtau=1.777;      // tau meson mass in GeV
   //const double mtau2=mtau*mtau; // m_tau^2 in GeV^2
   //const double hmtau2=mtau2/2;  // .5*m_e^2 in GeV^2
@@ -175,8 +175,8 @@ int main()
   const double dMN=MN+MN;       // 2*M_N in GeV
   const double dMN2=MN2+MN2;    // 2*M_N^2 in GeV^2
   const double fMN2=dMN2+dMN2;  // 4*M_N^2 in GeV^2
-  //const double EminE=me+me2/dMN;// Threshold for muon production
-  const double EminMu=mmu+mmu2/dMN;  // Threshold for muon production
+  const double EminE=me+me2/dMN;// Threshold for muon production
+  //const double EminMu=mmu+mmu2/dMN;  // Threshold for muon production
   //const double EminTau=mmu+mmu2/dMN; // Threshold for muon production
   //
   //const double mc=.3;           // parameter of W>M+mc cut for Quasi-Elastic/Delta
@@ -195,31 +195,31 @@ int main()
   double f[5];                    // A working array
   int    A=12;                    // Neucleus for which calculations should be done
   double lEnuMin=0;               // LogLog of Minimum energy of neutrino
-  double lEnuMax=std::log(1.+std::log(300./EminMu)); // LogLog of MaximumEnergy of neutrino
+  double lEnuMax=std::log(1.+std::log(300./EminE)); // LogLog of MaximumEnergy of neutrino
   int    nE=49;                   // Number of points
   double dlE=(lEnuMax-lEnuMin)/nE;
   lEnuMin+=dlE/10;
   lEnuMax+=dlE/5;
-  G4cout<<"Emin="<<EminMu<<",lEi="<<lEnuMin<<",lEa="<<lEnuMax<<",dlE="<<dlE<<G4endl;
+  G4cout<<"Emin="<<EminE<<",lEi="<<lEnuMin<<",lEa="<<lEnuMax<<",dlE="<<dlE<<G4endl;
   for(double lEnu=lEnuMin; lEnu<lEnuMax; lEnu+=dlE)
 		{
-    double Enu=std::exp(std::exp(lEnu)-1.)*EminMu; // Energy of neutrino/anti-neutrino
+    double Enu=std::exp(std::exp(lEnu)-1.)*EminE; // Energy of neutrino/anti-neutrino
     double dEnu=Enu+Enu;          // doubled energy of nu/anu
     double Enu2=Enu*Enu;          // squared energy of nu/anu
-    double Emu=Enu-mmu;           // Free Energy of neutrino/anti-neutrino
-    double Emu2=Emu*Emu;          // squared energy of nu/anu
+    double Ee=Enu-me;           // Free Energy of neutrino/anti-neutrino
+    double Ee2=Ee*Ee;          // squared energy of nu/anu
     double ME=Enu*MN;             // M*E
     double dME=ME+ME;             // 2*M*E
     double DIStsig=1.;            // Total curent DIS cross-section to be integrated
     double DISmsig=1.e20;         // Total remembered DIS cross-section
     double dEMN=(dEnu+MN)*ME;
-    double MEm=ME-hmmu2;
-    double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
-    double E2M=MN*Enu2-(Enu+MN)*hmmu2;
+    double MEm=ME-hme2;
+    double sqE=Enu*std::sqrt(MEm*MEm-me2*MN2);
+    double E2M=MN*Enu2-(Enu+MN)*hme2;
     double ymax=(E2M+sqE)/dEMN;
     double ymin=(E2M-sqE)/dEMN;
     double rmin=1.-ymin;
-    double rhm2E=hmmu2/Enu2;
+    double rhm2E=hme2/Enu2;
     double Q2min=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E));
     double Q2max=dME*ymax;
     int    nQ2=8;
@@ -241,7 +241,7 @@ int main()
         double lXQES=std::log((std::sqrt(qmc*qmc+Q2*fMN2)-qmc)/dMN2);//QuasielasticBoundary
         //double lXQES=log(Q2/(Q2+mcV)); // Quasielastic boundary (W=MN+m_c)
         //double xN=Q2/dME;
-        double xN=Q2/MN/(Emu+std::sqrt(Emu2+Q2));
+        double xN=Q2/MN/(Ee+std::sqrt(Ee2+Q2));
         //double lXmin=log(xN/ymax);
         double lXmin=std::log(xN);
         // ****** QE ********
@@ -260,8 +260,8 @@ int main()
 				      {
             getFun(A, lX, Q2, f);
             // ***** Neutrino/Antineutrino switch ******>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //DISxint+=f[0]+f[0]+xN*(f[1]+f[1]+xN*f[3]); // neutrino
-            DISxint+=f[0]+f[0]+xN*(f[2]+f[2]+xN*f[4]); // anti-neutrino
+            DISxint+=f[0]+f[0]+xN*(f[1]+f[1]+xN*f[3]); // neutrino
+            //DISxint+=f[0]+f[0]+xN*(f[2]+f[2]+xN*f[4]); // anti-neutrino
             //G4cout<<f[0]<<","<<f[1]<<","<<f[2]<<","<<f[3]<<","<<f[4]<<G4endl;
           }
           DISxint*=dlX;
@@ -278,33 +278,13 @@ int main()
     //===== tot/qe choice ====
     DIStsig*=sik/Enu;
     //G4cout<<"***total-neutrino*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
-    G4cout<<"***total-antineutrino*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
-    //G4cout<<"***quasiel-nu*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
-    //G4cout<<"***quasiel-antinu*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
+    //G4cout<<"***total-antineutrino*** E="<<Enu<<" ,sig/E="<<DIStsig<<G4endl;
+    G4cout<<"***quasiel-nu*** E="<<Enu<<" ,sig/E="<<DIStsig*Enu<<G4endl;
+    //G4cout<<"***quasiel-antinu*** E="<<Enu<<" ,sig/E="<<DIStsig*Enu<<G4endl;
     //...................
     //DIStsig*=sik;
     //G4cout<<"***qelas*** E="<<Enu<<",sig="<<DIStsig<<G4endl;
     //===== End of the choice
 		} // End of the Enery LOOP
-  // int np=0;
-  //for(int m=0; m<2; m++)
-  //{
-  //  //fileNuMuX<<"  static const G4double SH"<<n<<"[nH]={"<<G4endl<<"    ";
-  //  //G4cout<<"**** A_high="<<m<<G4endl;
-  //  np=0;
-  //  int nC=14;
-	 //  for(G4int en=0; en<nC; en++)
-	 //  {
-  //    //G4double sig=1.;
-  //    np++;
-  //    //if(np==7)           // Write by 7 number in brackets
-  //    //{
-  //    //  if(en==nC-1) fileNuMuX<<sig<<"};"<<G4endl;
-  //    //  else         fileNuMuX<<sig<<","<<G4endl<<"    ";
-	 //    //}
-  //    //else           fileNuMuX<<sig<<",";
-  //    //if(np==7) np=0;
-  //  } // End of the point LOOP
-  //} // End of the isotop LOOP
   return EXIT_SUCCESS;
 }
