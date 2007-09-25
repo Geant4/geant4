@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2007-07-12 11:16:18 japost Exp $
+$Id: History,v 1.134 2007-09-25 16:18:57 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Sept 25th, 2007, J.Apostolakis  transport-V09-00-01
+------------------------------
+- Modification to disable 'optimisation' in G4Navigator for small linear
+  step  (ie when a track does less than the safety).
+    * Relevant only if there is no field, or the particle is neutral
+    * Temporary measure (in current form) to improve comparison
+        old / new Transportation  (single/old vs coupled with pathfinder). 
 
 July 12th, 2007, J.Apostolakis  transport-V09-00-00
 ------------------------------
