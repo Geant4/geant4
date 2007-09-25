@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2007-09-25 13:43:59 gcosmo Exp $
+$Id: History,v 1.99 2007-09-25 13:48:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,18 +38,15 @@ July 12th, 2007 - J.Apostolakis (geomnav-V09-00-00)
      development of geomnav-V08-03-06) 
 - G4PropagatorInField:
   o Included revisions and fixes for G4PropagatorInField of June 8th.
-
-******* NOTE  This is based on geomnav-V08-03-06  **********
-        ****  Does NOT include the revisions of geomnav-V08-03-07
+- This tag is based on "geomnav-V08-03-06" and does NOT include the
+  revisions of "geomnav-V08-03-07".
 
 July 5th, 2007 - G.Cosmo
 ------------------------
 - G4PathFinder: 
   o Corrected signature to method PrepareNewTrack().
     Resolves linking problems detected on SUN-CC platform.
-- Changes included in tag  "geomnav-V08-03-02c".
-
-*** Note: Geant4 release 9.0 utilised "geomnav-V08-03-02b". *****
+- Changes included in tag  "geomnav-V08-03-02c", included in relase 9.0.p01.
 
 June 8th, 2007 - T.Nikitina
 ---------------------------
@@ -61,9 +58,7 @@ June 8th, 2007 - T.Nikitina
   o In case of proposed step less than tolerance, now return 'kInfinity'
     as per convention of geometry instead of 'DBL_MAX'.
     (by J.Apostolakis, May 18th 2007)
-- Changes included in tag  "geomnav-V08-03-02b".
-
-*******  NOTE: The revisions above are based on geomnav-V08-03-02 ******
+- Changes included in tag "geomnav-V08-03-02b", included in release 9.0.
 
 June 5th, 2007 - J.Apostolakis (geomnav-V08-03-07)
 ------------------------------
