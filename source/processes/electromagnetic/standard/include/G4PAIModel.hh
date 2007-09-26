@@ -37,6 +37,7 @@
 //
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 26-09-07 Fixed tmax computation (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -165,6 +166,8 @@ private:
   std::vector<G4PhysicsLogVector*> fdNdxCutTable ;
 
   const G4ParticleDefinition* fParticle;
+  const G4ParticleDefinition* fElectron;
+  const G4ParticleDefinition* fPositron;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double fMass;
@@ -177,18 +180,24 @@ private:
   G4double fBg2lim; 
   G4double fTaulim;
   G4double fQc;
+
+  G4bool   isInitialised;
 };
 
 /////////////////////////////////////////////////////////////////////
 
-inline G4double G4PAIModel::MaxSecondaryEnergy( const G4ParticleDefinition*,
+inline G4double G4PAIModel::MaxSecondaryEnergy( const G4ParticleDefinition* p,
                                                       G4double kinEnergy) 
 {
-
-  G4double gamma= kinEnergy/fMass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*fRatio + fRatio*fRatio);
-  
+  G4double tmax = kinEnergy;
+  if(p == fElectron) tmax *= 0.5;
+  else if(p != fPositron) { 
+    G4double mass = p->GetPDGMass();
+    G4double ratio= electron_mass_c2/mass;
+    G4double gamma= kinEnergy/mass + 1.0;
+    tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
+                  (1. + 2.0*gamma*ratio + ratio*ratio);
+  }
   return tmax;
 }
 

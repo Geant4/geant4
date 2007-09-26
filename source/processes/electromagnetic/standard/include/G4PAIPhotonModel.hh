@@ -37,6 +37,7 @@
 //
 // Modifications:
 // 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 26-09-07 Fixed tmax computation (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -141,6 +142,7 @@ private:
   G4double             fHighestKineticEnergy;
   G4int                fTotBin;
   G4int                fMeanNumber;
+  G4int                fVerbose; 
   G4PhysicsLogVector*  fProtonEnergyVector ;
 
 
@@ -183,6 +185,8 @@ private:
 
 
   const G4ParticleDefinition* fParticle;
+  const G4ParticleDefinition* fElectron;
+  const G4ParticleDefinition* fPositron;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double fMass;
@@ -195,18 +199,24 @@ private:
   G4double fBg2lim; 
   G4double fTaulim;
   G4double fQc;
+
+  G4bool   isInitialised;
 };
 
 /////////////////////////////////////////////////////////////////////
 
-inline G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition*,
+inline G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition* p,
                                                       G4double kinEnergy) 
 {
-
-  G4double gamma= kinEnergy/fMass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*fRatio + fRatio*fRatio);
-  
+  G4double tmax = kinEnergy;
+  if(p == fElectron) tmax *= 0.5;
+  else if(p != fPositron) { 
+    G4double mass = p->GetPDGMass();
+    G4double ratio= electron_mass_c2/mass;
+    G4double gamma= kinEnergy/mass + 1.0;
+    tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
+                  (1. + 2.0*gamma*ratio + ratio*ratio);
+  }
   return tmax;
 }
 
@@ -214,12 +224,8 @@ inline G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition
 
 inline  void G4PAIPhotonModel::DefineForRegion(const G4Region* r) 
 {
-  //  G4Region* rPAI = r;
-  //  fPAIRegionVector.push_back(rPAI);
   fPAIRegionVector.push_back(r);
 }
-
-
 
 #endif
 

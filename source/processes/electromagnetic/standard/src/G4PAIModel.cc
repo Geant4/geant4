@@ -49,6 +49,7 @@
 #include "G4PAIModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4Poisson.hh"
 #include "G4Step.hh"
 #include "G4Material.hh"
@@ -77,8 +78,8 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 {
   if(p) SetParticle(p);
   
-  // fLowestKineticEnergy  = LowEnergyLimit();
-  // fHighestKineticEnergy = HighEnergyLimit();
+  fElectron = G4Electron::Electron();
+  fPositron = G4Positron::Positron();
 
   fLowestKineticEnergy  = fMass*fLowestGamma;
   fHighestKineticEnergy = fMass*fHighestGamma;
@@ -92,6 +93,8 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fdEdxVector        = 0;
   fLambdaVector      = 0;
   fdNdxCutVector     = 0;
+
+  isInitialised      = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -139,6 +142,9 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
+  if(isInitialised) return;
+  isInitialised = true;
+
   if(!fParticle) SetParticle(p);
 
   if(pParticleChange)
@@ -152,8 +158,6 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
-
-    // (*fPAIRegionVector[iRegion])
 
     vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
     size_t jMat; 
@@ -186,7 +190,6 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       BuildLambdaVector(matCouple);
       fdNdxCutTable.push_back(fdNdxCutVector);
       fLambdaTable.push_back(fLambdaVector);
-
 
       matIter++;
     }
@@ -243,10 +246,10 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
 //                           *********
 
 void
-G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition* p)
+G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
 {
   G4double LowEdgeEnergy , ionloss ;
-  G4double massRatio, tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
+  G4double tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
   /*
   if( fPAItransferTable )
   {
@@ -279,30 +282,15 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition* p)
     gamma = tau +1. ;
     // G4cout<<"gamma = "<<gamma<<endl ;
     bg2 = tau*( tau + 2. );
-
-    if(p->GetParticleName() == "e-")
-    {
-      Tmax = 0.5*LowEdgeEnergy;
-    }
-    else if(p->GetParticleName() == "e+")
-    {
-      Tmax = LowEdgeEnergy;   // Unclear??
-    }
-    else
-    {
-      massRatio = electron_mass_c2/fMass ;
-      Tmax = 2.*electron_mass_c2*bg2/(1. + 2.*gamma*massRatio+massRatio*massRatio);
-    }
-
+    Tmax = MaxSecondaryEnergy(fParticle, LowEdgeEnergy); 
 
     // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
     // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;
     // Tkin = DeltaCutInKineticEnergyNow ;
 
     // if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
-    {
-      Tkin = Tmax ;
-    }
+    Tkin = Tmax ;
+  
     if ( Tkin < Tmin + deltaLow )  // low energy safety
     {
       Tkin = Tmin + deltaLow ;
@@ -312,7 +300,6 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition* p)
                              bg2,
                              fSandiaPhotoAbsCof,
                              fSandiaIntervalNumber  ) ;
-
 
     // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
     // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
@@ -340,12 +327,11 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition* p)
     fPAItransferTable->insertAt(i,transferVector) ;
     fPAIdEdxTable->insertAt(i,dEdxVector) ;
 
-    // delete[] transferVector ;
-    }                                        // end of Tkin loop
-   //  theLossTable->insert(fdEdxVector);
-                                              // end of material loop
-   // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
-   // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;
+  }                                        // end of Tkin loop
+  //  theLossTable->insert(fdEdxVector);
+  // end of material loop
+  // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
+  // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -387,10 +373,10 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 					  fHighestKineticEnergy,
 					  fTotBin                ) ;
   G4double deltaCutInKineticEnergyNow = (*deltaCutInKineticEnergy)[jMatCC] ;
-  if(fVerbose)
+  if(fVerbose > 0)
   {
-  G4cout<<"PAIModel DeltaCutInKineticEnergyNow = "
-        <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
+    G4cout<<"PAIModel DeltaCutInKineticEnergyNow = "
+	  <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
   }
   for ( i = 0 ; i < fTotBin ; i++ )
   {
@@ -590,8 +576,8 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
-  G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
-  if( tmin >= tmax && fVerbose)
+  G4double tmax = std::min(MaxSecondaryKinEnergy(dp), maxEnergy);
+  if( tmin >= tmax && fVerbose > 0)
   {
     G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;
   }
@@ -608,35 +594,25 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV<<" keV "<<G4endl;
 
-  if( deltaTkin <= 0. && fVerbose ) 
+  if( deltaTkin <= 0. && fVerbose > 0) 
   {
-    G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
-    G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
-    G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
-    // deltaTkin = 10*eV;
-    G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    G4cout<<"G4PAIModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
   }
   if( deltaTkin <= 0.) return;
 
-  if(deltaTkin > kineticEnergy && 
-     particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
-  if (deltaTkin > 0.5*kineticEnergy && 
-     (dp->GetDefinition()->GetParticleName() == "e-" || 
-     dp->GetDefinition()->GetParticleName() == "e+")    ) deltaTkin = 0.5*kineticEnergy;
+  if( deltaTkin > tmax) deltaTkin = tmax;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
 
-  if( costheta >= 0.99999 ) costheta = 0.99999;
-  G4double sintheta, sin2 = 1. - costheta*costheta;
-
-  if( sin2 <= 0.) sintheta = 0.;
-  else            sintheta = sqrt(sin2);
+  if( costheta > 0.99999 ) costheta = 0.99999;
+  G4double sintheta = 0.0;
+  G4double sin2 = 1. - costheta*costheta;
+  if( sin2 > 0.) sintheta = sqrt(sin2);
 
   //  direction of the delta electron
-  
   G4double phi  = twopi*G4UniformRand(); 
   G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
 
