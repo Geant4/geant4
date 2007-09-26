@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2007-08-27 10:04:18 vnivanch Exp $
+$Id: History,v 1.27 2007-09-26 10:23:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-09-07 V.Ivant  (testem8-V09-00-03)
+- Remove used lines from PAI physics constructors, added "pai_brem"
+  constructor PhysListEmPAI in which AlongStep from bremsstrahlung 
+  is allowed
 
 27-08-07 V.Ivant  (testem8-V09-00-02)
 - Recover head

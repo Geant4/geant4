@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPaiPhoton.cc,v 1.4 2007-08-02 12:01:53 vnivanch Exp $
+// $Id: PhysListEmPaiPhoton.cc,v 1.5 2007-09-26 10:23:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,9 +125,7 @@ void PhysListEmPaiPhoton::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       G4MuIonisation* muion = new G4MuIonisation();
-
-      G4PAIPhotonModel*     pai = new G4PAIPhotonModel(particle,"PAIModel");
-      
+      G4PAIPhotonModel*     pai = new G4PAIPhotonModel(particle,"PAIModel");  
       muion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(muion,      -1, 2, 2);

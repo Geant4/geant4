@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-
-// $Id: PhysicsList.cc,v 1.13 2007-08-02 13:27:49 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.14 2007-09-26 10:23:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +39,7 @@
 
 #include "PhysListEmModelPai.hh"
 #include "PhysListEmPaiPhoton.hh"
+#include "PhysListEmPAI.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -131,6 +131,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPaiPhoton(name);
     G4cout<<"PhysListEmModelPaiPhoton is called"<<G4endl;
+  } 
+  else if (name == "pai_brem") 
+  {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPAI(name);
+    G4cout<<"PhysListEmPAI is called (bremsstrahlung dedx added)"<<G4endl;
   } 
   else 
   {

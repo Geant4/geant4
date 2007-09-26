@@ -9,9 +9,10 @@
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  emstandard
 /testem/phys/addPhysics  pai
 #/testem/phys/addPhysics  pai_photon
+#/testem/phys/addPhysics  pai_brem
 #
 /testem/phys/setCuts    1 mm
 #/testem/stepMax         10 mm
