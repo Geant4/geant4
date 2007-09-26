@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.72 2007-09-25 15:52:02 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.73 2007-09-26 09:20:34 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -302,10 +302,10 @@ public:
                                 const G4Region* region = 0);
 
   // Assign a model to a process
-  inline void SetEmModel(G4VEmModel*, G4int index=0);
+  inline void SetEmModel(G4VEmModel*, G4int index=1);
   
   // return the assigned model
-  inline G4VEmModel* EmModel(G4int index=0);
+  inline G4VEmModel* EmModel(G4int index=1);
   
   // Assign a fluctuation model to a process
   inline void SetFluctModel(G4VEmFluctuationModel*);
