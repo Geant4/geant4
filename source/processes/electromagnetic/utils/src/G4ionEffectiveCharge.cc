@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.15 2007-09-27 13:48:52 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.16 2007-09-27 15:26:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,8 +124,8 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Heavy ion case
   } else {
     
-    G4double z23  = std::pow(z, 0.666667);
-    G4double zi13 = std::pow(Zi, 0.33333);
+    G4double z23  = std::pow(z, 0.666666);
+    G4double zi13 = std::pow(Zi, 0.333333);
     G4double zi23 = zi13*zi13;
     G4double e = std::max(reducedEnergy,energyBohr/z23);
 
@@ -143,7 +143,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
       // Slower than Fermi velocity
     } else {
-      y = 0.6923 * vF * (1.0 + 2.0*v1sq/3.0 + v1sq*v1sq/15.0) / zi23 ;
+      y = 0.6923 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
     }
 
     G4double y3 = std::pow(y, 0.3) ;
