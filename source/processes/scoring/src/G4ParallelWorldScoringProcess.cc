@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.8 2007-05-30 17:47:11 ahoward Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.9 2007-09-27 00:10:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -342,12 +342,12 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
       // proposedSafety = fGhostSafety;
     }
     proposedSafety = fGhostSafety;
-    if(eLimited == kUnique || eLimited == kSharedOther) {
-       *selection = CandidateForSelection;
-    }else if (eLimited == kSharedTransport) { 
+/////////////////////////==========================    if(eLimited == kUnique || eLimited == kSharedOther) {
+/////////////////////////==========================       *selection = CandidateForSelection;
+/////////////////////////==========================    }else if (eLimited == kSharedTransport) { 
        returnedStep *= (1.0 + 1.0e-9);  
-         // Expand to disable its selection in Step Manager comparison
-    }
+/////////////////////////==========================         // Expand to disable its selection in Step Manager comparison
+/////////////////////////==========================    }
   }
 
   // ----------------------------------------------
