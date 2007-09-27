@@ -1,4 +1,4 @@
-$Id: History,v 1.298 2007-09-26 09:22:42 vnivanch Exp $
+$Id: History,v 1.299 2007-09-27 13:48:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 September 07: V.Ivant (emutils-V09-00-07)
+- G4ionEffectiveCharge - use Fermi energy from G4Material and not
+  recalculate at each step; reorganized formulas - less calls to
+  exp, log, pow 
 
 26 September 07: V.Ivant (emutils-V09-00-06)
 - G4VEnergyLossProcess and G4VEmProcess - move virtual function
