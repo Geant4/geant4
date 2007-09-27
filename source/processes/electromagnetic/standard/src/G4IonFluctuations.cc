@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.4 2007-09-27 13:53:11 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.5 2007-09-27 14:01:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,18 +107,13 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   
   G4double navr = minNumberInteractionsBohr;
 
-  // Gaussian fluctuation
-  //  G4bool gauss = true;
-  //if (meanLoss >= minNumberInteractionsBohr*tmax) {
   navr = meanLoss*meanLoss/siga;
-  //if (navr < minNumberInteractionsBohr) gauss = false;
-  //}
   //  G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
 
-  if (navr < minNumberInteractionsBohr) {
-  //  if(gauss) {
-    // Increase fluctuations for big fractional energy loss
+  // Gaussian fluctuation
+  if (navr >= minNumberInteractionsBohr) {
 
+    // Increase fluctuations for big fractional energy loss
     //G4cout << "siga= " << siga << G4endl;
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;

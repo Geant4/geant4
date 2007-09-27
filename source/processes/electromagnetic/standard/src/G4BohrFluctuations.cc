@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.5 2007-09-27 14:01:12 vnivanch Exp $
+// $Id: G4BohrFluctuations.cc,v 1.6 2007-09-27 14:02:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,7 +95,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
 
-  navr = meanLoss*meanLoss/siga;
+  G4double navr = meanLoss*meanLoss/siga;
   //G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << G4endl;
   if (navr >= minNumberInteractionsBohr) {
  
