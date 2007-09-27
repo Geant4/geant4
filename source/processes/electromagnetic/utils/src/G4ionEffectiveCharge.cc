@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.16 2007-09-27 15:26:44 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.17 2007-09-27 17:08:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,15 +111,15 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
       x += y * c[i] ;
     }
     G4double ex;
-    if(x < 0.2) ex = 1.0 - x + 0.5*x*x;
-    else        ex = std::exp(-x);
+    if(x < 0.2) ex = x * (1 - 0.5*x);
+    else        ex = 1. - std::exp(-x);
 
     G4double tq = 7.6 - Q;
     G4double tq2= tq*tq;
-    q = ( 0.007 + 0.00005 * z ) * std::sqrt(1.0 - ex);
-    if(tq2 < 0.2) q *= (1.0 - tq2 + 0.5*tq2*tq2);
-    else          q *= std::exp(-tq2);
-    q += 1.0;
+    G4double tt = ( 0.007 + 0.00005 * z );
+    if(tq2 < 0.2) tt *= (1.0 - tq2 + 0.5*tq2*tq2);
+    else          tt *= std::exp(-tq2);
+    q = (1.0 + tt) * std::sqrt(ex);
 
     // Heavy ion case
   } else {
@@ -158,9 +158,10 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     
     G4double tq = 7.6 - std::log(reducedEnergy/keV);
     G4double tq2= tq*tq;
-    G4double sq = 1.0 + ( 0.18 + 0.0015 * z ) / (Zi*Zi);
+    G4double sq = ( 0.18 + 0.0015 * z ) / (Zi*Zi);
     if(tq2 < 0.2) sq *= (1.0 - tq2 + 0.5*tq2*tq2);
     else          sq *= std::exp(-tq2);
+    sq += 1.0;
     //    G4cout << "sq= " << sq << G4endl;
 
     // Screen length according to
@@ -174,7 +175,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double lambda2 = lambda*lambda;
 
     G4double xx = (0.5/q - 0.5)/vFsq;
-    if(lambda < 0.04) xx *= lambda2*(1.0 - 0.5*lambda2);
+    if(lambda2 < 0.2) xx *= lambda2*(1.0 - 0.5*lambda2);
     else              xx *= std::log(1.0 + lambda2); 
 
     chargeCorrection = sq * (1.0 + xx);
