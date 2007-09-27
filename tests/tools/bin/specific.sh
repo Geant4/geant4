@@ -560,42 +560,6 @@ if [ $UNAMEN = pcitapi22 ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ $UNAMEN = pcgeant3.cern.ch ]; then
-  export DEBOPT=${DEBOPT}_slc3_323
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-#  export G4SYSTEM=Linux-gO2
-  export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-#  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-# Take CLHEP with links to lcg area
-  export CLHEP_BASE_DIR=$G4WORKDIR/clhep 
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/Linux-g++
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/slc3_gcc323/
-
-#  export G4_NO_CBRT=1
-
-## Compiler
-############
-#. /afs/cern.ch/sw/geant4/dev/scripts/gcc32.sh 
-. /afs/cern.ch/sw/geant4/dev/scripts/gcc323.sh 
-
-  # Shareable library
-  #####################
-#  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
-#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
-
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-  export G4VIS_BUILD_OPENGLX_DRIVER=1
-  export G4VIS_USE_OPENGLX=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-fi
 
 if [ $UNAMEN = pcgeant6.cern.ch ]; then
   export DEBOPT=${DEBOPT}_slc3_323
@@ -849,6 +813,34 @@ if [ $UNAMEN = lxbuild056.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+if [ $UNAMEN = pcgeant3.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_amd64
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export EXTRALIBS=" -L/usr/X11R6/lib64/ "
+
+  # Shareable library
+  #####################
+#  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
 
 if [ $UNAMEN = pcgeant5.cern.ch ]; then
   export DEBOPT=${DEBOPT}_7.3_3.2
@@ -928,22 +920,19 @@ echo $G4SYSTEM
 fi
 
 
-if [ $UNAMEN = pcgeant4 ]; then
-  export DEBOPT=${DEBOPT}_7.3_3.2
+if [ $UNAMEN = pcgeant4.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_amd64
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-# Take CLHEP with links to lcg area  
+
+# Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
   
-#  export G4_NO_CBRT=1
-
-## Compiler
-############
-. /afs/cern.ch/sw/geant4/dev/scripts/gcc32.sh 
+  export EXTRALIBS=" -L/usr/X11R6/lib64/ "
 
   # Shareable library
   #####################
@@ -954,7 +943,8 @@ if [ $UNAMEN = pcgeant4 ]; then
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
