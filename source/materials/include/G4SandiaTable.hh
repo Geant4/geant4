@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.17 2007-09-28 15:36:17 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.18 2007-09-28 16:52:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -69,12 +69,15 @@ public:  // with description
 
   //main computation per atom:
   static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
-  inline G4double  GetZtoA            (G4int Z);
+  static G4double  GetZtoA            (G4int Z);
 
   //per volume of a material:
   inline G4int GetMatNbOfIntervals();
   inline G4double  GetSandiaCofForMaterial(G4int,G4int);
   inline G4double* GetSandiaCofForMaterial(G4double energy);
+
+  inline G4double GetSandiaMatTable(G4int,G4int) const;
+  inline G4OrderedTable* GetSandiaMatTable() const;
 	   
 public:  // without description
 
@@ -92,21 +95,24 @@ private:
   inline G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
   inline G4double  GetIonizationPot   (G4int Z);
 
-  // members of the class
+  // static members of the class
+  static const G4int      fNumberOfElements;
+  static const G4int      fIntervalLimit;
+  static const G4int      fNumberOfIntervals;
 
-  static const G4double        fSandiaTable[981][5];
-  static const G4int           fNbOfIntervals[101];
-  static const G4double        fZtoAratio[101];
-  static const G4double        fIonizationPotentials[101];
-  static const G4double        funitc[4];
+  static const G4double   fSandiaTable[981][5];
+  static const G4int      fNbOfIntervals[101];
+  static const G4double   fZtoAratio[101];
+  static const G4double   fIonizationPotentials[101];
+  static const G4double   funitc[4];
                
-  static       G4int           fCumulInterval[101];
-  static       G4double        fSandiaCofPerAtom[4];
+  static       G4int      fCumulInterval[101];
+  static       G4double   fSandiaCofPerAtom[4];
   
+  // members of the class
   G4Material*     fMaterial;
   G4int           fMatNbOfIntervals;
   G4OrderedTable* fMatSandiaMatrix;
-  G4OrderedTable* fMatSandiaMatrixPAI;
   
   G4double        fnulcof[4];
 		   
@@ -137,9 +143,6 @@ public:  // without description
 
   inline G4int GetMaxInterval() const { return fMaxInterval;};
 
-  G4OrderedTable* GetSandiaMatTable() const {return fMatSandiaMatrix;};
-  inline G4double GetSandiaMatTable(G4int,G4int) const;
-
 private:
 
   void ComputeMatTable();
@@ -149,9 +152,6 @@ private:
 // data members for PAI model
 
 private:
-  static const G4int    fNumberOfElements  ;
-  static const G4int    fIntervalLimit ;
-  static const G4int    fNumberOfIntervals  ;
 		
   G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
 
@@ -235,10 +235,22 @@ G4SandiaTable::GetIonizationPot(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-inline G4double
-G4SandiaTable::GetZtoA(G4int Z)
+inline G4double  
+G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
 {
-  return fZtoAratio[Z];
+  assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
+  G4double     unitCof ;
+  if(j == 0)   unitCof = keV ;
+  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
+  return ( (*(*fMatSandiaMatrix)[interval])[j] )*unitCof; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+inline G4OrderedTable* 
+G4SandiaTable::GetSandiaMatTable() const
+{
+  return fMatSandiaMatrix;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -269,19 +281,6 @@ G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
   else         unitCof = (cm2/g)*std::pow(keV,(G4double)j) ;
    
   return  fPhotoAbsorptionCof[i][j]*unitCof ;
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-//
-
-inline G4double  G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
-{
-  assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
-  G4double     unitCof ;
-  if(j == 0)   unitCof = keV ;
-  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
-  return ( (*(*fMatSandiaMatrix)[interval])[j] )*unitCof; 
 }
 
 //

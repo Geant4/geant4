@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.29 2007-09-28 08:57:12 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.30 2007-09-28 16:52:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -61,7 +61,6 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 {
   fMatSandiaMatrix    = 0; 
   fPhotoAbsorptionCof = 0;
-  fMatSandiaMatrixPAI = 0;
 
   //build the CumulInterval array
   fCumulInterval[0] = 1;
@@ -93,13 +92,19 @@ G4SandiaTable::~G4SandiaTable()
     //fMatSandiaMatrix->clearAndDestroy();
     delete fMatSandiaMatrix;
   }
-  delete fMatSandiaMatrixPAI;
   
   if(fPhotoAbsorptionCof)
   {
     //    for(G4int i = 0 ; i < fMaxInterval ; i++)  delete[] fPhotoAbsorptionCof[i];
     delete [] fPhotoAbsorptionCof ;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double G4SandiaTable::GetZtoA(G4int Z)
+{
+  return fZtoAratio[Z];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -453,8 +458,6 @@ G4SandiaTable::SandiaMixing(         G4int Z[],
     return mi ;
 }  
 
-
-
 ////////////////////////////////////////////////////////////////////////////
 //
 //  Sandia interval and mixing calculations for materialCutsCouple constructor 
@@ -488,7 +491,6 @@ void G4SandiaTable::ComputeMatTable()
   {
      fPhotoAbsorptionCof[i] = new G4double[5] ;
   }
-
 
   //  for(c = 0 ; c < fIntervalLimit ; c++)   // just in case
 
@@ -555,16 +557,7 @@ void G4SandiaTable::ComputeMatTable()
   SandiaSort(fPhotoAbsorptionCof,c) ;
   fMaxInterval = c ;
  
-
-  // G4int
-  // G4SandiaTable::SandiaMixing(         G4int Z[],
-
   const G4double* fractionW = fMaterial->GetFractionVector();
-
-  //		             G4int el,
-  //		             G4int mi     )
-
-  
    
   for(i = 0 ; i < fMaxInterval ; i++)
   {
