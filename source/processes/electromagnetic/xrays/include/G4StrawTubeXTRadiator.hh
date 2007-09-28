@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.hh,v 1.2 2006-06-29 19:55:41 gunter Exp $
+// $Id: G4StrawTubeXTRadiator.hh,v 1.3 2007-09-28 15:35:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,45 +42,39 @@
 // 22.04.05 V. Grichine, first version 
 //
 
-
 #ifndef G4StrawTubeXTRadiator_h
 #define G4StrawTubeXTRadiator_h 1
 
 #include <complex>
 #include "G4VXTRenergyLoss.hh"
 
+class G4SandiaTable;
+
 class G4StrawTubeXTRadiator : public G4VXTRenergyLoss
 {
 public:
 
   G4StrawTubeXTRadiator (G4LogicalVolume* anEnvelope, G4Material*, G4Material*,
-                        G4double,G4double,G4Material*,G4bool unishut = false,
-                        const G4String & processName = "StrawTubeXTRadiator");
-  ~G4StrawTubeXTRadiator ();
+                         G4double,G4double,G4Material*,G4bool unishut = false,
+                         const G4String & processName = "StrawTubeXTRadiator");
+  virtual ~G4StrawTubeXTRadiator ();
 
-// Auxiliary functions for plate/gas material parameters
+  // Auxiliary functions for plate/gas material parameters
 
   G4double  GetMediumFormationZone(G4double,G4double,G4double) ;
   void      ComputeMediumPhotoAbsCof() ;
   G4double  GetMediumLinearPhotoAbs(G4double) ;
   G4complex GetMediumComplexFZ(G4double,G4double,G4double) ;
 
-
-
-
-
   // Pure virtual function from base class
-
   G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
-
 
 protected:
 
   G4int      fMatIndex3;
   G4double   fSigma3;
-  G4double** fMediumPhotoAbsCof ;
-  G4int      fMediumIntervalNumber ;
-  
+
+  G4SandiaTable* fMediumPhotoAbsCof;
 };
 
 #endif

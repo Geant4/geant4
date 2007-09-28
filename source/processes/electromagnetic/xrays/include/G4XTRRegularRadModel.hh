@@ -41,21 +41,19 @@
 // 10.10.05 V. Grichine, first version 
 //
 
-
 #ifndef G4XTRRegularRadModel_h
 #define G4XTRRegularRadModel_h 1
 
 #include "G4VXTRenergyLoss.hh"
 
-
-class G4XTRRegularRadModel : public G4XTRenergyLoss
+class G4XTRRegularRadModel : public G4VXTRenergyLoss
 {
 public:
 
-   G4XTRRegularRadModel (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+  G4XTRRegularRadModel (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                         G4double,G4double,G4int,
                         const G4String & processName = "XTRegularModel");
-  ~G4XTRRegularRadModel ();
+  virtual ~G4XTRRegularRadModel ();
 
   // Pure virtual function from base class
 

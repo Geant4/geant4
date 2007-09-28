@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.22 2007-07-02 10:04:22 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.23 2007-09-28 15:36:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,10 +40,8 @@
 // 28.07.05, P.Gumplinger add G4ProcessType to constructor
 //
 
-
-#ifndef G4XTRenergyLoss_h
-#define G4XTRenergyLoss_h 1
-
+#ifndef G4VXTRenergyLoss_h
+#define G4VXTRenergyLoss_h 1
 
 #include <complex>
 #include "globals.hh"
@@ -68,37 +66,26 @@
 #include "G4Integrator.hh"
 #include "G4ParticleChange.hh"
 
-
 class G4SandiaTable;
 class G4VParticleChange;
 class G4PhysicsFreeVector;
 
-class G4XTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
+class G4VXTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
 public:
 
-  G4XTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                     G4double,G4double,G4int,
                     const G4String & processName = "XTRenergyLoss",
                     G4ProcessType type = fElectromagnetic);
-  virtual  ~G4XTRenergyLoss ();
+  virtual  ~G4VXTRenergyLoss ();
 
   // These virtual has to be implemented in inherited particular TR radiators
  
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
                                                      G4double varAngle );
 
-
   G4bool IsApplicable(const G4ParticleDefinition&);
-
-  G4double GetContinuousStepLimit(const G4Track& aTrack,
-					G4double  ,
-					G4double  ,
-                                        G4double& );
-        // Returns the continuous step limit defined by the XTR process.
-
-  G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
-				   const G4Step&  aStep);
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 				   const G4Step&  aStep);
@@ -161,19 +148,19 @@ public:
   void      GetGasZmuProduct();
   G4double  GetGasZmuProduct(G4double,G4double,G4double);
 
-  G4double GetPlateCompton(G4double);
-  G4double GetGasCompton(G4double);
-  G4double GetComptonPerAtom(G4double,G4double);
+  G4double  GetPlateCompton(G4double);
+  G4double  GetGasCompton(G4double);
+  G4double  GetComptonPerAtom(G4double,G4double);
 
-  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin );
-  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
+  G4double  GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin );
+  G4double  GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
 
-  G4double GetRandomAngle( G4double energyXTR, G4int iTkin );
-  G4double GetAngleXTR(G4int iTR,G4double position,G4int iAngle);
+  G4double  GetRandomAngle( G4double energyXTR, G4int iTkin );
+  G4double  GetAngleXTR(G4int iTR,G4double position,G4int iAngle);
 
-  G4double GetGamma()   {return fGamma;}; 
-  G4double GetEnergy()  {return fEnergy;};                
-  G4double GetVarAngle(){return fVarAngle;};
+  G4double  GetGamma()   {return fGamma;}; 
+  G4double  GetEnergy()  {return fEnergy;};                
+  G4double  GetVarAngle(){return fVarAngle;};
                
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
@@ -182,10 +169,10 @@ public:
   void SetCompton(G4bool pC){fCompton=pC;};               
   void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
 
-
   static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
   static G4int GetTotBin(){return fTotBin;};           
   G4PhysicsFreeVector* GetAngleVector(G4double energy, G4int n);
+
 protected:
 
   G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
@@ -198,7 +185,6 @@ protected:
 
   static G4PhysicsLogVector* fProtonEnergyVector ;
   static G4PhysicsLogVector* fXTREnergyVector ;
-
 
   static G4double fTheMinEnergyTR;            //  static min TR energy
   static G4double fTheMaxEnergyTR;            //  static max TR energy
@@ -220,7 +206,6 @@ protected:
   static G4double fPlasmaCof ;               // physical consts for plasma energy
   static G4double fCofTR ;  
 
-
   G4bool fExitFlux;
   G4bool fAngleRadDistr;
   G4bool fCompton;
@@ -230,14 +215,10 @@ protected:
 
   G4int fPlateNumber ;
   G4double fTotalDist ;
-  //  G4double** fPlatePhotoAbsCof ;
+  G4double fPlateThick ;
   G4SandiaTable* fPlatePhotoAbsCof ;
-  //  G4int      fPlateIntervalNumber ;
-  G4double   fPlateThick ;
  
-  // G4double** fGasPhotoAbsCof ;
   G4SandiaTable* fGasPhotoAbsCof ;
-  // G4int      fGasIntervalNumber ;
   G4double   fGasThick ;     
   G4double fAlphaPlate, fAlphaGas ;
 
@@ -247,7 +228,5 @@ protected:
   std::vector<G4PhysicsTable*>       fAngleBank;
   G4int fVerbose;
 };
-
-typedef G4XTRenergyLoss G4VXTRenergyLoss;
 
 #endif

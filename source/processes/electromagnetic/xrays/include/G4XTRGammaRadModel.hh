@@ -48,22 +48,21 @@
 // 03.10.05 V. Grichine, first version 
 //
 
-
 #ifndef G4XTRGammaRadModel_h
 #define G4XTRGammaRadModel_h 1
 
 #include "G4VXTRenergyLoss.hh"
 
-class G4XTRGammaRadModel : public G4XTRenergyLoss
+class G4XTRGammaRadModel : public G4VXTRenergyLoss
 {
 public:
 
-   G4XTRGammaRadModel (G4LogicalVolume *anEnvelope,
-                           G4double,G4double,
-                           G4Material*,G4Material*,
-                        G4double,G4double,G4int,
-                        const G4String & processName = "XTRgammaRadiator"   );
-  ~G4XTRGammaRadModel ();
+  G4XTRGammaRadModel (G4LogicalVolume *anEnvelope,
+		      G4double,G4double,
+		      G4Material*,G4Material*,
+		      G4double,G4double,G4int,
+		      const G4String & processName = "XTRgammaRadiator"   );
+  virtual ~G4XTRGammaRadModel ();
 
   // Pure virtual function from base class
 
