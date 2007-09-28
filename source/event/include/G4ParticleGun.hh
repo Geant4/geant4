@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.hh,v 1.8 2006-06-29 18:08:42 gunter Exp $
+// $Id: G4ParticleGun.hh,v 1.9 2007-09-28 21:04:48 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ class G4ParticleGunMessenger;
 // class description:
 //
 //  This is a concrete class of G4VPrimaryGenerator. It shoots a particle of given type
-// to a given direction with a given kinetic energy. 
+// into a given direction with either a given kinetic energy or momentum.
 //  The position and time of the primary particle must be set by the corresponding
 // set methods of G4VPrimaryGenerator base class, otherwise zero will be set.
 //
@@ -89,12 +89,12 @@ class G4ParticleGun:public G4VPrimaryGenerator
      //   
      void SetParticleDefinition
        (G4ParticleDefinition * aParticleDefinition);
+     void SetParticleEnergy(G4double aKineticEnergy);
+     void SetParticleMomentum(G4double aMomentum);
      void SetParticleMomentum(G4ParticleMomentum aMomentum);
      inline void SetParticleMomentumDirection
                  (G4ParticleMomentum aMomentumDirection)
      { particle_momentum_direction =  aMomentumDirection.unit(); }
-     inline void SetParticleEnergy(G4double aKineticEnergy)
-     { particle_energy = aKineticEnergy; }
      inline void SetParticleCharge(G4double aCharge)
      { particle_charge = aCharge; }
      inline void SetParticlePolarization(G4ThreeVector aVal)
@@ -123,6 +123,7 @@ class G4ParticleGun:public G4VPrimaryGenerator
      G4ParticleDefinition* particle_definition;
      G4ParticleMomentum    particle_momentum_direction;
      G4double	           particle_energy;
+     G4double              particle_momentum;
      G4double	           particle_charge;
      G4ThreeVector         particle_polarization;
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.12 2006-06-29 18:09:53 gunter Exp $
+// $Id: G4ParticleGun.cc,v 1.13 2007-09-28 21:05:10 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,6 +61,7 @@ void G4ParticleGun::SetInitialValues()
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 0.0;
+  particle_momentum = 0.0;
   particle_position = zero;
   particle_time = 0.0;
   particle_polarization = zero;
@@ -93,33 +94,91 @@ void G4ParticleGun::SetParticleDefinition
   }
   particle_definition = aParticleDefinition; 
   particle_charge = particle_definition->GetPDGCharge();
+  if(particle_momentum>0.0)
+  {
+    G4double mass =  particle_definition->GetPDGMass();
+    particle_energy =
+                 std::sqrt(particle_momentum*particle_momentum+mass*mass)-mass;
+  }
+}
+
+void G4ParticleGun::SetParticleEnergy(G4double aKineticEnergy)
+{
+  particle_energy = aKineticEnergy;
+  if(particle_momentum>0.0){
+    if(particle_definition){
+      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName()
+             << G4endl;
+    }else{
+      G4cout << "G4ParticleGun::" << " " << G4endl;
+    }
+    G4cout << " was defined in terms of Momentum: " 
+           << particle_momentum/GeV << "GeV/c" << G4endl;
+    G4cout << " is now defined in terms of KineticEnergy: " 
+           << particle_energy/GeV   << "GeV"   << G4endl;
+    particle_momentum = 0.0;
+  }
+}
+
+void G4ParticleGun::SetParticleMomentum(G4double aMomentum)
+{
+  if(particle_energy>0.0){
+    if(particle_definition){
+      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName()
+             << G4endl;
+    }else{
+      G4cout << "G4ParticleGun::" << " " << G4endl;
+    }
+    G4cout << " was defined in terms of KineticEnergy: "
+           << particle_energy/GeV << "GeV"   << G4endl;
+    G4cout << " is now defined in terms Momentum: "
+           << aMomentum/GeV       << "GeV/c" << G4endl;
+  }
+  if(particle_definition==0)
+  {
+    G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
+    G4cout <<"Zero Mass is assumed"<<G4endl;
+    particle_momentum = aMomentum;
+    particle_energy = aMomentum;
+  }
+  else
+  {
+    G4double mass =  particle_definition->GetPDGMass();
+    particle_momentum = aMomentum;
+    particle_energy =
+                 std::sqrt(particle_momentum*particle_momentum+mass*mass)-mass;
+  }
 }
  
 void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 {
+  if(particle_energy>0.0){
+    if(particle_definition){
+      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName()
+             << G4endl;
+    }else{
+      G4cout << "G4ParticleGun::" << " " << G4endl;
+    }
+    G4cout << " was defined in terms of KineticEnergy: "
+           << particle_energy/GeV << "GeV"   << G4endl;
+    G4cout << " is now defined in terms Momentum: "
+           << aMomentum.mag()/GeV << "GeV/c" << G4endl;
+  }
   if(particle_definition==0)
   {
     G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
     G4cout <<"Zero Mass is assumed"<<G4endl;
     particle_momentum_direction =  aMomentum.unit();
+    particle_momentum = aMomentum.mag();
     particle_energy = aMomentum.mag();
   } 
   else 
   {
     G4double mass =  particle_definition->GetPDGMass();
-    G4double p = aMomentum.mag();
+    particle_momentum = aMomentum.mag();
     particle_momentum_direction =  aMomentum.unit();
-    if ((particle_energy>0.0)&&(std::abs(particle_energy+mass-std::sqrt(p*p+mass*mass))>keV))
-    {
-      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName() << G4endl;
-      G4cout << "  KineticEnergy and Momentum could be inconsistent" << G4endl;
-      G4cout << " (Momentum:" << p/GeV << " GeV/c";
-      G4cout << "  Mass:" << mass/GeV << " GeV/c/c)" << G4endl;
-      G4cout << "  KineticEnergy is overwritten!! ";
-      G4cout << particle_energy/GeV << "->";
-      G4cout << (std::sqrt(p*p+mass*mass)-mass)/GeV << "GeV" << G4endl;
-    }
-    particle_energy = std::sqrt(p*p+mass*mass)-mass;
+    particle_energy = 
+                 std::sqrt(particle_momentum*particle_momentum+mass*mass)-mass;
   }
 }
 
