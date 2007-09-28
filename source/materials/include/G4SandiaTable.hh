@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.15 2007-09-28 08:57:12 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.16 2007-09-28 14:04:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -69,6 +69,7 @@ public:  // with description
 
   //main computation per atom:
   static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
+  inline G4double  GetZtoA            (G4int Z);
 
   //per volume of a material:
   inline G4int GetMatNbOfIntervals();
@@ -90,7 +91,6 @@ private:
   inline G4int     GetNbOfIntervals   (G4int Z);
   inline G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
   inline G4double  GetIonizationPot   (G4int Z);
-  inline G4double  GetZtoA            (G4int Z);
 
   // members of the class
 
