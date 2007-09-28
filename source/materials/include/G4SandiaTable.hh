@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.16 2007-09-28 14:04:29 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.17 2007-09-28 15:36:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -235,7 +235,7 @@ G4SandiaTable::GetIonizationPot(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4double
+inline G4double
 G4SandiaTable::GetZtoA(G4int Z)
 {
   return fZtoAratio[Z];
@@ -247,8 +247,7 @@ G4SandiaTable::GetZtoA(G4int Z)
 //
 // Inline methods for PAI model
 
-inline
-void
+inline void
 G4SandiaTable::SandiaSwap( G4double** da ,
                            G4int i,
                            G4int j )
