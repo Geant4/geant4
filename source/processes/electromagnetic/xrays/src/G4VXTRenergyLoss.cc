@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.43 2007-09-28 15:36:01 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.44 2007-09-29 17:49:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -33,6 +33,7 @@
 //                       in respect of angle: range is increased, accuracy is
 //                       improved
 // 28.07.05, P.Gumplinger add G4ProcessType to constructor
+// 28.09.07, V.Ivanchenko general cleanup without change of algorithms
 //
 
 #include "G4Timer.hh"
@@ -55,35 +56,6 @@
 
 using namespace std;
 
-// Initialization of local constants
-
-G4double G4VXTRenergyLoss::fTheMinEnergyTR   =    1.0*keV;
-G4double G4VXTRenergyLoss::fTheMaxEnergyTR   =  100.0*keV;
-G4double G4VXTRenergyLoss::fTheMaxAngle    =      1.0e-3;
-G4double G4VXTRenergyLoss::fTheMinAngle    =      5.0e-6;
-G4int    G4VXTRenergyLoss::fBinTR            =   50;
-
-G4double G4VXTRenergyLoss::fMinProtonTkin = 100.0*GeV;
-G4double G4VXTRenergyLoss::fMaxProtonTkin = 100.0*TeV;
-G4int    G4VXTRenergyLoss::fTotBin        =  50;
-// Proton energy vector initialization
-
-G4PhysicsLogVector* G4VXTRenergyLoss::
-fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
-                                             fMaxProtonTkin,
-                                                    fTotBin  );
-
-G4PhysicsLogVector* G4VXTRenergyLoss::
-fXTREnergyVector = new G4PhysicsLogVector(fTheMinEnergyTR,
-                                          fTheMaxEnergyTR,
-                                                    fBinTR  );
-
-G4double G4VXTRenergyLoss::fPlasmaCof = 4.0*pi*fine_structure_const*
-                                       hbarc*hbarc*hbarc/electron_mass_c2;
-
-G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi;
-
-
 ////////////////////////////////////////////////////////////////////////////
 //
 // Constructor, destructor
@@ -100,17 +72,44 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fEnergyDistrTable(0),
   fPlatePhotoAbsCof(0),
   fGasPhotoAbsCof(0),
-  fAngleForEnergyTable(0),
-  fVerbose(0)
+  fAngleForEnergyTable(0)
 {
-  fEnvelope = anEnvelope ;
-  //  fPlateNumber = fEnvelope->GetNoDaughters() ;
+  verboseLevel = 1;
+
+  // Initialization of local constants
+  fTheMinEnergyTR = 1.0*keV;
+  fTheMaxEnergyTR = 100.0*keV;
+  fTheMaxAngle    = 1.0e-3;
+  fTheMinAngle    = 5.0e-6;
+  fBinTR          = 50;
+
+  fMinProtonTkin  = 100.0*GeV;
+  fMaxProtonTkin  = 100.0*TeV;
+  fTotBin         = 50;
+
+  // Proton energy vector initialization
+
+  fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+					       fMaxProtonTkin,
+					       fTotBin  );
+
+  fXTREnergyVector = new G4PhysicsLogVector(fTheMinEnergyTR,
+					    fTheMaxEnergyTR,
+					    fBinTR  );
+
+  fPlasmaCof = 4.0*pi*fine_structure_const*hbarc*hbarc*hbarc/electron_mass_c2;
+
+  fCofTR     = fine_structure_const/pi;
+
+  fEnvelope  = anEnvelope ;
+
   fPlateNumber = n ;
-  G4cout<<"### G4VXTRenergyLoss: the number of TR radiator plates = "
-	<<fPlateNumber<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"### G4VXTRenergyLoss: the number of TR radiator plates = "
+	  <<fPlateNumber<<G4endl ;
   if(fPlateNumber == 0)
   {
-    G4Exception("No plates in X-ray TR radiator") ;
+    G4Exception("G4VXTRenergyLoss: No plates in X-ray TR radiator") ;
   }
   // default is XTR dEdx, not flux after radiator
 
@@ -124,26 +123,31 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fPlateThick = a ;
   fGasThick   = b ;
   fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;
-  G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
 
   // index of plate material
   fMatIndex1 = foilMat->GetIndex()  ;
-  G4cout<<"plate material = "<<foilMat->GetName()<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"plate material = "<<foilMat->GetName()<<G4endl ;
 
   // index of gas material
   fMatIndex2 = gasMat->GetIndex()  ;
-  G4cout<<"gas material = "<<gasMat->GetName()<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"gas material = "<<gasMat->GetName()<<G4endl ;
 
   // plasma energy squared for plate material
 
   fSigma1 = fPlasmaCof*foilMat->GetElectronDensity()  ;
   //  fSigma1 = (20.9*eV)*(20.9*eV) ;
-  G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
 
   // plasma energy squared for gas material
 
   fSigma2 = fPlasmaCof*gasMat->GetElectronDensity()  ;
-  G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
 
   // Compute cofs for preparation of linear photo absorption
 
@@ -193,7 +197,7 @@ G4double G4VXTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
     kinEnergy = aParticle->GetKineticEnergy();
     mass      = aParticle->GetDefinition()->GetPDGMass();
     gamma     = 1.0 + kinEnergy/mass;
-    if(verboseLevel)
+    if(verboseLevel > 1)
     {
       G4cout<<" gamma = "<<gamma<<";   fGamma = "<<fGamma<<G4endl;
     }
@@ -234,7 +238,7 @@ G4double G4VXTRenergyLoss::GetMeanFreePath(const G4Track& aTrack,
         else                 lambda = 1./sigma; 
         fLambda = lambda;
         fGamma  = gamma;   
-        if(verboseLevel)
+        if(verboseLevel > 1)
         {
 	  G4cout<<" lambda = "<<lambda/mm<<" mm"<<G4endl;
         }
@@ -258,7 +262,9 @@ void G4VXTRenergyLoss::BuildPhysicsTable(const G4ParticleDefinition& pd)
   BuildTable();
   if (fAngleRadDistr) 
   {
-    G4cout<<"Build angle distribution according the transparent regular radiator"<<G4endl;
+    if(verboseLevel > 0)
+      G4cout<<"Build angle distribution according the transparent regular radiator"
+	    <<G4endl;
     BuildAngleTable();
   }
 }
@@ -288,10 +294,12 @@ void G4VXTRenergyLoss::BuildTable()
   G4cout.precision(4) ;
   G4Timer timer ;
   timer.Start() ;
-  G4cout<<G4endl;
-  if (fVerbose) G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
-  G4cout<<G4endl;
-	
+
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
+    G4cout<<G4endl;
+  }
   for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
   {
     G4PhysicsLogVector* energyVector = new G4PhysicsLogVector( fMinEnergyTR,
@@ -337,7 +345,7 @@ void G4VXTRenergyLoss::BuildTable()
         energyVector->PutValue(iTR,energySum/fTotalDist);
         //  angleVector ->PutValue(iTR,angleSum);
       }
-    if(fVerbose)
+    if(verboseLevel > 0)
       {
 	G4cout
 	  // <<iTkin<<"\t"
@@ -353,9 +361,11 @@ void G4VXTRenergyLoss::BuildTable()
   }     
   timer.Stop();
   G4cout.precision(6);
-  G4cout<<G4endl;
-  G4cout<<"total time for build X-ray TR energy loss tables = "
-        <<timer.GetUserElapsed()<<" s"<<G4endl;
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"total time for build X-ray TR energy loss tables = "
+	  <<timer.GetUserElapsed()<<" s"<<G4endl;
+  }
   fGamma = 0.;
   return ;
 }
@@ -378,12 +388,8 @@ void G4VXTRenergyLoss::BuildAngleTable()
   G4int iTkin, iTR;
   G4double  energy;
 
-  // G4double theta, result, tmp, cof1, cof2, cofMin, cofPHC, angleSum=0.;
-  // G4int k, iTheta, kMax, kMin;
-
   fGammaTkinCut = 0.0;
-                            
-  
+                              
   // setting of min/max TR energies 
   
   if(fGammaTkinCut > fTheMinEnergyTR)  fMinEnergyTR = fGammaTkinCut;
@@ -395,10 +401,11 @@ void G4VXTRenergyLoss::BuildAngleTable()
   G4cout.precision(4);
   G4Timer timer;
   timer.Start();
-  G4cout<<G4endl;
-  if (fVerbose) G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
-  G4cout<<G4endl;
-	
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
+    G4cout<<G4endl;
+  }
   for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
   {
     
@@ -435,9 +442,11 @@ void G4VXTRenergyLoss::BuildAngleTable()
   }     
   timer.Stop();
   G4cout.precision(6);
-  G4cout<<G4endl;
-  G4cout<<"total time for build XTR angle for given energy tables = "
-        <<timer.GetUserElapsed()<<" s"<<G4endl;
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"total time for build XTR angle for given energy tables = "
+	  <<timer.GetUserElapsed()<<" s"<<G4endl;
+  }
   fGamma = 0.;
   
   return;
@@ -467,7 +476,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
   if (cofMin > kMin) kMin++;
 
   kMax = kMin + fBinTR -1;
-  if(fVerbose > 2)
+  if(verboseLevel > 2)
   {
     G4cout<<"n-1 = "<<n-1<<"; theta = "
           <<std::sqrt(fMaxThetaTR)*fGamma<<"; tmp = "
@@ -496,7 +505,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
       angleSum   += tmp; // sin(tmp)*sin(tmp)*abs(k-cofMin)/result;
     }
     theta = abs(k-cofMin)*cofPHC/energy/(fPlateThick + fGasThick);
-    if(fVerbose > 2)
+    if(verboseLevel > 2)
     {
       G4cout<<"iTheta = "<<iTheta<<"; k = "<<k<<"; theta = "
             <<std::sqrt(theta)*fGamma<<"; tmp = "
@@ -510,7 +519,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
     angleSum += 0.5*tmp;
     theta = 0.;
   }
-  if(fVerbose > 2)
+  if(verboseLevel > 2)
   {
     G4cout<<"iTheta = "<<iTheta<<"; theta = "
           <<std::sqrt(theta)*fGamma<<"; tmp = "
@@ -546,10 +555,11 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
   G4cout.precision(4) ;
   G4Timer timer ;
   timer.Start() ;
-  G4cout<<G4endl;
-  G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
-  G4cout<<G4endl;
-	
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
+    G4cout<<G4endl;
+  }
   for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
   {
     
@@ -586,21 +596,25 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
 
       angleVector ->PutValue(iTR,angleSum);
     }
-    G4cout
-       // <<iTkin<<"\t"
-       //   <<"fGamma = "
-       <<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
-       //  <<"sumN = "<<energySum      // <<" ; sumA = "
-       <<angleSum
-       <<G4endl;
-     iPlace = iTkin;
-     fAngleDistrTable->insertAt(iPlace,angleVector);
+    if(verboseLevel > 1) {
+      G4cout
+	// <<iTkin<<"\t"
+	//   <<"fGamma = "
+	<<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
+	//  <<"sumN = "<<energySum      // <<" ; sumA = "
+	<<angleSum
+	<<G4endl;
+    }
+    iPlace = iTkin;
+    fAngleDistrTable->insertAt(iPlace,angleVector);
   }     
   timer.Stop();
   G4cout.precision(6);
-  G4cout<<G4endl;
-  G4cout<<"total time for build X-ray TR angle tables = "
-        <<timer.GetUserElapsed()<<" s"<<G4endl;
+  if(verboseLevel > 0) {
+    G4cout<<G4endl;
+    G4cout<<"total time for build X-ray TR angle tables = "
+	  <<timer.GetUserElapsed()<<" s"<<G4endl;
+  }
   fGamma = 0.;
   
   return;
@@ -621,7 +635,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
   fParticleChange.Initialize(aTrack);
 
-  if(verboseLevel)
+  if(verboseLevel > 1)
   {
     G4cout<<"Start of G4VXTRenergyLoss::PostStepDoIt "<<G4endl ;
     G4cout<<"name of current material =  "
@@ -629,7 +643,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
   }
   if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
   {
-    if(verboseLevel)
+    if(verboseLevel > 0)
     {
       G4cout<<"Go out from G4VXTRenergyLoss::PostStepDoIt: wrong volume "<<G4endl;
     }
@@ -646,7 +660,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
     G4double mass      = aParticle->GetDefinition()->GetPDGMass() ;
     G4double gamma     = 1.0 + kinEnergy/mass ;
 
-    if(verboseLevel > 0 )
+    if(verboseLevel > 1 )
     {
       G4cout<<"gamma = "<<gamma<<G4endl ;
     }
@@ -664,7 +678,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
     if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
     {
-      if( verboseLevel )
+      if( verboseLevel > 0)
       {
         G4cout<<"Go out from G4VXTRenergyLoss::PostStepDoIt:iTkin = "<<iTkin<<G4endl;
       }
@@ -676,9 +690,9 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
 
       energyTR = GetXTRrandomEnergy(TkinScaled,iTkin);
 
-      if( verboseLevel )
+      if( verboseLevel > 1)
       {
-            G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
+	G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
       }
       if (fAngleRadDistr)
       {
@@ -720,7 +734,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
         G4ThreeVector localV = transform.TransformAxis(directionTR);
 
         G4double distance = fEnvelope->GetSolid()->DistanceToOut(localP, localV);
-        if(verboseLevel)
+        if(verboseLevel > 1)
         {
           G4cout<<"distance to exit = "<<distance/mm<<" mm"<<G4endl;
         }
@@ -1072,12 +1086,15 @@ void G4VXTRenergyLoss::GetPlateZmuProduct()
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
   varAngle = 1/gamma/gamma ;
-  G4cout<<"energy, keV"<<"\t"<<"Zmu for plate"<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"energy, keV"<<"\t"<<"Zmu for plate"<<G4endl ;
   for(i=0;i<100;i++)
   {
     omega = (1.0 + i)*keV ;
-    G4cout<<omega/keV<<"\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<"\t";
-    outPlate<<omega/keV<<"\t\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<G4endl ;
+    if(verboseLevel > 1)
+      G4cout<<omega/keV<<"\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<"\t";
+    if(verboseLevel > 0)
+      outPlate<<omega/keV<<"\t\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<G4endl ;
   }
   return  ;
 }
@@ -1106,12 +1123,15 @@ void G4VXTRenergyLoss::GetGasZmuProduct()
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
   varAngle = 1/gamma/gamma ;
-  G4cout<<"energy, keV"<<"\t"<<"Zmu for gas"<<G4endl ;
+  if(verboseLevel > 0)
+    G4cout<<"energy, keV"<<"\t"<<"Zmu for gas"<<G4endl ;
   for(i=0;i<100;i++)
   {
     omega = (1.0 + i)*keV ;
-    G4cout<<omega/keV<<"\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<"\t" ;
-    outGas<<omega/keV<<"\t\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<G4endl ;
+    if(verboseLevel > 1)
+      G4cout<<omega/keV<<"\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<"\t" ;
+    if(verboseLevel > 0)
+      outGas<<omega/keV<<"\t\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<G4endl ;
   }
   return  ;
 }
@@ -1317,10 +1337,11 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
                             GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
      numberE = (*(*fEnergyDistrTable)(iTkin))(0) ;
      //  numberA = (*(*fAngleDistrTable)(iTkin))(0) ;
-     G4cout<<gamma<<"\t\t"<<numberE<<"\t"    //  <<numberA
-           <<G4endl ; 
-     outEn<<gamma<<"\t\t"<<numberE<<G4endl ; 
-     //  outAng<<gamma<<"\t\t"<<numberA<<G4endl ; 
+     if(verboseLevel > 1)
+       G4cout<<gamma<<"\t\t"<<numberE<<"\t"    //  <<numberA
+	     <<G4endl ; 
+     if(verboseLevel > 0)
+       outEn<<gamma<<"\t\t"<<numberE<<G4endl ; 
   }
   return ;
 }  

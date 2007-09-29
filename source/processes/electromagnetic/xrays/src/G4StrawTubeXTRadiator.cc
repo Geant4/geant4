@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.5 2007-09-28 15:36:01 vnivanch Exp $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.6 2007-09-29 17:49:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,34 +45,39 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
                                          const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,1,processName)
 {
-  G4cout<<"Straw tube X-ray TR  radiator EM process is called"<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"Straw tube X-ray TR  radiator EM process is called"<<G4endl;
 
   if( unishut )
   {
     fAlphaPlate = 1./3.;
     fAlphaGas   = 12.4;
-    G4cout<<"straw uniform shooting: "<<"fAlphaPlate = "
-          <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
+    if(verboseLevel > 0)
+      G4cout<<"straw uniform shooting: "<<"fAlphaPlate = "
+	    <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
   }
   else
   {
     fAlphaPlate = 0.5;
     fAlphaGas   = 5.;
-    G4cout<<"straw isotropical shooting: "<<"fAlphaPlate = "
-          <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
+    if(verboseLevel > 0)
+      G4cout<<"straw isotropical shooting: "<<"fAlphaPlate = "
+	    <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
 
   }
   // index of medium material
 
   fMatIndex3 = mediumMat->GetIndex();
-  G4cout<<"medium material = "<<mediumMat->GetName()<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"medium material = "<<mediumMat->GetName()<<G4endl;
 
   // plasma energy squared for plate material
 
   fSigma3 = fPlasmaCof*mediumMat->GetElectronDensity();
-  G4cout<<"medium plasma energy = "<<sqrt(fSigma3)/eV<<" eV"<<G4endl;
+  if(verboseLevel > 0)
+    G4cout<<"medium plasma energy = "<<sqrt(fSigma3)/eV<<" eV"<<G4endl;
 
   // Compute cofs for preparation of linear photo absorption in external medium
 

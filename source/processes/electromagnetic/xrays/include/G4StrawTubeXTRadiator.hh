@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.hh,v 1.3 2007-09-28 15:35:58 vnivanch Exp $
+// $Id: G4StrawTubeXTRadiator.hh,v 1.4 2007-09-29 17:49:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 // 
 // History:
 // 22.04.05 V. Grichine, first version 
+// 28.09.07, V.Ivanchenko general cleanup without change of algorithms
 //
 
 #ifndef G4StrawTubeXTRadiator_h
