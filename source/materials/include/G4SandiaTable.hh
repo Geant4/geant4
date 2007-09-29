@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.18 2007-09-28 16:52:04 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.19 2007-09-29 17:47:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -75,10 +75,12 @@ public:  // with description
   inline G4int GetMatNbOfIntervals();
   inline G4double  GetSandiaCofForMaterial(G4int,G4int);
   inline G4double* GetSandiaCofForMaterial(G4double energy);
+  inline G4double  GetSandiaMatTable(G4int,G4int);
 
-  inline G4double GetSandiaMatTable(G4int,G4int) const;
-  inline G4OrderedTable* GetSandiaMatTable() const;
-	   
+  inline G4double  GetSandiaCofForMaterialPAI(G4int,G4int);
+  inline G4double* GetSandiaCofForMaterialPAI(G4double energy);
+  inline G4double  GetSandiaMatTablePAI(G4int,G4int);
+
 public:  // without description
 
   G4SandiaTable(__void__&);
@@ -89,6 +91,7 @@ public:  // without description
 private:
        
   void ComputeMatSandiaMatrix();
+  void ComputeMatSandiaMatrixPAI();
 
   // methods per atom
   inline G4int     GetNbOfIntervals   (G4int Z);
@@ -113,6 +116,7 @@ private:
   G4Material*     fMaterial;
   G4int           fMatNbOfIntervals;
   G4OrderedTable* fMatSandiaMatrix;
+  G4OrderedTable* fMatSandiaMatrixPAI;
   
   G4double        fnulcof[4];
 		   
@@ -227,16 +231,8 @@ G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-inline G4double
-G4SandiaTable::GetIonizationPot(G4int Z)
-{
-  return fIonizationPotentials[Z]*eV;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
 inline G4double  
-G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
+G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) 
 {
   assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
   G4double     unitCof ;
@@ -247,10 +243,50 @@ G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-inline G4OrderedTable* 
-G4SandiaTable::GetSandiaMatTable() const
+inline G4double  
+G4SandiaTable::GetSandiaCofForMaterialPAI(G4int interval, G4int j)    
 {
-  return fMatSandiaMatrix;
+  assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);                      
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  return ((*(*fMatSandiaMatrixPAI)[interval])[j]); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+inline G4double* 
+G4SandiaTable::GetSandiaCofForMaterialPAI(G4double energy)
+{
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  G4double* x = fnulcof;
+  if (energy >= (*(*fMatSandiaMatrixPAI)[0])[0]) {
+   
+    G4int interval = fMatNbOfIntervals - 1;
+    while ((interval>0)&&(energy<(*(*fMatSandiaMatrixPAI)[interval])[0])) 
+      {interval--;} 
+    x = &((*(*fMatSandiaMatrixPAI)[interval])[1]);
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+inline G4double  
+G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j) 
+{
+  assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  G4double     unitCof ;
+  if(j == 0)   unitCof = keV ;
+  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
+  return ( (*(*fMatSandiaMatrixPAI)[interval])[j] )*unitCof; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+inline G4double
+G4SandiaTable::GetIonizationPot(G4int Z)
+{
+  return fIonizationPotentials[Z]*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
