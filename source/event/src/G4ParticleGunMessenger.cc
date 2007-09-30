@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.14 2006-06-29 18:09:55 gunter Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.15 2007-09-30 21:52:05 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -89,6 +89,13 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   //energyCmd->SetUnitCategory("Energy");
   //energyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
 
+  momentumCmd = new G4UIcmdWithADoubleAndUnit("/gun/momentum",this);
+  momentumCmd->SetGuidance("Set momentum magnitude.");
+  momentumCmd->SetParameterName("Momentum",true,true);
+  momentumCmd->SetDefaultUnit("GeV");
+  //momentumCmd->SetUnitCategory("Energy");
+  //momentumCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+
   positionCmd = new G4UIcmdWith3VectorAndUnit("/gun/position",this);
   positionCmd->SetGuidance("Set starting position of the particle.");
   positionCmd->SetParameterName("X","Y","Z",true,true);
@@ -149,6 +156,7 @@ G4ParticleGunMessenger::~G4ParticleGunMessenger()
   delete particleCmd;
   delete directionCmd;
   delete energyCmd;
+  delete momentumCmd;
   delete positionCmd;
   delete timeCmd;
   delete polCmd;
@@ -176,6 +184,8 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   { fParticleGun->SetParticleMomentumDirection(directionCmd->GetNew3VectorValue(newValues)); }
   else if( command==energyCmd )
   { fParticleGun->SetParticleEnergy(energyCmd->GetNewDoubleValue(newValues)); }
+  else if( command==momentumCmd )
+  { fParticleGun->SetParticleMomentum(momentumCmd->GetNewDoubleValue(newValues)); }
   else if( command==positionCmd )
   { fParticleGun->SetParticlePosition(positionCmd->GetNew3VectorValue(newValues)); }
   else if( command==timeCmd )
