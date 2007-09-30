@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2007-09-29 17:49:34 vnivanch Exp $
+$Id: History,v 1.61 2007-09-30 22:19:15 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 September 07: P. Gumplinger (xrays-V09-00-02)
+- G4Cerenkov change inheritance to G4VDiscreteProcess
+  changed the arguments of G4Cerenkov::GetAverageNumberOfPhotons
 
 28 September 07: V.Ivant (xrays-V09-00-01)
 - G4VXTRenergyLoss: general cleanup of old comments;
