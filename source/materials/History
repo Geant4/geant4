@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007-09-27 14:05:47 vnivanch Exp $
+$Id: History,v 1.95 2007-10-01 09:34:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-09-07 V.Ivanchenko (materials-V09-00-03)
+G4SandiaTable - add fMatSandiaMatrixPAI ordered table; cleanup class
 
 27-09-07 V.Ivanchenko (materials-V09-00-02)
 G4IonisParamMat - add comutation and get methods for parameters of
