@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.cc,v 1.4 2007-09-25 10:35:24 vnivanch Exp $
+// $Id: MyKleinNishinaCompton.cc,v 1.5 2007-10-01 15:19:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,11 +65,8 @@ G4double MyKleinNishinaCompton::CrossSectionPerVolume(
 {
   G4double CrossSection = 
   G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy);
-    
-  G4double factor = CrossSectionFactor;
-  if (mat == detector->GetCavityMaterial()) factor = 0.;
 
-  return CrossSection*factor;
+  return CrossSection*CrossSectionFactor;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

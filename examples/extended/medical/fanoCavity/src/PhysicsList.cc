@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.7 2007-09-25 10:35:24 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.8 2007-10-01 15:19:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -162,17 +162,23 @@ void PhysicsList::ConstructEM()
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
   emOptions.SetSkin(2.);
   
-  //energy loss
+  //physics tables
   //
-  emOptions.SetLinearLossLimit(1.e-6);  
-  emOptions.SetMaxEnergy(10.*GeV);  
+  emOptions.SetMinEnergy(100*eV);    
+  emOptions.SetMaxEnergy(10*GeV);  
   emOptions.SetDEDXBinning(800);  
-  emOptions.SetLambdaBinning(800);  
-  emOptions.SetStepFunction(0.2, 10*um);
+  emOptions.SetLambdaBinning(800);
   
+  //energy loss
+  //  
+  emOptions.SetStepFunction(0.2, 10*um);
+  emOptions.SetLinearLossLimit(1.e-6);
+          
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);  
+  emOptions.SetBuildCSDARange(true);
+  emOptions.SetMaxEnergyForCSDARange(10*GeV);  
+  emOptions.SetDEDXBinningForCSDARange(800);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

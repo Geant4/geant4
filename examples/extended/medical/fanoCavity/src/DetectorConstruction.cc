@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2007-10-01 15:19:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -110,7 +110,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Air", 1.290*mg/cm3, 2);
   Air->AddElement(N, 70.*perCent);
   Air->AddElement(O, 30.*perCent);
-        
+  
+  new G4Material("Graphite",     6, 12.01*g/mole, 2.265*g/cm3);
+  new G4Material("Graphite_gas", 6, 12.01*g/mole, 2.265*mg/cm3);  
+  
+  new G4Material("Aluminium",     13, 26.98*g/mole, 2.700*g/cm3);
+  new G4Material("Aluminium_gas", 13, 26.98*g/mole, 2.700*mg/cm3);  
+          
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
