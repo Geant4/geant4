@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.19 2007-09-29 17:47:42 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.20 2007-10-01 13:34:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -97,6 +97,7 @@ private:
   inline G4int     GetNbOfIntervals   (G4int Z);
   inline G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
   inline G4double  GetIonizationPot   (G4int Z);
+  inline G4OrderedTable*  GetSandiaMatrixPAI();
 
   // static members of the class
   static const G4int      fNumberOfElements;
@@ -145,7 +146,9 @@ public:  // without description
 
   inline G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
 
-  inline G4int GetMaxInterval() const { return fMaxInterval;};
+  inline G4int GetMaxInterval() const; 
+
+  inline G4double** GetPointerToCof(); 
 
 private:
 
@@ -291,9 +294,30 @@ G4SandiaTable::GetIonizationPot(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+inline G4OrderedTable*  
+G4SandiaTable::GetSandiaMatrixPAI()
+{
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  return fMatSandiaMatrixPAI;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
 ///////////////////////////////////////////////////////////////////////
 //
-// Inline methods for PAI model
+// Inline methods for PAI model, will be removed in next major release
+
+inline G4int 
+G4SandiaTable::GetMaxInterval() const { 
+  return fMaxInterval;
+}
+
+inline G4double** 
+G4SandiaTable::GetPointerToCof() 
+{ 
+  if(!fPhotoAbsorptionCof) ComputeMatTable(); 
+  return fPhotoAbsorptionCof;
+}
 
 inline void
 G4SandiaTable::SandiaSwap( G4double** da ,
@@ -304,10 +328,6 @@ G4SandiaTable::SandiaSwap( G4double** da ,
   da[i][0] = da[j][0] ;
   da[j][0] = tmp ;
 }
-
-/////////////////////////////////////////////////////////////////////////
-//
-//
 
 inline
 G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const

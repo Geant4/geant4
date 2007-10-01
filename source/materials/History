@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2007-10-01 10:28:32 vnivanch Exp $
+$Id: History,v 1.97 2007-10-01 13:34:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 01-10-07 V.Ivanchenko (materials-V09-00-03)
-G4SandiaTable - add fMatSandiaMatrixPAI ordered table; cleanup class
+G4SandiaTable - separated computations of tables photo-absobtion 
+                coeffitients for photo-electric effect and PAI model; 
+                added fMatSandiaMatrixPAI ordered table; 
+                general cleanup, reduce number of static variables;
 
 27-09-07 V.Ivanchenko (materials-V09-00-02)
 G4IonisParamMat - add comutation and get methods for parameters of
