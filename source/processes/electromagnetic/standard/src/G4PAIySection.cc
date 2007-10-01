@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.cc,v 1.1 2007-10-01 17:45:14 vnivanch Exp $
+// $Id: G4PAIySection.cc,v 1.2 2007-10-01 18:25:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,18 +98,18 @@ void G4PAIySection::Initialize( const G4Material* material,
 
    for(i=1;i<=fIntervalNumber;i++)
      {
-       if((fSandia->GetPhotoAbsorpCof(i,0) >= maxEnergyTransfer) ||
-	  i > fIntervalNumber)
+       G4double e = fSandia->GetSandiaCofForMaterialPAI(i,0); 
+       if(e >= maxEnergyTransfer || i > fIntervalNumber)
 	 {
 	   fEnergyInterval[i] = maxEnergyTransfer ;
 	   fIntervalNumber = i ;
 	   break;
 	 }
-       fEnergyInterval[i] = fSandia->GetPhotoAbsorpCof(i,0) ;
-       fA1[i]             = fSandia->GetPhotoAbsorpCof(i,1)*fDensity ;
-       fA2[i]             = fSandia->GetPhotoAbsorpCof(i,2)*fDensity ;
-       fA3[i]             = fSandia->GetPhotoAbsorpCof(i,3)*fDensity ;
-       fA4[i]             = fSandia->GetPhotoAbsorpCof(i,4)*fDensity ;
+       fEnergyInterval[i] = e;
+       fA1[i]             = fSandia->GetSandiaMatTable(i,1);
+       fA2[i]             = fSandia->GetSandiaMatTable(i,2);
+       fA3[i]             = fSandia->GetSandiaMatTable(i,3);
+       fA4[i]             = fSandia->GetSandiaMatTable(i,4);
 
      }   
    if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
