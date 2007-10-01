@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.31 2007-09-29 17:47:42 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.32 2007-10-01 09:14:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -446,6 +446,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 G4SandiaTable::G4SandiaTable(G4int matIndex)
 { 
   fMatSandiaMatrix = 0 ; 
+  fMatSandiaMatrixPAI = 0;
   fPhotoAbsorptionCof = 0 ;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
