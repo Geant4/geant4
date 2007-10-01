@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationProbability.cc,v 1.5 2007-07-28 12:43:19 ahoward Exp $
+// $Id: G4NeutronEvaporationProbability.cc,v 1.6 2007-10-01 13:13:20 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -35,7 +35,7 @@
 #include "G4NeutronEvaporationProbability.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
-    G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,CoulombBarrier
+    G4EvaporationProbability(1,0,2) // A,Z,Gamma
 {
     std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
     std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
