@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.32 2007-10-01 09:14:12 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.33 2007-10-01 10:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -411,6 +411,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   // create the sandia matrix for this material
     
   fMatSandiaMatrixPAI = new G4OrderedTable();
+  G4double density = fMaterial->GetDensity();
  
   for (i = 0; i < fMaxInterval; i++)
     {
@@ -419,10 +420,10 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   for (i = 0; i < fMaxInterval; i++)
     {
       (*(*fMatSandiaMatrixPAI)[i])[0] = fPhotoAbsorptionCof0[i+1];
-      (*(*fMatSandiaMatrixPAI)[i])[1] = fPhotoAbsorptionCof1[i+1];
-      (*(*fMatSandiaMatrixPAI)[i])[2] = fPhotoAbsorptionCof2[i+1];
-      (*(*fMatSandiaMatrixPAI)[i])[3] = fPhotoAbsorptionCof3[i+1];
-      (*(*fMatSandiaMatrixPAI)[i])[4] = fPhotoAbsorptionCof4[i+1];
+      (*(*fMatSandiaMatrixPAI)[i])[1] = fPhotoAbsorptionCof1[i+1]*density;
+      (*(*fMatSandiaMatrixPAI)[i])[2] = fPhotoAbsorptionCof2[i+1]*density;
+      (*(*fMatSandiaMatrixPAI)[i])[3] = fPhotoAbsorptionCof3[i+1]*density;
+      (*(*fMatSandiaMatrixPAI)[i])[4] = fPhotoAbsorptionCof4[i+1]*density;
 
     }	         	    
   delete [] Z;
