@@ -55,6 +55,7 @@
 #include "G4VEmModel.hh"
 #include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4PAIySection.hh"
 
 class G4PhysicsLogVector;
 class G4PhysicsTable;

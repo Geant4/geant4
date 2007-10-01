@@ -45,7 +45,6 @@
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
 #include "G4OrderedTable.hh"
-#include "G4PAIySection.hh"
 
 #include "G4PAIModel.hh"
 #include "Randomize.hh"
