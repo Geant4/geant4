@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronEvaporationProbability.hh,v 1.6 2007-08-24 08:50:31 ahoward Exp $
+// $Id: G4DeuteronEvaporationProbability.hh,v 1.7 2007-10-01 13:21:23 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -66,7 +66,10 @@ private:
 
   virtual G4double CalcRjParam(const G4Fragment & fragment) const 
   { G4int NumberCharged = fragment.GetNumberOfCharged(); G4int NumberParticles = fragment.GetNumberOfParticles();
-    return 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(NumberParticles*(NumberParticles-1)); } // taken from PreCompound correction - justified? AH 24/8/07
+    G4double rj = 1.0;
+    G4double denominator = NumberParticles*(NumberParticles-1);
+    if(denominator != 0) rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator);
+    return rj; } // taken from PreCompound correction - justified? AH 24/8/07
 
 	
   G4double CCoeficient(const G4double aZ) const;
