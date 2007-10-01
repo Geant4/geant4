@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.6 2007-07-23 18:13:23 ahoward Exp $
+// $Id: G4PreCompoundNeutron.hh,v 1.7 2007-10-01 10:42:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -84,7 +84,9 @@ private:
 // added Rj method according to literature and JMQ - formula from Jose Quesada
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
   {
-    return static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
+    G4double rj = 1.0;
+    if(NumberParticles != 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
+    return rj;
   }
 
 
