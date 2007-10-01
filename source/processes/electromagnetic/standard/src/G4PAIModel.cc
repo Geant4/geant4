@@ -44,7 +44,8 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
-#include "G4PAIxSection.hh"
+#include "G4OrderedTable.hh"
+#include "G4PAIySection.hh"
 
 #include "G4PAIModel.hh"
 #include "Randomize.hh"
@@ -71,7 +72,6 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fMeanNumber(20),
   fParticle(0),
   fHighKinEnergy(100.*TeV),
-  fLowKinEnergy(2.0*MeV),
   fTwoln10(2.0*log(10.0)),
   fBg2lim(0.0169),
   fTaulim(8.4146e-3)
@@ -81,12 +81,6 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
-  fLowestKineticEnergy  = fMass*fLowestGamma;
-  fHighestKineticEnergy = fMass*fHighestGamma;
-
-  fParticleEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
-						 fHighestKineticEnergy,
-						 fTotBin                );
   fPAItransferTable  = 0;
   fPAIdEdxTable      = 0;
   fSandiaPhotoAbsCof = 0;
@@ -127,12 +121,13 @@ G4PAIModel::~G4PAIModel()
 
 void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 {
+  if(fParticle == p) return;
   fParticle = p;
   fMass = fParticle->GetPDGMass();
   fSpin = fParticle->GetPDGSpin();
   G4double q = fParticle->GetPDGCharge()/eplus;
   fChargeSquare = q*q;
-  fLowKinEnergy *= fMass/proton_mass_c2;
+  fLowKinEnergy = 0.2*MeV*fMass/proton_mass_c2;
   fRatio = electron_mass_c2/fMass;
   fQc = fMass/fRatio;
 }
@@ -145,53 +140,52 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   if(isInitialised) return;
   isInitialised = true;
 
-  if(!fParticle) SetParticle(p);
+  SetParticle(p);
+  fLowestKineticEnergy  = fMass*(fLowestGamma  - 1.0);
+  fHighestKineticEnergy = fMass*(fHighestGamma - 1.0);
+
+  fParticleEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
+						 fHighestKineticEnergy,
+						 fTotBin);
 
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 
+  // Prepare initialization
+
+  fPAItransferTable = new G4PhysicsTable(fTotBin);
+  fPAIdEdxTable = new G4PhysicsTable(fTotBin);
+
   const G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  size_t numOfMat   = G4Material::GetNumberOfMaterials();
+  size_t numRegions = fPAIRegionVector.size();
 
-  for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
+  for(size_t iReg = 0; iReg < numRegions; ++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
-
-    vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
-    size_t jMat; 
-    size_t numOfMat = curReg->GetNumberOfMaterials();
-
-    //  for(size_t jMat = 0; jMat < curReg->GetNumberOfMaterials();++jMat){}
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    size_t numberOfMat = G4Material::GetNumberOfMaterials();
-
-    for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
+    for(size_t jMat = 0; jMat < numOfMat; ++jMat) // region material loop
     {
-      const G4MaterialCutsCouple* matCouple = theCoupleTable->
-      GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
-      fMaterialCutsCoupleVector.push_back(matCouple);
+      fMaterial  = (*theMaterialTable)[jMat];
+      fCutCouple = theCoupleTable->GetMaterialCutsCouple( fMaterial, 
+					  curReg->GetProductionCuts() );
+      if( fCutCouple ) {
+	fMaterialCutsCoupleVector.push_back(fCutCouple);
+     
+	//ComputeSandiaPhotoAbsCof();
+	BuildPAIonisationTable(p);
 
-      size_t iMatGlob;
-      for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
-      {
-        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;
+	fPAIxscBank.push_back(fPAItransferTable);
+	fPAIdEdxBank.push_back(fPAIdEdxTable);
+	fdEdxTable.push_back(fdEdxVector);
+
+	BuildLambdaVector(fCutCouple);
+	fdNdxCutTable.push_back(fdNdxCutVector);
+	fLambdaTable.push_back(fLambdaVector);
       }
-      fMatIndex = iMatGlob;
-
-      ComputeSandiaPhotoAbsCof();
-      BuildPAIonisationTable(p);
-
-      fPAIxscBank.push_back(fPAItransferTable);
-      fPAIdEdxBank.push_back(fPAIdEdxTable);
-      fdEdxTable.push_back(fdEdxVector);
-
-      BuildLambdaVector(matCouple);
-      fdNdxCutTable.push_back(fdNdxCutVector);
-      fLambdaTable.push_back(fLambdaVector);
-
-      matIter++;
     }
   }
 }
@@ -199,7 +193,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 //////////////////////////////////////////////////////////////////
 
 void G4PAIModel::ComputeSandiaPhotoAbsCof()
-{
+{ 
   G4int i, j, numberOfElements ;
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
@@ -250,28 +244,15 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
 {
   G4double LowEdgeEnergy , ionloss ;
   G4double tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
-  /*
-  if( fPAItransferTable )
-  {
-     fPAItransferTable->clearAndDestroy() ;
-     delete fPAItransferTable ;
-  }
-  */
-  fPAItransferTable = new G4PhysicsTable(fTotBin);
-  /*
-  if( fPAIdEdxTable )
-  {
-     fPAIdEdxTable->clearAndDestroy() ;
-     delete fPAIdEdxTable ;
-  }
-  */
-  fPAIdEdxTable = new G4PhysicsTable(fTotBin);
 
   //  if(fdEdxVector) delete fdEdxVector ;
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy,
-					 fHighestKineticEnergy,
-					 fTotBin               ) ;
-  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+					fHighestKineticEnergy,
+					fTotBin);
+  //  G4OrderedTable* sandia = fMaterial->GetSandiaTable()->GetSandiaMatrix();
+  G4SandiaTable* sandia = fMaterial->GetSandiaTable();
+  //  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+  Tmin = sandia->GetSandiaMatTablePAI(0,0);
   deltaLow = 100.*eV; // 0.5*eV ;
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
@@ -291,21 +272,23 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
     // if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
     Tkin = Tmax ;
   
-    if ( Tkin < Tmin + deltaLow )  // low energy safety
-    {
+    if ( Tmax < Tmin + deltaLow )  // low energy safety
       Tkin = Tmin + deltaLow ;
-    }
+
+    /*
     G4PAIxSection protonPAI( fMatIndex,
                              Tkin,
                              bg2,
                              fSandiaPhotoAbsCof,
                              fSandiaIntervalNumber  ) ;
+    */
+    fPAIySection.Initialize(fMaterial, Tkin, bg2);
 
     // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
     // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
     // G4cout<<"protonPAI.GetSplineSize() = "<<
     //    protonPAI.GetSplineSize()<<G4endl<<G4endl ;
-
+    /*
     G4PhysicsFreeVector* transferVector = new
                              G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
     G4PhysicsFreeVector* dEdxVector = new
@@ -321,6 +304,22 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
                                 protonPAI.GetIntegralPAIdEdx(k+1) ) ;
     }
     ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
+    */
+    G4int n = fPAIySection.GetSplineSize();
+    G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n) ;
+    G4PhysicsFreeVector* dEdxVector = new G4PhysicsFreeVector(n);
+
+    for( G4int k = 0 ; k < n; k++ )
+    {
+      transferVector->PutValue( k ,
+                                fPAIySection.GetSplineEnergy(k+1),
+                                fPAIySection.GetIntegralPAIySection(k+1) ) ;
+      dEdxVector->PutValue( k ,
+                                fPAIySection.GetSplineEnergy(k+1),
+                                fPAIySection.GetIntegralPAIdEdx(k+1) ) ;
+    }
+    ionloss = fPAIySection.GetMeanEnergyLoss() ;   //  total <dE/dx>
+
     if ( ionloss <= 0.)  ionloss = DBL_MIN ;
     fdEdxVector->PutValue(i,ionloss) ;
 

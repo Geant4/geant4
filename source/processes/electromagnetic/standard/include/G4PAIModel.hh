@@ -140,6 +140,7 @@ private:
   G4int                fTotBin;
   G4int                fMeanNumber;
   G4PhysicsLogVector*  fParticleEnergyVector ;
+  G4PAIySection        fPAIySection;
 
   // vectors
 
@@ -151,6 +152,9 @@ private:
 
   std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>       fPAIRegionVector;
+
+  const G4MaterialCutsCouple*        fCutCouple;
+  const G4Material*                  fMaterial;
 
   size_t                             fMatIndex ;  
   G4double**                         fSandiaPhotoAbsCof ;
