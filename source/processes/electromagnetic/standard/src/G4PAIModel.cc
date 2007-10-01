@@ -251,7 +251,7 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
   //  G4OrderedTable* sandia = fMaterial->GetSandiaTable()->GetSandiaMatrix();
   G4SandiaTable* sandia = fMaterial->GetSandiaTable();
   //  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
-  Tmin = sandia->GetSandiaMatTablePAI(0,0);
+  Tmin = sandia->GetSandiaCofForMaterialPAI(0,0);
   deltaLow = 100.*eV; // 0.5*eV ;
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
