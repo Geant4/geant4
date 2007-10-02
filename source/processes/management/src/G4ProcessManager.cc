@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.29 2007-07-13 05:08:18 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.30 2007-10-02 08:23:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 //   fixed bugs in FindInsertPosition
 //                               18 July 1998 H.Kurashige
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//   Add exception to check ordering paramters 2 Oct. 2007  H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ProcessManagerMessenger.hh"
@@ -437,7 +438,7 @@ G4int G4ProcessManager::AddProcess(
   pAttr->ordProcVector[3] = ordAlongStepDoIt;
   pAttr->ordProcVector[4] = ordPostStepDoIt;
   pAttr->ordProcVector[5] = ordPostStepDoIt;
-
+ 
   // add aProccess in Process vectors
   for (G4int ivec=1; ivec<SizeOfProcVectorArray; ivec+=2) {
     if (pAttr->ordProcVector[ivec] < 0 ) {
@@ -470,6 +471,9 @@ G4int G4ProcessManager::AddProcess(
   theAttrVector->push_back(pAttr);
 
   numberOfProcesses += 1;
+
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
 
   CreateGPILvectors();
 
@@ -643,6 +647,9 @@ void G4ProcessManager::SetProcessOrdering(
     }
 
   }
+  // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
+
   // create GPIL vectors 
   CreateGPILvectors();
 }
@@ -698,6 +705,9 @@ void G4ProcessManager::SetProcessOrderingToFirst(
     }
 #endif
   }
+
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
 
   // create GPIL vectors 
   CreateGPILvectors();
@@ -783,6 +793,9 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     G4cout << G4endl;
   }
 #endif
+
+ // check consistencies between ordering parameters and process 
+  CheckOrderingParameters(aProcess);
 
   // create GPIL vectors 
   CreateGPILvectors();
@@ -1079,6 +1092,69 @@ void G4ProcessManager::EndTracking()
   return pAttr-> isActive;
 }
 
+/////////////////////////////////////////////
+void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
+{
+  if (aProcess==0) return;
+  G4ProcessAttribute* pAttr = GetAttribute(aProcess);
+  if (pAttr ==0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4ProcessManager::CheckOrderingParameters ";
+      G4cout << " process " << aProcess->GetProcessName() 
+	     << " has no attribute" << G4endl;
+    }
+#endif
+  }
+
+  // check consistencies between ordering parameters and 
+  // validity of DoIt of the Process  
+  G4bool isOK =true;
+  if ( (pAttr->ordProcVector[0]>=0) && (!aProcess->isAtRestDoItIsEnabled()) ){
+ #ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You can not set ordering parameter for AtRest DoIt"
+	     << " to the process " 
+	     << aProcess->GetProcessName() << G4endl;
+    }
+#endif
+    isOK = false;
+  }
+  
+  if ( (pAttr->ordProcVector[2]>=0) && (!aProcess->isAlongStepDoItIsEnabled()) ){
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You can not set ordering parameter for AlongStep DoIt "
+	     << " to the process " 
+	     << aProcess->GetProcessName() << G4endl;
+
+    }
+#endif
+    isOK = false;
+ } 
+
+  if ( (pAttr->ordProcVector[4]>=0) && (!aProcess->isPostStepDoItIsEnabled()) ) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "You can not set ordering parameter for PostStep DoIt "
+	     << " to the process " 
+	     << aProcess->GetProcessName() << G4endl;
+    }
+#endif
+    isOK = false;
+  } 
+  
+  if (!isOK) {
+    G4Exception( "G4ProcessManager::CheckOrderingParameters ",
+    		 "Invalid Ordering",JustWarning, 
+    		 "Invalid ordering parameters are set ");
+  }
+  
+  return;
+}
 
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestContinuousDiscreteProcess.cc,v 1.5 2006-06-29 21:08:28 gunter Exp $
+// $Id: G4VRestContinuousDiscreteProcess.cc,v 1.6 2007-10-02 08:23:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

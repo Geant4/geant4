@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDiscreteProcess.cc,v 1.5 2006-06-29 21:08:24 gunter Exp $
+// $Id: G4VDiscreteProcess.cc,v 1.6 2007-10-02 08:23:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,9 @@ G4VDiscreteProcess::G4VDiscreteProcess()
 G4VDiscreteProcess::G4VDiscreteProcess(const G4String& aName , G4ProcessType aType)
                   : G4VProcess(aName, aType)
 {
+  enableAtRestDoIt = false;
+  enableAlongStepDoIt = false;
+
 }
 
 G4VDiscreteProcess::~G4VDiscreteProcess()

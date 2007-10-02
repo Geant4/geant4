@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.15 2007-07-13 05:08:17 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.16 2007-10-02 08:23:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -317,7 +317,11 @@ class G4ProcessManager
 
       G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
 			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
- 
+
+  void CheckOrderingParameters(G4VProcess*) const;
+       // check consistencies between ordering parameters and 
+       // validity of DoIt of the Process 
+
   private:     
       G4ProcessAttribute* GetAttribute(G4int      index) const;
       G4ProcessAttribute* GetAttribute(G4VProcess *aProcess) const;
