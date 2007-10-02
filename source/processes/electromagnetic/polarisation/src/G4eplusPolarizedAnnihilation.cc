@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.5 2007-07-10 09:35:37 schaelic Exp $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.6 2007-10-02 11:36:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 26-07-06 modified cross section  (P. Starovoitov)
 // 21-08-06 interface updated   (A. Schaelicke)
 // 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
+// 02-10-07, enable AtRest (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -74,7 +75,9 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false),
     theAsymmetryTable(NULL),
     theTransverseAsymmetryTable(NULL)
-{}
+{
+  enableAtRestDoIt = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
