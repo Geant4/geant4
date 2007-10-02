@@ -106,14 +106,15 @@ public:
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();
-  void     BuildPAIonisationTable(const G4ParticleDefinition*);
-  void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
+  void     BuildPAIonisationTable();
+  void     BuildLambdaVector();
+
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
   G4double GetdEdxCut( G4int iPlace, G4double transferCut);
   G4double GetPostStepTransfer( G4double scaledTkin );
   G4double GetEnergyTransfer( G4int iPlace,
-                                          G4double position,
-					  G4int iTransfer );
+			      G4double position,
+			      G4int iTransfer );
 
   void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
 
@@ -156,6 +157,7 @@ private:
 
   const G4MaterialCutsCouple*        fCutCouple;
   const G4Material*                  fMaterial;
+  G4double                           fDeltaCutInKinEnergy; 
 
   size_t                             fMatIndex ;  
   G4double**                         fSandiaPhotoAbsCof ;
@@ -164,11 +166,11 @@ private:
   G4PhysicsLogVector*                fdEdxVector ;
   std::vector<G4PhysicsLogVector*>   fdEdxTable ;
 
-  G4PhysicsLogVector*              fLambdaVector ;
-  std::vector<G4PhysicsLogVector*> fLambdaTable ;
+  G4PhysicsLogVector*                fLambdaVector ;
+  std::vector<G4PhysicsLogVector*>   fLambdaTable ;
 
-  G4PhysicsLogVector*              fdNdxCutVector ;
-  std::vector<G4PhysicsLogVector*> fdNdxCutTable ;
+  G4PhysicsLogVector*                fdNdxCutVector ;
+  std::vector<G4PhysicsLogVector*>   fdNdxCutTable ;
 
   const G4ParticleDefinition* fParticle;
   const G4ParticleDefinition* fElectron;

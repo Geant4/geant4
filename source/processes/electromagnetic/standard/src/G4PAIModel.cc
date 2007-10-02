@@ -105,6 +105,11 @@ G4PAIModel::~G4PAIModel()
       fPAItransferTable->clearAndDestroy();
       delete fPAItransferTable ;
     }
+  if( fPAIdEdxTable )
+    {
+      fPAIdEdxTable->clearAndDestroy();
+      delete fPAIdEdxTable ;
+    }
   if(fSandiaPhotoAbsCof)
     {
       for(G4int i=0;i<fSandiaIntervalNumber;i++)
@@ -173,15 +178,18 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 					  curReg->GetProductionCuts() );
       if( fCutCouple ) {
 	fMaterialCutsCoupleVector.push_back(fCutCouple);
+
+	fDeltaCutInKinEnergy = 
+	  (*theCoupleTable->GetEnergyCutsVector(1))[fCutCouple->GetIndex()];
      
 	//ComputeSandiaPhotoAbsCof();
-	BuildPAIonisationTable(p);
+	BuildPAIonisationTable();
 
 	fPAIxscBank.push_back(fPAItransferTable);
 	fPAIdEdxBank.push_back(fPAIdEdxTable);
 	fdEdxTable.push_back(fdEdxVector);
 
-	BuildLambdaVector(fCutCouple);
+	BuildLambdaVector();
 	fdNdxCutTable.push_back(fdNdxCutVector);
 	fLambdaTable.push_back(fLambdaVector);
       }
@@ -238,19 +246,17 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
 //  the tables are built for MATERIALS
 //                           *********
 
-void
-G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
+void G4PAIModel::BuildPAIonisationTable()
 {
   G4double LowEdgeEnergy , ionloss ;
   G4double tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
 
-  //  if(fdEdxVector) delete fdEdxVector ;
+  if(fdEdxVector) delete fdEdxVector;
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy,
 					fHighestKineticEnergy,
 					fTotBin);
-  //  G4OrderedTable* sandia = fMaterial->GetSandiaTable()->GetSandiaMatrix();
   G4SandiaTable* sandia = fMaterial->GetSandiaTable();
-  //  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+
   Tmin = sandia->GetSandiaCofForMaterialPAI(0,0)*keV;
   deltaLow = 100.*eV; // 0.5*eV ;
 
@@ -258,18 +264,15 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
   {
     LowEdgeEnergy = fParticleEnergyVector->GetLowEdgeEnergy(i) ;
     tau = LowEdgeEnergy/fMass ;
-    //    if(tau < 0.01)  tau = 0.01 ;
     gamma = tau +1. ;
     // G4cout<<"gamma = "<<gamma<<endl ;
     bg2 = tau*( tau + 2. );
     Tmax = MaxSecondaryEnergy(fParticle, LowEdgeEnergy); 
+    //    Tmax = std::min(fDeltaCutInKinEnergy, Tmax);
+    Tkin = Tmax ;
 
     // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
     // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;
-    // Tkin = DeltaCutInKineticEnergyNow ;
-
-    // if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
-    Tkin = Tmax ;
   
     if ( Tmax < Tmin + deltaLow )  // low energy safety
       Tkin = Tmin + deltaLow ;
@@ -287,23 +290,7 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
     // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
     // G4cout<<"protonPAI.GetSplineSize() = "<<
     //    protonPAI.GetSplineSize()<<G4endl<<G4endl ;
-    /*
-    G4PhysicsFreeVector* transferVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
-    G4PhysicsFreeVector* dEdxVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
 
-    for( G4int k = 0 ; k < protonPAI.GetSplineSize() ; k++ )
-    {
-      transferVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIxSection(k+1) ) ;
-      dEdxVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIdEdx(k+1) ) ;
-    }
-    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
-    */
     G4int n = fPAIySection.GetSplineSize();
     G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n) ;
     G4PhysicsFreeVector* dEdxVector = new G4PhysicsFreeVector(n);
@@ -319,7 +306,7 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
     }
     ionloss = fPAIySection.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-    if ( ionloss <= 0.)  ionloss = DBL_MIN ;
+    if ( ionloss < DBL_MIN)  ionloss = DBL_MIN;
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferTable->insertAt(i,transferVector) ;
@@ -338,28 +325,10 @@ G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition*)
 //     tables are built for MATERIALS
 //
 
-void
-G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
+void G4PAIModel::BuildLambdaVector()
 {
-  G4int i ;
-  G4double dNdxCut, lambda;
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
-                           ->GetSurfaceTolerance();
-
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  size_t jMatCC;
-
-  for (jMatCC = 0 ; jMatCC < numOfCouples ; jMatCC++ )
-  {
-    if( matCutsCouple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
-  }
-  if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
-
-  const vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->
-                                GetEnergyCutsVector(idxG4ElectronCut);
+  //G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+  //                         ->GetSurfaceTolerance();
 
   if (fLambdaVector)   delete fLambdaVector;
   if (fdNdxCutVector)  delete fdNdxCutVector;
@@ -370,18 +339,17 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
   fdNdxCutVector = new G4PhysicsLogVector( fLowestKineticEnergy,
 					  fHighestKineticEnergy,
 					  fTotBin                ) ;
-  G4double deltaCutInKineticEnergyNow = (*deltaCutInKineticEnergy)[jMatCC] ;
-  if(fVerbose > 0)
+  if(fVerbose > 1)
   {
     G4cout<<"PAIModel DeltaCutInKineticEnergyNow = "
-	  <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
+	  <<fDeltaCutInKinEnergy/keV<<" keV"<<G4endl;
   }
-  for ( i = 0 ; i < fTotBin ; i++ )
+  for (G4int i = 0 ; i < fTotBin ; i++ )
   {
-    dNdxCut = GetdNdxCut(i,deltaCutInKineticEnergyNow) ;
-    lambda = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut ;
+    G4double dNdxCut = GetdNdxCut(i,fDeltaCutInKinEnergy) ;
+    G4double lambda = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut ;
 
-    if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance ; // Mmm ???
+    //    if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance ; // Mmm ???
 
     fLambdaVector->PutValue(i, lambda) ;
     fdNdxCutVector->PutValue(i, dNdxCut) ;
