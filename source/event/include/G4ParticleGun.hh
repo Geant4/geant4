@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.hh,v 1.9 2007-09-28 21:04:48 gum Exp $
+// $Id: G4ParticleGun.hh,v 1.10 2007-10-02 00:45:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -109,6 +109,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      { return particle_momentum_direction; }
      inline G4double GetParticleEnergy()
      { return particle_energy; }
+     inline G4double GetParticleMomentum()
+     { return particle_momentum; }
      inline G4double GetParticleCharge()
      { return particle_charge; }
      inline G4ThreeVector GetParticlePolarization()

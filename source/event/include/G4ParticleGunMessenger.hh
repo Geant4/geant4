@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.9 2007-09-30 21:51:44 gum Exp $
+// $Id: G4ParticleGunMessenger.hh,v 1.10 2007-10-02 00:45:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,8 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4UIcmdWithAString *        particleCmd;
     G4UIcmdWith3Vector *        directionCmd;
     G4UIcmdWithADoubleAndUnit * energyCmd;
-    G4UIcmdWithADoubleAndUnit * momentumCmd;
+    G4UIcmdWithADoubleAndUnit * momAmpCmd;
+    G4UIcmdWith3VectorAndUnit * momCmd;
     G4UIcmdWith3VectorAndUnit * positionCmd;
     G4UIcmdWithADoubleAndUnit * timeCmd;
     G4UIcmdWith3Vector *        polCmd;
