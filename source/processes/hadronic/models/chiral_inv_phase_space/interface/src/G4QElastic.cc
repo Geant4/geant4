@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.23 2007-05-23 15:14:25 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.24 2007-10-02 10:00:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -399,7 +399,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
+  G4double weight        = track.GetWeight();
+  G4double localtime     = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: before Touchable extraction"<<G4endl;
@@ -532,6 +533,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   // Make a recoil nucleus
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.4 2007-08-09 13:04:37 mkossov Exp $
+// $Id: G4QCoherentChargeExchange.cc,v 1.5 2007-10-02 10:00:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
@@ -408,8 +408,9 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #ifdef debug
   G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector position = track.GetPosition();
+  G4double      weight    = track.GetWeight();
+  G4double      localtime = track.GetGlobalTime();
+  G4ThreeVector position  = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: before Touchable extraction"<<G4endl;
 #endif
@@ -510,6 +511,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   EnMomConservation-=scat4M;
   theSec->Set4Momentum(scat4M);
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
   // Filling the recoil nucleus
@@ -537,6 +539,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #endif
   // Make a recoil nucleus
   aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetWeight(weight);                                   //    weighted
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug

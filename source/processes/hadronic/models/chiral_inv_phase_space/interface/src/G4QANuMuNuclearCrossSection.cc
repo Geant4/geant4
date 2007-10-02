@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.cc,v 1.9 2006-12-01 10:57:46 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.cc,v 1.10 2007-10-02 10:00:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,8 +38,8 @@
 // ****************************************************************************************
 //===============================================================================================
 
-///#define debug
-#define edebug
+//#define debug
+//#define edebug
 //#define pdebug
 //#define ppdebug
 //#define tdebug
@@ -85,7 +85,7 @@ G4double G4QANuMuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QAMNCS::GetCS:>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
@@ -93,7 +93,7 @@ G4double G4QANuMuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
 #endif
   if(pPDG!=-14)
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QAMNCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -332,7 +332,7 @@ G4double G4QANuMuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, 
 				{
       G4int newran=ran/2;
       if(lastE<=lastEN[sep]) sep-=newran;
-      else if(newran>1)      sep+=newran;
+      else                   sep+=newran;
       ran=newran;
       chk=chk+chk; 
     }
@@ -756,4 +756,4 @@ G4double G4QANuMuNuclearCrossSection::GetNPartons(G4double Q2)
 }
 
 // This class can provide only virtual exchange pi+ (a substitute for W+ boson)
-G4int G4QANuMuNuclearCrossSection::GetExchangePDGCode() {return 211;}
+G4int G4QANuMuNuclearCrossSection::GetExchangePDGCode() {return -211;}

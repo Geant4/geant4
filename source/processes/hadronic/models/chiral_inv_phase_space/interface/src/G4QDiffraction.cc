@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.2 2007-09-04 14:23:08 mkossov Exp $
+// $Id: G4QDiffraction.cc,v 1.3 2007-10-02 10:00:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction class -----------------
@@ -406,8 +406,9 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QDiffraction::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
-  G4ThreeVector position = track.GetPosition();
+  G4double      weight    = track.GetWeight();
+  G4double      localtime = track.GetGlobalTime();
+  G4ThreeVector position  = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QDiffraction::PostStepDoIt: before Touchable extraction"<<G4endl;
 #endif
@@ -530,6 +531,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
       EnMomConservation-=dif4M;
       theSec->Set4Momentum(dif4M);
       G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+      aNewTrack->SetWeight(weight);                                   //    weighted
       aNewTrack->SetTouchableHandle(trTouchable);
       aParticleChange.AddSecondary( aNewTrack );
 #ifdef pdebug

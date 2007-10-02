@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.30 2007-07-12 13:17:02 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.31 2007-10-02 10:00:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1287,10 +1287,10 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
     if     (PDG==2212) PDG=2112;
     else if(PDG==2112) PDG=2212;
   }
-  G4double pP2=pP*pP;                                  // squared momentum of the projectile
+  G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(PDG==2212 && tgZ==1 && tgN==0)
   {
-    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2;  // CMS 90deg value of -t=Q2 (GeV^2)
+    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
   else if(PDG==2112 && tgZ==0 && tgN==1)
