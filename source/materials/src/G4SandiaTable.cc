@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.33 2007-10-01 10:28:32 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.34 2007-10-02 10:13:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -90,14 +90,15 @@ G4SandiaTable::G4SandiaTable(__void__&)
 G4SandiaTable::~G4SandiaTable()
 { 
   if(fMatSandiaMatrix) {
-    //fMatSandiaMatrix->clearAndDestroy();
+    fMatSandiaMatrix->clearAndDestroy();
     delete fMatSandiaMatrix;
   }
-  if(fMatSandiaMatrixPAI) delete fMatSandiaMatrixPAI;
-  
+  if(fMatSandiaMatrixPAI) {
+    fMatSandiaMatrixPAI->clearAndDestroy();
+    delete fMatSandiaMatrixPAI;
+  }
   if(fPhotoAbsorptionCof)
   {
-    //    for(G4int i = 0 ; i < fMaxInterval ; i++)  delete[] fPhotoAbsorptionCof[i];
     delete [] fPhotoAbsorptionCof ;
   }
 }

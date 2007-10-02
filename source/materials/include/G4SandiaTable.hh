@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.20 2007-10-01 13:34:03 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.21 2007-10-02 10:13:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -80,6 +80,7 @@ public:  // with description
   inline G4double  GetSandiaCofForMaterialPAI(G4int,G4int);
   inline G4double* GetSandiaCofForMaterialPAI(G4double energy);
   inline G4double  GetSandiaMatTablePAI(G4int,G4int);
+  inline G4OrderedTable*  GetSandiaMatrixPAI();
 
 public:  // without description
 
@@ -97,7 +98,6 @@ private:
   inline G4int     GetNbOfIntervals   (G4int Z);
   inline G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
   inline G4double  GetIonizationPot   (G4int Z);
-  inline G4OrderedTable*  GetSandiaMatrixPAI();
 
   // static members of the class
   static const G4int      fNumberOfElements;
@@ -123,7 +123,8 @@ private:
 		   
 /////////////////////////////////////////////////////////////////////
 //
-// Methods for PAI model
+// Methods for old implementation of PAI model
+// Will be removed for the next major release
 
 public:  // without description
 
