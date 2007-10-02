@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.115 2007-09-25 17:28:07 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.116 2007-10-02 11:30:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -232,17 +232,44 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
   if ( !baseParticle ) {
     if(theDEDXTable && theRangeTableForLoss) {
       theDEDXTable->clearAndDestroy();
-      if(theDEDXSubTable) theDEDXSubTable->clearAndDestroy();
+      delete theDEDXTable;
+      if(theDEDXSubTable) {
+	theDEDXSubTable->clearAndDestroy();
+        theDEDXSubTable;
+      }
     }
-    if(theIonisationTable) theIonisationTable->clearAndDestroy(); 
-    if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy(); 
-    if(theDEDXunRestrictedTable && theCSDARangeTable)
+    if(theIonisationTable) {
+      theIonisationTable->clearAndDestroy(); 
+      delete theIonisationTable;
+    }
+    if(theIonisationSubTable) {
+      theIonisationSubTable->clearAndDestroy(); 
+      delete theIonisationSubTable;
+    }
+    if(theDEDXunRestrictedTable && theCSDARangeTable) {
        theDEDXunRestrictedTable->clearAndDestroy();
-    if(theCSDARangeTable) theCSDARangeTable->clearAndDestroy();
-    if(theRangeTableForLoss) theRangeTableForLoss->clearAndDestroy();
-    if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
-    if(theLambdaTable) theLambdaTable->clearAndDestroy();
-    if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
+       delete theDEDXunRestrictedTable;
+    }
+    if(theCSDARangeTable) {
+      theCSDARangeTable->clearAndDestroy();
+      delete theCSDARangeTable;
+    }
+    if(theRangeTableForLoss) {
+      theRangeTableForLoss->clearAndDestroy();
+      delete theRangeTableForLoss;
+    }
+    if(theInverseRangeTable) {
+      theInverseRangeTable->clearAndDestroy();
+      delete theInverseRangeTable;
+    }
+    if(theLambdaTable) {
+      theLambdaTable->clearAndDestroy();
+      delete theLambdaTable;
+    }
+    if(theSubLambdaTable) {
+      theSubLambdaTable->clearAndDestroy();
+      delete theSubLambdaTable;
+    }
   }
 
   delete modelManager;

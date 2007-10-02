@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.43 2007-05-18 18:39:55 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.44 2007-10-02 11:30:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,7 +115,10 @@ G4VMultipleScattering::~G4VMultipleScattering()
     G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
 	   << G4endl;
   delete modelManager;
-  if (theLambdaTable) theLambdaTable->clearAndDestroy();
+  if (theLambdaTable) {
+    theLambdaTable->clearAndDestroy();
+    delete theLambdaTable;
+  }
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 

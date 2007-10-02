@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.44 2007-09-25 17:28:07 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.45 2007-10-02 11:30:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,7 +118,10 @@ G4VEmProcess::~G4VEmProcess()
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
 	   << G4endl;
   Clear();
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
+  if(theLambdaTable) {
+    theLambdaTable->clearAndDestroy();
+    delete theLambdaTable;
+  }
   delete modelManager;
   (G4LossTableManager::Instance())->DeRegister(this);
 }
