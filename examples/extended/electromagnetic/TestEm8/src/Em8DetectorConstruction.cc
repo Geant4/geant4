@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.20 2007-07-27 15:29:38 vnivanch Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.21 2007-10-02 10:12:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,8 +58,6 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-const G4double Em8DetectorConstruction::fDelta = 0.0001*mm;
-
 /////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -72,6 +70,8 @@ fAbsorberMaterial(NULL),fSolidAbsorber(NULL),fLogicAbsorber(NULL),
 fPhysicsAbsorber(NULL),fDetectorMessenger(NULL),
 fCalorimeterSD(NULL),fRegGasDet(NULL)
 {
+  fDelta = 0.0001*mm;
+
   fAbsorberThickness = 23.0*mm;
 
   fAbsorberRadius    = 10.*cm;
