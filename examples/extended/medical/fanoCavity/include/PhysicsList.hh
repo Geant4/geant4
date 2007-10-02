@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2007-01-30 16:02:10 maire Exp $
+// $Id: PhysicsList.hh,v 1.3 2007-10-02 14:42:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,12 +61,14 @@ class PhysicsList: public G4VUserPhysicsList
     void AddStepMax();
     
     void SetComptonCSfactor(G4double);
+    void SingleCoulombScattering (G4bool);    
     void RegisterBrem (G4bool);
     
   private:
     DetectorConstruction*  detector;
     MyKleinNishinaCompton* comptonModel;
-    G4bool                 registerBrem;
+    G4bool                 singleScattering;        
+    G4bool                 registerBrem;    
     PhysicsListMessenger*  pMessenger;    
 };
 

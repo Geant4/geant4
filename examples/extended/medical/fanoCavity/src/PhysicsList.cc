@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.8 2007-10-01 15:19:57 maire Exp $
+// $Id: PhysicsList.cc,v 1.9 2007-10-02 14:42:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,6 +48,7 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
 : G4VUserPhysicsList(), detector(det)
 {
   defaultCutValue = 10.*km;
+  singleScattering = false;
   registerBrem = false;
   pMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
@@ -90,6 +91,7 @@ void PhysicsList::ConstructProcess()
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
+#include "G4CoulombScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -111,45 +113,56 @@ void PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+    G4int iAlong = 0, iPost = 0; 
      
     if (particleName == "gamma") {
     
       G4ComptonScattering* compton = new G4ComptonScattering();
       compton->SetModel(comptonModel = new MyKleinNishinaCompton(detector));
-      comptonModel->SetCSFactor(1000.); 
-      pmanager->AddDiscreteProcess(compton);
-                
+      comptonModel->SetCSFactor(1000.);
+       
+      pmanager->AddDiscreteProcess(compton);                
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      if (singleScattering)
+        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        else    
+        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);             
-      pmanager->AddProcess(eIoni,                    -1, 2,2);
+      pmanager->AddProcess(eIoni,                      -1, ++iAlong, ++iPost);
       
-      if (registerBrem) {
-        pmanager->AddProcess(new G4eBremsstrahlung,  -1, 3,3);      
-      } 
+      if (registerBrem)
+        pmanager->AddProcess(new G4eBremsstrahlung,    -1, ++iAlong, ++iPost);      
+       
     } else if (particleName == "e+") {
-
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+    
+      if (singleScattering)
+        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        else   
+        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);                   
-      pmanager->AddProcess(pIoni,                    -1, 2,2);
+      pmanager->AddProcess(pIoni,                      -1, ++iAlong, ++iPost);
       
       if (registerBrem) {
-        pmanager->AddProcess(new G4eBremsstrahlung,  -1, 3,3);
-        pmanager->AddProcess(new G4eplusAnnihilation, 0,-1,4);
+        pmanager->AddProcess(new G4eBremsstrahlung,    -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4eplusAnnihilation,   0, -1,       ++iPost);
       }
       
     } else if (particleName == "proton") {
-
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
+    
+      if (singleScattering)
+        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        else   
+        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+	
+      pmanager->AddProcess(new G4hIonisation,          -1, ++iAlong, ++iPost);
     }
   }
   
@@ -225,6 +238,13 @@ void PhysicsList::SetCuts()
 void PhysicsList::SetComptonCSfactor(G4double factor)
 {
   if (comptonModel) comptonModel->SetCSFactor(factor);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SingleCoulombScattering(G4bool flag)
+{
+  singleScattering = flag;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

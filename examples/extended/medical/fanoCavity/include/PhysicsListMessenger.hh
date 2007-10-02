@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
+// $Id: PhysicsListMessenger.hh,v 1.2 2007-10-02 14:42:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +54,7 @@ class PhysicsListMessenger: public G4UImessenger
     PhysicsList*        pPhysicsList;   
     G4UIdirectory*      physDir;        
     G4UIcmdWithADouble* csFactor;
+    G4UIcmdWithABool*   singleScat;      
     G4UIcmdWithABool*   brem;    
 };
 
