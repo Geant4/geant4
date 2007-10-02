@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2007-06-27 10:06:14 gcosmo Exp $
+$Id: History,v 1.34 2007-10-02 11:18:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-10-2007, V.Ivanchenko phys-lists-V09-00-00
+- G4EmStandardPhysics_option2 - increase number of bins in tables in
+                                two times
 
 27-06-2007, G.Cosmo      phys-lists-V08-03-07
 - Updated G4DataQuestionaire to change NeutronHPCrossSections with
