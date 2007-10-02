@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-02-Oct-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-00)
+02-Oct-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-02)
 ----------------------------------------------------------
 G4StopElementSelector - fixed typo in Primakoff formula for capture
                         velosity
