@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.62 2007-10-02 08:33:30 tnikitin Exp $
+// $Id: G4Torus.cc,v 1.63 2007-10-02 09:34:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -274,8 +274,10 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
     {
       ptmp = p + t*v ;
       rootsrefined = TorusRootsJT(ptmp,v,r) ;
-      if(rootsrefined.size()==roots.size())
-      t = t + rootsrefined[k] ; 
+      if ( rootsrefined.size()==roots.size() )
+      {
+        t = t + rootsrefined[k] ;
+      }
     }
 
     ptmp = p + t*v ;   // calculate the position of the proposed intersection
@@ -463,8 +465,6 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
           delta   = RTorus*RTorus - yoff2*yoff2;
           diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-	  // diff1   = std::sqrt(fRmax*fRmax - yoff1*yoff1) ;
-          // diff2   = std::sqrt(fRmax*fRmax - yoff2*yoff2) ;
           maxDiff = (diff1 > diff2) ? diff1:diff2 ;
           newMin  = xoffset - maxDiff ;
           newMax  = xoffset + maxDiff ;
@@ -493,8 +493,6 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
           delta   = RTorus*RTorus - xoff2*xoff2;
           diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          //diff1   = std::sqrt(fRmax*fRmax - xoff1*xoff1) ;
-          //diff2   = std::sqrt(fRmax*fRmax - xoff2*xoff2) ;
           maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
