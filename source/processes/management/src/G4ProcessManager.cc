@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.30 2007-10-02 08:23:20 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.31 2007-10-03 03:09:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1105,6 +1105,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 	     << " has no attribute" << G4endl;
     }
 #endif
+    return;
   }
 
   // check consistencies between ordering parameters and 
@@ -1114,8 +1115,9 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
  #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr << "G4ProcessManager::CheckOrderingParameters ";
-      G4cerr << "You can not set ordering parameter for AtRest DoIt"
-	     << " to the process " 
+      G4cerr << "You cannot set ordering parameter ["
+	     << pAttr->ordProcVector[0]
+	     << "] for AtRest DoIt  to the process "
 	     << aProcess->GetProcessName() << G4endl;
     }
 #endif
@@ -1126,8 +1128,9 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr << "G4ProcessManager::CheckOrderingParameters ";
-      G4cerr << "You can not set ordering parameter for AlongStep DoIt "
-	     << " to the process " 
+      G4cerr << "You cannot set ordering parameter ["
+	     <<  pAttr->ordProcVector[2]
+	     << "] for AlongStep DoIt to the process "
 	     << aProcess->GetProcessName() << G4endl;
 
     }
@@ -1139,8 +1142,9 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr << "G4ProcessManager::CheckOrderingParameters ";
-      G4cerr << "You can not set ordering parameter for PostStep DoIt "
-	     << " to the process " 
+      G4cerr << "You cannot set ordering parameter [" 
+	     << pAttr->ordProcVector[4] 
+	     << "] for PostStep DoIt to the process"
 	     << aProcess->GetProcessName() << G4endl;
     }
 #endif
@@ -1148,9 +1152,11 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
   } 
   
   if (!isOK) {
+    G4String msg;
+    msg = "Invalid ordering parameters are set for  ";
+    msg +=  aProcess->GetProcessName();
     G4Exception( "G4ProcessManager::CheckOrderingParameters ",
-    		 "Invalid Ordering",JustWarning, 
-    		 "Invalid ordering parameters are set ");
+    		 "Invalid Ordering",FatalException, msg);
   }
   
   return;
