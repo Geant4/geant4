@@ -42,22 +42,23 @@ class G4BCLateParticle : public G4BCAction
 		       G4double theCurrentTime)
   {
     theColl.clear();
-    if(aProjectile->GetFormationTime() > 0 )
-    {
-      G4KineticTrackVector noTarget;
-      G4CollisionInitialState * aLate = 
-            new G4CollisionInitialState(aProjectile->GetFormationTime(),
+    G4double ctime=std::max(0.,aProjectile->GetFormationTime()) + theCurrentTime;
+
+    G4KineticTrackVector noTarget;
+    G4CollisionInitialState * aLate = 
+            new G4CollisionInitialState(ctime,
 	    				 aProjectile, noTarget, this);
-      theColl.push_back(aLate);
+    theColl.push_back(aLate);
+
 #ifdef debug_BCLateParticle
   G4cout << "Particle starting late " << aProjectile << " "  
          <<  aProjectile->GetDefinition()->GetParticleName() << " "
 	 <<  1/MeV*aProjectile->Get4Momentum() << " " 
 	 <<  1/fermi*aProjectile->GetPosition() << " " 
-	 <<  aProjectile->GetFormationTime()
+	 <<  aProjectile->GetFormationTime() 
 	 << G4endl;
 #endif	 
-    }
+    
     return theColl;
   }
 
