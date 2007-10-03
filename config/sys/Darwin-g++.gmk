@@ -42,9 +42,18 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     XMFLAGS   := -I/sw/include
 #   XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
   endif
+  ifndef QTFLAGS
+    QTHOME    := /usr/local/Qt/4.2.2
+    QTFLAGS   := -I$(QTHOME)/lib/QtCore.framework/Versions/Current/Headers -I$(QTHOME)/lib/QtGui.framework/Versions/Current/Headers -I$(QTHOME)/lib/QtOpenGL.framework/Versions/Current/Headers -I$(QTHOME)/lib/QtSql.framework/Versions/Current/Headers -I$(QTHOME)/lib/QtXml.framework/Versions/Current/Headers -F$(QTHOME)/lib
+    MOC       := $(QTHOME)/bin/moc
+  endif
   ifndef XMLIBS
     XMLIBS    := -L/sw/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
+  endif
+  ifndef QTLIBS
+    QTHOME    := /usr/local/Qt/4.2.2
+    QTLIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui -framework QtOpenGL -framework QtSql -framework QtXml
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
