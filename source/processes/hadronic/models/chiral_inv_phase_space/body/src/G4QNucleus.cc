@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.82 2007-09-04 14:25:55 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.83 2007-10-03 15:03:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3967,18 +3967,18 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
 	     {
         G4QHadron*     theLast = (*evaHV)[nOfOUT-1];
         G4int          lastBN = theLast->GetBaryonNumber();
-        G4int          nFragm = theLast->GetNFragments();
+        G4int          nFrag  = theLast->GetNFragments();
         //////////////////G4int          gam    = theLast->GetPDGCode();
 #ifdef debug
 		      G4cout<<"G4QN::EvaNuc:*BackFus,BN="<<lastBN<<",nF="<<nFragm<<",n="<<nOfOUT<<G4endl;
 #endif
-		      while(nFragm)                            // => "Delete Decayed Hadrons" case
+		      while(nFrag)                             // => "Delete Decayed Hadrons" case
 		      {
           G4QHadron* thePrev = (*evaHV)[nOfOUT-2];
-          nFragm = thePrev->GetNFragments();
+          nFrag  = thePrev->GetNFragments();
 #ifdef debug
           G4int          prevPDG = thePrev->GetPDGCode();
-		        G4cout<<"G4QNucl::EvaNucl: DelTheLast, nFr="<<nFragm<<", pPDG="<<prevPDG<<G4endl;
+		        G4cout<<"G4QNucl::EvaNucl: DelTheLast, nFr="<<nFrag<<", pPDG="<<prevPDG<<G4endl;
 #endif
           evaHV->pop_back();          // the prev QHadron is excluded from OUTPUT
           delete theLast;//!!When kill,DON'T forget to del. theLastQHadron as an instance!!
@@ -5325,7 +5325,7 @@ void G4QNucleus::DecayDibaryon(G4QHadron* qH, G4QHadronVector* evaHV)
     {
       G4cout<<"---Warning---G4QN::DecDib:fPDG="<<fPDG<<"(M="<<fMass<<")+sPDG="<<sPDG<<"(M="
             <<sMass<<")+tPDG="<<tPDG<<"(tM="<<tMass<<")="<<sum<<">TotM="<<q4M.m()<<G4endl;
-      //G4cerr<<"***G4QNuc::DecayDibaryon:qM="<<qM<<"" < sum="<<sum<<",d="<<sum-qM<<G4endl;
+      //G4cerr<<"***G4QNuc::DecayDibaryon:qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
       //throw G4QException("G4QNucleus::DecayDibaryon: diBar DecayIn3 error");
       evaHV->push_back(qH);
       return;
@@ -5389,33 +5389,31 @@ void G4QNucleus::DecayAntiStrange(G4QHadron* qH, G4QHadronVector* evaHV)
       }
       else
       {
-        G4int dN=qP-qN;
-        if(dN>=aS)
+        G4int dPN=qP-qN;
+        if(dPN>=aS)
         {
           n1=0;
           n2=aS;
         }
         else
         {
-          G4int sS=(aS-dN)/2;
-          G4int bS=aS-dN-sS;
-          sS+=dN;
-          if(qP>=sS&&qN>=bS)
+          G4int sS=(aS-dPN)/2;
+          G4int bS=aS-dPN-sS;
+          sS+=dPN;
+          if(qP>=sS && qN>=bS)
           {
             n1=bS;
             n2=sS;
           }
           else if(qP<sS)
           {
-            G4int dS=aS-qP;
-            n1=dS;
+            n1=aS-qP;
             n2=qP;
           }
           else
           {
-            G4int dS=aS-qN;
             n1=qN;
-            n2=dS;
+            n2=aS-qN;
           }
         }
       }
@@ -5430,31 +5428,29 @@ void G4QNucleus::DecayAntiStrange(G4QHadron* qH, G4QHadronVector* evaHV)
     }
     else
     {
-      G4int dN=qN-qP;
-      if(dN>=aS)
+      G4int dNP=qN-qP;
+      if(dNP>=aS)
       {
         n1=aS;
         n2=0;
       }
       else
       {
-        G4int sS=(aS-dN)/2;
+        G4int sS=(aS-dNP)/2;
         G4int bS=aS-sS;
-        if(qN>=bS&&qP>=sS)
+        if(qN>=bS && qP>=sS)
         {
           n1=bS;
           n2=sS;
         }
         else if(qN<bS)
         {
-          G4int dS=aS-qN;
           n1=qN;
-          n2=dS;
+          n2=aS-qN;
         }
         else
         {
-          G4int dS=aS-qP;
-          n1=dS;
+          n1=aS-qP;
           n2=qP;
         }
       }
