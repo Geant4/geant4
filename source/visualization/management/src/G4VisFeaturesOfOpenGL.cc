@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfOpenGL.cc,v 1.5 2006-06-29 21:29:56 gunter Exp $
+// $Id: G4VisFeaturesOfOpenGL.cc,v 1.6 2007-10-03 14:21:55 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,4 +89,14 @@ G4String G4VisFeaturesOfOpenGLIWin32 () {
 G4String G4VisFeaturesOfOpenGLSWin32 () {
   return
     "\n It runs on WindowsNT ";
+}
+
+G4String G4VisFeaturesOfOpenGLIQt () {
+  return
+    "\n It runs everywhere";
+}
+
+G4String G4VisFeaturesOfOpenGLSQt () {
+  return
+    "\n It runs everywhere ";
 }
