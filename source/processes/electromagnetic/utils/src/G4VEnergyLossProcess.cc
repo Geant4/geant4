@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.117 2007-10-02 11:38:57 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.118 2007-10-04 09:38:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -231,9 +231,12 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 
   if ( !baseParticle ) {
     if(theDEDXTable && theRangeTableForLoss) {
+      if(theIonisationTable == theDEDXTable) theIonisationTable = 0;
       theDEDXTable->clearAndDestroy();
       delete theDEDXTable;
       if(theDEDXSubTable) {
+	if(theIonisationSubTable == theDEDXSubTable) 
+	  theIonisationSubTable = 0;
 	theDEDXSubTable->clearAndDestroy();
         delete theDEDXSubTable;
       }
