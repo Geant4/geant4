@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2007-10-04 02:55:21 tsasaki Exp $
+$Id: History,v 1.120 2007-10-04 07:37:44 gcosmo Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -19,7 +19,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 04 Oct 2007 T.Sasaki (tracking-V09-00-00)
-- G4SteppingManager.cc: fix to use kCarTolerance 
+- G4SteppingManager: fix to use kCarTolerance in Stepping() for the
+  computation of 'endPointSafety'.
 
 9th May 2007 M.Asai (tracking-V08-03-00)
 - Allowing regional user stepping action.
