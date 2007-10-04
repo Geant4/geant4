@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.45 2007-04-28 01:49:19 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.46 2007-10-04 02:55:21 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -51,6 +51,7 @@
 #include "G4TransportationManager.hh"
 #include "G4UserLimits.hh"
 #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
+#include "G4GeometryTolerance.hh"
 
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
@@ -195,7 +196,9 @@ G4StepStatus G4SteppingManager::Stepping()
 
      // Update safety after invocation of all AlongStepDoIts
      endpointSafOrigin= fPostStepPoint->GetPosition();
-     endpointSafety=  std::max( proposedSafety - GeomStepLength, 0.);
+//     endpointSafety=  std::max( proposedSafety - GeomStepLength, 0.);
+     G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+     endpointSafety=  std::max( proposedSafety - GeomStepLength, kCarTolerance);
 
      fStep->GetPostStepPoint()->SetSafety( endpointSafety );
 
