@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.29 2006-12-13 15:49:47 gunter Exp $
+// $Id: G4SteppingManager.hh,v 1.30 2007-10-04 07:33:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -273,6 +273,8 @@ public: //without description
 
    G4SteppingControl StepControlFlag;
 
+   G4double kCarTolerance;
+      // Cached geometrical tolerance on surface
    G4double proposedSafety;
       // This keeps the minimum safety value proposed by AlongStepGPILs.
    G4ThreeVector endpointSafOrigin;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.46 2007-10-04 02:55:21 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.47 2007-10-04 07:33:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -91,7 +91,7 @@ G4SteppingManager::G4SteppingManager()
      ->GetNavigatorForTracking());
 
    physIntLength = DBL_MAX; 
-//   fTouchableHandle = new G4TouchableHistory();
+   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 ///////////////////////////////////////
@@ -197,7 +197,6 @@ G4StepStatus G4SteppingManager::Stepping()
      // Update safety after invocation of all AlongStepDoIts
      endpointSafOrigin= fPostStepPoint->GetPosition();
 //     endpointSafety=  std::max( proposedSafety - GeomStepLength, 0.);
-     G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
      endpointSafety=  std::max( proposedSafety - GeomStepLength, kCarTolerance);
 
      fStep->GetPostStepPoint()->SetSafety( endpointSafety );
