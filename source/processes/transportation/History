@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2007-09-25 16:18:57 japost Exp $
+$Id: History,v 1.135 2007-10-04 15:37:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct   4th, 2007, J.Apostolakis  transport-V09-00-02
+------------------------------
+G4CoupledTransportation
+- First fix for problem in condition for Relocating when only a parallel 
+    geometry limited the step.  
+- Change of condition for recalculation safety (from Alex Howard) used,
+    as currently it improves stability.
+
 Sept 25th, 2007, J.Apostolakis  transport-V09-00-01
 ------------------------------
+G4Transportation
 - Modification to disable 'optimisation' in G4Navigator for small linear
   step  (ie when a track does less than the safety).
     * Relevant only if there is no field, or the particle is neutral
