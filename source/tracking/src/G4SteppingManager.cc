@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.47 2007-10-04 07:33:34 gcosmo Exp $
+// $Id: G4SteppingManager.cc,v 1.48 2007-10-04 07:35:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -91,7 +91,7 @@ G4SteppingManager::G4SteppingManager()
      ->GetNavigatorForTracking());
 
    physIntLength = DBL_MAX; 
-   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+   kCarTolerance = 0.5*G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 ///////////////////////////////////////
