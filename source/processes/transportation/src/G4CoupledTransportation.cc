@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.17 2007-05-29 19:52:56 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.18 2007-10-04 15:30:33 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -171,7 +171,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   startFullSafety= 0.0; 
 
   //  Recall that FullSafety <= MassSafety 
-  if( MagSqShift < sqr(fPreviousMassSafety) ) {
+  // Original: if( MagSqShift < sqr(fPreviousMassSafety) ) {
+  if( MagSqShift < sqr(fPreviousFullSafety) ) {  // Revision proposed by Alex H, 2 Oct 07
      G4double mag_shift= std::sqrt(MagSqShift); 
      startMassSafety = std::max( (fPreviousMassSafety - mag_shift), 0.0); 
      startFullSafety = std::max( (fPreviousFullSafety - mag_shift), 0.0);
@@ -256,7 +257,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       if( limitedStep == kUnique || limitedStep == kSharedTransport ) {
 	 fMassGeometryLimitedStep = true ;
       }
-      fAnyGeometryLimitedStep = ( limitedStep != kDoNot ); 
+      fAnyGeometryLimitedStep = true;  //  ( limitedStep != kDoNot ); was ERROR
       geometryStepLength = std::min( lengthAlongCurve, currentMinimumStep); 
 
       // Momentum:  Magnitude and direction can be changed too now ...
