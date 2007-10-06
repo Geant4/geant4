@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.17 2007-10-06 19:02:20 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.18 2007-10-06 19:12:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,12 +92,12 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,ekin,Z,cut,emax);
+    ComputeElectronXSectionPerAtom(p,tkin,Z,cut,emax);
 
   // CM system
   G4int iz      = G4int(Z);
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = ekin + mass;
+  G4double etot = tkin + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
@@ -112,14 +112,13 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
   if(1 == iz && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
   //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
+
   // Cross section in CM system 
   if(cosTetMaxNuc < cosThetaMin) {
     G4double effmass = mass*m1/(mass + m1);
-    invbeta2 = 1.0 +  effmass*effmass/momCM2;
-
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*(Z + 1.0)*chargeSquare*invbeta2
+    cross = coeff*Z*(Z + 1.0)*chargeSquare*(1.0 +  effmass*effmass/momCM2)
       *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
