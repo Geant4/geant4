@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.16 2007-10-06 16:52:38 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.17 2007-10-06 19:02:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,14 +89,15 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   // Lab system
   G4double cross= 0.0;
   SetupParticle(p);
-  SetupTarget(Z, A, std::max(keV, kinEnergy));
+  G4double ekin = std::max(keV, kinEnergy);
+  SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,kinEnergy,Z,cut,emax);
+    ComputeElectronXSectionPerAtom(p,ekin,Z,cut,emax);
 
   // CM system
   G4int iz      = G4int(Z);
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = tkin + mass;
+  G4double etot = ekin + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
@@ -171,13 +172,12 @@ void G4CoulombScatteringModel::SampleSecondaries(
 
   // Select isotope and setup
   SetupParticle(p);
-  SetupKinematic(kinEnergy);
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = SelectIsotope(elm);
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
-  SetupTarget(Z, A, std::max(keV, kinEnergy));
+  SetupTarget(Z, A, kinEnergy);
 
   //  G4cout << "SampleSec: Ekin= " << kinEnergy << " m1= " << m1 
   // << " Z= "<< Z << " A= " <<A<< G4endl; 

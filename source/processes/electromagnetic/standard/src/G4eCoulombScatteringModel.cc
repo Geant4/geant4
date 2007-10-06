@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.20 2007-10-06 16:52:38 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.21 2007-10-06 19:02:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -223,8 +223,8 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 {
   G4double cross = 0.0;
   SetupParticle(p);
-  SetupKinematic(kinEnergy);
-  SetupTarget(Z, A, std::max(keV, kinEnergy));
+  G4double ekin = std::max(keV, kinEnergy);
+  SetupTarget(Z, A, ekin);
 
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
@@ -254,11 +254,10 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
   // Select atom and setup
   SetupParticle(p);
-  SetupKinematic(kinEnergy);
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = elm->GetN();
-  SetupTarget(Z, A, std::max(keV, kinEnergy));
+  SetupTarget(Z, A, kinEnergy);
 
   //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries: e(MeV)= " << tkin 
   //	 << " ctmin= " << cosThetaMin
