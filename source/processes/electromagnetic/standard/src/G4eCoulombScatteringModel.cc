@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.19 2007-08-28 14:05:39 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.20 2007-10-06 16:52:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,18 +119,10 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
       fParticleChange = new G4ParticleChangeForGamma();
   }
 
-  // Initialise mass and charge
-  if(p != particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-  }
-
   if(!buildTable || p->GetParticleName() == "GenericIon") return;
 
-  // Compute log cross section table
-  if(!theCrossSectionTable)  theCrossSectionTable = new G4PhysicsTable();
+  // Compute log cross section table per atom
+  if(!theCrossSectionTable) theCrossSectionTable = new G4PhysicsTable();
 
   G4PhysicsLogVector* ptrVector;
   G4double e, value;
@@ -163,21 +155,82 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
+                const G4ParticleDefinition* p,
+		G4double kinEnergy,
+		G4double Z, G4double A,
+		G4double cutEnergy, G4double maxEnergy)
+{
+  G4bool b;
+  G4double cross = 0.0;
+
+  // nuclear cross section
+  if(theCrossSectionTable) {
+    cross = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
+		 ->GetValue(kinEnergy, b));
+  } else cross = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
+
+  // elecron cross section
+  cross -= ComputeElectronXSectionPerAtom(p,kinEnergy,Z,cutEnergy,maxEnergy);
+
+  if(cross < 0.0) cross = 0.0;
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
+                const G4ParticleDefinition* p,
+		G4double kinEnergy,
+		G4double Z, 
+		G4double cutEnergy, G4double maxEnergy)
+{
+  G4double cross = 0.0;
+  if(cutEnergy >= maxEnergy) return cross;
+  SetupParticle(p);
+  SetupKinematic(kinEnergy);
+
+  G4double tmax = kinEnergy;
+  if(p == theElectron) tmax *= 0.5;
+  else if(p != thePositron) {
+    G4double ratio = electron_mass_c2/mass;
+    tmax = 2.0*mom2/
+      (electron_mass_c2*(1.0 + ratio*(tkin/mass + 1.0) + ratio*ratio)); 
+  }
+  
+  G4double t = std::min(tmax, maxEnergy);
+  if(t > cutEnergy) {
+
+    cross = 1.0/cutEnergy - 1.0/t - log(t/cutEnergy)/(invbeta2*tmax);
+
+    // +term for spin=1/2 particle
+    if( 0.5 == spin ) 
+      cross += 0.5*(t - cutEnergy)/((tkin + mass)*(tkin + mass));
+
+    cross *= Z*twopi_mc2_rcl2*chargeSquare*invbeta2;
+  }
+  return cross;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
-		             const G4ParticleDefinition*,      
+		             const G4ParticleDefinition* p,
 			     G4double kinEnergy, 
 			     G4double Z, G4double A)
 {
   G4double cross = 0.0;
+  SetupParticle(p);
+  SetupKinematic(kinEnergy);
   SetupTarget(Z, A, std::max(keV, kinEnergy));
 
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
     cross = coeff*Z*(Z + 1.)*chargeSquare*invbeta2
-      *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/mom2;
+      *(1./x1 - 1./x2 - formfactA*(2.*std::log(x2/x1) - 1.))/mom2;
   }
   //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
   //	 << " cross(b)= " << cross/barn
@@ -197,13 +250,15 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
-  
   G4double kinEnergy = dp->GetKineticEnergy();
 
+  // Select atom and setup
+  SetupParticle(p);
+  SetupKinematic(kinEnergy);
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = elm->GetN();
-  SetupTarget(Z, A, kinEnergy);
+  SetupTarget(Z, A, std::max(keV, kinEnergy));
 
   //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries: e(MeV)= " << tkin 
   //	 << " ctmin= " << cosThetaMin

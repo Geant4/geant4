@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.9 2007-08-14 17:10:33 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.hh,v 1.10 2007-10-06 16:52:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,22 +71,24 @@ class G4CoulombScatteringModel : public G4eCoulombScatteringModel
 public:
 
   G4CoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = true, G4double tlim = TeV*TeV,
+			   G4bool build = false, G4double tlim = TeV*TeV,
 			   const G4String& nam = "CoulombScattering");
  
   virtual ~G4CoulombScatteringModel();
+
+  virtual G4double ComputeCrossSectionPerAtom(
+                                const G4ParticleDefinition*,
+				G4double kinEnergy, 
+				G4double Z, 
+				G4double A, 
+				G4double cut,
+				G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
-
-protected:
-
-  virtual G4double CalculateCrossSectionPerAtom(const G4ParticleDefinition*, 
-						G4double kinEnergy, 
-						G4double Z, G4double A);
 
 private:
 

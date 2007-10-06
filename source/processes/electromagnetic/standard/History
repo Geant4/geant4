@@ -1,4 +1,4 @@
-$Id: History,v 1.341 2007-10-02 10:17:44 vnivanch Exp $
+$Id: History,v 1.342 2007-10-06 16:52:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 October 07: V.Ivant (emstand-V09-00-...)
+- G4eCoulombScatteringModel, G4CoulombScatteringModel  
+	- add cut dependence for scattering off electrons
+        - do not build internal table of cross sections
+        - reorganized protected methods 
 
 02 October 07: V.Ivant (emstand-V09-00-11)
 G4eplusAnnihilation - enable AtRest

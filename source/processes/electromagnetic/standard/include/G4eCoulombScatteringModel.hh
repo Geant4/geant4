@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.13 2007-08-15 09:24:55 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.14 2007-10-06 16:52:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,7 @@ class G4eCoulombScatteringModel : public G4VEmModel
 public:
 
   G4eCoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = true, G4double tlim = TeV*TeV,
+			   G4bool build = false, G4double tlim = TeV*TeV,
 			   const G4String& nam = "eCoulombScattering");
  
   virtual ~G4eCoulombScatteringModel();
@@ -82,11 +82,11 @@ public:
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
+				G4double kinEnergy, 
+				G4double Z, 
+				G4double A, 
+				G4double cut,
+				G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -96,10 +96,19 @@ public:
 
 protected:
 
+  G4double ComputeElectronXSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kinEnergy, 
+				 G4double Z, 
+				 G4double cut,
+				 G4double emax);
+
   virtual G4double CalculateCrossSectionPerAtom(
-                                         const G4ParticleDefinition*, 
-					 G4double kinEnergy, 
-					 G4double Z, G4double A);
+                                 const G4ParticleDefinition*, 
+				 G4double kinEnergy, 
+				 G4double Z, G4double A);
+
+  inline void SetupParticle(const G4ParticleDefinition*);
 
   inline void SetupKinematic(G4double kinEnergy);
   
@@ -127,6 +136,7 @@ protected:
   const G4ParticleDefinition* particle;
 
   G4double                  chargeSquare;
+  G4double                  spin;
   G4double                  mass;
   G4double                  tkin;
   G4double                  mom2;
@@ -159,21 +169,20 @@ private:
   G4bool                    isInitialised;             
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
-                const G4ParticleDefinition* p,
-		G4double kinEnergy,
-		G4double Z, G4double A,
-		G4double, G4double)
+inline 
+void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 {
-  G4bool b;
-  G4double x = 0.0;
-  if(theCrossSectionTable) {
-    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
-		 ->GetValue(kinEnergy, b));
-  } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
-  return x;
+  // Initialise mass and charge
+  if(p != particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    tkin = 0.0;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -196,11 +205,10 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A,
     targetZ = Z;
     targetA = A;
     SetupKinematic(e);
-    screenZ = a0/mom2;
     cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
-    if(Z > 1.5) screenZ *= std::pow(Z,0.6666667)
-		  *(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
-    else if(particle == theProton && cosTetMaxNuc < 0.0) 
+    screenZ = a0*std::pow(Z,0.6666667)
+      *(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    if(particle == theProton && cosTetMaxNuc < 0.0) 
       cosTetMaxNuc = 0.0;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
     formfactA = mom2*constn*std::pow(A, 0.54);
