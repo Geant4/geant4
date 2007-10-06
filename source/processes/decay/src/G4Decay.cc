@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.25 2007-07-23 23:13:04 kurasige Exp $
+// $Id: G4Decay.cc,v 1.26 2007-10-06 05:00:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,12 +200,14 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   // Error due to NO Decay Table 
   if ( (decaytable == 0) && !isExtDecayer &&!isPreAssigned ){
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
       G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
     }
-#endif
+    G4Exception( "G4Decay::DecayIt ",
+                 "No Decay Table",JustWarning, 
+                 "Decay table is not defined");
+
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
     // Kill the parent particle
     fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
@@ -244,8 +246,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       }
 #endif
 #ifdef G4VERBOSE
-      // for debug
-      //if (! products->IsChecked() ) products->DumpInfo();
+      if (GetVerboseLevel()>2) {
+	if (! products->IsChecked() ) products->DumpInfo();
+      }
 #endif
     }
   }
@@ -255,7 +258,6 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   G4double   ParentMass    = aParticle->GetMass();
   if (ParentEnergy < ParentMass) {
     ParentEnergy = ParentMass;
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cerr << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
       G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
@@ -263,7 +265,6 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
       G4cerr << G4endl;
     }
-#endif
   }
 
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
