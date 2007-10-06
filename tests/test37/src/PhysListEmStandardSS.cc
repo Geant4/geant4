@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.4 2007-07-31 08:52:00 vnivanch Exp $
+// $Id: PhysListEmStandardSS.cc,v 1.5 2007-10-06 17:52:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,6 +115,13 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4CoulombScattering);
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetSubCutoff(true);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(10.*TeV);
+  opt.SetDEDXBinning(220);
+  opt.SetLambdaBinning(220);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
