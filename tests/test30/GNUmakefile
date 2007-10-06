@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2006-11-29 19:48:45 vnivanch Exp $
+# $Id: GNUmakefile,v 1.8 2007-10-06 11:45:14 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -27,5 +27,8 @@ ifdef G4ANALYSIS_USE
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+histclean:
+        rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
 
 
