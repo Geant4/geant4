@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.28 2007-09-14 07:04:09 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.29 2007-10-06 06:49:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -402,7 +402,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 ////////////////////
 void G4ParticleTable::DumpTable(const G4String &particle_name)  
 {
-   CheckReadiness();
+  CheckReadiness();
   if (( particle_name == "ALL" ) || (particle_name == "all")){
     // dump all particles 
     G4PTblDicIterator *piter = fIterator; 
@@ -416,12 +416,9 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
     ptr = FindParticle(particle_name);
     if ( ptr != 0) {
       ptr->DumpTable();
-    } else {
-#ifdef G4VERBOSE
-      if (verboseLevel>0){
-        G4cout << particle_name << " does not exist in ParticleTable " <<G4endl;
-      }
-#endif
+    } else { 
+      G4cout << " G4ParticleTable::DumpTable : " 
+	     << particle_name << " does not exist in ParticleTable " <<G4endl;
     }
   }
 }
