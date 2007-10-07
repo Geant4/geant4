@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eCrossSectionScreenedRutherford.cc,v 1.1 2007-05-02 17:20:36 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
-// $Id: G4eCrossSectionScreenedRutherford.cc,v 1.1 2007-05-02 17:20:36 pia Exp $
+// $Id: G4eCrossSectionScreenedRutherford.cc,v 1.2 2007-10-07 12:53:40 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
