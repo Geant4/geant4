@@ -24,78 +24,71 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.hh,v 1.2 2007-10-07 12:52:18 pia Exp $
+// $Id: G4FinalStateProduct.hh,v 1.1 2007-10-07 12:52:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author:  Maria Grazia Pia (Maria.Grazia.Pia@ge.infn.it)
+// 
+// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 29 Sep 2007 MGP   First (incomplete) impleentation
+// Date         Name              Modification
+// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Host class for DNA physics policies
-// Further documentation available in PAPER REF. TO BE ADDED
+// Final state product
+// Reference: TNS Geant4-DNA paper
+// Further documentation available from http://www.ge.infn.it/geant4/dna
 
 // -------------------------------------------------------------------
 
-#ifndef G4DNAPROCESS_HH
-#define G4DNAPROCESS_HH 1
 
+#ifndef G4FINALSTATEPRODUCT_HH
+#define G4FINALSTATEPRODUCT_HH 1
+ 
 #include "globals.hh"
-#include "G4VDiscreteProcess.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include <vector>
 
-class G4Track;
-class G4Step;
-class G4ParticleDefinition;
-class G4VParticleChange;
+class G4DynamicParticle;
 
-template < class TCrossSection, class TFinalState>
-class G4DNAProcess : public G4VDiscreteProcess {
-  
+class G4FinalStateProduct
+{
 public:
-
-  // ---- MGP ---- Note: process name to be replaced with a better identifying mechanism  
-  G4DNAProcess(const G4String& processName = "DNAProcess")  { /* nop */; }
   
-  ~G4DNAProcess() { /* nop */; }
-
-  //  ---- MGP ---- Dummy initially: process is always applicable
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) { return true; } 
+  G4FinalStateProduct();
   
-  //  ---- MGP ---- Dummy initially: no PhysicsTable (usefulness to be verified)
-  virtual void BuildPhysicsTable(const G4ParticleDefinition& particle) { /* nop */; }
+  ~G4FinalStateProduct();
+  
+  void Clear();
+  
+  void AddSecondary(G4DynamicParticle* particle);
+  
+  void AddEnergyDeposit(G4double energy);
+  
+  G4int NumberOfSecondaries() const;
+  
+  G4double GetEnergyDeposit() const;
+  
+  const std::vector<G4DynamicParticle*>& GetSecondaries() const;
  
-  // Implemented in terms of TFinalState
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
+  void KillIncidentParticle();
  
-  // For testing purpose only
-  virtual G4double DumpMeanFreePath(const G4Track& aTrack, 
-			    G4double previousStepSize, 
-			    G4ForceCondition* condition) 
-  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
-
-protected:
+  G4bool GetKillParticleStatus() const;
   
-  // Implemented in terms of TCrossSection
-  virtual G4double GetMeanFreePath(const G4Track& track, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
+  
+  // protected: 
+  
+  // Copy constructor and assignment operator to be added here
+  
 private:
-
- // Hide copy constructor and assignment operator as private 
-  G4DNAProcess& operator=(const G4DNAProcess& right);
-  G4DNAProcess(const G4DNAProcess& );
-
-  // Policy classes
-  TCrossSection crossSection;
-  TFinalState finalState;
-
+  
+  G4bool killStatus;
+  G4double localEnergyDeposit;
+  std::vector<G4DynamicParticle*> secondaries;
+  
 };
 
 #endif
-
-
-

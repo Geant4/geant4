@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DummyFinalState.hh,v 1.1 2007-10-07 12:48:36 pia Exp $
+// $Id: G4DummyFinalState.hh,v 1.2 2007-10-07 12:52:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -49,33 +49,33 @@
 #define G4DUMMYFINALSTATE_HH 1
  
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
+//#include "G4Track.hh"
+//#include "G4Step.hh"
 #include "G4FinalStateProduct.hh"
+
+
+class G4Track;
+class G4Step;
 
  class G4DummyFinalState
  {
-  public:
-
+ public:
+   
    G4DummyFinalState();
- 
-   virtual ~G4DummyFinalState();
+   
+   ~G4DummyFinalState();
    
    const G4FinalStateProduct& GenerateFinalState(const G4Track& track, const G4Step& step);
-
-  
-   //protected: 
-
-   // Copy constructor and assignment operator to be added here
-
-
+   
  private:
-
+   
+   // Copy constructor and assignment operator to be added here
+   
    G4String name;  
    G4double lowEnergyLimit;
    G4double highEnergyLimit;
    G4FinalStateProduct product;
-
+   
  };
 
 
