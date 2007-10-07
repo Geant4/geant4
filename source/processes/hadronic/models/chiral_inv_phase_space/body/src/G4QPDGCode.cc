@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.54 2007-08-31 09:38:32 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.55 2007-10-07 13:31:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -2305,47 +2305,33 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
 {//  =======================================================================
   if(nucPDG>80000000&&nucPDG<100000000)            // Condition of conversion
   {
-    G4int r=nucPDG-90000000;
-    if(!r)
-	   {
-      z=0;
-      n=0;
-      s=0;
-      return;
-	   }
-    // Antinucleus extraction
-    if(r<-200000)                                  // Negative -> anLambdas              
+    z=0;
+    n=0;
+    s=0;
+    G4int r=nucPDG;
+    if(r==90000000) return;
+    G4int cn =r%1000;                              // candidate to #of neutrons
+    if(cn)
     {
-      G4int ns=(-r-200000)/1000000+1;
-      r+=ns*1000000;                               // Get out aL from PDG
-      s=-ns;                                       // Remember aLambdas
+      if(cn>500) cn-=1000;                         // AntiNeutrons
+      n=cn;                                        // Increment neutrons
+      r-=cn;                                       // Subtract them from the residual
+      if(r==90000000) return;
     }
-    if(r<-200)                                     // Negative -> aProtons
+    G4int cz =r%1000000;                           // candidate to #of neutrons
+    if(cz)
     {
-      G4int nz=(-r-200)/1000+1;
-      r+=nz*1000;                                  // Get out aP from PDG
-      z=-nz;                                       // Remember aProtons
+      if(cz>500000) cz-=1000000;                   // AntiProtons
+				  z=cz/1000;                                   // Number of protons
+      r-=cz;                                       // Subtract them from the residual
+      if(r==90000000) return;
     }
-    if(r<0)                                        // Negative -> aNeutrons
+    G4int cs =r%10000000;                           // candidate to #of neutrons
+    if(cs)
     {
-      G4int nn=-r;
-      r=0;                                         // Get out aN from PDG
-      n=-nn;                                       // Remember aNeutrons
+      if(cs>5000000) cs-=10000000;                 // AntiLambda
+				  s=cs/1000000;                                // Number of Lambdas
     }
-    G4int sz =r/1000;                              // Residual to analize
-    n+=r%1000;                                     // A#of Neutrons
-    if(n>700)                                      // AntiNutrons
-    {
-      n-=1000;
-      z++;
-    }
-    z+=sz%1000;                                    // A#of Protons
-    if(z>700)                                      // AntiProtons
-    {
-      z-=1000;
-      s++;
-    }
-    s+=sz/1000;                                    // A#of Lambdas
   }
   return;
 }

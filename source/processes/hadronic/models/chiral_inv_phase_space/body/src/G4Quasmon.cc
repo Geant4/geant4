@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.99 2007-08-23 16:00:51 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.100 2007-10-07 13:31:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -1261,7 +1261,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         sPDG  = curCand->GetPDGCode();        // PDG of the selected candidate 
         //////////////////G4double prpr=curCand->GetPreProbability();
 #ifdef debug
-        G4cout<<"G4Q::HQ:hsfl="<<hsflag<<", sPDG"<<sPDG<<", i="<<i<<G4endl;
+        G4cout<<"G4Q::HQ:hsfl="<<hsflag<<", sPDG="<<sPDG<<", i="<<i<<G4endl;
 #endif
         //@@ For clusters use another randomization & a loop over possible parent clusters
         if(sPDG>MINPDG&&sPDG!=NUCPDG)         // ===> "Fragment" case
@@ -2572,7 +2572,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4double rnd=G4UniformRand();
       // Final state pi0/eta/eta' sorting (wave functions)
 #ifdef debug
-      G4cout<<"G4Q::HQ: *BEFORE rPDG COR* dm="<<dm<<",rnd="<<rnd<<", rPDG="<<rPDG<<G4endl;
+      G4cout<<"G4Q::HQ:BEFrPDGcor,d="<<dm<<",R="<<rnd<<",r="<<rPDG<<",rM="<<rMass<<G4endl;
 #endif
       //if(rPDG==111 && sPDG!=111 && dm>548. && rnd<.5 ) rPDG=221;
       //if(rPDG==111 && sPDG!=111 && dm>958. && rnd>.5 ) rPDG=331;
@@ -2593,7 +2593,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       if(rPDG== 211 && dm>544. && rnd>.5) rPDG= 213; // M-1.5*W conv. of pi+ to rho+
       if(rPDG==-211 && dm>544. && rnd>.5) rPDG=-213; // M-1.5*W conv. of pi- to rho-
 #ifdef debug
-      G4cout<<"G4Q::HQ:*After rPDG COR* qM="<<quasM<<",sM="<<sMass<<",rPDG="<<rPDG<<G4endl;
+      G4cout<<"G4Q::HQ:rCor,Q="<<quasM<<",sM="<<sMass<<",r="<<rPDG<<",rM="<<rMass<<G4endl;
 #endif
       if(rPDG<MINPDG&&rPDG!=2212&&rPDG!=2112&&rPDG!=3122&&rPDG!=10)//=>ResidQ isn't NuclCl
       {
@@ -2672,7 +2672,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4int rBaryn=rQPDG.GetBaryNum();
       G4double rCB=theEnvironment.CoulombBarrier(rChg,rBaryn);
 #ifdef debug
-	     G4cout<<"G4Q::HQ:rqCB="<<rCB<<",rqC="<<rChg<<",rqB="<<sBaryn<<",r="<<rQPDG<<G4endl;
+	     G4cout<<"G4Q::HQ:rqCB="<<rCB<<",rqC="<<rChg<<",rqB="<<sBaryn<<",rM="<<rQPDG<<",reM="
+            <<reMass<<G4endl;
 #endif
 	     if(totBN>1&&totS>=0 && envPDG>MINPDG && envPDG!=NUCPDG
          && (reMass+sMass>quasM || sCB+rCB+reMass+sMass+envM>totMass || !RQB&&quasM<diPiM))
@@ -2727,8 +2728,15 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           throw G4QException("***G4Quasmon::HadronizeQuasmon: Can't decay Q in N and K");
         }
       }
+#ifdef debug
+      G4cout<<"G4Q::HQ: ****** Before reM="<<reMass<<", rM="<<rMass<<G4endl;
+#endif
       G4QPDGCode tmpQPDG(rPDG);
-      if(tmpQPDG.GetWidth()<.000001) reMass=tmpQPDG.GetMass();
+      if(tmpQPDG.GetWidth()<.000001) reMass=tmpQPDG.GetMass(); // Recover const mass
+      if(!reMass) reMass=rMass;                         // @@ ?
+#ifdef debug
+      G4cout<<"G4Q::HQ: Decay in sM="<<sMass<<" + reM="<<reMass<<" (rM="<<rMass<<G4endl;
+#endif
       G4LorentzVector r4Mom(0.,0.,0.,reMass);
       G4LorentzVector s4Mom(0.,0.,0.,sMass);// Mass is random since probab. time
       if(sPDG>MINPDG)                       // @@ For the Quark-Exchange hadronization (?)
