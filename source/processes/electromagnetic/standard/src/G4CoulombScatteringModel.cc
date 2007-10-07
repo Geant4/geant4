@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.18 2007-10-06 19:12:54 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.19 2007-10-07 15:52:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,13 +118,13 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
     G4double effmass = mass*m1/(mass + m1);
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*(Z + 1.0)*chargeSquare*(1.0 +  effmass*effmass/momCM2)
+    cross = coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
       *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
     //       << " coeff= " << coeff << G4endl;
   }
-  cross -= ecross;
+  cross += ecross;
   if(cross < 0.0) cross = 0.0;
   //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM 
   //         << "  Z= " << Z << "  A= " << A 
