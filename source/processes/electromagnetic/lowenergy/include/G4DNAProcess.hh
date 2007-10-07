@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.hh,v 1.2 2007-10-07 12:52:18 pia Exp $
+// $Id: G4DNAProcess.hh,v 1.3 2007-10-07 20:21:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Maria Grazia Pia (Maria.Grazia.Pia@ge.infn.it)
@@ -58,7 +58,7 @@ class G4DNAProcess : public G4VDiscreteProcess {
 public:
 
   // ---- MGP ---- Note: process name to be replaced with a better identifying mechanism  
-  G4DNAProcess(const G4String& processName = "DNAProcess")  { /* nop */; }
+  G4DNAProcess(const G4String& processName = "DNAProcess"): G4VDiscreteProcess(processName) { /* nop */; }
   
   ~G4DNAProcess() { /* nop */; }
 
@@ -72,7 +72,7 @@ public:
   virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
  
   // For testing purpose only
-  virtual G4double DumpMeanFreePath(const G4Track& aTrack, 
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
 			    G4double previousStepSize, 
 			    G4ForceCondition* condition) 
   { return GetMeanFreePath(aTrack, previousStepSize, condition); }
@@ -94,6 +94,8 @@ private:
   TFinalState finalState;
 
 };
+
+#include "G4DNAProcess.icc"
 
 #endif
 
