@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.23 2007-10-07 15:52:58 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.24 2007-10-07 17:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -200,7 +200,7 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
     tmax = 2.0*mom2/
       (electron_mass_c2*(1.0 + ratio*(tkin/mass + 1.0) + ratio*ratio)); 
   }
-  
+  /*
   G4double t = std::min(tmax, ekin);
   if(t > cutEnergy) {
 
@@ -212,6 +212,18 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
 
     cross *= Z*twopi_mc2_rcl2*chargeSquare*invbeta2;
   }
+  */
+  G4double t = std::min(cutEnergy, tmax);
+  G4double mom21 = t*(t + 2.0*electron_mass_c2); 
+  t = tkin - t;
+  G4double mom22 = t*(t + 2.0*mass); 
+  G4double cost = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
+  if(cost < cosTetMaxNuc) cost = cosTetMaxNuc;
+  if(cost < cosThetaMin) {
+    cross = coeff*Z*chargeSquare*invbeta2*(cosThetaMin - cost)/
+      ((1.0 - cost + screenZ)*(1.0 - cosThetaMin + screenZ)*mom2);
+  }
+
   return cross;
 }
 
