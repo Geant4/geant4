@@ -92,6 +92,7 @@ private:
   
   //messenger of this class
   XrayFluoPrimaryGeneratorMessenger* gunMessenger; 
+
   XrayFluoRunAction*  runManager;
   
   //flag for a random impact point 
