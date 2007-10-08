@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.25 2007-10-08 09:20:53 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.26 2007-10-08 10:35:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -198,7 +198,7 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
-  if(ecut > emax) return elecXSection;
+  if(ecut >= emax) return elecXSection;
 
   G4double tmax = tkin;
   if(p == theElectron) tmax *= 0.5;
@@ -213,7 +213,7 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
   t = tkin - t;
   G4double mom22 = t*(t + 2.0*mass); 
   cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-  if(cosTetMaxElec > cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
+  if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
   if(cosTetMaxElec < cosThetaMin) {
     elecXSection = coeff*Z*chargeSquare*invbeta2*(cosThetaMin - cosTetMaxElec)/
       ((1.0 - cosTetMaxElec + screenZ)*(1.0 - cosThetaMin + screenZ)*mom2);

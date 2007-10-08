@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.20 2007-10-08 09:20:53 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.21 2007-10-08 10:35:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,8 +83,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double kinEnergy, 
 				G4double Z, 
 				G4double A, 
-				G4double cut,
-				G4double emax)
+				G4double cutEnergy,
+				G4double maxEnergy)
 {
   // Lab system
   G4double cross= 0.0;
@@ -92,7 +92,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cut,emax);
+    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cutEnergy,maxEnergy);
 
   // CM system
   G4int iz      = G4int(Z);
@@ -110,7 +110,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   G4double momCM2 = momCM*momCM;
   cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
-  if(1 == iz && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
+  if(1.5 > targetA && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
   //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
 
   // Cross section in CM system 
