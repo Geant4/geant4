@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.19 2007-10-07 15:52:58 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.20 2007-10-08 09:20:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,7 +92,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,tkin,Z,cut,emax);
+    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cut,emax);
 
   // CM system
   G4int iz      = G4int(Z);
@@ -163,7 +163,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       std::vector<G4DynamicParticle*>* fvect,
 			       const G4MaterialCutsCouple* couple,
 			       const G4DynamicParticle* dp,
-			       G4double, G4double)
+			       G4double cut, G4double tmax)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -176,12 +176,20 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double A  = SelectIsotope(elm);
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
-  SetupTarget(Z, A, kinEnergy);
+
+  G4double cross = ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cut,tmax);
+
+  G4double costm = cosTetMaxNuc;
+  G4double formf = formfactA;
+  if(G4UniformRand()*cross < elecXSection) {
+    costm = cosTetMaxElec;
+    formf = 0.0;
+  }
 
   //  G4cout << "SampleSec: Ekin= " << kinEnergy << " m1= " << m1 
   // << " Z= "<< Z << " A= " <<A<< G4endl; 
 
-  if(cosTetMaxNuc >= cosThetaMin) return; 
+  if(costm >= cosThetaMin) return; 
 
   // kinematics in CM system
   G4double m1   = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
@@ -193,8 +201,8 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double eCM  = gam*(etot - bet*ptot);
 
   G4double x1 = 1. - cosThetaMin + screenZ;
-  G4double x2 = 1. - cosTetMaxNuc;
-  G4double x3 = cosThetaMin - cosTetMaxNuc;
+  G4double x2 = 1. - costm;
+  G4double x3 = cosThetaMin - costm;
   G4double cost, st2, grej,  z, z1; 
   do {
     z  = G4UniformRand()*x3;
