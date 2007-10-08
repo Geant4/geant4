@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2007-10-08 12:05:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,12 +57,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   wallThick->SetParameterName("wallTick",false);
   wallThick->SetRange("wallTick>0.");
   wallThick->SetUnitCategory("Length");
-  
-  wallRadius = new G4UIcmdWithADoubleAndUnit("/testem/det/wallRadius",this);
-  wallRadius->SetGuidance("Set radius of the wall");
-  wallRadius->SetParameterName("wallRadius",false);
-  wallRadius->SetRange("wallRadius>0.");
-  wallRadius->SetUnitCategory("Length");
     
   cavMater = new G4UIcmdWithAString("/testem/det/cavityMater",this);
   cavMater->SetGuidance("Set material of the cavity.");
@@ -93,7 +87,6 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete wallMater;
   delete wallThick;
-  delete wallRadius;
   
   delete cavMater;
   delete cavThick;
@@ -113,9 +106,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == wallThick )
    { Detector->SetWallThickness(wallThick->GetNewDoubleValue(newValue));}
-   
-  if( command == wallRadius )
-   { Detector->SetWallRadius(wallRadius->GetNewDoubleValue(newValue));}
       
   if( command == cavMater )
    { Detector->SetCavityMaterial(newValue);}

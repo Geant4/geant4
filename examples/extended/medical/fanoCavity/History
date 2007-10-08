@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2007-10-02 14:42:51 maire Exp $
+$Id: History,v 1.15 2007-10-08 12:05:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08-10-07 mma(fano-V09-00-04)
+- DetectorConstruction : wallRadius automatically recomputed
+     
 02-10-07 mma(fano-V09-00-03)
 - PhysicsList : implement G4CoulombScattering process (option)
 

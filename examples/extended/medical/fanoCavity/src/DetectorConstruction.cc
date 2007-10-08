@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2007-10-01 15:19:57 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2007-10-08 12:05:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -56,7 +56,6 @@ DetectorConstruction::DetectorConstruction()
   cavityRadius    = 1*cm;      
   
   wallThickness = 5*mm;
-  defaultRadius = true;
   
   DefineMaterials();
   SetWallMaterial("Water");
@@ -132,7 +131,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // Chamber
   //
   totalThickness = cavityThickness + 2*wallThickness;
-  if (defaultRadius) wallRadius = cavityRadius + wallThickness;
+  wallRadius     = cavityRadius + wallThickness;
   
   G4Tubs* 
   sChamber = new G4Tubs("Chamber",					//name
@@ -202,13 +201,6 @@ void DetectorConstruction::SetWallThickness(G4double value)
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWallRadius(G4double value)
-{
-  wallRadius = value; 
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetWallMaterial(G4String materialChoice)
 {
   // search the material by its name   
@@ -228,7 +220,6 @@ void DetectorConstruction::SetCavityThickness(G4double value)
 void DetectorConstruction::SetCavityRadius(G4double value)
 {
   cavityRadius  = value;
-  defaultRadius = false; 
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
