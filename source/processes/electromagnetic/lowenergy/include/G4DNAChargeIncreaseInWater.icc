@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,16 +22,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DNAChargeIncreaseInWater.icc,v 1.4 2006-06-29 19:33:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// -------------------------------------------------------------------
+// $Id: G4DNAChargeIncreaseInWater.icc,v 1.5 2007-10-08 09:18:42 sincerti Exp $
+// -------------------------------------------------------------------
 //
 
-#ifdef    G4DNACHARGEINCREASEINWATER_HH
- #include "G4Electron.hh"
+#ifdef G4DNAChargeIncreaseInWater_HH
 
- template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- G4VParticleChange* G4DNAChargeIncreaseInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
+#include "G4Electron.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template<typename CrossSectionPolicy, typename FinalStatesPolicy>
+G4VParticleChange* G4DNAChargeIncreaseInWater<CrossSectionPolicy, FinalStatesPolicy>
+::PostStepDoIt
+(const G4Track& aTrack, const G4Step& aStep)
  {
   this->aParticleChange.Initialize(aTrack);
   this->aParticleChange.ProposeLocalEnergyDeposit(0.);
@@ -40,13 +44,20 @@
   
   G4double inK(aTrack.GetDynamicParticle()->GetKineticEnergy());
   
-  const G4int z(10); // H2O number of electrons
-  G4int finalStateIndex(TotalCrossSectionPolicy::RandomizePartialCrossSection(inK, z));
+  G4int finalStateIndex(CrossSectionPolicy::RandomizePartialCrossSection(inK));
 
-  G4int n(FinalStatesPolicy::NumberOfFinalStates(finalStateIndex));
-  G4double outK(inK-FinalStatesPolicy::IncomingParticleBindingEnergyConstant(finalStateIndex));
-  G4double electronK(inK*electron_mass_c2/proton_mass_c2);
-  
+  G4int n(FinalStatesPolicy::NumberOfFinalStates(aTrack.GetDefinition(),finalStateIndex));
+  G4double outK(inK-FinalStatesPolicy::IncomingParticleBindingEnergyConstant(aTrack.GetDefinition(),finalStateIndex));
+
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+
+  G4double electronK;
+  if (aTrack.GetDefinition()==instance->GetIon("hydrogen"))
+    electronK = inK*electron_mass_c2/proton_mass_c2;
+  else
+    electronK = inK*electron_mass_c2/(3728*MeV);
+    
   if (outK<0)
   {
    G4String message;
@@ -57,15 +68,32 @@
   }
   
   this->aParticleChange.SetNumberOfSecondaries(n+1);
-  this->aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), outK));
+  this->aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(aTrack.GetDefinition(),
+  finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), outK));
 
   while (n>0)
   {
    n--;
    
-   this->aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), electronK));
-  }
+   this->aParticleChange.AddSecondary
+     (new G4DynamicParticle(G4Electron::Electron(), aTrack.GetDynamicParticle()->GetMomentumDirection(), electronK));
+   }
  
-  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
- }
-#endif /* G4DNACHARGEINCREASEINWATER_HH */
+  return G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template<typename CrossSectionPolicy, typename FinalStatesPolicy> 
+G4bool                                  
+G4DNAChargeIncreaseInWater<CrossSectionPolicy, FinalStatesPolicy>
+::IsApplicable
+(const G4ParticleDefinition & /*aParticleDefinition*/)
+{
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif 
+

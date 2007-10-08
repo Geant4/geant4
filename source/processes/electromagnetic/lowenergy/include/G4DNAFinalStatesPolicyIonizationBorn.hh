@@ -23,42 +23,56 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNAFinalStatesPolicyIonizationBorn.hh,v 1.1 2007-10-08 09:18:43 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNAFinalStatesPolicyIonizationBorn_HH
+#define G4DNAFinalStatesPolicyIonizationBorn_HH 1
 
-#include "G4VDNAProcessInWater.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
-public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+class G4DNAFinalStatesPolicyIonizationBorn  
 {
- public:
-   
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
-   
-   virtual ~G4DNAChargeIncreaseInWater() {}
+ protected:
+   G4DNAFinalStatesPolicyIonizationBorn() {}
+   ~G4DNAFinalStatesPolicyIonizationBorn() {}
 
-   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+   G4double  RandomizeEjectedElectronEnergy(const G4Track& track, G4double incomingParticleEnergy, G4int shell) ;
+   void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
+                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
+   G4double EnergyConstant(G4int ionizationLevel) const;
 
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
+  private:
 
- private:
+   double  DifferentialCrossSection(G4double k, G4double energyTransfer, G4int shell);
+   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   G4double QuadInterpolator(G4double e11, G4double e12, G4double e21, G4double e22, 
+     G4double x11, G4double x12, G4double x21, G4double x22, 
+     G4double t1, G4double t2, G4double t, G4double e);
+
+   typedef std::map<double, std::map<double, double> > TriDimensionMap;
+   TriDimensionMap DiffCrossSectionData[6];
+
+   std::vector<double> TdummyVec;
  
+   typedef std::map<double, std::vector<double> > VecMap;
+   VecMap vecm;
+ 
+    std::ifstream eDiffCrossSection;
+
    // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
- };
+   G4DNAFinalStatesPolicyIonizationBorn(const G4DNAFinalStatesPolicyIonizationBorn & copy);
+   G4DNAFinalStatesPolicyIonizationBorn & operator=(const G4DNAFinalStatesPolicyIonizationBorn & right);
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4DNAChargeIncreaseInWater.icc"
+#include "G4DNAFinalStatesPolicyIonizationBorn.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+#endif 

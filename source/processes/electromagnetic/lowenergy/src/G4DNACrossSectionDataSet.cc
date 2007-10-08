@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,43 +22,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
-// $Id: G4DNACrossSectionDataSet.cc,v 1.4 2007-06-21 15:04:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Riccardo Capra <capra@ge.infn.it>
-//
-// History:
-// -----------
-// 30 Jun 2005  RC         Created
-
+// -------------------------------------------------------------------
+// $Id: G4DNACrossSectionDataSet.cc,v 1.5 2007-10-08 09:18:43 sincerti Exp $
+// -------------------------------------------------------------------
 
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4EMDataSet.hh"
 #include <vector>
-#include <fstream>
 #include <sstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-                                                G4DNACrossSectionDataSet :: G4DNACrossSectionDataSet(G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
-:
- G4ShellEMDataSet(0, argAlgorithm, argUnitEnergies, argUnitData)
-{
-}
+G4DNACrossSectionDataSet 
+:: G4DNACrossSectionDataSet
+(G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+:G4ShellEMDataSet(0, argAlgorithm, argUnitEnergies, argUnitData)
+{}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4DNACrossSectionDataSet 
+:: ~G4DNACrossSectionDataSet()
+{}
 
-                                                G4DNACrossSectionDataSet :: ~G4DNACrossSectionDataSet()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-G4bool                                          G4DNACrossSectionDataSet :: LoadData(const G4String & argFileName)
+G4bool G4DNACrossSectionDataSet 
+:: LoadData
+(const G4String & argFileName)
 {
  CleanUpComponents();
 
@@ -204,9 +195,11 @@ G4bool                                          G4DNACrossSectionDataSet :: Load
  return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-G4bool                                          G4DNACrossSectionDataSet :: SaveData(const G4String & argFileName) const
+G4bool G4DNACrossSectionDataSet 
+::SaveData
+(const G4String & argFileName) const
 {
  const size_t n(NumberOfComponents());
  
@@ -271,19 +264,23 @@ G4bool                                          G4DNACrossSectionDataSet :: Save
  return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-G4String                                        G4DNACrossSectionDataSet :: FullFileName(const G4String & argFileName) const
+G4String G4DNACrossSectionDataSet
+::FullFileName
+(const G4String & argFileName) const
 {
+
  char* path = getenv("G4LEDATA");
+ 
  if (!path)
   G4Exception("G4DNACrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
-  
+
  std::ostringstream fullFileName;
  
- fullFileName << path << '/' << argFileName << ".dat";
-                      
+ fullFileName << path << "/dna/G4DNA" << argFileName << ".dat";
+                        
  return G4String(fullFileName.str().c_str());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

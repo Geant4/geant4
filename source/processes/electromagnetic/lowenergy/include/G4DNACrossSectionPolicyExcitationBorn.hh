@@ -23,41 +23,53 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNACrossSectionPolicyExcitationBorn.hh,v 1.1 2007-10-08 09:18:42 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNACrossSectionPolicyExcitationBorn_HH
 
-#include "G4VDNAProcessInWater.hh"
+#define G4DNACrossSectionPolicyExcitationBorn_HH 1
+
+#include "G4DNACrossSectionDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
-public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+class G4DNACrossSectionPolicyExcitationBorn 
 {
- public:
+  protected:
+   G4DNACrossSectionPolicyExcitationBorn() {}
+   ~G4DNACrossSectionPolicyExcitationBorn() {}
+
+   G4double CrossSection(const G4Track&);
+
+   G4double EnergyConstant(G4int excitationLevel);
+
+   G4int RandomizePartialCrossSection(G4double k, G4int z, const G4ParticleDefinition* particle);
    
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
-   
-   virtual ~G4DNAChargeIncreaseInWater() {}
+  private:
 
-   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+   G4int NumberOfPartialCrossSections(void);
+   void  BuildTotalCrossSection(const G4ParticleDefinition*);
+   void  Free(void);
 
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
+   G4DNACrossSectionDataSet* dataset;
+   G4double* valuesBuffer;
 
- private:
- 
+   G4String name;  
+   G4double lowEnergyLimit;
+   G4double highEnergyLimit;
+   G4bool zeroBelowLowEnergyLimit;
+   G4bool zeroAboveHighEnergyLimit;
+
    // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
+   G4DNACrossSectionPolicyExcitationBorn(const G4DNACrossSectionPolicyExcitationBorn & copy);
+   G4DNACrossSectionPolicyExcitationBorn & operator=(const G4DNACrossSectionPolicyExcitationBorn & right);
  };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4DNAChargeIncreaseInWater.icc"
+#include "G4DNACrossSectionPolicyExcitationBorn.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

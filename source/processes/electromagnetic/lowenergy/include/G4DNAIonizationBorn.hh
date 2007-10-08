@@ -23,41 +23,47 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNAIonizationBorn.hh,v 1.1 2007-10-08 09:18:43 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNAIonizationBorn_HH
+#define G4DNAIonizationBorn_HH 1
 
-#include "G4VDNAProcessInWater.hh"
+#include "G4DNAIonizationInWater.hh"
+#include "G4DNACrossSectionPolicyIonizationBorn.hh"
+#include "G4DNAFinalStatesPolicyIonizationBorn.hh"
+#include "G4DNAGenericIonsManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
-public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+class G4DNAIonizationBorn :
+public G4DNAIonizationInWater
+<G4DNACrossSectionPolicyIonizationBorn, 
+G4DNAFinalStatesPolicyIonizationBorn>
 {
  public:
-   
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
-   
-   virtual ~G4DNAChargeIncreaseInWater() {}
-
-   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
-
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
-
- private:
  
-   // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
- };
+   G4DNAIonizationBorn(const G4String & name = "G4DNAIonizationBorn")
+   :G4DNAIonizationInWater
+   <G4DNACrossSectionPolicyIonizationBorn, 
+   G4DNAFinalStatesPolicyIonizationBorn > (name) {}
+   
+   virtual ~G4DNAIonizationBorn() {}
+   
+   G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition) 
+   {
+    G4DNAGenericIonsManager *instance;
+    instance = G4DNAGenericIonsManager::Instance();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4DNAChargeIncreaseInWater.icc"
+    return 
+    ( 
+      &aParticleDefinition == G4Electron::Electron()
+      ||
+      &aParticleDefinition == G4Proton::Proton()
+    ); 
+   } 
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

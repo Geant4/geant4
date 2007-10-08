@@ -23,42 +23,63 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNAFinalStatesPolicyIonizationRudd.hh,v 1.1 2007-10-08 09:18:43 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNAFinalStatesPolicyIonizationRudd_HH
+#define G4DNAFinalStatesPolicyIonizationRudd_HH 1
 
-#include "G4VDNAProcessInWater.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
-public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+class G4DNAFinalStatesPolicyIonizationRudd  
 {
- public:
-   
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
-   
-   virtual ~G4DNAChargeIncreaseInWater() {}
+ protected:
+   G4DNAFinalStatesPolicyIonizationRudd() {}
+   ~G4DNAFinalStatesPolicyIonizationRudd() {}
 
-   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+   G4double RandomizeEjectedElectronEnergy(const G4Track& track, G4double incomingParticleEnergy, G4int shell) ;
+   void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
+                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
+   G4double EnergyConstant(G4int ionizationLevel);
 
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
+  private:
 
- private:
+   double DifferentialCrossSection(const G4Track& track, G4double k, G4double energyTransfer, G4int shell);
+   G4double CorrectionFactor(G4ParticleDefinition * aParticleDefinition, G4double k);
+
+   G4double S_1s(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber);
+
+   G4double S_2s(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber);
+
+
+   G4double S_2p(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber);
+
+   G4double R(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber) ;
+
+   G4double slaterEffectiveCharge[3];
+   G4double sCoefficient[3];
+
+   typedef std::map<double, std::map<double, double> > TriDimensionMap;
+   TriDimensionMap DiffCrossSectionData[6];
+
+   std::vector<double> TdummyVec;
  
+   typedef std::map<double, std::vector<double> > VecMap;
+   VecMap vecm;
+
    // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
- };
+   G4DNAFinalStatesPolicyIonizationRudd(const G4DNAFinalStatesPolicyIonizationRudd & copy);
+   G4DNAFinalStatesPolicyIonizationRudd & operator=(const G4DNAFinalStatesPolicyIonizationRudd & right);
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4DNAChargeIncreaseInWater.icc"
+#include "G4DNAFinalStatesPolicyIonizationRudd.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+#endif 

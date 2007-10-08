@@ -1,0 +1,191 @@
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// -------------------------------------------------------------------
+// $Id: G4DNAFinalStatesPolicyScreenedRutherford.icc,v 1.1 2007-10-08 09:18:43 sincerti Exp $
+// -------------------------------------------------------------------
+//
+
+#ifdef G4DNAFinalStatesPolicyScreenedRutherford_HH
+
+#include "Randomize.hh"
+#include "G4DNAGenericIonsManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyScreenedRutherford
+::EmfietzoglouRandomizeCosTheta
+(G4double k, G4int z)
+{
+ //  d sigma_el                sigma_Ruth(K)
+ // ------------ (K) ~ -----------------------------  
+ //   d Omega           (1 + 2 n(K) - cos(theta))^2
+ //
+ // We extract cos(theta) distributed as (1 + 2 n(K) - cos(theta))^-2
+ //
+ // Maximum is for theta=0: 1/(4 n(K)^2) (When n(K) is positive, that is always satisfied within the validity of the process)
+ //
+ // Phys. Med. Biol. 45 (2000) 3171-3194
+
+ G4double n;
+ 
+ n=EmfietzoglouScreeningFactor(k, z);
+
+ G4double oneOverMax;
+ oneOverMax=(4.*n*n);
+
+ G4double cosTheta;
+ G4double fCosTheta;
+
+ do
+ {
+  cosTheta = 2.*G4UniformRand()-1.;
+  fCosTheta = (1 + 2.*n - cosTheta);
+  fCosTheta = oneOverMax/(fCosTheta*fCosTheta);
+ }
+ while (fCosTheta < G4UniformRand());
+ 
+ return cosTheta;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyScreenedRutherford
+::EmfietzoglouScreeningFactor
+(G4double k, G4int z)
+{
+ //
+ //         alpha_1 + beta_1 ln(K/eV)   constK Z^(2/3)
+ // n(T) = -------------------------- -----------------
+ //              K/(m_e c^2)            2 + K/(m_e c^2)
+ //
+ // Where K is the electron non-relativistic kinetic energy
+ //
+ // n(T) > 0 for T < ~ 400 MeV
+ // 
+ // Nucl. Instr. Meth. 155 (1978) 145-156
+
+ const G4double alpha_1(1.64);
+ const G4double beta_1(-0.0825);
+ const G4double constK(1.7E-5);
+ 
+ G4double numerator;
+ numerator=(alpha_1+beta_1*std::log(k/eV))*constK*std::pow(static_cast<double>(z), 2./3.);
+
+ k/=electron_mass_c2;
+
+ G4double denominator;
+ denominator=k*(2+k);
+ 
+ return numerator/denominator;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// **************************** 
+// BRENNER ANGULAR DISTRIBUTION
+// **************************** 
+
+G4double G4DNAFinalStatesPolicyScreenedRutherford
+::BrennerRandomizeCosTheta
+(G4double k, G4int /* z */)
+{
+ //  d sigma_el                         1                                 beta(K)
+ // ------------ (K) ~ --------------------------------- + ---------------------------------
+ //   d Omega           (1 + 2 gamma(K) - cos(theta))^2     (1 + 2 delta(K) + cos(theta))^2
+ //
+ // Maximum is < 1/(4 gamma(K)^2) + beta(K)/(4 delta(K)^2)
+ //
+ // Phys. Med. Biol. 29 N.4 (1983) 443-447
+ 
+ const G4double betaCoeff[5]         = { 7.51525,   -0.419122,    7.2017E-3, -4.646E-5,    1.02897E-7};  
+ const G4double deltaCoeff[5]        = { 2.9612,    -0.26376,     4.307E-3,  -2.6895E-5,   5.83505E-8};
+ const G4double gamma035_10Coeff[6]  = {-1.7013,    -1.48284,     0.6331,    -0.10911,     8.358E-3,  -2.388E-4};
+ const G4double gamma10_100Coeff[5]  = {-3.32517,    0.10996,    -4.5255E-3,  5.8372E-5,  -2.4659E-7};
+ const G4double gamma100_200Coeff[3] = { 2.4775E-2, -2.96264E-5, -1.20655E-7};
+
+ // gamma(K), beta(K) and delta(K) are polynomials with coefficients for energy measured in eV
+ k/=eV;
+ 
+ G4double beta;
+ beta=std::exp(BrennerCalculatePolynomial(k, betaCoeff, 5)); 
+
+ G4double delta;
+ delta=std::exp(BrennerCalculatePolynomial(k, deltaCoeff, 5)); 
+
+ G4double gamma;
+ 
+ if (k>100)
+  gamma=BrennerCalculatePolynomial(k, gamma100_200Coeff, 3); // Only in this case it is not the exponent of the polynomial
+ else if (k>10)
+  gamma=std::exp(BrennerCalculatePolynomial(k, gamma10_100Coeff, 5));
+ else
+  gamma=std::exp(BrennerCalculatePolynomial(k, gamma035_10Coeff, 6));
+  
+ G4double oneOverMax;
+ oneOverMax=1./(1./(4.*gamma*gamma) + beta/(4.*delta*delta));
+ 
+ G4double cosTheta;
+ G4double leftDenominator;
+ G4double rightDenominator;
+ G4double fCosTheta;
+ 
+ do
+ {
+  cosTheta = 2.*G4UniformRand()-1.;
+  leftDenominator = (1 + 2.*gamma - cosTheta);
+  rightDenominator = (1 + 2*delta + cosTheta);
+  fCosTheta = oneOverMax*(1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
+ }
+ while (fCosTheta < G4UniformRand());
+ 
+ return cosTheta; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyScreenedRutherford
+::BrennerCalculatePolynomial
+(G4double k, const G4double *vector, G4int size)
+{
+ // Sum_{i=0}^{size-1} vector_i k^i
+ //
+ // Phys. Med. Biol. 29 N.4 (1983) 443-447
+
+ G4double result(0);
+
+ while (size>0)
+ {
+  size--;
+  
+  result*=k;
+  result+=vector[size];
+ }
+ 
+ return result;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif 

@@ -1,0 +1,227 @@
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// -------------------------------------------------------------------
+// $Id: G4DNAFinalStatesPolicyIonizationBorn.icc,v 1.1 2007-10-08 09:18:43 sincerti Exp $
+// -------------------------------------------------------------------
+//
+
+#ifdef G4DNAFinalStatesPolicyIonizationBorn_HH
+
+#include "Randomize.hh"
+#include "G4DNAGenericIonsManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyIonizationBorn
+::RandomizeEjectedElectronEnergy
+(const G4Track& track, G4double k, G4int shell)
+{
+
+ char *path = getenv("G4LEDATA");
+ 
+ if (!path)
+  G4Exception("G4DNACrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
+
+ const G4ParticleDefinition* myParticleDefinition = track.GetDefinition();
+
+ std::ostringstream fullFileName;
+
+ if (myParticleDefinition == G4Electron::ElectronDefinition()) 
+ {
+  fullFileName << path << "/dna/G4DNAElectronDiffCrossSectionIonizationBorn.dat";
+  std::ifstream eDiffCrossSection(fullFileName.str().c_str());
+  
+  if(!eDiffCrossSection){ G4cout<<"ERROR OPENING DATA FILE IN ELECTRON IONIZATION !!! "<<G4endl;
+                           while(1);}
+ }
+
+ if (myParticleDefinition == G4Proton::ProtonDefinition()) 
+ {
+  fullFileName << path << "/dna/G4DNAProtonDiffCrossSectionIonizationBorn.dat";
+  std::ifstream eDiffCrossSection(fullFileName.str().c_str());
+ 
+  if(!eDiffCrossSection){ G4cout<<"ERROR OPENING DATA FILE IN PROTON IONIZATION !!! "<<G4endl;
+                           while(1);}
+ }
+
+  TdummyVec.push_back(0.);
+  while(!eDiffCrossSection.eof())
+    	{
+	        double Tdummy;
+		double Edummy;
+		eDiffCrossSection>>Tdummy>>Edummy;
+		if(Tdummy != TdummyVec.back()) TdummyVec.push_back(Tdummy);
+		for (int j=0; j<6; j++)
+		{
+		eDiffCrossSection>>DiffCrossSectionData[j][Tdummy][Edummy];
+		vecm[Tdummy].push_back(Edummy);
+		}
+	}
+
+ if (myParticleDefinition == G4Electron::ElectronDefinition()) 
+ {
+
+    G4double maximumEnergyTransfer=0.;
+    if((k+EnergyConstant(shell))/2. > k) maximumEnergyTransfer=k;
+    else maximumEnergyTransfer=(k+EnergyConstant(shell))/2.;
+    G4double crossSectionMaximum=0.;
+    for(G4double value=EnergyConstant(shell); value<=maximumEnergyTransfer; value+=0.1*eV)
+ 
+    {
+      G4double differentialCrossSection = DifferentialCrossSection(k/eV, value/eV, shell);
+      if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
+    }
+ 
+    G4double secElecKinetic=0.;
+    do{
+      secElecKinetic = G4UniformRand() * (maximumEnergyTransfer-EnergyConstant(shell));
+      }while(G4UniformRand()*crossSectionMaximum > DifferentialCrossSection(k/eV,(secElecKinetic+EnergyConstant(shell))/eV,shell));
+
+    return(secElecKinetic);
+ 
+ }
+  
+ if (myParticleDefinition == G4Proton::ProtonDefinition()) 
+ {
+    G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k - (EnergyConstant(shell));
+    G4double crossSectionMaximum=0.;
+    for(G4double value=EnergyConstant(shell); value<=4.*EnergyConstant(shell) ; value+=0.1*eV){
+                                                         G4double differentialCrossSection = DifferentialCrossSection(k/eV, value/eV, shell);
+							 if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection+1;
+							 }
+    //G4cout<<"-->  "<<G4endl<<k/eV<<"  "<<shell<<"  "<<crossSectionMaximum<<G4endl;
+    G4double secElecKinetic=0.;
+    do{
+      secElecKinetic = G4UniformRand() * maximumKineticEnergyTransfer;
+      }while(G4UniformRand()*crossSectionMaximum >= DifferentialCrossSection(k/eV,(secElecKinetic+EnergyConstant(shell))/eV,shell));
+    return(secElecKinetic);
+ }
+
+ return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4DNAFinalStatesPolicyIonizationBorn
+::RandomizeEjectedElectronDirection
+(G4ParticleDefinition * myParticleDefinition, G4double k, G4double secKinetic, G4double & cosTheta, G4double & phi )
+{
+ if (myParticleDefinition == G4Electron::ElectronDefinition()) 
+ {
+
+    phi = twopi * G4UniformRand();
+    if(secKinetic < 50.*eV) cosTheta = (2.*G4UniformRand())-1.;
+    else if(secKinetic <= 200.*eV) 	{
+   					if(G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
+					else cosTheta = G4UniformRand()*(sqrt(2)/2);
+					}
+    else	{
+    		G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
+		cosTheta = sqrt(1-sin2O);
+ 		}
+ }
+ 
+ if (myParticleDefinition == G4Proton::ProtonDefinition()) 
+ {
+    G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
+    phi = twopi * G4UniformRand();
+    cosTheta = sqrt(secKinetic / maxSecKinetic);
+ }
+
+				
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyIonizationBorn
+::EnergyConstant
+(G4int ionizationLevel) const
+{
+ const G4double bindingEnergy[]={10.79*eV, 13.39*eV, 16.05*eV, 32.30*eV, 539.0*eV};
+ return(bindingEnergy[ionizationLevel]);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+double G4DNAFinalStatesPolicyIonizationBorn
+::DifferentialCrossSection
+(G4double k, G4double energyTransfer, G4int ionizationLevelIndex)
+{
+   // k should be in eV and energy transfer eV also
+  std::vector<double>::iterator t2 = upper_bound(TdummyVec.begin(),TdummyVec.end(), k);
+  std::vector<double>::iterator t1 = t2-1;
+  std::vector<double>::iterator e12 = upper_bound(vecm[(*t1)].begin(),vecm[(*t1)].end(), energyTransfer);
+  std::vector<double>::iterator e11 = e12-1;
+
+  std::vector<double>::iterator e22 = upper_bound(vecm[(*t2)].begin(),vecm[(*t2)].end(), energyTransfer);
+  std::vector<double>::iterator e21 = e22-1;
+
+  G4double value_t1  = *t1;
+  G4double value_t2  = *t2;
+  G4double value_e21 = *e21;
+  G4double value_e22 = *e22;
+  G4double value_e12 = *e12;
+  G4double value_e11 = *e11;
+
+  G4double xs11 = DiffCrossSectionData[ionizationLevelIndex][value_t1][value_e11];
+  G4double xs12 = DiffCrossSectionData[ionizationLevelIndex][value_t1][value_e12];
+  G4double xs21 = DiffCrossSectionData[ionizationLevelIndex][value_t2][value_e21];
+  G4double xs22 = DiffCrossSectionData[ionizationLevelIndex][value_t2][value_e22];
+
+  G4double sigma = QuadInterpolator(value_e11, value_e12, value_e21, value_e22, xs11, xs12, xs21, xs22, value_t1, value_t2, k, energyTransfer);
+
+  if(energyTransfer < EnergyConstant(ionizationLevelIndex)) return(0.);
+  return(sigma);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyIonizationBorn
+::LogLogInterpolate
+(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2)
+{
+ G4double a = (log10(xs2)-log10(xs1)) / (log10(e2)-log10(e1));
+ G4double b = log10(xs2) - a*log10(e2);
+ G4double Sigma = a*log10(e) + b;
+ return (pow(10,Sigma));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DNAFinalStatesPolicyIonizationBorn
+::QuadInterpolator
+(G4double e11, G4double e12, G4double e21, G4double e22, 
+G4double xs11, G4double xs12, G4double xs21, G4double xs22, 
+G4double t1, G4double t2, G4double t, G4double e)
+{
+ G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
+ G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
+ G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+ return (value);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif 

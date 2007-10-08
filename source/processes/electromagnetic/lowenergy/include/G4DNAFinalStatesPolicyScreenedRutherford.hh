@@ -23,42 +23,41 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNAFinalStatesPolicyScreenedRutherford.hh,v 1.1 2007-10-08 09:18:43 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNAFinalStatesPolicyScreenedRutherford_HH
+#define G4DNAFinalStatesPolicyScreenedRutherford_HH 1
 
-#include "G4VDNAProcessInWater.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
-public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+class G4DNAFinalStatesPolicyScreenedRutherford  
 {
- public:
-   
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
-   
-   virtual ~G4DNAChargeIncreaseInWater() {}
+ protected:
+   G4DNAFinalStatesPolicyScreenedRutherford() {}
+   ~G4DNAFinalStatesPolicyScreenedRutherford() {}
 
-   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+   G4double EmfietzoglouRandomizeCosTheta(G4double k, G4int z);
+   G4double BrennerRandomizeCosTheta(G4double k, G4int z);
 
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
+  private:
 
- private:
- 
+   G4double EmfietzoglouScreeningFactor(G4double k, G4int z);
+   G4double BrennerCalculatePolynomial(G4double k, const G4double *vector, G4int size);
+
    // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
- };
+   G4DNAFinalStatesPolicyScreenedRutherford(const G4DNAFinalStatesPolicyScreenedRutherford & copy);
+   G4DNAFinalStatesPolicyScreenedRutherford & operator=(const G4DNAFinalStatesPolicyScreenedRutherford & right);
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4DNAChargeIncreaseInWater.icc"
+#include "G4DNAFinalStatesPolicyScreenedRutherford.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+#endif 

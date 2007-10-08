@@ -23,26 +23,26 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4DNAChargeIncreaseInWater.hh,v 1.4 2007-10-08 09:18:42 sincerti Exp $
+// $Id: G4DNAElasticScatteringInWater.hh,v 1.1 2007-10-08 09:18:43 sincerti Exp $
 // -------------------------------------------------------------------
 //
 
-#ifndef G4DNAChargeIncreaseInWater_HH
-#define G4DNAChargeIncreaseInWater_HH 1
+#ifndef G4DNAElasticScatteringInWater_HH
+#define G4DNAElasticScatteringInWater_HH 1
 
 #include "G4VDNAProcessInWater.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 template<typename CrossSectionPolicy, typename FinalStatesPolicy>
-class G4DNAChargeIncreaseInWater: 
+class G4DNAElasticScatteringInWater: 
 public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
 {
  public:
    
-   G4DNAChargeIncreaseInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
+   G4DNAElasticScatteringInWater(const G4String & name) : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
    
-   virtual ~G4DNAChargeIncreaseInWater() {}
+   virtual ~G4DNAElasticScatteringInWater() {}
 
    virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
 
@@ -50,14 +50,14 @@ public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
 
  private:
  
-   // Hides default constructor and assignment operator as private
-   G4DNAChargeIncreaseInWater(const G4DNAChargeIncreaseInWater & copy);
-   G4DNAChargeIncreaseInWater & operator=(const G4DNAChargeIncreaseInWater & right);
+  // Hides default constructor and assignment operator as private
+   G4DNAElasticScatteringInWater(const G4DNAElasticScatteringInWater & copy);
+   G4DNAElasticScatteringInWater & operator=(const G4DNAElasticScatteringInWater & right);
  };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4DNAChargeIncreaseInWater.icc"
+#include "G4DNAElasticScatteringInWater.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

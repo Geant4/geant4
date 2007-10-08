@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,19 +22,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DNAIonizationInWater.icc,v 1.4 2006-06-29 19:34:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// -------------------------------------------------------------------
+// $Id: G4DNAIonizationInWater.icc,v 1.5 2007-10-08 09:18:43 sincerti Exp $
+// -------------------------------------------------------------------
 //
 
-#ifdef    G4DNAIONIZATIONINWATER_HH
+#ifdef G4DNAIonizationInWater_HH
+
 #include "G4Electron.hh"
 
- template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- G4VParticleChange* G4DNAIonizationInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
- {
-  const G4int z(10); // H2O number of electrons
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+template<typename CrossSectionPolicy, typename FinalStatesPolicy>
+G4VParticleChange* G4DNAIonizationInWater<CrossSectionPolicy, FinalStatesPolicy>
+::PostStepDoIt
+(const G4Track& aTrack, const G4Step& aStep)
+ {
   this->aParticleChange.Initialize(aTrack);
 
   const G4DynamicParticle* aDynamicParticle = aTrack.GetDynamicParticle();
@@ -44,38 +46,35 @@
   G4double particleMass = aDynamicParticle->GetDefinition()->GetPDGMass();
   G4double TotalEnergy = k + particleMass;
   G4double Psquare = k*(TotalEnergy+particleMass);
-  G4double TotalMomentum = std::sqrt(Psquare);
-
-
-  G4int ionizationShell(TotalCrossSectionPolicy::RandomizePartialCrossSection(k,z));
-  G4double secondaryKinetic(FinalStatesPolicy::RandomizeEjectedElectronEnergy(k,ionizationShell));
+  G4double TotalMomentum = sqrt(Psquare);
+  G4int ionizationShell(CrossSectionPolicy::RandomizePartialCrossSection(aTrack,k));
+  G4double secondaryKinetic(FinalStatesPolicy::RandomizeEjectedElectronEnergy(aTrack,k,ionizationShell));
   G4double bindingEnergy(FinalStatesPolicy::EnergyConstant(ionizationShell));
  
   //Direction of the secondary electron
   G4double cosTheta = 0.;
   G4double phi = 0.; 
-  FinalStatesPolicy::RandomizeEjectedElectronDirection(k,secondaryKinetic, cosTheta, phi);
-  G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-  G4double dirx = sinTheta*std::cos(phi),diry = sinTheta*std::sin(phi),dirz = cosTheta;
+  FinalStatesPolicy::RandomizeEjectedElectronDirection(aTrack.GetDefinition(), k,secondaryKinetic, cosTheta, phi);
+  G4double sinTheta = sqrt(1.-cosTheta*cosTheta);
+  G4double dirx = sinTheta*cos(phi),diry = sinTheta*sin(phi),dirz = cosTheta;
   G4ThreeVector DeltaDirection(dirx,diry,dirz);
   DeltaDirection.rotateUz(primaryDirection);
 
-
-  G4double DeltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic +
+  G4double DeltaTotalMomentum = sqrt(secondaryKinetic*(secondaryKinetic +
                                                      2.*electron_mass_c2 ));
 
-   //Primary Particle Direction
-      G4double finalPx = TotalMomentum*primaryDirection.x()
+  //Primary Particle Direction
+  G4double finalPx = TotalMomentum*primaryDirection.x()
                         - DeltaTotalMomentum*DeltaDirection.x();
-      G4double finalPy = TotalMomentum*primaryDirection.y()
+  G4double finalPy = TotalMomentum*primaryDirection.y()
                         - DeltaTotalMomentum*DeltaDirection.y();
-      G4double finalPz = TotalMomentum*primaryDirection.z()
+  G4double finalPz = TotalMomentum*primaryDirection.z()
                         - DeltaTotalMomentum*DeltaDirection.z();
-      G4double finalMomentum =
-                std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-      finalPx /= finalMomentum;
-      finalPy /= finalMomentum;
-      finalPz /= finalMomentum;
+  G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+  finalPx /= finalMomentum;
+  finalPy /= finalMomentum;
+  finalPz /= finalMomentum;
 
   this->aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
   this->aParticleChange.ProposeEnergy(k-bindingEnergy-secondaryKinetic);
@@ -85,6 +84,21 @@
   G4DynamicParticle* aElectron = new G4DynamicParticle(G4Electron::Electron(),DeltaDirection,secondaryKinetic);
   this->aParticleChange.AddSecondary(aElectron);
 
-  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
- }
-#endif /* G4DNAIONIZATIONINWATER_HH */
+  return G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template<typename CrossSectionPolicy, typename FinalStatesPolicy> 
+G4bool                                  
+G4DNAIonizationInWater<CrossSectionPolicy, FinalStatesPolicy>
+::IsApplicable
+(const G4ParticleDefinition & /*aParticleDefinition*/)
+{
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif 
+

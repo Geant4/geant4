@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,42 +22,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DNAExcitationInWater.hh,v 1.2 2006-06-29 19:34:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// -------------------------------------------------------------------
+// $Id: G4DNAExcitationInWater.hh,v 1.3 2007-10-08 09:18:43 sincerti Exp $
+// -------------------------------------------------------------------
 //
 
-#ifndef   G4DNAEXCITATIONINWATER_HH
- #define  G4DNAEXCITATIONINWATER_HH 1
- 
- #include "G4VDNAProcessInWater.hh"
- 
- // TotalCrossSectionPolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
- //  - [protected] G4double TotalCrossSection(G4double k, G4int z)
- //  - [protected] void BuildTotalCrossSection(void)
- //  - [protected] G4int RandomizePartialCrossSection(G4double k, G4int z)
- //  - [protected] G4double EnergyConstant(G4int excitationLevelIndex)
- 
- // FinalStatesPolicy must provide:
- //  - [protected] G4bool KillIncomingParticle(G4double k)
- //  - [protected] void BuildFinalStatesData(void)
- 
- template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- class G4DNAExcitationInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
- {
-  public:
-                                         G4DNAExcitationInWater(const G4String & name) : G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
-   virtual                              ~G4DNAExcitationInWater() {}
- 
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+#ifndef G4DNAExcitationInWater_HH
+#define G4DNAExcitationInWater_HH 1
 
-  private:
-   // Hides default constructor and assignment operator as private 
-                                         G4DNAExcitationInWater(const G4DNAExcitationInWater & copy);
-   G4DNAExcitationInWater &              operator=(const G4DNAExcitationInWater & right);
+#include "G4VDNAProcessInWater.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template<typename CrossSectionPolicy, typename FinalStatesPolicy>
+class G4DNAExcitationInWater: 
+public G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>
+{
+ public:
+   
+   G4DNAExcitationInWater(const G4String & name) 
+   : G4VDNAProcessInWater<CrossSectionPolicy, FinalStatesPolicy>(name) {}
+   
+   virtual ~G4DNAExcitationInWater() {}
+
+   virtual G4VParticleChange * PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+
+   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleDefinition);
+
+ private:
+ 
+   // Hides default constructor and assignment operator as private
+   G4DNAExcitationInWater(const G4DNAExcitationInWater & copy);
+   G4DNAExcitationInWater & operator=(const G4DNAExcitationInWater & right);
  };
- 
- #include "G4DNAExcitationInWater.icc"
-#endif /* G4DNAEXCITATIONINWATER_HH */
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4DNAExcitationInWater.icc"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif

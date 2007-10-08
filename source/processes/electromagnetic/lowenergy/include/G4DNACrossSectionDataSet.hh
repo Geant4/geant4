@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,41 +22,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DNACrossSectionDataSet.hh,v 1.2 2006-06-29 19:33:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Riccardo Capra <capra@ge.infn.it>
-//
-// History:
-// -----------
-// 30 Jun 2005  RC         Created
-//
 // -------------------------------------------------------------------
-
-// Class description:
-// Low Energy Electromagnetic Physics
-// Data set for an electromagnetic physics process
-// A strategy pattern is used to encapsulate algorithms for data interpolation
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
+// $Id: G4DNACrossSectionDataSet.hh,v 1.3 2007-10-08 09:18:42 sincerti Exp $
 // -------------------------------------------------------------------
+//
 
-#ifndef   G4DNACROSSSECTIONDATASET_HH
- #define  G4DNACROSSSECTIONDATASET_HH 1
+#ifndef G4CrossSectionDataSet_HH
+#define G4CrossSectionDataSet_HH 1
 
- #include "G4ShellEMDataSet.hh"
+#include "G4ShellEMDataSet.hh"
 
- class G4DNACrossSectionDataSet : public G4ShellEMDataSet
- { 
+class G4DNACrossSectionDataSet : public G4ShellEMDataSet
+{ 
   public:
-                                                G4DNACrossSectionDataSet(G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
-   virtual                                     ~G4DNACrossSectionDataSet();
 
-   virtual G4bool                               LoadData(const G4String & argFileName);
-   virtual G4bool                               SaveData(const G4String & argFileName) const;
+   G4DNACrossSectionDataSet(G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
+   virtual ~G4DNACrossSectionDataSet();
+
+   virtual G4bool LoadData(const G4String & argFileName);
+   virtual G4bool SaveData(const G4String & argFileName) const;
    
   private:
-   G4String                                     FullFileName(const G4String & argFileName) const;
+
+   G4String FullFileName(const G4String & argFileName) const;
  };
-#endif /* G4DNACROSSSECTIONDATASET_HH */
+
+#endif 
