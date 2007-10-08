@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.22 2007-10-08 11:43:04 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.23 2007-10-08 17:00:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,8 +86,11 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double cutEnergy,
 				G4double)
 {
+  if(p == particle && kinEnergy == tkin && Z == targetZ &&
+     A == targetA && cutEnergy == ecut) return nucXSection;
+
   // Lab system
-  G4double cross= 0.0;
+  nucXSection = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
@@ -118,18 +121,18 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
     G4double effmass = mass*m1/(mass + m1);
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
+    nucXSection = coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
       *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
     //       << " coeff= " << coeff << G4endl;
   }
-  cross += ecross;
-  if(cross < 0.0) cross = 0.0;
+  nucXSection += ecross;
+  if(nucXSection < 0.0) nucXSection = 0.0;
   //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM 
   //         << "  Z= " << Z << "  A= " << A 
   //	     << " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
-  return cross;
+  return nucXSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -172,7 +175,8 @@ void G4CoulombScatteringModel::SampleSecondaries(
 
   // Select isotope and setup
   SetupParticle(p);
-  const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
+  const G4Element* elm = 
+    SelectRandomAtom(aMaterial,p,kinEnergy,cutEnergy,maxEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = SelectIsotope(elm);
   G4int iz    = G4int(Z);

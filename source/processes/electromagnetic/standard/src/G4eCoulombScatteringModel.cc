@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.27 2007-10-08 11:43:04 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.28 2007-10-08 17:00:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,8 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   coeff  = twopi*p0*p0;
   constn = 6.937e-6/(MeV*MeV);
   tkin = targetZ = targetA = mom2 = DBL_MIN;
-  elecXSection = ecut = 0.0;
+  elecXSection = nucXSection = 0.0;
+  ecut = DBL_MAX;
   particle = 0;
   for(size_t j=0; j<100; j++) {index[j] = -1;} 
 }
@@ -172,9 +173,15 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
     cross = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
 		 ->GetValue(kinEnergy, b));
   } else cross = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
-
+  /*
+  G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom ###" << G4endl;
+  G4cout << " Z= " << Z << " A= " << A 
+	 << " e= " << kinEnergy << " cross(bn)= " << cross/barn; 
+  */
   // elecron cross section
   cross += ComputeElectronXSectionPerAtom(p,kinEnergy,Z,A,cutEnergy);
+
+  //  G4cout << " cs(bn)= " << cross/barn << G4endl;
 
   if(cross < 0.0) cross = 0.0;
   return cross;
@@ -184,9 +191,9 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
                 const G4ParticleDefinition* p,
+		G4double kinEnergy,
 		G4double Z,
 		G4double A,
-		G4double kinEnergy,
 		G4double cutEnergy)
 {
   if(p == particle && kinEnergy == tkin && Z == targetZ &&
@@ -212,10 +219,11 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
   cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
   if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
   if(cosTetMaxElec < cosThetaMin) {
-    elecXSection = coeff*Z*chargeSquare*invbeta2*(cosThetaMin - cosTetMaxElec)/
-      ((1.0 - cosTetMaxElec + screenZ)*(1.0 - cosThetaMin + screenZ)*mom2);
+    G4double x1 = 1.0 - cosThetaMin  + screenZ;
+    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
+    elecXSection = coeff*Z*chargeSquare*invbeta2*(1.0/x1 - 1.0/x2)/mom2;
   }
-
+  //  G4cout << "cut= " << ecut << " e= " << tkin << " croosE= " << elecXSection << G4endl;
   return elecXSection;
 }
 
@@ -226,7 +234,9 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double kinEnergy, 
 			     G4double Z, G4double A)
 {
-  G4double cross = 0.0;
+  if(p == particle && kinEnergy == tkin && Z == targetZ &&
+     A == targetA) return nucXSection;
+  G4double nucXSection = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
@@ -234,24 +244,27 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    cross = coeff*Z*Z*chargeSquare*invbeta2
+    nucXSection = coeff*Z*Z*chargeSquare*invbeta2
       *(1./x1 - 1./x2 - formfactA*(2.*std::log(x2/x1) - 1.))/mom2;
   }
-  //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
-  //	 << " cross(b)= " << cross/barn
-  //	 << " ctmin= " << cosThetaMin
-  //	 << " ctmax= " << cosTetMaxNuc       
-  //	 << G4endl;
-  return cross;
+  /*
+  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
+  	 << " cross(b)= " << nucXSection/barn
+  	 << " ctmin= " << cosThetaMin
+  	 << " ctmax= " << cosTetMaxNuc       
+  	 << G4endl;
+  */
+  return nucXSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-						  const G4MaterialCutsCouple* couple,
-						  const G4DynamicParticle* dp,
-						  G4double cutEnergy,
-						  G4double maxEnergy)
+void G4eCoulombScatteringModel::SampleSecondaries(
+                std::vector<G4DynamicParticle*>*,
+		const G4MaterialCutsCouple* couple,
+		const G4DynamicParticle* dp,
+		G4double cutEnergy,
+		G4double maxEnergy)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -259,7 +272,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
   // Select atom and setup
   SetupParticle(p);
-  const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
+  const G4Element* elm = 
+    SelectRandomAtom(aMaterial,p,kinEnergy,cutEnergy,maxEnergy);
   G4double Z  = elm->GetZ();
   G4double A  = elm->GetN();
 
@@ -272,13 +286,15 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
     costm = cosTetMaxElec;
     formf = 0.0;
   }
-
-  //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries: e(MeV)= " << tkin 
-  //	 << " ctmin= " << cosThetaMin
-  //	 << " ctmax= " << cosTetMaxNuc 
-  //	 << " Z= " << Z << " A= " << A
-  //	 << G4endl;
-
+  /*
+  G4cout << "G4eCoul...SampleSecondaries: e(MeV)= " << tkin 
+  	 << " ctmin= " << cosThetaMin
+  	 << " ctmaxN= " << cosTetMaxNuc
+  	 << " ctmax= " << costm
+  	 << " Z= " << Z << " A= " << A
+  	 << " cross= " << cross/barn << " crossE= " << elecXSection/barn
+  	 << G4endl;
+  */
   if(costm >= cosThetaMin) return; 
 
   G4double x1 = 1. - cosThetaMin + screenZ;
@@ -296,12 +312,13 @@ void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*
   } while ( G4UniformRand() > grej*grej );  
   
   G4double sint= sqrt(st2);
-
-  //  G4cout<<"SampleSecondaries: e(MeV)= " << kinEnergy
-  //	<< " cost= " << cost << "  Z= " << Z << "  a= " << screenZ 
-  //	<< " cn= " << formfactA
-  //	<< G4endl;
-
+  /*
+  if(sint > 0.1) 
+    G4cout<<"## SampleSecondaries: e(MeV)= " << kinEnergy
+	  << " sint= " << sint << "  Z= " << Z << "  screenZ= " << screenZ 
+	  << " cn= " << formf
+	  << G4endl;
+  */
   G4double phi  = twopi * G4UniformRand();
 
   G4ThreeVector direction = dp->GetMomentumDirection(); 
