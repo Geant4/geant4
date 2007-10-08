@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.21 2007-10-08 10:35:45 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.22 2007-10-08 11:43:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double Z, 
 				G4double A, 
 				G4double cutEnergy,
-				G4double maxEnergy)
+				G4double)
 {
   // Lab system
   G4double cross= 0.0;
@@ -92,7 +92,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cutEnergy,maxEnergy);
+    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cutEnergy);
 
   // CM system
   G4int iz      = G4int(Z);
@@ -163,7 +163,8 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       std::vector<G4DynamicParticle*>* fvect,
 			       const G4MaterialCutsCouple* couple,
 			       const G4DynamicParticle* dp,
-			       G4double cut, G4double tmax)
+			       G4double cutEnergy, 
+			       G4double maxEnergy)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -177,7 +178,8 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
 
-  G4double cross = ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cut,tmax);
+  G4double cross = 
+    ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cutEnergy,maxEnergy);
 
   G4double costm = cosTetMaxNuc;
   G4double formf = formfactA;

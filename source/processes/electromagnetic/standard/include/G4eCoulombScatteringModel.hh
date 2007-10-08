@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.15 2007-10-08 09:20:52 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.16 2007-10-08 11:43:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,8 +101,7 @@ protected:
 				 G4double kinEnergy, 
 				 G4double Z,
 				 G4double A,
-				 G4double cut,
-				 G4double tmax);
+				 G4double cut);
 
   virtual G4double CalculateCrossSectionPerAtom(
                                  const G4ParticleDefinition*, 
@@ -159,7 +158,6 @@ private:
   G4PhysicsTable*           theCrossSectionTable; 
 
   G4double                  ecut;
-  G4double                  emax;
 
   G4double                  a0;
   G4double                  lowKEnergy;
