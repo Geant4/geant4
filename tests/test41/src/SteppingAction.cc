@@ -55,6 +55,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4VPhysicalVolume* vol2 = aStep->GetPostStepPoint()->GetPhysicalVolume();
   if(vol1 == det->GetPhysAbsorber() && vol2 == det->GetPhysWorld()) {
     G4ThreeVector dir = track->GetMomentumDirection();
+    /*
+    G4cout << "Next track vx= " << std::abs(dir.x())
+	   << " vy= " <<  std::abs(dir.y()) << G4endl;
+    */
     if(dir.z() > 0.0) {
       run->AddProjectileTheta(std::asin(std::abs(dir.y())));
       track->SetTrackStatus(fStopAndKill);

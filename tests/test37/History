@@ -14,9 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-10-07  V.Ivanchenko (test37-V09-00-01)
+- use sub-cutoff options for standardSS and standardIG physics
 
 29-07-07  V.Ivanchenko (test37-V09-00-00)
-- add PhysList standardIG with standardIG physics builder
+- add PhysList standardSS with standardIG physics builder
 - update thicknesses inside macro files accourding to O.Kadri
   investigation in litrature
 

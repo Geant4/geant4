@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-10-07  V.Ivanchenko (test41-V09-00-03)
+- use sub-cutoff options for standardSS and standardIG physics
+
 28-08-07  V.Ivanchenko (test41-V09-00-02)
 - add README
 
