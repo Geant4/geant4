@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-11-16 15:02:21 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2007-10-09 08:49:54 vnivanch Exp $
 # --------------------------------------------------------------
 
 name := test35
@@ -25,5 +25,8 @@ endif
 
 
 include $(G4INSTALL)/config/binmake.gmk
+
+histclean:
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
 
 
