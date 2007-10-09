@@ -1,14 +1,13 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2007-10-09 07:16:46 gcosmo Exp $
+$Id: History,v 1.2 2007-10-09 08:00:28 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
- 		   Geant4 - Microdosimetry example
+ 		      Geant4 - Microdosimetry example
      =========================================================
 
                        Package History file
                        --------------------
 
-09 Oct 2007 - G.Cosmo
-- Created module.
-
+08 Oct 2007 - S. Incerti (microdosimetry-V09-00-01)
+- created
