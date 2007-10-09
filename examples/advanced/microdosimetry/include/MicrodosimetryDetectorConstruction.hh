@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrodosimetryDetectorConstruction.hh,v 1.1 2007-10-09 08:00:28 sincerti Exp $
+// $Id: MicrodosimetryDetectorConstruction.hh,v 1.2 2007-10-09 08:08:42 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrodosimetryDetectorConstruction_h
@@ -42,7 +42,6 @@
 
 #include "MicrodosimetryPhantomConfiguration.hh"
 #include "MicrodosimetryCellParameterisation.hh"
-#include "MicrodosimetryEMField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
