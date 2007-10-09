@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.30 2007-10-04 07:33:34 gcosmo Exp $
+// $Id: G4SteppingManager.hh,v 1.31 2007-10-09 03:51:06 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -492,7 +492,7 @@ public: //without description
   inline G4double G4SteppingManager::CalculateSafety(){
     return std::max( endpointSafety -
 		(endpointSafOrigin - fPostStepPoint->GetPosition()).mag(),
-	        0.);
+	        kCarTolerance );
   }
 
 
