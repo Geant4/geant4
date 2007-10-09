@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.17 2007-10-08 17:00:03 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.18 2007-10-09 08:16:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 // 19.08.06 V.Ivanchenko add inline function ScreeningParameter and
 //                       make some members protected
+// 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 //
 // Class Description:
 //
