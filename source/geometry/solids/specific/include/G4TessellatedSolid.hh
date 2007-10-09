@@ -17,14 +17,14 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * and is subject to DEFCON 705 IPR conditions.                               *
+// * and is subject to DEFCON 705 IPR conditions.                     *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.8 2007-08-23 14:49:23 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.9 2007-10-09 13:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,6 +148,7 @@ class G4TessellatedSolid : public G4VSolid
 //                                  const G4VPhysicalVolume* pRep) const;
     
     virtual EInside Inside (const G4ThreeVector &p) const;
+    void SetRandomVectorSet ();
     virtual G4ThreeVector SurfaceNormal (const G4ThreeVector &p) const;
     virtual G4double DistanceToIn(const G4ThreeVector &p,
                                   const G4ThreeVector &v) const;
@@ -203,7 +204,7 @@ class G4TessellatedSolid : public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
-  private: 
+  private:
 
     mutable G4Polyhedron* fpPolyhedron;
 
@@ -222,7 +223,9 @@ class G4TessellatedSolid : public G4VSolid
     G4double                 zMaxExtent;
     G4bool                   solidClosed;
     
-    G4double                 dirTolerance;
+    G4double          dirTolerance;
+    G4ThreeVector     randir[20];
+    G4int             maxTries;
 };
 
 #endif

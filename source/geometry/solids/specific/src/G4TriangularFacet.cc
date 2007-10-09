@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.8 2007-08-23 14:49:23 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.9 2007-10-09 13:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,6 +48,12 @@
 //                  Significant modification to correct for errors and enhance
 //                  based on patches/observations kindly provided by Rickard
 //                  Holmberg
+//
+// 26 September 2007
+//                  P R Truscott, QinetiQ Ltd, UK
+//                  Further chamges implemented to the Intersect member
+//                  function to correctly treat rays nearly parallel to the
+//                  plane of the triangle.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -345,7 +351,7 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
 //
 // Do a heck for rounding errors in the distance-squared.
 //
-  if (sqrDist < 0.0)  { sqrDist = 0.0; }
+  if (sqrDist < 0.0) { sqrDist = 0.0; }
 
   return D + s*E[0] + t*E[1];
 }
@@ -474,7 +480,8 @@ G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
 // G4TessellatedSolid::Distance(p,v) calculation.
 //
 // This member function is thanks the valuable work of Rickard Holmberg.  PT.
-// However, "gotos" are the Work of the Devil ... and I'm atheist!
+// However, "gotos" are the Work of the Devil have been exorcised with
+// extreme prejudice!!
 //
 // IMPORTANT NOTE:  These calculations are predicated on v being a unit
 // vector.  If G4TessellatedSolid or other classes call this member function
@@ -556,30 +563,9 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   {
 //
 //
-// The ray is very nearly parallel with the triangle surface. Use an alternate,
-// slower algorithm.  This will hopefully be run very seldom, and thus won't 
-// impact too much on performance.  Note that this has been modified from the
-// original algorithm due to Rickard Holmberg - The projection of the triangle
-// into 2D  from 3D is based on the normal vector to the triangle.
-//
-//
-//
-// In the above, we're measuring the angle subtended between the direction of 
-// the ray and the displacement of the triangle circumcentre from p.  It's possible
-// this comparison should take into consideration the extent of the triangle,
-// so compare for each of the triangle vertices?
-//
-//    G4double w1 = (P0  -p).unit().cross(v);
-//    G4double w2 = (P[1]-p).unit().cross(v);
-//    G4double w3 = (P[2]-p).unit().cross(v);
-//    G4double w1 = (circumcentre-p).unit().cross(v);
-//    if (w1 < dirTolerance && w1 > -dirTolerance)
-//    {
-//
-//
 // The ray is within the plane of the triangle.  Project the problem into 2D
 // in the plane of the triangle.  First try to create orthogonal unit vectors
-// mu and nu, where u is E[0]/|E[0]|.  This is kinda like
+// mu and nu, where mu is E[0]/|E[0]|.  This is kinda like
 // the original algorithm due to Rickard Holmberg, but with better mathematical
 // justification than the original method ... however, beware Rickard's was less
 // time-consuming.
@@ -598,22 +584,23 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
     G4TwoVector E1prime(E[1].dot(mu),E[1].dot(nu));
 
     G4TwoVector loc[2];
-    if (tGeomAlg->IntersectLineAndTriangle2D(pprime,vprime,
-      P0prime,E0prime,E1prime,loc))
-      {
+    if ( tGeomAlg->IntersectLineAndTriangle2D(pprime,vprime,P0prime,
+                                              E0prime,E1prime,loc) )
+    {
 //
 //
 // There is an intersection between the line and triangle in 2D.  Now check
 // which part of the line intersects with the plane containing the triangle
 // in 3D.
 //
-//      G4double vprimemag = vprime.mag();
-//      G4double s0        = (loc[0] - pprime).mag()/vprimemag;
-//      G4double s1        = (loc[1] - pprime).mag()/vprimemag;
-      G4ThreeVector loc0 = loc[0].x()*mu + loc[0].y()*nu + D;
-      G4ThreeVector loc1 = loc[1].x()*mu + loc[1].y()*nu + D;
-      G4double sameDir   = loc0.cross(v).dot(v.cross(loc1));
-      if (sameDir < 0.0)
+      G4double vprimemag = vprime.mag();
+      G4double s0        = (loc[0] - pprime).mag()/vprimemag;
+      G4double s1        = (loc[1] - pprime).mag()/vprimemag;
+      G4double normDist0 = surfaceNormal.dot(s0*v) - distFromSurface;
+      G4double normDist1 = surfaceNormal.dot(s1*v) - distFromSurface;
+
+      if ((normDist0 < 0.0 && normDist1 < 0.0) ||
+          (normDist0 > 0.0 && normDist1 > 0.0))
       {
         distance        = kInfinity;
         distFromSurface = kInfinity;
@@ -622,11 +609,51 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
       }
       else
       {
-        distance = loc0.mag();
-        normal = surfaceNormal;
-        if (!outgoing) distFromSurface = -distFromSurface;
-        return true;
+        G4double dnormDist = normDist1-normDist0;
+        if (std::abs(dnormDist) < DBL_EPSILON)
+        {
+          distance = s0;
+          normal   = surfaceNormal;
+          if (!outgoing) distFromSurface = -distFromSurface;
+          return true;
+        }
+        else
+        {
+          distance = s0 - normDist0*(s1-s0)/dnormDist;
+          normal   = surfaceNormal;
+          if (!outgoing) distFromSurface = -distFromSurface;
+          return true;
+        }
       }
+
+//      G4ThreeVector dloc   = loc1 - loc0;
+//      G4ThreeVector dlocXv = dloc.cross(v);
+//      G4double dlocXvmag   = dlocXv.mag();
+//      if (dloc.mag() <= 0.5*kCarTolerance || dlocXvmag <= DBL_EPSILON)
+//      {
+//        distance = loc0.mag();
+//        normal = surfaceNormal;
+//        if (!outgoing) distFromSurface = -distFromSurface;
+//        return true;
+//      }
+
+//      G4ThreeVector loc0Xv   = loc0.cross(v);
+//      G4ThreeVector loc1Xv   = loc1.cross(v);
+//      G4double sameDir       = -loc0Xv.dot(loc1Xv);
+//      if (sameDir < 0.0)
+//      {
+//        distance        = kInfinity;
+//        distFromSurface = kInfinity;
+//        normal          = G4ThreeVector(0.0,0.0,0.0);
+//        return false;
+//      }
+//      else
+//      {
+//        distance = loc0.mag() + loc0Xv.mag() * dloc.mag()/dlocXvmag;
+//        normal   = surfaceNormal;
+//        if (!outgoing) distFromSurface = -distFromSurface;
+//        return true;
+//      }
     }
     else
     {
@@ -638,8 +665,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   }
 //
 //
-// Use conventional algorithm to determine whether there is an intersection.
-// This involves determining the point of intersection of the
+// Use conventional algorithm to determine the whether there is an
+// intersection.  This involves determining the point of intersection of the
 // line with the plane containing the triangle, and then calculating if the
 // point is within the triangle.
 //
@@ -682,16 +709,10 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double lambda1,lambda2;
-  G4ThreeVector v, w;
+  G4double lambda0 = CLHEP::RandFlat::shoot(0.,1.);
+  G4double lambda1 = CLHEP::RandFlat::shoot(0.,lambda0);
 
-  v = P[1] - P[0];
-  w = P[0] - P0;
-
-  lambda1 = CLHEP::RandFlat::shoot(0.,1.);
-  lambda2 = CLHEP::RandFlat::shoot(0.,lambda1);
-
-  return (P0 + lambda1*w + lambda2*v);
+  return (P0 + lambda0*E[0] + lambda1*E[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -702,13 +723,5 @@ G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 
 G4double G4TriangularFacet::GetArea()
 {
-  if (area)  { return area; }
-
-//  G4ThreeVector v, w;
-//
-//  v = P[1] - P[0];
-//  w = P[0] - P0;
-//  area = 0.5*(v.cross(w)).mag();
   return area;
-
 }

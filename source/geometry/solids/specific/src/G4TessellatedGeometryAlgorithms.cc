@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.2 2007-10-09 13:20:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,6 +43,11 @@
 //
 // 07 August 2007, P R Truscott, QinetiQ Ltd, UK - Created, with member
 //                 functions based on the work of Rickard Holmberg.
+//
+// 26 September 2007
+//                 P R Truscott, qinetiQ Ltd, UK
+//                 Updated to assign values of location array, not update
+//                 just the pointer.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -107,7 +112,8 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
   G4int e0i = IntersectLineAndLineSegment2D (p,v,P0,E0,loc0);
   if (e0i == 2)
   {
-    location = loc0;
+    location[0] = loc0[0];
+    location[1] = loc0[1];
     return true;
   }
   
@@ -115,7 +121,8 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
   G4int e1i = IntersectLineAndLineSegment2D (p,v,P0,E1,loc1);
   if (e1i == 2)
   {
-    location = loc1;
+    location[0] = loc1[0];
+    location[1] = loc1[1];
     return true;
   }
   
@@ -140,7 +147,8 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
   G4int e2i = IntersectLineAndLineSegment2D (p,v,P1,DE,loc2);
   if (e2i == 2)
   {
-    location = loc2;
+    location[0] = loc2[0];
+    location[1] = loc2[1];
     return true;
   }
 
@@ -200,7 +208,7 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
 // as ??.
 //
 // This is based on the work of Rickard Holmberg as well as material published
-// by Philip J Scneider and David H Eberly, "Geometric Tools for Computer
+// by Philip J Schneider and David H Eberly, "Geometric Tools for Computer
 // Graphics," ISBN 1-55860-694-0, pp 244-245, 2003.
 //
 G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
@@ -221,7 +229,7 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
 //
 //
 // The line and line segment are not parallel.  Determine if the intersection
-// is in positive s where r = P0 + s*D0, or for 0<=t<=1 where r = p1 + t*D1.
+// is in positive s where r = P0 + s*D0, and for 0<=t<=1 where r = p1 + t*D1.
 //
     G4double s = cross(E,D1)/kross;
     if (s < 0)          return 0; // Intersection does not occur for positive s.
