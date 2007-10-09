@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.24 2007-10-09 08:16:29 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.25 2007-10-09 10:55:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,11 +92,9 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   // Lab system
   nucXSection = 0.0;
-  SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
-  SetupTarget(Z, A, ekin);
   G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,tkin,Z,A,cutEnergy);
+    ComputeElectronXSectionPerAtom(p,ekin,Z,A,cutEnergy);
 
   // CM system
   G4int iz      = G4int(Z);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.29 2007-10-09 08:16:30 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.30 2007-10-09 10:55:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,26 +166,29 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double A,
 		G4double cutEnergy, G4double)
 {
-  G4bool b;
-  G4double cross = 0.0;
+  if(p == particle && kinEnergy == tkin && Z == targetZ &&
+     A == targetA && cutEnergy == ecut) return nucXSection;
+
+  G4double nucXSection = 0.0;
 
   // nuclear cross section
   if(theCrossSectionTable) {
-    cross = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
+    G4bool b;
+    nucXSection = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
 		 ->GetValue(kinEnergy, b));
-  } else cross = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
+  } else nucXSection = CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
   /*
   G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom ###" << G4endl;
   G4cout << " Z= " << Z << " A= " << A 
-	 << " e= " << kinEnergy << " cross(bn)= " << cross/barn; 
+	 << " e= " << kinEnergy << " cross(bn)= " << nucXSection/barn; 
   */
   // elecron cross section
-  cross += ComputeElectronXSectionPerAtom(p,kinEnergy,Z,A,cutEnergy);
+  nucXSection += ComputeElectronXSectionPerAtom(p,kinEnergy,Z,A,cutEnergy);
 
   //  G4cout << " cs(bn)= " << cross/barn << G4endl;
 
-  if(cross < 0.0) cross = 0.0;
-  return cross;
+  if(nucXSection < 0.0) nucXSection = 0.0;
+  return nucXSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -235,9 +238,7 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 			     G4double kinEnergy, 
 			     G4double Z, G4double A)
 {
-  if(p == particle && kinEnergy == tkin && Z == targetZ &&
-     A == targetA) return nucXSection;
-  G4double nucXSection = 0.0;
+  G4double cross = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
@@ -245,17 +246,17 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    nucXSection = coeff*Z*Z*chargeSquare*invbeta2
+    cross = coeff*Z*Z*chargeSquare*invbeta2
       *(1./x1 - 1./x2 - formfactA*(2.*std::log(x2/x1) - 1.))/mom2;
   }
   /*
   G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
-  	 << " cross(b)= " << nucXSection/barn
+  	 << " cross(b)= " << cross/barn
   	 << " ctmin= " << cosThetaMin
   	 << " ctmax= " << cosTetMaxNuc       
   	 << G4endl;
   */
-  return nucXSection;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
