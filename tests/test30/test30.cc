@@ -112,6 +112,9 @@ int main(int argc, char** argv)
   G4cout << "======        Cascade Test (test30) Start       ========" << G4endl;
   G4cout << "========================================================" << G4endl;
 
+  //-----------------------------------------------------------------------------
+  // ------- Initialisation 
+
   Histo     histo;
   G4NistManager::Instance()->SetVerbose(2);
   G4String  namePart = "proton";
@@ -219,67 +222,10 @@ int main(int argc, char** argv)
 
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
-
   Test30Material*  mate = new Test30Material();
+
+  //--------- Particles definition ---------
   Test30Physics*   phys = new Test30Physics();
-
-  // Geometry
-
-  G4double dimX = 100.0*cm;
-  G4double dimY = 100.0*cm;
-  G4double dimZ = 100.0*cm;
-
-  G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
-  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
-  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
-                                            lFrame,0,false,0);
-  assert(pFrame);
-
-  // -------------------------------------------------------------------
-  // ---- Read input file
-  G4cout << "Available commands are: " << G4endl;
-  G4cout << "#events" << G4endl;
-  G4cout << "#exclusive" << G4endl;
-  G4cout << "#inclusive" << G4endl;
-  G4cout << "#logx" << G4endl;
-  G4cout << "#nbins" << G4endl;
-  G4cout << "#nbinsa" << G4endl;
-  G4cout << "#nbinse" << G4endl;
-  G4cout << "#nbinsd" << G4endl;
-  G4cout << "#nbinspi" << G4endl;
-  G4cout << "#nangle" << G4endl;
-  G4cout << "#nanglepr" << G4endl;
-  G4cout << "#nanglepi" << G4endl;
-  G4cout << "#angles" << G4endl;
-  G4cout << "#anglespr" << G4endl;
-  G4cout << "#anglespi" << G4endl;
-  G4cout << "#dangle" << G4endl;
-  G4cout << "#particle" << G4endl;
-  G4cout << "#ion Z A" << G4endl;
-  G4cout << "#Shen (use Shen cross-section)" << G4endl;
-  G4cout << "#energy(MeV)" << G4endl;
-  G4cout << "#energyg(MeV)" << G4endl;
-  G4cout << "#sigmae(MeV)" << G4endl;
-  G4cout << "#emax(MeV)" << G4endl;
-  G4cout << "#emaxpi(MeV)" << G4endl;
-  G4cout << "#elim(MeV)" << G4endl;
-  G4cout << "#ebinlog(MeV)" << G4endl;
-  G4cout << "#range(mm)" << G4endl;
-  G4cout << "#step(mm)" << G4endl;
-  G4cout << "#material" << G4endl;
-  G4cout << "#generator" << G4endl;
-  G4cout << "#paw" << G4endl;
-  G4cout << "#verbose" << G4endl;
-  G4cout << "#position(mm)" << G4endl;
-  G4cout << "#direction" << G4endl;
-  G4cout << "#time(ns)" << G4endl;
-  G4cout << "#run" << G4endl;
-  G4cout << "#exit" << G4endl;
-  G4cout << "#HETCEmission" << G4endl;
-  G4cout << "#GNASHTransition" << G4endl;
-  G4cout << "#GEMEvaporation" << G4endl;
-  G4cout << "#eBound" << G4endl;
-  G4cout << "#kBound" << G4endl;
 
   const G4ParticleDefinition* gamma = G4Gamma::Gamma();
   const G4ParticleDefinition* proton = G4Proton::Proton();
@@ -293,10 +239,28 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
+  assert(ion);
+
+  //--------- Geometry definition
+
+  G4double dimX = 100.0*cm;
+  G4double dimY = 100.0*cm;
+  G4double dimZ = 100.0*cm;
+
+  G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
+                                            lFrame,0,false,0);
+  assert(pFrame);
+
+  // -------------------------------------------------------------------
+  // -------- Loop over run
 
   G4String line, line1;
   G4bool end = true;
   for(G4int run=0; run<100; run++) {
+
+    // ---- Read input file
     do {
       (*fin) >> line;
       G4cout << "Next line " << line << G4endl;
@@ -415,14 +379,17 @@ int main(int argc, char** argv)
 
     if(!end) break;
 
+    // -------------------------------------------------------------------
+    // -------- Start run processing
+
     G4StateManager* g4State=G4StateManager::GetStateManager();
     if (! g4State->SetNewState(G4State_Init)) 
       G4cout << "error changing G4state"<< G4endl;;   
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
-
-    if ( ionParticle ) energy*=ionA;
     
+    // -------- Target 
+
     material = mate->GetMaterial(nameMat);
     if(!material) {
       G4cout << "Material <" << nameMat
@@ -435,6 +402,10 @@ int main(int argc, char** argv)
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
 
+    // -------- Projectile
+
+    if ( ionParticle ) energy*=ionA;
+
     G4ParticleDefinition* part(0);
     if (!ionParticle) {
       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
@@ -446,6 +417,10 @@ int main(int argc, char** argv)
 	     << " found" << G4endl;
       G4Exception(" ");  
     }
+    G4DynamicParticle dParticle(part,aDirection,energy);
+
+    // ------- Select model
+
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
     G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
     G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
@@ -464,6 +439,8 @@ int main(int argc, char** argv)
 	     << G4endl;
 	     exit(1);
     }
+
+    // ------- Binning 
 
     G4int maxn = A + 1;
 
@@ -494,6 +471,8 @@ int main(int argc, char** argv)
     G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
     G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
     G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
+
+    // ------- Histograms
 
     if(usepaw && !isInitH) {
 
@@ -596,8 +575,8 @@ int main(int argc, char** argv)
 	     << G4endl;
     }
 
-    // Create a DynamicParticle
-    G4DynamicParticle dParticle(part,aDirection,energy);
+    // -------- Normalisation
+
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
@@ -653,7 +632,8 @@ int main(int argc, char** argv)
            << "### factorb = " << factorb
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
-    // Limit number of angles
+    // -------- Limit number of angles
+
     if(nangl   > 13) nangl   = 13;
     if(nanglpr > 11) nanglpr = 11;
     if(nanglpi >  5) nanglpi = 5;
@@ -727,10 +707,13 @@ int main(int argc, char** argv)
       }
     }
 
+    // -------- Track
+
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
-    // Step
+    // -------- Step
+
     G4Step* step;
     step = new G4Step();
     step->SetTrack(gTrack);
@@ -769,6 +752,8 @@ int main(int argc, char** argv)
     G4double e, p, m, px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
     G4int warn = 0;
+
+    // -------- Event loop
 
     for (G4int iter=0; iter<nevt; iter++) {
 
@@ -981,7 +966,8 @@ int main(int argc, char** argv)
     G4cout << "  "  << *timer << G4endl;
     delete timer;
 
-    // Committing the transaction with the tree
+    // -------- Committing the transaction with the tree
+
     if(usepaw) {
       G4cout << "###### Save histograms" << G4endl;
       histo.save();
