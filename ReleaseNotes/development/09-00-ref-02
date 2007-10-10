@@ -1,0 +1,248 @@
+
+                       geant4-09-00-ref-02
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o First implementation of interactive parallel world scoring.
+ o Revisions to G4PathFinder and transportation classes to resolve stability
+    issues affecting transportation on parallel geometries.
+ o Reviewed implementation of G4TessellatedSolid for proper handling of
+   concave surfaces.
+ o Implemented checking of process ordering at initialisation.
+ o Introduced treatment of hyper-nuclei for particles.
+ o Introduced single-target diffraction in CHIPS.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+digits_hits                                      digits_hits-V09-00-02
+-----------
+- First implementation of interactive parallel world scoring.
+- Introducing 3D scorers to be used in command-base scoring.
+
+error_propagation                                error_propagation-V09-00-01
+-----------------
+- G4ErrorFreeTrajState: corrected bug in one of the transformation matrix
+  terms. Addresses problem report #971.
+- G4ErrorFreeTrajParam: corrected normalization of Y and Z coordinates.
+
+event                                            event-V09-00-01
+-----
+- Added class member 'particle_momentum' and method SetParticleMomentum().
+- Added UI commands "/gun/momentum" and "/gun/momentumAmp"; for example:
+  /gun/momentumAmp 1.0 GeV (not GeV/c)!
+
+geometry/magneticfield                           field-V09-00-02
+----------------------
+- New class G4EqEMFieldWithSpin to allow tracking of spin also in case of
+  electromagnetic fields.
+
+geometry/navigation                              geomnav-V09-00-02
+-------------------
+- G4PathFinder:
+  o Make singleton definition canonical.
+  o New method to return the safety sphere last calculated for a PreStep
+    point. If last step(s) were smaller than safety, then for a linear
+    track (no field or no charge) navigator's ComputeSafety() is not
+    called. Older PreStep point is stored for this and provided.
+  o Fixed return value for ComputeStep() in case of step smaller than
+    tolerance (now kInfinity).
+  o Added calculation of start-point safety in DoNextCurvedStep().
+    and corrected GetCurrentSafety() accordingly.
+  o Added method to obtain safety of one navigator (after call to all).
+  o Deleted obsolete data member 'fMinSafety'.
+  o Optimisation: if only one geometry, do not call WhichLimited() in
+    DoNextLinearStep(). DoNextLinearStep() also only calls ComputeStep()
+    for a navigator whose safety greater than the step; if there's one
+    geometry, no longer calls ComputeSafety() at start.
+  o ComputeSafety(): save the values of isotropic safety for each navigator.
+  o Fix for result of ObtainSafety(), used in G4CoupledTransportation.
+  o Some code cleanup. Switched off additional optimisation for safety
+    in method DoNextLinearStep().
+  o PrepareNewTrack() clears safety to avoid potential problems in overlaps.
+    Added calls to re-initialise SafetyHelper (reset safety).
+- G4Navigator:
+  o Corrected calculation of 'fStepEndPoint' in ComputeStep()
+    for case of step not limited by geometry.
+  o Replaced call to LocateGlobalPointWithinVolume() with calls to
+    sub-navigators.
+  o Made 'fVerbose' protected.
+- Protected verbosity with compiler flags in G4PathFinder and G4MultiNavigator.
+- Set 'fRecomputeFactor' in G4SafetyHelper to 0.0, to switch off internal
+  optimisation and allow for reproducibility of steps.
+- Added method CheckPointExiting() in G4AuxiliaryNavServices utility class.
+- Reuse 'fVerbose' from G4Navigator in G4MultipleNavigator and some cleanup.
+
+geometry/solids/CSG                              geom-csg-V09-00-01
+-------------------
+- G4Torus:
+  o Fixed bug in CalculateExtent() for case of non-rotated full-phi
+    torus definition: added protection against negative value for sqrt()
+    and corrected formula for 'delta'. Fixes problem of NaN detected in
+    initialisation by CMS.
+  o Fixed bug in SolveNumericJT(): corrected handling of complex roots,
+    'rootsrefined' is used only if the number of refined roots is the same
+    as for primary roots. Addresses problem report #969.
+
+geometry/solids/specific                         geom-specific-V09-00-06
+------------------------
+- Revision of G4TessellatedSolid classes:
+  o Fixed problem report #931. Modified classes G4TessellatedSolid and
+    G4TriangularFacet.
+  o Modified data and accessor 'centroid' and 'GetCentroid()' for G4VFacet;
+    replaced by 'circumcentre' and 'GetCircumcentre()' respectively.
+  o Added utility class G4TessellatedGeometryAlgorithms.
+- Removed debug printout in G4Polycone::GetPointOnCone().
+- Added formulas for calculating SemiAxis and Zheight in G4EllipticalCone.
+
+materials                                        materials-V09-00-04
+---------
+- G4SandiaTable:
+  o Separated computations of tables photo-absobtion coefficients for
+    photo-electric effect and PAI model; added 'fMatSandiaMatrixPAI' ordered
+    table; general cleanup and reduced number of static variables.
+  o fixed memory leak at destruction.
+- G4IonisParamMat: added commutation and accessor methods for parameters of
+  ion ionisation: Fermi energy, effective Z, effective L-factor; values will
+  not be recomputed at each step.
+
+particles                                        particles-V09-00-01
+---------
+- Added G4HyperNucleiProperties class. Added GetIon() and FindIon() methods
+  for hyper-nuclei in G4ParticleTable. Modified G4PDGCodeChecker to check
+  for PDG code of nuclei.
+- Added units in messages printed out.
+
+physics_lists                                    phys-lists-V09-00-00
+-------------
+- G4EmStandardPhysics_option2: increased number of bins in tables.
+
+processes/electromagnetic/polarisation           empolar-V09-00-01
+--------------------------------------
+- G4eplusPolarizedAnnihilation: enabled AtRest.
+
+processes/electromagnetic/standard               emstand-V09-00-12
+----------------------------------
+- G4eCoulombScatteringModel, G4CoulombScatteringModel:
+  o Added cut dependence for scattering off electrons.
+  o Reorganized protected methods.
+- G4eplusAnnihilation: enabled AtRest.
+- G4IonFluctuations: added dependence on cut in the formula of width on cut;
+  reduces cut dependence of the Bragg peak width for ions; use Fermi energy
+  from G4Material.
+- G4BohrFluctuations: minor cleanup.
+- G4PAIySection: new class which substitutes G4PAIxSection, fixing
+  memory leak problems.
+- G4PAIphotonModel, G4PAIModel:
+  o Fixed MaxSecondaryEnergy() method for e- and e+ and use it for
+    definition of max energy transfer; protected printouts by verbosity flag.
+  o General cleanup and fixed memory leak in G4PAIModel.
+
+processes/electromagnetic/utils                  emutils-V09-00-10
+-------------------------------
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering:
+  o Fixed memory leak at destruction; proper deletion of G4PhysicsTables.
+  o Moved virtual function PostStepGetPhysicalInteractionLength() from
+    inline to body of classes.
+  o Fixed handling zero cross section in PostStepGetPhysicalInteractionLength()
+    method to avoid problem happening in FanoCavity example when cross section
+    inside cavity is zero.
+- G4VEmModel: compare cross section with DBL_MIN instead of zero.
+- G4VEmProcess: use cut in PostStepDoIt (before was zero).
+- G4ionEffectiveCharge: use Fermi energy from G4Material and not
+  recalculate it at each step; reorganized formulas: less calls to
+  mathematical functions.
+
+processes/electromagnetic/xrays                  xrays-V09-00-01
+-------------------------------
+- G4VXTRenergyLoss: general cleanup of old comments; removed all static
+  members; protect verbosity within flag.
+- G4XTRTransparentRegRadModel, G4XTRRegularRadModel, G4StrawTubeXTRadiator:
+  cleanup; protect verbosity within flag.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-00-08)
+  o Introducing Single Target Diffraction.
+  o More accurate decay transition from G4QEnvironment to G4QNucleus.
+    Fixed compilation warning in G4QNucleus and cleanup in G4QEnvironment.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-00-07)
+  o Introducing Single Target Diffraction.
+  o Added (e,nu) reaction to G4QCollision and weight support in all CHIPS
+    processes.
+- models/im_r_matrix (hadr-im_r_V09-00-02)
+  o Incorporated changes for G4CollisionComposite: fixed SUN compiler
+    warnings of hiding variable components.
+- models/neutron_hp (hadr-hpn-V09-00-02)
+  o Allow for _nat_ final state even for isotoped cross sections.
+  o Enabled element based cross-section dump.
+- models/stopping (hadr-stopping-V09-00-02)
+  o G4StopElementSelector: fixed typo in Primakoff formula for capture
+    velocity.
+
+processes/management                             procman-V09-00-01
+--------------------
+- Added CheckOrderingParameters() method to G4ProcessManager.
+  Added DoItIsEnabled methods in G4VProcess and derived classes.
+- Removed double definition of PreparePhysicsTable() in G4WrapperProcess.
+
+processes/transportation                         transport-V09-00-02
+------------------------
+- G4CoupledTransportation:
+  o First fix for problem in condition for relocating when only a parallel 
+    geometry limited the step.  
+  o Changed condition for recalculation of the safety used, as currently
+    it improves stability.
+  o Corrected treatment of time integration.
+  o Use momentum change flag in particle-change (optimisation).
+  o Also reset looping counter when no field or charge is present.
+  o Fix for case of zero proposed step: missed to set end position.
+- G4Transportation:
+  o Modification to disable 'optimisation' in G4Navigator for small linear
+    step  (i.e. when a track does less than the safety); the fix is
+    relevant only if there is no field, or the particle is neutral;
+    temporary measure (in current form) to improve comparison of old and
+    new transportation classes.
+  o Fixed StartTracking() to reset number of looping steps and 
+    to clear propagator state (safety issue in case of overlaps).
+
+run                                              run-V09-00-02
+---
+- First implementation of interactive parallel world scoring.
+- G4VUserPhysicsList::AddTransportation() temporarily checks the
+  existance of G4ScoringManager instance.
+
+track                                            track-V09-00-02
+-----
+- Added protection in G4Track::GetVolume() to avoid cases of dereferencing
+  of null pointer.
+
+tracking                                         tracking-V09-00-01
+--------
+- G4SteppingManager: fix to use Cartesian tolerance in Stepping() and
+  CalculateSafety() for the computation of 'endPointSafety'.
+
+examples                                         examples-V09-00-02
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm8 (testem8-V09-00-04)
+  o Fixed memory leak in the UI interface.
+  o Removed used lines from PAI physics constructors, added "pai_brem"
+    constructor PhysListEmPAI in which AlongStep from bremsstrahlung 
+    is allowed.
+- extended/medical/fanoCavity (fano-V09-00-04)
+  o DetectorConstruction: 'wallRadius' automatically recomputed; added
+    materials graphite and aluminium.
+  o PhysicsList: implemented G4CoulombScattering process as option; use
+    100 bins per decade (emOptions) in physics tables.
+  o MyKleinNishina: do not cancel Compton cross-section in cavity.
+
+tests                                            tests-V09-00-02
+-----
+- Updated reference outputs and tools.
+- test37 (test37-V09-00-01)
+- test41 (test41-V09-00-03)
+  o Use sub-cutoff options for standardSS and standardIG physics.
