@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.cc,v 1.3 2007-10-11 08:15:37 gcosmo Exp $ 
+// $Id: G4InclCascadeInterface.cc,v 1.4 2007-10-11 08:20:08 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -280,9 +280,9 @@ G4HadFinalState* G4InclCascadeInterface::ApplyYourself(const G4HadProjectile& aT
     for(particleI = 0; particleI < varntp->ntrack; particleI++) {
       // Get energy/momentum and construct momentum vector:
       // In INCL4 coordinates!
-      momx = varntp->plab[particleI]*std::cos(varntp->tetlab[particleI]*M_PI/180.0)*std::sin(varntp->philab[particleI]*M_PI/180.0)*MeV;
-      momy = varntp->plab[particleI]*std::sin(varntp->tetlab[particleI]*M_PI/180.0)*std::sin(varntp->philab[particleI]*M_PI/180.0)*MeV;
-      momz = varntp->plab[particleI]*std::cos(varntp->tetlab[particleI]*M_PI/180.0)*MeV;
+      momx = varntp->plab[particleI]*std::cos(varntp->tetlab[particleI]*CLHEP::pi/180.0)*std::sin(varntp->philab[particleI]*CLHEP::pi/180.0)*MeV;
+      momy = varntp->plab[particleI]*std::sin(varntp->tetlab[particleI]*CLHEP::pi/180.0)*std::sin(varntp->philab[particleI]*CLHEP::pi/180.0)*MeV;
+      momz = varntp->plab[particleI]*std::cos(varntp->tetlab[particleI]*CLHEP::pi/180.0)*MeV;
 
       eKin = varntp->enerj[particleI] * MeV;
 

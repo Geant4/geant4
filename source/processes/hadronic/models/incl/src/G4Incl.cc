@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.3 2007-10-11 08:15:37 gcosmo Exp $ 
+// $Id: G4Incl.cc,v 1.4 2007-10-11 08:20:08 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1289,7 +1289,7 @@ G4double G4Incl::deutv(G4int l, G4double q)
     }
   }
 
-  return res*std::sqrt(2./M_PI)*dton->fn; // See G4InclDataDefs.hh
+  return res*std::sqrt(2./CLHEP::pi)*dton->fn; // See G4InclDataDefs.hh
 }
 
 G4double G4Incl::fm2(G4int j)
