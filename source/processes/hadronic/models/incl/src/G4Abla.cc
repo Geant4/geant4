@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.4 2007-10-11 08:15:36 gcosmo Exp $ 
+// $Id: G4Abla.cc,v 1.5 2007-10-11 08:42:03 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -2975,8 +2975,8 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
 				 {-5.715764e4,-2.560989e5,-2.228781e5,-3.222789e3, 1.575670e4},
 				 {1.189447e4, 5.161815e4, 4.870290e4, 1.266808e4, 2.069603e3}};
 
-  for(G4int i = 0; i < sizey; i++) {
-    for(G4int j = 0; j < sizex; j++) {
+  for(i = 0; i < sizey; i++) {
+    for(j = 0; j < sizex; j++) {
       //       egscof[i][j][0] = egs1[i][j];
       //       egscof[i][j][1] = egs2[i][j];
       //       egscof[i][j][2] = egs3[i][j];
