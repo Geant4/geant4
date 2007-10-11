@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.23 2007-08-15 08:48:04 gcosmo Exp $
+# $Id: GNUmakefile,v 1.24 2007-10-11 07:29:09 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -33,6 +33,7 @@ SUBDIRS += models/de_excitation/ablation
 SUBDIRS += models/em_dissociation
 SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
+SUBDIRS += models/incl
 SUBDIRS += models/isotope_production
 SUBDIRS += models/leading_particle
 SUBDIRS += models/lll_fission
@@ -73,6 +74,7 @@ SUBLIBS +=  G4had_mod_util
 SUBLIBS +=  G4hadronic_bert_cascade
 SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
+SUBLIBS +=  G4hadronic_incl_cascade
 SUBLIBS +=  G4hadronic_body_ci
 SUBLIBS +=  G4hadronic_interface_ci
 SUBLIBS +=  G4hadronic_deex_evaporation
