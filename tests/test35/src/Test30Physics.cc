@@ -25,13 +25,14 @@
 //
 //
 // -------------------------------------------------------------
-//      GEANT 4 class 
+//      GEANT 4 class for test35
 //
 //      History: based on object model of
 //      ---------- Test30Physics -------
 //                by Vladimir Ivanchenko, 12 March 2002 
 // 
 //    Modified:
+//  11.10.2007 Added INCL cascade and RPG parameterized model (V.Ivanchenko)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,40 +48,26 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4PionZero.hh"
+#include "G4DecayPhysics.hh"
+
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
 #include "G4Proton.hh"
-#include "G4AntiProton.hh"
 #include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoE.hh"
-#include "G4AntiNeutrinoMu.hh"
 #include "G4GenericIon.hh"
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4BosonConstructor.hh"
-#include "G4LeptonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
+
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
 #include "G4LENeutronInelastic.hh"
-#include "G4LEPionPlusInelastic.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4LEProtonInelastic.hh"
+#include "G4RPGPiPlusInelastic.hh"
+#include "G4RPGPiMinusInelastic.hh"
+#include "G4RPGProtonInelastic.hh"
+#include "G4RPGNeutronInelastic.hh"
+
 #include "G4StringChipsParticleLevelInterface.hh"
 #include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
@@ -90,6 +77,8 @@
 #include "G4CascadeInterface.hh"
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
+#include "G4InclCascadeInterface.hh"
+#include "G4InclLightIonInterface.hh"
 
 #include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
@@ -118,54 +107,8 @@ Test30Physics::~Test30Physics()
 
 void Test30Physics::Initialise()
 {
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-
-	  // Strange barions
-  G4Lambda::LambdaDefinition();
-  G4AntiLambda::AntiLambdaDefinition();
-  G4SigmaZero::SigmaZeroDefinition();
-  G4AntiSigmaZero::AntiSigmaZeroDefinition();
-  G4SigmaPlus::SigmaPlusDefinition();
-  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
-  G4SigmaMinus::SigmaMinusDefinition();
-  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
-  G4XiZero::XiZeroDefinition();
-  G4AntiXiZero::AntiXiZeroDefinition();
-  G4XiMinus::XiMinusDefinition();
-  G4AntiXiMinus::AntiXiMinusDefinition();
-  G4OmegaMinus::OmegaMinusDefinition();
-  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
-
-
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-
-  G4GenericIon::GenericIonDefinition();
-  G4Deuteron::DeuteronDefinition();
-  G4Alpha::AlphaDefinition();
-  G4Triton::TritonDefinition();
+  G4DecayPhysics dp;
+  dp.ConstructParticle();
   theProcess = 0;
   theDeExcitation = 0;
   thePreCompound = 0;
@@ -214,6 +157,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "rpg") {
+    if(part_name == "proton")   
+      sg = new Test30VSecondaryGenerator(new G4RPGProtonInelastic(),mat);
+    else if(part_name == "pi+") 
+      sg = new Test30VSecondaryGenerator(new G4RPGPiPlusInelastic(),mat);
+    else if(part_name == "pi-") 
+      sg = new Test30VSecondaryGenerator(new G4RPGPiMinusInelastic(),mat);
+    else if(part_name == "neutron") 
+      sg = new Test30VSecondaryGenerator(new G4RPGNeutronInelastic(),mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "CHIPS") {
 
     sg = new Test30VSecondaryGenerator(new G4StringChipsParticleLevelInterface(),mat);
@@ -237,7 +192,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-//    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
@@ -249,6 +203,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
     hkm->SetMaxEnergy(15.*GeV);
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "incl") {
+    G4InclCascadeInterface* hkm = new G4InclCascadeInterface();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "incl_ion") {
+    G4InclLightIonInterface* hkm = new G4InclLightIonInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
