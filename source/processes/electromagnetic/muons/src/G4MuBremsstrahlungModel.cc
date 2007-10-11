@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.22 2007-05-22 17:35:58 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.23 2007-10-11 09:25:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 03-08-05 Angular correlations according to PRM (V.Ivantchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
 // 21-03-06 Fix problem of initialisation in case when cuts are not defined (VI)
+// 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 //
 
 //
@@ -87,14 +88,15 @@ using namespace std;
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  lowestKinEnergy(1.0*GeV),
-  minThreshold(1.0*keV),
-  nzdat(5),
-  ntdat(8),
-  NBIN(1000),
-  cutFixed(0.98*keV),
-  samplingTablesAreFilled(false)
+    particle(0),
+    lowestKinEnergy(1.0*GeV),
+    minThreshold(1.0*keV),
+    nzdat(5),
+    ntdat(8),
+    NBIN(1000),
+    cutFixed(0.98*keV),
+    ignoreCut(false),
+    samplingTablesAreFilled(false)
 {
   theGamma = G4Gamma::Gamma();
 
@@ -161,20 +163,23 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
       for (G4int i=0; i<numOfCouples; i++) {
         G4double cute = DBL_MAX;
         if(i < nc) cute = cuts[i];
+        if(cute < cutFixed || ignoreCut) cute = cutFixed;
         const G4MaterialCutsCouple* couple = 
-	                               theCoupleTable->GetMaterialCutsCouple(i);
+	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
 	G4DataVector* dv = ComputePartialSumSigma(material,fixedEnergy,cute);
 	partialSumSigma.push_back(dv);
       }
     }
   }
-  if(!samplingTablesAreFilled) MakeSamplingTables();
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                              (pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!samplingTablesAreFilled) {
+    MakeSamplingTables();
+    if(pParticleChange)
+      fParticleChange = 
+	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    else
+      fParticleChange = new G4ParticleChangeForLoss();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -186,10 +191,11 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (kineticEnergy <= lowestKinEnergy) return dedx;
+  if (kineticEnergy <= lowestKinEnergy || ignoreCut) return dedx;
 
   G4double tmax = kineticEnergy;
   G4double cut  = min(cutEnergy,tmax);
+  if(cut < cutFixed) cut = cutFixed;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector =
@@ -360,9 +366,9 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double)
 {
-  G4double cross = ComputeMicroscopicCrossSection (kineticEnergy,
-                                                     Z, A/(g/mole), cutEnergy);
-  return cross;
+  G4double cut  = min(cutEnergy, kineticEnergy);
+  if(cut < cutFixed || ignoreCut) cut = cutFixed;
+  return ComputeMicroscopicCrossSection (kineticEnergy, Z, A/(g/mole), cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -379,6 +385,7 @@ G4double G4MuBremsstrahlungModel::CrossSectionPerVolume(
   
   G4double tmax = min(maxEnergy, kineticEnergy);
   G4double cut  = min(cutEnergy, tmax);
+  if(cut < cutFixed || ignoreCut) cut = cutFixed;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector =
@@ -500,13 +507,15 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 						const G4MaterialCutsCouple* couple,
 						const G4DynamicParticle* dp,
-						G4double tmin,
+						G4double minEnergy,
 						G4double maxEnergy)
 {
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
+  G4double tmin = min(kineticEnergy, minEnergy);
+  if(tmin < cutFixed || ignoreCut) tmin = cutFixed;
   if(tmin >= tmax) return;
 
   static const G4double ysmall = -100. ;
@@ -606,7 +615,7 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   partDirection *= totalMomentum;
   partDirection -= gEnergy*gDirection;
-  partDirection = partDirection.unit();
+  partDirection  = partDirection.unit();
 
   // primary change
   kineticEnergy -= gEnergy;
