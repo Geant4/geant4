@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-00-03  11 October 2007 V.Ivanchenko
+- add INCL and RPG models
+
 test30-V09-00-02  14 August 2007 V.Ivanchenko
 - test30 - fix end of run
 - Histo - fix destructor

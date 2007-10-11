@@ -25,13 +25,14 @@
 //
 //
 // -------------------------------------------------------------
-//      GEANT 4 class 
+//      GEANT 4 class for test30
 //
 //      History: based on object model of
 //      ---------- Test30Physics -------
 //                by Vladimir Ivanchenko, 12 March 2002 
 // 
 //    Modified:
+//  11.10.2007 Added INCL cascade and RPG parameterized model (V.Ivanchenko)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,7 +74,8 @@
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
-//#include "G4InclCascadeInterface.hh"
+#include "G4InclCascadeInterface.hh"
+#include "G4InclLightIonInterface.hh"
 #include "G4WilsonAbrasionModel.hh"
 
 #include "G4TheoFSGenerator.hh"
@@ -273,8 +275,13 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "incl") {
-    G4CascadeInterface* hkm = new G4CascadeInterface();
-    //    G4InclCascadeInterface* hkm = new G4InclCascadeInterface();
+    G4InclCascadeInterface* hkm = new G4InclCascadeInterface();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "incl_ion") {
+    G4InclLightIonInterface* hkm = new G4InclLightIonInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
