@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.10 2007-07-23 11:37:58 ahoward Exp $
+// $Id: G4PreCompoundModel.cc,v 1.11 2007-10-11 14:19:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -86,7 +86,8 @@ G4HadFinalState * G4PreCompoundModel::ApplyYourself(const G4HadProjectile & theP
   
   // Number of Charged Excited Particles
   // JMQ/AH modify number of charged particles with probability of the Z/A ratio of the nucleus:
-  if(G4UniformRand() <= aZ/anA) 
+  //  if(G4UniformRand() <= aZ/anA) BUG! - integer arithmetic
+  if(G4UniformRand() <= (static_cast<G4double>(aZ))/(static_cast<G4double>(anA))) 
       anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 1);
   else
       anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01));
