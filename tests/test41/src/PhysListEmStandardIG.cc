@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.3 2007-10-06 17:55:52 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.4 2007-10-11 14:51:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,14 +86,14 @@ void PhysListEmStandardIG::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4eIonisation,        -1, 1,1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2,2);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("eCoulombScat"));
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eIonisation,        -1, 1,1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2,2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering("CoulombScat"));
+      pmanager->AddDiscreteProcess(new G4CoulombScattering("eCoulombScat"));
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
