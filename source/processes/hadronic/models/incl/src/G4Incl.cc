@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.5 2007-10-11 08:50:23 gcosmo Exp $ 
+// $Id: G4Incl.cc,v 1.6 2007-10-11 08:55:47 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -3389,7 +3389,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(verboseLevel > 3) {
     G4cout <<"next = " << next << G4endl;
   }
-  
+/*  
   if(isnan(tau)) {
     G4cout <<"G4Incl error: Smallest possitle time is NaN!" << G4endl;
      nopart = -1;
@@ -3397,7 +3397,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
      exit(0);
      goto pnureturn; // reject this event and try again
   }
-  
+*/
  pnu448:
   imin = indic[next];
   l1 = bl2->ind[imin];
@@ -3822,12 +3822,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"End of collis call" << G4endl;
     G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
     G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
-    if(isnan(bl1->eps[l1]) || isnan(bl1->eps[l2])) {
-      G4cout <<"Fatal error: NaN enocuntered!" << G4endl;
-      G4cout <<"bl1->eps[" << l1 << "] = " << bl1->eps[l1] << G4endl;
-      G4cout <<"bl1->eps[" << l2 << "] = " << bl1->eps[l2] << G4endl;
-      exit(0);
-    }
+//    if(isnan(bl1->eps[l1]) || isnan(bl1->eps[l2])) {
+//      G4cout <<"Fatal error: NaN enocuntered!" << G4endl;
+//      G4cout <<"bl1->eps[" << l1 << "] = " << bl1->eps[l1] << G4endl;
+//      G4cout <<"bl1->eps[" << l2 << "] = " << bl1->eps[l2] << G4endl;
+//      exit(0);
+//    }
   }
   
   if(verboseLevel > 3) {
@@ -5350,11 +5350,11 @@ pnu255:
   // deutons ajout beproj ?????? on retire beproj (18/06/2002 ab cv)
   // eh5=erem-efer-beproj+(ia2-irem)*tf
   eh5 = erem - efer + (bl3->ia2 - irem)*tf;
-  if(isnan(eh5)) {
-    if(verboseLevel > 1) {
-      G4cout <<"G4Incl: Warning! variable eh5 used in excitation energy calculation has value NaN!" << G4endl;
-    }
-  }
+//  if(isnan(eh5)) {
+//    if(verboseLevel > 1) {
+//      G4cout <<"G4Incl: Warning! variable eh5 used in excitation energy calculation has value NaN!" << G4endl;
+//    }
+//  }
   if (eh5 < 0.0) {
     eh5 = 0.00000001;
   }
@@ -6303,12 +6303,12 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   
   hel = 0.0;                                                       
   w1 = q1*q1 + q2*q2 + q3*q3;
-  if(isnan(w1)) {
-    G4cout <<"q1 = " << q1 << " q2 = " << q2 << " q3 = " << q3 << " wq = " << wq << G4endl;
-    G4cout <<"w1 = " << w1 << G4endl;
-    G4cout <<"x2 = " << x2 << G4endl;
-    // assert(isnan(w1) == false);
-  }
+//  if(isnan(w1)) {
+//    G4cout <<"q1 = " << q1 << " q2 = " << q2 << " q3 = " << q3 << " wq = " << wq << G4endl;
+//    G4cout <<"w1 = " << w1 << G4endl;
+//    G4cout <<"x2 = " << x2 << G4endl;
+//    assert(isnan(w1) == false);
+//  }
   assert((w1 + x2*x2) >= 0);
   wq = std::sqrt(w1 + x2*x2);
   p1 = -q1;
@@ -6426,16 +6426,16 @@ void G4Incl::newt(G4int l1, G4int l2)
       goto newt60;
     }
     E=am(bl1->p1[ig]+bl1->p1[id],bl1->p2[ig]+bl1->p2[id],bl1->p3[ig]+bl1->p3[id],bl1->eps[ig]+bl1->eps[id]);
-    if(isnan(E)) {
-      G4cout <<"E = " << E << G4endl;
-      G4cout <<"ig = " << ig << G4endl;
-      G4cout <<"p1[ig] = " << bl1->p1[ig] << " p2[ig] = " << bl1->p2[ig] << " p3[ig] = " << bl1->p3[ig] << " eps[ig] = " << bl1->eps[ig] << G4endl;
-      G4cout <<"id = " << id << G4endl;
-      G4cout <<"p1[id] = " << bl1->p1[id] << " p2[id] = " << bl1->p2[id] << " p3[id] = " << bl1->p3[id] << " eps[id] = " << bl1->eps[id] << G4endl;
+//    if(isnan(E)) {
+//      G4cout <<"E = " << E << G4endl;
+//      G4cout <<"ig = " << ig << G4endl;
+//      G4cout <<"p1[ig] = " << bl1->p1[ig] << " p2[ig] = " << bl1->p2[ig] << " p3[ig] = " << bl1->p3[ig] << " eps[ig] = " << bl1->eps[ig] << G4endl;
+//      G4cout <<"id = " << id << G4endl;
+//      G4cout <<"p1[id] = " << bl1->p1[id] << " p2[id] = " << bl1->p2[id] << " p3[id] = " << bl1->p3[id] << " eps[id] = " << bl1->eps[id] << G4endl;
 //       ofstream out("newtDump.out");
 //       dumpBl1(out);
 //       out.close();
-    }
+//    }
     
     // assert(isnan(E) == false);
     if (E < 1925.0) {
@@ -7521,9 +7521,9 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
     sig = dp0;
   }
 
-  if(isnan(sig)) {
-    sig = 0.0;
-  }
+//  if(isnan(sig)) {
+//    sig = 0.0;
+//  }
 
   return sig;
 }
