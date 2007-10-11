@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.3 2007-10-11 08:08:38 gcosmo Exp $ 
+// $Id: G4Abla.cc,v 1.4 2007-10-11 08:15:36 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -190,8 +190,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   varntp->ntrack = 0;
   volant->iv = 0;
   
-  G4double pcorem = sqrt(erecrem*(erecrem +2.*938.2796*nucleusA));
-    // G4double pcorem = sqrt(pow(momX,2) + pow(momY,2) + pow(momZ,2));
+  G4double pcorem = std::sqrt(erecrem*(erecrem +2.*938.2796*nucleusA));
+    // G4double pcorem = std::sqrt(std::pow(momX,2) + std::pow(momY,2) + std::pow(momZ,2));
     // assert(isnan(pcorem) == false);
   if(esrem >= 1.0e-3) { //then	       
     //   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
@@ -237,7 +237,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     remmass = mcorem  + double(esrem);			// ok
     remmass = mcorem;					//cugnon
     G4double gamrem = (remmass + trem)/remmass;
-    G4double etrem = sqrt(trem*(trem + 2.0*remmass))/remmass;
+    G4double etrem = std::sqrt(trem*(trem + 2.0*remmass))/remmass;
     // assert(isnan(etrem) == false);
     //  This is not treated as accurately as for the non fission case for which
     //  the remnant mass is computed to satisfy the energy conservation 
@@ -248,7 +248,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     mglms(aprf,zprf,0,&el);
     remmass = zprf*fmp + (aprf-zprf)*fmn + el + double(esrem);
 
-    gamrem = sqrt(pow(pcorem,2) + pow(remmass,2))/remmass;
+    gamrem = std::sqrt(std::pow(pcorem,2) + std::pow(remmass,2))/remmass;
     // assert(isnan(gamrem) == false);
     etrem = pcorem/remmass;
     // assert(isnan(etrem) == false);
@@ -282,7 +282,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       // assert(isnan(el) == false);
       masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el;
       // assert(isnan(masse) == false);
-      bil_e = bil_e + sqrt(pow(volant->pcv[iloc],2) + pow(masse,2));
+      bil_e = bil_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
       // assert(isnan(bil_e) == false); 
       bil_px = bil_px + volant->pcv[iloc]*(volant->xcv[iloc]);
       bil_py = bil_py + volant->pcv[iloc]*(volant->ycv[iloc]);
@@ -322,14 +322,14 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     G4cout <<"Fragment2: A = " << aff2 << " Z = " << zff2 << G4endl;
     //    exit(0);
     // C verif des A et Z decimaux:
-    G4int na_f = int(floor(af + 0.5));
-    G4int nz_f = int(floor(zf + 0.5));
+    G4int na_f = int(std::floor(af + 0.5));
+    G4int nz_f = int(std::floor(zf + 0.5));
     varntp->izfis = nz_f;   // copie dans le ntuple
     varntp->iafis = na_f;
-    G4int na_pf1 = int(floor(aff1 + 0.5));
-    G4int nz_pf1 = int(floor(zff1 + 0.5));  
-    G4int na_pf2 = int(floor(aff2 + 0.5));
-    G4int nz_pf2 = int(floor(zff2 + 0.5));
+    G4int na_pf1 = int(std::floor(aff1 + 0.5));
+    G4int nz_pf1 = int(std::floor(zff1 + 0.5));  
+    G4int na_pf2 = int(std::floor(aff2 + 0.5));
+    G4int nz_pf2 = int(std::floor(zff2 + 0.5));
 
     if((na_f != (na_pf1+na_pf2)) || (nz_f != (nz_pf1+nz_pf2))) {
       G4cout <<"problemes arrondis dans la fission " << G4endl;
@@ -373,7 +373,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     } //endif
     G4double t1 = b*(b + 2.0*masse2)/(2.0*massef);
     // assert(isnan(t1) == false);
-    G4double p1 = sqrt(t1*(t1 + 2.0*masse1));
+    G4double p1 = std::sqrt(t1*(t1 + 2.0*masse1));
     // assert(isnan(p1) == false);
     
     G4double rndm;
@@ -383,10 +383,10 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     phi1 = rndm*2.0*3.141592654;
            
     // C ----Coefs de la transformation de Lorentz (noyau de fission -> Remnant) 
-    G4double peva = pow(pxeva,2) + pow(pyeva,2) + pow(pleva,2);
-    G4double gamfis = sqrt(pow(massef,2) + peva)/massef;
+    G4double peva = std::pow(pxeva,2) + std::pow(pyeva,2) + std::pow(pleva,2);
+    G4double gamfis = std::sqrt(std::pow(massef,2) + peva)/massef;
     // assert(isnan(gamfis) == false);
-    peva = sqrt(peva);
+    peva = std::sqrt(peva);
     // assert(isnan(peva) == false);
     G4double etfis = peva/massef;
       
@@ -395,7 +395,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 
     // C ----Matrice de rotation (noyau de fission -> Remnant)
     if(peva >= 1.0e-4) {
-      sitet = sqrt(pow(pxeva,2)+pow(pyeva,2))/peva;
+      sitet = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2))/peva;
       // assert(isnan(sitet) == false);
     }
     if(sitet > 1.0e-5) { //then
@@ -453,7 +453,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       volant->zpcv[volant->iv] = zf1;
       G4cout <<"Added fission fragment: a = " << volant->acv[volant->iv] << " z = " << volant->zpcv[volant->iv] << G4endl;
       //      exit(0);
-      peva = sqrt(pow(ffpxeva1,2) + pow(ffpyeva1,2) + pow(ffpleva1,2));
+      peva = std::sqrt(std::pow(ffpxeva1,2) + std::pow(ffpyeva1,2) + std::pow(ffpleva1,2));
       // assert(isnan(peva) == false);
       volant->pcv[volant->iv] = peva;
       if(peva > 0.001) { // then
@@ -477,7 +477,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	mglms(volant->acv[iloc], volant->zpcv[iloc],0,&el);
        	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
 	// assert(isnan(masse) == false);
- 	bil1_e = bil1_e + sqrt(pow(volant->pcv[iloc],2) + pow(masse,2));
+ 	bil1_e = bil1_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
 	// assert(isnan(bil1_e) == false);
  	bil1_px = bil1_px + volant->pcv[iloc]*(volant->xcv[iloc]);
  	bil1_py = bil1_py + volant->pcv[iloc]*(volant->ycv[iloc]);
@@ -529,7 +529,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       volant->acv[volant->iv] = af2;
       volant->zpcv[volant->iv] = zf2; 
       G4cout <<"Added fission fragment: a = " << volant->acv[volant->iv] << " z = " << volant->zpcv[volant->iv] << G4endl;
-      peva = sqrt(pow(ffpxeva2,2) + pow(ffpyeva2,2) + pow(ffpleva2,2));
+      peva = std::sqrt(std::pow(ffpxeva2,2) + std::pow(ffpyeva2,2) + std::pow(ffpleva2,2));
       // assert(isnan(peva) == false);
       volant->pcv[volant->iv] = peva;
       //      exit(0);
@@ -552,7 +552,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       for(G4int iloc = nbpevap + 1; iloc <= volant->iv; iloc++) { //do iloc=nbpevap+1,iv
 	mglms(volant->acv[iloc],volant->zpcv[iloc],0,&el);
       	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
-	bil2_e = bil2_e + sqrt(pow(volant->pcv[iloc],2) + pow(masse,2));
+	bil2_e = bil2_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
 	// assert(isnan(bil2_e) == false);
 	bil2_px = bil2_px + volant->pcv[iloc]*(volant->xcv[iloc]);
 	bil2_py = bil2_py + volant->pcv[iloc]*(volant->ycv[iloc]);
@@ -564,11 +564,11 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double t2 = b - t1;
       //      G4double ctet2 = -ctet1;
       ctet2 = -1.0*ctet1;
-      assert(fabs(ctet2) <= 1.0);
+      assert(std::fabs(ctet2) <= 1.0);
       // assert(isnan(ctet2) == false);
       phi2 = dmod(phi1+3.141592654,6.283185308);
       // assert(isnan(phi2) == false);
-      G4double p2 = sqrt(t2*(t2+2.0*masse2));
+      G4double p2 = std::sqrt(t2*(t2+2.0*masse2));
       // assert(isnan(p2) == false);
       
       //   void translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet1,
@@ -609,24 +609,24 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     lorab(gamfis,etfis,massef,pfis_rem,&efis_rem,pfis_trav);
     rotab(R,pfis_trav,pfis_rem);
       
-    stet1 = sqrt(1.0 - pow(ctet1,2));
+    stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
     // assert(isnan(stet1) == false);
-    pf1_rem[1] = p1*stet1*cos(phi1);
-    pf1_rem[2] = p1*stet1*sin(phi1);
+    pf1_rem[1] = p1*stet1*std::cos(phi1);
+    pf1_rem[2] = p1*stet1*std::sin(phi1);
     pf1_rem[3] = p1*ctet1;
     G4double e1_rem;
     lorab(gamfis,etfis,masse1+t1,pf1_rem,&e1_rem,pfis_trav);
     rotab(R,pfis_trav,pf1_rem);
 
-    stet2 = sqrt(1.0 - pow(ctet2,2));
-    assert(pow(ctet2,2) >= 0.0);
-    assert(pow(ctet2,2) <= 1.0);
+    stet2 = std::sqrt(1.0 - std::pow(ctet2,2));
+    assert(std::pow(ctet2,2) >= 0.0);
+    assert(std::pow(ctet2,2) <= 1.0);
     // assert(isnan(stet2) == false);
     
     G4double pf2_rem[4];
     G4double e2_rem;
-    pf2_rem[1] = p2*stet2*cos(phi2);
-    pf2_rem[2] = p2*stet2*sin(phi2);
+    pf2_rem[1] = p2*stet2*std::cos(phi2);
+    pf2_rem[2] = p2*stet2*std::sin(phi2);
     pf2_rem[3] = p2*ctet2;
     lorab(gamfis,etfis,masse2+t2,pf2_rem,&e2_rem,pfis_trav);
     rotab(R,pfis_trav,pf2_rem);
@@ -648,11 +648,11 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double bil_py_pf1 = pf1_rem[2]; 
       G4double bil_pz_pf1 = pf1_rem[3];
       for(G4int ipf1 = lmi_pf1; ipf1 <= lma_pf1; ipf1++) { //do ipf1=lmi_pf1,lma_pf1
-	bil_e_pf1 = bil_e_pf1 - (pow(varntp->plab[ipf1],2) + pow(varntp->enerj[ipf1],2))/(2.0*(varntp->enerj[ipf1]));
-	cst = cos(varntp->tetlab[ipf1]/57.2957795);
-	sst = sin(varntp->tetlab[ipf1]/57.2957795);
-	csf = cos(varntp->philab[ipf1]/57.2957795);
-	ssf = sin(varntp->philab[ipf1]/57.2957795);
+	bil_e_pf1 = bil_e_pf1 - (std::pow(varntp->plab[ipf1],2) + std::pow(varntp->enerj[ipf1],2))/(2.0*(varntp->enerj[ipf1]));
+	cst = std::cos(varntp->tetlab[ipf1]/57.2957795);
+	sst = std::sin(varntp->tetlab[ipf1]/57.2957795);
+	csf = std::cos(varntp->philab[ipf1]/57.2957795);
+	ssf = std::sin(varntp->philab[ipf1]/57.2957795);
 	bil_px_pf1 = bil_px_pf1 - varntp->plab[ipf1]*sst*csf;
 	bil_py_pf1 = bil_py_pf1 - varntp->plab[ipf1]*sst*ssf;
 	bil_pz_pf1 = bil_pz_pf1 - varntp->plab[ipf1]*cst;		 
@@ -665,11 +665,11 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double bil_py_pf2 = pf2_rem[2]; 
       G4double bil_pz_pf2 = pf2_rem[3];
       for(G4int ipf2 = lmi_pf2; ipf2 <= lma_pf2; ipf2++) { //do ipf2=lmi_pf2,lma_pf2
-	bil_e_pf2 = bil_e_pf2 - (pow(varntp->plab[ipf2],2) + pow(varntp->enerj[ipf2],2))/(2.0*(varntp->enerj[ipf2]));
-	G4double cst = cos(varntp->tetlab[ipf2]/57.2957795);
-	G4double sst = sin(varntp->tetlab[ipf2]/57.2957795);
-	G4double csf = cos(varntp->philab[ipf2]/57.2957795);
-	G4double ssf = sin(varntp->philab[ipf2]/57.2957795);
+	bil_e_pf2 = bil_e_pf2 - (std::pow(varntp->plab[ipf2],2) + std::pow(varntp->enerj[ipf2],2))/(2.0*(varntp->enerj[ipf2]));
+	G4double cst = std::cos(varntp->tetlab[ipf2]/57.2957795);
+	G4double sst = std::sin(varntp->tetlab[ipf2]/57.2957795);
+	G4double csf = std::cos(varntp->philab[ipf2]/57.2957795);
+	G4double ssf = std::sin(varntp->philab[ipf2]/57.2957795);
 	bil_px_pf2 = bil_px_pf2 - varntp->plab[ipf2]*sst*csf;
 	bil_py_pf2 = bil_py_pf2 - varntp->plab[ipf2]*sst*ssf;
 	bil_pz_pf2 = bil_pz_pf2 - varntp->plab[ipf2]*cst;		 
@@ -690,7 +690,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     volant->iv = volant->iv + 1;
     volant->acv[volant->iv] = af;
     volant->zpcv[volant->iv] = zf;
-    G4double peva = sqrt(pow(pxeva,2)+pow(pyeva,2)+pow(pleva,2));
+    G4double peva = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2)+std::pow(pleva,2));
     // assert(isnan(peva) == false);
     volant->pcv[volant->iv] = peva;
     if(peva > 0.001) { //then
@@ -728,7 +728,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       //      assert(volant->zpcv[j] != 0);
       mglms(volant->acv[j],volant->zpcv[j],0,&el);
       fmcv = volant->zpcv[j]*fmp + (volant->acv[j] - volant->zpcv[j])*fmn + el;
-      e_evapo = e_evapo + sqrt(pow(volant->pcv[j],2) + pow(fmcv,2));
+      e_evapo = e_evapo + std::sqrt(std::pow(volant->pcv[j],2) + std::pow(fmcv,2));
       // assert(isnan(e_evapo) == false);
     } // enddo
 
@@ -737,7 +737,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     // C   mass of the remnant computed by pace2 + excitation energy (EE). (OK)      
     remmass = e_evapo;
       
-    G4double gamrem = sqrt(pow(pcorem,2)+pow(remmass,2))/remmass;
+    G4double gamrem = std::sqrt(std::pow(pcorem,2)+std::pow(remmass,2))/remmass;
     // assert(isnan(gamrem) == false);
     G4double etrem = pcorem/remmass;
 
@@ -1027,27 +1027,27 @@ void G4Abla::qrot(G4double z, G4double a, G4double bet, G4double sig, G4double u
 
   ucr = 40.0;
 
-  if(((fabs(bet)-1.15) < 0) || ((fabs(bet)-1.15) == 0)) {
+  if(((std::fabs(bet)-1.15) < 0) || ((std::fabs(bet)-1.15) == 0)) {
     goto qrot10;
   }
 
-  if((fabs(bet)-1.15) > 0) {
+  if((std::fabs(bet)-1.15) > 0) {
     goto qrot11;
   }
 
  qrot10:
   n = a - z;
-  dz = fabs(z - 82.0);
+  dz = std::fabs(z - 82.0);
   if (n > 104) {
-    dn = fabs(n-126.e0);
+    dn = std::fabs(n-126.e0);
   }
   else {
-    dn = fabs(n - 82.0);
+    dn = std::fabs(n - 82.0);
   }
 
   bet = 0.022 + 0.003*dn + 0.005*dz;
 
-  sig = 25.0*pow(bet,2) * sig;
+  sig = 25.0*std::pow(bet,2) * sig;
 
  qrot11:   
   ponq = (u - ucr)/dcr;
@@ -1058,7 +1058,7 @@ void G4Abla::qrot(G4double z, G4double a, G4double bet, G4double sig, G4double u
   if (sig < 1.0) {
     sig = 1.0;
   }
-  (*qr) = 1.0/(1.0 + exp(ponq)) * (sig - 1.0) + 1.0;
+  (*qr) = 1.0/(1.0 + std::exp(ponq)) * (sig - 1.0) + 1.0;
 
   if ((*qr) < 1.0) {
     (*qr) = 1.0;
@@ -1083,17 +1083,17 @@ void G4Abla::mglw(G4double a, G4double z, G4double *el)
   }
   else {
     xv = -15.56*a;
-    xs = 17.23*pow(a,(2.0/3.0));
+    xs = 17.23*std::pow(a,(2.0/3.0));
 
     if (a > 1.0) {
-      xc = 0.7*z*(z-1.0)*pow((a-1.0),(-1.e0/3.e0));
+      xc = 0.7*z*(z-1.0)*std::pow((a-1.0),(-1.e0/3.e0));
     }
     else {
       xc = 0.0;
     }
   }
 
-  xa = 23.6*(pow((a-2.0*z),2)/a);
+  xa = 23.6*(std::pow((a-2.0*z),2)/a);
   (*el) = xv+xs+xc+xa;
   return;	
 }
@@ -1212,17 +1212,17 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
 
   // myers & swiatecki droplet modell                        
   if (optxfis == 0) { //then                                            
-    fissilityResult = pow(zz,2) / aa /50.8830e0 / (1.0e0 - 1.7826e0 * pow(i,2));
+    fissilityResult = std::pow(zz,2) / aa /50.8830e0 / (1.0e0 - 1.7826e0 * std::pow(i,2));
   }
 
   if (optxfis == 1) {
     // dahlinger fit:                                          
-    fissilityResult = pow(zz,2) / aa * pow((49.22e0*(1.e0 - 0.3803e0*pow(i,2) - 20.489e0*pow(i,4))),(-1));
+    fissilityResult = std::pow(zz,2) / aa * std::pow((49.22e0*(1.e0 - 0.3803e0*std::pow(i,2) - 20.489e0*std::pow(i,4))),(-1));
   }
 
   if (optxfis == 2) {
     // dubna fit:                                              
-    fissilityResult = pow(zz,2) / aa  /(48.e0*(1.e0 - 17.22e0*pow(i,4)));
+    fissilityResult = std::pow(zz,2) / aa  /(48.e0*(1.e0 - 17.22e0*std::pow(i,4)));
   }
 
   return fissilityResult;
@@ -1454,8 +1454,8 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 4.0;
     zmoins = 2.0;
     epsiln = sba + eca;
-    assert((pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) >= 0);
-    pc = sqrt(pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) * 3.72834e3;
+    assert((std::pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) >= 0);
+    pc = std::sqrt(std::pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) * 3.72834e3;
     // assert(isnan(pc) == false);
     malpha = 4.0;
 
@@ -1473,8 +1473,8 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 1.0;
     zmoins = 1.0;
     epsiln = sbp + ecp;
-    assert((pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) >= 0);
-    pc = sqrt(pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) * 9.3827e2;
+    assert((std::pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) >= 0);
+    pc = std::sqrt(std::pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) * 9.3827e2;
     // assert(isnan(pc) == false);
     malpha = 0.0;
     // volant:
@@ -1491,8 +1491,8 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 1.0;
     zmoins = 0.0;
     epsiln = sn + ecn;
-    assert((pow((1.0 + (ecn)/9.3956e2),2) - 1.0) >= 0);
-    pc = sqrt(pow((1.0 + (ecn)/9.3956e2),2) - 1.0) * 9.3956e2;
+    assert((std::pow((1.0 + (ecn)/9.3956e2),2) - 1.0) >= 0);
+    pc = std::sqrt(std::pow((1.0 + (ecn)/9.3956e2),2) - 1.0) * 9.3956e2;
     // assert(isnan(pc) == false);
     malpha = 0.0;
   
@@ -1540,10 +1540,10 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     ctet1 = 2.0*rnd - 1.0;
     standardRandom(&rnd,&(hazard->igraine[4]));
     phi1 = rnd*2.0*3.141592654;
-    stet1 = sqrt(1.0 - pow(ctet1,2));
+    stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
     // assert(isnan(stet1) == false);
-    volant->xcv[volant->iv] = stet1*cos(phi1);
-    volant->ycv[volant->iv] = stet1*sin(phi1);
+    volant->xcv[volant->iv] = stet1*std::cos(phi1);
+    volant->ycv[volant->iv] = stet1*std::sin(phi1);
     volant->zcv[volant->iv] = ctet1;
     pxeva = pxeva - pc * volant->xcv[volant->iv];
     pyeva = pyeva - pc * volant->ycv[volant->iv];
@@ -1774,9 +1774,9 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   }
 
   // parameterisation gaimard:
-  // bp = 1.44*(zprf-1.d0)/(1.22*pow((a - 1.0),(1.0/3.0))+5.6)     
+  // bp = 1.44*(zprf-1.d0)/(1.22*std::pow((a - 1.0),(1.0/3.0))+5.6)     
   // parameterisation khs (12-99)
-  bp = 1.44*(zprf - 1.0)/(2.1*pow((a - 1.0),(1.0/3.0)) + 0.0);
+  bp = 1.44*(zprf - 1.0)/(2.1*std::pow((a - 1.0),(1.0/3.0)) + 0.0);
 
   sbp = sp + bp;
   if (a-4.0 <= 0.0) {
@@ -1787,7 +1787,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   // new effective barrier for alpha evaporation d=6.1: khs          
   // ba = 2.88d0*(zprf-2.d0)/(1.22d0*(a-4.d0)**(1.d0/3.d0)+6.1d0)
   // parametrisation khs (12-99)
-  ba = 2.88*(zprf - 2.0)/(2.2*pow((a - 4.0),(1.0/3.0)) + 0.0);
+  ba = 2.88*(zprf - 2.0)/(2.2*std::pow((a - 4.0),(1.0/3.0)) + 0.0);
 
   sba = sa + ba;
  direct30:
@@ -1857,7 +1857,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   bshell = ecld->ecfnz[in][iz];
 
   // ld saddle point deformation                                          
-  // here: beta2 = sqrt(5/(4pi)) * alpha2                                  
+  // here: beta2 = std::sqrt(5/(4pi)) * alpha2                                  
 
   // for the ground state def. 1.5d0 should be used                        
   // because this was just the factor to produce the                       
@@ -1904,7 +1904,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       iflag = iflag + 1;
       if(iflag >= 10) {
 	standardRandom(&rnd,&(hazard->igraine[5]));
-	ecp=sqrt(rnd)*(eer-sbp);
+	ecp=std::sqrt(rnd)*(eer-sbp);
 	// assert(isnan(ecp) == false);
 	goto direct2914;
       }
@@ -1950,7 +1950,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       iflag=iflag+1;
       if(iflag >= 10) {
 	standardRandom(&rnd,&(hazard->igraine[6]));
-	ecn = sqrt(rnd)*(eer-sn);
+	ecn = std::sqrt(rnd)*(eer-sn);
 	// assert(isnan(ecn) == false);
 	goto direct2915;
       }
@@ -1997,7 +1997,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       iflag=iflag+1;
       if(iflag >= 10) {
 	standardRandom(&rnd,&(hazard->igraine[7]));
-	eca=sqrt(rnd)*(eer-sba);
+	eca=std::sqrt(rnd)*(eer-sba);
 	// assert(isnan(eca) == false);
 	goto direct2916;
       }
@@ -2050,9 +2050,9 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   if ( densg > 0.e0) {
     // calculation of the partial decay width                                
     // used for both the time scale and the evaporation decay width
-    gp = (pow(a,(2./3.))/fiss->akap)*densp/densg/pi*pow(pt,2);
-    gn = (pow(a,(2./3.))/fiss->akap)*densn/densg/pi*pow(nt,2);
-    ga = (pow(a,(2./3.))/fiss->akap)*densa/densg/pi*2.0e0*pow(at,2);
+    gp = (std::pow(a,(2./3.))/fiss->akap)*densp/densg/pi*std::pow(pt,2);
+    gn = (std::pow(a,(2./3.))/fiss->akap)*densn/densg/pi*std::pow(nt,2);
+    ga = (std::pow(a,(2./3.))/fiss->akap)*densa/densg/pi*2.0e0*std::pow(at,2);
     gf = densf/densg/pi/2.0e0*ft;
 
     //     assert(isnan(gp) == false);
@@ -2107,15 +2107,15 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       rf = 0.0;
       rp = 0.0;
       rn = 1.0;
-      ra = densa*2.0/densn*pow((at/nt),2);
+      ra = densa*2.0/densn*std::pow((at/nt),2);
       goto direct50;
     }
     // alpha, proton and neutron emission                                    
     rf = 0.0;
     rp = 1.0;
-    rn = densn/densp*pow((nt/pt),2);
+    rn = densn/densp*std::pow((nt/pt),2);
     // assert(isnan(rn) == false);
-    ra = densa*2.0/densp*pow((at/pt),2);
+    ra = densa*2.0/densp*std::pow((at/pt),2);
     // assert(isnan(ra) == false);
     goto direct50;
   }
@@ -2131,7 +2131,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   else if (sbf > 0.0e0) {
     cf = cram(bet,homega);
     // if fission barrier ef=0.d0 then fission is the only possible      
-    // channel. to avoid log(0) in function tau                          
+    // channel. to avoid std::log(0) in function tau                          
     // a.j. 7/28/93                                                      
     if (ef <= 0.0) {
       rp = 0.0;
@@ -2150,7 +2150,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       wf = 1.0;
     }
     else {
-      wf = exp( -wfex);
+      wf = std::exp( -wfex);
     }
   }
   else {
@@ -2166,7 +2166,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 
   // change by g.k. and a.h. 5.9.95                                       
   tconst = 0.7;
-  dconst = 12.0/sqrt(a);
+  dconst = 12.0/std::sqrt(a);
   // assert(isnan(dconst) == false);
   nprf = a - zprf;
 
@@ -2180,7 +2180,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   }
   if ((ee <= 17.e0) && (fiss->optles == 1) && (iz >= 90) && (in >= 134)) { //then                              
     // constant changed to 5.0 accord to moretto & vandenbosch a.j. 19.3.96  
-    gngf=pow(a,(2.e0/3.e0))*tconst/10.e0*exp((ef-sn+dconst)/tconst);
+    gngf=std::pow(a,(2.e0/3.e0))*tconst/10.e0*std::exp((ef-sn+dconst)/tconst);
 
     // if the excitation energy is so low that densn=0 ==> gn = 0           
     // fission remains the only channel.                                    
@@ -2324,7 +2324,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   G4double y1;
   G4double y0;
 
-  G4double pi6 = pow(3.1415926535,2) / 6.0;
+  G4double pi6 = std::pow(3.1415926535,2) / 6.0;
   ecr=10.0;
   er=28.0;
   afp=idnint(a);
@@ -2332,13 +2332,13 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 
   // level density parameter                                               
   if((ald->optafan == 1)) {
-    pa = (ald->av)*a + (ald->as)*pow(a,(2.e0/3.e0)) + (ald->ak)*pow(a,(1.e0/3.e0));
+    pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
   }
   else {
-    pa = (ald->av)*a + (ald->as)*bs*pow(a,(2.e0/3.e0)) + (ald->ak)*bk*pow(a,(1.e0/3.e0));
+    pa = (ald->av)*a + (ald->as)*bs*std::pow(a,(2.e0/3.e0)) + (ald->ak)*bk*std::pow(a,(1.e0/3.e0));
   }
 
-  fp = 0.01377937231e0 * pow(a,(5.e0/3.e0)) * (1.e0 + defbet/3.e0);
+  fp = 0.01377937231e0 * std::pow(a,(5.e0/3.e0)) * (1.e0 + defbet/3.e0);
 
   // pairing corrections                                                   
   if (bs > 1.0) {
@@ -2370,18 +2370,18 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
     }
     if (optshp >= 2) {
       // pairing energy shift with condensation energy a.r.j. 10.03.97        
-      //      deltpp = -0.25e0* (delta0/pow(sqrt(a),2)) * pa /pi6 + 2.e0*delta0/sqrt(a);
-      deltpp = -0.25e0* pow((delta0/sqrt(a)),2) * pa /pi6 + 2.e0*delta0/sqrt(a);
+      //      deltpp = -0.25e0* (delta0/std::pow(std::sqrt(a),2)) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
+      deltpp = -0.25e0* std::pow((delta0/std::sqrt(a)),2) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
       // assert(isnan(deltpp) == false);
       
       parite(a,&para);
       if (para < 0.0) {
-	e = e - delta0/sqrt(a);
+	e = e - delta0/std::sqrt(a);
 	// assert(isnan(e) == false);
       } else {                                                         
 	parite(z,&parz);
 	if (parz > 0.e0) {
-	  e = e - 2.0*delta0/sqrt(a);
+	  e = e - 2.0*delta0/std::sqrt(a);
 	  // assert(isnan(e) == false);
 	} else {
 	  e = e;
@@ -2401,15 +2401,15 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   }
 
   // washing out is made stronger ! g.k. 3.7.96                           
-  ponfe = -2.5*pa*e*pow(a,(-4.0/3.0));
+  ponfe = -2.5*pa*e*std::pow(a,(-4.0/3.0));
 
   if (ponfe < -700.0)  {
     ponfe = -700.0;
   }
-  fe = 1.0 - exp(ponfe);
+  fe = 1.0 - std::exp(ponfe);
   if (e < ecr) {
     // priv. comm. k.-h. schmidt                                         
-    he = 1.0 - pow((1.0 - e/ecr),2);
+    he = 1.0 - std::pow((1.0 - e/ecr),2);
   }
   else {
     he = 1.0;
@@ -2428,12 +2428,12 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   // iterative procedure according to grossjean and feldmeier              
   // to avoid the singularity e = 0                                        
   if (ee < 5.0) {
-    y1 = sqrt(pa*ecor);
+    y1 = std::sqrt(pa*ecor);
     // assert(isnan(y1) == false);
     for(int j = 0; j < 5; j++) {
-      y2 = pa*ecor*(1.e0-exp(-y1));
+      y2 = pa*ecor*(1.e0-std::exp(-y1));
       // assert(isnan(y2) == false);
-      y1 = sqrt(y2);
+      y1 = std::sqrt(y2);
       // assert(isnan(y1) == false);
     }
     
@@ -2441,35 +2441,35 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
     // assert(isnan(y0) == false);
     assert(y0 != 0.0);
     (*temp)=1.0/y0;
-    (*dens) = exp(y0*ecor)/ (pow((pow(ecor,3)*y0),0.5)*pow((1.0-0.5*y0*ecor*exp(-y1)),0.5))* exp(y1)*(1.0-exp(-y1))*0.1477045;
+    (*dens) = std::exp(y0*ecor)/ (std::pow((std::pow(ecor,3)*y0),0.5)*std::pow((1.0-0.5*y0*ecor*std::exp(-y1)),0.5))* std::exp(y1)*(1.0-std::exp(-y1))*0.1477045;
     if (ecor < 1.0) {
       ecor1=1.0;
-      y11 = sqrt(pa*ecor1);
+      y11 = std::sqrt(pa*ecor1);
       // assert(isnan(y11) == false);
       for(int j = 0; j < 7; j++) {
-	y21 = pa*ecor1*(1.0-exp(-y11));
+	y21 = pa*ecor1*(1.0-std::exp(-y11));
 	// assert(isnan(21) == false);
-	y11 = sqrt(y21);
+	y11 = std::sqrt(y21);
 	// assert(isnan(y11) == false);
       }
 
       y01 = pa/y11;
       // assert(isnan(y01) == false);
-      (*dens) = (*dens)*pow((y01/y0),1.5);
-      (*temp) = (*temp)*pow((y01/y0),1.5);
+      (*dens) = (*dens)*std::pow((y01/y0),1.5);
+      (*temp) = (*temp)*std::pow((y01/y0),1.5);
     }
   }
   else {
-    ponniv = 2.0*sqrt(pa*ecor);
+    ponniv = 2.0*std::sqrt(pa*ecor);
     // assert(isnan(ponniv) == false);
     if (ponniv > 700.0) {
       ponniv = 700.0;
     }
 
     // fermi gas state density                                               
-    (*dens) = pow(pa,(-0.25e0))*pow(ecor,(-1.25e0))*exp(ponniv) * 0.1477045e0;
-    // assert(isnan(sqrt(ecor/pa)) == false);
-    (*temp) = sqrt(ecor/pa);
+    (*dens) = std::pow(pa,(-0.25e0))*std::pow(ecor,(-1.25e0))*std::exp(ponniv) * 0.1477045e0;
+    // assert(isnan(std::sqrt(ecor/pa)) == false);
+    (*temp) = std::sqrt(ecor/pa);
   }
  densniv100:
 
@@ -2499,10 +2499,10 @@ G4double G4Abla::bfms67(G4double zms, G4double ams)
 
   nms = ams - zms;
   ims = (nms-zms)/ams;
-  ksims= 50.15e0 * (1.- 1.78 * pow(ims,2));
-  xms = pow(zms,2) / (ams * ksims);
-  ums = 0.368e0-5.057e0*xms+8.93e0*pow(xms,2)-8.71*pow(xms,3);
-  return(0.7322e0*pow(zms,2)/pow(ams,(0.333333e0))*pow(10.e0,ums));
+  ksims= 50.15e0 * (1.- 1.78 * std::pow(ims,2));
+  xms = std::pow(zms,2) / (ams * ksims);
+  ums = 0.368e0-5.057e0*xms+8.93e0*std::pow(xms,2)-8.71*std::pow(xms,3);
+  return(0.7322e0*std::pow(zms,2)/std::pow(ams,(0.333333e0))*std::pow(10.e0,ums));
 }
 
 void G4Abla::lpoly(G4double x, G4int n, G4double pl[])
@@ -2612,16 +2612,16 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   a   = double(ia);
   in  = ia - iz;                                                       
   n   = double(in);
-  dn  = rmac*bs/pow(n,(1.0/3.0));
-  dp  = rmac*bs/pow(z,(1.0/3.0));
-  dpn = h/bs/pow(a,(2.0/3.0));
+  dn  = rmac*bs/std::pow(n,(1.0/3.0));
+  dp  = rmac*bs/std::pow(z,(1.0/3.0));
+  dpn = h/bs/std::pow(a,(2.0/3.0));
   // assert(isnan(dpn) == false);
   
   c1  = 3.0/5.0*esq/r0;
   // assert(isnan(c1) == false);
   // assert(isinf(c1) == false);
   
-  c4  = 5.0/4.0*pow((3.0/(2.0*pi)),(2.0/3.0)) * c1;
+  c4  = 5.0/4.0*std::pow((3.0/(2.0*pi)),(2.0/3.0)) * c1;
   // assert(isnan(c4) == false);
   // assert(isinf(c4) == false);
  
@@ -2629,27 +2629,27 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   // assert(isnan(z) == false);
   // assert(isnan(a) == false);
   // assert(isnan(r0) == false);
-  kf  = pow((9.0*pi*z/(4.0*a)),(1.0/3.0))/r0;
+  kf  = std::pow((9.0*pi*z/(4.0*a)),(1.0/3.0))/r0;
   // assert(isnan(kf) == false);
   // assert(isinf(kf) == false);
   
-  f = -1.0/8.0*rp*rp*esq/pow(r0,3) * (145.0/48.0 - 327.0/2880.0*pow(kf,2) * pow(rp,2) + 1527.0/1209600.0*pow(kf,4) * pow(rp,4));
+  f = -1.0/8.0*rp*rp*esq/std::pow(r0,3) * (145.0/48.0 - 327.0/2880.0*std::pow(kf,2) * std::pow(rp,2) + 1527.0/1209600.0*std::pow(kf,4) * std::pow(rp,4));
   i   = (n-z)/a;
 
-  x0  = r0 * pow(a,(1.0/3.0)) / ay;
-  y0  = r0 * pow(a,(1.0/3.0)) / aden;
+  x0  = r0 * std::pow(a,(1.0/3.0)) / ay;
+  y0  = r0 * std::pow(a,(1.0/3.0)) / aden;
 
-  b1  = 1.0 - 3.0/(pow(x0,2)) + (1.0 + x0) * (2.0 + 3.0/x0 + 3.0/pow(x0,2)) * exp(-2.0*x0);
+  b1  = 1.0 - 3.0/(std::pow(x0,2)) + (1.0 + x0) * (2.0 + 3.0/x0 + 3.0/std::pow(x0,2)) * std::exp(-2.0*x0);
 
-  b3  = 1.0 - 5.0/pow(y0,2) * (1.0 - 15.0/(8.0*y0) + 21.0/(8.0 * pow(y0,3))
-			       - 3.0/4.0 * (1.0 + 9.0/(2.0*y0) + 7.0/pow(y0,2)
-					    + 7.0/(2.0 * pow(y0,3))) * exp(-2.0*y0));
+  b3  = 1.0 - 5.0/std::pow(y0,2) * (1.0 - 15.0/(8.0*y0) + 21.0/(8.0 * std::pow(y0,3))
+			       - 3.0/4.0 * (1.0 + 9.0/(2.0*y0) + 7.0/std::pow(y0,2)
+					    + 7.0/(2.0 * std::pow(y0,3))) * std::exp(-2.0*y0));
 
   // now calulation of total binding energy a.j. 16.7.96                   
 
-  efl = -1.0 * av*(1.0 - kv*i*i)*a + as*(1.0 - ks*i*i)*b1 * pow(a,(2.0/3.0)) + a0
-    + c1*z*z*b3/pow(a,(1.0/3.0)) - c4*pow(z,(4.0/3.0))/pow(a,(1.e0/3.e0))
-    + f*pow(z,2)/a -ca*(n-z) - ael * pow(z,(2.39e0));
+  efl = -1.0 * av*(1.0 - kv*i*i)*a + as*(1.0 - ks*i*i)*b1 * std::pow(a,(2.0/3.0)) + a0
+    + c1*z*z*b3/std::pow(a,(1.0/3.0)) - c4*std::pow(z,(4.0/3.0))/std::pow(a,(1.e0/3.e0))
+    + f*std::pow(z,2)/a -ca*(n-z) - ael * std::pow(z,(2.39e0));
 
   if ((in == iz) && (mod(in,2) == 1) && (mod(iz,2) == 1)) {
     // n and z odd and equal
@@ -2706,12 +2706,12 @@ void G4Abla::appariem(G4double a, G4double z, G4double *del)
   else {
     parite(z, &parz);
     if (parz > 0.0) {
-      // assert(isnan(sqrt(a)) == false);
-      (*del) = -12.0/sqrt(a);
+      // assert(isnan(std::sqrt(a)) == false);
+      (*del) = -12.0/std::sqrt(a);
     }
     else {
-      // assert(isnan(sqrt(a)) == false);
-      (*del) = 12.0/sqrt(a);
+      // assert(isnan(std::sqrt(a)) == false);
+      (*del) = 12.0/std::sqrt(a);
     }
   }
 }
@@ -2761,12 +2761,12 @@ G4double G4Abla::tau(G4double bet, G4double homega, G4double ef, G4double t)
   }
 
   // modified bj and khs 6.1.2000:
-  if (bet/(sqrt(2.0)*10.0*(homega/6.582122)) <= 1.0) {
-    tauResult = log(10.0*ef/t)/(bet*1.0e+21);
+  if (bet/(std::sqrt(2.0)*10.0*(homega/6.582122)) <= 1.0) {
+    tauResult = std::log(10.0*ef/t)/(bet*1.0e+21);
     // assert(isnan(tauResult) == false);
   }
   else {
-    tauResult = log(10.0*ef/t)/ (2.0*pow((10.0*homega/6.582122),2))*(bet*1.0e-21);
+    tauResult = std::log(10.0*ef/t)/ (2.0*std::pow((10.0*homega/6.582122),2))*(bet*1.0e-21);
     // assert(isnan(tauResult) == false);
   } //end if                                                            
 
@@ -2780,7 +2780,7 @@ G4double G4Abla::cram(G4double bet, G4double homega)
   //                           INDEPENDENT OF EXCITATION ENERGY                             
 
   G4double rel = bet/(20.0*homega/6.582122);
-  G4double cramResult = sqrt(1.0 + pow(rel,2)) - rel;
+  G4double cramResult = std::sqrt(1.0 + std::pow(rel,2)) - rel;
   // limitation introduced   6.1.2000  by  khs
 
   if (cramResult > 1.0) {
@@ -3078,20 +3078,20 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
 
   if(el <= sel20) {
     // low l              
-    q=0.2e0/(pow(sel20,2)*pow(sel80,2)*(sel20-sel80));
-    qa=q*(4.e0*pow(sel80,3) - pow(sel20,3));
-    qb=-q*(4.e0*pow(sel80,2) - pow(sel20,2));
-    bfis=bfis*(1.e0 + qa*pow(el,2) + qb*pow(el,3));
+    q=0.2e0/(std::pow(sel20,2)*std::pow(sel80,2)*(sel20-sel80));
+    qa=q*(4.e0*std::pow(sel80,3) - std::pow(sel20,3));
+    qb=-q*(4.e0*std::pow(sel80,2) - std::pow(sel20,2));
+    bfis=bfis*(1.e0 + qa*std::pow(el,2) + qb*std::pow(el,3));
   }
   else {
     // high l             
-    aj=(-20.e0*pow(x,5) + 25.e0*pow(x,4) - 4.e0)*pow((y-1.e0),2)*y*y;
-    ak=(-20.e0*pow(y,5) + 25.e0*pow(y,4) - 1.e0) * pow((x-1.e0),2)*x*x;
-    q= 0.2e0/(pow((y-x)*((1.e0-x)*(1.e0-y)*x*y),2));
+    aj=(-20.e0*std::pow(x,5) + 25.e0*std::pow(x,4) - 4.e0)*std::pow((y-1.e0),2)*y*y;
+    ak=(-20.e0*std::pow(y,5) + 25.e0*std::pow(y,4) - 1.e0) * std::pow((x-1.e0),2)*x*x;
+    q= 0.2e0/(std::pow((y-x)*((1.e0-x)*(1.e0-y)*x*y),2));
     qa=q*(aj*y - ak*x);
     qb=-q*(aj*(2.e0*y+1.e0) - ak*(2.e0*x+1.e0));
     z=el/(*selmax);
-    a1=4.e0*pow(z,5) - 5.e0*pow(z,4) + 1.e0;
+    a1=4.e0*std::pow(z,5) - 5.e0*std::pow(z,4) + 1.e0;
     a2=qa*(2.e0*z+1.e0);
     bfis=bfis*(a1 + (z-1.e0)*(a2 + qb*z)*z*z*(z-1.e0));
   }
@@ -3158,22 +3158,22 @@ G4double G4Abla::expohaz(G4int k, G4double T)
 {
   // TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
 
-  // assert(isnan((-1*T*log(haz(k)))) == false);
-  return (-1*T*log(haz(k)));
+  // assert(isnan((-1*T*std::log(haz(k)))) == false);
+  return (-1*T*std::log(haz(k)));
 }
 
 G4double G4Abla::fd(G4double E)
 {
   // DISTRIBUTION DE MAXWELL
 
-  return (E*exp(-E));
+  return (E*std::exp(-E));
 }
 
 G4double G4Abla::f(G4double E)
 {
   // FONCTION INTEGRALE DE FD(E)
 
-  return (1 - (E + 1) * exp(-E));
+  return (1 - (E + 1) * std::exp(-E));
 }
 
 G4double G4Abla::fmaxhaz(G4double T)
@@ -3206,7 +3206,7 @@ G4double G4Abla::fmaxhaz(G4double T)
   fmaxhaz20:
     x1 = x - (f(x) - double(i)/100.0)/fd(x);
     x = x1;
-    if (fabs(f(x) - double(i)/100.0) < 1e-5) {
+    if (std::fabs(f(x) - double(i)/100.0) < 1e-5) {
       goto fmaxhaz100;
     }
     goto fmaxhaz20;
@@ -3290,8 +3290,8 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
   const G4int qcols = 70;
   G4double q[qrows][qcols];
 
-  G4int ix=G4int(floor(x+0.5));
-  G4int iz=G4int(floor(z+0.5));
+  G4int ix=G4int(std::floor(x+0.5));
+  G4int iz=G4int(std::floor(z+0.5));
   G4double zz = iz;
   G4double xx = ix;
   find = 0.0;
@@ -3324,12 +3324,12 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
   else {
     G4double xneu=xx-zz;
     G4double si=(xneu-zz)/xx;
-    G4double x13=pow(xx,.333);
+    G4double x13=std::pow(xx,.333);
     G4double ee1=c1*zz*zz/x13;
     G4double ee2=c2*zz*zz/xx;
     G4double aux=1.+(9.*xjj/4./qq/x13);
     G4double ee3=xjj*xx*si*si/aux;
-    G4double ee4=avol*xx+asur*(pow(xx,.666))+ac*x13+azer;
+    G4double ee4=avol*xx+asur*(std::pow(xx,.666))+ac*x13+azer;
     G4double tota = ee1 + ee2 + ee3 + ee4;
     find = 939.55*xneu+938.77*zz - tota;
   }
@@ -3418,16 +3418,16 @@ G4double G4Abla::umass(G4double z,G4double n,G4double beta)
   const G4double pi = 3.1416;
      
   a = n + z;
-  alpha = ( sqrt(5.0/(4.0*pi)) ) * beta;
+  alpha = ( std::sqrt(5.0/(4.0*pi)) ) * beta;
   // assert(isnan(alpha) == false);
   
   xcom = 1.0 - 1.7826 * ((a - 2.0*z)/a)*((a - 2.0*z)/a);
   // assert(isnan(xcom) == false);
   // factor for asymmetry dependence of surface and volume term
   xvs = - xcom * ( 15.4941 * a - 
-		   17.9439 * pow(a,0.66667) * (1.0+0.4*alpha*alpha) );
+		   17.9439 * std::pow(a,0.66667) * (1.0+0.4*alpha*alpha) );
   // sum of volume and surface energy
-  xe = z*z * (0.7053/(pow(a,0.33333)) * (1.0-0.2*alpha*alpha) - 1.1529/a);
+  xe = z*z * (0.7053/(std::pow(a,0.33333)) * (1.0-0.2*alpha*alpha) - 1.1529/a);
   // assert(isnan(xe) == false);
   umass = xvs + xe;
   
@@ -3454,8 +3454,8 @@ G4double G4Abla::ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4doub
   G4double dtot;
   const G4double r0 = 1.16;
 
-  dtot = r0 * ( pow((z1+n1),0.33333) * (1.0+(2.0/3.0)*beta1)
-		+ pow((z2+n2),0.33333) * (1.0+(2.0/3.0)*beta2) ) + d;
+  dtot = r0 * ( std::pow((z1+n1),0.33333) * (1.0+(2.0/3.0)*beta1)
+		+ std::pow((z2+n2),0.33333) * (1.0+(2.0/3.0)*beta2) ) + d;
   ecoul = z1 * z2 * 1.44 / dtot;
 
   // assert(isnan(ecoul) == false);
@@ -3501,7 +3501,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   // The width and eventually a shift in N/Z (polarization) follows the
   // following rules:                                        
 
-  // The line N/Z following UCD has an angle of atan(Zcn/Ncn)
+  // The line N/Z following UCD has an angle of std::atan(Zcn/Ncn)
   // to the horizontal axis on a chart of nuclides.
   // (For 238U the angle is 32.2 deg.)
 
@@ -3731,7 +3731,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 
   k = 0;
   icz = 0;
-  if ( (pow(z,2)/a < 25.0) || (n < nheavy2) || (e > 500.0) ) {
+  if ( (std::pow(z,2)/a < 25.0) || (n < nheavy2) || (e > 500.0) ) {
     icz = -1;
     //          GOTO 1002;
     goto milledeux;
@@ -3749,7 +3749,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   zheavy2_shell = ((nheavy2/n) * z) - ((a/n) * cpol2);
 
   e_saddle_scission = 
-    (-24.0 + 0.02227 * (pow(z,2))/(pow(a,0.33333)) ) * friction_factor;
+    (-24.0 + 0.02227 * (std::pow(z,2))/(std::pow(a,0.33333)) ) * friction_factor;
     
   //      /* Energy dissipated from saddle to scission                        */
   //      /* F. Rejmund et al., Nucl. Phys. A 678 (2000) 215, fig. 4 b        */
@@ -3771,15 +3771,15 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   //       MassCurv = 10.E0 ** (7.16993332E0 - 0.26602401E0 * Z**2/A
   //                               + 0.00283802E0 * Z**4 / (A**2)) ;  */
   //  /* New parametrization of T. Enqvist according to Mulgin et al. 1998 */
-  if ( (pow(z,2))/a < 34.0) {
-    masscurv =  pow( 10.0,(-1.093364 + 0.082933 * (pow(z,2)/a)
-			   - 0.0002602 * (pow(z,4)/pow(a,2))) );
+  if ( (std::pow(z,2))/a < 34.0) {
+    masscurv =  std::pow( 10.0,(-1.093364 + 0.082933 * (std::pow(z,2)/a)
+			   - 0.0002602 * (std::pow(z,4)/std::pow(a,2))) );
   } else {
-    masscurv = pow( 10.0,(3.053536 - 0.056477 * (pow(z,2)/a)
-			  + 0.0002454 * (pow(z,4)/pow(a,2))) );
+    masscurv = std::pow( 10.0,(3.053536 - 0.056477 * (std::pow(z,2)/a)
+			  + 0.0002454 * (std::pow(z,4)/std::pow(a,2))) );
   }
 
-  cz_symm = (8.0/pow(z,2)) * masscurv;
+  cz_symm = (8.0/std::pow(z,2)) * masscurv;
 
   if (itest == 1) {
     G4cout << "cz_symmetry= " << cz_symm << G4endl;
@@ -3819,9 +3819,9 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   a_levdens_heavy2 = aheavy2 / xlevdens;
   a_levdens_light1 = alight1 / xlevdens;
   a_levdens_light2 = alight2 / xlevdens;
-  gamma = a_levdens / (0.4 * (pow(a,1.3333)) );
-  gamma_heavy1 = ( a_levdens_heavy1 / (0.4 * (pow(aheavy1,1.3333)) ) ) * fgamma1;
-  gamma_heavy2 = a_levdens_heavy2 / (0.4 * (pow(aheavy2,1.3333)) );
+  gamma = a_levdens / (0.4 * (std::pow(a,1.3333)) );
+  gamma_heavy1 = ( a_levdens_heavy1 / (0.4 * (std::pow(aheavy1,1.3333)) ) ) * fgamma1;
+  gamma_heavy2 = a_levdens_heavy2 / (0.4 * (std::pow(aheavy2,1.3333)) );
 
   cz_asymm1_saddle = cz_asymm1_shell + cz_symm;
   cz_asymm2_saddle = cz_asymm2_shell + cz_symm;
@@ -3829,25 +3829,25 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   // Up to here: Ok! Checked CS 10/10/05      	   
 
   cn = umass(zsymm,(nsymm+1.),0.0) + umass(zsymm,(nsymm-1.),0.0)
-    + 1.44 * (pow(zsymm,2))/
-    ( (pow(r_null,2)) * 
-      ( pow((asymm+1.0),0.33333) + pow((asymm-1.0),0.33333) ) *
-      ( pow((asymm+1.0),0.33333) + pow((asymm-1.0),0.33333) ) )
+    + 1.44 * (std::pow(zsymm,2))/
+    ( (std::pow(r_null,2)) * 
+      ( std::pow((asymm+1.0),0.33333) + std::pow((asymm-1.0),0.33333) ) *
+      ( std::pow((asymm+1.0),0.33333) + std::pow((asymm-1.0),0.33333) ) )
     - 2.0 * umass(zsymm,nsymm,0.0)
-    - 1.44 * (pow(zsymm,2))/
-    ( ( 2.0 * r_null * (pow(asymm,0.33333)) ) * 
-      ( 2.0 * r_null * (pow(asymm,0.33333)) ) );
+    - 1.44 * (std::pow(zsymm,2))/
+    ( ( 2.0 * r_null * (std::pow(asymm,0.33333)) ) * 
+      ( 2.0 * r_null * (std::pow(asymm,0.33333)) ) );
 	
   // /* shell effect in valley of mode 1 */
-  delta_u1 = delta_u1_shell + (pow((zheavy1_shell-zheavy1),2))*cz_asymm1_shell;
+  delta_u1 = delta_u1_shell + (std::pow((zheavy1_shell-zheavy1),2))*cz_asymm1_shell;
   // /* shell effect in valley of mode 2 */
-  delta_u2 = delta_u2_shell + (pow((zheavy2_shell-zheavy2),2))*cz_asymm2_shell;
+  delta_u2 = delta_u2_shell + (std::pow((zheavy2_shell-zheavy2),2))*cz_asymm2_shell;
 
   //     /* liquid drop energies
   //        at the centres of the different shell effects
   //        with respect to liquid drop at symmetry: */
-  epot0_mode1_saddle = (pow((zheavy1-zsymm),2)) * cz_symm;
-  epot0_mode2_saddle = (pow((zheavy2-zsymm),2)) * cz_symm;
+  epot0_mode1_saddle = (std::pow((zheavy1-zsymm),2)) * cz_symm;
+  epot0_mode2_saddle = (std::pow((zheavy2-zsymm),2)) * cz_symm;
   epot0_symm_saddle = 0.0;
       
   if (itest == 1) {
@@ -3935,22 +3935,22 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 
   //     /* Calculate widhts at the saddle:                */
 
-  e_eff1_saddle = epsilon0_1_saddle - delta_u1 * (exp((-epsilon_1_saddle*gamma)));
+  e_eff1_saddle = epsilon0_1_saddle - delta_u1 * (std::exp((-epsilon_1_saddle*gamma)));
    
   if (e_eff1_saddle > 0.0) {
-    wzasymm1_saddle = sqrt( (0.5 * 
-			     (sqrt(1.0/a_levdens*e_eff1_saddle)) /
-			     (cz_asymm1_shell * exp((-epsilon_1_saddle*gamma)) + cz_symm) ) );
+    wzasymm1_saddle = std::sqrt( (0.5 * 
+			     (std::sqrt(1.0/a_levdens*e_eff1_saddle)) /
+			     (cz_asymm1_shell * std::exp((-epsilon_1_saddle*gamma)) + cz_symm) ) );
   } 
   else {
     wzasymm1_saddle = 1.0;
   }
 
-  e_eff2_saddle = epsilon0_2_saddle - delta_u2 * (exp((-epsilon_2_saddle*gamma)));
+  e_eff2_saddle = epsilon0_2_saddle - delta_u2 * (std::exp((-epsilon_2_saddle*gamma)));
   if (e_eff2_saddle > 0.0) {
-    wzasymm2_saddle = sqrt( (0.5 * 
-			     (sqrt(1.0/a_levdens*e_eff2_saddle)) /
-			     (cz_asymm2_shell * exp((-epsilon_2_saddle*gamma)) + cz_symm) ) );
+    wzasymm2_saddle = std::sqrt( (0.5 * 
+			     (std::sqrt(1.0/a_levdens*e_eff2_saddle)) /
+			     (cz_asymm2_shell * std::exp((-epsilon_2_saddle*gamma)) + cz_symm) ) );
   } 
   else {
     wzasymm2_saddle = 1.0;
@@ -3960,8 +3960,8 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
     if ( (eld + epsilon_symm_saddle) < 0.0)  {
       G4cout << "<e> eld + epsilon_symm_saddle < 0" << G4endl;
     }
-    wzsymm_saddle = sqrt( (0.5 * 
-			   (sqrt(1.0/a_levdens*(eld+epsilon_symm_saddle))) / cz_symm ) );
+    wzsymm_saddle = std::sqrt( (0.5 * 
+			   (std::sqrt(1.0/a_levdens*(eld+epsilon_symm_saddle))) / cz_symm ) );
   } else {
     wzsymm_saddle = 1.0;
   }
@@ -3986,8 +3986,8 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   else {
 
     if (nheavy1_eff > 75.0) {
-      wzasymm1_scission = (sqrt(21.0)) * z/a;
-      wzasymm2_scission = (sqrt (max( (70.0-28.0)/3.0*(z*z/a-35.0)+28.,0.0 )) ) * z/a;
+      wzasymm1_scission = (std::sqrt(21.0)) * z/a;
+      wzasymm2_scission = (std::sqrt (max( (70.0-28.0)/3.0*(z*z/a-35.0)+28.,0.0 )) ) * z/a;
     } 
     else {
       wzasymm1_scission = wzasymm1_saddle;
@@ -4029,24 +4029,24 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   }
   // Up to here: Ok! Checked CS 11/10/05
             
-  if ( (epsilon0_1_saddle - delta_u1*exp((-epsilon_1_saddle*gamma_heavy1))) < 0.0) {
+  if ( (epsilon0_1_saddle - delta_u1*std::exp((-epsilon_1_saddle*gamma_heavy1))) < 0.0) {
     sasymm1 = -10.0;
   } 
   else {
-    sasymm1 = 2.0 * sqrt( a_levdens * (epsilon0_1_saddle - 
-				       delta_u1*(exp((-epsilon_1_saddle*gamma_heavy1))) ) );
+    sasymm1 = 2.0 * std::sqrt( a_levdens * (epsilon0_1_saddle - 
+				       delta_u1*(std::exp((-epsilon_1_saddle*gamma_heavy1))) ) );
   }
 
-  if ( (epsilon0_2_saddle - delta_u2*exp((-epsilon_2_saddle*gamma_heavy2))) < 0.0) {
+  if ( (epsilon0_2_saddle - delta_u2*std::exp((-epsilon_2_saddle*gamma_heavy2))) < 0.0) {
     sasymm2 = -10.0;
   } 
   else {
-    sasymm2 = 2.0 * sqrt( a_levdens * (epsilon0_2_saddle - 
-				       delta_u2*(exp((-epsilon_2_saddle*gamma_heavy2))) ) );
+    sasymm2 = 2.0 * std::sqrt( a_levdens * (epsilon0_2_saddle - 
+				       delta_u2*(std::exp((-epsilon_2_saddle*gamma_heavy2))) ) );
   }
               
   if (epsilon_symm_saddle > 0.0) {
-    ssymm = 2.0 * sqrt( a_levdens*(epsilon_symm_saddle) );
+    ssymm = 2.0 * std::sqrt( a_levdens*(epsilon_symm_saddle) );
   } 
   else {
     ssymm = -10.0;
@@ -4057,25 +4057,25 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 
     if (epsilon0_1_saddle < 0.0) {
       //  /* low energy */
-      yasymm1 = exp((sasymm1-ssymm)) * wzasymm1_saddle / wzsymm_saddle * 2.0;
+      yasymm1 = std::exp((sasymm1-ssymm)) * wzasymm1_saddle / wzsymm_saddle * 2.0;
       //           /* factor of 2 for symmetry classes */
     } 
     else {
       //        /* high energy */
-      ssymm_mode1 = 2.0 * sqrt( a_levdens*(epsilon0_1_saddle) );
-      yasymm1 = ( exp((sasymm1-ssymm)) - exp((ssymm_mode1 - ssymm)) )  
+      ssymm_mode1 = 2.0 * std::sqrt( a_levdens*(epsilon0_1_saddle) );
+      yasymm1 = ( std::exp((sasymm1-ssymm)) - std::exp((ssymm_mode1 - ssymm)) )  
 	* wzasymm1_saddle / wzsymm_saddle * 2.0;
     }
 
     if (epsilon0_2_saddle < 0.0) {
       //  /* low energy */
-      yasymm2 = exp((sasymm2-ssymm)) * wzasymm2_saddle / wzsymm_saddle * 2.0;
+      yasymm2 = std::exp((sasymm2-ssymm)) * wzasymm2_saddle / wzsymm_saddle * 2.0;
       //           /* factor of 2 for symmetry classes */
     } 
     else {
       //        /* high energy */
-      ssymm_mode2 = 2.0 * sqrt( a_levdens*(epsilon0_2_saddle) );
-      yasymm2 = ( exp((sasymm2-ssymm)) - exp((ssymm_mode2 - ssymm)) )  
+      ssymm_mode2 = 2.0 * std::sqrt( a_levdens*(epsilon0_2_saddle) );
+      yasymm2 = ( std::exp((sasymm2-ssymm)) - std::exp((ssymm_mode2 - ssymm)) )  
 	* wzasymm2_saddle / wzsymm_saddle * 2.0;
     }       
     //                            /* difference in the exponent in order */
@@ -4085,8 +4085,8 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   else {
     if ( (sasymm1 > -10.0) && (sasymm2 > -10.0) ) {
       ysymm = 0.0;
-      yasymm1 = exp(sasymm1) * wzasymm1_saddle * 2.0;
-      yasymm2 = exp(sasymm2) * wzasymm2_saddle * 2.0;
+      yasymm1 = std::exp(sasymm1) * wzasymm1_saddle * 2.0;
+      yasymm2 = std::exp(sasymm2) * wzasymm2_saddle * 2.0;
     }
   }
         
@@ -4129,10 +4129,10 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
     r_e_o_exp = -0.017 * (e_saddle_scission + eld) * (e_saddle_scission + eld);
     if ( r_e_o_exp < -307.0) {
       r_e_o_exp = -307.0;
-      r_e_o = pow(10.0,r_e_o_exp);
+      r_e_o = std::pow(10.0,r_e_o_exp);
     }
     else {
-      r_e_o = pow(10.0,r_e_o_exp);
+      r_e_o = std::pow(10.0,r_e_o_exp);
     }
   } 
   else {
@@ -4336,7 +4336,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
   //                 - 1.44E0 * (Zsymm)**2 / (r_null * 2.E0 * (Asymm)**1/3)**2; */
 
 
-  //    /* N1width = sqrt(0.5E0 * sqrt(1.E0/A_levdens*(Eld+E_saddle_scission)) / CN); */
+  //    /* N1width = std::sqrt(0.5E0 * std::sqrt(1.E0/A_levdens*(Eld+E_saddle_scission)) / CN); */
   //    /* 8. 9. 1998: KHS (see also consideration in the first comment block)
   //       sigma_N(Z=const) = A/Z  * sigma_Z(A=const)
   //       sigma_Z(A=const) = 0.4 to 0.5  (from Lang paper Nucl Phys. A345 (1980) 34)
@@ -4358,7 +4358,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
     //           IF (CN.lt.0.) Then
     //             write(6,*)'CN < 0, MODE 1,2'
     //           ENDIF
-    n1width=sqrt( (0.5 * (sqrt(1.0/a_levdens*(e_scission)))/cn) );
+    n1width=std::sqrt( (0.5 * (std::sqrt(1.0/a_levdens*(e_scission)))/cn) );
     n1width=max(n1width, sigzmin);
 
     //          /* random decision: N1R and N2R at scission, before evaporation: */
@@ -4405,8 +4405,8 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
       //           IF (CZ.lt.0.) Then
       //             write(6,*) 'CZ < 0, MODE 1,2'
       //           ENDIF
-      za1width=sqrt( (0.5 * sqrt(1.0/a_levdens*(e_scission)) / cz) );
-      za1width=sqrt( (max((za1width*za1width-(1.0/12.0)),0.1)) );
+      za1width=std::sqrt( (0.5 * std::sqrt(1.0/a_levdens*(e_scission)) / cz) );
+      za1width=std::sqrt( (max((za1width*za1width-(1.0/12.0)),0.1)) );
       //                        /* Check the value of 0.1 ! */
       //                        /* Shephard correction */
       a1r = z1 + n1mean;
@@ -4464,7 +4464,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
       //           IF (CN.lt.0.) Then
       //             write(6,*) 'CN < 0, MODE 1,2'
       //           Endif
-      n1width=sqrt( (0.5 * sqrt(1.0/a_levdens*(e_scission)) / cn) );
+      n1width=std::sqrt( (0.5 * std::sqrt(1.0/a_levdens*(e_scission)) / cn) );
       n1width=max(n1width, sigzmin);
 
       //          /* random decision: N1R and N2R at scission, before evaporation: */
@@ -4538,15 +4538,15 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 
   //       /* Pre-neutron-emission total kinetic energy: */
   tker = (z1 * z2 * 1.44) /
-    ( r0 * pow(a1,0.33333) * (1.0 + 2.0/3.0 * beta1) +
-      r0 * pow(a2,0.33333) * (1.0 + 2.0/3.0 * beta2) + 2.0 );
+    ( r0 * std::pow(a1,0.33333) * (1.0 + 2.0/3.0 * beta1) +
+      r0 * std::pow(a2,0.33333) * (1.0 + 2.0/3.0 * beta2) + 2.0 );
   //       /* Pre-neutron-emission kinetic energy of 1. fragment: */
   ekinr1 = tker * a2 / a;
   //       /* Pre-neutron-emission kinetic energy of 2. fragment: */
   ekinr2 = tker * a1 / a;
 
-  v1 = sqrt( (ekinr1/a1) ) * 1.3887;
-  v2 = sqrt( (ekinr2/a2) ) * 1.3887;
+  v1 = std::sqrt( (ekinr1/a1) ) * 1.3887;
+  v2 = std::sqrt( (ekinr2/a2) ) * 1.3887;
 
   if (itest == 1) {
     G4cout << "ekinr1 " << ekinr1 << G4endl;
@@ -4577,9 +4577,9 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
     a_levdens = a / xlevdens;
 
     masscurv = 2.0;
-    cz_symm = 8.0 / pow(z,2) * masscurv;
+    cz_symm = 8.0 / std::pow(z,2) * masscurv;
 
-    wzsymm = sqrt( (0.5 * sqrt(1.0/a_levdens*e) / cz_symm) ) ;
+    wzsymm = std::sqrt( (0.5 * std::sqrt(1.0/a_levdens*e) / cz_symm) ) ;
 
     if (itest == 1) {
       G4cout << " symmetric high energy fission " << G4endl;
@@ -4641,7 +4641,7 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 	  - 2.0 * umass(z2,n2mean,0.0) ) * 0.5;
     //      This is an approximation! Coulomb energy is neglected.
 
-    n1width = sqrt( (0.5 * sqrt(1.0/a_levdens*e) / cn) );
+    n1width = std::sqrt( (0.5 * std::sqrt(1.0/a_levdens*e) / cn) );
 
     if (itest == 1) {
       G4cout << " cn " << cn << G4endl;
@@ -4677,15 +4677,15 @@ void G4Abla::fissionDistri(G4double &a,G4double &z,G4double &e,
 
   //       /* Pre-neutron-emission total kinetic energy: */
   tker = (z1 * z2 * 1.44) /
-    ( r0 * pow(a1,0.33333) * (1.0 + 2.0/3.0 * beta1) +
-      r0 * pow(a2,0.33333) * (1.0 + 2.0/3.0 * beta2) + 2.0 );
+    ( r0 * std::pow(a1,0.33333) * (1.0 + 2.0/3.0 * beta1) +
+      r0 * std::pow(a2,0.33333) * (1.0 + 2.0/3.0 * beta2) + 2.0 );
   //       /* Pre-neutron-emission kinetic energy of 1. fragment: */
   ekin1 = tker * a2 / a;
   //       /* Pre-neutron-emission kinetic energy of 2. fragment: */
   ekin2 = tker * a1 / a;
 
-  v1 = sqrt( (ekin1/a1) ) * 1.3887;
-  v2 = sqrt( (ekin2/a2) ) * 1.3887;
+  v1 = std::sqrt( (ekin1/a1) ) * 1.3887;
+  v2 = std::sqrt( (ekin2/a2) ) * 1.3887;
 
   if (itest == 1) {
     G4cout << " kinetic energies " << G4endl;
@@ -4724,7 +4724,7 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
   //       DATA UMA,MELEC/931.4942,0.511/
 
   // C Matrice de rotation dans le labo:
-  G4double sitet = sqrt(pow(csrem[1],2)+pow(csrem[2],2));
+  G4double sitet = std::sqrt(std::pow(csrem[1],2)+std::pow(csrem[2],2));
   G4double cstet, siphi, csphi;
   G4double R[4][4];
 
@@ -4785,16 +4785,16 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
       masse = volant->zpcv[i]*938.27 + (volant->acv[i] - volant->zpcv[i])*939.56 + el;
     } //end if
 	
-    er = sqrt(pow(volant->pcv[i],2) + pow(masse,2));
+    er = std::sqrt(std::pow(volant->pcv[i],2) + std::pow(masse,2));
     // assert(isnan(er) == false);
     plabi[1] = volant->pcv[i]*(volant->xcv[i]);
     plabi[2] = volant->pcv[i]*(volant->ycv[i]);
     plabi[3] = er*etrem + gamrem*(volant->pcv[i])*(volant->zcv[i]);
 	
-    ptrav2 = pow(plabi[1],2) + pow(plabi[2],2) + pow(plabi[3],2);
+    ptrav2 = std::pow(plabi[1],2) + std::pow(plabi[2],2) + std::pow(plabi[3],2);
     // assert(isnan(ptrav2) == false);
-    varntp->plab[intp] = sqrt(ptrav2); 
-    varntp->enerj[intp] = sqrt(ptrav2 + pow(masse,2)) - masse;
+    varntp->plab[intp] = std::sqrt(ptrav2); 
+    varntp->enerj[intp] = std::sqrt(ptrav2 + std::pow(masse,2)) - masse;
 
     // Rotation dans le labo:
     for(G4int j = 1; j <= 3; j++) { //do j=1,3
@@ -4805,7 +4805,7 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
     }  // end do
     // C impulsions dans le nouveau systeme copiees dans /volant/
     volant->pcv[i] = varntp->plab[intp];
-    ptrav2 = sqrt(pow(plabf[1],2) + pow(plabf[2],2) + pow(plabf[3],2));
+    ptrav2 = std::sqrt(std::pow(plabf[1],2) + std::pow(plabf[2],2) + std::pow(plabf[3],2));
     if(ptrav2 >= 1.0e-6) { //then
       volant->xcv[i] = plabf[1]/ptrav2;
       volant->ycv[i] = plabf[2]/ptrav2;
@@ -4826,9 +4826,9 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
       if(bidon < -1.0) {
 	bidon = -1.0;
       }
-      varntp->tetlab[intp] = acos(bidon);
-      sitet = sin(varntp->tetlab[intp]);
-      varntp->philab[intp] = atan2(plabf[2],plabf[1]);        
+      varntp->tetlab[intp] = std::acos(bidon);
+      sitet = std::sin(varntp->tetlab[intp]);
+      varntp->philab[intp] = std::atan2(plabf[2],plabf[1]);        
       varntp->tetlab[intp] = varntp->tetlab[intp]*57.2957795;
       varntp->philab[intp] = varntp->philab[intp]*57.2957795;
     }
@@ -4861,13 +4861,13 @@ void G4Abla::translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet
      
   G4double er = t1 + masse1;
 	
-  G4double sitet = sqrt(1.0 - pow(ctet1,2));
+  G4double sitet = std::sqrt(1.0 - std::pow(ctet1,2));
 
   G4double plabi[4];
   G4double plabf[4];
   // C ----Transformation de Lorentz Noyau fissionnant --> Remnant:	
-  plabi[1] = p1*sitet*cos(phi1);
-  plabi[2] = p1*sitet*sin(phi1);
+  plabi[1] = p1*sitet*std::cos(phi1);
+  plabi[2] = p1*sitet*std::sin(phi1);
   plabi[3] = er*etrem + gamrem*p1*ctet1;
   
   // C ----Rotation du syst Noyaut Fissionant vers syst remnant:
@@ -4880,9 +4880,9 @@ void G4Abla::translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet
   } //end do
   // C ----Cosinus directeurs et coefs de la transf de Lorentz dans le
   // c     nouveau systeme:	
-  (*plab1) = pow(plabf[1],2) + pow(plabf[2],2) + pow(plabf[3],2);
-  (*gam1) = sqrt(pow(masse1,2) + (*plab1))/masse1;
-  (*plab1) = sqrt((*plab1));
+  (*plab1) = std::pow(plabf[1],2) + std::pow(plabf[2],2) + std::pow(plabf[3],2);
+  (*gam1) = std::sqrt(std::pow(masse1,2) + (*plab1))/masse1;
+  (*plab1) = std::sqrt((*plab1));
   (*eta1) = (*plab1)/masse1;
 
   if((*plab1) <= 1.0e-6) { //then
@@ -5059,10 +5059,10 @@ G4double G4Abla::gausshaz(int k, double xmoy, double sig)
     do {
       v1 = 2.0*haz(k) - 1.0;
       v2 = 2.0*haz(k) - 1.0;
-      r = pow(v1,2) + pow(v2,2);
+      r = std::pow(v1,2) + std::pow(v2,2);
     } while(r >= 1);
 
-    fac = sqrt(-2.*log(r)/r);
+    fac = std::sqrt(-2.*std::log(r)/r);
     // assert(isnan(fac) == false);
     gset = v1*fac;
     gausshaz = v2*fac*sig+xmoy;
@@ -5123,28 +5123,28 @@ G4int G4Abla::nint(G4double number)
 {
   G4double intpart;
   G4double fractpart;
-  fractpart = modf(number, &intpart);
+  fractpart = std::modf(number, &intpart);
   if(number == 0) {
     return 0;
   }
   if(number > 0) {
     if(fractpart < 0.5) {
-      return int(floor(number));
+      return int(std::floor(number));
     }
     else {
-      return int(ceil(number));
+      return int(std::ceil(number));
     }
   }
   if(number < 0) {
     if(fractpart < -0.5) {
-      return int(floor(number));
+      return int(std::floor(number));
     }
     else {
-      return int(ceil(number));
+      return int(std::ceil(number));
     }
   }
 
-  return int(floor(number));
+  return int(std::floor(number));
 }
 
 G4int G4Abla::secnds(G4int x)
@@ -5188,10 +5188,10 @@ G4double G4Abla::dint(G4double a)
   G4double value = 0.0;
 
   if(a < 0.0) {
-    value = double(ceil(a));
+    value = double(std::ceil(a));
   }
   else {
-    value = double(floor(a));
+    value = double(std::floor(a));
   }
 
   return value;
@@ -5202,10 +5202,10 @@ G4int G4Abla::idint(G4double a)
   G4int value = 0;
 
   if(a < 0) {
-    value = int(ceil(a));
+    value = int(std::ceil(a));
   }
   else {
-    value = int(floor(a));
+    value = int(std::floor(a));
   }
 
   return value;
@@ -5213,10 +5213,10 @@ G4int G4Abla::idint(G4double a)
 
 G4int G4Abla::idnint(G4double value)
 {
-  G4double valueCeil = int(ceil(value));
-  G4double valueFloor = int(floor(value));
+  G4double valueCeil = int(std::ceil(value));
+  G4double valueFloor = int(std::floor(value));
 
-  if(fabs(value - valueCeil) < fabs(value - valueFloor)) {
+  if(std::fabs(value - valueCeil) < std::fabs(value - valueFloor)) {
     return int(valueCeil);
   }
   else {

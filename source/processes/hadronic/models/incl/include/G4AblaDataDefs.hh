@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.3 2007-09-11 13:18:42 miheikki Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.4 2007-10-11 08:15:36 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -126,7 +126,7 @@ public:
 
   /**
    * Alpha ground state deformation (this is not beta2!)       
-   * beta2 = sqrt(5/(4pi)) * alpha 
+   * beta2 = std::sqrt(5/(4pi)) * alpha 
    */
   G4double alpha[ECLDROWS][ECLDCOLS];
 };

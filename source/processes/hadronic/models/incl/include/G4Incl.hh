@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.2 2007-09-11 13:18:42 miheikki Exp $ 
+// $Id: G4Incl.hh,v 1.3 2007-10-11 08:15:36 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -391,7 +391,7 @@ public: // Main INCL routines
   /**
    * This routine describes the anisotropic decay of a particle of
    * mass xi into 2 particles of masses x1,x2 the anisotropy is
-   * supposed to follow a 1+3*hel*(cos(theta))**2 law with respect to
+   * supposed to follow a 1+3*hel*(std::cos(theta))**2 law with respect to
    * the direction of the incoming particle in the input, p1,p2,p3 is
    * the momentum of particle xi in the output, p1,p2,p3 is the
    * momentum of particle x1, while q1,q2,q3 is the momentum of
