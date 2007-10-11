@@ -1,0 +1,28 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+           History file for the Liege cascade INCL Model
+           ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+11 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-01)
+------------------------------------------------------
+- Fixes for porting:
+  o Commented out usage of isnan() and isinf() in assertions.
+  o Replaced usage of M_PI with CLHEP::pi.
+  o Use std namespace for standard mathematical functions.
+
+23 May 2007 - Aatos Heikkinen (hadr-incl-V09-00-00)
+---------------------------------------------------
+- First version of the Liege cascade INCL Model.
+
+
