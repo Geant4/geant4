@@ -10,13 +10,21 @@ Some of the development/fixes included since the last development tag are:
  o Reviewed implementation of G4TessellatedSolid for proper handling of
    concave surfaces.
  o Implemented checking of process ordering at initialisation.
+ o Modified G4Cerenkov process to become a discrete process in order to
+   allow for Cerenkov photons to correctly originate on the line connecting
+   PreStep to PostStep points.
  o Introduced treatment of hyper-nuclei for particles.
  o Introduced single-target diffraction in CHIPS.
+ o First implementation of the Liege cascade hadronic model.
 
 
 ---------- Reference-tag 'Release Notes' -----------
 
 Summarised, the list of changes is the following:
+
+config                                           config-V09-00-05
+------
+- Added "incl" (Liege cascade) hadronic model module to binmake.gmk.
 
 digits_hits                                      digits_hits-V09-00-02
 -----------
@@ -156,8 +164,10 @@ processes/electromagnetic/utils                  emutils-V09-00-10
   recalculate it at each step; reorganized formulas: less calls to
   mathematical functions.
 
-processes/electromagnetic/xrays                  xrays-V09-00-01
+processes/electromagnetic/xrays                  xrays-V09-00-02
 -------------------------------
+- G4Cerenkov: changed inheritance to G4VDiscreteProcess, and
+  changed the arguments of G4Cerenkov::GetAverageNumberOfPhotons().
 - G4VXTRenergyLoss: general cleanup of old comments; removed all static
   members; protect verbosity within flag.
 - G4XTRTransparentRegRadModel, G4XTRRegularRadModel, G4StrawTubeXTRadiator:
@@ -176,6 +186,8 @@ processes/hadronic
 - models/im_r_matrix (hadr-im_r_V09-00-02)
   o Incorporated changes for G4CollisionComposite: fixed SUN compiler
     warnings of hiding variable components.
+- models/incl (hadr-incl-V09-00-01)
+  o First version of the Liege cascade INCL Model.
 - models/neutron_hp (hadr-hpn-V09-00-02)
   o Allow for _nat_ final state even for isotoped cross sections.
   o Enabled element based cross-section dump.
@@ -228,6 +240,9 @@ tracking                                         tracking-V09-00-01
 examples                                         examples-V09-00-02
 --------
 - Updated reference outputs.
+- advanced/air_shower (air_shower-V09-00-00)
+- advanced/Rich (Rich-V09-00-00)
+  o Adjust to the G4Cerenkov process now become a G4VDiscreteProcess.  
 - extended/electromagnetic/TestEm8 (testem8-V09-00-04)
   o Fixed memory leak in the UI interface.
   o Removed used lines from PAI physics constructors, added "pai_brem"
@@ -239,6 +254,9 @@ examples                                         examples-V09-00-02
   o PhysicsList: implemented G4CoulombScattering process as option; use
     100 bins per decade (emOptions) in physics tables.
   o MyKleinNishina: do not cancel Compton cross-section in cavity.
+- extended/optical/LXe (LXe-V09-00-00)
+- novice/N06 (exampleN06-V09-00-00)
+  o Adjust to the G4Cerenkov process now become a G4VDiscreteProcess.  
 
 tests                                            tests-V09-00-02
 -----
