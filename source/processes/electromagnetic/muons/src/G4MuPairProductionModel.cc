@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.34 2007-10-11 09:25:31 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.35 2007-10-11 13:52:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,6 +81,7 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -158,12 +159,20 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
   if (!samplingTablesAreFilled) {
     if(p) SetParticle(p);
     MakeSamplingTables();
-
-    if(pParticleChange)
+  }
+  if(pParticleChange) {
+    if(ignoreCut) {
+      gParticleChange = 
+	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+      fParticleChange = 0;
+    } else {
       fParticleChange = 
 	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-    else
-      fParticleChange = new G4ParticleChangeForLoss();
+      gParticleChange = 0;
+    }
+  } else {
+    fParticleChange = new G4ParticleChangeForLoss();
+    gParticleChange = 0;
   }
 }
 
@@ -608,7 +617,10 @@ void G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   // primary change
   kineticEnergy -= (ElectronEnergy + PositronEnergy);
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  if(fParticleChange)
+    fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  else 
+    gParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);

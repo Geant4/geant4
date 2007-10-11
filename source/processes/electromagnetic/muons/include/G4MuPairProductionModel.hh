@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.23 2007-10-11 09:25:31 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.24 2007-10-11 13:52:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 
 class G4Element;
 class G4ParticleChangeForLoss;
+class G4ParticleChangeForGamma;
 
 class G4MuPairProductionModel : public G4VEmModel
 {
@@ -155,6 +156,7 @@ private:
   G4ParticleDefinition*       theElectron;
   G4ParticleDefinition*       thePositron;
   G4ParticleChangeForLoss*    fParticleChange;
+  G4ParticleChangeForGamma*   gParticleChange;
 
   G4double minPairEnergy;
   G4double lowestKinEnergy;
