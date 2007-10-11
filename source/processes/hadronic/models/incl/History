@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.2 2007-10-11 08:34:34 gcosmo Exp $
+$Id: History,v 1.3 2007-10-11 10:25:25 gcosmo Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -22,6 +22,10 @@ code and to keep track of all tags.
   o Commented out usage of isnan() and isinf() in assertions.
   o Replaced usage of M_PI with CLHEP::pi.
   o Use std namespace for standard mathematical functions.
+  o Casted to double arguments used in std::pow() function.
+  o Commented out initialisation of data in G4InclAblaHardcodedData.cc
+    for Windows; temporary solution to allow for compilation, pending
+    solution of loading of data from file !
 
 23 May 2007 - Aatos Heikkinen (hadr-incl-V09-00-00)
 ---------------------------------------------------
