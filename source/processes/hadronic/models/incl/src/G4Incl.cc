@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.4 2007-10-11 08:20:08 gcosmo Exp $ 
+// $Id: G4Incl.cc,v 1.5 2007-10-11 08:50:23 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1118,7 +1118,7 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
 
   // parametres moyens de densite de la cible (fermi 2 parametres)
   if (iamat >= 28) {
-    ws->r0 = (2.745e-4*iamat+1.063)*std::pow(iamat, 0.33333333);
+    ws->r0 = (2.745e-4*iamat+1.063)*std::pow(G4double(iamat), 0.33333333);
     ws->adif = 1.63e-4*iamat+0.510;
     ws->rmaxws = ws->r0 + (ws->xfoisa)*(ws->adif);
   }
@@ -2285,11 +2285,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double pm2 = fmp*fmp;
   G4int ia = bl3->ia1 + bl3->ia2;
   G4int a2 = bl3->ia2;
-  bl3->r2 = r02*std::pow(a2,0.33333333);
+  bl3->r2 = r02*std::pow(G4double(a2),0.33333333);
 
   // parametres moyens de densite de la cible (fermi 2 parametres)
   if (bl3->ia2 > 28) { //then
-    ws->r0 = (2.745e-4*bl3->ia2+1.063)*std::pow(bl3->ia2,0.33333333);
+    ws->r0 = (2.745e-4*bl3->ia2+1.063)*std::pow(G4double(bl3->ia2),0.33333333);
     ws->adif = 1.63e-4*bl3->ia2 + 0.510;
     ws->rmaxws = ws->r0 + ws->xfoisa*(ws->adif);
   }
@@ -2437,7 +2437,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  eb0 = 0.283 - 0.000013 * tlab;
 	}
       }
-      temfin = 1.25*cb0/amax1(1.0,0.854 + 0.438*bred)*std::pow(bl3->ia2,(eb0/amax1(1.0,0.941+0.177*bred)));
+      temfin = 1.25*cb0/amax1(1.0,0.854 + 0.438*bred)*std::pow(G4double(bl3->ia2),(eb0/amax1(1.0,0.941+0.177*bred)));
       temfin = temfin*tnor;
     }
     else {
@@ -2472,7 +2472,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  xc = 0.438*bred + 0.854;
 	  xe = 0.177*bred + 0.941;
 	}
-	temfin = 1.25*(coeffb0/xc)*std::pow((bl3->ia2),(expob0/xe));
+	temfin = 1.25*(coeffb0/xc)*std::pow(G4double(bl3->ia2),(expob0/xe));
 	// same renormalisation of time for p,n and composit particles.
 	temfin = temfin*tnor;
       }
@@ -2483,11 +2483,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       // here for pions (arbitrary multiplied by 2 for surface) (a.b., c.v.) 2/2002:
       // temfin=60.*(float(ia2)/208.)**0.25*(1.-0.2*bred)*(1.-tlab/1250.)
       // modified in april 2003 (more reasonable but not yet checked!)
-      temfin = 25.5*std::pow(bl3->ia2,0.16);  // pb208->60fm/c
+      temfin = 25.5*std::pow(G4double(bl3->ia2),0.16);  // pb208->60fm/c
     }
     else {
       // here for other hadrons
-      temfin = 29.8*std::pow(bl3->ia2,0.16);  // pb208->70fm/c
+      temfin = 29.8*std::pow(G4double(bl3->ia2),0.16);  // pb208->70fm/c
     }
   }
 
@@ -2599,8 +2599,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
 
     bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);
-    assert(isnan(bl1->eps[i]) == false);
-    assert(isnan(energyTest(i)) == false);
+    // assert(isnan(bl1->eps[i]) == false);
+    // assert(isnan(energyTest(i)) == false);
 
     sp1t1 = sp1t1 + bl1->p1[i];
     sp2t1 = sp2t1 + bl1->p2[i];
@@ -2618,8 +2618,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[bl3->ia1] = -sp2t1;
   bl1->p3[bl3->ia1] = -sp3t1;
   bl1->eps[bl3->ia1] = w(bl1->p1[bl3->ia1],bl1->p2[bl3->ia1],bl1->p3[bl3->ia1],fmp);
-  assert(isnan(bl1->eps[bl3->ia1]) == false);
-  assert(isnan(energyTest(bl3->ia1)) == false);
+  // assert(isnan(bl1->eps[bl3->ia1]) == false);
+  // assert(isnan(energyTest(bl3->ia1)) == false);
   
   // deutons
   jparticip[bl3->ia1] = 1;
@@ -2691,8 +2691,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       sp3t1 = sp3t1+bl1->p3[i];
       bl1->ind1[i] = 0;                                                      
       bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);                            
-      assert(isnan(bl1->eps[i]) == false);
-      assert(isnan(energyTest(i)) == false);
+      // assert(isnan(bl1->eps[i]) == false);
+      // assert(isnan(energyTest(i)) == false);
       bl9->hel[i] = 0.0;
       efer = efer + bl1->eps[i] - fmp;                                        
     }
@@ -2704,7 +2704,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl3->x1[ia] = -s1t1;
     bl3->x2[ia] = -s2t1;
     bl3->x3[ia] = -s3t1;
-    assert(isnan(bl3->x3[ia]) == false);
+    // assert(isnan(bl3->x3[ia]) == false);
     bl1->p1[ia] = -sp1t1;
     bl1->p2[ia] = -sp2t1;
     bl1->p3[ia] = -sp3t1;
@@ -2716,7 +2716,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
 
     bl1->eps[ia] = w(bl1->p1[ia],bl1->p2[ia],bl1->p3[ia],fmp);
-    assert(isnan(energyTest(ia)) == false);
+    // assert(isnan(energyTest(ia)) == false);
     
     efer = efer + bl1->eps[ia]-fmp;                                        
 
@@ -2777,7 +2777,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       x3_target = x3_target + bl3->x3[i];
       bl1->ind1[i] = 0;
       bl1->eps[i] = w(bl1->p1[i],bl1->p2[i],bl1->p3[i],fmp);
-      assert(isnan(energyTest(i)) == false);
+      // assert(isnan(energyTest(i)) == false);
 
       bl9->hel[i] = 0.0;
       efer = efer + bl1->eps[i] - fmp;
@@ -2834,10 +2834,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       
       for(G4int i = 1; i <= bl3->ia1; i++) {
       //      for(G4int i = 1; i < bl3->ia1; i++) {
-	assert(isnan(ginc) == false);
+	// assert(isnan(ginc) == false);
 	assert(ginc != 0);
 	bl3->x3[i] = bl3->x3[i]/ginc;
-	assert(isnan(bl3->x3[i]) == false);
+	// assert(isnan(bl3->x3[i]) == false);
 	zai2 = ws->rmaxws*(ws->rmaxws) - std::pow((b+bl3->x1[i]),2) - std::pow(bl3->x2[i],2);
 	if (zai2 < 0.0) {
 	  goto pnu22;
@@ -2852,7 +2852,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	}
 	ilm = i;
 	xlengm = xleng;
-	assert(isnan(ztu) == false);
+	// assert(isnan(ztu) == false);
 	ztouch = ztu;
 	//	goto pnu21;
 	continue;
@@ -2871,8 +2871,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       }
       else {
 	zshif = bl3->x3[ilm] - ztouch;
-	assert(isnan(bl3->x3[ilm]) == false);
-	assert(isnan(ztouch) == false);
+	// assert(isnan(bl3->x3[ilm]) == false);
+	// assert(isnan(ztouch) == false);
 	standardRandom(&tbid, &(hazard->igraine[13]));
 	tbid = tbid*6.283185;
 	for(G4int i = 1; i <= bl3->ia1; i++) {
@@ -2881,8 +2881,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  bl3->x1[i] = xxx*std::cos(tbid) - bl3->x2[i]*std::sin(tbid);
 	  bl3->x2[i] = xxx*std::sin(tbid) + bl3->x2[i]*std::cos(tbid);
 	  bl3->x3[i] = bl3->x3[i] - zshif;
-	  assert(isnan(zshif) == false);
-	  assert(isnan(bl3->x3[i]) == false);
+	  // assert(isnan(zshif) == false);
+	  // assert(isnan(bl3->x3[i]) == false);
 	  //   1135	c           x1(i)=x1(i)+b
 	  //   1136	c           x3(i)=x3(i)-zshif
 	} //enddo
@@ -2914,7 +2914,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl1->eps[1] = g1*fmp + v0; // eps(1)->eps[0]
     assert((std::pow(bl1->eps[1],2) - std::pow(fmp,2)) >= 0);
     bl1->p3[1] = std::sqrt(std::pow(bl1->eps[1],2) - std::pow(fmp,2));
-    assert(isnan(energyTest(1)) == false);
+    // assert(isnan(energyTest(1)) == false);
   }
   else {
     // here for pions
@@ -2933,7 +2933,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  bl1->p1[i] = 0.0;
 	  bl1->p2[i] = 0.0;
 	  bl1->p3[i] = pinc/bl3->ia1;
-	  assert(isnan(energyTest(i)) == false);
+	  // assert(isnan(energyTest(i)) == false);
 	}
 	goto pnu1871;
       }
@@ -2957,7 +2957,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	tte = eps_c[i];
 	bl1->eps[i] = g1*(eps_c[i] + b1*p3_c[i]);
 	bl1->p3[i] = g1*(b1*tte + p3_c[i]);
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	sueps = sueps + bl1->eps[i];
       } //enddo
 
@@ -2976,7 +2976,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	goto pnu1870;
       }
       for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	arg = std::pow((cobe*(bl1->eps[i])),2)-pm2;
 	if (arg <= 0.) { //then	! put maximum momentum to 0. 
 	  i_emax = 1; //	!find maximum
@@ -3027,21 +3027,21 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
       for(G4int i = 1; i <= bl3->ia1; i++) { //do i=1,bl3->ia1
       //      for(G4int i = 1; i < bl3->ia1; i++) { //do i=1,bl3->ia1
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	arg = std::pow((cobe*(bl1->eps[i])),2) - pm2;
 	comom = std::sqrt(arg/(std::pow(bl1->eps[i],2) - pm2));
-	assert(isnan(comom) == false);
+	// assert(isnan(comom) == false);
 	bl1->p1[i] = comom*(bl1->p1[i]);
 	bl1->p2[i] = comom*(bl1->p2[i]);
 	bl1->p3[i] = comom*(bl1->p3[i]);
 	bl1->eps[i] = bl1->eps[i]*cobe;
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	if (std::fabs(am(bl1->p1[i],bl1->p2[i],bl1->p3[i],bl1->eps[i])-fmp) > 0.01) {
 	  G4cout <<"wrong correction " << i << G4endl;                  
 	}
       }
       bl1->eps[ilm] = bl1->eps[ilm] + v0;  
-      assert(isnan(energyTest(ilm)) == false);
+      // assert(isnan(energyTest(ilm)) == false);
     }
   }
 
@@ -3058,9 +3058,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       ioldk = bl2->k;
       //   bl2->k = bl2->k + 1;
       //		tref=ref(x1(i),x2(i),x3(i),p1(i),p2(i),p3(i),eps(i),r22)          p-n04740
-      assert(isnan(energyTest(i)) == false);
+      // assert(isnan(energyTest(i)) == false);
       tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
-      assert(isnan(tref) == false);
+      // assert(isnan(tref) == false);
       if (tref > bl4->tmax5) {
 	goto pnu45;
       }
@@ -3093,14 +3093,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  continue;
 	}
 	eij=am(bl1->p1[i]+bl1->p1[j],bl1->p2[i]+bl1->p2[j],bl1->p3[i]+bl1->p3[j],bl1->eps[i]+bl1->eps[j]);
-	assert(isnan(eij) == false);
+	// assert(isnan(eij) == false);
 	if (eij < 1925.0) {
 	  continue;
 	}
 	isos=bl1->ind2[i]+bl1->ind2[j];
 
-	assert(isnan(eij) == false);
-	assert(isnan(isos) == false);
+	// assert(isnan(eij) == false);
+	// assert(isnan(isos) == false);
 	if (31.0*(bl3->rab2) > totalCrossSection(eij,0,isos)) {
 	  continue;
 	}
@@ -3126,10 +3126,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     if (kindstruct->kindf7 < 6) { //then
       // here for incoming pions:
       for(G4int i = bl3->ia1+1; i <= ia; i++) { //do i=ia1+1,ia
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); 
-	assert(isnan(tref) == false);
-	assert(isnan(tref) == false);
+	// assert(isnan(tref) == false);
+	// assert(isnan(tref) == false);
 	if (tref < bl4->tmax5) {
 	  bl2->k = bl2->k + 1;
 	  assert((bl2->k >= 0) && (bl2->k < BL2INDSIZE));
@@ -3154,9 +3154,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  goto pnu36;
 	}
 	//   1371	      tref=ref(x1(i),x2(i),x3(i),p1(i),p2(i),p3(i),eps(i),r22)
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); // line 2579 
-	assert(isnan(tref) == false);
+	// assert(isnan(tref) == false);
 	if(verboseLevel > 3) {
 	  if(tref < 0.0) {
 	    G4cout <<"G4Incl: Reflection time < 0! (line 2579)" << G4endl;
@@ -3187,7 +3187,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  continue;
 	}
 	tref = (-1*t3 - std::sqrt(t5))*(bl1->eps[i]);  
-	assert(isnan(tref) == false);
+	// assert(isnan(tref) == false);
 	if (tref > bl4->tmax5) {
 	  continue;
 	}
@@ -3204,9 +3204,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       //      for(G4int i = bl3->ia1+1; i < ia; i++) { //do  39 i=ia1+1,ia
       for(G4int i = bl3->ia1+1; i <= ia; i++) { //do  39 i=ia1+1,ia
 	npproj[i] = 0;
-	assert(isnan(energyTest(i)) == false);
+	// assert(isnan(energyTest(i)) == false);
 	tref = ref(bl3->x1[i], bl3->x2[i], bl3->x3[i], bl1->p1[i], bl1->p2[i], bl1->p3[i], bl1->eps[i], r22); // line 2609 
-	assert(isnan(tref) == false);
+	// assert(isnan(tref) == false);
 	if(verboseLevel > 3) {
 	  if(tref < 0.0) {
 	    G4cout <<"G4Incl: Reflection time < 0! (line 2609)" << G4endl;
@@ -3228,13 +3228,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  continue;
 	}
 	eij=am(bl1->p1[i]+bl1->p1[ilm],bl1->p2[i]+bl1->p2[ilm],bl1->p3[i]+bl1->p3[ilm],bl1->eps[i]+bl1->eps[ilm]);
-	assert(isnan(eij) == false);
+	// assert(isnan(eij) == false);
 	if (eij < 1925.0) {
 	  continue;
 	}
 	isos=bl1->ind2[i]+bl1->ind2[ilm];                                             
-	assert(isnan(eij) == false);
-	assert(isnan(isos) == false);
+	// assert(isnan(eij) == false);
+	// assert(isnan(isos) == false);
 	if (31.*(bl3->rab2) > totalCrossSection(eij,0,isos)) {
 	  continue;
 	}								
@@ -3385,7 +3385,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     indic[next] = i;
   }
 
-  assert(isnan(tau) == false);
+  // assert(isnan(tau) == false);
   if(verboseLevel > 3) {
     G4cout <<"next = " << next << G4endl;
   }
@@ -3560,8 +3560,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   // parameters for the next colliding pair
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   t[9] = bl1->eps[l1] + bl1->eps[l2]; //t(10)->t[9] 
   t0 = 1.0/t[9]; // t(10)->t[9]
   b1 = (bl1->p1[l1] + bl1->p1[l2])*t0;
@@ -3619,12 +3619,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     if(mg-bl1->ind1[l1] == 0) {
       ldel=l1;
     }
-    assert(isnan(energyTest(ldel)) == false);
+    // assert(isnan(energyTest(ldel)) == false);
     bl6->xx10 = std::sqrt(std::pow(bl1->eps[ldel],2) - std::pow(bl1->p1[ldel],2) - std::pow(bl1->p2[ldel],2) - std::pow(bl1->p3[ldel],2));
     bl6->isa = bl1->ind2[ldel];
-    assert(isnan(sq) == false);
-    assert(isnan(mg) == false);
-    assert(isnan(isos) == false);
+    // assert(isnan(sq) == false);
+    // assert(isnan(mg) == false);
+    // assert(isnan(isos) == false);
     bmax2 = totalCrossSection(sq,mg,isos)/31.415926;
     if (k5 == 0 && mg != 0) {
       bmax2 = bmax2 - lowEnergy(sq,mg,isos)/31.415926;
@@ -3632,9 +3632,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     // go to 261
   }
   else {
-    assert(isnan(sq) == false);
-    assert(isnan(mg) == false);
-    assert(isnan(isos) == false);
+    // assert(isnan(sq) == false);
+    // assert(isnan(mg) == false);
+    // assert(isnan(isos) == false);
     bmax2 = totalCrossSection(sq,mg,isos)/31.41592;
   }
 
@@ -3689,7 +3689,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (irst_avatar == 1) {
     for(G4int i = 1; i <= l1; i = i + l1 - 1) { // bugfix!
       assert(bl1->eps[i] != 0);
-      assert(isnan(energyTest(i)) == false);
+      // assert(isnan(energyTest(i)) == false);
       bl1->ta = tau/bl1->eps[i];                                                
       bl3->x1[i] = bl3->x1[i] + bl1->p1[i]*(bl1->ta);                                     
       bl3->x2[i] = bl3->x2[i] + bl1->p2[i]*(bl1->ta);                                    
@@ -3704,7 +3704,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
   else {
     for(G4int i = 1; i <= ia; i++) {
-      assert(isnan(energyTest(i)) == false);
+      // assert(isnan(energyTest(i)) == false);
       assert(bl1->eps[i] != 0);
       bl1->ta = tau/bl1->eps[i];
       bl3->x1[i] = bl3->x1[i] + bl1->p1[i]*(bl1->ta);
@@ -3755,8 +3755,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   ich2 = bl1->ind1[l2];
   ich3 = bl1->ind2[l1];
   ich4 = bl1->ind2[l2];
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   aml1 = std::sqrt(std::pow(bl1->eps[l1],2) - std::pow(bl1->p1[l1],2) - std::pow(bl1->p2[l1],2) - std::pow(bl1->p3[l1],2));
   aml2 = std::sqrt(std::pow(bl1->eps[l2],2) - std::pow(bl1->p1[l2],2) - std::pow(bl1->p2[l2],2) - std::pow(bl1->p3[l2],2));
   gl1 = bl1->eps[l1]/aml1;
@@ -3806,8 +3806,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
     G4cout <<"Momentum: p1 = " << bl1->p1[l2] << " p2 = " << bl1->p2[l2] << " p3 = " << bl1->p3[l2] << G4endl;
   }
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   bl9->l1 = l1;
   bl9->l2 = l2;
   collis(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]),
@@ -3816,8 +3816,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	 &(bl1->ind1[l1]), &(bl1->ind1[l2]), &(bl1->ind2[l1]), &(bl1->ind2[l2]));
   l1 = bl9->l1;
   l2 = bl9->l2;
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   if(verboseLevel > 3) {
     G4cout <<"End of collis call" << G4endl;
     G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
@@ -3867,8 +3867,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     varavat->bloc_paul[iavat] = 1;
   }
   // restitution de l1 et l2 si rejet de la col. par pauli:
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   bl1->p1[l1] = t[20]; //t(21)->t[20]
   bl1->p2[l1] = t[21]; //t(22)->t[21]
   bl1->p3[l1] = t[22]; //t(23)->t[22]
@@ -3881,8 +3881,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->ind1[l2] = ich2;
   bl1->ind2[l1] = ich3;
   bl1->ind2[l2] = ich4;
-  assert(isnan(energyTest(l1)) == false);
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l2)) == false);
 
   if (bl2->k == 0) {
     goto pnu230;
@@ -4027,7 +4027,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[l1] = bl1->p2[l2];
   bl1->p3[l1] = bl1->p3[l2];
   bl1->eps[l1] = bl1->eps[l2];
-  assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l1)) == false);
 
   bl3->x1[l1] = bl3->x1[l2];
   bl3->x2[l1] = bl3->x2[l2];
@@ -4040,7 +4040,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl1->p2[l2] = xr2;
   bl1->p3[l2] = xr3;
   bl1->eps[l2] = xr4;
-  assert(isnan(energyTest(l2)) == false);
+  // assert(isnan(energyTest(l2)) == false);
   
   bl3->x1[l2] = xr5;
   bl3->x2[l2] = xr6;
@@ -4104,8 +4104,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (k6 == 1) {
     aml1 = am(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1]);
     aml2 = am(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],bl1->eps[l2]);
-    assert(isnan(aml1) == false);
-    assert(isnan(aml2) == false);
+    // assert(isnan(aml1) == false);
+    // assert(isnan(aml2) == false);
     
     t[36] = (aml2*(bl1->p1[l1]) - aml1*(bl1->p1[l2]))/(aml1+aml2); //t(37)->t[36]
     t[37] = (aml2*(bl1->p2[l1]) - aml1*(bl1->p2[l2]))/(aml1+aml2); //t(38)->t[37]
@@ -4148,12 +4148,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl1->p2[l1] = aml1*tt35/(aml1 + aml2) + t[37]; //t(38)->t[37]
     bl1->p3[l1] = aml1*tt36/(aml1 + aml2) + t[38]; //t(39)->t[38]
     bl1->eps[l1] = w(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],aml1);
-    assert(isnan(energyTest(l1)) == false);
+    // assert(isnan(energyTest(l1)) == false);
     bl1->p1[l2] = aml2*tt34/(aml1 + aml2) - t[36]; //t(37)->t[36]
     bl1->p2[l2] = aml2*tt35/(aml1 + aml2) - t[37]; //t(38)->t[37]
     bl1->p3[l2] = aml2*tt36/(aml1 + aml2) - t[38]; //t(39)->t[38]
     bl1->eps[l2] = w(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],aml2);
-    assert(isnan(energyTest(l2)) == false);
+    // assert(isnan(energyTest(l2)) == false);
   }
   // l-conservation
 
@@ -4233,7 +4233,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   newt(l1,l2);
 
   tref=ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22); // line 3502
-  assert(isnan(tref) == false);
+  // assert(isnan(tref) == false);
   
   if(verboseLevel > 3) {
     if(tref < 0.0) {
@@ -4249,7 +4249,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   tref=ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22); // line 3516
-  assert(isnan(tref) == false);
+  // assert(isnan(tref) == false);
   
   if(verboseLevel > 3) {
     if(tref < 0.0) {
@@ -4327,15 +4327,15 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   standardRandom(&rndm,&(hazard->igraine[16]));
   // largeur variable du delta (phase space factor G4introduced 4/2001)
   amlnew = std::sqrt(std::pow(bl1->eps[lnew],2)-std::pow(bl1->p1[lnew],2)-std::pow(bl1->p2[lnew],2)-std::pow(bl1->p3[lnew],2)); 
-  assert(isnan(amlnew) == false);
+  // assert(isnan(amlnew) == false);
   
   geff = bl1->eps[lnew]/amlnew;
   qqq = std::sqrt((std::pow(amlnew,2) - std::pow((fmp+fmpi),2))*(std::pow(amlnew,2) - std::pow((fmp-fmpi),2)))/(2.0*amlnew);
-  assert(isnan(qqq) == false);
+  // assert(isnan(qqq) == false);
   
   psf = std::pow(qqq,3)/(std::pow(qqq,3) + 5832000.0);
   tdel = -hc/(g0*psf)*std::log(rndm)*geff;                                  
-  assert(isnan(tdel) == false);
+  // assert(isnan(tdel) == false);
   
   if(tdel <= bl4->tmax5) {
     bl2->k = bl2->k + 1;
@@ -4361,11 +4361,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   t[31] = bl1->p2[l1]; //t(32)->t[31]
   t[32] = bl1->p3[l1]; //t(33)->t[32]
   t[33] = bl1->eps[l1]; //t(34)->t[33]
-  assert(isnan(energyTest(l1)) == false);
+  // assert(isnan(energyTest(l1)) == false);
   var_ab = std::pow(bl1->eps[l1],2) - std::pow(bl1->p1[l1],2) - std::pow(bl1->p2[l1],2) - std::pow(bl1->p3[l1],2);
 //   G4cout <<"var_ab:" << G4endl;
 //   G4cout <<"E = " << bl1->eps[l1] << " p1 = " << bl1->p1[l1] << " p2 = " << bl1->p2[l1] << " p3 = " << bl1->p3[l1] << G4endl;
-  assert(isnan(var_ab) == false); 
+  // assert(isnan(var_ab) == false); 
   assert(var_ab > 0);
   ym[npion] = 0.0;
 
@@ -4385,9 +4385,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     ym[npion] = ym[npion]+fmpi+100.0;
   }
   // PK
-  assert(isnan(ym[npion]) == false);
+  // assert(isnan(ym[npion]) == false);
   assert(ym[npion] != 0);
-  assert(isnan(pcm(ym[npion], fmp, fmpi)) == false);
+  // assert(isnan(pcm(ym[npion], fmp, fmpi)) == false);
   if(varavat->kveux == 1) {
     varavat->del1avat[iavat] = bl1->ind1[l1];
     varavat->energyavat[iavat] = ym[npion];
@@ -4398,11 +4398,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"npion = " << npion << G4endl;
     G4cout <<"q1 = " << q1[npion] << " q2 = " << q2[npion] << " q3 = " << q3[npion] << " q4 = " << q4[npion] << G4endl;
   }
-  assert(isnan(q1[npion]) == false);
-  assert(isnan(q2[npion]) == false);
-  assert(isnan(q3[npion]) == false);
-  assert(isnan(q4[npion]) == false);
-  assert(isnan(ym[npion]) == false);
+  // assert(isnan(q1[npion]) == false);
+  // assert(isnan(q2[npion]) == false);
+  // assert(isnan(q3[npion]) == false);
+  // assert(isnan(q4[npion]) == false);
+  // assert(isnan(ym[npion]) == false);
   assert(ym[npion] != 0);
   decay2(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &(bl1->eps[l1]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
  	 &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[l1]));
@@ -5062,10 +5062,10 @@ pnu255:
       varavat->jpartl2[iavat] = 0;
     }
 
-    assert(isnan(q1[i]) == false);
-    assert(isnan(q2[i]) == false);
-    assert(isnan(q3[i]) == false);
-    assert(isnan(q4[i]) == false);
+    // assert(isnan(q1[i]) == false);
+    // assert(isnan(q2[i]) == false);
+    // assert(isnan(q3[i]) == false);
+    // assert(isnan(q4[i]) == false);
     decay2(&(bl1->p1[i]), &(bl1->p2[i]), &(bl1->p3[i]), &(bl1->eps[i]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
 	   &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[i]));
 
@@ -5272,9 +5272,9 @@ pnu255:
     
     t[3] = bl3->x1[i]*(bl3->x1[i]) + bl3->x2[i]*(bl3->x2[i]) + bl3->x3[i]*(bl3->x3[i]); //t(4)->t[3]
     erem = erem + bl1->eps[i] - fmp;
-    if(isinf(bl1->eps[i])) {
-      G4cout <<"G4Incl: energy of nucleon " << i << " is " << bl1->eps[i] << G4endl;
-    }
+//    if(isinf(bl1->eps[i])) {
+//      G4cout <<"G4Incl: energy of nucleon " << i << " is " << bl1->eps[i] << G4endl;
+//    }
     rcm1 = rcm1 + bl3->x1[i];
     rcm2 = rcm2 + bl3->x2[i];
     rcm3 = rcm3 + bl3->x3[i];
@@ -5510,7 +5510,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   G4double debugOutput;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   G4double pout11 = (*pout11_p);
   G4double pout12 = (*pout12_p);
@@ -5623,7 +5623,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   assert(psq >= 0);
   pnorm = std::sqrt(psq);
   ecm = e1 + eout1;
-  assert(isnan(ecm) == false);
+  // assert(isnan(ecm) == false);
   
   if(ecm < 1925.0) {
     goto collis160;
@@ -5633,7 +5633,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     goto collis17;
   }
 
-  assert(isnan(bl8->rathr) == false);
+  // assert(isnan(bl8->rathr) == false);
   if(ecm < (2065.0 + bl8->rathr)) {
     goto collis17;
   }
@@ -5660,7 +5660,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
  collis19:
-  assert(isnan(bl8->ramass) == false);
+  // assert(isnan(bl8->ramass) == false);
   if((ecm-2170.4-bl8->ramass) <= 0) {
     goto collis17;
   }
@@ -5687,29 +5687,29 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   standardRandom(&rndm, &(hazard->igraine[10]));
 
-  assert(isnan(ecm) == false);
-  assert(isnan(iso) == false);
+  // assert(isnan(ecm) == false);
+  // assert(isnan(iso) == false);
   s1 = lowEnergy(ecm, 1, iso);
-  assert(isnan(s1) == false);
+  // assert(isnan(s1) == false);
   
   if(m1 != 0) {
     assert((e1*e1 - psq) >= 0);
     bl6->xx10=std::sqrt(e1*e1-psq);
     bl6->isa=is1;
-    assert(isnan(bl6->isa) == false);
+    // assert(isnan(bl6->isa) == false);
   }
   else {
     assert((std::pow(eout1,2)-psq) >= 0);
     bl6->xx10 = std::sqrt(std::pow(eout1,2)-psq);
     bl6->isa = is2;
-    assert(isnan(bl6->isa) == false);
+    // assert(isnan(bl6->isa) == false);
   }
 
   s = s1 + srec(ecm,bl6->xx10, iso,int(bl6->isa));
-  assert(isnan(s) == false);
+  // assert(isnan(s) == false);
   assert(s != 0);
   a = (s - s1)/s;
-  assert(isnan(a) == false);
+  // assert(isnan(a) == false);
   
   if((rndm-a) <= 0) {
     goto collis170;
@@ -5729,8 +5729,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
  collis18:
   standardRandom(&rndm, &(hazard->igraine[0]));
   s = lowEnergy(ecm,0,iso);
-  assert(isnan(ecm) == false);
-  assert(isnan(iso) == false);
+  // assert(isnan(ecm) == false);
+  // assert(isnan(iso) == false);
   a = deltaProductionCrossSection(ecm,iso);
   a = s/(s+a);
   if(rndm > a) {
@@ -5746,7 +5746,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   assert((std::pow(ecm,2) - 4.0*xm2) >= 0);
   pl = 0.5*ecm*std::sqrt(std::pow(ecm,2) - 4.0*xm2)/xm;
   x = 0.001*pl;
-  assert(isnan(x) == false);
+  // assert(isnan(x) == false);
   
   if (iso == 0) {
     goto collis80;
@@ -5779,7 +5779,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
  collis82:
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   
   btmax = 4.0*psq*b;
   z = std::exp(-btmax);
@@ -5835,7 +5835,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   zz = p3*p3;    
 
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   if(xx >= (zz*1.0e-8)) {
     assert(xx >= 0);
@@ -5866,7 +5866,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   pout12 = -p2;
   pout13 = -p3;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   // backward scattering according the parametrization of ref
   // prc56(1997)1
@@ -5885,7 +5885,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
   // delta production
@@ -5934,7 +5934,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
  collis103:
   pin = pnorm;
   pnorm = pcm(ecm,xm,xmdel);
-  assert(isnan(pnorm) == false);
+  // assert(isnan(pnorm) == false);
   if (pnorm <= 0) {
     pnorm = 0.000001;
   }
@@ -6019,10 +6019,10 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   qq4 = std::sqrt(xp1*xp1 + xp2*xp2 + xp3*xp3 + xmdel*xmdel);
   heli = std::pow(ctet,2);
 
-  assert(isnan(q1) == false);
-  assert(isnan(q2) == false);
-  assert(isnan(q3) == false);
-  assert(isnan(q4) == false);
+  // assert(isnan(q1) == false);
+  // assert(isnan(q2) == false);
+  // assert(isnan(q3) == false);
+  // assert(isnan(q4) == false);
   G4cout <<"Caling decay2 from collis" << G4endl;
   decay2(&qq[0],&qq[1],&qq[2],&qq4,&q1,&q2,&q3,&q4,&xmdel,&xm,&xpi,&heli);
 
@@ -6046,14 +6046,14 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     e1 = e3;
   }
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   if (iso == 0) {
     goto collis150;
   }
   if (rndm > 0.333333) {
     debugOutput = am(p1,p2,p3,e1);
-    assert(isnan(debugOutput) == false);
+    // assert(isnan(debugOutput) == false);
     goto exitRoutine;
   }
 
@@ -6063,7 +6063,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
  collis150:
   if (index == 1) {
     debugOutput = am(p1,p2,p3,e1);
-    assert(isnan(debugOutput) == false);
+    // assert(isnan(debugOutput) == false);
     goto exitRoutine;
   }
   if (rndm < 0.5) {
@@ -6073,7 +6073,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   is2 = 1;
   ip = -2;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
  collis152: 
@@ -6081,7 +6081,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   is2 = -1;
   ip = 2;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
  collis160:
@@ -6089,7 +6089,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   pout12 = -p2;
   pout13 = -p3;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   goto exitRoutine;
 
   // long-lived delta
@@ -6111,7 +6111,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     m1=1;
   }
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   // symmetrization of charges in pn -> n delta
   // the test on "index" above symetrizes the excitation of one 
@@ -6139,7 +6139,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   // recombination process
  collis170: 
   pnorm = pcm(ecm,xm,xm);
-  assert(isnan(pnorm) == false);
+  // assert(isnan(pnorm) == false);
   standardRandom(&rndm, &(hazard->igraine[11]));
   ctet = -1.0 + 2.0*rndm;
   if(std::fabs(ctet) > 1.0) {
@@ -6160,7 +6160,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   e1 = std::sqrt(p1*p1 + p2*p2 + p3*p3 + xm*xm);
   eout1 = ecm - e1;
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
 
   if (iso == 0) {
     goto collis160;
@@ -6171,7 +6171,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   
  exitRoutine:
   debugOutput = am(p1,p2,p3,e1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   (*p1_p) = p1;// Was pq
   (*p2_p) = p2;
   (*p3_p) = p3;
@@ -6179,7 +6179,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   (*e1_p) = e1;
 
   debugOutput = am(pout11,pout12,pout13,eout1);
-  assert(isnan(debugOutput) == false);
+  // assert(isnan(debugOutput) == false);
   (*pout11_p) = pout11;
   (*pout12_p) = pout12;
   (*pout13_p) = pout13;
@@ -6247,7 +6247,7 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   }
   // PK
   G4double xq = pcm(xi,x1,x2);                                                  
-  assert(isnan(xq) == false);
+  // assert(isnan(xq) == false);
   G4double ctet, stet;
 
   G4double fi, cfi, sfi;
@@ -6280,7 +6280,7 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   sfi = std::sin(fi);
   assert((b1*b1+b2*b2+b3*b3) >= 0);
   beta = std::sqrt(b1*b1+b2*b2+b3*b3);
-  assert(isnan(beta) == false);
+  // assert(isnan(beta) == false);
   assert(beta != 0);
 
   assert((std::pow(b1,2) + std::pow(b2,2)) >= 0);
@@ -6307,7 +6307,7 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
     G4cout <<"q1 = " << q1 << " q2 = " << q2 << " q3 = " << q3 << " wq = " << wq << G4endl;
     G4cout <<"w1 = " << w1 << G4endl;
     G4cout <<"x2 = " << x2 << G4endl;
-    assert(isnan(w1) == false);
+    // assert(isnan(w1) == false);
   }
   assert((w1 + x2*x2) >= 0);
   wq = std::sqrt(w1 + x2*x2);
@@ -6437,7 +6437,7 @@ void G4Incl::newt(G4int l1, G4int l2)
 //       out.close();
     }
     
-    assert(isnan(E) == false);
+    // assert(isnan(E) == false);
     if (E < 1925.0) {
       goto newt50;
     }
@@ -6449,10 +6449,10 @@ void G4Incl::newt(G4int l1, G4int l2)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   newt61:
-    assert(isnan(E) == false);
-    assert(isnan(iy) == false);
-    assert(isnan(bl1->ind2[ig]) == false);
-    assert(isnan(bl1->ind2[id]) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(iy) == false);
+    // assert(isnan(bl1->ind2[ig]) == false);
+    // assert(isnan(bl1->ind2[id]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[ig]+bl1->ind2[id])) {
       goto newt50;
     }
@@ -6487,10 +6487,10 @@ void G4Incl::newt(G4int l1, G4int l2)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   newt63: 
-    assert(isnan(E) == false);
-    assert(isnan(iy) == false);
-    assert(isnan(bl1->ind2[kg]) == false);
-    assert(isnan(bl1->ind2[kd]) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(iy) == false);
+    // assert(isnan(bl1->ind2[kg]) == false);
+    // assert(isnan(bl1->ind2[kd]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[kg]+bl1->ind2[kd])) {
       continue;
     }
@@ -6545,10 +6545,10 @@ void G4Incl::new1(G4int l1)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   new161: 
-    assert(isnan(E) == false);
-    assert(isnan(iy) == false);
-    assert(isnan(bl1->ind2[i]) == false);
-    assert(isnan(bl1->ind2[l1]) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(iy) == false);
+    // assert(isnan(bl1->ind2[i]) == false);
+    // assert(isnan(bl1->ind2[l1]) == false);
     if ((31.*(bl3->rab2)) > totalCrossSection(E ,iy,bl1->ind2[i]+bl1->ind2[l1])) {
       continue;
     }
@@ -6581,10 +6581,10 @@ void G4Incl::new1(G4int l1)
     bl6->xx10=am(bl1->p1[ix],bl1->p2[ix],bl1->p3[ix],bl1->eps[ix]);
     bl6->isa=bl1->ind2[ix];
   new171: 
-    assert(isnan(E) == false);
-    assert(isnan(iy) == false);
-    assert(isnan(bl1->ind2[i]) == false);
-    assert(isnan(bl1->ind2[l1]) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(iy) == false);
+    // assert(isnan(bl1->ind2[i]) == false);
+    // assert(isnan(bl1->ind2[l1]) == false);
     if ((31.0*(bl3->rab2)) > totalCrossSection(E,iy,bl1->ind2[i]+bl1->ind2[l1])) {
       continue;
     }
@@ -6639,7 +6639,7 @@ void G4Incl::new2(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
     }
     G4double xx2 = t[3]*t[3] + t[4]*t[4] + t[5]*t[5] + (bl1->ta)*t[6];
     G4double E = std::sqrt(std::pow((bl1->eps[i]+q4),2) - std::pow((bl1->p1[i]+q1),2) - std::pow((bl1->p2[i]+q2),2) - std::pow((bl1->p3[i]+q3),2));
-    assert(isnan(E) == false);
+    // assert(isnan(E) == false);
     if ((31.0*xx2) > pionNucleonCrossSection(E)) {
       continue;
     }
@@ -6685,7 +6685,7 @@ void G4Incl::new3(G4double y1, G4double y2, G4double y3, G4double q1, G4double q
   }
   xx2 = t[3]*t[3] + t[4]*t[4] + t[5]*t[5] + (bl1->ta)*t[6];
   E = std::sqrt(std::pow((bl1->eps[l1]+q4),2) - std::pow((bl1->p1[l1]+q1),2) - std::pow((bl1->p2[l1]+q2),2) - std::pow((bl1->p3[l1]+q3),2));
-  assert(isnan(E) == false);
+  // assert(isnan(E) == false);
   if ((31.0*xx2) > pionNucleonCrossSection(E)) {
     return;
   }
@@ -6759,7 +6759,7 @@ G4double G4Incl::pauliBlocking(G4int l, G4double xr, G4double pr)
     pr2 = pr*pr;
     vol = std::pow((40.0*3.1415926/3.0),2) * (std::pow((xr*pr)/(2.0*3.1415926*197.13),3));
     rs = std::sqrt(bl3->x1[l]*bl3->x1[l] + bl3->x2[l]*bl3->x2[l] + bl3->x3[l]*bl3->x3[l]);
-    assert(isnan(rs) == false);
+    // assert(isnan(rs) == false);
     if (ws->nosurf <= 0) {
       // modifs a.b.: r2 -> rmaxws pour la densite en w.s.
       rdeq = ws->rmaxws;
@@ -6860,8 +6860,8 @@ G4double G4Incl::totalCrossSection(G4double E, G4int m, G4int i)
   G4double sine = 0.0;
 
   if((m-1) < 0) {
-    assert(isnan(E) == false);
-    assert(isnan(i) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(i) == false);
     sine = deltaProductionCrossSection(E,int(i));
   }
 
@@ -6874,7 +6874,7 @@ G4double G4Incl::totalCrossSection(G4double E, G4int m, G4int i)
   }
 
   stotResult = sine + lowEnergy(E,m,i);
-  assert(isnan(stotResult) == false);
+  // assert(isnan(stotResult) == false);
   return stotResult;
 }
 
@@ -6899,8 +6899,8 @@ G4double G4Incl::srec(G4double Ein, G4double d, G4int i, G4int isa)
     s = E*E;
     x = (s - 3.523e6)/(s - std::pow((938.3 + d),2));
     y = s/(s - std::pow((d - 938.3),2));
-    assert(isnan(E) == false);
-    assert(isnan(i) == false);
+    // assert(isnan(E) == false);
+    // assert(isnan(i) == false);
     srecResult = 0.5*x*y*deltaProductionCrossSection(E, i);
     srecResult = srecResult*(32.0 + i*i*(isa*isa - 5))/64.0;
     srecResult = srecResult/(1.0 + 0.25*i*i);
@@ -6983,12 +6983,12 @@ G4double G4Incl::deltaProductionCrossSection(G4double E, G4int i)
 
   double EE=E-(bl8->rathr);
 
-  assert(isnan(EE) == false);
+  // assert(isnan(EE) == false);
   if(EE*EE-3.53e6 < 0) {
     goto spro22;
   }
   plab=EE*std::sqrt(EE*EE-3.52e6)/1876.6;
-  assert(isnan(plab) == false);
+  // assert(isnan(plab) == false);
   p1=0.001*plab;
   if (plab > 800.) {
     goto spro1;
@@ -7067,17 +7067,17 @@ G4double G4Incl::transmissionProb(G4double E, G4double iz, G4double izn, G4doubl
   // We need enough energy to escape from the potential well.
   if (E > v0) {
     x = std::sqrt(E*(E-v0));
-    assert(isnan(x) == false);
+    // assert(isnan(x) == false);
     barr = 4.*x/(E+E-v0+x+x);
-    assert(isnan(barr) == false);
+    // assert(isnan(barr) == false);
     if (iz > 0) {
       G4double b = izn*1.44/r;
       G4double px = std::sqrt((E-v0)/b);
-      assert(isnan(px) == false);
+      // assert(isnan(px) == false);
       
       if (px < 1.0) {
 	G4double g = izn/137.03*std::sqrt(2.*938.3/(E-v0))*(std::acos(px)-px*std::sqrt(1.-px*px));
-	assert(isnan(g) == false);
+	// assert(isnan(g) == false);
 	if (g > 35.){
 	  barr=0.0;
 	}
@@ -7115,9 +7115,9 @@ G4double G4Incl::ref(G4double x1, G4double x2, G4double x3, G4double p1, G4doubl
   
   if (ws->nosurf <= 0) {
     xv = p/pf;
-    assert(isnan(xv) == false);
+    // assert(isnan(xv) == false);
     r = interpolateFunction(xv);
-    assert(isnan(r) == false);
+    // assert(isnan(r) == false);
     r = r*r;
     if (t2 > pf2) {
       r = std::pow(ws->rmaxws,2);
@@ -7139,7 +7139,7 @@ G4double G4Incl::ref(G4double x1, G4double x2, G4double x3, G4double p1, G4doubl
   t5 = t3*t3 + (r - t4)/t2;   
   if (t5 > 0) {
     ref = (-t3 + std::sqrt(t5))*E;
-    assert(isnan(ref) == false);
+    // assert(isnan(ref) == false);
     return ref;
   }
   else {
@@ -7205,10 +7205,10 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
       G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
       bmaxt = ws->bmax;
       proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
-      assert(isnan(proba_trans) == false);
+      // assert(isnan(proba_trans) == false);
       
       proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
-      assert(isnan(proba) == false);
+      // assert(isnan(proba) == false);
       
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
@@ -7219,7 +7219,7 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
       (*izrem) = int(calincl->f[1]) + int(iz1);
       
       del = std::sqrt(std::pow(((calincl->f[0] + 1.0)*fmpinc + calincl->f[2]),2) - pbeam2);
-      assert(isnan(del) == false);
+      // assert(isnan(del) == false);
       
       (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc+calincl->f[2] + del);
 
@@ -7239,10 +7239,10 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
       G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
       bmaxt = ws->bmax;
       proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
-      assert(isnan(proba_trans) == false);
+      // assert(isnan(proba_trans) == false);
       
       proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
-      assert(isnan(proba) == false);
+      // assert(isnan(proba) == false);
       
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
@@ -7253,7 +7253,7 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
       (*izrem) = int(calincl->f[1]) + int(iz1);
       
       del = std::sqrt(std::pow(((calincl->f[0]+1.)*fmpinc+calincl->f[2]),2)-pbeam2);
-      assert(isnan(del) == false);
+      // assert(isnan(del) == false);
       
       (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc + calincl->f[2] + del);
 
@@ -7290,10 +7290,10 @@ G4double G4Incl::forceAbs(G4double iprojo, G4double at, G4double zt, G4double ep
   }
 
   sig_exp = xabs2(zp, ap, zt, at, ep);
-  assert(isnan(sig_exp) == false);
+  // assert(isnan(sig_exp) == false);
   
   sig_incl = crossSection(int(iprojo), ep, at);
-  assert(isnan(sig_incl) == false);
+  // assert(isnan(sig_incl) == false);
   
   proba = (sig_exp-pt*sig_incl)/(pt*(sig_g - sig_incl));
   //  G4cout << "sig_exp : " << sig_exp << " \t \t sig_incl: " << sig_incl << G4endl;
@@ -7369,10 +7369,10 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 
   gcm = (ap*(dp1 + E/938.0) + at)/(std::pow((std::pow(ap,2) + std::pow(at,2) + dp2*ap*(E + 938.0)*at/938.e0),dph));
   bcm = std::sqrt(dp1-dp1/(std::pow(gcm,2)));
-  assert(isnan(bcm) == false);
+  // assert(isnan(bcm) == false);
   
   plab = ap*std::sqrt(dp2*938.0*E + E*E);                                    
-  assert(isnan(plab) == false);
+  // assert(isnan(plab) == false);
   ecmp = gcm*(E+938.0)*ap - bcm*gcm*plab - ap*938.0;                     
   ecmt = gcm*938.0*at - at*938.0;
   rela = ecmp + ecmt;                                                    
@@ -7382,10 +7382,10 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   }                             
   rm = (197.32/137.01)*zp*zt/ecm;                                      
   bigr = rp + rt + 1.2*(std::pow(ap,dpth) + std::pow(at,dpth))/(std::pow(ecm,dpth));                   
-  assert(isnan(bigr) == false);
+  // assert(isnan(bigr) == false);
 
   bigb = 1.44*zp*zt/bigr;                                              
-  assert(isnan(bigb) == false);
+  // assert(isnan(bigb) == false);
   
   if ((nint(zp) == 1) && (nint(at) > 56)) {
     bigb = 0.90*bigb;
