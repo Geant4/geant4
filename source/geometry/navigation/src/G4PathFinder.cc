@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.48 2007-09-24 09:28:05 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.49 2007-10-12 17:18:11 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -91,6 +91,7 @@ G4PathFinder::G4PathFinder()
    fMinSafety_atSafLocation= -1.0; 
    fMinStep=   -1.0;
    fNewTrack= false; 
+   fNoGeometriesLimiting= 0; 
 
    for( register int num=0; num<= fMaxNav; ++num )
    {
@@ -340,6 +341,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
      fCurrentStepSize[num] = 0.0; 
      fLocatedVolume[num] = 0; 
   }
+  fNoGeometriesLimiting= 0;  // At start of track, no process limited step
 
   // In case of one geometry, the tracking will have done the locating!!
 
@@ -979,19 +981,12 @@ void G4PathFinder::WhichLimited()
 
   const G4int IdTransport= 0;  // Id of Mass Navigator !!
 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 4 )
-  {
-    G4cout << " G4PathFinder::WhichLimited - entered " << G4endl;
-  }
-#endif
-
   // Assume that [IdTransport] is Mass / Transport
   //
   G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep)
                            && ( fMinStep!= kInfinity) ; 
-  if( transportLimited )
-  { 
+
+  if( transportLimited )  { 
      shared= kSharedTransport;
   }
 
@@ -1015,6 +1010,7 @@ void G4PathFinder::WhichLimited()
       fLimitedStep[num] = kDoNot;
     }
   }
+  fNoGeometriesLimiting= noLimited;  // Save # processes limiting step
 
   if( (last > -1) && (noLimited == 1 ) )
   {
@@ -1025,8 +1021,7 @@ void G4PathFinder::WhichLimited()
   if( fVerboseLevel > 1 )
   {
     PrintLimited();   // --> for tracing 
-    if( fVerboseLevel > 4 )
-    {
+    if( fVerboseLevel > 4 ) {
       G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
     }
   }
