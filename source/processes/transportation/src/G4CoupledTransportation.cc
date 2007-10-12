@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.18 2007-10-04 15:30:33 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.19 2007-10-12 17:35:52 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -253,11 +253,20 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
       G4double newFullSafety= fPathFinder->GetCurrentSafety();  
                // this was estimated already in step above
+      // G4double newFullStep= fPathFinder->GetMinimumStep(); 
 
       if( limitedStep == kUnique || limitedStep == kSharedTransport ) {
 	 fMassGeometryLimitedStep = true ;
       }
-      fAnyGeometryLimitedStep = true;  //  ( limitedStep != kDoNot ); was ERROR
+
+      fAnyGeometryLimitedStep = (fPathFinder->GetNumberGeometriesLimitingStep() != 0); 
+
+      // Other potential 
+      // fAnyGeometryLimitedStep = newFullStep < currentMinimumStep; 
+      //                                      ^^^ Not good enough; 
+      //          Must compare with maximum requested step size
+      //           (eg in case another process requested bigger, got this!)
+
       geometryStepLength = std::min( lengthAlongCurve, currentMinimumStep); 
 
       // Momentum:  Magnitude and direction can be changed too now ...
