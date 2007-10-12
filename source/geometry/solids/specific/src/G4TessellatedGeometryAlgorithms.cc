@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.2 2007-10-09 13:20:37 gcosmo Exp $
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.3 2007-10-12 08:27:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,7 +126,7 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
     return true;
   }
   
-  if (e0i == 1 && e1i == 1)
+  if ((e0i == 1) && (e1i == 1))
   {
     if ((loc0[0]-p).mag2() < (loc1[0]-p).mag2())
     {
@@ -152,9 +152,9 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
     return true;
   }
 
-  if (e0i == 0 && e1i == 0 and e2i == 0) return false;
+  if ((e0i == 0) && (e1i == 0) && (e2i == 0)) { return false; }
 
-  if (e0i == 1 && e2i == 1)
+  if ((e0i == 1) && (e2i == 1))
   {
     if ((loc0[0]-p).mag2() < (loc2[0]-p).mag2())
     {
@@ -169,7 +169,7 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
     return true;
   }
 
-  if (e1i == 1 && e2i == 1)
+  if ((e1i == 1) && (e2i == 1))
   {
     if ((loc1[0]-p).mag2() < (loc2[0]-p).mag2())
     {
