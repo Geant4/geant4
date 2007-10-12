@@ -128,39 +128,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.26s Real=8.28s Sys=0s
+  User=8.7s Real=8.77s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.683115 0.637834 0.876669 0.88846 0.495013 0.92066 0.952525 0.246856 0.442761 0.272497 0.464485 0.760722 0.425541 0.942536 0.651594 0.952328 0.237713 0.394552 0.793005 0.966454 0.713263 0.814683 0.376384 0.899328 
- i_lag = 0, j_lag = 10
- carry = 0, count24 = 9
+ float_seed_table[] = 0.94291 0.0354721 0.701186 0.326206 0.587015 0.262074 0.473896 0.572566 0.506972 0.38817 0.77218 0.0933633 0.537664 0.922866 0.398394 0.355871 0.201726 0.502977 0.808976 0.170803 0.308365 0.152811 0.675957 0.526142 
+ i_lag = 11, j_lag = 21
+ carry = 0, count24 = 1
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31218
-	pol-compt = 269
-	msc = 3483
-	pol-eBrem = 337
-	pol-conv = 205
-	pol-eIoni = 529
-	phot = 147
-	pol-annihil = 66
+	Transportation = 31244
+	pol-compt = 258
+	msc = 4037
+	pol-eBrem = 378
+	pol-conv = 218
+	pol-eIoni = 636
+	pol-annihil = 73
+	phot = 168
  Gamma: 
-Mean Number per Event :1.0116
-Mean Energy :9.5542 MeV +- 1.9541 MeV
-Mean Polarization :-0.96197 +- 0.1895
+Mean Number per Event :1.0136
+Mean Energy :9.5366 MeV +- 1.9941 MeV
+Mean Polarization :-0.96027 +- 0.19151
  Electron: 
-Mean Number per Event :0.0351
-Mean Energy :5.2803 MeV +- 2.531 MeV
-Mean Polarization :-0.72252 +- 0.30702
+Mean Number per Event :0.0337
+Mean Energy :5.159 MeV +- 2.4146 MeV
+Mean Polarization :-0.7333 +- 0.26613
  Positron: 
-Mean Number per Event :0.0142
-Mean Energy :4.3136 MeV +- 1.978 MeV
-Mean Polarization :-0.6136 +- 0.29807
+Mean Number per Event :0.0149
+Mean Energy :4.0003 MeV +- 2.1527 MeV
+Mean Polarization :-0.56259 +- 0.33273
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

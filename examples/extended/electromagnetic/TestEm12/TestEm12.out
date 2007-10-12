@@ -321,7 +321,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1089.99s Real=1223.45s Sys=7.93s
+  User=1210.25s Real=1735.43s Sys=8.63s
 
  ======================== run summary ======================
 
@@ -329,18 +329,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.938 MeV +- 221.963 keV
+ Total Energy deposited        = 3.938 MeV +- 221.906 keV
 
- Track length of primary track = 2.017 cm  +- 2.761 mm 
+ Track length of primary track = 2.024 cm  +- 2.738 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.311 cm  +- 4.196 mm 
+ Projected range               = 1.310 cm  +- 4.223 mm 
 
- Nb of steps of primary track  = 238.62 +- 30.75	 Step size= 84.511 um  +- 4.503 um 
+ Nb of steps of primary track  = 239.25 +- 30.47	 Step size= 84.565 um  +- 4.542 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1131416311, 2012873415
+ Current couple of seeds = 320871900, 261010155
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

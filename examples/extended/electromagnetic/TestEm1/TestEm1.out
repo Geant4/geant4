@@ -295,7 +295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=214.21s Real=237.32s Sys=1.24s
+  User=238.73s Real=320.86s Sys=1.33s
 
  ======================== run summary ======================
 
@@ -303,29 +303,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.813 MeV
+ total energy deposit: 99.789 MeV
 
- nb tracks/event   neutral:     27.706   charged:     147.55
- nb  steps/event   neutral:     140.45   charged:     470.47
+ nb tracks/event   neutral:     27.831   charged:     147.49
+ nb  steps/event   neutral:     140.31   charged:      470.5
 
  nb of process calls per event: 
           eBrem       eIoni        phot         msc       comptTransportation        conv     annihil
-         25.175      300.01      25.355      143.87      112.74      0.9515      1.4045      1.4045
+         25.311      300.19      25.447      143.59      112.48      0.9935       1.396       1.396
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.114 cm    rms = 3.8867 cm 
- proj Range = 9.6588 cm    rms = 3.6 cm 
- proj/true  = 0.86908
- transverse dispersion at end = 1.6499 cm 
-      mass true Range from simulation = 30.007 g/cm2 
+ true Range = 11.105 cm    rms = 3.7992 cm 
+ proj Range = 9.6784 cm    rms = 3.5678 cm 
+ proj/true  = 0.87151
+ transverse dispersion at end = 1.6514 cm 
+      mass true Range from simulation = 29.984 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1956982241, 1546232161
+ Current couple of seeds = 1941280726, 521687253
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -355,7 +355,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1956982241, 1546232161
+ Current couple of seeds = 1941280726, 521687253
 ----------------------------------------
 Start Run processing.
 
@@ -363,7 +363,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=383.54s Real=406.45s Sys=1.42s
+  User=428.37s Real=490.45s Sys=1.9s
 
  ======================== run summary ======================
 
@@ -371,29 +371,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.804 MeV
+ total energy deposit: 99.76 MeV
 
- nb tracks/event   neutral:     36.608   charged:     291.19
- nb  steps/event   neutral:     146.66   charged:     905.42
+ nb tracks/event   neutral:     36.781   charged:     291.31
+ nb  steps/event   neutral:      147.1   charged:     904.86
 
  nb of process calls per event: 
-          eIoni       eBrem         msc       compt        photTransportation        conv     annihil
-         583.89      34.769      285.36      110.06       34.27      0.9555      1.3895       1.389
+          eIoni       eBrem         msc       compt        phot        conv     annihilTransportation
+         583.19      34.877      285.38      110.32      34.433      1.4015       1.402       0.955
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.16 cm    rms = 3.8198 cm 
- proj Range = 9.6765 cm    rms = 3.5676 cm 
- proj/true  = 0.86708
- transverse dispersion at end = 1.7561 cm 
-      mass true Range from simulation = 30.132 g/cm2 
+ true Range = 11.211 cm    rms = 3.851 cm 
+ proj Range = 9.7322 cm    rms = 3.5993 cm 
+ proj/true  = 0.86807
+ transverse dispersion at end = 1.7047 cm 
+      mass true Range from simulation = 30.271 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1037678474, 1393533598
+ Current couple of seeds = 591544993, 456516889
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

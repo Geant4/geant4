@@ -308,7 +308,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.1s Sys=0.01s
+  User=0.05s Real=0.2s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1189,7 +1189,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.4s Real=0.53s Sys=0.09s
+  User=0.41s Real=0.58s Sys=0.12s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1355,7 +1355,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.07s Real=0.1s Sys=0.01s
+  User=0.06s Real=0.11s Sys=0.03s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

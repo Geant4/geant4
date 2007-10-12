@@ -212,7 +212,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=24s Real=24s Sys=0.17s
+  User=24s Real=24s Sys=0.14s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -558,7 +558,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.53s Real=5.55s Sys=0.02s
+  User=5.57s Real=5.61s Sys=0.04s
 #
 #
 # deuteron at 200 MeV in U
@@ -600,7 +600,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.23s Real=0.25s Sys=0s
+  User=0.23s Real=0.26s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -725,7 +725,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.11s Real=4.16s Sys=0.04s
+  User=4.12s Real=5.18s Sys=0.05s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -807,7 +807,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.62s Real=2.63s Sys=0.01s
+  User=2.65s Real=2.66s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -980,7 +980,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28.56s Real=28.76s Sys=0.07s
+  User=28.41s Real=28.66s Sys=0.11s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1064,7 +1064,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.01s Real=7.05s Sys=0.03s
+  User=7.01s Real=7.05s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1244,7 +1244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.62s Real=3.67s Sys=0.03s
+  User=3.65s Real=5.21s Sys=0.02s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1386,7 +1386,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.25s Sys=0.01s
+  User=0.25s Real=0.25s Sys=0s
 #
 # .....end C(12,6)++............
 #
@@ -1583,7 +1583,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.29s Sys=0.01s
+  User=0.22s Real=0.95s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
