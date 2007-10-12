@@ -1,4 +1,4 @@
-$Id: History,v 1.261 2007-10-11 13:24:09 pia Exp $
+$Id: History,v 1.262 2007-10-12 10:46:34 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.10.2007   MGP, tag emlowen-V09-00-04
+             Refactoring Geant4-DNA domain to be compliant with TNS paper
+             Added G4DNAProcess and G4DNAFinalStateProduct
+
+11.10.2007   MGP, tag emlowen-V09-00-03
+             Identical to emlowen-V09-00-02, which apparently already 
+             existed on some files (it is unclear where it originared from)
 
 11.10.2007   MGP, tag emlowen-V09-00-02
              Re-update to atomic relaxation fixes as in  emlowen-V09-00-00
