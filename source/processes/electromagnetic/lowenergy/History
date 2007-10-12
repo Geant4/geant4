@@ -1,4 +1,4 @@
-$Id: History,v 1.266 2007-10-12 20:24:08 pia Exp $
+$Id: History,v 1.267 2007-10-12 23:17:29 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13.10.2007   MGP, tag emlowen-V09-00-09
+             Added Brenner-Zaider elastic scattering final state
 
 12.10.2007   MGP, tag emlowen-V09-00-08
              Fully working Geant4-DNA electron elastic scattering, 
