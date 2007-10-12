@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.1 2007-10-12 20:00:56 pia Exp $
+// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.2 2007-10-12 23:10:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,7 +40,10 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Geant4-DNA dummy final state for test purpose
+// Reference: TNS Geant4-DNA paper
+// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
+// design foundation and implementation of the first set of models,
+// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
 // Further documentation available from http://www.ge.infn.it/geant4/dna
 
 // -------------------------------------------------------------------
