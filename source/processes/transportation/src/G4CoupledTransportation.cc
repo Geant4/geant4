@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.19 2007-10-12 17:35:52 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.20 2007-10-12 17:37:17 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -42,9 +42,6 @@
 //                          correction for spin tracking   
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V.Grichine:     update of Kinetic Energy
-//             9 June 1999, J.Apostolakis & S.Giani: protect full relocation
-//                          in DEBUG for track  starting on surface that
-//                          goes step < tolerance.
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -153,7 +150,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4ThreeVector startPosition          = track.GetPosition() ;
   G4VPhysicalVolume* currentVolume= track.GetVolume(); 
 
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_TRANSPORT
   if( fVerboseLevel > 1 ) {
     G4cout << "G4CoupledTransportation::AlongStepGPIL> called in volume " 
 	   << currentVolume->GetName() << G4endl; 
@@ -280,6 +277,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousFullSafety = newFullSafety ; 
       // fSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
 
+#ifdef G4DEBUG_TRANSPORT
       if( fVerboseLevel > 1 ){
 	G4cout << "G4Transport:CompStep> " 
 	       << " called the pathfinder for a new step at " << startPosition
@@ -287,6 +285,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	G4cout << "  New safety (preStep) = " << newMassSafety 
 	       << " versus precalculated = "  << startMassSafety << G4endl; 
       }
+#endif
 
       // Store as best estimate value
       startMassSafety    = newMassSafety ; 
@@ -324,7 +323,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   else 
   { 
   
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_TRANSPORT
       if( fVerboseLevel > 1 ){
 	G4cout << " G4CT::CS End Position = "  << fTransportEndPosition << G4endl; 
 	G4cout << " G4CT::CS End Direction = " << fTransportEndMomentumDir << G4endl; 
@@ -819,7 +818,7 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
      //  Should also do this for the chord finders of local field managers - TODO
   }
 
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_TRANSPORT
   if( fVerboseLevel > 1 ){
     G4cout << " Returning touchable handle " << fCurrentTouchableHandle << G4endl;
   }
