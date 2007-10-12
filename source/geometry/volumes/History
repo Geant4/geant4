@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2007-05-11 14:00:23 gcosmo Exp $
+$Id: History,v 1.147 2007-10-12 20:20:34 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 12th, 2007  P.Gumplinger - geomvol-V09-00-00
+- move typedef to begin of include files and rename to
+  theSkinSurfaceTable: G4LogicalBorderSurface and
+  G4LogicalSkinSurface class
 
 May 11th, 2007      G.Cosmo - geomvol-V08-03-00
 - Use call to G4GeometryTolerance instead of kCarTolerance in
