@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.31 2007-07-05 09:48:49 gcosmo Exp $
+// $Id: G4PathFinder.hh,v 1.32 2007-10-12 17:43:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -112,8 +112,11 @@ class G4PathFinder
    inline G4bool   IsParticleLooping() const;
 
    inline G4double GetCurrentSafety() const;
-     //
      // Minimum value of safety after last ComputeStep
+   inline G4double GetMinimumStep() const;      
+     // Get the minimum step size from the last ComputeStep call
+     //   - in case full step is taken, this is kInfinity
+   inline unsigned int  GetNumberGeometriesLimitingStep() const; 
 
    G4double ComputeSafety( const G4ThreeVector& globalPoint); 
      // Recompute safety for the relevant point the endpoint of the last step!!
@@ -216,6 +219,7 @@ class G4PathFinder
    ELimited      fLimitedStep[fMaxNav];
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
+   unsigned int  fNoGeometriesLimiting;  //  How many processes contribute to limit
 
    G4ThreeVector fPreSafetyLocation;    //  last initial position for which safety evaluated
    G4double      fPreSafetyMinValue;    //   /\ corresponding value of full safety
@@ -281,6 +285,16 @@ inline G4VPhysicalVolume* G4PathFinder::GetLocatedVolume( G4int navId ) const
 inline G4int  G4PathFinder::SetVerboseLevel(G4int newLevel)
 {
   G4int old= fVerboseLevel;  fVerboseLevel= newLevel; return old;
+}
+
+inline G4double G4PathFinder::GetMinimumStep() const
+{ 
+  return fMinStep; 
+} 
+
+inline unsigned int G4PathFinder::GetNumberGeometriesLimitingStep() const
+{
+  return fNoGeometriesLimiting; 
 }
 
 inline G4double G4PathFinder::GetCurrentSafety() const
