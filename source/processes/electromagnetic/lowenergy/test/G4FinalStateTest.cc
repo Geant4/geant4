@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateTest.cc,v 1.2 2007-10-12 16:39:46 pia Exp $
+// $Id: G4FinalStateTest.cc,v 1.3 2007-10-12 19:57:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -64,13 +64,14 @@
 
 #include "G4FinalStateProduct.hh"
 #include "G4DummyFinalState.hh"
-
+#include "G4FinalStateElasticScreenedRutherford.hh"
 
 int main()
 {
   //  G4cout.setf( ios::scientific, ios::floatfield );
 
-  G4DummyFinalState* finalState = new G4DummyFinalState;
+  // G4DummyFinalState* finalState = new G4DummyFinalState;
+  G4FinalStateElasticScreenedRutherford* finalState = new G4FinalStateElasticScreenedRutherford;
 
   // Create particle track
 
@@ -187,9 +188,17 @@ int main()
 	      <<  pz/keV  << ") keV "
 	      <<  G4endl;     
     }
+  G4double eModified = product.GetModifiedEnergy();
+  G4ThreeVector vec = product.GetModifiedDirection();
   
-  
-  
+  G4cout << "Primary particle modified energy = " 
+	 << eModified / keV << " keV, direction (px,py,pz) = ("
+	      <<  vec.x() << "," 
+	      <<  vec.y() << ","
+	      <<  vec.z() << ") "
+	      <<  G4endl; 
+
+
   delete finalState;
   
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcessTest.cc,v 1.2 2007-10-12 16:39:46 pia Exp $
+// $Id: G4DNAProcessTest.cc,v 1.3 2007-10-12 19:57:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -62,13 +62,14 @@
 #include "G4PVPlacement.hh"
 
 
-
+#include "G4FinalStateElasticScreenedRutherford.hh"
 #include "G4eCrossSectionScreenedRutherford.hh"
 #include "G4FinalStateProduct.hh"
 #include "G4DummyFinalState.hh"
 #include "G4DNAProcess.hh"
 
-typedef G4DNAProcess<G4eCrossSectionScreenedRutherford,G4DummyFinalState> G4MyProcess;
+//typedef G4DNAProcess<G4eCrossSectionScreenedRutherford,G4DummyFinalState> G4MyProcess;
+typedef G4DNAProcess<G4eCrossSectionScreenedRutherford,G4FinalStateElasticScreenedRutherford> G4MyProcess;
 
 int main()
 {
@@ -208,8 +209,26 @@ int main()
 	      <<  pz/keV  << ") keV "
 	      <<  G4endl;     
     }
+
+  G4ParticleChange* pChange = dynamic_cast<G4ParticleChange*>(particleChange);
+
+  G4double eFinal = pChange->GetEnergy();
+  const G4ThreeVector* dirFinal = pChange->GetMomentumDirection();
+  G4double pX = dirFinal->x();
+  G4double pY = dirFinal->y();
+  G4double pZ = dirFinal->z();
+
+  G4cout  << "==== Final energy: " <<  eFinal/keV  << " keV,  " 
+	  << "Modified direction (px,py,pz): ("
+	  <<  pX << "," 
+	  <<  pY  << ","
+	  <<  pZ  << ") keV "
+	  <<  G4endl;     
   
-     //  delete process;
+  //  delete dirFinal;
+  //  delete track;
+  // delete step;
+  // delete process;
   
   //  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
