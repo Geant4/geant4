@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.3 2007-10-12 16:38:39 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.4 2007-10-12 19:50:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -70,6 +70,7 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
       G4DynamicParticle* particle = product.GetSecondaries()[l];
       if (particle != 0) 
 	{
+	  aParticleChange.SetNumberOfSecondaries(nSecondaries);
 	  aParticleChange.AddSecondary(particle);
 	}
     }
