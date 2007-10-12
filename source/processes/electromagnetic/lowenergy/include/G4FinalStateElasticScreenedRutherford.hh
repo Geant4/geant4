@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateElasticScreenedRutherford.hh,v 1.1 2007-10-12 19:59:28 pia Exp $
+// $Id: G4FinalStateElasticScreenedRutherford.hh,v 1.2 2007-10-12 23:02:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,6 +39,10 @@
 // Class description:
 // Geant4-DNA Cross total cross section for electron elastic scattering in water
 // Reference: TNS Geant4-DNA paper
+// Reference: TNS Geant4-DNA paper
+// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
+// design foundation and implementation of the first set of models,
+// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
 // Reference for implementation model: NIM. 155, pp. 145-156, 1978
 // Further documentation available from http://www.ge.infn.it/geant4/dna
 
