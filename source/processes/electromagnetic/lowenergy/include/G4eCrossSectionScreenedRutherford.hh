@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eCrossSectionScreenedRutherford.hh,v 1.1 2007-05-02 17:18:48 pia Exp $
+// $Id: G4eCrossSectionScreenedRutherford.hh,v 1.2 2007-10-12 12:26:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -49,35 +49,32 @@
 #define G4ECROSSSECTIONSCREENEDRUTHERFORD_HH 1
  
 #include "globals.hh"
-#include "G4Track.hh"
- 
- class G4eCrossSectionScreenedRutherford
- {
-  public:
+//#include "G4Track.hh"
 
-   G4eCrossSectionScreenedRutherford();
+class G4Track;
  
-   virtual ~G4eCrossSectionScreenedRutherford();
-   
-   G4double CrossSection(const G4Track&);
-
+class G4eCrossSectionScreenedRutherford
+{
+public:
   
-   //protected: 
-
-   // Copy constructor and assignment operator to be added here
-
-
- private:
-   
-   G4double RutherfordCrossSection(G4double energy, G4double z);
-
-   G4double ScreeningFactor(G4double energy, G4double z);
-
-   G4String name;  
-   G4double lowEnergyLimit;
-   G4double highEnergyLimit;
-
- };
-
+  G4eCrossSectionScreenedRutherford();
+  
+  virtual ~G4eCrossSectionScreenedRutherford();
+  
+  G4double CrossSection(const G4Track&);
+  
+  // Copy constructor and assignment operator to be added here
+    
+private:
+  
+  G4double RutherfordCrossSection(G4double energy, G4double z);
+  
+  G4double ScreeningFactor(G4double energy, G4double z);
+  
+  G4String name;  
+  G4double lowEnergyLimit;
+  G4double highEnergyLimit;
+  
+};
 
 #endif

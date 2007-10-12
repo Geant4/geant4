@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eCrossSectionScreenedRutherford.cc,v 1.2 2007-10-07 12:53:40 pia Exp $
+// $Id: G4eCrossSectionScreenedRutherford.cc,v 1.3 2007-10-12 12:27:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -49,12 +49,8 @@
 #include "G4eCrossSectionScreenedRutherford.hh"
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
-
 #include "G4ParticleDefinition.hh"
-#include "G4Track.hh"
 #include "G4Electron.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
 
 
 G4eCrossSectionScreenedRutherford::G4eCrossSectionScreenedRutherford()
@@ -84,23 +80,27 @@ G4double G4eCrossSectionScreenedRutherford::CrossSection(const G4Track& track)
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double k = particle->GetKineticEnergy();
 
-  // G4Material* material = track.GetMaterial();
+  // Cross section = 0 outside the energy validity limits set in the constructor
+  // ---- MGP ---- Better handling of these limits to be set in a following design iteration 
 
-  // Assume that the material is water; proper algorithm to calculate z correctly for any material to be inserted here
-  // For H20 Z = 10 (total number of electrons)
+  G4double screenedCrossSection = 0.;
 
-  G4double z = 10.;
+  if (k > lowEnergyLimit && k < highEnergyLimit)
+    {      
+      // G4Material* material = track.GetMaterial();
 
-  G4double n = ScreeningFactor(k,z);
-
-  G4double crossSection = RutherfordCrossSection(k, z);
-
-  G4double screenedCrossSection = pi *  crossSection / (n * (n + 1.));
+      // Assume that the material is water; proper algorithm to calculate z correctly for any material to be inserted here
+      // For H20 Z = 10 (total number of electrons)
+      G4double z = 10.;
+      
+      G4double n = ScreeningFactor(k,z);
+      G4double crossSection = RutherfordCrossSection(k, z);
+      screenedCrossSection = pi *  crossSection / (n * (n + 1.));
+    }    
 
   return screenedCrossSection;
 }
-
-
+  
 G4double G4eCrossSectionScreenedRutherford::RutherfordCrossSection(G4double k, G4double z)
 {
   //   
@@ -113,7 +113,6 @@ G4double G4eCrossSectionScreenedRutherford::RutherfordCrossSection(G4double k, G
   // NIM 155, pp. 145-156, 1978
   
   G4double length =(e_squared * (k + electron_mass_c2)) / (4 * pi *epsilon0 * k * ( k + 2 * electron_mass_c2));
-
   G4double cross = z * ( z + 1) * length * length;
   
   return cross;
@@ -137,6 +136,7 @@ G4double G4eCrossSectionScreenedRutherford::ScreeningFactor(G4double k, G4double
   // n(T) > 0 for T < ~ 400 MeV
   // 
   // NIM 155, pp. 145-156, 1978
+  // Formulae (2) and (5)
 
   const G4double alpha_1(1.64);
   const G4double beta_1(-0.0825);
