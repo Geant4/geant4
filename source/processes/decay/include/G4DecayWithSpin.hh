@@ -40,8 +40,6 @@
 
 #include "G4Decay.hh"
 
-class G4VExtDecayer;
-
 class G4DecayWithSpin : public G4Decay
 {
   public:
