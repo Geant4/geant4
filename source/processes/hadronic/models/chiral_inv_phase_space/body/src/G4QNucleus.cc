@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.84 2007-10-07 13:31:42 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.85 2007-10-12 10:40:51 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3661,17 +3661,25 @@ G4int G4QNucleus::HadrToNucPDG(G4int hPDG)
   else if(hPDG==3122||hPDG==3212) nPDG=91000000; // Lambda
   else if(hPDG== 211) nPDG=90000999; // pi+
   else if(hPDG==-211) nPDG=89999001; // pi-
-  else if(hPDG== 213) nPDG=89001000; // K0 (anti-strange)
-  else if(hPDG== 213) nPDG=89000001; // K+ (anti-strange)
-  else if(hPDG==-213) nPDG=90999000; // anti-K0 (strange)
-  else if(hPDG==-213) nPDG=90999999; // K-      (strange)
-  else if(hPDG==1114) nPDG=90001999; // Delta-
-  else if(hPDG==2224) nPDG=89999002; // Delta++
-  else if(hPDG==3112) nPDG=91000999; // Sigma-
-  else if(hPDG==3222) nPDG=90999001; // Sigma+
-  else if(hPDG==3312) nPDG=91999999; // Ksi-
-  else if(hPDG==3322) nPDG=91999000; // Ksi0
+  else if(hPDG== 213) nPDG=89000001; // K0 (anti-strange)
+  else if(hPDG== 213) nPDG=89001000; // K+ (anti-strange)
+  else if(hPDG==-213) nPDG=90999999; // anti-K0 (strange)
+  else if(hPDG==-213) nPDG=90999000; // K-      (strange)
+  else if(hPDG==1114) nPDG=89999002; // Delta-
+  else if(hPDG==2224) nPDG=90001999; // Delta++
+  else if(hPDG==3112) nPDG=90999000; // Sigma-
+  else if(hPDG==3222) nPDG=91000999; // Sigma+
+  else if(hPDG==3312) nPDG=91999000; // Ksi-
+  else if(hPDG==3322) nPDG=91999999; // Ksi0
   else if(hPDG==3334) nPDG=92998999; // Omega-
+  if     (hPDG==-2212) nPDG=8999000; // anti-p
+  else if(hPDG==-2112) nPDG=8999999; // anti-n
+  else if(hPDG==-3122||hPDG==3212) nPDG=89000000; //anti- Lambda
+  else if(hPDG==-3112) nPDG=89000999; // anti-Sigma-
+  else if(hPDG==-3222) nPDG=88999001; // anti-Sigma+
+  else if(hPDG==-3312) nPDG=88001000; // anti-Ksi-
+  else if(hPDG==-3322) nPDG=88000001; // anti-Ksi0
+  else if(hPDG==-3334) nPDG=87001001; // anti-Omega-
   return nPDG;
 } 
 
