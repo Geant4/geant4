@@ -1,4 +1,4 @@
-$Id: History,v 1.265 2007-10-12 20:21:04 pia Exp $
+$Id: History,v 1.266 2007-10-12 20:24:08 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 12.10.2007   MGP, tag emlowen-V09-00-08
-             Fully working Geant4-DNA electron elastic scattering
+             Fully working Geant4-DNA electron elastic scattering, 
+             screened Rutherford cross section and final state
 
 12.10.2007   MGP, tag emlowen-V09-00-07
              Improved G4DNAProcess, G4FinalStateProduct
