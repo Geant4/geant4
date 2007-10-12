@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.hh,v 1.1 2007-10-07 12:52:18 pia Exp $
+// $Id: G4FinalStateProduct.hh,v 1.2 2007-10-12 16:38:39 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,16 +68,24 @@ public:
   
   void AddEnergyDeposit(G4double energy);
   
+  void ModifyPrimaryParticle(G4double dirX, G4double dirY, G4double dirZ, G4double energy);
+  
+  void KillIncidentParticle();
+ 
+  G4bool PrimaryParticleIsKilled() const { return killStatus; }
+  
+  G4bool PrimaryParticleIsModified() const { return isModified; }
+ 
   G4int NumberOfSecondaries() const;
   
-  G4double GetEnergyDeposit() const;
+  G4double GetEnergyDeposit() const { return localEnergyDeposit; }
+
+  G4double GetModifiedEnergy() const { return modifiedEnergy; }
+
+  G4ThreeVector GetModifiedDirection() const { return modifiedDirection; }
   
   const std::vector<G4DynamicParticle*>& GetSecondaries() const;
  
-  void KillIncidentParticle();
- 
-  G4bool GetKillParticleStatus() const;
-  
   
   // protected: 
   
@@ -86,9 +94,11 @@ public:
 private:
   
   G4bool killStatus;
+  G4bool isModified;
   G4double localEnergyDeposit;
+  G4double modifiedEnergy;
   std::vector<G4DynamicParticle*> secondaries;
-  
+  G4ThreeVector modifiedDirection;
 };
 
 #endif

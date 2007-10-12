@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.cc,v 1.1 2007-10-07 12:56:54 pia Exp $
+// $Id: G4FinalStateProduct.cc,v 1.2 2007-10-12 16:39:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -50,10 +50,11 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
+#include "G4ThreeVector.hh"
 
-G4FinalStateProduct::G4FinalStateProduct() : killStatus(false), localEnergyDeposit(0.)
+G4FinalStateProduct::G4FinalStateProduct() : killStatus(false), isModified(false), localEnergyDeposit(0.), modifiedEnergy(0)
 {
-  // empty  
+  // empty
 }
 
 G4FinalStateProduct::~G4FinalStateProduct()
@@ -66,8 +67,13 @@ void G4FinalStateProduct::Clear()
 {
   // Reset object status
   killStatus = false;
+  isModified = false;
   localEnergyDeposit = 0.;
+  modifiedEnergy = 0.;
   secondaries.clear();
+  modifiedDirection.setX(0.);
+  modifiedDirection.setY(0.);
+  modifiedDirection.setZ(0.);
 }
 
 void G4FinalStateProduct::AddSecondary(G4DynamicParticle* particle)
@@ -85,12 +91,7 @@ G4int G4FinalStateProduct::NumberOfSecondaries() const
   size_t n = secondaries.size();
   return n;
 }   
-
-G4double G4FinalStateProduct::GetEnergyDeposit() const
-{
-  return localEnergyDeposit;
-}
-  
+ 
 const std::vector<G4DynamicParticle*>& G4FinalStateProduct::GetSecondaries() const
 {
   return secondaries;
@@ -101,7 +102,13 @@ void G4FinalStateProduct::KillIncidentParticle()
   killStatus = true;
 }
 
-G4bool G4FinalStateProduct::GetKillParticleStatus() const
+void G4FinalStateProduct::ModifyPrimaryParticle(G4double dirX, G4double dirY, G4double dirZ, G4double energy)
 {
-  return killStatus;
+  isModified = true;
+  modifiedEnergy = energy;
+  modifiedDirection.setX(dirX);
+  modifiedDirection.setX(dirY);
+  modifiedDirection.setX(dirZ);
+  modifiedDirection = modifiedDirection.unit();
 }
+

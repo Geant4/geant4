@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProductTest.cc,v 1.1 2007-10-07 12:59:37 pia Exp $
+// $Id: G4FinalStateProductTest.cc,v 1.2 2007-10-12 16:39:46 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -72,7 +72,7 @@ int main()
 	 << nSecondaries
 	 << " secondaries"
 	 <<G4endl;
-  G4bool kill = product->GetKillParticleStatus();
+  G4bool kill = product->PrimaryParticleIsKilled();
 
   if (kill)
     {
@@ -139,7 +139,7 @@ int main()
 	     << G4endl; 
     }
 
-  kill = product->GetKillParticleStatus();
+  kill = product->PrimaryParticleIsKilled();
 
   if (kill)
     {

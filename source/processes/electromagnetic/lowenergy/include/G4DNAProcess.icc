@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.2 2007-10-12 09:52:05 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.3 2007-10-12 16:38:39 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -78,7 +78,7 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
   G4double deposit = product.GetEnergyDeposit();
   if (deposit > 0.0) aParticleChange.ProposeLocalEnergyDeposit(deposit);
   
-  if (product.GetKillParticleStatus())
+  if (product.PrimaryParticleIsKilled())
     {
       aParticleChange.ProposeTrackStatus(fStopAndKill);
       aParticleChange.ProposeEnergy(0.);
@@ -104,9 +104,9 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
 	  secondaryKineticEnergy = secondary->GetKineticEnergy();
 	  
 	  // Calculate new primary particle kinetic energy
-	  G4double finalKinEnergy = primaryKineticEnergy - secondaryKineticEnergy - deposit;
+	  G4double finalKineticEnergy = primaryKineticEnergy - secondaryKineticEnergy - deposit;
 	  
-	  if (finalKinEnergy <= 0.0) 
+	  if (finalKineticEnergy <= 0.0) 
 	    {
 	      // Primary particle is stopped; kill it
 	      aParticleChange.ProposeTrackStatus(fStopAndKill);
@@ -120,12 +120,19 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
 	      G4ThreeVector finalMomentum = primaryMomentum - secondaryMomentum;
 	      G4ThreeVector finalDirection = finalMomentum.unit();
 	      aParticleChange.ProposeMomentumDirection(finalDirection);
-	      aParticleChange.ProposeEnergy(finalKinEnergy);
+	      aParticleChange.ProposeEnergy(finalKineticEnergy);
 	    }
 	}
       else
 	{
-	  // No secondaries generated; is any action needed?
+	  // Check whether primary particle is modified
+	  if (product.PrimaryParticleIsModified())
+	    {
+	      G4ThreeVector finalDirection = product.GetModifiedDirection();
+	      aParticleChange.ProposeMomentumDirection(finalDirection);
+	      G4double finalKineticEnergy = product.GetModifiedEnergy();
+	      aParticleChange.ProposeEnergy(finalKineticEnergy);	      
+	    }
 	}  
 	
     }
