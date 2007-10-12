@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.hh,v 1.3 2007-10-07 20:21:14 pia Exp $
+// $Id: G4DNAProcess.hh,v 1.4 2007-10-12 09:51:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Maria Grazia Pia (Maria.Grazia.Pia@ge.infn.it)
 //
 // History:
 // -----------
-// 29 Sep 2007 MGP   First (incomplete) impleentation
+// 29 Sep 2007 MGP   First (incomplete) implementation
 //
 // -------------------------------------------------------------------
 
@@ -46,11 +46,14 @@
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-
-class G4Track;
-class G4Step;
-class G4ParticleDefinition;
-class G4VParticleChange;
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4VParticleChange.hh"
+#include "G4DynamicParticle.hh"
+#include "G4ThreeVector.hh"
+#include "G4FinalStateProduct.hh"
+#include <vector>
 
 template < class TCrossSection, class TFinalState>
 class G4DNAProcess : public G4VDiscreteProcess {
