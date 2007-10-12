@@ -95,7 +95,7 @@ geometry/solids/CSG                              geom-csg-V09-00-01
     'rootsrefined' is used only if the number of refined roots is the same
     as for primary roots. Addresses problem report #969.
 
-geometry/solids/specific                         geom-specific-V09-00-06
+geometry/solids/specific                         geom-specific-V09-00-07
 ------------------------
 - Revision of G4TessellatedSolid classes:
   o Fixed problem report #931. Modified classes G4TessellatedSolid and
