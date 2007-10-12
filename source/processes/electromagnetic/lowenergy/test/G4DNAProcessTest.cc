@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcessTest.cc,v 1.3 2007-10-12 19:57:17 pia Exp $
+// $Id: G4DNAProcessTest.cc,v 1.4 2007-10-12 23:00:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -63,13 +63,19 @@
 
 
 #include "G4FinalStateElasticScreenedRutherford.hh"
-#include "G4eCrossSectionScreenedRutherford.hh"
+#include "G4FinalStateElasticBrennerZaider.hh"
+
+#include "G4CrossSectionElasticScreenedRutherford.hh"
+
 #include "G4FinalStateProduct.hh"
 #include "G4DummyFinalState.hh"
 #include "G4DNAProcess.hh"
 
 //typedef G4DNAProcess<G4eCrossSectionScreenedRutherford,G4DummyFinalState> G4MyProcess;
-typedef G4DNAProcess<G4eCrossSectionScreenedRutherford,G4FinalStateElasticScreenedRutherford> G4MyProcess;
+
+//typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> G4MyProcess;
+
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> G4MyProcess;
 
 int main()
 {
@@ -229,7 +235,8 @@ int main()
   //  delete track;
   // delete step;
   // delete process;
-  
+
+
   //  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
