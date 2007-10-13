@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.4 2007-10-12 19:50:10 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.5 2007-10-13 00:12:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -38,15 +38,39 @@
 //
 // -------------------------------------------------------------------
 
+
 template <class TCrossSection,class TFinalState>
 G4double G4DNAProcess<TCrossSection,TFinalState>::GetMeanFreePath(const G4Track& track, 
-								  G4double previousStepSize, 
-								  G4ForceCondition* condition)
+								  G4double /* previousStepSize */, 
+								  G4ForceCondition* /* condition */)
 { 
   G4double meanFreePath = DBL_MAX;
-  G4double cross = crossSection.CrossSection(track);
-  if (cross > 0.0) meanFreePath = 1.0/cross;
-  return meanFreePath;
+
+  // Assume the interacting medium to be water; one of the elements must be oxygen
+  G4Material* material(track.GetMaterial());
+  size_t i = material->GetNumberOfElements();
+  while (i>0)
+    {
+      i--;
+      const G4Element* element(material->GetElement(i));
+      if (element->GetZ() == 8.)
+	{
+	  // Number of oxygen atoms per volume = number of water molecules per volume
+	  G4double density = material->GetAtomicNumDensityVector()[i];
+	  G4cout << "density = " << density << G4endl;
+	  if (density > 0.)
+	    {
+	      G4double cross = crossSection.CrossSection(track);
+	      if (cross > 0.0) meanFreePath = 1. / (density*cross);
+	      return meanFreePath;
+	    }
+	}
+    } // end while
+  
+  // If it ends up here, it means that the material is not water
+  G4Exception("G4DNAProcess::GetMeanFreePath - material is not water");
+  // One does not really need a return statement here
+  return DBL_MAX;
 }
 
 								  

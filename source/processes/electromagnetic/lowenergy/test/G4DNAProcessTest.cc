@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcessTest.cc,v 1.4 2007-10-12 23:00:29 pia Exp $
+// $Id: G4DNAProcessTest.cc,v 1.5 2007-10-13 00:09:46 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -178,6 +178,10 @@ int main()
   
   if (mfp > 0.0) cross = 1. / mfp;
   
+  G4double atomicDensity = 3.34192e+19;
+
+  cross = cross/atomicDensity;
+
   G4cout << "MeanFreePath = " << mfp 
 	 << " - Cross section = " << cross /(nm*nm)
 	 << G4endl; 
