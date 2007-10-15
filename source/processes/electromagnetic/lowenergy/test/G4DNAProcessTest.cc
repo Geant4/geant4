@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcessTest.cc,v 1.5 2007-10-13 00:09:46 pia Exp $
+// $Id: G4DNAProcessTest.cc,v 1.6 2007-10-15 09:00:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -61,11 +61,15 @@
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 
-
+#include "G4CrossSectionElasticScreenedRutherford.hh"
 #include "G4FinalStateElasticScreenedRutherford.hh"
 #include "G4FinalStateElasticBrennerZaider.hh"
 
-#include "G4CrossSectionElasticScreenedRutherford.hh"
+#include "G4CrossSectionExcitationEmfietzoglou.hh"
+#include "G4FinalStateExcitationEmfietzoglou.hh"
+
+#include "G4CrossSectionExcitationBorn.hh"
+#include "G4FinalStateExcitationBorn.hh"
 
 #include "G4FinalStateProduct.hh"
 #include "G4DummyFinalState.hh"
@@ -75,7 +79,11 @@
 
 //typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> G4MyProcess;
 
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> G4MyProcess;
+//typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> G4MyProcess;
+
+//typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> G4MyProcess;
+
+typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn> G4MyProcess;
 
 int main()
 {
@@ -86,6 +94,7 @@ int main()
 
   // Particle definitions
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
   
   // Create a DynamicParticle  
   
@@ -101,9 +110,11 @@ int main()
   G4cin >> energy;
   energy = energy * keV;
  
-  G4DynamicParticle dynamicParticle(electron,direction,energy);
+  // G4DynamicParticle dynamicParticle(electron,direction,energy);
     
-    //     dynamicParticle.DumpInfo(0);
+  G4DynamicParticle dynamicParticle(proton,direction,energy);
+  
+  //     dynamicParticle.DumpInfo(0);
 
 
 // Materials
@@ -178,63 +189,70 @@ int main()
   
   if (mfp > 0.0) cross = 1. / mfp;
   
-  G4double atomicDensity = 3.34192e+19;
+  G4double atomicDensity = 3.34192e+19 / (1./ mm3);
 
   cross = cross/atomicDensity;
 
   G4cout << "MeanFreePath = " << mfp 
-	 << " - Cross section = " << cross /(nm*nm)
+	 << " - Inverse mean free path = " <<  1./(mfp/um) 
+	 << " - Cross section = " << cross /(cm*cm) << " cm-2 "
 	 << G4endl; 
   
- 
   G4cout << "Before invoking PostStepDoIt " << G4endl;
-  
-  // Retrieve final state produced
-  G4VParticleChange* particleChange = process->PostStepDoIt(*track,*step);
+ 
 
-  G4int nSecondaries = particleChange->GetNumberOfSecondaries();
+  G4int nTry = 5;
 
-  G4cout << "Number of secondary particles produced = " << nSecondaries << G4endl;
-  
-  for (G4int i = 0; i < nSecondaries; i++) 
-    {  
-      G4Track* finalParticle = particleChange->GetSecondary(i) ;
+  for (G4int iTry = 0; iTry < nTry; iTry++)
+    { 
+      // Retrieve final state produced
+      G4VParticleChange* particleChange = process->PostStepDoIt(*track,*step);
       
-      G4double e  = finalParticle->GetTotalEnergy();
-      G4double eKin = finalParticle->GetKineticEnergy();
-      G4double px = (finalParticle->GetMomentum()).x();
-      G4double py = (finalParticle->GetMomentum()).y();
-      G4double pz = (finalParticle->GetMomentum()).z();
-      G4double theta = (finalParticle->GetMomentum()).theta();
-      G4double phi = (finalParticle->GetMomentum()).phi();
-      G4double p = std::sqrt(px*px+py*py+pz*pz);
-      G4String particleName = finalParticle->GetDefinition()->GetParticleName();
-      G4cout  << "==== Final " 
-	      <<  particleName  << " "  
-	      << "energy: " <<  e/keV  << " keV,  " 
-	      << "eKin: " <<  eKin/keV  << " keV, " 
-	      << "(px,py,pz): ("
-	      <<  px/keV  << "," 
-	      <<  py/keV  << ","
-	      <<  pz/keV  << ") keV "
+      G4int nSecondaries = particleChange->GetNumberOfSecondaries();
+      
+      G4cout << iTry << ") Number of secondary particles produced = " << nSecondaries << G4endl;
+      
+      for (G4int i = 0; i < nSecondaries; i++) 
+	{  
+	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
+	  
+	  G4double e  = finalParticle->GetTotalEnergy();
+	  G4double eKin = finalParticle->GetKineticEnergy();
+	  G4double px = (finalParticle->GetMomentum()).x();
+	  G4double py = (finalParticle->GetMomentum()).y();
+	  G4double pz = (finalParticle->GetMomentum()).z();
+	  // G4double theta = (finalParticle->GetMomentum()).theta();
+	  // G4double phi = (finalParticle->GetMomentum()).phi();
+	  // G4double p = std::sqrt(px*px+py*py+pz*pz);
+	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
+	  G4cout  << "==== Final " 
+		  <<  particleName  << " "  
+		  << "energy: " <<  e/keV  << " keV,  " 
+		  << "eKin: " <<  eKin/keV  << " keV, " 
+		  << "(px,py,pz): ("
+		  <<  px/keV  << "," 
+		  <<  py/keV  << ","
+		  <<  pz/keV  << ") keV "
+		  <<  G4endl;     
+	}
+      
+      G4ParticleChange* pChange = dynamic_cast<G4ParticleChange*>(particleChange);
+      
+      G4double eFinal = pChange->GetEnergy();
+      const G4ThreeVector* dirFinal = pChange->GetMomentumDirection();
+      G4double pX = dirFinal->x();
+      G4double pY = dirFinal->y();
+      G4double pZ = dirFinal->z();
+      
+      G4cout  << "==== Final energy: " <<  eFinal/keV  << " keV,  " 
+	      << "Modified direction (px,py,pz): ("
+	      <<  pX << "," 
+	      <<  pY  << ","
+	      <<  pZ  << ") keV "
 	      <<  G4endl;     
-    }
+      //     delete particleChange;
+    }  
 
-  G4ParticleChange* pChange = dynamic_cast<G4ParticleChange*>(particleChange);
-
-  G4double eFinal = pChange->GetEnergy();
-  const G4ThreeVector* dirFinal = pChange->GetMomentumDirection();
-  G4double pX = dirFinal->x();
-  G4double pY = dirFinal->y();
-  G4double pZ = dirFinal->z();
-
-  G4cout  << "==== Final energy: " <<  eFinal/keV  << " keV,  " 
-	  << "Modified direction (px,py,pz): ("
-	  <<  pX << "," 
-	  <<  pY  << ","
-	  <<  pZ  << ") keV "
-	  <<  G4endl;     
-  
   //  delete dirFinal;
   //  delete track;
   // delete step;
