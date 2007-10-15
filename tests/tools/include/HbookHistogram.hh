@@ -45,7 +45,7 @@ extern "C"
   float hsum_(const int &);
   void hopera_(int&,const char*,int&,int&,float &,float &,int);
   void hidopt_(int&,const char*,int);
-};
+}
 
 class HbookHistogram : public HbookType
 {
