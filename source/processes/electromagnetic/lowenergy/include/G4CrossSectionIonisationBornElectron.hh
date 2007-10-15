@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.hh,v 1.2 2007-10-15 08:31:49 pia Exp $
+// $Id: G4CrossSectionIonisationBornElectron.hh,v 1.1 2007-10-15 08:33:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,23 +48,25 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH
-#define G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH 1
+#ifndef G4CROSSSECTIONIONISATIONBORNELECTRON_HH
+#define G4CROSSSECTIONIONISATIONBORNELECTRON_HH 1
  
 #include "globals.hh"
-#include "G4CrossSectionExcitationEmfietzoglouPartial.hh"
+#include <vector>
+#include "G4WaterExcitationStructure.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
 class G4Track;
  
-class G4CrossSectionExcitationEmfietzoglou
+class G4CrossSectionIonisationBornElectron
 {
 public:
   
-  G4CrossSectionExcitationEmfietzoglou();
+  G4CrossSectionIonisationBornElectron();
   
-  virtual ~G4CrossSectionExcitationEmfietzoglou();
+  virtual ~G4CrossSectionIonisationBornElectron();
   
-  G4double CrossSection(const G4Track&);
+  G4double CrossSection(const G4Track& track);
   
   // Copy constructor and assignment operator to be added here
     
@@ -74,8 +76,8 @@ private:
   G4double lowEnergyLimit;
   G4double highEnergyLimit;
 
-  G4CrossSectionExcitationEmfietzoglouPartial partialCrossSection;
-
+  G4DNACrossSectionDataSet* table;
+  
 };
 
 #endif

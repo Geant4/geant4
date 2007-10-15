@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.cc,v 1.3 2007-10-12 19:48:19 pia Exp $
+// $Id: G4FinalStateProduct.cc,v 1.4 2007-10-15 08:36:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -97,8 +97,9 @@ const std::vector<G4DynamicParticle*>& G4FinalStateProduct::GetSecondaries() con
   return secondaries;
 }
   
-void G4FinalStateProduct::KillIncidentParticle()
+void G4FinalStateProduct::KillPrimaryParticle()
 {
+  // ---- MGP ---- To be added: Handle local energy deposit here
   killStatus = true;
 }
 

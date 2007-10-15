@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DummyFinalState.cc,v 1.1 2007-10-07 12:56:54 pia Exp $
+// $Id: G4DummyFinalState.cc,v 1.2 2007-10-15 08:36:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -73,7 +73,7 @@ G4DummyFinalState::~G4DummyFinalState()
 }
  
 
-const G4FinalStateProduct& G4DummyFinalState::GenerateFinalState(const G4Track& track, const G4Step& step)
+const G4FinalStateProduct& G4DummyFinalState::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
   // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
@@ -86,7 +86,7 @@ const G4FinalStateProduct& G4DummyFinalState::GenerateFinalState(const G4Track& 
   G4double primaryEnergy = track.GetKineticEnergy();
   if ( primaryEnergy < energy)
     {
-      product.KillIncidentParticle();
+      product.KillPrimaryParticle();
       product.AddEnergyDeposit(primaryEnergy);
     }
   else

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.1 2007-10-13 01:55:59 pia Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.2 2007-10-15 08:36:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -53,9 +53,6 @@
 #include "G4CrossSectionExcitationEmfietzoglou.hh"
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Electron.hh"
-
 
 G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
 {
@@ -63,22 +60,6 @@ G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
   name = "CrossSectionExcitationEmfietzoglou";
   lowEnergyLimit = 7.4 * eV;
   highEnergyLimit = 10. * MeV;
-  nLevels = 5;
-
-  energyConstant.push_back(8.22*eV);
-  energyConstant.push_back(10.00*eV);
-  energyConstant.push_back(11.24*eV);
-  energyConstant.push_back(12.61*eV);
-  energyConstant.push_back(13.77*eV);
-
-//  if (verboseLevel > 0)
-//  {
-//    G4cout << name << " is created " << G4endl
-//     << "Energy range: "
-//     << lowEnergyLimit / keV << " keV - "
-//     << highEnergyLimit / GeV << " GeV"
-//     << G4endl;
-//  }
 }
 
 
@@ -94,52 +75,10 @@ G4double G4CrossSectionExcitationEmfietzoglou::CrossSection(const G4Track& track
   // Cross section = 0 outside the energy validity limits set in the constructor
   // ---- MGP ---- Better handling of these limits to be set in a following design iteration 
 
-  G4double totalCrossSection = 0.;
-
-  if (k > lowEnergyLimit && k < highEnergyLimit)
-    {      
-      for (G4int i=0; i<nLevels; i++)
-	{
-	  totalCrossSection += PartialCrossSection(k,i);
-	}
-    }
-
-  return totalCrossSection;
-}
-
-G4double G4CrossSectionExcitationEmfietzoglou::PartialCrossSection(G4double t, G4int level)
-{
-  //                 Aj                        T
-  // sigma(T) = ------------- (Bj /  T) ln(Cj ---) [1 - Bj / T]^Pj
-  //             2 pi alpha0                   R
-  //
-  // T      is the incoming electron kinetic energy
-  // alpha0 is the Bohr Radius (Bohr_radius)
-  // Aj, Bj, Cj & Pj are parameters that can be found in Emfietzoglou's papers
-  //
-  //
-  // From Phys. Med. Biol. 48 (2003) 2355-2371, D.Emfietzoglou,
-  // Monte Carlo Simulation of the energy loss of low energy electrons in liquid Water
-  
-  const G4double sigma0 = (10. / 3.343e22) * cm2;
-  
-  const G4double aj[]={0.0205, 0.0209, 0.0130, 0.0026, 0.0025};
-  const G4double cj[]={4.9801, 3.3850, 2.8095, 1.9242, 3.4624};
-  const G4double pj[]={0.4757, 0.3483, 0.4443, 0.3429, 0.4379};
-  const G4double r = 13.6 * eV;
-  
   G4double sigma = 0.;
-  
-  if (t >= energyConstant[level])
-    {
-      G4double excSigma = ( aj[level] / (2.*pi*Bohr_radius)) 
-	* (energyConstant[level] / t) 
-	* log(cj[level]*(t/r)) 
-	* pow((1.- (energyConstant[level]/t)), pj[level]);
-      sigma = excSigma * sigma0;
-    }
+
+  if (k > lowEnergyLimit && k < highEnergyLimit) sigma = partialCrossSection.Sum(k);
+
   return sigma;
 }
-
-
 

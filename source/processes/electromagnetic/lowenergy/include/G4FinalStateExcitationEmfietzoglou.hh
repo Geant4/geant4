@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.hh,v 1.2 2007-10-15 08:31:49 pia Exp $
+// $Id: G4FinalStateExcitationEmfietzoglou.hh,v 1.1 2007-10-15 08:33:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,6 +39,7 @@
 // Class description:
 // Geant4-DNA Cross total cross section for electron elastic scattering in water
 // Reference: TNS Geant4-DNA paper
+// Reference: TNS Geant4-DNA paper
 // S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
 // design foundation and implementation of the first set of models,
 // IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
@@ -48,34 +49,40 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH
-#define G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH 1
+#ifndef G4FINALSTATEEXCITATIONEMFIETZOGLOU_HH
+#define G4FINALSTATEEXCITATIONEMFIETZOGLOU_HH 1
  
 #include "globals.hh"
+#include "G4FinalStateProduct.hh"
+#include "G4WaterExcitationStructure.hh"
 #include "G4CrossSectionExcitationEmfietzoglouPartial.hh"
 
 class G4Track;
- 
-class G4CrossSectionExcitationEmfietzoglou
-{
-public:
-  
-  G4CrossSectionExcitationEmfietzoglou();
-  
-  virtual ~G4CrossSectionExcitationEmfietzoglou();
-  
-  G4double CrossSection(const G4Track&);
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
+class G4Step;
+
+ class G4FinalStateExcitationEmfietzoglou
+ {
+ public:
    
-  G4String name;  
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
+   G4FinalStateExcitationEmfietzoglou();
+   
+   ~G4FinalStateExcitationEmfietzoglou();
+   
+   const G4FinalStateProduct& GenerateFinalState(const G4Track& track, const G4Step& step);
+   
+ private:
+   
+   // Copy constructor and assignment operator to be added here
+   
+   G4String name;  
+   G4double lowEnergyLimit;
+   G4double highEnergyLimit;
+   G4FinalStateProduct product;
 
-  G4CrossSectionExcitationEmfietzoglouPartial partialCrossSection;
+   G4WaterExcitationStructure waterStructure;
 
+   G4CrossSectionExcitationEmfietzoglouPartial cross;
 };
+
 
 #endif

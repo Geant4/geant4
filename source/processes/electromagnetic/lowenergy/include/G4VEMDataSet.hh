@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.8 2006-06-29 19:37:09 gunter Exp $
+// $Id: G4VEMDataSet.hh,v 1.9 2007-10-15 08:31:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.hh,v 1.2 2007-10-15 08:31:49 pia Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglouPartial.hh,v 1.1 2007-10-15 08:33:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,34 +48,38 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH
-#define G4CROSSSECTIONEXCITATIONEMFIETZOGLOU_HH 1
+#ifndef G4CROSSSECTIONEXCITATIONEMFIETZOGLOUPARTIAL_HH
+#define G4CROSSSECTIONEXCITATIONEMFIETZOGLOUPARTIAL_HH 1
  
 #include "globals.hh"
-#include "G4CrossSectionExcitationEmfietzoglouPartial.hh"
+#include <vector>
+#include "G4WaterExcitationStructure.hh"
 
 class G4Track;
  
-class G4CrossSectionExcitationEmfietzoglou
+class G4CrossSectionExcitationEmfietzoglouPartial
 {
 public:
   
-  G4CrossSectionExcitationEmfietzoglou();
+  G4CrossSectionExcitationEmfietzoglouPartial();
   
-  virtual ~G4CrossSectionExcitationEmfietzoglou();
+  virtual ~G4CrossSectionExcitationEmfietzoglouPartial();
   
-  G4double CrossSection(const G4Track&);
+  G4double CrossSection(G4double energy,G4int level);
+
+  G4double Sum(G4double energy);
+
+  G4int RandomSelect(G4double energy);
   
   // Copy constructor and assignment operator to be added here
     
 private:
    
-  G4String name;  
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
+ // Number of excitation levels of the water molecule
+  G4int nLevels;
 
-  G4CrossSectionExcitationEmfietzoglouPartial partialCrossSection;
-
+  G4WaterExcitationStructure waterExcitation;
+  
 };
 
 #endif

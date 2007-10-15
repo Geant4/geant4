@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.hh,v 1.3 2007-10-12 19:46:29 pia Exp $
+// $Id: G4FinalStateProduct.hh,v 1.4 2007-10-15 08:31:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -71,7 +71,7 @@ public:
   void ModifyPrimaryParticle(G4double dirX, G4double dirY, G4double dirZ, G4double energy);
   void ModifyPrimaryParticle(const G4ThreeVector& direction, G4double energy);
   
-  void KillIncidentParticle();
+  void KillPrimaryParticle();
  
   G4bool PrimaryParticleIsKilled() const { return killStatus; }
   
