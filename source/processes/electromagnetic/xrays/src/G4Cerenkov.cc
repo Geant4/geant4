@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.22 2007-09-30 22:17:22 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.23 2007-10-15 20:05:23 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -87,6 +87,13 @@ using namespace std;
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
 {
+        G4cout << "G4Cerenkov::G4Cerenkov constructor" << G4endl;
+        G4cout << "NOTE: this is now a G4VDiscreteProcess!" << G4endl;
+        G4cout << "Required change in UserPhysicsList: " << G4endl;
+        G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
+        G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
+        G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
+
 	fTrackSecondariesFirst = false;
 	fMaxPhotons = 0;
 
