@@ -1,4 +1,4 @@
-$Id: History,v 1.267 2007-10-12 23:17:29 pia Exp $
+$Id: History,v 1.268 2007-10-15 09:21:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.10.2007   MGP, tag emlowen-V09-00-10
+             Added electron excitation (Emfietzoglou model),
+             proton Born excitation, electron ionisation (Born) cross 
+             section; modified G4DNACrossSectionDataSet to 
+             remove inheritance from concrete base class introduced
+             by a developer against the baseline design
+             Obsolete G4DNA* classes not compliant with the design
+             as in the TNS paper are still in this tag for convenience;
+             they will be removed from the repository when the 
+             migration to the design as in the paper is completed
+             Goes with G4EMLOW5.0 (where a new dna/directory has been
+             added containing Geant4-DNA data tables for interpolation)
 
 13.10.2007   MGP, tag emlowen-V09-00-09
              Added Brenner-Zaider elastic scattering final state
