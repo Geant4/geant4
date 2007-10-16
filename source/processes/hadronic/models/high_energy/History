@@ -14,6 +14,11 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+11 Oct 2007 - F.W. Jones
+--------------------------------------------------
+ G4HEPionMinusInelastic: fixed incorrect Imax (should be Imin) in
+ sampling of charge exchange.
+
 11 April 2007 - Dennis Wright (hadr-hep-V08-02-00)
 --------------------------------------------------
  Add model names to all high energy models in order to complete
