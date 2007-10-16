@@ -63,7 +63,12 @@
 //fission_distri:
 
 //abla:
-
+#pragma link C++ function init_evapora__;
+#pragma link C++ function lpoly_;
+#pragma link C++ function barfit_;
+#pragma link C++ function bipol_;
+#pragma link C++ function cram_;
+#pragma link C++ function spdef_;
 // CERNLIB:
 #pragma link C++ function ranf_;
 

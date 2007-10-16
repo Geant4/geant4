@@ -8,7 +8,8 @@ C
 C      SUBROUTINE ABLAINIT(STATUS,TSTAT,NAME,FPATH)
 C********************************************************************                      
 
-      SUBROUTINE INIT_EVAPORA(RACINE)
+C      SUBROUTINE INIT_EVAPORA(RACINE)
+      SUBROUTINE INIT_EVAPORA
                       
 C********************************************************************                                                                       
 C     ON INPUT:  INPUT PARAMETERS FROM FILE                             
@@ -347,7 +348,8 @@ C      OPEN(UNIT =13,STATUS='UNKNOWN',SHARED,READONLY,FILE=DEFTAB(33:80))
 C                                                                       
 C Verif par DIFF file1 file2: pas de differences dans les tables...(A.B.)                                          
 C      FILEDAT = '/crash46/CODES_SPAL/TRAVAIL/KHS/frldm.tab'
-      FILEDAT = '/DeformAndGSShellEff/frldm.tab'
+      RACINE = 'reference'
+      FILEDAT = '/data/frldm.tab'
 
 C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/frldm.tab'
       long=0
@@ -361,14 +363,14 @@ C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/frldm.tab'
 C                                                                       
 C      FILEDAT = '/crash46/CODES_SPAL/TRAVAIL/KHS/vgsld.tab'                                                   
 C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/vgsld.tab'                                                   
-      FILEDAT = '/DeformAndGSShellEff/vgsld.tab'                                                   
+      FILEDAT = '/data/vgsld.tab'                                                   
       FILENAME=RACINE(1:long)//FILEDAT                                                                                                      
       OPEN(UNIT =11,STATUS='UNKNOWN',FILE=FILENAME)
 C                                                                       
                                                  
 C      FILEDAT = '/crash46/CODES_SPAL/TRAVAIL/KHS/flalpha.tab'                                                   
 C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/flalpha.tab'                                                   
-      FILEDAT = '/DeformAndGSShellEff/flalpha.tab'                                                   
+      FILEDAT = '/data/flalpha.tab'                                                   
       FILENAME=RACINE(1:long)//FILEDAT                                                                                                      
       OPEN(UNIT =13,STATUS='UNKNOWN',FILE=FILENAME)    
 C
@@ -2654,7 +2656,8 @@ C Ici on evite froidement les depassements de tableaux....(A.B. 3/9/99)
 C****************************************************************************
 C===============================================================================
 
-      	subroutine inipace(RACINE)
+C      	subroutine inipace(RACINE)
+      	subroutine inipace
 
       	DIMENSION XM(15)
       	common/pace/DM(500,0:500)
@@ -2669,7 +2672,8 @@ c     1  '[BENLLIURE.SIMULATION.EVAPORA]pace2.DATA')
 C    	open(22,file='/TABMASS DATA A',form='formatted')
 
 C      FILEDAT='/crash46/CODES_SPAL/TRAVAIL/KHS/pace2.data'
-      FILEDAT='/DeformAndGSShellEff/pace2.data'
+      RACINE = 'reference'
+      FILEDAT='/data/pace2.data'
       long=0
       i=0
       DO WHILE(long.EQ.0)

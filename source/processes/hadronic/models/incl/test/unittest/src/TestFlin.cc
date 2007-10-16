@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestFlin.cc,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
+// $Id: TestFlin.cc,v 1.3 2007-10-16 20:37:44 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -99,7 +99,7 @@ void TestFlin::runMe()
   Float_t integral = 0.0;
 
   // Set error marginal
-  const Float_t errorMarginal = 1e-9;
+  const Float_t errorMarginal = 1e-3;
 
   // Set up arrays for data collection:
   const Int_t points = 10;
@@ -120,9 +120,9 @@ void TestFlin::runMe()
   saxw->n = 30;
   gSaxw->n = 30;
   for(Int_t i = 0; i < 30; i++) {
-    saxw->x[i][0] = i*r_step + 0.05;
-    saxw->y[i][0] = 2*(i*r_step) + (i*r_step)*(i*r_step);
-    //saxw->y[i][0] = 2*(i*r_step);
+    saxw->x[i][0] = i*r_step + 0.1;
+    //saxw->y[i][0] = 2*(i*r_step) + (i*r_step)*(i*r_step);
+    saxw->y[i][0] = 2*(i*r_step);
     gSaxw->x[0][i] = saxw->x[i][0];
     gSaxw->y[0][i] = saxw->y[i][0];
   }
@@ -160,7 +160,7 @@ void TestFlin::runMe()
     fort_f_r[i] = flin_(&r[i]);
     
     relativeDifference[i] = 100.0*(cpp_f_r[i] - fort_f_r[i])/fort_f_r[i];
-    integral = integral + abs(cpp_f_r[i] - fort_f_r[i]);
+    integral = integral + fabs(cpp_f_r[i] - fort_f_r[i]);
   }
 
   TCanvas *c1 = new TCanvas();

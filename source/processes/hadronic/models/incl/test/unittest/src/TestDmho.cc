@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestDmho.cc,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
+// $Id: TestDmho.cc,v 1.3 2007-10-16 20:37:44 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -95,7 +95,7 @@ void TestDmho::runMe()
   Float_t integral = 0.0;
 
   // Set the error marginal:
-  const Float_t errorMarginal = 1e-9;
+  const Float_t errorMarginal = 1e-6;
 
   // Set up arrays for data collection:
   const Int_t points = 50;

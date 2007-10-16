@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: InclAblaTest.hh,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
+// $Id: InclAblaTest.hh,v 1.3 2007-10-16 20:37:44 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -52,7 +52,6 @@
 #endif
 
 #include <iostream>
-extern std::ostream G4cout;
 
 class InclAblaTest : public TObject {
 

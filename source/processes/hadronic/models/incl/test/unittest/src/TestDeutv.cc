@@ -62,7 +62,7 @@ void TestDeutv::runMe()
   Int_t l = 0;
 
   // Set error marginal
-  const Float_t errorMarginal = 1e-9;
+  const Float_t errorMarginal = 1e-3;
 
   // Set up arrays for data collection:
   const Int_t points = 100;

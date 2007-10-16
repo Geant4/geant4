@@ -1,7 +1,7 @@
 
 extern "C" {
+  // INCL
   void ribm_(float *rndm, int *ial);
-
   void rgauss_(float *xg);
 
   void init_incl__(int *init_graine);
@@ -32,6 +32,14 @@ extern "C" {
   void coulomb_transm__(float *E, float *fm1, float *z1, float *fm2, float *z2, float *proba);
   double clmb1_(double *ro, double *eta, double *t1);
   double clmb2_(double *ro, double *eta, double *t1);
+  
+  // ABLA
+  void init_evapora__();
+  void lpoly_(double *x, int *n, double *pl);
+  void barfit_(int *iz, int *ia, int *il, float *sbfis, float *segs, float *selmax);
+  double bipol_(int *iflag, double *y);
+  double cram_(double *bet, double *homega);
+  double spdef_(int *a, int *z, int *optxfis);  
   
   // Functions from CERNLIB
   float ranf_();

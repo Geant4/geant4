@@ -3819,11 +3819,17 @@ CCC   IBM STANDARD RANDOM NUMBER
 C
 C      SUBROUTINE RIBM(RNDM,IAL)
       SUBROUTINE ribm(rndm,ial)
-      ial=ial*65539
+      integer tries
+      integer maxtries
+      maxtries = 100
+      tries = 0
+1185  ial=ial*65539
       if(ial)1187,1188,1188
 1187  ial=ial+2147483647+1
 1188  al=ial
       rndm=al*0.4656613E-9
+      tries = tries + 1
+      if((rndm.GT.1D0.OR.rndm.LT.0D0).AND.tries.LT.maxtries) GOTO 1185
       return
       end
 c-------------------------------------------------------------------------------

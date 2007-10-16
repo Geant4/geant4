@@ -1,5 +1,8 @@
 PACKAGE = TestingFramework
 
+# FORTRAN static lib
+LIBFORTRANINCLABLA = reference/libINCLABLA.a
+
 # OO INCL/ABLA lib
 LIBOOINCLABLA = $(G4LIB)/$(G4SYSTEM)/libG4hadronic_incl_cascade.a
 
@@ -69,11 +72,18 @@ STATICLIB = lib$(PACKAGE).a
 
 all: $(SO) RootMap 
 
+testprogram : $(STATICLIB) runTests.cc
+	$(CXX) -c runTests.cc -I./include $(CXXFLAGS)
+	$(CXX) -o runTests runTests.o $(LIBS) $(STATICLIB) $(LIBOOINCLABLA) $(LIBFORTRANINCLABLA) 
+
 $(SO) : $(SRCOBJFILES) dictionary
-	$(CXX) -o $@ -shared $(SRCOBJFILES) $(DICTOBJFILES)  $(G4LIBS) $(LIBOOINCLABLA) $(LIBS)
+	$(CXX) -o $@ -shared $(SRCOBJFILES) $(DICTOBJFILES) $(LIBOOINCLABLA) $(LIBS) $(G4LIBS)
+	mkdir -p htmldoc/plots
+	mkdir -p htmldoc/logs
 
 $(STATICLIB) : $(SRCOBJFILES) dictionary
-	$(CXX) -o $@ -static $(SRCOBJFILES) $(DICTOBJFILES) $(LIBS)
+#	$(CXX) -o $@ -static $(SRCOBJFILES) $(DICTOBJFILES) $(LIBS)
+	ar r $(STATICLIB) $(SRCOBJFILES) $(DICTOBJFILES)
 
 %.o : %.cc
 	$(CXX) $(CXXFLAGS) -c -o $@ $<

@@ -72,6 +72,10 @@ rootlib : $(INCLABLAOBJS) $(WRAPPEROBJS) $(ROOTOBJS) dictionary
 	$(CXX) $(CXXFLAGS) -o libINCLABLA.so -shared $(INCLABLAOBJS) \
 	$(WRAPPEROBJS) $(DICTOBJS) $(CERNLIBS) $(FORTRANCPPLIBS) $(ROOTLIBS)
 
+staticlib : $(INCLABLAOBJS) $(WRAPPEROBJS) dictionary 
+	ar r libINCLABLA.a $(INCLABLAOBJS) $(WRAPPEROBJS) $(DICTOBJS)
+
+
 dictionary:
 	mkdir -p dict
 	rootcint -f dict/InclAblaF_dict.cc -c $(root-config --incdir) include/InclAblaF.hh \

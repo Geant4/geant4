@@ -28,6 +28,22 @@
   canvas->Print("testevap.ps");
   canvas->SetLogy(0);
   
+  cppTree->Draw("Ntrack", "", "");
+  fortranTree->Draw("Ntrack", "", "same");
+  canvas->Print("testevap.ps");
+
+  cppTree->Draw("Kfis", "", "");
+  fortranTree->Draw("Kfis", "", "same");
+  canvas->Print("testevap.ps");
+  
+  cppTree->Draw("Ntrack", "Kfis == 1", "");
+  fortranTree->Draw("Kfis", "Kfis == 1", "same");
+  canvas->Print("testevap.ps");
+
+  cppTree->Draw("Ntrack", "Kfis == 0", "");
+  fortranTree->Draw("Kfis", "Kfis == 0", "same");
+  canvas->Print("testevap.ps");
+
   canvas->Clear();
   cppTree->Draw("Enerj", "Avv == 1 && Zvv == 0", "");
   fortranTree->Draw("Enerj", "Avv == 1 && Zvv == 0", "same");

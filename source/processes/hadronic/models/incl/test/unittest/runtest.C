@@ -23,61 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: runtest.C,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
-// Translation of INCL4.2/ABLA V3 
+// $Id: runtest.C,v 1.3 2007-10-16 20:37:44 miheikki Exp $
+// Translation of INCL4.2/ABLA V3
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
 // Alain Boudard, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
 
 {
-// Main script for running the tests.
-	
-InclAblaTestManager *theTestManager = new InclAblaTestManager();
+  // Main script for running the tests.
 
-InclAblaTestSet *theInclTestSet = new InclAblaTestSet("Cascade: G4Incl");
-InclAblaTestSet *theAblaTestSet = new InclAblaTestSet("Evaporation/Fission: G4Abla");
+  InclAblaTestManager *theTestManager = new InclAblaTestManager();
 
-// Add tests
-theInclTestSet->addTest(new TestInitIncl());
-theInclTestSet->addTest(new TestInitMat());
-theInclTestSet->addTest(new TestDensDeut());
-theInclTestSet->addTest(new TestInteg());
-theInclTestSet->addTest(new TestRibm());
-theInclTestSet->addTest(new TestRgaus());
-theInclTestSet->addTest(new TestWsax());
-theInclTestSet->addTest(new TestDerivWsax());
-theInclTestSet->addTest(new TestDmho());
-theInclTestSet->addTest(new TestDerivMho());
-theInclTestSet->addTest(new TestDerivGaus());
-theInclTestSet->addTest(new TestDeutv());
-theInclTestSet->addTest(new TestFm2());
-theInclTestSet->addTest(new TestDens());
-theInclTestSet->addTest(new TestFlin());
-theInclTestSet->addTest(new TestFlin2());
-theInclTestSet->addTest(new TestTexp());
-theInclTestSet->addTest(new TestSigReac());
-theInclTestSet->addTest(new TestRadius());
-theInclTestSet->addTest(new TestSpl2Ab());
-theInclTestSet->addTest(new TestSplineab());
-theInclTestSet->addTest(new TestClmb1());
-theInclTestSet->addTest(new TestClmb2());
-theInclTestSet->addTest(new TestCoulombTransm());
-theInclTestSet->addTest(new TestXabs2());
-theInclTestSet->addTest(new TestForceAbs());
+  InclAblaTestSet *theInclTestSet = new InclAblaTestSet("Cascade: G4Incl");
+  InclAblaTestSet *theAblaTestSet = new InclAblaTestSet("Evaporation/Fission: G4Abla");
+ 
+  // Add INCL tests
+  theInclTestSet->addTest(new TestInitIncl());
+  theInclTestSet->addTest(new TestInitMat());
+  theInclTestSet->addTest(new TestDensDeut());
+  theInclTestSet->addTest(new TestInteg());
+  theInclTestSet->addTest(new TestRibm());
+  theInclTestSet->addTest(new TestRgaus());
+  theInclTestSet->addTest(new TestWsax());
+  theInclTestSet->addTest(new TestDerivWsax());
+  theInclTestSet->addTest(new TestDmho());
+  theInclTestSet->addTest(new TestDerivMho());
+  theInclTestSet->addTest(new TestDerivGaus());
+  theInclTestSet->addTest(new TestDeutv());
+  theInclTestSet->addTest(new TestFm2());
+  theInclTestSet->addTest(new TestDens());
+  theInclTestSet->addTest(new TestFlin());
+  theInclTestSet->addTest(new TestFlin2());
+  theInclTestSet->addTest(new TestTexp());
+  theInclTestSet->addTest(new TestSigReac());
+  theInclTestSet->addTest(new TestRadius());
+  theInclTestSet->addTest(new TestSpl2Ab());
+  theInclTestSet->addTest(new TestSplineab());
+  theInclTestSet->addTest(new TestClmb1());
+  theInclTestSet->addTest(new TestClmb2());
+  theInclTestSet->addTest(new TestCoulombTransm());
+  theInclTestSet->addTest(new TestXabs2());
+  theInclTestSet->addTest(new TestForceAbs());
 
-theTestManager->addTestSet(theInclTestSet);
-theTestManager->addTestSet(theAblaTestSet);
+  // Add ABLA tests
+  theAblaTestSet->addTest(new TestLpoly());
+  theAblaTestSet->addTest(new TestBarfit());
+  theAblaTestSet->addTest(new TestBipol());
 
+  theTestManager->addTestSet(theInclTestSet);
+  theTestManager->addTestSet(theAblaTestSet);
 
-InclAblaTestHtmlLogWriter *theHtmlLogWriter = new InclAblaTestHtmlLogWriter();
+  InclAblaTestHtmlLogWriter *theHtmlLogWriter = new InclAblaTestHtmlLogWriter();
 
-// Register new log writer:
-// Just console output:
-//theTestManager->registerLogWriter(new InclAblaTestConsoleLogWriter());
-// Console and HTML log output:
-theTestManager->registerLogWriter(new InclAblaTestHtmlLogWriter());
+  // Register new log writer:
+  // Just console output:
+  //theTestManager->registerLogWriter(new InclAblaTestConsoleLogWriter());
+  // Console and HTML log output:
+  theTestManager->registerLogWriter(new InclAblaTestHtmlLogWriter());
+  theTestManager->runTests();
+  theTestManager->writeLog();
 
-theTestManager->runTests();
-theTestManager->writeLog();
+  THtml h;
+  h.MakeAll();
 }

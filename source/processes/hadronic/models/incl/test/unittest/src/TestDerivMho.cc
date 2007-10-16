@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestDerivMho.cc,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
+// $Id: TestDerivMho.cc,v 1.3 2007-10-16 20:37:44 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -90,7 +90,7 @@ void TestDerivMho::runMe()
   G4Incl *incl = new G4Incl();
 
   // Error marginal
-  const Float_t errorMarginal = 1e-9;
+  const Float_t errorMarginal = 1e-6;
   
   // Set starting values:
   Float_t r0 = 0.1;

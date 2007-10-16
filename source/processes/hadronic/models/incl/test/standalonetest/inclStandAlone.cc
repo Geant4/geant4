@@ -197,26 +197,19 @@ int main(int argc, char *argv[])
   // FINPUT(6)
   calincl->f[5] = 1.0;
 
-  // Use evaporation 0/1 = No/Yes:
-  int   use_evap = 1;
-
-  // Evaporation model 1 = KHS, 2 = GEM:
-  //  localvars_.choice_evap = 1;
-
-  // Other random seeds:
-//   int seeds[19] = {21033,17563,27563,33657,43657,56375,66375,77365,87365, 
-// 		   12345,22345,32345,42345,52345,62345,72345,82345,34567,
-// 		   47059};
-//   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-//     hazard->igraine[seedIndex] = seeds[seedIndex];
-//   }
-
-//   cout <<"Seeds at the beginning of the simulation:" << endl;
-//   cout <<"ial: " << hazard_.ial << endl;
-//   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-//     cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
-//   }
-//   cout << endl;
+  // Custom random seeds for testing.
+  //   int seeds[19] = {21033,17563,27563,33657,43657,56375,66375,77365,87365, 
+  // 		   12345,22345,32345,42345,52345,62345,72345,82345,34567,
+  // 		   47059};
+  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
+  //     hazard->igraine[seedIndex] = seeds[seedIndex];
+  //   }
+  //   cout <<"Seeds at the beginning of the simulation:" << endl;
+  //   cout <<"ial: " << hazard_.ial << endl;
+  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
+  //     cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
+  //   }
+  //   cout << endl;
 
 
   // Nuclear potential:
@@ -231,15 +224,6 @@ int main(int argc, char *argv[])
 
   // NPAULSTR
   ws->npaulstr = 0;
-
-  // Print event
-  int  ievtest = 0;
-
-  // Message output file:
-  //  sprintf(localvars_.stringout, "inclabla.out");
-
-  // Data path:
-  //  sprintf(localvars_.RACINE, "./dapnia/dapx4");
 
   // Events (only for compatibility)
   // Deprecated
@@ -278,24 +262,12 @@ int main(int argc, char *argv[])
   cout <<"Initialization complete." << endl;
 
   for(int n = 1; n <= totalevents; n++) {
-    //    debugval_.cppevent = n;
-
-//     if(n == 10) {
-//       cout <<"Seeds at the beginning of event " << n << endl;
-//       cout <<"ial: " << hazard_.ial << endl;
-//       for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-// 	cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
-//       }
-//       cout << endl;
-//     }
-
     if(n == 1) {
       doinit = 1;
     } 
     else {
       doinit = 0;
     }
-    //    applyincl4abla_(doinit);
 
     //    cout <<"Processing event " << n << endl;
     incl->processEventIncl();

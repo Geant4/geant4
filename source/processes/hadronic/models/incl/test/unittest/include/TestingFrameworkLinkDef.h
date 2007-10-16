@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestingFrameworkLinkDef.h,v 1.2 2007-09-11 13:28:42 miheikki Exp $ 
+// $Id: TestingFrameworkLinkDef.h,v 1.3 2007-10-16 20:37:44 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -80,5 +80,11 @@
 #pragma link C++ class TestClmb1+;
 #pragma link C++ class TestClmb2+;
 
+// ABLA
+#pragma link C++ class TestLpoly+;
+#pragma link C++ class TestBarfit+;
+#pragma link C++ class TestBipol+;
+#pragma link C++ class TestCram+;
+#pragma link C++ class TestSpdef+;
 
 #endif

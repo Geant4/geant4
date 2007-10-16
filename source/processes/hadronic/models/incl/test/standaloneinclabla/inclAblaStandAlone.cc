@@ -49,10 +49,9 @@ int main(int argc, char *argv[])
 
   // set initial values:
   // First random seed:
-  // (Premiere graine)
   //  hazard->ial = 38035;
   hazard->ial = 979678188;
-  //  hazard->ial = 387553;
+
   // other seeds:
   hazard->igraine[0] = 3997;
   hazard->igraine[1] = 15573;
@@ -197,26 +196,23 @@ int main(int argc, char *argv[])
   // FINPUT(6)
   calincl->f[5] = 1.0;
 
-  // Use evaporation 0/1 = No/Yes:
-  int   use_evap = 1;
-
   // Evaporation model 1 = KHS, 2 = GEM:
   //  localvars_.choice_evap = 1;
 
   // Other random seeds:
-//   int seeds[19] = {21033,17563,27563,33657,43657,56375,66375,77365,87365, 
-// 		   12345,22345,32345,42345,52345,62345,72345,82345,34567,
-// 		   47059};
-//   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-//     hazard->igraine[seedIndex] = seeds[seedIndex];
-//   }
+  //   int seeds[19] = {21033,17563,27563,33657,43657,56375,66375,77365,87365, 
+  // 		   12345,22345,32345,42345,52345,62345,72345,82345,34567,
+  // 		   47059};
+  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
+  //     hazard->igraine[seedIndex] = seeds[seedIndex];
+  //   }
 
-//   cout <<"Seeds at the beginning of the simulation:" << endl;
-//   cout <<"ial: " << hazard_.ial << endl;
-//   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-//     cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
-//   }
-//   cout << endl;
+  //   cout <<"Seeds at the beginning of the simulation:" << endl;
+  //   cout <<"ial: " << hazard_.ial << endl;
+  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
+  //     cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
+  //   }
+  //   cout << endl;
 
 
   // Nuclear potential:
@@ -232,9 +228,6 @@ int main(int argc, char *argv[])
   // NPAULSTR
   ws->npaulstr = 0;
 
-  // Print event
-  int  ievtest = 0;
-
   // Message output file:
   //  sprintf(localvars_.stringout, "inclabla.out");
 
@@ -244,9 +237,6 @@ int main(int argc, char *argv[])
   // Events (only for compatibility)
   // Deprecated
   calincl->icoup = 1;
-
-  // Inithaz
-  // inithaz = 1;
 
   // Events:
   //  int totalevents = 100000;
@@ -278,29 +268,15 @@ int main(int argc, char *argv[])
   cout <<"Initialization complete." << endl;
 
   for(int n = 1; n <= totalevents; n++) {
-    //    debugval_.cppevent = n;
-
-//     if(n == 10) {
-//       cout <<"Seeds at the beginning of event " << n << endl;
-//       cout <<"ial: " << hazard_.ial << endl;
-//       for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-// 	cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
-//       }
-//       cout << endl;
-//     }
-
     if(n == 1) {
       doinit = 1;
     } 
     else {
       doinit = 0;
     }
-    //    applyincl4abla_(doinit);
 
-    //    cout <<"Processing event " << n << endl;
     incl->processEventInclAbla(n);
-    // incl->processEventIncl();
-    //    cout <<"Event  " << n << " complete." << endl;
+
     // The coulomb transparency:
     if(n == 1) {
       //      totalevents = totalevents - debugval_.ntranscoul;
@@ -427,7 +403,6 @@ int main(int argc, char *argv[])
   summaryFile << "Output information: " << endl;
   summaryFile << "Total number of events: " << endl;
   summaryFile << "\t Asked by the user: " << (totalevents + 0 ) << endl; //debugval_.ntranscoul) << endl;
-  //  summaryFile << "\t Coulomb transparent: <not taken into account> " << endl; //<< debugval_.ntranscoul << endl;
   summaryFile << "\t Transparent: " << transparent << endl;
   summaryFile << "\t Proper cascades: " << (totalevents - transparent) << endl;
   summaryFile << "Maximum impact parameter: " << ws->bmax << endl;
