@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.3 2007-09-11 13:18:42 miheikki Exp $ 
+// $Id: G4InclAblaCascadeInterface.hh,v 1.4 2007-10-16 20:27:11 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,10 +32,9 @@
 
 
 // CLASS DESCRIPTION
-// This class is a preliminary interface code for INCL4 cascade and
-// ABLA evaporation codes. This class is intended to be used as an 
-// interface for colliding light ions (deuterons, tritons, he3 and 
-// alphas) to nuclei.
+// This class is a preliminary interface code for INCL4 cascade
+// code. This class is intended to be used as an interface for
+// colliding hadrons (protons, neutrons, pions) to nuclei.
 
 // This class was created by Pekka Kaitaniemi
 // (kaitanie@cc.helsinki.fi) , Helsinki Institute of Physics using
@@ -88,39 +87,31 @@ public:
     return (this != &right);
   }
 
-  /**
-   * Destructor
-   */
-  ~G4InclAblaCascadeInterface();
+  ~G4InclAblaCascadeInterface(); // Destructor
+
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus); // Idle
 
   /**
-   * Propagate
-   */
-  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
-
-  /**
-   * Applies the INCL/ABLA physics model.
+   * Main method to apply the INCL/ABLA physics model.
    * @param aTrack the projectile particle
    * @param theNucleus target nucleus
    * @return the output of the INCL/ABLA physics model
    */
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-                                   G4Nucleus& theNucleus); 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus); 
 
 private:
   G4int outputVerbosity;
   G4int verboseLevel;
-  G4int enableAbla; //1 = enabled, 0 = disabled
-  G4bool useAbla;
 
 private:
+  G4Hazard *hazard; // The random seeds used by INCL.
+
   G4HadFinalState theResult;  
   ofstream diagdata;
 
   G4int eventNumber;
   G4double previousTargetA;
   G4double previousTargetZ;
-  G4bool theAblaModelEnabled;
 };
 
 #endif // G4INCLABLACASCADEINTERFACE_H

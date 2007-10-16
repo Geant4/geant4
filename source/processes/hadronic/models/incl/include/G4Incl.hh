@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.3 2007-10-11 08:15:36 gcosmo Exp $ 
+// $Id: G4Incl.hh,v 1.4 2007-10-16 20:27:11 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,10 +34,8 @@
 #define G4Incl_hh 1
 
 #include "globals.hh"
-
 #include "G4InclDataDefs.hh"
 #include "G4Abla.hh"
-
 #include <fstream>
 
 using namespace std;
@@ -50,192 +48,92 @@ class G4Incl {
 public:
   /**
    *   
-   * We support Doxygen with JavaDoc style.
+   * Support for Doxygen JavaDoc style.
    *
    * \author{pekka.kaitaniemi@helsinki.fi}
    */
 
-
   /**
-   * The standard constructor used to initialize the INCL4 algorithm.
+   * Constructor to be used with Geant4.
+   * @param hazard a pointer to G4Hazard structure.
+   * @param calincl a pointer to G4Calincl structure.
+   * @param ws a pointer to G4Ws structure.   
+   * @param mat a pointer to G4Mat structure.
+   * @param varntp a pointer to G4VarNtp structure.   
    */
-  G4Incl();
+  G4Incl(G4Hazard *hazard, G4Calincl *calincl, G4Ws *ws, G4Mat *mat, G4VarNtp *varntp);
 
   /**
-   * Constructor in which the user can define initialization
-   * data. This is useful for unit testing purposes.
-   * @param hazard a pointer to G4Hazard structure
+   * Constructor for private unit testing purposes.
+   * @param hazard a pointer to G4Hazard structure.
+   * @param dton a pointer to G4Dton structure.
+   * @param saxw a pointer to G4Saxw structure.
+   * @param ws a pointer to G4Ws structure.   
    */
   G4Incl(G4Hazard *hazard, G4Dton *dton, G4Saxw *saxw, G4Ws *ws);
 
-  /**
-   * Constructor to be used with Geant4.
-   */
-  G4Incl(G4Hazard *hazard, G4Calincl *calincl, G4Ws *ws, G4Mat *mat, G4VarNtp *varntp);
+  G4Incl(); 
   
-  /**
-   * A destructor.
-   * A more elaborate description of the destructor.
-   */
-  ~G4Incl();
+  ~G4Incl(); // Destructor
+
+  G4double energyTest(G4int i); // Test for NaN energy of particle i.
+  void dumpBl5(std::ofstream& dumpOut); // Dump the contents of G4Bl5.
+  void dumpSaxw(std::ofstream& dumpOut); // Dump the contents of G4Saxw.
+  void dumpBl1(std::ofstream& dumpOut); // Dump the contents of G4Bl1.
+  void dumpBl2(std::ofstream& dumpOut); // Dump the contents of G4Bl2.
+  void dumpBl3(std::ofstream& dumpOut); // Dump the contents of G4Bl3.
 
   /**
-   * Test the energy of particle i. This allows us to test
-   * e.g. whether we get NaN value as energy or not.
-   */
-  G4double energyTest(G4int i);
-
-  /**
-   * Dump the contents of G4Bl5.
-   */
-  void dumpBl5(std::ofstream& dumpOut);
-
-  /**
-   * Dump the contents of G4Saxw.
-   */
-  void dumpSaxw(std::ofstream& dumpOut);
-
-  /**
-   * Dump the contents of G4Bl1.
-   */
-  void dumpBl1(std::ofstream& dumpOut);
-
-  /**
-   * Dump the contents of G4Bl2.
-   */
-  void dumpBl2(std::ofstream& dumpOut);
-
-  /**
-   * Dump the contents of G4Bl3.
-   */
-  void dumpBl3(std::ofstream& dumpOut);
-
-  /**
-   *
+   * Set verbosity level.
    */
   void setVerboseLevel(G4int level);
-
   /**
-   *
+   * Get verbosity level.
    */
   G4int getVerboseLevel();
   
-  /**
-   * Set G4Dton data.
-   */
-  void setDtonData(G4Dton *newDton);
-
-  /**
-   * Set G4Ws data.
-   */
-  void setWsData(G4Ws *newWs);
-  
-  /**
-   * Set G4Hazard data.
-   */
-  void setHazardData(G4Hazard *newHazard);
-
-  /**
-   * Set G4Saxw data.
-   */
+  void setDtonData(G4Dton *newDton); // Set internal data.
+  void setWsData(G4Ws *newWs); 
+  void setHazardData(G4Hazard *newHazard); 
   void setSaxwData(G4Saxw *newSaxw);
-
-  /**
-   * Set G4Spl2 data.
-   */
   void setSpl2Data(G4Spl2 *newSpl2);
-
-  /**
-   * Set G4Mat data.
-   */
   void setMatData(G4Mat *newMat);
-
-  /**
-   * Set G4Calincl data.
-   */
   void setCalinclData(G4Calincl *newCalincl);
-
-  /**
-   * Set G4LightNuc data.
-   */
   void setLightNucData(G4LightNuc *newLightNuc);
-
-  /**
-   * Set G4LightGausNuc data.
-   */
   void setLightGausNucData(G4LightGausNuc *newLightGausNuc);
-
-  /**
-   * Set Bl1 data.
-   */
   void setBl1Data(G4Bl1 *newBl1);
-
-  /**
-   * Set Bl2 data.
-   */
   void setBl2Data(G4Bl2 *newBl2);
-
-  /**
-   * Set Bl3 data.
-   */
   void setBl3Data(G4Bl3 *newBl3);
-
-  /**
-   * Set Bl4 data.
-   */
   void setBl4Data(G4Bl4 *newBl4);
-
-  /**
-   * Set Bl5 data.
-   */
   void setBl5Data(G4Bl5 *newBl5);
-
-  /**
-   * Set Bl6 data.
-   */
   void setBl6Data(G4Bl6 *newBl6);
-
-  /**
-   * Set Bl8 data.
-   */
   void setBl8Data(G4Bl8 *newBl8);
-
-  /**
-   * Set Bl9 data.
-   */
   void setBl9Data(G4Bl9 *newBl9);
-
-  /**
-   * Set Bl10 data.
-   */
   void setBl10Data(G4Bl10 *newBl10);
-
-  /**
-   * Set Kind data.
-   */
   void setKindData(G4Kind *newKind);
 
-public: // For Geant4
+public:
   /**
-   * Process one event with INCL4. No built-in de-excitation.
+   * Process one event with INCL4 only.
    */ 
   void processEventIncl();
 
   /**
-   * Process one event with INCL4 and built-in ABLA de-excitation.
-   * Connection between INCL and ABLA not implemented yet.
+   * Process one event with INCL4 and built-in ABLA evaporation and fission.
    */ 
   void processEventInclAbla(G4int eventnumber);
 
 public: // Methods used to initialize INCL
   /**
-   * Initialize INCL
+   * Initialize INCL.
+   *
    * @param initRandomSeed choose whether INCL should initialize random seeds.
    */
   void initIncl(G4bool initRandomSeed);
 
   /**
-   * Initialize target materials
+   * Initialize target materials.
+   *
    * @param izmat charge number
    * @param iamat mass number
    * @param imat material number (array index)
@@ -243,7 +141,8 @@ public: // Methods used to initialize INCL
   void initMaterial(G4int izmat, G4int iamat, G4int imat);
 
   /**
-   * a normal member taking two arguments and returning an integer value.
+   * A normal member taking two arguments and returning an integer value.
+   *
    * @param l an integer argument.
    * @param q a constant character pointer.
    * @return The test results
@@ -255,22 +154,22 @@ public: // Methods used to initialize INCL
    * \f[
    * (0.23162461 + (j - 1))^2
    * \f]
+   *
    * @param j an integer parameter
    * @return a double value
    */
   G4double fm2(G4int j);
 
   /**
-   * Interpolates function described by struct G4Saxw around a point.
+   * Interpolates function described by class G4Saxw around a point.
    *
-   * @param xv interpolation point (a double parameter)
+   * @param xv interpolation point
    * @return a double value
    */
   G4double interpolateFunction(G4double xv);
 
   /**
-   * Calculates the first derivative of the function stored in
-   * structure G4Saxw.
+   * Calculates the first derivative of the function stored in class G4Saxw.
    *
    * @param xv an integer parameter
    */
@@ -313,6 +212,7 @@ public: // Methods used to initialize INCL
    * \f[
    *    -\frac{2r^4}{A_{dif}^2} (r_0(1.0 - \frac{r^2}{A_{dif}^2}) - 1.0) e^{-\frac{r^2}{A_{dif}^2}}
    * \f]
+   *
    * @param r a G4double argument
    * @return a double value
    */
@@ -323,16 +223,18 @@ public: // Methods used to initialize INCL
    * \f[
    *    \frac{r^4}{A_{dif}^2} e^{-\frac{1}{2} \frac{r^2}{A_{dif}^2}}
    * \f]
+   *
    * @param r a G4double argument
    * @return a double value
    */
   G4double derivGaus(G4double r);
 
-  /** ce subroutine appele sur le premier tir va calculer la densite du deuton
+  /**
+   * Ce subroutine appele sur le premier tir va calculer la densite du deuton
    * dans l'espace des impulsions et preparer l'interpolation permettant ensuite
    * le tir au hasard d'un module de l'impulsion (q).
-   * ce subroutine remplit le common /spl2/:
-   * xsp(0:1), ysp integrale normalisee de la densite de 0 a q.
+   * Ce subroutine remplit le G4Spl2:
+   * xsp, ysp integrale normalisee de la densite de 0 a q.
    * a(),b(),c() coefs des nsp points pour une interpolation du second degre.
    * q est en fm-1. 
    */
@@ -340,6 +242,7 @@ public: // Methods used to initialize INCL
 
   /**
    * Integrate using Alkazhov's method.
+   *
    * @param ami a double parameter
    * @param ama a double parameter
    * @param dr a double parameter
@@ -350,18 +253,19 @@ public: // Methods used to initialize INCL
     
   /**
    * Deuteron density
+   *
    * @param q a double parameter
    * @return a double value
    */
   G4double dens(G4double q);
 
   /**
-   * Spl2Ab
+   * 
    */
   void spl2ab();
 
   /**
-   * Splineab
+   * 
    * @param xv a double parameter
    * @return a double value
    */
@@ -375,13 +279,8 @@ public: // Main INCL routines
 	   G4double *erecrem_p, G4double *alrem_p, G4double *berem_p, G4double *garem_p,
 	   G4double *bimpact_p, G4int *l_p);
 
-// void pnu(G4int *ibert_p, float *f_p[], G4int *nopart_p, G4int
-// 		*kind_p[], G4double *ep_p[], G4double *alpha_p[], G4double *beta_p[], G4double *gam_p[],
-// 		G4int *izrem_p, G4int *iarem_p, G4double *esrem_p, G4double *erecrem_p, G4double
-// 		 *alrem_p, G4double *berem_p, G4double *garem_p, G4double *bimpact_p, G4int *l_p);
-
   /**
-   * Collision routine
+   * Single nucleon-nucleon collision.
    */
   void collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1_p, G4double *pout11_p, G4double *pout12_p, 
 	      G4double *pout13_p, G4double *eout1_p, G4double *q1_p, G4double *q2_p, G4double *q3_p,
@@ -390,12 +289,15 @@ public: // Main INCL routines
 
   /**
    * This routine describes the anisotropic decay of a particle of
-   * mass xi into 2 particles of masses x1,x2 the anisotropy is
-   * supposed to follow a 1+3*hel*(std::cos(theta))**2 law with respect to
-   * the direction of the incoming particle in the input, p1,p2,p3 is
-   * the momentum of particle xi in the output, p1,p2,p3 is the
-   * momentum of particle x1, while q1,q2,q3 is the momentum of
-   * particle x2
+   * mass xi into 2 particles of masses x1,x2.
+   * The anisotropy is supposed to follow a 1+3*hel*(std::cos(theta))**2 law
+   * with respect to the direction of the incoming particle.
+   *
+   * In the input, p1,p2,p3 is the momentum of particle xi.
+   *
+   * In the output, p1,p2,p3 is the momentum of particle x1,
+   * while q1,q2,q3 is the momentum of particle x2.
+   *
    * @param p1_p pointer to momentum component 1
    * @param p2_p pointer to momentum component 2
    * @param p3_p pointer to momentum component 3
@@ -415,27 +317,31 @@ public: // Main INCL routines
 	      G4double *x2_p, G4double *hel_p);
 
   /**
-   * Time calculation
+   * Time calculation.
+   *
    * @param i an index of particle 1
    * @param j an index of particle 2
    */
   void time(G4int i, G4int j);
 
   /**
-   * New time
+   * New time.
+   *
    * @param l1 an integer parameter
    * @param l2 an integer parameter
    */
   void newt(G4int l1, G4int l2);
 
   /**
-   * New1
+   * 
+   *
    * @param l1 an integer parameter
    */
   void new1(G4int l1);
 
   /**
-   * New2
+   * 
+   *
    * @param y1 a double parameter
    * @param y2 a double parameter
    * @param y3 a double parameter
@@ -450,7 +356,8 @@ public: // Main INCL routines
 	    G4double q4, G4int npion, G4int l1);
 
   /**
-   * New3
+   * 
+   *
    * @param y1 a double parameter
    * @param y2 a double parameter
    * @param y3 a double parameter
@@ -465,7 +372,8 @@ public: // Main INCL routines
 	    G4double q4, G4int npion, G4int l1);
 
   /**
-   * Lorentz transformation
+   * Lorentz transformation.
+   *
    * @param q1 a double parameter
    * @param q2 a double parameter
    * @param q3 a double parameter
@@ -478,6 +386,7 @@ public: // Main INCL routines
 
   /**
    * Pauli blocking.
+   *
    * @param l an integer parameter
    * @param xr a double parameter
    * @param pr a double parameter
@@ -486,33 +395,29 @@ public: // Main INCL routines
   G4double pauliBlocking(G4int l, G4double xr, G4double pr);
 
   /**
-   * fit by j.vandermeulen
-   * low enrgy fit of j.c., d. l'hote, j. vdm, nim b111(1996)215
-   *
-   * i = 2,0,-2  for pp,pn,nn
-   * m = 0,1,2 for nucleon-nucleon,nucleon-delta,delta,delta
+   * Fit by J. Vandermeulen.
+   * Low energy fit from reference J.Cugnon, D. L'hote and J. Vandermeulen, NIM B111 (1996) 215.
    *
    * @param E energy
-   * @param m a double parameter
-   * @param i a double parameter
+   * @param m a double parameter m = 0, 1, 2 for nucleon-nucleon, nucleon-delta, delta-delta
+   * @param i a double parameter i = 2, 0, -2  for pp, pn, nn
    * @return a double value
    */
   G4double lowEnergy(G4double E, G4double m, G4double i);
 
   /**
-   * Total cross-sections
-   * i=2,0,-2  for pp,pn,nn
-   * m=0,1,2 for nucleon-nucleon,nucleon-delta,delta,delta
-   *
+   * Total cross-sections.
+   * 
    * @param E energy
-   * @param m an integer parameter
-   * @param i an integer parameter
+   * @param m an integer parameter m=0,1,2 for nucleon-nucleon, nucleon-delta, delta-delta
+   * @param i an integer parameter i = 2, 0, -2 for pp, pn, nn
    * @return a double value
    */
   G4double totalCrossSection(G4double E, G4int m, G4int i);
 
   /**
-   * Srec
+   *
+   *
    * @param Ein energy
    * @param d a double parameter
    * @param i an integer parameter
@@ -522,7 +427,8 @@ public: // Main INCL routines
   G4double srec(G4double Ein, G4double d, G4int i, G4int isa);
 
   /**
-   * Delta production cross section
+   * Delta production cross section.
+   *
    * @param E energy
    * @param i an integer parameter
    * @return a double value
@@ -530,9 +436,9 @@ public: // Main INCL routines
   G4double deltaProductionCrossSection(G4double E, G4int i);
 
   /**
-   * sigma(pi+ + p) in the (3,3) region
-   * new fit by j.vandermeulen + constant value above the (3,3)
-   * resonance
+   * Sigma(pi+ + p) in the (3,3) region.
+   * New fit by J. Vandermeulen and constant value above the (3,3) resonance.
+   *
    * @param x a double parameter
    * @return a double value
    */
@@ -540,20 +446,22 @@ public: // Main INCL routines
 
   /**
    * Transmission probability for a nucleon of kinetic energy
-   * E on the edge of the well of depth v0 (nr approximation)
-   * iz is the isospin of the nucleon,izn the instanteneous charge
+   * E on the edge of the well of depth v0 (nr approximation).
+   * ,
    * of the nucleus and r is the target radius
-   * @param E a double parameter
-   * @param iz a double parameter
-   * @param izn a double parameter
-   * @param r a double parameter
-   * @param v0 a double parameter
+   *
+   * @param E kinetic energy
+   * @param iz the isospin of the nucleon
+   * @param izn the instanteneous charge
+   * @param r 
+   * @param v0 
    * @return a double value
    */
   G4double transmissionProb(G4double E, G4double iz, G4double izn, G4double r, G4double v0);
 
   /**
-   * Ref
+   *
+   *
    * @param x1 a double parameter
    * @param x2 a double parameter
    * @param x3 a double parameter
