@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.5 2006-06-29 20:13:33 gunter Exp $
+// $Id: G4CompetitiveFission.cc,v 1.6 2007-10-17 18:59:33 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
