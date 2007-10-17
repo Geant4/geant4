@@ -14,10 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11 Oct 2007 - F.W. Jones
+17 Oct 2007 -  V.Ivanchenko (hadr-cohe-V09-00-00)
 ------------------------------------------------
-  G4LEnp - removed erroneous code for identity exchange of particles.
-  
+  G4LEnp                 - removed erroneous code for identity 
+	                   exchange of particles ( F.W. Jones)
+
+  G4DiffuseElastic       - added Coulomb elastic scattering amplitude
+                           using Wentzel model (V. Grichine)
 
 14 June 2007 - V.Ivanchenko (hadr-cohe-V08-03-07)
 ------------------------------------------------
