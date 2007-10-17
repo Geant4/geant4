@@ -1,0 +1,83 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4RegularNavigation.icc,v 1.1 2007-10-17 19:13:58 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4RegularNavigation Inline implementation
+//
+// --------------------------------------------------------------------
+
+// ********************************************************************
+// ParamVoxelLocate
+// ********************************************************************
+//
+inline
+G4SmartVoxelNode*
+G4RegularNavigation::ParamVoxelLocate( G4SmartVoxelHeader* pHead,
+                                       const G4ThreeVector& localPoint )
+{
+  // If no parameterisation axis is specified, adopt default
+  // location strategy as for placements
+  //  
+  if ( pHead->GetParamAxis()==kUndefined )
+  {
+    fVoxelNode = G4VoxelNavigation::VoxelLocate(pHead,localPoint);
+  }
+  else
+  {
+    G4double targetHeaderMin, targetHeaderNodeWidth;
+    G4int targetHeaderNoSlices, targetNodeNo;
+    EAxis targetHeaderAxis;
+
+    targetHeaderAxis = pHead->GetAxis();
+    targetHeaderNoSlices = pHead->GetNoSlices();
+    targetHeaderMin = pHead->GetMinExtent();
+    targetHeaderNodeWidth = (pHead->GetMaxExtent()-targetHeaderMin)
+                          / targetHeaderNoSlices;
+    targetNodeNo = G4int ( (localPoint(targetHeaderAxis)-targetHeaderMin)
+                           / targetHeaderNodeWidth );
+    // Rounding protection
+    //
+    if ( targetNodeNo<0 )
+    {
+      targetNodeNo = 0;
+    }
+    else if ( targetNodeNo>=targetHeaderNoSlices )
+         {
+           targetNodeNo = targetHeaderNoSlices-1;
+         }
+    fVoxelAxis = targetHeaderAxis;
+    fVoxelNoSlices = targetHeaderNoSlices;
+    fVoxelSliceWidth = targetHeaderNodeWidth;
+    fVoxelNodeNo = targetNodeNo;
+    fVoxelHeader = pHead;    
+    fVoxelNode = pHead->GetSlice(targetNodeNo)->GetNode();
+  }
+  return fVoxelNode;
+}
+

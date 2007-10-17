@@ -1,0 +1,148 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4PhantomParameterisation.icc,v 1.1 2007-10-17 19:13:58 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//--------------------------------------------------------------------
+inline
+void G4PhantomParameterisation::
+SetVoxelDimensions( G4double halfx, G4double halfy, G4double halfz )
+{
+  fVoxelHalfX = halfx; 
+  fVoxelHalfY = halfy; 
+  fVoxelHalfZ = halfz; 
+}
+  
+
+//--------------------------------------------------------------------
+inline
+void G4PhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_t nz )
+{
+  fNoVoxelX = nx; 
+  fNoVoxelY = ny; 
+  fNoVoxelZ = nz; 
+  fNoVoxelXY = nx*ny; 
+  fNoVoxel = nx*ny*nz;
+}
+  
+//--------------------------------------------------------------------
+inline
+void G4PhantomParameterisation::SetMaterials(std::vector<G4Material*>& mates )
+{
+  fMaterials = mates;
+}
+  
+//--------------------------------------------------------------------
+inline
+void G4PhantomParameterisation::SetMaterialIndices( size_t* matInd )
+{
+  fMaterialIndices = matInd;
+}
+
+//--------------------------------------------------------------------
+inline
+G4double G4PhantomParameterisation::GetVoxelHalfX() const
+{
+  return fVoxelHalfX;
+}
+
+//--------------------------------------------------------------------
+inline
+G4double G4PhantomParameterisation::GetVoxelHalfY() const
+{
+  return fVoxelHalfY;
+}
+
+//--------------------------------------------------------------------
+inline
+G4double G4PhantomParameterisation::GetVoxelHalfZ() const
+{
+  return fVoxelHalfZ;
+}
+
+//--------------------------------------------------------------------
+inline
+size_t G4PhantomParameterisation::GetNoVoxelX() const
+{
+  return fNoVoxelX;
+}
+
+//--------------------------------------------------------------------
+inline
+size_t G4PhantomParameterisation::GetNoVoxelY() const
+{
+  return fNoVoxelY;
+}
+
+//--------------------------------------------------------------------
+inline
+size_t G4PhantomParameterisation::GetNoVoxelZ() const
+{
+  return fNoVoxelZ;
+}
+
+//--------------------------------------------------------------------
+inline
+size_t G4PhantomParameterisation::GetNoVoxel() const
+{
+  return fNoVoxel;
+}
+
+//--------------------------------------------------------------------
+inline
+std::vector<G4Material*> G4PhantomParameterisation::GetMaterials() const
+{
+  return fMaterials;
+}
+
+//--------------------------------------------------------------------
+inline
+size_t* G4PhantomParameterisation::GetMaterialIndices() const
+{
+  return fMaterialIndices;
+}
+
+//--------------------------------------------------------------------
+inline
+G4VSolid* G4PhantomParameterisation::GetContainerSolid() const
+{
+  return fContainerSolid;
+}
+
+//--------------------------------------------------------------------
+inline
+G4bool G4PhantomParameterisation::SkipEqualMaterials() const
+{
+  return bSkipEqualMaterials;
+}
+
+//--------------------------------------------------------------------
+inline
+void G4PhantomParameterisation::SetSkipEqualMaterials( G4bool skip )
+{
+  bSkipEqualMaterials = skip;
+}
