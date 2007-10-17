@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.49 2007-08-28 15:42:32 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.50 2007-10-17 13:37:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -198,7 +198,14 @@ const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
   return *this;
 }
 
-G4QHadron::~G4QHadron() {}
+G4QHadron::~G4QHadron()
+{
+  std::deque<G4QParton*>::iterator pos;
+  for(pos=Color.begin(); pos<Color.end(); pos++) {delete [] *pos;}
+  Color.clear();
+  for(pos=AntiColor.begin(); pos<AntiColor.end(); pos++) {delete [] *pos;}
+  AntiColor.clear();
+}
 
 // Define quark content of the particle with a particular PDG Code
 void G4QHadron::DefineQC(G4int PDGCode)

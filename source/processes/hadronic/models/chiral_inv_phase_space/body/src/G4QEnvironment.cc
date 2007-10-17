@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.132 2007-10-07 13:31:41 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.133 2007-10-17 13:37:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7584,7 +7584,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
       //KsiM: KsiM+Pi0=1456.29, Ksi0+Pi=1454.4, L+K=1609.36, Sig0+K=1686.32, SigM+K0=1695.1
       //KsiZ: Ksi0+Pi0=1449.81, KsiM+Pi=1460.9, L+K0=1613.3, Sig0+K0=1690.3, SigP+K=1683.05
       //Omeg: Omeg+Pi0=1807.43, Ksi0+K=1808.5, KsiM+K0=1818.96
-      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknBaryon(S>1)QC="<<qH->GetQC()<<G4endl;
+      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknownBaryon(S>1)QC="<<qH->GetQC()<<G4endl;
       theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
       return;
     }
@@ -7621,6 +7621,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
     }
     else
     {
+      delete qH;
       G4cerr<<"***G4QEnv::DecayBaryon: Can't Correct, *EmptyEnv*="<<theEnvironment<<G4endl;
       throw G4QException("G4QEnv::DecayBaryon: Baryon DecayIn2 error");
     }
