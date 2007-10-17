@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.hh,v 1.3 2007-09-02 10:37:31 akimura Exp $
+// $Id: G4ScoringTubs.hh,v 1.4 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,6 +48,8 @@ class G4ScoringTubs : public G4VScoringMesh
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
+      virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111);
+      virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
 
   void SetRMinMax(G4double rMinMax[2]) {
     for(int i = 0; i < 2; i++) fSize[i] = rMinMax[i];

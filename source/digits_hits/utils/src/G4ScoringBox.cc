@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.34 2007-09-24 17:39:29 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.35 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 #include "G4PSEnergyDeposit3D.hh"
 
 #include <map>
+#include <fstream>
 
 G4ScoringBox::G4ScoringBox(G4String wName)
   :G4VScoringMesh(wName), fSegmentDirection(-1),
@@ -387,6 +388,53 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
   }
 }
 
+void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String & option) {
+
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  if(fMapItr == fMap.end()) {
+    G4cout << "G4ScoringBox::DumpToFile() : There is no quantity, \""
+	   << psName << "\"." << G4endl;
+    return;
+  }
+  std::map<G4int, G4double*> * map = fMapItr->second->GetMap();
+
+  std::ofstream ofile(fileName);
+
+  if(option == "sequence" || option == "SEQUENCE") {
+    ofile << fNSegment[0] << " " << fNSegment[1] << " " << fNSegment[2]
+	  << G4endl;
+    ofile << "MeV" << G4endl;
+  }
+
+  long count = 0;
+  for(int x = 0; x < fNSegment[0]; x++) {
+    for(int y = 0; y < fNSegment[1]; y++) {
+      for(int z = 0; z < fNSegment[2]; z++) {
+	G4int idx = GetIndex(x, y, z);
+	
+	if(option == "csv" || option == "CSV")
+	  ofile << x << "," << y << "," << z << ",";
+
+	std::map<G4int, G4double*>::iterator value = map->find(idx);
+	if(value == map->end()) {
+	  ofile << 0.;
+	} else {
+	  ofile << *(value->second)/MeV;
+	}
+
+	if(option == "csv" || option == "CSV") {
+	  ofile << G4endl;
+	} else if(option == "sequence" || option == "SEQUENCE") {
+	  ofile << " ";
+	  if(count++%8 == 7) ofile << G4endl;
+	}
+      }
+    }
+  }
+  ofile.close();
+  
+}
+
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
   G4ThreeVector width(fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
   G4ThreeVector pos(-fSize[0] + 2*(x+0.5)*width.x(),
@@ -404,6 +452,10 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 
   //G4cout << "GetXYZ: " << index << ": "
   //<< q[0] << ", " << q[1] << ", " << q[2] << G4endl;
+}
+
+G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
+  return x + y*fNSegment[0] + z*fNSegment[0]*fNSegment[1];
 }
 
 void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {

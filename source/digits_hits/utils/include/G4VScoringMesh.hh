@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.17 2007-09-15 11:21:57 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.18 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,6 +72,7 @@ public:
   void Dump();
   inline void DrawMesh(G4String psName,G4int axflg=111);
   virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111) = 0;
+  virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option) = 0;
 
   void ResetScore();
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.13 2007-09-15 11:21:57 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.14 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,6 +70,7 @@ class G4ScoringManager
       void List() const;
       void Dump() const;
       void DrawMesh(G4String meshName,G4String psName,G4int axflg=111);
+      void DumpToFile(G4String meshName,G4String psName,G4String fileName, G4String option = "csv");
 
   private: 
       static G4ScoringManager * fSManager;

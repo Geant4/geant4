@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.17 2007-09-15 11:21:57 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.18 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -180,7 +180,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 
   // Draw Scoring result
   drawCmd = new G4UIcommand("/score/draw",this);
-  drawCmd->SetGuidance("Dump scorer results ");
+  drawCmd->SetGuidance("Draw scorer results ");
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
@@ -188,6 +188,19 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("proj",'i',true);
   param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
+
+  // Dump scoring result
+  dumpToFileCmd = new G4UIcommand("/score/dumpToFile", this);
+  dumpToFileCmd->SetGuidance("Dump scorer results to file ");
+  param = new G4UIparameter("meshName", 's', false);
+  dumpToFileCmd->SetParameter(param);
+  param = new G4UIparameter("psName", 's', false);
+  dumpToFileCmd->SetParameter(param);
+  param = new G4UIparameter("fileName", 's', false);
+  dumpToFileCmd->SetParameter(param);
+  param = new G4UIparameter("option", 's', true);
+  param->SetDefaultValue("csv");
+  dumpToFileCmd->SetParameter(param);
 
   //
   // Quantity commands
@@ -550,6 +563,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     //
     delete     dumpCmd;
     delete     drawCmd;
+    delete     dumpToFileCmd;
     //
     delete         quantityDir;
     delete         qTouchCmd;
@@ -596,6 +610,13 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4String psName = next();
       G4int axflg = StoI(next());
       fSMan->DrawMesh(meshName,psName,axflg);
+  } else if(command==dumpToFileCmd) { 
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String psName = next();
+      G4String fileName = next();
+      G4String option = next();
+      fSMan->DumpToFile(meshName, psName, fileName, option);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {

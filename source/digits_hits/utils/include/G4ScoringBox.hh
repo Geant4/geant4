@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.13 2007-09-15 11:21:57 asaim Exp $
+// $Id: G4ScoringBox.hh,v 1.14 2007-10-17 13:45:09 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,8 +50,9 @@ class G4ScoringBox : public G4VScoringMesh
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
       virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111);
-  
-  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+      virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
+
+       void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
 
 private:
   G4int fSegmentDirection; // =1: x, =2: y, =3: z
@@ -61,6 +62,7 @@ private:
   G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
   //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
   void GetXYZ(G4int index, G4int q[3]) const;
+  G4int GetIndex(G4int x, G4int y, G4int z) const;
   void GetMapColor(G4double value, G4double color[3]);
 };
 

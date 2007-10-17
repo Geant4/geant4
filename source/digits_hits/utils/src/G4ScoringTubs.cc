@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringTubs.cc,v 1.6 2007-09-02 10:37:31 akimura Exp $
+// $Id: G4ScoringTubs.cc,v 1.7 2007-10-17 13:45:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -275,3 +275,10 @@ void G4ScoringTubs::GetSegmentOrder(G4int segDir, G4int nseg[3],
 
 }
 
+void G4ScoringTubs::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
+  ;
+}
+
+void G4ScoringTubs::DumpToFile(G4String & psName, G4String & fileName, G4String & option) {
+  ;
+}
