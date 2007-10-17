@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 October, 07  Z.Torzsok
+- Introduced new "gdml" plugin sub-module, based on new GDML release 3.
+- Moved existing classes to "mctruth" sub-module; renamed libraries.
+
 14 November, 06  G.Cosmo (persistency-V08-01-02)
 - Cleared trivial compilation warnings in G4PersistencyManager implementation.
 - Added setup for retrieving HepMC in case G4LIB_USE_HEPMC is set and the
