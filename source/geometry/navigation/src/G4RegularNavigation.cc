@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.1 2007-10-17 19:13:58 arce Exp $
+// $Id: G4RegularNavigation.cc,v 1.2 2007-10-18 09:21:53 arce Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -216,24 +216,6 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   {
     newStep = voxelBox->DistanceToOut( localPoint, localDirection );
     if( ii == 0 && newStep < currentProposedStepLength ) exiting  = true;
-
-    /*    //    G4double newStep2 = fnormalNav->ComputeStep(localPoint,
-    G4double newStep2 = ComputeStep2(localPoint,
-                                      localDirection,
-                                      currentProposedStepLength,
-                                      newSafety,
-                                      history,
-                                      validExitNormal,
-                                      exitNormal,
-                                      exiting,
-                                      entering,
-                                      pBlockedPhysical,
-                                      blockedReplicaNo);
-    
-    if( fabs(newStep-newStep2) > 1.e-6 ) G4cout << " BAD step old " << newStep << " new " << newStep2 << " box " << pCurrentPhysical << " " << pCurrentPhysical->GetMotherLogical() << " " << voxelBox << " " << *voxelBox << " localp " << localPoint <<G4endl;
-
-    //    G4cout << " step " << newStep-newStep2 << " old " << newStep2 << " new " << newStep <<G4endl;
-    */
 
     newStep += kCarTolerance;   // Avoid precision problems
     ourStep += newStep;
