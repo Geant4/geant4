@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.10 2007-09-11 13:30:25 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.11 2007-10-18 16:25:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -261,15 +261,8 @@ G4DiffuseElastic::GetDiffuseElasticXsc( const G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  
-  G4double r0;
-  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-  else        r0  = 1.1*fermi;
 
-  // fNuclearRadius = r0*std::pow(A, 1./3.);
-
-  r0 = 1.7*fermi;
-  fNuclearRadius = r0*std::pow(A, 0.27);
+  fNuclearRadius = CalculateNuclearRad(A);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticProb(theta);
 
@@ -295,15 +288,8 @@ G4DiffuseElastic::GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle,
   fBeta          = CalculateParticleBeta( particle, momentum);
   fZommerfeld    = CalculateZommerfeld( fBeta, z, fAtomicNumber);
   fAm            = CalculateAm( momentum, fZommerfeld, fAtomicNumber);
-  
-  G4double r0;
-  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-  else        r0  = 1.1*fermi;
 
-  // fNuclearRadius = r0*std::pow(A, 1./3.);
-
-  r0 = 1.7*fermi;
-  fNuclearRadius = r0*std::pow(A, 0.27);
+  fNuclearRadius = CalculateNuclearRad(A);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticSumProb(theta);
 
@@ -486,10 +472,8 @@ G4DiffuseElastic::IntegralElasticProb(  const G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  G4double r0;
-  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-  else        r0  = 1.1*fermi;
-  fNuclearRadius = r0*std::pow(A, 1./3.);
+
+  fNuclearRadius = CalculateNuclearRad(A);
 
 
   G4Integrator<G4DiffuseElastic,G4double(G4DiffuseElastic::*)(G4double)> integral;
@@ -521,18 +505,16 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
                                        G4double momentum, G4double A)
 {
   G4int i, iMax = 100;  
-  G4double r0, norm, result, theta1, theta2, thetaMax, sum = 0.;
+  G4double norm, result, theta1, theta2, thetaMax, sum = 0.;
 
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  
-  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-  else        r0  = 1.1*fermi;
 
-  fNuclearRadius  = r0*std::pow(A, 1./3.);
+  fNuclearRadius = CalculateNuclearRad(A);
   
   thetaMax = 10.174/fWaveVector/fNuclearRadius;
+
   if (thetaMax > pi) thetaMax = pi;
 
   G4Integrator<G4DiffuseElastic,G4double(G4DiffuseElastic::*)(G4double)> integral;
@@ -654,3 +636,68 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
 
   return theta;
 }
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return scattering angle in lab system (target at rest) knowing theta in CMS
+
+
+
+G4double 
+G4DiffuseElastic::ThetaCMStoThetaLab( const G4HadProjectile* aParticle, 
+                                        G4double tmass, G4double thetaCMS)
+{
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  G4double m1 = theParticle->GetPDGMass();
+  // G4double plab = aParticle->GetTotalMomentum();
+  G4LorentzVector lv1 = aParticle->Get4Momentum();
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double ptot    = p1.mag();
+
+  G4double phi  = G4UniformRand()*twopi;
+  G4double cost = std::cos(thetaCMS);
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }    
+  if (verboseLevel>1) 
+  {
+    G4cout << "cos(tcms)=" << cost << " std::sin(tcms)=" << sint << G4endl;
+  }
+  G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
+  v1 *= ptot;
+  G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
+
+  nlv1.boost(bst); 
+
+  G4ThreeVector np1 = nlv1.vect();
+
+
+  G4double thetaLab = np1.theta();
+
+  return thetaLab;
+}
+
+//
+//
+/////////////////////////////////////////////////////////////////////////////////

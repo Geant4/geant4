@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.9 2007-09-08 12:02:48 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.10 2007-10-18 16:25:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,6 +117,10 @@ public:
 
   G4double CalculateAm( G4double momentum, G4double n, G4double Z);
 
+  G4double CalculateNuclearRad( G4double A);
+
+  G4double ThetaCMStoThetaLab(const G4HadProjectile* aParticle, 
+                                G4double tmass, G4double thetaCMS);
 
 
 
@@ -376,6 +380,30 @@ inline  G4double G4DiffuseElastic::CalculateAm( G4double momentum, G4double n, G
   fAm          = ch/zn2;
 
   return fAm;
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// calculate nuclear radius for different atomic weights using different approximations
+
+inline  G4double G4DiffuseElastic::CalculateNuclearRad( G4double A)
+{
+  G4double r0;
+
+  if(A < 50.)
+  {
+    if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else        r0  = 1.1*fermi;
+
+    fNuclearRadius = r0*std::pow(A, 1./3.);
+  }
+  else
+  {
+    r0 = 1.7*fermi;
+
+    fNuclearRadius = r0*std::pow(A, 0.27);
+  }
+  return fNuclearRadius;
 }
 
 ////////////////////////////////////////////////////////////////////
