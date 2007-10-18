@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHBook.hh,v 1.3 2006-06-29 21:45:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 #ifndef G4QHBook_h
 #define G4QHBook_h 1
@@ -45,11 +42,11 @@
 class G4QHBook
 {
 public:
-  G4QHBook();                                     // Default Constructor
-  ~G4QHBook();                                    // Destructor
+  G4QHBook();           // Default Constructor
+  ~G4QHBook();          // Destructor
 
   // Specific Modifiers
-  void  FillEvt(const G4VParticleChange* hadrons);  // Fill Histos & ntuples for the event
+  void  FillEvt(const G4VParticleChange* hadrons, const G4DynamicParticle* pdProj);
 
 private: 
   G4int         nEvnt;    // Consecutive number of call to fill the histograms 
