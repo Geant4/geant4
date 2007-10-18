@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18-Oct-2007 Gunter Folger                had-binary-V09-00-00
+-   Collect many changes for propagate interface.
+    Fix for pion incident at low energy: cannot go to deexitation directly
 
 18-May-2007 Gunter Folger                had-binary-V08-03-00
 -   G4BinaryLightIonReaction: Protect against divide by 0 when energy momentum
