@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.18 2007-10-17 13:45:10 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.19 2007-10-18 05:57:47 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -615,7 +615,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4String meshName = next();
       G4String psName = next();
       G4String fileName = next();
-      G4String option = next();
+      G4String option = next("\n");
       fSMan->DumpToFile(meshName, psName, fileName, option);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 

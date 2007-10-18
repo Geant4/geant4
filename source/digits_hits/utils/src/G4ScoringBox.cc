@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.35 2007-10-17 13:45:10 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.36 2007-10-18 05:57:47 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -390,29 +390,51 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
 
 void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String & option) {
 
+
+  // change the option string into lowercase to the case-insensitive.
+  G4String opt = option;
+  std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
+
+  // confirm the option
+  if(opt.find("csv") == std::string::npos &&
+     opt.find("sequence") == std::string::npos) {
+    G4cerr << "DumpToFile : Unknown option -> "
+	   << option << G4endl;
+    return;
+  }
+
+  // retrieve the map
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
   if(fMapItr == fMap.end()) {
-    G4cout << "G4ScoringBox::DumpToFile() : There is no quantity, \""
+    G4cerr << "DumpToFile : Unknown quantity, \""
 	   << psName << "\"." << G4endl;
     return;
   }
   std::map<G4int, G4double*> * map = fMapItr->second->GetMap();
 
+  // open the file
   std::ofstream ofile(fileName);
-
-  if(option == "sequence" || option == "SEQUENCE") {
+  if(!ofile) {
+    G4cerr << "DumpToFile : File open error -> "
+	   << fileName << G4endl;
+    return;
+  }
+  
+  // "sequence" option: write header info 
+  if(opt.find("sequence") != std::string::npos) {
     ofile << fNSegment[0] << " " << fNSegment[1] << " " << fNSegment[2]
 	  << G4endl;
     ofile << "MeV" << G4endl;
   }
 
+  // write quantity values
   long count = 0;
   for(int x = 0; x < fNSegment[0]; x++) {
     for(int y = 0; y < fNSegment[1]; y++) {
       for(int z = 0; z < fNSegment[2]; z++) {
 	G4int idx = GetIndex(x, y, z);
 	
-	if(option == "csv" || option == "CSV")
+	if(opt.find("csv") != std::string::npos)
 	  ofile << x << "," << y << "," << z << ",";
 
 	std::map<G4int, G4double*>::iterator value = map->find(idx);
@@ -422,15 +444,17 @@ void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String &
 	  ofile << *(value->second)/MeV;
 	}
 
-	if(option == "csv" || option == "CSV") {
+	if(opt.find("csv") != std::string::npos) {
 	  ofile << G4endl;
-	} else if(option == "sequence" || option == "SEQUENCE") {
+	} else if(opt.find("sequence") != std::string::npos) {
 	  ofile << " ";
 	  if(count++%8 == 7) ofile << G4endl;
 	}
       }
     }
   }
+
+  // close the file
   ofile.close();
   
 }
