@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.1 2007-10-17 19:13:58 arce Exp $
+// $Id: G4PhantomParameterisation.hh,v 1.2 2007-10-18 14:29:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,6 +153,7 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     G4Material* GetMaterial( size_t copyNo ) const;
 
   private:
+
     void ComputeVoxelIndices(const G4int copyNo, size_t& nx,
                                    size_t& ny, size_t& nz ) const;
       // Convert the copyNo to voxel numbers in x, y and z.
