@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.13 2007-07-28 15:58:03 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.14 2007-10-18 11:14:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -157,10 +157,17 @@ public:
 
   const std::vector<G4String>& GetNistMaterialNames() const;
 
+  inline G4double GetZ13(G4double Z);
+
+  inline G4double GetLOGA(G4double A);
+
 private:
 
   G4NistManager();
   static G4NistManager* instance;
+
+  static G4double POWERZ13[256];
+  static G4double LOGA[256];
   
   std::vector<G4Element*>   elements;
   std::vector<G4Material*>  materials;
@@ -373,6 +380,26 @@ inline
 const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
 {
   return matBuilder->GetMaterialNames();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetZ13(G4double Z)
+{
+  G4int iz = G4int(Z);
+  if(iz > 255) iz = 255;
+  else if(iz < 0) iz = 0;
+  return POWERZ13[iz]*(1.0 + (Z - G4double(iz))/(3.0*Z));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetLOGA(G4double A)
+{
+  G4int ia = G4int(A);
+  if(ia > 255) ia = 255;
+  else if(ia < 0) ia = 0;
+  return LOGA[ia] + (A - G4double(ia))/A;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

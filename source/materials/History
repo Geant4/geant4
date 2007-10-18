@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2007-10-02 10:13:32 vnivanch Exp $
+$Id: History,v 1.99 2007-10-18 11:14:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-10-07 V.Ivanchenko (materials-V09-00-05)
+G4NistManager - added deletion of isotopes (fixed problem of double 
+                deletion); added precomputed Z^1/3 and log(A)
+G4Material - move registration in MaterialTable from constructors
+             to ComputeDerivedQuantities; added Imean to printout
+G4Element  - do not delete isotopes; move registration in ElementTable 
+             from constructors to ComputeDerivedQuantities
 
 01-10-07 V.Ivanchenko (materials-V09-00-04)
 G4SandiaTable - fixed memory leak

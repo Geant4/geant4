@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.13 2007-07-28 15:58:04 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.14 2007-10-18 11:14:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,8 +59,11 @@
 
 #include "G4NistManager.hh"
 #include "G4NistMessenger.hh"
+#include "G4Isotope.hh"
 
 G4NistManager* G4NistManager::instance = 0;
+G4double G4NistManager::POWERZ13[256] = {0};
+G4double G4NistManager::LOGA[256] = {0};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -85,6 +88,13 @@ G4NistManager::G4NistManager()
   matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
   
   messenger  = new G4NistMessenger(this);  
+  for(G4int i=1; i<256; i++) {
+    G4double x = G4double(i);
+    POWERZ13[i] = std::pow(x,1.0/3.0);
+    LOGA[i] = std::log(x);
+  }
+  POWERZ13[0] = 1.0;
+  LOGA[0]     = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,16 +104,23 @@ G4NistManager::~G4NistManager()
   //  G4cout << "NistManager: start material destruction" << G4endl;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   size_t nmat = theMaterialTable->size();
-  for(size_t i=0; i<nmat; i++) {
+  size_t i;
+  for(i=0; i<nmat; i++) {
     if((*theMaterialTable)[i]) delete (*theMaterialTable)[i];
   }
   //  G4cout << "NistManager: start element destruction" << G4endl;
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
-  for(size_t i=0; i<nelm; i++) {
+  for(i=0; i<nelm; i++) {
     if((*theElementTable)[i]) delete (*theElementTable)[i];
   }
-  //  G4cout << "NistManager: end element destruction" << G4endl;
+  //  G4cout << "NistManager: start isotope destruction" << G4endl;
+  const G4IsotopeTable* theIsotopeTable = G4Isotope::GetIsotopeTable();
+  size_t niso = theIsotopeTable->size();
+  for(i=0; i<niso; i++) {
+    if((*theIsotopeTable)[i]) delete (*theIsotopeTable)[i];
+  }
+  //  G4cout << "NistManager: end isotope destruction" << G4endl;
   delete messenger;
   delete matBuilder;
   delete elmBuilder;  
