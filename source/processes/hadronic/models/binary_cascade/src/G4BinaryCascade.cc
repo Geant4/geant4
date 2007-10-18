@@ -79,7 +79,8 @@
 //#define debug_BIC_GetExcitationEnergy 1
 //#define debug_BIC_FinalNucleusMomentum 1
 //#define debug_BIC_FindFragments 1
-//#define debug_BIC_BuildTargetList
+//#define debug_BIC_BuildTargetList 1
+//#define debug_BIC_FindCollision 1
 
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -96,17 +97,15 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   theImR.push_back(theDecay);
   G4Scatterer * aSc=new G4Scatterer;
   theImR.push_back(aSc);
-//  theImR.push_back(new G4Scatterer);
   G4MesonAbsorption * aAb=new G4MesonAbsorption;
   theImR.push_back(aAb);
-//  theImR.push_back(new G4MesonAbsorption);
-G4cout << "CTOR: decay ="<< theDecay << ", Scatter=" << aSc <<", MesonAbsorb="<<aAb << G4endl;
+
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
   theBCminP = 45*MeV;
   theCutOnP = 90*MeV;
   theCutOnPAbsorb= 0*MeV;
-//  G4ExcitationHandler *
+
   theExcitationHandler = new G4ExcitationHandler;
   SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
   SetMinEnergy(0.0*GeV);
@@ -153,7 +152,10 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
   G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
-  if(initial4Momentum.e()-initial4Momentum.m()<theBCminP)
+  G4ParticleDefinition * definition = const_cast<G4ParticleDefinition *>(aTrack.GetDefinition());
+
+  if(initial4Momentum.e()-initial4Momentum.m()<theBCminP &&
+      ( definition==G4Neutron::NeutronDefinition() || definition==G4Proton::ProtonDefinition() ) ) 
   {
     return theDeExcitation->ApplyYourself(aTrack, aNucleus);
   }
@@ -163,8 +165,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   the3DNucleus = new G4Fancy3DNucleus;
 
 // Build a KineticTrackVector with the G4Track
-  G4KineticTrackVector * secondaries = new G4KineticTrackVector;
-  G4ParticleDefinition * definition = const_cast<G4ParticleDefinition *>(aTrack.GetDefinition());
+  G4KineticTrackVector * secondaries;// = new G4KineticTrackVector;
   G4ThreeVector initialPosition(0., 0., 0.); // will be set later
 
   if(!getenv("I_Am_G4BinaryCascade_Developer") )
@@ -212,7 +213,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       initialPosition=GetSpherePoint(1.1*radius, initial4Momentum);  // get random position
       kt->SetPosition(initialPosition);         
       kt->SetState(G4KineticTrack::outside);
-//    Note: secondaries has been cleared by Propagate() in the previous loop event
+//    Note: secondaries has been cleared + del by Propagate() in the previous loop event
+      secondaries= new G4KineticTrackVector;
       secondaries->push_back(kt);
       products = Propagate(secondaries, the3DNucleus);
     } while(! products );  // until we FIND a collision...
@@ -266,7 +268,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
   ClearAndDestroy(products);
   delete products;
-  delete secondaries;
+//GF now in propagate  delete secondaries;
 
 
   delete the3DNucleus;
@@ -302,8 +304,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
   std::vector<G4KineticTrack *>::iterator iter;
+
+   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
   if(nucleus->GetMassNumber() == 1) // 1H1 is special case
   {
+    G4cout << " special case 1H1.... " << G4endl;
      return Propagate1H1(secondaries,nucleus);
   }
 
@@ -317,8 +322,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
   for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
   {
-  G4cout << " Formation time : " << (*iter)->GetDefinition()->GetParticleName() << " " 
- 	 << (*iter)->GetFormationTime() << G4endl;
+//  G4cout << " Formation time : " << (*iter)->GetDefinition()->GetParticleName() << " " 
+// 	 << (*iter)->GetFormationTime() << G4endl;
     if( (*iter)->GetState() == G4KineticTrack::undefined ) 
     {
        FindLateParticleCollision(*iter);
@@ -336,18 +341,20 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   }
   FindCollisions(&theSecondaryList);
   secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
-			// ?GF? should we delete secondaries as well?
+  delete secondaries;			// ?GF? should we delete secondaries as well? 
+			//       - not with ApplyYourself, but 
 
 // if called stand alone, build theTargetList and find first collisions
 
   if(theCollisionMgr->Entries() == 0 )      //late particles ALWAYS create Entries
   {
+	//G4cout << " no collsions -> return 0" << G4endl;
       delete products;
       return 0;
   }
 
 // end of initialization: do the job now
-// loop untill there are collisions
+// loop untill there are no more collisions
 
 
   G4bool haveProducts = false;
@@ -427,6 +434,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
   if(!haveProducts)  // no collisions happened. Return an empty vector.
   {
+	//G4cout << " no products return 0" << G4endl;
     return products;
   }
 
@@ -523,6 +531,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 //#endif
 	}
 	ClearAndDestroy(products);
+		//G4cout << "  negative Excitation E return empty products " << products << G4endl;
 	return products;   // return empty products
   }
 
@@ -698,6 +707,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
 //  G4cerr <<"mon - end of event       "<<G4endl;
   thePrimaryEscape = true;
+	//G4cout << "  return products " << products << G4endl;
   return products;
 }
 
@@ -880,13 +890,13 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     for(std::vector<G4BCAction *>::iterator j = theImR.begin();
         j!=theImR.end(); j++)
     {
-      G4cout << "G4BinaryCascade::FindCollisions: at action " << *j << G4endl; 
+//      G4cout << "G4BinaryCascade::FindCollisions: at action " << *j << G4endl; 
       const std::vector<G4CollisionInitialState *> & aCandList
           = (*j)->GetCollisions(*i, theTargetList, theCurrentTime);
       for(size_t count=0; count<aCandList.size(); count++)
       {
         theCollisionMgr->AddCollision(aCandList[count]);
-	G4cout << "====================== New Collision ================="<<G4endl;
+//	G4cout << "====================== New Collision ================="<<G4endl;
 //	theCollisionMgr->Print();
       }
     }
@@ -934,17 +944,21 @@ void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
        secondary->SetState(G4KineticTrack::miss_nucleus);
     }
 
-    G4cout << "FindLateP Particle, 4-mom, times newState" 
+#ifdef debug_BIC_FindCollision
+    G4cout << "FindLateP Particle, 4-mom, times newState " 
            << secondary->GetDefinition()->GetParticleName() << " " 
 	   << secondary->Get4Momentum() 
-	   << " times " <<  tin << " " << tout 
+	   << " times " <<  tin << " " << tout << " " 
            << secondary->GetState() << G4endl;
+#endif
 
     const std::vector<G4CollisionInitialState *> & aCandList
         = theLateParticle->GetCollisions(secondary, theTargetList, theCurrentTime);
     for(size_t count=0; count<aCandList.size(); count++)
     {
+#ifdef debug_BIC_FindCollision
       G4cout << " Adding a late Col : " << aCandList[count] << G4endl;
+#endif
       theCollisionMgr->AddCollision(aCandList[count]);
     }
 }
@@ -979,7 +993,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
  
 #ifdef debug_BIC_ApplyCollision
-//      G4cout << "ApplyCollisions : projte 4mom " << primary->GetTrackingMomentum()<< G4endl;
+      G4cout << "ApplyCollisions : projte 4mom " << primary->GetTrackingMomentum()<< G4endl;
 #endif
 
   G4int initialBaryon(0);
@@ -1009,25 +1023,29 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 //     initial_Efermi+= RKprop->GetField((*titer)->GetDefinition()->GetPDGEncoding(),(*titer)->GetPosition());
   }
 //****************************************
+
   G4KineticTrackVector * products=0;
   products = collision->GetFinalState();
-if ( !products )
-{
-        G4cout << " Collision type: "<< typeid(*collision->GetGenerator()).name()
-	    << ", with number NO products: " <<G4endl;
-       G4cout << G4endl<<"Initial condition are these:"<<G4endl;
-       G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;
-       PrintKTVector(collision->GetPrimary());
-       for(size_t it=0; it<collision->GetTargetCollection().size(); it++)
-       {
-         G4cout << "targ: "
-	      <<collision->GetTargetCollection()[it]->GetDefinition()->GetParticleName()<<G4endl;
-       }
-       PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
-}  
-  G4bool lateParticleCollision= (!haveTarget) && products->size() == 1;
-  if ( lateParticleCollision ) G4cout << " Added late particle--------------------------"<<G4endl;
-  if ( products ) PrintKTVector(products, " reaction products");
+
+  #ifdef debug_BIC_ApplyCollision
+      if ( !products )
+      {
+            G4cout << " Collision type: "<< typeid(*collision->GetGenerator()).name()
+		<< ", with NO products! " <<G4endl;
+	   G4cout << G4endl<<"Initial condition are these:"<<G4endl;
+	   G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;
+	   PrintKTVector(collision->GetPrimary());
+	   for(size_t it=0; it<collision->GetTargetCollection().size(); it++)
+	   {
+             G4cout << "targ: "
+		  <<collision->GetTargetCollection()[it]->GetDefinition()->GetParticleName()<<G4endl;
+	   }
+	   PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
+      }  
+   #endif
+     G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
+	//  if ( lateParticleCollision ) G4cout << " Added late particle--------------------------"<<G4endl;
+	//  if ( products ) PrintKTVector(products, " reaction products");
 //****************************************  
 
   // reset primary to initial state
@@ -1057,7 +1075,7 @@ if ( !products )
    for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
    {
        G4int PDGcode=std::abs((*i)->GetDefinition()->GetPDGEncoding());
-       G4cout << " PDGcode, state " << PDGcode << " " << (*i)->GetState()<<G4endl;
+//       G4cout << " PDGcode, state " << PDGcode << " " << (*i)->GetState()<<G4endl;
        final_Efermi+=RKprop->GetField(PDGcode,(*i)->GetPosition());
        if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
        {  
@@ -1073,7 +1091,7 @@ if ( !products )
 	  G4double mass2=mom.mag2();
 	  G4double newEnergy=mom.e() + delta_Fermi;
 	  G4double newEnergy2= newEnergy*newEnergy;
-	  G4cout << "mom = " << mom <<" newE " << newEnergy<< G4endl;
+	  	//G4cout << "mom = " << mom <<" newE " << newEnergy<< G4endl;
 	  if ( newEnergy2 < mass2 )
 	  {
              ClearAndDestroy(products);
@@ -1147,10 +1165,10 @@ if ( !products )
     theCollisionMgr->RemoveTracksCollisions(&toFinalState);
   }
 
-G4cout << " currentA, Z be4: " << currentA << " " << currentZ << G4endl;
+	//G4cout << " currentA, Z be4: " << currentA << " " << currentZ << G4endl;
   currentA += finalBaryon-initialBaryon;
   currentZ += finalCharge-initialCharge;
-G4cout << " currentA, Z aft: " << currentA << " " << currentZ << G4endl;
+	//G4cout << " currentA, Z aft: " << currentA << " " << currentZ << G4endl;
   
   G4KineticTrackVector oldSecondaries;
   if (primary) 
@@ -1160,9 +1178,9 @@ G4cout << " currentA, Z aft: " << currentA << " " << currentZ << G4endl;
   }
 
 //#ifdef debug_G4BinaryCascade
-//  if  (finalBaryon-initialBaryon) != 0 || (finalCharge-initialCharge) != 0 ) 
+  if ( (finalBaryon-initialBaryon) != 0 || (finalCharge-initialCharge) != 0 ) 
      {
-//        G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
+        G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
         G4cout << "initial/final baryon number, initial/final Charge "
             << initialBaryon <<" "<< finalBaryon <<" "
 	    << initialCharge <<" "<< finalCharge <<" "
@@ -1299,7 +1317,7 @@ G4bool G4BinaryCascade::Absorb()
 // Build the vector of G4KineticTracks that must be absorbed
   G4KineticTrackVector absorbList;
   std::vector<G4KineticTrack *>::iterator iter;
-  PrintKTVector(&theSecondaryList, " testing for Absorb" );
+//  PrintKTVector(&theSecondaryList, " testing for Absorb" );
   for(iter = theSecondaryList.begin();
       iter != theSecondaryList.end(); ++iter)
   {
