@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.37 2007-10-18 11:14:33 vnivanch Exp $
+// $Id: G4Material.cc,v 1.38 2007-10-18 11:30:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@
 // 09-03-06, minor change of printout (V.Ivanchenko) 
 // 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
 // 27-07-07, improve destructor (V.Ivanchenko) 
-// 18-10-07, move definition of material index to ComputeDerivedQuantities (V.Ivanchenko) 
+// 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
 // 
 
 // 
@@ -341,10 +341,6 @@ void G4Material::ComputeDerivedQuantities()
   // Header routine to compute various properties of material.
   // 
 
-  // Store in the static Table of Materials
-  theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;
-
   // Number of atoms per volume (per element), total nb of electrons per volume
   G4double Zi, Ai;
   TotNbOfAtomsPerVolume = 0.;
@@ -405,6 +401,10 @@ void G4Material::InitializePointers()
   VecNbOfAtomsPerVolume    = 0;
   fIonisation              = 0;
   fSandiaTable             = 0;
+
+  // Store in the static Table of Materials
+  theMaterialTable.push_back(this);
+  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -447,10 +447,6 @@ G4Material::G4Material(const G4Material& right)
 {
   InitializePointers();
   *this = right;
-        
-  // Store this new material in the table of Materials
-  theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
