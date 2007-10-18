@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.25 2007-05-24 09:14:10 japost Exp $
+// $Id: G4Navigator.hh,v 1.26 2007-10-18 14:18:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,7 @@
 #include "G4VoxelNavigation.hh"
 #include "G4ParameterisedNavigation.hh"
 #include "G4ReplicaNavigation.hh"
+#include "G4RegularNavigation.hh"
 
 #include <iostream>
 
@@ -298,6 +299,9 @@ class G4Navigator
   inline EVolume CharacteriseDaughters(const G4LogicalVolume *pLog) const;
     // Characterise daughter of logical volume.
 
+  inline G4int GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const;
+    // Get regular structure ID of first daughter
+
   virtual void SetupHierarchy();
     // Renavigate & reset hierarchy described by current history
     // o Reset volumes
@@ -436,6 +440,7 @@ class G4Navigator
   G4VoxelNavigation fvoxelNav;
   G4ParameterisedNavigation fparamNav;
   G4ReplicaNavigation freplicaNav;
+  G4RegularNavigation fregularNav;
 };
 
 #include "G4Navigator.icc"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.hh,v 1.1 2007-10-17 19:13:58 arce Exp $
+// $Id: G4RegularNavigation.hh,v 1.2 2007-10-18 14:18:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,20 +127,6 @@ class G4RegularNavigation
 
     G4NormalNavigation* fnormalNav;
     G4double kCarTolerance;  
-
-
-G4double
-ComputeStep2(const G4ThreeVector &localPoint,
-                                const G4ThreeVector &localDirection,
-                                const G4double currentProposedStepLength,
-                                      G4double &newSafety,
-                                      G4NavigationHistory &history,
-                                      G4bool &validExitNormal,
-                                      G4ThreeVector &exitNormal,
-                                      G4bool &exiting,
-                                      G4bool &entering,
-                                      G4VPhysicalVolume *(*pBlockedPhysical),
-				  G4int &blockedReplicaNo);
 };
 
 #endif

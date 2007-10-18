@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.14 2006-12-07 15:19:41 japost Exp $
+// $Id: G4Navigator.icc,v 1.15 2007-10-18 14:18:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,7 +157,7 @@ EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
 }
 
 // ********************************************************************
-// CharacteriseDahghters
+// CharacteriseDaughters
 // ********************************************************************
 //
 inline
@@ -188,6 +188,26 @@ EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
     type = kNormal;
   }
   return type;
+}
+
+
+// ********************************************************************
+// GetDaughtersRegularStructureId
+// ********************************************************************
+//
+inline
+G4int G4Navigator::
+GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
+{
+  G4int regId = 0;
+  G4VPhysicalVolume *pVol;
+
+  if ( pLog->GetNoDaughters()==1 )
+  {
+    pVol = pLog->GetDaughter(0);
+    regId = pVol->GetRegularStructureId();
+  }
+  return regId;
 }
 
 // ********************************************************************
@@ -283,14 +303,7 @@ G4GRSSolid* G4Navigator::CreateGRSSolid() const
 inline
 G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 {
-  // return new G4TouchableHistory(fHistory);
-  G4TouchableHistory* touchHist;
-  if( !fLocatedOutsideWorld ) { 
-     touchHist =  new G4TouchableHistory(fHistory); 
-  } else { 
-     touchHist =  new G4TouchableHistory();  // Null history (outside world)
-  } 
-  return touchHist;
+  return new G4TouchableHistory(fHistory);
 }
 
 // ********************************************************************
@@ -309,15 +322,13 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
-#if 0
      if( pPhysVol == 0 )
      {
-       // Extra work to ensure that the touchable is correct
+       // We want to ensure that the touchable is correct in this case.
+       //  The method below should do this and recalculate a lot more ....
+       //
        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
      }
-#else
-     // An updated  CreateTouchableHistory() should now take care of this !?
-#endif
   }
   return;
 }
@@ -377,6 +388,7 @@ void G4Navigator::SetVerboseLevel(G4int level)
   fvoxelNav.SetVerboseLevel(level);
   fparamNav.SetVerboseLevel(level);
   freplicaNav.SetVerboseLevel(level);
+  fregularNav.SetVerboseLevel(level);
 }
 
 // ********************************************************************
@@ -433,6 +445,7 @@ void  G4Navigator::CheckMode(G4bool mode)
   fvoxelNav.CheckMode(mode);
   fparamNav.CheckMode(mode);
   freplicaNav.CheckMode(mode);
+  fregularNav.CheckMode(mode);
 }
 
 // ********************************************************************

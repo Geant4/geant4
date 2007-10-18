@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.2 2007-10-18 09:21:53 arce Exp $
+// $Id: G4RegularNavigation.cc,v 1.3 2007-10-18 14:18:36 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -43,8 +43,7 @@
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
-  : fVerbose(0), fCheck(false)
-    //  : fVerbose(1), fCheck(true)
+  : fVerbose(1), fCheck(true)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -118,7 +117,7 @@ G4double G4RegularNavigation::
                                  blockedReplicaNo);
 }
 
-#include "G4Box.hh"
+
 //------------------------------------------------------------------
 G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                                 G4ThreeVector localPoint,
@@ -136,9 +135,6 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 {
   G4PhantomParameterisation *param =
     (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
-
-  //    G4cout << " ComputeStepSkippingEqualMaterials " << param->SkipEqualMaterials() << G4endl;
-
 
   if( !param->SkipEqualMaterials() ) {
     return fnormalNav->ComputeStep(localPoint,
@@ -161,24 +157,16 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   // param container volume
   //
   G4int ide = history.GetDepth();
-  /*
   G4ThreeVector containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
 
-  for( G4int ii = 0; ii <= ide; ii++ ){
-    G4cout << "TRANSF " << ii << history.GetTransform(ii).NetTranslation() << G4endl;
-  }
   // Point in global frame
   //
   containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+
   // Point in voxel parent volume frame
   //
   containerPoint = history.GetTransform(ide-1).TransformPoint(containerPoint);
-  */
 
-  G4ThreeVector containerPoint = localPoint - history.GetTransform(ide).NetTranslation() + history.GetTransform(ide-1).NetTranslation();
-
-  //  G4cout << localPoint << " container " << (containerPoint-containerPoint2).mag() << " old " << containerPoint << " new " << containerPoint2 << G4endl;
-  //  if((containerPoint-containerPoint2).mag()>1.E-6) G4cout << " BAD container " << (containerPoint-containerPoint2).mag() << " old " << containerPoint << " new " << containerPoint2 << G4endl;
   // Store previous voxel translation to move localPoint by the difference
   // with the new one
   //
@@ -196,26 +184,27 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
   G4Material* currentMate = param->ComputeMaterial( copyNo, 0, 0 );
 
-#ifdef DEBUG_PAD
-  G4cout << " G4RegularNavigation::ComputeStepSkippingEqualMaterials copyNo " << copyNo << " containerPoint " << containerPoint << " localPoint " << localPoint << " localDirection " << localDirection << G4endl;
-   //  G4cout << " G4RegularNavigation::ComputeStepSkippingEqualMaterials( pbs " << *pBlockedPhysical << G4endl;
-#endif
-
   G4VSolid* containerSolid = param->GetContainerSolid();
   G4Material* nextMate;
   G4bool bLocatedOnEdge = false;
   G4double newStep;
   G4double totalNewStep = 0.;
 
-  G4Box* voxelBox = (G4Box*)(pCurrentPhysical->GetLogicalVolume()->GetSolid());
-
   // Loop while same material is found 
   //
-  size_t ii = 0;
   for( ;; )
   {
-    newStep = voxelBox->DistanceToOut( localPoint, localDirection );
-    if( ii == 0 && newStep < currentProposedStepLength ) exiting  = true;
+    newStep = fnormalNav->ComputeStep(localPoint,
+                                      localDirection,
+                                      currentProposedStepLength,
+                                      newSafety,
+                                      history,
+                                      validExitNormal,
+                                      exitNormal,
+                                      exiting,
+                                      entering,
+                                      pBlockedPhysical,
+                                      blockedReplicaNo);
 
     newStep += kCarTolerance;   // Avoid precision problems
     ourStep += newStep;
@@ -253,11 +242,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     // Check if material of next voxel is the same as that of the current voxel
     nextMate = param->ComputeMaterial( copyNo, 0, 0 );
 
-#ifdef DEBUG_PAD
-    G4cout << " ComputeStepSkippingEqualMaterials mates " << currentMate->GetName() << " =? " << nextMate->GetName() << G4endl;
-#endif
     if( currentMate != nextMate ) { break; }
-    ii++;
   }
 
   return ourStep;
@@ -365,102 +350,4 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   }
 
   return false;
-}
-
-
-
-#include <iomanip>
-G4double
-G4RegularNavigation::ComputeStep2(const G4ThreeVector &localPoint,
-                                const G4ThreeVector &localDirection,
-                                const G4double currentProposedStepLength,
-                                      G4double &newSafety,
-                                      G4NavigationHistory &history,
-                                      G4bool &validExitNormal,
-                                      G4ThreeVector &exitNormal,
-                                      G4bool &exiting,
-                                      G4bool &entering,
-                                      G4VPhysicalVolume *(*pBlockedPhysical),
-                                      G4int &blockedReplicaNo)
-{
-  G4VPhysicalVolume *motherPhysical, *samplePhysical, *blockedExitedVol=0;
-  G4LogicalVolume *motherLogical;
-  G4VSolid *motherSolid;
-  G4ThreeVector sampleDirection;
-  G4double ourStep=currentProposedStepLength, motherSafety, ourSafety;
-  G4int localNoDaughters, sampleNo;
-
-  motherPhysical = history.GetTopVolume();
-  motherLogical  = motherPhysical->GetLogicalVolume();
-  motherSolid    = motherLogical->GetSolid();
-
-
-  // Compute mother safety
-  //
-  //t  return  motherSolid->DistanceToOut(localPoint,localDirection);
-
-  motherSafety = motherSolid->DistanceToOut(localPoint);
-  ourSafety = motherSafety; // Working isotropic safety
-  
-  //
-  // Compute daughter safeties & intersections
-  //
-
-  // Exiting normal optimisation
-  //
-  if ( exiting&&validExitNormal )
-  {
-    if ( localDirection.dot(exitNormal)>=kMinExitingNormalCosine )
-    {
-      // Block exited daughter volume
-      //
-      blockedExitedVol =* pBlockedPhysical;
-      ourSafety = 0;
-    }
-  }
-  exiting  = false;
-  entering = false;
-
-  if ( currentProposedStepLength<ourSafety )
-  {
-    // Guaranteed physics limited
-    //
-    entering = false;
-    exiting  = false;
-    *pBlockedPhysical = 0;
-    ourStep = kInfinity;
-  }
-  else
-  {
-    // Compute mother intersection if required
-    //
-    if ( motherSafety<=ourStep )
-    {
-      G4double motherStep = motherSolid->DistanceToOut(localPoint,
-                                                       localDirection,
-                                                       true,
-                                                       &validExitNormal,
-                                                       &exitNormal);
-      if ( motherStep<=ourStep )
-      {
-        ourStep  = motherStep;
-	//        exiting  = true;
-        entering = false;
-        if ( validExitNormal )
-        {
-          const G4RotationMatrix *rot = motherPhysical->GetRotation();
-          if (rot)
-          {
-            exitNormal *= rot->inverse();
-          }
-        }
-      }
-      else
-      {
-        validExitNormal = false;
-      }
-    }
-  }
-  newSafety = ourSafety;
-  return ourStep;
 }
