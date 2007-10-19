@@ -2,6 +2,7 @@
 
 #include "FTFC.hh"
 #include "FTFP.hh"
+#include "FTFP_BERT.hh"
 #include "LBE.hh"
 #include "LHEP_BERT_HP.hh"
 #include "LHEP_BERT.hh"
@@ -22,6 +23,7 @@
 #include "QGSP_EMV.hh"
 #include "QGSP_EMX.hh"
 #include "QGSP_QEL.hh"
+#include "QGSP_CASC.hh"
 
 #include "CLHEP/Random/RanluxEngine.h" 
 
@@ -32,29 +34,31 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager; 
 //  runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
 
-  FTFC *thePL1 = new FTFC; 
-  FTFP *thePL2 = new FTFP; 
+  G4VModularPhysicsList * theFTF1 = new FTFC; 
+  G4VModularPhysicsList * theFTF2 = new FTFP;
+  G4VModularPhysicsList * theFTF3 = new FTFP_BERT;
 
-  LBE *thePL3 = new LBE; 
+  G4VModularPhysicsList *theLBE = new LBE; 
 
-  LHEP_BERT_HP *thePL4 = new LHEP_BERT_HP; 
-  LHEP_BERT *thePL5 = new LHEP_BERT; 
-  LHEP_EMV *thePL8 = new LHEP_EMV; 
-  LHEP *thePL10 = new LHEP; 
+  G4VModularPhysicsList *thePL4 = new LHEP_BERT_HP; 
+  G4VModularPhysicsList *thePL5 = new LHEP_BERT; 
+  G4VModularPhysicsList *thePL8 = new LHEP_EMV; 
+  G4VModularPhysicsList *thePL10 = new LHEP; 
 
-  QBBC *thePL15 = new QBBC;
+  G4VModularPhysicsList *thePL15 = new QBBC;
 
-  QGSC_EMV *thePL16 = new QGSC_EMV;
-  QGSC *thePL17 = new QGSC;
+  G4VModularPhysicsList *thePL16 = new QGSC_EMV;
+  G4VModularPhysicsList *thePL17 = new QGSC;
 
-  QGSP_BERT_HP *thePL20 = new QGSP_BERT_HP; 
-  QGSP_BERT *thePL21 = new QGSP_BERT;
-  QGSP_BIC_HP *thePL22 = new QGSP_BIC_HP; 
-  QGSP_BIC *thePL23 = new QGSP_BIC;
-  QGSP_EMV *thePL24 = new QGSP_EMV;
-  QGSP_EMX *thePL25 = new QGSP_EMX;
-  QGSP *thePL27 = new QGSP;
-  QGSP_QEL *thePL28 = new QGSP_QEL;
+  G4VModularPhysicsList *thePL20 = new QGSP_BERT_HP; 
+  G4VModularPhysicsList *thePL21 = new QGSP_BERT;
+  G4VModularPhysicsList *thePL22 = new QGSP_BIC_HP; 
+  G4VModularPhysicsList *thePL23 = new QGSP_BIC;
+  G4VModularPhysicsList *thePL24 = new QGSP_EMV;
+  G4VModularPhysicsList *thePL25 = new QGSP_EMX;
+  G4VModularPhysicsList *thePL27 = new QGSP;
+  G4VModularPhysicsList *thePL28 = new QGSP_QEL;
+  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
 
 
   delete runManager; 
