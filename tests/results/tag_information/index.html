@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-09-00-ref-01</b></blink> development tag.
+<blink><b>geant4-09-00-ref-02</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -44,12 +44,12 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
                                                                                                             
                1        2           3         4        5             6      7         8           9          10
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-           | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++ |Linux-g++| Linux-icc|WIN32-VC8|WIN32-VC7|
-           |debug_55 |optim_55 |op.SLC4.64|de.SLC4.64|opt.SLC3 |opt.SLC4  |FPE.SLC4 |	 deb   |  optim  |  debug  |
-  	   |sungeant | refsol8 |pcgeant4  |pcgeant3  |pcgeant6 |lxbuild021|lxplus071| pcg4speed|pcphsft30|pcepsft16|
+           | SUN-CC  | MacIntel| Linux-g++| Linux-g++|Linux-g++|Linux-g++ |Linux-g++| Linux-icc|WIN32-VC8|WIN32-VC7|
+           |debug_55 |optim_104|op.SLC4.64|de.SLC4.64|opt.SLC3 |opt.SLC4  |FPE.SLC4 |	 deb   |  optim  |  debug  |
+  	   |sungeant | gcc4.1  |pcgeant4  |pcgeant3  |pcgeant6 |lxbuild021|lxplus071| pcg4speed|pcphsft30|pcepsft16|
 -----------+---------+---------+----------+----------+---------+--------- +---------+----------+---------+---------+
-test01     |	     |   NA    |	  |	     |         |	  |	    |	NA     |    	 |   NA	   |
-test02     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
+test01     |	     |         |	  |	     |         |	  |	    |	NA     |   NA	 |   NA	   |
+test02     |	     |   WL1   |	  |	     |         |	  |	    |	       |	 |	   |
 test02.h   |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test05     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+----------+---------+----------+---------+---------+
@@ -60,7 +60,7 @@ test10     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+----------+---------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	  |  FP1    |          |	 |         |
 test12     |         |         |          |          |         |          |         |	       |	 |	   |
-test13     |         |         |   WL1    |  WL1     |  WL1    |  WL1     |  WL1    |	       |         |         |
+test13     |         |   WL1   |   WL1    |  WL1     |  WL1    |  WL1     |  WL1    |	       |         |         |
 test14     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+----------+---------+----------+---------+---------+
@@ -68,21 +68,21 @@ test16     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	  |  FP1    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
-test21     |  EL2    |         |          |  WL8EL7  |  WL8    |  WL10    |  WL8WL7 |	       |	 |         |
+test21     |  EL8    |  WL1WL11|   EL9    |  WL11    |  EL10   |  WL1EL11 | WL12WL7 |	       |	 |         |
 test22     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
-test27     |	     |         |	  |	     |         |	  |  WN4    |	       |	 |	   |
+test27     |	     |         |	  |	     |         |	  |         |	       |	 |	   |
 test29	   |         |         |      	  |          |         |   	  |	    |	       |         |         |
-test33	   |  WN1    |         |   WN1	  |  WN1     |  WN1    |  WN1 	  |  WN1    |	       |         |         |
-test34	   |  WN2    |         |   WN2	  |  WN2     |  WN2    |  WN2 	  |  WN2    |	       |         |         |
+test33	   |  WN1    |   WN1   |   WN1	  |  WN1     |  WN1    |  WN1 	  |  WN1    |	       |         |         |
+test34	   |  WN2    |   WN2   |   WN2	  |  WN2     |  WN2    |  WN2 	  |  WN2    |	       |         |         |
 -----------+---------+---------+----------+----------+---------+----------+---------+----------+---------+---------+
 test102    |	     |         |	  |	     |         |	  |  FP1    |	       |	 |	   |
 test103    |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
-test104    |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
+test104    |	     |         |	  |	     |         |	  |  FP1    |          |	   |
 test104.Em |	     |         |	  |	     |         |	  |  FP1    |	       |	 |	   |
 test105    |         |         |      	  |          |         |    	  |         |	       |         |         |
-test107    |         |         |   WL9	  |   WL9    |  WL9    |  WL9	  |  WL9    |	       |   WL9   |         |
+test107    |         |   WL9   |    	  |          |         |  WL9	  |  WL7    |	       |         |         |
 test502    |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test505    |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test506    |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
@@ -182,6 +182,22 @@ WL10
 --------------
 ***G4QNucleus::EvaporateBaryon: A=-2
 ***G4QHadr:(QP) PDG=10 use other constructor
+
+
+WL11
+--------------
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-3322
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-3322
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-2224
+***G4QHadron:(P) PDG=10, use other constructor
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=10
+  etc...
+
+
+WL12
+--------------
+*!*G4QE::FSI:NoCor 154532+939.566=155472>154541
+*!*G4QE::FSI:NoCor 138685+939.566=139625>138698
 
 
 WN1			   
@@ -321,6 +337,52 @@ terminate called after throwing an instance of 'G4QException'
   what():  12G4QException
 Command terminated by signal 6
 
+
+EL8
+--------------
+*!*G4QE::FSI:NoCor 143344+939.566=144284>143354
+time: command terminated abnormally.
+
+
+EL9
+--------------
+*!*G4QE::FSI:NoCor 150801+939.566=151741>150814
+G4QE::FSI:R=9362.73,S+=0,S-=0,L=1,d=9.62468
+***G4QE::FSI: HypN=91002008, M=10468.8<10485.5,d=16.6648
+*G4QEnv::Fragment:Exception.Target=90009012. Projectiles:
+G4QE::F:#0,PDG/4M=89005999(-410.817,305.98,4929.78;8349.08)
+G4QE::F:#1,PDG/4M=10(-175.996,131.084,2111.94;3576.79)
+terminate called after throwing an instance of 'G4QException'
+  what():  12G4QException
+Command terminated by signal 6
+
+
+EL10
+--------------
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-3312
+G4QE::FSI:R=5630.32,S+=0,S-=0,L=1,d=5.57825
+***G4QE::FSI: HypN=91001005, M=6740.42<6747.54,d=7.11372
+*G4QEnv::Fragment:Exception.Target=90009011. Projectiles:
+G4QE::F:#0,PDG/4M=89006998(-393.434,-341.208,4658.91;8109.31)
+G4QE::F:#1,PDG/4M=90993005(-245.028,-212.502,2901.53;5050.41)
+Command terminated by signal 6
+
+
+EL11
+--------------
+*!*G4QE::FSI:NoCor 126574+938.272=127512>126588
+***G4QNucleus::EvaporateBaryon: A=-2
+---Warning---G4Q::FillHV:Evaporate PDG=90000997,M=2232.85
+***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-2224
+***G4QHadr:(QP) PDG=10 use other constructor
+ZMxpvInfiniteVector thrown:
+ZMxpvInfiniteVector: Attempt to do LorentzVector / 0 --
+division by zero would produce infinite or NAN components
+at line 166 in file ../../../CLHEP/Vector/src/LorentzVector.cc
+terminate called after throwing an instance of 'ZMxpvInfiniteVector'
+  what():  ZMxpvInfiniteVector: Attempt to do LorentzVector / 0 --
+division by zero would produce infinite or NAN components
+Command terminated by signal 6
 
 Results of FPE checking on SLC4_ia32
 
