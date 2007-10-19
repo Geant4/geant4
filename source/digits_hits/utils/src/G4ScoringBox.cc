@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.36 2007-10-18 05:57:47 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.37 2007-10-19 07:47:11 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -424,7 +424,7 @@ void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String &
   if(opt.find("sequence") != std::string::npos) {
     ofile << fNSegment[0] << " " << fNSegment[1] << " " << fNSegment[2]
 	  << G4endl;
-    ofile << "MeV" << G4endl;
+    //ofile << "MeV" << G4endl;
   }
 
   // write quantity values
