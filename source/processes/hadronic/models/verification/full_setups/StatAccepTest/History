@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+19-Oct-2007 - A.Ribon (statAccepTest-V09-00-00)
+- Included the possibility to study the hadronic
+  shower development only in a specified time
+  window (as espressed in nanoseconds).
+
+
 29-Jun-2007 - A.Ribon (statAccepTest-V08-03-04)
 - Included all changes that emerged during the
   June 2007 (G4 9) release. In particular:
@@ -9,6 +15,7 @@
        replaces the old NeutronHPCrossSections;
     o  support the environmental variable $OSG_APP
        for running on the Grid in American sites.
+
 
 07-Jun-2007 - A.Ribon (statAccepTest-V08-03-02)
 - Updated G4 DATA libraries in build.py .

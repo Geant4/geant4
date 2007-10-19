@@ -36,6 +36,9 @@ G4double StatAccepTestAnalysis::supParticleEkin_proton   = 1.0E+30;
 G4double StatAccepTestAnalysis::infParticleEkin_nuclei   = -999.9;   
 G4double StatAccepTestAnalysis::supParticleEkin_nuclei   = 1.0E+30;
 
+G4double StatAccepTestAnalysis::infTimeWindow = -999.9;  // in [nanosec]
+G4double StatAccepTestAnalysis::supTimeWindow = 1.0E+30; // in [nanosec]
+
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
 
 

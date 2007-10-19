@@ -43,6 +43,12 @@ void StatAccepTestSensitiveCalorimeter::Initialize( G4HCofThisEvent* ) {
 G4bool StatAccepTestSensitiveCalorimeter::
 ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
 
+  G4double timeDeposit = aStep->GetPostStepPoint()->GetGlobalTime(); 
+  if ( timeDeposit < StatAccepTestAnalysis::getInfTimeWindow()  ||  
+       timeDeposit > StatAccepTestAnalysis::getSupTimeWindow() ) return false;
+  // Consider the energy deposition only if it is inside the 
+  // specified time window.
+
   G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
   // Multiply the energy deposit with the weight of the track,
   // to allow the use of biasing.

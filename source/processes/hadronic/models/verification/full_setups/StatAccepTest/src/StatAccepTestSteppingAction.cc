@@ -21,6 +21,12 @@ StatAccepTestSteppingAction::~StatAccepTestSteppingAction() {}
 
 void StatAccepTestSteppingAction::UserSteppingAction( const G4Step * theStep ) {
 
+  // Consider the energy deposition only if it is inside the 
+  // specified time window.
+  G4double timeDeposit = theStep->GetPostStepPoint()->GetGlobalTime(); 
+  if ( timeDeposit < StatAccepTestAnalysis::getInfTimeWindow()  ||  
+       timeDeposit > StatAccepTestAnalysis::getSupTimeWindow() ) return;
+
   if ( StatAccepTestAnalysis::getInstance()->getIsHistogramOn() ) {
 
     // 10-Apr-2006 : Added energy spectra.

@@ -85,6 +85,10 @@ public:
   // properly the statistical error of the quantities defined per
   // event.
 
+  static inline double getInfTimeWindow();
+  static inline double getSupTimeWindow();
+  // Returns the limits of the considered time window.
+
 private:
   
   StatAccepTestAnalysis();
@@ -113,6 +117,9 @@ private:
   static G4double supParticleEkin_proton;   // only for proton-information.
   static G4double infParticleEkin_nuclei;   // Energy thresholds for nuclei,
   static G4double supParticleEkin_nuclei;   // only for nuclei-information.
+
+  static G4double infTimeWindow;  // To study the energy deposition as a
+  static G4double supTimeWindow;  // function of time we define a time window.
 
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
@@ -572,5 +579,13 @@ inline void StatAccepTestAnalysis::setIsHistogramOn( const bool choice ) {
 	 << "  <---" << G4endl << G4endl; 
 }
 
+
+inline double StatAccepTestAnalysis::getInfTimeWindow() {
+  return infTimeWindow;
+}
+
+inline double StatAccepTestAnalysis::getSupTimeWindow() {
+  return supTimeWindow;
+}
 
 #endif
