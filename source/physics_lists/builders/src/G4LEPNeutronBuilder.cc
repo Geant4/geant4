@@ -86,10 +86,13 @@ Build(G4HadronCaptureProcess * aP)
 void G4LEPNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
-  theLENeutronModel = new G4LENeutronInelastic();
-  theLENeutronModel->SetMinEnergy(theIMin);
-  theLENeutronModel->SetMaxEnergy(theIMax);
-  aP->RegisterMe(theLENeutronModel);
+  if ( theIMax > 1.*eV ) 
+  {
+     theLENeutronModel = new G4LENeutronInelastic();
+     theLENeutronModel->SetMinEnergy(theIMin);
+     theLENeutronModel->SetMaxEnergy(theIMax);
+     aP->RegisterMe(theLENeutronModel);
+  }
 }
 
 // 2002 by J.P. Wellisch
