@@ -386,7 +386,8 @@ int main(int argc, char** argv)
     if (! g4State->SetNewState(G4State_Init)) 
       G4cout << "error changing G4state"<< G4endl;;   
 
-    G4cout << "###### Start new run # " << run << "     #####" << G4endl;
+    G4cout << "###### Start new run # " << run << "   for "
+	   << nevt << " events  #####" << G4endl;
     
     // -------- Target 
 
