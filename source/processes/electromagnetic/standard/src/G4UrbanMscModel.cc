@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.67 2007-10-22 05:07:28 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.68 2007-10-22 13:05:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,7 +166,6 @@
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
-#include "G4Navigator.hh"
 #include "G4SafetyHelper.hh"
 
 #include "G4Poisson.hh"
