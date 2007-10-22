@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionTest.cc,v 1.2 2007-10-22 10:21:25 pia Exp $
+// $Id: G4NSS07IonisationBorn.cc,v 1.1 2007-10-22 10:21:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -41,6 +41,7 @@
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
+#include <vector>
 
 
 #include "G4ParticleDefinition.hh"
@@ -75,8 +76,8 @@ int main()
   // Particle definitions
   
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* positron = G4Positron::PositronDefinition();
+  //  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
+  //   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
  
   // Create a DynamicParticle  
   
@@ -88,24 +89,48 @@ int main()
 
   G4cout << "Enter initial energy in keV" << G4endl;
   G4double e0;
-  G4cin >> e0;
+  // G4cin >> e0;
   e0 = e0 * keV;
 
 
-  G4cout << "Enter energy step in keV" << G4endl;
+  std::vector<G4double> masonIoniTot;
 
+  masonIoniTot.push_back(13.5*eV);
+  masonIoniTot.push_back(15*eV);
+  masonIoniTot.push_back(17.5*eV);
+  masonIoniTot.push_back(20*eV);
+  masonIoniTot.push_back(22.5*eV);
+  masonIoniTot.push_back(30*eV);
+  masonIoniTot.push_back(35*eV);
+  masonIoniTot.push_back(30*eV);
+  masonIoniTot.push_back(40*eV);
+  masonIoniTot.push_back(45*eV);
+  masonIoniTot.push_back(50*eV);
+  masonIoniTot.push_back(60*eV);
+  masonIoniTot.push_back(70*eV);
+  masonIoniTot.push_back(80*eV);
+  masonIoniTot.push_back(90*eV);
+  masonIoniTot.push_back(100*eV);
+  masonIoniTot.push_back(110*eV);
+  masonIoniTot.push_back(125*eV);
+  masonIoniTot.push_back(150*eV);
+  masonIoniTot.push_back(175*eV);
+  masonIoniTot.push_back(200*eV);
+  masonIoniTot.push_back(250*eV);
+  masonIoniTot.push_back(300*eV);
+  masonIoniTot.push_back(400*eV);
+  masonIoniTot.push_back(500*eV);
+  masonIoniTot.push_back(600*eV);
+  masonIoniTot.push_back(700*eV);
+  masonIoniTot.push_back(800*eV);
+  masonIoniTot.push_back(900*eV);
+  masonIoniTot.push_back(1000*eV);
+ 
+  G4int nE = masonIoniTot.size();
 
-  G4double eStep;
-  G4cin >> eStep;
-  eStep = eStep * keV;
-
-
-  // 10 energy steps between the energy limits
-  G4int nStep = 11;
-
-  for (G4int i=0; i<nStep; i++) 
+  for (G4int i=0; i<nE; i++) 
     {
-      G4double energy = e0 + i * eStep;
+      G4double energy = masonIoniTot[i];
       
       G4DynamicParticle dynamicParticle(electron,direction,energy);
       //      G4DynamicParticle dynamicParticle(proton,direction,energy);
@@ -124,7 +149,9 @@ int main()
       // G4double sigma = cross->CrossSection(energy,0);
       // G4double sigma = cross->CrossSection(energy,electron::GetParticleName());
 
-      G4cout << energy/keV <<" keV, cross section = " << sigma / (cm*cm) << " cm-2" << G4endl;
+      // G4cout << energy/eV <<" eV, cross section = " << sigma / (cm*cm) << " cm-2" << G4endl;
+
+      G4cout << energy/eV <<" " << sigma / cm2 << G4endl;
 
       // G4int level = cross->RandomSelect(energy);
 

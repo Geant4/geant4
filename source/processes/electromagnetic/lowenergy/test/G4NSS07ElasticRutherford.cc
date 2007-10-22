@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionTest.cc,v 1.2 2007-10-22 10:21:25 pia Exp $
+// $Id: G4NSS07ElasticRutherford.cc,v 1.1 2007-10-22 10:21:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///
@@ -41,6 +41,7 @@
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
+#include <vector>
 
 
 #include "G4ParticleDefinition.hh"
@@ -64,19 +65,19 @@ int main()
 {
   //  G4cout.setf( ios::scientific, ios::floatfield );
 
-  // G4CrossSectionElasticScreenedRutherford* cross = new G4CrossSectionElasticScreenedRutherford;
+  G4CrossSectionElasticScreenedRutherford* cross = new G4CrossSectionElasticScreenedRutherford;
   // G4CrossSectionExcitationEmfietzoglou* cross = new G4CrossSectionExcitationEmfietzoglou;
   // G4CrossSectionExcitationEmfietzoglouPartial* cross = new G4CrossSectionExcitationEmfietzoglouPartial;
   // G4CrossSectionExcitationBornPartial* cross = new G4CrossSectionExcitationBornPartial;
   // G4CrossSectionIonisationBornElectron* cross = new G4CrossSectionIonisationBornElectron;
 
-  G4CrossSectionIonisationBorn* cross = new G4CrossSectionIonisationBorn;
+  // G4CrossSectionIonisationBorn* cross = new G4CrossSectionIonisationBorn;
 
   // Particle definitions
   
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* positron = G4Positron::PositronDefinition();
+  //  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
+  //   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
  
   // Create a DynamicParticle  
   
@@ -86,26 +87,30 @@ int main()
  
   G4ParticleMomentum direction(initX,initY,initZ);
 
-  G4cout << "Enter initial energy in keV" << G4endl;
-  G4double e0;
-  G4cin >> e0;
-  e0 = e0 * keV;
+  std::vector<G4double> mason;
+
+  // Itikawa & Mason, J. Phys. Chem. Ref. Data 34 (1), pp. 1-22, 2005, table 4. 
+  mason.push_back(1);
+  mason.push_back(2);
+  mason.push_back(4);
+  mason.push_back(6);
+  mason.push_back(10);
+  mason.push_back(20);
+  mason.push_back(30);
+  mason.push_back(40);
+  mason.push_back(50);
+  mason.push_back(60);
+  mason.push_back(70);
+  mason.push_back(80);
+  mason.push_back(90);
+  mason.push_back(100);
+
+ G4int nE = mason.size();
 
 
-  G4cout << "Enter energy step in keV" << G4endl;
-
-
-  G4double eStep;
-  G4cin >> eStep;
-  eStep = eStep * keV;
-
-
-  // 10 energy steps between the energy limits
-  G4int nStep = 11;
-
-  for (G4int i=0; i<nStep; i++) 
+  for (G4int i=0; i<nE; i++) 
     {
-      G4double energy = e0 + i * eStep;
+      G4double energy = mason[i] * eV;
       
       G4DynamicParticle dynamicParticle(electron,direction,energy);
       //      G4DynamicParticle dynamicParticle(proton,direction,energy);
@@ -124,7 +129,9 @@ int main()
       // G4double sigma = cross->CrossSection(energy,0);
       // G4double sigma = cross->CrossSection(energy,electron::GetParticleName());
 
-      G4cout << energy/keV <<" keV, cross section = " << sigma / (cm*cm) << " cm-2" << G4endl;
+      // G4cout << energy/eV <<" eV, cross section = " << sigma / (cm*cm) << " cm-2" << G4endl;
+
+      G4cout << energy/eV <<" " << sigma / cm2 << G4endl;
 
       // G4int level = cross->RandomSelect(energy);
 
