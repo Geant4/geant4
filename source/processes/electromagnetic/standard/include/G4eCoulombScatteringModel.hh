@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.18 2007-10-09 08:16:29 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.19 2007-10-22 13:02:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,9 @@ private:
 protected:
 
   const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
+
   G4ParticleChangeForGamma* fParticleChange;
 
   G4double                  coeff;
@@ -154,9 +157,6 @@ protected:
   G4double                  formfactA;
 
 private:
-
-  const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* thePositron;
 
   G4PhysicsTable*           theCrossSectionTable; 
 
