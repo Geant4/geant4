@@ -1,4 +1,4 @@
-$Id: History,v 1.343 2007-10-08 17:00:02 vnivanch Exp $
+$Id: History,v 1.344 2007-10-22 05:13:16 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 October 07: L.Urban
+- G4UrbanMscModel: corr. in ComputeGeomPathLength in order to get
+          better low energy behaviour for heavy particles (mu,hadrons)
+         - small modification of theta0 in ComputeTheta0 (based on data)
+         - some old inconsistency/bug has been cured in SampleCosineTheta
+           now the variable prob is always in [0,1]
 
 08 October 07: V.Ivant (emstand-V09-00-12)
 - G4eCoulombScatteringModel, G4CoulombScatteringModel  
