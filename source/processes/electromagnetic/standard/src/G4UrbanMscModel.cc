@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.66 2007-08-13 09:02:09 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.67 2007-10-22 05:07:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -141,6 +141,11 @@
 // 06-07-07 theta0 is not the same for e-/e+ as for heavy particles (L.Urban)
 // 02-08-07 compare safety not with 0. but with tlimitminfix (V.Ivanchenko)
 // 09-08-07 tail of angular distribution has been modified (L.Urban)
+// 22-10-07 - corr. in ComputeGeomPathLength in order to get better low
+//          energy behaviour for heavy particles,
+//          - theta0 is slightly modified,
+//          - some old inconsistency/bug is cured in SampleCosineTheta,
+//          now 0 <= prob <= 1 in any case (L.Urban) 
 //
 
 // Class Description:
@@ -739,7 +744,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda0*(1.-exp(-tau));
-  } else if(currentKinEnergy < mass) {
+  } else if(currentKinEnergy < electron_mass_c2)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
@@ -840,9 +845,9 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   G4double theta0 = c_highland*charge*sqrt(y)/betacp;
   y = log(y);
   if(mass == electron_mass_c2)
-    theta0 *= 1.+0.049*y;
+    theta0 *= 1.+0.051*y;
   else
-    theta0 *= 1.+0.044*y;
+    theta0 *= 1.+0.029*y;
     
   return theta0;
 }
@@ -1008,23 +1013,56 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
-      if(theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
-      else                a = 1.0/(theta0*theta0) ;
+      if(theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
+      else                  a = 1.0/(theta0*theta0) ;
 
       ea = exp(-2.*a);
       eaa = 1.-ea ; 
       xmean1 = (1.+ea)/eaa-1./a;
 
-      if(xmean1 <= xmeanth)
-        xmean1 = 0.50*(1.+xmeanth);
-
-      // material i.e. Zeff dependent tail
-      b = 1.+(1.-0.15*log(Zeff))*(1./xmeanth-1.) ;
+      b = 1./xmeanth ;                               
       bp1 = b+1.;
       bm1 = b-1.;
       xmean2 = b-0.5*bp1*bm1*log(bp1/bm1);
 
-      prob = (xmeanth-xmean2)/(xmean1-xmean2);
+      if((xmean1 >= xmeanth) && (xmean2 <= xmeanth))
+      {
+        //normal case
+        prob = (xmeanth-xmean2)/(xmean1-xmean2);
+      }
+      else
+      {
+        // x1 < xth ( x2 < xth automatically if b = 1/xth)
+        // correct a (xmean1)
+        if((xmeanth-xmean1)/xmeanth < 1.e-5)
+        {   
+          // xmean1 is small probably due to precision problems
+          xmean1 = 0.50*(1.+xmeanth);
+          prob = (xmeanth-xmean2)/(xmean1-xmean2);
+        }
+        else if(a < 0.2)
+        {
+          // low energy particle, correct a in order to have x1=xth
+          a = xmeanth/(1.-xmeanth);
+          ea = exp(-2.*a);
+          eaa = 1.-ea;
+          prob = 1.;
+        } 
+        else
+        {
+          // not low energy, correct a in order to have x1=xth
+          G4int i=0, imax=10;
+          do
+          {
+            a = 1./(1.-xmeanth+2.*ea/eaa);
+            ea = exp(-2.*a);
+            eaa = 1.-ea;
+            xmean1 = (1.+ea)/eaa-1./a;
+            i += 1;
+          } while ((std::abs((xmeanth-xmean1)/xmeanth) > 0.05) && (i < imax));
+         prob = 1.;          
+        }
+      }
 
       // sampling of costheta
       if (G4UniformRand() < prob)
