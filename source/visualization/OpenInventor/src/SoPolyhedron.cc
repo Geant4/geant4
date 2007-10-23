@@ -128,7 +128,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
     (SoTextureCoordinateElement::getType(state) == 
      SoTextureCoordinateElement::FUNCTION);
   const SoTextureCoordinateElement *tce = NULL;
-  SbVec4f texCoord;
+  SbVec4f texCoord(0.,0.,0.,0.);
   if (useTexFunction) {
     tce = SoTextureCoordinateElement::getInstance(state);
   } else {
@@ -415,7 +415,7 @@ void Geant4_SoPolyhedron::generateAlternateRep(
     int ncoord = nedge*3;
     int32_t* coords = new int32_t[ncoord];
 
-    SbVec3f pvb,pve;
+    SbVec3f pvb(0.,0.,0.), pve(0.,0.,0.);
 
     SbBool empty = TRUE;
     int ipoint = 0;
