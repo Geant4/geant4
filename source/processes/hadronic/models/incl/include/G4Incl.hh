@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.4 2007-10-16 20:27:11 miheikki Exp $ 
+// $Id: G4Incl.hh,v 1.5 2007-10-24 14:28:45 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)

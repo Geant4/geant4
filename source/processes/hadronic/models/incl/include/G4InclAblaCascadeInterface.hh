@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.4 2007-10-16 20:27:11 miheikki Exp $ 
+// $Id: G4InclAblaCascadeInterface.hh,v 1.5 2007-10-24 14:28:46 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -105,6 +105,11 @@ private:
 
 private:
   G4Hazard *hazard; // The random seeds used by INCL.
+  G4VarNtp *varntp;
+  G4Calincl *calincl;
+  G4Ws *ws;
+  G4Mat *mat;
+  G4Incl *incl;
 
   G4HadFinalState theResult;  
   ofstream diagdata;
