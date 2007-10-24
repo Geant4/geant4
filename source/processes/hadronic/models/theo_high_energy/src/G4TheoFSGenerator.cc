@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.7 2007-04-12 07:53:38 gunter Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.8 2007-10-24 16:32:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
@@ -130,10 +130,18 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   {
     theTransportResult = 
                theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+    if ( !theTransportResult ) {
+       G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
+       throw G4HadronicException(__FILE__, __LINE__, text);
+    } 
   }
   else
   {
-     theTransportResult = theDecay.Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+    theTransportResult = theDecay.Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+    if ( !theTransportResult ) {
+       G4cout << "G4TheoFSGenerator: null ptr from decay propagate " << G4endl;
+       throw G4HadronicException(__FILE__, __LINE__, text);
+    }   
   }
 
   // Fill particle change
