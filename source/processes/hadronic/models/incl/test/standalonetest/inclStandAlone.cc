@@ -348,7 +348,12 @@ int main(int argc, char *argv[])
       varntp->ntrack = 0;
     }
     else {
-      transparent++;
+      if(varntp->ntrack == -2) {
+	n = n - 1; // Event is not accepted.
+      }
+      else {
+	transparent++;
+      }
     }
   }
 

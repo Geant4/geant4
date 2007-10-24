@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007-09-11 13:32:36 miheikki Exp $
+# $Id: GNUmakefile,v 1.2 2007-10-24 15:45:47 miheikki Exp $
 #G4TARGET := cascade
 #G4TARGET := benchmarks
 G4TARGET := inclStandAlone
@@ -15,17 +15,19 @@ CPPFLAGS += $(shell root-config --cflags)
 LDFLAGS  += $(shell root-config --libs)
 
 CPPFLAGS += -DUSEROOT
-
-b1:  # benchmark 1
-	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks 1 >> b1.out; date; cat b1.out 
-
-b2:  # test run for cascade  parameters: runId #events particle energy [MeV] A Z
-#	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/cascade 1 1000 1 1000 27 13 > ../data/b2.out; date; head ../data/b2.out; wc ../data/b2.out 
-#	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/cascade 1 1000 1 3000 27 13 > b2.out; date; head b2.out; 
-
+TESTPROGRAM = $(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone
 
 incl:
 	rm -f incl.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/testIncl 1  > incl.out; date; head incl.out; 
+
+t1:
+	$(TESTPROGRAM) 27 13 1 256 100000 ../data/testrunAl27Proton256MeV_noabla.root
+
+t2:
+	$(TESTPROGRAM) 27 13 1 800 100000 ../data/testrunAl27Proton800MeV_noabla.root
+
+t3:
+	$(TESTPROGRAM) 56 26 1 800 100000 ../data/testrunFe56Proton800MeV_noabla.root
 
 demo:
 	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 208 82 9 1000 10000 Pb208Alpha1GeV.root
@@ -33,5 +35,9 @@ demo:
 	root -l compareDemo.C
 
 testrun:
-	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 208 82 1 1000 10000 test.root
+	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 208 82 1 1000 10000 test.out
+#	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 27 13 1 1000 1 test.out > console.out
+
+vg:
+	valgrind $(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 208 82 1 1000 10 valgrindtest.out 2> vg.output
 #	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 27 13 1 1000 1 test.out > console.out
