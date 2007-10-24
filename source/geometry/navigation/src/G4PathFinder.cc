@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.52 2007-10-24 17:46:24 japost Exp $
+// $Id: G4PathFinder.cc,v 1.53 2007-10-24 18:28:10 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -953,10 +953,8 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      fLimitTruth[IdTransport] = transportLimited; 
      fLimitedStep[IdTransport] = transportLimited ? kUnique : kDoNot;
 
-     // fNoGeometriesLimiting - as WhichLimited does
-     unsigned int noGeomLimited=0; 
-     if( fLimitedStep[IdTransport] ) noGeomLimited=1; 
-     fNoGeometriesLimiting= noGeomLimited;  
+     // Set fNoGeometriesLimiting - as WhichLimited does
+     fNoGeometriesLimiting = transportLimited ? 1 : 0;  
   }
   else
   {
