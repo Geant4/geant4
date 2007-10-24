@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.6 2007-10-16 20:44:38 miheikki Exp $ 
+// $Id: G4Abla.cc,v 1.7 2007-10-24 15:06:38 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,7 +33,7 @@
 #include <time.h>
 
 #include "G4Abla.hh"
-#include "G4InclAblaHardcodedData.hh"
+#include "G4InclAblaDataFile.hh"
 
 #include <assert.h>
 
@@ -980,11 +980,9 @@ void G4Abla::initEvapora()
     G4cout <<"as " << ald->as << G4endl;
     G4cout <<"ak " << ald->ak << G4endl;
   }
-	
   fiss->optxfis = 1;
-  G4InclAblaHardcodedData *dataInterface = new G4InclAblaHardcodedData();
-  dataInterface->readData();
 
+  G4InclAblaDataFile *dataInterface = new G4InclAblaDataFile();
   for(int z = 0; z < 98; z++) { //do 30  z = 0,98,1                                                 
     for(int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
       // 			ecld->ecfnz[n][z] = 0.e0;
@@ -1003,7 +1001,7 @@ void G4Abla::initEvapora()
   } //30   continue                                                          
 
   for(int z = 0; z < 500; z++) {
-    for(int a = 0; a < 501; a++) {
+    for(int a = 0; a < 500; a++) {
       pace->dm[z][a] = dataInterface->getPace2(z,a);
     }
   }

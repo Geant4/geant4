@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.5 2007-10-16 20:44:39 miheikki Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.6 2007-10-24 15:06:39 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -40,23 +40,27 @@ G4InclAblaCascadeInterface::G4InclAblaCascadeInterface()
   const G4long* table_entry = CLHEP::HepRandom::getTheSeeds(); // Get random seed from CLHEP.
   hazard->ial = (*table_entry);
 
+  varntp = new G4VarNtp();
+  calincl = new G4Calincl();
+  ws = new G4Ws();
+  mat = new G4Mat();
+  incl = new G4Incl(hazard, calincl, ws, mat, varntp);
+
   verboseLevel = 0;
 }
 
 G4InclAblaCascadeInterface::~G4InclAblaCascadeInterface()
 {
   delete hazard;
+  delete varntp;
+  delete calincl;
+  delete ws;
+  delete mat;
+  delete incl;
 }
 
 G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
-  G4VarNtp *varntp = new G4VarNtp();
-  G4Calincl *calincl = new G4Calincl();
-  G4Ws *ws = new G4Ws();
-  G4Mat *mat = new G4Mat();
-  
-  G4Incl *incl = new G4Incl(hazard, calincl, ws, mat, varntp);
-
   G4int maxTries = 200;
 
   G4int particleI, n = 0;
@@ -194,6 +198,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
     if(varntp->ntrack <= 0) {
       if(verboseLevel > 1) {
         G4cout <<"G4InclAblaCascadeInterface: No cascade. Returning original particle with original momentum." << G4endl;
+        G4cout <<"WARNING G4InclAblaCascadeInterface: No cascade. Returning original particle with original momentum." << G4endl;
+	G4cout <<"\t Reached maximum trials of 200 to produce inelastic scattering." << G4endl;
       }
 
       theResult.SetStatusChange(stopAndKill);

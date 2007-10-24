@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.7 2007-10-16 20:44:38 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.8 2007-10-24 15:06:38 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -419,7 +419,6 @@ void G4Incl::processEventIncl()
    * Call the actual INCL routine.
    */
   pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem);
-
   forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
   G4double aprf = double(iarem); // mass number of the prefragment
   G4double jprf = 0.0;           // angular momentum of the prefragment
@@ -460,6 +459,14 @@ void G4Incl::processEventIncl()
   G4double pxbil = 0.0;
   G4double pybil = 0.0;
   G4double pzbil = 0.0;         
+
+  if(nopart > -1) {
+    for(G4int j = 0; j < nopart; j++) {
+      if(ep[j] > calincl->f[2]) { //FIX: Remove unphysical events (Ekin > Ebullet).
+	nopart = -2;
+      }
+    }
+  }
 
   if(nopart > -1) {
     for(G4int j = 0; j < nopart; j++) {
@@ -639,7 +646,12 @@ void G4Incl::processEventIncl()
     }
   }
   else {
-    varntp->ntrack = -1;
+    if(nopart == -2) {
+      varntp->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
+    }
+    else {
+      varntp->ntrack = -1;
+    }
   }
 }
 
@@ -991,8 +1003,14 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     }
   }
   else {
-    varntp->ntrack = -1;
-    evaporationResult->ntrack = -1;
+    if(nopart == -2) {
+      varntp->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
+      evaporationResult->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
+    }
+    else {
+      varntp->ntrack = -1;
+      evaporationResult->ntrack = -1;
+    }
   }
 }
 
@@ -1701,8 +1719,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int kcol; 
   G4int kd; 
   //  G4int klm = 0; 
-  G4int l1; 
-  G4int l2; 
+//   G4int l1; 
+//   G4int l2; 
   G4int ldel; 
   G4int lead; 
   G4int led; 
@@ -2098,6 +2116,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int ia1t[9] = {1,1,0,0,0,2,3,3,4};
   G4int iz1t[9] = {1,0,1,0,-1,1,1,2,2};
   G4double fmpinct[9] = {938.2796,938.2796,138.0,138.0,138.0,1874.35,2806.8,2806.8,3727.};
+
+  // Initialize array:
+   for(G4int i = 0; i < 300; i++) {
+     npproj[i] = 0;
+     nc[i] = 0;
+   }
+
   //    266	     
   //    267	c      data rms1t,pf1t/0.,0.,0.,0.,0.,2.10,1.80,1.80,1.63,
   //    268	c     -0.,0.,0.,0.,0.,77.,110.,110.,153./
@@ -3337,8 +3362,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
  pnu448:
   imin = indic[next];
-  l1 = bl2->ind[imin];
-  l2 = bl2->jnd[imin];
+  bl9->l1 = bl2->ind[imin]; //NOTE: l1 changed to bl9->l1.
+  bl9->l2 = bl2->jnd[imin]; //NOTE: l2 changed to bl9->l2.
 
   // test le 20/3/2003: tue sinon le dernier avatar?
   if (bl2->k == 0) {
@@ -3423,9 +3448,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // modif: pas de reflexions avant au moins un avatar du (des) nucleon incident
   // celui-ci ne peut etre qu'une collision nn (ou pin)
 
-  if((irst_avatar == 0) && (l2 == -1)) {
+  if((irst_avatar == 0) && (bl9->l2 == -1)) {
     if(verboseLevel > 3) {
-      G4cout <<"Interaction type: reflection (l2 = " << l2 << "). No first interaction with a participant yet." << G4endl;
+      G4cout <<"Interaction type: reflection (l2 = " << bl9->l2 << "). No first interaction with a participant yet." << G4endl;
     }
     goto pnu44;
   }
@@ -3452,7 +3477,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     goto pnu255;
   }
   // l1 va a la surface du noyau:
-  if (l2 == -1) {
+  if (bl9->l2 == -1) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: l2 == -1. Going to pnu220." << G4endl;
     }
@@ -3478,11 +3503,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"G4Incl: Now at pnu830." << G4endl;
   }
   
-  if(l2 == 0) {
+  if(bl9->l2 == 0) {
     goto pnu220;
   }
   // interaction pi(l1-ia)-nucleon(l2)
-  if(l1 > ia) { // line 2916
+  if(bl9->l1 > ia) { // line 2916
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: l1 > ia (line 2916)" << G4endl;
     }
@@ -3490,7 +3515,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
  pnu803:
   // pas de collision entre 2 non participants:
-  if(jparticip[l1] == 0 && jparticip[l2] == 0) {
+  if(jparticip[bl9->l1] == 0 && jparticip[bl9->l2] == 0) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: both particles are spectators. No collision. " << G4endl;
     }
@@ -3500,38 +3525,38 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // parameters for the next colliding pair
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
-  t[9] = bl1->eps[l1] + bl1->eps[l2]; //t(10)->t[9] 
+  t[9] = bl1->eps[bl9->l1] + bl1->eps[bl9->l2]; //t(10)->t[9] 
   t0 = 1.0/t[9]; // t(10)->t[9]
-  b1 = (bl1->p1[l1] + bl1->p1[l2])*t0;
-  b2 = (bl1->p2[l1] + bl1->p2[l2])*t0;
-  b3 = (bl1->p3[l1] + bl1->p3[l2])*t0;
+  b1 = (bl1->p1[bl9->l1] + bl1->p1[bl9->l2])*t0;
+  b2 = (bl1->p2[bl9->l1] + bl1->p2[bl9->l2])*t0;
+  b3 = (bl1->p3[bl9->l1] + bl1->p3[bl9->l2])*t0;
   s = (1.0 - b1*b1 - b2*b2 - b3*b3)*t[9]*t[9]; //t(10)->t[9]
   sq = std::sqrt(s);
 
   if(sq < 1925.5) {
     if(verboseLevel > 3) {
       G4cout <<"sq < 1925.5" << G4endl;
-      G4cout <<"Particles: l1 = " << l1 << " l2 = " << l2 << G4endl;
-      G4cout <<"eps[l1] = " << bl1->eps[l1] << " eps[l2] = " << bl1->eps[l2] << G4endl;
-      G4cout <<"p1[l1] = " << bl1->p1[l1] << " p1[l2] = " << bl1->p1[l2] << G4endl;
-      G4cout <<"p2[l1] = " << bl1->p2[l1] << " p2[l2] = " << bl1->p2[l2] << G4endl;
-      G4cout <<"p3[l1] = " << bl1->p3[l1] << " p3[l2] = " << bl1->p3[l2] << G4endl;
+      G4cout <<"Particles: l1 = " << bl9->l1 << " l2 = " << bl9->l2 << G4endl;
+      G4cout <<"eps[bl9->l1] = " << bl1->eps[bl9->l1] << " eps[bl9->l2] = " << bl1->eps[bl9->l2] << G4endl;
+      G4cout <<"p1[bl9->l1] = " << bl1->p1[bl9->l1] << " p1[bl9->l2] = " << bl1->p1[bl9->l2] << G4endl;
+      G4cout <<"p2[bl9->l1] = " << bl1->p2[bl9->l1] << " p2[bl9->l2] = " << bl1->p2[bl9->l2] << G4endl;
+      G4cout <<"p3[bl9->l1] = " << bl1->p3[bl9->l1] << " p3[bl9->l2] = " << bl1->p3[bl9->l2] << G4endl;
       G4cout <<"sq = " << sq << G4endl;
     }
     goto pnu44;
   }
 
-  assert(bl1->eps[l1] != 0);
-  bl1->ta = tau/bl1->eps[l1];
-  x1l1 = bl3->x1[l1] + bl1->p1[l1]*(bl1->ta);
-  x2l1 = bl3->x2[l1] + bl1->p2[l1]*(bl1->ta);
-  x3l1 = bl3->x3[l1] + bl1->p3[l1]*(bl1->ta);
+  assert(bl1->eps[bl9->l1] != 0);
+  bl1->ta = tau/bl1->eps[bl9->l1];
+  x1l1 = bl3->x1[bl9->l1] + bl1->p1[bl9->l1]*(bl1->ta);
+  x2l1 = bl3->x2[bl9->l1] + bl1->p2[bl9->l1]*(bl1->ta);
+  x3l1 = bl3->x3[bl9->l1] + bl1->p3[bl9->l1]*(bl1->ta);
 
-  assert(bl1->eps[l2] != 0);
-  bl1->ta = tau/bl1->eps[l2];
-  x1l2 = bl3->x1[l2] + bl1->p1[l2]*(bl1->ta);
-  x2l2 = bl3->x2[l2] + bl1->p2[l2]*(bl1->ta);
-  x3l2 = bl3->x3[l2] + bl1->p3[l2]*(bl1->ta);
+  assert(bl1->eps[bl9->l2] != 0);
+  bl1->ta = tau/bl1->eps[bl9->l2];
+  x1l2 = bl3->x1[bl9->l2] + bl1->p1[bl9->l2]*(bl1->ta);
+  x2l2 = bl3->x2[bl9->l2] + bl1->p2[bl9->l2]*(bl1->ta);
+  x3l2 = bl3->x3[bl9->l2] + bl1->p3[bl9->l2]*(bl1->ta);
 
   // test on the minimum distance of approach
   t[10] = x1l1 - x1l2; //t(11)->t[10]
@@ -3549,13 +3574,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // Replaced goto structure:
   // if (k3 == 1) go to 260
   // if (k4 == 0) go to 260
-  mg=bl1->ind1[l1]+bl1->ind1[l2];
+  mg=bl1->ind1[bl9->l1]+bl1->ind1[bl9->l2];
   if((k3 != 1) && (k4 != 0) && (mg == 1)) {
-    isos=bl1->ind2[l1]+bl1->ind2[l2];
+    isos=bl1->ind2[bl9->l1]+bl1->ind2[bl9->l2];
     // if (mg != 1) go to 260
-    ldel=l2;
-    if(mg-bl1->ind1[l1] == 0) {
-      ldel=l1;
+    ldel = bl9->l2;
+    if(mg-bl1->ind1[bl9->l1] == 0) {
+      ldel = bl9->l1;
     }
     // assert(isnan(energyTest(ldel)) == false);
     bl6->xx10 = std::sqrt(std::pow(bl1->eps[ldel],2) - std::pow(bl1->p1[ldel],2) - std::pow(bl1->p2[ldel],2) - std::pow(bl1->p3[ldel],2));
@@ -3604,19 +3629,19 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(varavat->kveux == 1) { //then
     iavat = iavat + 1;
     varavat->timeavat[iavat] = tim;
-    varavat->l1avat[iavat] = l1;
-    varavat->l2avat[iavat] = l2;
+    varavat->l1avat[iavat] = bl9->l1;
+    varavat->l2avat[iavat] = bl9->l2;
     varavat->energyavat[iavat] = sq;
 
-    if(l1 <= ia) {
-      varavat->jpartl1[iavat] = jparticip[l1];
+    if(bl9->l1 <= ia) {
+      varavat->jpartl1[iavat] = jparticip[bl9->l1];
     }
     else {
       varavat->jpartl1[iavat] = 0;
     }
 
-    if(l2 > 0) {
-      varavat->jpartl2[iavat] = jparticip[l2];
+    if(bl9->l2 > 0) {
+      varavat->jpartl2[iavat] = jparticip[bl9->l2];
     }
     else {
       varavat->jpartl2[iavat] = 0;
@@ -3625,7 +3650,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // gel des nucleons non participants sur le premier avatar (nn)=(l1,1)      
   if (irst_avatar == 1) {
-    for(G4int i = 1; i <= l1; i = i + l1 - 1) { // bugfix!
+    for(G4int i = 1; i <= bl9->l1; i = i + bl9->l1 - 1) { // bugfix!
       assert(bl1->eps[i] != 0);
       // assert(isnan(energyTest(i)) == false);
       bl1->ta = tau/bl1->eps[i];                                                
@@ -3661,7 +3686,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
   }
 
-  if(l2 == 0) {
+  if(bl9->l2 == 0) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: l2 == 0. Going to pnu805." << G4endl;
     }
@@ -3670,14 +3695,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // Candidate: if(l2!=0)...
 
   // reflexions sur le potentiel, sortie eventuelle de la particule:
-  if (l2 == -1) {
+  if (bl9->l2 == -1) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: l2 == -1. Going to pnu600." << G4endl;
     }
     goto pnu600;
   }
 
-  if(l1 > ia) {
+  if(bl9->l1 > ia) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: l1 > ia. Going to pnu831." << G4endl;
     }
@@ -3689,101 +3714,101 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"Particles l1 and l2 collide!" << G4endl;
   }
   
-  ich1 = bl1->ind1[l1];
-  ich2 = bl1->ind1[l2];
-  ich3 = bl1->ind2[l1];
-  ich4 = bl1->ind2[l2];
+  ich1 = bl1->ind1[bl9->l1];
+  ich2 = bl1->ind1[bl9->l2];
+  ich3 = bl1->ind2[bl9->l1];
+  ich4 = bl1->ind2[bl9->l2];
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
-  aml1 = std::sqrt(std::pow(bl1->eps[l1],2) - std::pow(bl1->p1[l1],2) - std::pow(bl1->p2[l1],2) - std::pow(bl1->p3[l1],2));
-  aml2 = std::sqrt(std::pow(bl1->eps[l2],2) - std::pow(bl1->p1[l2],2) - std::pow(bl1->p2[l2],2) - std::pow(bl1->p3[l2],2));
-  gl1 = bl1->eps[l1]/aml1;
-  gl2 = bl1->eps[l2]/aml2;
+  aml1 = std::sqrt(std::pow(bl1->eps[bl9->l1],2) - std::pow(bl1->p1[bl9->l1],2) - std::pow(bl1->p2[bl9->l1],2) - std::pow(bl1->p3[bl9->l1],2));
+  aml2 = std::sqrt(std::pow(bl1->eps[bl9->l2],2) - std::pow(bl1->p1[bl9->l2],2) - std::pow(bl1->p2[bl9->l2],2) - std::pow(bl1->p3[bl9->l2],2));
+  gl1 = bl1->eps[bl9->l1]/aml1;
+  gl2 = bl1->eps[bl9->l2]/aml2;
   // l-conservation
   if (k6 == 1) {
-    t[30] = (aml1*(bl3->x1[l1]) + aml2*(bl3->x1[l2]))/(aml1 + aml2); //t(31)->t[30]
-    t[31] = (aml1*(bl3->x2[l1]) + aml2*(bl3->x2[l2]))/(aml1 + aml2); //t(32)->t[31]
-    t[32] = (aml1*(bl3->x3[l1]) + aml2*(bl3->x3[l2]))/(aml1 + aml2); //t(33)->t[32]
-    tt31 = bl3->x1[l1] - bl3->x1[l2];
-    tt32 = bl3->x2[l1] - bl3->x2[l2];
-    tt33 = bl3->x3[l1] - bl3->x3[l2];
-    t[33] = (aml2*(bl1->p1[l1]) - aml1*(bl1->p1[l2]))/(aml1 + aml2); //t(34)->t[33]
-    t[34] = (aml2*(bl1->p2[l1]) - aml1*(bl1->p2[l2]))/(aml1 + aml2); //t(35)->t[34]
-    t[35] = (aml2*(bl1->p3[l1]) - aml1*(bl1->p3[l2]))/(aml1 + aml2); //t(36)->t[35]
-    tt34 = bl1->p1[l1] + bl1->p1[l2];
-    tt35 = bl1->p2[l1] + bl1->p2[l2];
-    tt36 = bl1->p3[l1] + bl1->p3[l2];
+    t[30] = (aml1*(bl3->x1[bl9->l1]) + aml2*(bl3->x1[bl9->l2]))/(aml1 + aml2); //t(31)->t[30]
+    t[31] = (aml1*(bl3->x2[bl9->l1]) + aml2*(bl3->x2[bl9->l2]))/(aml1 + aml2); //t(32)->t[31]
+    t[32] = (aml1*(bl3->x3[bl9->l1]) + aml2*(bl3->x3[bl9->l2]))/(aml1 + aml2); //t(33)->t[32]
+    tt31 = bl3->x1[bl9->l1] - bl3->x1[bl9->l2];
+    tt32 = bl3->x2[bl9->l1] - bl3->x2[bl9->l2];
+    tt33 = bl3->x3[bl9->l1] - bl3->x3[bl9->l2];
+    t[33] = (aml2*(bl1->p1[bl9->l1]) - aml1*(bl1->p1[bl9->l2]))/(aml1 + aml2); //t(34)->t[33]
+    t[34] = (aml2*(bl1->p2[bl9->l1]) - aml1*(bl1->p2[bl9->l2]))/(aml1 + aml2); //t(35)->t[34]
+    t[35] = (aml2*(bl1->p3[bl9->l1]) - aml1*(bl1->p3[bl9->l2]))/(aml1 + aml2); //t(36)->t[35]
+    tt34 = bl1->p1[bl9->l1] + bl1->p1[bl9->l2];
+    tt35 = bl1->p2[bl9->l1] + bl1->p2[bl9->l2];
+    tt36 = bl1->p3[bl9->l1] + bl1->p3[bl9->l2];
   }
 
   // l-conservation
-  t[20] = bl1->p1[l1]; //t(21)->t[20]
-  t[21] = bl1->p2[l1]; //t(22)->t[21]
-  t[22] = bl1->p3[l1]; //t(23)->t[22]
-  t[23] = bl1->eps[l1]; //t(24)->t[23]
-  t[24] = bl1->p1[l2]; //t(25)->t[24]
-  t[25] = bl1->p2[l2]; //t(26)->t[25]
-  t[26] = bl1->p3[l2]; //t(27)->t[26]
-  t[27] = bl1->eps[l2]; //t(28)->t[27]
+  t[20] = bl1->p1[bl9->l1]; //t(21)->t[20]
+  t[21] = bl1->p2[bl9->l1]; //t(22)->t[21]
+  t[22] = bl1->p3[bl9->l1]; //t(23)->t[22]
+  t[23] = bl1->eps[bl9->l1]; //t(24)->t[23]
+  t[24] = bl1->p1[bl9->l2]; //t(25)->t[24]
+  t[25] = bl1->p2[bl9->l2]; //t(26)->t[25]
+  t[26] = bl1->p3[bl9->l2]; //t(27)->t[26]
+  t[27] = bl1->eps[bl9->l2]; //t(28)->t[27]
 
   // info delta ou nucleon:
   if(varavat->kveux == 1) {
-    varavat->del1avat[iavat] = bl1->ind1[l1];
-    varavat->del2avat[iavat] = bl1->ind1[l2];                                               
+    varavat->del1avat[iavat] = bl1->ind1[bl9->l1];
+    varavat->del2avat[iavat] = bl1->ind1[bl9->l2];                                               
   }
 
   minus_b1 = -1.0*b1;
   minus_b2 = -1.0*b2;
   minus_b3 = -1.0*b3;
-  loren(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[l1]));
-  loren(&(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[l2]));
+  loren(&(bl1->p1[bl9->l1]), &(bl1->p2[bl9->l1]), &(bl1->p3[bl9->l1]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[bl9->l1]));
+  loren(&(bl1->p1[bl9->l2]), &(bl1->p2[bl9->l2]), &(bl1->p3[bl9->l2]), &minus_b1, &minus_b2, &minus_b3, &(bl1->eps[bl9->l2]));
 
   if(verboseLevel > 3) {
     G4cout <<"Calling collis..." << G4endl;
-    G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
-    G4cout <<"Momentum: p1 = " << bl1->p1[l1] << " p2 = " << bl1->p2[l1] << " p3 = " << bl1->p3[l1] << G4endl;
-    G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
-    G4cout <<"Momentum: p1 = " << bl1->p1[l2] << " p2 = " << bl1->p2[l2] << " p3 = " << bl1->p3[l2] << G4endl;
+    G4cout <<"Energy eps[bl9->l1] = " << bl1->eps[bl9->l1] << G4endl;
+    G4cout <<"Momentum: p1 = " << bl1->p1[bl9->l1] << " p2 = " << bl1->p2[bl9->l1] << " p3 = " << bl1->p3[bl9->l1] << G4endl;
+    G4cout <<"Energy eps[bl9->l2] = " << bl1->eps[bl9->l2] << G4endl;
+    G4cout <<"Momentum: p1 = " << bl1->p1[bl9->l2] << " p2 = " << bl1->p2[bl9->l2] << " p3 = " << bl1->p3[bl9->l2] << G4endl;
   }
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
-  bl9->l1 = l1;
-  bl9->l2 = l2;
-  collis(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]),
-	 &(bl1->eps[l1]), &(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &(bl1->eps[l2]),
+//   bl9->l1 = l1;
+//   bl9->l2 = l2;
+  collis(&(bl1->p1[bl9->l1]), &(bl1->p2[bl9->l1]), &(bl1->p3[bl9->l1]),
+	 &(bl1->eps[bl9->l1]), &(bl1->p1[bl9->l2]), &(bl1->p2[bl9->l2]), &(bl1->p3[bl9->l2]), &(bl1->eps[bl9->l2]),
 	 &(t[11]), &(t[12]), &(t[13]), &(t[14]), &np, &ip, &k2, &k3, &k4, &k5,
-	 &(bl1->ind1[l1]), &(bl1->ind1[l2]), &(bl1->ind2[l1]), &(bl1->ind2[l2]));
-  l1 = bl9->l1;
-  l2 = bl9->l2;
+	 &(bl1->ind1[bl9->l1]), &(bl1->ind1[bl9->l2]), &(bl1->ind2[bl9->l1]), &(bl1->ind2[bl9->l2]));
+//   l1 = bl9->l1;
+//   l2 = bl9->l2;
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
   if(verboseLevel > 3) {
     G4cout <<"End of collis call" << G4endl;
-    G4cout <<"Energy eps[l1] = " << bl1->eps[l1] << G4endl;
-    G4cout <<"Energy eps[l2] = " << bl1->eps[l2] << G4endl;
+    G4cout <<"Energy eps[bl9->l1] = " << bl1->eps[bl9->l1] << G4endl;
+    G4cout <<"Energy eps[bl9->l2] = " << bl1->eps[bl9->l2] << G4endl;
   }
   
   if(verboseLevel > 3) {
     G4cout <<"Variables after collis call: "<< G4endl;
-    G4cout <<"bl1->p1[" << l1 <<"] = " << bl1->p1[l1] <<" bl1->p2[" << l1 <<"] = " << bl1->p2[l1] <<" bl1->p3[" << l1 <<"] = " << bl1->p3[l1] <<" bl1->eps[" << l1 <<"] = " << bl1->eps[l1] << G4endl;
-    G4cout <<"bl1->p1[" << l2 <<"] = " << bl1->p1[l2] <<" bl2->p2[" << l2 <<"] = " << bl1->p2[l2] <<" bl2->p3[" << l2 <<"] = " << bl1->p3[l2] <<" bl1->eps[" << l2 <<"] = " << bl1->eps[l2] << G4endl;
+    G4cout <<"bl1->p1[" << bl9->l1 <<"] = " << bl1->p1[bl9->l1] <<" bl1->p2[" << bl9->l1 <<"] = " << bl1->p2[bl9->l1] <<" bl1->p3[" << bl9->l1 <<"] = " << bl1->p3[bl9->l1] <<" bl1->eps[" << bl9->l1 <<"] = " << bl1->eps[bl9->l1] << G4endl;
+    G4cout <<"bl1->p1[" << bl9->l2 <<"] = " << bl1->p1[bl9->l2] <<" bl2->p2[" << bl9->l2 <<"] = " << bl1->p2[bl9->l2] <<" bl2->p3[" << bl9->l2 <<"] = " << bl1->p3[bl9->l2] <<" bl1->eps[" << bl9->l2 <<"] = " << bl1->eps[bl9->l2] << G4endl;
   }
   
-  loren(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &b1, &b2, &b3, &(bl1->eps[l1]));
-  loren(&(bl1->p1[l2]), &(bl1->p2[l2]), &(bl1->p3[l2]), &b1, &b2, &b3, &(bl1->eps[l2]));
+  loren(&(bl1->p1[bl9->l1]), &(bl1->p2[bl9->l1]), &(bl1->p3[bl9->l1]), &b1, &b2, &b3, &(bl1->eps[bl9->l1]));
+  loren(&(bl1->p1[bl9->l2]), &(bl1->p2[bl9->l2]), &(bl1->p3[bl9->l2]), &b1, &b2, &b3, &(bl1->eps[bl9->l2]));
 
-  if (bl1->ind1[l1] == 1) { // bugfix 1 -> 0
+  if (bl1->ind1[bl9->l1] == 1) { // bugfix 1 -> 0
     goto pnu243;
   }
-  xbl1 = pauliBlocking(l1, rbl, pbl);
+  xbl1 = pauliBlocking(bl9->l1, rbl, pbl);
   standardRandom(&rndm,&(hazard->igraine[10])); 
   if (rndm > (1.0 - xbl1)) {
     goto pnu248;
   }
  pnu243:
-  if (bl1->ind1[l2] == 1) { // bugfix 1 -> 0
+  if (bl1->ind1[bl9->l2] == 1) { // bugfix 1 -> 0
     goto pnu241;
   }
-  xbl2 = pauliBlocking(l2, rbl, pbl);
+  xbl2 = pauliBlocking(bl9->l2, rbl, pbl);
   standardRandom(&rndm,&(hazard->igraine[10]));
   if (rndm > (1.0 - xbl2)) {
     goto pnu248;
@@ -3801,18 +3826,18 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // restitution de l1 et l2 si rejet de la col. par pauli:
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
-  bl1->p1[l1] = t[20]; //t(21)->t[20]
-  bl1->p2[l1] = t[21]; //t(22)->t[21]
-  bl1->p3[l1] = t[22]; //t(23)->t[22]
-  bl1->eps[l1] = t[23]; //t(24)->t[23]
-  bl1->p1[l2] = t[24]; //t(25)->t[24]
-  bl1->p2[l2] = t[25]; //t(26)->t[25]
-  bl1->p3[l2] = t[26]; //t(27)->t[26]
-  bl1->eps[l2] = t[27]; //t(28)->t[27]
-  bl1->ind1[l1] = ich1;
-  bl1->ind1[l2] = ich2;
-  bl1->ind2[l1] = ich3;
-  bl1->ind2[l2] = ich4;
+  bl1->p1[bl9->l1] = t[20]; //t(21)->t[20]
+  bl1->p2[bl9->l1] = t[21]; //t(22)->t[21]
+  bl1->p3[bl9->l1] = t[22]; //t(23)->t[22]
+  bl1->eps[bl9->l1] = t[23]; //t(24)->t[23]
+  bl1->p1[bl9->l2] = t[24]; //t(25)->t[24]
+  bl1->p2[bl9->l2] = t[25]; //t(26)->t[25]
+  bl1->p3[bl9->l2] = t[26]; //t(27)->t[26]
+  bl1->eps[bl9->l2] = t[27]; //t(28)->t[27]
+  bl1->ind1[bl9->l1] = ich1;
+  bl1->ind1[bl9->l2] = ich2;
+  bl1->ind2[bl9->l1] = ich3;
+  bl1->ind2[bl9->l2] = ich4;
   // assert(isnan(energyTest(l1)) == false);
   // assert(isnan(energyTest(l2)) == false);
 
@@ -3838,9 +3863,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(ncol_2c == 1) {
     for (G4int icomp = 0; icomp < bl3->ia1; icomp++) {
       // test on the first collision modified 4/07/2001 for direct and exchange.
-      if(icomp == l1 || icomp == l2) {
+      if(icomp == bl9->l1 || icomp == bl9->l2) {
 	xavant = min(t[23],t[27]); //t(24)->t[23], t(28)->t[27]
-	xapres = min(bl1->eps[l1],bl1->eps[l2]);
+	xapres = min(bl1->eps[bl9->l1],bl1->eps[bl9->l2]);
 	if(xapres <= xavant) {
 	  if(varavat->kveux == 1) {
 	    varavat->bloc_cdpp[iavat] = 1;
@@ -3886,35 +3911,35 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     varavat->bloc_paul[iavat] = 0;
   }
 
-  jparticip[l1] = 1;
-  jparticip[l2] = 1;
+  jparticip[bl9->l1] = 1;
+  jparticip[bl9->l2] = 1;
   if(verboseLevel > 3) {
-    G4cout <<"Particle " << l1 << " is now participant." << G4endl;
-    G4cout <<"Particle " << l2 << " is now participant." << G4endl;
+    G4cout <<"Particle " << bl9->l1 << " is now participant." << G4endl;
+    G4cout <<"Particle " << bl9->l2 << " is now participant." << G4endl;
   }
   
   if (ws->nosurf <= 0) {
     // surface
-    pppp = std::sqrt(std::pow(bl1->p1[l1],2) + std::pow(bl1->p2[l1],2) + std::pow(bl1->p3[l1],2));
-    rrrr = std::sqrt(std::pow(bl3->x1[l1],2) + std::pow(bl3->x2[l1],2) + std::pow(bl3->x3[l1],2));
+    pppp = std::sqrt(std::pow(bl1->p1[bl9->l1],2) + std::pow(bl1->p2[bl9->l1],2) + std::pow(bl1->p3[bl9->l1],2));
+    rrrr = std::sqrt(std::pow(bl3->x1[bl9->l1],2) + std::pow(bl3->x2[bl9->l1],2) + std::pow(bl3->x3[bl9->l1],2));
     if (pppp <= bl10->pf) {
       xv = pppp/bl10->pf;
       rcorr = interpolateFunction(xv);
       if (rrrr > rcorr) {
-	bl3->x1[l1] = bl3->x1[l1]*rcorr/rrrr;
-	bl3->x2[l1] = bl3->x2[l1]*rcorr/rrrr;
-	bl3->x3[l1] = bl3->x3[l1]*rcorr/rrrr;
+	bl3->x1[bl9->l1] = bl3->x1[bl9->l1]*rcorr/rrrr;
+	bl3->x2[bl9->l1] = bl3->x2[bl9->l1]*rcorr/rrrr;
+	bl3->x3[bl9->l1] = bl3->x3[bl9->l1]*rcorr/rrrr;
       }
     }
-    pppp = std::sqrt(std::pow(bl1->p1[l2],2) + std::pow(bl1->p2[l2],2) + std::pow(bl1->p3[l2],2));
-    rrrr = std::sqrt(std::pow(bl3->x1[l2],2) + std::pow(bl3->x2[l2],2) + std::pow(bl3->x3[l2],2));
+    pppp = std::sqrt(std::pow(bl1->p1[bl9->l2],2) + std::pow(bl1->p2[bl9->l2],2) + std::pow(bl1->p3[bl9->l2],2));
+    rrrr = std::sqrt(std::pow(bl3->x1[bl9->l2],2) + std::pow(bl3->x2[bl9->l2],2) + std::pow(bl3->x3[bl9->l2],2));
     if (pppp <= bl10->pf) {
       xv = pppp/bl10->pf;
       rcorr = interpolateFunction(xv);
       if (rrrr > rcorr) {
-	bl3->x1[l2] = bl3->x1[l2]*rcorr/rrrr;
-	bl3->x2[l2] = bl3->x2[l2]*rcorr/rrrr;
-	bl3->x3[l2] = bl3->x3[l2]*rcorr/rrrr;
+	bl3->x1[bl9->l2] = bl3->x1[bl9->l2]*rcorr/rrrr;
+	bl3->x2[bl9->l2] = bl3->x2[bl9->l2]*rcorr/rrrr;
+	bl3->x3[bl9->l2] = bl3->x3[bl9->l2]*rcorr/rrrr;
       }
     }
   }
@@ -3931,58 +3956,58 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   q4[npion] = t[14]; //t(15)->t[14]
  pnu240:
   ncol = ncol + 1;
-  if (l2 != 1) {
+  if (bl9->l2 != 1) {
     goto pnu870;
   }
 
   // critere pour la leading particle: avant impulsion longitudinale max l=1
   // change en fevrier 2002: leading part. = energie totale max (l=1)
-  if (bl1->p3[l2] > bl1->p3[l1]) { 
+  if (bl1->p3[bl9->l2] > bl1->p3[bl9->l1]) { 
     goto pnu870;
   }
 
   // attention, il faut mieux faire et selectionner la plus grande energie
   // des particules participantes (jparticip()=1) et dans le noyau (nesc()=0)!
 
-  xr1 = bl1->p1[l1];
-  xr2 = bl1->p2[l1];
-  xr3 = bl1->p3[l1];
-  xr4 = bl1->eps[l1];
-  xr5 = bl3->x1[l1];
-  xr6 = bl3->x2[l1];
-  xr7 = bl3->x3[l1];
+  xr1 = bl1->p1[bl9->l1];
+  xr2 = bl1->p2[bl9->l1];
+  xr3 = bl1->p3[bl9->l1];
+  xr4 = bl1->eps[bl9->l1];
+  xr5 = bl3->x1[bl9->l1];
+  xr6 = bl3->x2[bl9->l1];
+  xr7 = bl3->x3[bl9->l1];
   xr8 = gl1;
-  ixr1 = bl1->ind1[l1];
-  ixr2 = bl1->ind2[l1];
+  ixr1 = bl1->ind1[bl9->l1];
+  ixr2 = bl1->ind2[bl9->l1];
   ixr3 = ich1;
-  bl1->p1[l1] = bl1->p1[l2];
-  bl1->p2[l1] = bl1->p2[l2];
-  bl1->p3[l1] = bl1->p3[l2];
-  bl1->eps[l1] = bl1->eps[l2];
+  bl1->p1[bl9->l1] = bl1->p1[bl9->l2];
+  bl1->p2[bl9->l1] = bl1->p2[bl9->l2];
+  bl1->p3[bl9->l1] = bl1->p3[bl9->l2];
+  bl1->eps[bl9->l1] = bl1->eps[bl9->l2];
   // assert(isnan(energyTest(l1)) == false);
 
-  bl3->x1[l1] = bl3->x1[l2];
-  bl3->x2[l1] = bl3->x2[l2];
-  bl3->x3[l1] = bl3->x3[l2];
+  bl3->x1[bl9->l1] = bl3->x1[bl9->l2];
+  bl3->x2[bl9->l1] = bl3->x2[bl9->l2];
+  bl3->x3[bl9->l1] = bl3->x3[bl9->l2];
   gl1 = gl2;
-  bl1->ind1[l1] = bl1->ind1[l2];
-  bl1->ind2[l1] = bl1->ind2[l2];
+  bl1->ind1[bl9->l1] = bl1->ind1[bl9->l2];
+  bl1->ind2[bl9->l1] = bl1->ind2[bl9->l2];
   ich1 = ich2;
-  bl1->p1[l2] = xr1;
-  bl1->p2[l2] = xr2;
-  bl1->p3[l2] = xr3;
-  bl1->eps[l2] = xr4;
+  bl1->p1[bl9->l2] = xr1;
+  bl1->p2[bl9->l2] = xr2;
+  bl1->p3[bl9->l2] = xr3;
+  bl1->eps[bl9->l2] = xr4;
   // assert(isnan(energyTest(l2)) == false);
   
-  bl3->x1[l2] = xr5;
-  bl3->x2[l2] = xr6;
-  bl3->x3[l2] = xr7;
+  bl3->x1[bl9->l2] = xr5;
+  bl3->x2[bl9->l2] = xr6;
+  bl3->x3[bl9->l2] = xr7;
   gl2 = xr8;
-  bl1->ind1[l2] = ixr1;
-  bl1->ind2[l2] = ixr2;
+  bl1->ind1[bl9->l2] = ixr1;
+  bl1->ind2[bl9->l2] = ixr2;
   ich2 = ixr3;
 
-  if(ich1 + ich2 - bl1->ind1[l1] - bl1->ind1[l2] != 0 || (ich1 + ich2) != 1) {
+  if(ich1 + ich2 - bl1->ind1[bl9->l1] - bl1->ind1[bl9->l2] != 0 || (ich1 + ich2) != 1) {
     goto pnu870;
   }
   if (bl2->k == 0) {
@@ -3991,28 +4016,28 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   for(G4int i = 1; i <= bl2->k; i++) {
     if((bl2->ind[i] != 1) || (bl2->jnd[i] != 0)) {
-      if((bl2->ind[i] != l1) || (bl2->jnd[i] != 0)) {
+      if((bl2->ind[i] != bl9->l1) || (bl2->jnd[i] != 0)) {
 	continue;
       }
       bl2->ind[i] = 1;
       break;
     }
 
-    bl2->ind[i] = l1;
+    bl2->ind[i] = bl9->l1;
     break;
   }
 
   pnu870:
-  bl5->tlg[l1] = th*(bl1->eps[l1])/std::sqrt(std::pow(bl1->eps[l1],2)-std::pow(bl1->p1[l1],2)-std::pow(bl1->p2[l1],2)-std::pow(bl1->p3[l1],2));
-  bl5->tlg[l2] = th*(bl1->eps[l2])/std::sqrt(std::pow(bl1->eps[l2],2)-std::pow(bl1->p1[l2],2)-std::pow(bl1->p2[l2],2)-std::pow(bl1->p3[l2],2));
-  nc[l1] = nc[l1] + 1;
-  nc[l2] = nc[l2] + 1;
+  bl5->tlg[bl9->l1] = th*(bl1->eps[bl9->l1])/std::sqrt(std::pow(bl1->eps[bl9->l1],2)-std::pow(bl1->p1[bl9->l1],2)-std::pow(bl1->p2[bl9->l1],2)-std::pow(bl1->p3[bl9->l1],2));
+  bl5->tlg[bl9->l2] = th*(bl1->eps[bl9->l2])/std::sqrt(std::pow(bl1->eps[bl9->l2],2)-std::pow(bl1->p1[bl9->l2],2)-std::pow(bl1->p2[bl9->l2],2)-std::pow(bl1->p3[bl9->l2],2));
+  nc[bl9->l1] = nc[bl9->l1] + 1;
+  nc[bl9->l2] = nc[bl9->l2] + 1;
   led = 0;
 
-  if((ich1+ich2-bl1->ind1[l1]-bl1->ind1[l2]) < 0) {
+  if((ich1+ich2-bl1->ind1[bl9->l1]-bl1->ind1[bl9->l2]) < 0) {
     mrnd = mrnd + 1;
   }
-  if((ich1+ich2-bl1->ind1[l1]-bl1->ind1[l2]) == 0) {
+  if((ich1+ich2-bl1->ind1[bl9->l1]-bl1->ind1[bl9->l2]) == 0) {
     if((ich1+ich2-1) < 0) {
       mrnn = mrnn + 1;
     }
@@ -4025,7 +4050,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       led = 1;
     }
   }
-  if((ich1+ich2-bl1->ind1[l1]-bl1->ind1[l2]) > 0) {
+  if((ich1+ich2-bl1->ind1[bl9->l1]-bl1->ind1[bl9->l2]) > 0) {
     mrdn = mrdn + 1;
   }
 
@@ -4034,14 +4059,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // l-conservation 
   if (k6 == 1) {
-    aml1 = am(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1]);
-    aml2 = am(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],bl1->eps[l2]);
+    aml1 = am(bl1->p1[bl9->l1],bl1->p2[bl9->l1],bl1->p3[bl9->l1],bl1->eps[bl9->l1]);
+    aml2 = am(bl1->p1[bl9->l2],bl1->p2[bl9->l2],bl1->p3[bl9->l2],bl1->eps[bl9->l2]);
     // assert(isnan(aml1) == false);
     // assert(isnan(aml2) == false);
     
-    t[36] = (aml2*(bl1->p1[l1]) - aml1*(bl1->p1[l2]))/(aml1+aml2); //t(37)->t[36]
-    t[37] = (aml2*(bl1->p2[l1]) - aml1*(bl1->p2[l2]))/(aml1+aml2); //t(38)->t[37]
-    t[38] = (aml2*(bl1->p3[l1]) - aml1*(bl1->p3[l2]))/(aml1+aml2); //t(39)->t[38]
+    t[36] = (aml2*(bl1->p1[bl9->l1]) - aml1*(bl1->p1[bl9->l2]))/(aml1+aml2); //t(37)->t[36]
+    t[37] = (aml2*(bl1->p2[bl9->l1]) - aml1*(bl1->p2[bl9->l2]))/(aml1+aml2); //t(38)->t[37]
+    t[38] = (aml2*(bl1->p3[bl9->l1]) - aml1*(bl1->p3[bl9->l2]))/(aml1+aml2); //t(39)->t[38]
     t[39] = std::sqrt(t[33]*t[33] + t[34]*t[34] + t[35]*t[35]); //t(N)->t[N-1]
     t[40] = std::sqrt(t[36]*t[36] + t[37]*t[37] + t[38]*t[38]); //t(N)->t[N-1]
     rhopi = tt31*t[33] + tt32*t[34] + tt33*t[35]; //t(N)->t[N-1]
@@ -4070,21 +4095,21 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     tt31 = (c1*t[33]/t[39] + c2*t[42])*tri*t[39]/t[40]; //t(N)->t[N-1]
     tt32 = (c1*t[34]/t[39] + c2*t[43])*tri*t[39]/t[40]; //t(N)->t[N-1]
     tt33 = (c1*t[35]/t[39] + c2*t[44])*tri*t[39]/t[40]; //t(N)->t[N-1]
-    bl3->x1[l1] = t[30] + aml2*tt31/(aml1 + aml2); //t(31)->t[30]
-    bl3->x2[l1] = t[31] + aml2*tt32/(aml1 + aml2); //t(32)->t[30]
-    bl3->x3[l1] = t[32] + aml2*tt33/(aml1 + aml2); //t(33)->t[32]
-    bl3->x1[l2] = t[30] - aml1*tt31/(aml1 + aml2); //t(31)->t[30]
-    bl3->x2[l2] = t[31] - aml1*tt32/(aml1 + aml2); //t(32)->t[31]
-    bl3->x3[l2] = t[32] - aml1*tt33/(aml1 + aml2); //t(33)->t[32]
-    bl1->p1[l1] = aml1*tt34/(aml1 + aml2) + t[36]; //t(37)->t[36]
-    bl1->p2[l1] = aml1*tt35/(aml1 + aml2) + t[37]; //t(38)->t[37]
-    bl1->p3[l1] = aml1*tt36/(aml1 + aml2) + t[38]; //t(39)->t[38]
-    bl1->eps[l1] = w(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],aml1);
+    bl3->x1[bl9->l1] = t[30] + aml2*tt31/(aml1 + aml2); //t(31)->t[30]
+    bl3->x2[bl9->l1] = t[31] + aml2*tt32/(aml1 + aml2); //t(32)->t[30]
+    bl3->x3[bl9->l1] = t[32] + aml2*tt33/(aml1 + aml2); //t(33)->t[32]
+    bl3->x1[bl9->l2] = t[30] - aml1*tt31/(aml1 + aml2); //t(31)->t[30]
+    bl3->x2[bl9->l2] = t[31] - aml1*tt32/(aml1 + aml2); //t(32)->t[31]
+    bl3->x3[bl9->l2] = t[32] - aml1*tt33/(aml1 + aml2); //t(33)->t[32]
+    bl1->p1[bl9->l1] = aml1*tt34/(aml1 + aml2) + t[36]; //t(37)->t[36]
+    bl1->p2[bl9->l1] = aml1*tt35/(aml1 + aml2) + t[37]; //t(38)->t[37]
+    bl1->p3[bl9->l1] = aml1*tt36/(aml1 + aml2) + t[38]; //t(39)->t[38]
+    bl1->eps[bl9->l1] = w(bl1->p1[bl9->l1],bl1->p2[bl9->l1],bl1->p3[bl9->l1],aml1);
     // assert(isnan(energyTest(l1)) == false);
-    bl1->p1[l2] = aml2*tt34/(aml1 + aml2) - t[36]; //t(37)->t[36]
-    bl1->p2[l2] = aml2*tt35/(aml1 + aml2) - t[37]; //t(38)->t[37]
-    bl1->p3[l2] = aml2*tt36/(aml1 + aml2) - t[38]; //t(39)->t[38]
-    bl1->eps[l2] = w(bl1->p1[l2],bl1->p2[l2],bl1->p3[l2],aml2);
+    bl1->p1[bl9->l2] = aml2*tt34/(aml1 + aml2) - t[36]; //t(37)->t[36]
+    bl1->p2[bl9->l2] = aml2*tt35/(aml1 + aml2) - t[37]; //t(38)->t[37]
+    bl1->p3[bl9->l2] = aml2*tt36/(aml1 + aml2) - t[38]; //t(39)->t[38]
+    bl1->eps[bl9->l2] = w(bl1->p1[bl9->l2],bl1->p2[bl9->l2],bl1->p3[bl9->l2],aml2);
     // assert(isnan(energyTest(l2)) == false);
   }
   // l-conservation
@@ -4125,30 +4150,30 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	goto pnu511;
       }
     pnu512:
-      if(bl2->ind[i] == l1) {//if (ind(i).eq.l1) go to 52                                        p-n09120
+      if(bl2->ind[i] == bl9->l1) {//if (ind(i).eq.l1) go to 52                                        p-n09120
 	goto pnu52; 
 
       }
-      if(bl2->ind[i] == l2) {//if (ind(i).eq.l2) go to 52                                        p-n09130
+      if(bl2->ind[i] == bl9->l2) {//if (ind(i).eq.l2) go to 52                                        p-n09130
 	goto pnu52;
 	}
-      if(bl2->jnd[i] == l2) {//if (jnd(i).eq.l2) go to 52                                        p-n09140
+      if(bl2->jnd[i] == bl9->l2) {//if (jnd(i).eq.l2) go to 52                                        p-n09140
 	goto pnu52;
       }
-      if(bl2->jnd[i] == l1) {//if (jnd(i).eq.l1) go to 52                                        p-n09150
+      if(bl2->jnd[i] == bl9->l1) {//if (jnd(i).eq.l1) go to 52                                        p-n09150
 	goto pnu52;
       }
       goto pnu513;
     pnu511:
       //if (ind(i).eq.l1.and.ind1(l1).eq.1) crois(i)=(crois(i)-ccr)*eps(l1p-n09170
       //-)/std::sqrt(eps(l1)**2-p1(l1)**2-p2(l1)**2-p3(l1)**2)/gl1+ccr          p-n09180
-      if(bl2->ind[i] == l1 && bl1->ind1[l1] == 1) {
-	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[l1]/std::sqrt(std::pow(bl1->eps[l1],2)-std::pow(bl1->p1[l1],2)-std::pow(bl1->p2[l1],2)-std::pow(bl1->p3[l1],2))/gl1+ccr;
+      if(bl2->ind[i] == bl9->l1 && bl1->ind1[bl9->l1] == 1) {
+	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[bl9->l1]/std::sqrt(std::pow(bl1->eps[bl9->l1],2)-std::pow(bl1->p1[bl9->l1],2)-std::pow(bl1->p2[bl9->l1],2)-std::pow(bl1->p3[bl9->l1],2))/gl1+ccr;
       }
       //if (ind(i).eq.l2.and.ind1(l2).eq.1) crois(i)=(crois(i)-ccr)*eps(l2p-n09190
       //-)/std::sqrt(eps(l2)**2-p1(l2)**2-p2(l2)**2-p3(l2)**2)/gl2+ccr          p-n09200
-      if(bl2->ind[i] == l2 && bl1->ind1[l2] == 1) {
-	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[l2]/std::sqrt(std::pow(bl1->eps[l2],2)-std::pow(bl1->p1[l2],2)-std::pow(bl1->p2[l2],2)-std::pow(bl1->p3[l2],2))/gl1+ccr;
+      if(bl2->ind[i] == bl9->l2 && bl1->ind1[bl9->l2] == 1) {
+	bl2->crois[i]=(bl2->crois[i]-ccr)*bl1->eps[bl9->l2]/std::sqrt(std::pow(bl1->eps[bl9->l2],2)-std::pow(bl1->p1[bl9->l2],2)-std::pow(bl1->p2[bl9->l2],2)-std::pow(bl1->p3[bl9->l2],2))/gl1+ccr;
       }
  pnu513:
       bl2->crois[i20]=bl2->crois[i]-ccr;
@@ -4162,9 +4187,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl2->k = bl2->k - kd;
   }
 
-  newt(l1,l2);
+  newt(bl9->l1,bl9->l2);
 
-  tref=ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22); // line 3502
+  tref=ref(bl3->x1[bl9->l1], bl3->x2[bl9->l1], bl3->x3[bl9->l1], bl1->p1[bl9->l1], bl1->p2[bl9->l1], bl1->p3[bl9->l1], bl1->eps[bl9->l1],r22); // line 3502
   // assert(isnan(tref) == false);
   
   if(verboseLevel > 3) {
@@ -4176,11 +4201,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(tref <= bl4->tmax5) {
     bl2->k = bl2->k + 1;
     bl2->crois[bl2->k] = tref;
-    bl2->ind[bl2->k] = l1;
+    bl2->ind[bl2->k] = bl9->l1;
     bl2->jnd[bl2->k] = -1;
   }
 
-  tref=ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22); // line 3516
+  tref=ref(bl3->x1[bl9->l2], bl3->x2[bl9->l2], bl3->x3[bl9->l2], bl1->p1[bl9->l2], bl1->p2[bl9->l2], bl1->p3[bl9->l2], bl1->eps[bl9->l2],r22); // line 3516
   // assert(isnan(tref) == false);
   
   if(verboseLevel > 3) {
@@ -4192,7 +4217,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(tref <= bl4->tmax5) {
     bl2->k = bl2->k + 1;
     bl2->crois[bl2->k] = tref;
-    bl2->ind[bl2->k] = l2;
+    bl2->ind[bl2->k] = bl9->l2;
     bl2->jnd[bl2->k] = -1;
   }
 
@@ -4217,14 +4242,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (npion == 0) {
     goto pnu844;
   }
-  if (bl1->ind1[l1] == 1) {
+  if (bl1->ind1[bl9->l1] == 1) {
     goto pnu843;
   }
   for(G4int k20 = 1; k20 <= npion; k20++) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: calling G4Incl::new3" << G4endl;
     }
-    new3((y1[k20]), (y2[k20]), (y3[k20]), (q1[k20]), (q2[k20]), (q3[k20]), (q4[k20]), k20, l1);
+    new3((y1[k20]), (y2[k20]), (y3[k20]), (q1[k20]), (q2[k20]), (q3[k20]), (q4[k20]), k20, bl9->l1);
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: After new3:" << G4endl;
       G4cout <<"y1[" << k20 << "] = " << y1[k20] <<" y2[" << k20 << "] = " << y2[k20] <<" y3[" << k20 << "] = " << y3[k20] << G4endl;
@@ -4233,27 +4258,27 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
  pnu843:
-  if(bl1->ind1[l2] != 1) {
+  if(bl1->ind1[bl9->l2] != 1) {
     for(G4int k20 = 1; k20 <= npion; k20++) {
       //new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], -k20, l2);
-      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l2);
+      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, bl9->l2);
     }
   }
  pnu844:
 
-  if(bl1->ind1[l1]+bl1->ind1[l2] <= ich1+ich2) {
+  if(bl1->ind1[bl9->l1]+bl1->ind1[bl9->l2] <= ich1+ich2) {
     goto pnu849;
   }
-  if(bl1->ind1[l1]-ich1 != 1) {
+  if(bl1->ind1[bl9->l1]-ich1 != 1) {
     goto pnu820;
   }
-  lnew = l1;
+  lnew = bl9->l1;
   goto pnu821;
  pnu820:
-  if(bl1->ind1[l2]-ich2 != 1) {
+  if(bl1->ind1[bl9->l2]-ich2 != 1) {
     goto pnu849;
   }
-  lnew = l2;
+  lnew = bl9->l2;
 
  pnu821:
   standardRandom(&rndm,&(hazard->igraine[16]));
@@ -4288,12 +4313,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // decay of the delta particle                                       p-n09780
  pnu805:
   npion = npion + 1;
-  ichd = bl1->ind2[l1];
-  t[30] = bl1->p1[l1];   //t(31)->t[30]
-  t[31] = bl1->p2[l1]; //t(32)->t[31]
-  t[32] = bl1->p3[l1]; //t(33)->t[32]
-  t[33] = bl1->eps[l1]; //t(34)->t[33]
-  var_ab = std::pow(bl1->eps[l1],2) - std::pow(bl1->p1[l1],2) - std::pow(bl1->p2[l1],2) - std::pow(bl1->p3[l1],2);
+  ichd = bl1->ind2[bl9->l1];
+  t[30] = bl1->p1[bl9->l1];   //t(31)->t[30]
+  t[31] = bl1->p2[bl9->l1]; //t(32)->t[31]
+  t[32] = bl1->p3[bl9->l1]; //t(33)->t[32]
+  t[33] = bl1->eps[bl9->l1]; //t(34)->t[33]
+  var_ab = std::pow(bl1->eps[bl9->l1],2) - std::pow(bl1->p1[bl9->l1],2) - std::pow(bl1->p2[bl9->l1],2) - std::pow(bl1->p3[bl9->l1],2);
   assert(var_ab > 0);
   ym[npion] = 0.0;
 
@@ -4312,7 +4337,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   assert(ym[npion] != 0);
   // assert(isnan(pcm(ym[npion], fmp, fmpi)) == false);
   if(varavat->kveux == 1) {
-    varavat->del1avat[iavat] = bl1->ind1[l1];
+    varavat->del1avat[iavat] = bl1->ind1[bl9->l1];
     varavat->energyavat[iavat] = ym[npion];
   }
 
@@ -4322,16 +4347,16 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     G4cout <<"q1 = " << q1[npion] << " q2 = " << q2[npion] << " q3 = " << q3[npion] << " q4 = " << q4[npion] << G4endl;
   }
   assert(ym[npion] != 0);
-  decay2(&(bl1->p1[l1]), &(bl1->p2[l1]), &(bl1->p3[l1]), &(bl1->eps[l1]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
- 	 &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[l1]));
+  decay2(&(bl1->p1[bl9->l1]), &(bl1->p2[bl9->l1]), &(bl1->p3[bl9->l1]), &(bl1->eps[bl9->l1]), &(q1[npion]), &(q2[npion]), &(q3[npion]),
+ 	 &(q4[npion]), &(ym[npion]), &fmp, &fmpi, &(bl9->hel[bl9->l1]));
 
   if(verboseLevel > 3) {
     G4cout <<"Quantities after decay2: " << G4endl;
-    G4cout <<"l1 = " << l1 << " bl1->p1[l1] = " << bl1->p1[l1] << " bl1->p2[l1] = " << bl1->p2[l1] << " bl1->p3[l1] = " << bl1->p3[l1] << " bl1->eps[l1] = " << bl1->eps[l1] << G4endl;
+    G4cout <<"l1 = " << bl9->l1 << " bl1->p1[l1] = " << bl1->p1[bl9->l1] << " bl1->p2[l1] = " << bl1->p2[bl9->l1] << " bl1->p3[l1] = " << bl1->p3[bl9->l1] << " bl1->eps[l1] = " << bl1->eps[bl9->l1] << G4endl;
   }
   
   // decay
-  if (bl1->ind2[l1]*(bl1->ind2[l1]) == 9) {
+  if (bl1->ind2[bl9->l1]*(bl1->ind2[bl9->l1]) == 9) {
     goto pnu806;
   }
   
@@ -4344,23 +4369,23 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   goto pnu809;
 
  pnu837:
-  ipi[npion]=bl1->ind2[l1]*2;
-  bl1->ind2[l1]=-1*(bl1->ind2[l1]);
+  ipi[npion]=bl1->ind2[bl9->l1]*2;
+  bl1->ind2[bl9->l1]=-1*(bl1->ind2[bl9->l1]);
   goto pnu809;
  pnu806:
-  bl1->ind2[l1]=bl1->ind2[l1]/3;
-  ipi[npion]=2*(bl1->ind2[l1]);
+  bl1->ind2[bl9->l1]=bl1->ind2[bl9->l1]/3;
+  ipi[npion]=2*(bl1->ind2[bl9->l1]);
  pnu809: // continue
-  bl1->ind1[l1]=0;
-  bl5->tlg[l1]=0.;
+  bl1->ind1[bl9->l1]=0;
+  bl5->tlg[bl9->l1]=0.;
 
   // escape ?
-  if (bl5->nesc[l1] > 0) {
+  if (bl5->nesc[bl9->l1] > 0) {
     goto pnu850;
   }
 
   iteste = 0;
-  xpb = pauliBlocking(l1, rbl, pbl);
+  xpb = pauliBlocking(bl9->l1, rbl, pbl);
   standardRandom(&rndm,&(hazard->igraine[10])); 
 
   // pauli blocking?
@@ -4412,16 +4437,16 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(tdel <= bl4->tmax5) {
     bl2->k = bl2->k + 1;
     bl2->crois[bl2->k] = tdel;
-    bl2->ind[bl2->k] = l1;
+    bl2->ind[bl2->k] = bl9->l1;
     bl2->jnd[bl2->k] = 0;
   }
 
-  bl1->p1[l1] = t[30]; //t(31)->t[30]
-  bl1->p2[l1] = t[31]; //t(32)->t[31]
-  bl1->p3[l1] = t[32]; //t(33)->t[32]
-  bl1->eps[l1] = t[33]; //t(34)->t[33]
-  bl1->ind1[l1] = 1;
-  bl1->ind2[l1] = ichd;
+  bl1->p1[bl9->l1] = t[30]; //t(31)->t[30]
+  bl1->p2[bl9->l1] = t[31]; //t(32)->t[31]
+  bl1->p3[bl9->l1] = t[32]; //t(33)->t[32]
+  bl1->eps[bl9->l1] = t[33]; //t(34)->t[33]
+  bl1->ind1[bl9->l1] = 1;
+  bl1->ind2[bl9->l1] = ichd;
   npion = npion - 1;
 
   if (bl2->k == 0) {
@@ -4446,24 +4471,24 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   if (ws->nosurf <= 0) {
     // surface
-    pppp = std::sqrt(std::pow(bl1->p1[l1],2) + std::pow(bl1->p2[l1],2) + std::pow(bl1->p3[l1],2));
-    rrrr = std::sqrt(std::pow(bl3->x1[l1],2) + std::pow(bl3->x2[l1],2) + std::pow(bl3->x3[l1],2));
+    pppp = std::sqrt(std::pow(bl1->p1[bl9->l1],2) + std::pow(bl1->p2[bl9->l1],2) + std::pow(bl1->p3[bl9->l1],2));
+    rrrr = std::sqrt(std::pow(bl3->x1[bl9->l1],2) + std::pow(bl3->x2[bl9->l1],2) + std::pow(bl3->x3[bl9->l1],2));
     if (pppp <= bl10->pf) {
       xv = pppp/bl10->pf;
       rcorr = interpolateFunction(xv);
       if (rrrr > rcorr) {
-	bl3->x1[l1] = bl3->x1[l1]*rcorr/rrrr;
-	bl3->x2[l1] = bl3->x2[l1]*rcorr/rrrr;
-	bl3->x3[l1] = bl3->x3[l1]*rcorr/rrrr;
+	bl3->x1[bl9->l1] = bl3->x1[bl9->l1]*rcorr/rrrr;
+	bl3->x2[bl9->l1] = bl3->x2[bl9->l1]*rcorr/rrrr;
+	bl3->x3[bl9->l1] = bl3->x3[bl9->l1]*rcorr/rrrr;
       }
     }
   }
 
   ncol = ncol + 1;
   mrdp = mrdp + 1;
-  y1[npion] = bl3->x1[l1];
-  y2[npion] = bl3->x2[l1];
-  y3[npion] = bl3->x3[l1];
+  y1[npion] = bl3->x1[bl9->l1];
+  y2[npion] = bl3->x2[bl9->l1];
+  y3[npion] = bl3->x3[bl9->l1];
 
   if (bl2->k == 0) {
     goto pnu4047;
@@ -4474,7 +4499,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   for(G4int i = 1; i <= bl2->k; i++) {
     i20 = i - kd;
 
-    if((bl2->ind[i] == l1) || (bl2->jnd[i] == l1)) {
+    if((bl2->ind[i] == bl9->l1) || (bl2->jnd[i] == bl9->l1)) {
       kd = kd + 1;
     }
     else {
@@ -4486,14 +4511,14 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl2->k = bl2->k - kd;
   
  pnu4047:
-  if (bl5->nesc[l1] != 0) {
+  if (bl5->nesc[bl9->l1] != 0) {
     goto pnu845;
   }
 
-  new1(l1);
+  new1(bl9->l1);
   bl2->k = bl2->k + 1;
-  bl2->crois[bl2->k] = ref(bl3->x1[l1], bl3->x2[l1], bl3->x3[l1], bl1->p1[l1], bl1->p2[l1], bl1->p3[l1], bl1->eps[l1],r22);
-  bl2->ind[bl2->k] = l1;
+  bl2->crois[bl2->k] = ref(bl3->x1[bl9->l1], bl3->x2[bl9->l1], bl3->x3[bl9->l1], bl1->p1[bl9->l1], bl1->p2[bl9->l1], bl1->p3[bl9->l1], bl1->eps[bl9->l1],r22);
+  bl2->ind[bl2->k] = bl9->l1;
   bl2->jnd[bl2->k] = -1;
   if(verboseLevel > 3) {
     if(bl2->crois[bl2->k] < 0.0) {
@@ -4505,12 +4530,12 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(npion > 1) {
     n20 = npion - 1;
     for(G4int k20 = 1; k20 <= n20; k20++) {
-      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l1);
+      new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, bl9->l1);
     }
   }
 
  pnu845: 
-  new2(y1[npion], y2[npion], y3[npion], q1[npion], q2[npion], q3[npion], q4[npion], npion, l1);
+  new2(y1[npion], y2[npion], y3[npion], q1[npion], q2[npion], q3[npion], q4[npion], npion, bl9->l1);
   if(bl2->k == 0) {
     goto pnu230;
   }
@@ -4525,19 +4550,19 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(verboseLevel > 3) {
     G4cout <<"Pion-nucleon collision!" << G4endl;
   }
-  lp = l1 - ia;
-  dis1 = bl3->x1[l2]-y1[lp] + (bl1->p1[l2]/bl1->eps[l2] - q1[lp]/q4[lp])*tau;
-  dis2 = bl3->x2[l2]-y2[lp] + (bl1->p2[l2]/bl1->eps[l2] - q2[lp]/q4[lp])*tau;
-  dis3 = bl3->x3[l2]-y3[lp] + (bl1->p3[l2]/bl1->eps[l2] - q3[lp]/q4[lp])*tau;
+  lp = bl9->l1 - ia;
+  dis1 = bl3->x1[bl9->l2]-y1[lp] + (bl1->p1[bl9->l2]/bl1->eps[bl9->l2] - q1[lp]/q4[lp])*tau;
+  dis2 = bl3->x2[bl9->l2]-y2[lp] + (bl1->p2[bl9->l2]/bl1->eps[bl9->l2] - q2[lp]/q4[lp])*tau;
+  dis3 = bl3->x3[bl9->l2]-y3[lp] + (bl1->p3[bl9->l2]/bl1->eps[bl9->l2] - q3[lp]/q4[lp])*tau;
   dist = dis1*dis1 + dis2*dis2 + dis3*dis3;
-  t[9] = bl1->eps[l2] + q4[lp]; //t(10)->t[9]
+  t[9] = bl1->eps[bl9->l2] + q4[lp]; //t(10)->t[9]
   t0 = 1.0/t[9]; //t(10)->t[9]
-  b1 = (bl1->p1[l2] + q1[lp])*t0;
-  b2 = (bl1->p2[l2] + q2[lp])*t0;
-  b3 = (bl1->p3[l2] + q3[lp])*t0;
+  b1 = (bl1->p1[bl9->l2] + q1[lp])*t0;
+  b2 = (bl1->p2[bl9->l2] + q2[lp])*t0;
+  b3 = (bl1->p3[bl9->l2] + q3[lp])*t0;
   s = (1.0 - b1*b1 - b2*b2 - b3*b3)*t[9]*t[9]; //t(10)->t[9]
   sq = std::sqrt(s);
-  cg = 4+bl1->ind2[l2]*ipi[lp];
+  cg = 4+bl1->ind2[bl9->l2]*ipi[lp];
 
   if(verboseLevel > 3) {
     G4cout <<"Pion-Nucleon collision done! " << G4endl;
@@ -4582,31 +4607,31 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   psf = std::pow(qqq,3)/(std::pow(qqq,3)+5832000.);
   tdel = -hc/(gg*psf)*std::log(rndm)*geff;         
 
-  bl1->ind1[l2] = 1;
-  bl1->ind2[l2] = bl1->ind2[l2] + ipi[lp];
-  nc[l2] = nc[l2] + 1;
-  bl1->eps[l2] = t[9]; //t(10)->t[9]
-  bl1->p1[l2] = bl1->p1[l2] + q1[lp];
-  bl1->p2[l2] = bl1->p2[l2] + q2[lp];
-  bl1->p3[l2] = bl1->p3[l2] + q3[lp]; 
+  bl1->ind1[bl9->l2] = 1;
+  bl1->ind2[bl9->l2] = bl1->ind2[bl9->l2] + ipi[lp];
+  nc[bl9->l2] = nc[bl9->l2] + 1;
+  bl1->eps[bl9->l2] = t[9]; //t(10)->t[9]
+  bl1->p1[bl9->l2] = bl1->p1[bl9->l2] + q1[lp];
+  bl1->p2[bl9->l2] = bl1->p2[bl9->l2] + q2[lp];
+  bl1->p3[bl9->l2] = bl1->p3[bl9->l2] + q3[lp]; 
 
   // ce nucleon (ici delta) devient un participant:
-  jparticip[l2] = 1;
+  jparticip[bl9->l2] = 1;
   if(verboseLevel > 3) {
-    G4cout <<"Particle " << l2 << " is now participant." << G4endl;
+    G4cout <<"Particle " << bl9->l2 << " is now participant." << G4endl;
   }
   
   if (ws->nosurf <= 0) {
     // surface
-    pppp = std::sqrt(std::pow(bl1->p1[l2],2) + std::pow(bl1->p2[l2],2) + std::pow(bl1->p3[l2],2));
-    rrrr = std::sqrt(std::pow(bl3->x1[l2],2) + std::pow(bl3->x2[l2],2) + std::pow(bl3->x3[l2],2));
+    pppp = std::sqrt(std::pow(bl1->p1[bl9->l2],2) + std::pow(bl1->p2[bl9->l2],2) + std::pow(bl1->p3[bl9->l2],2));
+    rrrr = std::sqrt(std::pow(bl3->x1[bl9->l2],2) + std::pow(bl3->x2[bl9->l2],2) + std::pow(bl3->x3[bl9->l2],2));
     if (pppp <= bl10->pf) {
       xv = pppp/bl10->pf;
       rcorr = interpolateFunction(xv);
       if (rrrr > rcorr) {
-	bl3->x1[l2] = bl3->x1[l2]*rcorr/rrrr;
-	bl3->x2[l2] = bl3->x2[l2]*rcorr/rrrr;
-	bl3->x3[l2] = bl3->x3[l2]*rcorr/rrrr;
+	bl3->x1[bl9->l2] = bl3->x1[bl9->l2]*rcorr/rrrr;
+	bl3->x2[bl9->l2] = bl3->x2[bl9->l2]*rcorr/rrrr;
+	bl3->x3[bl9->l2] = bl3->x3[bl9->l2]*rcorr/rrrr;
       }
     }
     // fin surface
@@ -4639,8 +4664,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     ccr = tau;
     for(G4int i = 1; i <= bl2->k; i++) {
       i20 = i - kd;
-
-      if((bl2->ind[i] == l1) || (bl2->ind[i] == l2) || (bl2->jnd[i] == l1) || (bl2->jnd[i] == l2)) {
+      if((bl2->ind[i] == bl9->l1) || (bl2->ind[i] == bl9->l2) || (bl2->jnd[i] == bl9->l1) || (bl2->jnd[i] == bl9->l2)) {
 	kd = kd + 1;
       }
       else {
@@ -4652,7 +4676,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
     bl2->k = bl2->k - kd;
     for(G4int i10 = 1; i10 <= bl2->k; i10++) {
-      if(bl2->ind[i10] <= l1) {
+      if(bl2->ind[i10] <= bl9->l1) {
 	continue;
       }
       else {
@@ -4661,23 +4685,23 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
   }
 
-  new1(l2);
+  new1(bl9->l2);
 
   if(tdel <= bl4->tmax5) {
     bl2->k = bl2->k + 1;
     bl2->crois[bl2->k] = tdel;
-    bl2->ind[bl2->k] = l2;
+    bl2->ind[bl2->k] = bl9->l2;
     bl2->jnd[bl2->k] = 0;
   }
 
   bl2->k = bl2->k + 1;
-  bl2->crois[bl2->k] = ref(bl3->x1[l2], bl3->x2[l2], bl3->x3[l2], bl1->p1[l2], bl1->p2[l2], bl1->p3[l2], bl1->eps[l2],r22);
+  bl2->crois[bl2->k] = ref(bl3->x1[bl9->l2], bl3->x2[bl9->l2], bl3->x3[bl9->l2], bl1->p1[bl9->l2], bl1->p2[bl9->l2], bl1->p3[bl9->l2], bl1->eps[bl9->l2],r22);
   if(verboseLevel > 3) {
     if(bl2->crois[bl2->k] < 0.0) {
       G4cout <<"G4Incl: Reflection time < 0! (line 3955)" << G4endl;
     }
   }
-  bl2->ind[bl2->k] = l2;
+  bl2->ind[bl2->k] = bl9->l2;
   bl2->jnd[bl2->k] = -1;
 
   if(verboseLevel > 3) {
@@ -4688,40 +4712,40 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // reflection on or transmission through the potential wall
  pnu600:
   // deutons pas bien compris ici cv ?
-  if (npproj[l1] == 0) {
+  if (npproj[bl9->l1] == 0) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: npproj[l1] == 0. Going to pnu608." << G4endl;
     }
     goto pnu608;
   }
   
-  if (bl1->ind1[l1] != 0) {
+  if (bl1->ind1[bl9->l1] != 0) {
     if(verboseLevel > 3) {
       G4cout <<"wrong reentering particle (ind1[l1] != 0)" << G4endl;
-      G4cout <<"ind1[" << l1 << "] = " << bl1->ind1[l1] << G4endl;
+      G4cout <<"ind1[" << bl9->l1 << "] = " << bl1->ind1[bl9->l1] << G4endl;
     }
   }
   
-  if (bl3->x1[l1]*(bl1->p1[l1])+bl3->x2[l1]*(bl1->p2[l1])+bl3->x3[l1]*(bl1->p3[l1]) > 0.0) {
+  if (bl3->x1[bl9->l1]*(bl1->p1[bl9->l1])+bl3->x2[bl9->l1]*(bl1->p2[bl9->l1])+bl3->x3[bl9->l1]*(bl1->p3[bl9->l1]) > 0.0) {
     if(verboseLevel > 3) {
       G4cout <<"wrong reentering particle" << G4endl;
-      G4cout <<"particle: l1 = " << l1 << G4endl;
+      G4cout <<"particle: l1 = " << bl9->l1 << G4endl;
     }
   }
   
-  var_ab = std::pow(bl1->p1[l1],2) + std::pow(bl1->p2[l1],2) + std::pow(bl1->p3[l1],2);
+  var_ab = std::pow(bl1->p1[bl9->l1],2) + std::pow(bl1->p2[bl9->l1],2) + std::pow(bl1->p3[bl9->l1],2);
   assert(var_ab > 0);
   gpsg = 0.0;
   if (var_ab > 0.0) {
-    gpsg = std::sqrt((std::pow(bl1->eps[l1]+v0,2)-pm2)/var_ab); 
+    gpsg = std::sqrt((std::pow(bl1->eps[bl9->l1]+v0,2)-pm2)/var_ab); 
   }
   
-  bl1->p1[l1] = gpsg*(bl1->p1[l1]);                                                
-  bl1->p2[l1] = gpsg*(bl1->p2[l1]);                                               
-  bl1->p3[l1] = gpsg*(bl1->p3[l1]);                                               
-  bl1->eps[l1] = bl1->eps[l1] + v0;
-  npproj[l1] = 0;
-  bl5->nesc[l1] = 0;
+  bl1->p1[bl9->l1] = gpsg*(bl1->p1[bl9->l1]);                                                
+  bl1->p2[bl9->l1] = gpsg*(bl1->p2[bl9->l1]);                                               
+  bl1->p3[bl9->l1] = gpsg*(bl1->p3[bl9->l1]);                                               
+  bl1->eps[bl9->l1] = bl1->eps[bl9->l1] + v0;
+  npproj[bl9->l1] = 0;
+  bl5->nesc[bl9->l1] = 0;
 
   // reevaluation of the times tab after entrance of 2nd,..nucleon 
   // of the projectile (goto 602 instead of 607 modif. 13/06/01)
@@ -4731,10 +4755,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // pour un non participant la transmission est impossible:
  pnu608:
   if(varavat->kveux == 1) {
-    varavat->del1avat[iavat] = bl1->ind1[l1];
-    varavat->energyavat[iavat] = bl1->eps[l1] - fmp;
+    varavat->del1avat[iavat] = bl1->ind1[bl9->l1];
+    varavat->energyavat[iavat] = bl1->eps[bl9->l1] - fmp;
   }
-  if(jparticip[l1] == 0) {
+  if(jparticip[bl9->l1] == 0) {
     if(verboseLevel > 3) {
       G4cout <<"G4Incl: jparticip[l1] == 0. Going to pnu601." << G4endl;
     }
@@ -4743,10 +4767,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(varavat->kveux == 1) {
     varavat->go_out[iavat]=1;
   }
-  if (bl1->ind1[l1] == 0) {
+  if (bl1->ind1[bl9->l1] == 0) {
     goto pnu605;
   }
-  fm = am(bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1]);
+  fm = am(bl1->p1[bl9->l1],bl1->p2[bl9->l1],bl1->p3[bl9->l1],bl1->eps[bl9->l1]);
   pot = v1;
   goto pnu606;
 
@@ -4758,9 +4782,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(verboseLevel > 3) {
     G4cout <<"G4Incl: Now at pnu606. Calculating transmission probability." << G4endl;
   }
-  tp = transmissionProb(bl1->eps[l1]-fm,bl1->ind2[l1],itch,bl3->r2,v0);
+  tp = transmissionProb(bl1->eps[bl9->l1]-fm,bl1->ind2[bl9->l1],itch,bl3->r2,v0);
   if(varavat->kveux == 1) {
-    varavat->energyavat[iavat] = bl1->eps[l1] - fm;
+    varavat->energyavat[iavat] = bl1->eps[bl9->l1] - fm;
   }
   standardRandom(&rndm,&(hazard->igraine[10]));
 
@@ -4772,19 +4796,19 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   // ici la particule l1 s'échappe du noyau:
-  bl5->nesc[l1] = 1;
+  bl5->nesc[bl9->l1] = 1;
   nbquit = nbquit + 1;
-  itch = itch - (1 + bl1->ind2[l1])/2;
-  var_ab = std::pow(bl1->p1[l1],2) + std::pow(bl1->p2[l1],2) + std::pow(bl1->p3[l1],2);
+  itch = itch - (1 + bl1->ind2[bl9->l1])/2;
+  var_ab = std::pow(bl1->p1[bl9->l1],2) + std::pow(bl1->p2[bl9->l1],2) + std::pow(bl1->p3[bl9->l1],2);
   assert(var_ab > 0);
   gpsg = 0.0;
   if(var_ab > 0.0) {
-    gpsg = std::sqrt((std::pow(bl1->eps[l1]-pot,2) - fm*fm)/(var_ab));
+    gpsg = std::sqrt((std::pow(bl1->eps[bl9->l1]-pot,2) - fm*fm)/(var_ab));
   }
-  bl1->p1[l1] = gpsg*(bl1->p1[l1]);
-  bl1->p2[l1] = gpsg*(bl1->p2[l1]);
-  bl1->p3[l1] = gpsg*(bl1->p3[l1]);
-  bl1->eps[l1] = bl1->eps[l1] - pot;
+  bl1->p1[bl9->l1] = gpsg*(bl1->p1[bl9->l1]);
+  bl1->p2[bl9->l1] = gpsg*(bl1->p2[bl9->l1]);
+  bl1->p3[bl9->l1] = gpsg*(bl1->p3[bl9->l1]);
+  bl1->eps[bl9->l1] = bl1->eps[bl9->l1] - pot;
 
   // comptage des particules hors du noyau (7/6/2002):
   // (remnant minimum=1 nucleon)
@@ -4802,17 +4826,17 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // here no transmission possible
  pnu601:
-  pspr=bl3->x1[l1]*(bl1->p1[l1])+bl3->x2[l1]*(bl1->p2[l1])+bl3->x3[l1]*(bl1->p3[l1]);
+  pspr=bl3->x1[bl9->l1]*(bl1->p1[bl9->l1])+bl3->x2[bl9->l1]*(bl1->p2[bl9->l1])+bl3->x3[bl9->l1]*(bl1->p3[bl9->l1]);
   if(varavat->kveux == 1) {
     varavat->go_out[iavat]=0;
   }
 
   // surface: modif a.b. pour tenir compte du rayon variable du noyau.
   // (x2cour remplace r22 le rayon**2 fixe du noyau)
-  x2cour = std::pow(bl3->x1[l1],2) + std::pow(bl3->x2[l1],2) + std::pow(bl3->x3[l1],2);
-  bl1->p1[l1] = bl1->p1[l1] - 2.0*(bl3->x1[l1])*pspr/x2cour;
-  bl1->p2[l1] = bl1->p2[l1] - 2.0*(bl3->x2[l1])*pspr/x2cour;
-  bl1->p3[l1] = bl1->p3[l1] - 2.0*(bl3->x3[l1])*pspr/x2cour;
+  x2cour = std::pow(bl3->x1[bl9->l1],2) + std::pow(bl3->x2[bl9->l1],2) + std::pow(bl3->x3[bl9->l1],2);
+  bl1->p1[bl9->l1] = bl1->p1[bl9->l1] - 2.0*(bl3->x1[bl9->l1])*pspr/x2cour;
+  bl1->p2[bl9->l1] = bl1->p2[bl9->l1] - 2.0*(bl3->x2[bl9->l1])*pspr/x2cour;
+  bl1->p3[bl9->l1] = bl1->p3[bl9->l1] - 2.0*(bl3->x3[bl9->l1])*pspr/x2cour;
   // fin modif surface a.b.             
 
  pnu602:
@@ -4826,7 +4850,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     for(G4int i = 1; i <= bl2->k; i++) {
       i20 = i - kd;
 
-      if((bl2->jnd[i] == l1) || ((bl2->ind[i] == l1) && (bl2->jnd[i] != 0))) {
+      if((bl2->jnd[i] == bl9->l1) || ((bl2->ind[i] == bl9->l1) && (bl2->jnd[i] != 0))) {
 	kd = kd + 1;
 	continue;
       }
@@ -4837,22 +4861,22 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     }
     bl2->k = bl2->k - kd;
 
-    if (bl5->nesc[l1] == 1) {
+    if (bl5->nesc[bl9->l1] == 1) {
       goto pnu613;
     }
   }
 
   if(verboseLevel > 3) {
-    G4cout <<"G4Incl: Now calling new1(l1) (new1(" << l1 << "))" << G4endl;
+    G4cout <<"G4Incl: Now calling new1(l1) (new1(" << bl9->l1 << "))" << G4endl;
   }
-  new1(l1);
+  new1(bl9->l1);
 
   if(verboseLevel > 3) {
     G4cout <<"G4Incl: Now calling ref." << G4endl;
-    G4cout <<"x1 = " << bl3->x1[l1] <<" x2 = " << bl3->x2[l1] <<" x3 = " << bl3->x3[l1] << G4endl;
-    G4cout <<"p1 = " << bl1->p1[l1] <<" p2 = " << bl1->p2[l1] <<" p3 = " << bl1->p3[l1] <<" eps = " << bl1->eps[l1] << G4endl;
+    G4cout <<"x1 = " << bl3->x1[bl9->l1] <<" x2 = " << bl3->x2[bl9->l1] <<" x3 = " << bl3->x3[bl9->l1] << G4endl;
+    G4cout <<"p1 = " << bl1->p1[bl9->l1] <<" p2 = " << bl1->p2[bl9->l1] <<" p3 = " << bl1->p3[bl9->l1] <<" eps = " << bl1->eps[bl9->l1] << G4endl;
   }
-  tref = ref(bl3->x1[l1],bl3->x2[l1],bl3->x3[l1],bl1->p1[l1],bl1->p2[l1],bl1->p3[l1],bl1->eps[l1],r22); // line 4101
+  tref = ref(bl3->x1[bl9->l1],bl3->x2[bl9->l1],bl3->x3[bl9->l1],bl1->p1[bl9->l1],bl1->p2[bl9->l1],bl1->p3[bl9->l1],bl1->eps[bl9->l1],r22); // line 4101
   if(verboseLevel > 3) {
     G4cout <<"Returned from function ref. tref = " << tref << G4endl;
   }
@@ -4860,7 +4884,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(verboseLevel > 3) {
     if(tref < 0.0) {
       G4cout <<"G4Incl: Reflection time < 0 (line 4101)!" << G4endl;
-      G4cout <<"G4Incl: bl1->eps[" << l1 << "] = " << bl1->eps[l1] << G4endl;
+      G4cout <<"G4Incl: bl1->eps[" << bl9->l1 << "] = " << bl1->eps[bl9->l1] << G4endl;
     }
   }
   
@@ -4869,7 +4893,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
   bl2->k = bl2->k + 1;
   bl2->crois[bl2->k] = tref;
-  bl2->ind[bl2->k] = l1;
+  bl2->ind[bl2->k] = bl9->l1;
   bl2->jnd[bl2->k] = -1;
 
  pnu615:
@@ -4880,11 +4904,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if (npion == 0) {
     goto pnu613;
   }
-  if (bl1->ind1[l1] == 1) {
+  if (bl1->ind1[bl9->l1] == 1) {
     goto pnu613;
   }
   for(G4int k20 = 1; k20 <= npion; k20++) { //do 614 k20=1,npion
-    new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, l1);
+    new3(y1[k20], y2[k20], y3[k20], q1[k20], q2[k20], q3[k20], q4[k20], k20, bl9->l1);
   }
  pnu613:
   if(verboseLevel > 3) {
@@ -4964,7 +4988,7 @@ pnu255:
       varavat->energyavat[iavat] = ym[npion];
       varavat->bloc_paul[iavat] = 0;
       varavat->bloc_cdpp[iavat] = 0;
-      varavat->del1avat[iavat] = bl1->ind1[l1];
+      varavat->del1avat[iavat] = bl1->ind1[bl9->l1];
       varavat->jpartl1[iavat] = 1;
       varavat->jpartl2[iavat] = 0;
     }
@@ -5094,7 +5118,7 @@ pnu255:
   cmultn = 0.0;
 
   if (kindstruct->kindf7 <= 2) {
-    if (ncol == 0 || nc[0] == 0) { // then nc(1)->nc[0]
+    if (ncol == 0 || nc[1] == 0) { // then nc(1)->nc[0]
       if(verboseLevel > 3) {
 	G4cout <<"no collisioms" << G4endl;
       }
