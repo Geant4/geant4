@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.25 2007-10-09 10:55:57 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.26 2007-10-24 10:42:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,10 +91,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
      A == targetA && cutEnergy == ecut) return nucXSection;
 
   // Lab system
-  nucXSection = 0.0;
   G4double ekin = std::max(keV, kinEnergy);
-  G4double ecross = 
-    ComputeElectronXSectionPerAtom(p,ekin,Z,A,cutEnergy);
+  nucXSection = ComputeElectronXSectionPerAtom(p,ekin,Z,A,cutEnergy);
 
   // CM system
   G4int iz      = G4int(Z);
@@ -120,17 +118,13 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
     G4double effmass = mass*m1/(mass + m1);
     G4double x1 = 1.0 - cosThetaMin + screenZ;
     G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    nucXSection = coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
+    nucXSection += coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
       *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
     //       << " coeff= " << coeff << G4endl;
   }
-  nucXSection += ecross;
   if(nucXSection < 0.0) nucXSection = 0.0;
-  //  G4cout << "p= " << sqrt(mom2) << " momCM= " << momCM 
-  //         << "  Z= " << Z << "  A= " << A 
-  //	     << " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
   return nucXSection;
 }
 

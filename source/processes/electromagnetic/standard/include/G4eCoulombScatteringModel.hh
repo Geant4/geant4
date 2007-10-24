@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.19 2007-10-22 13:02:24 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.20 2007-10-24 10:42:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "G4NistManager.hh"
 #include "globals.hh"
 
 class G4ParticleChangeForGamma;
@@ -128,6 +129,7 @@ protected:
   const G4ParticleDefinition* thePositron;
 
   G4ParticleChangeForGamma* fParticleChange;
+  G4NistManager*            fNistManager;
 
   G4double                  coeff;
   G4double                  constn;
@@ -211,12 +213,13 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A,
     targetA = A;
     SetupKinematic(e);
     cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
-    screenZ = a0*std::pow(Z,0.6666667)
-      *(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    G4double x = fNistManager->GetZ13(Z);
+    screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
       cosTetMaxNuc = 0.0;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
-    formfactA = mom2*constn*std::pow(A, 0.54);
+    x =  fNistManager->GetLOGA(A);
+    formfactA = mom2*constn*std::exp(0.54*x);
   } 
 } 
 

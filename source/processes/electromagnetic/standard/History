@@ -1,4 +1,4 @@
-$Id: History,v 1.345 2007-10-22 13:09:42 vnivanch Exp $
+$Id: History,v 1.346 2007-10-24 10:42:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 22 October 07: V.Ivant (emstand-V09-00-13)
-- G4eCoulombScatteringModel, G4CoulombScatteringModel cleanup  
+- G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed
+  Z^1/3 and log(A) values to speed up the code
 
 22 October 07: L.Urban
 - G4UrbanMscModel: corr. in ComputeGeomPathLength in order to get
