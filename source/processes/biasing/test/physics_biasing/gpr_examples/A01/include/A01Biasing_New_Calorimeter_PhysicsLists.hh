@@ -24,16 +24,17 @@ public:
     // AddProcess<Particle>(process, atRestIdx, alongStepIdx, postStepIdx)
     G4String caloListName("Calorimeter_PhysicsList");
     
-    CreatePhysicsListWithTrigger<G4Gamma, G4GPRTriggerTypes::Geometry::NewVolume>
+    CreateTriggeredPhysicsList<G4Gamma, G4GPRTriggerTypes::Geometry::NewVolume>
       (caloListName, &CalorimeterTrigger);
+    
+    CreateTriggeredPhysicsList<G4Electron, G4GPRTriggerTypes::Geometry::NewVolume>
+      (caloListName, &CalorimeterTrigger);
+    
+    CreateTriggeredPhysicsList<G4Positron, G4GPRTriggerTypes::Geometry::NewVolume>
+      (caloListName, &CalorimeterTrigger);
+
     AddProcess<G4Gamma>(new G4Transportation,  -1, 0, 0, caloListName);
-    
-    CreatePhysicsListWithTrigger<G4Electron, G4GPRTriggerTypes::Geometry::NewVolume>
-      (caloListName, &CalorimeterTrigger);
     AddProcess<G4Electron>(new G4Transportation,  -1, 0, 0, caloListName);
-    
-    CreatePhysicsListWithTrigger<G4Positron, G4GPRTriggerTypes::Geometry::NewVolume>
-      (caloListName, &CalorimeterTrigger);
     AddProcess<G4Positron>(new G4Transportation,  -1, 0, 0, caloListName);
   }
 };

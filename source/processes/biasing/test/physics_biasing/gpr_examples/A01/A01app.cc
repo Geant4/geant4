@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.4 2007-09-17 16:16:11 tinslay Exp $
+// $Id: A01app.cc,v 1.5 2007-10-25 20:05:58 tinslay Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -62,7 +62,7 @@ int main(int argc,char** argv)
 
   runManager->SetUserInitialization(new A01DetectorConstruction);
   //runManager->SetUserInitialization(new A01PhysicsList);
-  //runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
+  runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
   //  runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
   //  runManager->SetUserInitialization(new A01Biasing_BremSplitting_With_Russian_Roulette);
 
@@ -76,10 +76,10 @@ int main(int argc,char** argv)
   // mandatory user initialization classes
   runManager->SetUserInitialization(new A01DetectorConstruction);
   runManager->SetUserInitialization(new A01PhysicsList);
-  runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
-  //runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
+  //runManager->SetUserInitialization(new A01Biasing_New_Calorimeter_PhysicsLists);
+  // runManager->SetUserInitialization(new A01Biasing_Leading_Particle_Biasing);
   //runManager->SetUserInitialization(new A01Biasing_BremSplitting_With_Russian_Roulette);
-  // runManager->SetUserInitialization(new A01Biasing_BremSplitting_DaugherOfPrimary_Only);
+   runManager->SetUserInitialization(new A01Biasing_BremSplitting_DaugherOfPrimary_Only);
 
   // initialize Geant4 kernel
   runManager->Initialize();

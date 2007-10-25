@@ -30,9 +30,9 @@ namespace G4GPRBuilder {
   }
 
   template <typename Particle, typename TriggerType, typename Trigger>
-  void CreatePhysicsListWithTrigger(const G4String& id, const Trigger& trigger)
+  void CreateTriggeredPhysicsList(const G4String& id, const Trigger& trigger)
   {
-    G4GPRBuilderUtils::CreatePhysicsListWithTrigger<Particle, TriggerType>(id, trigger);
+    G4GPRBuilderUtils::CreateTriggeredPhysicsList<Particle, TriggerType>(id, trigger);
   }
 
   template <typename Particle, typename ProcessList, typename TriggerType, 

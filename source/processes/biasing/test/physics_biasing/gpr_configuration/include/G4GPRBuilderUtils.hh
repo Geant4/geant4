@@ -40,7 +40,7 @@ namespace G4GPRBuilderUtils {
   }
 
   template <typename Particle, typename TriggerType, typename Trigger>
-  void CreatePhysicsListWithTrigger(const G4String& id, const Trigger& trigger)
+  void CreateTriggeredPhysicsList(const G4String& id, const Trigger& trigger)
   {
     G4ParticleDefinition* def = Particle::Definition();
     

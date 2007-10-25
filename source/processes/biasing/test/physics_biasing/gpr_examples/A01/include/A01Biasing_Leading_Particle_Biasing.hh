@@ -52,31 +52,3 @@ public:
 
 };
 #endif
-/*
-class A01Biasing_Leading_Particle_Biasing : public G4VUserPhysicsBiasing {
-
-public:
-  
-  void ConstructBiasing() 
-  {
-    // AddTriggeredBiasing<Particle, Process list, Trigger type>
-    //   (Name, Process index, Biasing function, Trigger function)
-    AddTriggeredBiasing<G4Electron, G4GPRProcessLists::DiscreteDoIt, G4GPRTriggerTypes::Geometry::NewVolume>
-      ("LeadingParticlebiasing", 3, &A01LeadingParticleBiasing_EM::SimpleEM, &CalorimeterTrigger);
-    
-...
-    // Slightly more complex configuration case - want to bias all G4HadronicProcess's
-    G4GPRBiasingConfig hadronicConfig;
-    hadronicConfig.SelectAllParticles();
-    hadronicConfig.SelectVProcess<G4HadronicProcess>();
-    
-    // AddTriggeredBiasing<Process list, Trigger type>
-    //   (Name, Biasing function, Trigger function, biasing placement configuration)
-    AddTriggeredBiasing<G4GPRProcessLists::DiscreteDoIt, 
-                        G4GPRTriggerTypes::Stepping::StartStep>
-      ("LeadingParticlebiasing_Hadronic", 
-       &A01LeadingParticleBiasing_Hadronic::Biasing, 
-       &Hadronic_LeadingParticleBiasing_Trigger, hadronicConfig);
-  }
-
-*/
