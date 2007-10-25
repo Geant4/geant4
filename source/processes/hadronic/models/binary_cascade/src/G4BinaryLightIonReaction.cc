@@ -195,14 +195,18 @@
 
 	result=theModel.Propagate(initalState, fancyNucleus);
 	debug.push_back("################# Result size");
-	debug.push_back(result->size());
+	if (result) {
+	   debug.push_back(result->size());
+	} else  {
+	      debug.push_back(" -none-");
+	}      
 	debug.dump();
-	std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
-	delete initalState;
+//	std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
+//	delete initalState;
 
-	if(result->size()==0) 
+	if(! result || result->size()==0) 
 	{
-          delete result; result=0;
+          if (result) {delete result; result=0;}
           delete fancyNucleus;
           delete projectile;
 	  if (++tryCount > 200)
