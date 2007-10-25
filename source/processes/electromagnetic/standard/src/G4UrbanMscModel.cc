@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.68 2007-10-22 13:05:31 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.69 2007-10-25 08:00:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -846,7 +846,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   if(mass == electron_mass_c2)
     theta0 *= 1.+0.051*y;
   else
-    theta0 *= 1.+0.029*y;
+    theta0 *= 1.+0.044*y;
     
   return theta0;
 }
