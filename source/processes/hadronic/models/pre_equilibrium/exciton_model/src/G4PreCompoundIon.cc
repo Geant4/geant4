@@ -51,8 +51,8 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
   //    theLDP.LevelDensityParameter(GetRestA(),GetRestZ(),U);
-  G4double gj = (6.0/pi2)*GetA() *
-    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //no longer used:  G4double gj = (6.0/pi2)*GetA() *
+  //  -----"-----    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
   //    theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
   G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0;
