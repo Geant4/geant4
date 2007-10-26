@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.20 2007-10-26 12:56:22 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.21 2007-10-26 16:22:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -639,6 +639,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
  	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
           G4cerr << "Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
       }
+      fSMan->SetCurrentMesh(mesh);
   } else if(command==meshClsCmd) {
       fSMan->CloseCurrentMesh();
   } else {
