@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.69 2007-10-25 08:00:51 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.70 2007-10-26 13:36:09 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -146,6 +146,7 @@
 //          - theta0 is slightly modified,
 //          - some old inconsistency/bug is cured in SampleCosineTheta,
 //          now 0 <= prob <= 1 in any case (L.Urban) 
+// 26-10-07 different correction parameters for e/mu/hadrons in ComputeTheta0
 //
 
 // Class Description:
@@ -189,6 +190,9 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
     samplez(m_samplez),
     isInitialized(false)
 {
+  masslimite  = 0.6*MeV;
+  masslimitmu = 110.*MeV;
+
   taubig        = 8.0;
   tausmall      = 1.e-20;
   taulim        = 1.e-6;
@@ -843,10 +847,12 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   G4double y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*charge*sqrt(y)/betacp;
   y = log(y);
-  if(mass == electron_mass_c2)
+  if(mass < masslimite)                 
     theta0 *= 1.+0.051*y;
-  else
+  else if(mass < masslimitmu)
     theta0 *= 1.+0.044*y;
+  else
+    theta0 *= 1.+0.038*y;
     
   return theta0;
 }
