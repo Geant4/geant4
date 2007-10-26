@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.1 2007-10-26 09:52:37 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.2 2007-10-26 17:03:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4MuMultipleScattering::G4MuMultipleScattering(G4double tet,
   dtrl              = 0.05;
   samplez           = false ; 
   isInitialized     = false;  
-
+  SetRangeFactor(0.04);
   SetLateralDisplasmentFlag(true);
 }
 
