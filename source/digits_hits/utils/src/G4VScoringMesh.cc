@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.23 2007-09-07 01:21:31 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.24 2007-10-26 12:56:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -122,6 +122,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
   if(fCurrentPS == NULL) {
     //G4Exception("G4VScoringMesh::SetSDFilter() : Current primitive scorer has not been set.");
+    return;
   }
 
   fCurrentPS->SetFilter(filter);
@@ -132,6 +133,12 @@ void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
   if(fCurrentPS == NULL) {
     //G4Execption("G4VScoringMesh::SetCurrentPrimitiveScorer() :  The primitive scorer ", name, " was not exist.");
   }
+}
+
+G4bool G4VScoringMesh::FindPrimitiveScorer(G4String & psname) {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  if(itr == fMap.end()) return false;
+  return true;
 }
 
 G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {

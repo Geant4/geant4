@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.18 2007-10-17 13:45:10 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.19 2007-10-26 12:56:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,6 +88,13 @@ public:
   void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
   void SetFilter(G4VSDFilter * filter);
   void SetCurrentPrimitiveScorer(G4String & name);
+  G4bool FindPrimitiveScorer(G4String & psname);
+
+  G4bool IsCurrentPrimitiveScorerNull() {
+    if(fCurrentPS == NULL) return true;
+    else return false;
+  }
+  void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
 
   inline void SetVerboseLevel(G4int vl) 
   { verboseLevel = vl; }

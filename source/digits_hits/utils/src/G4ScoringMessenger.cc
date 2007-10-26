@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.19 2007-10-18 05:57:47 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.20 2007-10-26 12:56:22 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -496,7 +496,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names");
   param = new G4UIparameter("fname",'s',false);
   fparticleCmd->SetParameter(param);
-  param = new G4UIparameter("particlelist",'s',true);
+  param = new G4UIparameter("particlelist",'s',false);
   param->SetDefaultValue("");
   fparticleCmd->SetParameter(param);
   //
@@ -697,92 +697,212 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  // Quantity
           //    
 	  } else if(command== qCellChgCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(new G4PSCellCharge3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qCellFluxCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal)) { 
 	      mesh->SetPrimitiveScorer(new G4PSCellFlux3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qPassCellFluxCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSPassageCellFlux3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command==qeDepCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qdoseDepCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSDoseDeposit3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qnOfStepCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSNofStep3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qnOfSecondaryCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qTrackLengthCmd) {
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSTrackLength3D* ps = new G4PSTrackLength3D(token[0]);
 	      ps->Weighted(StoB(token[1]));
 	      ps->MultiplyKineticEnergy(StoB(token[2]));
 	      ps->DivideByVelocity(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qPassCellCurrCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSPassageCellCurrent* ps = new G4PSPassageCellCurrent3D(token[0]);
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qPassTrackLengthCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSPassageTrackLength* ps = new G4PSPassageTrackLength3D(token[0]);
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qFlatSurfCurrCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSFlatSurfaceCurrent3D* ps = 
 		  new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qFlatSurfFluxCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
 		  new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qSphereSurfCurrCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSSphereSurfaceCurrent3D* ps = 
 		  new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 	  } else if(command== qSphereSurfFluxCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
 		  new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qCylSurfCurrCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSCylinderSurfaceCurrent3D* ps = 
 		  new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qCylSurfFluxCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
 		  new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qNofCollisionCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSNofCollision3D* ps =new G4PSNofCollision3D(token[0]); 
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qPopulationCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSPopulation3D* ps =new G4PSPopulation3D(token[0]); 
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qTrackCountCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSTrackCounter3D* ps =new G4PSTrackCounter3D(token[0],StoI(token[1])); 
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
           } else if(command== qTerminationCmd){
+	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSTermination3D* ps =new G4PSTermination3D(token[0]); 
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
+	    } else {
+	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      mesh->SetNullToCurrentPrimitiveScorer();
+	    }
 
          //
          // Filters 
          // 
 	  }else if(command== fchargedCmd){
+	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDChargedFilter(token[0])); 
+	    } else {
+	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	    }
           }else if(command== fneutralCmd){
+	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDNeutralFilter(token[0])); 
+	    } else {
+	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	    }
           }else if(command== fkinECmd){
+	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      G4String& name = token[0];
 	      G4double elow  = StoD(token[1]);
 	      G4double ehigh = StoD(token[2]);
 	      mesh->SetFilter(new G4SDKineticEnergyFilter(name,elow,ehigh));
+	    } else {
+	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	    }
           }else if(command== fparticleKinECmd){
+	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleWithEnergyCommand(mesh,token); 
+	    } else {
+	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	    }
 	  } else if(command==fparticleCmd) {
+	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleCommand(mesh,token);
+	    } else {
+	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	    }
 	  }
       }else{
 	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
