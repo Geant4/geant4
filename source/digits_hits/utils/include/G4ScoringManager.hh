@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.14 2007-10-17 13:45:10 akimura Exp $
+// $Id: G4ScoringManager.hh,v 1.15 2007-10-26 16:30:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,11 +80,9 @@ class G4ScoringManager
       MeshVec fMeshVec;
       G4VScoringMesh* fCurrentMesh;
 
-  private:
+  public:
       inline void SetCurrentMesh(G4VScoringMesh* cm)
       { fCurrentMesh = cm; }
-
-  public:
       inline G4VScoringMesh* GetCurrentMesh() const
       { return fCurrentMesh; }
       inline void CloseCurrentMesh()
