@@ -15,7 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 - define cuts as 1/10 of absober thinckness
-- use MuMultipleScattering in standardIG physics 
+- use G4MuMultipleScattering in standardIG physics 
 
 09-10-07  V.Ivanchenko (test37-V09-00-01)
 - use sub-cutoff options for standardSS and standardIG physics
