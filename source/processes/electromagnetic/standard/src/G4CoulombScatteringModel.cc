@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.26 2007-10-24 10:42:06 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.27 2007-10-26 09:53:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,11 +113,18 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(1.5 > targetA && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
   //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
 
+  // limit integral because of nuclear size effect
+  G4double costm = cosTetMaxNuc;
+  if(formfactA > 2.01) {
+    G4double ctet = sqrt(1.0 - 2.0/formfactA);
+    if(ctet > costm) costm = ctet; 
+  }
+
   // Cross section in CM system 
-  if(cosTetMaxNuc < cosThetaMin) {
+  if(costm < cosThetaMin) {
     G4double effmass = mass*m1/(mass + m1);
     G4double x1 = 1.0 - cosThetaMin + screenZ;
-    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
+    G4double x2 = 1.0 - costm + screenZ;
     nucXSection += coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
       *(1./x1 - 1./x2 - formfactA*(2.*log(x2/x1) - 1.))/momCM2;
     //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
