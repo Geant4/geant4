@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.21 2007-10-26 16:22:25 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.22 2007-10-26 22:58:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -633,13 +633,15 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       if ( currentmesh ){
  	  /////////////////////G4Exception("G4ScroingMessenger:: Close current mesh first!. Error!");
           G4cerr << "Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
-      }
-      G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
-      if ( !mesh ){
+      } else {
+	G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
+	if ( !mesh ){
  	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
           G4cerr << "Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
+	} else {
+	  fSMan->SetCurrentMesh(mesh);
+	}
       }
-      fSMan->SetCurrentMesh(mesh);
   } else if(command==meshClsCmd) {
       fSMan->CloseCurrentMesh();
   } else {
@@ -778,7 +780,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           } else if(command== qFlatSurfCurrCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSFlatSurfaceCurrent3D* ps = 
-		  new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1]));
+		new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
@@ -789,7 +791,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           } else if(command== qFlatSurfFluxCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
-		  new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])));
+				       new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])));
 	    } else {
 	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
@@ -797,7 +799,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           } else if(command== qSphereSurfCurrCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSSphereSurfaceCurrent3D* ps = 
-		  new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
+		new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
@@ -808,7 +810,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  } else if(command== qSphereSurfFluxCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
-		  new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
+				       new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
 	    } else {
 	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
@@ -816,7 +818,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           } else if(command== qCylSurfCurrCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSCylinderSurfaceCurrent3D* ps = 
-		  new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
+		new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
 	      ps->Weighted(StoB(token[2]));
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
@@ -827,7 +829,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           } else if(command== qCylSurfFluxCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(
-		  new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
+				       new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
 	    } else {
 	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
@@ -868,20 +870,20 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
 
-         //
-         // Filters 
-         // 
+	    //
+	    // Filters 
+	    // 
 	  }else if(command== fchargedCmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDChargedFilter(token[0])); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
 	    }
           }else if(command== fneutralCmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDNeutralFilter(token[0])); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
 	    }
           }else if(command== fkinECmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
@@ -890,19 +892,19 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      G4double ehigh = StoD(token[2]);
 	      mesh->SetFilter(new G4SDKineticEnergyFilter(name,elow,ehigh));
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
 	    }
           }else if(command== fparticleKinECmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleWithEnergyCommand(mesh,token); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
 	    }
 	  } else if(command==fparticleCmd) {
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleCommand(mesh,token);
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", was not registered." << G4endl;
+	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
 	    }
 	  }
       }else{
