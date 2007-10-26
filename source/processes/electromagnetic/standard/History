@@ -1,4 +1,4 @@
-$Id: History,v 1.347 2007-10-25 08:00:51 vnivanch Exp $
+$Id: History,v 1.348 2007-10-26 14:41:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25 October 07: V.Ivant (emstand-V09-00-13)
+26 October 07: V.Ivant (emstand-V09-00-13)
 - G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed
   Z^1/3 and log(A) values to speed up the code
 
-22 October 07: L.Urban
-- G4UrbanMscModel: 
+- G4UrbanMscModel (L.Urban): 
+         - use different correction to Highland formula for different
+           particle type
          - tuning ComputeGeomPathLength in order to get better low 
            energy behaviour for heavy particles (mu, hadrons)
          - small modification of theta0 in ComputeTheta0 (based on data)
