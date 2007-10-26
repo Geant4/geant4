@@ -28,7 +28,7 @@
 /gun/energy 1.0 MeV
 /gun/direction 1.0  0.0  0.0 
 
-/testem/phys/setCuts 0.7 mm
+/testem/phys/setCuts 0.005 mm
 /run/initialize
 
 /run/beamOn 100000

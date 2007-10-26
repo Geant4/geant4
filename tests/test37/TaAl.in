@@ -27,7 +27,7 @@
 
 /gun/direction 1.0  0.0  0.0 
 
-/testem/phys/setCuts 0.7 mm
+/testem/phys/setCuts 0.01 mm
 
 /run/initialize
 /run/beamOn 100000
