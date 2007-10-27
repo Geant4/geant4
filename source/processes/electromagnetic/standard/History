@@ -1,4 +1,4 @@
-$Id: History,v 1.348 2007-10-26 14:41:39 vnivanch Exp $
+$Id: History,v 1.349 2007-10-27 16:51:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 October 07: V.Ivant (emstand-V09-00-13)
+27 October 07: V.Ivant (emstand-V09-00-13)
 - G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed
-  Z^1/3 and log(A) values to speed up the code
+  Z^1/3 and log(A) values to speed up the code; revised nuclear size 
+  correction
 
 - G4UrbanMscModel (L.Urban): 
          - use different correction to Highland formula for different
