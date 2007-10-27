@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.33 2007-10-26 09:53:09 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.34 2007-10-27 16:33:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -240,18 +240,16 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
 
-  // limit integral because of nuclear size effect
-  G4double costm = cosTetMaxNuc;
-  if(formfactA > 2.01) {
-    G4double ctet = sqrt(1.0 - 2.0/formfactA);
-    if(ctet > costm) costm = ctet; 
-  }
-
-  if(costm < cosThetaMin) {
-    G4double x1 = 1.0 - cosThetaMin  + screenZ;
-    G4double x2 = 1.0 - costm + screenZ;
+  if(cosTetMaxNuc < cosThetaMin) {
+    G4double x1 = 1.0 - cosThetaMin;
+    G4double x2 = 1.0 - cosTetMaxNuc;
+    G4double z1 = x1 + screenZ;
+    G4double z2 = x2 + screenZ;
+    G4double d  = 1.0/formfactA;
+    G4double zn1= x1 + d;
+    G4double zn2= x2 + d;
     cross = coeff*Z*Z*chargeSquare*invbeta2
-      *(1./x1 - 1./x2 - formfactA*(2.*std::log(x2/x1) - 1.))/mom2;
+      *(1./z1 - 1./z2 + 1./zn1 - 1./zn2 + 2.0*formfactA*std::log(z1*zn2/(z2*zn1)))/mom2;
   }
   /*
   G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
@@ -306,18 +304,17 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double x1 = 1. - cosThetaMin + screenZ;
   G4double x2 = 1. - costm;
   G4double x3 = cosThetaMin - costm;
-  G4double cost, st2, grej,  z, z1; 
+  G4double grej,  z, z1; 
   do {
     z  = G4UniformRand()*x3;
     z1 = (x1*x2 - screenZ*z)/(x1 + z);
     if(z1 < 0.0) z1 = 0.0;
     else if(z1 > 2.0) z1 = 2.0;
-    cost = 1.0 - z1;
-    st2  = z1*(2.0 - z1);
-    grej = 1.0/(1.0 + formf*st2);
+    grej = 1.0/(1.0 + formf*z1);
   } while ( G4UniformRand() > grej*grej );  
   
-  G4double sint= sqrt(st2);
+  G4double cost = 1.0 - z1;
+  G4double sint= sqrt(z1*(2.0 - z1));
   /*
   if(sint > 0.1) 
     G4cout<<"## SampleSecondaries: e(MeV)= " << kinEnergy
