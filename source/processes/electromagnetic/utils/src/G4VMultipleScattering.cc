@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.44 2007-10-02 11:30:44 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.45 2007-10-27 17:46:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -210,7 +211,7 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
-                                 const G4Region* region)
+				       const G4Region* region)
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
@@ -241,6 +242,79 @@ void G4VMultipleScattering::PrintInfoDefinition()
       if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4double currentMinimalStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  valueGPILSelectionMSC = NotCandidateForSelection;
+  G4double steplength = GetMscContinuousStepLimit(track,previousStepSize,
+                                              currentMinimalStep,currentSafety);
+  // G4cout << "StepLimit= " << steplength << G4endl;
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::GetContinuousStepLimit(
+                                       const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4double currentMinimalStep,
+                                       G4double& currentSafety)
+{
+  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+				   currentSafety);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::GetMeanFreePath(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(const G4Track&,
+                                                        const G4Step& step)
+{
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
+						       const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  std::vector<G4DynamicParticle*>* p=0;
+  currentModel->SampleSecondaries(p, currentCouple,
+				  track.GetDynamicParticle(),
+				  step.GetStepLength(),
+				  step.GetPostStepPoint()->GetSafety());
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

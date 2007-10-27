@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.118 2007-10-04 09:38:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.119 2007-10-27 17:46:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,6 +105,7 @@
 // 10-04-07 use unique SafetyHelper (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 // 25-04-07 move initialisation of safety helper to BuildPhysicsTable (VI)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -610,6 +611,56 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
   }
 
   return table;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEnergyLossProcess::GetContinuousStepLimit(
+		const G4Track&,
+                G4double, G4double, G4double&)
+{
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
+                             const G4Track&,
+                             G4double,
+                             G4double  currentMinStep,
+                             G4double&,
+                             G4GPILSelection* selection)
+{
+  G4double x = DBL_MAX;
+  *selection = aGPILSelection;
+  if(isIonisation) {
+    fRange = GetScaledRangeForScaledEnergy(preStepScaledEnergy)*reduceFactor;
+
+    x = fRange;
+    G4double y = x*dRoverRange;
+
+    if(x > finalRange && y < currentMinStep) { 
+      x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
+    } else if (rndmStepFlag) x = SampleRange();
+    //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
+    //	  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
+    //	  <<" safety= " << safety<< " limit= " << x <<G4endl;
+  }
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
+  //  <<" stepLimit= "<<x<<G4endl;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEnergyLossProcess::GetMeanFreePath(
+                             const G4Track& track,
+                             G4double,
+                             G4ForceCondition* condition)
+
+{
+  *condition = NotForced;
+  return MeanFreePath(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

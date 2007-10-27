@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.46 2007-10-08 17:31:12 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.47 2007-10-27 17:46:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 // 12-09-06 add SetModel() (mma)
 // 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
+// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -298,6 +299,16 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     currentInteractionLength = DBL_MAX;
   }
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
+				       G4double,
+				       G4ForceCondition* condition)
+{
+  *condition = NotForced;
+  return G4VEmProcess::MeanFreePath(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
