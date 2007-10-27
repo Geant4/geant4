@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.22 2007-10-26 22:58:30 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.23 2007-10-27 00:28:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -670,7 +670,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  vsize[2] = size.z();
 		  mesh->SetSize(vsize);
 	      } else {
-		  G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
+		  ////////////////////G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
+                 G4cerr << "This mesh is not Box. Command ignored." << G4endl;
 	      }
 	  } else if(command==mBinCmd) {
 	      MeshBinCommand(mesh,token);
@@ -908,7 +909,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	    }
 	  }
       }else{
-	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+///////////////////	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
+        G4cerr << "No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
       }
   }
 }
