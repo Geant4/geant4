@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.16 2007-07-28 14:35:05 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.17 2007-10-28 18:10:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -198,7 +198,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-				            G4double dens, G4bool isotopes)
+				      G4double dens, 
+				      G4bool isotopes,
+				      G4State state,     
+				      G4double temp,  
+				      G4double pressure)
 {
   G4int Z;
   G4int nm = elm.size();
@@ -207,7 +211,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
     AddMaterial(name,dens,Z);
   }
   else if (nm > 1) {
-    AddMaterial(name,dens,0,0.0,nm);
+    AddMaterial(name,dens,0,0.0,nm,state,temp,pressure);
     for (G4int i=0; i<nm; i++) {
       Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
       AddElementByAtomCount(Z, nbAtoms[i]);
@@ -223,7 +227,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
-				            G4double dens, G4bool isotopes)
+				      G4double dens, 
+				      G4bool isotopes,
+				      G4State state,     
+				      G4double temp,  
+				      G4double pressure)
 {
   G4int Z;
   G4int nm = elm.size();
@@ -238,7 +246,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
     AddMaterial(name,dens,Z);
 
   } else {
-    AddMaterial(name,dens,0,0.0,nm);
+    AddMaterial(name,dens,0,0.0,nm,state,temp,pressure);
     for (G4int i=0; i<nm; i++) {
       Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
       AddElementByWeightFraction(Z, w[i]);
@@ -253,7 +261,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 				      const G4String& name,
 				      const G4String& nameNist,
-				      G4double temp, G4double pres, 
+				      G4double temp, 
+				      G4double pres, 
 				      G4bool isotopes)
 {
   G4int idx = -1;
@@ -308,8 +317,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 
   if (chFormulas[idx] != "") {
     mat->SetChemicalFormula(chFormulas[idx]);
-    G4double exc = mat->GetIonisation()
-                                   ->FindMeanExcitationEnergy(chFormulas[idx]);
+    G4double exc = 
+      mat->GetIonisation()->FindMeanExcitationEnergy(chFormulas[idx]);
     mat->GetIonisation()->SetMeanExcitationEnergy(exc);
   }
 

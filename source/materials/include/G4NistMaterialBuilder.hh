@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.10 2007-07-28 14:35:05 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.11 2007-10-28 18:10:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -82,14 +82,23 @@ public:
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4int>& nbAtoms,
-				    G4double dens, G4bool isotopes=true);
+				    G4double dens, 
+				    G4bool isotopes=true,
+				    G4State   state    = kStateUndefined,     
+				    G4double  temp     = STP_Temperature,  
+				    G4double  pressure = STP_Pressure); 
 				      
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4double>& weight,
-				    G4double dens, G4bool isotopes=true);
+				    G4double dens, 
+				    G4bool isotopes=true,
+				    G4State   state    = kStateUndefined,     
+				    G4double  temp     = STP_Temperature,  
+				    G4double  pressure = STP_Pressure); 
+
 
   // construct a gas G4Material from scratch by atome count
   // 
