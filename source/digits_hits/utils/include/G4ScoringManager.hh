@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.15 2007-10-26 16:30:36 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.16 2007-10-28 02:13:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,6 +36,7 @@
 #include <vector>
 class G4ScoringMessenger;
 class G4VHitsCollection;
+class G4VScoreWriter;
 
 // class description:
 //
@@ -70,7 +71,8 @@ class G4ScoringManager
       void List() const;
       void Dump() const;
       void DrawMesh(G4String meshName,G4String psName,G4int axflg=111);
-      void DumpToFile(G4String meshName,G4String psName,G4String fileName, G4String option = "csv");
+      void DumpQuantityToFile(G4String meshName, G4String psName,G4String fileName, G4String option = "");
+      void DumpAllQuantitiesToFile(G4String meshName, G4String fileName, G4String option = "");
 
   private: 
       static G4ScoringManager * fSManager;
@@ -79,6 +81,8 @@ class G4ScoringManager
 
       MeshVec fMeshVec;
       G4VScoringMesh* fCurrentMesh;
+
+      G4VScoreWriter * writer;
 
   public:
       inline void SetCurrentMesh(G4VScoringMesh* cm)
@@ -109,6 +113,8 @@ class G4ScoringManager
       inline G4String GetWorldName(G4int i) const
       { return fMeshVec[i]->GetWorldName(); }
 
+      inline void SetScoreWriter(G4VScoreWriter * sw)
+      { writer = sw; }
 };
 
 

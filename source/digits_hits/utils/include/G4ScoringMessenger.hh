@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.13 2007-10-17 13:45:10 akimura Exp $
+// $Id: G4ScoringMessenger.hh,v 1.14 2007-10-28 02:13:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -120,7 +120,8 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcommand *        drawCmd;
     //
     // Dump scoring result to file
-    G4UIcommand * dumpToFileCmd;
+    G4UIcommand * dumpQtyToFileCmd;
+    G4UIcommand * dumpAllQtsToFileCmd;
     //
     // Quantity commands
     G4UIdirectory*             quantityDir;

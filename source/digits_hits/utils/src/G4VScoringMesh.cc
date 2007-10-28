@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.24 2007-10-26 12:56:22 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.25 2007-10-28 02:13:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -81,7 +81,9 @@ void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
 }
-
+void G4VScoringMesh::GetNumberOfSegments(G4int nSegment[3]) {
+  for(int i = 0; i < 3; i++) nSegment[i] = fNSegment[i];
+}
 void G4VScoringMesh::RotateX(G4double delta) {
   if(fRotationMatrix == NULL) fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateX(delta);
@@ -152,7 +154,6 @@ G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
 
   return NULL;
 }
-
 void G4VScoringMesh::List() const {
   G4cout << " Size: ("
 	 << fSize[0]/cm << ", "
@@ -191,7 +192,7 @@ void G4VScoringMesh::List() const {
   for(int i = 0; i < nps; i++) {
     ps = fMFD->GetPrimitive(i);
     G4cout << "   " << i << "  " << ps->GetName();
-    if(ps->GetFilter() != NULL) G4cout << "     with a filter : " << ps->GetFilter()->GetName();
+    if(ps->GetFilter() != NULL) G4cout << "     with  " << ps->GetFilter()->GetName();
     G4cout << G4endl;
   }
 

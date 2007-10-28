@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.37 2007-10-19 07:47:11 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.38 2007-10-28 02:13:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -388,12 +388,14 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
   }
 }
 
+/*
 void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String & option) {
 
 
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
-  std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
+  //std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
+  std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
   // confirm the option
   if(opt.find("csv") == std::string::npos &&
@@ -458,6 +460,7 @@ void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String &
   ofile.close();
   
 }
+*/
 
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
   G4ThreeVector width(fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);

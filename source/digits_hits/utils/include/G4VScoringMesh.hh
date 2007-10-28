@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.19 2007-10-26 12:56:22 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.20 2007-10-28 02:13:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,7 +43,7 @@ class G4VSDFilter;
 #include <map>
 
 enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
-
+typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
 // class description:
 //
 //  This class represents a parallel world for interactive scoring purposes.
@@ -72,7 +72,6 @@ public:
   void Dump();
   inline void DrawMesh(G4String psName,G4int axflg=111);
   virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111) = 0;
-  virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option) = 0;
 
   void ResetScore();
 
@@ -82,6 +81,7 @@ public:
   void RotateY(G4double delta);
   void RotateZ(G4double delta);
   void SetNumberOfSegments(G4int nSegment[3]);
+  void GetNumberOfSegments(G4int nSegment[3]);
   inline void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
 
   
@@ -98,6 +98,8 @@ public:
 
   inline void SetVerboseLevel(G4int vl) 
   { verboseLevel = vl; }
+
+  MeshScoreMap GetScoreMap() {return fMap;}
 
 protected:
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
