@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.70 2007-10-26 13:36:09 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.71 2007-10-29 08:42:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -859,16 +859,13 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-					const G4MaterialCutsCouple*,
-					const G4DynamicParticle* dynParticle,
-					G4double truestep,
-					G4double safety)
+void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
+				       G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if((kineticEnergy <= 0.0) || (truestep <= tlimitminfix)) return;
+  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)) return;
 
-  G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
+  G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
   if(cth > 1.)  cth =  1.;
   if(cth < -1.) cth = -1.;
@@ -888,7 +885,7 @@ void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 /*
     G4cout << "G4UrbanMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
 	   << " sinTheta= " << sth << " r(mm)= " << r
-           << " trueStep(mm)= " << truestep 
+           << " trueStep(mm)= " << tPathLength
            << " geomStep(mm)= " << zPathLength
            << G4endl;
 */
@@ -1078,6 +1075,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   }  
   return cth ;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4UrbanMscModel::SampleDisplacement()
@@ -1139,5 +1137,14 @@ G4double G4UrbanMscModel::LatCorrelation()
 
   return latcorr;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+					const G4MaterialCutsCouple*,
+					const G4DynamicParticle*,
+					G4double,
+					G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

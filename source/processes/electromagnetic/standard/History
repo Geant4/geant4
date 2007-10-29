@@ -1,4 +1,4 @@
-$Id: History,v 1.349 2007-10-27 16:51:22 vnivanch Exp $
+$Id: History,v 1.350 2007-10-29 08:42:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,8 +23,9 @@ committal in the CVS repository !
   correction
 
 - G4UrbanMscModel (L.Urban): 
+         - use sampleScattering method instead of SampleSecondaries
          - use different correction to Highland formula for different
-           particle type
+           particle type (electron, muons, others)
          - tuning ComputeGeomPathLength in order to get better low 
            energy behaviour for heavy particles (mu, hadrons)
          - small modification of theta0 in ComputeTheta0 (based on data)

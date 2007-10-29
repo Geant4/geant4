@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.30 2007-10-26 13:36:09 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.31 2007-10-29 08:42:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,28 +114,29 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom( 
-                             const G4ParticleDefinition* particle,
-                                   G4double KineticEnergy,
-                                   G4double AtomicNumber,
-                                   G4double AtomicWeight=0., 
-				   G4double cut =0.,
-				   G4double emax=DBL_MAX);
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
+				      G4double KineticEnergy,
+				      G4double AtomicNumber,
+				      G4double AtomicWeight=0., 
+				      G4double cut =0.,
+				      G4double emax=DBL_MAX);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double length,
-				 G4double safety);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double,
+			 G4double);
 
-  virtual G4double ComputeTruePathLengthLimit(
-                             const G4Track& track,
-			           G4PhysicsTable* theLambdaTable,
-			           G4double currentMinimalStep);
+  void SampleScattering(const G4DynamicParticle*,
+			G4double safety);
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+  G4double ComputeTruePathLengthLimit(const G4Track& track,
+				      G4PhysicsTable* theLambdaTable,
+				      G4double currentMinimalStep);
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  G4double ComputeGeomPathLength(G4double truePathLength);
+
+  G4double ComputeTrueStepLength(G4double geomStepLength);
 
   G4double ComputeTheta0(G4double truePathLength,
                          G4double KineticEnergy);
