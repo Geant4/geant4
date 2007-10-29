@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.32 2007-10-12 17:43:05 japost Exp $
+// $Id: G4PathFinder.hh,v 1.33 2007-10-29 18:13:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -242,8 +242,10 @@ class G4PathFinder
    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
    G4ThreeVector      fLastLocatedPosition; 
 
-   G4FieldTrack    fEndState;
-     // End point storage
+   // State after calling 'ComputeStep' (others member variables will be affected)
+   G4FieldTrack    fEndState;           // Point, velocity, ... at proposed step end
+   G4bool          fFieldExertedForce;  // In current proposed step
+
    G4bool fRelocatedPoint;   //  Signals that point was or is being moved 
                              //  from the position of the last location
                              //   or the endpoint resulting from ComputeStep 
