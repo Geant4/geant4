@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.3 2007-10-29 10:48:21 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.4 2007-10-29 18:50:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -163,7 +163,8 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
     G4double x2 = screenZ/(1.0 - cosTetMaxElec + screenZ);
     xSection += coeff*Z*chargeSquare*invbeta2*(x2 - 1.0 - log(x2))/mom2;
   }
-  //  G4cout << "cut= " << ecut << " e= " << tkin << " croosE= " << xSection/barn << G4endl;
+  //  G4cout << "cut= " << ecut << " e= " << tkin << " croosE= " 
+  //  << xSection/barn << G4endl;
 
   // limit integral because of nuclear size effect
   G4double costm = cosTetMaxNuc;
@@ -173,11 +174,11 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   }
 
   if(costm < 1.0) {
-    G4double x1 = 1.0 - costm;
+    G4double x1 = 1.0 - costm; 
     G4double x2 = screenZ/(x1 + screenZ);
-    xSection += coeff*Z*Z*chargeSquare*invbeta2*
-      (x2 - 1.0 -(1.0 + 2.0*formfactA*screenZ)*log(x2) 
-       - 2.0*formfactA*x1*(1.0 - 0.25*x1))/mom2;
+    G4double x3 = 1.0/(1.0 + formfactA*x1);
+    xSection += 
+      coeff*Z*Z*chargeSquare*invbeta2*(log(x3/x2) - 2.0 + x2 + x3)/mom2; 
   }
   //  G4cout << " croosE= " << xSection/barn << " screenZ= " 
   //	 << screenZ << " formF= " << formfactA << G4endl;
@@ -276,7 +277,7 @@ G4double G4MuMscModel::ComputeGeomPathLength(G4double truelength)
   } else if(tPathLength < currentRange*dtrl) {
     zPathLength = lambda0*(1.0 - exp(-tau));
 
-  } else if(tkin < electron_mass_c2) {
+  } else if(tkin < mass) {
 
     par1 = 1./currentRange;
     par2 = 1./(par1*lambda0);
