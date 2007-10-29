@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2007-03-19 13:08:41 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2007-10-29 12:36:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
+#include "EventAction.hh"
 #include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
@@ -40,8 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               HistoManager* histo)
-:detector(det), runAction(RuAct), histoManager(histo),
+                               EventAction* EvAct,HistoManager* histo)
+:detector(det), runAction(RuAct), eventAction(EvAct), histoManager(histo),
  wall(0), cavity(0)
 { 
   first = true;
@@ -81,7 +82,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  if (volume == cavity) { 
    G4double edep = step->GetTotalEnergyDeposit();
-   if (edep > 0.) runAction->AddEdepCavity(edep);     
+   if (edep > 0.) eventAction->AddEdepCavity(edep);     
  }
 
  //keep only charged particles

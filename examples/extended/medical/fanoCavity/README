@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2007-10-01 15:19:57 maire Exp $
+$Id: README,v 1.11 2007-10-29 12:36:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -102,7 +102,7 @@ $Id: README,v 1.10 2007-10-01 15:19:57 maire Exp $
     MyKleinNishinaCompton class.
     
     In order to make the program more efficient, one can increase the Compton
-    cross section in wall via the function SetCSFactor(factor) and its 
+    cross section via the function SetCSFactor(factor) and its 
     associated UI command. Default is factor=1000.
     
     - Bremsstrahlung : Fano conditions imply no energy transfer via
@@ -142,6 +142,7 @@ $Id: README,v 1.10 2007-10-01 15:19:57 maire Exp $
       8 : track segment of e+- in cavity
       9 : step size of e+- in wall
      10 : step size of e+- in cavity
+     11 : energy deposit in cavity per incident gamma     
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
