@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.119 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.120 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,8 +175,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   minSubRange(0.1),
   lambdaFactor(0.8),
   mfpKinEnergy(0.0),
-  lossFluctuationFlag(true),
-  lossFluctuationArePossible(true),
+  lossFluctuationFlag(false),
+  lossFluctuationArePossible(false),
   rndmStepFlag(false),
   tablesAreBuilt(false),
   integral(true),
@@ -888,13 +888,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
 
   // Sample fluctuations
-  if (lossFluctuationFlag && 
+  if (lossFluctuationFlag) {
+    G4VEmFluctuationModel* fluc = currentModel->GetModelOfFluctuations();
+    if(fluc && 
       (eloss + esec + esecdep + lowestKinEnergy) < preStepKinEnergy) {
 
-    G4double tmax = 
-      std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
-    eloss = currentModel->GetModelOfFluctuations()->
-      SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
+      G4double tmax = 
+	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
+      fluc->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
 
     /*        
       if(-1 < verboseLevel) 
@@ -905,6 +906,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " tmax= " << tmax
              << G4endl;
     */
+    }
   }
   // add low-energy subcutoff particles
   eloss += esecdep;

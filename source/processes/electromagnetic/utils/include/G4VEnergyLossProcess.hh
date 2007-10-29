@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.74 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.75 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -142,14 +142,13 @@ protected:
   //------------------------------------------------------------------------
 protected:
 
-  inline virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-					   const G4Material*, G4double cut);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+				    const G4Material*, G4double cut);
 
-  inline virtual void CorrectionsAlongStep(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-			     G4double& eloss,
-			     G4double& length);
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& length);
 
   //------------------------------------------------------------------------
   // Generic methods common to all ContinuousDiscrete processes 
@@ -943,13 +942,13 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 
 void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
 				      G4VEmFluctuationModel* fluc,
-                                const G4Region* region)
+				      const G4Region* region)
 {
   modelManager->AddEmModel(order, p, fluc, region);
   if(p) p->SetParticleChange(pParticleChange, fluc);
-  if(!fluc) {
-    lossFluctuationFlag = false;
-    lossFluctuationArePossible = false;
+  if(fluc) {
+    lossFluctuationFlag = true;
+    lossFluctuationArePossible = true;
   }
 }
 

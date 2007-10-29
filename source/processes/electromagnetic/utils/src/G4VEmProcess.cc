@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.47 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.48 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -228,15 +228,6 @@ void G4VEmProcess::BuildLambdaTable()
       G4cout << *theLambdaTable << G4endl;
     }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
-			      const G4Region* region)
-{
-  modelManager->AddEmModel(order, p, 0, region);
-  if(p) p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

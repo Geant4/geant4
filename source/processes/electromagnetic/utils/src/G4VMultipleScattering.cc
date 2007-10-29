@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.45 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.46 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -210,16 +210,6 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
-				       const G4Region* region)
-{
-  G4VEmFluctuationModel* fm = 0;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p)p->SetParticleChange(pParticleChange);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4VMultipleScattering::PrintInfoDefinition()
 {
   if (0 < verboseLevel) {
@@ -309,11 +299,8 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 						       const G4Step& step)
 {
   fParticleChange.Initialize(track);
-  std::vector<G4DynamicParticle*>* p=0;
-  currentModel->SampleSecondaries(p, currentCouple,
-				  track.GetDynamicParticle(),
-				  step.GetStepLength(),
-				  step.GetPostStepPoint()->GetSafety());
+  currentModel->SampleScattering(track.GetDynamicParticle(),
+				 step.GetPostStepPoint()->GetSafety());
   return &fParticleChange;
 }
 

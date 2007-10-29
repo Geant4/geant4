@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.47 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.48 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -207,7 +207,7 @@ public:
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
 
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
 					    size_t& idxRegion) const;
@@ -545,11 +545,25 @@ inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
   return theLambdaTable;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline 
 const G4MaterialCutsCouple* G4VMultipleScattering::CurrentMaterialCutsCouple() const
 {
   return currentCouple;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
+					      const G4Region* region)
+{
+  G4VEmFluctuationModel* fm = 0;
+  modelManager->AddEmModel(order, p, fm, region);
+  if(p)p->SetParticleChange(pParticleChange);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx)
 {

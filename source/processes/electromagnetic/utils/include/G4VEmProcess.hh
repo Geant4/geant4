@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.42 2007-10-27 17:46:00 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.43 2007-10-29 08:38:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -200,7 +200,7 @@ public:
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
 
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
   // Add EM model coupled for the region
    
   inline void SetModel(G4VEmModel*);
@@ -505,6 +505,16 @@ inline void G4VEmProcess::SetParticle(const G4ParticleDefinition* p)
 inline void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 {
   secondaryParticle = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
+				     const G4Region* region)
+{
+  G4VEmFluctuationModel* fm = 0;
+  modelManager->AddEmModel(order, p, fm, region);
+  if(p) p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
