@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.2 2007-01-23 13:34:19 maire Exp $
+// $Id: TrackingAction.hh,v 1.3 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,21 +35,27 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class SteppingAction;
+class RunAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(SteppingAction*);
+    TrackingAction(RunAction*, HistoManager*);
    ~TrackingAction();
    
     void  PreUserTrackingAction(const G4Track*);
     void PostUserTrackingAction(const G4Track*);
     
+    void AddEdepCavity(G4double de) { EdepCavity += de;};
+        
   private:
-    SteppingAction*       stepAction;
+    RunAction*     runAction;
+    HistoManager*  histoManager;
+    
+    G4double       EdepCavity;            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity.cc,v 1.5 2007-10-29 12:36:26 maire Exp $
+// $Id: fanoCavity.cc,v 1.6 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,9 +76,9 @@ int main(int argc,char** argv) {
   HistoManager* histo   = new HistoManager();
   RunAction* run        = new RunAction(det,kin,histo);
   EventAction* event    = new EventAction(run,histo);
-  SteppingAction* step  = new SteppingAction(det,run,event,histo);
+  TrackingAction* track = new TrackingAction(run,histo);      
+  SteppingAction* step  = new SteppingAction(det,run,event,track,histo);
   StackingAction* stack = new StackingAction(det,run,histo);  
-  TrackingAction* track = new TrackingAction(step);    
   
   runManager->SetUserAction(run); 
   runManager->SetUserAction(event);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.3 2007-10-29 12:36:26 maire Exp $
+// $Id: SteppingAction.hh,v 1.4 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 class DetectorConstruction;
 class RunAction;
 class EventAction;
+class TrackingAction;
 class HistoManager;
 
 class G4VPhysicalVolume;
@@ -48,23 +49,22 @@ class G4VPhysicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,EventAction*,HistoManager*);
+    SteppingAction(DetectorConstruction*,RunAction*,EventAction*,
+                                        TrackingAction*,HistoManager*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
     
-    void TrackCharge (G4bool flag) { trackCharged = flag;}
-    
   private:
     DetectorConstruction* detector;
     RunAction*            runAction;
-    EventAction*          eventAction;    
+    EventAction*          eventAction;
+    TrackingAction*       trackAction;        
     HistoManager*         histoManager;
     
     G4VPhysicalVolume*    wall;
     G4VPhysicalVolume*    cavity;
     G4bool                first; 
-    G4bool                trackCharged;
     G4double              trackSegm;
     G4ThreeVector         directionIn;        
 };

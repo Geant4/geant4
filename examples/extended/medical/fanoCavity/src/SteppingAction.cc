@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2007-10-29 12:36:26 maire Exp $
+// $Id: SteppingAction.cc,v 1.4 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,20 +33,22 @@
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
+#include "G4Gamma.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               EventAction* EvAct,HistoManager* histo)
-:detector(det), runAction(RuAct), eventAction(EvAct), histoManager(histo),
- wall(0), cavity(0)
+                               EventAction* EvAct,TrackingAction* TrAct,
+			       HistoManager* histo)
+:detector(det), runAction(RuAct), eventAction(EvAct), trackAction(TrAct),
+ histoManager(histo), wall(0), cavity(0)
 { 
   first = true;
-  trackCharged = false;
   trackSegm = 0.;
   directionIn = 0.;
 }
@@ -82,12 +84,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  if (volume == cavity) { 
    G4double edep = step->GetTotalEnergyDeposit();
-   if (edep > 0.) eventAction->AddEdepCavity(edep);     
+   if (edep > 0.) trackAction->AddEdepCavity(edep);     
  }
 
  //keep only charged particles
  //
- if (!trackCharged) return;
+ if (step->GetTrack()->GetDefinition() == G4Gamma::Gamma()) return;
  
  //step size of charged particles
  //

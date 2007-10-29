@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2007-10-29 12:36:26 maire Exp $
+// $Id: HistoManager.cc,v 1.4 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,7 +175,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "track segment of e- in cavity",			//8
 		  "step size of e- in wall",				//9
 		  "step size of e- in cavity",				//10
-		  "energy deposit in cavity per incident gamma"		//11		  
+		  "energy deposit in cavity per track"			//11		  
                  };
 
 

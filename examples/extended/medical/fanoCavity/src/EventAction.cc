@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.3 2007-10-29 12:36:26 maire Exp $
+// $Id: EventAction.cc,v 1.4 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,23 +64,12 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  //survey convergence
  //
  if (evtNb%printModulo == 0) runAct->SurveyConvergence(evtNb);
- 
- //initialize edep per event
- //
- EdepCavity = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{
-  //sum energy in cavity
-  //
-  if (EdepCavity > 0.) {
-    runAct->AddEdepCavity(EdepCavity);
-    histoManager->FillHisto(11,EdepCavity);
-  }  
-   
+{   
   //trajectories
   //
   if (G4VVisManager::GetConcreteInstance())

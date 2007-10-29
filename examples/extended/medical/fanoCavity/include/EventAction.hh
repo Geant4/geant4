@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.2 2007-10-29 12:36:26 maire Exp $
+// $Id: EventAction.hh,v 1.3 2007-10-29 17:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,8 +50,6 @@ class EventAction : public G4UserEventAction
   public:
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
-    
-    void AddEdepCavity(G4double de) { EdepCavity += de;};
         
     void SetDrawFlag(G4String val) {drawFlag = val;};
     void SetPrintModulo(G4int val) {printModulo = val;};
@@ -59,7 +57,6 @@ class EventAction : public G4UserEventAction
     
   private:
     RunAction*             runAct;
-    G4double               EdepCavity;    
     G4String               drawFlag;
     G4int                  printModulo;
     HistoManager*          histoManager;                        
