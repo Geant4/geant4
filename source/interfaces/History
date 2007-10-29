@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2007-08-02 06:06:01 kmura Exp $
+$Id: History,v 1.84 2007-10-29 18:55:29 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 October 2007, Makoto Asai
+- Remove unnecessary dependency from interfaces/basic to run.
 
 02 August 2007, Koichi Murakami (interfaces-V09-00-00)
 - Fix compilation warning on SUN-CC in G4UIterminal.cc
