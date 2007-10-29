@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2007-10-24 18:00:04 japost Exp $
+$Id: History,v 1.104 2007-10-29 18:16:45 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +29,19 @@ October 18th, 2007 - G.Cosmo (geomnav-V09-00-04)
 - Added new specific navigation for regular structures and phantoms.
   New classes: G4RegularNavigation, G4PhantomParameterisation (by P.Arce).
   Added cases to G4Navigator. Added dependency on "materials" module.
+
+October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
+----------------------------------
+- G4PathFinder: First fix for problem of another process shortening steps
+   ( between calls to ComputeStep by different processes in same step.)
+   I.e.  First call to ComputeStep  propose Step = 3.0 cm
+         Next  call to ComputeStep  propose Step = 1.0 cm (eg Mult Scat)
+
+October 24th, 2007 - J.Apostolakis (geomnav-V09-00-03a)
+----------------------------------
+- G4PathFinder: Fix - now set fNoGeometriesLimiting in DoNextLinearStep
+    when WhichLimited is not called, 
+        i.e. in case of one navigator optimisation, 
 
 October 12th, 2007 - J.Apostolakis (geomnav-V09-00-03)
 ----------------------------------
