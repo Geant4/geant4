@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.53 2007-10-24 18:28:10 japost Exp $
+// $Id: G4PathFinder.cc,v 1.54 2007-10-29 18:12:03 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -146,44 +146,35 @@ G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
 G4double 
 G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack, 
                                  G4double     proposedStepLength,
-                                 G4int        navigatorId, 
+                                 G4int        navigatorNo, 
                                  G4int        stepNo,       // find next step 
                                  G4double     &pNewSafety,  // for this geom 
                                  ELimited     &limitedStep, 
                                  G4FieldTrack &EndState,
                                  G4VPhysicalVolume* currentVolume)
 {
-  G4int navigatorNo=-1; 
+  G4double  possibleStep= -1.0; 
 
 #ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 2 )
-  { 
+  if( fVerboseLevel > 2 ) { 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
            << " navigatorId = " << std::setw(2) << navigatorId  << " "
-           << " proposed step len = " << proposedStepLength << " "
-           << G4endl;
+           << " proposed step len = " << proposedStepLength << " " << G4endl;
     G4cout << " PF::ComputeStep requested step " 
          << " from " << InitialFieldTrack.GetPosition()
-         << " dir  " << InitialFieldTrack.GetMomentumDirection()
-         << G4endl;
+         << " dir  " << InitialFieldTrack.GetMomentumDirection() << G4endl;
   }
 #endif
-
-  if( navigatorId <= fNoActiveNavigators )
-  {
-    navigatorNo= navigatorId;
-  }
-  else
-  { 
-    G4cerr << "ERROR - G4PathFinder::ComputeStep()" << G4endl
-           << "        Navigator ID = " << navigatorId 
-           << " Number of active navigators = "
-           << fNoActiveNavigators << ". " << G4endl;
+#ifdef G4VERBOSE
+  if( navigatorNo >= fNoActiveNavigators ) {
+    G4cerr << "ERROR - Requested Navigator ID = " << navigatorNo
+           << " Num of active navigators = " << fNoActiveNavigators << G4endl;
     G4Exception("G4PathFinder::ComputeStep()", "InvalidSetup",
                 FatalException, "Bad Navigator ID !"); 
   }
+#endif
 
   if( fNewTrack || (stepNo != fLastStepNo)  )
   {
@@ -234,6 +225,8 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
         fieldExertsForce = (fieldMgr != 0) 
                         && (fieldMgr->GetDetectorField() != 0);
     }
+    fFieldExertedForce = fieldExertsForce;  // Store for use in later calls
+                                             //   referring to this 'step'.
 
     if( fieldExertsForce )
     {
@@ -247,20 +240,71 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   }
   else
   {
-    // This is neither a new track nor a new step -- just another 
-    // client accessing information for the current track, step 
-    // We will simply retrieve the results of the synchronous
-    // stepping for this Navigator Id below.
+     G4double minimumStep= fTrueMinStep; // GetMinimumStep(); 
+     if( proposedStepLength < minimumStep )  // For 2nd+ geometry 
+     { 
+        G4cout << " G4P::CS -> Must shorten step: requested Step < minimum Step: " 
+	       << " Steps:  request/proposed= " << proposedStepLength << G4endl
+	       << "  minimumStep (used) = " << minimumStep << G4endl
+	       << "  MinimumStep (true) = " << fTrueMinStep << G4endl
+	       << "  minimumStep (nav)  = " << fMinStep << G4endl
+	       << "  -- Step info> stepNo= " << stepNo << " last= " << fLastStepNo 
+	       << " newTr= " << fNewTrack       << G4endl; 
 
+        possibleStep= proposedStepLength;
+	// Inform that no obstacle found within dist=proposedStepLength
+	//  possibleStep= kInfinity;    // --> The Navigator's convention
+
+	G4ThreeVector oldEndPosition= fEndState.GetPosition(); 
+        G4ThreeVector oldEndDirection= fEndState.GetMomentumDirection();
+
+	// Reset the end point, state
+	if( ! fFieldExertedForce ) { 
+   	   // Can simply recalculate end position
+	   G4ThreeVector initialPosition=  InitialFieldTrack.GetPosition(); 
+	   G4ThreeVector initialDirection= InitialFieldTrack.GetMomentumDirection();
+	   fEndState.SetPosition( initialPosition + proposedStepLength * initialDirection ); 
+	   G4cout << " G4P::CS -> Doing shortening of step: linear " << G4endl; 
+	} else {
+  	   // The step must be shortened using propagation in field.
+	   // 1st solution: do full calculation of the End Point (extra work!)
+	   G4FieldTrack currentState= InitialFieldTrack;
+           DoNextCurvedStep( currentState, proposedStepLength, currentVolume ); 
+	   // 2nd solution: do only integration of end-point for shorter distance
+           //               -- but it is not guaranteed to be in same volume 
+           //                    due to volume-intersection (in)accuracy. 
+	   G4cout << " G4P::CS -> Doing shortening of step: Curved " << G4endl;
+	   G4Exception("G4PathFinder::ComputeStep()", "NotYetImplementedPartialStep",
+		       FatalException, "Partial step in case of field not yet implemented."); 
+	} 
+	G4cout << " New step is  = " << proposedStepLength 
+	       <<  " end position = " << EndState.GetPosition() 
+	       <<  " direction= " << EndState.GetMomentumDirection()
+	       << G4endl; 
+	G4cout << " Old step was = " << fTrueMinStep
+	       <<  " end position = " << oldEndPosition 
+	       <<  " direction= " << oldEndDirection
+	       << G4endl;
+
+	// EndState = fEndState; 
+
+	// Reset Minimum step(s) to avoid same work on next request
+        fTrueMinStep= proposedStepLength; 
+        fMinStep= proposedStepLength; 
+     } else { 
+        // This is neither a new track nor a new step -- just another 
+        // client accessing information for the current track, step 
+        // We will simply retrieve the results of the synchronous
+        // stepping for this Navigator Id below.
 #ifdef G4DEBUG_PATHFINDER      
-    if( fVerboseLevel > 1 )
-    { 
-      G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
-             << " stepNo= " << stepNo << " last= " << fLastStepNo 
-             << " new= " << fNewTrack << " Step already done" << G4endl; 
-    }
+        if( fVerboseLevel > 1 ) { 
+	   G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
+		  << " stepNo= " << stepNo << " last= " << fLastStepNo 
+		  << " new= " << fNewTrack << " Step already done" << G4endl; 
+	}
 #endif
-  } 
+     } 
+  }
 
   fNewTrack= false; 
 
@@ -268,9 +312,10 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
   pNewSafety  = fCurrentPreStepSafety[ navigatorNo ]; 
   limitedStep = fLimitedStep[ navigatorNo ];
-  EndState = fEndState;  // set in DoNextLinearStep  ( right ? )
   fRelocatedPoint= false;
 
+  possibleStep= std::min( proposedStepLength, fCurrentStepSize[ navigatorNo ] ) ;
+  EndState = fEndState;  //  now corrected for smaller step, if needed
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 0 )
@@ -284,7 +329,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   }
 #endif
 
-  return fCurrentStepSize[ navigatorNo ];
+  return possibleStep;
 }
 
 // ----------------------------------------------------------------------
