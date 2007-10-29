@@ -742,8 +742,8 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   G4int iTkin, iTransfer, iPlace  ;
   G4long numOfCollisions=0;
 
-  // G4cout<<"G4PAIModel::SampleFluctuations"<<G4endl ;
-  // G4cout<<"in:  "<<fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName()<<G4endl ;
+  //  G4cout<<"G4PAIModel::SampleFluctuations"<<G4endl ;
+  //G4cout<<"in:  "<<fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName()<<G4endl ;
 
   G4double loss = 0.0, charge2 ;
   G4double stepSum = 0., stepDelta, lambda, omega; 
@@ -781,7 +781,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
      if(stepSum >= step) break;
      numOfCollisions++;
     }   
-    //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+    //    G4cout<<"##1 numOfCollisions = "<<numOfCollisions<<G4endl ;
 
     while(numOfCollisions)
     {
@@ -820,7 +820,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
      numOfCollisions++;
     }   
 
-      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+    //G4cout<<"##2 numOfCollisions = "<<numOfCollisions<<G4endl ;
 
       while(numOfCollisions)
       {
@@ -866,7 +866,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
      numOfCollisions++;
     }   
 
-      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+    //G4cout<<"##3 numOfCollisions = "<<numOfCollisions<<endl ;
 
       while(numOfCollisions)
       {
@@ -894,7 +894,8 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       }
     }
   } 
-  // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "<<step/mm<<" mm"<<G4endl ; 
+  //  G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
+  //  <<step/mm<<" mm"<<G4endl ; 
   if(loss > Tkin) loss=Tkin;
   if(loss < 0.  ) loss = 0.;
   return loss ;

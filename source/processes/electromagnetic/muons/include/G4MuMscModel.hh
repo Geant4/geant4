@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.2 2007-10-26 17:03:24 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.3 2007-10-29 10:48:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,30 +77,30 @@ public:
 
   virtual ~G4MuMscModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom( 
-                             const G4ParticleDefinition* particle,
-                                   G4double KineticEnergy,
-                                   G4double AtomicNumber,
-                                   G4double AtomicWeight=0., 
-				   G4double cut =0.,
-				   G4double emax=DBL_MAX);
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
+				      G4double KineticEnergy,
+				      G4double AtomicNumber,
+				      G4double AtomicWeight=0., 
+				      G4double cut =0.,
+				      G4double emax=DBL_MAX);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double length,
-				 G4double safety);
+  void SampleScattering(const G4DynamicParticle*, G4double safety);
 
-  virtual G4double ComputeTruePathLengthLimit(
-                             const G4Track& track,
-			           G4PhysicsTable* theLambdaTable,
-			           G4double currentMinimalStep);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double,
+			 G4double);
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+  G4double ComputeTruePathLengthLimit(const G4Track& track,
+				      G4PhysicsTable* theLambdaTable,
+				      G4double currentMinimalStep);
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  G4double ComputeGeomPathLength(G4double truePathLength);
+
+  G4double ComputeTrueStepLength(G4double geomStepLength);
 
   inline void SetStepLimitType(G4MscStepLimitType);
 

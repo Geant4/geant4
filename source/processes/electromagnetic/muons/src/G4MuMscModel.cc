@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.2 2007-10-26 17:03:24 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.3 2007-10-29 10:48:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -338,14 +338,11 @@ G4double G4MuMscModel::ComputeTrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                     const G4MaterialCutsCouple*,
-				     const G4DynamicParticle* dynParticle,
-				     G4double truestep,
-				     G4double safety)
+void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
   if(dynParticle->GetKineticEnergy() == 0.0) return;
-  G4double rms  = sqrt(truestep/lambdaeff);
+  G4double rms  = sqrt(tPathLength/lambdaeff);
   G4double dirx, diry, dirz, tetx, tety;
   //  G4cout << "G4MuMscModel::SampleSecondaries: tstep(mm)= " << truestep/mm
   //	 << " lambdaeff= " << lambdaeff
@@ -413,5 +410,14 @@ void G4MuMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
     } 
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                                     const G4MaterialCutsCouple*,
+				     const G4DynamicParticle*,
+				     G4double,
+				     G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

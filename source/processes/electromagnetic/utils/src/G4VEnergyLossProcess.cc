@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.120 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.121 2007-10-29 10:46:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -787,7 +787,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
-  /*  
+  /*    
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -797,7 +797,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " fluct= " << lossFluctuationFlag
            << G4endl;
   }
-  */  
+  */
 
   G4double cut  = (*theCuts)[currentMaterialIndex];
   G4double esec = 0.0;
@@ -895,9 +895,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
       G4double tmax = 
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
-      fluc->SampleFluctuations(currentMaterial,dynParticle,tmax,length,eloss);
-
-    /*        
+      eloss = fluc->SampleFluctuations(currentMaterial,dynParticle,
+				       tmax,length,eloss);
+      /*           
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
              << " fluc= " << (eloss-eloss0)/MeV
@@ -905,7 +905,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " massRatio= " << massRatio
              << " tmax= " << tmax
              << G4endl;
-    */
+      */
     }
   }
   // add low-energy subcutoff particles
@@ -922,7 +922,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  /*  
+  /*
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
