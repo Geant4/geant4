@@ -1,4 +1,4 @@
-$Id: History,v 1.351 2007-10-29 08:57:19 vnivanch Exp $
+$Id: History,v 1.352 2007-10-29 18:10:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 October 07: V.Ivant (emstand-V09-00-14)
+- G4UrbanMscModel (V.Ivanchenko) - fixed nan for heavy ions introduced 
+	                           in previous tag
 
 27 October 07: V.Ivant (emstand-V09-00-13)
 - G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed

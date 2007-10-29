@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.71 2007-10-29 08:42:43 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.72 2007-10-29 18:10:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -747,7 +747,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda0*(1.-exp(-tau));
-  } else if(currentKinEnergy < electron_mass_c2)  {
+  } else if(currentKinEnergy < mass)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
