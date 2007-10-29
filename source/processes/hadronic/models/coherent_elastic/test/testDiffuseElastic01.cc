@@ -70,6 +70,7 @@ int main()
   G4double x;
 
   G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
+
   /*
   std::ofstream writeb("bessel.dat", std::ios::out ) ;
   writeb.setf( std::ios::scientific, std::ios::floatfield );
@@ -81,6 +82,7 @@ int main()
     writeb<<x<<"\t"<<diffelastic->BesselJzero(x)<<"\t"<<diffelastic->BesselJone(x)<<G4endl;
   }
   */
+
   // Element definition
 
   G4Element*     theElement;
@@ -214,13 +216,13 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 1;
+  choice = 4;
 
   G4ParticleDefinition* theParticleDefinition;
 
-  G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
+  // G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
 
-  // G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
+  G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
 
   switch (choice)
   {
@@ -272,6 +274,7 @@ int main()
 
 
   G4double momentum = 9.92*GeV;
+
   G4double pMass    = theParticleDefinition->GetPDGMass();
 
   G4double thetaMax  = 15.*degree; 
@@ -332,12 +335,16 @@ int main()
   // Angle sampling
 
   G4int  numberOfSimPoints = 0;
-  G4double pData, sData, dData, tData[200], sumsigma;
+  G4double pData, sData, dData, tData[200], sumsigma, coulsigma;
 
   std::ifstream simRead;
 
-  simRead.open("pPb9p92GeVc.dat");
+  // simRead.open("pPb9p92GeVc.dat");
   // simRead.open("pPbT1GeV.dat");
+  //  simRead.open("pSiT1GeV.dat");
+  // simRead.open("pipC9p92GeVc.exp");
+  // simRead.open("pipPb9p92GeVc.exp");
+  simRead.open("pimPb9p92GeVc.exp");
 
   simRead>>numberOfSimPoints;
 
@@ -349,9 +356,9 @@ int main()
 
   for( i = 0; i < numberOfSimPoints; i++ )
   {
-    // simRead>>pData>>sData>>dData;
-    // tData[i] = pData*GeV*GeV;
-    simRead >> tData[i] >> sData;
+    simRead>>pData>>sData>>dData;
+    tData[i] = pData;   // pData*GeV*GeV;
+    // simRead >> tData[i] >> sData;
     G4cout << tData[i] << "\t" << sData <<G4endl;
   }
   simRead.close();
@@ -360,7 +367,7 @@ int main()
   std::ofstream writes("sigma.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4double theta, sigma, integral;
+  G4double theta, thetaLab, thetaCMS, sigma, integral;
 
   iMax = numberOfSimPoints;
 
@@ -374,17 +381,28 @@ int main()
   {
 
     // theta = tData[i]*degree;
+
     theta = tData[i]*milliradian;
 
+    thetaCMS = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,theta);
 
-    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+
+
+    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
+    // sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+    // coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
+
+    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, thetaCMS, ptot, A);
+    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCMS, ptot, A, Z);
+    coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, thetaCMS, ptot, Z);
 
     // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
-    // writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    // writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
+    //        << "\t" << coulsigma/millibarn << G4endl;
 
- G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
- writes << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+     G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+     writes << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
+        << "\t" << coulsigma/millibarn << G4endl;
 
 
 
@@ -406,7 +424,6 @@ int main()
   writec.setf( std::ios::scientific, std::ios::floatfield );
 
   iMax = 200;
-
 
   G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta;
 
@@ -432,17 +449,24 @@ int main()
     logTheta = logThetaMin + dLogTheta*i;
     theta    = std::pow(10.,logTheta);
 
-    // sigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
+    thetaCMS = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,theta);
 
-    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+
+    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
+    // sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
+    // coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
     
+    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, thetaCMS, ptot, A);
+    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCMS, ptot, A, Z);
+    coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, thetaCMS, ptot, Z);
 
     // G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
-    // writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    // writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
+    //       << "\t" << coulsigma/millibarn<< G4endl;
 
- G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
- writec << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
+    writec << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
+    << "\t" << coulsigma/millibarn << G4endl;
   }
   G4cout<<G4endl;
 

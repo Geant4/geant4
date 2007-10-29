@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.10 2007-10-18 16:25:36 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.11 2007-10-29 09:16:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,8 +86,18 @@ public:
 			         G4double momentum, 
 				 G4double A         );
 
+  G4double GetInvElasticXsc( const G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double A, G4double Z );
+
   G4double GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
+			         G4double momentum, 
+				 G4double A, G4double Z );
+
+  G4double GetInvElasticSumXsc( const G4ParticleDefinition* particle, 
+                                 G4double tMand, 
 			         G4double momentum, 
 				 G4double A, G4double Z );
 
@@ -96,11 +106,16 @@ public:
 			         G4double momentum, 
 				 G4double A            );
   
+
   G4double GetCoulombElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double Z         );
 
+  G4double GetInvCoulombElasticXsc( const G4ParticleDefinition* particle, 
+                                 G4double tMand, 
+			         G4double momentum, 
+				 G4double A, G4double Z         );
 
   G4double GetCoulombTotalXsc( const G4ParticleDefinition* particle,  
 			         G4double momentum, G4double Z       );
@@ -119,8 +134,11 @@ public:
 
   G4double CalculateNuclearRad( G4double A);
 
-  G4double ThetaCMStoThetaLab(const G4HadProjectile* aParticle, 
+  G4double ThetaCMStoThetaLab(const G4DynamicParticle* aParticle, 
                                 G4double tmass, G4double thetaCMS);
+
+  G4double ThetaLabToThetaCMS(const G4DynamicParticle* aParticle, 
+                                G4double tmass, G4double thetaLab);
 
 
 

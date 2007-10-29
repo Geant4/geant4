@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.11 2007-10-18 16:25:37 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.12 2007-10-29 09:16:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -271,6 +271,55 @@ G4DiffuseElastic::GetDiffuseElasticXsc( const G4ParticleDefinition* particle,
 
 ////////////////////////////////////////////////////////////////////////////
 //
+// return invariant differential elastic cross section d(sigma)/d(tMand) 
+
+G4double 
+G4DiffuseElastic::GetInvElasticXsc( const G4ParticleDefinition* particle, 
+                                        G4double tMand, 
+			                G4double plab, 
+                                        G4double A, G4double Z         )
+{
+  G4double m1 = particle->GetPDGMass();
+  G4LorentzVector lv1(0.,0.,plab,std::sqrt(plab*plab+m1*m1));
+
+  G4int iZ = static_cast<G4int>(Z+0.5);
+  G4int iA = static_cast<G4int>(A+0.5);
+  G4ParticleDefinition * theDef = 0;
+
+  if      (iZ == 1 && iA == 1) theDef = theProton;
+  else if (iZ == 1 && iA == 2) theDef = theDeuteron;
+  else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
+  else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
+  else if (iZ == 2 && iA == 4) theDef = theAlpha;
+  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+ 
+  G4double tmass = theDef->GetPDGMass();
+
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double ptot    = p1.mag();
+  G4double ptot2 = ptot*ptot;
+  G4double cost = 1 - 0.5*std::fabs(tMand)/ptot2;
+
+  if( cost >= 1.0 )      cost = 1.0;  
+  else if( cost <= -1.0) cost = -1.0;
+  
+  G4double thetaCMS = std::acos(cost);
+
+  G4double sigma = GetDiffuseElasticXsc( particle, thetaCMS, ptot, A);
+
+  sigma *= pi/ptot2;
+
+  return sigma;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
 // return differential elastic cross section d(sigma)/d(omega) with Coulomb
 // correction
 
@@ -292,6 +341,106 @@ G4DiffuseElastic::GetDiffuseElasticSumXsc( const G4ParticleDefinition* particle,
   fNuclearRadius = CalculateNuclearRad(A);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticSumProb(theta);
+
+  return sigma;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return invariant differential elastic cross section d(sigma)/d(tMand) with Coulomb
+// correction
+
+G4double 
+G4DiffuseElastic::GetInvElasticSumXsc( const G4ParticleDefinition* particle, 
+                                        G4double tMand, 
+			                G4double plab, 
+                                        G4double A, G4double Z         )
+{
+  G4double m1 = particle->GetPDGMass();
+  G4LorentzVector lv1(0.,0.,plab,std::sqrt(plab*plab+m1*m1));
+
+  G4int iZ = static_cast<G4int>(Z+0.5);
+  G4int iA = static_cast<G4int>(A+0.5);
+  G4ParticleDefinition * theDef = 0;
+
+  if      (iZ == 1 && iA == 1) theDef = theProton;
+  else if (iZ == 1 && iA == 2) theDef = theDeuteron;
+  else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
+  else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
+  else if (iZ == 2 && iA == 4) theDef = theAlpha;
+  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+ 
+  G4double tmass = theDef->GetPDGMass();
+
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double ptot    = p1.mag();
+  G4double ptot2 = ptot*ptot;
+  G4double cost = 1 - 0.5*std::fabs(tMand)/ptot2;
+
+  if( cost >= 1.0 )      cost = 1.0;  
+  else if( cost <= -1.0) cost = -1.0;
+  
+  G4double thetaCMS = std::acos(cost);
+
+  G4double sigma = GetDiffuseElasticSumXsc( particle, thetaCMS, ptot, A, Z );
+
+  sigma *= pi/ptot2;
+
+  return sigma;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return invariant differential elastic cross section d(sigma)/d(tMand) with Coulomb
+// correction
+
+G4double 
+G4DiffuseElastic::GetInvCoulombElasticXsc( const G4ParticleDefinition* particle, 
+                                        G4double tMand, 
+			                G4double plab, 
+                                        G4double A, G4double Z         )
+{
+  G4double m1 = particle->GetPDGMass();
+  G4LorentzVector lv1(0.,0.,plab,std::sqrt(plab*plab+m1*m1));
+
+  G4int iZ = static_cast<G4int>(Z+0.5);
+  G4int iA = static_cast<G4int>(A+0.5);
+  G4ParticleDefinition * theDef = 0;
+
+  if      (iZ == 1 && iA == 1) theDef = theProton;
+  else if (iZ == 1 && iA == 2) theDef = theDeuteron;
+  else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
+  else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
+  else if (iZ == 2 && iA == 4) theDef = theAlpha;
+  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+ 
+  G4double tmass = theDef->GetPDGMass();
+
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double ptot    = p1.mag();
+  G4double ptot2 = ptot*ptot;
+  G4double cost = 1 - 0.5*std::fabs(tMand)/ptot2;
+
+  if( cost >= 1.0 )      cost = 1.0;  
+  else if( cost <= -1.0) cost = -1.0;
+  
+  G4double thetaCMS = std::acos(cost);
+
+  G4double sigma = GetCoulombElasticXsc( particle, thetaCMS, ptot, Z );
+
+  sigma *= pi/ptot2;
 
   return sigma;
 }
@@ -341,20 +490,24 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
     e1      = 0.3*fermi;
     e2      = 0.35*fermi;
   }
-  G4double kg    = fWaveVector*gamma;   // wavek*delta;
+  G4double lambda = 15.; // 15 ok
+  //  G4double kg    = fWaveVector*gamma;   // wavek*delta;
+  G4double kg    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
   G4double kg2   = kg*kg;
   G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   G4double dk2t2 = dk2t*dk2t;
-  G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+  // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+
+  damp           = DampFactor(pikdt);
+  damp2          = damp*damp;
 
   G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
   G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
 
 
-  damp           = DampFactor(pikdt);
-  damp2          = damp*damp;
-
-  sigma  = kg2 + dk2t2;
+  sigma  = kg2;
+  // sigma  += dk2t2;
   sigma *= bzero2;
   sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
   sigma += kr2*bonebyarg2;
@@ -410,30 +563,42 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
     e1      = 0.3*fermi;
     e2      = 0.35*fermi;
   }
-  G4double kg    = fWaveVector*gamma;   // wavek*delta;
+  G4double lambda = 15.; // 15 ok
+  // G4double kg    = fWaveVector*gamma;   // wavek*delta;
+  G4double kg    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+
+  // G4cout<<"kg = "<<kg<<G4endl;
 
   G4double sinHalfTheta  = std::sin(0.5*theta);
   G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
 
-  // kg += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
-  kg += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  kg += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  // kg += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
 
 
   G4double kg2   = kg*kg;
-  G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
-  G4double dk2t2 = dk2t*dk2t;
-  G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+  // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
 
-  G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
-  G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
+  //   G4cout<<"dk2t = "<<dk2t<<G4endl;
 
+  // G4double dk2t2 = dk2t*dk2t;
+
+  // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+
+  // G4cout<<"pikdt = "<<pikdt<<G4endl;
 
   damp           = DampFactor(pikdt);
   damp2          = damp*damp;
 
-  sigma  = kg2 + dk2t2;
+  G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
+  G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
+
+  sigma  = kg2;
+  // sigma += dk2t2;
   sigma *= bzero2;
-  sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
+  sigma += mode2k2*bone2; 
+  sigma += e2dk3t*bzero*bone;
 
   // sigma += kr2*(1 + 8.*fZommerfeld*fZommerfeld/kr2)*bonebyarg2;  // correction at J1()/()
   sigma += kr2*bonebyarg2;  // correction at J1()/()
@@ -644,7 +809,7 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
 
 
 G4double 
-G4DiffuseElastic::ThetaCMStoThetaLab( const G4HadProjectile* aParticle, 
+G4DiffuseElastic::ThetaCMStoThetaLab( const G4DynamicParticle* aParticle, 
                                         G4double tmass, G4double thetaCMS)
 {
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
@@ -696,6 +861,66 @@ G4DiffuseElastic::ThetaCMStoThetaLab( const G4HadProjectile* aParticle,
   G4double thetaLab = np1.theta();
 
   return thetaLab;
+}
+////////////////////////////////////////////////////////////////////////////
+//
+// Return scattering angle in CMS system (target at rest) knowing theta in Lab
+
+
+
+G4double 
+G4DiffuseElastic::ThetaLabToThetaCMS( const G4DynamicParticle* aParticle, 
+                                        G4double tmass, G4double thetaLab)
+{
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  G4double m1 = theParticle->GetPDGMass();
+  G4double plab = aParticle->GetTotalMomentum();
+  G4LorentzVector lv1 = aParticle->Get4Momentum();
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+
+  // lv1.boost(-bst);
+
+  // G4ThreeVector p1 = lv1.vect();
+  // G4double ptot    = p1.mag();
+
+  G4double phi  = G4UniformRand()*twopi;
+  G4double cost = std::cos(thetaLab);
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }    
+  if (verboseLevel>1) 
+  {
+    G4cout << "cos(tlab)=" << cost << " std::sin(tlab)=" << sint << G4endl;
+  }
+  G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
+  v1 *= plab;
+  G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(plab*plab + m1*m1));
+
+  nlv1.boost(-bst); 
+
+  G4ThreeVector np1 = nlv1.vect();
+
+
+  G4double thetaCMS = np1.theta();
+
+  return thetaCMS;
 }
 
 //
