@@ -1,0 +1,421 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+
+                            field04 Example
+                            ---------------
+
+     This example shows how to define/use OVERLAPPING field elements 
+     in Geant4. Fields might be either magnetic, electric or both.
+
+     Credit goes to Tom Roberts and Muons Inc. since much of the code
+     and ideas were taken at liberty from the (GNU GPL) source of 
+     G4BEAMLINE release 1.12.
+
+     http://g4beamline.muonsinc.com
+
+**************
+*Classes Used*
+**************
+
+ 1 - main()
+
+        Note:
+
+        //  runManager->Initialize();
+
+        is commented out and must be executed with: /run/initialize
+        either in a macro or on the command line. Note: One can change
+        the geometry (see below) only BEFORE the initialization!
+
+        Is is possible to assign the PhysicsList via an argument to
+        program submission:
+
+        field04 -p QGSP_BERT
+
+        and an initial random number seed with:
+
+        field04 field04.in 12345
+
+        It is also possible to specify more than one macro file which are
+        then executed in succession:
+
+        field04 field04.in field04.in 12345
+
+        (Note, in this case the initial random # must also be provided)
+
+        (1) argc holds the number of arguments on the command line. Since
+            this MUST include at least the program name, argc value is >= 1!
+        (2) argv[0] is always the name of the program
+            argv[1] points to the first argument, and so on ...
+        (3) argv[argc-1] is assumed to be the intial random # seed
+        (4) the loop over macro files goes from optind = 1 to (argc-1)
+
+
+ 2- GEOMETRY DEFINITION
+
+        The geometry consists of two solenoidal magnets: a "CaptureMgnt"
+        followed by a (bloe-colored "TransferMgnt". By definition, the
+        axis and center of the "CaptureMgnt" coincide with the "World". The
+        position of the "TransferMgnt" relative to the downstream end of the
+        "CaptureMgnt", as well as its axis angle, both may vary. A cylindrical
+        "Target" is positioned inside the "CaptureMgnt". Its axis can vary
+        from 0 to 180 deg, and hence also the direction of the incoming
+        proton beam wrt the "CaptureMgnt"'s axis. A "Degrader" is located
+        inside the "TransferMgnt", its default position being at the
+        upstream end of the "TransferMgnt". Finally, also a "TestPlane" is
+        located inside the "TransferMgnt", by default at its downstream end.
+
+
+        The "World" consists of a solid cylinder made of a given material.
+          (It is the responsibility of the user to make the world
+           large enough to contain the rest of the geometry!)
+
+        Three parameters define the world :
+        - the material of the world,
+        - the world radius,
+        - the world length.
+
+        Example (default values):
+        /field04/SetWorldMat G4_AIR
+        /field04/SetWorldR  5.0 m
+        /field04/SetWorldZ 50.0 m
+
+
+        The "Target" is a solid cylinder made of a given material.
+
+        Five parameters define the target:
+        - the material of the target,
+        - the target radius,
+        - the target thickness,
+        - the target position inside the "CaptureMgnt",
+        - the target axis angle relative to that of the "CaptureMgnt".
+
+        Example (default values):
+        /field04/SetTgtMat G4_W
+        /field04/SetTgtRad    0.4 cm
+        /field04/SetTgtThick 16.0 cm
+        /field04/SetTgtPos 0.0 cm
+        /field04/SetTgtAng 170
+
+
+        The "Degrader" is a solid cylinder  made of a given material.
+
+        Four parameters define the degrader:
+        - the material of the degrader,
+        - the degrader radius,
+        - the degrader thickness,
+        - the degrader position relative to the "TransferMgnt" center.
+
+        Example (default values):
+        /field04/SetDgrMat G4_Pb
+        /field04/SetDgrRad  30.0 cm
+        /field04/SetDgrThick 0.1 cm
+        #/field04/SetDgrPos -7.4 m
+
+
+        The "CaptureMgnt" is a solenoid (vacuum cylinder). It is either
+        a two-sided or a one-sided magnetic bottle with the B field
+        varying linearly from the center value B1 to the edge value B2.
+        The one-sided 'FocusSolenoid' has the open end at +z and focuses
+        on the z < 0 side.
+
+        Four parameters define the "CaptureMgnt":
+        - the magnet radius,
+        - the magnet length,
+        - the weaker magnetic field at the center B1
+        - the stronger magnetic field at the edge B2
+
+        Example (default values):
+        /field04/SetCaptureR 0.6 m 
+        /field04/SetCaptureZ 4.0 m
+        /field04/SetCaptureB1 2.5 tesla 
+        /field04/SetCaptureB2 5.0 tesla
+
+
+        The "TransferMgnt" is a solenoid (vacuum cylinder) with a 
+        constant B-field. When the "TransferMgnt" follows immediately
+        the "CaptureMgnt", its relative position is at 0 cm.
+
+        Four parameters define the "TransferMgnt":
+        - the magnet radius,
+        - the magnet length,
+        - the magnet field,
+        - the magnet relative position
+          (its upstream face wrt the downstream face of the "CaptureMgnt".)
+
+        Example (default values):
+        /field04/SetTransferR  0.3 m
+        /field04/SetTransferZ 15.0 m
+        /field04/SetTransferB 5.0 tesla
+        /field04/SetTransferP 0.0 m
+
+        The default geometry is constructed in DetectorConstruction class,
+        but all the parameters can be changed via the commands defined in 
+        the DetectorMessenger class.
+
+
+ 3- MATERIAL DEFINITION
+
+        Material definitions are done through the singleton class Materials
+        which keeps a pointer to the G4NistManager. It has a method
+        GetMaterial by name (G4String) which in turn invokes the
+        G4NistManager::FindOrBuildMaterial, and/or G4Material::GetMaterial
+        methods. It has also a method CreateMaterials which, for materials
+        absent from the NIST data base, shows how to create them using the
+        G4NistManager::ConstructNewMaterial method.
+
+
+ 4- AN EVENT: THE PRIMARY GENERATOR
+
+        The primary kinematic consists of a single particle which hits the
+        target perpendicular to its upstream face. The type of the particle
+        and its energy are set in the PrimaryGeneratorAction class, and can
+        be changed via the G4 build-in commands of the ParticleGun class.
+        In addition, there is a rndmFlag, which once set allows the beam to
+        explore randomly the whole cross section of the target. The default
+        beam consists of 500 MeV protons, starting at the upstream face of
+        the target, directed along dx = dy = 0, dz = 1 wrt the target frame.
+        The default direction should NOT be changed! The arguments of the
+        x/y/zvertex commands are relative to the target center.
+
+        Example:
+        /gun/random on
+        #/gun/xvertex 0 mm
+        #/gun/yvertex 0 mm
+        #/gun/zvertex -100 mm
+
+
+ 5- DETECTOR RESPONSE
+
+        Information is extracted from the program via SteppingAction
+        at the TestPlane.
+
+
+ 6- PHYSICS 
+
+        The PhysicsList is adopted from examples/extended/hadronic/Hadr01.
+        It uses components which are distributed with Geant4 in
+        /geant4/physics_lists subdirectory. So, before compiling field04
+        it is necessary to compile physics_lists.
+
+        There are two std::vector<G4VPhysicsConstructor*> PhysicsListVectors;
+        one for EM- and one for HadronPHysics and a user defined process
+        "StepMax".
+
+        The choice of the physics is provided by the UI command:
+
+        /exp/phys/addPhysics emstandard_opt1
+        /exp/phys/addPhysics QGSP_BERT
+
+        To see the list of available configurations one can use:
+
+        /exp/phys/list
+
+        The command:
+
+        /exp/phys/addPhysics PHYSLIST
+
+        allows to download a physics configuration defined by an
+        environment variable PHYSLIST.
+
+        The cuts for electromagnetic phsyics can be established via:
+
+        /exp/phys/allCuts       1 mm
+        /exp/phys/gammaCut    0.1 mm
+        /exp/phys/electronCut 0.2 mm
+        /exp/phys/positronCut 0.3 mm
+
+        The cut for the StepMax process via:
+
+        /exp/phys/stepMax
+
+        The two PhysicsListVectors can be cleared via:
+
+        /exp/phys/clearEMPhysics
+        /exp/phys/clearHadronPhysics
+
+        and individual processes can be removed from the vectors via,
+        for example:
+
+        /exp/phys/removeEMPhysics msc
+        /exp/phys/removeHadronPhysics gamma_nuc
+
+        Furthermore, the following commands are also available, but
+        may only be used AFTER /run/initialize
+
+        /process/inactivate msc
+        /process/activate msc
+
+        The decay of pions can be assigned via (pi -> e nu, pi -> mu nu):
+
+        /decay/pienu
+        /decay/pimunu
+
+        The pienu assignment includes a small fraction of radiative decay:
+        e nu gamma (G4PionRadiativeDecayChannel).
+
+        The standard/default muon decay chain is modified to be 98.6%
+        G4MuonDecayChannelWithSpin and 1.4% G4MuonRadiativeDecayChannelWithSpin
+        in ConstructParticle().
+
+        The pion decay process G4PolDecay inherits from G4Decay and implements
+        the virtual method - empty in the base class - DaughterPolarization
+
+        The muon decay process is G4DecayWithSpin
+
+
+ 7- Overlapping Fields
+
+        The GlobalField (a singleton) is instantiated in DetectorConstruction()
+        and assigned to the global field manager in updateField():
+
+        fFieldManager = GetGlobalFieldManager();
+        fFieldManager->SetDetectorField(this);
+
+        The GlobalField has a std::vector<ElementField*> FieldList
+
+        The field from each individual beamline element is given by a
+        ElementField object. Any number of overlapping ElementField
+        objects can be added to the global field. Any element that
+        represents an element with an EM field must add the appropriate
+        ElementField to the global GlobalField object.
+
+        Of course, the GlobalField has the method GetFieldValue implemented.
+
+        Before /run/initialize in the macro file or command, the update
+        field command must have been issued if any of the other following
+        field commands was employed:
+
+        /field/update
+
+        Other options are:
+
+        /field/setStepperType 4
+        /field/setMinStep 10 mm
+        /field/setDeltaChord 3.0 mm
+        /field/setDeltaOneStep 0.01 mm
+        /field/setDeltaIntersection 0.1 mm
+        /field/setEpsMin 2.5e-7 mm
+        /field/setEpsMax 0.05 mm
+        
+        Each field element has a rectilinear bounding box in global
+        coordinate space which is checked before a point is verified to
+        actually be inside the ElementField (isWithin and isOutside).
+        setGlobalPoint is called 8 times for the corners of the local
+        bounding box, after a local->global coordinate transform.
+
+        The ElementField is the interface class used by GlobalField to 
+        compute the field value at a given point[].
+
+        A beamline element, for example the SimpleSolenoid, will derive
+        from ElementField and implement the computation for the element.
+
+        simpleSolenoid = new SimpleSolenoid(B, l,
+                                      logicTransferMgnt,TransferMgntCenter);
+
+        Besides the magnetic field and the length of the simple solenoid,
+        the constructor needs the knowledge of the G4LogicalVolume for
+        the beamline element and where its center is located in the
+        'World'.
+
+        The ElementField has a G4AffineTransform "global2local" which
+        allows the quick computation of coordinate transformations. It can
+        only be determined by knowing the element's coordinate origin in
+        the global frame and after all of the geometry has been defined.
+        For this reason, the object is prepared in two stages, through the
+        constructor providing it with the coordinate center and a pointer
+        to the G4LogicalVolume. Later the construct() method is called to
+        calculate the global2local and the bounding box. This can be done
+        from the RunAction::BeginOfRunAction method, for only then are we
+        certain that the geometry has been completely built:
+
+        FieldList* fields = GlobalField::getObject()->getFields();
+
+        if (fields) {
+           if (fields->size()>0) {
+              FieldList::iterator i;
+              for (i=fields->begin(); i!=fields->end(); ++i)(*i)->construct();
+           }
+        }
+
+        The ElementField constructor will also add the derived object into
+        GlobalField. Finally, its addFieldValue() will add the field value
+        for this element to field[]. 
+
+
+ 8- User Action Classes
+
+        RunActionMessenger:
+
+                     /rndm/save freq - to save rndm status in external files
+                                 0 not saved
+                                >0 saved on: beginOfRun.rndm
+                                 1 saved on:   endOfRun.rndm
+                                 2 saved on: endOfEvent.rndm
+                     /rndm/read random/run0evt8268.rndm
+
+        RunAction:  
+                     BeginOfRunAction: Deal with random number storage,
+                     initialization etc. Call the construct() method of
+                     ElementFields in the FieldList of GlobalField object.
+                     EndOfRunAction: random number storage/status printing.
+
+        EventActionMessenger:
+                     /event/setverbose
+                     /event/drawTracks none/charged/all
+                     /event/printModulo
+
+        EventAction(RunAction* RA):
+                     Customized BeginOfEvent printing (frequency: printModulo)
+                     EndofEvent: condition depending drawing of trajectories,
+                     saveEngingStatus and showEngineStatus according to flag
+                     in RunAction
+
+        TrackingAction:
+                     PreUserTrackingAction: Instantiate UserTrackInformation
+                     and set the application TrackStatus.
+                     PostUserTrackingAction: Retreive UserTrackInformation
+                     and decide to save random number status accordingly.
+
+        SteppingActionMessenger:
+
+        SteppingAction:
+                     UserSteppingAction: Kill primary if/when outside Target
+                     volume. Diagnostic/histogram filling for particles at a
+                     TestPlane. Find decay position and when particle
+                     FIRST reverses z-momentum component via using a
+                     UserTrackInformation object.
+
+        StackingAction:
+                     Track only primaries, pi+ or mu+
+
+        UserTrackInformation:
+                     Keep a application TrackStatus for the track:
+                          undefined, left, right, reverse
+
+        SteppingVerbose:
+                    Only print track header and step information for
+                    pi+ and mu+
+
+        Trajectory, TrajectoryPoint:
+                    Example of application specific implementations
+
+ 9- HOW TO START ?
+
+        - compile and link to generate an executable
+                % cd $G4INSTALL/example/extended/field/field04
+                % gmake
+
+        - execute field04 in 'batch' mode from macro files e.g.
+                % $(G4INSTALL)/bin/$(G4SYSTEM)/field04 field04.in
+
+        - execute field04 in 'interactive' mode with visualization e.g.
+                % $(G4INSTALL)/bin/$(G4SYSTEM)/field04
+                ....
+                Idle> type your commands, for example:
+                Idle> control/execute field04.in
+                ....

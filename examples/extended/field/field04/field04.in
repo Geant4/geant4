@@ -1,0 +1,69 @@
+#
+# Macro file for the initialization phase of field04
+#
+#/run/verbose 1
+/control/verbose 2
+#/event/verbose 1
+#/tracking/verbose 1
+#
+/field04/SetWorldMat G4_AIR
+/field04/SetWorldR  5.0 m
+/field04/SetWorldZ 50.0 m
+#
+/field04/SetCaptureR 0.6 m
+/field04/SetCaptureZ 4.0 m
+/field04/SetCaptureB1 2.5 tesla
+/field04/SetCaptureB2 5.0 tesla
+#
+/field04/SetTransferR  0.3 m
+/field04/SetTransferZ 15.0 m
+/field04/SetTransferB 5.0 tesla
+/field04/SetTransferP 0.0 m
+#
+/field04/SetTgtMat G4_W
+/field04/SetTgtRad    0.4 cm
+/field04/SetTgtThick 16.0 cm
+/field04/SetTgtPos 0.0 cm
+/field04/SetTgtAng 170
+#
+/field04/SetDgrMat G4_Pb
+/field04/SetDgrRad  30.0 cm
+/field04/SetDgrThick 0.1 cm
+#/field04/SetDgrPos -7.4 m
+#
+#/exp/phys/addPhysics emstandard_opt1
+#/exp/phys/addPhysics QGSP_BERT
+#/exp/phys/removeHadronPhysics gamma_nuc
+/exp/phys/gammaCut 1.0 m
+/exp/phys/stepMax 2.0 mm
+/exp/phys/list
+#
+#/decay/pienu
+#/decay/pimunu
+#
+/field/setStepperType 4
+/field/setMinStep 10 mm
+/field/update
+#
+/run/initialize
+#
+#/process/inactivate msc
+#/process/activate msc
+#
+#/field04/SetTgtMat G4_Pb
+#/field04/SetCaptureR 0.6 m
+#/field04/Update
+#
+/gun/particle proton
+/gun/energy 500.0 MeV
+#/gun/momentumAmp 1.09008 GeV
+/gun/random on
+#
+#/control/execute vis.mac
+#
+#/rndm/save 2
+#/rndm/read random/run0evt8268.rndm
+#/random/resetEngineFrom random/run0evt40.rndm
+#
+/run/beamOn 1000
+#

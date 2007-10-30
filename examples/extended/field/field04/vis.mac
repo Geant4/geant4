@@ -1,0 +1,42 @@
+#
+# Create a scene handler/viewer for a specific graphics system
+#    The compound command "/vis/open <vis-driver-name>"
+#    is equivalent to the following set of commands:
+#
+#    /vis/sceneHandler/create
+#    /vis/viewer/create
+#
+# Create a scene handler and a viewer for the OGLIXm driver
+#
+/vis/open OGLSXm
+#
+#/vis/viewer/set/style surface
+/vis/viewer/set/style wireframe
+#
+# Set direction from target to camera.
+/vis/viewer/set/viewpointVector 1 1.5 1.1
+/vis/viewer/set/viewpointThetaPhi 110 140
+/vis/viewer/zoom 1.4
+#
+#    The compound command "/vis/drawVolume"
+#    is equivalent to the following set of commands:
+#
+#    /vis/scene/create
+#    /vis/scene/add/volume
+#    /vis/sceneHandler/attach
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
+#
+# Store particle trajectories for visualization
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 2
+#
+# Add trajectories to the current scene
+/vis/scene/add/trajectories smooth
+#
+# Requests viewer to accumulate hits, tracks, etc. at end of event.
+# detector remains or is redrawn.
+/vis/scene/endOfEventAction refresh
+#/vis/scene/endOfEventAction accumulate
+#
+#/event/drawTracks charged
