@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.8 2006-06-29 21:08:56 gunter Exp $
+// $Id: G4OpWLS.cc,v 1.9 2007-10-30 03:53:36 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -119,6 +119,25 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
   G4int NumPhotons = 1;
+
+  if (aMaterialPropertiesTable->ConstPropertyExists("WLSMEANNUMBERPHOTONS")) {
+
+     G4double MeanNumberOfPhotons = aMaterialPropertiesTable->
+                                    GetConstProperty("WLSMEANNUMBERPHOTONS");
+
+     NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
+
+     if (NumPhotons <= 0) {
+
+        // return unchanged particle and no secondaries
+
+        aParticleChange.SetNumberOfSecondaries(0);
+
+        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+
+     }
+
+  }
 
   aParticleChange.SetNumberOfSecondaries(NumPhotons);
 
