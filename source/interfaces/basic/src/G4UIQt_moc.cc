@@ -7,6 +7,8 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
+#ifdef G4UI_BUILD_QT_SESSION
+
 #include "../include/G4UIQt.hh"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'G4UIQt.hh' doesn't include <QObject>."
@@ -98,3 +100,5 @@ void G4UIQt::myClicked(const QString & _t1)
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
+
+#endif
