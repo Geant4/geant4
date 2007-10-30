@@ -425,42 +425,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 G4cout << " Old Polarization:       " << OldPolarization << G4endl;
         }
 
-/*	G4ThreeVector theGlobalPoint = pPostStepPoint->GetPosition();
-
-        G4Navigator* theNavigator =
-                     G4TransportationManager::GetTransportationManager()->
-                                              GetNavigatorForTracking();
-
-	G4ThreeVector theLocalPoint = theNavigator->
-        			      GetGlobalToLocalTransform().
-				      TransformPoint(theGlobalPoint);
-
-	G4ThreeVector theLocalNormal;	// Normal points back into volume
-
-	G4bool valid;
-	theLocalNormal = theNavigator->GetLocalExitNormal(&valid);
-
-	if (valid) {
-	  theLocalNormal = -theLocalNormal;
-	}
-	else {
-	  G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
-	       << " The Navigator reports that it returned an invalid normal"
-	       << G4endl;
-	}
-
-	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
-	                                TransformAxis(theLocalNormal);
-*/
-
-        if (OldMomentum * theGlobalNormal > 0.0) {
-#ifdef G4DEBUG_OPTICAL
-           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
-                  << " theGlobalNormal points the wrong direction "
-                  << G4endl;
-#endif
-           theGlobalNormal = -theGlobalNormal;
-        }
 	if (type == dielectric_metal) {
 
 	  DielectricMetal();
