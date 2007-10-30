@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.15 2007-10-28 18:10:28 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.16 2007-10-30 10:05:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -135,7 +135,7 @@ public:
 				  const std::vector<G4int>& nbAtoms,
 				  G4double dens, 
 				  G4bool isotopes=true,
-				  G4State   state    = kStateUndefined,     
+				  G4State   state    = kStateSolid,     
 				  G4double  temp     = STP_Temperature,  
 				  G4double  pressure = STP_Pressure); 
 				      
@@ -147,7 +147,7 @@ public:
 				  const std::vector<G4double>& weight,
 				  G4double dens, 
 				  G4bool isotopes=true,
-				  G4State   state    = kStateUndefined,     
+				  G4State   state    = kStateSolid,     
 				  G4double  temp     = STP_Temperature,  
 				  G4double  pressure = STP_Pressure); 
 
