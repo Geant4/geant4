@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.18 2006-06-29 19:09:23 gunter Exp $
+// $Id: G4UIGAG.cc,v 1.19 2007-10-30 10:14:34 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -413,7 +413,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
 void G4UIGAG::TerminalHelp(G4String newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
-  /*int*/unsigned i = newCommand.index(" ");
+  /*int*/str_size i = newCommand.index(" ");
   if( i != std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
