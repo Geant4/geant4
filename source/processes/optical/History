@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29th Oct 2007 Peter Gumplinger (op-V09-01-01)
+29th Oct 2007 Peter Gumplinger (op-V09-00-01)
               In G4OpWLS.cc allow for the MeanNumberOfPhotons to be
               different from one, in case the constant property: 
               WLSMEANNUMBERPHOTONS is provided and, if it is, sample 
