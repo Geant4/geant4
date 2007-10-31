@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.4 2007-10-31 10:44:22 miheikki Exp $
+$Id: History,v 1.5 2007-10-31 15:00:04 gcosmo Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,8 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
-24 October 2007 - Pekka Kaitaniemi
-------------------------------------------------------
+31 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-05)
+--------------------------------
+- Again commented out calls to isnan() and isinf() in G4Abla.cc for allow
+  porting to platforms other than Linux.
+
+24 October 2007 - Pekka Kaitaniemi (hadr-incl-V09-00-04)
+----------------------------------
 - Modified INCL to filter out unphysical events containing particles
   that have more energy than the energy of the projectile. This should
   fix problem we had with outcoming neutrons (and protons) that have
