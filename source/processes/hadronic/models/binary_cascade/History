@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31-Oct-2007 Gunter Folger                had-binary-V09-00-01
+-   G4BinaryLightIon... adapt to changes in BIC
+-   Work around problem with very low energy pion (Coulomb barrier, nuclear mass
+      difference)
+
 18-Oct-2007 Gunter Folger                had-binary-V09-00-00
 -   Collect many changes for propagate interface.
     Fix for pion incident at low energy: cannot go to deexitation directly
