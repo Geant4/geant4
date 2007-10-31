@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.32 2007-08-31 09:38:31 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.33 2007-10-31 13:23:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -52,7 +52,7 @@ public:
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s=0);                 // At Rest ZNS-Constructor
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
-  G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
+  //G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
   G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
   ~G4QNucleus();                                           // Public Destructor
   // Overloaded Operators
@@ -94,7 +94,8 @@ public:
   }
   G4QHadron* GetNextNucleon()
     {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
-  std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  std::vector<G4double> const* GetBThickness() {return &Tb;} // T(b) function, step .1 fm
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
@@ -190,7 +191,8 @@ private:
   G4int currentNucleon;         // Current nucleon for the NextNucleon (? M.K.)
   G4double rho0;                // Normalazation density
   G4double radius;              // Nuclear radius
-  std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
+  //std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
+  std::vector<G4double> Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
 };
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
