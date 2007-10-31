@@ -60,6 +60,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/em_dissociation        PRTruscott@space.qinetiq.com    Pete Truscott
 "/"/"/high_energy            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/incl                   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/isotope_production     Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
 "/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
@@ -146,6 +147,7 @@ examples/extended
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   field:
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
+    field04                  gum@triumf.ca                   Peter Gumplinger
   g3tog4:
     clGeometry, cltog4       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
   gdml                       Witold.Pokorski@cern.ch         Witold Pokorski
