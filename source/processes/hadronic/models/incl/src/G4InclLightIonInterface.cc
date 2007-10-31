@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.cc,v 1.6 2007-10-24 15:06:39 miheikki Exp $ 
+// $Id: G4InclLightIonInterface.cc,v 1.7 2007-10-31 10:44:22 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -196,7 +196,6 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     // If not return the original bullet particle with the same momentum.
     if(varntp->ntrack <= 0) {
       if(verboseLevel > 1) {
-        G4cout <<"G4InclLightIonInterface: No cascade. Returning original particle with original momentum." << G4endl;
         G4cout <<"WARNING G4InclLightIonInterface: No cascade. Returning original particle with original momentum." << G4endl;
 	G4cout <<"\t Reached maximum trials of 200 to produce inelastic scattering." << G4endl;
       }
@@ -381,13 +380,6 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     }
   }
 
-  // Free allocated memory
-  delete varntp;
-  delete calincl;
-  delete ws;
-  delete mat;
-  delete incl;
-  
   return &theResult;
 } 
 

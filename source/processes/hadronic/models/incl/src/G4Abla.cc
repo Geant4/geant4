@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.7 2007-10-24 15:06:38 miheikki Exp $ 
+// $Id: G4Abla.cc,v 1.8 2007-10-31 10:44:22 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -447,9 +447,10 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       evapora(zff1, aff1, epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
 	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
       // C On ajoute le fragment:
+      // assert(af1 > 0);
       volant->iv = volant->iv + 1;
-      assert(af1 != 0);
-      assert(zf1 != 0);
+      // assert(af1 != 0);
+      // assert(zf1 != 0);
       volant->acv[volant->iv] = af1;
       volant->zpcv[volant->iv] = zf1;
       if(verboseLevel > 2) {
@@ -688,7 +689,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     volant->acv[volant->iv] = af;
     volant->zpcv[volant->iv] = zf;
     G4double peva = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2)+std::pow(pleva,2));
-    // assert(isnan(peva) == false);
+    assert(isnan(peva) == false);
     volant->pcv[volant->iv] = peva;
     if(peva > 0.001) { //then
       volant->xcv[volant->iv] = pxeva/peva;
@@ -723,12 +724,14 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	  G4cout <<"volant->iv = " << volant->iv << G4endl;
 	}
       }
-      assert(volant->acv[j] != 0);
-      //      assert(volant->zpcv[j] != 0);
-      mglms(volant->acv[j],volant->zpcv[j],0,&el);
-      fmcv = volant->zpcv[j]*fmp + (volant->acv[j] - volant->zpcv[j])*fmn + el;
-      e_evapo = e_evapo + std::sqrt(std::pow(volant->pcv[j],2) + std::pow(fmcv,2));
-      // assert(isnan(e_evapo) == false);
+      if(volant->acv[j] > 0) {
+	assert(volant->acv[j] != 0);
+	//      assert(volant->zpcv[j] != 0);
+	mglms(volant->acv[j],volant->zpcv[j],0,&el);
+	fmcv = volant->zpcv[j]*fmp + (volant->acv[j] - volant->zpcv[j])*fmn + el;
+	e_evapo = e_evapo + std::sqrt(std::pow(volant->pcv[j],2) + std::pow(fmcv,2));
+	// assert(isnan(e_evapo) == false);
+      }
     } // enddo
 
     // C Redefinition pour conservation d'impulsion!!!
@@ -3247,7 +3250,7 @@ G4double G4Abla::expohaz(G4int k, G4double T)
   // TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
 
   // assert(isnan((-1*T*std::log(haz(k)))) == false);
-  return (-1*T*std::log(haz(k)));
+  return (-1.0*T*std::log(haz(k)));
 }
 
 G4double G4Abla::fd(G4double E)
@@ -3260,8 +3263,7 @@ G4double G4Abla::fd(G4double E)
 G4double G4Abla::f(G4double E)
 {
   // FONCTION INTEGRALE DE FD(E)
-
-  return (1 - (E + 1) * std::exp(-E));
+  return (1.0 - (E + 1.0) * std::exp(-E));
 }
 
 G4double G4Abla::fmaxhaz(G4double T)
@@ -3282,9 +3284,9 @@ G4double G4Abla::fmaxhaz(G4double T)
 
   // calcul des p(i) par approximation de newton
   p[pSize-1] = 8.0;
-  static G4double x = 0.1;
-  static G4double x1;
-  static G4double y;
+  G4double x = 0.1;
+  G4double x1;
+  G4double y;
 
   if (itest == 1) {
     goto fmaxhaz120;

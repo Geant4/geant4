@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2007-10-16 20:37:43 miheikki Exp $
+# $Id: GNUmakefile,v 1.3 2007-10-31 10:44:22 miheikki Exp $
 #G4TARGET := cascade
 #G4TARGET := benchmarks
 G4TARGET := inclAblaStandAlone
@@ -94,6 +94,9 @@ testevap:
 	@perl -e '{printf("Press ENTER to continue with visualization..."); <STDIN>}'
 	root -l compare.C
 	gv testevap.ps &
+
+testout:
+	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclAblaStandAlone 208 82 1 1000 100 test.out
 
 testrun:
 #	$(G4WORKDIR)/bin/$(G4SYSTEM)/inclStandAlone 208 82 1 1000 1 test.out > console.out

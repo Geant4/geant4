@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.3 2007-10-11 10:25:25 gcosmo Exp $
+$Id: History,v 1.4 2007-10-31 10:44:22 miheikki Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,46 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+24 October 2007 - Pekka Kaitaniemi
+------------------------------------------------------
+- Modified INCL to filter out unphysical events containing particles
+  that have more energy than the energy of the projectile. This should
+  fix problem we had with outcoming neutrons (and protons) that have
+  more energy than the projectile particle.
+- Added G4InclAblaDataFile class that reads data used by INCL/ABLA
+  from datafiles located in $G4ABLADATA. If this environment variable
+  is not correctly set INCL/ABLA returns G4Exception.
+- Problematic hardcoded data has been removed.
+
+16 October 2007 - Pekka Kaitaniemi
+------------------------------------------------------
+- Silenced the rather verbose output. Now nothing should be printed on
+  terminal by default.
+- Fixed INCL internal random number generator bug that sometimes
+  (rarely) produced random numbers that were greater than 1.0.
+- Random number seeds are now taken from CLHEP::HepRandom.
+- Cleaned up some commented code.
+- Found new NaN bugs in ABLA.
+
+13 October 2007 - Pekka Kaitaniemi
+------------------------------------------------------
+- Interface cleanup. G4InclCascadeInterface and
+  G4InclLightIonInterface  should be fully operational.
+- INCL was reverted back to using simple random number generator for
+  test result compatibility (to produce exactly same results as the
+  FORTRAN version does).
+- Fixes for ABLA evaporation/fission:
+  o Fission barrier problem fixed. Now fission code is called during
+    the run.
+  o Several NaN bugs fixed.
+  o Random seed initialization bug fixed.
+  o Stand-alone INCL/ABLA program (test/standaloneinclabla) mostly
+    works (produces results that are sometimes in good agreement with
+    FORTRAN version and sometimes in not so good agreement). With
+    heavy targets and lots of energy fission is overestimated.
+  o INCL+ABLA interface not yet fully operational. G4 simulation run
+    crashes. 
 
 11 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-01)
 ------------------------------------------------------
