@@ -335,6 +335,10 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //      for the moment take it past the nucleus, so we'll not worry next time..
 	  FreeTransport(kt, 1.1*t_leave);   // take past nucleus
           kt->SetState(G4KineticTrack::miss_nucleus);
+//	   G4cout << "G4RKPropagation: Warning particle cannot enter Nucleus :" << G4endl;
+//	   G4cout << " enter nucleus, E out/in: " << kt->GetTrackingMomentum().e() << " / " << newE <<G4endl;
+//	   G4cout << " the Field "<< currentField->GetField(kt->GetPosition()) << " "<< kt->GetPosition()<<G4endl;
+// 	   G4cout << " the particle "<<kt->GetDefinition()->GetParticleName()<<G4endl;
 	  continue;
 	}
 //
