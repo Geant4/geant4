@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: testIncl.cc,v 1.3 2007-09-11 13:28:42 miheikki Exp $
+// $Id: testIncl.cc,v 1.4 2007-10-31 14:57:24 gcosmo Exp $
 
 #include <vector>
 
@@ -199,7 +199,7 @@ int tCascadeInterface() {
   aParticle.SetDefinition(aProton);
   //  G4double Momentum = 2000;
   G4double Momentum = 2000;
-  G4double Tkin = sqrt(Momentum*Momentum+938.27*938.27)-938.27;
+  G4double Tkin = std::sqrt(Momentum*Momentum+938.27*938.27)-938.27;
 
   inVector.setZ(Momentum);
 
@@ -230,7 +230,7 @@ int tCascadeInterface() {
     G4cout << "  momentum change " << outVector << G4endl;
     G4double outE = hadSta->GetEnergyChange();
     G4cout << "  energy change " << outE << G4endl;
-    G4double outP = sqrt(outE*outE-938.27*938.27);
+    G4double outP = std::sqrt(outE*outE-938.27*938.27);
 
     for (G4int iSecondary =1 ; iSecondary < nPart; iSecondary++) { 
 

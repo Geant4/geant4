@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
   summaryFile << "\t Proper cascades: " << (totalevents - transparent) << endl;
   summaryFile << "Maximum impact parameter: " << ws->bmax << endl;
   summaryFile << "Geometrical cross-section: " << geomCrossSection << " mb" << endl;
-  summaryFile << "Total reaction cross section: " << fCrossSection*31.4159*pow(ws->bmax,2) << " mb" << endl;
+  summaryFile << "Total reaction cross section: " << fCrossSection*31.4159*std::pow(ws->bmax,2) << " mb" << endl;
   summaryFile << "---------------------" << G4endl;
   summaryFile << "Normalization factor = " << geomCrossSection/(double(totalevents) - double(transparent)) << endl;
   summaryFile.close();

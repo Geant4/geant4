@@ -111,7 +111,7 @@ int main() {
     G4cin >> MyPz;
     
     G4ThreeVector triV(MyPx*MeV,MyPy*MeV,MyPz*MeV);
-    //    G4LorentzVector initialMomentum(triV,sqrt(triV.mag2()+AtomicMass*AtomicMass));
+    //    G4LorentzVector initialMomentum(triV,std::sqrt(triV.mag2()+AtomicMass*AtomicMass));
     G4LorentzVector initialMomentum(triV,std::sqrt(triV.mag2()+AtomicMass*AtomicMass*MeV*MeV));
 
     // put info about excited nucleus in fragment class
@@ -222,7 +222,7 @@ int main() {
       }
 
       G4ThreeVector t(0,0,0);
-      //    G4LorentzVector initialMomentum(triV,sqrt(triV.mag2()+AtomicMass*AtomicMass));
+      //    G4LorentzVector initialMomentum(triV,std::sqrt(triV.mag2()+AtomicMass*AtomicMass));
       G4LorentzVector initialM(t, MyExE);
 
 

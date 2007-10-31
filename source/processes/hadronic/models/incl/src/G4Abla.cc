@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.9 2007-10-31 14:53:52 gcosmo Exp $ 
+// $Id: G4Abla.cc,v 1.10 2007-10-31 14:57:24 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -3175,7 +3175,7 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   else {
     // high l             
     aj = (-20.0*std::pow(x,5) + 25.e0*std::pow(x,4) - 4.0)*std::pow((y-1.0),2)*y*y;
-    ak = (-20.0*std::pow(y,5) + 25.0*pow(y,4) - 1.0) * std::pow((x-1.0),2)*x*x;
+    ak = (-20.0*std::pow(y,5) + 25.0*std::pow(y,4) - 1.0) * std::pow((x-1.0),2)*x*x;
     q = 0.2/(std::pow((y-x)*((1.0-x)*(1.0-y)*x*y),2));
     qa = q*(aj*y - ak*x);
     qb = -q*(aj*(2.0*y + 1.0) - ak*(2.0*x + 1.0));
