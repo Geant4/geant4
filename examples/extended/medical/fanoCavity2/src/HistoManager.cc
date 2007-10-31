@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2007-10-31 16:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ HistoManager::HistoManager()
   }	     
 #endif 
  
-  fileName[0] = "fanocavity";
+  fileName[0] = "fanocavity2";
   fileType    = "hbook";
   fileOption  = "--noErrors uncompress";  
   // histograms
@@ -162,7 +162,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9" ,"10"};
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9" ,"10", "11"};
   const G4String title[] =
                 { "dummy",						//0
 		  "emission point of e-",				//1
@@ -174,7 +174,8 @@ void HistoManager::SetHisto(G4int ih,
 		  "theta distribution of e- at first step in cavity",	//7
 		  "track segment of e- in cavity",			//8
 		  "step size of e- in wall",				//9
-		  "step size of e- in cavity"				//10
+		  "step size of e- in cavity",				//10
+		  "energy deposit in cavity per track"			//11
                  };
 
 

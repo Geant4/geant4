@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity2.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: fanoCavity2.cc,v 1.2 2007-10-31 16:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,11 +73,11 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(phys = new PhysicsList(det));
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det,histo));
     
-  //set user action classes
+  //set user action classes  
   RunAction* run        = new RunAction(det,kin,histo);
   EventAction* event    = new EventAction(run,histo);
-  SteppingAction* step  = new SteppingAction(det,run,histo);
-  TrackingAction* track = new TrackingAction(step);    
+  TrackingAction* track = new TrackingAction(run,histo);      
+  SteppingAction* step  = new SteppingAction(det,run,event,track,histo);
   
   runManager->SetUserAction(run); 
   runManager->SetUserAction(event);

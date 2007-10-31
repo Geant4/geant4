@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: RunAction.hh,v 1.2 2007-10-31 16:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +61,9 @@ class RunAction : public G4UserRunAction
     
     void FlowInCavity(G4int k, G4double e) { EnerFlowCavity[k] += e;  
                                              PartFlowCavity[k]++;};
-				                
-    void AddEdepCavity(G4double de) { EdepCavity += de;};
+					     
+    void AddEdepCavity(G4double de) { EdepCavity += de; EdepCavity2 += de*de;
+                                      nbEventCavity++;};
     void AddTrakCavity(G4double dt) { trkSegmCavity += dt;};
         
     void StepInWall   (G4double s)  { stepWall += s; stepWall2 += s*s; 
@@ -78,9 +79,10 @@ class RunAction : public G4UserRunAction
     
     G4long                  PartFlowCavity[2];
     G4double                EnerFlowCavity[2];        
-    G4double                EdepCavity;
+    G4double                EdepCavity, EdepCavity2;
     G4double                trkSegmCavity;
-        
+    G4long                  nbEventCavity;
+                
     G4double                stepWall,   stepWall2;
     G4double                stepCavity, stepCavity2;    
     G4long                  nbStepWall, nbStepCavity;

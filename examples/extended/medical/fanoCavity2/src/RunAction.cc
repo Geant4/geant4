@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: RunAction.cc,v 1.2 2007-10-31 16:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,8 +160,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
        
   //total energy deposit and charged track segment in cavity
   //
-  EdepCavity = trkSegmCavity = 0.; 
-   
+  EdepCavity = EdepCavity2 = trkSegmCavity = 0.;
+  nbEventCavity = 0;
+      
   //stepLenth of charged particles
   //
   stepWall = stepWall2 = stepCavity = stepCavity2 =0.;
@@ -280,18 +281,28 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "\t Icav/Iwall = " << Iratio        
     << "\t energyFluence = " << energyFluence/(MeV*cm2/mg) << " MeV*cm2/mg"
     << G4endl;
-             
+  
+  //error on Edep in cavity
+  //
+  if (nbEventCavity == 0) return;
+  G4double meanEdep  = EdepCavity/nbEventCavity;
+  G4double meanEdep2 = EdepCavity2/nbEventCavity;
+  G4double varianceEdep = meanEdep2 - meanEdep*meanEdep;
+  G4double dEoverE = 0.;
+  if(varianceEdep>0.) dEoverE = std::sqrt(varianceEdep/nbEventCavity)/meanEdep;
+               
   //total dose in cavity
   //		   
   G4double doseCavity = EdepCavity/massCavity;
-  G4double ratio = doseCavity/energyFluence, err = 100*(ratio - 1.);
+  G4double ratio = doseCavity/energyFluence, error = ratio*dEoverE;
   		  
   G4cout 
     << "\n Total edep in cavity = "      << G4BestUnit(EdepCavity,"Energy")
-    << "\t Total dose in cavity = " << doseCavity/(MeV*cm2/mg) << " MeV*cm2/mg"
-    << "\n DoseCavity/EnergyFluence = " << ratio 
-    << "  (100*(ratio-1) = " << err << " %)"          
-    << G4endl;
+    << " +- " << 100*dEoverE << " %"        
+    << "\n Total dose in cavity = " << doseCavity/(MeV*cm2/mg) << " MeV*cm2/mg"
+    << " +- " << 100*dEoverE << " %"          
+    << "\n\n DoseCavity/EnergyFluence = " << ratio 
+    << " +- " << error << G4endl;
     
 
   //track length in cavity
