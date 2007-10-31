@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
+// $Id: G4ProcessPlacer.hh,v 1.3 2007-10-31 18:05:44 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -82,6 +82,8 @@ private:
   void AddProcessAs(G4VProcess *process, SecondOrLast);
 
   void PrintProcVec(G4ProcessVector* processVec);
+  void PrintAlongStepGPILVec();  
+  void PrintAlongStepDoItVec();  
   void PrintPostStepGPILVec();  
   void PrintPostStepDoItVec();  
 
