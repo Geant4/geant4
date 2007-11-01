@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc,v 1.3 2007-07-10 09:36:39 schaelic Exp $
+// $Id: G4VPolarizedCrossSection.cc,v 1.4 2007-11-01 17:32:34 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // File name:     G4VPolarizedCrossSection
 //
@@ -44,7 +44,8 @@
 #include "G4VPolarizedCrossSection.hh"
 #include "Randomize.hh"
 
-G4VPolarizedCrossSection::G4VPolarizedCrossSection()
+G4VPolarizedCrossSection::G4VPolarizedCrossSection() :
+  fXmin(0), fXmax(1.), fYmin(1.), theA(1), theZ(1), fCoul(0.)
 {
 }
 
@@ -80,6 +81,18 @@ G4StokesVector G4VPolarizedCrossSection::GetPol3()
   G4double xsPol3=XSection(G4StokesVector::ZERO,G4StokesVector::P3); 
   return G4ThreeVector(invXsecTotal*xsPol1,invXsecTotal*xsPol2,invXsecTotal*xsPol3); 
 }
+// minimal energy fraction in TotalXSection
+G4double G4VPolarizedCrossSection::GetXmin(G4double /*y*/)
+{
+  return fXmin;
+}
+
+// maximal energy fraction in TotalXSection
+G4double G4VPolarizedCrossSection::GetXmax(G4double /*y*/)
+{
+  return fXmax;
+}
+
 
 /*
 void G4VPolarizedCrossSection::DicePolarization() 
