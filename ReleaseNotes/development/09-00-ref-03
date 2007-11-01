@@ -1,0 +1,202 @@
+
+                       geant4-09-00-ref-03
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o First implementation of a specialized navigator for regular structures
+   and phantoms.
+ o Extended interfaces to build new materials from the NIST builder.
+ o Added capability of calculating the reflectivity off a metal surface by
+   way of a refraction index.
+ o Reviewed de_excitation and pre_equilibrium hadronic models.
+ o New physics list FTFP_BERT: FTFP with Bertini cascade.
+ o New data sets: G4EMLOW4.4 for low-energy processes and G4ABLA3.0 for
+   nuclear shell effects in INCL/ABLA hadronic model.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry/management                              geommng-V09-00-01
+-------------------
+- Fixed typo in forcing minimum number of points in method
+  G4VSolid::EstimateSurfaceArea(). Addresses problem report #981.
+
+geometry/navigation                              geomnav-V09-00-02
+-------------------
+- Introduced new specific navigation for regular structures and phantoms.
+  New classes: G4RegularNavigation, G4PhantomParameterisation.
+- G4PathFinder:
+  o Fix to now set 'fNoGeometriesLimiting' in DoNextLinearStep()
+    in the case of one navigator optimisation, 
+  o Added new methods GetNumberGeometriesLimitingStep() and GetMinimumStep()
+    needed by G4CoupledTransportation to see whether to relocate.
+
+geometry/solids/Boolean                          geom-bool-V09-00-00
+-----------------------
+- Boosted performance for response of Inside() for G4SubtractionSolid and
+  G4UnionSolid according to suggestion in problem report #979.
+
+geometry/volumes                                 geomvol-V09-00-00
+----------------
+- Added explicit initialisation of first volume entry to zero, to ensure
+  correct behavior for 'out-of-world' touchable handle.
+- Minor cleanup in G4LogicalBorderSurface and G4LogicalSkinSurface classes.
+
+interfaces                                       interfaces-V09-00-02
+----------
+- Updated the implementation of the signal handler for Ctrl-C.
+- Removed improper dependency from "basic" submodule to "run" in GNUmakefile.
+
+materials                                        materials-V09-00-07
+---------
+- G4NistManager and G4NistMaterialBuilder:
+  o Extended interfaces to build new materials: added G4State, temperature,
+    pressure (gases are allowed) with default values.
+- G4NistManager: added deletion of isotopes (fixed problem of double 
+  deletion); added precomputed Z^1/3 and log(A).
+- G4Material: moved registration in G4MaterialTable from constructors
+  to InitialisePointers(); added 'Imean' to printout.
+- G4Element: do not delete isotopes; moved registration in G4ElementTable 
+  from constructors to ComputeDerivedQuantities().
+
+particles                                        particles-V09-00-02
+---------
+- Added new classes G4PionRadiativeDecayChannel and
+  G4MuonRadiativeDecayChannelWithSpin.
+
+physics_lists                                    phys-list-V09-00-01
+-------------
+- New physics list FTFP_BERT: FTFP with Bertini cascade.
+  Crossover from Bertini to FTFP at 4-5 GeV. No LEP for inelastic for p,n,pi,K.
+- G4LEPNeutronBuilder: when the limit for MaxInelastic is zero, do NOT add 
+  LEP for inelastic. Change needed for FTFP_BERT list.
+
+processes/biasing                                procbiasing-V09-00-00
+-----------------
+- Fix in G4ProcessPlacer to put biasing process at the second place for
+  AlongStep as well as PostStep. A bug fix which would feature for charged
+  particles.
+- Added print out for AlongStep process vector to avoid confusion.
+
+processes/decay                                  decay-V09-00-02
+---------------
+- Added method DaughterPolarization() in G4Decay.
+- Added G4PionDecayMakeSpin class: set the daughter muon spin for 2 body
+  decays of pi, K and K0_long.
+- Added forward declaration for G4VExtDecayer in G4DecayWithSpin.
+
+processes/electromagnetic/lowenergy              emlowen-V09-00-03
+-----------------------------------
+- Fixes to handle Z=100 in the Livermore library and to correct problem
+  report #933.
+- Fix in G4PenelopeRayleigh to address problem report #965.
+- New G4EMLOW data library (G4EMLOW4.4) required.
+
+processes/electromagnetic/standard               emstand-V09-00-14
+----------------------------------
+- G4UrbanMscModel:
+  o Changed initialisation for ions. Parameters are protected from
+    modification.
+  o Use SampleScattering() method instead of SampleSecondaries().
+  o Use different correction to Highland formula for different particle
+    types (electron, muons, others...).
+  o Tuned ComputeGeomPathLength() in order to get better low energy behaviour
+    for heavy particles (mu, hadrons).
+  o Small modification of theta0 in ComputeTheta0() (based on data).
+  o Some old inconsistency/bug has been fixed in SampleCosineTheta():
+    now the value of 'prob' is always between [0,1].
+- G4eCoulombScatteringModel, G4CoulombScatteringModel: using precomputed
+  Z^1/3 and log(A) values to speed up code; revised nuclear size correction.
+
+processes/electromagnetic/utils                  emutils-V09-00-11
+-------------------------------
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering:
+  cleanup; moved virtual method implementations to source code.
+- G4VMultipleScattering: use SampleScattering() method in PostStep.
+- G4VEmModel: added SampleScattering() method for multiple-scattering models.
+- G4VEnergyLossProcess: set default flags of fluctuation to "false"; they
+  changed to "true" when first model of fluctuations was added.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-00-00)
+  o G4HadronicProcess::FillTotalResult(): fix addressing problem report #967,
+    replaced call to aT.GetGlobalTime() with the internal variable time.
+- models/binary_cascade (had-binary-V09-00-01)
+  o Collected many changes for propagate interface.
+  o Fix for pion incident at low energy: cannot go to deexcitation directly.
+  o G4BinaryLightIon: adapted to changes in BIC.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-00-11)
+  o Anti-hypernucleus "PDG code" correction in G4QNucleus.
+  o Memory leak is fixed in G4QHadron and G4QNucleus.
+  o Modified initialization in G4QNucleus class to improve CPU speed.
+- models/coherent_elastic (hadr-cohe-V09-00-00)
+  o G4LEnp: removed erroneous code for identity exchange of particles.
+  o G4DiffuseElastic: added Coulomb elastic scattering amplitude using
+    Wentzel model.
+- models/de_excitation (hadr-deex-V09-00-03)
+  o Removed atomic mass number from "gamma factor" for
+    G4DeuteronEvaporationProbability, G4TritonEvaporationProbability,
+    G4He3EvaporationProbability and G4AlphaEvaporationProbability.
+  o Introduced missing Rj (Q_beta) factor in the evaporation module.
+    Protected against occasionally divide by zero.
+- models/incl (hadr-incl-V09-00-05)
+  o Introduced ABLA evaporation and fission.
+  o Fixed problem of unphysically energetic particles which were produced
+    from Liege cascade.
+  o Removed hard-coded set of data, used mainly by ABLA.
+    Requires new external data set (G4ABLA3.0) including files for nuclear
+    shell effects, with new environment variable G4ABLADATA to be set to point
+    to the directory where the data are stored.
+- models/neutron_hp (hadr-hpn-V09-00-03)
+  o Fixed bug in G4NeutronHPChannel for treatment of Z in elements.
+- models/pre_equilibrium (hadr-pre-V09-00-04)
+  o New developments to reflect the literature and units expected for the
+    exciton model: introducing an Rj factor into the probability calculation; 
+    correcting the units for the Pauli Blocking Factor (missing a g factor);
+    decreasing the number of charged particles if the number excitons is
+    decreased (previously this number was only increased with increasing
+    excitons).
+  o New development with respect to light ion production.
+  o Correction for integer arithmetic bug in G4PreCompoundModel and
+    concerning the ratio of charged to neutral excitons.
+
+processes/management                             procman-V09-00-03
+--------------------
+- Changed ExceptionSeverity of CheckOrderingParameters() to FatalException.
+- Clean up messages in G4ProcessManager and G4ProcessTable classes.
+
+processes/optical                                op-V09-00-01
+-----------------
+- Added capability of calculating the reflectivity off a metal surface by
+  way of an index of refraction.
+- In G4OpWLS, allow for the 'MeanNumberOfPhotons' to be different from 1,
+  in case the constant property 'WLSMEANNUMBERPHOTONS' is provided and, if
+  it 'NumPhotons' is sampled with Poisson.
+
+processes/transportation                         transport-V09-00-03
+------------------------
+- G4CoupledTransportation: improved condition that regulates relocation
+  when any geometry (including a parallel geometry) limits the step.  
+
+examples                                         examples-V09-00-03
+--------
+- Updated reference outputs.
+- extended/field (fieldex-V09-00-00)
+  o New field04 example showin how to define/use overlapping field elements.
+    Fields might be either magnetic, electric or both.
+- extended/medical/fanoCavity (fano-V09-00-06)
+  o EventAction: added histogram of energy deposit in cavity per incident
+    gamma.
+  o RunAction: compute error on energy deposit and mean kinetic energy.
+- novice/N02 (exampleN02-V09-00-02)
+  o Explicitely delete allocated parameterisation and step-limit objects
+    in ExN02DetectorConstruction class.
+
+tests                                            tests-V09-00-03
+-----
+- Updated reference outputs and tools.
+- test30 (test30-V09-00-03)
+  o Added INCL and RPG models to test suite.
