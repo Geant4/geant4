@@ -88,6 +88,8 @@ export G4ELASTICDATA=/afs/cern.ch/sw/geant4/dev/data/G4ELASTIC
 # Yes!
 export G4RADIOACTIVEDATA=/afs/cern.ch/sw/geant4/dev/data/RadioactiveDecay
 
+# Yes!
+export G4ABLADATA=/afs/cern.ch/sw/geant4/dev/data/G4ABLA
 
 # STEP
 export G4LIB_BUILD_STEP=1
