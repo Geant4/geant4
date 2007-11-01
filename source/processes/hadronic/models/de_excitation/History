@@ -15,6 +15,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+ 01 November 2007 Dennis Wright (hadr-deex-V09-00-04)
+-----------------------------------------------------
+- suppressed gamma level file warnings in G4NuclearLevelManager.cc
+  To turn them on again, set pre-compiler flag 
+  CPPFLAGS += -DGAMMAFILEWARNING
+ 
+
  01 October 2007 Alex Howard (hadr-deex-V09-00-03)
 ---------------------------------------------------
 - Protected Rj (Q_beta) factor against divide by zeroes - occurs occasionally.
