@@ -258,9 +258,11 @@ void G4NuclearLevelManager::MakeLevels()
   std::ifstream inFile(_fileName, std::ios::in);
   if (! inFile) 
     {
+#ifdef GAMMAFILEWARNING
       if (_nucleusZ > 10) G4cout << " G4NuclearLevelManager: nuclide (" 
                                  << _nucleusZ << "," << _nucleusA 
                                  << ") does not have a gamma levels file" << G4endl;
+#endif
       return;
     }
   
