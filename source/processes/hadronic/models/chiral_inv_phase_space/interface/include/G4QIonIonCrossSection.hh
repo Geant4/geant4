@@ -57,28 +57,35 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  // At present momentum (pMom) must be in GeV (@@ Units)
+  // At present momentum (pMom) must be in GeV(@@ Units),fCS=true:Inelastic, =false:Elastic
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int Z, G4int N, G4int PDG);
 
-  G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG,
+  G4double CalculateCrossSection(G4bool fCS, G4int F, G4int I, G4int PDG,
                                  G4int tZ, G4int tN, G4double Momentum);
 
 private:
-  G4int    GetFunctions(G4double A, G4double* y, G4double* z);// y&z are pointers to arrays
+  G4int    GetFunctions(G4double pA, G4double tA, G4double* LI, G4double* HI,  // Inelastic
+                        G4double* LE, G4double* HE);                           // Elastic
+
+  G4double CalculateTotal(G4double pA, G4double tA, G4double Momentum);
+  G4double CalculateElTot(G4double pA, G4double tA, G4double Momentum);
+  // first=Inelastic, second=elastic
+  std::pair<G4double,G4double> CalculateXS(G4double pA, G4double tA,G4double Momentum);
 
 // Body
 private:
-  static G4double  lastSig; // Last value of the Cross Section
-  static G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
-  static G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
+  static G4double* lastLENI;// Pointer to the last array of LowEnergy Inel cross sections
+  static G4double* lastHENI;// Pointer to the last array of HighEnergy Inel cross sections
+  static G4double* lastLENE;// Pointer to the last array of LowEnergy Elast cross sections
+  static G4double* lastHENE;// Pointer to the last array of HighEnergy Elast cross sections
   static G4double  lastE;   // Last used in the cross section Energy
-  static G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
   static G4int     lastPDG; // The last projectile PDG
   static G4int     lastN;   // The last N of calculated nucleus
   static G4int     lastZ;   // The last Z of calculated nucleus
   static G4double  lastP;   // Last used in the cross section Momentum
   static G4double  lastTH;  // Last value of the Momentum Threshold
-  static G4double  lastCS;  // Last value of the Cross Section
+  static G4double  lastICS; // Last value of the Inelastic Cross Section
+  static G4double  lastECS; // Last value of the Elastic Cross Section
   static G4int     lastI;   // The last position in the DAMDB
 };
 

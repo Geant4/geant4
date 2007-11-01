@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuENuclearCrossSection.cc,v 1.2 2007-11-01 16:09:38 mkossov Exp $
+// $Id: G4QANuANuNuclearCrossSection.cc,v 1.1 2007-11-01 16:09:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QANuENuclearCrossSection for (anti_ni_e,e+) cross sections
-// Created: M.V. Kossov, CERN/ITEP(Moscow), 24-SEP-2007
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 24-SEP-2007
+// G4 Physics class: G4QANuANuNuclearCrossSection for gamma+A cross sections
+// Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
 // 
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
@@ -45,35 +45,35 @@
 //#define tdebug
 //#define sdebug
 
-#include "G4QANuENuclearCrossSection.hh"
+#include "G4QANuANuNuclearCrossSection.hh"
 
 // Initialization of the
-G4bool    G4QANuENuclearCrossSection::onlyCS=true;//Flag to calculate only CS (not QE)
-G4double  G4QANuENuclearCrossSection::lastSig=0.;//Last calculated total cross section
-G4double  G4QANuENuclearCrossSection::lastQEL=0.;//Last calculated quasi-el. cross section
-G4int     G4QANuENuclearCrossSection::lastL=0;   //Last used in cross section TheLastBin
-G4double  G4QANuENuclearCrossSection::lastE=0.;  //Last used in cross section TheEnergy
-G4double* G4QANuENuclearCrossSection::lastEN=0;  //Pointer to the Energy Scale of TX & QE
-G4double* G4QANuENuclearCrossSection::lastTX=0;  //Pointer to the LastArray of TX function
-G4double* G4QANuENuclearCrossSection::lastQE=0;  //Pointer to the LastArray of QE function
-G4int     G4QANuENuclearCrossSection::lastPDG=0; // The last PDG code of the projectile
-G4int     G4QANuENuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4QANuENuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QANuENuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
-G4double  G4QANuENuclearCrossSection::lastTH=0.; // Last threshold momentum
-G4double  G4QANuENuclearCrossSection::lastCS=0.; // Last value of the Cross Section
-G4int     G4QANuENuclearCrossSection::lastI=0;   // The last position in the DAMDB
+G4bool    G4QANuANuNuclearCrossSection::onlyCS=true;//Flag to calculate only CS (not QE)
+G4double  G4QANuANuNuclearCrossSection::lastSig=0.;//Last calculated total cross section
+G4double  G4QANuANuNuclearCrossSection::lastQEL=0.;//Last calculated quasi-el cross section
+G4int     G4QANuANuNuclearCrossSection::lastL=0;   //Last used in cross section TheLastBin
+G4double  G4QANuANuNuclearCrossSection::lastE=0.;  //Last used in cross section TheEnergy
+G4double* G4QANuANuNuclearCrossSection::lastEN=0;  //Pointer to theEnergy Scale of TX & QE
+G4double* G4QANuANuNuclearCrossSection::lastTX=0;  //Pointer to theLastArray of TX function
+G4double* G4QANuANuNuclearCrossSection::lastQE=0;  //Pointer to theLastArray of QE function
+G4int     G4QANuANuNuclearCrossSection::lastPDG=0; // The last PDG code of the projectile
+G4int     G4QANuANuNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
+G4int     G4QANuANuNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
+G4double  G4QANuANuNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double  G4QANuANuNuclearCrossSection::lastTH=0.; // Last threshold momentum
+G4double  G4QANuANuNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
+G4int     G4QANuANuNuclearCrossSection::lastI=0;   // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
-G4VQCrossSection* G4QANuENuclearCrossSection::GetPointer()
+G4VQCrossSection* G4QANuANuNuclearCrossSection::GetPointer()
 {
-  static G4QANuENuclearCrossSection theCrossSection;//**Static body of the Cross Section**
+  static G4QANuANuNuclearCrossSection theCrossSection; //*Static body of the Cross Section*
   return &theCrossSection;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
-G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
+G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                       G4int tgZ, G4int tgN, G4int pPDG)
 {
   static G4int j;                      // A#0f records found in DB for this projectile
@@ -86,15 +86,15 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
 #ifdef debug
-  G4cout<<"G4QAENCS::GetCS:>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
+  G4cout<<"G4QAMNCS::GetCS:>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
 		//CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-  if(pPDG!=-12)
+  if(pPDG!=-14)
   {
 #ifdef debug
-    G4cout<<"G4QAENCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QAMNCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -116,13 +116,13 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
-        G4cout<<"G4QAENCS::GetCS:*Found*P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
+        G4cout<<"G4QAMNCS::GetCS:*Found*P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(pEn<=lastTH)
         {
 #ifdef pdebug
-          G4cout<<"G4QAENCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",X=0"<<G4endl;
+          G4cout<<"G4QAMNCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",X=0"<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
           return 0.;                     // Energy is below the Threshold value
@@ -132,7 +132,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
         if(std::fabs(lastP/pMom-1.)<tolerance)
         {
 #ifdef pdebug
-          G4cout<<"G4QAENCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+          G4cout<<"G4QAMNCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
           return lastCS*millibarn;     // Use theLastCS
@@ -140,24 +140,24 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
         in = true;                       // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
 #ifdef pdebug
-        G4cout<<"G4QAENCS::G:UpdaDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
+        G4cout<<"G4QAMNCS::G:UpdaDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
 #endif
         lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // read & update
 #ifdef pdebug
-        G4cout<<"G4QAENCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
+        G4cout<<"G4QAMNCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
         {
 #ifdef pdebug
-          G4cout<<"G4QAENCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+          G4cout<<"G4QAMNCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
         break;                           // Go out of the LOOP
       }
 #ifdef pdebug
-      G4cout<<"---G4QAENCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
+      G4cout<<"---G4QAMNCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
             <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -166,7 +166,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
 	   if(!in)                            // This nucleus has not been calculated previously
 	   {
 #ifdef pdebug
-      G4cout<<"G4QAENCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lstI="<<lastI<<G4endl;
+      G4cout<<"G4QAMNCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lstI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,lastPDG,lastZ,lastN,pMom); //calculate & create
@@ -174,18 +174,18 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
 						{
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
-        G4cout<<"G4QAENCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+        G4cout<<"G4QAMNCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
 #endif
         if(pEn>lastTH)
         {
 #ifdef pdebug
-          G4cout<<"G4QAENCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+          G4cout<<"G4QAMNCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
 						}
 #ifdef pdebug
-      G4cout<<"G4QAENCS::GetCrosSec:New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
+      G4cout<<"G4QAMNCS::GetCrosSec:New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       colN.push_back(tgN);
@@ -195,7 +195,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
       colTH.push_back(lastTH);
       colCS.push_back(lastCS);
 #ifdef pdebug
-      G4cout<<"G4QAENCS::GetCS:1st,P="<<pMom<<"(MeV),X="<<lastCS*millibarn<<"(mb)"<<G4endl;
+      G4cout<<"G4QAMNCS::GetCS:1st,P="<<pMom<<"(MeV),X="<<lastCS*millibarn<<"(mb)"<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       return lastCS*millibarn;
@@ -203,7 +203,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
     else
 				{
 #ifdef pdebug
-      G4cout<<"G4QAENCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
+      G4cout<<"G4QAMNCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
       colP[lastI]=pMom;
       colPDG[lastI]=pPDG;
@@ -213,7 +213,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   else if(pEn<=lastTH)
   {
 #ifdef pdebug
-    G4cout<<"G4QAENCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
+    G4cout<<"G4QAMNCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
@@ -221,7 +221,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   else if(std::fabs(lastP/pMom-1.)<tolerance)
   {
 #ifdef pdebug
-    G4cout<<"G4QAENCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+    G4cout<<"G4QAMNCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return lastCS*millibarn;     // Use theLastCS
@@ -229,60 +229,40 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   else
   {
 #ifdef pdebug
-    G4cout<<"G4QAENCS::GetCS:UpdaCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+    G4cout<<"G4QAMNCS::GetCS:UpdaCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
 #endif
     lastCS=CalculateCrossSection(fCS,1,j,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
     lastP=pMom;
   }
 #ifdef pdebug
-  G4cout<<"G4QAENCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+  G4cout<<"G4QAMNCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
   return lastCS*millibarn;
 }
 
 // Gives the threshold energy = the same for all nuclei (@@ can be reduced for hevy nuclei)
-G4double G4QANuENuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
-{
-  //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1.,0.)/GeV;
-  //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1.,1.)/GeV;
-  //static const G4double mDeut = G4NucleiProperties::GetNuclearMass(2.,1.)/GeV/2.;
-  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
-  static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
-  static const G4double me=.00051099892; // electron mass in GeV
-  static const G4double me2=me*me;    // Squared mass of an electron in GeV^2
-  static const G4double thresh=me+me2/dmN; // Universal threshold in GeV
-  // ---------
-  //static const G4double infEn = 9.e27;
-  G4double dN=0.;
-  if(Z>0||N>0) dN=thresh*GeV; // @@ if upgraded, change it in a total cross section
-  //@@ "dN=me+me2/G4NucleiProperties::GetNuclearMass(<G4double>(Z+N),<G4double>(Z)/GeV"
-  return dN;
-}
+G4double G4QANuANuNuclearCrossSection::ThresholdEnergy(G4int, G4int, G4int) {return 0.;}
 
 // The main member function giving the gamma-A cross section (E_kin in MeV, CS in mb)
-G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+G4double G4QANuANuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
                                        G4int , G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4double mb38=1.E-11;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
-  static const G4int nE=65;   // !! If change this, change it in GetFunctions() !!
+  static const G4int nE=65;   // !! If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
-  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
-  static const G4double dmN=mN+mN;      // Doubled nucleon mass (2*AtomicMassUnit, GeV)
-  static const G4double me=.00051099892;// electron mass in GeV
-  static const G4double me2=me*me;      // Squared mass of an electron in GeV^2
-  static const G4double EMi=me+me2/dmN; // Universal threshold of the reaction in GeV
-  static const G4double EMa=300.;       // Maximum tabulated Energy of nu_e in GeV 
+  static const G4double EMi=0.; // Universal threshold of the reaction in GeV
+  static const G4double EMa=300.;       // Maximum tabulated Energy of nu_mu in GeV 
   // *** Begin of the Associative memory for acceleration of the cross section calculations
   static std::vector <G4double> colH;   //?? Vector of HighEnergyCoefficients (functional)
   static std::vector <G4double*> TX;    // Vector of pointers to the TX tabulated functions
   static std::vector <G4double*> QE;    // Vector of pointers to the QE tabulated functions
   static G4bool first=true;             // Flag of initialization of the energy axis
   // *** End of Static Definitions (Associative Memory) ***
-  //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Electron
+  //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
   //G4double TotEnergy2=Momentum;
   onlyCS=CS;                            // Flag to calculate only CS (not TX & QE)
-  lastE=Momentum/GeV;                   // Kinetic energy of the electron neutrino (in GeV)
+  lastE=Momentum/GeV;                   // Kinetic energy of the muon neutrino (in GeV!)
   if (lastE<=EMi)                       // Energy is below the minimum energy in the table
   {
     lastE=0.;
@@ -308,10 +288,10 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       lastTX = new G4double[nE];     // Allocate memory for the new TX function
       lastQE = new G4double[nE];     // Allocate memory for the new QE function
       G4int res=GetFunctions(Z,targN,lastTX,lastQE,lastEN);//@@analize(0=first,-1=bad,1=OK)
-      if(res<0) G4cerr<<"*W*G4NuENuclearCS::CalcCrossSect:Bad Function Retrieve"<<G4endl;
+      if(res<0) G4cerr<<"*W*G4NuMuNuclearCS::CalcCrossSect:Bad Function Retrieve"<<G4endl;
       // *** The synchronization check ***
       G4int sync=TX.size();
-      if(sync!=I) G4cerr<<"***G4NuENuclearCS::CalcCrossSect:Sync.="<<sync<<"#"<<I<<G4endl;
+      if(sync!=I) G4cerr<<"***G4NuMuNuclearCS::CalcCrossSect:Sync.="<<sync<<"#"<<I<<G4endl;
       TX.push_back(lastTX);
       QE.push_back(lastQE);
 	   } // End of creation of the new set of parameters
@@ -331,21 +311,17 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
     while(ran>=2)
 				{
       G4int newran=ran/2;
-      G4double oldL=lastEN[sep];
-      if(lastE<=oldL) sep-=newran;
-      else            sep+=newran;
-#ifdef pdebug
-      G4cout<<"G4ANuE::CCS:n="<<newran<<",s="<<sep<<",E="<<lastE<<",oE="<<oldL<<G4endl;
-#endif
+      if(lastE<=lastEN[sep]) sep-=newran;
+      else                   sep+=newran;
       ran=newran;
       chk=chk+chk; 
     }
-    if(chk+chk!=mL) G4cerr<<"*Warn*G4NuENuclearCS::CalcCS:Table! mL="<<mL<<G4endl;
+    if(chk+chk!=mL) G4cerr<<"*Warn*G4NuMuNuclearCS::CalcCS:Table! mL="<<mL<<G4endl;
     G4double lowE=lastEN[sep];
     G4double highE=lastEN[sep+1];
     G4double lowTX=lastTX[sep];
     if(lastE<lowE||sep>=mL||lastE>highE)
-      G4cerr<<"*Warn*G4ANuENuclearCS::CalcCS:Bin! "<<lowE<<" < "<<lastE<<" < "<<highE
+      G4cerr<<"*Warn*G4NuMuNuclearCS::CalcCS:Bin! "<<lowE<<" < "<<lastE<<" < "<<highE
             <<", sep="<<sep<<", mL="<<mL<<G4endl;
     lastSig=lastE*(lastE-lowE)*(lastTX[sep+1]-lowTX)/(highE-lowE)+lowTX; // Recover *E
     if(!onlyCS)                       // Skip the differential cross-section parameters
@@ -353,7 +329,7 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       G4double lowQE=lastQE[sep];
       lastQEL=(lastE-lowE)*(lastQE[sep+1]-lowQE)/(highE-lowE)+lowQE;
 #ifdef pdebug
-      G4cout<<"G4ANuENuclearCS::CalcCS: T="<<lastSig<<",Q="<<lastQEL<<",E="<<lastE<<G4endl;
+      G4cout<<"G4NuMuNuclearCS::CalcCS: T="<<lastSig<<",Q="<<lastQEL<<",E="<<lastE<<G4endl;
 #endif
     }
   }
@@ -375,42 +351,37 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
 // *** This tables are the same for all lepto-nuclear reactions, only mass is different ***
 // ***@@ IT'S REASONABLE TO MAKE ADDiTIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR WITH THIS@@ ***
 // ****************************************************************************************
-G4int G4QANuENuclearCrossSection::GetFunctions (G4int z, G4int n,
+G4int G4QANuANuNuclearCrossSection::GetFunctions (G4int z, G4int n,
                                                      G4double* t, G4double* q, G4double* e)
 {
-  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
-  static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
-  static const G4double me=.00051099892; // electron mass in GeV
-  static const G4double me2=me*me;    // Squared mass of an electron in GeV^2
-  static const G4double thresh=me+me2/dmN; // Universal threshold in GeV
-  static const G4int nE=65; // !! If change this, change it in CalculateCrossSection() !!
-  static const G4double nuEn[nE]={thresh,
-.00051331,.00053602,.00056078,.00058783,.00061743,.00064990,.00068559,.00072492,
-.00076834,.00081641,.00086975,.00092912,.00099536,.00106950,.00115273,.00124646,
-.00135235,.00147241,.00160901,.00176503,.00194392,.00214986,.00238797,.00266448,
-.00298709,.00336531,.00381094,.00433879,.00496745,.00572047,.00662785,.00772806,
-.00907075,.01072050,.01276190,.01530660,.01850330,.02255110,.02771990,.03437780,
-.04303240,.05438970,.06944210,.08959920,.11688400,.15423600,.20597200,.27851200,
-.38153100,.52979600,.74616300,1.0665200,1.5480900,2.2834800,3.4251100,5.2281000,
-8.1270200,12.875900,20.808500,34.331200,57.877800,99.796200,176.16300,318.68200};
+  static const G4int nE=65; // !! If change this, change it in GetCrossSection() (*.cc) !!
+  static const G4double nuEn[nE]={0.,
+1.00463e-5,1.05336e-5,1.10692e-5,1.16592e-5,1.23109e-5,1.30323e-5,1.38331e-5,1.47245e-5,
+1.57194e-5,1.68335e-5,1.80848e-5,1.94948e-5,2.10894e-5,2.28991e-5,2.49608e-5,2.73189e-5,
+3.00273e-5,3.31516e-5,3.67722e-5,4.09881e-5,4.59217e-5,5.17255e-5,5.85908e-5,6.67583e-5,
+7.65338e-5,8.83078e-5,.000102583,.000120011,.000141441,.000167995,.000201160,.000242926,
+.000295985,.000364008,.000452051,.000567152,.000719210,.000922307,.001196710,.001571930,
+.002091530,.002820590,.003857810,.005354930,.007548840,.010815300,.015760100,.023376900,
+.035325600,.054430800,.085595700,.137508000,.225898000,.379892000,.654712000,1.15767000,
+2.10277000,3.92843000,7.55861000,14.9991000,30.7412000,65.1734000,143.155000,326.326000};
   static const G4double TOTX[nE]={0.,
-.00046923,.00160693,.00229560,.00288772,.00344344,.00398831,.00453725,.00510087,
-.00568797,.00630663,.00696489,.00767121,.00843477,.00926586,.01017610,.01117910,
-.01229040,.01352820,.01491430,.01647420,.01823820,.02024280,.02253130,.02515600,
-.02818010,.03167950,.03574640,.04049260,.04605330,.05739330,.07028190,.08396290,
-.09969400,.11756200,.13812500,.16207000,.19099600,.22447700,.26434900,.31051900,
-.36357400,.42242900,.48500000,.54692800,.60140500,.63996800,.65519300,.64339200,
-.60784300,.55734400,.50212600,.45116800,.40962600,.37854800,.35702100,.34330900,
-.33576200,.33300100,.33387100,.33737700,.34235200,.34880100,.35507500,.35961200};
+.000406414,.000426120,.000447780,.000471642,.000497992,.000527163,.000559542,.000595581,
+.000635808,.000680845,.000731427,.000788424,.000852872,.000926009,.001009320,.001104600,
+.001214020,.001340230,.001486460,.001656690,.001855860,.002090100,.002367090,.002696500,
+.003090590,.003565010,.004139860,.004841160,.005702800,.006769320,.008099650,.009772430,
+.011893400,.014606200,.018106900,.022666500,.028661600,.036620500,.047289900,.061731500,
+.081463600,.108663000,.146447000,.209000000,.326533000,.470598000,.662422000,.920893000,
+1.26407000,1.68855000,2.14425000,2.50651000,2.61808000,2.43459000,2.09211000,1.76431000,
+1.53711000,1.40718000,1.34670000,1.33201000,1.34620000,1.37537000,1.41317000,1.44294000};
   static const G4double QELX[nE]={0.,
-2.40856e-7,8.61338e-7,1.28732e-6,1.69747e-6,2.12608e-6,2.59201e-6,3.11071e-6,3.69770e-6,
-4.37028e-6,5.14877e-6,6.05773e-6,7.12746e-6,8.39567e-6,9.90987e-6,1.17304e-5,1.39343e-5,
-1.66209e-5,1.99191e-5,2.39974e-5,2.90775e-5,3.54536e-5,4.35191e-5,5.38039e-5,6.70278e-5,
-8.41765e-5,.000106611,.000136228,.000175689,.000228768,.000328317,.000465818,.000648870,
-.000904299,.001260330,.001762740,.002480740,.003534040,.005062210,.007327720,.010675000,
-.015645500,.022975800,.033679400,.049004300,.070294800,.098706100,.134951000,.179193000,
-.231297000,.287287000,.344760000,.404397000,.465915000,.527060000,.584085000,.632748000,
-.671346000,.699744000,.719355000,.732541000,.740996000,.746249000,.749265000,.751160000};
+4.08295e-9,4.48857e-9,4.95656e-9,5.49899e-9,6.13072e-9,6.87016e-9,7.74022e-9,8.76961e-9,
+9.99455e-9,1.14610e-8,1.32277e-8,1.53702e-8,1.79866e-8,2.12048e-8,2.51934e-8,3.01764e-8,
+3.64538e-8,4.44308e-8,5.46604e-8,6.79047e-8,8.52243e-8,1.08112e-7,1.38689e-7,1.80013e-7,
+2.36534e-7,3.14818e-7,4.24680e-7,5.80990e-7,8.06612e-7,1.13722e-6,1.62933e-6,2.37398e-6,
+3.52029e-6,5.31677e-6,8.18526e-6,1.28553e-5,2.06137e-5,3.37754e-5,5.65922e-5,9.70377e-5,
+.000170383,.000306494,.000564967,.001119180,.002464940,.005089650,.010439800,.021527600,
+.044654000,.091909200,.183539000,.344666000,.591419000,.922517000,1.29190000,1.67242000,
+2.05826000,2.40472000,2.66353000,2.82782000,2.92082000,2.96955000,2.99365000,3.00493000};
   // --------------------------------
   G4int first=0;
   if(z<0.)
@@ -418,9 +389,9 @@ G4int G4QANuENuclearCrossSection::GetFunctions (G4int z, G4int n,
     first=1;
     z=-z;
   }
-  if(z<1 || z>92)                 // neutron & plutonium are forbidden
+  if(z<1 || z>92)             // neutron & plutonium are forbidden
   {
-    G4cout<<"***G4QANuENuclearCrossSection::GetFunctions:Z="<<z<<".No CS returned"<<G4endl;
+    G4cout<<"*G4QANuANuNuclearCrossSection::GetFunctions:Z="<<z<<".No CS returned"<<G4endl;
     return -1;
   }
   for(G4int k=0; k<nE; k++)
@@ -437,14 +408,10 @@ G4int G4QANuENuclearCrossSection::GetFunctions (G4int z, G4int n,
   return first;
 }
 
-// Randomize Q2 from neutrino to the scattered electron when scattering is quasi-elastic
-G4double G4QANuENuclearCrossSection::GetQEL_ExchangeQ2()
+// Randomize Q2 from neutrino to the scattered muon when the scattering is quasi-elastic
+G4double G4QANuANuNuclearCrossSection::GetQEL_ExchangeQ2()
 {
-  static const G4double me=.00051099892; // electron mass in GeV
-  static const G4double me2=me*me;     // Squared mass of an electron in GeV^2
-  static const G4double hme2=me2/2;    // .5*m_e^2 in GeV^2
   static const double MN=.931494043;   // Nucleon mass (inside nucleus, atomicMassUnit,GeV)
-  static const double MN2=MN*MN;       // M_N^2 in GeV^2
   static const G4double power=-3.5;    // direct power for the magic variable
   static const G4double pconv=1./power;// conversion power for the magic variable
   static const G4int nQ2=101;          // #Of point in the Q2l table (in GeV^2)
@@ -483,14 +450,10 @@ G4double G4QANuENuclearCrossSection::GetQEL_ExchangeQ2()
   G4double ME=Enu*MN;                 // M*E
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
-  G4double MEm=ME-hme2;
-  G4double sqE=Enu*std::sqrt(MEm*MEm-me2*MN2);
-  G4double E2M=MN*Enu2-(Enu+MN)*hme2;
+  G4double sqE=Enu*ME;
+  G4double E2M=MN*Enu2;
   G4double ymax=(E2M+sqE)/dEMN;
-  G4double ymin=(E2M-sqE)/dEMN;
-  G4double rmin=1.-ymin;
-  G4double rhm2E=hme2/Enu2;
-  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
+  G4double Q2mi=0.; // Q2_min(E_nu)
   G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
   G4double Xma=std::pow((1.+Q2mi),power);  // X_max(E_nu)
   G4double Xmi=std::pow((1.+Q2ma),power);  // X_min(E_nu)
@@ -522,15 +485,11 @@ G4double G4QANuENuclearCrossSection::GetQEL_ExchangeQ2()
   return Q2*GeV*GeV;
 }
 
-// Randomize Q2 from neutrino to the scattered electron when scattering is not quasiElastic
-G4double G4QANuENuclearCrossSection::GetNQE_ExchangeQ2()
+// Randomize Q2 from neutrino to the scattered muon when the scattering is not quasiElastic
+G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
 {
   static const double mpi=.13957018;    // charged pi meson mass in GeV
-  static const G4double me=.00051099892;// electron mass in GeV
-  static const G4double me2=me*me;      // Squared mass of an electron in GeV^2
-  static const G4double hme2=me2/2;     // .5*m_e^2 in GeV^2
   static const double MN=.931494043;    // Nucleon mass (inside nucleus,atomicMassUnit,GeV)
-  static const double MN2=MN*MN;        // M_N^2 in GeV^2
   static const double dMN=MN+MN;        // 2*M_N in GeV
   static const double mcV=(dMN+mpi)*mpi;// constant of W>M+mc cut for Quasi-Elastic
   static const G4int power=7;           // direct power for the magic variable
@@ -692,20 +651,16 @@ G4double G4QANuENuclearCrossSection::GetNQE_ExchangeQ2()
   G4double dE=rE-fE;                  // relative log shift from the left bin
   G4double dEnu=Enu+Enu;              // doubled energy of nu/anu
   G4double Enu2=Enu*Enu;              // squared energy of nu/anu
-  G4double Ee=Enu-me;               // Free Energy of neutrino/anti-neutrino
+  G4double Emu=Enu;                   // Free Energy of neutrino/anti-neutrino
   G4double ME=Enu*MN;                 // M*E
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
-  G4double MEm=ME-hme2;
-  G4double sqE=Enu*std::sqrt(MEm*MEm-me2*MN2);
-  G4double E2M=MN*Enu2-(Enu+MN)*hme2;
+  G4double sqE=Enu*ME;
+  G4double E2M=MN*Enu2;
   G4double ymax=(E2M+sqE)/dEMN;
-  G4double ymin=(E2M-sqE)/dEMN;
-  G4double rmin=1.-ymin;
-  G4double rhm2E=hme2/Enu2;
-  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
-  G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
-  G4double Q2nq=Ee*dMN-mcV;
+  G4double Q2mi=0.;                   // Q2_min(E_nu)
+  G4double Q2ma=dME*ymax;             // Q2_max(E_nu)
+  G4double Q2nq=Emu*dMN-mcV;
   if(Q2ma>Q2nq) Q2ma=Q2nq;            // Correction for Non Quasi Elastic
   // --- now r_min=Q2mi/Q2ma and r_max=1.; when r is randomized -> Q2=r*Q2ma ---
   G4double Rmi=Q2mi/Q2ma;
@@ -755,7 +710,7 @@ G4double G4QANuENuclearCrossSection::GetNQE_ExchangeQ2()
 }
 
 // It returns a fraction of the direct interaction of the neutrino with quark-partons
-G4double G4QANuENuclearCrossSection::GetDirectPart(G4double Q2)
+G4double G4QANuANuNuclearCrossSection::GetDirectPart(G4double Q2)
 {
   G4double f=Q2/4.62;
   G4double ff=f*f;
@@ -766,10 +721,10 @@ G4double G4QANuENuclearCrossSection::GetDirectPart(G4double Q2)
 }
 
 // #of quark-partons in the nonperturbative phase space is the same for neut and anti-neut
-G4double G4QANuENuclearCrossSection::GetNPartons(G4double Q2)
+G4double G4QANuANuNuclearCrossSection::GetNPartons(G4double Q2)
 {
   return 3.+.3581*std::log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
 }
 
 // This class can provide only virtual exchange pi+ (a substitute for W+ boson)
-G4int G4QANuENuclearCrossSection::GetExchangePDGCode() {return -211;}
+G4int G4QANuANuNuclearCrossSection::GetExchangePDGCode() {return 22;}

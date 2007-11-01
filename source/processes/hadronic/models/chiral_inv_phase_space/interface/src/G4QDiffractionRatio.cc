@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.5 2007-09-04 14:23:08 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.6 2007-11-01 16:09:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -377,7 +377,8 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mMin=mP+mPi0;                   // Minimum diffractive mass
   G4double tA=tgA;                         // Real A of the target
   G4double sA=5./std::pow(tA,third);       // Mass-screaning
-  mMin+=mPi0+G4UniformRand()*(mP*sA+mPi0); // *Experimental*
+  //mMin+=mPi0+G4UniformRand()*(mP*sA+mPi0); // *Experimental*
+  mMin+=G4UniformRand()*(mP*sA+mPi0);      // *Experimental*
   G4double ss=std::sqrt(s);                // CM compound mass (sqrt(s))
   G4double mMax=ss-mP;                     // Maximum diffraction mass of the projectile
   if(mMax>maxDM) mMax=maxDM;               // Restriction to avoid too big masses
@@ -1309,5 +1310,7 @@ G4double G4QDiffractionRatio::GetTargSingDiffXS(G4double pIU, G4int pPDG, G4int 
     G4cerr<<"G4QDiffractionRatio::GetTargSingDiffXS isn't applicable p="<<mom<<" GeV, PDG="
          <<pPDG<<G4endl;
   G4double A=Z+N;                        // A of the target
-		return 4.5*std::pow(A,.364)*millibarn; // Result
+		//return 4.5*std::pow(A,.364)*millibarn; // Result
+		return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
+
 } // End of ProjFragment
