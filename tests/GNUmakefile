@@ -31,7 +31,7 @@ ELECTROMAGNETIC += 18 ## Energy loss due to ionization and bremsstrahlung
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
 
 # Symbolic links to extended field examples using test701, etc...
-FIELD += 01 02 03
+FIELD += 01 02 03 04
 
 # Symbolic links to extended gdml examples using test901, etc...
 #temp GDML += 01
