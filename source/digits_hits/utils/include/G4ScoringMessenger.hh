@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.14 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4ScoringMessenger.hh,v 1.15 2007-11-02 02:12:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -88,15 +88,15 @@ class G4ScoringMessenger: public G4UImessenger
     //
     G4UIdirectory*             meshCreateDir;
     G4UIcmdWithAString*        meshBoxCreateCmd;
-    G4UIcmdWithAString*        meshTubsCreateCmd;
-    G4UIcmdWithAString*        meshSphereCreateCmd;
+//    G4UIcmdWithAString*        meshTubsCreateCmd;
+//    G4UIcmdWithAString*        meshSphereCreateCmd;
     //
     // Mesh commands
     G4UIdirectory*             meshDir;
     G4UIcmdWithAString*        meshOpnCmd;
     //
     G4UIcmdWithoutParameter*   meshClsCmd;
-    G4UIcmdWithABool*        meshActCmd;
+//    G4UIcmdWithABool*        meshActCmd;
     //
     //   Size commands
     G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;

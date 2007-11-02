@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.24 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.25 2007-11-02 02:12:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -98,13 +98,13 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshBoxCreateCmd->SetGuidance("Create scoring mesh.");
   meshBoxCreateCmd->SetParameterName("MeshName",false);
   //
-  meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
-  meshTubsCreateCmd->SetGuidance("Create scoring mesh.");
-  meshTubsCreateCmd->SetParameterName("MeshName",false);
+//  meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
+//  meshTubsCreateCmd->SetGuidance("Create scoring mesh.");
+//  meshTubsCreateCmd->SetParameterName("MeshName",false);
   //
-  meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
-  meshSphereCreateCmd->SetGuidance("Create scoring mesh.");
-  meshSphereCreateCmd->SetParameterName("MeshName",false);
+//  meshSphereCreateCmd = new G4UIcmdWithAString("/score/create/sphereMesh",this);
+//  meshSphereCreateCmd->SetGuidance("Create scoring mesh.");
+//  meshSphereCreateCmd->SetParameterName("MeshName",false);
   //
   meshOpnCmd = new G4UIcmdWithAString("/score/open",this);
   meshOpnCmd->SetGuidance("Open scoring mesh.");
@@ -113,13 +113,14 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   meshClsCmd = new G4UIcmdWithoutParameter("/score/close",this);
   meshClsCmd->SetGuidance("Close scoring mesh.");
   //
-  meshActCmd = new G4UIcmdWithABool("/score/mesh/activate",this);
-  meshActCmd->SetGuidance("Activate scoring mesh.");
-  meshActCmd->SetParameterName("MeshName",false);
+//  meshActCmd = new G4UIcmdWithABool("/score/mesh/activate",this);
+//  meshActCmd->SetGuidance("Activate scoring mesh.");
+//  meshActCmd->SetParameterName("MeshName",false);
   //
   mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxsize",this);
   mBoxSizeCmd->SetGuidance("Define Size of scoring mesh.");
   mBoxSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
+  mBoxSizeCmd->SetRange("Di>0. && Dj>0. && Dk>0.");
   mBoxSizeCmd->SetDefaultUnit("mm");
   //
   //   Division command
@@ -130,16 +131,19 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
   mBinCmd->SetGuidance("  Nk  :(int) Number of bins k ");
   mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
-  mBinCmd->SetGuidance("  P1..Pn-1  :(double) \"paramter from P1 to Pn-1 for division.\"");
+//  mBinCmd->SetGuidance("  P1..Pn-1  :(double) \"paramter from P1 to Pn-1 for division.\"");
   param = new G4UIparameter("Ni",'i',false);
   param->SetDefaultValue("1");
+  param->SetParameterRange("Ni>0");
   mBinCmd->SetParameter(param);
   param = new G4UIparameter("Nj",'i',false);
   param->SetDefaultValue("1");
+  param->SetParameterRange("Nj>0");
   mBinCmd->SetParameter(param);
   param = new G4UIparameter("Nk",'i',false);
   param->SetDefaultValue("1");
   mBinCmd->SetParameter(param);
+  param->SetParameterRange("Nk>0");
   param = new G4UIparameter("Axis",'i',true);
   param->SetDefaultValue("3");
   mBinCmd->SetParameter(param);
@@ -546,14 +550,14 @@ G4ScoringMessenger::~G4ScoringMessenger()
     //
     delete           meshCreateDir;
     delete           meshBoxCreateCmd;
-    delete           meshTubsCreateCmd;
-    delete           meshSphereCreateCmd;
+//    delete           meshTubsCreateCmd;
+//    delete           meshSphereCreateCmd;
     //
     delete          meshDir;
     delete          meshOpnCmd;
     //
     delete    meshClsCmd;
-    delete    meshActCmd;
+//    delete    meshActCmd;
     //
     delete  mBoxSizeCmd;
     delete  mTubsSizeCmd;
@@ -674,9 +678,10 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  // 
 	  // Mesh Geometry
 	  //
-	  if(command==meshActCmd) {
-	      mesh->Activate(meshActCmd->GetNewBoolValue(newVal)); 
-	  } else if(command==mBoxSizeCmd) {
+//	  if(command==meshActCmd) {
+//	      mesh->Activate(meshActCmd->GetNewBoolValue(newVal)); 
+//	  } else
+          if(command==mBoxSizeCmd) {
 	      MeshShape shape = mesh->GetShape();
 	      if ( shape == boxMesh ){
 		  G4ThreeVector size = mBoxSizeCmd->GetNew3VectorValue(newVal);
