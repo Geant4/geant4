@@ -79,6 +79,7 @@ cp $g4_test/test602.out          $g4_src/examples/extended/g3tog4/cltog4/cltog4.
 cp $g4_test/test701.out          $g4_src/examples/extended/field/field01/field01.out
 cp $g4_test/test702.out          $g4_src/examples/extended/field/field02/field02.out
 cp $g4_test/test703.out          $g4_src/examples/extended/field/field03/field03.out
+cp $g4_test/test704.out          $g4_src/examples/extended/field/field04/field04.out
 cp $g4_test/test801.out          $g4_src/examples/extended/biasing/B01/exampleB01.out
 cp $g4_test/test1002.out         $g4_src/examples/advanced/microbeam/microbeam.out
 cp $g4_test/test1003.out         $g4_src/examples/advanced/raredecay_calorimetry/PhotIn.out
