@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.33 2007-10-29 18:13:05 japost Exp $
+// $Id: G4PathFinder.hh,v 1.34 2007-11-02 12:28:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -219,7 +219,7 @@ class G4PathFinder
    ELimited      fLimitedStep[fMaxNav];
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
-   unsigned int  fNoGeometriesLimiting;  //  How many processes contribute to limit
+   G4int         fNoGeometriesLimiting;  //  How many processes contribute to limit
 
    G4ThreeVector fPreSafetyLocation;    //  last initial position for which safety evaluated
    G4double      fPreSafetyMinValue;    //   /\ corresponding value of full safety
@@ -296,7 +296,8 @@ inline G4double G4PathFinder::GetMinimumStep() const
 
 inline unsigned int G4PathFinder::GetNumberGeometriesLimitingStep() const
 {
-  return fNoGeometriesLimiting; 
+  unsigned int noGeometries=fNoGeometriesLimiting;
+  return noGeometries; 
 }
 
 inline G4double G4PathFinder::GetCurrentSafety() const
