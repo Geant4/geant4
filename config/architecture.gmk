@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.111 2007-11-02 15:57:52 gcosmo Exp $
+# $Id: architecture.gmk,v 1.112 2007-11-02 16:29:06 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -270,6 +270,7 @@ ifneq ($(G4LIB_BUILD_GDML),)
   ifndef GDMLLIBS
     GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-depdom -lxerces-c
   endif
+  CPPFLAGS  += $(GDMLFLAGS)
 endif
 
 # For cfront compilers the repository location is set to
