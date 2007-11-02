@@ -9,31 +9,31 @@
 
 ***** Table : Nb of materials = 8 *****
 
- Material:    G4_Al     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
+ Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.366 cm 
+ Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Imean: 173.000 eV 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Fe     density:  7.874 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.757 cm 
+ Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Imean: 286.000 eV 
    --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Ge     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+ Material:    G4_Ge     density:  5.323 g/cm3   RadL:   2.301 cm   Imean: 350.000 eV 
    --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     G4_W     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+ Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Imean: 727.000 eV 
    --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Pb     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.613 mm 
+ Material:    G4_Pb     density: 11.350 g/cm3   RadL:   5.613 mm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
+ Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
    --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.083 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
@@ -321,7 +321,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1210.25s Real=1735.43s Sys=8.63s
+  User=1298.78s Real=1430.52s Sys=7.57s
 
  ======================== run summary ======================
 
@@ -329,18 +329,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.938 MeV +- 221.906 keV
+ Total Energy deposited        = 3.938 MeV +- 218.656 keV
 
- Track length of primary track = 2.024 cm  +- 2.738 mm 
+ Track length of primary track = 2.016 cm  +- 2.762 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.310 cm  +- 4.223 mm 
+ Projected range               = 1.314 cm  +- 4.200 mm 
 
- Nb of steps of primary track  = 239.25 +- 30.47	 Step size= 84.565 um  +- 4.542 um 
+ Nb of steps of primary track  = 238.53 +- 30.79	 Step size= 84.494 um  +- 4.516 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 320871900, 261010155
+ Current couple of seeds = 2005829460, 1137979291
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

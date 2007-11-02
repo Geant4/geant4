@@ -18,196 +18,196 @@ Test29:-->Material(47,60):Silver,107Ag
 Test29:-->Material(92,146):Uranium,238U
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-2212, 1 of 88
-Test29:CalculationTimePerEvent= 7.330000e-02 s
+Test29:CalculationTimePerEvent= 6.600000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-2212, 2 of 88
-Test29:CalculationTimePerEvent= 1.108000e-01 s
+Test29:CalculationTimePerEvent= 1.021000e-01 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-2212, 3 of 88
-Test29:CalculationTimePerEvent= 1.855000e-01 s
+Test29:CalculationTimePerEvent= 1.707000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-2212, 4 of 88
-Test29:CalculationTimePerEvent= 4.400000e-01 s
+Test29:CalculationTimePerEvent= 4.054000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-2212, 5 of 88
-Test29:CalculationTimePerEvent= 6.342000e-01 s
+Test29:CalculationTimePerEvent= 5.840000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-2212, 6 of 88
-Test29:CalculationTimePerEvent= 5.528000e-01 s
+Test29:CalculationTimePerEvent= 5.095000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-2212, 7 of 88
-Test29:CalculationTimePerEvent= 5.679000e-01 s
+Test29:CalculationTimePerEvent= 5.232000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-2212, 8 of 88
-Test29:CalculationTimePerEvent= 4.167000e-01 s
+Test29:CalculationTimePerEvent= 3.840000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-211, 9 of 88
-Test29:CalculationTimePerEvent= 2.000000e-04 s
+Test29:CalculationTimePerEvent= 1.000000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-211, 10 of 88
-Test29:CalculationTimePerEvent= 4.570000e-02 s
+Test29:CalculationTimePerEvent= 4.310000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-211, 11 of 88
-Test29:CalculationTimePerEvent= 1.176000e-01 s
+Test29:CalculationTimePerEvent= 1.100000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-211, 12 of 88
-Test29:CalculationTimePerEvent= 1.534000e-01 s
+Test29:CalculationTimePerEvent= 1.418000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-211, 13 of 88
-Test29:CalculationTimePerEvent= 1.485000e-01 s
+Test29:CalculationTimePerEvent= 1.383000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-211, 14 of 88
-Test29:CalculationTimePerEvent= 1.495000e-01 s
+Test29:CalculationTimePerEvent= 1.404000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-211, 15 of 88
-Test29:CalculationTimePerEvent= 1.579000e-01 s
+Test29:CalculationTimePerEvent= 1.471000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-211, 16 of 88
-Test29:CalculationTimePerEvent= 1.639000e-01 s
+Test29:CalculationTimePerEvent= 1.532000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-321, 17 of 88
-Test29:CalculationTimePerEvent= 2.230000e-02 s
+Test29:CalculationTimePerEvent= 2.110000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-321, 18 of 88
-Test29:CalculationTimePerEvent= 5.020000e-02 s
+Test29:CalculationTimePerEvent= 4.690000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-321, 19 of 88
-Test29:CalculationTimePerEvent= 1.261000e-01 s
+Test29:CalculationTimePerEvent= 1.163000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-321, 20 of 88
-Test29:CalculationTimePerEvent= 2.023000e-01 s
+Test29:CalculationTimePerEvent= 1.888000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-321, 21 of 88
-Test29:CalculationTimePerEvent= 2.061000e-01 s
+Test29:CalculationTimePerEvent= 1.918000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-321, 22 of 88
-Test29:CalculationTimePerEvent= 2.203000e-01 s
+Test29:CalculationTimePerEvent= 2.057000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-321, 23 of 88
-Test29:CalculationTimePerEvent= 2.216000e-01 s
+Test29:CalculationTimePerEvent= 2.067000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-321, 24 of 88
-Test29:CalculationTimePerEvent= 2.258000e-01 s
+Test29:CalculationTimePerEvent= 2.111000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=13, 25 of 88
 Test29:CalculationTimePerEvent= 5.000000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=13, 26 of 88
-Test29:CalculationTimePerEvent= 6.000000e-04 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=13, 27 of 88
-Test29:CalculationTimePerEvent= 8.000000e-04 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=13, 28 of 88
-Test29:CalculationTimePerEvent= 5.800000e-03 s
+Test29:CalculationTimePerEvent= 5.600000e-03 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=13, 29 of 88
-Test29:CalculationTimePerEvent= 5.140000e-02 s
+Test29:CalculationTimePerEvent= 4.840000e-02 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=13, 30 of 88
-Test29:CalculationTimePerEvent= 7.080000e-02 s
+Test29:CalculationTimePerEvent= 6.650000e-02 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=13, 31 of 88
-Test29:CalculationTimePerEvent= 7.290000e-02 s
+Test29:CalculationTimePerEvent= 6.840000e-02 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=13, 32 of 88
-Test29:CalculationTimePerEvent= 8.040000e-02 s
+Test29:CalculationTimePerEvent= 7.530000e-02 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=15, 33 of 88
-Test29:CalculationTimePerEvent= 2.000000e-04 s
+Test29:CalculationTimePerEvent= 3.000000e-04 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=15, 34 of 88
-Test29:CalculationTimePerEvent= 2.400000e-03 s
+Test29:CalculationTimePerEvent= 2.300000e-03 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=15, 35 of 88
-Test29:CalculationTimePerEvent= 1.530000e-02 s
+Test29:CalculationTimePerEvent= 1.420000e-02 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=15, 36 of 88
-Test29:CalculationTimePerEvent= 1.839000e-01 s
+Test29:CalculationTimePerEvent= 1.705000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=15, 37 of 88
-Test29:CalculationTimePerEvent= 2.209000e-01 s
+Test29:CalculationTimePerEvent= 2.048000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=15, 38 of 88
-Test29:CalculationTimePerEvent= 2.236000e-01 s
+Test29:CalculationTimePerEvent= 2.083000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=15, 39 of 88
-Test29:CalculationTimePerEvent= 2.421000e-01 s
+Test29:CalculationTimePerEvent= 2.251000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=15, 40 of 88
-Test29:CalculationTimePerEvent= 2.270000e-01 s
+Test29:CalculationTimePerEvent= 2.106000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3112, 41 of 88
-Test29:CalculationTimePerEvent= 2.160000e-02 s
+Test29:CalculationTimePerEvent= 2.050000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3112, 42 of 88
-Test29:CalculationTimePerEvent= 4.900000e-02 s
+Test29:CalculationTimePerEvent= 4.610000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3112, 43 of 88
-Test29:CalculationTimePerEvent= 1.167000e-01 s
+Test29:CalculationTimePerEvent= 1.088000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3112, 44 of 88
-Test29:CalculationTimePerEvent= 1.684000e-01 s
+Test29:CalculationTimePerEvent= 1.570000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3112, 45 of 88
-Test29:CalculationTimePerEvent= 1.505000e-01 s
+Test29:CalculationTimePerEvent= 1.400000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3112, 46 of 88
-Test29:CalculationTimePerEvent= 1.641000e-01 s
+Test29:CalculationTimePerEvent= 1.537000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3112, 47 of 88
-Test29:CalculationTimePerEvent= 1.693000e-01 s
+Test29:CalculationTimePerEvent= 1.588000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3112, 48 of 88
-Test29:CalculationTimePerEvent= 1.933000e-01 s
+Test29:CalculationTimePerEvent= 1.823000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3312, 49 of 88
-Test29:CalculationTimePerEvent= 2.170000e-02 s
+Test29:CalculationTimePerEvent= 2.050000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3312, 50 of 88
-Test29:CalculationTimePerEvent= 4.770000e-02 s
+Test29:CalculationTimePerEvent= 4.480000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3312, 51 of 88
-Test29:CalculationTimePerEvent= 1.107000e-01 s
+Test29:CalculationTimePerEvent= 1.031000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3312, 52 of 88
-Test29:CalculationTimePerEvent= 1.471000e-01 s
+Test29:CalculationTimePerEvent= 1.369000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3312, 53 of 88
-Test29:CalculationTimePerEvent= 1.323000e-01 s
+Test29:CalculationTimePerEvent= 1.234000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3312, 54 of 88
-Test29:CalculationTimePerEvent= 1.568000e-01 s
+Test29:CalculationTimePerEvent= 1.481000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3312, 55 of 88
-Test29:CalculationTimePerEvent= 1.804000e-01 s
+Test29:CalculationTimePerEvent= 1.707000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3312, 56 of 88
-Test29:CalculationTimePerEvent= 2.156000e-01 s
+Test29:CalculationTimePerEvent= 2.040000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3334, 57 of 88
-Test29:CalculationTimePerEvent= 2.220000e-02 s
+Test29:CalculationTimePerEvent= 2.090000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3334, 58 of 88
-Test29:CalculationTimePerEvent= 2.540000e-02 s
+Test29:CalculationTimePerEvent= 2.440000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3334, 59 of 88
-Test29:CalculationTimePerEvent= 2.680000e-02 s
+Test29:CalculationTimePerEvent= 2.560000e-02 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3334, 60 of 88
-Test29:CalculationTimePerEvent= 2.690000e-02 s
+Test29:CalculationTimePerEvent= 2.560000e-02 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3334, 61 of 88
-Test29:CalculationTimePerEvent= 2.710000e-02 s
+Test29:CalculationTimePerEvent= 2.590000e-02 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3334, 62 of 88
-Test29:CalculationTimePerEvent= 2.690000e-02 s
+Test29:CalculationTimePerEvent= 2.550000e-02 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3334, 63 of 88
-Test29:CalculationTimePerEvent= 2.670000e-02 s
+Test29:CalculationTimePerEvent= 2.560000e-02 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3334, 64 of 88
-Test29:CalculationTimePerEvent= 2.680000e-02 s
+Test29:CalculationTimePerEvent= 2.540000e-02 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=2112, 65 of 88
 Test29:CalculationTimePerEvent= 2.000000e-04 s
@@ -216,67 +216,67 @@ Test29:NewRun: Targ=90002002,Proj=2112, 66 of 88
 Test29:CalculationTimePerEvent= 2.000000e-04 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=2112, 67 of 88
-Test29:CalculationTimePerEvent= 2.000000e-04 s
+Test29:CalculationTimePerEvent= 3.000000e-04 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=2112, 68 of 88
-Test29:CalculationTimePerEvent= 1.797000e-01 s
+Test29:CalculationTimePerEvent= 1.658000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=2112, 69 of 88
 Test29:CalculationTimePerEvent= 3.000000e-04 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=2112, 70 of 88
-Test29:CalculationTimePerEvent= 5.270000e-02 s
+Test29:CalculationTimePerEvent= 4.870000e-02 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=2112, 71 of 88
-Test29:CalculationTimePerEvent= 5.420000e-02 s
+Test29:CalculationTimePerEvent= 5.010000e-02 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=2112, 72 of 88
-Test29:CalculationTimePerEvent= 5.330000e-02 s
+Test29:CalculationTimePerEvent= 4.920000e-02 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-2112, 73 of 88
-Test29:CalculationTimePerEvent= 6.860000e-02 s
+Test29:CalculationTimePerEvent= 6.150000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-2112, 74 of 88
-Test29:CalculationTimePerEvent= 9.610000e-02 s
+Test29:CalculationTimePerEvent= 8.770000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-2112, 75 of 88
-Test29:CalculationTimePerEvent= 1.745000e-01 s
+Test29:CalculationTimePerEvent= 1.602000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-2112, 76 of 88
-Test29:CalculationTimePerEvent= 3.767000e-01 s
+Test29:CalculationTimePerEvent= 3.474000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-2112, 77 of 88
-Test29:CalculationTimePerEvent= 4.699000e-01 s
+Test29:CalculationTimePerEvent= 4.320000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-2112, 78 of 88
-Test29:CalculationTimePerEvent= 4.597000e-01 s
+Test29:CalculationTimePerEvent= 4.208000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-2112, 79 of 88
-Test29:CalculationTimePerEvent= 4.002000e-01 s
+Test29:CalculationTimePerEvent= 3.677000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-2112, 80 of 88
-Test29:CalculationTimePerEvent= 4.790000e-01 s
+Test29:CalculationTimePerEvent= 4.398000e-01 s
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-3222, 81 of 88
-Test29:CalculationTimePerEvent= 5.970000e-02 s
+Test29:CalculationTimePerEvent= 5.390000e-02 s
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-3222, 82 of 88
-Test29:CalculationTimePerEvent= 9.610000e-02 s
+Test29:CalculationTimePerEvent= 8.840000e-02 s
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-3222, 83 of 88
-Test29:CalculationTimePerEvent= 1.762000e-01 s
+Test29:CalculationTimePerEvent= 1.623000e-01 s
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-3222, 84 of 88
-Test29:CalculationTimePerEvent= 4.105000e-01 s
+Test29:CalculationTimePerEvent= 3.790000e-01 s
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-3222, 85 of 88
-Test29:CalculationTimePerEvent= 5.850000e-01 s
+Test29:CalculationTimePerEvent= 5.410000e-01 s
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-3222, 86 of 88
-Test29:CalculationTimePerEvent= 4.236000e-01 s
+Test29:CalculationTimePerEvent= 3.919000e-01 s
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-3222, 87 of 88
-Test29:CalculationTimePerEvent= 4.749000e-01 s
+Test29:CalculationTimePerEvent= 4.383000e-01 s
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-3222, 88 of 88
-Test29:CalculationTimePerEvent= 3.610000e-01 s
+Test29:CalculationTimePerEvent= 3.333000e-01 s

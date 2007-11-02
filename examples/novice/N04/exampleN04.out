@@ -205,9 +205,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     137 hits are stored in ExN04TrackerHitsCollection.
-     32 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.55638282 (GeV)
+     136 hits are stored in ExN04TrackerHitsCollection.
+     30 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.45099181 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -219,12 +219,12 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     46 hits are stored in ExN04TrackerHitsCollection.
-     27 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.48765193 (GeV)
+     49 hits are stored in ExN04TrackerHitsCollection.
+     28 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.64914832 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=7.89s Real=8.58s Sys=0.2s
+  User=8.94s Real=9.31s Sys=0.2s
 G4 kernel has come to Quit state.

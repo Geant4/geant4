@@ -343,7 +343,6 @@ Event number 500
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-**G4Q::HQ:*KinematicTotal*, PDG=0{0,2,0,6,2,0}, QC={3,5,0,6,2,0}
 Event number 600
 #
 # proton at 100 GeV in Air

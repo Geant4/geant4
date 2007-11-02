@@ -269,14 +269,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.75s Real=7.79s Sys=0s
+  User=7.85s Real=7.95s Sys=0.01s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.2342 +- 0.0932031  mm  
+    mean charged track length   in absorber=23.22 +- 0.0908886  mm  
 
-            mean energy deposit in absorber=0.0157368 +- 0.000298219  MeV 
+            mean energy deposit in absorber=0.0157127 +- 0.000283582  MeV 
 
- mean number of steps in absorber (charged) =0.069 +- 0.0328974      
+ mean number of steps in absorber (charged) =0.072 +- 0.0353951      
  mean number of steps in absorber (neutral) =0 +- 0      
 
    mean number of charged secondaries = 0.006 +- 0.00244213
@@ -285,31 +285,31 @@ Run Summary
 
    mean number of e-s =0.006  and e+s =0
 
-(number) transmission coeff=0.515  reflection coeff=0
+(number) transmission coeff=0.524  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=5
+#entries=1000    #underflows=0    #overflows=4
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           9       0.009
-    2         6         101       0.101
-    3         9         263       0.263
-    4        12         245       0.245
-    5        15         150        0.15
-    6        18          84       0.084
-    7        21          41       0.041
-    8        24          30        0.03
-    9        27          18       0.018
-   10        30          17       0.017
-   11        33           9       0.009
-   12        36           7       0.007
+    2         6          99       0.099
+    3         9         262       0.262
+    4        12         244       0.244
+    5        15         157       0.157
+    6        18          83       0.083
+    7        21          40        0.04
+    8        24          31       0.031
+    9        27          17       0.017
+   10        30          14       0.014
+   11        33          10        0.01
+   12        36           8       0.008
    13        39           5       0.005
-   14        42           6       0.006
+   14        42           5       0.005
    15        45           1       0.001
-   16        48           1       0.001
+   16        48           2       0.002
    17        51           1       0.001
    18        54           5       0.005
-   19        57           2       0.002
+   19        57           3       0.003
 
  Emp =           0.009   width=          0.006  MeV 
 

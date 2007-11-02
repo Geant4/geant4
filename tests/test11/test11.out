@@ -3854,5 +3854,3 @@ SimpleBox is now made of G4_U
 /mydet/SelectMaterial G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
---> warning from ~G4Isotope(): the isotope U238 is still referenced by 1 G4Elements 
-

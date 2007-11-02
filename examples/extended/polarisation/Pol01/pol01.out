@@ -128,39 +128,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.7s Real=8.77s Sys=0s
+  User=8.68s Real=8.72s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.94291 0.0354721 0.701186 0.326206 0.587015 0.262074 0.473896 0.572566 0.506972 0.38817 0.77218 0.0933633 0.537664 0.922866 0.398394 0.355871 0.201726 0.502977 0.808976 0.170803 0.308365 0.152811 0.675957 0.526142 
+ float_seed_table[] = 0.728835 0.652089 0.0897291 0.0110269 0.0631678 0.364531 0.156654 0.778579 0.546934 0.963504 0.574139 0.861241 0.953165 0.720102 0.44319 0.0129219 0.65787 0.263727 0.785415 0.175945 0.51455 0.290382 0.94114 0.874435 
  i_lag = 11, j_lag = 21
- carry = 0, count24 = 1
+ carry = 5.96046e-08, count24 = 18
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31244
-	pol-compt = 258
-	msc = 4037
-	pol-eBrem = 378
-	pol-conv = 218
-	pol-eIoni = 636
-	pol-annihil = 73
-	phot = 168
+	Transportation = 31216
+	pol-compt = 270
+	msc = 3547
+	pol-eBrem = 379
+	pol-conv = 209
+	pol-eIoni = 598
+	pol-annihil = 61
+	phot = 167
  Gamma: 
-Mean Number per Event :1.0136
-Mean Energy :9.5366 MeV +- 1.9941 MeV
-Mean Polarization :-0.96027 +- 0.19151
+Mean Number per Event :1.0122
+Mean Energy :9.5463 MeV +- 1.975 MeV
+Mean Polarization :-0.96112 +- 0.19016
  Electron: 
-Mean Number per Event :0.0337
-Mean Energy :5.159 MeV +- 2.4146 MeV
-Mean Polarization :-0.7333 +- 0.26613
+Mean Number per Event :0.0336
+Mean Energy :5.2737 MeV +- 2.5005 MeV
+Mean Polarization :-0.73466 +- 0.29668
  Positron: 
-Mean Number per Event :0.0149
-Mean Energy :4.0003 MeV +- 2.1527 MeV
-Mean Polarization :-0.56259 +- 0.33273
+Mean Number per Event :0.015
+Mean Energy :4.3803 MeV +- 2.2007 MeV
+Mean Polarization :-0.60679 +- 0.33425
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

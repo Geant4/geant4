@@ -22,10 +22,10 @@ PhysicsList::AddPhysicsList: <standard>
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+ Material: Galactic     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+ Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Imean: 173.600 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  The  WORLD   is made of 30 um  of Galactic. The transverse size (YZ) of the world is 60 um 
@@ -250,26 +250,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=205.91s Real=1810.63s Sys=161.57s
+  User=188.43s Real=950.16s Sys=79.67s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.306 keV +- 16.58 eV 
- -----> Mean dE/dx = 3.153 MeV/cm	(1.353 MeV*cm2/g)
+ Total energy deposit in absorber per event = 6.289 keV +- 16.49 eV 
+ -----> Mean dE/dx = 3.144 MeV/cm	(1.35 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 2.936 MeV/cm	(1.26 MeV*cm2/g)
    full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.26 um  +- 7.851 nm 
- Total track length (neutral) in absorber per event = 1.845 Ang +- 1.755 Ang
+ Total track length (charged) in absorber per event = 20.27 um  +- 7.96 nm 
+ Total track length (neutral) in absorber per event = 2.81 Ang +- 2.237 Ang
 
- Number of steps (charged) in absorber per event = 6.138 +- 8.86e-06
- Number of steps (neutral) in absorber per event = 2e-05 +- 8.86e-06
+ Number of steps (charged) in absorber per event = 6.144 +- 8.922e-06
+ Number of steps (neutral) in absorber per event = 2e-05 +- 8.922e-06
 
- Number of secondaries per event : Gammas = 2e-05;   electrons = 0.01664;   positrons = 0
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.01736;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -278,13 +278,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02341 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02485 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.007 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.106 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 112833642, 2140969345
+ Current couple of seeds = 1747289587, 186153775
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
