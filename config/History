@@ -1,4 +1,4 @@
-$Id: History,v 1.302 2007-10-11 07:15:44 gcosmo Exp $
+$Id: History,v 1.303 2007-11-02 15:58:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd November 2007  Gabriele Cosmo (config-V09-00-06)
+- Introduced G4LIB_BUILD_GDML/G4LIB_USE_GDML flags to trigger compilation
+  of the new persistency/gdml sub-module. Added setup for XERCESC.
+  Required path XERCESCROOT to XERCESC installation if G4LIB_BUILD_GDML
+  is set. Added "persistency/gdml" include path to binmake.gmk
+- Added setup for QT in UI scripts, and specific QT paths and setup in
+  Darwin-g++.gmk. (L.Garnier)
 
 10th October 2007  Gunter Folger (config-V09-00-05)
 - Added "incl" (Liege cascade) hadronic model module to binmake.gmk. 
