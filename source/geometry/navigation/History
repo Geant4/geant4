@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2007-11-02 12:31:27 japost Exp $
+$Id: History,v 1.106 2007-11-02 12:36:38 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -36,6 +36,10 @@ November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-03c)
    * Added setting of fNoGeometriesLimiting in DoNextCurvedStep
    * Check to see that fNoGeometriesLimiting is set by DoNext---Step methods
    * Revised data type of fNoGeometriesLimiting (to an int, so that < 0 shows 'unset'
+
+- G4PropagatorInField: 
+   * Fixes for compilation of code under G4DEBUG_FIELD
+   * Extra check of method LocateIntersectionPoint arguments
 
 October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
 ----------------------------------
