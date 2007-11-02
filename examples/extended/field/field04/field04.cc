@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.6 2007-11-02 10:29:59 gcosmo Exp $
+// $Id: field04.cc,v 1.7 2007-11-02 10:53:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,6 @@ int main(int argc,char** argv)
 
   G4int seed = 0;
   if (argc  > 2) seed = atoi(argv[argc-1]);
-//  if (seed == 0) seed = time(0);
 
   CLHEP::HepRandom::setTheSeed(seed);
 
@@ -146,14 +145,11 @@ int main(int argc,char** argv)
   runManager->SetUserAction( new F04SteppingAction() );
   runManager->SetUserAction( new F04StackingAction() );
 
-  // Initialize G4 kernel, physics tables ...
-
-  //  runManager->Initialize();
-    
   // Get the pointer to the User Interface manager 
 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
 
+#ifndef WIN32
   G4int optmax = argc;
   if (argc > 2)  { optmax = optmax-1; }
 
@@ -166,7 +162,8 @@ int main(int argc,char** argv)
          UI->ApplyCommand(command+macroFilename);
      }
   }
-  else {
+  else
+  {
      // Define (G)UI terminal for interactive mode
      G4UIsession * session = 0;
      if (useUItcsh)
@@ -182,7 +179,20 @@ int main(int argc,char** argv)
      session->SessionStart();
      delete session;
   }
-      
+#else  // Simple UI for Windows runs, no possibility of additional arguments
+  if (argc==1)   // Define UI terminal for interactive mode  
+  { 
+     G4UIsession * session = new G4UIterminal;
+     session->SessionStart();
+     delete session;
+  }
+  else           // Batch mode
+  { 
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+  }
+#endif      
   // job termination
 
 #ifdef G4VIS_USE
