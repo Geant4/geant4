@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.35 2007-06-08 10:05:46 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.36 2007-11-02 11:08:51 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -542,8 +542,9 @@ G4PropagatorInField::LocateIntersectionPoint(
       //  The above method is the key & most intuitive part ...
 
 #ifdef G4DEBUG_FIELD
-``    if( ApproxIntersecPointV.GetCurveLength() > 
-          CurrentB_PointVelocity.GetCurveLength() * (1.0 + kAngTolerance) )
+      static G4double tolerance= 1.0e-8; 
+      if( ApproxIntersecPointV.GetCurveLength() > 
+          CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
         G4cerr << "Error - Intermediate F point is more advanced than endpoint B." 
                << G4endl;
@@ -1249,13 +1250,13 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 
 #ifdef G4DEBUG_FIELD
   G4double lengthDone=  newEndPoint.GetCurveLength() 
-                           - CurrentStateA.GetCurveLength(); 
+                          - CurrentStateA.GetCurveLength(); 
   if( !goodAdvance )
   {
     if( fVerboseLevel >= 3 )
     {
       G4cout << MethodName << "> AccurateAdvance failed " ;
-      G4cout << " in " << itrial << " integration trials/steps. " << G4endl
+      G4cout << " in " << itrial << " integration trials/steps. " << G4endl; 
       G4cout << " It went only " << lengthDone << " instead of " << curveDist 
              << " -- a difference of " << curveDist - lengthDone  << G4endl;
       G4cout << " ReEstimateEndpoint> Reset endPoint to original value!"
