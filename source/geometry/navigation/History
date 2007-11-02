@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2007-10-29 18:16:45 japost Exp $
+$Id: History,v 1.105 2007-11-02 12:31:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,12 +30,19 @@ October 18th, 2007 - G.Cosmo (geomnav-V09-00-04)
   New classes: G4RegularNavigation, G4PhantomParameterisation (by P.Arce).
   Added cases to G4Navigator. Added dependency on "materials" module.
 
+November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-03c)
+----------------------------------
+- G4PathFinder: 
+   * Added setting of fNoGeometriesLimiting in DoNextCurvedStep
+   * Check to see that fNoGeometriesLimiting is set by DoNext---Step methods
+   * Revised data type of fNoGeometriesLimiting (to an int, so that < 0 shows 'unset'
+
 October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
 ----------------------------------
 - G4PathFinder: First fix for problem of another process shortening steps
    ( between calls to ComputeStep by different processes in same step.)
-   I.e.  First call to ComputeStep  propose Step = 3.0 cm
-         Next  call to ComputeStep  propose Step = 1.0 cm (eg Mult Scat)
+   I.e.  First call to ComputeStep (geom 1) has proposed Step = 3.0 cm
+         Next  call to ComputeStep (geom 2) has proposed Step = 1.0 cm (eg Mult Scat)
 
 October 24th, 2007 - J.Apostolakis (geomnav-V09-00-03a)
 ----------------------------------
