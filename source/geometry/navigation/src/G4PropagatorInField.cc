@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.36 2007-11-02 11:08:51 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.37 2007-11-02 12:35:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -506,6 +506,19 @@ G4PropagatorInField::LocateIntersectionPoint(
 
   G4int depth=0; // Depth counts how many subdivisions of initial step made
 
+#ifdef G4DEBUG_FIELD
+  static G4double tolerance= 1.0e-8; 
+  G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
+  if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
+  {
+     G4cerr << "Warning - Intermediate F point is on top of starting point A." 
+	    << G4endl;
+     G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
+		 "IntersectionPointIsAtStart", JustWarning,
+		 "Intersection point F is exactly at start point A." ); 
+  }
+#endif
+
   // Intermediates Points on the Track = Subdivided Points must be stored.
   // Give the initial values to 'InterMedFt'
   // Important is 'ptrInterMedFT[0]', it saves the 'EndCurvePoint'
@@ -542,7 +555,7 @@ G4PropagatorInField::LocateIntersectionPoint(
       //  The above method is the key & most intuitive part ...
 
 #ifdef G4DEBUG_FIELD
-      static G4double tolerance= 1.0e-8; 
+      // static G4double tolerance= 1.0e-8; 
       if( ApproxIntersecPointV.GetCurveLength() > 
           CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
