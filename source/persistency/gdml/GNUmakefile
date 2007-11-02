@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2007-10-17 10:07:06 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2007-11-02 15:46:11 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -30,11 +30,10 @@ CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/materials/include \
             -I$(G4INSTALL)/source/graphics_reps/include 
  
-ifdef G4LIB_USE_XERCES
+ifdef G4LIB_USE_GDML
   ifndef XERCESCROOT
 	@echo XERCESCROOT not defined!
   endif
-  CPPFLAGS += -I$(XERCESCROOT)/include
 endif
 
 include $(G4INSTALL)/config/common.gmk

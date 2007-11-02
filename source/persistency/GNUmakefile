@@ -1,11 +1,14 @@
-# $Id: GNUmakefile,v 1.27 2007-10-17 09:33:17 gcosmo Exp $
+# $Id: GNUmakefile,v 1.28 2007-11-02 15:46:11 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
 
 name := G4persistency
 
-SUBDIRS := mctruth gdml
+SUBDIRS := mctruth
+ifdef G4LIB_BUILD_GDML
+  SUBDIRS += gdml
+endif
 
 GLOBLIBS  = libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4digits_hits.lib libG4track.lib
