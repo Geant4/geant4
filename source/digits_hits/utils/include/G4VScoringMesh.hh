@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.20 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.21 2007-11-02 02:48:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -101,6 +101,9 @@ public:
 
   MeshScoreMap GetScoreMap() {return fMap;}
 
+  inline G4bool ReadyForQuantity() const
+  { return (sizeIsSet && nMeshIsSet); }
+
 protected:
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
 
@@ -121,6 +124,9 @@ protected:
   G4MultiFunctionalDetector * fMFD;
 
   G4int verboseLevel;
+
+  G4bool sizeIsSet;
+  G4bool nMeshIsSet;
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)

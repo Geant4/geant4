@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.25 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.26 2007-11-02 02:48:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,7 +38,7 @@
 G4VScoringMesh::G4VScoringMesh(G4String wName)
   : fWorldName(wName),fConstructed(false),fActive(true),
     fRotationMatrix(NULL), fMFD(new G4MultiFunctionalDetector(wName)),
-    verboseLevel(0)
+    verboseLevel(0),sizeIsSet(false),nMeshIsSet(false)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -73,6 +73,7 @@ void G4VScoringMesh::ResetScore() {
 }
 void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
+  sizeIsSet = true;
 }
 void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
@@ -80,6 +81,7 @@ void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
 }
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
+  nMeshIsSet = true;
 }
 void G4VScoringMesh::GetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) nSegment[i] = fNSegment[i];
@@ -101,6 +103,13 @@ void G4VScoringMesh::RotateZ(G4double delta) {
 
 void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
+  if(!ReadyForQuantity())
+  {
+    G4cerr << "G4VScoringMesh::SetPrimitiveScorer() : " << ps->GetName() 
+           << " does not yet have mesh size or number of bins. Set them first." << G4endl
+           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+    return;
+  }
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
 			      << ps->GetName() << " is registered."
 			      << " 3D size: ("
@@ -117,16 +126,28 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
+  if(fCurrentPS == NULL) {
+    G4cerr << "G4VScoringMesh::SetSDFilter() : scorer must be defined first. Method ignored." << G4endl;
+    return;
+  }
+  if(!ReadyForQuantity())
+  {
+    G4cerr << "G4VScoringMesh::SetFilter() : " << fCurrentPS->GetName() 
+           << " does not yet have mesh size or number of bins. Set them first." << G4endl
+           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+    return;
+  }
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
 			      << " is set to "
 			      << fCurrentPS->GetName() << G4endl;
 
-  if(fCurrentPS == NULL) {
-    //G4Exception("G4VScoringMesh::SetSDFilter() : Current primitive scorer has not been set.");
-    return;
+  G4VSDFilter* oldFilter = fCurrentPS->GetFilter();
+  if(oldFilter)
+  {
+    G4cout << "G4VScoringMesh::SetFilter() : " << oldFilter->GetName() 
+           << " is overwritten by " << filter->GetName() << G4endl;
   }
-
   fCurrentPS->SetFilter(filter);
 }
 
