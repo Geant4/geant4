@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.54 2007-10-29 18:12:03 japost Exp $
+// $Id: G4PathFinder.cc,v 1.55 2007-11-02 12:26:28 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -160,7 +160,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
-           << " navigatorId = " << std::setw(2) << navigatorId  << " "
+           << " navigatorId = " << std::setw(2) << navigatorNo  << " "
            << " proposed step len = " << proposedStepLength << " " << G4endl;
     G4cout << " PF::ComputeStep requested step " 
          << " from " << InitialFieldTrack.GetPosition()
@@ -180,6 +180,9 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   {
     // This is a new track or a new step, so we must make the step
     // ( else we can simply retrieve its results for this Navigator Id )    
+
+    //   G4cout << " G4PF::CS> Make step (newTrack=" << fNewTrack << ")," 
+    //   << "  stepNos:  now=" << stepNo << " last= " << fLastStepNo << G4endl;
 
     G4FieldTrack currentState= InitialFieldTrack;
 
@@ -228,6 +231,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     fFieldExertedForce = fieldExertsForce;  // Store for use in later calls
                                              //   referring to this 'step'.
 
+    fNoGeometriesLimiting= -1;  // At start of track, no process limited step
     if( fieldExertsForce )
     {
        DoNextCurvedStep( currentState, proposedStepLength, currentVolume ); 
@@ -237,19 +241,49 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        //--------------
     }
     fLastStepNo= stepNo; 
+    // #ifdef G4DEBUG
+    if( (fNoGeometriesLimiting < 0) || (fNoGeometriesLimiting>fNoActiveNavigators) ) { 
+      G4cout << " Number of geometries limiting step = " << 
+	fNoGeometriesLimiting << G4endl;
+      G4Exception("G4PathFinder::ComputeStep()", 
+		  "NumGeometriesOutOfRange",
+		  FatalException, 
+		  "Current step did not set the number of Geometries limiting step."); 
+    } 
+    // #endif
   }
   else
   {
-     G4double minimumStep= fTrueMinStep; // GetMinimumStep(); 
-     if( proposedStepLength < minimumStep )  // For 2nd+ geometry 
+     if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
      { 
-        G4cout << " G4P::CS -> Must shorten step: requested Step < minimum Step: " 
+        G4cout << " G4PathFinder::ComputeStep() -> Problem in step size request. " << G4endl
+	       << " Being requested to make a step which is shorter than the minimum Step "
+	       << " already computed for any Navigator/geometry during this tracking-step: " 
+	       << G4endl; 
+	G4cout << " This can happen due to an error in process ordering. " << G4endl;
+	G4cout << " Check that all physics processes are registered before " 
+	       << " all processes with a navigator/geometry. " << G4endl;
+	G4cout << " If using pre-packaged physics list and/or functionality, "
+	       << " please report this error."  << G4endl << G4endl;
+	G4cout << " Additional information for problem: "  << G4endl
 	       << " Steps:  request/proposed= " << proposedStepLength << G4endl
-	       << "  minimumStep (used) = " << minimumStep << G4endl
-	       << "  MinimumStep (true) = " << fTrueMinStep << G4endl
-	       << "  minimumStep (nav)  = " << fMinStep << G4endl
-	       << "  -- Step info> stepNo= " << stepNo << " last= " << fLastStepNo 
+	       << "  MinimumStep (true  ) = " << fTrueMinStep << G4endl
+	       << "  minimumStep (navraw)  = " << fMinStep  
+	       << "   Navigator raw return value " << G4endl
+	       << "  requested step now = " << proposedStepLength
+	       << "  difference min-req  = " << fTrueMinStep - proposedStepLength 
+	       << G4endl; 
+	G4cout << "  -- Step info> stepNo= " << stepNo << " last= " << fLastStepNo 
 	       << " newTr= " << fNewTrack       << G4endl; 
+        G4cerr << " G4PathFinder::ComputeStep() -> Problem in step size request. " << G4endl
+	       << "    Error can be caused by incorrect process ordering. " << G4endl
+	       << "    Please see more information in standard output."  << G4endl;
+        G4Exception("G4PathFinder::ComputeStep()", 
+		    "ReductionOfRequestedStepSizeBelowMinimum",
+		    FatalException, 
+		    "Revision of requested step size below minimum is not part of specification - and not implemented.");
+
+        // Trial code for this case was created in G4PathFinder.cc 1.54
 
         possibleStep= proposedStepLength;
 	// Inform that no obstacle found within dist=proposedStepLength
@@ -1227,10 +1261,12 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
     // Recover the remaining information from MultiNavigator
     // especially regarding which Navigator limited the step
 
+    G4int noLimited= 0;  //   No geometries limiting step
     for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
     {
       G4double finalStep, lastPreSafety=0.0, minStepLast;
       ELimited didLimit; 
+      G4bool limited; 
 
       finalStep=  fpMultiNavigator->ObtainFinalStep( numNav, lastPreSafety, 
                                                      minStepLast, didLimit );
@@ -1263,8 +1299,9 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       //     endSafety= fpNavigator[numNav]->ComputeSafety( endPoint ); 
 
       fLimitedStep[numNav] = didLimit; 
-      fLimitTruth[numNav] = (didLimit != kDoNot ); 
-      
+      fLimitTruth[numNav] = limited = (didLimit != kDoNot ); 
+      if( limited ) noLimited++; 
+
 #ifdef G4DEBUG_PATHFINDER
       G4bool StepError= (currentStepSize < 0) 
                    || ( (minStepLast != kInfinity) && (diffStep < 0) ) ; 
@@ -1295,6 +1332,8 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       }
 #endif
     } // for num Navigators
+
+    fNoGeometriesLimiting= noLimited;  // Save # processes limiting step
   } 
   else if ( (minStep == proposedStepLength)  
             || (minStep == kInfinity)  
@@ -1316,6 +1355,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       fLimitedStep[numNav] = kDoNot; 
       fLimitTruth[numNav] = false; 
     }
+    fNoGeometriesLimiting= 0;  // Save # processes limiting step
   } 
   else    //  (minStep > proposedStepLength) and not (minStep == kInfinity)
   {
