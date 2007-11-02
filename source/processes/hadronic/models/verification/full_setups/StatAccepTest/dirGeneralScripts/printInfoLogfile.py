@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 01-Dec-2006
+# Last update: 02-Nov-2007
 #
 # This script has 1 input argument, and should be run as:
 #
@@ -347,7 +347,7 @@ def funExtract( theFile ) :
                         print "  exitFracMuons = %.1f" % \
                               float( line.split( "=" )[1].split( "+/-" )[0] )
                     elif ( line.find( "fraction due to Electrons" ) > -1 ) :
-                        print "  exitFracElectrons %.1f" % \
+                        print "  exitFracElectrons = %.1f" % \
                               float( line.split( "=" )[1].split( "+/-" )[0] )
                     elif ( line.find( "fraction due to Others" ) > -1 ) :
                         print "  exitFracOthers = %.1f" % \
