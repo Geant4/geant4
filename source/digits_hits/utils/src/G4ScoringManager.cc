@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.16 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.17 2007-11-02 03:59:17 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 #include "G4ScoringMessenger.hh"
 #include "G4VScoringMesh.hh"
 #include "G4ScoringBox.hh"
-#include "G4ScoringTubs.hh"
+//#include "G4ScoringTubs.hh"
 #include "G4THitsMap.hh"
 #include "G4VScoreWriter.hh"
 
