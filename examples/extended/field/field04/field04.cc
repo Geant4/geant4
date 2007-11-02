@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.5 2007-11-02 10:23:43 gcosmo Exp $
+// $Id: field04.cc,v 1.6 2007-11-02 10:29:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,9 @@
 //
 // --------------------------------------------------------------
 
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -79,25 +81,29 @@ int main(int argc,char** argv)
 
   CLHEP::HepRandom::setTheSeed(seed);
 
+#ifndef WIN32
   G4int c = 0;
-  while ((c=getopt(argc,argv,"p:t")) != -1) {
-        switch (c) {
-        case 'p':
-            physicsList = optarg;
-            G4cout << "Physics List used is " <<  physicsList << G4endl;
-            break;
-        case 't': // Don't use a tcsh-style command line interface
-            useUItcsh = false;
-            break;
-        case ':':       /* -p without operand */
-            fprintf(stderr, 
-                            "Option -%c requires an operand\n", optopt);
-            break;
-        case '?':
-            fprintf(stderr,
-                            "Unrecognised option: -%c\n", optopt);
-        }
+  while ((c=getopt(argc,argv,"p:t")) != -1)
+  {
+     switch (c)
+     {
+       case 'p':
+         physicsList = optarg;
+         G4cout << "Physics List used is " <<  physicsList << G4endl;
+         break;
+       case 't': // Don't use a tcsh-style command line interface
+         useUItcsh = false;
+         break;
+       case ':':       /* -p without operand */
+         fprintf(stderr, 
+                         "Option -%c requires an operand\n", optopt);
+         break;
+       case '?':
+         fprintf(stderr,
+                         "Unrecognised option: -%c\n", optopt);
+     }
   }
+#endif
 
   // Choose the Random engine
 
@@ -149,11 +155,13 @@ int main(int argc,char** argv)
   G4UImanager * UI = G4UImanager::GetUIpointer();  
 
   G4int optmax = argc;
-  if (argc > 2) optmax = optmax-1;
+  if (argc > 2)  { optmax = optmax-1; }
 
-  if (optind < optmax) {
+  if (optind < optmax)
+  {
      G4String command = "/control/execute ";
-     for ( ; optind < optmax; optind++) {
+     for ( ; optind < optmax; optind++)
+     {
          G4String macroFilename = argv[optind];
          UI->ApplyCommand(command+macroFilename);
      }
@@ -161,10 +169,13 @@ int main(int argc,char** argv)
   else {
      // Define (G)UI terminal for interactive mode
      G4UIsession * session = 0;
-     if (useUItcsh) {
+     if (useUItcsh)
+     {
         // G4UIterminal is a terminal with tcsh-like control.
         session = new G4UIterminal(new G4UItcsh);
-     } else {
+     }
+     else
+     {
         // G4UIterminal is a (dumb) terminal.
         session = new G4UIterminal();
      }
