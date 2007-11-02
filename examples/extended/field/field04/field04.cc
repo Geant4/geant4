@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 //
+// $Id: field04.cc,v 1.4 2007-11-02 09:51:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -34,10 +36,6 @@
 //
 //
 // --------------------------------------------------------------
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

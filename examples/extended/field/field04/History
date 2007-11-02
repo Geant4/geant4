@@ -1,3 +1,5 @@
+// $Id: History,v 1.4 2007-11-02 09:51:25 gcosmo Exp $
+// ------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 2nd, 2007  Gabriele Cosmo - fieldex04-V09-00-01
+-----------------------------
+- Minor fixes for porting on Windows platform.
+
 Oct 29th, 2007  Peter Gumplinger - fieldex04-V09-00-00
 --------------------------------
-- First implementation
+- First implementation.
