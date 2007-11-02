@@ -184,8 +184,8 @@ processes/transportation                         transport-V09-00-03
 examples                                         examples-V09-00-03
 --------
 - Updated reference outputs.
-- extended/field (fieldex-V09-00-00)
-  o New field04 example showin how to define/use overlapping field elements.
+- extended/field/field04 (fieldex04-V09-00-01)
+  o New field04 example showing how to define/use overlapping field elements.
     Fields might be either magnetic, electric or both.
 - extended/medical/fanoCavity (fano-V09-00-06)
   o EventAction: added histogram of energy deposit in cavity per incident
