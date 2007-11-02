@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.6 2007-05-21 15:35:50 gcosmo Exp $
+// $Id: G4MultiNavigator.cc,v 1.7 2007-11-02 13:48:43 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -330,7 +330,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
            << G4endl;
     G4cout << "   Locating at position: " << position
            << ", with direction: " << direction << G4endl
-           << "   Relative: " << relative <<
+           << "   Relative: " << relative 
            << ", ignore direction: " << ignoreDirection << G4endl;
     G4cout << "   Number of active navigators: " << fNoActiveNavigators
            << G4endl;
