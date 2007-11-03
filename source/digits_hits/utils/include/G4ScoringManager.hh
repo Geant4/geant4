@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.16 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4ScoringManager.hh,v 1.17 2007-11-03 21:10:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4VScoringMesh.hh"
 #include <vector>
 class G4ScoringMessenger;
+class G4ScoreQuantityMessenger;
 class G4VHitsCollection;
 class G4VScoreWriter;
 
@@ -78,6 +79,7 @@ class G4ScoringManager
       static G4ScoringManager * fSManager;
       G4int verboseLevel;
       G4ScoringMessenger* fMessenger;
+      G4ScoreQuantityMessenger* fQuantityMessenger;
 
       MeshVec fMeshVec;
       G4VScoringMesh* fCurrentMesh;

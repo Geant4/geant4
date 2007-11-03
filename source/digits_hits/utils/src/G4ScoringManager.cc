@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.18 2007-11-02 18:45:30 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.19 2007-11-03 21:10:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringMessenger.hh"
+#include "G4ScoreQuantityMessenger.hh"
 #include "G4VScoringMesh.hh"
 #include "G4THitsMap.hh"
 #include "G4VScoreWriter.hh"
@@ -52,6 +53,7 @@ G4ScoringManager::G4ScoringManager()
 :verboseLevel(0),fCurrentMesh(0),writer(NULL)
 {
   fMessenger = new G4ScoringMessenger(this);
+  fQuantityMessenger = new G4ScoreQuantityMessenger(this);
 }
 
 G4ScoringManager::~G4ScoringManager()
