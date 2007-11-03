@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.26 2007-11-03 21:10:02 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.27 2007-11-03 22:30:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -89,14 +89,14 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 //  meshActCmd->SetGuidance("Activate scoring mesh.");
 //  meshActCmd->SetParameterName("MeshName",false);
   //
-  mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxsize",this);
+  mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxSize",this);
   mBoxSizeCmd->SetGuidance("Define Size of scoring mesh.");
   mBoxSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
   mBoxSizeCmd->SetRange("Di>0. && Dj>0. && Dk>0.");
   mBoxSizeCmd->SetDefaultUnit("mm");
   //
   //   Division command
-  mBinCmd = new G4UIcommand("/score/mesh/nbin",this);
+  mBinCmd = new G4UIcommand("/score/mesh/nBin",this);
   mBinCmd->SetGuidance("Define segmentation of scoring mesh.");
   mBinCmd->SetGuidance("[usage] /score/mesh/nbin");
   mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
@@ -138,17 +138,17 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mRResetCmd = new G4UIcmdWithoutParameter("/score/mesh/rotate/reset",this);
   mRResetCmd->SetGuidance("Reset rotation of scoring mesh placement.");
   //
-  mRotXCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotX",this);
+  mRotXCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateX",this);
   mRotXCmd->SetGuidance("Add rotation to the current scoring mesh in X.");
   mRotXCmd->SetParameterName("Rx",false);
   mRotXCmd->SetDefaultUnit("deg");
   //
-  mRotYCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotY",this);
+  mRotYCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateY",this);
   mRotYCmd->SetGuidance("Add rotation to the current scoring mesh in Y.");
   mRotYCmd->SetParameterName("Ry",false);
   mRotYCmd->SetDefaultUnit("deg");
   //
-  mRotZCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotZ",this);
+  mRotZCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateZ",this);
   mRotZCmd->SetGuidance("Add rotation to the current scoring mesh in Z.");
   mRotZCmd->SetParameterName("Rz",false);
   mRotZCmd->SetDefaultUnit("deg");

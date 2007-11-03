@@ -5,10 +5,10 @@
 #
 /score/create/boxMesh boxMesh_1
 #
-/score/mesh/boxsize 1. 1. 1. m
-/score/mesh/nbin 10 10 10
+/score/mesh/boxSize 1. 1. 1. m
+/score/mesh/nBin 10 10 10
 #
-/score/quantity/eDep eDepPS
+/score/quantity/energyDeposit eDepPS
 /score/quantity/nOfStep nOfStepPSgamma
 /score/filter/particle gammaFilter gamma
 /score/quantity/nOfStep nOfStepPSeMinus
@@ -22,10 +22,10 @@
 #
 /score/create/boxMesh boxMesh_2
 #
-/score/mesh/boxsize 100. 100. 20. cm
-/score/mesh/nbin 50 50 20
+/score/mesh/boxSize 100. 100. 20. cm
+/score/mesh/nBin 50 50 20
 #
-/score/quantity/eDep eDepPS
+/score/quantity/energyDeposit eDepPS
 /score/quantity/nOfStep nOfStepPSgamma
 /score/filter/particle gammaFilter gamma
 /score/quantity/nOfStep nOfStepPSeMinus

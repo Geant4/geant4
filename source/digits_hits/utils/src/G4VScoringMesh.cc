@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.26 2007-11-02 02:48:58 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.27 2007-11-03 22:30:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -130,13 +130,13 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
     G4cerr << "G4VScoringMesh::SetSDFilter() : scorer must be defined first. Method ignored." << G4endl;
     return;
   }
-  if(!ReadyForQuantity())
-  {
-    G4cerr << "G4VScoringMesh::SetFilter() : " << fCurrentPS->GetName() 
-           << " does not yet have mesh size or number of bins. Set them first." << G4endl
-           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
-    return;
-  }
+/////  if(!ReadyForQuantity())
+/////  {
+/////    G4cerr << "G4VScoringMesh::SetFilter() : " << fCurrentPS->GetName() 
+/////           << " does not yet have mesh size or number of bins. Set them first." << G4endl
+/////           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+/////    return;
+/////  }
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
 			      << " is set to "

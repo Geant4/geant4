@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.1 2007-11-03 21:46:49 asaim Exp $
+// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.2 2007-11-03 22:30:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -85,7 +85,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qTouchCmd->SetGuidance("Assign previously defined quantity to current quantity.");
   qTouchCmd->SetParameterName("qname",false);
   //
-  qeDepCmd = new G4UIcmdWithAString("/score/quantity/eDep",this);
+  qeDepCmd = new G4UIcmdWithAString("/score/quantity/energyDeposit",this);
   qeDepCmd->SetGuidance("Energy Deposit Scorer");
   qeDepCmd->SetParameterName("qname",false);
   //
@@ -157,10 +157,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("true");
   qPassTrackLengthCmd->SetParameter(param);
   //
-  qFlatSurfCurrCmd = new G4UIcommand("/score/quantity/flatSurfCurrent",this);
+  qFlatSurfCurrCmd = new G4UIcommand("/score/quantity/flatSurfaceCurrent",this);
   qFlatSurfCurrCmd->SetGuidance("Flat surface current Scorer");
   qFlatSurfCurrCmd->
-      SetGuidance("[usage] /score/quantiy/flatSurfCurrent qname dflag wflag aflag");
+      SetGuidance("[usage] /score/quantiy/flatSurfaceCurrent qname dflag wflag aflag");
   qFlatSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qFlatSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
   qFlatSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -180,10 +180,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("true");
   qFlatSurfCurrCmd->SetParameter(param);
   //
-  qFlatSurfFluxCmd = new G4UIcommand("/score/quantity/flatSurfFlux",this);
+  qFlatSurfFluxCmd = new G4UIcommand("/score/quantity/flatSurfaceFlux",this);
   qFlatSurfFluxCmd->SetGuidance("Flat surface Flux Scorer");
   qFlatSurfFluxCmd->
-      SetGuidance("[usage] /score/quantiy/flatSurfFlux qname dflag");
+      SetGuidance("[usage] /score/quantiy/flatSurfaceFlux qname dflag");
   qFlatSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qFlatSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
   qFlatSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
@@ -195,10 +195,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("0");
   qFlatSurfFluxCmd->SetParameter(param);
   //
-  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfCurrent",this);
+  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfaceCurrent",this);
   qSphereSurfCurrCmd->SetGuidance("Sphere surface current Scorer");
   qSphereSurfCurrCmd->
-      SetGuidance("[usage] /score/quantiy/sphereSurfCurrent qname dflag wflag aflag");
+      SetGuidance("[usage] /score/quantiy/sphereSurfaceCurrent qname dflag wflag aflag");
   qSphereSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qSphereSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
   qSphereSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -219,10 +219,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qSphereSurfCurrCmd->SetParameter(param);
 
   //
-  qSphereSurfFluxCmd = new G4UIcommand("/score/quantity/sphereSurfFlux",this);
+  qSphereSurfFluxCmd = new G4UIcommand("/score/quantity/sphereSurfaceFlux",this);
   qSphereSurfFluxCmd->SetGuidance("Sphere surface Flux Scorer");
   qSphereSurfFluxCmd->
-      SetGuidance("[usage] /score/quantiy/sphereSurfFlux qname dflag");
+      SetGuidance("[usage] /score/quantiy/sphereSurfaceFlux qname dflag");
   qSphereSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qSphereSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
   qSphereSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
@@ -235,10 +235,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qSphereSurfFluxCmd->SetParameter(param);
 
   //
-  qCylSurfCurrCmd = new G4UIcommand("/score/quantity/cylSurfCurrent",this);
+  qCylSurfCurrCmd = new G4UIcommand("/score/quantity/cylinderSurfaceCurrent",this);
   qCylSurfCurrCmd->SetGuidance("Cylinder surface current Scorer");
   qCylSurfCurrCmd->
-      SetGuidance("[usage] /score/quantiy/cylSurfCurrent qname dflag wflag aflag");
+      SetGuidance("[usage] /score/quantiy/cylinderSurfaceCurrent qname dflag wflag aflag");
   qCylSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qCylSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
   qCylSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -258,10 +258,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("true");
   qCylSurfCurrCmd->SetParameter(param);
   //
-  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylSurfFlux",this);
+  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylinderSurfaceFlux",this);
   qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer");
   qCylSurfFluxCmd->
-      SetGuidance("[usage] /score/quantiy/cylSurfFlux qname dflag");
+      SetGuidance("[usage] /score/quantiy/cylinderSurfaceFlux qname dflag");
   qCylSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qCylSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
   qCylSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");

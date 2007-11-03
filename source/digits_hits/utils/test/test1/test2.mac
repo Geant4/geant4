@@ -5,11 +5,11 @@
 #
 /score/create/boxMesh boxMesh_1
 #
-/score/mesh/boxsize 30. 30. 20. cm
+/score/mesh/boxSize 30. 30. 20. cm
 /score/mesh/translate/xyz 0. 0. -80. cm
-/score/mesh/nbin 20 20 20
+/score/mesh/nBin 20 20 20
 #
-/score/quantity/eDep eDepPS
+/score/quantity/energyDeposit eDepPS
 /score/quantity/nOfStep nOfStepPSgamma
 /score/filter/particle gammaFilter gamma
 /score/quantity/nOfStep nOfStepPSeMinus
@@ -23,11 +23,11 @@
 #
 /score/create/boxMesh boxMesh_2
 #
-/score/mesh/boxsize 60. 60. 30. cm
+/score/mesh/boxSize 60. 60. 30. cm
 /score/mesh/translate/xyz 0. 0. -30. cm
-/score/mesh/nbin 50 50 25
+/score/mesh/nBin 50 50 25
 #
-/score/quantity/eDep eDepPS
+/score/quantity/energyDeposit eDepPS
 /score/quantity/nOfStep nOfStepPSgamma
 /score/filter/particle gammaFilter gamma
 /score/quantity/nOfStep nOfStepPSeMinus
@@ -41,11 +41,11 @@
 #
 /score/create/boxMesh boxMesh_3
 #
-/score/mesh/boxsize 100. 100. 50. cm
+/score/mesh/boxSize 100. 100. 50. cm
 /score/mesh/translate/xyz 0. 0. 50. cm
-/score/mesh/nbin 50 50 25
+/score/mesh/nBin 50 50 25
 #
-/score/quantity/eDep eDepPS
+/score/quantity/energyDeposit eDepPS
 /score/quantity/nOfStep nOfStepPSgamma
 /score/filter/particle gammaFilter gamma
 /score/quantity/nOfStep nOfStepPSeMinus
