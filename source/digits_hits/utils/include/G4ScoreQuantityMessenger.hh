@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh,v 1.1 2007-11-03 21:10:02 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.hh,v 1.2 2007-11-03 21:46:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -63,7 +63,7 @@ class G4ScoreQuantityMessenger: public G4UImessenger
 
     void SetNewValue(G4UIcommand * command,G4String newValues);
 
-    G4String GetCurrentValue(G4UIcommand * command);
+    G4String GetCurrentValue(G4UIcommand * );
 
   protected:    
 
@@ -72,6 +72,10 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     void FParticleCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
     void FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
   
+  private:
+    void QuantityCommands();
+    void FilterCommands();
+
   private:
     G4ScoringManager*        fSMan;
     //
