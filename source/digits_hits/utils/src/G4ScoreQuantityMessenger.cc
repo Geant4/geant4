@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.3 2007-11-03 22:30:42 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.4 2007-11-03 22:39:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -173,10 +173,10 @@ G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
     delete          qPassTrackLengthCmd;
     delete          qFlatSurfCurrCmd;
     delete          qFlatSurfFluxCmd;
-    delete          qSphereSurfCurrCmd;
-    delete          qSphereSurfFluxCmd;
-    delete          qCylSurfCurrCmd;
-    delete          qCylSurfFluxCmd;
+//    delete          qSphereSurfCurrCmd;
+//    delete          qSphereSurfFluxCmd;
+//    delete          qCylSurfCurrCmd;
+//    delete          qCylSurfFluxCmd;
     delete          qNofCollisionCmd;
     delete          qPopulationCmd;
     delete          qTrackCountCmd;
@@ -301,44 +301,44 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
-          } else if(command== qSphereSurfCurrCmd){
-	    if(!mesh->FindPrimitiveScorer(newVal)) {
-	      G4PSSphereSurfaceCurrent3D* ps = 
-		new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
-	      ps->Weighted(StoB(token[2]));
-	      ps->DivideByArea(StoB(token[3]));
-	      mesh->SetPrimitiveScorer(ps);
-	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
-	      mesh->SetNullToCurrentPrimitiveScorer();
-	    }
-	  } else if(command== qSphereSurfFluxCmd){
-	    if(!mesh->FindPrimitiveScorer(newVal)) {
-	      mesh->SetPrimitiveScorer(
-				       new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
-	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
-	      mesh->SetNullToCurrentPrimitiveScorer();
-	    }
-          } else if(command== qCylSurfCurrCmd){
-	    if(!mesh->FindPrimitiveScorer(newVal)) {
-	      G4PSCylinderSurfaceCurrent3D* ps = 
-		new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
-	      ps->Weighted(StoB(token[2]));
-	      ps->DivideByArea(StoB(token[3]));
-	      mesh->SetPrimitiveScorer(ps);
-	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
-	      mesh->SetNullToCurrentPrimitiveScorer();
-	    }
-          } else if(command== qCylSurfFluxCmd){
-	    if(!mesh->FindPrimitiveScorer(newVal)) {
-	      mesh->SetPrimitiveScorer(
-				       new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
-	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
-	      mesh->SetNullToCurrentPrimitiveScorer();
-	    }
+//	  } else if(command== qSphereSurfCurrCmd){
+//	    if(!mesh->FindPrimitiveScorer(newVal)) {
+//	      G4PSSphereSurfaceCurrent3D* ps = 
+//		new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
+//	      ps->Weighted(StoB(token[2]));
+//	      ps->DivideByArea(StoB(token[3]));
+//	      mesh->SetPrimitiveScorer(ps);
+//	    } else {
+//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      mesh->SetNullToCurrentPrimitiveScorer();
+//	    }
+//	  } else if(command== qSphereSurfFluxCmd){
+//	    if(!mesh->FindPrimitiveScorer(newVal)) {
+//	      mesh->SetPrimitiveScorer(
+//				       new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
+//	    } else {
+//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      mesh->SetNullToCurrentPrimitiveScorer();
+//	    }
+//        } else if(command== qCylSurfCurrCmd){
+//	    if(!mesh->FindPrimitiveScorer(newVal)) {
+//	      G4PSCylinderSurfaceCurrent3D* ps = 
+//		new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
+//	      ps->Weighted(StoB(token[2]));
+//	      ps->DivideByArea(StoB(token[3]));
+//	      mesh->SetPrimitiveScorer(ps);
+//	    } else {
+//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      mesh->SetNullToCurrentPrimitiveScorer();
+//	    }
+//        } else if(command== qCylSurfFluxCmd){
+//	    if(!mesh->FindPrimitiveScorer(newVal)) {
+//	      mesh->SetPrimitiveScorer(
+//				       new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
+//	    } else {
+//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      mesh->SetNullToCurrentPrimitiveScorer();
+//	    }
           } else if(command== qNofCollisionCmd){
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      G4PSNofCollision3D* ps =new G4PSNofCollision3D(token[0]); 

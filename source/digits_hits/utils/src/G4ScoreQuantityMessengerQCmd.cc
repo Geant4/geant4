@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.2 2007-11-03 22:30:42 asaim Exp $
+// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.3 2007-11-03 22:39:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -195,83 +195,83 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("0");
   qFlatSurfFluxCmd->SetParameter(param);
   //
-  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfaceCurrent",this);
-  qSphereSurfCurrCmd->SetGuidance("Sphere surface current Scorer");
-  qSphereSurfCurrCmd->
-      SetGuidance("[usage] /score/quantiy/sphereSurfaceCurrent qname dflag wflag aflag");
-  qSphereSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
-  qSphereSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
-  qSphereSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
-  qSphereSurfCurrCmd->SetGuidance("         : 1 = In only");
-  qSphereSurfCurrCmd->SetGuidance("         : 2 = Out only");
-  qSphereSurfCurrCmd->SetGuidance("  wflag  :(Bool) Weighted");
-  qSphereSurfCurrCmd->SetGuidance("  aflag  :(Bool) DivideByArea");
-  param = new G4UIparameter("qname",'s',false);
-  qSphereSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("dflag",'i',true);
-  param->SetDefaultValue("0");
-  qSphereSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("wflag",'b',true);
-  param->SetDefaultValue("true");
-  qSphereSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("aflag",'b',true);
-  param->SetDefaultValue("true");
-  qSphereSurfCurrCmd->SetParameter(param);
+//  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfaceCurrent",this);
+//  qSphereSurfCurrCmd->SetGuidance("Sphere surface current Scorer");
+//  qSphereSurfCurrCmd->
+//      SetGuidance("[usage] /score/quantiy/sphereSurfaceCurrent qname dflag wflag aflag");
+//  qSphereSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
+//  qSphereSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
+//  qSphereSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
+//  qSphereSurfCurrCmd->SetGuidance("         : 1 = In only");
+//  qSphereSurfCurrCmd->SetGuidance("         : 2 = Out only");
+//  qSphereSurfCurrCmd->SetGuidance("  wflag  :(Bool) Weighted");
+//  qSphereSurfCurrCmd->SetGuidance("  aflag  :(Bool) DivideByArea");
+//  param = new G4UIparameter("qname",'s',false);
+//  qSphereSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("dflag",'i',true);
+//  param->SetDefaultValue("0");
+//  qSphereSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("wflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qSphereSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("aflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qSphereSurfCurrCmd->SetParameter(param);
 
   //
-  qSphereSurfFluxCmd = new G4UIcommand("/score/quantity/sphereSurfaceFlux",this);
-  qSphereSurfFluxCmd->SetGuidance("Sphere surface Flux Scorer");
-  qSphereSurfFluxCmd->
-      SetGuidance("[usage] /score/quantiy/sphereSurfaceFlux qname dflag");
-  qSphereSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
-  qSphereSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
-  qSphereSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
-  qSphereSurfFluxCmd->SetGuidance("         : 1 = In only");
-  qSphereSurfFluxCmd->SetGuidance("         : 2 = Out only");
-  param = new G4UIparameter("qname",'s',false);
-  qSphereSurfFluxCmd->SetParameter(param);
-  param = new G4UIparameter("dflag",'i',true);
-  param->SetDefaultValue("0");
-  qSphereSurfFluxCmd->SetParameter(param);
+//  qSphereSurfFluxCmd = new G4UIcommand("/score/quantity/sphereSurfaceFlux",this);
+//  qSphereSurfFluxCmd->SetGuidance("Sphere surface Flux Scorer");
+//  qSphereSurfFluxCmd->
+//      SetGuidance("[usage] /score/quantiy/sphereSurfaceFlux qname dflag");
+//  qSphereSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
+//  qSphereSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
+//  qSphereSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
+//  qSphereSurfFluxCmd->SetGuidance("         : 1 = In only");
+//  qSphereSurfFluxCmd->SetGuidance("         : 2 = Out only");
+//  param = new G4UIparameter("qname",'s',false);
+//  qSphereSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("dflag",'i',true);
+//  param->SetDefaultValue("0");
+//  qSphereSurfFluxCmd->SetParameter(param);
 
   //
-  qCylSurfCurrCmd = new G4UIcommand("/score/quantity/cylinderSurfaceCurrent",this);
-  qCylSurfCurrCmd->SetGuidance("Cylinder surface current Scorer");
-  qCylSurfCurrCmd->
-      SetGuidance("[usage] /score/quantiy/cylinderSurfaceCurrent qname dflag wflag aflag");
-  qCylSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
-  qCylSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
-  qCylSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
-  qCylSurfCurrCmd->SetGuidance("         : 1 = In only");
-  qCylSurfCurrCmd->SetGuidance("         : 2 = Out only");
-  qCylSurfCurrCmd->SetGuidance("  wflag  :(Bool) Weighted");
-  qCylSurfCurrCmd->SetGuidance("  aflag  :(Bool) DivideByArea");
-  param = new G4UIparameter("qname",'s',false);
-  qCylSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("dflag",'i',true);
-  param->SetDefaultValue("0");
-  qCylSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("wflag",'b',true);
-  param->SetDefaultValue("true");
-  qCylSurfCurrCmd->SetParameter(param);
-  param = new G4UIparameter("aflag",'b',true);
-  param->SetDefaultValue("true");
-  qCylSurfCurrCmd->SetParameter(param);
+//  qCylSurfCurrCmd = new G4UIcommand("/score/quantity/cylinderSurfaceCurrent",this);
+//  qCylSurfCurrCmd->SetGuidance("Cylinder surface current Scorer");
+//  qCylSurfCurrCmd->
+//      SetGuidance("[usage] /score/quantiy/cylinderSurfaceCurrent qname dflag wflag aflag");
+//  qCylSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
+//  qCylSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
+//  qCylSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
+//  qCylSurfCurrCmd->SetGuidance("         : 1 = In only");
+//  qCylSurfCurrCmd->SetGuidance("         : 2 = Out only");
+//  qCylSurfCurrCmd->SetGuidance("  wflag  :(Bool) Weighted");
+//  qCylSurfCurrCmd->SetGuidance("  aflag  :(Bool) DivideByArea");
+//  param = new G4UIparameter("qname",'s',false);
+//  qCylSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("dflag",'i',true);
+//  param->SetDefaultValue("0");
+//  qCylSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("wflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qCylSurfCurrCmd->SetParameter(param);
+//  param = new G4UIparameter("aflag",'b',true);
+//  param->SetDefaultValue("true");
+//  qCylSurfCurrCmd->SetParameter(param);
   //
-  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylinderSurfaceFlux",this);
-  qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer");
-  qCylSurfFluxCmd->
-      SetGuidance("[usage] /score/quantiy/cylinderSurfaceFlux qname dflag");
-  qCylSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
-  qCylSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
-  qCylSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
-  qCylSurfFluxCmd->SetGuidance("         : 1 = In only");
-  qCylSurfFluxCmd->SetGuidance("         : 2 = Out only");
-  param = new G4UIparameter("qname",'s',false);
-  qCylSurfFluxCmd->SetParameter(param);
-  param = new G4UIparameter("dflag",'i',true);
-  param->SetDefaultValue("0");
-  qCylSurfFluxCmd->SetParameter(param);
+//  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylinderSurfaceFlux",this);
+//  qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer");
+//  qCylSurfFluxCmd->
+//      SetGuidance("[usage] /score/quantiy/cylinderSurfaceFlux qname dflag");
+//  qCylSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
+//  qCylSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
+//  qCylSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
+//  qCylSurfFluxCmd->SetGuidance("         : 1 = In only");
+//  qCylSurfFluxCmd->SetGuidance("         : 2 = Out only");
+//  param = new G4UIparameter("qname",'s',false);
+//  qCylSurfFluxCmd->SetParameter(param);
+//  param = new G4UIparameter("dflag",'i',true);
+//  param->SetDefaultValue("0");
+//  qCylSurfFluxCmd->SetParameter(param);
   //
   qNofCollisionCmd = new G4UIcommand("/score/quantity/nOfCollision",this);
   qNofCollisionCmd->SetGuidance("Number of Collision Scorer");

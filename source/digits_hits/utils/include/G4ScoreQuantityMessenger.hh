@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh,v 1.2 2007-11-03 21:46:49 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.hh,v 1.3 2007-11-03 22:39:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -96,10 +96,10 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     G4UIcommand*          qPassTrackLengthCmd;
     G4UIcommand*          qFlatSurfCurrCmd;
     G4UIcommand*          qFlatSurfFluxCmd;
-    G4UIcommand*          qSphereSurfCurrCmd;
-    G4UIcommand*          qSphereSurfFluxCmd;
-    G4UIcommand*          qCylSurfCurrCmd;
-    G4UIcommand*          qCylSurfFluxCmd;
+//    G4UIcommand*          qSphereSurfCurrCmd;
+//    G4UIcommand*          qSphereSurfFluxCmd;
+//    G4UIcommand*          qCylSurfCurrCmd;
+//    G4UIcommand*          qCylSurfFluxCmd;
     G4UIcommand*          qNofCollisionCmd;
     G4UIcommand*          qPopulationCmd;
     G4UIcommand*          qTrackCountCmd;
