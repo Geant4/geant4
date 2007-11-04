@@ -45,5 +45,5 @@
 ########################################
 #
 /score/draw boxMesh_1 nOfStepPSgamma
-/score/draw boxMesh_2 nOfStepPSgamma 11
+/score/draw boxMesh_2 nOfStepPSgamma ! 11
 #
