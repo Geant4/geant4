@@ -24,50 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.16 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4DefaultLinearColorMap.hh,v 1.1 2007-11-04 04:06:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringBox_h
-#define G4ScoringBox_h 1
+#ifndef G4DefaultLinearColorMap_h
+#define G4DefaultLinearColorMap_h 1
 
 #include "globals.hh"
-#include "G4VScoringMesh.hh"
-#include "G4RotationMatrix.hh"
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4VPrimitiveScorer;
-class G4VScoreColorMap;
+#include "G4VScoreColorMap.hh"
 
-#include <vector>
-
-class G4ScoringBox : public G4VScoringMesh
+class G4DefaultLinearColorMap : public G4VScoreColorMap
 {
   public:
-      G4ScoringBox(G4String wName);
-      ~G4ScoringBox();
+      G4DefaultLinearColorMap(G4String mName);
+      virtual ~G4DefaultLinearColorMap();
 
   public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys);
-      virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  //virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
-
-       void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
-
-private:
-  G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  G4LogicalVolume * fMeshElementLogical;
-  
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
-  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
-  //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
-  void GetXYZ(G4int index, G4int q[3]) const;
-  G4int GetIndex(G4int x, G4int y, G4int z) const;
+      virtual void GetMapColor(G4double val, G4double color[4]);
 };
-
-
-
 
 #endif
 

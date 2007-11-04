@@ -24,50 +24,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.16 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4VScoreColorMap.hh,v 1.1 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringBox_h
-#define G4ScoringBox_h 1
+#ifndef G4VScoreColorMap_h
+#define G4VScoreColorMap_h 1
 
 #include "globals.hh"
-#include "G4VScoringMesh.hh"
-#include "G4RotationMatrix.hh"
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4VPrimitiveScorer;
-class G4VScoreColorMap;
 
-#include <vector>
-
-class G4ScoringBox : public G4VScoringMesh
+class G4VScoreColorMap
 {
   public:
-      G4ScoringBox(G4String wName);
-      ~G4ScoringBox();
+      G4VScoreColorMap(G4String mName);
+      virtual ~G4VScoreColorMap();
 
   public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys);
-      virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  //virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
+      virtual void GetMapColor(G4double val, G4double color[4]) = 0;
 
-       void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+  public:
+      inline G4String GetName() const
+      { return fName; }
+      inline void SetFloatingMinMax(G4bool vl=true)
+      { ifFloat = vl; }
+      inline G4bool IfFloatMinMax() const 
+      { return ifFloat; }
+      inline void SetMinMax(G4double minVal, G4double maxVal)
+      { fMinVal = minVal; fMaxVal = maxVal; }
+      inline G4double GetMin() const
+      { return fMinVal; }
+      inline G4double GetMax() const
+      { return fMaxVal; }
 
-private:
-  G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  G4LogicalVolume * fMeshElementLogical;
-  
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
-  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
-  //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
-  void GetXYZ(G4int index, G4int q[3]) const;
-  G4int GetIndex(G4int x, G4int y, G4int z) const;
+  protected:
+      G4String fName;
+      G4bool ifFloat;
+      G4double fMinVal;
+      G4double fMaxVal;
 };
-
-
-
 
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.27 2007-11-03 22:30:42 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.28 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -161,6 +161,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
   drawCmd->SetParameter(param);
+  param = new G4UIparameter("psName",'s',true);
+  param->SetDefaultValue("defaultLinearColorMap");
+  drawCmd->SetParameter(param);
   param = new G4UIparameter("proj",'i',true);
   param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
@@ -238,8 +241,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4Tokenizer next(newVal);
       G4String meshName = next();
       G4String psName = next();
+      G4String colorMapName = next();
       G4int axflg = StoI(next());
-      fSMan->DrawMesh(meshName,psName,axflg);
+      fSMan->DrawMesh(meshName,psName,colorMapName,axflg);
   } else if(command==dumpQtyToFileCmd) { 
       G4Tokenizer next(newVal);
       G4String meshName = next();

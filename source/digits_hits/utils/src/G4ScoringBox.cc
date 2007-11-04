@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.38 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.39 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,7 @@
 #include "G4VisAttributes.hh"
 #include "G4ScoringBoxParameterisation.hh"
 #include "G4VVisManager.hh"
+#include "G4VScoreColorMap.hh"
 
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
@@ -245,7 +246,7 @@ void G4ScoringBox::List() const {
 //////  }
 }
 
-void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
+void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -296,6 +297,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
     G4Scale3D scale;
     if(axflg/100==1) {
     // xy plane
+    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
     G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
     G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
     for(int x = 0; x < fNSegment[0]; x++) {
@@ -315,7 +317,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
           trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
         }
 	G4double c[4];
-	GetMapColor(xyedep[x][y]/xymax, c);
+	colorMap->GetMapColor(xyedep[x][y], c);
 	att.SetColour(c[0], c[1], c[2]);//, c[3]);
 	pVisManager->Draw(xyplate, att, trans);
 	pVisManager->Draw(xyplate, att, trans2);
@@ -326,6 +328,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
     axflg = axflg%100;
     if(axflg/10==1) {
     // yz plane
+    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); }
     G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
     G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
     for(int y = 0; y < fNSegment[1]; y++) {
@@ -345,7 +348,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
           trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
         }
 	G4double c[4];
-	GetMapColor(yzedep[y][z]/yzmax, c);
+	colorMap->GetMapColor(yzedep[y][z], c);
 	att.SetColour(c[0], c[1], c[2]);//, c[3]);
 	pVisManager->Draw(yzplate, att, trans);
 	pVisManager->Draw(yzplate, att, trans2);
@@ -356,6 +359,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
     axflg = axflg%10;
     if(axflg==1) {
     // xz plane
+    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax); }
     G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
     G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
     for(int x = 0; x < fNSegment[0]; x++) {
@@ -375,7 +379,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4int axflg) {
           trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
 	}
 	G4double c[4];
-	GetMapColor(xzedep[x][z]/xzmax, c);
+	colorMap->GetMapColor(xzedep[x][z], c);
 	att.SetColour(c[0], c[1], c[2]);//, c[3]);
 	pVisManager->Draw(xzplate, att, trans);
 	pVisManager->Draw(xzplate, att, trans2);
@@ -485,44 +489,3 @@ G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
   return x + y*fNSegment[0] + z*fNSegment[0]*fNSegment[1];
 }
 
-void G4ScoringBox::GetMapColor(G4double value, G4double color[4]) {
-
-
-  if(value > 1.) {
-    G4cerr << "Error : G4ScoringBox::GetMapColor() : 'value' argument needs to be <= 1." << G4endl;
-    color[0] = 1.;
-    color[1] = color[2] = color[3] = 0.;
-    return;
-  }
-
-  // color map
-  const int NCOLOR = 6;
-  struct ColorMap {
-    G4double val;
-    G4double rgb[4];
-  } colormap[NCOLOR] = {{0.0, {1., 1., 1., 1.}}, // value, r, g, b, alpha
-			{0.2, {0., 0., 1., 1.}},
-			{0.4, {0., 1., 1., 1.}},
-			{0.6, {0., 1., 0., 1.}},
-			{0.8, {1., 1., 0., 1.}},
-			{1.0, {1., 0., 0., 1.}}};
-  
-  // search
-  G4int during[2] = {0, 0};
-  for(int i = 1; i < NCOLOR; i++) {
-    if(colormap[i].val >= value) {
-      during[0] = i-1;
-      during[1] = i;
-      break;
-    }
-  }
-
-  // interpolate
-  G4double a = std::fabs(value - colormap[during[0]].val);
-  G4double b = std::fabs(value - colormap[during[1]].val);
-  for(int i = 0; i < 4; i++) {
-    color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
-      /(colormap[during[1]].val - colormap[during[0]].val);
-  } 
-
-}

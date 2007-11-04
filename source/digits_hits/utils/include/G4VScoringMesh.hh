@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.21 2007-11-02 02:48:58 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.22 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,7 @@ class G4VPhysicalVolume;
 class G4MultiFunctionalDetector;
 class G4VPrimitiveScorer;
 class G4VSDFilter;
+class G4VScoreColorMap;
 
 #include <map>
 
@@ -70,8 +71,8 @@ public:
   { return fShape; }
   inline void Accumulate(G4THitsMap<G4double> * map);
   void Dump();
-  inline void DrawMesh(G4String psName,G4int axflg=111);
-  virtual void Draw(std::map<G4int, G4double*> * map, G4int axflg=111) = 0;
+  inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
 
   void ResetScore();
 
@@ -150,10 +151,10 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
   }
 }
 
-void G4VScoringMesh::DrawMesh(G4String psName,G4int axflg)
+void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
 {
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end()) Draw(fMapItr->second->GetMap(),axflg);
+  if(fMapItr!=fMap.end()) Draw(fMapItr->second->GetMap(),colorMap,axflg);
 }
 
 #endif

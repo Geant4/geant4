@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.17 2007-11-03 21:10:02 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.18 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@ class G4ScoringMessenger;
 class G4ScoreQuantityMessenger;
 class G4VHitsCollection;
 class G4VScoreWriter;
+class G4VScoreColorMap;
 
 // class description:
 //
@@ -71,7 +72,7 @@ class G4ScoringManager
       G4VScoringMesh* FindMesh(G4String);
       void List() const;
       void Dump() const;
-      void DrawMesh(G4String meshName,G4String psName,G4int axflg=111);
+      void DrawMesh(G4String meshName,G4String psName,G4String colorMapName,G4int axflg=111);
       void DumpQuantityToFile(G4String meshName, G4String psName,G4String fileName, G4String option = "");
       void DumpAllQuantitiesToFile(G4String meshName, G4String fileName, G4String option = "");
 
@@ -85,6 +86,7 @@ class G4ScoringManager
       G4VScoringMesh* fCurrentMesh;
 
       G4VScoreWriter * writer;
+      G4VScoreColorMap * fDefaultLinearColorMap;
 
   public:
       inline void SetCurrentMesh(G4VScoringMesh* cm)

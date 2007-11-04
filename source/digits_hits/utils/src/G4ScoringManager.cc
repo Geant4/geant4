@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.19 2007-11-03 21:10:02 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.20 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,8 @@
 #include "G4VScoringMesh.hh"
 #include "G4THitsMap.hh"
 #include "G4VScoreWriter.hh"
+#include "G4VScoreColorMap.hh"
+#include "G4DefaultLinearColorMap.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
 
@@ -54,6 +56,7 @@ G4ScoringManager::G4ScoringManager()
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
+  fDefaultLinearColorMap = new G4DefaultLinearColorMap("defaultLinearColorMap");
 }
 
 G4ScoringManager::~G4ScoringManager()
@@ -105,10 +108,16 @@ void G4ScoringManager::Dump() const
   }
 }
 
-void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4int axflg)
+void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String colorMapName,G4int axflg)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
-  if(mesh) mesh->DrawMesh(psName,axflg);
+  if(mesh) 
+  {
+    if(fDefaultLinearColorMap->GetName()==colorMapName)
+    {
+      mesh->DrawMesh(psName,fDefaultLinearColorMap,axflg);
+    }
+  }
 }
 
 void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4String fileName, G4String option)

@@ -24,50 +24,54 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.16 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4DefaultLinearColorMap.cc,v 1.1 2007-11-04 04:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef G4ScoringBox_h
-#define G4ScoringBox_h 1
+#include "G4DefaultLinearColorMap.hh"
 
-#include "globals.hh"
-#include "G4VScoringMesh.hh"
-#include "G4RotationMatrix.hh"
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4VPrimitiveScorer;
-class G4VScoreColorMap;
+G4DefaultLinearColorMap::G4DefaultLinearColorMap(G4String mName)
+:G4VScoreColorMap(mName)
+{;}
 
-#include <vector>
+G4DefaultLinearColorMap::~G4DefaultLinearColorMap()
+{;}
 
-class G4ScoringBox : public G4VScoringMesh
+void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
 {
-  public:
-      G4ScoringBox(G4String wName);
-      ~G4ScoringBox();
+  G4double value = (val-fMinVal)/(fMaxVal-fMinVal);
 
-  public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys);
-      virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  //virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
+  if(value > 1.) {value=1.;}
+  if(value < 0.) {value=0.;}
 
-       void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
-
-private:
-  G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  G4LogicalVolume * fMeshElementLogical;
+  // color map
+  const int NCOLOR = 6;
+  struct ColorMap {
+    G4double val;
+    G4double rgb[4];
+  } colormap[NCOLOR] = {{0.0, {1., 1., 1., 1.}}, // value, r, g, b, alpha
+			{0.2, {0., 0., 1., 1.}},
+			{0.4, {0., 1., 1., 1.}},
+			{0.6, {0., 1., 0., 1.}},
+			{0.8, {1., 1., 0., 1.}},
+			{1.0, {1., 0., 0., 1.}}};
   
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
-  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
-  //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
-  void GetXYZ(G4int index, G4int q[3]) const;
-  G4int GetIndex(G4int x, G4int y, G4int z) const;
-};
+  // search
+  G4int during[2] = {0, 0};
+  for(int i = 1; i < NCOLOR; i++) {
+    if(colormap[i].val >= value) {
+      during[0] = i-1;
+      during[1] = i;
+      break;
+    }
+  }
 
+  // interpolate
+  G4double a = std::fabs(value - colormap[during[0]].val);
+  G4double b = std::fabs(value - colormap[during[1]].val);
+  for(int i = 0; i < 4; i++) {
+    color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
+      /(colormap[during[1]].val - colormap[during[0]].val);
+  } 
 
-
-
-#endif
-
+}
