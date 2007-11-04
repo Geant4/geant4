@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.39 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.40 2007-11-04 18:05:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -488,4 +488,9 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
 G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
   return x + y*fNSegment[0] + z*fNSegment[0]*fNSegment[1];
 }
+
+void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+                          G4int idxProj, G4int idxColumn) 
+{;}
+
 

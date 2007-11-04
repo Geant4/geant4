@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.23 2007-11-04 16:51:49 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.24 2007-11-04 18:05:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,6 +73,8 @@ public:
   void Dump();
   inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
+  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+                          G4int idxProj, G4int idxColumn) = 0;
 
   void ResetScore();
 
@@ -105,9 +107,6 @@ public:
   inline G4bool ReadyForQuantity() const
   { return (sizeIsSet && nMeshIsSet); }
 
-  inline void SetDrawColumn(G4int ix, G4int iy, G4int iz)
-  { fDrawFlg[0] = ix; fDrawFlg[1] = iy; fDrawFlg[2] = iz; }
-
 protected:
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
 
@@ -132,7 +131,6 @@ protected:
   G4bool sizeIsSet;
   G4bool nMeshIsSet;
 
-  G4int fDrawFlg[3];
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
