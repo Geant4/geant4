@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.2 2007-08-10 18:26:51 vnivanch Exp $
+// $Id: Histo.hh,v 1.3 2007-11-05 19:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -48,14 +48,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//class HistoMessenger;
-
 namespace AIDA {
   class ITree;
   class ITuple;
   class IHistogram1D;
   class IAnalysisFactory;
 }
+
+class TFile;
+class TH1D;
+class TApplication;
 
 class Histo
 {
@@ -113,7 +115,11 @@ private:
   AIDA::IAnalysisFactory* af;  
   AIDA::ITuple*   ntup;
   AIDA::ITree*    tree;
-  //  HistoMessenger* messenger;
+
+  TFile*                 m_ROOT_file;
+  TApplication*          m_root;
+  std::vector<TH1D*>     m_ROOT_histo;  
+
   std::vector<G4bool>    active;
   std::vector<G4int>     bins;
   std::vector<G4double>  xmin;

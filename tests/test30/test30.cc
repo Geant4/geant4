@@ -500,9 +500,9 @@ int main(int argc, char** argv)
       for(i=nanglpr; i<11; i++) {histo.activate(3+i, false);}
 
       histo.add1D("15","E(MeV) for gamma",200,0.,energyg);
-      histo.add1D("16","delta E (MeV) ",100,-0.5,0.5);
-      histo.add1D("17","delta Pz (GeV)",100,-0.5,0.5);
-      histo.add1D("18","delta Pt (GeV)",100,-0.5,0.5);
+      histo.add1D("16","delta E (MeV) ",100,-5,5);
+      histo.add1D("17","delta Pz (MeV/c)",100,-50,50);
+      histo.add1D("18","delta Pt (MeV/c)",100,-50,50);
 
       histo.add1D("19","E(MeV) for pi0",nbinse,0.,emax);
       histo.add1D("20","E(MeV) for pi+",nbinse,0.,emax);
@@ -771,7 +771,8 @@ int main(int argc, char** argv)
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(energy);
 
-      labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
+      labv = G4LorentzVector(0.0, 0.0, sqrt(e0*(e0 + 2.*mass)), 
+			     e0 + mass + amass);
       G4ThreeVector bst = labv.boostVector();
       
       aChange = proc->PostStepDoIt(*gTrack,*step);
@@ -957,8 +958,8 @@ int main(int argc, char** argv)
       if(usepaw) {
         histo.fill(0,(G4double)n,1.0);
 	histo.fill(15,labv.e()/MeV, 1.0);
-	histo.fill(16,pz/GeV, 1.0);
-	histo.fill(17,pt/GeV, 1.0);
+	histo.fill(16,pz/MeV, 1.0);
+	histo.fill(17,pt/MeV, 1.0);
       }
       aChange->Clear();
     }
