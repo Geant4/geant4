@@ -939,12 +939,12 @@ void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
        {
 	  secondary->SetState(G4KineticTrack::inside);
        } else {
-//           G4cout << "G4BC set miss , tin, tout " << tin << " , " << tout <<G4endl;
+            //G4cout << "G4BC set miss , tin, tout " << tin << " , " << tout <<G4endl;
 	  secondary->SetState(G4KineticTrack::miss_nucleus);
        }
     } else {
        secondary->SetState(G4KineticTrack::miss_nucleus);
-//           G4cout << "G4BC set miss ,no intersect tin, tout " << tin << " , " << tout <<G4endl;
+           //G4cout << "G4BC set miss ,no intersect tin, tout " << tin << " , " << tout <<G4endl;
     }
 
 #ifdef debug_BIC_FindCollision
@@ -1004,8 +1004,11 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4double initial_Efermi(0);
   G4LorentzVector mom4Primary(0);
   
-  initialBaryon= primary->GetDefinition()->GetBaryonNumber();
-  initialCharge+=G4lrint(primary->GetDefinition()->GetPDGCharge());
+  if (primary->GetState() == G4KineticTrack::inside)
+  {
+     initialBaryon = primary->GetDefinition()->GetBaryonNumber();
+     initialCharge = G4lrint(primary->GetDefinition()->GetPDGCharge());
+  }
 
 // for primary resonances, subtract neutron ( = proton) field ( ie. add std::abs(field))
   G4int PDGcode=std::abs(primary->GetDefinition()->GetPDGEncoding());
@@ -1053,9 +1056,16 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 
   // reset primary to initial state
   primary->Set4Momentum(mom4Primary);
-  
+
+
+  G4int lateBaryon(0), lateCharge(0);
+
   if ( lateParticleCollision )
   {  // for late particles, reset charges
+        //G4cout << "lateP, initial B C state " << initialBaryon << " " 
+        //        << initialCharge<< " " << primary->GetState() << " "<< primary->GetDefinition()->GetParticleName()<< G4endl;
+      lateBaryon = initialBaryon;
+      lateCharge = initialCharge;
       initialBaryon=initialCharge=0;
   }
   
@@ -1119,14 +1129,13 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   {
     if ( ! lateParticleCollision ) 
     {
-       (*i)->SetState(G4KineticTrack::inside);  // secondaries are created inside nucleus
+       (*i)->SetState(primary->GetState());  // secondaries are created inside nucleus, except for decay in propagate
        finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
        finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
     } else {
        G4double tin=0., tout=0.; 
        if (((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes((*i),tin,tout))
        {
-          G4cout << "*******************  where are we ??? tin, tout " << tin << " " << tout<<G4endl;
           if ( tin > 0 ) 
 	  {
 	     (*i)->SetState(G4KineticTrack::outside);
@@ -1139,14 +1148,13 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	  }   
 	  else 
 	  {
-	     G4cout << "***************  where are we past nucleus??? tin, tout " << tin << " " << tout<<G4endl;
 	     (*i)->SetState(G4KineticTrack::gone_out);
 	     toFinalState.push_back((*i));
 	  }  
        } else
        {
           (*i)->SetState(G4KineticTrack::miss_nucleus);
-	         G4cout << " G4BC - miss -late Part- no intersection found " << G4endl;
+	         //G4cout << " G4BC - miss -late Part- no intersection found " << G4endl;
 	  toFinalState.push_back((*i));
        }
        
@@ -1182,7 +1190,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   }
 
 #ifdef debug_G4BinaryCascade
-  if ( (finalBaryon-initialBaryon) != 0 || (finalCharge-initialCharge) != 0 ) 
+  if ( (finalBaryon-initialBaryon-lateBaryon) != 0 || (finalCharge-initialCharge-lateCharge) != 0 ) 
      {
         G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
         G4cout << "initial/final baryon number, initial/final Charge "
@@ -1929,7 +1937,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 // Add tracks missing nucleus and tracks going straight though  to addFinals
   std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::miss_nucleus));
-		//    PrintKTVector(kt_gone_out, std::string("miss to append to final state.."));
+		    //PrintKTVector(kt_gone_out, std::string("miss to append to final state.."));
   std::for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::gone_out));
     
@@ -2005,15 +2013,12 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
                     + GetTotalCharge(theCapturedList)
 		    + GetTotalCharge(*kt_inside)) )
    {
-      G4cout << " error-DoTimeStep, aft, A, Z, sec-Z,... "
-       << currentA << " "
-       << currentZ << " "
-       << GetTotalCharge(theTargetList)
-          + GetTotalCharge(theCapturedList)
-          + GetTotalCharge(*kt_inside) << " "
-       << GetTotalCharge(theTargetList) << " " 
-       << GetTotalCharge(theCapturedList) << " "
-       << GetTotalCharge(*kt_inside) << " "
+      G4cout << " error-DoTimeStep aft, A, Z: " << currentA << " " << currentZ 
+       << " sum(tgt,capt,active) " 
+       << GetTotalCharge(theTargetList) + GetTotalCharge(theCapturedList) + GetTotalCharge(*kt_inside) 
+       << " targets: "  << GetTotalCharge(theTargetList) 
+       << " captured: " << GetTotalCharge(theCapturedList) 
+       << " active: "   << GetTotalCharge(*kt_inside) 
        << G4endl;
    }    
 #endif
@@ -2102,6 +2107,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 	   //particle cannot go in, put to miss_nucleus
 	     G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
 	     (*iter)->SetState(G4KineticTrack::miss_nucleus);
+	     G4cout << " miss from mass differ" << G4endl;
 	     // Undo correction for Colomb Barrier
 	     G4double barrier=RKprop->GetBarrier((*iter)->GetDefinition()->GetPDGEncoding());
 	     (*iter)->UpdateTrackingMomentum((*iter)->GetTrackingMomentum().e() + barrier); 
