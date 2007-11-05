@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.13 2007-11-05 09:29:55 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.14 2007-11-05 14:15:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -168,7 +168,7 @@ void G4DiffuseElastic::Initialise()
     fAtomicNumber = (*theElementTable)[jEl]->GetZ();     // atomic number
     fAtomicWeight = (*theElementTable)[jEl]->GetN();     // number of nucleons
     fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
-
+    G4cout<<"G4DiffuseElastic::Initialise() the element: "<<(*theElementTable)[jEl]->GetName()<<G4endl;
     fElementNumberVector.push_back(fAtomicNumber);
     fElementNameVector.push_back((*theElementTable)[jEl]->GetName());
 
@@ -214,7 +214,7 @@ void G4DiffuseElastic::BuildAngleTable()
     }
     G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(fAngleBin);
 
-    G4PhysicsLogVector*  angleBins = new G4PhysicsLogVector( 0., thetaMax, fAngleBin );
+    G4PhysicsLogVector*  angleBins = new G4PhysicsLogVector( 0.01*thetaMax, thetaMax, fAngleBin );
 
     for(j = 1; j < fAngleBin; j++)
     {
@@ -224,15 +224,16 @@ void G4DiffuseElastic::BuildAngleTable()
       if(theta2 > thetaCoulomb && z) fAddCoulomb = true;
 
       sum   += integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, theta1,theta2);
-
-      angleVector->PutValue( j-1 , theta2, sum ) ;
+      
+      angleVector->PutValue( j-1 , theta2, sum );
+      // G4cout<<"j-1 = "<<j-1<<"; theta2 = "<<theta2<<"; sum = "<<sum<<G4endl;
     }
     fAddCoulomb = false;
 
-    fAngleTable->insertAt(i,angleVector) ;
+    fAngleTable->insertAt(i,angleVector);
 
-    delete[] angleVector; 
-    delete[] angleBins; 
+    // delete[] angleVector; 
+    // delete[] angleBins; 
   }
   return;
 }
@@ -317,7 +318,7 @@ G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack,
   
   // t = SampleT( theParticle, ptot, A);
 
-  t = SampleTableT( theParticle, ptot, A); // use initialised table
+  t = SampleTableT( theParticle, ptot, Z); // use initialised table
 
   // NaN finder
   if(!(t < 0.0 || t >= 0.0)) 
@@ -916,6 +917,8 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
     G4cout<<"G4DiffuseElastic: Element with atomic number "<<Z<<" is not found, return zero angle"<<G4endl;
     return 0.; // no table for this element
   }
+  // G4cout<<"iElement = "<<iElement<<G4endl;
+
   fAngleTable = fAngleBank[iElement];
 
   G4double kinE = std::sqrt(momentum*momentum + m1*m1) - m1;
@@ -926,35 +929,44 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
   }
   if ( iMomentum == fEnergyBin ) iMomentum--;   // kinE is more then theMaxEnergy
   if ( iMomentum < 0 )           iMomentum = 0; // against negative index, kinE < theMinEnergy
+  // G4cout<<"iMomentum = "<<iMomentum<<G4endl;
 
   if (iMomentum == fEnergyBin -1 || iMomentum == 0 ) // the table edges
   {
-    position = (*(*fAngleTable)(iMomentum))(fAngleBin-1)*G4UniformRand();
+    position = (*(*fAngleTable)(iMomentum))(fAngleBin-2)*G4UniformRand();
+    // G4cout<<"position = "<<position<<G4endl;
 
     for(iAngle = 0; iAngle < fAngleBin; iAngle++)
     {
       if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
     }
     if (iAngle == fAngleBin) iAngle--;
+    // G4cout<<"iAngle = "<<iAngle<<G4endl;
 
     randAngle = GetScatteringAngle(iMomentum, iAngle, position);
+    // G4cout<<"randAngle = "<<randAngle<<G4endl;
   }
   else
   {
-    position = (*(*fAngleTable)(iMomentum))(fAngleBin-1)*G4UniformRand();
+    position = (*(*fAngleTable)(iMomentum))(fAngleBin-2)*G4UniformRand();
+    // G4cout<<"position = "<<position<<G4endl;
 
     for(iAngle = 0; iAngle < fAngleBin; iAngle++)
     {
       if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
     }
     if (iAngle == fAngleBin) iAngle--;
+    // G4cout<<"iAngle = "<<iAngle<<G4endl;
 
     theta2  = GetScatteringAngle(iMomentum, iAngle, position);
+    // G4cout<<"theta2 = "<<theta2<<G4endl;
     E2 = fEnergyVector->GetLowEdgeEnergy(iMomentum);
+    // G4cout<<"E2 = "<<E2<<G4endl;
 
     iMomentum--;
 
-    position = (*(*fAngleTable)(iMomentum))(fAngleBin-1)*G4UniformRand();
+    position = (*(*fAngleTable)(iMomentum))(fAngleBin-2)*G4UniformRand();
+    // G4cout<<"position = "<<position<<G4endl;
 
     for(iAngle = 0; iAngle < fAngleBin; iAngle++)
     {
@@ -963,13 +975,16 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
     if (iAngle == fAngleBin) iAngle--;
 
     theta1  = GetScatteringAngle(iMomentum, iAngle, position);
+    // G4cout<<"theta1 = "<<theta1<<G4endl;
     E1 = fEnergyVector->GetLowEdgeEnergy(iMomentum);
+    // G4cout<<"E1 = "<<E1<<G4endl;
 
     W  = 1.0/(E2 - E1);
     W1 = (E2 - kinE)*W;
     W2 = (kinE - E1)*W;
 
     randAngle = W1*theta1 + W2*theta2;
+    // G4cout<<"randAngle = "<<randAngle<<G4endl;
   }
   return randAngle;
 }

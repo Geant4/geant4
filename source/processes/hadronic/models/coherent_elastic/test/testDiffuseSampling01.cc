@@ -71,7 +71,7 @@ int main()
   G4int i, j, k, iMax, iMod;
   G4double x;
 
-  G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
+  //  G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
   /*
   std::ofstream writeb("bessel.dat", std::ios::out ) ;
   writeb.setf( std::ios::scientific, std::ios::floatfield );
@@ -265,6 +265,12 @@ int main()
       break;
 
   }
+
+  // Initialisation
+
+
+  G4DiffuseElastic* diffelastic = new G4DiffuseElastic(theParticleDefinition);
+
   // Physics data
 
   G4double momentum = 9.92*GeV;
@@ -359,9 +365,9 @@ int main()
   std::ofstream writes("sigma.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4double theta, thetaLab, thetaCMS, sigma, integral;
+  G4double theta, thetaLab, thetaCMS, sigma, integral, transfer;
 
-  iMax = 10;   // numberOfSimPoints;
+  iMax = 1000000;   // numberOfSimPoints;
   iMod = iMax/10;
   writes << iMax  << G4endl;
 
@@ -380,7 +386,17 @@ int main()
     // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
     // integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
 
-    theta = diffelastic->SampleThetaLab(projectile, m2, A);
+    // theta = diffelastic->SampleThetaLab(projectile, m2, A);
+
+    // transfer = diffelastic->SampleTableT(theParticleDefinition, ptot, Z);
+
+    // thetaCMS = std::acos( 1 - std::fabs(transfer)/2./ptot/ptot );
+
+    thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z);
+
+    theta = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCMS);
+
+    // G4cout << transfer/GeV/GeV <<"\t" << thetaCMS/degree << "\t"<< theta/degree << G4endl;
 
     for( k = 0; k < kAngle; k++)
     {
@@ -416,13 +432,15 @@ int main()
     G4cout <<tData[k]/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
     writef <<tData[k]/degree<<"\t"<<angleDistr[k]<<G4endl;
   }
-  iMax = 100;
+
+
+  iMax = 1;
 
   for( i = 0; i < iMax; i++)
   {
     thetaLab = i*degree;
-    thetaCMS = diffelastic->ThetaLabToThetaCMS(projectile, m2, thetaLab);     
-    theta    = diffelastic->ThetaCMStoThetaLab(projectile, m2, thetaCMS);     
+    thetaCMS = diffelastic->ThetaLabToThetaCMS(theDynamicParticle, m2, thetaLab);     
+    theta    = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCMS);     
     // G4cout<<thetaLab<<"\t"<<theta<<G4endl;
   } 
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
