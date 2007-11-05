@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.14 2007-11-05 14:15:37 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.15 2007-11-05 15:58:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,6 +148,13 @@ G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle)
 
 G4DiffuseElastic::~G4DiffuseElastic()
 {
+  if(fEnergyVector) delete fEnergyVector;
+
+  if( fAngleTable )
+  {
+      fAngleTable->clearAndDestroy();
+      delete fAngleTable ;
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
