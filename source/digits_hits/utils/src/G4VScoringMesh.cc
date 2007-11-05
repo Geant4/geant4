@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.29 2007-11-04 18:05:49 asaim Exp $
+// $Id: G4VScoringMesh.cc,v 1.30 2007-11-05 03:15:13 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,7 @@ G4VScoringMesh::G4VScoringMesh(G4String wName)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
+  fSize[0] = fSize[1] = fSize[2] = 0.;
   fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
 }
 

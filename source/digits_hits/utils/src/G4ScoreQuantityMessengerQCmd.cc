@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.3 2007-11-03 22:39:37 asaim Exp $
+// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.4 2007-11-05 03:15:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -318,10 +318,10 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qTrackCountCmd->SetParameter(param);
 
   //
-  qTerminationCmd = new G4UIcommand("/score/quantity/termination",this);
+  qTerminationCmd = new G4UIcommand("/score/quantity/nOfTerminatedTrack",this);
   qTerminationCmd->SetGuidance("Number of Terminated tracks Scorer");
   qTerminationCmd->
-      SetGuidance("[usage] /score/quantiy/termination qname wflag");
+      SetGuidance("[usage] /score/quantiy/nOfTerminatedTrack qname wflag");
   qTerminationCmd->SetGuidance("  qname  :(String) scorer name");
   qTerminationCmd->SetGuidance("  wflag  :(Bool) Weighted");
   param = new G4UIparameter("qname",'s',false);

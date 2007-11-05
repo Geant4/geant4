@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.28 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.29 2007-11-05 03:15:13 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -98,11 +98,11 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //   Division command
   mBinCmd = new G4UIcommand("/score/mesh/nBin",this);
   mBinCmd->SetGuidance("Define segmentation of scoring mesh.");
-  mBinCmd->SetGuidance("[usage] /score/mesh/nbin");
+  mBinCmd->SetGuidance("[usage] /score/mesh/nBin");
   mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
   mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
   mBinCmd->SetGuidance("  Nk  :(int) Number of bins k ");
-  mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
+  //mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
 //  mBinCmd->SetGuidance("  P1..Pn-1  :(double) \"paramter from P1 to Pn-1 for division.\"");
   param = new G4UIparameter("Ni",'i',false);
   param->SetDefaultValue("1");
@@ -116,9 +116,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("1");
   mBinCmd->SetParameter(param);
   param->SetParameterRange("Nk>0");
-  param = new G4UIparameter("Axis",'i',true);
-  param->SetDefaultValue("3");
-  mBinCmd->SetParameter(param);
+  //param = new G4UIparameter("Axis",'i',true);
+  //param->SetDefaultValue("3");
+  //mBinCmd->SetParameter(param);
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");

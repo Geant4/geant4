@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.40 2007-11-04 18:05:49 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.41 2007-11-05 03:15:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -244,31 +244,37 @@ void G4ScoringBox::List() const {
 //////  for(; itr != fMap.end(); itr++) {
 //////    G4cout << "[" << itr->first << "]" << G4endl;
 //////  }
+
 }
 
 void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
 
+  //DrawColumn(map, colorMap, 0, 40);
+  //DrawColumn(map, colorMap, 1, 25);
+  //DrawColumn(map, colorMap, 2, 25);
+  //return;
+
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
     
-    // edep vectors
-    std::vector<std::vector<std::vector<double> > > edep; // edep[X][Y][Z]
+    // cell vectors
+    std::vector<std::vector<std::vector<double> > > cell; // cell[X][Y][Z]
     std::vector<double> ez;
     for(int z = 0; z < fNSegment[2]; z++) ez.push_back(0.);
     std::vector<std::vector<double> > eyz;
     for(int y = 0; y < fNSegment[1]; y++) eyz.push_back(ez);
-    for(int x = 0; x < fNSegment[0]; x++) edep.push_back(eyz);
+    for(int x = 0; x < fNSegment[0]; x++) cell.push_back(eyz);
 
-    std::vector<std::vector<double> > xyedep; // xyedep[X][Y]
+    std::vector<std::vector<double> > xycell; // xycell[X][Y]
     std::vector<double> ey;
     for(int y = 0; y < fNSegment[1]; y++) ey.push_back(0.);
-    for(int x = 0; x < fNSegment[0]; x++) xyedep.push_back(ey);
+    for(int x = 0; x < fNSegment[0]; x++) xycell.push_back(ey);
 
-    std::vector<std::vector<double> > yzedep; // yzedep[Y][Z]
-    for(int y = 0; y < fNSegment[1]; y++) yzedep.push_back(ez);
+    std::vector<std::vector<double> > yzcell; // yzcell[Y][Z]
+    for(int y = 0; y < fNSegment[1]; y++) yzcell.push_back(ez);
 
-    std::vector<std::vector<double> > xzedep; // xzedep[X][Z]
-    for(int x = 0; x < fNSegment[0]; x++) xzedep.push_back(ez);
+    std::vector<std::vector<double> > xzcell; // xzcell[X][Z]
+    for(int x = 0; x < fNSegment[0]; x++) xzcell.push_back(ez);
 
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
     G4int q[3];
@@ -276,14 +282,14 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     for(; itr != map->end(); itr++) {
       GetXYZ(itr->first, q);
 
-      xyedep[q[0]][q[1]] += *(itr->second);
-      if(xymax < xyedep[q[0]][q[1]]) xymax = xyedep[q[0]][q[1]];
+      xycell[q[0]][q[1]] += *(itr->second);
+      if(xymax < xycell[q[0]][q[1]]) xymax = xycell[q[0]][q[1]];
 
-      yzedep[q[1]][q[2]] += *(itr->second);
-      if(yzmax < yzedep[q[1]][q[2]]) yzmax = yzedep[q[1]][q[2]];
+      yzcell[q[1]][q[2]] += *(itr->second);
+      if(yzmax < yzcell[q[1]][q[2]]) yzmax = yzcell[q[1]][q[2]];
 
-      xzedep[q[0]][q[2]] += *(itr->second);
-      if(xzmax < xzedep[q[0]][q[2]]) xzmax = xzedep[q[0]][q[2]];
+      xzcell[q[0]][q[2]] += *(itr->second);
+      if(xzmax < xzcell[q[0]][q[2]]) xzmax = xzcell[q[0]][q[2]];
     }  
     
     G4VisAttributes att;
@@ -296,99 +302,97 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
 
     G4Scale3D scale;
     if(axflg/100==1) {
-    // xy plane
-    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
-    G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
-    G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
-    for(int x = 0; x < fNSegment[0]; x++) {
-      for(int y = 0; y < fNSegment[1]; y++) {
-	//G4ThreeVector pos(GetReplicaPosition(x, y, 0) + fCenterPosition - zhalf);
-        //G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + fCenterPosition + zhalf);
-	G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
-        G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
-        G4Transform3D trans, trans2;
-        if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
-	  trans = G4Translate3D(fCenterPosition)*trans;
-          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
-	  trans2 = G4Translate3D(fCenterPosition)*trans2;
-        } else {
-          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
-          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
-        }
-	G4double c[4];
-	colorMap->GetMapColor(xyedep[x][y], c);
-	att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	pVisManager->Draw(xyplate, att, trans);
-	pVisManager->Draw(xyplate, att, trans2);
+      // xy plane
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
+      G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
+      G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
+      for(int x = 0; x < fNSegment[0]; x++) {
+	for(int y = 0; y < fNSegment[1]; y++) {
+	  //G4ThreeVector pos(GetReplicaPosition(x, y, 0) + fCenterPosition - zhalf);
+	  //G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + fCenterPosition + zhalf);
+	  G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
+	  G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
+	  G4Transform3D trans, trans2;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	    trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	    trans2 = G4Translate3D(fCenterPosition)*trans2;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	    trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(xycell[x][y], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(xyplate, att, trans);
+	  pVisManager->Draw(xyplate, att, trans2);
 
+	}
       }
-    }
     }
     axflg = axflg%100;
     if(axflg/10==1) {
-    // yz plane
-    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); }
-    G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
-    G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
-    for(int y = 0; y < fNSegment[1]; y++) {
-      for(int z = 0; z < fNSegment[2]; z++) {
-        //G4ThreeVector pos(GetReplicaPosition(0, y, z) + fCenterPosition - xhalf);
-        //G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + fCenterPosition + xhalf);
-        G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
-        G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + xhalf);
-        G4Transform3D trans, trans2;
-        if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
-	  trans = G4Translate3D(fCenterPosition)*trans;
-          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
-	  trans2 = G4Translate3D(fCenterPosition)*trans2;
-        } else {
-          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
-          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
-        }
-	G4double c[4];
-	colorMap->GetMapColor(yzedep[y][z], c);
-	att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	pVisManager->Draw(yzplate, att, trans);
-	pVisManager->Draw(yzplate, att, trans2);
+      // yz plane
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); }
+      G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
+      G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+      for(int y = 0; y < fNSegment[1]; y++) {
+	for(int z = 0; z < fNSegment[2]; z++) {
+	  //G4ThreeVector pos(GetReplicaPosition(0, y, z) + fCenterPosition - xhalf);
+	  //G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + fCenterPosition + xhalf);
+	  G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
+	  G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + xhalf);
+	  G4Transform3D trans, trans2;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	    trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	    trans2 = G4Translate3D(fCenterPosition)*trans2;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	    trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(yzcell[y][z], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(yzplate, att, trans);
+	  pVisManager->Draw(yzplate, att, trans2);
 
+	}
       }
-    }
     }
     axflg = axflg%10;
     if(axflg==1) {
-    // xz plane
-    if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax); }
-    G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
-    G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
-    for(int x = 0; x < fNSegment[0]; x++) {
-      for(int z = 0; z < fNSegment[2]; z++) {
-        //G4ThreeVector pos(GetReplicaPosition(x, 0, z) + fCenterPosition - yhalf);
-        //G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + fCenterPosition + yhalf);
-        G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
-        G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + yhalf);
-        G4Transform3D trans, trans2;
-        if(fRotationMatrix) {
-          trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
-	  trans = G4Translate3D(fCenterPosition)*trans;
-          trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
-	  trans2 = G4Translate3D(fCenterPosition)*trans2;
-        } else {
-          trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
-          trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
-	}
-	G4double c[4];
-	colorMap->GetMapColor(xzedep[x][z], c);
-	att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	pVisManager->Draw(xzplate, att, trans);
-	pVisManager->Draw(xzplate, att, trans2);
+      // xz plane
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax); }
+      G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
+      G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
+      for(int x = 0; x < fNSegment[0]; x++) {
+	for(int z = 0; z < fNSegment[2]; z++) {
+	  //G4ThreeVector pos(GetReplicaPosition(x, 0, z) + fCenterPosition - yhalf);
+	  //G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + fCenterPosition + yhalf);
+	  G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
+	  G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + yhalf);
+	  G4Transform3D trans, trans2;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	    trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
+	    trans2 = G4Translate3D(fCenterPosition)*trans2;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	    trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(xzcell[x][z], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(xzplate, att, trans);
+	  pVisManager->Draw(xzplate, att, trans2);
 
+	}
       }
     }
-    }
-
-
   }
 }
 
@@ -491,6 +495,120 @@ G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
 
 void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn) 
-{;}
+{
+  G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
+  if(pVisManager) {
+    
+    // cell vectors
+    std::vector<std::vector<std::vector<double> > > cell; // cell[X][Y][Z]
+    std::vector<double> ez;
+    for(int z = 0; z < fNSegment[2]; z++) ez.push_back(0.);
+    std::vector<std::vector<double> > eyz;
+    for(int y = 0; y < fNSegment[1]; y++) eyz.push_back(ez);
+    for(int x = 0; x < fNSegment[0]; x++) cell.push_back(eyz);
+
+    std::vector<std::vector<double> > xycell; // xycell[X][Y]
+    std::vector<double> ey;
+    for(int y = 0; y < fNSegment[1]; y++) ey.push_back(0.);
+    for(int x = 0; x < fNSegment[0]; x++) xycell.push_back(ey);
+
+    std::vector<std::vector<double> > yzcell; // yzcell[Y][Z]
+    for(int y = 0; y < fNSegment[1]; y++) yzcell.push_back(ez);
+
+    std::vector<std::vector<double> > xzcell; // xzcell[X][Z]
+    for(int x = 0; x < fNSegment[0]; x++) xzcell.push_back(ez);
+
+    G4double xymax = 0., yzmax = 0., xzmax = 0.;
+    G4int q[3];
+    std::map<G4int, G4double*>::iterator itr = map->begin();
+    for(; itr != map->end(); itr++) {
+      GetXYZ(itr->first, q);
+
+      if(idxProj == 0 && q[2] == idxColumn) { // xy plane
+	xycell[q[0]][q[1]] += *(itr->second);
+	if(xymax < xycell[q[0]][q[1]]) xymax = xycell[q[0]][q[1]];
+      }
+      if(idxProj == 1 && q[0] == idxColumn) { // yz plane
+	yzcell[q[1]][q[2]] += *(itr->second);
+	if(yzmax < yzcell[q[1]][q[2]]) yzmax = yzcell[q[1]][q[2]];
+      }
+      if(idxProj == 2 && q[1] == idxColumn) { // zx plane
+	xzcell[q[0]][q[2]] += *(itr->second);
+	if(xzmax < xzcell[q[0]][q[2]]) xzmax = xzcell[q[0]][q[2]];
+      }
+    }  
+    
+    G4VisAttributes att;
+    att.SetForceSolid(true);
+    att.SetForceAuxEdgeVisible(true);
+
+
+    G4Scale3D scale;
+    // xy plane
+    if(idxProj == 0) {
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); G4cout << xymax << G4endl; }
+      G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+      for(int x = 0; x < fNSegment[0]; x++) {
+	for(int y = 0; y < fNSegment[1]; y++) {
+	  G4ThreeVector pos(GetReplicaPosition(x, y, idxColumn));
+	  G4Transform3D trans;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(xycell[x][y], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(xyplate, att, trans);
+
+	}
+      }
+    } else
+    // yz plane
+    if(idxProj == 1) {
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); G4cout << yzmax << G4endl; }
+      G4Box yzplate("yz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+      for(int y = 0; y < fNSegment[1]; y++) {
+	for(int z = 0; z < fNSegment[2]; z++) {
+	  G4ThreeVector pos(GetReplicaPosition(idxColumn, y, z));
+	  G4Transform3D trans;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(yzcell[y][z], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(yzplate, att, trans);
+	}
+      }
+    } else
+    // xz plane
+      if(idxProj == 2) {
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax);  G4cout << xzmax << G4endl;}
+      G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
+      for(int x = 0; x < fNSegment[0]; x++) {
+	for(int z = 0; z < fNSegment[2]; z++) {
+	  G4ThreeVector pos(GetReplicaPosition(x, idxColumn, z));
+	  G4Transform3D trans;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	  } else {
+	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(xzcell[x][z], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(xzplate, att, trans);
+	}
+      }
+    }
+  }
+}
 
 

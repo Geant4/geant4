@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.hh,v 1.1 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4VScoreColorMap.hh,v 1.2 2007-11-05 03:15:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,11 @@ class G4VScoreColorMap
       inline G4bool IfFloatMinMax() const 
       { return ifFloat; }
       inline void SetMinMax(G4double minVal, G4double maxVal)
-      { fMinVal = minVal; fMaxVal = maxVal; }
+      { fMinVal = minVal; fMaxVal = maxVal;
+	if(fMinVal >= fMaxVal)
+	  G4cerr << "G4VScoreColoMap::SetMinMax() : Verify [min., max.] values you set, ["
+		 << fMinVal << ", " << fMaxVal << "]" << G4endl;
+      }
       inline G4double GetMin() const
       { return fMinVal; }
       inline G4double GetMax() const
