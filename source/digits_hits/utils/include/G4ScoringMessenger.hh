@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.16 2007-11-03 21:10:02 asaim Exp $
+// $Id: G4ScoringMessenger.hh,v 1.17 2007-11-05 20:29:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -115,6 +115,7 @@ class G4ScoringMessenger: public G4UImessenger
     //
     // Draw Command
     G4UIcommand *        drawCmd;
+    G4UIcmdWithoutParameter * listColorMapCmd;
     //
     // Dump scoring result to file
     G4UIcommand * dumpQtyToFileCmd;

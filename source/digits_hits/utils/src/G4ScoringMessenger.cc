@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.29 2007-11-05 03:15:13 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.30 2007-11-05 20:29:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -168,6 +168,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
 
+  listColorMapCmd = new G4UIcmdWithoutParameter("/score/listScoreColorMaps",this);
+  listColorMapCmd->SetGuidance("List registered score color maps.");
+
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
   dumpQtyToFileCmd->SetGuidance("Dump a scored quantity to file ");
@@ -226,6 +229,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     //
     delete     dumpCmd;
     delete     drawCmd;
+    delete     listColorMapCmd;
     delete     dumpQtyToFileCmd;
     delete     dumpAllQtsToFileCmd;
     //
@@ -268,6 +272,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
           G4cerr << "Scoring mesh <" << newVal << "> already exists. Command ignored." << G4endl;
       }
+  } else if(command==listColorMapCmd) {
+      fSMan->ListScoreColorMaps();
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){

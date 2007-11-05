@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.22 2007-11-05 03:19:52 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.23 2007-11-05 20:29:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,7 +56,9 @@ G4ScoringManager::G4ScoringManager()
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
+  fColorMapDict = new ColorMapDict();
   fDefaultLinearColorMap = new G4DefaultLinearColorMap("defaultLinearColorMap");
+  (*fColorMapDict)[fDefaultLinearColorMap->GetName()] = fDefaultLinearColorMap;
 }
 
 G4ScoringManager::~G4ScoringManager()
@@ -113,10 +115,13 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String color
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) 
   {
-    if(fDefaultLinearColorMap->GetName()==colorMapName)
+    G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
+    if(!colorMap)
     {
-      mesh->DrawMesh(psName,fDefaultLinearColorMap,axflg);
+      G4cerr << "Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
+      colorMap = fDefaultLinearColorMap;
     }
+    mesh->DrawMesh(psName,colorMap,axflg);
   } else {
     G4cerr << "G4ScoringManager::DrawMesh() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;
@@ -152,3 +157,34 @@ void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileNa
 	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
+
+void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
+{
+  if(fColorMapDict->find(colorMap->GetName()) != fColorMapDict->end())
+  {
+    G4cerr << "G4ScoringManager::RegisterScoreColorMap -- "
+           << colorMap->GetName() << " has already been registered. Method ignored." << G4endl;
+  }
+  else
+  {
+    (*fColorMapDict)[colorMap->GetName()] = colorMap;
+  }
+}
+
+G4VScoreColorMap* G4ScoringManager::GetScoreColorMap(G4String mapName)
+{
+  ColorMapDictItr mItr = fColorMapDict->find(mapName);
+  if(mItr == fColorMapDict->end()) { return 0; }
+  return (mItr->second);
+}
+
+void G4ScoringManager::ListScoreColorMaps()
+{
+  G4cout << "Registered Score Color Maps -------------------------------------------------------" << G4endl;
+  ColorMapDictItr mItr = fColorMapDict->begin();
+  for(;mItr!=fColorMapDict->end();mItr++)
+  { G4cout << "   " << mItr->first; }
+  G4cout << G4endl;
+}
+
+
