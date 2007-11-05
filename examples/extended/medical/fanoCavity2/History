@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007-10-31 16:16:20 maire Exp $
+$Id: History,v 1.3 2007-11-05 13:19:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-12-10-07 mma
+12-10-07 mma (fano2-V09-00-00)
 - compute error on ratio
     
 12-10-07 michel maire

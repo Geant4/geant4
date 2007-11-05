@@ -1,14 +1,15 @@
-# $Id: essai.mac,v 1.1 2007-10-15 16:20:23 maire Exp $
+# $Id: essai.mac,v 1.2 2007-11-05 13:19:16 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
 #
 /testem/det/wallMater Water
+/testem/det/wallThickness 5 cm
 #
 /run/initialize
 #
-/gun/energy 1 MeV
+/gun/energy 10 MeV
 #
-/testem/event/printModulo 200000
+/testem/event/printModulo 10000
 #
-/run/beamOn 2000000
+/run/beamOn 200000

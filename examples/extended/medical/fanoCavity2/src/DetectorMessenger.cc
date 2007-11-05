@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2007-11-05 13:19:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,13 +52,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   wallMater->SetGuidance("Set material of the wall.");
   wallMater->SetParameterName("wallMat",false);
   
-  wallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallTickness",this);
+  wallThick = new G4UIcmdWithADoubleAndUnit("/testem/det/wallThickness",this);
   wallThick->SetGuidance("Set tickness of the wall");
   wallThick->SetParameterName("wallTick",false);
   wallThick->SetRange("wallTick>0.");
   wallThick->SetUnitCategory("Length");
   
-  cavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityTickness",this);
+  cavThick = new G4UIcmdWithADoubleAndUnit("/testem/det/cavityThickness",this);
   cavThick->SetGuidance("Set tickness of the cavity");
   cavThick->SetParameterName("cavityTick",false);
   cavThick->SetRange("cavityTick>0.");

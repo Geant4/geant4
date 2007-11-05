@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2007-11-05 13:19:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -52,7 +52,7 @@ DetectorConstruction::DetectorConstruction()
 :pWall(0), pCavity(0)
 {
   // default parameter values
-  wallThickness   = 10*mm;  
+  wallThickness   = 5*cm;  
   cavityThickness = 2*mm;
   worldRadius     = 10*m;    
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2007-10-31 16:16:20 maire Exp $
+// $Id: RunAction.cc,v 1.3 2007-11-05 13:19:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,7 +88,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   G4EmCalculator emCal;
   G4double RangeWall = emCal.GetCSDARange(energyGun,particleGun,mateWall);
-  G4double factor = 1.3;
+  G4double factor = 1.2;
   G4double effWallThick = factor*RangeWall;
   if ((effWallThick > wallThickness)||(effWallThick <= 0.))
     effWallThick = wallThickness;
