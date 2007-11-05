@@ -14,10 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-05 Nov 2007 -  V.Grichine 
+05 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-01)
 ------------------------------------------------
 
-G4DiffuseElastic         -  initialisation of  in constructor(particle definition)
+  G4DiffuseElastic       - (V.Grichine) initialisation of the model in 
+                           constructor with particle definition for the 
+                           vector of available elements; tuning
+                           at high energies. 
 
 17 Oct 2007 -  V.Ivanchenko (hadr-cohe-V09-00-00)
 ------------------------------------------------
