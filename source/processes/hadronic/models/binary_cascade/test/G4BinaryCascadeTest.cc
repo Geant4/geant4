@@ -20,13 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "G4HadronKineticModel.hh"
+#include "G4BinaryCascade.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4StateManager.hh"
 
 #include "G4LeptonConstructor.hh"
 #include "G4Gamma.hh"
@@ -38,7 +39,7 @@
 
 /*
 #include "ResourceMgr.hh"
-// in G4HadronKineticModel.cc
+// in G4BinaryCascade.cc
 ResourceMgr absorbRes;
 ResourceMgr buildTargetListRes;
 ResourceMgr findCollisionRes;
@@ -52,7 +53,7 @@ void PrintResourceUsage(ResourceMgr & resMgr);
 G4V3DNucleus * global3DNucleus;
 
 
-void Init(G4int code, vector<G4ParticleDefinition *> & particles);
+void Init(G4int code, std::vector<G4ParticleDefinition *> & particles);
 void GetParam(G4int & A, G4int & Z, G4double & pMin, G4double & pMax,
 	      G4int &nEvents, G4int & particleCode);
 G4ThreeVector GetSpherePoint(G4double r);
@@ -60,6 +61,10 @@ G4ThreeVector GetSurfacePoint(G4double r);
 
 int main(int argc, char * argv[])
 {
+    G4StateManager* g4State=G4StateManager::GetStateManager();
+    if (! g4State->SetNewState(G4State_Init)) 
+      G4cout << "error changing G4state"<< G4endl;;   
+
   G4String a=G4Proton::ProtonDefinition()->GetParticleName();
   G4cout << " At Start " << a << G4endl;
   G4cout.setf( std::ios::scientific, std::ios::floatfield );
@@ -68,10 +73,24 @@ int main(int argc, char * argv[])
   leptons.ConstructParticle();
   G4IonConstructor ions;
   ions.ConstructParticle();
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
+  const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
+  const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
+
+    if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
+      G4cout << "G4StateManager PROBLEM! " << G4endl;
 
   G4int A, Z, nEvents, particleCode;
   G4double pMin, pMax;
-  vector<G4ParticleDefinition *> particles;
+  std::vector<G4ParticleDefinition *> particles;
   if(argc == 7)
   {
     A = atoi(argv[1]);
@@ -93,23 +112,13 @@ int main(int argc, char * argv[])
 
   Init(particleCode, particles);
 
-  G4HadronKineticModel hkm;
+  G4BinaryCascade bic;
   G4ExcitationHandler * excite = new G4ExcitationHandler();
   G4VPreCompoundModel * precompound = new G4PreCompoundModel(excite);
 
-  hkm.SetDeExcitation(0);
-//  hkm.SetDeExcitation(precompound);
+//  bic.SetDeExcitation(0);
+  bic.SetDeExcitation(precompound);
 
-// build the nucleus
-#ifdef APPLYYOURSELF
-  //  G4Nucleus nucleus(G4double(A), G4double(Z));  // for ApplyYourself()
-  G4Nucleus nucleus(A, Z);  // for ApplyYourself()
-  global3DNucleus = new G4Fancy3DNucleus;
-  global3DNucleus->Init(A, Z);
-#else
-  G4V3DNucleus * fancyNucleus = new G4Fancy3DNucleus;  // for PropagateSTL()
-  fancyNucleus->Init(A, Z);
-#endif
 
   for(G4int event = 0; event < nEvents; ++event)
   {
@@ -132,30 +141,42 @@ int main(int argc, char * argv[])
            << " " << e-mass << " "
 	   <<G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A)<< G4endl;
 
+// build the nucleus
+#ifdef APPLYYOURSELF
+  //  G4Nucleus nucleus(G4double(A), G4double(Z));  // for ApplyYourself()
+  G4Nucleus nucleus(A, Z);  // for ApplyYourself()
+//  global3DNucleus = new G4Fancy3DNucleus;
+//  global3DNucleus->Init(A, Z);
+#else
+  G4V3DNucleus * fancyNucleus = new G4Fancy3DNucleus;  // for PropagateSTL()
+  fancyNucleus->Init(A, Z);
+#endif
+
 // build the projectile
 #ifdef APPLYYOURSELF
     G4DynamicParticle * dynamic = new G4DynamicParticle(particle, mom);
     G4double time = 0.;
     G4Track projectile(dynamic, time, pos);
     // needed by G4ParticleChange::Initialize(G4Track &)
-    G4Step * step = new G4Step();
-    step->SetStepLength(1.0*mm);
-    projectile.SetStep(step);
-    G4VParticleChange * aFinalState = hkm.ApplyYourself(projectile, nucleus);
+   // G4Step * step = new G4Step();
+    //step->SetStepLength(1.0*mm);
+   // projectile.SetStep(step);
+    G4HadFinalState * aFinalState = bic.ApplyYourself(projectile, nucleus);
 
     G4double QValue = 0, Etot=0;
     G4LorentzVector pTot = 0;
-    G4Track * second;
+//    G4Track * second;
+    G4HadSecondary * second;
     const G4DynamicParticle * aSec;
     
     for(G4int isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
     {
       second = aFinalState->GetSecondary(isec);
-      aSec = second->GetDynamicParticle();
+      aSec = second->GetParticle();
       G4cout << "SECONDARIES info ";
       G4cout << aSec->GetDefinition()->GetBaryonNumber() << " ";
       G4cout << aSec->GetTotalEnergy();
-      G4cout << aSec->GetMomentum();
+      G4cout << aSec->GetMomentum()<< " ";
       G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
       G4cout << G4endl;
       QValue += aSec->GetKineticEnergy();
@@ -173,31 +194,31 @@ int main(int argc, char * argv[])
       } 
       
 
-      delete second;
+//      delete second;
     }
     G4cout << "QVALUE = "<<QValue<<G4endl;
     G4cout << "Ptotal, pseudoE, exciteE = " 
              << pTot << " " << Etot << " " << e-mass-Etot <<G4endl;
 
     aFinalState->Clear();
-    delete dynamic;
-    delete step;
+//    delete dynamic;
+//    delete step;
 
 //    change->DumpInfo();
 
 #else
     G4double radius = fancyNucleus->GetOuterRadius();
     G4KineticTrackVectorSTL * ktv = new G4KineticTrackVectorSTL;
-//    hkm.GetSpherePoint(radius, pos); // start from the surface
+//    bic.GetSpherePoint(radius, pos); // start from the surface
     pos = GetSpherePoint(radius); // start already inside, pos.mag()< r
     pos = GetSurfacePoint(radius*1.01); // start outside,  pos.mag()= r*1.01
 //    pos = G4ThreeVector(1.*fermi,0.*fermi,-15.*fermi);
     G4KineticTrack * kt = new G4KineticTrack(particle, 0., pos, mom);
     ktv->push_back(kt);
-    G4ReactionProductVector *result=hkm.PropagateSTL(ktv, fancyNucleus);
+    G4ReactionProductVector *result=bic.PropagateSTL(ktv, fancyNucleus);
 
-//    hkm.GetExcitationEnergy();
-//    cout << hkm.GetExcitationEnergy()/MeV << endl;
+//    bic.GetExcitationEnergy();
+//    std::cout << bic.GetExcitationEnergy()/MeV << endl;
     
     G4ReactionProductVector::iterator result_iter;
     G4int isec=0;
@@ -217,25 +238,25 @@ int main(int argc, char * argv[])
   }
 /*
   totalRes.Stop();
-  cout << "Absorb() resources:" << endl;
+  std::cout << "Absorb() resources:" << endl;
   PrintResourceUsage(absorbRes);
-  cout << "FindFirstCollision() resources:" << endl;
+  std::cout << "FindFirstCollision() resources:" << endl;
   PrintResourceUsage(findFirstCollisionRes);
-  cout << "FindCollision() resources:" << endl;
+  std::cout << "FindCollision() resources:" << endl;
   PrintResourceUsage(findCollisionRes);
-  cout << "BuildTargetList() resources:" << endl;
+  std::cout << "BuildTargetList() resources:" << endl;
   PrintResourceUsage(buildTargetListRes);
-  cout << "thePropagator() resources:" << endl;
+  std::cout << "thePropagator() resources:" << endl;
   PrintResourceUsage(thePropagatorRes);
-  cout << "UpdateTrackAndCollisions() resources:" << endl;
+  std::cout << "UpdateTrackAndCollisions() resources:" << endl;
   PrintResourceUsage(updateRes);
-  cout << "scatterer resources:" << endl;
+  std::cout << "scatterer resources:" << endl;
   PrintResourceUsage(scattererRes);
-  cout << "main() resources:" << endl;
+  std::cout << "main() resources:" << endl;
   PrintResourceUsage(totalRes);
 */
-//  cout << "Exiting" << endl;
-  cout.flush();
+//  std::cout << "Exiting" << endl;
+  std::cout.flush();
 
   return 0;
 }
@@ -247,14 +268,14 @@ void PrintResourceUsage(ResourceMgr & resMgr)
   double userTime = resMgr.GetUserTime();
   double sysTime = resMgr.GetSysTime();
   double cpuTime = userTime+sysTime;
-  cout << "cpu time: " << cpuTime << " (" << userTime << "+"
+  std::cout << "cpu time: " << cpuTime << " (" << userTime << "+"
        << sysTime << ")" << endl;
 }
 
 
 */
 
-void Init(G4int code, vector<G4ParticleDefinition *> & particles)
+void Init(G4int code, std::vector<G4ParticleDefinition *> & particles)
 {
   if(code == 0)
   {
@@ -317,23 +338,23 @@ void GetParam(G4int & A, G4int & Z, G4double & pMin, G4double & pMax,
 	      G4int &nEvents, G4int & particleCode)
 {
 // A and Z
-  cout << "Input Nucleus A and Z: ";
-  cin >> A >> Z;
+  std::cout << "Input Nucleus A and Z: ";
+  std::cin >> A >> Z;
 // initial impulse
-  cout << "Input min and max of |momentum|: ";
-  cin >> pMin >> pMax;
+  std::cout << "Input min and max of |momentum|: ";
+  std::cin >> pMin >> pMax;
 // number of events
-  cout << "Input number of events: ";
-  cin >> nEvents;
+  std::cout << "Input number of events: ";
+  std::cin >> nEvents;
 // particle code
-  cout << "Binary code for projectile type:" << endl;
-  cout << "1 = proton, 2 = neutron, 4 = antiproton" << endl;
-  cout << "8 = pi+, 16 = pi0, 32 = pi-" << endl;
-  cout << "64 = k+, 128 = k0, 256 = k-" << endl;
-  cout << "512 = s+, 1024 = s0, 2048 = s-" << endl;
-  cout << "       0 for photon" << endl;
-  cout << "Input projectile type (binary code): ";
-  cin >> particleCode;
+  std::cout << "Binary code for projectile type:" << std::endl;
+  std::cout << "1 = proton, 2 = neutron, 4 = antiproton" << std::endl;
+  std::cout << "8 = pi+, 16 = pi0, 32 = pi-" << std::endl;
+  std::cout << "64 = k+, 128 = k0, 256 = k-" << std::endl;
+  std::cout << "512 = s+, 1024 = s0, 2048 = s-" << std::endl;
+  std::cout << "       0 for photon" << std::endl;
+  std::cout << "Input projectile type (binary code): ";
+  std::cin >> particleCode;
 }
 
 
