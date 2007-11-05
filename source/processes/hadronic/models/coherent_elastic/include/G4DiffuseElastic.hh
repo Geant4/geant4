@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.11 2007-10-29 09:16:50 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.12 2007-11-05 09:29:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,8 @@
 using namespace std;
 
 class G4ParticleDefinition;
+class G4PhysicsTable;
+class G4PhysicsLogVector;
 
 class G4DiffuseElastic : public G4HadronicInteraction
 {
@@ -57,7 +59,18 @@ public:
 
   G4DiffuseElastic();
 
+  G4DiffuseElastic(const G4ParticleDefinition* aParticle);
+
+
+
+
+
   virtual ~G4DiffuseElastic();
+
+  void Initialise();
+
+  void BuildAngleTable();
+
  
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 				  G4Nucleus & targetNucleus);
@@ -76,7 +89,14 @@ public:
   G4double SampleT(const G4ParticleDefinition* aParticle, 
                          G4double p, G4double A);
 
+  G4double SampleTableT(const G4ParticleDefinition* aParticle, 
+                         G4double p, G4double Z);
+
   G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
+
+  G4double SampleTableThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double Z);
+
+  G4double GetScatteringAngle(G4int iMomentum, G4int iAngle, G4double position);
 
   G4double SampleThetaLab(const G4HadProjectile* aParticle, 
                                 G4double tmass, G4double A);
@@ -173,6 +193,16 @@ private:
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
 
+  G4int fEnergyBin;
+  G4int fAngleBin;
+
+  G4PhysicsLogVector*           fEnergyVector;
+  G4PhysicsTable*               fAngleTable;
+  std::vector<G4PhysicsTable*>  fAngleBank;
+
+  std::vector<G4double> fElementNumberVector;
+  std::vector<G4String> fElementNameVector;
+
   const G4ParticleDefinition* fParticle;
   G4double fWaveVector;
   G4double fAtomicWeight;
@@ -181,9 +211,10 @@ private:
   G4double fBeta;
   G4double fZommerfeld;
   G4double fAm;
-
+  G4bool fAddCoulomb;
 
 };
+
 
 inline void G4DiffuseElastic::SetRecoilKinEnergyLimit(G4double value)
 {
