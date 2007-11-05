@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2007-11-01 17:31:17 schaelic Exp $
+$Id: History,v 1.15 2007-11-05 10:53:13 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 November 07: A.Schaelicke (empolar-V09-00-02)
 01 November 07: A.Schaelicke
 - Bug fix in G4PolarizedAnnihilationCrossSection
-   (polarisation dependence of total cross section)
+    error in calculation of polarisation dependent total cross section
+    (wrong interactionLength for positrons in applications where, 
+     particle and media are polarised)  
 - more general Cross section frame work:
     G4PolarizedAnnihilationCrossSection
     G4PolarizedBhabhaCrossSection
@@ -30,12 +33,18 @@ committal in the CVS repository !
     G4PolarizedPairProductionCrossSection
     G4VPolarizedCrossSection
     G4ePolarizedBremsstrahlungModel
+   (removed dependencies to models; now cross sections can be used 
+    independent of any model, e.g. in a cross section calculator class)
 - add polarized photo electric effect:
     G4PolarizationHelper
+       (new method GetRandomFrame, used when interaction frame is not
+        well defined by outgoing particles) 
     G4PolarizedPEEffectCrossSection
+       (based on McMaster, Rev.Mod.Phys. 33 (1961) 8)
     G4PolarizedPEEffectModel
+       (derived from G4PEEffectModel, adds polarisation transfer)
     G4PolarizedPhotoElectricEffect
-
+       (derived from G4VEmProcess)
 
 02 October 07: V.Ivanchenko (empolar-V09-00-01)
 G4eplusPolarizedAnnihilation - enabled AtRest
