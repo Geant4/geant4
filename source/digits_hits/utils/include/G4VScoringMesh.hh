@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.24 2007-11-04 18:05:49 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.25 2007-11-05 23:52:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,6 +72,7 @@ public:
   inline void Accumulate(G4THitsMap<G4double> * map);
   void Dump();
   inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  inline void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn) = 0;
@@ -157,7 +158,19 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
 void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
 {
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end()) Draw(fMapItr->second->GetMap(),colorMap,axflg);
+  if(fMapItr!=fMap.end())
+  { Draw(fMapItr->second->GetMap(),colorMap,axflg); }
+  else
+  { G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl; }
+}
+
+void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
+{
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  if(fMapItr!=fMap.end())
+  { DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn); }
+  else
+  { G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl; }
 }
 
 #endif

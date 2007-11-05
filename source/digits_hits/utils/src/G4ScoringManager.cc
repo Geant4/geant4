@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.23 2007-11-05 20:29:05 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.24 2007-11-05 23:52:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -122,6 +122,24 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String color
       colorMap = fDefaultLinearColorMap;
     }
     mesh->DrawMesh(psName,colorMap,axflg);
+  } else {
+    G4cerr << "G4ScoringManager::DrawMesh() --- <"
+	   << meshName << "> is not found. Nothing is done." << G4endl;
+  }
+}
+
+void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4int idxPlane,G4int iColumn,G4String colorMapName)
+{
+  G4VScoringMesh* mesh = FindMesh(meshName);
+  if(mesh) 
+  {
+    G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
+    if(!colorMap)
+    {
+      G4cerr << "Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
+      colorMap = fDefaultLinearColorMap;
+    }
+    mesh->DrawMesh(psName,idxPlane,iColumn,colorMap);
   } else {
     G4cerr << "G4ScoringManager::DrawMesh() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;

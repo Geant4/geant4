@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.19 2007-11-05 20:29:04 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.20 2007-11-05 23:52:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -78,6 +78,7 @@ class G4ScoringManager
       void List() const;
       void Dump() const;
       void DrawMesh(G4String meshName,G4String psName,G4String colorMapName,G4int axflg=111);
+      void DrawMesh(G4String meshName,G4String psName,G4int idxPlane,G4int iColumn,G4String colorMapName);
       void DumpQuantityToFile(G4String meshName, G4String psName,G4String fileName, G4String option = "");
       void DumpAllQuantitiesToFile(G4String meshName, G4String fileName, G4String option = "");
       void RegisterScoreColorMap(G4VScoreColorMap* colorMap);

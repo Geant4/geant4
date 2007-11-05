@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.30 2007-11-05 20:29:05 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.31 2007-11-05 23:52:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4UIcommand.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreColorMap.hh"
 
 G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 :fSMan(SManager)
@@ -161,16 +162,51 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
   drawCmd->SetParameter(param);
-  param = new G4UIparameter("psName",'s',true);
+  param = new G4UIparameter("cmName",'s',true);
   param->SetDefaultValue("defaultLinearColorMap");
   drawCmd->SetParameter(param);
   param = new G4UIparameter("proj",'i',true);
   param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
 
-  listColorMapCmd = new G4UIcmdWithoutParameter("/score/listScoreColorMaps",this);
+  // Draw column
+  drawColumnCmd = new G4UIcommand("/score/drawColumn",this);
+  drawColumnCmd->SetGuidance("Draw a cell column");
+  drawColumnCmd->SetGuidance(" plane = 0 : xy, 1: yz, 2: zx");
+  param = new G4UIparameter("meshName",'s',false);
+  drawColumnCmd->SetParameter(param);
+  param = new G4UIparameter("psName",'s',false);
+  drawColumnCmd->SetParameter(param);
+  param = new G4UIparameter("plane",'i',false);
+  param->SetParameterRange("plane>=0 && plane<=2");
+  drawColumnCmd->SetParameter(param);
+  param = new G4UIparameter("column",'i',false);
+  drawColumnCmd->SetParameter(param);
+  param = new G4UIparameter("cmName",'s',true);
+  param->SetDefaultValue("defaultLinearColorMap");
+  drawColumnCmd->SetParameter(param);
+
+  colorMapDir = new G4UIdirectory("/score/colorMap/");
+  colorMapDir->SetGuidance("Color map commands");
+
+  listColorMapCmd = new G4UIcmdWithoutParameter("/score/colorMap/listScoreColorMaps",this);
   listColorMapCmd->SetGuidance("List registered score color maps.");
 
+  floatMinMaxCmd = new G4UIcmdWithAString("/score/colorMap/floatMinMax",this);
+  floatMinMaxCmd->SetGuidance("Min/Max of color map is calculated accorging to the actual scores.");
+  floatMinMaxCmd->SetParameterName("colorMapName",true,false);
+  floatMinMaxCmd->SetDefaultValue("defaultLinearColorMap");
+
+  colorMapMinMaxCmd = new G4UIcommand("/score/colorMap/setMinMax",this);
+  colorMapMinMaxCmd->SetGuidance("Define min/max value of the color map");
+  param = new G4UIparameter("colorMapMame",'s',true);
+  param->SetDefaultValue("defaultLinearColorMap");
+  colorMapMinMaxCmd->SetParameter(param);
+  param = new G4UIparameter("minValue",'d',false);
+  colorMapMinMaxCmd->SetParameter(param);
+  param = new G4UIparameter("maxValue",'d',false);
+  colorMapMinMaxCmd->SetParameter(param);
+  
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
   dumpQtyToFileCmd->SetGuidance("Dump a scored quantity to file ");
@@ -197,7 +233,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 
 G4ScoringMessenger::~G4ScoringMessenger()
 {
-    delete scoreDir;
     delete listCmd;
     delete verboseCmd;
     //
@@ -206,11 +241,11 @@ G4ScoringMessenger::~G4ScoringMessenger()
 //    delete           meshTubsCreateCmd;
 //    delete           meshSphereCreateCmd;
     //
-    delete          meshDir;
     delete          meshOpnCmd;
     //
     delete    meshClsCmd;
 //    delete    meshActCmd;
+    delete          meshDir;
     //
     delete  mBoxSizeCmd;
     delete  mTubsSizeCmd;
@@ -218,21 +253,26 @@ G4ScoringMessenger::~G4ScoringMessenger()
     //
     delete      mBinCmd;
     //
-    delete   mTransDir;
     delete   mTResetCmd;
     delete   mTXyzCmd;
-    delete   mRotDir;
+    delete   mTransDir;
     delete   mRResetCmd;
     delete   mRotXCmd;
     delete   mRotYCmd;
     delete   mRotZCmd;
+    delete   mRotDir;
     //
     delete     dumpCmd;
     delete     drawCmd;
+    delete     drawColumnCmd;
     delete     listColorMapCmd;
+    delete     floatMinMaxCmd;
+    delete     colorMapMinMaxCmd;
+    delete     colorMapDir;
     delete     dumpQtyToFileCmd;
     delete     dumpAllQtsToFileCmd;
     //
+    delete scoreDir;
 }
 
 void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
@@ -248,6 +288,14 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4String colorMapName = next();
       G4int axflg = StoI(next());
       fSMan->DrawMesh(meshName,psName,colorMapName,axflg);
+  } else if(command==drawColumnCmd) { 
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String psName = next();
+      G4int iPlane = StoI(next());
+      G4int iColumn = StoI(next());
+      G4String colorMapName = next();
+      fSMan->DrawMesh(meshName,psName,iPlane,iColumn,colorMapName);
   } else if(command==dumpQtyToFileCmd) { 
       G4Tokenizer next(newVal);
       G4String meshName = next();
@@ -274,6 +322,23 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       }
   } else if(command==listColorMapCmd) {
       fSMan->ListScoreColorMaps();
+  } else if(command==floatMinMaxCmd) {
+      G4VScoreColorMap* colorMap = fSMan->GetScoreColorMap(newVal);
+      if(colorMap)
+      { colorMap->SetFloatingMinMax(true); }
+      else
+      { G4cerr << "color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
+  } else if(command==colorMapMinMaxCmd) {
+      G4Tokenizer next(newVal);
+      G4String mapName = next();
+      G4double minVal = StoD(next());
+      G4double maxVal = StoD(next());
+      G4VScoreColorMap* colorMap = fSMan->GetScoreColorMap(mapName);
+      if(colorMap)
+      { colorMap->SetFloatingMinMax(false);
+        colorMap->SetMinMax(minVal,maxVal); }
+      else
+      { G4cerr << "color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
