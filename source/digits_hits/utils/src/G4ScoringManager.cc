@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.21 2007-11-05 03:15:13 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.22 2007-11-05 03:19:52 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,7 +119,7 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String color
     }
   } else {
     G4cerr << "G4ScoringManager::DrawMesh() --- <"
-	   << meshName << "> is not found. Nothing is done." << G4endl;.
+	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
 
@@ -134,7 +134,7 @@ void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4St
     writer->DumpQuantityToFile(psName, fileName, option);
   } else {
     G4cerr << "G4ScoringManager::DrawQuantityToFile() --- <"
-	   << meshName << "> is not found. Nothing is done." << G4endl;.
+	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
 
@@ -149,6 +149,6 @@ void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileNa
     writer->DumpAllQuantitiesToFile(fileName, option);
   } else {
     G4cerr << "G4ScoringManager::DrawAllQuantitiesToFile() --- <"
-	   << meshName << "> is not found. Nothing is done." << G4endl;.
+	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
