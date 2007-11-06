@@ -24,7 +24,7 @@ export  REF=prod
 fi
 
 #export CLHEP_VERSION=pro
-export CLHEP_VERSION=2.0.3.1
+export CLHEP_VERSION=2.0.3.2
 
 if [ $G4DEBUG ]; then
 export DEBOPT=debug
