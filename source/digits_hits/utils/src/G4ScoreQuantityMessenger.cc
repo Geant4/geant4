@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.4 2007-11-03 22:39:37 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.5 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -439,11 +439,6 @@ void G4ScoreQuantityMessenger::FillTokenVec(G4String newValues, G4TokenVec& toke
 	//    val.remove(val.length()-1,1);
 	//}
 	token.push_back(val);
-
-//      G4cout << "@GetToken:"
-//	       << val
-//	       << "::"
-//	       << G4endl;
     }
 }
 

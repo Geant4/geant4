@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.hh,v 1.1 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4VScoreWriter.hh,v 1.2 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,15 +46,20 @@ public:
   virtual ~G4VScoreWriter();
 
 public:
+  // store a quantity into a file
   virtual void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  // store all quantities into a file
   virtual void DumpAllQuantitiesToFile(G4String & fileName, G4String & option);
 
+  // set a socring mesh to retrieve its quantities
   void SetScoringMesh(G4VScoringMesh * sm); 
+  // set a verbose level
   inline void SetVerboseLevel(G4int vl) {
     verboseLevel = vl;
   }
 
 protected:
+  // get an index from (x,y,z) 
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
 protected:

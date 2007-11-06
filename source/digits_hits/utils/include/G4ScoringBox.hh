@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.17 2007-11-04 18:05:49 asaim Exp $
+// $Id: G4ScoringBox.hh,v 1.18 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,29 +43,34 @@ class G4VScoreColorMap;
 
 class G4ScoringBox : public G4VScoringMesh
 {
-  public:
-      G4ScoringBox(G4String wName);
-      ~G4ScoringBox();
+public:
+  G4ScoringBox(G4String wName);
+  ~G4ScoringBox();
 
-  public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys);
-      virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-      virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+public:
+  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+  virtual void List() const;
+  virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn); 
-  //virtual void DumpToFile(G4String & psName, G4String & fileName, G4String & option);
 
-       void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+  // set a direction to segment this mesh
+  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+
+private:
+  // construct this mesh
+  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
+  // get replicated position from 3D index (x,y,z)
+  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
+  // get 3D index (x,y,z) from sequential index
+  void GetXYZ(G4int index, G4int q[3]) const;
+  // get sequential index from 3D index (x,y,z)
+  G4int GetIndex(G4int x, G4int y, G4int z) const;
 
 private:
   G4int fSegmentDirection; // =1: x, =2: y, =3: z
   G4LogicalVolume * fMeshElementLogical;
   
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
-  G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
-  //void GetSegmentOrder(G4int segDir, G4int nseg[3], G4int segOrd[3], G4double segfact[3][3]);
-  void GetXYZ(G4int index, G4int q[3]) const;
-  G4int GetIndex(G4int x, G4int y, G4int z) const;
 };
 
 

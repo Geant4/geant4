@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.25 2007-11-05 23:52:36 asaim Exp $
+// $Id: G4VScoringMesh.hh,v 1.26 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,58 +57,83 @@ class G4VScoringMesh
   ~G4VScoringMesh();
 
   public:
+  // a pure virtual function to construct this mesh geometry
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+  // list infomration of this mesh 
   virtual void List() const;
   
 public:
+  // get the world name
   inline const G4String& GetWorldName() const
   { return fWorldName; }
+  // get whether this mesh is active or not
   inline G4bool IsActive() const
   { return fActive; }
+  // set an activity of this mesh
   inline void Activate(G4bool vl = true)
   { fActive = vl; }
+  // get the shape of this mesh
   inline MeshShape GetShape() const
   { return fShape; }
+  // accumulate hits in a registered primitive scorer
   inline void Accumulate(G4THitsMap<G4double> * map);
+  // dump information of primitive socrers registered in this mesh
   void Dump();
+  // draw a projected quantity on a current viewer
   inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  // draw a column of a quantity on a current viewer
   inline void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
+  // draw a projected quantity on a current viewer
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
+  // draw a column of a quantity on a current viewer
   virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn) = 0;
-
+  // reset registered primitive scorers
   void ResetScore();
 
+  // set size of this mesh
   void SetSize(G4double size[3]);
+  // set position of center of this mesh
   void SetCenterPosition(G4double centerPosition[3]);
+  // set a rotation angle around the x axis
   void RotateX(G4double delta);
+  // set a rotation angle around the y axis
   void RotateY(G4double delta);
+  // set a rotation angle around the z axis
   void RotateZ(G4double delta);
+  // set number of segments of this mesh
   void SetNumberOfSegments(G4int nSegment[3]);
+  // get number of segments of this mesh
   void GetNumberOfSegments(G4int nSegment[3]);
+  // set positions to segment this mesh
   inline void SetSegmentPositions(std::vector<G4double> & sp) {fSegmentPositions = sp;}
 
-  
+  // register a primitive scorer to the MFD & set it to the current primitive scorer
   void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
+  // register a filter to a current primtive scorer
   void SetFilter(G4VSDFilter * filter);
+  // set a primitive scorer to the current one by the name
   void SetCurrentPrimitiveScorer(G4String & name);
+  // find registered primitive scorer by the name
   G4bool FindPrimitiveScorer(G4String & psname);
-
+  // get whether current primitive scorer is set or not
   G4bool IsCurrentPrimitiveScorerNull() {
     if(fCurrentPS == NULL) return true;
     else return false;
   }
+  // set current  primitive scorer to NULL
   void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
-
+  // set verbose level
   inline void SetVerboseLevel(G4int vl) 
   { verboseLevel = vl; }
-
+  // get the primitive scorer map
   MeshScoreMap GetScoreMap() {return fMap;}
-
+  // get whether this mesh setup has been ready
   inline G4bool ReadyForQuantity() const
   { return (sizeIsSet && nMeshIsSet); }
 
 protected:
+  // get registered primitive socrer by the name
   G4VPrimitiveScorer * GetPrimitiveScorer(G4String & name);
 
 protected:

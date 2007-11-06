@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.31 2007-11-06 05:27:07 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.32 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,19 +48,8 @@ G4VScoringMesh::G4VScoringMesh(G4String wName)
 
 G4VScoringMesh::~G4VScoringMesh()
 {
-  //delete fMFD;
+  ;
 }
-
-//void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
-//{
-//  if(fConstructed) 
-//  {
-//    G4cerr << fWorldPhys->GetName() << G4endl;
-//    G4Exception(fWorldName+" has already been built.");
-//  }
-//  fConstructed = true;
-//
-//}
 
 void G4VScoringMesh::ResetScore() {
   if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore() is called." << G4endl;
@@ -76,7 +65,6 @@ void G4VScoringMesh::SetSize(G4double size[3]) {
 }
 void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
-  //for(int i = 0; i < 3; i++) fCenterPosition[i] = centerPosition[i];
 }
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
@@ -129,13 +117,6 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
     G4cerr << "G4VScoringMesh::SetSDFilter() : scorer must be defined first. Method ignored." << G4endl;
     return;
   }
-/////  if(!ReadyForQuantity())
-/////  {
-/////    G4cerr << "G4VScoringMesh::SetFilter() : " << fCurrentPS->GetName() 
-/////           << " does not yet have mesh size or number of bins. Set them first." << G4endl
-/////           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
-/////    return;
-/////  }
   if(verboseLevel > 1) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
 			      << " is set to "
@@ -153,7 +134,8 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
   fCurrentPS = GetPrimitiveScorer(name);
   if(fCurrentPS == NULL) {
-    //G4Execption("G4VScoringMesh::SetCurrentPrimitiveScorer() :  The primitive scorer ", name, " was not exist.");
+    G4cerr << "G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer "
+	   << name << " was not exist." << G4endl;
   }
 }
 
@@ -230,6 +212,5 @@ void G4VScoringMesh::Dump() {
   }
   G4cout << G4endl;
 
-//////////////  Draw();
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.24 2007-11-05 23:52:36 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.25 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,7 +91,7 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
   }
   if(!sm && verboseLevel>19)
   { G4cout << "G4ScoringManager::FindMesh() --- <" << wName << "> is not found. Null returned." << G4endl; }
-//////////////////////////////////////////  SetCurrentMesh(sm); ///////////// Commented out
+
   return sm;
 }
 

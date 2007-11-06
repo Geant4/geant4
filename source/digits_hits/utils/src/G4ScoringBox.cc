@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.42 2007-11-06 05:27:07 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.43 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,7 +67,6 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
     if(verboseLevel > 1) 
       G4cerr << "G4ScoringBox::Construct() : " << fWorldPhys->GetName()
 	     << " is already constructed. All quantities are reset." << G4endl;
-//////////////////////////////////////    G4Exception(fWorldName+" has already been built.");
     ResetScore();
 
   } else {
@@ -101,8 +100,6 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   //G4int segOrder[3];
   //GetSegmentOrder(fSegmentDirection, fNSegment, segOrder, fsegment);
   //EAxis axis[3] = {kXAxis, kYAxis, kZAxis};
-
-
 
   G4String layerName[2] = {boxName + "1",  boxName + "2"};
   G4VSolid * layerSolid[2]; 
@@ -239,22 +236,9 @@ void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox : " << fWorldName << " --- Shape: Box mesh" << G4endl;
 
   G4VScoringMesh::List();
-
-//////  G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
-
-//////  std::map<G4String, G4THitsMap<G4double>* >::const_iterator itr = fMap.begin();
-//////  for(; itr != fMap.end(); itr++) {
-//////    G4cout << "[" << itr->first << "]" << G4endl;
-//////  }
-
 }
 
 void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
-
-  //DrawColumn(map, colorMap, 0, 40);
-  //DrawColumn(map, colorMap, 1, 25);
-  //DrawColumn(map, colorMap, 2, 25);
-  //return;
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -299,9 +283,6 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     att.SetForceAuxEdgeVisible(true);
 
 
-    //G4VSolid * drawBox = new G4Box("drawBox", fSize[0], fSize[1], fSize[2]);
-    //G4LogicalVolume * drawBoxLV = new G4LogicalVolume(drawBox, 0 ,"drawBoxLV");
-
     G4Scale3D scale;
     if(axflg/100==1) {
       // xy plane
@@ -310,8 +291,6 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
       for(int x = 0; x < fNSegment[0]; x++) {
 	for(int y = 0; y < fNSegment[1]; y++) {
-	  //G4ThreeVector pos(GetReplicaPosition(x, y, 0) + fCenterPosition - zhalf);
-	  //G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + fCenterPosition + zhalf);
 	  G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
 	  G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
 	  G4Transform3D trans, trans2;
@@ -341,8 +320,6 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
       for(int y = 0; y < fNSegment[1]; y++) {
 	for(int z = 0; z < fNSegment[2]; z++) {
-	  //G4ThreeVector pos(GetReplicaPosition(0, y, z) + fCenterPosition - xhalf);
-	  //G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + fCenterPosition + xhalf);
 	  G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
 	  G4ThreeVector pos2(GetReplicaPosition(fNSegment[0]-1, y, z) + xhalf);
 	  G4Transform3D trans, trans2;
@@ -372,8 +349,6 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
       for(int x = 0; x < fNSegment[0]; x++) {
 	for(int z = 0; z < fNSegment[2]; z++) {
-	  //G4ThreeVector pos(GetReplicaPosition(x, 0, z) + fCenterPosition - yhalf);
-	  //G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + fCenterPosition + yhalf);
 	  G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
 	  G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1]-1, z) + yhalf);
 	  G4Transform3D trans, trans2;
@@ -398,81 +373,8 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
   }
 }
 
-/*
-void G4ScoringBox::DumpToFile(G4String & psName, G4String & fileName, G4String & option) {
-
-
-  // change the option string into lowercase to the case-insensitive.
-  G4String opt = option;
-  //std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
-  std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
-
-  // confirm the option
-  if(opt.find("csv") == std::string::npos &&
-     opt.find("sequence") == std::string::npos) {
-    G4cerr << "DumpToFile : Unknown option -> "
-	   << option << G4endl;
-    return;
-  }
-
-  // retrieve the map
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr == fMap.end()) {
-    G4cerr << "DumpToFile : Unknown quantity, \""
-	   << psName << "\"." << G4endl;
-    return;
-  }
-  std::map<G4int, G4double*> * map = fMapItr->second->GetMap();
-
-  // open the file
-  std::ofstream ofile(fileName);
-  if(!ofile) {
-    G4cerr << "DumpToFile : File open error -> "
-	   << fileName << G4endl;
-    return;
-  }
-  
-  // "sequence" option: write header info 
-  if(opt.find("sequence") != std::string::npos) {
-    ofile << fNSegment[0] << " " << fNSegment[1] << " " << fNSegment[2]
-	  << G4endl;
-    //ofile << "MeV" << G4endl;
-  }
-
-  // write quantity values
-  long count = 0;
-  for(int x = 0; x < fNSegment[0]; x++) {
-    for(int y = 0; y < fNSegment[1]; y++) {
-      for(int z = 0; z < fNSegment[2]; z++) {
-	G4int idx = GetIndex(x, y, z);
-	
-	if(opt.find("csv") != std::string::npos)
-	  ofile << x << "," << y << "," << z << ",";
-
-	std::map<G4int, G4double*>::iterator value = map->find(idx);
-	if(value == map->end()) {
-	  ofile << 0.;
-	} else {
-	  ofile << *(value->second)/MeV;
-	}
-
-	if(opt.find("csv") != std::string::npos) {
-	  ofile << G4endl;
-	} else if(opt.find("sequence") != std::string::npos) {
-	  ofile << " ";
-	  if(count++%8 == 7) ofile << G4endl;
-	}
-      }
-    }
-  }
-
-  // close the file
-  ofile.close();
-  
-}
-*/
-
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
+
   G4ThreeVector width(fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
   G4ThreeVector pos(-fSize[0] + 2*(x+0.5)*width.x(),
 		    -fSize[1] + 2*(y+0.5)*width.y(),
@@ -487,8 +389,6 @@ void G4ScoringBox::GetXYZ(G4int index, G4int q[3]) const {
   q[1] = (index - q[0]*fNSegment[2]*fNSegment[1])/fNSegment[2];
   q[2] = index - q[1]*fNSegment[2] - q[0]*fNSegment[2]*fNSegment[1];
 
-  //G4cout << "GetXYZ: " << index << ": "
-  //<< q[0] << ", " << q[1] << ", " << q[2] << G4endl;
 }
 
 G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {

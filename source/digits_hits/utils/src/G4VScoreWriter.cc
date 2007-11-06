@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.1 2007-10-28 02:13:44 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.2 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,11 +53,8 @@ void G4VScoreWriter::SetScoringMesh(G4VScoringMesh * sm) {
 
 void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
 
-  //G4cout << "psName: " << psName << ", fileName: " << fileName << ", options: " << option << "(" << option.size() << ")" << G4endl;
-
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
-  //std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
   std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
   // confirm the option
@@ -135,11 +132,8 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 
 void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & option) {
 
-  //G4cout << "fileName: " << fileName << ", options: " << option << "(" << option.size() << ")" << G4endl;
-
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
-  //std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(std::tolower));
   std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
   // confirm the option

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.31 2007-11-05 23:52:36 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.32 2007-11-06 09:41:34 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -317,7 +317,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  mesh = new G4ScoringBox(newVal);
 	  fSMan->RegisterScoringMesh(mesh);
       }else{
-	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has already existed. Error!");
           G4cerr << "Scoring mesh <" << newVal << "> already exists. Command ignored." << G4endl;
       }
   } else if(command==listColorMapCmd) {
@@ -342,12 +341,10 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
- 	  /////////////////////G4Exception("G4ScroingMessenger:: Close current mesh first!. Error!");
           G4cerr << "Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
       } else {
 	G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
 	if ( !mesh ){
- 	  /////////////////////G4Exception("G4ScroingMessenger:: Mesh has not existed. Error!");
           G4cerr << "Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
 	} else {
 	  fSMan->SetCurrentMesh(mesh);
@@ -382,7 +379,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  vsize[2] = size.z();
 		  mesh->SetSize(vsize);
 	      } else {
-		  ////////////////////G4Exception("G4ScroingMessenger:: Mesh is not Box type. Error!");
                  G4cerr << "This mesh is not Box. Command ignored." << G4endl;
 	      }
 	  } else if(command==mBinCmd) {
@@ -409,7 +405,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->RotateZ(value);
 	  }
       }else{
-///////////////////	  G4Exception("G4ScroingMessenger:: Current Mesh has not opened. Error!");
         G4cerr << "No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
       }
   }
@@ -436,11 +431,6 @@ void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token){
 	//    val.remove(val.length()-1,1);
 	//}
 	token.push_back(val);
-
-//      G4cout << "@GetToken:"
-//	       << val
-//	       << "::"
-//	       << G4endl;
     }
 }
 
@@ -455,7 +445,6 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
     nSegment[2] = Nk;
     //
     mesh->SetNumberOfSegments(nSegment);
-    //
     //
     /*
     G4int iAxis = 3;
