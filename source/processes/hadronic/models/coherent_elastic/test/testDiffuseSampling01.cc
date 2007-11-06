@@ -392,7 +392,7 @@ int main()
 
     // thetaCMS = std::acos( 1 - std::fabs(transfer)/2./ptot/ptot );
 
-    thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z);
+    thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z, A);
 
     theta = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCMS);
 

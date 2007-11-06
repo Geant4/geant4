@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.12 2007-11-05 09:29:55 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.13 2007-11-06 17:01:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,6 +69,8 @@ public:
 
   void Initialise();
 
+  void InitialiseOnFly(G4double Z, G4double A);
+
   void BuildAngleTable();
 
  
@@ -90,11 +92,12 @@ public:
                          G4double p, G4double A);
 
   G4double SampleTableT(const G4ParticleDefinition* aParticle, 
-                         G4double p, G4double Z);
+                         G4double p, G4double Z, G4double A);
 
   G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
 
-  G4double SampleTableThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double Z);
+  G4double SampleTableThetaCMS(const G4ParticleDefinition* aParticle, G4double p, 
+                                     G4double Z, G4double A);
 
   G4double GetScatteringAngle(G4int iMomentum, G4int iAngle, G4double position);
 

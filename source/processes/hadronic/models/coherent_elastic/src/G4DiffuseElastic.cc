@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.15 2007-11-05 15:58:32 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.16 2007-11-06 17:01:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,7 +127,8 @@ G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle)
   fEnergyBin = 200;
   fAngleBin = 100;
 
-  fEnergyVector = 0;
+  // fEnergyVector = 0;
+  fEnergyVector = new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
   fAngleTable = 0;
 
   fParticle = aParticle;
@@ -139,7 +140,7 @@ G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle)
   fZommerfeld = 0.;
   fAm = 0.;
   fAddCoulomb = false;
-  Initialise();
+  // Initialise();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -164,7 +165,7 @@ G4DiffuseElastic::~G4DiffuseElastic()
 void G4DiffuseElastic::Initialise() 
 {
 
-  fEnergyVector = new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
+  // fEnergyVector = new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
@@ -182,6 +183,23 @@ void G4DiffuseElastic::Initialise()
     BuildAngleTable();
     fAngleBank.push_back(fAngleTable);
   }  
+  return;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Initialisation for given particle on fly using new element number
+
+void G4DiffuseElastic::InitialiseOnFly(G4double Z, G4double A) 
+{
+  fAtomicNumber = Z;     // atomic number
+  fAtomicWeight = A;     // number of nucleons
+  fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
+  G4cout<<"G4DiffuseElastic::Initialise() the element with Z = "<<Z<<"; and A = "<<A<<G4endl;
+  fElementNumberVector.push_back(fAtomicNumber);
+
+  BuildAngleTable();
+  fAngleBank.push_back(fAngleTable);
   return;
 }
 
@@ -325,7 +343,7 @@ G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack,
   
   // t = SampleT( theParticle, ptot, A);
 
-  t = SampleTableT( theParticle, ptot, Z); // use initialised table
+  t = SampleTableT( theParticle, ptot, Z, A); // use initialised table
 
   // NaN finder
   if(!(t < 0.0 || t >= 0.0)) 
@@ -841,9 +859,10 @@ G4double G4DiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, G4dou
 //
 // Return inv momentum transfer -t > 0 from initialisation table
 
-G4double G4DiffuseElastic::SampleTableT( const G4ParticleDefinition* aParticle, G4double p, G4double A)
+G4double G4DiffuseElastic::SampleTableT( const G4ParticleDefinition* aParticle, G4double p, 
+                                               G4double Z, G4double A)
 {
-  G4double theta = SampleTableThetaCMS( aParticle,  p, A); // sample theta in cms
+  G4double theta = SampleTableThetaCMS( aParticle,  p, Z, A); // sample theta in cms
   G4double t     = 2*p*p*( 1 - std::cos(theta) ); // -t !!!
   return t;
 }
@@ -908,7 +927,7 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
 
 G4double 
 G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle, 
-                                       G4double momentum, G4double Z)
+                                       G4double momentum, G4double Z, G4double A)
 {
   size_t iElement;
   G4int iMomentum, iAngle;  
@@ -921,8 +940,12 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
   }
   if ( iElement == fElementNumberVector.size() ) 
   {
-    G4cout<<"G4DiffuseElastic: Element with atomic number "<<Z<<" is not found, return zero angle"<<G4endl;
-    return 0.; // no table for this element
+    InitialiseOnFly(Z,A);
+    // iElement--;
+
+    // G4cout << "G4DiffuseElastic: Element with atomic number " << Z
+    // << " is not found, return zero angle" << G4endl;
+    // return 0.; // no table for this element
   }
   // G4cout<<"iElement = "<<iElement<<G4endl;
 
