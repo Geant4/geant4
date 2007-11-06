@@ -16,10 +16,10 @@ code and to keep track of all tags.
 
 
 
-06 Nov 2007 -  V.Grichine
+06 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-02)
 ------------------------------------------------
-  G4DiffuseElastic       - (V.Grichine) initialisation of the model in 
-                           constructor with particle definition on fly. 
+  G4DiffuseElastic       - (V.Grichine) initialisation of the model for 
+                           each new target nucleus on-fly 
 
 05 Nov 2007 -  V.Ivanchenko (hadr-cohe-V09-00-01)
 ------------------------------------------------
