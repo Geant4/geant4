@@ -42,10 +42,10 @@
 #include "AIDA/AIDA.h"
 #endif
 
-#ifdef G4ROOTANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
 #include "TROOT.h"
 #include "TFile.h"
-#include "TApplication.h"
+//#include "TApplication.h"
 #include "TH1D.h"
 #endif
 
@@ -63,14 +63,15 @@ Histo::Histo()
   tupleId    = "100";
   tupleList  = "";
   ntup       = 0;
+  m_ROOT_file= 0;
 
 #ifdef G4ANALYSIS_USE
   tree = 0;
   af   = 0; 
 #endif
-
-#ifdef G4ANALYSIS_USE
-  m_root = new TApplication("App", ((int *)0), ((char **)0));
+  //
+#ifdef G4ANALYSIS_USE_ROOT
+  //  m_root = new TApplication("App", ((int *)0), ((char **)0));
   histType   = "root";
 #endif
 }
@@ -83,13 +84,14 @@ Histo::~Histo()
   delete af;
 #endif
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Histo::book()
 {
   G4String nam = histName + "." + histType;
-  G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
+  G4cout << "### Histo books " << nHisto 
+	 << " histograms in <" << nam << ">" << G4endl;
 
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
@@ -101,7 +103,7 @@ void Histo::book()
   tree = tf->create(nam,histType,false,true,"--noErrors uncompress");
   delete tf;
   if(tree) {
-    G4cout << "Tree store  : " << tree->storeName() << G4endl;
+    G4cout << "Tree store  : <" << tree->storeName() << ">" << G4endl;
   } else {
     G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl;
     return;
@@ -123,8 +125,8 @@ void Histo::book()
   }
 #endif
 
-#ifdef G4ROOT_ANALYSIS_USE
   // Creating the ROOT file, trees, histos
+#ifdef G4ANALYSIS_USE_ROOT
   m_ROOT_file = 
     new TFile(nam,"RECREATE","ROOT file with trees and histograms");
   if(m_ROOT_file)
@@ -136,12 +138,12 @@ void Histo::book()
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
-      G4String r_name = "h" + m_names[i];
+      G4String r_name = "h" + ids[i];
       m_ROOT_histo[i] = new TH1D(r_name, titles[i], bins[i], xmin[i], xmax[i]);
-    }
+    } 
   }
 #endif
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -158,13 +160,14 @@ void Histo::save()
     tree = 0;
   }
 #endif
-#ifdef G4ROOT_ANALYSIS_USE
+
   // Writing and closing the ROOT file
+#ifdef G4ANALYSIS_USE_ROOT
   G4cout << "[Histo::save] ROOT: files writing..." << G4endl;
   m_ROOT_file->Write();
   G4cout << "[Histo::save] ROOT: files closing..." << G4endl;
   m_ROOT_file->Close();
-  //  delete m_ROOT_file;
+  delete m_ROOT_file;
 #endif
 } 
 
@@ -225,6 +228,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
 #ifdef G4ANALYSIS_USE  
       if(histo[i]) histo[i]->fill((x/unit[i]), w);
 #endif
+      //
 #ifdef G4ANALYSIS_USE_ROOT
       if(m_ROOT_histo[i]) m_ROOT_histo[i]->Fill(x/unit[i], w);
 #endif
@@ -246,7 +250,8 @@ void Histo::scale(G4int i, G4double x)
 #ifdef G4ANALYSIS_USE  
       if(histo[i]) histo[i]->scale(x);
 #endif
-#ifdef G4ROOT_ANALYSIS_USE  
+      //
+#ifdef G4ANALYSIS_USE_ROOT  
       if(m_ROOT_histo[i]) m_ROOT_histo[i]->Scale(x);
 #endif
     }
