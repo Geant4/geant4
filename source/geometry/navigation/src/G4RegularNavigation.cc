@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.4 2007-11-06 09:59:15 arce Exp $
+// $Id: G4RegularNavigation.cc,v 1.5 2007-11-06 14:27:29 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -183,23 +183,25 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   G4int copyNo = param->GetReplicaNo(containerPoint,localDirection);
 
   G4Material* currentMate = param->ComputeMaterial( copyNo, 0, 0 );
+  G4VSolid* voxelBox = pCurrentPhysical->GetLogicalVolume()->GetSolid();
 
   G4VSolid* containerSolid = param->GetContainerSolid();
   G4Material* nextMate;
   G4bool bLocatedOnEdge = false;
+  G4bool bFirstStep = true;
   G4double newStep;
   G4double totalNewStep = 0.;
 
-  G4VSolid* voxelBox = pCurrentPhysical->GetLogicalVolume()->GetSolid();
-
   // Loop while same material is found 
   //
-  G4bool bFirstStep = TRUE;
   for( ;; )
   {
     newStep = voxelBox->DistanceToOut( localPoint, localDirection );
-    if( bFirstStep && newStep < currentProposedStepLength ) exiting  = true;
-    bFirstStep = FALSE;
+    if( (bFirstStep) && (newStep < currentProposedStepLength) )
+    {
+      exiting  = true;
+    }
+    bFirstStep = false;
  
     newStep += kCarTolerance;   // Avoid precision problems
     ourStep += newStep;
