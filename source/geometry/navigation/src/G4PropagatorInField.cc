@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.38 2007-11-06 14:55:08 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.39 2007-11-06 15:59:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -512,6 +512,7 @@ G4PropagatorInField::LocateIntersectionPoint(
   if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
   {
      G4cerr << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+            << G4endl
             << "          Intermediate F point is on top of starting point A."
             << G4endl;
      G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
@@ -559,6 +560,7 @@ G4PropagatorInField::LocateIntersectionPoint(
           CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
         G4cerr << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+               << G4endl
                << "        Intermediate F point is more advanced than"
                << " endpoint B." << G4endl;
         G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
@@ -737,14 +739,17 @@ G4PropagatorInField::LocateIntersectionPoint(
         }
         if( curveDist < 0.0 )
         {
-          G4cerr << "G4PropagatorInField::LocateIntersectionPoint():" << G4endl
-                 << "Error in advancing propagation." << G4endl;
+          G4cerr << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+                 << G4endl
+                 << "        Error in advancing propagation." << G4endl;
           fVerboseLevel = 5; // Print out a maximum of information
           printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                        -1.0, NewSafety,  substep_no, 0 );
-          G4cerr << " Point A (start) is " << CurrentA_PointVelocity << G4endl;
-          G4cerr << " Point B (end)   is " << CurrentB_PointVelocity << G4endl;
-          G4cerr << " curveDist is " << curveDist << G4endl;
+          G4cerr << "        Point A (start) is " << CurrentA_PointVelocity
+                 << G4endl;
+          G4cerr << "        Point B (end)   is " << CurrentB_PointVelocity
+                 << G4endl;
+          G4cerr << "        Curve distance is " << curveDist << G4endl;
           G4cerr << G4endl
                  << "The final curve point is not further along"
                  << " than the original!" << G4endl;

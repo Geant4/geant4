@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.55 2007-11-02 12:26:28 japost Exp $
+// $Id: G4PathFinder.cc,v 1.56 2007-11-06 15:59:48 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -156,21 +156,25 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   G4double  possibleStep= -1.0; 
 
 #ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 2 ) { 
+  if( fVerboseLevel > 2 )
+  { 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
            << " navigatorId = " << std::setw(2) << navigatorNo  << " "
            << " proposed step len = " << proposedStepLength << " " << G4endl;
     G4cout << " PF::ComputeStep requested step " 
-         << " from " << InitialFieldTrack.GetPosition()
-         << " dir  " << InitialFieldTrack.GetMomentumDirection() << G4endl;
+           << " from " << InitialFieldTrack.GetPosition()
+           << " dir  " << InitialFieldTrack.GetMomentumDirection() << G4endl;
   }
 #endif
 #ifdef G4VERBOSE
-  if( navigatorNo >= fNoActiveNavigators ) {
-    G4cerr << "ERROR - Requested Navigator ID = " << navigatorNo
-           << " Num of active navigators = " << fNoActiveNavigators << G4endl;
+  if( navigatorNo >= fNoActiveNavigators )
+  {
+    G4cerr << "ERROR - G4PathFinder::ComputeStep()" << G4endl
+           << "        Requested Navigator ID = " << navigatorNo << G4endl
+           << "        Number of active navigators = " << fNoActiveNavigators
+           << G4endl;
     G4Exception("G4PathFinder::ComputeStep()", "InvalidSetup",
                 FatalException, "Bad Navigator ID !"); 
   }
@@ -180,9 +184,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   {
     // This is a new track or a new step, so we must make the step
     // ( else we can simply retrieve its results for this Navigator Id )    
-
-    //   G4cout << " G4PF::CS> Make step (newTrack=" << fNewTrack << ")," 
-    //   << "  stepNos:  now=" << stepNo << " last= " << fLastStepNo << G4endl;
 
     G4FieldTrack currentState= InitialFieldTrack;
 
@@ -229,7 +230,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                         && (fieldMgr->GetDetectorField() != 0);
     }
     fFieldExertedForce = fieldExertsForce;  // Store for use in later calls
-                                             //   referring to this 'step'.
+                                            // referring to this 'step'.
 
     fNoGeometriesLimiting= -1;  // At start of track, no process limited step
     if( fieldExertsForce )
@@ -241,101 +242,125 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        //--------------
     }
     fLastStepNo= stepNo; 
-    // #ifdef G4DEBUG
-    if( (fNoGeometriesLimiting < 0) || (fNoGeometriesLimiting>fNoActiveNavigators) ) { 
-      G4cout << " Number of geometries limiting step = " << 
-	fNoGeometriesLimiting << G4endl;
+
+    if ( (fNoGeometriesLimiting < 0)
+      || (fNoGeometriesLimiting > fNoActiveNavigators) )
+    {
+      G4cout << "ERROR - G4PathFinder::ComputeStep()" << G4endl
+             << "        Number of geometries limiting step = "
+             << fNoGeometriesLimiting << G4endl;
       G4Exception("G4PathFinder::ComputeStep()", 
-		  "NumGeometriesOutOfRange",
-		  FatalException, 
-		  "Current step did not set the number of Geometries limiting step."); 
-    } 
-    // #endif
+                  "NumGeometriesOutOfRange", FatalException, 
+                  "Number of geometries limiting the step not set."); 
+    }
   }
   else
   {
      if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
      { 
-        G4cout << " G4PathFinder::ComputeStep() -> Problem in step size request. " << G4endl
-	       << " Being requested to make a step which is shorter than the minimum Step "
-	       << " already computed for any Navigator/geometry during this tracking-step: " 
-	       << G4endl; 
-	G4cout << " This can happen due to an error in process ordering. " << G4endl;
-	G4cout << " Check that all physics processes are registered before " 
-	       << " all processes with a navigator/geometry. " << G4endl;
-	G4cout << " If using pre-packaged physics list and/or functionality, "
-	       << " please report this error."  << G4endl << G4endl;
-	G4cout << " Additional information for problem: "  << G4endl
-	       << " Steps:  request/proposed= " << proposedStepLength << G4endl
-	       << "  MinimumStep (true  ) = " << fTrueMinStep << G4endl
-	       << "  minimumStep (navraw)  = " << fMinStep  
-	       << "   Navigator raw return value " << G4endl
-	       << "  requested step now = " << proposedStepLength
-	       << "  difference min-req  = " << fTrueMinStep - proposedStepLength 
-	       << G4endl; 
-	G4cout << "  -- Step info> stepNo= " << stepNo << " last= " << fLastStepNo 
-	       << " newTr= " << fNewTrack       << G4endl; 
-        G4cerr << " G4PathFinder::ComputeStep() -> Problem in step size request. " << G4endl
-	       << "    Error can be caused by incorrect process ordering. " << G4endl
-	       << "    Please see more information in standard output."  << G4endl;
+        G4cout << "ERROR - G4PathFinder::ComputeStep()" << G4endl
+               << "        Problem in step size request." << G4endl
+               << "        Being requested to make a step which is shorter"
+               << " than the minimum Step " << G4endl
+               << "        already computed for any Navigator/geometry during"
+               << " this tracking-step: " << G4endl; 
+        G4cout << "        This can happen due to an error in process ordering."
+               << G4endl;
+        G4cout << "        Check that all physics processes are registered"
+               << G4endl
+               << "        before all processes with a navigator/geometry."
+               << G4endl;
+        G4cout << "        If using pre-packaged physics list and/or"
+               << G4endl
+               << "        functionality, please report this error."
+               << G4endl << G4endl;
+        G4cout << "        Additional information for problem: "  << G4endl
+               << "        Steps request/proposed = " << proposedStepLength
+               << G4endl
+               << "        MinimumStep (true) = " << fTrueMinStep
+               << G4endl
+               << "        MinimumStep (navraw)  = " << fMinStep
+               << G4endl
+               << "        Navigator raw return value" << G4endl
+               << "        Requested step now = " << proposedStepLength
+               << G4endl
+               << "        Difference min-req = "
+               << fTrueMinStep-proposedStepLength << G4endl; 
+        G4cout << "     -- Step info> stepNo= " << stepNo
+               << " last= " << fLastStepNo 
+               << " newTr= " << fNewTrack << G4endl; 
+        G4cerr << "ERROR - G4PathFinder::ComputeStep()" << G4endl
+               << "        Problem in step size request. " << G4endl
+               << "        Error can be caused by incorrect process ordering."
+               << G4endl
+               << "        Please see more information in standard output."
+               << G4endl;
         G4Exception("G4PathFinder::ComputeStep()", 
-		    "ReductionOfRequestedStepSizeBelowMinimum",
-		    FatalException, 
-		    "Revision of requested step size below minimum is not part of specification - and not implemented.");
-
+                    "ReductionOfRequestedStepSizeBelowMinimum",
+                    FatalException, 
+                    "Not part of specification - not implemented.");
+/*
         // Trial code for this case was created in G4PathFinder.cc 1.54
 
         possibleStep= proposedStepLength;
-	// Inform that no obstacle found within dist=proposedStepLength
-	//  possibleStep= kInfinity;    // --> The Navigator's convention
+        // Inform that no obstacle found within dist=proposedStepLength
+        //  possibleStep= kInfinity;    // --> The Navigator's convention
 
-	G4ThreeVector oldEndPosition= fEndState.GetPosition(); 
+        G4ThreeVector oldEndPosition= fEndState.GetPosition(); 
         G4ThreeVector oldEndDirection= fEndState.GetMomentumDirection();
 
-	// Reset the end point, state
-	if( ! fFieldExertedForce ) { 
-   	   // Can simply recalculate end position
-	   G4ThreeVector initialPosition=  InitialFieldTrack.GetPosition(); 
-	   G4ThreeVector initialDirection= InitialFieldTrack.GetMomentumDirection();
-	   fEndState.SetPosition( initialPosition + proposedStepLength * initialDirection ); 
-	   G4cout << " G4P::CS -> Doing shortening of step: linear " << G4endl; 
-	} else {
-  	   // The step must be shortened using propagation in field.
-	   // 1st solution: do full calculation of the End Point (extra work!)
-	   G4FieldTrack currentState= InitialFieldTrack;
+        // Reset the end point, state
+        //
+        if( ! fFieldExertedForce )
+        { 
+           // Can simply recalculate end position
+
+           G4ThreeVector initialPosition= InitialFieldTrack.GetPosition(); 
+           G4ThreeVector initialDirection=
+                                  InitialFieldTrack.GetMomentumDirection();
+           fEndState.SetPosition( initialPosition + proposedStepLength * initialDirection ); 
+           G4cout << " G4P::CS -> Doing shortening of step: linear " << G4endl; 
+        } else {
+           // The step must be shortened using propagation in field.
+           // 1st solution: do full calculation of the End Point (extra work!)
+           G4FieldTrack currentState= InitialFieldTrack;
            DoNextCurvedStep( currentState, proposedStepLength, currentVolume ); 
-	   // 2nd solution: do only integration of end-point for shorter distance
+           // 2nd solution: do only integration of end-point for shorter distance
            //               -- but it is not guaranteed to be in same volume 
            //                    due to volume-intersection (in)accuracy. 
-	   G4cout << " G4P::CS -> Doing shortening of step: Curved " << G4endl;
-	   G4Exception("G4PathFinder::ComputeStep()", "NotYetImplementedPartialStep",
-		       FatalException, "Partial step in case of field not yet implemented."); 
-	} 
-	G4cout << " New step is  = " << proposedStepLength 
-	       <<  " end position = " << EndState.GetPosition() 
-	       <<  " direction= " << EndState.GetMomentumDirection()
-	       << G4endl; 
-	G4cout << " Old step was = " << fTrueMinStep
-	       <<  " end position = " << oldEndPosition 
-	       <<  " direction= " << oldEndDirection
-	       << G4endl;
+           G4cout << " G4P::CS -> Doing shortening of step: Curved " << G4endl;
+           G4Exception("G4PathFinder::ComputeStep()", "NotYetImplementedPartialStep",
+                       FatalException, "Partial step in case of field not yet implemented."); 
+        } 
+        G4cout << " New step is  = " << proposedStepLength 
+               <<  " end position = " << EndState.GetPosition() 
+               <<  " direction= " << EndState.GetMomentumDirection()
+               << G4endl; 
+        G4cout << " Old step was = " << fTrueMinStep
+               <<  " end position = " << oldEndPosition 
+               <<  " direction= " << oldEndDirection
+               << G4endl;
 
-	// EndState = fEndState; 
+        // EndState = fEndState; 
 
-	// Reset Minimum step(s) to avoid same work on next request
+        // Reset Minimum step(s) to avoid same work on next request
         fTrueMinStep= proposedStepLength; 
         fMinStep= proposedStepLength; 
-     } else { 
+*/
+     }
+     else
+     { 
         // This is neither a new track nor a new step -- just another 
         // client accessing information for the current track, step 
         // We will simply retrieve the results of the synchronous
         // stepping for this Navigator Id below.
 #ifdef G4DEBUG_PATHFINDER      
-        if( fVerboseLevel > 1 ) { 
-	   G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
-		  << " stepNo= " << stepNo << " last= " << fLastStepNo 
-		  << " new= " << fNewTrack << " Step already done" << G4endl; 
-	}
+        if( fVerboseLevel > 1 )
+        { 
+           G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
+                  << " stepNo= " << stepNo << " last= " << fLastStepNo 
+                  << " new= " << fNewTrack << " Step already done" << G4endl; 
+        }
 #endif
      } 
   }
@@ -348,7 +373,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   limitedStep = fLimitedStep[ navigatorNo ];
   fRelocatedPoint= false;
 
-  possibleStep= std::min( proposedStepLength, fCurrentStepSize[ navigatorNo ] ) ;
+  possibleStep= std::min(proposedStepLength, fCurrentStepSize[ navigatorNo ]);
   EndState = fEndState;  //  now corrected for smaller step, if needed
 
 #ifdef G4DEBUG_PATHFINDER
@@ -1300,7 +1325,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 
       fLimitedStep[numNav] = didLimit; 
       fLimitTruth[numNav] = limited = (didLimit != kDoNot ); 
-      if( limited ) noLimited++; 
+      if( limited ) { noLimited++; }
 
 #ifdef G4DEBUG_PATHFINDER
       G4bool StepError= (currentStepSize < 0) 
