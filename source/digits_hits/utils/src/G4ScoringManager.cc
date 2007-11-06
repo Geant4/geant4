@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.25 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.26 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,6 @@
 #include "G4ScoreQuantityMessenger.hh"
 #include "G4VScoringMesh.hh"
 #include "G4THitsMap.hh"
-#include "G4VScoreWriter.hh"
 #include "G4VScoreColorMap.hh"
 #include "G4DefaultLinearColorMap.hh"
 
@@ -52,7 +51,7 @@ G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 { return fSManager; }
 
 G4ScoringManager::G4ScoringManager()
-:verboseLevel(0),fCurrentMesh(0),writer(NULL)
+:verboseLevel(0),fCurrentMesh(0),writer(0)
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
@@ -65,7 +64,7 @@ G4ScoringManager::~G4ScoringManager()
 {
   delete fMessenger;
   fSManager = 0;
-  delete writer;
+  if(writer) delete writer;
 }
 
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
@@ -150,7 +149,7 @@ void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4St
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
-    if(writer == NULL) {
+    if(!writer) {
       writer = new G4VScoreWriter();
     }
     writer->SetScoringMesh(mesh);
@@ -165,7 +164,7 @@ void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileNa
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
-    if(writer == NULL) {
+    if(!writer) {
       writer = new G4VScoreWriter();
     }
     writer->SetScoringMesh(mesh);

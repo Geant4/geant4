@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.20 2007-11-05 23:52:36 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.21 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,8 +38,8 @@
 class G4ScoringMessenger;
 class G4ScoreQuantityMessenger;
 class G4VHitsCollection;
-class G4VScoreWriter;
 class G4VScoreColorMap;
+#include "G4VScoreWriter.hh"
 
 // class description:
 //
@@ -72,6 +72,11 @@ class G4ScoringManager
   public:
       ~G4ScoringManager();
 
+  public: // with description
+      void RegisterScoreColorMap(G4VScoreColorMap* colorMap);
+      // Register a color map. Once registered, it is available by /score/draw and /score/drawColumn
+      // commands.
+
   public:
       void Accumulate(G4VHitsCollection* map);
       G4VScoringMesh* FindMesh(G4String);
@@ -81,7 +86,6 @@ class G4ScoringManager
       void DrawMesh(G4String meshName,G4String psName,G4int idxPlane,G4int iColumn,G4String colorMapName);
       void DumpQuantityToFile(G4String meshName, G4String psName,G4String fileName, G4String option = "");
       void DumpAllQuantitiesToFile(G4String meshName, G4String fileName, G4String option = "");
-      void RegisterScoreColorMap(G4VScoreColorMap* colorMap);
       G4VScoreColorMap* GetScoreColorMap(G4String mapName);
       void ListScoreColorMaps();
 
@@ -127,8 +131,13 @@ class G4ScoringManager
       inline G4String GetWorldName(G4int i) const
       { return fMeshVec[i]->GetWorldName(); }
 
+  public: // with description
       inline void SetScoreWriter(G4VScoreWriter * sw)
-      { writer = sw; }
+      {
+        if(writer) { delete writer; }
+        writer = sw;
+      }
+      // Replace score writers.
 };
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.43 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.44 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -398,6 +398,12 @@ G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
 void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
                           G4int idxProj, G4int idxColumn) 
 {
+  if(idxColumn<0 || idxColumn>=fNSegment[idxProj])
+  {
+    G4cerr << "Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[idxProj]-1 <<
+    "]. Method ignored." << G4endl;
+    return;
+  }
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
     

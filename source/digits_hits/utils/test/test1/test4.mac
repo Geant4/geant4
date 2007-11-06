@@ -32,6 +32,7 @@
 #
 /vis/scene/create
 /vis/sceneHandler/attach scene-2
+/vis/viewer/flush
 /score/colorMap/setMinMax ! 0. 800.
-/control/loop test4a.mac iColumn 0 29
+/control/loop test4a.mac iColumn 0 29 7
 #

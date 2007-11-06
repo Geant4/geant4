@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.cc,v 1.1 2007-11-04 04:06:09 asaim Exp $
+// $Id: G4DefaultLinearColorMap.cc,v 1.2 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,3 +75,5 @@ void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
   } 
 
 }
+
+

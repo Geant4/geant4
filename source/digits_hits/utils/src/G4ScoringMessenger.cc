@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.32 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.33 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -353,9 +353,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==meshClsCmd) {
       fSMan->CloseCurrentMesh();
   } else {
-      // Tokens
-      G4TokenVec token;
-      FillTokenVec(newVal,token);
       //
       // Get Current Mesh
       //
@@ -363,6 +360,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       //
       // Commands for Current Mesh
       if ( mesh ){
+          // Tokens
+          G4TokenVec token;
+          FillTokenVec(newVal,token);
 	  // 
 	  // Mesh Geometry
 	  //
@@ -424,12 +424,6 @@ void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token){
     G4Tokenizer next(newValues);
     G4String val;
     while ( !(val = next()).isNull() ) {
-	//if ( val.first('"')==0 ) {
-	//     val.remove(0,1);
-	//}
-	//if ( (val.last('"')) == (G4int)(val.length()-1) ){
-	//    val.remove(val.length()-1,1);
-	//}
 	token.push_back(val);
     }
 }
@@ -445,18 +439,6 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
     nSegment[2] = Nk;
     //
     mesh->SetNumberOfSegments(nSegment);
-    //
-    /*
-    G4int iAxis = 3;
-    G4String Axis = token[3];
-    if ( ! Axis.isNull() ){
-       iAxis = StoI(Axis);
-       //
-       //==== Implementation for variable bin size Here
-       //
-       //  .........
-    }
-    */
 }
 
  

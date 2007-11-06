@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.26 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.27 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,13 +56,13 @@ class G4VScoringMesh
   G4VScoringMesh(G4String wName);
   ~G4VScoringMesh();
 
-  public:
+  public: // with description
   // a pure virtual function to construct this mesh geometry
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
   // list infomration of this mesh 
   virtual void List() const;
   
-public:
+  public: // with description
   // get the world name
   inline const G4String& GetWorldName() const
   { return fWorldName; }

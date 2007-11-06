@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh,v 1.3 2007-11-03 22:39:37 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.hh,v 1.4 2007-11-06 17:17:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
+//  01-Nov-2007  M.Asai Class is splited into two.
 
 
 #ifndef G4ScoreQuantityMessenger_h
