@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2007-11-02 13:54:25 japost Exp $
+$Id: History,v 1.108 2007-11-06 16:01:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,49 +16,56 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 6th, 2007 - P.Arce (geomnav-V09-00-07)
+---------------------------
+- Optimisation in G4RegularNavigation: use voxelBox->DistanceToOut() instead
+  of ComputeStep() in ComputeStepSkippingEqualMaterials().
+- Some cleanup and proper formatting of error/warning messages.
+
 November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-06)
 ----------------------------------
-- Introduced the fixes in geomnav-V09-00-03b, geomnav-V09-00-03c
+- Merging fixes in "geomnav-V09-00-03b" and "geomnav-V09-00-03c" on top
+  of tag "geomnav-V09-00-05".
+
+November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-03c)
+----------------------------------
+- G4PathFinder: 
+  o Added setting of 'fNoGeometriesLimiting' in DoNextCurvedStep().
+  o Check to verify that 'fNoGeometriesLimiting' is set by DoNext*Step methods.
+  o Revised data type of 'fNoGeometriesLimiting' to be a int, so that < 0
+    shows 'unset'.
+- G4PropagatorInField: 
+  o Fixes for compilation of code under G4DEBUG_FIELD (problem report #982).
+  o Added extra check of method LocateIntersectionPoint() arguments.
+- Tag based on "geomnav-V09-00-03b".
+
+October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
+----------------------------------
+- G4PathFinder: first fix for problem of another process shortening steps
+  (between calls to ComputeStep by different processes in same step.)
+  I.e.  First call to ComputeStep (geom 1) has proposed Step = 3.0 cm
+        Next  call to ComputeStep (geom 2) has proposed Step = 1.0 cm
+        (e.g. Multiple Scattering)
+- Tag based on "geomnav-V09-00-03a".
 
 October 24th, 2007 - J.Apostolakis (geomnav-V09-00-05)
 ----------------------------------
-- G4PathFinder: Fix - now set fNoGeometriesLimiting in DoNextLinearStep
-    when WhichLimited is not called, 
-        i.e. in case of one navigator optimisation, 
-  --> This fix also included in interim tag geomnav-V09-00-03a, 
-      which did not include the developments of geomnav-V09-00-04
+- Merging fixes introduced in "geomnav-V09-00-03a" on top of
+  "geomnav-V09-00-04".
+
+October 24th, 2007 - J.Apostolakis (geomnav-V09-00-03a)
+----------------------------------
+- G4PathFinder: fix to now set 'fNoGeometriesLimiting' in DoNextLinearStep()
+  when WhichLimited() is not called, i.e. in case of one navigator
+  optimisation.
+- Tag based on "geomnav-V09-00-03".
 
 October 18th, 2007 - G.Cosmo (geomnav-V09-00-04)
 ----------------------------
 - Added new specific navigation for regular structures and phantoms.
   New classes: G4RegularNavigation, G4PhantomParameterisation (by P.Arce).
   Added cases to G4Navigator. Added dependency on "materials" module.
-
-*************  The fixes below are not included in geomnav-V09-00-04 *******
-**************   these are 03a, 03b, 03c                            ********
-November 2nd, 2007 - J.Apostolakis (geomnav-V09-00-03c)
-----------------------------------
-- G4PathFinder: 
-   * Added setting of fNoGeometriesLimiting in DoNextCurvedStep
-   * Check to see that fNoGeometriesLimiting is set by DoNext---Step methods
-   * Revised data type of fNoGeometriesLimiting (to an int, so that < 0 shows 'unset'
-
-- G4PropagatorInField: 
-   * Fixes for compilation of code under G4DEBUG_FIELD
-   * Extra check of method LocateIntersectionPoint arguments
-
-October 29th, 2007 - J.Apostolakis (geomnav-V09-00-03b)
-----------------------------------
-- G4PathFinder: First fix for problem of another process shortening steps
-   ( between calls to ComputeStep by different processes in same step.)
-   I.e.  First call to ComputeStep (geom 1) has proposed Step = 3.0 cm
-         Next  call to ComputeStep (geom 2) has proposed Step = 1.0 cm (eg Mult Scat)
-
-October 24th, 2007 - J.Apostolakis (geomnav-V09-00-03a)
-----------------------------------
-- G4PathFinder: Fix - now set fNoGeometriesLimiting in DoNextLinearStep
-    when WhichLimited is not called, 
-        i.e. in case of one navigator optimisation, 
 
 October 12th, 2007 - J.Apostolakis (geomnav-V09-00-03)
 ----------------------------------
