@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.37 2007-11-02 12:35:49 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.38 2007-11-06 14:55:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -511,11 +511,12 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
   {
-     G4cerr << "Warning - Intermediate F point is on top of starting point A." 
-	    << G4endl;
+     G4cerr << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+            << "          Intermediate F point is on top of starting point A."
+            << G4endl;
      G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
-		 "IntersectionPointIsAtStart", JustWarning,
-		 "Intersection point F is exactly at start point A." ); 
+                 "IntersectionPointIsAtStart", JustWarning,
+                 "Intersection point F is exactly at start point A." ); 
   }
 #endif
 
@@ -533,7 +534,6 @@ G4PropagatorInField::LocateIntersectionPoint(
   //
   G4FieldTrack SubStart_PointVelocity = CurveStartPointVelocity;
    
-
   do
   {
     G4int substep_no_p = 0;
@@ -555,12 +555,12 @@ G4PropagatorInField::LocateIntersectionPoint(
       //  The above method is the key & most intuitive part ...
 
 #ifdef G4DEBUG_FIELD
-      // static G4double tolerance= 1.0e-8; 
       if( ApproxIntersecPointV.GetCurveLength() > 
           CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
-        G4cerr << "Error - Intermediate F point is more advanced than endpoint B." 
-               << G4endl;
+        G4cerr << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+               << "        Intermediate F point is more advanced than"
+               << " endpoint B." << G4endl;
         G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
                     "IntermediatePointConfusion", FatalException,
                     "Intermediate F point is past end B point" ); 
@@ -1262,15 +1262,15 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 #endif
 
 #ifdef G4DEBUG_FIELD
-  G4double lengthDone=  newEndPoint.GetCurveLength() 
-                          - CurrentStateA.GetCurveLength(); 
+  G4double lengthDone = newEndPoint.GetCurveLength() 
+                      - CurrentStateA.GetCurveLength(); 
   if( !goodAdvance )
   {
     if( fVerboseLevel >= 3 )
     {
       G4cout << MethodName << "> AccurateAdvance failed " ;
-      G4cout << " in " << itrial << " integration trials/steps. " << G4endl; 
-      G4cout << " It went only " << lengthDone << " instead of " << curveDist 
+      G4cout << " in " << itrial << " integration trials/steps. " << G4endl;
+      G4cout << " It went only " << lengthDone << " instead of " << curveDist
              << " -- a difference of " << curveDist - lengthDone  << G4endl;
       G4cout << " ReEstimateEndpoint> Reset endPoint to original value!"
              << G4endl;
