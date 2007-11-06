@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.30 2007-11-05 03:15:13 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.31 2007-11-06 05:27:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,9 +67,7 @@ void G4VScoringMesh::ResetScore() {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
     if(verboseLevel > 9) G4cout << itr->first << G4endl;
-    G4cout << itr->second->entries() << G4endl;
     itr->second->clear();
-    G4cout << itr->second->entries() << G4endl;
   }
 }
 void G4VScoringMesh::SetSize(G4double size[3]) {
@@ -111,7 +109,7 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
            << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
     return;
   }
-  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
+  if(verboseLevel > 1) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
 			      << ps->GetName() << " is registered."
 			      << " 3D size: ("
 			      << fNSegment[0] << ", "
@@ -138,7 +136,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 /////           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
 /////    return;
 /////  }
-  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
+  if(verboseLevel > 1) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
 			      << " is set to "
 			      << fCurrentPS->GetName() << G4endl;

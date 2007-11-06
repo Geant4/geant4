@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.41 2007-11-05 03:15:12 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.42 2007-11-06 05:27:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,7 +64,9 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) {
 
-    G4cerr << fWorldPhys->GetName() << G4endl;
+    if(verboseLevel > 1) 
+      G4cerr << "G4ScoringBox::Construct() : " << fWorldPhys->GetName()
+	     << " is already constructed. All quantities are reset." << G4endl;
 //////////////////////////////////////    G4Exception(fWorldName+" has already been built.");
     ResetScore();
 
