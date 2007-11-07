@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleGun.cc,v 1.4 2006-06-29 15:31:36 gunter Exp $
+// $Id: pyG4ParticleGun.cc,v 1.5 2007-11-07 07:07:23 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ParticleGun.cc
@@ -82,6 +82,12 @@ G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
 // ====================================================================
 namespace pyG4ParticleGun {
 
+// SetParticleMomentum
+void (G4ParticleGun::*f1_SetParticleMomentum)(G4double)
+  = &G4ParticleGun::SetParticleMomentum;
+void (G4ParticleGun::*f2_SetParticleMomentum)(G4ParticleMomentum)
+  = &G4ParticleGun::SetParticleMomentum;
+
 ////////////////////////////////////////////////////////////////////
 void SetParticleByName(G4ParticleGun* gun, const std::string& pname)
 ////////////////////////////////////////////////////////////////////
@@ -124,7 +130,8 @@ void export_G4ParticleGun()
     .def("SetParticleDefinition", &G4ParticleGun::SetParticleDefinition)
     .def("GetParticleDefinition", &G4ParticleGun::GetParticleDefinition,
     	 return_value_policy<reference_existing_object>())
-    .def("SetParticleMomentum",   &G4ParticleGun::SetParticleMomentum)
+    .def("SetParticleMomentum",   f1_SetParticleMomentum)
+    .def("SetParticleMomentum",   f2_SetParticleMomentum)
     .def("SetParticleMomentumDirection", 
 	 &G4ParticleGun::SetParticleMomentumDirection)
     .def("GetParticleMomentumDirection", 
