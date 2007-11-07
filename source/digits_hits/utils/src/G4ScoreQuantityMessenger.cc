@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.7 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.8 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -198,7 +198,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
       if(!mesh)
       {
-        G4cerr << "No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
+        G4cerr << "ERROR : No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
         return;
       }
       // Tokens
@@ -212,49 +212,56 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	    if(!mesh->FindPrimitiveScorer(newVal)) {
 	      mesh->SetPrimitiveScorer(new G4PSCellCharge3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qTouchCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qCellFluxCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal)) { 
 	      mesh->SetPrimitiveScorer(new G4PSCellFlux3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qCellFluxCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qPassCellFluxCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSPassageCellFlux3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qPassCellFluxCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command==qeDepCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSEnergyDeposit3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qeDepCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qdoseDepCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSDoseDeposit3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qdoseDepCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qnOfStepCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSNofStep3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qnOfStepCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qnOfSecondaryCmd) {
 	    if(!mesh->FindPrimitiveScorer(newVal))  {
 	      mesh->SetPrimitiveScorer(new G4PSNofSecondary3D(newVal));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qnOfSecondaryCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qTrackLengthCmd) {
@@ -265,7 +272,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->DivideByVelocity(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qTrackLengthCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qPassCellCurrCmd){
@@ -274,7 +282,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qPassCellCurrCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qPassTrackLengthCmd){
@@ -283,7 +292,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qPassTrackLengthCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qFlatSurfCurrCmd){
@@ -294,7 +304,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->DivideByArea(StoB(token[3]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qFlatSurfCurrCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qFlatSurfFluxCmd){
@@ -302,7 +313,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      mesh->SetPrimitiveScorer(
 				       new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])));
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qFlatSurfFluxCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
 //	  } else if(command== qSphereSurfCurrCmd){
@@ -313,7 +325,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //	      ps->DivideByArea(StoB(token[3]));
 //	      mesh->SetPrimitiveScorer(ps);
 //	    } else {
-//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      G4cout << "WARNING[" << qSphereSurfCurrCmd->GetCommandPath()
+//		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 //	      mesh->SetNullToCurrentPrimitiveScorer();
 //	    }
 //	  } else if(command== qSphereSurfFluxCmd){
@@ -321,7 +334,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //	      mesh->SetPrimitiveScorer(
 //				       new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1])));
 //	    } else {
-//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      G4cout << "WARNING[" << qSphereSurfFluxCmd->GetCommandPath()
+//		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 //	      mesh->SetNullToCurrentPrimitiveScorer();
 //	    }
 //        } else if(command== qCylSurfCurrCmd){
@@ -332,7 +346,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //	      ps->DivideByArea(StoB(token[3]));
 //	      mesh->SetPrimitiveScorer(ps);
 //	    } else {
-//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      G4cout << "WARNING[" << qCylSurfCurrCmd->GetCommandPath()
+//		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 //	      mesh->SetNullToCurrentPrimitiveScorer();
 //	    }
 //        } else if(command== qCylSurfFluxCmd){
@@ -340,7 +355,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 //	      mesh->SetPrimitiveScorer(
 //				       new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1])));
 //	    } else {
-//	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+//	      G4cout << "WARNING[" << qCylSurfFluxCmd->GetCommandPath()
+//		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 //	      mesh->SetNullToCurrentPrimitiveScorer();
 //	    }
       } else if(command== qNofCollisionCmd){
@@ -349,7 +365,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qNofCollisionCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qPopulationCmd){
@@ -358,7 +375,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qPopulationCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qTrackCountCmd){
@@ -366,7 +384,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      G4PSTrackCounter3D* ps =new G4PSTrackCounter3D(token[0],StoI(token[1])); 
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qTrackCountCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
       } else if(command== qTerminationCmd){
@@ -375,7 +394,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      ps->Weighted(StoB(token[1]));
 	      mesh->SetPrimitiveScorer(ps);
 	    } else {
-	      G4cout << " Quantity name, \"" << newVal << "\", is already existing." << G4endl;
+	      G4cout << "WARNING[" << qTerminationCmd->GetCommandPath()
+		     << "] : Quantity name, \"" << newVal << "\", is already existing." << G4endl;
 	      mesh->SetNullToCurrentPrimitiveScorer();
 	    }
 
@@ -386,13 +406,15 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDChargedFilter(token[0])); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
+	      G4cout << "WARNING[" << fchargedCmd->GetCommandPath()
+		     << "] : Current quantity is not set. Set or touch a quantity first." << G4endl;
 	    }
       }else if(command== fneutralCmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      mesh->SetFilter(new G4SDNeutralFilter(token[0])); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
+	      G4cout << "WARNING[" << fneutralCmd->GetCommandPath()
+		     << "] : Current quantity is not set. Set or touch a quantity first." << G4endl;
 	    }
       }else if(command== fkinECmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
@@ -401,19 +423,22 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	      G4double ehigh = StoD(token[2]);
 	      mesh->SetFilter(new G4SDKineticEnergyFilter(name,elow,ehigh));
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
+	      G4cout << "WARNING[" << fkinECmd->GetCommandPath()
+		     << "] : Current quantity is not set. Set or touch a quantity first." << G4endl;
 	    }
       }else if(command== fparticleKinECmd){
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleWithEnergyCommand(mesh,token); 
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
+	      G4cout << "WARNING[" << fparticleKinECmd->GetCommandPath()
+		     << "] : Current quantity is not set. Set or touch a quantity first." << G4endl;
 	    }
       } else if(command==fparticleCmd) {
 	    if(!mesh->IsCurrentPrimitiveScorerNull()) {
 	      FParticleCommand(mesh,token);
 	    } else {
-	      G4cout << " Filter, \"" << token[0] << "\", is not registered." << G4endl;
+	      G4cout << "WARNING[" << fparticleCmd->GetCommandPath()
+		     << "] : Current quantity is not set. Set or touch a quantity first." << G4endl;
 	    }
       }
 }

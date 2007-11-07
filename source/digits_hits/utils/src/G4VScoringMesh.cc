@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.33 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.34 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,7 +92,7 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 
   if(!ReadyForQuantity())
   {
-    G4cerr << "G4VScoringMesh::SetPrimitiveScorer() : " << ps->GetName() 
+    G4cerr << "ERROR : G4VScoringMesh::SetPrimitiveScorer() : " << ps->GetName() 
            << " does not yet have mesh size or number of bins. Set them first." << G4endl
            << "This Method is ignored." << G4endl;
     return;
@@ -114,7 +114,7 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
   if(fCurrentPS == NULL) {
-    G4cerr << "G4VScoringMesh::SetSDFilter() : a quantity must be defined first. This method is ignored." << G4endl;
+    G4cerr << "ERROR : G4VScoringMesh::SetSDFilter() : a quantity must be defined first. This method is ignored." << G4endl;
     return;
   }
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
@@ -125,7 +125,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
   G4VSDFilter* oldFilter = fCurrentPS->GetFilter();
   if(oldFilter)
   {
-    G4cout << "G4VScoringMesh::SetFilter() : " << oldFilter->GetName() 
+    G4cout << "WARNING : G4VScoringMesh::SetFilter() : " << oldFilter->GetName() 
            << " is overwritten by " << filter->GetName() << G4endl;
   }
   fCurrentPS->SetFilter(filter);
@@ -134,7 +134,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
   fCurrentPS = GetPrimitiveScorer(name);
   if(fCurrentPS == NULL) {
-    G4cerr << "G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer <"
+    G4cerr << "ERROR : G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer <"
 	   << name << "> does not found." << G4endl;
   }
 }

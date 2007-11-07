@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.34 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.35 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -317,12 +317,21 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {
-      G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
-      if ( !mesh ){
+      G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
+      if ( currentmesh ){
+	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	       << "] : Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
+      } else {
+
+	G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
+	if ( !mesh ){
 	  mesh = new G4ScoringBox(newVal);
 	  fSMan->RegisterScoringMesh(mesh);
-      }else{
-          G4cerr << "Scoring mesh <" << newVal << "> already exists. Command ignored." << G4endl;
+	}else{
+	  G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+		 << "] : Scoring mesh <" << newVal
+		 << "> already exists. Command ignored." << G4endl;
+	}
       }
   } else if(command==listColorMapCmd) {
       fSMan->ListScoreColorMaps();
@@ -331,7 +340,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       if(colorMap)
       { colorMap->SetFloatingMinMax(true); }
       else
-      { G4cerr << "color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
+      { G4cerr << "ERROR[" << floatMinMaxCmd->GetCommandPath()
+	       << "] : color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
   } else if(command==colorMapMinMaxCmd) {
       G4Tokenizer next(newVal);
       G4String mapName = next();
@@ -342,15 +352,18 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       { colorMap->SetFloatingMinMax(false);
         colorMap->SetMinMax(minVal,maxVal); }
       else
-      { G4cerr << "color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
+      { G4cerr << "ERROR[" << colorMapMinMaxCmd->GetCommandPath()
+	       << "] : color map <" << newVal << "> is not defined. Command ignored." << G4endl; }
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-          G4cerr << "Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
+	G4cerr << "ERROR[" << meshOpnCmd->GetCommandPath()
+	       << "] : Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
       } else {
 	G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
 	if ( !mesh ){
-          G4cerr << "Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
+          G4cerr << "ERROR[" << meshOpnCmd->GetCommandPath()
+		 << "] : Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
 	} else {
 	  fSMan->SetCurrentMesh(mesh);
 	}
@@ -384,7 +397,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  vsize[2] = size.z();
 		  mesh->SetSize(vsize);
 	      } else {
-                 G4cerr << "This mesh is not Box. Command ignored." << G4endl;
+                 G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
+			<< "] : This mesh is not Box. Command ignored." << G4endl;
 	      }
 	  } else if(command==mBinCmd) {
 	      MeshBinCommand(mesh,token);
@@ -410,7 +424,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->RotateZ(value);
 	  }
       }else{
-        G4cerr << "No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
+        G4cerr << "ERROR: No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
       }
   }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.20 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4ScoringMessenger.hh,v 1.21 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)

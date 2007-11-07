@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.27 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.28 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -89,7 +89,7 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4String wName)
     }
   }
   if(!sm && verboseLevel>9)
-  { G4cout << "G4ScoringManager::FindMesh() --- <" << wName << "> is not found. Null returned." << G4endl; }
+  { G4cout << "WARNING : G4ScoringManager::FindMesh() --- <" << wName << "> is not found. Null returned." << G4endl; }
 
   return sm;
 }
@@ -117,12 +117,12 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4String color
     G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
     if(!colorMap)
     {
-      G4cerr << "Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
+      G4cerr << "WARNING : Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
       colorMap = fDefaultLinearColorMap;
     }
     mesh->DrawMesh(psName,colorMap,axflg);
   } else {
-    G4cerr << "G4ScoringManager::DrawMesh() --- <"
+    G4cerr << "ERROR : G4ScoringManager::DrawMesh() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
@@ -135,12 +135,12 @@ void G4ScoringManager::DrawMesh(G4String meshName,G4String psName,G4int idxPlane
     G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
     if(!colorMap)
     {
-      G4cerr << "Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
+      G4cerr << "WARNING : Score color map <" << colorMapName << "> is not found. Default linear color map is used." << G4endl;
       colorMap = fDefaultLinearColorMap;
     }
     mesh->DrawMesh(psName,idxPlane,iColumn,colorMap);
   } else {
-    G4cerr << "G4ScoringManager::DrawMesh() --- <"
+    G4cerr << "ERROR : G4ScoringManager::DrawMesh() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
@@ -155,7 +155,7 @@ void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4St
     writer->SetScoringMesh(mesh);
     writer->DumpQuantityToFile(psName, fileName, option);
   } else {
-    G4cerr << "G4ScoringManager::DrawQuantityToFile() --- <"
+    G4cerr << "ERROR : G4ScoringManager::DrawQuantityToFile() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
@@ -170,7 +170,7 @@ void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileNa
     writer->SetScoringMesh(mesh);
     writer->DumpAllQuantitiesToFile(fileName, option);
   } else {
-    G4cerr << "G4ScoringManager::DrawAllQuantitiesToFile() --- <"
+    G4cerr << "ERROR : G4ScoringManager::DrawAllQuantitiesToFile() --- <"
 	   << meshName << "> is not found. Nothing is done." << G4endl;
   }
 }
@@ -179,7 +179,7 @@ void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
 {
   if(fColorMapDict->find(colorMap->GetName()) != fColorMapDict->end())
   {
-    G4cerr << "G4ScoringManager::RegisterScoreColorMap -- "
+    G4cerr << "ERROR : G4ScoringManager::RegisterScoreColorMap -- "
            << colorMap->GetName() << " has already been registered. Method ignored." << G4endl;
   }
   else

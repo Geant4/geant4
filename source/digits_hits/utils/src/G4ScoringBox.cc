@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.45 2007-11-07 03:03:46 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.46 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,7 +65,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
   if(fConstructed) {
 
     if(verboseLevel > 0) 
-      G4cerr << "G4ScoringBox::Construct() : " << fWorldPhys->GetName()
+      G4cout << "WARNING : G4ScoringBox::Construct() : " << fWorldPhys->GetName()
 	     << " is already constructed. All quantities are reset." << G4endl;
     ResetScore();
 
@@ -120,7 +120,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[0], layerName[0], boxLogical, false, 0);
   } else
-    G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
+    G4cerr << "ERROR : G4ScoringBox::SetupGeometry() : invalid parameter ("
 	   << fNSegment[0] << ") "
 	   << "in placement of the first nested layer." << G4endl;
 
@@ -148,7 +148,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[1], layerName[1], layerLogical[0], false, 0);
   } else
-    G4cerr << "G4ScoringBox::SetupGeometry() : invalid parameter ("
+    G4cerr << "ERROR : G4ScoringBox::SetupGeometry() : invalid parameter ("
 	   << fNSegment[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
 
@@ -204,7 +204,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
   } else
-    G4cerr << "G4ScoringBox::SetupGeometry() : "
+    G4cerr << "ERROR : G4ScoringBox::SetupGeometry() : "
 	   << "invalid parameter (" << fNSegment[2] << ") "
 	   << "in mesh element placement." << G4endl;
 
@@ -400,7 +400,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
 {
   if(idxColumn<0 || idxColumn>=fNSegment[idxProj])
   {
-    G4cerr << "Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[idxProj]-1 <<
+    G4cerr << "ERROR : Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[idxProj]-1 <<
     "]. Method ignored." << G4endl;
     return;
   }
@@ -454,7 +454,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     G4Scale3D scale;
     // xy plane
     if(idxProj == 0) {
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); G4cout << xymax << G4endl; }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
       G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
       for(int x = 0; x < fNSegment[0]; x++) {
 	for(int y = 0; y < fNSegment[1]; y++) {
@@ -476,7 +476,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     } else
     // yz plane
     if(idxProj == 1) {
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); G4cout << yzmax << G4endl; }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); }
       G4Box yzplate("yz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
       for(int y = 0; y < fNSegment[1]; y++) {
 	for(int z = 0; z < fNSegment[2]; z++) {
@@ -497,7 +497,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     } else
     // xz plane
       if(idxProj == 2) {
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax);  G4cout << xzmax << G4endl;}
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax);}
       G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
       for(int x = 0; x < fNSegment[0]; x++) {
 	for(int z = 0; z < fNSegment[2]; z++) {

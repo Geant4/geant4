@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.2 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.3 2007-11-07 04:12:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
   if(opt.size() == 0) opt = "csv";
   if(opt.find("csv") == std::string::npos &&
      opt.find("sequence") == std::string::npos) {
-    G4cerr << "DumpToFile : Unknown option -> "
+    G4cerr << "ERROR : DumpToFile : Unknown option -> "
 	   << option << G4endl;
     return;
   }
@@ -69,7 +69,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
   // open the file
   std::ofstream ofile(fileName);
   if(!ofile) {
-    G4cerr << "DumpToFile : File open error -> "
+    G4cerr << "ERROR : DumpToFile : File open error -> "
 	   << fileName << G4endl;
     return;
   }
@@ -82,7 +82,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 
   MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
   if(msMapItr == fSMap.end()) {
-    G4cerr << "DumpToFile : Unknown quantity, \""
+    G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
 	   << psName << "\"." << G4endl;
     return;
   }
@@ -140,7 +140,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
   if(opt.size() == 0) opt = "csv";
   if(opt.find("csv") == std::string::npos &&
      opt.find("sequence") == std::string::npos) {
-    G4cerr << "DumpToFile : Unknown option -> "
+    G4cerr << "ERROR : DumpToFile : Unknown option -> "
 	   << option << G4endl;
     return;
   }
@@ -148,7 +148,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
   // open the file
   std::ofstream ofile(fileName);
   if(!ofile) {
-    G4cerr << "DumpToFile : File open error -> "
+    G4cerr << "ERROR : DumpToFile : File open error -> "
 	   << fileName << G4endl;
     return;
   }
