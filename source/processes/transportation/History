@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2007-10-12 17:47:03 japost Exp $
+$Id: History,v 1.137 2007-11-07 21:00:06 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 Oct  12th, 2007, J.Apostolakis  transport-V09-00-03
 ------------------------------
 G4CoupledTransportation
-- Improved condition for condition that regulates Relocating when only 
+- Improves condition for flag that regulates Relocating when only 
     any geometry (including a parallel geometry) limits the step.  
     New PathFinder method required.
   -> Requires and co-works with tag geomnav-V09-00-03
