@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.44 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.45 2007-11-07 03:03:46 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,7 +64,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) {
 
-    if(verboseLevel > 1) 
+    if(verboseLevel > 0) 
       G4cerr << "G4ScoringBox::Construct() : " << fWorldPhys->GetName()
 	     << " is already constructed. All quantities are reset." << G4endl;
     ResetScore();
@@ -80,17 +80,17 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
-  if(verboseLevel > 10) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
+  if(verboseLevel > 9) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
 
   // World
   G4VPhysicalVolume * scoringWorld = fWorldPhys;
   G4LogicalVolume * worldLogical = scoringWorld->GetLogicalVolume();
 
   // Scoring Mesh
-  if(verboseLevel > 10) G4cout << fWorldName << G4endl;
+  if(verboseLevel > 9) G4cout << fWorldName << G4endl;
   G4String boxName = fWorldName;
 
-  if(verboseLevel > 10) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
+  if(verboseLevel > 9) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
   G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
   new G4PVPlacement(fRotationMatrix, fCenterPosition,
@@ -106,7 +106,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4LogicalVolume * layerLogical[2];
 
   // fisrt nested layer (replicated to x direction)
-  if(verboseLevel > 10) G4cout << "layer 1 :" << G4endl;
+  if(verboseLevel > 9) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fNSegment[0],
 			    fSize[1],
@@ -124,7 +124,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fNSegment[0] << ") "
 	   << "in placement of the first nested layer." << G4endl;
 
-  if(verboseLevel > 10) {
+  if(verboseLevel > 9) {
     G4cout << fSize[0]/fNSegment[0] << ", "
 	   << fSize[1] << ", "
 	   << fSize[2] << G4endl;
@@ -134,7 +134,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   }
 
   // second nested layer (replicated to y direction)
-  if(verboseLevel > 10) G4cout << "layer 2 :" << G4endl;
+  if(verboseLevel > 9) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Box(layerName[1],
 			    fSize[0]/fNSegment[0],
 			    fSize[1]/fNSegment[1],
@@ -152,7 +152,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fNSegment[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
 
-  if(verboseLevel > 10) {
+  if(verboseLevel > 9) {
     G4cout << fSize[0]/fNSegment[0] << ", "
 	   << fSize[1]/fNSegment[1] << ", "
 	   << fSize[2] << G4endl;
@@ -162,7 +162,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   }
 
   // mesh elements (replicated to z direction)
-  if(verboseLevel > 10) G4cout << "mesh elements :" << G4endl;
+  if(verboseLevel > 9) G4cout << "mesh elements :" << G4endl;
   G4String elementName = boxName +"3";
   G4VSolid * elementSolid = new G4Box(elementName,
 				      fSize[0]/fNSegment[0],
@@ -187,7 +187,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 			    nelement,
 			    param);
 
-      if(verboseLevel > 10) {
+      if(verboseLevel > 9) {
 	G4cout << motherDims[0] << ", " << motherDims[1] << ", " << motherDims[2] << G4endl;
 	for(int i = 0; i < (int)fSegmentPositions.size(); i++)
 	  G4cout << fSegmentPositions[i] << ", ";
@@ -208,7 +208,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << "invalid parameter (" << fNSegment[2] << ") "
 	   << "in mesh element placement." << G4endl;
 
-  if(verboseLevel > 10) {
+  if(verboseLevel > 9) {
     G4cout << fSize[0]/fNSegment[0] << ", "
 	   << fSize[1]/fNSegment[1] << ", "
 	   << fSize[2]/fNSegment[2] << G4endl;

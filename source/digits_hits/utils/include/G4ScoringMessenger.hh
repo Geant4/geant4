@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.19 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4ScoringMessenger.hh,v 1.20 2007-11-07 03:03:46 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
@@ -71,6 +71,7 @@ class G4ScoringMessenger: public G4UImessenger
 
     G4String GetCurrentValue(G4UIcommand * command);
 
+
   protected:    
 
     void FillTokenVec(G4String newValues,G4TokenVec& token);
@@ -78,6 +79,7 @@ class G4ScoringMessenger: public G4UImessenger
     void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
 
   private:
+
     G4ScoringManager*        fSMan;
     G4UIdirectory*           scoreDir;
     G4UIcmdWithoutParameter* listCmd;

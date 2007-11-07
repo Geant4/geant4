@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.33 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.34 2007-11-07 03:03:46 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -58,17 +58,22 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   listCmd->SetGuidance("List scoring worlds.");
 
   dumpCmd = new G4UIcmdWithoutParameter("/score/dump",this);
-  dumpCmd->SetGuidance("Dump scorer results ");
+  dumpCmd->SetGuidance("Dump results of scorers.");
 
   verboseCmd = new G4UIcmdWithAnInteger("/score/verbose",this);
-  verboseCmd->SetGuidance("Verbosity");
+  verboseCmd->SetGuidance("Verbosity.");
+  verboseCmd->SetGuidance("  0) errors or warnings,");
+  verboseCmd->SetGuidance("  1) information with 0)");
+
+  meshDir = new G4UIdirectory("/score/mesh/");
+  meshDir->SetGuidance("    Mesh processing commands.");
 
   meshCreateDir = new G4UIdirectory("/score/create/");
-  meshCreateDir->SetGuidance("Interactive scoring commands.");
+  meshCreateDir->SetGuidance("  Mesh creation commands.");
   //
   // Mesh commands
   meshBoxCreateCmd = new G4UIcmdWithAString("/score/create/boxMesh",this);
-  meshBoxCreateCmd->SetGuidance("Create scoring mesh.");
+  meshBoxCreateCmd->SetGuidance("Create scoring box mesh.");
   meshBoxCreateCmd->SetParameterName("MeshName",false);
   //
 //  meshTubsCreateCmd = new G4UIcmdWithAString("/score/create/tubsMesh",this);
@@ -91,14 +96,14 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 //  meshActCmd->SetParameterName("MeshName",false);
   //
   mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxSize",this);
-  mBoxSizeCmd->SetGuidance("Define Size of scoring mesh.");
+  mBoxSizeCmd->SetGuidance("Define size of the scoring mesh.");
   mBoxSizeCmd->SetParameterName("Di","Dj","Dk",false,false);
   mBoxSizeCmd->SetRange("Di>0. && Dj>0. && Dk>0.");
   mBoxSizeCmd->SetDefaultUnit("mm");
   //
   //   Division command
   mBinCmd = new G4UIcommand("/score/mesh/nBin",this);
-  mBinCmd->SetGuidance("Define segmentation of scoring mesh.");
+  mBinCmd->SetGuidance("Define segments of the scoring mesh.");
   mBinCmd->SetGuidance("[usage] /score/mesh/nBin");
   mBinCmd->SetGuidance("  Ni  :(int) Number of bins i ");
   mBinCmd->SetGuidance("  Nj  :(int) Number of bins j ");
@@ -123,41 +128,41 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
-  mTransDir->SetGuidance("Placement of scoring mesh");
+  mTransDir->SetGuidance("Mesh translation commands.");
   //
   mTResetCmd = new G4UIcmdWithoutParameter("/score/mesh/translate/reset",this);
-  mTResetCmd->SetGuidance("Reset translation of scoring mesh placement.");
+  mTResetCmd->SetGuidance("Reset translated position of the scoring mesh.");
   //
   mTXyzCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/translate/xyz",this);
-  mTXyzCmd->SetGuidance("Translation the current scoring mesh to the position.");
+  mTXyzCmd->SetGuidance("Translate the scoring mesh.");
   mTXyzCmd->SetParameterName("X","Y","Z",false,false);
   mTXyzCmd->SetDefaultUnit("mm");
   //
   mRotDir = new G4UIdirectory("/score/mesh/rotate/");
-  mRotDir->SetGuidance("Placement of scoring mesh");
+  mRotDir->SetGuidance("Mesh rotation commands.");
   //
   mRResetCmd = new G4UIcmdWithoutParameter("/score/mesh/rotate/reset",this);
-  mRResetCmd->SetGuidance("Reset rotation of scoring mesh placement.");
+  mRResetCmd->SetGuidance("Reset rotation angles of the scoring mesh.");
   //
   mRotXCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateX",this);
-  mRotXCmd->SetGuidance("Add rotation to the current scoring mesh in X.");
+  mRotXCmd->SetGuidance("Rotate the scoring mesh in X axis.");
   mRotXCmd->SetParameterName("Rx",false);
   mRotXCmd->SetDefaultUnit("deg");
   //
   mRotYCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateY",this);
-  mRotYCmd->SetGuidance("Add rotation to the current scoring mesh in Y.");
+  mRotYCmd->SetGuidance("Rotate the scoring mesh in Y axis.");
   mRotYCmd->SetParameterName("Ry",false);
   mRotYCmd->SetDefaultUnit("deg");
   //
   mRotZCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateZ",this);
-  mRotZCmd->SetGuidance("Add rotation to the current scoring mesh in Z.");
+  mRotZCmd->SetGuidance("Rotate the scoring mesh in Z axis.");
   mRotZCmd->SetParameterName("Rz",false);
   mRotZCmd->SetDefaultUnit("deg");
   //
 
   // Draw Scoring result
   drawCmd = new G4UIcommand("/score/draw",this);
-  drawCmd->SetGuidance("Draw scorer results ");
+  drawCmd->SetGuidance("Draw results of scored quantities.");
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
@@ -171,7 +176,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 
   // Draw column
   drawColumnCmd = new G4UIcommand("/score/drawColumn",this);
-  drawColumnCmd->SetGuidance("Draw a cell column");
+  drawColumnCmd->SetGuidance("Draw a cell column.");
   drawColumnCmd->SetGuidance(" plane = 0 : xy, 1: yz, 2: zx");
   param = new G4UIparameter("meshName",'s',false);
   drawColumnCmd->SetParameter(param);
@@ -187,18 +192,18 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawColumnCmd->SetParameter(param);
 
   colorMapDir = new G4UIdirectory("/score/colorMap/");
-  colorMapDir->SetGuidance("Color map commands");
+  colorMapDir->SetGuidance("Color map commands.");
 
   listColorMapCmd = new G4UIcmdWithoutParameter("/score/colorMap/listScoreColorMaps",this);
   listColorMapCmd->SetGuidance("List registered score color maps.");
 
   floatMinMaxCmd = new G4UIcmdWithAString("/score/colorMap/floatMinMax",this);
-  floatMinMaxCmd->SetGuidance("Min/Max of color map is calculated accorging to the actual scores.");
+  floatMinMaxCmd->SetGuidance("Min/Max of the color map is calculated accorging to the actual scores.");
   floatMinMaxCmd->SetParameterName("colorMapName",true,false);
   floatMinMaxCmd->SetDefaultValue("defaultLinearColorMap");
 
   colorMapMinMaxCmd = new G4UIcommand("/score/colorMap/setMinMax",this);
-  colorMapMinMaxCmd->SetGuidance("Define min/max value of the color map");
+  colorMapMinMaxCmd->SetGuidance("Define min/max value of the color map.");
   param = new G4UIparameter("colorMapMame",'s',true);
   param->SetDefaultValue("defaultLinearColorMap");
   colorMapMinMaxCmd->SetParameter(param);
@@ -209,7 +214,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
-  dumpQtyToFileCmd->SetGuidance("Dump a scored quantity to file ");
+  dumpQtyToFileCmd->SetGuidance("Dump one scored quantity to file.");
   param = new G4UIparameter("meshName", 's', false);
   dumpQtyToFileCmd->SetParameter(param);
   param = new G4UIparameter("psName", 's', false);
@@ -221,7 +226,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 
   // Dump all scored quantities
   dumpAllQtsToFileCmd = new G4UIcommand("/score/dumpAllQuantitiesToFile", this);
-  dumpAllQtsToFileCmd->SetGuidance("Dump all quantities in a mesh to file ");
+  dumpAllQtsToFileCmd->SetGuidance("Dump all quantities of the mesh to file.");
   param = new G4UIparameter("meshName", 's', false);
   dumpAllQtsToFileCmd->SetParameter(param);
   param = new G4UIparameter("fileName", 's', false);

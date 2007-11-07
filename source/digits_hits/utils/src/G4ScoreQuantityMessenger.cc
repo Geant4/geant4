@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.6 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.7 2007-11-07 03:03:46 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -86,18 +86,18 @@ void G4ScoreQuantityMessenger::FilterCommands()
   //
   // Filter commands 
   filterDir = new G4UIdirectory("/score/filter/");
-  filterDir->SetGuidance("Filter for scoring");
+  filterDir->SetGuidance("  Scoring filter commands.");
   //
   fchargedCmd = new G4UIcmdWithAString("/score/filter/charged",this);
-  fchargedCmd->SetGuidance("Charge filter ( charged )");
+  fchargedCmd->SetGuidance("Charged particle filter.");
   fchargedCmd->SetParameterName("fname",false);
   //
   fneutralCmd = new G4UIcmdWithAString("/score/filter/neutral",this);
-  fneutralCmd->SetGuidance("Charge filter ( Neutral )");
+  fneutralCmd->SetGuidance("Neutral particle filter.");
   fneutralCmd->SetParameterName("fname",false);
   //
   fkinECmd = new G4UIcommand("/score/filter/kineticEnergy",this);
-  fkinECmd->SetGuidance("Kinetic Energy Filter");
+  fkinECmd->SetGuidance("Kinetic energy filter.");
   fkinECmd->SetGuidance("[usage] /score/filter/kineticEnergy fname Elow Ehigh unit");
   fkinECmd->SetGuidance("  fname     :(String) Filter Name ");
   fkinECmd->SetGuidance("  Elow      :(Double) Lower edge of kinetic energy");
@@ -117,7 +117,7 @@ void G4ScoreQuantityMessenger::FilterCommands()
   fkinECmd->SetParameter(param);
   //
   fparticleCmd = new G4UIcommand("/score/filter/particle",this);
-  fparticleCmd->SetGuidance("Touch particle filter into current quantity");
+  fparticleCmd->SetGuidance("Particle filter.");
   fparticleCmd->SetGuidance("[usage] /score/filter/particle fname p0 .. pn");
   fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names");
@@ -130,7 +130,7 @@ void G4ScoreQuantityMessenger::FilterCommands()
   //
   //
   fparticleKinECmd = new G4UIcommand("/score/filter/particleWithKineticEnergy",this);
-  fparticleKinECmd->SetGuidance("Particle with kinetic energy filter");
+  fparticleKinECmd->SetGuidance("Particle with kinetic energy filter.");
   fparticleKinECmd->SetGuidance("[usage] /score/filter/particleWithKineticEnergy fname Elow Ehigh unit p0 .. pn");
   fparticleKinECmd->SetGuidance("  fname     :(String) Filter Name ");
   fparticleKinECmd->SetGuidance("  Elow      :(Double) Lower edge of kinetic energy");

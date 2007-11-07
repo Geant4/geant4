@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.32 2007-11-06 09:41:34 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.33 2007-11-07 03:03:46 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ void G4VScoringMesh::ResetScore() {
   if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore() is called." << G4endl;
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
   for(; itr != fMap.end(); itr++) {
-    if(verboseLevel > 9) G4cout << itr->first << G4endl;
+    if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore()" << itr->first << G4endl;
     itr->second->clear();
   }
 }
@@ -94,10 +94,10 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
   {
     G4cerr << "G4VScoringMesh::SetPrimitiveScorer() : " << ps->GetName() 
            << " does not yet have mesh size or number of bins. Set them first." << G4endl
-           << "Method ignored. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+           << "This Method is ignored." << G4endl;
     return;
   }
-  if(verboseLevel > 1) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
+  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
 			      << ps->GetName() << " is registered."
 			      << " 3D size: ("
 			      << fNSegment[0] << ", "
@@ -114,10 +114,10 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
   if(fCurrentPS == NULL) {
-    G4cerr << "G4VScoringMesh::SetSDFilter() : scorer must be defined first. Method ignored." << G4endl;
+    G4cerr << "G4VScoringMesh::SetSDFilter() : a quantity must be defined first. This method is ignored." << G4endl;
     return;
   }
-  if(verboseLevel > 1) G4cout << "G4VScoringMesh::SetFilter() : "
+  if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetFilter() : "
 			      << filter->GetName()
 			      << " is set to "
 			      << fCurrentPS->GetName() << G4endl;
@@ -134,8 +134,8 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
   fCurrentPS = GetPrimitiveScorer(name);
   if(fCurrentPS == NULL) {
-    G4cerr << "G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer "
-	   << name << " was not exist." << G4endl;
+    G4cerr << "G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer <"
+	   << name << "> does not found." << G4endl;
   }
 }
 
