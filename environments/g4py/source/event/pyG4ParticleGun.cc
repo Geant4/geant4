@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleGun.cc,v 1.5 2007-11-07 07:07:23 kmura Exp $
+// $Id: pyG4ParticleGun.cc,v 1.6 2007-11-07 07:15:17 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ParticleGun.cc
@@ -31,6 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4Event.hh"
@@ -82,11 +83,14 @@ G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
 // ====================================================================
 namespace pyG4ParticleGun {
 
+#if G4VERSION_NUMBER >= 910
 // SetParticleMomentum
 void (G4ParticleGun::*f1_SetParticleMomentum)(G4double)
   = &G4ParticleGun::SetParticleMomentum;
 void (G4ParticleGun::*f2_SetParticleMomentum)(G4ParticleMomentum)
   = &G4ParticleGun::SetParticleMomentum;
+#endif
+
 
 ////////////////////////////////////////////////////////////////////
 void SetParticleByName(G4ParticleGun* gun, const std::string& pname)
@@ -130,8 +134,12 @@ void export_G4ParticleGun()
     .def("SetParticleDefinition", &G4ParticleGun::SetParticleDefinition)
     .def("GetParticleDefinition", &G4ParticleGun::GetParticleDefinition,
     	 return_value_policy<reference_existing_object>())
+#if G4VERSION_NUMBER >= 910
     .def("SetParticleMomentum",   f1_SetParticleMomentum)
     .def("SetParticleMomentum",   f2_SetParticleMomentum)
+#else
+    .def("SetParticleMomentum",   &G4ParticleGun::SetParticleMomentum)
+#endif
     .def("SetParticleMomentumDirection", 
 	 &G4ParticleGun::SetParticleMomentumDirection)
     .def("GetParticleMomentumDirection", 
