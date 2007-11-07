@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.20 2007-10-12 17:37:17 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.21 2007-11-07 20:59:29 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -67,7 +67,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 ) 
+    fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 )  // or 4
 {
   G4TransportationManager* transportMgr ; 
 
@@ -236,6 +236,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( currentMinimumStep > 0 )  {
       G4double newMassSafety= 0.0;     //  temp. for recalculation
 
+      if( fVerboseLevel > 2 ){
+	G4cout << " Calling PathFinder::ComputeStep() from " 
+	       << " G4CoupledTransportation::AlongStepGPIL " << G4endl;
+      }
+
       // Do the Transport in the field (non recti-linear)
       //
       lengthAlongCurve = fPathFinder->ComputeStep( theFieldTrack,
@@ -257,6 +262,18 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       }
 
       fAnyGeometryLimitedStep = (fPathFinder->GetNumberGeometriesLimitingStep() != 0); 
+
+      // #ifdef G4DEBUG
+      if( fMassGeometryLimitedStep && !fAnyGeometryLimitedStep ){
+         G4cerr << " Error in determining geometries limiting the step" << G4endl;
+	 G4cerr << "  Limiting:  mass=" << fMassGeometryLimitedStep
+		<< " any= " << fAnyGeometryLimitedStep << G4endl;
+	 G4Exception("G4CoupledTransportation::AlongStepGetPhysicalInteractionLength()", 
+		     "PathFinderConfused", 
+		     FatalException, 
+		     "Incompatible conditions - was limited by a geometry?");
+      }
+      // #endif
 
       // Other potential 
       // fAnyGeometryLimitedStep = newFullStep < currentMinimumStep; 
