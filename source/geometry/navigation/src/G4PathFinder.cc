@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.56 2007-11-06 15:59:48 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.57 2007-11-07 20:55:27 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -984,12 +984,14 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            //        to the latest minStep value - to reduce calculations
 
 #ifdef G4DEBUG_PATHFINDER
-           G4cout.precision(8); 
-           G4cout << "PathFinder::ComputeStep> long  proposed step = "
-                  << proposedStepLength
-                  << "  >  safety = " << previousSafety  << " for nav " << num 
-                  << " .  New safety = " << safety << " step= " << step
-                  << G4endl;       
+	   if( fVerboseLevel > 0) {
+	     G4cout.precision(8); 
+	     G4cout << "PathFinder::ComputeStep> long  proposed step = "
+		    << proposedStepLength
+		    << "  >  safety = " << previousSafety  << " for nav " << num 
+		    << " .  New safety = " << safety << " step= " << step
+		    << G4endl;      
+	   } 
 #endif
         }
         fCurrentStepSize[num] = step; 
