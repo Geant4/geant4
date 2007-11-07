@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.13 2007-09-28 21:05:10 gum Exp $
+// $Id: G4ParticleGun.cc,v 1.14 2007-11-07 17:13:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,6 +73,19 @@ G4ParticleGun::~G4ParticleGun()
 {
   delete theMessenger;
 }
+
+G4ParticleGun::G4ParticleGun(const G4ParticleGun& /*right*/)
+:G4VPrimaryGenerator()
+{ G4Exception("G4ParticleGun : Copy constructor should not be used."); }
+
+const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun& right)
+{ G4Exception("G4ParticleGun : Equal operator should not be used."); return right; }
+
+G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
+{ G4Exception("G4ParticleGun : == operator should not be used."); return true; }
+
+G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
+{ G4Exception("G4ParticleGun : == operator should not be used."); return false; }
 
 void G4ParticleGun::SetParticleDefinition
                  (G4ParticleDefinition * aParticleDefinition)
