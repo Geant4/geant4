@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2007-08-19 20:52:53 maire Exp $
+$Id: README,v 1.7 2007-11-07 17:22:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -128,6 +128,10 @@ $Id: README,v 1.6 2007-08-19 20:52:53 maire Exp $
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
    with the command /testem/histo/setFileType (hbook by default)
+   
+   It is also possible to print selected histograms on an ascii file:
+   /testem/histo/printHisto id
+   All selected histos will be written on a file name.ascii  (default testem11) 
        
    Note that, by default, histograms are disabled. To activate them, uncomment
    the flag G4ANALYSIS_USE in GNUmakefile.
