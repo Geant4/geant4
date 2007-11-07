@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2007-11-06 10:55:07 maire Exp $
+$Id: README,v 1.5 2007-11-07 13:07:54 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,7 @@ $Id: README,v 1.4 2007-11-06 10:55:07 maire Exp $
                             -----------
 
     This program computes the dose deposited in an ionization chamber by an
-    extended (1 dimensional) monoenergetic electron source.
+    extended (one dimensional) monoenergetic electron source.
     The geometry of the chamber satisfies the conditions of charged particle
     equilibrium. Hence, under idealized conditions, the ratio of the dose 
     deposited over the beam energy fluence must be equal to 1.
@@ -28,10 +28,11 @@ $Id: README,v 1.4 2007-11-06 10:55:07 maire Exp $
       - the thickness of the cavity
 
     Wall and cavity must be made of the same material, but with different
-    density	 	
+    density.
+    Radius must be bigger than range of electrons in cavity. 	 	
  	
     All above parameters can be redifined via the UI commands built in 
-    DetectorMessenger class
+    DetectorMessenger class.
     
 			_________________
      radius (infinite)	|     |   |	|
@@ -54,7 +55,7 @@ $Id: README,v 1.4 2007-11-06 10:55:07 maire Exp $
  2- BEAM
   
     Monoenergetic (E0) incident electron source is uniformly distribued along
-    cylinder axis, within wall and cavity, with constant linear density
+    cylinder axis, within wall and cavity, with constant lineic density
     per mass: I.
     An effective wall thickness is defined from the range of e- at energy E0.
      
