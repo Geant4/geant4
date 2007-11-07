@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.18 2007-07-28 16:40:18 vnivanch Exp $
+# $Id: ionC12.mac,v 1.19 2007-11-07 19:41:32 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -19,9 +19,9 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standard	#em physics
-#/testem/phys/addPhysics  emstandard	#em physics
-#/testem/phys/addPhysics  standardIG	#em physics
+/testem/phys/addPhysics  standardNR	
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  standard_opt2
 #
 /run/initialize
 #
