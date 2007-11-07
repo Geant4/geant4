@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.75 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.76 2007-11-07 18:38:49 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -495,7 +495,6 @@ private:
   G4GPILSelection  aGPILSelection;
 
   G4bool   lossFluctuationFlag;
-  G4bool   lossFluctuationArePossible;
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
@@ -946,10 +945,6 @@ void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p,
 {
   modelManager->AddEmModel(order, p, fluc, region);
   if(p) p->SetParticleChange(pParticleChange, fluc);
-  if(fluc) {
-    lossFluctuationFlag = true;
-    lossFluctuationArePossible = true;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1045,7 +1040,7 @@ inline void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
 
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
-  if(!val || lossFluctuationArePossible) lossFluctuationFlag = val;
+  lossFluctuationFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
