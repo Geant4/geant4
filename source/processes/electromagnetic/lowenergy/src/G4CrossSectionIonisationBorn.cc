@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationBorn.cc,v 1.1 2007-10-22 09:14:43 pia Exp $
+// $Id: G4CrossSectionIonisationBorn.cc,v 1.2 2007-11-08 18:51:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,7 +68,7 @@ G4CrossSectionIonisationBorn::G4CrossSectionIonisationBorn()
   lowEnergyLimitDefault = 25 * eV;
   highEnergyLimitDefault = 30 * keV;
 
-  G4String fileElectron("dna/sigmatot_ionisation_e_born");
+  G4String fileElectron("dna/sigma_ionisation_e_born");
   G4String fileProton("dna/sigma_ionisation_p_born");
 
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();

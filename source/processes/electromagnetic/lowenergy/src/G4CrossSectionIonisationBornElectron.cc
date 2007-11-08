@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationBornElectron.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// $Id: G4CrossSectionIonisationBornElectron.cc,v 1.2 2007-11-08 18:51:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -86,7 +86,7 @@ G4double G4CrossSectionIonisationBornElectron::CrossSection(const G4Track& track
       // Load tables
       // ---- MGP ---- 
       table = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,(1e-22/3.343)*m*m );
-      table->LoadData("dna/sigmatot_ionisation_e_born");
+      table->LoadData("dna/sigma_ionisation_e_born");
       
       // ---- MGP ---- Temporary
       table->PrintData();
