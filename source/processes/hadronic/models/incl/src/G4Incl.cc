@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.10 2007-11-08 14:19:56 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.11 2007-11-08 16:19:50 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,6 +33,7 @@
 #include "G4Incl.hh"
 #include <iostream>
 #include <assert.h>
+#include "Randomize.hh"
 
 G4Incl::G4Incl()
 {
@@ -45,9 +46,6 @@ G4Incl::G4Incl()
   derivMhoFunction = 3;
   derivGausFunction = 4;
   densFunction = 5;
-
-  // Initialize random number generator:
-  heprandom = new CLHEP::HepRandom(hazard->ial);    
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
@@ -67,9 +65,6 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
   dton = aDton;
   saxw = aSaxw;
   ws = aWs;
-
-  // Initialize random number generator:
-  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
@@ -115,9 +110,6 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G
   evaporationResult = new G4VarNtp();
   evaporationResult->ntrack = -1;
 
-  // Initialize random number generator:
-  heprandom = new CLHEP::HepRandom(hazard->ial);
-
   // Initialize evaporation.
   abla = new G4Abla(hazard, volant, evaporationResult);
   abla->initEvapora();
@@ -143,7 +135,6 @@ G4Incl::~G4Incl()
   delete paul;
   delete varavat;
 
-  delete heprandom;
   delete abla;
   delete evaporationResult;
   delete volant;
@@ -7447,8 +7438,8 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 void G4Incl::standardRandom(G4double *rndm, G4long *seed)
 {
   (*seed) = (*seed); // Avoid warning during compilation.
-  // Use CLHEP random number generator:
-  (*rndm) = heprandom->flat();
+  // Use Geant4 G4UniformRand
+  (*rndm) = G4UniformRand();
 }
 
 void G4Incl::gaussianRandom(G4double *rndm)

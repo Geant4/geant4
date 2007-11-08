@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.7 2007-11-08 14:20:35 miheikki Exp $ 
+// $Id: G4Incl.hh,v 1.8 2007-11-08 16:20:09 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -37,7 +37,6 @@
 #include "G4InclDataDefs.hh"
 #include "G4Abla.hh"
 #include <fstream>
-#include "CLHEP/Random/Random.h"
 
 using namespace std;
 /**
@@ -816,7 +815,6 @@ public: // Utilities
 
   G4Volant *volant;
   G4Abla *abla;
-  CLHEP::HepRandom *heprandom;
 };
 
 #endif

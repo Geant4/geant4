@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.6 2007-11-08 14:27:04 miheikki Exp $
+$Id: History,v 1.7 2007-11-08 16:20:49 miheikki Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -18,10 +18,9 @@ code and to keep track of all tags.
 
 08 November 2007 - Pekka Kaitaniemi
 --------------------------------
-- Started using CLHEP::HepRandom::flat() as a random number
-  generator. 
-  o CLHEP offers much more sophisticated generators than the original
-  INCL one was. 
+- Started using G4UniformRand as a random number generator. 
+  o It is much more sophisticated generator than the original INCL one
+  was.  
   o This should eliminate infinite loop in test runs on 64-bit
   plattforms. The old generator probably was not 64-bit clean.
 

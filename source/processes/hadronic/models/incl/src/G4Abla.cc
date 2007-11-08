@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.11 2007-11-08 14:19:56 miheikki Exp $ 
+// $Id: G4Abla.cc,v 1.12 2007-11-08 16:19:50 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,7 +34,7 @@
 
 #include "G4Abla.hh"
 #include "G4InclAblaDataFile.hh"
-
+#include "Randomize.hh"
 #include <assert.h>
 
 G4Abla::G4Abla()
@@ -61,9 +61,6 @@ G4Abla::G4Abla(G4Hazard *hazard, G4Volant *volant)
   fb = new G4Fb();
   fiss = new G4Fiss();
   opt = new G4Opt();
-
-  // Initialize random number generator
-  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
@@ -86,14 +83,10 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   fb = new G4Fb();
   fiss = new G4Fiss();
   opt = new G4Opt();
-
-  // Initialize random number generator
-  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Abla::~G4Abla()
 {
-  delete heprandom;
   delete pace;
   delete ald;
   delete ablamain;
@@ -993,6 +986,15 @@ void G4Abla::initEvapora()
   fiss->optxfis = 1;
 
   G4InclAblaDataFile *dataInterface = new G4InclAblaDataFile();
+  if(dataInterface->readData() == true) {
+    if(verboseLevel > 0) {
+      G4cout <<"G4Abla: Datafiles read successfully." << G4endl;
+    }
+  }
+  else {
+    G4Exception("ERROR: Failed to read datafiles.");
+  }
+  
   for(int z = 0; z < 98; z++) { //do 30  z = 0,98,1                                                 
     for(int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
       // 			ecld->ecfnz[n][z] = 0.e0;
@@ -5046,8 +5048,8 @@ void G4Abla::rotab(G4double R[4][4], G4double pin[4], G4double pout[4])
 void G4Abla::standardRandom(G4double *rndm, G4long *seed)
 {
   (*seed) = (*seed); // Avoid warning during compilation.
-  // Use CLHEP random number generator:
-  (*rndm) = heprandom->flat();
+  // Use Geant4 G4UniformRand
+  (*rndm) = G4UniformRand();
 }
 
 G4double G4Abla::haz(G4int k)
