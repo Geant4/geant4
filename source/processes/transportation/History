@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2007-11-08 17:33:10 japost Exp $
+$Id: History,v 1.139 2007-11-08 18:00:29 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   8th, 2007, J.Apostolakis  transport-V09-00-05
+------------------------------
+G4Transportation:
+- Create new method (and class member) for flag on Short StepOptimisation.
+  * When it is true, the optimisation is 'on' steps shorter than the
+     safety will not call G4Navigator - so long as the particle goes straight
+     ie it is not charged or there is no field.
+  * Retained the default value as 'off' - as since changed in 
+     transport-V09-00-02 following Alex's suggestion.
 
 Nov   8th, 2007, J.Apostolakis  transport-V09-00-04
 ------------------------------
