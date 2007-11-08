@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.87 2007-10-31 13:23:07 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.88 2007-11-08 13:55:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3044,14 +3044,8 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   if(cA<0.) G4cout<<"-Warning-G4QNucl::CoulombBarrier: NucleusA="<<cA<<", Z="<<cZ<<G4endl;
 #endif
   G4double ca=cA;
-
-  // Alex Howard adding protection against NaNs 25/4/07
   if(cA<0.) ca=0.;
-  G4double cb=0.; // default of 0 MeV coulomb barrier if meson? AH
-  G4double denominator = pow(rA,third)+ff*pow(ca,third);
-  if(denominator != 0) cb=zz/denominator; // Negative hadronic potential
-  // AH
-
+  G4double cb=zz/(pow(rA,third)+ff*pow(ca,third)+.1); // Negative hadronic potential
   // Geant4 solution for protons is practically the same:
   // G4double cb=1.263*Z/(1.0 + pow(rA,third));
   // @@ --- Temporary "Lambda/Delta barrier for mesons"
@@ -6162,8 +6156,8 @@ void G4QNucleus::DecayAlphaBar(G4QHadron* qH, G4QHadronVector* evaHV)
     }
     else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
     {
-      G4cout<<"--Warning--G4QNucl::DecAlphBar:fPDG="<<fPDG<<"(2*fM="<<fMass<<")*2="<<2*fMass
-            <<",sPDG="<<sPDG<<"(sM="<<sMass<<" > TotM="<<q4M.m()<<q4M<<G4endl;
+      G4cout<<"--Warning--G4QNucl::DecAlphBar:fPDG="<<fPDG<<"(2*fM="<<fMass<<")*2="
+            <<2*fMass<<",sPDG="<<sPDG<<"(sM="<<sMass<<" > TotM="<<q4M.m()<<q4M<<G4endl;
       //G4cerr<<"*G4QNuc::DecayAlphaBar: qM="<<qM<<" < sum="<<sum<<",d="<<sum-qM<<G4endl;
       //throw G4QException("G4QNucl::DecayAlphaBar:QuintBaryon DecayIn2 didn't succeed");
       evaHV->push_back(qH);
