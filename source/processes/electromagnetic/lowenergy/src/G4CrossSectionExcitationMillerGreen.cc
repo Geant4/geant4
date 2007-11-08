@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationMillerGreen.cc,v 1.1 2007-05-02 17:20:36 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
-// $Id: G4CrossSectionExcitationMillerGreen.cc,v 1.1 2007-05-02 17:20:36 pia Exp $
+// $Id: G4CrossSectionExcitationMillerGreen.cc,v 1.2 2007-11-08 19:57:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -45,6 +41,10 @@
 
 // Class description:
 // Geant4-DNA Cross total cross section for electron elastic scattering in water
+// Reference: TNS Geant4-DNA paper
+// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
+// design foundation and implementation of the first set of models,
+// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
 // Further documentation available from http://www.ge.infn.it/geant4/dna
 
 // -------------------------------------------------------------------
@@ -53,229 +53,157 @@
 #include "G4CrossSectionExcitationMillerGreen.hh"
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4Track.hh"
-#include "G4Electron.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
-
-#include "Randomize.hh"
+#include "G4Proton.hh"
+#include "G4CrossSectionExcitationEmfietzoglouPartial.hh"
+#include "G4DNAGenericIonsManager.hh"
 
 G4CrossSectionExcitationMillerGreen::G4CrossSectionExcitationMillerGreen()
 {
+  // Default energy limits (defined for protection against anomalous behaviour only)
+  lowEnergyLimitDefault = 10 * eV;
+  highEnergyLimitDefault = 10 * MeV;
 
-  name = "CrossSectionExcitationMillerGreen";
-  lowEnergyLimit = 7. * eV;
-  highEnergyLimit = 10 * keV;
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+  G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
+  G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
+  G4ParticleDefinition* heliumDef = instance->GetIon("helium");
 
-  // Energy correction factor for protons (to be added for alpha and other particles)
-  kineticEnergyCorrection = 1.;
+  G4String proton;
+  G4String alphaPlusPlus;
+  G4String alphaPlus;
+  G4String helium;
 
-  // The following are for protons; to be generalized for alpha and other particles
-  slaterEffectiveCharge[0] = 0.;
-  slaterEffectiveCharge[1] = 0.;
-  slaterEffectiveCharge[2] = 0.;
-  sCoefficient[0] = 0.;
-  sCoefficient[1] = 0.;
-  sCoefficient[2] = 0.;
+  if (protonDef != 0)
+    {
+      proton = protonDef->GetParticleName();
+      lowEnergyLimit[proton] = 10. * eV;
+      highEnergyLimit[proton] = 500. * keV;
+    }
+  else
+    {
+      G4Exception("G4CrossSectionExcitationMillerGreen Constructor: proton is not defined");
+    }
 
-//  if (verboseLevel > 0)
-//  {
-//    G4cout << name << " is created " << G4endl
-//     << "Energy range: "
-//     << lowEnergyLimit / keV << " keV - "
-//     << highEnergyLimit / GeV << " GeV"
-//     << G4endl;
-//  }
+  if (alphaPlusPlusDef != 0)
+    {
+      alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
+      lowEnergyLimit[alphaPlusPlus] = 1. * keV;
+      highEnergyLimit[alphaPlusPlus] = 10. * MeV;
+    }
+  else
+    {
+      G4Exception("G4CrossSectionExcitationMillerGreen Constructor: alphaPlusPlus is not defined");
+    }
+
+  if (alphaPlusDef != 0)
+    {
+      alphaPlus = alphaPlusDef->GetParticleName();
+      lowEnergyLimit[alphaPlus] = 1. * keV;
+      highEnergyLimit[alphaPlus] = 10. * MeV;
+    }
+  else
+    {
+      G4Exception("G4CrossSectionExcitationMillerGreen Constructor: alphaPlus is not defined");
+    }
+
+  if (heliumDef != 0)
+    {
+      helium = heliumDef->GetParticleName();
+      lowEnergyLimit[helium] = 1. * keV;
+      highEnergyLimit[helium] = 10. * MeV;
+    }
+  else
+    {
+      G4Exception("G4CrossSectionExcitationMillerGreen Constructor: helium is not defined");
+    }
+  
+  
 }
 
 
 G4CrossSectionExcitationMillerGreen::~G4CrossSectionExcitationMillerGreen()
-{ }
+{}
  
 
 G4double G4CrossSectionExcitationMillerGreen::CrossSection(const G4Track& track)
 {
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+
+  if (
+      track.GetDefinition() != G4Proton::ProtonDefinition()
+      &&
+      track.GetDefinition() != instance->GetIon("alpha++")
+      &&
+      track.GetDefinition() != instance->GetIon("alpha+")
+      &&
+      track.GetDefinition() != instance->GetIon("helium")
+      )
+   	    
+    G4Exception("G4CrossSectionMillerGreen: attempting to calculate cross section for wrong particle");
+
+  G4double lowLim = lowEnergyLimitDefault;
+  G4double highLim = highEnergyLimitDefault;
+
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double k = particle->GetKineticEnergy();
-  const G4ParticleDefinition* particleDef = track.GetDefinition();
 
-  // G4Material* material = track.GetMaterial();
+  const G4String& particleName = particle->GetDefinition()->GetParticleName();
 
-  // Assume that the material is water; proper algorithm to calculate correctly for any material to be inserted here
-  G4int z = 10;
+  // Retrieve energy limits for the current particle type
 
-  // Take into account 5 excitation levels (D. Emfietzoglou et al., NIM B 193, pp. 71-78, 2002.
-  G4int i = 5;
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+  pos1 = lowEnergyLimit.find(particleName);
+
+  // Lower limit
+  if (pos1 != lowEnergyLimit.end())
+    {
+      lowLim = pos1->second;
+    }
+
+  // Upper limit
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+  pos2 = highEnergyLimit.find(particleName);
+
+  if (pos2 != highEnergyLimit.end())
+    {
+      highLim = pos2->second;
+    }
+
+  //
+  const G4ParticleDefinition* particleDefinition = track.GetDefinition();
 
   G4double crossSection(0.);
-
-  while (i>0)
+  
+  if (k >= lowLim && k <= highLim)
     {
-      i--;
-      crossSection += PartialCrossSection(k,z,i,particleDef);
+  
+      crossSection = partialCrossSection.Sum(k,particleDefinition);
+      G4DNAGenericIonsManager *instance;
+      instance = G4DNAGenericIonsManager::Instance();
+
+      // add ONE or TWO electron-water excitation for alpha+ and helium
+  
+      if ( particleDefinition == instance->GetIon("alpha+") 
+	   ||
+	   particleDefinition == instance->GetIon("helium")
+	   ) 
+	{
+	  G4CrossSectionExcitationEmfietzoglouPartial * excitationXS = 
+	    new G4CrossSectionExcitationEmfietzoglouPartial();
+	  G4double sigmaExcitation=0;
+	  if (k*0.511/3728 > 7.4*eV && k*0.511/3728 < 10*keV) sigmaExcitation = excitationXS->Sum(k*0.511/3728);
+       
+	  if ( particleDefinition == instance->GetIon("alpha+") ) 
+	    crossSection = crossSection +  sigmaExcitation ;
+	  if ( particleDefinition == instance->GetIon("helium") ) 
+	    crossSection = crossSection + 2*sigmaExcitation ;
+	  delete excitationXS;
+	}      
     }
+     
   return crossSection;
- }
-
-
-G4double G4CrossSectionExcitationMillerGreen::PartialCrossSection(G4double k, 
-								  G4int z, 
-								  G4int excitationLevel, 
-								  const G4ParticleDefinition* particle)
-{
-   //                               ( ( z * aj ) ^ omegaj ) * ( t - ej ) ^ nu
-  // sigma(t) = zEff^2 * sigma0 * --------------------------------------------
-  //                               jj ^ ( omegaj + nu ) + t ^ ( omegaj + nu )
-  //
-  // where t is the kinetic energy corrected by Helium mass over proton mass for Helium ions
-  //
-  // zEff is:
-  //  1 for protons
-  //  2 for alpha++
-  //  and  2 - c1 S_1s - c2 S_2s - c3 S_2p for alpha+ and He
-  //
-  // Dingfelder et al., RPC 59 p. 266 (2000) from Miller and Green (1973)
-  
-  const G4double sigma0(1.E+8 * barn);
-  const G4double nu(1.);
-  const G4double aj[]={876.*eV, 2084.* eV, 1373.*eV, 692.*eV, 900.*eV};
-  const G4double jj[]={19820.*eV, 23490.*eV, 27770.*eV, 30830.*eV, 33080.*eV};
-  const G4double omegaj[]={0.85, 0.88, 0.88, 0.78, 0.78};
-  
-  G4double tCorrected;
-  tCorrected = k * kineticEnergyCorrection;
-
-  G4double numerator;
-  numerator = std::pow(z * aj[excitationLevel], omegaj[excitationLevel]) * 
-    std::pow(tCorrected - EnergyConstant(excitationLevel), nu);
-
-  G4double power;
-  power = omegaj[excitationLevel] + nu;
-
-  G4double denominator;
-  denominator = std::pow(jj[excitationLevel], power) + std::pow(tCorrected, power);
-
-  G4double zEff = particle->GetPDGCharge() / eplus + particle->GetLeptonNumber();
-  
-  zEff -= ( sCoefficient[0] * S_1s(k, EnergyConstant(excitationLevel), slaterEffectiveCharge[0], 1.) +
-	    sCoefficient[1] * S_2s(k, EnergyConstant(excitationLevel), slaterEffectiveCharge[1], 2.) +
-	    sCoefficient[2] * S_2p(k, EnergyConstant(excitationLevel), slaterEffectiveCharge[2], 2.) );
-
-  G4double cross = sigma0 * zEff * zEff * numerator / denominator;
-
-  return cross;
 }
-
-
-G4double G4CrossSectionExcitationMillerGreen::S_1s(G4double t, 
-						   G4double energyTransferred, 
-						   G4double slaterEffectiveCharge, 
-						   G4double shellNumber)
-{
-  // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
- 
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
-  G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
-  
-  return value;
-}
-
-
-G4double G4CrossSectionExcitationMillerGreen::S_2s(G4double t, 
-						   G4double energyTransferred, 
-						   G4double slaterEffectiveCharge, 
-						   G4double shellNumber)
-{
-  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
-
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
-  G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
-
-  return value;
- 
-}
-
-G4double G4CrossSectionExcitationMillerGreen::S_2p(G4double t, 
-						   G4double energyTransferred, 
-						   G4double slaterEffectiveCharge, 
-						   G4double shellNumber)
-{
-
-  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
-
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
-  G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
-
-  return value;
-}
-
-
-G4double G4CrossSectionExcitationMillerGreen::R(G4double t, 
-						G4double energyTransferred, 
-						G4double slaterEffectiveCharge, 
-						G4double shellNumber) 
-{
-  // tElectron = m_electron / m_alpha * t
-
-  // Hardcoded in Riccardo's implementation; to be corrected
-  G4double tElectron = 0.511/3728. * t;
-  G4double value = 2. * tElectron * slaterEffectiveCharge / (energyTransferred * shellNumber);
-  
-  return value;
-}
-
-
-
- //G4int G4CrossSectionExcitationMillerGreen::RandomizePartialCrossSection(G4double k, G4int z)
- //{
-  // Assume 5 excitation levels 
-
-  //  G4int i = 5;
-  // G4double value = 0.;
-  //G4double values[5];
-  
-   //while (i>0)
-     //{
-   //i--;
-    //   values[i] = PartialCrossSection(k,z,i,definition);
-    //   value += values[i];
-    // }
-  
- //  value *= G4UniformRand();
-  
-   // i = 5;
-  // while (i>0)
-   //  {
-     //  i--;
-      
-     //  if (values[i] > value) return i;
-      
-     //  value -= values[i];
-  //   }
-  // One should never end up here; next statement added to avoid compilation warning
-  // Probably one should throw an exception if one ends up here
- //  return 0;
- //}
-
-G4double G4CrossSectionExcitationMillerGreen::EnergyConstant(G4int excitationLevel)
-{
-  const G4double ej[]={8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
-  // The numbers above are inconsistent with the equivalent in electron ExcitationEmfietzoglou
-  // listed below; this difference must be clarified
-  //  const G4double ej[] ={ 8.22*eV, 10.00*eV, 11.24*eV, 12.61*eV, 13.77*eV};
-
-  G4double e = ej[excitationLevel];
-  
-  return e;
-}
-
-
-
-
-//G4bool G4CrossSectionExcitationMillerGreen::IsApplicable(const G4ParticleDefinition& particle)
-//{
-//  return ( &particle == G4Electron::Electron() );
-//} 
 

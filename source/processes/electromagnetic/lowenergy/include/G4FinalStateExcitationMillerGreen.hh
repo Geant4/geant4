@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationMillerGreen.hh,v 1.2 2007-11-08 19:56:02 pia Exp $
+// $Id: G4FinalStateExcitationMillerGreen.hh,v 1.1 2007-11-08 19:56:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,6 +39,7 @@
 // Class description:
 // Geant4-DNA Cross total cross section for electron elastic scattering in water
 // Reference: TNS Geant4-DNA paper
+// Reference: TNS Geant4-DNA paper
 // S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
 // design foundation and implementation of the first set of models,
 // IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
@@ -48,38 +49,40 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONMILLERGREEN_HH
-#define G4CROSSSECTIONEXCITATIONMILLERGREEN_HH 1
+#ifndef G4FINALSTATEEXCITATIONMILLERGREEN_HH
+#define G4FINALSTATEEXCITATIONMILLERGREEN_HH 1
  
 #include "globals.hh"
-#include <map>
+#include "G4FinalStateProduct.hh"
+#include "G4WaterExcitationStructure.hh"
 #include "G4CrossSectionExcitationMillerGreenPartial.hh"
 
 class G4Track;
- 
-class G4CrossSectionExcitationMillerGreen
-{
-public:
-  
-  G4CrossSectionExcitationMillerGreen();
-  
-  virtual ~G4CrossSectionExcitationMillerGreen();
-  
-  G4double CrossSection(const G4Track&);
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
+class G4Step;
+
+ class G4FinalStateExcitationMillerGreen
+ {
+ public:
    
-  G4String name;  
-  G4double lowEnergyLimitDefault;
-  G4double highEnergyLimitDefault;
+   G4FinalStateExcitationMillerGreen();
+   
+   ~G4FinalStateExcitationMillerGreen();
+   
+   const G4FinalStateProduct& GenerateFinalState(const G4Track& track, const G4Step& step);
+   
+ private:
+   
+   // Copy constructor and assignment operator to be added here
+   
+   G4String name;  
+   G4double lowEnergyLimit;
+   G4double highEnergyLimit;
+   G4FinalStateProduct product;
 
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+   G4WaterExcitationStructure waterStructure;
 
-  G4CrossSectionExcitationMillerGreenPartial partialCrossSection;
-
+   G4CrossSectionExcitationMillerGreenPartial cross;
 };
+
 
 #endif

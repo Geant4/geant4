@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationMillerGreen.hh,v 1.2 2007-11-08 19:56:02 pia Exp $
+// $Id: G4FinalStateExcitationMillerGreen.cc,v 1.1 2007-11-08 19:57:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
+// Reference: TNS Geant4-DNA paper
+// Reference for implementation model: NIM. 155, pp. 145-156, 1978
+
 // History:
 // -----------
 // Date         Name              Modification
@@ -37,49 +40,70 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
 // Reference: TNS Geant4-DNA paper
 // S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
 // design foundation and implementation of the first set of models,
 // IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
 // Further documentation available from http://www.ge.infn.it/geant4/dna
 
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONMILLERGREEN_HH
-#define G4CROSSSECTIONEXCITATIONMILLERGREEN_HH 1
- 
-#include "globals.hh"
-#include <map>
-#include "G4CrossSectionExcitationMillerGreenPartial.hh"
+#include "G4FinalStateExcitationMillerGreen.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4DynamicParticle.hh"
+#include "Randomize.hh"
 
-class G4Track;
+#include "G4ParticleTypes.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Electron.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ParticleMomentum.hh"
+
+G4FinalStateExcitationMillerGreen::G4FinalStateExcitationMillerGreen()
+{}
+
+
+G4FinalStateExcitationMillerGreen::~G4FinalStateExcitationMillerGreen()
+{}
  
-class G4CrossSectionExcitationMillerGreen
+
+const G4FinalStateProduct& G4FinalStateExcitationMillerGreen::GenerateFinalState(const G4Track& track, const G4Step& /* step */)
 {
-public:
-  
-  G4CrossSectionExcitationMillerGreen();
-  
-  virtual ~G4CrossSectionExcitationMillerGreen();
-  
-  G4double CrossSection(const G4Track&);
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
-   
-  G4String name;  
-  G4double lowEnergyLimitDefault;
-  G4double highEnergyLimitDefault;
+  // Clear previous secondaries, energy deposit and particle kill status
+  product.Clear();
 
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
 
-  G4CrossSectionExcitationMillerGreenPartial partialCrossSection;
+  // Kinetic energy of primary particle
+  G4double k = particle->GetKineticEnergy();
 
-};
+  // Select excitation level on the basis of partial excitation cross section
+  G4int level = cross.RandomSelect(k,track.GetDefinition());
+  // Excitation energy corresponding to the selected level
+  G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
+  G4double newEnergy = k - excitationEnergy;
+  
+  // ---- SI ---- Test on newEnergy
+  if (newEnergy > 0)
+    {
+      // Deposit excitation energy locally, modify primary energy accordingly 
+      // Particle direction is unchanged
+      product.ModifyPrimaryParticle(particle->GetMomentumDirection(),newEnergy);
+      product.AddEnergyDeposit(excitationEnergy);
+    }
 
-#endif
+  // ---- SI ---- Particle is not modified by default otherwise
+/*
+  else
+    {
+      // Primary particle is killed
+      product.KillPrimaryParticle();
+    }
+*/
+
+  return product;
+}
+
+

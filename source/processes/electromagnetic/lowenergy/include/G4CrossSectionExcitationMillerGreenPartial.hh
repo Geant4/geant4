@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationMillerGreen.hh,v 1.2 2007-11-08 19:56:02 pia Exp $
+// $Id: G4CrossSectionExcitationMillerGreenPartial.hh,v 1.1 2007-11-08 19:56:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,37 +48,62 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4CROSSSECTIONEXCITATIONMILLERGREEN_HH
-#define G4CROSSSECTIONEXCITATIONMILLERGREEN_HH 1
+#ifndef G4CROSSSECTIONEXCITATIONMILLERGREENPARTIAL_HH
+#define G4CROSSSECTIONEXCITATIONMILLERGREENPARTIAL_HH 1
  
 #include "globals.hh"
-#include <map>
-#include "G4CrossSectionExcitationMillerGreenPartial.hh"
+#include <vector>
+#include "G4WaterExcitationStructure.hh"
+#include "G4ParticleDefinition.hh"
 
 class G4Track;
  
-class G4CrossSectionExcitationMillerGreen
+class G4CrossSectionExcitationMillerGreenPartial
 {
 public:
   
-  G4CrossSectionExcitationMillerGreen();
+  G4CrossSectionExcitationMillerGreenPartial();
   
-  virtual ~G4CrossSectionExcitationMillerGreen();
+  virtual ~G4CrossSectionExcitationMillerGreenPartial();
   
-  G4double CrossSection(const G4Track&);
+  G4double CrossSection(G4double energy,G4int level, const G4ParticleDefinition* particle);
+
+  G4double Sum(G4double energy, const G4ParticleDefinition* particle);
+
+  G4int RandomSelect(G4double energy, const G4ParticleDefinition* particle);
   
   // Copy constructor and assignment operator to be added here
     
 private:
    
-  G4String name;  
-  G4double lowEnergyLimitDefault;
-  G4double highEnergyLimitDefault;
+  // Number of excitation levels of the water molecule
+  G4int nLevels;
 
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+  G4WaterExcitationStructure waterExcitation;
+  
+  G4double S_1s(G4double t, 
+		G4double energyTransferred, 
+		G4double slaterEffectiveCharge,
+		G4double shellNumber);
 
-  G4CrossSectionExcitationMillerGreenPartial partialCrossSection;
+  G4double S_2s(G4double t, 
+		G4double energyTransferred,  
+		G4double slaterEffectiveCharge, 
+		G4double shellNumber);
+
+  G4double S_2p(G4double t, 
+		G4double energyTransferred, 
+		G4double slaterEffectiveCharge, 
+		G4double shellNumber);
+
+  G4double R(G4double t, 
+	     G4double energyTransferred, 
+	     G4double slaterEffectiveCharge, 
+	     G4double shellNumber);
+
+  G4double kineticEnergyCorrection[4]; // 4 is the particle type index
+  G4double slaterEffectiveCharge[3][4];
+  G4double sCoefficient[3][4];
 
 };
 
