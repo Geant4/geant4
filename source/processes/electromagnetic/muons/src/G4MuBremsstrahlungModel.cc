@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.23 2007-10-11 09:25:31 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.24 2007-11-08 11:48:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,7 +49,7 @@
 // 03-08-05 Angular correlations according to PRM (V.Ivantchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
 // 21-03-06 Fix problem of initialisation in case when cuts are not defined (VI)
-// 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
+// 07-11-07 Improve sampling of final state (A.Bogdanov)
 //
 
 //
@@ -99,7 +99,6 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
     samplingTablesAreFilled(false)
 {
   theGamma = G4Gamma::Gamma();
-
   if(p) SetParticle(p);
 }
 
@@ -143,7 +142,6 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   highKinEnergy = HighEnergyLimit();
 
   G4double fixedEnergy = 0.5*highKinEnergy;
-//  G4double fixedEnergy = 500000.*TeV;
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -172,14 +170,12 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
       }
     }
   }
-  if(!samplingTablesAreFilled) {
-    MakeSamplingTables();
-    if(pParticleChange)
-      fParticleChange = 
-	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-    else
-      fParticleChange = new G4ParticleChangeForLoss();
-  }
+  if(!samplingTablesAreFilled) MakeSamplingTables();
+  if(pParticleChange)
+    fParticleChange = 
+      reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -368,7 +364,9 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
 {
   G4double cut  = min(cutEnergy, kineticEnergy);
   if(cut < cutFixed || ignoreCut) cut = cutFixed;
-  return ComputeMicroscopicCrossSection (kineticEnergy, Z, A/(g/mole), cut);
+  G4double cross =
+    ComputeMicroscopicCrossSection (kineticEnergy, Z, A/(g/mole), cut);
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -510,7 +508,6 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 						G4double minEnergy,
 						G4double maxEnergy)
 {
-
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
@@ -518,8 +515,8 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   if(tmin < cutFixed || ignoreCut) tmin = cutFixed;
   if(tmin >= tmax) return;
 
-  static const G4double ysmall = -100. ;
-  static const G4double ytablelow = -5. ;
+  // ===== the begining of a new code  ======
+  // ===== sampling of energy transfer ======
 
   G4ParticleMomentum partDirection = dp->GetMomentumDirection();
 
@@ -529,81 +526,37 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double totalEnergy   = kineticEnergy + mass;
   G4double totalMomentum = sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
 
-  G4double dy = 5./G4float(NBIN);
+  G4double AtomicNumber = anElement->GetZ();
+  G4double AtomicWeight = anElement->GetA()/(g/mole);
 
-  // This sampling should be checked!!! VI
-  G4double ymin=log(log(tmin/cutFixed)/log(tmax/cutFixed));
+  G4double func1 = tmin*ComputeDMicroscopicCrossSection(
+				    kineticEnergy,AtomicNumber,
+				    AtomicWeight,tmin);
 
-  if(ymin < ysmall) return;
-
-  //  sampling using tables
-
-  G4double v,x,y ;
-  G4int iy;
-  // select sampling table ;
-  G4double lnZ = log(anElement->GetZ()) ;
-  G4double delmin = 1.e10 ;
-  G4double del ;
-  G4int izz = 0;
-  G4int itt = 0;
-  G4int NBINminus1;
-  NBINminus1 = NBIN-1 ;
-  for (G4int iz=0; iz<nzdat; iz++)
-  {
-    del = std::abs(lnZ-log(zdat[iz])) ;
-    if(del<delmin)
-    {
-       delmin=del ;
-       izz=iz ;
-    }
-  }
-
-  delmin = 1.e10 ;
-  for (G4int it=0; it<ntdat; it++)
-  {
-    del = std::abs(log(tmax)-log(tdat[it])) ;
-    if(del<delmin)
-    {
-      delmin=del;
-      itt=it ;
-    }
-  }
-  G4int iymin = G4int((ymin+5.)/dy+0.5) ;
+  G4double lnepksi, epksi;
+  G4double func2;
+  G4double ksi2;
 
   do {
-    if(ymin < ytablelow)
-    {
-      y = ymin + G4UniformRand()*(ytablelow-ymin) ;
-    }
-    else
-    {
-      G4double r = G4UniformRand() ;
+    lnepksi = log(tmin) + G4UniformRand()*log(kineticEnergy/tmin);
+    epksi   = exp(lnepksi);
+    func2   = epksi*ComputeDMicroscopicCrossSection(
+				kineticEnergy,AtomicNumber,
+				AtomicWeight,epksi);
+    ksi2 = G4UniformRand();
 
-      iy = iymin-1 ;
-      delmin = proba[izz][itt][NBINminus1]-proba[izz][itt][iymin] ;
-      do {
-         iy += 1 ;
-      } while ((r > (proba[izz][itt][iy]-proba[izz][itt][iymin])/delmin)
-                 &&(iy < NBINminus1)) ;
+  } while(func2/func1 < ksi2);
 
-      //sampling is Done uniformly in y in the bin
-      y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
-    }
-
-    x = exp(y) ;
-
-    v = cutFixed*exp(x*log(tmax/cutFixed)) ;
-
-  } while ( v <= 0.);
+  // ===== the end of a new code =====
 
   // create G4DynamicParticle object for the Gamma
-  G4double gEnergy = v;
+  G4double gEnergy = epksi;
 
   // sample angle
   G4double gam  = totalEnergy/mass;
   G4double rmax = gam*min(1.0, totalEnergy/gEnergy - 1.0);
   rmax *= rmax;
-  x = G4UniformRand()*rmax/(1.0 + rmax);
+  G4double x = G4UniformRand()*rmax/(1.0 + rmax);
 
   G4double theta = sqrt(x/(1.0 - x))/gam;
   G4double sint  = sin(theta);
@@ -615,7 +568,7 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   partDirection *= totalMomentum;
   partDirection -= gEnergy*gDirection;
-  partDirection  = partDirection.unit();
+  partDirection = partDirection.unit();
 
   // primary change
   kineticEnergy -= gEnergy;
