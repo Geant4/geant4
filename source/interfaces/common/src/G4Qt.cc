@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.2 2007-11-08 10:31:35 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -134,6 +134,7 @@ void* G4Qt::GetEvent (
 //  QtAppNextEvent (appContext, &event);
 //  return         &event;
   printf("*");
+  return 0;
 }
 /***************************************************************************/
 void G4Qt::FlushAndWaitExecution (
