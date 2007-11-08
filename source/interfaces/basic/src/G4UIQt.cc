@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.1 2007-09-27 09:22:37 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.2 2007-11-08 10:32:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -89,7 +89,7 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
-  G4Qt* interactorManager = G4Qt::getInstance ();
+  //G4Qt* interactorManager = G4Qt::getInstance ();
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
