@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.5 2007-10-31 15:00:04 gcosmo Exp $
+$Id: History,v 1.6 2007-11-08 14:27:04 miheikki Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,10 +16,25 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+08 November 2007 - Pekka Kaitaniemi
+--------------------------------
+- Started using CLHEP::HepRandom::flat() as a random number
+  generator. 
+  o CLHEP offers much more sophisticated generators than the original
+  INCL one was. 
+  o This should eliminate infinite loop in test runs on 64-bit
+  plattforms. The old generator probably was not 64-bit clean.
+
 31 October 2007 - Gabriele Cosmo (hadr-incl-V09-00-05)
 --------------------------------
 - Again commented out calls to isnan() and isinf() in G4Abla.cc for allow
   porting to platforms other than Linux.
+
+30 October 2007 - Pekka Kaitaniemi
+----------------------------------
+- Abla now runs. Integrated energy spectrums for protons and neutrons
+  seem to be OK. Isotope production is still problematic. There seems
+  to be too much fission.
 
 24 October 2007 - Pekka Kaitaniemi (hadr-incl-V09-00-04)
 ----------------------------------
