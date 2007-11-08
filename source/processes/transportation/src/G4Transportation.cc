@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.71 2007-11-08 17:12:30 japost Exp $
+// $Id: G4Transportation.cc,v 1.72 2007-11-08 17:55:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -74,6 +74,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
+    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
@@ -219,9 +220,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( !fieldExertsForce ) 
   {
      G4double linearStepLength ;
-     G4bool faststep = false;
-     //     faststep = true;  // Enable optimisation - old default 
-     if( faststep && currentMinimumStep <= currentSafety )
+     if( fShortStepOptimisation && (currentMinimumStep <= currentSafety) )
      {
        // The Step is guaranteed to be taken
        //
@@ -246,19 +245,16 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        currentSafety = newSafety ;
           
-       if( linearStepLength <= currentMinimumStep)
+       fGeometryLimitedStep= (linearStepLength <= currentMinimumStep); 
+       if( fGeometryLimitedStep )
        {
          // The geometry limits the Step size (an intersection was found.)
-         //
          geometryStepLength   = linearStepLength ;
-         fGeometryLimitedStep = true ;
-       }
+       } 
        else
        {
          // The full Step is taken.
-         //
          geometryStepLength   = currentMinimumStep ;
-         fGeometryLimitedStep = false ;
        }
      }
      endpointDistance = geometryStepLength ;
@@ -305,15 +301,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                                           currentMinimumStep, 
                                                           currentSafety,
                                                           track.GetVolume() ) ;
-        if( lengthAlongCurve < currentMinimumStep)
-        {
+        fGeometryLimitedStep= lengthAlongCurve < currentMinimumStep; 
+	if( fGeometryLimitedStep ) {
            geometryStepLength   = lengthAlongCurve ;
-           fGeometryLimitedStep = true ;
-        }
-        else
-        {
+        } else {
            geometryStepLength   = currentMinimumStep ;
-           fGeometryLimitedStep = false ;
         }
      }
      else
