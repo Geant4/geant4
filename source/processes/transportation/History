@@ -1,4 +1,4 @@
-$Id: History,v 1.137 2007-11-07 21:00:06 japost Exp $
+$Id: History,v 1.138 2007-11-08 17:33:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   8th, 2007, J.Apostolakis  transport-V09-00-04
+------------------------------
+G4Transportation (AlongStepGPIL)
+- Moved the call to ConfigureForTrack before the check whether 
+    fieldMgr has 0 field ptr, in order to enable it to be called 
+    even if the field manager points to a zero field.
+
+  Needed to enable a user to switch a global field on (off was possible), as a
+  track goes between volume (or regions) of a setup.   
+				[ Response to request of Atlas/ZM. ] 
+
+  Note: this ordering already existed in G4CoupledTransportation.
+
+
 Oct  12th, 2007, J.Apostolakis  transport-V09-00-03
 ------------------------------
 G4CoupledTransportation
