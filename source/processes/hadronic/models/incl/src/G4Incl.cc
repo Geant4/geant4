@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.9 2007-10-31 10:44:22 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.10 2007-11-08 14:19:56 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -45,6 +45,9 @@ G4Incl::G4Incl()
   derivMhoFunction = 3;
   derivGausFunction = 4;
   densFunction = 5;
+
+  // Initialize random number generator:
+  heprandom = new CLHEP::HepRandom(hazard->ial);    
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
@@ -64,6 +67,9 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
   dton = aDton;
   saxw = aSaxw;
   ws = aWs;
+
+  // Initialize random number generator:
+  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
@@ -109,6 +115,9 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G
   evaporationResult = new G4VarNtp();
   evaporationResult->ntrack = -1;
 
+  // Initialize random number generator:
+  heprandom = new CLHEP::HepRandom(hazard->ial);
+
   // Initialize evaporation.
   abla = new G4Abla(hazard, volant, evaporationResult);
   abla->initEvapora();
@@ -134,6 +143,7 @@ G4Incl::~G4Incl()
   delete paul;
   delete varavat;
 
+  delete heprandom;
   delete abla;
   delete evaporationResult;
   delete volant;
@@ -7436,22 +7446,9 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 
 void G4Incl::standardRandom(G4double *rndm, G4long *seed)
 {
-  // IBM standard random number generator
-
-  // Generator produces sometimes (rarely) number that is greater than
-  // 1. In this case another random number is generated.
-  G4int tries = 0;
-  const G4int maxTries = 100; 
-  
-  do {
-    (*seed) = (*seed) * 65539;
-    if((*seed) < 0) {
-      (*seed) = (*seed) + 2147483647+1;
-    }
-
-    (*rndm) = (*seed) * 0.4656613e-9;
-    tries++;
-  } while(((*rndm) > 1.0 || (*rndm < 0.0)) && tries < maxTries);
+  (*seed) = (*seed); // Avoid warning during compilation.
+  // Use CLHEP random number generator:
+  (*rndm) = heprandom->flat();
 }
 
 void G4Incl::gaussianRandom(G4double *rndm)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.10 2007-10-31 14:57:24 gcosmo Exp $ 
+// $Id: G4Abla.cc,v 1.11 2007-11-08 14:19:56 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -61,6 +61,9 @@ G4Abla::G4Abla(G4Hazard *hazard, G4Volant *volant)
   fb = new G4Fb();
   fiss = new G4Fiss();
   opt = new G4Opt();
+
+  // Initialize random number generator
+  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
@@ -72,7 +75,7 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   hazard = aHazard; // Random seeds
   varntp = aVarntp; // Output data structure
   varntp->ntrack = 0;
-  
+ 
   pace = new G4Pace();
   ald = new G4Ald();
   ablamain = new G4Ablamain();
@@ -83,10 +86,14 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   fb = new G4Fb();
   fiss = new G4Fiss();
   opt = new G4Opt();
+
+  // Initialize random number generator
+  heprandom = new CLHEP::HepRandom(hazard->ial);  
 }
 
 G4Abla::~G4Abla()
 {
+  delete heprandom;
   delete pace;
   delete ald;
   delete ablamain;
@@ -5038,22 +5045,9 @@ void G4Abla::rotab(G4double R[4][4], G4double pin[4], G4double pout[4])
 
 void G4Abla::standardRandom(G4double *rndm, G4long *seed)
 {
-  // IBM standard random number generator
-
-  // Generator produces sometimes (rarely) number that is greater than
-  // 1. In this case another random number is generated.
-  G4int tries = 0;
-  const G4int maxTries = 100; 
-  
-  do {
-    (*seed) = (*seed) * 65539;
-    if((*seed) < 0) {
-      (*seed) = (*seed) + 2147483647+1;
-    }
-
-    (*rndm) = (*seed) * 0.4656613e-9;
-    tries++;
-  } while(((*rndm) > 1.0 || (*rndm < 0.0)) && tries < maxTries);
+  (*seed) = (*seed); // Avoid warning during compilation.
+  // Use CLHEP random number generator:
+  (*rndm) = heprandom->flat();
 }
 
 G4double G4Abla::haz(G4int k)
