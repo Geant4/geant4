@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.16 2007-09-06 06:45:53 asaim Exp $
+// $Id: G4RunMessenger.hh,v 1.17 2007-11-08 15:21:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,8 +48,6 @@
 //    geometryModified *    Force geometry to be closed again.
 //    physicsModified *     Force cross-section tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
-//    storeRandomNumberStatus *   Set the flag for storing random number status
-//    restoreRandomNumberStatus * Restore the stored random number status
 //    constructScoringWorlds * Constrct scoring world(s) if defined
 // 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.25 2007-09-06 06:45:53 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.26 2007-11-08 15:21:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -327,18 +327,21 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==randDirOld )
   {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
           << G4endl; 
-   runManager->SetRandomNumberStoreDir(newValue); }
+  // runManager->SetRandomNumberStoreDir(newValue);
+  }
   else if( command==storeRandOld )
   {G4cout << "warning: deprecated command. Use /random/setSavingFlag"
           << G4endl;
-   G4int frequency = storeRandOld->GetNewIntValue(newValue);
-   G4bool flag = false;
-   if(frequency != 0) flag = true;	     
-   runManager->SetRandomNumberStore(flag); }    
+   // G4int frequency = storeRandOld->GetNewIntValue(newValue);
+   // G4bool flag = false;
+   // if(frequency != 0) flag = true;	     
+   // runManager->SetRandomNumberStore(flag);
+  }    
   else if( command==restoreRandOld )
   {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
            << G4endl;  
-   runManager->RestoreRandomNumberStatus(newValue); }  
+   // runManager->RestoreRandomNumberStatus(newValue);
+  }  
   else if( command==constScoreCmd )
   { runManager->ConstructScoringWorlds(); }
 
