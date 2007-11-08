@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.2 2007-11-08 17:00:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,13 +41,15 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 
-#include <QObject>
-#include <QGLWidget>
-#include <QDialog>
-#include <QContextMenuEvent>
-#include <QMenu>
-#include <QPoint>
-#include <QImage>
+#include <QtCore/QObject>
+#include <QtCore/QPoint>
+
+class QGLWidget;
+class QDialog;
+class QContextMenuEvent;
+class QMenu;
+class QImage;
+class QAction;
 
 class G4OpenGLSceneHandler;
 

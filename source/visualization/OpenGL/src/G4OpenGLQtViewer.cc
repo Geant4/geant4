@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.2 2007-11-08 13:50:36 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.3 2007-11-08 17:00:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,14 +49,21 @@
 #include "G4Qt.hh"
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qmenu.h>
-#include <QImageWriter>
-#include <QMessageBox>
-#include <QFileDialog.h>
-#include <QPrinter.h>
-#include <QPainter.h>
+#include <QtGui/QApplication.h>
+#include <QtGui/QBoxLayout.h>
+#include <QtGui/QDialog.h>
+#include <QtGui/QMenu.h>
+#include <QtGui/QImageWriter>
+#include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog.h>
+#include <QtGui/QPrinter.h>
+#include <QtGui/QPainter.h>
+#include <QtOpenGL/QGLWidget>
+#include <QtGui/QDialog>
+#include <QtGui/QContextMenuEvent>
+#include <QtGui/QMenu>
+#include <QtGui/QImage>
+
 
 //////////////////////////////////////////////////////////////////////////////
 /**

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.2 2007-11-08 17:00:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,8 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLImmediateViewer.hh"
 #include "G4OpenGLQtViewer.hh"
-#include <QGLWidget>
+
+#include <QtOpenGL/QGLWidget>
 
 #include "globals.hh"
 
