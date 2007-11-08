@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleGun.cc,v 1.6 2007-11-07 07:15:17 kmura Exp $
+// $Id: pyG4ParticleGun.cc,v 1.7 2007-11-08 06:42:03 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ParticleGun.cc
@@ -38,6 +38,7 @@
 
 using namespace boost::python;
 
+#if G4VERSION_NUMBER < 910
 // ====================================================================
 // miscs
 // ====================================================================
@@ -77,6 +78,9 @@ G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
 {
   return 0;
 }
+
+#endif
+
 
 // ====================================================================
 // thin wrappers
@@ -123,7 +127,11 @@ using namespace pyG4ParticleGun;
 // ====================================================================
 void export_G4ParticleGun()
 {
+#if G4VERSION_NUMBER < 910
   class_<G4ParticleGun>
+#else
+    class_<G4ParticleGun, boost::noncopyable>
+#endif
     ("G4ParticleGun", "particle gun")
     // constructor
     .def(init<G4int>())
