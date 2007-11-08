@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.2 2007-11-08 10:31:35 gbarrand Exp $
+// $Id: G4Qt.cc,v 1.3 2007-11-08 17:00:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -37,6 +37,9 @@
 #include "G4ios.hh"
 
 #include "G4Qt.hh"
+
+#include <QtGui/QApplication.h>
+
 
 #define NewString(str)  \
  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : NULL)

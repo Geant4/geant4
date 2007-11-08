@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.2 2007-11-08 17:00:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -37,17 +37,17 @@
 #include "G4VBasicShell.hh"
 #include "G4VInteractiveSession.hh"
 
-#include <QtGui/qmainwindow.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qlistwidget.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qtreewidget.h>
-#include <QSignalMapper.h>
-#include <QObject>
+#include <QtCore/QObject>
 
+class QMainWindow;
+class QLineEdit;
 class G4UIsession;
-
+class QListWidget;
+class QTextEdit;
+class QLabel;
+class QDialog;
+class QTreeWidgetItem;
+class QTreeWidget;
 
 // Class description :
 //

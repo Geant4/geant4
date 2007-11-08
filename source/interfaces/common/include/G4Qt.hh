@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4Qt.hh,v 1.2 2007-11-08 17:00:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify Qt event treatment between 
@@ -37,10 +37,6 @@
 #if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
 
 #include "G4VInteractorManager.hh"
-
-#include <QtGui/qapplication.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qmainwindow.h>
 
 // Class description :
 //

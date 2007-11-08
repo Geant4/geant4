@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.2 2007-11-08 10:32:30 gbarrand Exp $
+// $Id: G4UIQt.cc,v 1.3 2007-11-08 17:00:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -45,17 +45,24 @@
 
 #include "G4Qt.hh"
 
-#include <QtGui/qapplication.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qmenu.h>
-#include <QtGui/qmenubar.h>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qsplitter.h>
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qevent.h>
+#include <QtGui/QApplication.h>
+#include <QtGui/QMainWindow.h>
+#include <QtGui/QLineEdit.h>
+#include <QtGui/QWidget.h>
+#include <QtGui/QMenu.h>
+#include <QtGui/QMenuBar.h>
+#include <QtGui/QBoxLayout.h>
+#include <QtGui/QPushButton.h>
+#include <QtGui/QLabel.h>
+#include <QtGui/QSplitter.h>
+#include <QtGui/QScrollBar.h>
+#include <QtGui/QDialog.h>
+#include <QtGui/QEvent.h>
+#include <QtGui/QListWidget.h>
+#include <QtGui/QTextEdit.h>
+#include <QtGui/QTreeWidget.h>
+#include <QtCore/QSignalMapper.h>
+
 
 #include <stdlib.h>
 
@@ -89,7 +96,7 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
-  //G4Qt* interactorManager = G4Qt::getInstance ();
+  G4Qt* interactorManager = G4Qt::getInstance ();
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
