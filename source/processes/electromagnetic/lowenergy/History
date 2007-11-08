@@ -1,4 +1,4 @@
-$Id: History,v 1.269 2007-10-22 10:22:03 pia Exp $
+$Id: History,v 1.270 2007-11-08 18:35:04 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08.11.2007   MGP, tag emlowen-V09-00-13
+             Added charge increase/decrease Geant4-DNA cross sections
+             and final states (code by S. Incerti + code review by MGP)
+
+08.11.2007   MGP, tag emlowen-V09-00-12
+             Removed obsolete G4DNA* files from CVS
+ 
 22.10.2007   MGP, tag emlowen-V09-00-11
              Added G4CrossSectionIonisationBorn
              Excludes prototype G4DNA* classes (still available in CVS head)
@@ -27,8 +34,7 @@ committal in the CVS repository !
 
 15.10.2007   MGP, tag emlowen-V09-00-10
              Added electron excitation (Emfietzoglou model),
-             proton Born excitation, electron ionisation (Born) cross 
-             section; modified G4DNACrossSectionDataSet to 
+             proton Born excitation, electron ionisation (Born) cross              section; modified G4DNACrossSectionDataSet to 
              remove inheritance from concrete base class introduced
              by a developer against the baseline design
              Obsolete G4DNA* classes not compliant with the design
