@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.70 2007-09-25 16:06:24 japost Exp $
+// $Id: G4Transportation.cc,v 1.71 2007-11-08 17:12:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -200,6 +200,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   {
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
      if (fieldMgr != 0) {
+	// Message the field Manager, to configure it for this track
+	fieldMgr->ConfigureForTrack( &track );
+	// Moved here, in order to allow a transition
+	//   from a zero-field  status (with fieldMgr->(field)0
+	//   to a finite field  status
+
         // If the field manager has no field, there is no field !
         fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      } 
@@ -280,9 +286,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
                                               momentumMagnitude, // in Mev/c 
                                               restMass           ) ;  
-
-     // Message the field Manager, to configure it for this track
-     fieldMgr->ConfigureForTrack( &track );
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
