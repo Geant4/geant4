@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.107 2007-08-30 04:05:48 asaim Exp $
+// $Id: G4RunManager.cc,v 1.108 2007-11-09 13:57:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -195,17 +195,17 @@ void G4RunManager::RunInitialization()
   HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
-
-  if(storeRandomNumberStatus) {
-    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
-    HepRandom::saveEngineStatus(fileN);
-  }
   
   previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }
 
   runAborted = false;
 
