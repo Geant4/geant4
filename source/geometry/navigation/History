@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2007-11-09 16:25:03 gcosmo Exp $
+$Id: History,v 1.110 2007-11-09 19:29:02 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 9th, 2007 - J.Apostolakis (geomnav-V09-00-09)
+----------------------------------
+- G4SafetyHelper: Improved ComputeSafety not to call Navigator if exactly
+                    on safety 'center'.  
+- G4PathFinder: correction to code under #ifdef G4DEBUG_NAVIGATION
 
 November 9th, 2007 - G.Cosmo (geomnav-V09-00-08)
 ----------------------------
