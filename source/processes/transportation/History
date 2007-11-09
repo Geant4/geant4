@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2007-11-09 15:40:23 japost Exp $
+$Id: History,v 1.141 2007-11-09 15:43:30 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  10th, 2007, J.Apostolakis  transport-V09-00-07
+-------------------------------
+G4Transportation:
+- Put back the default for short step optimisation to 'on'
 
 Nov   9th, 2007, J.Apostolakis  transport-V09-00-06
 ------------------------------
