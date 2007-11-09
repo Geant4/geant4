@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.13 2007-09-25 13:04:40 ahoward Exp $
+// $Id: G4SafetyHelper.cc,v 1.14 2007-11-09 15:51:10 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -111,11 +111,18 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 {
   G4double newSafety;
 
-  // return last value if position is not significantly changed
-  //
-  G4double moveLen = (position-fLastSafetyPosition).mag();
-  if(moveLen >= fRecomputeFactor*fLastSafety)
+  // Only recompute (calling Navigator/PathFinder) if 'position'
+  //   is  *not* the safety location
+  //     and has moved 'significantly'
+  G4double moveLengthSq = (position-fLastSafetyPosition).mag2();
+  G4double safeDistance = fRecomputeFactor*fLastSafety; 
+  if(   (moveLengthSq > 0.0 )
+     && (moveLengthSq >= safeDistance*safeDistance))    
   {
+    // " G4SafetyHelper::ComputeSafety> Recomputing safety for move " 
+    // G4cout << "G4SF:CS> Recomputed safety - move = " 
+    //        << sqrt(moveLengthSq) << G4endl; 
+
     fLastSafetyPosition = position;
  
     if( !fUseParallelGeometries )
@@ -132,7 +139,16 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
   }
   else
   {
-    newSafety = fLastSafety-moveLen;
+    // return last value if position is not significantly changed
+    //
+    G4double moveLength = 0;
+    if( moveLengthSq > 0.0 ) 
+      moveLength= std::sqrt(moveLengthSq); 
+    newSafety = fLastSafety-moveLength;
+    // G4cout << "G4SF:CS> Fast safety - move = " << moveLength << G4endl;
+    // fCount_fastCalc ++; 
+    // if( moveLength == 0.0 ) fCount_Zero ++; 
+    // if( moveLength < kCarTolerance ) fCount_BelowTolerance ++; 
   } 
   return newSafety;
 }
