@@ -46,6 +46,9 @@ export G4VIS_BUILD_ASCIITREE_DRIVER=1
 export G4LIB_BUILD_G3TOG4=1
 export G4USE_G3TOG4=1
 
+export G4LIB_BUILD_GDML=1
+export G4LIB_USE_GDML=1
+
 
 UNAMEN=`uname -n `
 echo UNAMEN $UNAMEN
@@ -350,6 +353,11 @@ if [ `uname -n | grep sungeant` ]; then
   export G4LIB=$G4WORKDIR/lib
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/sunos58_CC54
+  
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$XERCESCROOT/lib
+  
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -465,6 +473,11 @@ if [ $UNAMEN = pcg4speed.cern.ch ]; then
 #  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
 
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc3_icc91
+
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$XERCESCROOT/lib
+
+
 # To link with AIDA (paths to libraries)
 #export G4ANALYSIS_AIDA_CONFIG_LIBS="-L/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib -lAnaphe_AIDA_AnalysisFactory_native -lAnaphe_AIDA_Annotation_native -lAnaphe_AIDA_Histogram_native -lAnaphe_AIDA_Tree_native -lAnaphe_AIDA_HBookStore -lg2c-forMinuit -lHepUtilities -lCLHEP -lAnaphe_AIDA_Tuple_native"
 
@@ -570,8 +583,10 @@ if [ $UNAMEN = macphsft02.cern.ch ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 # Take CLHEP with links to lcg area
-  export CLHEP_BASE_DIR=$G4WORKDIR/clhep 
-
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/macosx104_gcc40
+  
 #  export G4_NO_CBRT=1
 
 ## Compiler
@@ -580,7 +595,8 @@ if [ $UNAMEN = macphsft02.cern.ch ]; then
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+# export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -602,6 +618,10 @@ if [ $UNAMEN = pcgeant2.cern.ch ]; then
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep 
 
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc3_gcc323
+
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
+
 #  export G4_NO_CBRT=1
 
 ## Compiler
@@ -610,7 +630,7 @@ if [ $UNAMEN = pcgeant2.cern.ch ]; then
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+# export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -632,12 +652,16 @@ if [ $UNAMEN = lxbuild021.cern.ch ]; then
 
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
+  
 #  export CLHEP_BASE_DIR=/scratch/stesting/clhep
   
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -715,11 +739,14 @@ if [ $UNAMEN = lxplus071.cern.ch ]; then
 
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
 
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -855,12 +882,16 @@ if [ $UNAMEN = pcgeant3.cern.ch ]; then
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
   
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_x86_64_gcc346
+  
   export EXTRALIBS=" -L/usr/X11R6/lib64/ "
 
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
+  
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -962,12 +993,14 @@ if [ $UNAMEN = pcgeant4.cern.ch ]; then
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
   
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_x86_64_gcc346
+  
   export EXTRALIBS=" -L/usr/X11R6/lib64/ "
 
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -1352,5 +1385,3 @@ export XENVIRONMENT=$OIVHOME/app-defaults/Inventor
 fi
 
 # Global environment
-
-export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
