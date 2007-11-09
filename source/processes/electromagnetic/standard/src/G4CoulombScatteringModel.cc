@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.28 2007-10-27 16:33:10 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.29 2007-11-09 11:45:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,7 +111,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double momCM2 = momCM*momCM;
   cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
   if(1.5 > targetA && p == theProton && cosTetMaxNuc < 0.0) cosTetMaxNuc = 0.0;
-  //G4cout << " ctmax= " << cosTetMaxNuc << " ctmin= " << cosThetaMin << G4endl;  
+  //G4cout << " ctmax= " << cosTetMaxNuc 
+  //<< " ctmin= " << cosThetaMin << G4endl;  
 
   // Cross section in CM system 
   if(cosTetMaxNuc < cosThetaMin) {
@@ -124,8 +125,10 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
     G4double zn1= x1 + d;
     G4double zn2= x2 + d;
     nucXSection += coeff*Z*Z*chargeSquare*(1.0 +  effmass*effmass/momCM2)
-      *(1./z1 - 1./z2 + 1./zn1 - 1./zn2 + 2.0*formfactA*std::log(z1*zn2/(z2*zn1)))/momCM2;
-    //G4cout << "XS: x1= " << x1 << " x2= " << x2 << " cross= " << cross << G4endl;
+      *(1./z1 - 1./z2 + 1./zn1 - 1./zn2 + 
+	2.0*formfactA*std::log(z1*zn2/(z2*zn1)))/momCM2;
+    //G4cout << "XS: x1= " << x1 << " x2= " << x2 
+    //<< " cross= " << cross << G4endl;
     //G4cout << "momCM2= " << momCM2 << " invbeta2= " << invbeta2 
     //       << " coeff= " << coeff << G4endl;
   }
@@ -244,6 +247,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
     fvect->push_back(newdp);
   } else if(erec > 0.0) {
     fParticleChange->ProposeLocalEnergyDeposit(erec);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(erec);
   }
 }
 

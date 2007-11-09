@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.2 2007-08-13 06:13:30 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.3 2007-11-09 11:45:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,11 +118,10 @@ void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionGasIonisation::CorrectionsAlongStep(
-			   const G4MaterialCutsCouple* couple,
-                           const G4DynamicParticle* dp,
-                                 G4double& eloss,
-                                 G4double& s)
+void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+					      const G4DynamicParticle* dp,
+					      G4double& eloss,
+					      G4double& s)
 {
   // add corrections
   if(eloss < preStepKinEnergy) {
@@ -135,7 +134,9 @@ void G4ionGasIonisation::CorrectionsAlongStep(
 
     // use nuclear stopping 
     else if(NuclearStoppingFlag()) {
-      eloss += s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
+      G4double nloss = s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
+      eloss += nloss;
+      fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
     }
 
     // effective number of collisions

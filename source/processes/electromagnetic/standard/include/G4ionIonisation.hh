@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.49 2007-08-13 06:13:30 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.50 2007-11-09 11:45:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
 // 22-07-06 Remove obsolete method (V.Ivantchenko)
+// 07-11-07 Moved CorrectionsAlongStep to cc (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -100,14 +101,13 @@ public:
 
 protected:
 
-  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-				   const G4ParticleDefinition*);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
-  inline void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-	             	   const G4DynamicParticle*,
-			         G4double& eloss,
-			         G4double& length);
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& length);
 
   inline void InitialiseMassCharge(const G4Track&);
 
@@ -176,30 +176,6 @@ inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
 						       track.GetMaterial(),
 						       preKinEnergy);
   SetDynamicMassCharge(massRatio, charge2);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4ionIonisation::CorrectionsAlongStep(
-                           const G4MaterialCutsCouple* couple,
-	             	   const G4DynamicParticle* dp,
-			         G4double& eloss,
-                                 G4double& s)
-{
-  if(eloss < preKinEnergy) {
-    const G4ParticleDefinition* part = dp->GetDefinition();
-    const G4Material* mat = couple->GetMaterial();
-    if(preKinEnergy*massRatio > eth)
-      eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
-    else {
-      if(stopDataActive)
-	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
-      if(nuclearStopping)
-	eloss += s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
-    }
-    fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
-                                      mat,preKinEnergy-eloss));
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

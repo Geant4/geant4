@@ -1,4 +1,4 @@
-$Id: History,v 1.352 2007-10-29 18:10:17 vnivanch Exp $
+$Id: History,v 1.353 2007-11-09 11:45:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 07: V.Ivant (emstand-V09-00-15)
+- G4ionIonisation, G4ionGasIonisation, G4CoulombScatteringModel:
+  fill NIEL energy deposit
 
 29 October 07: V.Ivant (emstand-V09-00-14)
 - G4UrbanMscModel (V.Ivanchenko) - fixed nan for heavy ions introduced 
