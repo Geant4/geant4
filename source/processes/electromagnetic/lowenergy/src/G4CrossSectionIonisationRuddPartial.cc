@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationRuddPartial.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
+// $Id: G4CrossSectionIonisationRuddPartial.cc,v 1.3 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,6 +68,7 @@ G4CrossSectionIonisationRuddPartial::G4CrossSectionIonisationRuddPartial()
   name = "IonisationRudd";
   
   // Default energy limits (defined for protection against anomalous behaviour only)
+  name = "IonisationRuddPartial";
   lowEnergyLimitDefault = 100 * eV;
   highEnergyLimitDefault = 100 * MeV;
 

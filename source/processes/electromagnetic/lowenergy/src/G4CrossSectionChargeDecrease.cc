@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeDecrease.cc,v 1.1 2007-11-08 18:25:25 pia Exp $
+// $Id: G4CrossSectionChargeDecrease.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -60,6 +60,7 @@
 G4CrossSectionChargeDecrease::G4CrossSectionChargeDecrease()
 {
   // Default energy limits (defined for protection against anomalous behaviour only)
+  name = "ChargeDecrease";
   lowEnergyLimitDefault = 1 * keV;
   highEnergyLimitDefault = 10 * MeV;
 

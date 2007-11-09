@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.3 2007-11-09 16:38:13 pia Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.4 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -66,6 +66,7 @@
 
 G4FinalStateIonisationRudd::G4FinalStateIonisationRudd()
 {
+  name = "IonisationBorn";
   // Default energy limits (defined for protection against anomalous behaviour only)
   lowEnergyLimitDefault = 100 * eV;
   highEnergyLimitDefault = 100 * MeV;

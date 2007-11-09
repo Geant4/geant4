@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.3 2007-11-09 16:38:13 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.4 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -65,6 +65,9 @@
 
 G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 {
+
+  name = "IonisationBorn";
+
   // NEW
   // Factor to scale microscopic/macroscopic cross section data in water
  

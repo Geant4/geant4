@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.cc,v 1.4 2007-10-15 08:36:35 pia Exp $
+// $Id: G4FinalStateProduct.cc,v 1.5 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -108,12 +108,12 @@ void G4FinalStateProduct::ModifyPrimaryParticle(G4double dirX, G4double dirY, G4
   isModified = true;
   modifiedEnergy = energy;
   modifiedDirection.set(dirX,dirY,dirZ);
-  //  modifiedDirection = modifiedDirection.unit();
+  modifiedDirection = modifiedDirection.unit();
 }
 
 void G4FinalStateProduct::ModifyPrimaryParticle(const G4ThreeVector& direction, G4double energy)
 {
   isModified = true;
   modifiedEnergy = energy;
-  modifiedDirection = direction;
+  modifiedDirection = direction.unit();
 }

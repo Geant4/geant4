@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateExcitationMillerGreen.cc,v 1.1 2007-11-08 19:57:23 pia Exp $
+// $Id: G4FinalStateExcitationMillerGreen.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,7 +62,11 @@
 #include "G4ParticleMomentum.hh"
 
 G4FinalStateExcitationMillerGreen::G4FinalStateExcitationMillerGreen()
-{}
+{
+  name = "ExcitationMillerGreen";
+  lowEnergyLimit = 10 * eV;
+  highEnergyLimit = 10 * MeV;
+}
 
 
 G4FinalStateExcitationMillerGreen::~G4FinalStateExcitationMillerGreen()

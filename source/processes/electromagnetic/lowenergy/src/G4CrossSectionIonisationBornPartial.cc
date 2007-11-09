@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationBornPartial.cc,v 1.2 2007-11-08 18:51:34 pia Exp $
+// $Id: G4CrossSectionIonisationBornPartial.cc,v 1.3 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,6 +68,7 @@ G4CrossSectionIonisationBornPartial::G4CrossSectionIonisationBornPartial()
   name = "IonisationBorn";
   
   // Default energy limits (defined for protection against anomalous behaviour only)
+  name = "IonisationBornPartial";
   lowEnergyLimitDefault = 25 * eV;
   highEnergyLimitDefault = 30 * keV;
 

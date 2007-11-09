@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationBorn.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// $Id: G4CrossSectionExcitationBorn.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -63,6 +63,7 @@ G4CrossSectionExcitationBorn::G4CrossSectionExcitationBorn()
 {
 
   // ---- MGP ---- Limits to be checked: current values are just temporary for testing purpose
+  name = "ExcitationBorn";
   lowEnergyLimit = 1. * keV;
   highEnergyLimit = 10 * MeV;
 

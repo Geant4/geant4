@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -63,7 +63,9 @@
 
 G4FinalStateExcitationEmfietzoglou::G4FinalStateExcitationEmfietzoglou()
 {
-  // empty
+  name = "FinalStateExcitationEmfietzoglou";
+  lowEnergyLimit = 7.4 * eV;
+  highEnergyLimit = 10 * MeV;
 }
 
 

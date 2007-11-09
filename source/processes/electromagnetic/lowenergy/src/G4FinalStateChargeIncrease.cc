@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateChargeIncrease.cc,v 1.1 2007-11-08 18:25:25 pia Exp $
+// $Id: G4FinalStateChargeIncrease.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,7 +62,11 @@
 #include "G4DNAGenericIonsManager.hh"
 
 G4FinalStateChargeIncrease::G4FinalStateChargeIncrease()
-{}
+{
+  name = "ChargeIncrease";
+  lowEnergyLimit = 1 * keV;
+  highEnergyLimit = 10 * MeV;
+}
 
 
 G4FinalStateChargeIncrease::~G4FinalStateChargeIncrease()
