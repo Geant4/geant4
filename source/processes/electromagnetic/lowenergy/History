@@ -1,4 +1,4 @@
-$Id: History,v 1.273 2007-11-08 21:38:03 pia Exp $
+$Id: History,v 1.274 2007-11-09 16:30:56 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.11.2007   MGP, tag emlowen-V09-00-18
+             Fixed compilation problems on Solaris
 
 08.11.2007   MGP, tag emlowen-V09-00-17
              Added Rudd ionisation

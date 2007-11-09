@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.hh,v 1.1 2007-11-08 21:35:31 pia Exp $
+// $Id: G4FinalStateIonisationRudd.hh,v 1.2 2007-11-09 16:30:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -106,23 +106,23 @@ private:
 
   G4double S_1s(G4double t, 
 		G4double energyTransferred, 
-		G4double slaterEffectiveCharge, 
+		G4double slaterEffectiveChg, 
 		G4double shellNumber);
 
   G4double S_2s(G4double t, 
 		G4double energyTransferred, 
-		G4double slaterEffectiveCharge, 
+		G4double slaterEffectiveChg, 
 		G4double shellNumber);
 
 
   G4double S_2p(G4double t, 
 		G4double energyTransferred, 
-		G4double slaterEffectiveCharge, 
+		G4double slaterEffectiveChg, 
 		G4double shellNumber);
 
   G4double R(G4double t, 
 	     G4double energyTransferred, 
-	     G4double slaterEffectiveCharge, 
+	     G4double slaterEffectiveChg, 
 	     G4double shellNumber) ;
 
   G4double slaterEffectiveCharge[3];

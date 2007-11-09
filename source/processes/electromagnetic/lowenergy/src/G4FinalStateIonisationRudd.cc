@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.1 2007-11-08 21:36:12 pia Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.2 2007-11-09 16:30:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -441,13 +441,13 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
 
 G4double G4FinalStateIonisationRudd::S_1s(G4double t, 
 					  G4double energyTransferred, 
-					  G4double slaterEffectiveCharge, 
+					  G4double slaterEffectiveChg, 
 					  G4double shellNumber)
 {
   // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
   // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
  
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+  G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
   G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
   
   return value;
@@ -457,13 +457,13 @@ G4double G4FinalStateIonisationRudd::S_1s(G4double t,
 
 G4double G4FinalStateIonisationRudd::S_2s(G4double t,
 					  G4double energyTransferred, 
-					  G4double slaterEffectiveCharge, 
+					  G4double slaterEffectiveChg, 
 					  G4double shellNumber)
 {
   // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
   // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+  G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
   G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
   return value;
@@ -474,13 +474,13 @@ G4double G4FinalStateIonisationRudd::S_2s(G4double t,
 
 G4double G4FinalStateIonisationRudd::S_2p(G4double t, 
 					  G4double energyTransferred,
-					  G4double slaterEffectiveCharge, 
+					  G4double slaterEffectiveChg, 
 					  G4double shellNumber)
 {
   // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
   // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
-  G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+  G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
   G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
   return value;
@@ -490,7 +490,7 @@ G4double G4FinalStateIonisationRudd::S_2p(G4double t,
 
 G4double G4FinalStateIonisationRudd::R(G4double t,
 				       G4double energyTransferred,
-				       G4double slaterEffectiveCharge,
+				       G4double slaterEffectiveChg,
 				       G4double shellNumber) 
 {
   // tElectron = m_electron / m_alpha * t
@@ -498,7 +498,7 @@ G4double G4FinalStateIonisationRudd::R(G4double t,
   // Dingfelder, in Chattanooga 2005 proceedings, p 4
 
   G4double tElectron = 0.511/3728. * t;
-  G4double value = 2. * tElectron * slaterEffectiveCharge / (energyTransferred * shellNumber);
+  G4double value = 2. * tElectron * slaterEffectiveChg / (energyTransferred * shellNumber);
   
   return value;
 }
