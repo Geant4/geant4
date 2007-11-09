@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72 2007-11-08 17:55:57 japost Exp $
+// $Id: G4Transportation.cc,v 1.73 2007-11-09 14:54:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -36,20 +36,22 @@
 // a particle, ie the geometrical propagation that encounters the 
 // geometrical sub-volumes of the detectors.
 //
-// It is also tasked with part of updating the "safety".
+// It is also tasked with the key role of proposing the "isotropic safety",
+//   which will be used to update the post-step point's safety.
 //
 // =======================================================================
 // Modified:   
-//            19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
-//            11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
-//            21 June 2003, J.Apostolakis: Calling field manager with 
-//                            track, to enable it to configure its accuracy
-//            13 May  2003, J.Apostolakis: Zero field areas now taken into
-//                            account correclty in all cases (thanks to W Pokorski).
-//            29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
-//                          correction for spin tracking   
-//            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
-//            22 Sept 2000, V.Grichine:     update of Kinetic Energy
+//    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
+//   19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
+//   11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
+//   21 June 2003, J.Apostolakis: Calling field manager with 
+//                     track, to enable it to configure its accuracy
+//   13 May  2003, J.Apostolakis: Zero field areas now taken into
+//                     account correclty in all cases (thanks to W Pokorski).
+//   29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
+//                     correction for spin tracking   
+//   20 Febr 2001, J.Apostolakis:  update for new FieldTrack
+//   22 Sept 2000, V.Grichine:     update of Kinetic Energy
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -95,14 +97,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   //  is constructed.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  // Small memory leak from this new
-  //    fCurrentTouchableHandle = new G4TouchableHistory();
-  // Fixes: 
-  // 1) static G4TouchableHistory sfNullTouchableHistory = new G4TouchableHistory();
-  //    fCurrentTouchableHandle = new G4TouchableHandle( sfNullTouchableHistory );
-  // 2) set it to (G4TouchableHistory*) 0 
-  //    fCurrentTouchableHandle = new G4TouchableHandle( (G4TouchableHistory*) 0 ); 
-  // 3) Below:
+  // The following assignment corrected a small memory leak (from new)
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
@@ -114,15 +109,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
 G4Transportation::~G4Transportation()
 {
-
-  // --- Alternative code to delete 'junk data' in touchable handle
-  //  ** Corresponds to the case that the constructor has
-  //       fCurrentTouchableHandle = new G4TouchableHistory();
-  //  ** Likely incorrect - as at the end of the simulation 
-  //     the handle no longer holds the original 'null' history
-  // G4VTouchable*  pTouchable= fCurrentTouchableHandle();  //  Incorrect
-  // delete  pTouchable;  // Incorrect
-
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
