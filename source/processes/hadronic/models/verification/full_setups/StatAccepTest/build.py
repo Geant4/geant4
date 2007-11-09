@@ -61,21 +61,18 @@ print '  Release = ', Release
 # ---------------- Physics ---------------------
 if ( PHYSICS != "LHEP"          and
      PHYSICS != "LHEP_GN"       and
-     PHYSICS != "LHEP_HP"       and
-     PHYSICS != "LHEP_BERT"     and
-     PHYSICS != "LHEP_BIC"      and
-     PHYSICS != "LHEP_BERT_HP"  and
-     PHYSICS != "LHEP_BIC_HP"   and
      PHYSICS != "QGSP"          and
      PHYSICS != "QGSP_GN"       and
-     PHYSICS != "QGSP_HP"       and
      PHYSICS != "QGSP_BERT"     and
      PHYSICS != "QGSP_BIC"      and
      PHYSICS != "QGSP_BERT_HP"  and
+     PHYSICS != "QGSP_BIC_HP"   and
      PHYSICS != "QGSC"          and
      PHYSICS != "QGSP_EMV"      and
      PHYSICS != "FTFP"          and 
-     PHYSICS != "FTFC" 
+     PHYSICS != "FTFC"          and
+     PHYSICS != "FTFP_BERT"     and 
+     PHYSICS != "FTFP_BIC"     
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit( 1 )        
@@ -222,7 +219,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun07 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec07 \n" )   #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -241,8 +238,8 @@ setupFile.write( "fi \n")
 
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
-setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH \n" )
+###setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
+###setupFile.write( "export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH \n" )
 
 setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
 setupFile.write( "export G4_RELEASE=" + Release + " \n" )
@@ -307,19 +304,13 @@ setupFile.write( "export PI_DIR=$DIR_INSTALLATIONS/dirPI \n" )
 setupFile.write( "export PATH=$PI_DIR/bin:${PATH} \n" )
 setupFile.write( "eval `aida-config --runtime sh` \n" )
 
-setupFile.write( "export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit/packages \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$DIR_STAT/StatisticsTesting/src/.libs:$LD_LIBRARY_PATH \n" )
+setupFile.write( "export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$DIR_STAT/lib:$LD_LIBRARY_PATH \n" )
 
 setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
 
 setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
-
-# The following line should be commented out if you use
-# Geant4 versions (either as reference or as candidate)
-# older than 8.3, because otherwise you would get a crash
-# when using biasing.
-setupFile.write( "export AlwaysKillLeadingHadron=1 \n" )
 
 setupFile.close()
 
@@ -332,9 +323,9 @@ mainProgram.write( "#include \"G4UImanager.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
 mainProgram.write( "#include \"LHEP.hh\" \n" )
 mainProgram.write( "#include \"QGSP.hh\" \n" )
-###mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
 ###mainProgram.write( "#include \"QGSP_BERT_HP.hh\" \n" )
+###mainProgram.write( "#include \"QGSP_BIC_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
 mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"QGSP_EMV.hh\" \n" )

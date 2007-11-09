@@ -1,6 +1,6 @@
 #
 #***LOOKHERE***
-export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun07
+export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec07
 #
 export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 #
@@ -8,14 +8,14 @@ export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 # === GCC ===
 # ===========
 #
-export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH
-export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH
+###export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH
+###export LD_LIBRARY_PATH=$DIR_INSTALLATIONS/dirGCC/lib:$LD_LIBRARY_PATH
 #
-echo ' which g++ '
-which g++
-echo ' g++ -v '
-g++ -v
-echo ' '
+###echo ' which g++ '
+###which g++
+###echo ' g++ -v '
+###g++ -v
+###echo ' '
 #
 # ==============
 # === GEANT4 ===
@@ -23,7 +23,7 @@ echo ' '
 #
 export G4SYSTEM=Linux-g++
 #
-export G4_RELEASE=dirGeant4-8.2.p01
+export G4_RELEASE=dirGeant4-9.0.p01
 #
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib
@@ -32,6 +32,7 @@ export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation
 export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay
 export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW
 export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL
+export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/dirG4DATA/G4NDL
 #
 export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP
 export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
@@ -60,8 +61,8 @@ export PATH=$PI_DIR/bin:$PATH
 eval `aida-config --runtime sh`
 #
 # --- Statistical toolkit ---
-export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit/packages
-export LD_LIBRARY_PATH=$DIR_STAT/StatisticsTesting/src/.libs:$LD_LIBRARY_PATH
+export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit
+export LD_LIBRARY_PATH=$DIR_STAT/lib:$LD_LIBRARY_PATH
 #
 # --- GSL : this is needed only for  dirStat/pvalue.cpp ---
 export GSL_DIR=$DIR_INSTALLATIONS/dirGSL

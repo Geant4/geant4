@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+09-Nov-2007 - A.Ribon (statAccepTest-V09-00-01)
+- Migrated to SLC4, g++ 3.4.6, for 32-bit platforms.
+
+
 19-Oct-2007 - A.Ribon (statAccepTest-V09-00-00)
 - Included the possibility to study the hadronic
   shower development only in a specified time

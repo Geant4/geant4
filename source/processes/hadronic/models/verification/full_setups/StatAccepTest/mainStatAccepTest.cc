@@ -3,16 +3,18 @@
 #include "StatAccepTestDetectorConstruction.hh" 
 #include "LHEP.hh" 
 #include "QGSP.hh" 
-#include "QGSP_HP.hh" 
 #include "QGSP_BERT.hh" 
 #include "QGSP_BIC.hh" 
 #include "QGSC.hh" 
+#include "QGSP_EMV.hh" 
+#include "FTFP.hh" 
+#include "FTFC.hh" 
 #include "StatAccepTestPrimaryGeneratorAction.hh" 
 #include "StatAccepTestEventAction.hh" 
 #include "StatAccepTestRunAction.hh" 
 #include "StatAccepTestTrackingAction.hh" 
 #include "StatAccepTestStackingAction.hh" 
-#include "StatAccepTestAnalysis.hh"
+#include "StatAccepTestAnalysis.hh" 
 #include "G4UIterminal.hh" 
 #ifdef G4UI_USE_TCSH 
   #include "G4UItcsh.hh" 
@@ -37,14 +39,14 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager; 
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
   QGSP  *thePL = new QGSP; 
-  //thePL->SetDefaultCutValue( 1.0*mm ); 
+  //thePL->SetDefaultCutValue( 1.0*cm ); 
   runManager->SetUserInitialization( thePL ); 
   runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
   runManager->SetUserAction( new StatAccepTestRunAction ); 
   runManager->SetUserAction( new StatAccepTestEventAction ); 
   runManager->SetUserAction( new StatAccepTestTrackingAction ); 
   //runManager->SetUserAction( new StatAccepTestStackingAction ); 
-  //StatAccepTestAnalysis::getInstance()->setIsHistogramOn( false );
+  StatAccepTestAnalysis::getInstance()->setIsHistogramOn( false ); 
 #ifdef G4VIS_USE 
   StatAccepTestVisManager *visManager = new StatAccepTestVisManager; 
   visManager->Initialize(); 

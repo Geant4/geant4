@@ -1,6 +1,9 @@
 //========================================================================
+// Last update: 09-Nov-2007
+//
 //                         Program  pvalue.cpp
 //                         -------------------
+//
 // This program reads in input two HBOOK files: 
 //          1)  ntuple_a.hbook 
 //          2)  ntuple_b.hbook
@@ -43,7 +46,7 @@
 
 #include "AIDA/AIDA.h"
 #include "AIDA/ICloud1D.h" 
-#include "UserLayer-aida/StatisticsComparator.h"
+#include "StatisticsComparator.h"
 #include "ComparisonResult.h"
 
 #include "Chi2ComparisonAlgorithm.h"                    
