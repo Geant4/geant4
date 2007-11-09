@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.2 2007-11-08 17:00:09 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -37,7 +37,7 @@
 #include "G4VBasicShell.hh"
 #include "G4VInteractiveSession.hh"
 
-#include <QtCore/QObject>
+#include <qobject.h>
 
 class QMainWindow;
 class QLineEdit;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.3 2007-11-08 17:00:09 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.4 2007-11-09 15:03:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -38,7 +38,7 @@
 
 #include "G4Qt.hh"
 
-#include <QtGui/QApplication.h>
+#include <qapplication.h>
 
 
 #define NewString(str)  \
@@ -145,7 +145,7 @@ void G4Qt::FlushAndWaitExecution (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  printf("G4Qt::FlushAndWaitExecution ::  Flush ....\n");
+  //  printf("G4Qt::FlushAndWaitExecution ::  Flush ....\n");
   if(!qApp) return;
   qApp->processEvents();
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.3 2007-11-08 17:00:09 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.4 2007-11-09 15:03:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -45,23 +45,23 @@
 
 #include "G4Qt.hh"
 
-#include <QtGui/QApplication.h>
-#include <QtGui/QMainWindow.h>
-#include <QtGui/QLineEdit.h>
-#include <QtGui/QWidget.h>
-#include <QtGui/QMenu.h>
-#include <QtGui/QMenuBar.h>
-#include <QtGui/QBoxLayout.h>
-#include <QtGui/QPushButton.h>
-#include <QtGui/QLabel.h>
-#include <QtGui/QSplitter.h>
-#include <QtGui/QScrollBar.h>
-#include <QtGui/QDialog.h>
-#include <QtGui/QEvent.h>
-#include <QtGui/QListWidget.h>
-#include <QtGui/QTextEdit.h>
-#include <QtGui/QTreeWidget.h>
-#include <QtCore/QSignalMapper.h>
+#include <qapplication.h>
+#include <qmainwindow.h>
+#include <qlineedit.h>
+#include <qwidget.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qboxlayout.h>
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qsplitter.h>
+#include <qscrollbar.h>
+#include <qdialog.h>
+#include <qevent.h>
+#include <qlistwidget.h>
+#include <qtextedit.h>
+#include <qtreewidget.h>
+#include <qsignalmapper.h>
 
 
 #include <stdlib.h>
@@ -805,7 +805,7 @@ void G4UIQt::ButtonCallback (
 void G4UIQt::HelpTreeClicCallback (
 )
 {
-  printf("G4UIQt::HelpTreeClicCallback");
+  //  printf("G4UIQt::HelpTreeClicCallback");
   QTreeWidgetItem* item =  NULL;
   if (!fHelpTreeWidget)
     return ;

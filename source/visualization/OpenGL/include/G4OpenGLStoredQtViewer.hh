@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.2 2007-11-08 17:00:51 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLQtViewer.hh"
 
-#include <QtOpenGL/QGLWidget>
+#include <qgl.h>  // include qglwidget
 
 class QMouseEvent;
 class QContextMenuEvent;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.2 2007-11-08 17:00:51 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.3 2007-11-09 15:03:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,8 +38,8 @@
 
 #include "G4ios.hh"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QContextMenuEvent>
+//#include <qmouseevent.h>
+#include <qevent.h> // include <qcontextmenuevent.h>
 
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 (G4OpenGLStoredSceneHandler& sceneHandler,

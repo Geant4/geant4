@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.2 2007-11-08 17:00:51 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,17 +33,17 @@
 
 #include "G4OpenGLQtExportDialog.hh"
 
-#include <QtCore/QVariant.h>
-#include <QtGui/QPushButton.h>
-#include <QtGui/QCheckBox.h>
-#include <QtGui/QLabel.h>
-#include <QtGui/QComboBox.h>
-#include <QtGui/QSlider.h>
-#include <QtGui/QLayout.h>
-#include <QtGui/QGroupBox.h>
-#include <QtGui/QRadioButton.h>
-#include <QtGui/QImage.h>
-#include <QtGui/QLineEdit.h>
+#include <qvariant.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qslider.h>
+#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qradiobutton.h>
+#include <qimage.h>
+#include <qlineedit.h>
 
 G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
  QWidget* parent

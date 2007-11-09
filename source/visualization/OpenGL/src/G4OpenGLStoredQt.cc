@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4OpenGLStoredQt.cc,v 1.2 2007-11-09 15:03:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ G4OpenGLStoredQt::G4OpenGLStoredQt ():
 		     G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
+  printf("G4OpenGLStoredQt::Create  \n");
 }
 
 G4VSceneHandler* G4OpenGLStoredQt::CreateSceneHandler
