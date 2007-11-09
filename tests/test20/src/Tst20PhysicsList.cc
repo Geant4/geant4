@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.7 2007-11-09 18:33:00 pia Exp $
+// $Id: Tst20PhysicsList.cc,v 1.8 2007-11-09 19:40:39 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -86,6 +86,9 @@
 #include "G4CrossSectionChargeIncrease.hh"
 #include "G4FinalStateChargeIncrease.hh"
 
+#include "G4CrossSectionKill.hh"
+#include "G4FinalStateKill.hh"
+
 // Processes
 
 typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> ElasticScreenedRutherford;
@@ -97,6 +100,7 @@ typedef G4DNAProcess<G4CrossSectionIonisationRudd,G4FinalStateIonisationRudd> Io
 typedef G4DNAProcess<G4CrossSectionExcitationMillerGreen,G4FinalStateExcitationMillerGreen> ExcitationMillerGreen;
 typedef G4DNAProcess<G4CrossSectionChargeDecrease,G4FinalStateChargeDecrease> ChargeDecrease;
 typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease> ChargeIncrease;
+typedef G4DNAProcess<G4CrossSectionKill,G4FinalStateKill> KillBelowThreshold;
 
 
 Tst20PhysicsList::Tst20PhysicsList(): G4VUserPhysicsList()
@@ -192,9 +196,11 @@ void Tst20PhysicsList::ConstructEM()
 	{
 	  // DNA
 	  processManager->AddDiscreteProcess(new ExcitationEmfietzoglou);
-	  // processManager->AddDiscreteProcess(new ElasticScreenedRutherford);
-	  // processManager->AddDiscreteProcess(new ElasticBrennerZaider);
+	  processManager->AddDiscreteProcess(new ElasticScreenedRutherford);
+	  processManager->AddDiscreteProcess(new ElasticBrennerZaider);
 	  processManager->AddDiscreteProcess(new IonisationBorn);
+	  processManager->AddDiscreteProcess(new IonisationBorn);
+	  processManager->AddDiscreteProcess(new KillBelowThreshold);
 	}
       else if (particleName == "e+") 
 	{
