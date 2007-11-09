@@ -74,7 +74,7 @@
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
-#include "G4InclCascadeInterface.hh"
+#include "G4InclAblaCascadeInterface.hh"
 #include "G4InclLightIonInterface.hh"
 #include "G4WilsonAbrasionModel.hh"
 
@@ -236,15 +236,21 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "ftfb") {
 
-    G4TheoFSGenerator * model = new G4TheoFSGenerator;
-    G4FTFModel * stringmodel= new G4FTFModel;
-    G4BinaryCascade* cascade = new G4BinaryCascade();
-    G4ExcitedStringDecay * stringDecay = 
+    G4TheoFSGenerator * theModel = new G4TheoFSGenerator;
+    G4FTFModel * theStringModel= new G4FTFModel;
+    G4BinaryCascade* theCascade = new G4BinaryCascade();
+    G4ExcitedStringDecay * theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
-    model->SetHighEnergyGenerator(stringmodel);
-    stringmodel->SetFragmentationModel(stringDecay);
-    model->SetTransport(cascade);
-    sg = new Test30VSecondaryGenerator(model, mat);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    theStringModel->SetFragmentationModel(theStringDecay);
+
+    theModel->SetTransport(theCascade);
+    theQuasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    theModel->SetMinEnergy(GeV);
+
+    sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -275,7 +281,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "incl") {
-    G4InclCascadeInterface* hkm = new G4InclCascadeInterface();
+    G4InclAblaCascadeInterface* hkm = new G4InclAblaCascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

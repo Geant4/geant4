@@ -86,6 +86,7 @@
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4IonTable.hh"
+#include "G4DecayPhysics.hh"
 
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
@@ -237,6 +238,10 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
   const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+
+  G4DecayPhysics decays;
+  decays.ConstructParticle();  
+
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
   assert(ion);
