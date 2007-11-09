@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.74 2007-11-09 15:38:56 japost Exp $
+// $Id: G4Transportation.cc,v 1.75 2007-11-09 15:42:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -86,9 +86,11 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
 
+#ifdef G4VERBOSE
   G4cout << " G4Transportation constructor> set fShortStepOptimisation to "; 
-  if ( fShortStepOptimisation )  G4cout << "true" << G4endl;
-  else                           G4cout  << "false" << G4endl;
+  if ( fShortStepOptimisation )  G4cout << "true"  << G4endl;
+  else                           G4cout << "false" << G4endl;
+#endif
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
