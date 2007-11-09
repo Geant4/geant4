@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.46 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.47 2007-11-09 11:35:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,7 @@
 #include "G4RegionStore.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4GenericIon.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -201,7 +202,9 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     if(buildLambdaTable)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     const G4DataVector* theCuts = 
-      modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
+      modelManager->Initialise(firstParticle, 
+			       G4Electron::Electron(), 
+			       10.0, verboseLevel);
 
     if(2 < verboseLevel) G4cout << theCuts << G4endl;
 
