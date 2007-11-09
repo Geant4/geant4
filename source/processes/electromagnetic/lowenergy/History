@@ -1,4 +1,4 @@
-$Id: History,v 1.276 2007-11-09 20:11:04 pia Exp $
+$Id: History,v 1.277 2007-11-09 20:23:21 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.11.2007   MGP, tag emlowen-V09-00-21
+             Initialized data members missing initialization
 
 09.11.2007   MGP, tag emlowen-V09-00-20
              Removed verbose printouts in Geant4-DNA processes
