@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.13 2007-05-18 07:31:03 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.14 2007-11-09 16:05:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -206,11 +206,13 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
     case kPhi:
       if ( localPoint.y()<=0 )
       {
-        safety = localPoint.x()*std::sin(width*0.5)+localPoint.y()*std::cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)
+               + localPoint.y()*std::cos(width*0.5);
       }
       else
       {
-        safety = localPoint.x()*std::sin(width*0.5)-localPoint.y()*std::cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)
+               - localPoint.y()*std::cos(width*0.5);
       }
       break;
     case kRho:
@@ -268,12 +270,12 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       if ( Comp>0 )
       {
         lindist = width*0.5-coord;
-        Dist = (lindist>kCarTolerance*0.5) ? lindist/Comp : 0;
+        Dist = (lindist>0) ? lindist/Comp : 0;
       }
       else if ( Comp<0 )
       {
         lindist = width*0.5+coord;
-        Dist = (lindist>kCarTolerance*0.5) ? -lindist/Comp : 0;
+        Dist = (lindist>0) ? -lindist/Comp : 0;
       }
       else
       {
