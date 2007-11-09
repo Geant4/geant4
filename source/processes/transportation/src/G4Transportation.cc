@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.75 2007-11-09 15:42:15 japost Exp $
+// $Id: G4Transportation.cc,v 1.76 2007-11-09 15:42:54 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -77,7 +77,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
+    fShortStepOptimisation(true),    // Old default: true (=fast short steps)
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
