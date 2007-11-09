@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.5 2006-06-29 18:36:10 gunter Exp $
+// $Id: G4ParameterisedNavigation.hh,v 1.6 2007-11-09 16:06:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,8 +63,8 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
     G4ParameterisedNavigation();
     ~G4ParameterisedNavigation();
 
-    G4SmartVoxelNode* ParamVoxelLocate( G4SmartVoxelHeader* pHead,
-                                  const G4ThreeVector& localPoint );
+    inline G4SmartVoxelNode* ParamVoxelLocate( G4SmartVoxelHeader* pHead,
+                                         const G4ThreeVector& localPoint );
 
     G4bool LevelLocate( G4NavigationHistory& history,
                   const G4VPhysicalVolume* blockedVol,
@@ -102,7 +102,7 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
 
     // Necessary to resolve cases with nested parameterisations
 
-    G4VSolid* IdentifyAndPlaceSolid( G4int num,
+    inline G4VSolid* IdentifyAndPlaceSolid( G4int num,
                                      G4VPhysicalVolume* apparentPhys, 
                                      G4VPVParameterisation* curParam );
        // Call virtual 'Compute' methods, and copy information if nested.
