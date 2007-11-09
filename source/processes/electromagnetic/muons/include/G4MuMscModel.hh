@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.3 2007-10-29 10:48:21 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.4 2007-11-09 19:48:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,7 +71,7 @@ class G4MuMscModel : public G4eCoulombScatteringModel
 public:
 
   G4MuMscModel(G4double frange = 0.2,
-	       G4double thetaMax = 0.1,
+	       G4double thetaMax = 0.04,
 	       G4double tMax = TeV*TeV, 
 	       const G4String& nam = "MuMscUni");
 
@@ -79,12 +79,12 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 				      G4double KineticEnergy,
 				      G4double AtomicNumber,
 				      G4double AtomicWeight=0., 
-				      G4double cut =0.,
-				      G4double emax=DBL_MAX);
+				      G4double cut = DBL_MAX,
+				      G4double emax= DBL_MAX);
 
   void SampleScattering(const G4DynamicParticle*, G4double safety);
 
@@ -108,7 +108,7 @@ public:
 
   inline G4double GetLambda(G4double kinEnergy);
 
-  inline G4double GetLambda1(G4double kinEnergy);
+  inline G4double GetLambda2(G4double kinEnergy);
 
   //  inline void SetThetaLimit(G4double);
 
@@ -118,9 +118,7 @@ private:
 
   void BuildTables();
 
-  G4double ComputeLambda1(const G4MaterialCutsCouple*,
-			  const G4ParticleDefinition*,
-			  G4double kinEnergy);
+  G4double ComputeLambda2(G4double kinEnergy, G4double cut);
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
@@ -132,8 +130,9 @@ private:
 
   G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
-  G4PhysicsTable*             theLambda1Table;
+  G4PhysicsTable*             theLambda2Table;
   G4LossTableManager*         theManager;
+  const G4DataVector*         currentCuts;
 
   G4double dtrl;
   G4double facrange;
@@ -141,8 +140,11 @@ private:
   G4double numlimit;
   G4double tlimitminfix;
   G4double invsqrt12;
+  G4double lowBinEnergy;
+  G4double highBinEnergy;
 
   // cash
+  G4double preKinEnergy;
   G4double xSection;
   G4double ecut;
   G4double lambda0;
@@ -153,9 +155,14 @@ private:
   G4double par1;
   G4double par2;
   G4double par3;
+
   G4int    currentMaterialIndex;
 
-  const G4MaterialCutsCouple* couple;
+  G4int    nbins;
+  G4int    nwarnings;
+  G4int    nwarnlimit;
+
+  const G4MaterialCutsCouple* currentCouple;
 
   G4MscStepLimitType steppingAlgorithm;
 
@@ -163,9 +170,8 @@ private:
   G4bool   latDisplasment;
   G4bool   isInitialized;
   G4bool   buildTables;
-  G4bool   inside;
   G4bool   newrun;
-
+  G4bool   inside;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,9 +212,9 @@ void G4MuMscModel::SetStepLimitType(G4MscStepLimitType val)
 inline
 void G4MuMscModel::DefineMaterial(const G4MaterialCutsCouple* cup) 
 { 
-  if(cup != couple) {
-    couple = cup;
-    currentMaterialIndex = couple->GetIndex(); 
+  if(cup != currentCouple) {
+    currentCouple = cup;
+    currentMaterialIndex = currentCouple->GetIndex(); 
   }
 }
 
@@ -222,7 +228,7 @@ G4double G4MuMscModel::GetLambda(G4double e)
     G4bool b;
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
-    x = CrossSection(couple,particle,e);
+    x = CrossSection(currentCouple,particle,e);
   }
   if(x > DBL_MIN) x = 1./x;
   else            x = DBL_MAX;
@@ -232,18 +238,15 @@ G4double G4MuMscModel::GetLambda(G4double e)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4MuMscModel::GetLambda1(G4double e)
+G4double G4MuMscModel::GetLambda2(G4double e)
 {
-  if(newrun) BuildTables();
   G4double x;
-  if(theLambda1Table) {
+  if(theLambda2Table) {
     G4bool b;
-    x = ((*theLambda1Table)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambda2Table)[currentMaterialIndex])->GetValue(e, b);
   } else {
-    x = ComputeLambda1(couple,particle,e);
+    x = ComputeLambda2(e, (*currentCuts)[currentMaterialIndex]);
   }
-  //if(x > DBL_MIN) x = 1./x;
-  //else            x = DBL_MAX;
   return x;
 }
 
