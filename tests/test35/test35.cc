@@ -92,6 +92,7 @@
 #include "G4Evaporation.hh"
 
 #include "G4StateManager.hh"
+#include "G4DecayPhysics.hh"
 
 #include "Histo.hh"
 #include "G4Timer.hh"
@@ -155,12 +156,10 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-  //  const G4ParticleDefinition* gamma = 
-  G4Gamma::Gamma();
-  //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-  // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
-  // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-  //const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+
+  G4DecayPhysics decays;
+  decays.ConstructParticle();  
+
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
 

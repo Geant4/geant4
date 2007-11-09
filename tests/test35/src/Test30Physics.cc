@@ -77,7 +77,8 @@
 #include "G4CascadeInterface.hh"
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
-#include "G4InclCascadeInterface.hh"
+#include "HsQGSBInterface.hh"
+#include "G4InclAblaCascadeInterface.hh"
 #include "G4InclLightIonInterface.hh"
 
 #include "G4LElastic.hh"
@@ -208,7 +209,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "incl") {
-    G4InclCascadeInterface* hkm = new G4InclCascadeInterface();
+    G4InclAblaCascadeInterface* hkm = new G4InclAblaCascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
@@ -223,6 +224,13 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     HsQGSPInterface* qgsp = new HsQGSPInterface();
     qgsp->SetMinEnergy(GeV);
     sg = new Test30VSecondaryGenerator(qgsp, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "qgsb") {
+    HsQGSBInterface* qgsb = new HsQGSBInterface();
+    qgsb->SetMinEnergy(GeV);
+    sg = new Test30VSecondaryGenerator(qgsb, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
