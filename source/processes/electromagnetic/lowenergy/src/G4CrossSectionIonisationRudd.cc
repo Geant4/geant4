@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationRudd.cc,v 1.1 2007-11-08 21:36:12 pia Exp $
+// $Id: G4CrossSectionIonisationRudd.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -311,7 +311,7 @@ G4double G4CrossSectionIonisationRudd::CrossSection(const G4Track& track )
 		  G4DNACrossSectionDataSet* electronDataset = new G4DNACrossSectionDataSet 
 		    (new G4LogLogInterpolation, eV, (1./3.343e22)*m*m);
        
-		  electronDataset->LoadData("dna/sigmatot_ionisation_e_born");
+		  electronDataset->LoadData("dna/sigma_ionisation_e_born");
 
 		  G4double kElectron = k * 0.511/3728;
 

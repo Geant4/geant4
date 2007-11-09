@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.1 2007-11-08 20:39:35 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -97,6 +97,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       std::ostringstream eFullFileName;
       eFullFileName << path << "/dna/sigmadiff_ionisation_e_born.dat";
       std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
+      // eDiffCrossSection(eFullFileName.str().c_str());
       if(!eDiffCrossSection)
 	{ 
 	  G4cout<<"ERROR OPENING DATA FILE IN ELECTRON BORN IONIZATION !!! "<<G4endl;
@@ -135,6 +136,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       std::ostringstream pFullFileName;
       pFullFileName << path << "/dna/sigmadiff_ionisation_p_born.dat";
       std::ifstream pDiffCrossSection(pFullFileName.str().c_str());
+      //     pDiffCrossSection(pFullFileName.str().c_str());
       if (!pDiffCrossSection)
 	{ 
 	  G4cout<<"ERROR OPENING DATA FILE IN PROTON BORN IONIZATION !!! "<<G4endl;
@@ -371,12 +373,12 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
   if (particleDefinition == G4Electron::ElectronDefinition()) 
     {
       // k should be in eV and energy transfer eV also
-      std::vector<double>::iterator t2 = upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
+      std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
+      std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
       std::vector<double>::iterator e11 = e12-1;
 
-      std::vector<double>::iterator e22 = upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
+      std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
       std::vector<double>::iterator e21 = e22-1;
 
       value_t1  = *t1;
@@ -390,12 +392,12 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
   if (particleDefinition == G4Proton::ProtonDefinition()) 
     {
       // k should be in eV and energy transfer eV also
-      std::vector<double>::iterator t2 = upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
+      std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
+      std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
       std::vector<double>::iterator e11 = e12-1;
 
-      std::vector<double>::iterator e22 = upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
+      std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
       std::vector<double>::iterator e21 = e22-1;
  
       value_t1  = *t1;

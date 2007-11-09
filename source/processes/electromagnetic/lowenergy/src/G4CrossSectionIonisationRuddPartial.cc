@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationRuddPartial.cc,v 1.1 2007-11-08 21:36:12 pia Exp $
+// $Id: G4CrossSectionIonisationRuddPartial.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -242,7 +242,7 @@ G4int G4CrossSectionIonisationRuddPartial::RandomSelect(G4double k, const G4Stri
        particle == instance->GetIon("helium")->GetParticleName()
        ) 
     {     
-      electronDataset->LoadData("dna/sigmatot_ionisation_e_born");
+      electronDataset->LoadData("dna/sigma_ionisation_e_born");
 
       kElectron = k * 0.511/3728;
        

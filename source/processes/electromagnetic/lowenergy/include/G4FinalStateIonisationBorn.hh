@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.hh,v 1.1 2007-11-08 20:38:40 pia Exp $
+// $Id: G4FinalStateIonisationBorn.hh,v 1.2 2007-11-09 16:20:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -119,8 +119,8 @@ class G4Step;
    VecMap eVecm;
    VecMap pVecm;
  
-   std::ifstream eDiffCrossSection;
-   std::ifstream pDiffCrossSection;
+   //   std::ifstream eDiffCrossSection;
+   //   std::ifstream pDiffCrossSection;
    
 };
 

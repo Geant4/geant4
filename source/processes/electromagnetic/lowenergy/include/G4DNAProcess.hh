@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.hh,v 1.4 2007-10-12 09:51:57 pia Exp $
+// $Id: G4DNAProcess.hh,v 1.5 2007-11-09 16:20:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Maria Grazia Pia (Maria.Grazia.Pia@ge.infn.it)
@@ -69,7 +69,7 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition&) { return true; } 
   
   //  ---- MGP ---- Dummy initially: no PhysicsTable (usefulness to be verified)
-  virtual void BuildPhysicsTable(const G4ParticleDefinition& particle) { /* nop */; }
+  virtual void BuildPhysicsTable(const G4ParticleDefinition& /* particle */) { /* nop */; }
  
   // Implemented in terms of TFinalState
   virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
