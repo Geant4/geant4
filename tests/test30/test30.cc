@@ -782,7 +782,11 @@ int main(int argc, char** argv)
       
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
+      // take into account local energy deposit
       G4double de = aChange->GetLocalEnergyDeposit();
+      G4LorentzVector dee = G4LorentzVector(0.0, 0.0, 0.0, de); 
+      labv -= dee;
+
       G4int n = aChange->GetNumberOfSecondaries();
 
       if(iter == modu*(iter/modu)) 
