@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2007-11-08 18:00:29 japost Exp $
+$Id: History,v 1.140 2007-11-09 15:40:23 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   9th, 2007, J.Apostolakis  transport-V09-00-06
+------------------------------
+G4Transportation:
+- Update the SafetyHelper using the safety calculated by Navigator
 
 Nov   8th, 2007, J.Apostolakis  transport-V09-00-05
 ------------------------------
