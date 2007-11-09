@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorMessenger.hh,v 1.4 2006-06-29 21:45:48 gunter Exp $
+// $Id: Tst20DetectorMessenger.hh,v 1.5 2007-11-09 18:32:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 #ifndef Tst20DetectorMessenger_h
 #define Tst20DetectorMessenger_h 1
@@ -45,33 +44,32 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst20DetectorMessenger: public G4UImessenger
 {
-  public:
-    Tst20DetectorMessenger(Tst20DetectorConstruction* );
-   ~Tst20DetectorMessenger();
+public:
+  Tst20DetectorMessenger(Tst20DetectorConstruction* );
+  ~Tst20DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    Tst20DetectorConstruction*   Tst20Detector;
+private:
+  Tst20DetectorConstruction* detector;
     
-    G4UIdirectory*             Tst20detDir;
+  G4UIdirectory*             directory;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
+  G4UIcmdWithAString*        absMaterCmd;
+  G4UIcmdWithADoubleAndUnit* absThickCmd;
+  G4UIcmdWithADoubleAndUnit* absRadCmd;
 
-    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
+  G4UIcmdWithADoubleAndUnit* absZposCmd;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldZCmd;
-    G4UIcmdWithADoubleAndUnit* WorldRCmd;
+  G4UIcmdWithAString*        worldMaterCmd;
+  G4UIcmdWithADoubleAndUnit* worldZCmd;
+  G4UIcmdWithADoubleAndUnit* worldRCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithADoubleAndUnit* magFieldCmd;
+  G4UIcmdWithoutParameter*   updateCmd;
 
 };
 

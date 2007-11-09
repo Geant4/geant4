@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.6 2006-06-29 21:46:23 gunter Exp $
+// $Id: Tst20PhysicsList.cc,v 1.7 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 
 #include "Tst20PhysicsList.hh"
+#include "G4DNAGenericIonsManager.hh"
+
+
 #include "Tst20PhysicsListMessenger.hh"
-#include "Tst20DetectorConstruction.hh"
-#include "G4LowEnergyPolarizedCompton.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
@@ -55,17 +56,56 @@
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 
-//#include "G4EnergyLossTables.hh"
-//#include "G4Material.hh"
-//#include "G4RunManager.hh"
+#include "G4Decay.hh"
 
-//#include "G4UImanager.hh"
+#include "G4FinalStateProduct.hh"
+#include "G4DNAProcess.hh"
+
+#include "G4CrossSectionExcitationEmfietzoglou.hh"
+#include "G4FinalStateExcitationEmfietzoglou.hh"
+
+#include "G4CrossSectionElasticScreenedRutherford.hh"
+#include "G4FinalStateElasticScreenedRutherford.hh"
+#include "G4FinalStateElasticBrennerZaider.hh"
+
+#include "G4CrossSectionExcitationBorn.hh"
+#include "G4FinalStateExcitationBorn.hh"
+
+#include "G4CrossSectionIonisationBorn.hh"
+#include "G4FinalStateIonisationBorn.hh"
+
+#include "G4CrossSectionIonisationRudd.hh"
+#include "G4FinalStateIonisationRudd.hh"
+
+#include "G4CrossSectionExcitationMillerGreen.hh"
+#include "G4FinalStateExcitationMillerGreen.hh"
+
+#include "G4CrossSectionChargeDecrease.hh"
+#include "G4FinalStateChargeDecrease.hh"
+
+#include "G4CrossSectionChargeIncrease.hh"
+#include "G4FinalStateChargeIncrease.hh"
+
+// Processes
+
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> ElasticScreenedRutherford;
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> ElasticBrennerZaider;
+typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> ExcitationEmfietzoglou;
+typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn> ExcitationBorn;
+typedef G4DNAProcess<G4CrossSectionIonisationBorn,G4FinalStateIonisationBorn> IonisationBorn;
+typedef G4DNAProcess<G4CrossSectionIonisationRudd,G4FinalStateIonisationRudd> IonisationRudd;
+typedef G4DNAProcess<G4CrossSectionExcitationMillerGreen,G4FinalStateExcitationMillerGreen> ExcitationMillerGreen;
+typedef G4DNAProcess<G4CrossSectionChargeDecrease,G4FinalStateChargeDecrease> ChargeDecrease;
+typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease> ChargeIncrease;
+
 
 Tst20PhysicsList::Tst20PhysicsList(): G4VUserPhysicsList()
 {
-  defaultCutValue = 0.1*mm;
-  cutForGamma = defaultCutValue;
-  cutForElectron = defaultCutValue;
+  defaultCutValue = 1000. * nanometer;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
+  cutForProton    = defaultCutValue;
   SetVerboseLevel(1);
   physicsListMessenger = new Tst20PhysicsListMessenger(this);
 }
@@ -86,6 +126,7 @@ void Tst20PhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
+  ConstructBarions();
 }
 
 
@@ -104,129 +145,140 @@ void Tst20PhysicsList::ConstructLeptons()
   G4Positron::PositronDefinition();
 }
 
+
+void Tst20PhysicsList::ConstructBarions()
+{
+  //  baryons
+  G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+
+  // Geant4-DNA
+
+  G4DNAGenericIonsManager* genericIonsManager;
+  genericIonsManager = G4DNAGenericIonsManager::Instance();
+  genericIonsManager->GetIon("alpha++");
+  genericIonsManager->GetIon("alpha+");
+  genericIonsManager->GetIon("helium");
+  genericIonsManager->GetIon("hydrogen");
+}
+
+
 void Tst20PhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
+  ConstructGeneral();
 }
 
 
 void Tst20PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* processManager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
 
-      // gamma, polarised processes
-      processManager->AddDiscreteProcess(new G4LowEnergyPolarizedCompton);
-      processManager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-
-      lowEPhotoelProcess = new G4LowEnergyPhotoElectric();
-      processManager->AddDiscreteProcess(lowEPhotoelProcess);
-
-      processManager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* processManager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
       
-    } else if (particleName == "e-") {
-      //electron
-      processManager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      if (particleName == "gamma") 
+	{
+	  processManager->AddDiscreteProcess(new G4LowEnergyCompton);
+	  processManager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  processManager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);	
+	  processManager->AddDiscreteProcess(new G4LowEnergyRayleigh);	  
+	} 
+      else if (particleName == "e-") 
+	{
+	  // DNA
+	  processManager->AddDiscreteProcess(new ExcitationEmfietzoglou);
+	  // processManager->AddDiscreteProcess(new ElasticScreenedRutherford);
+	  // processManager->AddDiscreteProcess(new ElasticBrennerZaider);
+	  processManager->AddDiscreteProcess(new IonisationBorn);
+	}
+      else if (particleName == "e+") 
+	{
+	  processManager->AddProcess(new G4MultipleScattering,-1, 1,1);
+	  processManager->AddProcess(new G4eIonisation,      -1, 2,2);
+	  processManager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+	  processManager->AddProcess(new G4eplusAnnihilation,  0,-1,4);	
+	} 
+      else if (particleName == "proton") 
+	{
+	  processManager->AddDiscreteProcess(new ExcitationMillerGreen);
+	  processManager->AddDiscreteProcess(new ExcitationBorn);
+	  processManager->AddDiscreteProcess(new IonisationRudd);
+	  processManager->AddDiscreteProcess(new IonisationBorn);
+	  processManager->AddDiscreteProcess(new ChargeDecrease);
+	} 
+      else if (particleName == "hydrogen") 
+	{
+	  processManager->AddDiscreteProcess(new IonisationRudd);
+	  processManager->AddDiscreteProcess(new ChargeIncrease);
+	} 
+      else if (particleName == "alpha") 
+	{
+	  processManager->AddDiscreteProcess(new ExcitationMillerGreen);
+	  processManager->AddDiscreteProcess(new IonisationRudd);
+	  processManager->AddDiscreteProcess(new ChargeDecrease);   
+	} 
+      else if (particleName == "alpha+") 
+	{
+	  processManager->AddDiscreteProcess(new ExcitationMillerGreen);
+	  processManager->AddDiscreteProcess(new IonisationRudd);
+	  processManager->AddDiscreteProcess(new ChargeDecrease);
+	  processManager->AddDiscreteProcess(new ChargeIncrease);    
+	} 
+      else if (particleName == "helium") 
+	{
+	  processManager->AddDiscreteProcess(new ExcitationMillerGreen);
+	  processManager->AddDiscreteProcess(new IonisationRudd);
+	  processManager->AddDiscreteProcess(new ChargeIncrease);
+	}
+    }
+}
 
-      lowEIoniProcess = new G4LowEnergyIonisation();
-      processManager->AddProcess(lowEIoniProcess, -1,  2, 2);
-
-      lowEBremProcess = new G4LowEnergyBremsstrahlung();
-      processManager->AddProcess(lowEBremProcess, -1, -1, 3);
-
-    } else if (particleName == "e+") {
-      //positron
-      processManager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      processManager->AddProcess(new G4eIonisation,      -1, 2,2);
-      processManager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
-      processManager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      
-    } 
-  }
+void Tst20PhysicsList::ConstructGeneral()
+{
+  // Add Decay Process
+  G4Decay* theDecayProcess = new G4Decay();
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* processManager = particle->GetProcessManager();
+      if (theDecayProcess->IsApplicable(*particle)) 
+	{ 
+	  processManager ->AddProcess(theDecayProcess);
+	  // set ordering for PostStepDoIt and AtRestDoIt
+	  processManager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+	  processManager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+	}
+    }
 }
 
 
-void Tst20PhysicsList::SetGELowLimit(G4double lowCut)
+void Tst20PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
-    G4cout << "Tst20PhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " 
-	   << lowCut*MeV << " (MeV)" << G4endl;
+  if (verboseLevel >0)
+  {
+    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
-
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
-
-}
-
-void Tst20PhysicsList::SetGammaLowLimit(G4double lowCut)
-{
-  if (verboseLevel >0){
-    G4cout << "Tst20PhysicsList::SetCuts:";
-    G4cout << "Gamma cut in energy: " 
-	   << lowCut*MeV << " (MeV)" << G4endl;
-  }  
-
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
-
-}
-
-void Tst20PhysicsList::SetElectronLowLimit(G4double lowCut)
-{
-  if (verboseLevel >0){
-
-    G4cout << "Tst20PhysicsList::SetCuts:";
-    G4cout << "Electron cut in energy: " << lowCut*MeV << " (MeV)" << G4endl;
-
-  }  
-
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowCut*MeV,1e5*MeV);
-
-}
-void Tst20PhysicsList::SetGammaCut(G4double val)
-{
-  ResetCuts();
-  cutForGamma = val;
-}
-
-
-void Tst20PhysicsList::SetElectronCut(G4double val)
-{
-  ResetCuts();
-  cutForElectron = val;
-}
-
-void Tst20PhysicsList::SetCuts(){
-
-  SetCutValue(cutForGamma,"gamma");
-  SetCutValue(cutForElectron,"e-");
-  SetCutValue(cutForElectron,"e+");
-
-}
-
-
-void Tst20PhysicsList::SetLowEnSecPhotCut(G4double cut){
   
-  G4cout << "Low energy secondary photons cut is now set to: "
-	 << cut*MeV << " (MeV)"<< G4endl;
-  G4cout << "for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"
-	 <<G4endl;
-  lowEBremProcess->SetCutForLowEnSecPhotons(cut);
-  lowEPhotoelProcess->SetCutForLowEnSecPhotons(cut);
-  lowEIoniProcess->SetCutForLowEnSecPhotons(cut);
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma 
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
+  
+  // set cut values for proton and anti_proton before all other hadrons
+  // because some processes for hadrons need cut values for proton/anti_proton 
+  SetCutValue(cutForProton, "proton");
+  SetCutValue(cutForProton, "anti_proton");
+  
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
-void Tst20PhysicsList::SetLowEnSecElecCut(G4double cut){
-  
-  G4cout << "Low energy secondary electrons cut is now set to: "
-	 << cut*MeV << " (MeV)" << G4endl;
-  //  G4cout <<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
-  G4cout <<"for LowEnergyIonisation"<<G4endl;
-  //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
-  lowEIoniProcess->SetCutForLowEnSecElectrons(cut);
-}
+
+

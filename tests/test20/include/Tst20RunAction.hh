@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20RunAction.hh,v 1.4 2006-06-29 21:46:09 gunter Exp $
+// $Id: Tst20RunAction.hh,v 1.5 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,8 +43,8 @@ class Tst20RunAction : public G4UserRunAction
     virtual ~Tst20RunAction();
 
   public:
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* run);
+    virtual void EndOfRunAction(const G4Run* run);
 
 };
 

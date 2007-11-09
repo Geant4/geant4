@@ -41,7 +41,7 @@ class Tst20SteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
     
   private:
-    Tst20ProcCallSA  theProcCallSA;
+    Tst20ProcCallSA  processCallSA;
 };
 
 #endif

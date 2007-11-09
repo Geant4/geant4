@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorConstruction.hh,v 1.5 2006-06-29 21:45:46 gunter Exp $
+// $Id: Tst20DetectorConstruction.hh,v 1.6 2007-11-09 18:32:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst20DetectorConstruction_h
 #define Tst20DetectorConstruction_h 1
@@ -48,7 +46,6 @@ class G4UniformMagField;
 class Tst20DetectorMessenger;
 class Tst20CalorimeterSD;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst20DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -80,70 +77,56 @@ class Tst20DetectorConstruction : public G4VUserDetectorConstruction
   
      void PrintCalorParameters(); 
                     
-     G4Material* GetWorldMaterial()    {return WorldMaterial;};
-     G4double GetWorldSizeZ()          {return WorldSizeZ;}; 
-     G4double GetWorldSizeR()          {return WorldSizeR;};
+     G4Material* GetWorldMaterial() {return worldMaterial;};
+     G4double GetWorldSizeZ() {return worldSizeZ;}; 
+     G4double GetWorldSizeR() {return worldSizeR;};
      
-     G4double GetAbsorberZpos()        {return zAbsorber;}; 
-     G4double GetzstartAbs()           {return zstartAbs;};
-     G4double GetzendAbs()             {return zendAbs;};
+     G4double GetAbsorberZpos() {return zAbsorber;}; 
+     G4double GetZstartAbs() {return zStartAbs;};
+     G4double GetZendAbs() {return zEndAbs;};
 
-     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-     G4double GetAbsorberRadius()       {return AbsorberRadius;};
+     G4Material* GetAbsorberMaterial() {return absorberMaterial;};
+     G4double GetAbsorberThickness() {return absorberThickness;};      
+     G4double GetAbsorberRadius() {return absorberRadius;};
      
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
-     const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
+     const G4VPhysicalVolume* GetAbsorber() {return physiAbsorber;};
                  
   private:
      
-     G4bool             worldchanged;
-     G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberRadius;
+     G4bool worldChanged;
+     G4Material* absorberMaterial;
+     G4double absorberThickness;
+     G4double absorberRadius;
  
-     G4double           zAbsorber ;
-     G4double           zstartAbs , zendAbs ;
+     G4double zAbsorber ;
+     G4double zStartAbs;
+     G4double zEndAbs ;
      
-     G4Material*        WorldMaterial;
-     G4double           WorldSizeR;
-     G4double           WorldSizeZ;
+     G4Material* worldMaterial;
+     G4double worldSizeR;
+     G4double worldSizeZ;
             
-     G4Tubs*            solidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
+     G4Tubs* solidWorld;    //pointer to the solid World 
+     G4LogicalVolume* logicWorld;    //pointer to the logical World
      G4VPhysicalVolume* physiWorld;    //pointer to the physical World
 
-     G4Tubs*             solidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
+     G4Tubs* solidAbsorber; //pointer to the solid Absorber
+     G4LogicalVolume* logicAbsorber; //pointer to the logical Absorber
      G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
      
-     G4UniformMagField* magField;      //pointer to the magnetic field
+     G4UniformMagField* magneticField;      //pointer to the magnetic field
      
      Tst20DetectorMessenger* detectorMessenger;  //pointer to the Messenger
      Tst20CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
       
-  private:
     
      void DefineMaterials();
      void ComputeCalorParameters();
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void Tst20DetectorConstruction::ComputeCalorParameters()
-{
-  // Compute derived parameters of the calorimeter
-     if(!worldchanged)
-     {
-       WorldSizeR=2.*AbsorberRadius ;
-       WorldSizeZ=2.*AbsorberThickness ;
-     }
-     
-     zstartAbs = zAbsorber-0.5*AbsorberThickness; 
-     zendAbs   = zAbsorber+0.5*AbsorberThickness; 
-
-}
 
 #endif
 

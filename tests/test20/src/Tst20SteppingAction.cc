@@ -44,7 +44,7 @@ Tst20SteppingAction::Tst20SteppingAction()
 Tst20SteppingAction::~Tst20SteppingAction()
 {;}
 
-void Tst20SteppingAction::UserSteppingAction(const G4Step * theStep)
+void Tst20SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  theProcCallSA.execute(theStep);
+  processCallSA.execute(step);
 }

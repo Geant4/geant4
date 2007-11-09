@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsListMessenger.hh,v 1.3 2006-06-29 21:46:02 gunter Exp $
+// $Id: Tst20PhysicsListMessenger.hh,v 1.4 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 #ifndef Tst20PhysicsListMessenger_h
 #define Tst20PhysicsListMessenger_h 1
@@ -43,7 +42,6 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst20PhysicsListMessenger: public G4UImessenger
 {
@@ -57,16 +55,9 @@ public:
   
 private:
 
-  Tst20PhysicsList*          Tst20List;
+  Tst20PhysicsList* physicsList;
 
   G4UIdirectory* lowEnDir;
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-  G4UIcmdWithADoubleAndUnit* cutGCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
 };
 
 #endif

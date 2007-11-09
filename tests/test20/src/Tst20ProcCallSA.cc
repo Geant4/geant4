@@ -34,36 +34,32 @@
 Tst20ProcCallSA::Tst20ProcCallSA()
 { }
 
-Tst20ProcCallSA::~Tst20ProcCallSA(){
+Tst20ProcCallSA::~Tst20ProcCallSA()
+{
   print();
-  
 }
 
-void Tst20ProcCallSA::execute(const G4Step* aStep){
-
+void Tst20ProcCallSA::execute(const G4Step* aStep)
+{
+  G4Track* theTrack = aStep->GetTrack();
+  if(theTrack->GetNextVolume() == 0 ) return;  
+  G4String particleType = theTrack->GetDefinition()->GetParticleName();
      
-     G4Track* theTrack = aStep->GetTrack();
-     if(theTrack->GetNextVolume()==0 ) return;  
-     G4String particleType = theTrack->GetDefinition()->GetParticleName();
-     
-     G4StepPoint* postStepPoint = aStep->GetPostStepPoint(); 
-     G4String procname = postStepPoint->GetProcessDefinedStep()->GetProcessName();
+  G4StepPoint* postStepPoint = aStep->GetPostStepPoint(); 
+  G4String processName = postStepPoint->GetProcessDefinedStep()->GetProcessName();
 
-     G4Material* material = postStepPoint->GetMaterial();
-     G4String matname = material->GetName();
+  G4Material* material = postStepPoint->GetMaterial();
+  G4String materialName = material->GetName();
      
-     G4String index = procname
-	              + G4String(" for ") + particleType 
-	              + G4String(" in ") + matname;
-     calls[index] ++; 
-
+  G4String index = processName + G4String(" for ") + particleType + G4String(" in ") + materialName;
+  calls[index]++; 
 }
 
-void Tst20ProcCallSA::print(){
-
-     for(intMapIter icall=calls.begin(); icall!=calls.end(); icall++){
-         G4cout<<(*icall).first<<" : "<<(*icall).second<<" calls"<<G4endl;
-     }
-
+void Tst20ProcCallSA::print()
+{
+  for(intMapIter iCall=calls.begin(); iCall!=calls.end(); iCall++)
+    {
+      G4cout << (*iCall).first << " : " << (*iCall).second << " calls" << G4endl;
+    }
 }
 

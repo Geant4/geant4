@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20TrackingAction.hh,v 1.4 2006-06-29 21:46:13 gunter Exp $
+// $Id: Tst20TrackingAction.hh,v 1.5 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ class Tst20TrackingAction : public G4UserTrackingAction {
     Tst20TrackingAction(){};
     virtual ~Tst20TrackingAction(){};
    
-    virtual void PreUserTrackingAction(const G4Track* aTrack);
+    virtual void PreUserTrackingAction(const G4Track*);
 
 };
 

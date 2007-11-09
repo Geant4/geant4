@@ -24,60 +24,55 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20CalorHit.cc,v 1.4 2006-06-29 21:46:15 gunter Exp $
+// $Id: Tst20CalorHit.cc,v 1.5 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst20CalorHit.hh"
 
 G4Allocator<Tst20CalorHit> Tst20CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst20CalorHit::Tst20CalorHit()
 {
-   EdepAbs = 0.; TrackLengthAbs = 0.;
-   EdepGap = 0.; TrackLengthGap = 0.;
+   energyDeposit = 0.; 
+   trackLength = 0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst20CalorHit::~Tst20CalorHit()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst20CalorHit::Tst20CalorHit(const Tst20CalorHit& right)
-  : G4VHit()
+
+Tst20CalorHit::Tst20CalorHit(const Tst20CalorHit& right) : G4VHit()
 {
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
+  energyDeposit = right.energyDeposit; 
+  trackLength = right.trackLength;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const Tst20CalorHit& Tst20CalorHit::operator=(const Tst20CalorHit& right)
 {
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
+  energyDeposit = right.energyDeposit; 
+  trackLength = right.trackLength;
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-int Tst20CalorHit::operator==(const Tst20CalorHit& right) const
+bool Tst20CalorHit::operator==(const Tst20CalorHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst20CalorHit::Print()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Tst20CalorHit::AddEnergyDeposit(G4double energy, G4double length) 
+{
+  energyDeposit += energy; 
+  trackLength += length;
+}
+
 

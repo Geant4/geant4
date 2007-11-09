@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20CalorimeterSD.cc,v 1.4 2006-06-29 21:46:17 gunter Exp $
+// $Id: Tst20CalorimeterSD.cc,v 1.5 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst20CalorimeterSD.hh"
 
@@ -45,90 +43,90 @@
   
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst20CalorimeterSD::Tst20CalorimeterSD(G4String name,
-                                   Tst20DetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+Tst20CalorimeterSD::Tst20CalorimeterSD(G4String name,	 
+				       Tst20DetectorConstruction* det) : G4VSensitiveDetector(name),
+									 detector(det)
 {
   collectionName.insert("CalCollection");
-  HitID = new G4int[500];
+  hitID = new G4int[500];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst20CalorimeterSD::~Tst20CalorimeterSD()
 {
-  delete [] HitID;
+  delete [] hitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst20CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  CalCollection = new Tst20CalorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1; j++) {HitID[j] = -1;};
+  collection = new Tst20CalorHitsCollection(SensitiveDetectorName,collectionName[0]); 
+  for (G4int j=0; j<1; j++) {hitID[j] = -1;};
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool Tst20CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool Tst20CalorimeterSD::ProcessHits(G4Step* step,G4TouchableHistory*)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  
-  G4double stepl = 0.;
-  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-      stepl = aStep->GetStepLength();
-      
-  if ((edep==0.)&&(stepl==0.)) return false;      
+  G4double energyDeposit = step->GetTotalEnergyDeposit();
 
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  G4double length = 0.;
+  
+  if (step->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
+    {
+      length = step->GetStepLength();
+    }
+
+  if ((energyDeposit == 0.) && (length == 0.)) return false;      
+
+  G4TouchableHistory* theTouchable = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
   //theTouchable->MoveUpHistory();
-  G4int Tst20Number = 0 ;
 
-  if (HitID[Tst20Number]==-1)
+  G4int number = 0 ;
+
+  if (hitID[number] == -1)
     { 
       Tst20CalorHit* calHit = new Tst20CalorHit();
-      if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      HitID[Tst20Number] = CalCollection->insert(calHit) - 1;
-      if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on Tst20: " << Tst20Number << G4endl;
+      if (physVol == detector->GetAbsorber()) calHit->AddEnergyDeposit(energyDeposit,length);
+      hitID[number] = collection->insert(calHit) - 1;
+      if (verboseLevel > 0)
+        G4cout << " New Calorimeter Hit on Tst20: " << number << G4endl;
     }
   else
     { 
-      if (physVol == Detector->GetAbsorber())
-         (*CalCollection)[HitID[Tst20Number]]->AddAbs(edep,stepl);
-      if (verboseLevel>0)
-        G4cout << " Energy added to Tst20: " << Tst20Number << G4endl; 
+      if (physVol == detector->GetAbsorber())
+	{
+	  (*collection)[hitID[number]]->AddEnergyDeposit(energyDeposit,length);
+	}
+      if (verboseLevel > 0)
+	{
+	  G4cout << " Energy added to Tst20: " << number << G4endl; 
+	}
     }
     
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst20CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection(HCID,CalCollection);
+  if (HCID < 0)
+    { 
+      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); 
+    }
+  HCE->AddHitsCollection(HCID,collection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst20CalorimeterSD::clear()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 void Tst20CalorimeterSD::PrintAll()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

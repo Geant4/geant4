@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20CalorimeterSD.hh,v 1.3 2006-06-29 21:45:44 gunter Exp $
+// $Id: Tst20CalorimeterSD.hh,v 1.4 2007-11-09 18:32:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst20CalorimeterSD_h
 #define Tst20CalorimeterSD_h 1
@@ -43,26 +41,25 @@ class G4HCofThisEvent;
 class G4Step;
 #include "Tst20CalorHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst20CalorimeterSD : public G4VSensitiveDetector
 {
-  public:
+public:
   
-      Tst20CalorimeterSD(G4String, Tst20DetectorConstruction* );
-     ~Tst20CalorimeterSD();
+  Tst20CalorimeterSD(G4String, Tst20DetectorConstruction* );
+  ~Tst20CalorimeterSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void PrintAll();
 
-  private:
+private:
   
-      Tst20CalorHitsCollection*  CalCollection;      
-      Tst20DetectorConstruction* Detector;
-      G4int*                   HitID;
+  Tst20CalorHitsCollection* collection;      
+  Tst20DetectorConstruction* detector;
+  G4int* hitID;
 };
 
 #endif

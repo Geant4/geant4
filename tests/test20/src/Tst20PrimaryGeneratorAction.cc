@@ -24,39 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PrimaryGeneratorAction.cc,v 1.5 2006-06-29 21:46:27 gunter Exp $
+// $Id: Tst20PrimaryGeneratorAction.cc,v 1.6 2007-11-09 18:33:00 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst20PrimaryGeneratorAction.hh"
 
 #include "Tst20DetectorConstruction.hh"
-//#include "Tst20PrimaryGeneratorMessenger.hh"
 
-#include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
- G4String Tst20PrimaryGeneratorAction::thePrimaryParticleName="e-" ; 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Tst20PrimaryGeneratorAction::Tst20PrimaryGeneratorAction(
-                                            Tst20DetectorConstruction* Tst20DC)
-:Tst20Detector(Tst20DC),rndmFlag("off"),xvertex(0.),yvertex(0.),zvertex(0.),
- vertexdefined(false)
+Tst20PrimaryGeneratorAction::Tst20PrimaryGeneratorAction(Tst20DetectorConstruction* detConstr):detector(detConstr),
+											       rndmFlag("off"),
+											       xVertex(0.),
+											       yVertex(0.),
+											       vertexDefined(false)
 {
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  primaryParticleName = "e-";
+  G4int nParticle = 1;
+  particleGun  = new G4ParticleGun(nParticle);
   
   //create a messenger for this class
   //  gunMessenger = new Tst20PrimaryGeneratorMessenger(this);
@@ -64,88 +57,78 @@ Tst20PrimaryGeneratorAction::Tst20PrimaryGeneratorAction(
   // default particle kinematic
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle(primaryParticleName);
   particleGun->SetParticleDefinition(particle);
   
-  thePrimaryParticleName = particle->GetParticleName() ;
+  // This is nonsense...
+  primaryParticleName = particle->GetParticleName();
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(30.*MeV);
+  particleGun->SetParticleEnergy(100.*eV);
 
-  zvertex = -0.5*(Tst20Detector->GetAbsorberThickness());
-  particleGun->SetParticlePosition(G4ThreeVector(xvertex,yvertex,zvertex));
+  zVertex = -0.5 * detector->GetAbsorberThickness();
+  particleGun->SetParticlePosition(G4ThreeVector(xVertex,yVertex,zVertex));
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst20PrimaryGeneratorAction::~Tst20PrimaryGeneratorAction()
 {
   delete particleGun;
-  //  delete gunMessenger;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst20PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
-  // 
-  thePrimaryParticleName = particleGun->GetParticleDefinition()->
-                                                GetParticleName() ;
-  G4double x0,y0,z0 ;
-  if(vertexdefined)
-  {
-    x0 = xvertex ;
-    y0 = yvertex ;
-    z0 = zvertex ;
-  }
-  else
-  {
-    x0 = 0. ;
-    y0 = 0. ;
-    //z0 = -0.5*(Tst20Detector->GetWorldSizeZ()) ;
-    z0 = Tst20Detector->GetzstartAbs() ;
-  }
-  G4double r0,phi0 ;
+  // This function is called at the begining of event
+ 
+  primaryParticleName = particleGun->GetParticleDefinition()->GetParticleName() ;
+  G4double x0 = 0.;
+  G4double y0 = 0.;
+  G4double z0 = detector->GetZstartAbs() + 0.5 * detector->GetAbsorberThickness();
+
+  if (vertexDefined)
+    {
+      x0 = xVertex ;
+      y0 = yVertex ;
+      z0 = zVertex ;
+    }
+
+  G4double r0 = 0.;
+  G4double phi0 = 0.;
+  
   if (rndmFlag == "on")
-     {r0 = (Tst20Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
-      phi0 = twopi*G4UniformRand();
-      x0 = r0*std::cos(phi0);
-      y0 = r0*std::sin(phi0);
-     } 
+    {
+      r0 = (detector->GetAbsorberRadius()) * std::sqrt(G4UniformRand());
+      phi0 = twopi * G4UniformRand();
+      x0 = r0 * std::cos(phi0);
+      y0 = r0 * std::sin(phi0);
+    } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4String Tst20PrimaryGeneratorAction::GetPrimaryName()
 {
-   return thePrimaryParticleName ;
+  return primaryParticleName;
 }
 
-void Tst20PrimaryGeneratorAction::Setzvertex(G4double z)
+void Tst20PrimaryGeneratorAction::SetZvertex(G4double z)
 {
-  vertexdefined = true ;
-  zvertex = z ;
-  G4cout << " Z coordinate of the primary vertex = " << zvertex/mm <<
-            " mm." << G4endl;
-}
-void Tst20PrimaryGeneratorAction::Setxvertex(G4double x)
-{
-  vertexdefined = true ;
-  xvertex = x ;
-  G4cout << " X coordinate of the primary vertex = " << xvertex/mm <<
-            " mm." << G4endl;
+  vertexDefined = true ;
+  zVertex = z ;
+  G4cout << " Z coordinate of the primary vertex = " << zVertex/mm << " mm" << G4endl;
 }
 
-void Tst20PrimaryGeneratorAction::Setyvertex(G4double y)
+void Tst20PrimaryGeneratorAction::SetXvertex(G4double x)
 {
-  vertexdefined = true ;
-  yvertex = y ;
-  G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
-            " mm." << G4endl;
+  vertexDefined = true ;
+  xVertex = x ;
+  G4cout << " X coordinate of the primary vertex = " << xVertex/mm << " mm" << G4endl;
+}
+
+void Tst20PrimaryGeneratorAction::SetYvertex(G4double y)
+{
+  vertexDefined = true ;
+  yVertex = y ;
+  G4cout << " Y coordinate of the primary vertex = " << yVertex/mm << " mm" << G4endl;
 }

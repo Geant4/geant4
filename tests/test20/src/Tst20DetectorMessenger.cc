@@ -24,13 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorMessenger.cc,v 1.5 2006-06-29 21:46:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
+// $Id: Tst20DetectorMessenger.cc,v 1.6 2007-11-09 18:33:00 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $ 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst20DetectorMessenger.hh"
 
@@ -41,122 +37,137 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst20DetectorMessenger::Tst20DetectorMessenger(Tst20DetectorConstruction * Tst20Det)
-:Tst20Detector(Tst20Det)
+Tst20DetectorMessenger::Tst20DetectorMessenger(Tst20DetectorConstruction* detConstr) : detector(detConstr)
 { 
-  Tst20detDir = new G4UIdirectory("/calor/");
-  Tst20detDir->SetGuidance("Tst20 detector control.");
+  directory = new G4UIdirectory("/calor/");
+  directory->SetGuidance("Tst20 detector control.");
       
-  AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
-  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",true);
-  AbsMaterCmd->SetDefaultValue("Lead");
-  AbsMaterCmd->AvailableForStates(G4State_Idle);
+  absMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  absMaterCmd->SetGuidance("Select Material of the Absorber.");
+  absMaterCmd->SetParameterName("choice",true);
+  absMaterCmd->SetDefaultValue("Lead");
+  absMaterCmd->AvailableForStates(G4State_Idle);
   
-  WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
-  WorldMaterCmd->SetGuidance("Select Material of the World.");
-  WorldMaterCmd->SetParameterName("wchoice",true);
-  WorldMaterCmd->SetDefaultValue("Air");
-  WorldMaterCmd->AvailableForStates(G4State_Idle);
+  worldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
+  worldMaterCmd->SetGuidance("Select Material of the World.");
+  worldMaterCmd->SetParameterName("wchoice",true);
+  worldMaterCmd->SetDefaultValue("Air");
+  worldMaterCmd->AvailableForStates(G4State_Idle);
   
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
-  AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  AbsThickCmd->SetParameterName("SizeZ",false,false);
-  AbsThickCmd->SetDefaultUnit("mm");
-  AbsThickCmd->SetRange("SizeZ>0.");
-  AbsThickCmd->AvailableForStates(G4State_Idle);
+  absThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  absThickCmd->SetGuidance("Set Thickness of the Absorber");
+  absThickCmd->SetParameterName("SizeZ",false,false);
+  absThickCmd->SetDefaultUnit("mm");
+  absThickCmd->SetRange("SizeZ>0.");
+  absThickCmd->AvailableForStates(G4State_Idle);
   
-  AbsRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad",this);
-  AbsRadCmd->SetGuidance("Set radius of the Absorber");
-  AbsRadCmd->SetParameterName("SizeR",false,false);
-  AbsRadCmd->SetDefaultUnit("mm");
-  AbsRadCmd->SetRange("SizeR>0.");
-  AbsRadCmd->AvailableForStates(G4State_Idle);
+  absRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad",this);
+  absRadCmd->SetGuidance("Set radius of the Absorber");
+  absRadCmd->SetParameterName("SizeR",false,false);
+  absRadCmd->SetDefaultUnit("mm");
+  absRadCmd->SetRange("SizeR>0.");
+  absRadCmd->AvailableForStates(G4State_Idle);
   
-  AbsZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos",this);
-  AbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
-  AbsZposCmd->SetParameterName("Zpos",false,false);
-  AbsZposCmd->SetDefaultUnit("mm");
-  AbsZposCmd->AvailableForStates(G4State_Idle);
+  absZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos",this);
+  absZposCmd->SetGuidance("Set Z position of the Absorber");
+  absZposCmd->SetParameterName("Zpos",false,false);
+  absZposCmd->SetDefaultUnit("mm");
+  absZposCmd->AvailableForStates(G4State_Idle);
   
-  WorldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ",this);
-  WorldZCmd->SetGuidance("Set Z size of the World");
-  WorldZCmd->SetParameterName("WSizeZ",false,false);
-  WorldZCmd->SetDefaultUnit("mm");
-  WorldZCmd->SetRange("WSizeZ>0.");
-  WorldZCmd->AvailableForStates(G4State_Idle);
+  worldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ",this);
+  worldZCmd->SetGuidance("Set Z size of the World");
+  worldZCmd->SetParameterName("WSizeZ",false,false);
+  worldZCmd->SetDefaultUnit("mm");
+  worldZCmd->SetRange("WSizeZ>0.");
+  worldZCmd->AvailableForStates(G4State_Idle);
   
-  WorldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR",this);
-  WorldRCmd->SetGuidance("Set R size of the World");
-  WorldRCmd->SetParameterName("WSizeR",false,false);
-  WorldRCmd->SetDefaultUnit("mm");
-  WorldRCmd->SetRange("WSizeR>0.");
-  WorldRCmd->AvailableForStates(G4State_Idle);
+  worldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR",this);
+  worldRCmd->SetGuidance("Set R size of the World");
+  worldRCmd->SetParameterName("WSizeR",false,false);
+  worldRCmd->SetDefaultUnit("mm");
+  worldRCmd->SetRange("WSizeR>0.");
+  worldRCmd->AvailableForStates(G4State_Idle);
   
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  updateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  updateCmd->SetGuidance("Update calorimeter geometry.");
+  updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  updateCmd->SetGuidance("if you changed geometrical value(s)");
+  updateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(G4State_Idle);  
+  magFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  magFieldCmd->SetGuidance("Define magnetic field");
+  magFieldCmd->SetGuidance("Magnetic field will be in Z direction");
+  magFieldCmd->SetParameterName("Bz",false,false);
+  magFieldCmd->SetDefaultUnit("tesla");
+  magFieldCmd->AvailableForStates(G4State_Idle);  
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 Tst20DetectorMessenger::~Tst20DetectorMessenger()
 {
-  delete AbsMaterCmd; 
-  delete AbsThickCmd; 
-  delete AbsRadCmd;  
-  delete AbsZposCmd; 
-  delete WorldMaterCmd;
-  delete WorldZCmd;
-  delete WorldRCmd;
-  delete UpdateCmd;
-  delete MagFieldCmd;
-  delete Tst20detDir;
+  delete absMaterCmd; 
+  delete absThickCmd; 
+  delete absRadCmd;  
+  delete absZposCmd; 
+  delete worldMaterCmd;
+  delete worldZCmd;
+  delete worldRCmd;
+  delete updateCmd;
+  delete magFieldCmd;
+  delete directory;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 void Tst20DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { Tst20Detector->SetAbsorberMaterial(newValue);}
+  if ( command == absMaterCmd )
+    { 
+      detector->SetAbsorberMaterial(newValue);
+    }
    
-  if( command == WorldMaterCmd )
-   { Tst20Detector->SetWorldMaterial(newValue);}
+  if ( command == worldMaterCmd )
+    { 
+      detector->SetWorldMaterial(newValue);
+    }
    
-  if( command == AbsThickCmd )
-   { Tst20Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+  if ( command == absThickCmd )
+    { 
+      detector->SetAbsorberThickness(absThickCmd->GetNewDoubleValue(newValue));
+    }
    
-  if( command == AbsRadCmd )
-   { Tst20Detector->SetAbsorberRadius(AbsRadCmd->GetNewDoubleValue(newValue));}
+  if ( command == absRadCmd )
+    { 
+      detector->SetAbsorberRadius(absRadCmd->GetNewDoubleValue(newValue));
+    }
    
-  if( command == AbsZposCmd )
-   { Tst20Detector->SetAbsorberZpos(AbsZposCmd->GetNewDoubleValue(newValue));}
+  if ( command == absZposCmd )
+    { 
+      detector->SetAbsorberZpos(absZposCmd->GetNewDoubleValue(newValue));
+    }
    
-  if( command == WorldZCmd )
-   { Tst20Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));}
+  if ( command == worldZCmd )
+    { 
+      detector->SetWorldSizeZ(worldZCmd->GetNewDoubleValue(newValue));
+    }
    
-  if( command == WorldRCmd )
-   { Tst20Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));}
+  if ( command == worldRCmd )
+    { 
+      detector->SetWorldSizeR(worldRCmd->GetNewDoubleValue(newValue));
+    }
    
-  if( command == UpdateCmd )
-   { Tst20Detector->UpdateGeometry(); }
+  if ( command == updateCmd )
+    { 
+      detector->UpdateGeometry(); 
+    }
 
-  if( command == MagFieldCmd )
-   { Tst20Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-
+  if ( command == magFieldCmd )
+    { 
+      detector->SetMagField(magFieldCmd->GetNewDoubleValue(newValue));
+    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

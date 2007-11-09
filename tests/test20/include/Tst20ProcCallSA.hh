@@ -51,9 +51,9 @@ private:
   void print();
   
 private:
-  typedef std::map<G4String, G4int, std::less<G4String> > intMap;
+  typedef std::map<G4String, G4int, std::less<G4String> > IntMap;
   typedef std::map<G4String, G4int, std::less<G4String> >::iterator intMapIter;
-  intMap calls;  
+  IntMap calls;  
   
 };
 
