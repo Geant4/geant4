@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.3 2007-11-09 16:38:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -219,7 +219,7 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       G4double particleMass = particle->GetDefinition()->GetPDGMass();
       G4double totalEnergy = k + particleMass;
       G4double pSquare = k * (totalEnergy + particleMass);
-      G4double totalMomentum = sqrt(pSquare);
+      G4double totalMomentum = std::sqrt(pSquare);
 
       const G4String& particleName = particle->GetDefinition()->GetParticleName();
   
@@ -233,14 +233,14 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       G4double phi = 0.; 
       RandomizeEjectedElectronDirection(track.GetDefinition(), k,secondaryKinetic, cosTheta, phi);
 
-      G4double sinTheta = sqrt(1.-cosTheta*cosTheta);
+      G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
       G4double dirX = sinTheta*cos(phi);
       G4double dirY = sinTheta*sin(phi);
       G4double dirZ = cosTheta;
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
 
-      G4double deltaTotalMomentum = sqrt(secondaryKinetic*(secondaryKinetic +
+      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic +
 							   2.*electron_mass_c2 ));
 
       //Primary Particle Direction
@@ -251,7 +251,7 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       G4double finalPz = totalMomentum*primaryDirection.z()
 	- deltaTotalMomentum*deltaDirection.z();
       G4double finalMomentum =
-	sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+	std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
       finalPx /= finalMomentum;
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
@@ -338,12 +338,12 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
       else if(secKinetic <= 200.*eV) 	
 	{
 	  if(G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
-	  else cosTheta = G4UniformRand()*(sqrt(2)/2);
+	  else cosTheta = G4UniformRand()*(std::sqrt(2)/2);
 	}
       else	
 	{
 	  G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
-	  cosTheta = sqrt(1-sin2O);
+	  cosTheta = std::sqrt(1-sin2O);
 	}
     }
  
@@ -351,7 +351,7 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
     {
       G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
       phi = twopi * G4UniformRand();
-      cosTheta = sqrt(secKinetic / maxSecKinetic);
+      cosTheta = std::sqrt(secKinetic / maxSecKinetic);
     }
 
 				

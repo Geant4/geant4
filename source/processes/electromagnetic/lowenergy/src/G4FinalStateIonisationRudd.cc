@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.2 2007-11-09 16:30:56 pia Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.3 2007-11-09 16:38:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -157,7 +157,7 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
       G4double particleMass = definition->GetPDGMass();
       G4double totalEnergy = k + particleMass;
       G4double pSquare = k*(totalEnergy+particleMass);
-      G4double totalMomentum = sqrt(pSquare);
+      G4double totalMomentum = std::sqrt(pSquare);
 
       const G4String& particleName = definition->GetParticleName();
   
@@ -171,20 +171,20 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
       G4double phi = 0.; 
       RandomizeEjectedElectronDirection(definition, k,secondaryKinetic, cosTheta, phi);
 
-      G4double sinTheta = sqrt(1.-cosTheta*cosTheta);
+      G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
       G4double dirX = sinTheta*cos(phi);
       G4double dirY = sinTheta*sin(phi);
       G4double dirZ = cosTheta;
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
 
-      G4double deltaTotalMomentum = sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
+      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
 
       // Primary Particle Direction
       G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
       G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
       G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-      G4double finalMomentum = sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
       finalPx /= finalMomentum;
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
@@ -269,7 +269,7 @@ void G4FinalStateIonisationRudd::RandomizeEjectedElectronDirection(G4ParticleDef
     }
   
   phi = twopi * G4UniformRand();
-  cosTheta = sqrt(secKinetic / maxSecKinetic);
+  cosTheta = std::sqrt(secKinetic / maxSecKinetic);
 }
 
 
@@ -366,7 +366,7 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
  
   G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
   G4double v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
-  G4double v = sqrt(v2);
+  G4double v = std::sqrt(v2);
   G4double wc = 4.*v2 - 2.*v - (Ry/(4.*waterStructure.IonisationEnergy(ionizationLevelIndex)));
 
   G4double L1 = (C1* pow(v,(D1))) / (1.+ E1*pow(v, (D1+4.)));
