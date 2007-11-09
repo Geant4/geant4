@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.8 2006-06-29 18:18:01 gunter Exp $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.9 2007-11-09 15:07:53 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,29 +66,41 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
   if (init_w > upperWeight) {
     // splitting
 
-    G4double wi_ws = init_w/survivalWeight;
-    G4int int_wi_ws = static_cast<int>(wi_ws);
+    //TB    G4double wi_ws = init_w/survivalWeight;
+    //TB
+    G4double wi_ws = init_w;
+    G4int split_i = 1;
+    for(G4int i=2; i <= fMaxNumberOfSplits; ++i) {
+      wi_ws = init_w/i;
+      split_i = i;
+      if(wi_ws < upperWeight) break;
+    }
+
+    //TB
+//TB    G4int int_wi_ws = static_cast<int>(wi_ws);
 
     // values in case integer mode or in csae of double
     // mode and the lower number of splits will be diced
-    nw.fN = int_wi_ws;
-    nw.fW = survivalWeight;	
+    //TB    nw.fN = int_wi_ws;
+    //TB    nw.fW = survivalWeight;	
+    nw.fN = split_i;
+    nw.fW = wi_ws;	
 
-    if (wi_ws <= fMaxNumberOfSplits) {
-      if (wi_ws > int_wi_ws) {
-	// double mode
-	G4double p2 =  wi_ws - int_wi_ws;
-	G4double r = G4UniformRand();
-	if (r<p2) {
-	  nw.fN = int_wi_ws + 1;
-	}
-      }
-    }
-    else {
-      // fMaxNumberOfSplits < wi_ws
-      nw.fN = fMaxNumberOfSplits;
-      nw.fW = init_w/fMaxNumberOfSplits;
-    }
+//TB     if (wi_ws <= fMaxNumberOfSplits) {
+//TB       if (wi_ws > int_wi_ws) {
+//TB 	// double mode
+//TB 	G4double p2 =  wi_ws - int_wi_ws;
+//TB 	G4double r = G4UniformRand();
+//TB 	if (r<p2) {
+//TB 	  nw.fN = int_wi_ws + 1;
+//TB 	}
+//TB       }
+//TB     }
+//TB     else {
+//TB       // fMaxNumberOfSplits < wi_ws
+//TB       nw.fN = fMaxNumberOfSplits;
+//TB       nw.fW = init_w/fMaxNumberOfSplits;
+//TB     }
 
 
   } else if (init_w < lowerWeightBound) {
