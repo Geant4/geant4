@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.10 2007-11-09 15:22:38 ahoward Exp $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.11 2007-11-09 15:43:07 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -68,9 +68,10 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
 
     //TB    G4double wi_ws = init_w/survivalWeight;
     //TB
-    G4double wi_ws = init_w/upperWeight;
-    G4int split_i = static_cast<int>(wi_ws);
-    if(split_i != wi_ws) split_i++;
+    G4double temp_wi_ws = init_w/upperWeight;
+    G4int split_i = static_cast<int>(temp_wi_ws);
+    if(split_i != temp_wi_ws) split_i++;
+    G4double wi_ws = init_w/split_i;
 
     //TB
 //TB    G4int int_wi_ws = static_cast<int>(wi_ws);
