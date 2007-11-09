@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2007-10-30 03:22:46 gum Exp $
+$Id: History,v 1.147 2007-11-09 05:59:32 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,8 @@ committal in the CVS repository !
 - Add G44HyperNucleiProperties
 - Add GetIon/FindIon methods for hyper-nuclei in ParticleTable
 - Modify G4PDGCodeChecker to check PDG code for  nuclei
+- remove const from return value of G4ParticleTable::GetIonTable
+  in order to allow users to use G4IonTable::GetIon methods directly. 
 
 - May. 30  2007    H.Kurashige (particles-V08-03-01)
 - Fix G4PDGCodeChecker::GetQuarkFlavor
