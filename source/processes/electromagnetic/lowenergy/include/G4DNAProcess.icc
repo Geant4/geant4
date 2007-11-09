@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.5 2007-10-13 00:12:58 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.6 2007-11-09 18:06:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,7 +57,7 @@ G4double G4DNAProcess<TCrossSection,TFinalState>::GetMeanFreePath(const G4Track&
 	{
 	  // Number of oxygen atoms per volume = number of water molecules per volume
 	  G4double density = material->GetAtomicNumDensityVector()[i];
-	  G4cout << "density = " << density << G4endl;
+	  // G4cout << "density = " << density << G4endl;
 	  if (density > 0.)
 	    {
 	      G4double cross = crossSection.CrossSection(track);
@@ -94,7 +94,7 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
       G4DynamicParticle* particle = product.GetSecondaries()[l];
       if (particle != 0) 
 	{
-	  aParticleChange.SetNumberOfSecondaries(nSecondaries);
+//	  aParticleChange.SetNumberOfSecondaries(nSecondaries);
 	  aParticleChange.AddSecondary(particle);
 	}
     }
