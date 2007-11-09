@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.6 2007-11-09 18:06:26 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.7 2007-11-09 18:10:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -79,7 +79,7 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
 {
   aParticleChange.Initialize(track);
   
-  G4cout << "Track initialized" << G4endl;
+  // G4cout << "Track initialized" << G4endl;
 
   // Interaction product
   const G4FinalStateProduct& product = finalState.GenerateFinalState(track,step);

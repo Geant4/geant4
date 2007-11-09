@@ -25,10 +25,12 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.6 2007-10-15 08:38:08 pia Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.7 2007-11-09 18:06:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
+// Code review by MGP October 2007: removed inheritance from concrete class
+//                                  more improvements needed
 //
 // History:
 // -----------
