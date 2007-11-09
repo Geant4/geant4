@@ -29,6 +29,8 @@ G4VPhysicalVolume *G4GDMLSetup::Get(const std::string &name) {
 
 bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
 
+   std::cout << "Reading setup... ";
+
    std::string name("");
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
@@ -57,6 +59,8 @@ bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
       xercesc::XMLString::release(&ref_attr);
 
       setupMap[name] = ref;
+
+      std::cout << "OK" << std::endl;
 
       return true;
    }

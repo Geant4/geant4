@@ -3,9 +3,6 @@
 
 #include <xercesc/dom/DOM.hpp>
 
-#include <iostream>
-#include <string>
-
 #include "G4LogicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -17,8 +14,9 @@
 
 class G4GDMLStructure {
 
+   bool refRead    (const xercesc::DOMElement* const,G4String&);
    bool physvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool volumeRead(const xercesc::DOMElement* const);
+   bool volumeRead (const xercesc::DOMElement* const);
 public:
    G4GDMLMaterials materials;
    G4GDMLSolids solids;

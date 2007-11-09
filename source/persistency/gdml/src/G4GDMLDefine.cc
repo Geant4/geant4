@@ -118,7 +118,7 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
       {
       }
    }
-
+   
    double _x;
    double _y;
    double _z;
@@ -134,16 +134,11 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLDefine::Read(const xercesc::DOMElement* const element) {
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t nodeCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t i=0;i<nodeCount;i++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* node = children->item(i);
-      
-      if (node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
       const std::string tag = xercesc::XMLString::transcode(child->getTagName());
 
@@ -157,7 +152,7 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element) {
          return false;
       }
    }
-
+            
    return true;
 }
 

@@ -37,7 +37,7 @@ G4GDMLParser::~G4GDMLParser() {
    }
 }
 
-bool G4GDMLParser::Read(const std::string &fileName) {
+bool G4GDMLParser::Read(const std::string& fileName) {
 
    try {
 
@@ -76,24 +76,21 @@ bool G4GDMLParser::Read(const std::string &fileName) {
       return false;
    }
 
-   xercesc::DOMNodeList* children = element->getChildNodes();
-   const  XMLSize_t nodeCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t i=0;i<nodeCount;i++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* node = children->item(i);
-      
-      if (node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue; 
-      
-      element = dynamic_cast<xercesc::DOMElement*>(node);   
-      
-      std::string tag = xercesc::XMLString::transcode(element->getTagName());
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      if (tag=="define"   ) { if (!structure.solids.define.Read(element)) return false; } else
-      if (tag=="materials") { if (!structure.materials.Read(element)    ) return false; } else
-      if (tag=="solids"   ) { if (!structure.solids.Read(element)       ) return false; } else
-      if (tag=="structure") { if (!structure.Read(element)              ) return false; } else
-      if (tag=="setup"    ) { if (!setup.Read(element)                  ) return false; }
+      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag=="define"   ) { if (!structure.solids.define.Read(child)) return false; } else
+      if (tag=="materials") { if (!structure.materials.Read(child)    ) return false; } else
+      if (tag=="solids"   ) { if (!structure.solids.Read(child)       ) return false; } else
+      if (tag=="structure") { if (!structure.Read(child)              ) return false; } else
+      if (tag=="setup"    ) { if (!setup.Read(child)                  ) return false; } else 
+      {
+      }
    }
 
    return true;

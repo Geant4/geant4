@@ -7,9 +7,9 @@ G4GDMLSolids::G4GDMLSolids() {
 
 bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
 
-   std::string name;
-   std::string first_ref;
-   std::string second_ref;
+   G4String name;
+   G4String first_ref;
+   G4String second_ref;
 
    G4ThreeVector position;
    G4ThreeVector rotation;
@@ -25,35 +25,26 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") { name = attribute_value; } else
-      {
-      }
+      if (attribute_name=="name") { name = attribute_value; }
    }
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t elementCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t element_index=0;element_index<elementCount;element_index++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* element_node = children->item(element_index);
-      
-      if (element_node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(element_node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="first"   ) { if (!refRead     (child,first_ref )) return false; } else
       if (tag=="second"  ) { if (!refRead     (child,second_ref)) return false; } else
       if (tag=="position") { if (!positionRead(child,position  )) return false; } else
       if (tag=="rotation") { if (!rotationRead(child,rotation  )) return false; } else
       {
-         std::cout << std::endl;
-         std::cout << "GDML ERROR! Unsupported tag in boolean solid '" << name << "': " << tag << std::endl;
-         std::cout << std::endl;
+         G4cout << "GDML ERROR! Unsupported tag in boolean solid '" << name << "': " << tag << G4endl;
          return false;
       }
    }
@@ -62,9 +53,7 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    if (!FirstSolid) {
 
-      std::cout << std::endl;   
-      std::cout << "GDML ERROR! Referenced solid '" << first_ref << "' in boolean solid '" << name << "' was not found!" << std::endl;   
-      std::cout << std::endl;   
+      G4cout << "GDML ERROR! Referenced solid '" << first_ref << "' in boolean solid '" << name << "' was not found!" << G4endl;   
       return false;
    }
 
@@ -72,9 +61,7 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    if (!SecondSolid) {
 
-      std::cout << std::endl;   
-      std::cout << "GDML ERROR! Referenced solid '" << second_ref << "' in boolean solid '" << name << "' was not found!" << std::endl;   
-      std::cout << std::endl;   
+      G4cout << "GDML ERROR! Referenced solid '" << second_ref << "' in boolean solid '" << name << "' was not found!" << G4endl;   
       return false;
    }
 
@@ -95,12 +82,11 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
 bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
+   G4String name;
+   G4String lunit;
+   G4String x;
+   G4String y;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -113,22 +99,19 @@ bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit") { lunit = attribute_value; } else
-      if (attribute_name=="aunit") { aunit = attribute_value; } else
       if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="lunit") { lunit = attribute_value; } else
       if (attribute_name=="x"    ) { x     = attribute_value; } else
       if (attribute_name=="y"    ) { y     = attribute_value; } else
-      if (attribute_name=="z"    ) { z     = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"    ) { z     = attribute_value; }
    }
 
-   double _x;
-   double _y;
-   double _z;
+   G4double _x;
+   G4double _y;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x,x,lunit)) return false;
    if (!evaluator->Evaluate(_y,y,lunit)) return false;
@@ -145,16 +128,16 @@ bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string rmin1;
-   std::string rmax1;
-   std::string rmin2;
-   std::string rmax2;
-   std::string z;
-   std::string startphi;
-   std::string deltaphi;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String rmin1;
+   G4String rmax1;
+   G4String rmin2;
+   G4String rmax2;
+   G4String z;
+   G4String startphi;
+   G4String deltaphi;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -167,30 +150,28 @@ bool G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
       if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="rmin1"   ) { rmin1    = attribute_value; } else
       if (attribute_name=="rmax1"   ) { rmax1    = attribute_value; } else
       if (attribute_name=="rmin2"   ) { rmin2    = attribute_value; } else
       if (attribute_name=="rmax2"   ) { rmax2    = attribute_value; } else
       if (attribute_name=="z"       ) { z        = attribute_value; } else
       if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="deltaphi") { deltaphi = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltaphi") { deltaphi = attribute_value; }
    }
 
-   double _rmin1;
-   double _rmax1;
-   double _rmin2;
-   double _rmax2;
-   double _z;
-   double _startphi;
-   double _deltaphi;
+   G4double _rmin1;
+   G4double _rmax1;
+   G4double _rmin2;
+   G4double _rmax2;
+   G4double _z;
+   G4double _startphi;
+   G4double _deltaphi;
 
    if (!evaluator->Evaluate(_rmin1   ,rmin1   ,lunit)) return false;
    if (!evaluator->Evaluate(_rmax1   ,rmax1   ,lunit)) return false;
@@ -209,14 +190,13 @@ bool G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string ax;
-   std::string by;
-   std::string cz;
-   std::string zcut1; 
-   std::string zcut2; 
+   G4String name;
+   G4String lunit;
+   G4String ax;
+   G4String by;
+   G4String cz;
+   G4String zcut1; 
+   G4String zcut2; 
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -229,26 +209,23 @@ bool G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit") { lunit = attribute_value; } else
-      if (attribute_name=="aunit") { aunit = attribute_value; } else
       if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="lunit") { lunit = attribute_value; } else
       if (attribute_name=="ax"   ) { ax    = attribute_value; } else
       if (attribute_name=="by"   ) { by    = attribute_value; } else
       if (attribute_name=="cz"   ) { cz    = attribute_value; } else
       if (attribute_name=="zcut1") { zcut1 = attribute_value; } else
-      if (attribute_name=="zcut2") { zcut2 = attribute_value; } else
-      {
-      }
+      if (attribute_name=="zcut2") { zcut2 = attribute_value; }
    }
 
-   double _ax;
-   double _by;
-   double _cz;
-   double _zcut1; 
-   double _zcut2; 
+   G4double _ax;
+   G4double _by;
+   G4double _cz;
+   G4double _zcut1; 
+   G4double _zcut2; 
 
    if (!evaluator->Evaluate(_ax   ,ax   ,lunit)) return false;
    if (!evaluator->Evaluate(_by   ,by   ,lunit)) return false;
@@ -261,16 +238,13 @@ bool G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
+bool G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string rmin;
-   std::string rmax;
-   std::string inst;
-   std::string outst;
-   std::string z;
+   G4String name;
+   G4String lunit;
+   G4String dx;
+   G4String dy;
+   G4String dz;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -283,26 +257,69 @@ bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="lunit") { lunit = attribute_value; } else
+      if (attribute_name=="dx"   ) { dx    = attribute_value; } else
+      if (attribute_name=="dy"   ) { dy    = attribute_value; } else
+      if (attribute_name=="dz"   ) { dz    = attribute_value; }
+   }
+
+   G4double _dx;
+   G4double _dy;
+   G4double _dz;
+
+   if (!evaluator->Evaluate(_dx   ,dx   ,lunit)) return false;
+   if (!evaluator->Evaluate(_dy   ,dy   ,lunit)) return false;
+   if (!evaluator->Evaluate(_dz   ,dz   ,lunit)) return false;
+
+   new G4EllipticalTube(name,_dx,_dy,_dz);
+
+   return true;
+}
+
+bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String rmin;
+   G4String rmax;
+   G4String inst;
+   G4String outst;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name" ) { name  = attribute_value; } else
       if (attribute_name=="lunit") { lunit = attribute_value; } else
       if (attribute_name=="aunit") { aunit = attribute_value; } else
-      if (attribute_name=="name" ) { name  = attribute_value; } else
       if (attribute_name=="rmin" ) { rmin  = attribute_value; } else
       if (attribute_name=="rmax" ) { rmax  = attribute_value; } else
       if (attribute_name=="inst" ) { inst  = attribute_value; } else
       if (attribute_name=="outst") { outst = attribute_value; } else
-      if (attribute_name=="z"    ) { z     = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"    ) { z     = attribute_value; }
    }
 
-   double _rmin;
-   double _rmax;
-   double _inst;
-   double _outst;
-   double _z;
+   G4double _rmin;
+   G4double _rmax;
+   G4double _inst;
+   G4double _outst;
+   G4double _z;
 
    if (!evaluator->Evaluate(_rmin ,rmin ,lunit)) return false;
    if (!evaluator->Evaluate(_rmax ,rmax ,lunit)) return false;
@@ -319,10 +336,9 @@ bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string r;
+   G4String name;
+   G4String lunit;
+   G4String r;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -335,18 +351,15 @@ bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit") { lunit = attribute_value; } else
-      if (attribute_name=="aunit") { aunit = attribute_value; } else
       if (attribute_name=="name" ) { name  = attribute_value; } else
-      if (attribute_name=="r"    ) { r     = attribute_value; } else
-      {
-      }
+      if (attribute_name=="lunit") { lunit = attribute_value; } else
+      if (attribute_name=="r"    ) { r     = attribute_value; }
    }
 
-   double _r;
+   G4double _r;
 
    if (!evaluator->Evaluate(_r,r,lunit)) return false;
 
@@ -357,15 +370,15 @@ bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
-   std::string alpha;
-   std::string theta;
-   std::string phi;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String x;
+   G4String y;
+   G4String z;
+   G4String alpha;
+   G4String theta;
+   G4String phi;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -378,28 +391,26 @@ bool G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name" ) { name  = attribute_value; } else
       if (attribute_name=="lunit") { lunit = attribute_value; } else
       if (attribute_name=="aunit") { aunit = attribute_value; } else
-      if (attribute_name=="name" ) { name  = attribute_value; } else
       if (attribute_name=="x"    ) { x     = attribute_value; } else
       if (attribute_name=="y"    ) { y     = attribute_value; } else
       if (attribute_name=="z"    ) { z     = attribute_value; } else
       if (attribute_name=="alpha") { alpha = attribute_value; } else
       if (attribute_name=="theta") { theta = attribute_value; } else
-      if (attribute_name=="phi"  ) { phi   = attribute_value; } else
-      {
-      }
+      if (attribute_name=="phi"  ) { phi   = attribute_value; }
    }
 
-   double _x;
-   double _y;
-   double _z;
-   double _alpha;
-   double _theta;
-   double _phi;
+   G4double _x;
+   G4double _y;
+   G4double _z;
+   G4double _alpha;
+   G4double _theta;
+   G4double _phi;
 
    if (!evaluator->Evaluate(_x    ,x    ,lunit)) return false;
    if (!evaluator->Evaluate(_y    ,y    ,lunit)) return false;
@@ -419,11 +430,11 @@ bool G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string startphi;
-   std::string deltaphi;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String startphi;
+   G4String deltaphi;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -436,38 +447,31 @@ bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
       if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="deltaphi") { deltaphi = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltaphi") { deltaphi = attribute_value; }
    }
 
-   double _startphi;
-   double _deltaphi;
+   G4double _startphi;
+   G4double _deltaphi;
 
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
    if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
    std::vector<zplaneType> zplaneList;
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t elementCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t element_index=0;element_index<elementCount;element_index++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* element_node = children->item(element_index);
-      
-      if (element_node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(element_node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="zplane") {
 
@@ -479,13 +483,13 @@ bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   int numZPlanes = zplaneList.size();
+   G4int numZPlanes = zplaneList.size();
 
-   double *rmin_array = new double[numZPlanes];
-   double *rmax_array = new double[numZPlanes];
-   double* z_array = new double[numZPlanes];
+   G4double *rmin_array = new G4double[numZPlanes];
+   G4double *rmax_array = new G4double[numZPlanes];
+   G4double* z_array    = new G4double[numZPlanes];
 
-   for (int i=0;i<numZPlanes;i++) {
+   for (G4int i=0;i<numZPlanes;i++) {
    
       rmin_array[i] = zplaneList[i].rmin;
       rmax_array[i] = zplaneList[i].rmax;
@@ -499,12 +503,12 @@ bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string startphi;
-   std::string totalphi;
-   std::string numsides;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String startphi;
+   G4String deltaphi;
+   G4String numsides;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -517,42 +521,35 @@ bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
       if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="totalphi") { totalphi = attribute_value; } else
-      if (attribute_name=="numsides") { numsides = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltaphi") { deltaphi = attribute_value; } else
+      if (attribute_name=="numsides") { numsides = attribute_value; }
    }
 
-   double _startphi;
-   double _totalphi;
-   double _numsides;
+   G4double _startphi;
+   G4double _deltaphi;
+   G4double _numsides;
 
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
-   if (!evaluator->Evaluate(_totalphi,totalphi,aunit)) return false;
+   if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
    if (!evaluator->Evaluate(_numsides,numsides)) return false;
 
    std::vector<zplaneType> zplaneList;
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t elementCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t element_index=0;element_index<elementCount;element_index++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* element_node = children->item(element_index);
-      
-      if (element_node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(element_node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="zplane") {
 
@@ -564,31 +561,31 @@ bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   int numZPlanes = zplaneList.size();
+   G4int numZPlanes = zplaneList.size();
 
-   double *rmin_array = new double[numZPlanes];
-   double *rmax_array = new double[numZPlanes];
-   double* z_array = new double[numZPlanes];
+   G4double *rmin_array = new G4double[numZPlanes];
+   G4double *rmax_array = new G4double[numZPlanes];
+   G4double* z_array    = new G4double[numZPlanes];
 
-   for (int i=0;i<numZPlanes;i++) {
+   for (G4int i=0;i<numZPlanes;i++) {
    
       rmin_array[i] = zplaneList[i].rmin;
       rmax_array[i] = zplaneList[i].rmax;
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polyhedra(name,_startphi,_totalphi,(int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
-
+   new G4Polyhedra(name,_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
+   
    return true;
 }
 
 bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
 
-   std::string unit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
+   G4String name;
+   G4String unit;
+   G4String x;
+   G4String y;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -601,21 +598,19 @@ bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4Three
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="name") { name = attribute_value; } else
+      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="x"   ) { x    = attribute_value; } else
       if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   double _x;
-   double _y;
-   double _z;
+   G4double _x;
+   G4double _y;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
@@ -626,17 +621,57 @@ bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4Three
    return true;
 }
 
-bool G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element) {
+bool G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element,G4TessellatedSolid* tessellated) {
 
-   return true;
-}
-
-bool G4GDMLSolids::refRead(const xercesc::DOMElement* const element,std::string& ref) {
+   G4String v1;
+   G4String v2;
+   G4String v3;
+   G4String v4;
+   G4String type;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
-   if (attributeCount != 1) return false;
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="v1"  ) { v1   = attribute_value; } else
+      if (attribute_name=="v2"  ) { v2   = attribute_value; } else
+      if (attribute_name=="v3"  ) { v3   = attribute_value; } else
+      if (attribute_name=="v4"  ) { v4   = attribute_value; } else
+      if (attribute_name=="type") { type = attribute_value; }
+   }
+
+   const G4ThreeVector* ptr1 = define.GetPosition(v1);
+   const G4ThreeVector* ptr2 = define.GetPosition(v2);
+   const G4ThreeVector* ptr3 = define.GetPosition(v3);
+   const G4ThreeVector* ptr4 = define.GetPosition(v4);
+
+   if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL || ptr4 == NULL) {
+   
+      G4cout << "GDML ERROR! Referenced position was not found in tessellated solid!" << G4endl;   
+      return false;
+   }
+
+   tessellated->AddFacet(new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE)));
+
+   return true;
+}
+
+bool G4GDMLSolids::refRead(const xercesc::DOMElement* const element,G4String& ref) {
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   if (attributeCount<1) return true;
 
    xercesc::DOMNode* attribute_node = attributes->item(0);
 
@@ -644,23 +679,29 @@ bool G4GDMLSolids::refRead(const xercesc::DOMElement* const element,std::string&
 
    const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-   const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-   const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+   const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+   const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-   if (attribute_name=="ref") { ref = attribute_value; } else
-   {
-   }
+   if (attribute_name=="ref") { ref = attribute_value; }
 
    return true;
 }
 
-bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
+bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) {
 
-   std::string unit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String solid;
+   G4String sx;
+   G4String sy;
+   G4String sz;
+   G4String rx;
+   G4String ry;
+   G4String rz;
+   G4String dx;
+   G4String dy;
+   G4String dz;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -673,21 +714,102 @@ bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4Three
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
-      if (attribute_name=="name") { name = attribute_value; } else
-      if (attribute_name=="x"   ) { x    = attribute_value; } else
-      if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="lunit") { lunit = attribute_value; } else
+      if (attribute_name=="aunit") { aunit = attribute_value; } else
+      if (attribute_name=="solid") { solid = attribute_value; } else
+      if (attribute_name=="sx"   ) { sx    = attribute_value; } else
+      if (attribute_name=="sy"   ) { sy    = attribute_value; } else
+      if (attribute_name=="sz"   ) { sz    = attribute_value; } else
+      if (attribute_name=="rx"   ) { rx    = attribute_value; } else
+      if (attribute_name=="ry"   ) { ry    = attribute_value; } else
+      if (attribute_name=="rz"   ) { rz    = attribute_value; } else
+      if (attribute_name=="dx"   ) { dx    = attribute_value; } else
+      if (attribute_name=="dy"   ) { dy    = attribute_value; } else
+      if (attribute_name=="dz"   ) { dz    = attribute_value; }
    }
 
-   double _x;
-   double _y;
-   double _z;
+   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(solid,false);
+
+   if (solidPtr == NULL) {
+   
+      G4cout << "GDML ERROR! Referenced solid '" << solid << "' in reflectedSolid '" << name << "' was not found!" << G4endl;   
+      return false;
+   }
+
+   G4double _sx;
+   G4double _sy;
+   G4double _sz;
+   G4double _rx;
+   G4double _ry;
+   G4double _rz;
+   G4double _dx;
+   G4double _dy;
+   G4double _dz;
+
+   if (!evaluator->Evaluate(_sx,sx)) return false; // Scaling factors have no unit!
+   if (!evaluator->Evaluate(_sy,sy)) return false;
+   if (!evaluator->Evaluate(_sz,sz)) return false;
+   if (!evaluator->Evaluate(_rx,rx,aunit)) return false;
+   if (!evaluator->Evaluate(_ry,ry,aunit)) return false;
+   if (!evaluator->Evaluate(_rz,rz,aunit)) return false;
+   if (!evaluator->Evaluate(_dx,dx,lunit)) return false;
+   if (!evaluator->Evaluate(_dy,dy,lunit)) return false;
+   if (!evaluator->Evaluate(_dz,dz,lunit)) return false;
+
+   G4Scale3D scale(_sx,_sy,_sz);
+
+   G4RotationMatrix rot;
+   
+   rot.rotateX(_rx);
+   rot.rotateY(_ry);
+   rot.rotateZ(_rz);
+
+   G4ThreeVector trans(_dx,_dy,_dz);
+
+   G4Transform3D transform(rot,trans);
+   transform = transform*scale;
+          
+   new G4ReflectedSolid(name,solidPtr,transform);
+
+   return true;
+}
+
+bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
+
+   G4String name;
+   G4String unit;
+   G4String x;
+   G4String y;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name") { name = attribute_value; } else
+      if (attribute_name=="unit") { unit = attribute_value; } else
+      if (attribute_name=="x"   ) { x    = attribute_value; } else
+      if (attribute_name=="y"   ) { y    = attribute_value; } else
+      if (attribute_name=="z"   ) { z    = attribute_value; }
+   }
+
+   G4double _x;
+   G4double _y;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
@@ -698,12 +820,12 @@ bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4Three
    return true;
 }
 
-bool G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4ExtrudedSolid::ZSection& section,const std::string& lunit) {
+bool G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4ExtrudedSolid::ZSection& section,const G4String& lunit) {
 
-   std::string zPosition;
-   std::string xOffset;
-   std::string yOffset;
-   std::string scalingFactor;
+   G4String zPosition;
+   G4String xOffset;
+   G4String yOffset;
+   G4String scalingFactor;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -716,26 +838,24 @@ bool G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4Extrud
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="zPosition"    ) { zPosition     = attribute_value; } else
       if (attribute_name=="xOffset"      ) { xOffset       = attribute_value; } else
       if (attribute_name=="yOffset"      ) { yOffset       = attribute_value; } else
-      if (attribute_name=="scalingFactor") { scalingFactor = attribute_value; } else
-      {
-      }
+      if (attribute_name=="scalingFactor") { scalingFactor = attribute_value; }
    }
 
-   double _zPosition;
-   double _xOffset;
-   double _yOffset;
-   double _scalingFactor;
+   G4double _zPosition;
+   G4double _xOffset;
+   G4double _yOffset;
+   G4double _scalingFactor;
 
-   if (!evaluator->Evaluate(_zPosition    ,zPosition    ,lunit)) return false;
-   if (!evaluator->Evaluate(_xOffset      ,xOffset      ,lunit)) return false;
-   if (!evaluator->Evaluate(_yOffset      ,yOffset      ,lunit)) return false;
-   if (!evaluator->Evaluate(_scalingFactor,scalingFactor,lunit)) return false;
+   if (!evaluator->Evaluate(_zPosition    ,zPosition ,lunit)) return false;
+   if (!evaluator->Evaluate(_xOffset      ,xOffset   ,lunit)) return false;
+   if (!evaluator->Evaluate(_yOffset      ,yOffset   ,lunit)) return false;
+   if (!evaluator->Evaluate(_scalingFactor,scalingFactor)) return false; // scaling factor has no unit!
 
    section.fZ = _zPosition;
    section.fOffset.set(_xOffset,_yOffset);
@@ -746,15 +866,15 @@ bool G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4Extrud
 
 bool G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string rmin;
-   std::string rmax;
-   std::string startphi;
-   std::string deltaphi;
-   std::string starttheta;
-   std::string deltatheta;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String rmin;
+   G4String rmax;
+   G4String startphi;
+   G4String deltaphi;
+   G4String starttheta;
+   G4String deltatheta;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -767,28 +887,26 @@ bool G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name"      ) { name       = attribute_value; } else
       if (attribute_name=="lunit"     ) { lunit      = attribute_value; } else
       if (attribute_name=="aunit"     ) { aunit      = attribute_value; } else
-      if (attribute_name=="name"      ) { name       = attribute_value; } else
       if (attribute_name=="rmin"      ) { rmin       = attribute_value; } else
       if (attribute_name=="rmax"      ) { rmax       = attribute_value; } else
       if (attribute_name=="startphi"  ) { startphi   = attribute_value; } else
       if (attribute_name=="deltaphi"  ) { deltaphi   = attribute_value; } else
       if (attribute_name=="starttheta") { starttheta = attribute_value; } else
-      if (attribute_name=="deltatheta") { deltatheta = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltatheta") { deltatheta = attribute_value; }
    }
 
-   double _rmin;
-   double _rmax;
-   double _startphi;
-   double _deltaphi;
-   double _starttheta;
-   double _deltatheta;
+   G4double _rmin;
+   G4double _rmax;
+   G4double _startphi;
+   G4double _deltaphi;
+   G4double _starttheta;
+   G4double _deltatheta;
 
    if (!evaluator->Evaluate(_rmin      ,rmin      ,lunit)) return false;
    if (!evaluator->Evaluate(_rmax      ,rmax      ,lunit)) return false;
@@ -804,9 +922,7 @@ bool G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
+   G4String name;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -819,31 +935,36 @@ bool G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit"     ) { lunit      = attribute_value; } else
-      if (attribute_name=="aunit"     ) { aunit      = attribute_value; } else
-      if (attribute_name=="name"      ) { name       = attribute_value; } else
-      {
-      }
+      if (attribute_name=="name") { name = attribute_value; }
    }
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(name);
 
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag=="triangular"  ) { if (!triangularRead  (child,tessellated)) return false; } else
+      if (tag=="quadrangular") { if (!quadrangularRead(child,tessellated)) return false; }
+   }
+
    return true;
 }
 
-bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
+bool G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string rmin;
-   std::string rmax;
-   std::string rtor;
-   std::string startphi;
-   std::string deltaphi;
+   G4String name;
+   G4String vertex1;
+   G4String vertex2;
+   G4String vertex3;
+   G4String vertex4;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -856,26 +977,73 @@ bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name   ") { name    = attribute_value; } else
+      if (attribute_name=="vertex1") { vertex1 = attribute_value; } else
+      if (attribute_name=="vertex2") { vertex2 = attribute_value; } else
+      if (attribute_name=="vertex3") { vertex3 = attribute_value; } else
+      if (attribute_name=="vertex4") { vertex4 = attribute_value; }
+   }
+   
+   const G4ThreeVector* ptr1 = define.GetPosition(vertex1);
+   const G4ThreeVector* ptr2 = define.GetPosition(vertex2);
+   const G4ThreeVector* ptr3 = define.GetPosition(vertex3);
+   const G4ThreeVector* ptr4 = define.GetPosition(vertex4);
+
+   if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL || ptr4 == NULL) {
+
+      G4cout << "GDML ERROR! Vertex referenced in tet '" << name << "' was not found!" << G4endl;   
+      return false;
+   }
+   
+   new G4Tet(name,*ptr1,*ptr2,*ptr3,*ptr4);
+   
+   return true;
+}
+
+
+bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String rmin;
+   G4String rmax;
+   G4String rtor;
+   G4String startphi;
+   G4String deltaphi;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name"      ) { name       = attribute_value; } else
       if (attribute_name=="lunit"     ) { lunit      = attribute_value; } else
       if (attribute_name=="aunit"     ) { aunit      = attribute_value; } else
-      if (attribute_name=="name"      ) { name       = attribute_value; } else
       if (attribute_name=="rmin"      ) { rmin       = attribute_value; } else
       if (attribute_name=="rmax"      ) { rmax       = attribute_value; } else
       if (attribute_name=="rtor"      ) { rtor       = attribute_value; } else
       if (attribute_name=="startphi"  ) { startphi   = attribute_value; } else
-      if (attribute_name=="deltaphi"  ) { deltaphi   = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltaphi"  ) { deltaphi   = attribute_value; }
    }
 
-   double _rmin;
-   double _rmax;
-   double _rtor;
-   double _startphi;
-   double _deltaphi;
+   G4double _rmin;
+   G4double _rmax;
+   G4double _rtor;
+   G4double _startphi;
+   G4double _deltaphi;
 
    if (!evaluator->Evaluate(_rmin    ,rmin    ,lunit)) return false;
    if (!evaluator->Evaluate(_rmax    ,rmax    ,lunit)) return false;
@@ -890,20 +1058,20 @@ bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string z;
-   std::string theta;
-   std::string phi;
-   std::string y1;
-   std::string x1;
-   std::string x2;
-   std::string alpha1;
-   std::string y2;
-   std::string x3;
-   std::string x4;
-   std::string alpha2;
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String z;
+   G4String theta;
+   G4String phi;
+   G4String y1;
+   G4String x1;
+   G4String x2;
+   G4String alpha1;
+   G4String y2;
+   G4String x3;
+   G4String x4;
+   G4String alpha2;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -916,12 +1084,12 @@ bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="name"  ) { name   = attribute_value; } else
       if (attribute_name=="lunit" ) { lunit  = attribute_value; } else
       if (attribute_name=="aunit" ) { aunit  = attribute_value; } else
-      if (attribute_name=="name"  ) { name   = attribute_value; } else
       if (attribute_name=="z"     ) { z      = attribute_value; } else
       if (attribute_name=="theta" ) { theta  = attribute_value; } else
       if (attribute_name=="phi"   ) { phi    = attribute_value; } else
@@ -932,22 +1100,20 @@ bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="y2"    ) { y2     = attribute_value; } else
       if (attribute_name=="x3"    ) { x3     = attribute_value; } else
       if (attribute_name=="x4"    ) { x4     = attribute_value; } else
-      if (attribute_name=="alpha2") { alpha2 = attribute_value; } else
-      {
-      }
+      if (attribute_name=="alpha2") { alpha2 = attribute_value; }
    }
 
-   double _z;
-   double _theta;
-   double _phi;
-   double _y1;
-   double _x1;
-   double _x2;
-   double _alpha1;
-   double _y2;
-   double _x3;
-   double _x4;
-   double _alpha2;
+   G4double _z;
+   G4double _theta;
+   G4double _phi;
+   G4double _y1;
+   G4double _x1;
+   G4double _x2;
+   G4double _alpha1;
+   G4double _y2;
+   G4double _x3;
+   G4double _x4;
+   G4double _alpha2;
 
    if (!evaluator->Evaluate(_z     ,z     ,lunit)) return false;
    if (!evaluator->Evaluate(_theta ,theta ,aunit)) return false;
@@ -976,14 +1142,13 @@ bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string x1;
-   std::string x2;
-   std::string y1;
-   std::string y2;
-   std::string z;
+   G4String name;
+   G4String lunit;
+   G4String x1;
+   G4String x2;
+   G4String y1;
+   G4String y2;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -996,12 +1161,11 @@ bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit" ) { lunit  = attribute_value; } else
-      if (attribute_name=="aunit" ) { aunit  = attribute_value; } else
       if (attribute_name=="name"  ) { name   = attribute_value; } else
+      if (attribute_name=="lunit" ) { lunit  = attribute_value; } else
       if (attribute_name=="x1"    ) { x1     = attribute_value; } else
       if (attribute_name=="x2"    ) { x2     = attribute_value; } else
       if (attribute_name=="y1"    ) { y1     = attribute_value; } else
@@ -1011,11 +1175,11 @@ bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   double _x1;
-   double _x2;
-   double _y1;
-   double _y2;
-   double _z;
+   G4double _x1;
+   G4double _x2;
+   G4double _y1;
+   G4double _y2;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x1,x1,lunit)) return false;
    if (!evaluator->Evaluate(_x2,x2,lunit)) return false;
@@ -1034,21 +1198,12 @@ bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element) {
+bool G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element,G4TessellatedSolid* tessellated) {
 
-   return true;
-}
-
-bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
-
-   std::string lunit;
-   std::string aunit;
-   std::string name;
-   std::string rmin;
-   std::string rmax;
-   std::string z;
-   std::string startphi;
-   std::string deltaphi;
+   G4String v1;
+   G4String v2;
+   G4String v3;
+   G4String type;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -1061,26 +1216,70 @@ bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attribute_name=="v1"  ) { v1   = attribute_value; } else
+      if (attribute_name=="v2"  ) { v2   = attribute_value; } else
+      if (attribute_name=="v3"  ) { v3   = attribute_value; } else
+      if (attribute_name=="type") { type = attribute_value; }
+   }
+
+   const G4ThreeVector* ptr1 = define.GetPosition(v1);
+   const G4ThreeVector* ptr2 = define.GetPosition(v2);
+   const G4ThreeVector* ptr3 = define.GetPosition(v3);
+
+   if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL) {
+   
+      G4cout << "GDML ERROR! Referenced position was not found in tessellated solid!" << G4endl;   
+      return false;
+   }
+
+   tessellated->AddFacet(new G4TriangularFacet(*ptr1,*ptr2,*ptr3,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE)));
+
+   return true;
+}
+
+bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String lunit;
+   G4String aunit;
+   G4String rmin;
+   G4String rmax;
+   G4String z;
+   G4String startphi;
+   G4String deltaphi;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
       if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
       if (attribute_name=="rmin"    ) { rmin     = attribute_value; } else
       if (attribute_name=="rmax"    ) { rmax     = attribute_value; } else
       if (attribute_name=="z"       ) { z        = attribute_value; } else
       if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="deltaphi") { deltaphi = attribute_value; } else
-      {
-      }
+      if (attribute_name=="deltaphi") { deltaphi = attribute_value; }
    }
 
-   double _rmin;
-   double _rmax;
-   double _z;
-   double _startphi;
-   double _deltaphi;
+   G4double _rmin;
+   G4double _rmax;
+   G4double _z;
+   G4double _startphi;
+   G4double _deltaphi;
 
    if (!evaluator->Evaluate(_rmin    ,rmin    ,lunit)) return false;
    if (!evaluator->Evaluate(_rmax    ,rmax    ,lunit)) return false;
@@ -1095,10 +1294,10 @@ bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4TwoVector& vec2D,const std::string& lunit) {
+bool G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4TwoVector& vec2D,const G4String& lunit) {
 
-   std::string x;
-   std::string y;
+   G4String x;
+   G4String y;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -1111,17 +1310,15 @@ bool G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4T
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="x") { x = attribute_value; } else
-      if (attribute_name=="y") { y = attribute_value; } else
-      {
-      }
+      if (attribute_name=="y") { y = attribute_value; }
    }
 
-   double _x;
-   double _y;
+   G4double _x;
+   G4double _y;
 
    if (!evaluator->Evaluate(_x,x,lunit)) return false;
    if (!evaluator->Evaluate(_y,y,lunit)) return false;
@@ -1133,9 +1330,8 @@ bool G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4T
 
 bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
 
-   std::string lunit;
-   std::string aunit;
-   std::string name;
+   G4String name;
+   G4String lunit;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -1148,31 +1344,23 @@ bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
-      if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
-      {
-      }
+      if (attribute_name=="name" ) { name  = attribute_value; }
+      if (attribute_name=="lunit") { lunit = attribute_value; }
    }
 
    std::vector<G4TwoVector> twoDimVertexList;
    std::vector<G4ExtrudedSolid::ZSection> sectionList;
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t elementCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t element_index=0;element_index<elementCount;element_index++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* element_node = children->item(element_index);
-      
-      if (element_node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(element_node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="twoDimVertex") {
       
@@ -1193,11 +1381,11 @@ bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneType& zplane,const std::string& lunit) {
+bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneType& zplane,const G4String& lunit) {
 
-   std::string rmin;
-   std::string rmax;
-   std::string z;
+   G4String rmin;
+   G4String rmax;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -1210,19 +1398,17 @@ bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneTyp
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="rmin" ) { rmin  = attribute_value; } else
       if (attribute_name=="rmax" ) { rmax  = attribute_value; } else
-      if (attribute_name=="z"    ) { z     = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"    ) { z     = attribute_value; }
    }
 
-   double _rmin;
-   double _rmax;
-   double _z;
+   G4double _rmin;
+   G4double _rmax;
+   G4double _z;
 
    if (!evaluator->Evaluate(_rmin,rmin,lunit)) return false;
    if (!evaluator->Evaluate(_rmax,rmax,lunit)) return false;
@@ -1237,41 +1423,37 @@ bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneTyp
 
 bool G4GDMLSolids::Read(const xercesc::DOMElement* const element) {
 
-   const xercesc::DOMNodeList* const children = element->getChildNodes();
-   XMLSize_t elementCount = children->getLength();
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
-   for (XMLSize_t element_index=0;element_index<elementCount;element_index++) {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
-      xercesc::DOMNode* element_node = children->item(element_index);
-      
-      if (element_node->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-   
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(element_node);   
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="box"        ) { if (!boxRead        (child)) return false; } else
-      if (tag=="cone"       ) { if (!coneRead       (child)) return false; } else
-      if (tag=="ellipsoid"  ) { if (!ellipsoidRead  (child)) return false; } else
-      if (tag=="hype"       ) { if (!hypeRead       (child)) return false; } else
-      if (tag=="orb"        ) { if (!orbRead        (child)) return false; } else
-      if (tag=="para"       ) { if (!paraRead       (child)) return false; } else
-      if (tag=="polycone"   ) { if (!polyconeRead   (child)) return false; } else
-      if (tag=="polyhedra"  ) { if (!polyhedraRead  (child)) return false; } else
-      if (tag=="sphere"     ) { if (!sphereRead     (child)) return false; } else
-      if (tag=="tessellated") { if (!tessellatedRead(child)) return false; } else
-      if (tag=="torus"      ) { if (!torusRead      (child)) return false; } else
-      if (tag=="trap"       ) { if (!trapRead       (child)) return false; } else
-      if (tag=="trd"        ) { if (!trdRead        (child)) return false; } else
-      if (tag=="tube"       ) { if (!tubeRead       (child)) return false; } else
-      if (tag=="xtru"       ) { if (!xtruRead       (child)) return false; } else
-      if (tag=="intersection") { if (!booleanRead(child,INTERSECTION)) return false; } else // Parse union,intersection and subtraction with the same function!
-      if (tag=="subtraction" ) { if (!booleanRead(child,SUBTRACTION )) return false; } else
-      if (tag=="union"       ) { if (!booleanRead(child,UNION       )) return false; } else
+      if (tag=="box"           ) { if (!boxRead           (child)) return false; } else
+      if (tag=="cone"          ) { if (!coneRead          (child)) return false; } else
+      if (tag=="ellipsoid"     ) { if (!ellipsoidRead     (child)) return false; } else
+      if (tag=="eltube"        ) { if (!eltubeRead        (child)) return false; } else
+      if (tag=="hype"          ) { if (!hypeRead          (child)) return false; } else
+      if (tag=="orb"           ) { if (!orbRead           (child)) return false; } else
+      if (tag=="para"          ) { if (!paraRead          (child)) return false; } else
+      if (tag=="polycone"      ) { if (!polyconeRead      (child)) return false; } else
+      if (tag=="polyhedra"     ) { if (!polyhedraRead     (child)) return false; } else
+      if (tag=="sphere"        ) { if (!sphereRead        (child)) return false; } else
+      if (tag=="reflectedSolid") { if (!reflectedSolidRead(child)) return false; } else
+      if (tag=="tessellated"   ) { if (!tessellatedRead   (child)) return false; } else
+      if (tag=="tet"           ) { if (!tetRead           (child)) return false; } else
+      if (tag=="torus"         ) { if (!torusRead         (child)) return false; } else
+      if (tag=="trap"          ) { if (!trapRead          (child)) return false; } else
+      if (tag=="trd"           ) { if (!trdRead           (child)) return false; } else
+      if (tag=="tube"          ) { if (!tubeRead          (child)) return false; } else
+      if (tag=="xtru"          ) { if (!xtruRead          (child)) return false; } else
+      if (tag=="intersection"  ) { if (!booleanRead(child,INTERSECTION)) return false; } else // Parse union,intersection and subtraction with the same function!
+      if (tag=="subtraction"   ) { if (!booleanRead(child,SUBTRACTION )) return false; } else
+      if (tag=="union"         ) { if (!booleanRead(child,UNION       )) return false; } else
       {
-         std::cout << std::endl;
-	 std::cout << "GDML ERROR! Unsupported tag in solids: " << tag << std::endl;
-         std::cout << std::endl;
+	 G4cout << "GDML ERROR! Unsupported tag in solids: " << tag << G4endl;
          return false;
       }
    }
