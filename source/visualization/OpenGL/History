@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007-08-21 14:05:50 allison Exp $
+$Id: History,v 1.95 2007-11-10 14:52:00 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+10th November 2007  John Allison  (opengl-V09-00-01)
+- Moved WinSize_x, y to base class G4OpenGLViewer.
+- Minor improvement in guidance for /vis/ogl/printEPS.
 
 21st August 2007  John Allison  (opengl-V09-00-00)
 - Removed redundant G4OpenGLXViewerMessenger.
