@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.13 2006-06-29 21:18:20 gunter Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.14 2007-11-10 14:50:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,9 +54,6 @@ protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();
   virtual void CreateMainWindow ();
-protected:
-  G4int WinSize_x;
-  G4int WinSize_y;
   HDC fHDC;
 private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);

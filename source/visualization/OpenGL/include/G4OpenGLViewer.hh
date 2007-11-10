@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.20 2007-05-08 11:04:11 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.21 2007-11-10 14:50:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ class G4OpenGLViewer: virtual public G4VViewer {
   friend class G4OpenGLSceneHandler;
   friend class G4OpenGLImmediateSceneHandler;
   friend class G4OpenGLStoredSceneHandler;
+  friend class G4OpenGLFileSceneHandler;
   friend class G4OpenGLViewerMessenger;
 
 public:
@@ -78,6 +79,7 @@ protected:
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
+  unsigned int WinSize_x, WinSize_y;
   G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
