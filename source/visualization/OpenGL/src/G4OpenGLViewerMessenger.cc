@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.9 2007-06-15 09:52:52 gcosmo Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.10 2007-11-10 14:51:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4OpenGLViewerMessenger.hh"
@@ -63,7 +63,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
   fpCommandPrintEPS->SetGuidance
     ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0.");
+     "\nnumber, starting at 0."
+     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
