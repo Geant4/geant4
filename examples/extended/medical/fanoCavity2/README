@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2007-11-07 13:07:54 maire Exp $
+$Id: README,v 1.6 2007-11-10 09:43:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,7 @@ $Id: README,v 1.5 2007-11-07 13:07:54 maire Exp $
     The geometry of the chamber satisfies the conditions of charged particle
     equilibrium. Hence, under idealized conditions, the ratio of the dose 
     deposited over the beam energy fluence must be equal to 1.
+    This variante of the Fano cavity test is based on an reciprocity theorem.
     
     J.Sempau and P.Andreo, Phys. Med. Biol. 51 (2006) 3533        
 	
@@ -103,7 +104,7 @@ $Id: README,v 1.5 2007-11-07 13:07:54 maire Exp $
      	
  5- HISTOGRAMS
  
-   fanoCavity has several predefined 1D histograms : 
+   fanoCavity2 has several predefined 1D histograms : 
   
       1 : emission point of e+-
       2 : energy spectrum of e+-
@@ -134,14 +135,14 @@ $Id: README,v 1.5 2007-11-07 13:07:54 maire Exp $
  6- HOW TO START ?
  
  	- compile and link to generate an executable
- 		% cd geant4/examples/extended/medical/fanoCavity
+ 		% cd geant4/examples/extended/medical/fanoCavity2
  		% gmake
  		
- 	- execute fanoCavity in 'batch' mode from macro files
- 		% fanoCavity   run01.mac
+ 	- execute fanoCavity2 in 'batch' mode from macro files
+ 		% fanoCavity2   run01.mac
  		
- 	- execute fanoCavity in 'interactive mode' with visualization
- 		% fanoCavity
+ 	- execute fanoCavity2 in 'interactive mode' with visualization
+ 		% fanoCavity2
  		....
  		Idle> type your commands
  		....
