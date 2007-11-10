@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2007-07-10 17:52:25 allison Exp $
+$Id: History,v 1.102 2007-11-10 15:05:46 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+10th November 2007  John Allison  (visman-V09-00-01)
+- G4VisManager.cc: Minor improvement in messaging.
+- G4VisCommandsScene.cc: Improvements in /vis/scene/endOfEventAction messaging.
 
 10th July 2007  John Allison  (visman-V09-00-00)
 - Remove redundant method declarations in G4VisManager.hh.
