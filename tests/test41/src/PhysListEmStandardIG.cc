@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.5 2007-10-26 17:01:24 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.6 2007-11-11 17:50:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ PhysListEmStandardIG::~PhysListEmStandardIG()
 
 void PhysListEmStandardIG::ConstructProcess()
 {
-  G4double thetamin = 0.2;
+  G4double thetamin = 0.05;
  
   //  G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
 
