@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.5 2007-11-09 19:48:09 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.6 2007-11-11 17:40:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -208,10 +208,13 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   //  << xSection/barn << G4endl;
 
   if(cosTetMaxNuc < 1.0) {
-    G4double x1 = 1.0 - cosTetMaxNuc; 
-    G4double x2 = screenZ/(x1 + screenZ);
-    G4double x3 = 1.0/(1.0 + formfactA*x1);
-    xSection += (log(x3/x2) - 2.0 + x2 + x3); 
+    G4double x1 = screenZ*formfactA;
+    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
+    G4double x3 = 1.0 - x1; 
+    G4double x4 = 1.0/(formfactA*x2 + x3);
+    G4double x5 = screenZ/x2;
+    xSection += ((1.0 - 2.0*x1/x3)*log(x4/x5) - 1.0 + 
+		 x5 - (1.0 - 4.0*x1)*(1.0 - x4))/(x3*x3); 
   }
   xSection *= coeff*Z*Z*chargeSquare*invbeta2/mom2; 
   //  G4cout << " croosE= " << xSection/barn << " screenZ= " 
@@ -248,6 +251,7 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
   G4double mom22 = t*(t + 2.0*mass);
   cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
   if(cosTetMaxElec < 0.0) cosTetMaxElec = 0.0;
+
   G4double x, x1, x2, y;
 
   for (size_t i=0; i<nelm; i++) {
@@ -259,7 +263,7 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
     if(costm < cosTetMaxNuc) costm = cosTetMaxNuc;
     if(costm < 1.0) {
       x = 1.0 - costm + screenZ;
-      y = (x + screenZ*(1.0  - screenZ/x - 2.0*log(x/screenZ)))/Z;
+      y = (x - screenZ*(screenZ/x + 2.0*log(x/screenZ)))/Z;
       if(y < 0.0) {
         nwarnings++;
         if(nwarnings < nwarnlimit) 
@@ -272,12 +276,17 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
     //  << xSection/barn << G4endl;
 
     // limit main integral because of nuclear size effect
-    x = 1.0 - cosTetMaxNuc;
 
-    if(x > 0.0) {
-      x1 = x + screenZ;
-      x2 = 1.0 + formfactA*x; 
-      y = (x1/x2 + screenZ*(x/x1 - 2.0*log(x1/(screenZ*x2))));
+    if(cosTetMaxNuc < 1.0) {
+      x1 = screenZ*formfactA;
+      x2 = 1.0 - cosTetMaxNuc + screenZ;
+      G4double x3 = 1.0 - x1; 
+      G4double f  = 1.0/formfactA;
+      G4double d  = f - screenZ;
+      G4double x4 = f/(x2 + d);
+      G4double x5 = screenZ/x2;
+      y = (screenZ*(1.0 - x5) + (d*d - screenZ*(2.0*d - 3.0*screenZ))*(1.0 - x4)/f -
+	   2.0*screenZ*f*log(x4/x5)/d)/(x3*x3); 
       if(y < 0.0) {
         nwarnings++;
         if(nwarnings < nwarnlimit) 
@@ -449,13 +458,14 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double kinEnergy = dynParticle->GetKineticEnergy();
   if(kinEnergy == 0.0) return;
   G4double x1  = 0.5*tPathLength/lambdaeff;
-  /*
-  G4double y1  = 1.0 - x1;
   
+  /*
   G4cout << "G4MuMscModel::SampleScattering t(mm)= " << tPathLength
 	 << " 1/lambdaeff= " << 1.0/lambdaeff 
 	 << " matIdx= " << currentMaterialIndex << G4endl;
- 
+  */
+  /*
+  G4double y1  = 1.0 - x1;
   G4double x2  = tPathLength*GetLambda2(0.5*(preKinEnergy + kinEnergy)); 
   G4double x3  = (x2 - x1*x1)/(x1*y1);
   if(x3 <= 0.0 || x3 >= 0.33) {
@@ -473,10 +483,10 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double x  = G4UniformRand();
   G4double z;
-  /*
-  if(x < y1) z = x1*pow(x/y1,x4);
-  else       z = 1.0 - y1*pow((1.0 - x)/x1,x4);
-  */
+  
+  //if(x < y1) z = x1*pow(x/y1,x4);
+  //else       z = 1.0 - y1*pow((1.0 - x)/x1,x4);
+ 
   z = -x1*log(x);
 
   G4double cost = 1.0 - 2.0*z;
