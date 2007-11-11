@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.6 2007-09-25 00:36:51 asaim Exp $
+// $Id: test1.cc,v 1.7 2007-11-11 00:59:03 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,9 +35,6 @@
 #include "G4UItcsh.hh"
 
 #include "G4ScoringManager.hh"
-#include "G4ScoringBox.hh"
-#include "G4PSEnergyDeposit3D.hh"
-#include "G4SDParticleFilter.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -46,6 +43,7 @@
 #include "Tst1PhysicsList.hh"
 #include "Tst1PrimaryGeneratorAction.hh"
 #include "Tst1RunAction.hh"
+#include "Tst1UserScoreWriter.hh"
 
 int main(int argc,char** argv)
 {
@@ -54,6 +52,7 @@ int main(int argc,char** argv)
  G4RunManager * runManager = new G4RunManager;
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
  scManager->SetVerboseLevel(1);
+ //scManager->SetScoreWriter(new Tst1UserScoreWriter());
 
  // Set mandatory initialization classes
  //
