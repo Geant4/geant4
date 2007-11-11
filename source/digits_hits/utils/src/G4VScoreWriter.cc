@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.3 2007-11-07 04:12:07 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.4 2007-11-11 01:00:44 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -110,7 +110,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 	if(value == score->end()) {
 	  ofile << 0.;
 	} else {
-	  ofile << *(value->second)/MeV;
+	  ofile << *(value->second);
 	}
 
 	if(opt.find("csv") != std::string::npos) {
@@ -183,7 +183,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 	  if(value == score->end()) {
 	    ofile << 0.;
 	  } else {
-	    ofile << *(value->second)/MeV;
+	    ofile << *(value->second);
 	  }
 
 	  if(opt.find("csv") != std::string::npos) {
