@@ -1,4 +1,4 @@
-$Id: History,v 1.353 2007-11-09 11:45:45 vnivanch Exp $
+$Id: History,v 1.354 2007-11-11 16:39:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 November 07: V.Ivant (emstand-V09-00-16)
+G4eCoulombScatteringModel - fixed computation of transport cross section
 
 09 November 07: V.Ivant (emstand-V09-00-15)
 - G4ionIonisation, G4ionGasIonisation, G4CoulombScatteringModel:
