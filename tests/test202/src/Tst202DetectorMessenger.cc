@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorMessenger.cc,v 1.1 2007-02-08 15:45:29 allison Exp $
+// $Id: Tst202DetectorMessenger.cc,v 1.2 2007-11-11 11:36:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include <sstream>
 
 Tst202DetectorMessenger::Tst202DetectorMessenger(Tst202DetectorConstruction * myDet)
 :myDetector(myDet)
