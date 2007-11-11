@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2007-11-10 14:52:00 allison Exp $
+$Id: History,v 1.96 2007-11-11 04:47:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,14 +24,15 @@ History file for visualization/OpenGL
 - Moved WinSize_x, y to base class G4OpenGLViewer.
 - Minor improvement in guidance for /vis/ogl/printEPS.
 
+28th September 2007  lgarnier
+- first import of G4UI Qt files : Do not try to compil them
+
 21st August 2007  John Allison  (opengl-V09-00-00)
 - Removed redundant G4OpenGLXViewerMessenger.
 
 25th May 2007  John Allison  (opengl-V08-03-03)
 - G4OpenGLSceneHandler and G4OpenGLXViewerMessenger:
   Fixed gcc-4.1.2 compiler warnings.
-
-G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.
 
 25th May 2007  John Allison  (opengl-V08-03-02)
 - G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.
