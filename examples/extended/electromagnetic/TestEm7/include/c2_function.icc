@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version c2_function.cc,v 1.24 2007/11/06 14:59:30 marcus Exp
+ *	\version c2_function.cc,v 1.38 2007/11/10 01:58:31 marcus Exp
  */
 
 #include <iostream>
@@ -19,7 +19,8 @@
 #include <cmath>
 #include <limits>
 
-template <typename float_type> const char c2_function<float_type>::CVSVers[]="c2_function.cc,v 1.24 2007/11/06 14:59:30 marcus Exp";
+template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
+{ return "c2_function.cc,v 1.38 2007/11/10 01:58:31 marcus Exp"; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -334,7 +335,7 @@ template <typename float_type> std::vector<float_type> &c2_function<float_type>:
 	return *result;
 }
 
-template <typename float_type> void c2_function<float_type>::preen_sampling_grid(std::vector<float_type> *result)
+template <typename float_type> void c2_function<float_type>::preen_sampling_grid(std::vector<float_type> *result) const
 {		
 	//  this is the unrefined sampling grid... now check for very close points on front & back and fix if needed.
 	if(result->size() > 2) { // may be able to prune dangerously close points near the ends if there are at least 3 points
@@ -480,19 +481,19 @@ template <typename float_type> const c2_recip<float_type> c2_recip<float_type>::
 
 // generate a sampling grid at points separated by dx=5, which is intentionally
 // incommensurate with pi and 2*pi so grid errors are somewhat randomized
-template <typename float_type> std::vector<float_type> &c2_sin<float_type>::trig_grid(float_type xmin, float_type xmax)
+template <typename float_type> std::vector<float_type> &c2_sin<float_type>::get_sampling_grid(float_type xmin, float_type xmax)
 {
 	std::vector<float_type> *result=new std::vector<float_type>;
 	
 	for(; xmin < xmax; xmin+=5.0) result->push_back(xmin);
 	result->push_back(xmax);
-	c2_function<float_type>::preen_sampling_grid(result);
+	this->preen_sampling_grid(result);
 	return *result;
 }
 
-template <typename float_type> static float_type Identity(float_type x) { return x; } // a useful function
-template <typename float_type> static float_type f_one(float_type) { return 1.0; } // the first derivative of identity
-template <typename float_type> static float_type f_zero(float_type) { return 0.0; } // the second derivative of identity
+template <typename float_type> float_type Identity(float_type x) { return x; } // a useful function
+template <typename float_type> float_type f_one(float_type) { return 1.0; } // the first derivative of identity
+template <typename float_type> float_type f_zero(float_type) { return 0.0; } // the second derivative of identity
 
 //  The constructor
 template <typename float_type> void interpolating_function<float_type>::init(
@@ -787,24 +788,25 @@ interpolating_function<float_type>::get_data(std::vector<float_type> &xvals, std
 
 template <typename float_type> interpolating_function<float_type> & 
 	interpolating_function<float_type>::binary_operator(const c2_function<float_type> &rhs,
-	float_type (&combiner)(const c2_function<float_type> &, const c2_function<float_type> &, 
-	float_type , float_type *, float_type *)) const
+		c2_binary_function<float_type> *combining_stub) const
 {	
 	size_t np=X.size();	
 	std::vector<float_type> yv(np);
-	c2_binary_function<float_type> comp((*this), rhs, combiner);
 	c2_constant<float_type> fval;
-	c2_binary_function<float_type> const_comp(fval, rhs, combiner);
+	c2_constant<float_type> yval;
 	float_type yp0, yp1, ypp;
 	
 	for(size_t i=0; i<np; i++) { 
 		fval.reset(fYout(F[i])); // update the constant function pointwise
-		yv[i]=const_comp(Xraw[i]); // compute rhs & combine without derivatives
+		yval.reset(rhs(Xraw[i])); 
+		yv[i]=(*combining_stub).combine(fval, yval, Xraw[i], (float_type *)0, (float_type *)0); // compute rhs & combine without derivatives
 	}
 	
-	comp(Xraw.front(), &yp0, &ypp); // get derivative at front
-	comp(Xraw.back(), &yp1, &ypp); // get derivative at back
+	(*combining_stub).combine(*this, rhs, Xraw.front(), &yp0, &ypp); // get derivative at front
+	(*combining_stub).combine(*this, rhs, Xraw.back(),  &yp1, &ypp); // get derivative at back
 
+	delete combining_stub;
+	
 	return  *new interpolating_function(Xraw, yv, false, yp0, false, yp1,
 									   fXin, fXinPrime, fXinDPrime,
 									   fYin, fYinPrime, fYinDPrime, fYout);	
@@ -843,9 +845,9 @@ template <typename float_type> log_log_interpolating_function<float_type>::log_l
 		 std::log, c2_f_logprime, c2_f_logprime2, std::log, c2_f_logprime, c2_f_logprime2, std::exp );
 }
 
-template <typename float_type> static float_type c2_f_recip(float_type x) { return 1.0/x; }
-template <typename float_type> static float_type c2_f_recipprime(float_type x) { return -1.0/(x*x); } // the derivative of 1/x
-template <typename float_type> static float_type c2_f_recipprime2(float_type x) { return 2.0/(x*x*x); } // the second derivative of 1/x
+template <typename float_type> float_type c2_f_recip(float_type x) { return 1.0/x; }
+template <typename float_type> float_type c2_f_recipprime(float_type x) { return -1.0/(x*x); } // the derivative of 1/x
+template <typename float_type> float_type c2_f_recipprime2(float_type x) { return 2.0/(x*x*x); } // the second derivative of 1/x
 
 template <typename float_type> arrhenius_interpolating_function<float_type>::arrhenius_interpolating_function(
 										const std::vector<float_type> &x, const std::vector<float_type> &f, 
@@ -858,7 +860,7 @@ template <typename float_type> arrhenius_interpolating_function<float_type>::arr
 }
 
 template <typename float_type> c2_inverse_function<float_type>::c2_inverse_function(const c2_function<float_type> &source) 
-	: c2_scaled_function<float_type>(source, 0.0) 
+	: c2_plugin_function<float_type>(source) 
 {
 	float_type l=source.xmin();
 	float_type r=source.xmax();
@@ -876,10 +878,10 @@ template <typename float_type> float_type c2_inverse_function<float_type>::value
 					float_type x, float_type *yprime, float_type *yprime2
 			) const throw(c2_exception)
 {
-	float_type l=this->Left.xmin();
-	float_type r=this->Left.xmax();
+	float_type l=this->func->xmin();
+	float_type r=this->func->xmax();
 	float_type yp, ypp;
-	float_type y=this->Left.find_root(l, r, get_start_hint(x), x, 0, &yp, &ypp);
+	float_type y=this->func->find_root(l, r, get_start_hint(x), x, 0, &yp, &ypp);
 	start_hint=y;
 	if(yprime) *yprime=1.0/yp;
 	if(yprime2) *yprime2=-ypp/(yp*yp*yp);
@@ -940,14 +942,133 @@ template <typename float_type> accumulated_histogram<float_type>::accumulated_hi
 	std::fill(this->y2.begin(), this->y2.end(), 0.0); // clear second derivatives, to we are piecewise linear
 }
 
-#if 0 // test to make sure templates can be instantiated
-static interpolating_function &testit(void) {
-	std::vector<float_type> xvals(10);
-	return inverse_integrated_density<lin_log_interpolating_function>(xvals, c2_sin<float_type>::sin);
+template <typename float_type> c2_piecewise_function<float_type>::c2_piecewise_function() 
+: c2_function<float_type>(), lastKLow(-1)
+{
+	this->sampling_grid=new std::vector<float_type>; // this always has a smapling grid
 }
 
-static interpolating_function &testit2(void) {
-	std::vector<float_type> xvals(10), yvals(10);
-	return inverse_integrated_density<log_log_interpolating_function, lin_log_interpolating_function>(xvals, yvals);
+template <typename float_type> c2_piecewise_function<float_type>::~c2_piecewise_function() 
+{
+	size_t np=functions.size();
+	for(size_t i=0; i<np; i++) if(owns[i]) delete functions[i];
 }
-#endif
+
+template <typename float_type> float_type c2_piecewise_function<float_type>::value_with_derivatives(
+		  float_type x, float_type *yprime, float_type *yprime2
+		  ) const throw(c2_exception)
+{
+	
+	size_t np=functions.size();
+	if(!np) throw c2_exception("attempting to evaluate an empty piecewise function");
+	
+	if(x < this->xmin() || x > this->xmax()) {
+		char buf[256];
+		snprintf(buf, sizeof(buf)-1, "piecewise function argument %g out of range %g -- %g", (double)x, 
+			   (double)(this->xmin()), (double)(this->xmax()));
+		throw c2_exception(buf);
+	}
+
+	int klo=0;
+	
+	if(lastKLow >= 0 && functions[lastKLow]->xmin() <= x && functions[lastKLow]->xmax() > x) {
+		klo=lastKLow;
+	} else {
+		int khi=np;
+		while(khi-klo > 1) {
+			int km=(khi+klo)/2;
+			if(functions[km]->xmin() > x) khi=km;
+			else klo=km;
+		}
+	}
+	lastKLow=klo;
+	return functions[klo]->value_with_derivatives(x, yprime, yprime2);
+}
+
+template <typename float_type> void c2_piecewise_function<float_type>::append_function(
+	c2_function<float_type> &func, bool pass_ownership) throw(c2_exception)
+{
+	if(functions.size()) { // check whether there are any gaps to fill, etc.
+		c2_function<float_type> &tail=*(functions.back());
+		float_type x0=tail.xmax();
+		float_type x1=func.xmin();
+		if(x0 < x1) {
+			// must insert a connector if x0 < x1
+			float_type y0=tail(x0);
+			float_type y1=func(x1);
+			c2_function<float_type> *connector=new c2_linear<float_type>(x0, y0, (y1-y0)/(x1-x0));
+			connector->set_domain(x0,x1);
+			functions.push_back(connector);
+			owns.push_back(true);
+			this->sampling_grid->push_back(x1);
+		} else if(x0>x1) throw c2_exception("function domains not increasing in c2_piecewise_function");
+	}
+	functions.push_back(&func);
+	owns.push_back(pass_ownership);
+	// extend our domain to include all known functions
+	this->set_domain(functions.front()->xmin(), functions.back()->xmax());
+	// extend our sampling grid with the new function's grid, with the first point dropped to avoid duplicates
+	std::vector<float_type> &newgrid=func.get_sampling_grid(func.xmin(), func.xmax());
+	this->sampling_grid->insert(this->sampling_grid->end(), newgrid.begin()+1, newgrid.end());
+	delete &newgrid;
+}
+
+template <typename float_type> c2_connector_function<float_type>::c2_connector_function(
+	const c2_function<float_type> &f1, const c2_function<float_type> &f2, float_type x0, float_type x2, 
+	bool auto_center, float_type y1)
+
+: c2_function<float_type>()
+{
+	float_type y0, yp0, ypp0, y2, yp2, ypp2;
+	fdx=(x2-x0)/2.0;
+	fhinv=1.0/fdx;
+	fx1=(x0+x2)/2.0;
+	
+	y0=f1.value_with_derivatives(x0, &yp0, &ypp0); // get left wall values from conventional computation
+	y2=f2.value_with_derivatives(x2, &yp2, &ypp2); // get right wall values from conventional computation
+
+	// scale derivs to put function on [-1,1] since mma  solution is done this way
+	yp0*=fdx;
+	yp2*=fdx;
+	ypp0*=fdx*fdx;
+	ypp2*=fdx*fdx;
+	
+	float_type ff0=(8*(y0 + y2) + 5*(yp0 - yp2) + ypp0 + ypp2)/16.0;
+	if(auto_center) y1=ff0; // forces ff to be 0 if we are auto-centering
+	
+	// y[x_] = y1 + x (a + b x) + (x-1) x (x+1) (c + d x + e x^2 + f x^3)
+	fy1=y1; 
+	fa=-(y0 - y2)/2.;
+	fb=(y0 - 2*y1 + y2)/2.;
+	fc=(7*(y0 - y2 + yp0 + yp2) + ypp0 - ypp2)/16.;
+	fd=(32*y1 - 16*(y2 + y0) + 9*(yp2 - yp0) - ypp0 - ypp2)/16.;
+	fe=(3*(y2 - y0 - yp0 - yp2) - ypp0 + ypp2)/16.;
+	ff=(ff0 - y1);
+	// y'[x] = a + 2 b x + (3x^2 - 1)   (c + d x + e x^2 + f x^3) + (x-1) x (x+1) (d + 2 e x + 3 f x^2 )
+	// y''[x] = 2b + (x-1) x (x+1) (2 e + 6 f x) + 2 (3 x^2 -1) (d + 2 e x + 3 f x^2 ) + 6 x (c + d x + e x^2 + f x^3)
+	this->set_domain(x0,x2); // this is where the function is valid
+}
+
+template <typename float_type> c2_connector_function<float_type>::~c2_connector_function() 
+{
+}
+
+template <typename float_type> float_type c2_connector_function<float_type>::value_with_derivatives(
+	float_type x, float_type *yprime, float_type *yprime2
+	) const throw(c2_exception)
+{
+																									
+	float_type dx=(x-fx1)*fhinv;
+	float_type q1=fc + dx*(fd + dx*(fe + dx*ff));
+	float_type xp1=(dx-1)*(dx+1)*dx;
+	
+	float_type y= fy1 + dx*(fa+fb*dx) + xp1*q1;
+	if(yprime || yprime2) {
+		float_type q2 =fd + dx*(2*fe + dx*3*ff);	
+		float_type q3=2*fe+6*ff*dx;
+		float_type xp2=(3*dx*dx-1);
+		if(yprime) *yprime=(fa + 2*fb*dx + xp2*q1 + xp1*q2)*fhinv;
+		if(yprime2) *yprime2=(2*fb+xp1*q3+2*xp2*q2+6*dx*q1)*fhinv*fhinv;
+	}
+	return y;
+}

@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_function.hh,v 1.29 2007/11/06 14:59:30 marcus Exp
+ * 	\version c2_function.hh,v 1.49 2007/11/10 02:15:27 marcus Exp
  */
 
 #ifndef __has_C2Functions_c2_h
@@ -31,7 +31,12 @@ private:
 };
 
 // put these forward references here, and with a bogus typename to make swig happy.
-template <typename Foo> class c2_composed_function;
+template <typename float_type> class c2_composed_function;
+template <typename float_type> class c2_sum;
+template <typename float_type> class c2_diff;
+template <typename float_type> class c2_product;
+template <typename float_type> class c2_ratio;
+
 template<typename Foo> struct recur;
 
 /**
@@ -66,17 +71,14 @@ template <typename float_type=double> class c2_function {
 public:    
     /// \brief get versioning information for the header file
     /// \return the CVS Id string
-	static const std::string cvs_header_vers() { return 
-		"c2_function.hh,v 1.29 2007/11/06 14:59:30 marcus Exp";
+	const std::string cvs_header_vers() const { return 
+		"c2_function.hh,v 1.49 2007/11/10 02:15:27 marcus Exp";
 	}
 	
     /// \brief get versioning information for the source file
     /// \return the CVS Id string
-	static const std::string cvs_file_vers() { return CVSVers; }
-	
-private:
-	static const char CVSVers[];
-	
+	const std::string cvs_file_vers() const ;
+		
 public:
     /// \brief destructor
 	virtual ~c2_function() { if(sampling_grid && !no_overwrite_grid) delete sampling_grid; }
@@ -223,7 +225,7 @@ public:
 	///
 	/// \param[in,out] result the sampling grid with excessively closely space endpoints removed.
 	/// The grid is modified in place.
-	static void preen_sampling_grid(std::vector<float_type> *result);		
+	void preen_sampling_grid(std::vector<float_type> *result) const;		
 	/// \brief refine a grid by splitting each interval into more intervals
 	/// \param grid the grid to refine
 	/// \param refinement the number of new steps for each old step
@@ -250,6 +252,25 @@ public:
 	/// \return a new c2_function with the desired \a norm.
 	c2_function<float_type> &square_normalized_function(float_type xmin, float_type xmax, const c2_function<float_type> &weight, float_type norm=1.0);
 
+	/// \brief factory function to create a c2_sum from an regular algebraic expression.
+	/// \note
+	/// be very wary of ownership issues if this is used in a complex expression.
+	c2_sum<float_type> &operator + (const c2_function<float_type> &rhs)  { return *new c2_sum<float_type>(*this, rhs); }
+	/// \brief factory function to create a c2_diff from an regular algebraic expression.
+	/// \note
+	/// be very wary of ownership issues if this is used in a complex expression.
+	c2_diff<float_type> &operator - (const c2_function<float_type> &rhs)  { return *new c2_diff<float_type>(*this, rhs); }
+	/// \brief factory function to create a c2_product from an regular algebraic expression.
+	/// \note
+	/// be very wary of ownership issues if this is used in a complex expression.
+	c2_product<float_type> &operator * (const c2_function<float_type> &rhs)  { return *new c2_product<float_type>(*this, rhs); }
+	/// \brief factory function to create a c2_ratio from an regular algebraic expression.
+	/// \note
+	/// be very wary of ownership issues if this is used in a complex expression.
+	c2_ratio<float_type> &operator / (const c2_function<float_type> &rhs)  { return *new c2_ratio<float_type>(*this, rhs); }
+	
+
+	
 	std::vector<float_type> *sampling_grid;
 	bool no_overwrite_grid;
 	    
@@ -297,32 +318,45 @@ private:
 ///
 ///It is useful for plugging different InterpolatingFunctions into a c2_function expression.
 ///It saves a lot of effort in other places with casting away const declarations.
+///
+/// It is also useful as a wrapper for a function if it is necessary to have a copy of a function
+/// which has a different domain or sampling grid than the parent function.  This can be
+/// be used, for example, to patch badly-behaved functions with c2_piecewise_function by 
+/// taking the parent function, creating two plugins of it with domains on each side of the 
+/// nasty bit, and then inserting a nice function in the hole.
 template <typename float_type=double> class c2_plugin_function : public c2_function<float_type> {
 public:
 	/// \brief construct the container with no function
-	c2_plugin_function() : c2_function<float_type>(), func(0)  {}
+	c2_plugin_function() : c2_function<float_type>(), func(0), owns(false)  {}
 	/// \brief construct the container with a pre-defined function
-	c2_plugin_function(c2_function<float_type> &f) : c2_function<float_type>() { set_function(f); }
+	c2_plugin_function(const c2_function<float_type> &f) : c2_function<float_type>(), func(0), owns(false) { set_function(f); }
 	/// \brief fill the container with a new function
-	void set_function(c2_function<float_type> &f) 
+	void set_function(const c2_function<float_type> &f) 
 		{ 
+			if(owns && func) delete func;
 			func=&f; set_domain(f.xmin(), f.xmax()); 
-			set_sampling_grid(*f.sampling_grid); 
+			set_sampling_grid_pointer(*f.sampling_grid); 
+			owns=false;
 		}
 	/// \copydoc c2_function::value_with_derivatives
 	/// Uses the internal function pointer set by set_function().
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
 		{
 			if(!func) throw c2_exception("c2_plugin_function<float_type> called uninitialized");
-			return func->value_with_derivatives(x, yprime, yprime2); 
+			return this->func->value_with_derivatives(x, yprime, yprime2); 
 		}
 	/// \brief clear the function
 	///
 	/// Any attempt to use this c2_plugin_function throws an exception if the saved function is cleared.
-	void unset_function(void) { func=0; }
+	void unset_function(void) { if(owns && func) delete func; func=0; owns=false; }
+	/// \brief destructor
+	~c2_plugin_function() { if(owns && func) delete func; }
+	/// \brief tell us we should delete the function at destruction.  NOT sticky when function is reset
+	void set_ownership() { this->owns=true; }
 	
 protected:
-	c2_function<float_type> *func;
+	const c2_function<float_type> *func;
+	bool owns;
 	
 };
 
@@ -337,14 +371,15 @@ protected:
 /// none of this marking is automatic, to keep this class very lightweight.
 template <typename float_type=double> class c2_binary_function : public c2_function<float_type> {
 public:
-	/// \copydoc c2_function::value_with_derivatives
-	/// 
-	/// Uses the combining helper function \a combiner given at construction to compute the appropriate combined derivatives.
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
-    { 
-		return (*Comb)(Left, Right, x, yprime, yprime2);
-	}
 	
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+					   float_type x, float_type *yprime, float_type *yprime2) const =0;
+	
+	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw (c2_exception) 
+    { 
+		return this->combine(this->Left, this->Right, x, yprime, yprime2);
+    }
+
 	/// \brief allow c2_binary_function to remember ownership of contained functions for automatic cleanup
 	///
 	/// upon destruction, this will cause disposal of the left member function
@@ -364,22 +399,7 @@ public:
 		if(leftown) delete &Left;
 		if(rightown) delete &Right;
 	}
-	
-	/// \brief construct a binary function from two c2_function objects and a combining function.
-	///
-	/// \param left the c2_function to be used in the left side of the binary relation
-	/// \param right the c2_function to be used in the right side of the binary relation
-	/// \param combiner a function which actually generate the combined value of its left and right members
-	c2_binary_function( const c2_function<float_type> &left,  const c2_function<float_type> &right,
-		  float_type (&combiner)(const c2_function<float_type> &, const c2_function<float_type> &, float_type x, float_type *yprime, float_type *yprime2)
-		  ) : c2_function<float_type>(), Left(left), Right(right), Comb(&combiner), leftown(false), rightown(false) 
-		{ 
-			set_domain(
-				(left.xmin() > right.xmin()) ? left.xmin() : right.xmin(), 
-				(left.xmax() < right.xmax()) ? left.xmax() : right.xmax()
-			);
-		} 
-	
+		
 	/// \brief construct for the case where there is no explicit combiner
 	/// 
 	/// This is only useful for cases where value_with_derivatives() is explicitly overridden.
@@ -387,7 +407,7 @@ public:
 	/// \param right the c2_function to be used in the right side of the binary relation
 	c2_binary_function( const c2_function<float_type> &left,  const c2_function<float_type> &right) : 
 		c2_function<float_type>(), 
-		Left(left), Right(right), Comb(0), leftown(false), rightown(false) 
+		Left(left), Right(right), leftown(false), rightown(false) 
 	 { 
 		  set_domain(
 					(left.xmin() > right.xmin()) ? left.xmin() : right.xmin(), 
@@ -397,43 +417,38 @@ public:
 
 protected:
     c2_binary_function() : c2_function<float_type>(), 
-		Left(*this), Right(*this), Comb(0) {} // hide default constructor, since its use is almost always an error.
+		Left(*this), Right(*this) {} // hide default constructor, since its use is almost always an error.
 	const c2_function<float_type> &Left,  &Right;
-	float_type (*Comb)(const c2_function<float_type> &, const c2_function<float_type> &, float_type x, float_type *yprime, float_type *yprime2);
 	bool leftown, rightown;
 		
 };
 
 /// \brief Create a very lightweight method to return a scalar multiple of another function.
 /// 
-/// This is a degenerate c2_binary_function, since it contains only one function and 
-/// doesn't use the combine() method.
-/// This is only a BinaryFunction to inherit ownership code.
-template <typename float_type=double> class c2_scaled_function : public c2_binary_function<float_type> {
+template <typename float_type=double> class c2_scaled_function : public c2_plugin_function<float_type> {
 public:
 	/// \brief construct the function with its scale factor.
 	///
 	/// \param outer the function to be scaled
 	/// \param scale the multiplicative scale factor
 	c2_scaled_function(const c2_function<float_type> &outer, float_type scale) : 
-		c2_binary_function<float_type>(outer, outer), yscale(scale) { }
+		c2_plugin_function<float_type>(outer), yscale(scale) { }
+	
+	/// \brief set a new scale factor
+	/// \param scale the new factor
+	void reset(float_type scale) { yscale=scale; }
 	
 	/// \copydoc c2_function::value_with_derivatives
 	/// 
 	/// provide our own value_with_derivatives which bypasses the combiner for quicker operation
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw (c2_exception) 
     { 
-		float_type y=Left(x, yprime, yprime2); 
+		float_type y=this->func->value_with_derivatives(x, yprime, yprime2); 
 		if(yprime) (*yprime)*=yscale; 
 		if(yprime2) (*yprime2)*=yscale; 
 		return y*yscale; 
     }
 
-	/// \brief Claim ownership of the function
-	///
-	/// results in deletion of the owned c2_function if this c2_scaled_function is deleted
-	void set_ownership(void) { this->set_left_ownership(); } // there is no real righthand function
-	
 protected:
     c2_scaled_function<float_type>() {} // hide default constructor, since its use is almost always an error.
 	float_type yscale;
@@ -445,13 +460,12 @@ protected:
 /// efficiently. If it is re-evaluated at the previous point, it returns the remembered values;
 /// otherwise, it re-evauates the function at the new point.
 ///
-/// The only reason it is a c2_scaled_function is to inherit single-function ownership.
-template <typename float_type=double> class c2_cached_function : public c2_scaled_function<float_type> {
+template <typename float_type=double> class c2_cached_function : public c2_plugin_function<float_type> {
 public:
 	/// \brief construct the container
 	///
 	/// \param f the function to be cached
-	c2_cached_function(const c2_function<float_type> &f) : c2_scaled_function<float_type>(f, 0.0), init(false)  {}
+	c2_cached_function(const c2_function<float_type> &f) : c2_plugin_function<float_type>(f), init(false)  {}
 	/// \copydoc c2_function::value_with_derivatives
 	///
 	/// Checks to see if the function is being re-evaluated at the previous point, and
@@ -459,7 +473,7 @@ public:
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
     {
 		if(!init || x != x0) {
-			y=this->Left.value_with_derivatives(x, &yp, &ypp);
+			y=this->func->value_with_derivatives(x, &yp, &ypp);
 			x0=x;
 			init=true;
 		}
@@ -467,7 +481,7 @@ public:
 		if(yprime2) *yprime2=ypp;
 		return y; 
 	}
-	
+
 protected:
     c2_cached_function() {} // hide default constructor, since its use is almost always an error.
 	mutable bool init;
@@ -486,30 +500,14 @@ public:
 	/// \brief construct outer(inner(x))
     /// \note See c2_binary_function for discussion of ownership.
 	c2_composed_function(const c2_function<float_type> &outer, const c2_function<float_type> &inner) : c2_binary_function<float_type>(outer, inner) {}
-
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw () 
-    { 
-		float_type y0, yp0, ypp0, y1, yp1, ypp1;
-		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
-		if(yprime || yprime2) {
-			yp0p=&yp0; ypp0p=&ypp0; yp1p=&yp1; ypp1p=&ypp1;
-		} else {
-			yp0p=ypp0p=yp1p=ypp1p=0;
-		}
-		
-		y0=this->Right.value_with_derivatives(x, yp0p, ypp0p);
-		y1=this->Left.value_with_derivatives(y0, yp1p, ypp1p);
-		if(yprime) *yprime=yp1*yp0;
-		if(yprime2) *yprime2=ypp0*yp1+yp0*yp0*ypp1;
-		return y1;
-	}
+	c2_composed_function() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	///  \brief freestanding function to do composition, used by interpolating_function 
     /// 
     /// Normally not used, but can be used to implement other c2_binary_function implementations
     /// of c2_composed_function varieties.
-	static float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
-						  float_type x, float_type *yprime, float_type *yprime2) 
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+						  float_type x, float_type *yprime, float_type *yprime2) const
     {
 		float_type y0, yp0, ypp0, y1, yp1, ypp1;
 		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
@@ -533,27 +531,11 @@ public:
 template <typename float_type=double> class c2_sum : public c2_binary_function<float_type> {
 public:	
 	c2_sum(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	c2_sum() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	// function to do derivative arithmetic for sums
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw () 
-    { 
-		float_type y0, yp0, ypp0, y1, yp1, ypp1;
-		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
-		if(yprime || yprime2) {
-			yp0p=&yp0; ypp0p=&ypp0; yp1p=&yp1; ypp1p=&ypp1;
-		} else {
-			yp0p=ypp0p=yp1p=ypp1p=0;
-		}
-		y0=this->Left.value_with_derivatives(x, yp0p, ypp0p);
-		y1=this->Right.value_with_derivatives(x, yp1p, ypp1p);
-		if(yprime) *yprime=yp0+yp1;
-		if(yprime2) *yprime2=ypp0+ypp1;
-		return y0+y1;
-	}
-
-	// function to do derivative arithmetic for sums
-	static float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
-						  float_type x, float_type *yprime, float_type *yprime2) 
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+						  float_type x, float_type *yprime, float_type *yprime2) const
     {
 		float_type y0, yp0, ypp0, y1, yp1, ypp1;
 		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
@@ -577,27 +559,11 @@ public:
 template <typename float_type=double> class c2_diff : public c2_binary_function<float_type> {
 public:	
 	c2_diff(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	c2_diff() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	// function to do derivative arithmetic for diffs
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw () 
-    { 
-		float_type y0, yp0, ypp0, y1, yp1, ypp1;
-		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
-		if(yprime || yprime2) {
-			yp0p=&yp0; ypp0p=&ypp0; yp1p=&yp1; ypp1p=&ypp1;
-		} else {
-			yp0p=ypp0p=yp1p=ypp1p=0;
-		}
-		y0=this->Left.value_with_derivatives(x, yp0p, ypp0p);
-		y1=this->Right.value_with_derivatives(x, yp1p, ypp1p);
-		if(yprime) *yprime=yp0-yp1;
-		if(yprime2) *yprime2=ypp0-ypp1;
-		return y0-y1;
-	}
-	
-	// function to do derivative arithmetic for diffs
-	static float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
-							  float_type x, float_type *yprime, float_type *yprime2) 
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+							  float_type x, float_type *yprime, float_type *yprime2) const
     {
 		float_type y0, yp0, ypp0, y1, yp1, ypp1;
 		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
@@ -621,25 +587,10 @@ public:
 template <typename float_type=double> class c2_product : public c2_binary_function<float_type> {
 public:	
 	c2_product(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	c2_product() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw () 
-    { 
-		float_type y0, yp0, ypp0, y1, yp1, ypp1;
-		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
-		if(yprime || yprime2) {
-			yp0p=&yp0; ypp0p=&ypp0; yp1p=&yp1; ypp1p=&ypp1;
-		} else {
-			yp0p=ypp0p=yp1p=ypp1p=0;
-		}
-		y0=this->Left.value_with_derivatives(x, yp0p, ypp0p);
-		y1=this->Right.value_with_derivatives(x, yp1p, ypp1p);
-		if(yprime) *yprime=y1*yp0+y0*yp1;
-		if(yprime2) *yprime2=ypp0*y1+2.0*yp0*yp1+ypp1*y0;
-		return y0*y1;
-	}
-
-	static float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
-								   float_type x, float_type *yprime, float_type *yprime2) 
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+							   float_type x, float_type *yprime, float_type *yprime2) const
     {
 		float_type y0, yp0, ypp0, y1, yp1, ypp1;
 		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
@@ -663,25 +614,10 @@ public:
 template <typename float_type=double> class c2_ratio : public c2_binary_function<float_type> {
 public:	
 	c2_ratio(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	c2_ratio() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 	
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw () 
-    { 
-		float_type y0, yp0, ypp0, y1, yp1, ypp1;
-		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
-		if(yprime || yprime2) {
-			yp0p=&yp0; ypp0p=&ypp0; yp1p=&yp1; ypp1p=&ypp1;
-		} else {
-			yp0p=ypp0p=yp1p=ypp1p=0;
-		}
-		y0=this->Left.value_with_derivatives(x, yp0p, ypp0p);
-		y1=this->Right.value_with_derivatives(x, yp1p, ypp1p);
-		if(yprime) *yprime=(yp0*y1-y0*yp1)/(y1*y1); // first deriv of ratio
-		if(yprime2) *yprime2=(y1*y1*ypp0+y0*(2*yp1*yp1-y1*ypp1)-2*y1*yp0*yp1)/(y1*y1*y1); // second deriv of ratio 
-		return y0/y1;
-	}
-	
-	static float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
-							  float_type x, float_type *yprime, float_type *yprime2) 
+	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
+							  float_type x, float_type *yprime, float_type *yprime2) const
     {
 		float_type y0, yp0, ypp0, y1, yp1, ypp1;
 		float_type *yp0p, *ypp0p, *yp1p, *ypp1p;
@@ -698,23 +634,6 @@ public:
 	}
 
 };
-
-/// \brief factory function to create a c2_sum from an regular algebraic expression.
-/// \note
-/// be very wary of ownership issues if this is used in a complex expression.
-template <typename float_type> inline c2_sum<float_type> &operator + (const c2_function<float_type> &lhs, const c2_function<float_type> &rhs)  { return *new c2_sum<float_type>(lhs, rhs); }
-/// \brief factory function to create a c2_diff from an regular algebraic expression.
-/// \note
-/// be very wary of ownership issues if this is used in a complex expression.
-template <typename float_type> inline c2_diff<float_type> &operator - (const c2_function<float_type> &lhs, const c2_function<float_type> &rhs)  { return *new c2_diff<float_type>(lhs, rhs); }
-/// \brief factory function to create a c2_product from an regular algebraic expression.
-/// \note
-/// be very wary of ownership issues if this is used in a complex expression.
-template <typename float_type> inline c2_product<float_type> &operator * (const c2_function<float_type> &lhs, const c2_function<float_type> &rhs)  { return *new c2_product<float_type>(lhs, rhs); }
-/// \brief factory function to create a c2_ratio from an regular algebraic expression.
-/// \note
-/// be very wary of ownership issues if this is used in a complex expression.
-template <typename float_type> inline c2_ratio<float_type> &operator / (const c2_function<float_type> &lhs, const c2_function<float_type> &rhs)  { return *new c2_ratio<float_type>(lhs, rhs); }
 
 /// \brief a c2_function which is constant : can do interpolating_function  f2=f1 + c2_constant(11.3)
 template <typename float_type> class c2_constant : public c2_function<float_type> {
@@ -846,9 +765,8 @@ public:
     /// \param combiner a function which defines which binary operation to use.
     /// \return a new interpolating_function  with the same mappings for x and y
 	interpolating_function <float_type> & binary_operator(const c2_function<float_type> &rhs,
-           float_type (&combiner)(const c2_function<float_type> &, const c2_function<float_type> &, float_type , float_type *, float_type *)
+           c2_binary_function<float_type> *combining_stub
            ) const;
-	
 	
 	// InterpolatingFunctions override the c2_function operators, since they explicitly re-generate the interpolation table
 	// when they are applied.  If this is not desired, these operators are not virtual, so the interpolating_function 
@@ -861,7 +779,8 @@ public:
 	/// InterpolatingFunctions override the c2_function operators, since they explicitly re-generate the interpolation table
 	/// when they are applied.  If this is not desired, these operators are not virtual, so the interpolating_function 
 	/// can be upcast back to a c2_function to produce unprocessed binaries.
-    interpolating_function <float_type> & operator + (const c2_function<float_type> &rhs) const { return binary_operator(rhs, c2_sum<float_type>::combine); }
+    interpolating_function <float_type> & operator + (const c2_function<float_type> &rhs) const { 
+		return binary_operator(rhs, new c2_sum<float_type>()); }
 	/// \brief produce a newly resampled interpolating_function  which is the specified difference.
     /// \param rhs the function to subtract, pointwise
     /// \return a new interpolating_function 
@@ -869,7 +788,8 @@ public:
 	/// InterpolatingFunctions override the c2_function operators, since they explicitly re-generate the interpolation table
 	/// when they are applied.  If this is not desired, these operators are not virtual, so the interpolating_function 
 	/// can be upcast back to a c2_function to produce unprocessed binaries.
-	interpolating_function <float_type> & operator - (const c2_function<float_type> &rhs) const { return binary_operator(rhs, c2_diff<float_type>::combine); }
+	interpolating_function <float_type> & operator - (const c2_function<float_type> &rhs) const {
+		return binary_operator(rhs, new c2_diff<float_type>()); }
 	/// \brief produce a newly resampled interpolating_function  which is the specified product.
     /// \param rhs the function to multiply, pointwise
     /// \return a new interpolating_function 
@@ -877,7 +797,8 @@ public:
 	/// InterpolatingFunctions override the c2_function operators, since they explicitly re-generate the interpolation table
 	/// when they are applied.  If this is not desired, these operators are not virtual, so the interpolating_function 
 	/// can be upcast back to a c2_function to produce unprocessed binaries.
-	interpolating_function <float_type> & operator * (const c2_function<float_type> &rhs) const { return binary_operator(rhs, c2_product<float_type>::combine); }
+	interpolating_function <float_type> & operator * (const c2_function<float_type> &rhs) const { 
+		return binary_operator(rhs, new c2_product<float_type>()); }
 	/// \brief produce a newly resampled interpolating_function  which is the specified ratio.
     /// \param rhs the function to divide, pointwise
     /// \return a new interpolating_function 
@@ -885,7 +806,8 @@ public:
 	/// InterpolatingFunctions override the c2_function operators, since they explicitly re-generate the interpolation table
 	/// when they are applied.  If this is not desired, these operators are not virtual, so the interpolating_function 
 	/// can be upcast back to a c2_function to produce unprocessed binaries.
-	interpolating_function <float_type> & operator / (const c2_function<float_type> &rhs) const { return binary_operator(rhs, c2_ratio<float_type>::combine); }
+	interpolating_function <float_type> & operator / (const c2_function<float_type> &rhs) const { 
+		return binary_operator(rhs, new c2_ratio<float_type>()); }
 	/// \brief produce a newly resampled interpolating_function  which is the specified sum.
     /// \param rhs a constant to add, pointwise
     /// \return a new interpolating_function 
@@ -1093,22 +1015,20 @@ public:
     /// \param xmin the lower bound for the grid
     /// \param xmax upper bound for the grid
     /// \return a new sampling grid.
-	static std::vector<float_type> &trig_grid(float_type xmin, float_type xmax); 
-	virtual std::vector<float_type> &get_sampling_grid(float_type xmin, float_type xmax) const { return c2_sin::trig_grid(xmin, xmax); }
+	virtual std::vector<float_type> &get_sampling_grid(float_type xmin, float_type xmax); 
     /// \brief the static singleton 
 	static const c2_sin sin;
 };
 /// \brief compute cos(x) with its derivatives.
 ///
 /// Creates a singleton instance c2_cos::cos of itself for convenient access.
-template <typename float_type=double> class c2_cos : public c2_function<float_type> {
+template <typename float_type=double> class c2_cos : public c2_sin<float_type> {
 public:
 	/// \brief constructor.  There is already a singleton c2_cos::cos, which usually suffices.
 	c2_cos() {}
 	
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
 	{ float_type q=std::cos(x); if(yprime) *yprime=-std::sin(x); if(yprime2) *yprime2=-q; return q; }	
-	virtual std::vector<float_type> &get_sampling_grid(float_type xmin, float_type xmax) const { return c2_sin<float_type>::trig_grid(xmin, xmax); }
     /// \brief the static singleton 
 	static const c2_cos cos;
 };
@@ -1128,7 +1048,6 @@ public:
 		if(yprime) *yprime=yp; if(yprime2) *yprime2=2*t*yp; 
 		return t; 
 	}	
-	virtual std::vector<float_type> &get_sampling_grid(float_type xmin, float_type xmax) const { return c2_sin<float_type>::trig_grid(xmin, xmax); }
     /// \brief the static singleton 
 	static const c2_tan tan;
 };
@@ -1182,9 +1101,10 @@ public:
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
 	{ 
 		float_type q=1.0/x; 
-		if(yprime) *yprime=-rscale*(q*q); 
-		if(yprime2) *yprime2=2*rscale*q*q*q; 
-		return rscale*q; 
+		float_type y=rscale*q;
+		if(yprime) *yprime=-y*q; 
+		if(yprime2) *yprime2=2*y*q*q; 
+		return y; 
 	}
 	/// \brief reset the scale factor
 	/// \param scale the new numerator
@@ -1213,24 +1133,28 @@ public:
  
  for example, given a c2_function \a f 
  \code 
- c2_linear<double> L(1.2, 2.0);
+ c2_linear<double> L(1.2, 2.0, 3.0);
  c2_composed_function<double> &F=L(f); 
  \endcode
- produces a new c2_function F=1.2+2.0*\a f 
+ produces a new c2_function F=2.0+3.0*(\a f - 1.2) 
 */
 template <typename float_type=double> class c2_linear : public c2_function<float_type> {
 public:
-    /// \brief Construct the operator
+    /// \brief Construct the operator f=y0 + slope * (x-x0)
+	/// \param x0 the x offset
+    /// \param y0 the y-intercept i.e. f(x0)
+    /// \param slope the slope of the mapping
+	c2_linear(float_type x0, float_type y0, float_type slope) : xint(x0), intercept(y0), m(slope) {}
+    /// \brief Change the slope and intercepts after construction.
+	/// \param x0 the x offset
     /// \param y0 the y-intercept 
     /// \param slope the slope of the mapping
-	c2_linear(float_type y0, float_type slope) : intercept(y0), m(slope) {}
-    /// \brief Change the slope and intercept after construction.
-	void reset(float_type y0, float_type slope) { intercept=y0; m=slope; } 
+	void reset(float_type x0, float_type y0, float_type slope) { xint=x0; intercept=y0; m=slope; } 
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
-	{ if(yprime) *yprime=m; if(yprime2) *yprime2=0; return m*x+intercept; }
+	{ if(yprime) *yprime=m; if(yprime2) *yprime2=0; return m*(x-xint)+intercept; }
 	
 private:
-		float_type intercept, m;
+		float_type xint, intercept, m;
 protected:
 		c2_linear() {} // do not allow naked construction... it is usually an accident.
 };
@@ -1317,7 +1241,7 @@ protected:
  
  Note that it is a subclass of c2_scaled_function only to manage ownership of another c2_function.
  */
-template <typename float_type=double> class c2_inverse_function : public c2_scaled_function<float_type> {
+template <typename float_type=double> class c2_inverse_function : public c2_plugin_function<float_type> {
 public:
     /// \brief Construct the operator
     /// \param source the function to be inverted
@@ -1436,6 +1360,68 @@ template <typename float_type, typename Intermediate, typename Final> Final
 	
 	return result;
 }
+
+/// \brief create a c2_function which smoothly connects two other c2_functions.
+///
+/// This takes two points and generates a polynomial which matches two c2_function arguments 
+/// at those two points, with two derivatives at each point, and an arbitrary value at the center of the 
+/// region.  It is useful for splicing together functions over rough spots (0/0, for example).
+/// 
+/// If \a auto_center is true, the value at the midpoint is computed so that the resulting polynomial is
+/// of order 5.  If \a auto_center is false, the value \a y1 is used at the midpoint, resulting in a 
+/// polynomial of order 6.
+template <typename float_type=double> class c2_connector_function : public c2_function<float_type> {
+public:	
+	/// \brief construct the container
+	/// \param f1 the function on the left side to be connected 
+	/// \param f2 the function on the right side to be connected
+	/// \param x0 the point at which to match \a f1 and its derivatives
+	/// \param x2 the point at which to match \a f2 and its derivatives
+	/// \param auto_center if true, no midpoint value is specified.  If false, match the value \a y1 at the midpoint
+	/// \param y1 the value to match at the midpoint, if \a auto_center is false
+	/// \return a c2_function with domain (\a x0,\a x2) which smoothly connects \a f1 and \a f2
+	c2_connector_function(const c2_function<float_type> &f1, const c2_function<float_type> &f2, float_type x0, float_type x2, 
+			bool auto_center, float_type y1);
+	/// \brief destructor
+	virtual ~c2_connector_function();
+	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw (c2_exception);
+protected:
+	float_type fx1, fhinv, fdx, fy1, fa, fb, fc, fd, fe, ff;
+};
+
+
+
+/// \brief create a c2_function which is a piecewise assembly of other c2_functions.
+///
+/// The functions must have increasing, non-overlapping domains.  Any empty space
+/// between functions will be filled with a linear interpolation.
+/// \note The creation of the container results in the creation of an explicit sampling grid.  
+/// If this is used with functions with a large domain, or which generate very dense sampling grids,
+/// it could eat a lot of memory.  Do not abuse this by using functions which can generate gigantic grids.
+/// 
+/// See c2_plugin_function for a discussion of how this might be used.
+template <typename float_type=double> class c2_piecewise_function : public c2_function<float_type> {
+public:	
+	/// \brief construct the container
+	c2_piecewise_function();
+	/// \brief destructor
+	virtual ~c2_piecewise_function();
+	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw (c2_exception);
+	/// \brief append a new function to the sequence
+	///
+	/// This takes a c2_function, and appends it onto the end of the piecewise collection.
+	/// The domain of the function (which MUST be set) specifies the place it will be used in 
+	/// the final function.  If the domain exactly abuts the domain of the previous function, it
+	/// will be directly attached.  If there is a gap, the gap will be filled in by linear interpolation.
+	/// If the function being appended is to be deleted automatically when this container is deleted, set the pass_ownership flag.
+	/// \param func a c2_function with a defined domain to be appended to the collection
+	/// \param pass_ownership if set, \a func will be deleted when the container is destroyed
+	void append_function(c2_function<float_type> &func, bool pass_ownership) throw (c2_exception);
+protected:
+	std::vector<c2_function<float_type> *> functions;
+	std::vector<bool> owns;
+	mutable int lastKLow;
+};
 
 #include "c2_function.icc"
 

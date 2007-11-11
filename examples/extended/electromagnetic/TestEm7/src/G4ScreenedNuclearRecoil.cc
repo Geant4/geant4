@@ -77,7 +77,7 @@
 
 #include "G4ScreenedNuclearRecoil.hh"
 
-const char G4ScreenedCoulombCrossSectionInfo::CVSVers[]="G4ScreenedNuclearRecoil.cc,v 1.20 2007/10/25 18:43:26 marcus Exp";
+const char G4ScreenedCoulombCrossSectionInfo::CVSVers[]="G4ScreenedNuclearRecoil.cc,v 1.24 2007/11/10 22:48:29 marcus Exp";
 
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
@@ -102,6 +102,8 @@ const char G4ScreenedCoulombCrossSectionInfo::CVSVers[]="G4ScreenedNuclearRecoil
 
 #include "Randomize.hh"
 
+#include "CLHEP/Units/PhysicalConstants.h"
+
 #include <iostream>
 #include <iomanip>
 
@@ -121,7 +123,7 @@ G4ScreenedCoulombCrossSection::~G4ScreenedCoulombCrossSection()
 	
 }
 
-const G4double G4ScreenedCoulombCrossSection::massmap[nElements+1]={
+const G4double G4ScreenedCoulombCrossSection::massmap[nMassMapElements+1]={
 	0, 1.007940, 4.002602, 6.941000, 9.012182, 10.811000, 12.010700, 
 	14.006700, 15.999400, 18.998403, 20.179700, 22.989770, 24.305000, 26.981538, 28.085500, 
 	30.973761, 32.065000, 35.453000, 39.948000, 39.098300, 40.078000, 44.955910, 47.867000, 
@@ -142,13 +144,13 @@ G4ParticleDefinition* G4ScreenedCoulombCrossSection::SelectRandomUnweightedTarge
 {
 	// Select randomly an element within the material, according to number density only	
 	const G4Material* material = couple->GetMaterial();
-	G4int nElements = material->GetNumberOfElements();
+	G4int nMatElements = material->GetNumberOfElements();
 	const G4ElementVector* elementVector = material->GetElementVector();
 	const G4Element *element=0;
 	G4ParticleDefinition*target=0;
 	
 	// Special case: the material consists of one element
-	if (nElements == 1)
+	if (nMatElements == 1)
     {
 		element= (*elementVector)[0];
     }
@@ -159,7 +161,7 @@ G4ParticleDefinition* G4ScreenedCoulombCrossSection::SelectRandomUnweightedTarge
 		G4double nsum=0.0;
 		const G4double *atomDensities=material->GetVecNbOfAtomsPerVolume();
 		
-		for (G4int k=0 ; k < nElements ; k++ )
+		for (G4int k=0 ; k < nMatElements ; k++ )
         {
 			nsum+=atomDensities[k];
 			element= (*elementVector)[k];
@@ -231,13 +233,13 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 
 		const G4Material* material= (*materialTable)[matidx];
 		const G4ElementVector &elementVector = *(material->GetElementVector());
-		const G4int nElements = material->GetNumberOfElements();
+		const G4int nMatElements = material->GetNumberOfElements();
 
 		const G4Element *element=0;
 		const G4double *atomDensities=material->GetVecNbOfAtomsPerVolume();
 		
 		G4double emin=0, emax=0; // find innermost range of cross section functions
-		for (G4int kel=0 ; kel < nElements ; kel++ )
+		for (G4int kel=0 ; kel < nMatElements ; kel++ )
         {
 			element=elementVector[kel];
 			G4int Z=(G4int)std::floor(element->GetZ()+0.5);
@@ -257,7 +259,7 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 		for (G4int eidx=0; eidx < nmfpvals; eidx++) mfpvals[eidx] = 0.0; 
 		
 		// sum inverse mfp for each element in this material and for each energy
-		for (G4int kel=0 ; kel < nElements ; kel++ )
+		for (G4int kel=0 ; kel < nMatElements ; kel++ )
         {
 			element=elementVector[kel];
 			G4int Z=(G4int)std::floor(element->GetZ()+0.5);
@@ -428,7 +430,7 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, 
 	G4double numberDensity=mat->GetTotNbOfAtomsPerVolume();
 	G4double lattice=0.5/std::pow(numberDensity,1.0/3.0); // typical lattice half-spacing
 	G4double length=GetCurrentInteractionLength();
-	G4double sigopi=1.0/(M_PI*numberDensity*length);  // this is sigma0/pi
+	G4double sigopi=1.0/(CLHEP::pi*numberDensity*length);  // this is sigma0/pi
 	
 	// compute the impact parameter very early, so if is rejected as too far away, little effort is wasted
 	// this is the TRIM method for determining an impact parameter based on the flight path
@@ -517,11 +519,11 @@ G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(G4ScreenedNu
 	// or, for easier scaling, x'^2 - x' au phi(x')/eps - beta^2 au^2
 	static c2_plugin_function<G4double> phifunc;
 	static c2_quadratic<G4double> xsq(0., 0., 0., 1.); //  x^2
-	static c2_linear<G4double> xovereps(0., 0.); // will fill this in with the right slope at run time
+	static c2_linear<G4double> xovereps(0., 0., 0.); // will fill this in with the right slope at run time
 	static c2_function<G4double> &xphi=xovereps*phifunc;
 	static c2_function<G4double> &diff=xsq-xphi;
 	
-	xovereps.reset(0.0, au/eps); // slope of x*au/eps term
+	xovereps.reset(0., 0.0, au/eps); // slope of x*au/eps term
 	phifunc.set_function(phiData); // install interpolating table
 	
 	G4double xx1, phip, phip2;
@@ -559,7 +561,7 @@ G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(G4ScreenedNu
 		alpha+=weights[k]*ff;
 	}
 	
-	G4double thetac1=M_PI*beta*alpha/xx1; // complement of CM scattering angle
+	G4double thetac1=CLHEP::pi*beta*alpha/xx1; // complement of CM scattering angle
 	G4double sintheta=std::sin(thetac1); //note sin(pi-theta)=sin(theta)
 	G4double costheta=-std::cos(thetac1); // note cos(pi-theta)=-cos(theta)
 										  // G4double psi=std::atan2(sintheta, costheta+a1/A); // lab scattering angle (M&T 3rd eq. 8.69)
@@ -647,7 +649,7 @@ void G4SingleScatter::DoCollisionStep(G4ScreenedNuclearRecoil *master,
 	G4double incidentEnergy = incidentParticle->GetKineticEnergy();
 	G4double eRecoil=kin.eRecoil;
 	
-	G4double azimuth=G4UniformRand()*(2.0*M_PI);
+	G4double azimuth=G4UniformRand()*(2.0*CLHEP::pi);
 	G4double sa=std::sin(azimuth);
 	G4double ca=std::cos(azimuth);
 
@@ -827,9 +829,9 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
     {
 		const G4Material* material= (*materialTable)[m];
 		const G4ElementVector* elementVector = material->GetElementVector();
-		const G4int nElements = material->GetNumberOfElements();
+		const G4int nMatElements = material->GetNumberOfElements();
 		
-		for (G4int iEl=0; iEl<nElements; iEl++)
+		for (G4int iEl=0; iEl<nMatElements; iEl++)
 		{
 			G4Element* element = (*elementVector)[iEl];
 			G4int Z = (G4int) element->GetZ();
@@ -860,9 +862,9 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 			//Since we don't need exact sigma values, this is good enough (within a factor of 2 almost always)
 			//this rearranges to phi(x0)/(x0*eps) = 2*theta/pi - theta^2/pi^2
 			
-			c2_linear<G4double> c2au(0.0, au);
+			c2_linear<G4double> c2au(0.0, 0.0, au);
 			c2_composed_function<G4double> phiau(screen, c2au); // build phi(x*au) for dimensionless phi
-			c2_linear<G4double> c2eps(0.0, 0.0); // will store an appropriate eps inside this in loop
+			c2_linear<G4double> c2eps(0.0, 0.0, 0.0); // will store an appropriate eps inside this in loop
 			c2_ratio<G4double> x0func(phiau, c2eps); // this will be phi(x)/(x*eps) when c2eps is correctly set
 			
 			G4double m1c2=a1*amu_c2;
@@ -884,7 +886,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 				G4double theta=thetac(gamma*a1, a2, eratio);
 			
 				G4double eps=cm_energy(a1, a2, ee)/escale; // #make sure lab energy is converted to CM for these calculations
-				c2eps.reset(0.0, eps); // set correct slope in this function
+				c2eps.reset(0.0, 0.0, eps); // set correct slope in this function
 				
 				G4double q=theta/pi;
 				// G4cout << ee << " " << m1c2 << " " << gamma << " " << eps << " " << theta << " " << q << G4endl;

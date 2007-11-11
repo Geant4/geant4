@@ -41,7 +41,7 @@
 //
 // Class Description - End
 
-// static char CVSVers[]="G4ScreenedNuclearRecoil.hh,v 1.2 2007/10/25 18:33:28 marcus Exp"
+// static char CVSVers[]="G4ScreenedNuclearRecoil.hh,v 1.4 2007/11/10 22:48:30 marcus Exp"
 
 
 #ifndef G4ScreenedNuclearRecoil_h
@@ -69,7 +69,7 @@ public:
 	~G4ScreenedCoulombCrossSectionInfo() { }
 	
 	const char *CVSHeaderVers() { return 
-		"G4ScreenedNuclearRecoil.hh,v 1.2 2007/10/25 18:33:28 marcus Exp";
+		"G4ScreenedNuclearRecoil.hh,v 1.4 2007/11/10 22:48:30 marcus Exp";
 	}
 	
 	const char *CVSFileVers() { return CVSVers; }
@@ -108,9 +108,9 @@ public:
 	// this process needs element selection weighted only by number density
 	G4ParticleDefinition* SelectRandomUnweightedTarget(const G4MaterialCutsCouple* couple);
 	
-	enum { nElements=116 };
+	enum { nMassMapElements=116 };
 		
-	G4double standardmass(G4int z1) { return z1 <= nElements ? massmap[z1] : 2.5*z1; }
+	G4double standardmass(G4int z1) { return z1 <= nMassMapElements ? massmap[z1] : 2.5*z1; }
 	
 	// get the mean-free-path table for the indexed material 
 	c2_function<G4double> * operator [] (G4int materialIndex) { 
@@ -125,7 +125,7 @@ protected:
 	std::map<G4int, c2_function<G4double> *> MFPTables; // MFP for each material
 	
 private:
-	static const G4double massmap[nElements+1];
+	static const G4double massmap[nMassMapElements+1];
 
 };
 
