@@ -105,7 +105,7 @@ HADR_EXAMPLES += 01
 
 POLARISATION_EXAMPLES += 01
 
-MEDICAL += 01 02
+MEDICAL += 01 02 03
 
 ELECTRO += 01 02
 
@@ -304,6 +304,12 @@ examples_links_source:
 	  ln -s $$exdir $$testdir; \
 	  ln -s fanoCavity.in  $$testdir/test2002.in;  \
           ln -s fanoCavity.out $$testdir/test2002.out; :
+
+	  @testdir=test2003; \
+	  exdir=$(G4INSTALL)/examples/extended/medical/fanoCavity2/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s fanoCavity2.in  $$testdir/test2003.in;  \
+          ln -s fanoCavity2.out $$testdir/test2003.out; :
 
 # OPTICAL
 	  @testdir=test4001; \
@@ -551,6 +557,7 @@ examples_links_binaries:
 	ln -s PhotIn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003; \
         ln -s GammaTherapy $(G4WORKDIR)/bin/$(G4SYSTEM)/test2001; \
         ln -s fanoCavity $(G4WORKDIR)/bin/$(G4SYSTEM)/test2002; \
+	ln -s fanoCavity2 $(G4WORKDIR)/bin/$(G4SYSTEM)/test2003; \
 	true
 
 #temp
