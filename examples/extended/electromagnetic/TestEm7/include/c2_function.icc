@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version $Id: c2_function.icc,v 1.4 2007-11-12 17:01:28 vnivanch Exp $
+ *	\version c2_function.cc,v 1.41 2007/11/12 18:11:23 marcus Exp
  */
 
 #include <iostream>
@@ -20,7 +20,7 @@
 #include <limits>
 
 template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
-{ return "$Id: c2_function.icc,v 1.4 2007-11-12 17:01:28 vnivanch Exp $"; }
+{ return "c2_function.cc,v 1.41 2007/11/12 18:11:23 marcus Exp"; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -67,9 +67,17 @@ template <typename float_type> float_type c2_function<float_type>::find_root(flo
 		if(error) { *error=1; return 0.0; }
 		else { 
 			char buf[256]; 
+
+// for now, work around missing snprintf in MSVC
+#ifndef MSVC 
 			snprintf(buf, sizeof(buf)-1, 
 				"unbracketed root in find_root at xlower=%g, xupper=%g, value=%g : bailing", 
 				(double)lower_bracket, (double)upper_bracket, (double)value);
+#else
+			printf(buf, 
+					 "unbracketed root in find_root at xlower=%g, xupper=%g, value=%g : bailing", 
+					 (double)lower_bracket, (double)upper_bracket, (double)value);
+#endif
 			throw c2_exception(buf);
 		}
 	}
@@ -171,9 +179,16 @@ template <typename float_type> float_type c2_function<float_type>::integrate_ste
 		// check for underflow on step size, which prevents us from achieving specified accuracy. 
 		if(std::abs(dx) < std::abs(f1.x)*rb.rel_tol) {
 			char buf[256]; 
+#ifndef MSVC
 			snprintf(buf, sizeof(buf)-1, 
 					 "Step size underflow in adaptive_partial_integrals at depth=%d, x=%.4g", 
 					 depth, (double)f1.x);
+#else
+			sprintf(buf, 
+					 "Step size underflow in adaptive_partial_integrals at depth=%d, x=%.4g", 
+					 depth, (double)f1.x);
+#endif
+			
 			throw c2_exception(buf);
 		}
 		
@@ -478,8 +493,8 @@ template <typename float_type> std::vector<float_type> &c2_sin<float_type>::get_
 }
 
 template <typename float_type> float_type Identity(float_type x) { return x; } // a useful function
-template <typename float_type> float_type f_one(float_type x) { return 1.0; } // the first derivative of identity
-template <typename float_type> float_type f_zero(float_type x) { return 0.0; } // the second derivative of identity
+template <typename float_type> float_type f_one(float_type) { return 1.0; } // the first derivative of identity
+template <typename float_type> float_type f_zero(float_type) { return 0.0; } // the second derivative of identity
 
 //  The constructor
 template <typename float_type> void interpolating_function<float_type>::init(
@@ -608,8 +623,14 @@ template <typename float_type> float_type interpolating_function<float_type>::va
 {
 	if(x < this->xmin() || x > this->xmax()) {
 		char buf[256];
+#ifndef MSVC
 		snprintf(buf, sizeof(buf)-1, "Interpolating function argument %g out of range %g -- %g", (double)x, 
 			(double)(this->xmin()), (double)(this->xmax()));
+#else
+		sprintf(buf, "Interpolating function argument %g out of range %g -- %g", (double)x, 
+				 (double)(this->xmin()), (double)(this->xmax()));
+#endif
+		
 		throw c2_exception(buf);
     }
 	
@@ -846,7 +867,7 @@ template <typename float_type> arrhenius_interpolating_function<float_type>::arr
 										: interpolating_function<float_type>()
 {
 	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
-		 c2_f_recip, c2_f_recipprime, c2_f_recipprime2, 
+		c2_f_recip, c2_f_recipprime, c2_f_recipprime2, 
 		(float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
 		(float_type (*)(float_type)) (std::exp) );
 }
@@ -956,8 +977,14 @@ template <typename float_type> float_type c2_piecewise_function<float_type>::val
 	
 	if(x < this->xmin() || x > this->xmax()) {
 		char buf[256];
+#ifndef MSVC
 		snprintf(buf, sizeof(buf)-1, "piecewise function argument %g out of range %g -- %g", (double)x, 
 			   (double)(this->xmin()), (double)(this->xmax()));
+#else
+		sprintf(buf,  "piecewise function argument %g out of range %g -- %g", (double)x, 
+				 (double)(this->xmin()), (double)(this->xmax()));
+#endif
+		
 		throw c2_exception(buf);
 	}
 
