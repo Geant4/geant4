@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.7 2007-11-11 00:59:03 akimura Exp $
+// $Id: test1.cc,v 1.8 2007-11-12 01:53:59 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "Tst1PhysicsList.hh"
 #include "Tst1PrimaryGeneratorAction.hh"
 #include "Tst1RunAction.hh"
-#include "Tst1UserScoreWriter.hh"
+//#include "Tst1UserScoreWriter.hh"
 
 int main(int argc,char** argv)
 {
