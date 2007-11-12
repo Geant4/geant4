@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_function.hh,v 1.49 2007/11/10 02:15:27 marcus Exp
+ * 	\version c2_function.hh,v 1.50 2007/11/12 13:09:30 marcus Exp
  */
 
 #ifndef __has_C2Functions_c2_h
@@ -36,8 +36,6 @@ template <typename float_type> class c2_sum;
 template <typename float_type> class c2_diff;
 template <typename float_type> class c2_product;
 template <typename float_type> class c2_ratio;
-
-template<typename Foo> struct recur;
 
 /**
  \brief the parent class for all c2_functions.
@@ -72,13 +70,13 @@ public:
     /// \brief get versioning information for the header file
     /// \return the CVS Id string
 	const std::string cvs_header_vers() const { return 
-		"c2_function.hh,v 1.49 2007/11/10 02:15:27 marcus Exp";
+		"c2_function.hh,v 1.50 2007/11/12 13:09:30 marcus Exp";
 	}
 	
     /// \brief get versioning information for the source file
     /// \return the CVS Id string
 	const std::string cvs_file_vers() const ;
-		
+	
 public:
     /// \brief destructor
 	virtual ~c2_function() { if(sampling_grid && !no_overwrite_grid) delete sampling_grid; }
@@ -298,12 +296,26 @@ protected:
 	mutable int evaluations;
 	
 private:
+	/// \brief structure used for recursion in adaptive integrator.  
+	///
+	/// Contains all the information for the function at one point. 
+	struct c2_integrate_fblock {	float_type x, y, yp, ypp; };
+	/// \brief structure used to pass information recursively.
+	///
+	/// the \a abs_tol is scaled by a factor of two at each division.  
+	/// Everything else is just passed down.
+	struct c2_integrate_recur { struct c2_integrate_fblock *f0, *f1, *f2;
+		float_type abs_tol, rel_tol, *lr, eps_scale, extrap_coef, extrap2;
+		int depth, derivs;
+		bool adapt, extrapolate;
+	};
+	
     /// \brief Carry out the recursive subdivision and integration.
     ///
     /// This passes information recursively through the \a recur block pointer
     /// to allow very efficient recursion.
     /// \param rb a pointer to the recur struct.
-	float_type integrate_step(struct recur<float_type> &rb) const;
+	float_type integrate_step(struct c2_integrate_recur &rb) const;
     
     /// these carry a memory of the last root bracketing,
     /// to avoid the necessity of evaluating the function on the brackets every time

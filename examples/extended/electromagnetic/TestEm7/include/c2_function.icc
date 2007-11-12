@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version c2_function.cc,v 1.38 2007/11/10 01:58:31 marcus Exp
+ *	\version c2_function.cc,v 1.39 2007/11/12 13:09:30 marcus Exp
  */
 
 #include <iostream>
@@ -20,7 +20,7 @@
 #include <limits>
 
 template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
-{ return "c2_function.cc,v 1.38 2007/11/10 01:58:31 marcus Exp"; }
+{ return "c2_function.cc,v 1.39 2007/11/12 13:09:30 marcus Exp"; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -129,25 +129,11 @@ template <typename float_type> float_type c2_function<float_type>::find_root(flo
 	#yint = (y0+y1)*dx/2 + dx^2*(yp0-yp1)/10 + dx^3 * (ypp0+ypp1)/120 )
 */
 
-/// \brief structure used for recursion in adaptive integrator.  
-///
-/// Contains all the information for the function at one point. 
-template <typename float_type> struct fblock {	float_type x, y, yp, ypp; };
-/// \brief structure used to pass information recursively.
-///
-/// the \a abs_tol is scaled by a factor of two at each division.  
-/// Everything else is just passed down.
-template <typename float_type> struct recur { struct fblock<float_type> *f0, *f1, *f2;
-	float_type abs_tol, rel_tol, *lr, eps_scale, extrap_coef, extrap2;
-	int depth, derivs;
-	bool adapt, extrapolate;
-};
-
 // the recursive part of the integrator is agressively designed to minimize copying of data... lots of pointers
-template <typename float_type> float_type c2_function<float_type>::integrate_step(recur<float_type> &rb) const
+template <typename float_type> float_type c2_function<float_type>::integrate_step(c2_integrate_recur &rb) const
 {
-	struct fblock<float_type> *fbl[3]={rb.f0, rb.f1, rb.f2}; 
-	struct fblock<float_type> f1; // will hold new middle values
+	struct c2_integrate_fblock *fbl[3]={rb.f0, rb.f1, rb.f2}; 
+	struct c2_integrate_fblock f1; // will hold new middle values
 	float_type retvals[2]={0.0,0.0};
 	float_type lr[2];
 
@@ -173,7 +159,7 @@ template <typename float_type> float_type c2_function<float_type>::integrate_ste
 	}
 	
 	for (int i=0; i<(depth==0?1:2); i++) { // handle left and right intervals, but only left one for depth=0
-		struct fblock<float_type> *f0=fbl[i], *f2=fbl[i+1];
+		struct c2_integrate_fblock *f0=fbl[i], *f2=fbl[i+1];
 		f1.x=0.5*(f0->x + f2->x); // center of interval
 		float_type dx=f2->x - f0->x;
 		float_type dx2 = 0.5*dx;
@@ -429,8 +415,8 @@ template <typename float_type> float_type c2_function<float_type>::partial_integ
 {
 	int np=xgrid.size();
 	
-	struct fblock<float_type> f0, f2;
-	struct recur<float_type> rb;
+	struct c2_integrate_fblock f0, f2;
+	struct c2_integrate_recur rb;
 	rb.rel_tol=rel_tol;
 	rb.extrapolate=extrapolate;
 	rb.adapt=adapt;
@@ -492,8 +478,8 @@ template <typename float_type> std::vector<float_type> &c2_sin<float_type>::get_
 }
 
 template <typename float_type> float_type Identity(float_type x) { return x; } // a useful function
-template <typename float_type> float_type f_one(float_type) { return 1.0; } // the first derivative of identity
-template <typename float_type> float_type f_zero(float_type) { return 0.0; } // the second derivative of identity
+template <typename float_type> float_type f_one(float_type ) { return 1.0; } // the first derivative of identity
+template <typename float_type> float_type f_zero(float_type ) { return 0.0; } // the second derivative of identity
 
 //  The constructor
 template <typename float_type> void interpolating_function<float_type>::init(
