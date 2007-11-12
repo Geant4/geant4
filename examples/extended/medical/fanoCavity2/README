@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2007-11-10 09:43:29 maire Exp $
+$Id: README,v 1.7 2007-11-12 11:34:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ $Id: README,v 1.6 2007-11-10 09:43:29 maire Exp $
     The geometry of the chamber satisfies the conditions of charged particle
     equilibrium. Hence, under idealized conditions, the ratio of the dose 
     deposited over the beam energy fluence must be equal to 1.
-    This variante of the Fano cavity test is based on an reciprocity theorem.
+    This variante of the Fano cavity test make use of an reciprocity theorem.
     
     J.Sempau and P.Andreo, Phys. Med. Biol. 51 (2006) 3533        
 	
@@ -84,7 +84,7 @@ $Id: README,v 1.6 2007-11-10 09:43:29 maire Exp $
     physics list. However, it is always possible to include it via an UI
     command. See PhysicsListMessenger class.
     
-    - Ionisation : In order to have same stopping power in wall and cavity, one
+    - Ionization : In order to have same stopping power in wall and cavity, one
     must cancel the density correction term in the dedx formula. This is done in
     a specific MollerBhabha model (MyMollerBhabhaModel) which inherites from 
     G4MollerBhabhaModel.
