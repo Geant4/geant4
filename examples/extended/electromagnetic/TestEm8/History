@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2007-10-02 10:12:47 vnivanch Exp $
+$Id: History,v 1.29 2007-11-12 10:54:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-11-07 V.Ivant  (testem8-V09-00-05)
+- Fixed logic in SteppingAction 
 
 02-10-07 V.Ivant  (testem8-V09-00-04)
 - Fixed memory leak in UI interface
