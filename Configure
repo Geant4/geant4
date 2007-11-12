@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.98 2007-06-22 11:49:47 bmorgan Exp $
+# $Id: Configure,v 1.99 2007-11-12 17:00:49 bmorgan Exp $
 #
-# Generated on Fri Jun 22 12:32:16 BST 2007 [metaconfig 3.0 PL70]
+# Generated on Mon Nov 12 16:57:17 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -166,6 +166,7 @@ g4workdir=''
 g4bin=''
 g4lib=''
 g4tmp=''
+g4abladata=''
 g4data=''
 g4elasticdata=''
 g4ledata=''
@@ -2739,7 +2740,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW4.3
+	g4ledata=$g4data/G4EMLOW5.1
 	;;
 esac
 
@@ -2748,6 +2749,13 @@ case "$g4neutronhpcrosssections" in
 	g4neutronhpcrosssections=$g4data/G4NDL3.11
 	;;
 esac
+
+case "$g4abladata" in
+'')
+	g4abladata=$g4data/G4ABLA3.0
+	;;
+esac
+
 
 #case "$g4elasticdata" in
 #'')
@@ -2771,6 +2779,8 @@ Please, specify default directory where ALL the Geant4 data is installed:
 
  G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
+ G4ABLADATA:                    $g4abladata
+
 You will be asked about customizing these next.
 
 EOM`
@@ -2791,8 +2801,9 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW4.3
+		g4ledata=$g4data/G4EMLOW5.1
 		g4neutronhpcrosssections=$g4data/G4NDL3.11
+		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
@@ -2812,6 +2823,8 @@ Please, specify default directory where the Geant4 data is installed:
 3) G4LEDATA:			$g4ledata
 
 4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
+
+5) G4ABLADATA:                  $g4abladata
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -2843,7 +2856,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW4.3 data installed ?"
+		rp="Where is G4EMLOW5.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
@@ -2853,6 +2866,14 @@ gans=$ans
 		rp="Where is G4NDL3.11 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
+		;;
+
+	5)
+		dflt=$g4abladata
+		fn='d~'
+		rp="Where is G4ABLA3.0 data installed?"
+		. ./getfile
+		g4abladata=$ans
 		;;
 
 #	5) 
@@ -5813,6 +5834,7 @@ g4_gmake='$g4_gmake'
 g4_gmake_version='$g4_gmake_version'
 g4_make='$g4_make'
 g4_make_version='$g4_make_version'
+g4abladata='$g4abladata'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
