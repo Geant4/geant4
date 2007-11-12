@@ -1,5 +1,6 @@
 #
 /control/execute vis.mac
+/control/verbose 2
 #
 ########################################
 #
@@ -57,14 +58,13 @@
 #
 ########################################
 #
-/run/constructScoringWorlds
 /score/list
 #
 /run/beamOn 100
 #
 ########################################
 #
-/score/draw boxMesh_3 nOfStepPSgamma
-/score/draw boxMesh_2 nOfStepPSgamma
-/score/draw boxMesh_1 nOfStepPSgamma
+/score/drawProjection boxMesh_3 nOfStepPSgamma
+/score/drawProjection boxMesh_2 nOfStepPSgamma
+/score/drawProjection boxMesh_1 nOfStepPSgamma
 #

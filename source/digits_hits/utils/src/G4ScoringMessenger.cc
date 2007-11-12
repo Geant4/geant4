@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.35 2007-11-07 04:12:07 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.36 2007-11-12 13:27:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -161,13 +161,15 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
 
   // Draw Scoring result
-  drawCmd = new G4UIcommand("/score/draw",this);
-  drawCmd->SetGuidance("Draw results of scored quantities.");
+  drawCmd = new G4UIcommand("/score/drawProjection",this);
+  drawCmd->SetGuidance("Draw projection(s) of scored quantities.");
+  drawCmd->SetGuidance("Parameter <proj> specified which projection(s) to be drawn.");
+  drawCmd->SetGuidance("  100 : xy-plane, 010 : yz-place, 001 : zx-plane -- default 111");
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
   drawCmd->SetParameter(param);
-  param = new G4UIparameter("cmName",'s',true);
+  param = new G4UIparameter("colorMapName",'s',true);
   param->SetDefaultValue("defaultLinearColorMap");
   drawCmd->SetParameter(param);
   param = new G4UIparameter("proj",'i',true);
@@ -187,7 +189,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawColumnCmd->SetParameter(param);
   param = new G4UIparameter("column",'i',false);
   drawColumnCmd->SetParameter(param);
-  param = new G4UIparameter("cmName",'s',true);
+  param = new G4UIparameter("colorMapName",'s',true);
   param->SetDefaultValue("defaultLinearColorMap");
   drawColumnCmd->SetParameter(param);
 

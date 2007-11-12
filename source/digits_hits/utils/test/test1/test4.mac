@@ -19,11 +19,8 @@
 #
 /score/close
 #
-/run/constructScoringWorlds
-#
 ########################################
 #
-/run/constructScoringWorlds
 /score/list
 #
 /run/beamOn 100
