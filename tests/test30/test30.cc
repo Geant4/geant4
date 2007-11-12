@@ -133,6 +133,7 @@ int main(int argc, char** argv)
   G4double  sigmae   = 0.0;
   G4double  elim     = 30.*MeV;
   G4double  energyg  = 40.*MeV;
+  G4double  balance  = 5.0*MeV;
   G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
@@ -294,6 +295,9 @@ int main(int argc, char** argv)
       } else if(line == "#elim(MeV)") {
         (*fin) >> elim;
         elim *= MeV;
+      } else if(line == "#ebalance(MeV)") {
+        (*fin) >> balance;
+        balance *= MeV;
       } else if(line == "#ebinlog(MeV)") {
         (*fin) >> ebinlog;
 	if (ebinlog < 1.1) ebinlog = 1.1;
@@ -505,9 +509,9 @@ int main(int argc, char** argv)
       for(i=nanglpr; i<11; i++) {histo.activate(3+i, false);}
 
       histo.add1D("15","E(MeV) for gamma",200,0.,energyg);
-      histo.add1D("16","delta E (MeV) ",100,-5,5);
-      histo.add1D("17","delta Pz (MeV/c)",100,-50,50);
-      histo.add1D("18","delta Pt (MeV/c)",100,-50,50);
+      histo.add1D("16","delta E (MeV) ",100,-balance,balance);
+      histo.add1D("17","delta Pz (MeV/c)",100,-balance,balance);
+      histo.add1D("18","delta Pt (MeV/c)",100,-balance,balance);
 
       histo.add1D("19","E(MeV) for pi0",nbinse,0.,emax);
       histo.add1D("20","E(MeV) for pi+",nbinse,0.,emax);
