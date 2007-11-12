@@ -37,7 +37,7 @@ G4GDMLParser::~G4GDMLParser() {
    }
 }
 
-bool G4GDMLParser::Read(const std::string& fileName) {
+bool G4GDMLParser::Read(const G4String& fileName) {
 
    try {
 
@@ -88,15 +88,13 @@ bool G4GDMLParser::Read(const std::string& fileName) {
       if (tag=="materials") { if (!structure.materials.Read(child)    ) return false; } else
       if (tag=="solids"   ) { if (!structure.solids.Read(child)       ) return false; } else
       if (tag=="structure") { if (!structure.Read(child)              ) return false; } else
-      if (tag=="setup"    ) { if (!setup.Read(child)                  ) return false; } else 
-      {
-      }
+      if (tag=="setup"    ) { if (!setup.Read(child)                  ) return false; }
    }
 
    return true;
 }
 
-G4VPhysicalVolume *G4GDMLParser::GetWorldVolume(const std::string &setupName) {
+G4VPhysicalVolume *G4GDMLParser::GetWorldVolume(const G4String &setupName) {
 
    return setup.Get(setupName);
 }

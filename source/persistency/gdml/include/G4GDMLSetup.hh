@@ -3,8 +3,6 @@
 
 #include <xercesc/dom/DOM.hpp>
 
-#include <iostream>
-#include <string>
 #include <map>
 
 #include "G4LogicalVolumeStore.hh"
@@ -13,9 +11,9 @@
 #include "G4PVPlacement.hh"
 
 class G4GDMLSetup {
-   std::map<std::string,std::string> setupMap;
+   std::map<G4String,G4String> setupMap;
 public:
-   G4VPhysicalVolume *Get(const std::string&);
+   G4VPhysicalVolume *Get(const G4String&);
    bool Read(const xercesc::DOMElement* const);
 };
 

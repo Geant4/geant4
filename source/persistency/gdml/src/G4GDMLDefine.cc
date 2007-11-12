@@ -10,8 +10,8 @@ G4GDMLDefine::~G4GDMLDefine() {
 
 bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
-   std::string name;
-   std::string value;
+   G4String name;
+   G4String value;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -24,20 +24,14 @@ bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name" ) { name  = attribute_value; } else
-      if (attribute_name=="value") { value = attribute_value; } else
-      {
-         std::cout << std::endl;
-         std::cout << "GDML ERROR! Unsupported attribute in constant '" << name << "': " << attribute_name << std::endl;
-         std::cout << std::endl;
-         return false;
-      }
+      if (attribute_name=="value") { value = attribute_value; }
    }
 
-   double _value;
+   G4double _value;
 
    if (!evaluator->Evaluate(_value,value)) return false;
 
@@ -46,11 +40,11 @@ bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
-   std::string unit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
+   G4String name;
+   G4String unit;
+   G4String x;
+   G4String y;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -63,21 +57,19 @@ bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="name") { name = attribute_value; } else
+      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="x"   ) { x    = attribute_value; } else
       if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   double _x;
-   double _y;
-   double _z;
+   G4double _x;
+   G4double _y;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
@@ -90,11 +82,11 @@ bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
-   std::string unit;
-   std::string name;
-   std::string x;
-   std::string y;
-   std::string z;
+   G4String name;
+   G4String unit;
+   G4String x;
+   G4String y;
+   G4String z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -107,21 +99,19 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const std::string attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="name") { name = attribute_value; } else
+      if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="x"   ) { x    = attribute_value; } else
       if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="z"   ) { z    = attribute_value; }
    }
    
-   double _x;
-   double _y;
-   double _z;
+   G4double _x;
+   G4double _y;
+   G4double _z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
@@ -140,15 +130,13 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="constant") { if (!constantRead(child)) return false; } else
       if (tag=="position") { if (!positionRead(child)) return false; } else
       if (tag=="rotation") { if (!rotationRead(child)) return false; } else
       {
-         std::cout << std::endl;
-	 std::cout << "GDML ERROR! Unsupported tag in define: " << tag << std::endl;
-         std::cout << std::endl;
+	 G4cout << "GDML ERROR! Unsupported tag in define: " << tag << G4endl;
          return false;
       }
    }
@@ -156,12 +144,12 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element) {
    return true;
 }
 
-G4ThreeVector *G4GDMLDefine::GetPosition(const std::string& ref) {
+G4ThreeVector* G4GDMLDefine::GetPosition(const G4String& ref) {
 
    return (positionMap.find(ref) == positionMap.end()) ? (0) : (positionMap[ref]);
 }
 
-G4ThreeVector *G4GDMLDefine::GetRotation(const std::string& ref) {
+G4ThreeVector* G4GDMLDefine::GetRotation(const G4String& ref) {
 
    return (rotationMap.find(ref) == rotationMap.end()) ? (0) : (rotationMap[ref]);
 }

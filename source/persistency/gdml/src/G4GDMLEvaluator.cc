@@ -17,17 +17,17 @@ G4GDMLEvaluator *G4GDMLEvaluator::GetInstance() {
    return &instance;
 }
 
-bool G4GDMLEvaluator::RegisterConstant(const std::string &name,double value) {
+bool G4GDMLEvaluator::RegisterConstant(const G4String &name,G4double value) {
 
    eval.setVariable(name.c_str(),value);
 
    return true;
 }
 
-bool G4GDMLEvaluator::Evaluate(double& value,const std::string& expression,const std::string& unit) {
+bool G4GDMLEvaluator::Evaluate(G4double& value,const G4String& expression,const G4String& unit) {
 
-   double _expression = 0.0;
-   double _unit = 1.0;
+   G4double _expression = 0.0;
+   G4double _unit = 1.0;
 
    if (expression != "") {
    

@@ -20,9 +20,9 @@ public:
    G4GDMLParser();
    ~G4GDMLParser();
 
-   bool Read(const std::string &fileName);
+   bool Read(const G4String &fileName);
 
-   G4VPhysicalVolume *GetWorldVolume(const std::string &setupName="Default");
+   G4VPhysicalVolume *GetWorldVolume(const G4String& setupName="Default");
 };
 
 #endif

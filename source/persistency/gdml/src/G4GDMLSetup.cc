@@ -1,24 +1,20 @@
 #include "G4GDMLSetup.hh"
 
-G4VPhysicalVolume *G4GDMLSetup::Get(const std::string &name) {
+G4VPhysicalVolume *G4GDMLSetup::Get(const G4String& name) {
 
    if (setupMap.find(name) == setupMap.end()) {
    
-      std::cout << std::endl;
-      std::cout << "G4GDML ERROR! setup '" << name << "' can not be found!" << std::endl;
-      std::cout << std::endl;
+      G4cout << "G4GDML ERROR! setup '" << name << "' was not found!" << G4endl;
       return 0;
    }
 
-   std::string worldref = setupMap[name];
+   G4String worldref = setupMap[name];
 
    G4LogicalVolume *volume = G4LogicalVolumeStore::GetInstance()->GetVolume(worldref,false);
 
    if (volume == 0) {
    
-      std::cout << std::endl;
-      std::cout << "G4GDML ERROR! volume '" << worldref << "' referenced in setup '" << name << "' was not found!" << std::endl;
-      std::cout << std::endl;
+      G4cout << "G4GDML ERROR! volume '" << worldref << "' referenced in setup '" << name << "' was not found!" << G4endl;
       return 0;
    }
 
@@ -29,9 +25,7 @@ G4VPhysicalVolume *G4GDMLSetup::Get(const std::string &name) {
 
 bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
 
-   std::cout << "Reading setup... ";
-
-   std::string name("");
+   G4String name;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
 
@@ -50,17 +44,15 @@ bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
    
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(node);   
 
-      const std::string tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag != "world") return false;
 
       XMLCh *ref_attr = xercesc::XMLString::transcode("ref");
-      std::string ref = xercesc::XMLString::transcode(child->getAttribute(ref_attr));
+      G4String ref = xercesc::XMLString::transcode(child->getAttribute(ref_attr));
       xercesc::XMLString::release(&ref_attr);
 
       setupMap[name] = ref;
-
-      std::cout << "OK" << std::endl;
 
       return true;
    }
