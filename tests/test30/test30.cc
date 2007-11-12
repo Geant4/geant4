@@ -774,7 +774,7 @@ int main(int argc, char** argv)
       dParticle.SetKineticEnergy(e0);
 
       gTrack->SetStep(step);
-      gTrack->SetKineticEnergy(energy);
+      gTrack->SetKineticEnergy(e0);
 
       labv = G4LorentzVector(0.0, 0.0, sqrt(e0*(e0 + 2.*mass)), 
 			     e0 + mass + amass);
