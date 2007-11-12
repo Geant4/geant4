@@ -1,4 +1,4 @@
-$Id: History,v 1.279 2007-11-09 20:28:53 pia Exp $
+$Id: History,v 1.280 2007-11-12 15:26:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.11.2007   G.Cosmo, tag emlowen-V09-00-23
+             Fixed trivial compilation error on WIN32-VC system in file
+             G4FinalStateIonisationBorn.cc.
 
 09.11.2007   MGP, tag emlowen-V09-00-22
              Added cross section and final state policy classes to configure
