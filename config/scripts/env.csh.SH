@@ -39,6 +39,7 @@ unsetenv  G4LEDATA
 unsetenv  G4LEVELGAMMADATA
 unsetenv  G4NEUTRONHPDATA
 unsetenv  G4RADIOACTIVEDATA
+unsetenv  G4ABLADATA
 
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
@@ -143,6 +144,13 @@ if ( X$g4neutronhpcrosssections != X ) then
 setenv G4NEUTRONHPDATA "$g4neutronhpcrosssections"
 echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 endif
+
+#+
+if ( X$g4abladata != X ) then
+setenv G4ABLADATA "$g4abladata"
+echo "On this machine the G4ABLADATA=\$G4ABLADATA"
+endif
+
 
 #+
 #if ( X$g4elasticdata != X ) then
