@@ -1,3 +1,5 @@
+#if QT_VERSION > 0x040202
+
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
@@ -112,3 +114,4 @@ int G4OpenGLQtViewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     return _id;
 }
+#endif

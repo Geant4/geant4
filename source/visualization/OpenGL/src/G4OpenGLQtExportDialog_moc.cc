@@ -1,3 +1,5 @@
+#if QT_VERSION > 0x040000
+
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtExportDialog.hh'
 **
@@ -73,3 +75,4 @@ int G4OpenGLQtExportDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a
     }
     return _id;
 }
+#endif
