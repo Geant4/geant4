@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.6 2007-06-20 15:26:33 maire Exp $
+// $Id: EventAction.cc,v 1.7 2007-11-12 15:48:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,8 +64,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%printModulo == 0) {
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
+}
  
  //additional initializations            
  TotalEnergyDeposit = 0.;

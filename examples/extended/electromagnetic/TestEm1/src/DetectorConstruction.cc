@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.7 2007-07-13 15:12:25 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2007-11-12 15:48:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,6 +115,8 @@ void DetectorConstruction::DefineMaterials()
   G4Material* CO2 = new G4Material("CO2", density, ncomponents=2);
   CO2->AddElement(C, natoms=1);
   CO2->AddElement(O, natoms=2);
+  
+  new G4Material("D2_gas", z=2., a= 2.0141*g/mole, density= 0.036*mg/cm3);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
 
