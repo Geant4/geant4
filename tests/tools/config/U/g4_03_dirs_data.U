@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4elasticdata: \
+?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4abladata g4elasticdata: \
 	g4tmp Myread Getfile cat rm g4system
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -28,7 +28,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW4.3
+	g4ledata=$g4data/G4EMLOW5.1
 	;;
 esac
 
@@ -37,6 +37,13 @@ case "$g4neutronhpcrosssections" in
 	g4neutronhpcrosssections=$g4data/G4NDL3.11
 	;;
 esac
+
+case "$g4abladata" in
+'')
+	g4abladata=$g4data/G4ABLA3.0
+	;;
+esac
+
 
 #case "$g4elasticdata" in
 #'')
@@ -60,6 +67,8 @@ Please, specify default directory where ALL the Geant4 data is installed:
 
  G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
+ G4ABLADATA:                    $g4abladata
+
 You will be asked about customizing these next.
 
 EOM`
@@ -80,8 +89,9 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW4.3
+		g4ledata=$g4data/G4EMLOW5.1
 		g4neutronhpcrosssections=$g4data/G4NDL3.11
+		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
@@ -101,6 +111,8 @@ Please, specify default directory where the Geant4 data is installed:
 3) G4LEDATA:			$g4ledata
 
 4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
+
+5) G4ABLADATA:                  $g4abladata
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -132,7 +144,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW4.3 data installed ?"
+		rp="Where is G4EMLOW5.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
@@ -142,6 +154,14 @@ gans=$ans
 		rp="Where is G4NDL3.11 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
+		;;
+
+	5)
+		dflt=$g4abladata
+		fn='d~'
+		rp="Where is G4ABLA3.0 data installed?"
+		. ./getfile
+		g4abladata=$ans
 		;;
 
 #	5) 

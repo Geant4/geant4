@@ -95,6 +95,15 @@ echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
 
 #+
+if [ X$g4abladata != X ] ; then 
+G4ABLADATA="$g4abladata"
+export G4ABLADATA
+echo "On this machine the G4ABLADATA=\$G4ABLADATA"
+fi
+
+
+
+#+
 #if [ X$g4elasticdata != X ] ; then 
 #G4ELASTICDATA="$g4elasticdata"
 #export G4ELASTICDATA

@@ -39,6 +39,7 @@ unset  G4LEDATA
 unset  G4LEVELGAMMADATA
 unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
+unset  G4ABLADATA
 
 unset  G4LIB
 unset  G4LIB_BUILD_G3TOG4
@@ -148,6 +149,16 @@ G4NEUTRONHPDATA="$g4neutronhpcrosssections"
 export G4NEUTRONHPDATA
 echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
+
+#+
+if [ X$g4abladata != X ] ; then 
+G4ABLADATA="$g4abladata"
+export G4ABLADATA
+echo "On this machine the G4ABLADATA=\$G4ABLADATA"
+fi
+
+
+
 
 #+
 #if [ X$g4elasticdata != X ] ; then 
