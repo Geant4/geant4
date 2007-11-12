@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.4 2007-11-09 20:11:04 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.5 2007-11-12 15:08:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -341,7 +341,7 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
       else if(secKinetic <= 200.*eV) 	
 	{
 	  if(G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
-	  else cosTheta = G4UniformRand()*(std::sqrt(2)/2);
+	  else cosTheta = G4UniformRand()*(std::sqrt(2.)/2);
 	}
       else	
 	{
