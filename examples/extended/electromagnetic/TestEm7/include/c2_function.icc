@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version c2_function.cc,v 1.39 2007/11/12 13:09:30 marcus Exp
+ *	\version $Id: c2_function.icc,v 1.4 2007-11-12 17:01:28 vnivanch Exp $
  */
 
 #include <iostream>
@@ -20,7 +20,7 @@
 #include <limits>
 
 template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
-{ return "c2_function.cc,v 1.39 2007/11/12 13:09:30 marcus Exp"; }
+{ return "$Id: c2_function.icc,v 1.4 2007-11-12 17:01:28 vnivanch Exp $"; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -478,8 +478,8 @@ template <typename float_type> std::vector<float_type> &c2_sin<float_type>::get_
 }
 
 template <typename float_type> float_type Identity(float_type x) { return x; } // a useful function
-template <typename float_type> float_type f_one(float_type ) { return 1.0; } // the first derivative of identity
-template <typename float_type> float_type f_zero(float_type ) { return 0.0; } // the second derivative of identity
+template <typename float_type> float_type f_one(float_type x) { return 1.0; } // the first derivative of identity
+template <typename float_type> float_type f_zero(float_type x) { return 0.0; } // the second derivative of identity
 
 //  The constructor
 template <typename float_type> void interpolating_function<float_type>::init(
@@ -818,7 +818,9 @@ template <typename float_type> lin_log_interpolating_function<float_type>::lin_l
 										: interpolating_function<float_type>()
 {
 	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
-		 0, 0, 0, std::log, c2_f_logprime, c2_f_logprime2, std::exp );
+		 0, 0, 0, 
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::exp) );
 }
 
 template <typename float_type> log_log_interpolating_function<float_type>::log_log_interpolating_function(
@@ -828,7 +830,9 @@ template <typename float_type> log_log_interpolating_function<float_type>::log_l
 										: interpolating_function<float_type>()
 {
 	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
-		 std::log, c2_f_logprime, c2_f_logprime2, std::log, c2_f_logprime, c2_f_logprime2, std::exp );
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		 (float_type (*)(float_type)) (std::exp) );
 }
 
 template <typename float_type> float_type c2_f_recip(float_type x) { return 1.0/x; }
@@ -842,7 +846,9 @@ template <typename float_type> arrhenius_interpolating_function<float_type>::arr
 										: interpolating_function<float_type>()
 {
 	init(x, f, lowerSlopeNatural, lowerSlope, upperSlopeNatural, upperSlope,
-		 c2_f_recip, c2_f_recipprime, c2_f_recipprime2, std::log, c2_f_logprime, c2_f_logprime2, std::exp );
+		 c2_f_recip, c2_f_recipprime, c2_f_recipprime2, 
+		(float_type (*)(float_type)) (std::log), c2_f_logprime, c2_f_logprime2, 
+		(float_type (*)(float_type)) (std::exp) );
 }
 
 template <typename float_type> c2_inverse_function<float_type>::c2_inverse_function(const c2_function<float_type> &source) 
