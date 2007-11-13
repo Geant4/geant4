@@ -111,9 +111,9 @@ bool G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   if (nComponents > 0) return mixtureRead(element,new G4Element(name,formula,nComponents));
+   if (nComponents > 0) return mixtureRead(element,new G4Element(module+name,formula,nComponents));
 
-   new G4Element(name,formula,_Z,_a);
+   new G4Element(module+name,formula,_Z,_a);
 
    return true;
 }
@@ -187,12 +187,10 @@ bool G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
 
       const std::string tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="atom") { if (!atomRead(child,_a)) return false; } else
-      {
-      }
+      if (tag=="atom") { if (!atomRead(child,_a)) return false; }
    }
 
-   new G4Isotope(name,(G4int)_Z,(G4int)_N,_a);
+   new G4Isotope(module+name,(G4int)_Z,(G4int)_N,_a);
 
    return true;
 }
@@ -217,9 +215,7 @@ bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
       const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name") { name = attribute_value; } else
-      if (attribute_name=="Z"   ) { Z    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="Z"   ) { Z    = attribute_value; }
    }
   
    double _Z;
@@ -247,9 +243,9 @@ bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   if (nComponents > 0) return mixtureRead(element,new G4Material(name,_D,nComponents));
+   if (nComponents > 0) return mixtureRead(element,new G4Material(module+name,_D,nComponents));
 
-   new G4Material(name,_Z,_a,_D);
+   new G4Material(module+name,_Z,_a,_D);
 
    return true;
 }
@@ -329,7 +325,9 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
    return true;
 }
 
-bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element) {
+bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+
+   module = newModule;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 

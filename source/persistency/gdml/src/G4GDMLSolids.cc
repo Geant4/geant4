@@ -49,6 +49,9 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
       }
    }
 
+   first_ref = module + first_ref;
+   second_ref = module + second_ref;
+
    G4VSolid *FirstSolid = G4SolidStore::GetInstance()->GetSolid(first_ref);
 
    if (!FirstSolid) {
@@ -73,9 +76,9 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    G4Transform3D transform(rot,position);
 
-   if (op==UNION       ) { new G4UnionSolid       (name,FirstSolid,SecondSolid,transform); } else
-   if (op==SUBTRACTION ) { new G4SubtractionSolid (name,FirstSolid,SecondSolid,transform); } else
-   if (op==INTERSECTION) { new G4IntersectionSolid(name,FirstSolid,SecondSolid,transform); }
+   if (op==UNION       ) { new G4UnionSolid       (module+name,FirstSolid,SecondSolid,transform); } else
+   if (op==SUBTRACTION ) { new G4SubtractionSolid (module+name,FirstSolid,SecondSolid,transform); } else
+   if (op==INTERSECTION) { new G4IntersectionSolid(module+name,FirstSolid,SecondSolid,transform); }
 
    return true;
 }
@@ -121,7 +124,7 @@ bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
    _y *= 0.5;
    _z *= 0.5;
 
-   new G4Box(name,_x,_y,_z);
+   new G4Box(module+name,_x,_y,_z);
 
    return true;
 }
@@ -183,7 +186,7 @@ bool G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
    _z *= 0.5;
 
-   new G4Cons(name,_rmin1,_rmax1,_rmin2,_rmax2,_z,_startphi,_deltaphi);
+   new G4Cons(module+name,_rmin1,_rmax1,_rmin2,_rmax2,_z,_startphi,_deltaphi);
 
    return true;
 }
@@ -233,7 +236,7 @@ bool G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_zcut1,zcut1,lunit)) return false;
    if (!evaluator->Evaluate(_zcut2,zcut2,lunit)) return false;
 
-   new G4Ellipsoid(name,_ax,_by,_cz,_zcut1,_zcut2);
+   new G4Ellipsoid(module+name,_ax,_by,_cz,_zcut1,_zcut2);
 
    return true;
 }
@@ -275,7 +278,7 @@ bool G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_dy   ,dy   ,lunit)) return false;
    if (!evaluator->Evaluate(_dz   ,dz   ,lunit)) return false;
 
-   new G4EllipticalTube(name,_dx,_dy,_dz);
+   new G4EllipticalTube(module+name,_dx,_dy,_dz);
 
    return true;
 }
@@ -329,7 +332,7 @@ bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
 
    _z *= 0.5;
    
-   new G4Hype(name,_rmin,_rmax,_inst,_outst,_z);
+   new G4Hype(module+name,_rmin,_rmax,_inst,_outst,_z);
 
    return true;
 }
@@ -363,7 +366,7 @@ bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
    if (!evaluator->Evaluate(_r,r,lunit)) return false;
 
-   new G4Orb(name,_r);
+   new G4Orb(module+name,_r);
 
    return true;
 }
@@ -423,7 +426,7 @@ bool G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
    _y *= 0.5;
    _z *= 0.5;
 
-   new G4Para(name,_x,_y,_z,_alpha,_theta,_phi);
+   new G4Para(module+name,_x,_y,_z,_alpha,_theta,_phi);
 
    return true;
 }
@@ -496,7 +499,7 @@ bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polycone(name,_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polycone(module+name,_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
 
    return true;
 }
@@ -574,14 +577,13 @@ bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polyhedra(name,_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polyhedra(module+name,_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
    
    return true;
 }
 
 bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
 
-   G4String name;
    G4String unit;
    G4String x;
    G4String y;
@@ -601,7 +603,6 @@ bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4Three
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") { name = attribute_value; } else
       if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="x"   ) { x    = attribute_value; } else
       if (attribute_name=="y"   ) { y    = attribute_value; } else
@@ -732,7 +733,7 @@ bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
       if (attribute_name=="dz"   ) { dz    = attribute_value; }
    }
 
-   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(solid,false);
+   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(module+solid,false);
 
    if (solidPtr == NULL) {
    
@@ -773,14 +774,13 @@ bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    G4Transform3D transform(rot,trans);
    transform = transform*scale;
           
-   new G4ReflectedSolid(name,solidPtr,transform);
+   new G4ReflectedSolid(module+name,solidPtr,transform);
 
    return true;
 }
 
 bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
 
-   G4String name;
    G4String unit;
    G4String x;
    G4String y;
@@ -800,7 +800,6 @@ bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4Three
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") { name = attribute_value; } else
       if (attribute_name=="unit") { unit = attribute_value; } else
       if (attribute_name=="x"   ) { x    = attribute_value; } else
       if (attribute_name=="y"   ) { y    = attribute_value; } else
@@ -915,7 +914,7 @@ bool G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_starttheta,starttheta,aunit)) return false;
    if (!evaluator->Evaluate(_deltatheta,deltatheta,aunit)) return false;
 
-   new G4Sphere(name,_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
+   new G4Sphere(module+name,_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
 
    return true;
 }
@@ -998,7 +997,7 @@ bool G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
       return false;
    }
    
-   new G4Tet(name,*ptr1,*ptr2,*ptr3,*ptr4);
+   new G4Tet(module+name,*ptr1,*ptr2,*ptr3,*ptr4);
    
    return true;
 }
@@ -1051,7 +1050,7 @@ bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
    if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
-   new G4Torus(name,_rmin,_rmax,_rtor,_startphi,_deltaphi);
+   new G4Torus(module+name,_rmin,_rmax,_rtor,_startphi,_deltaphi);
 
    return true;
 }
@@ -1135,7 +1134,7 @@ bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
    _x3 *= 0.5;
    _x4 *= 0.5;
 
-   new G4Trap(name,_z,_theta,_phi,_y1,_x1,_x2,_alpha1,_y2,_x3,_x4,_alpha2);
+   new G4Trap(module+name,_z,_theta,_phi,_y1,_x1,_x2,_alpha1,_y2,_x3,_x4,_alpha2);
 
    return true;
 }
@@ -1193,7 +1192,7 @@ bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    _y2 *= 0.5;
    _z  *= 0.5;
 
-   new G4Trd(name,_x1,_x2,_y1,_y2,_z);
+   new G4Trd(module+name,_x1,_x2,_y1,_y2,_z);
 
    return true;
 }
@@ -1289,7 +1288,7 @@ bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
 
    _z  *= 0.5;
 
-   new G4Tubs(name,_rmin,_rmax,_z,_startphi,_deltaphi);
+   new G4Tubs(module+name,_rmin,_rmax,_z,_startphi,_deltaphi);
 
    return true;
 }
@@ -1376,7 +1375,7 @@ bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   new G4ExtrudedSolid(name,twoDimVertexList,sectionList);
+   new G4ExtrudedSolid(module+name,twoDimVertexList,sectionList);
 
    return true;
 }
@@ -1421,7 +1420,9 @@ bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneTyp
    return true;
 }
 
-bool G4GDMLSolids::Read(const xercesc::DOMElement* const element) {
+bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+
+   module = newModule;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 

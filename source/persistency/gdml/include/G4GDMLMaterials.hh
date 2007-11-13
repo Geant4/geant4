@@ -11,6 +11,8 @@
 
 class G4GDMLMaterials {
 
+   G4String module;
+
    G4GDMLEvaluator* evaluator;
 
    bool atomRead     (const xercesc::DOMElement* const,double& _value);
@@ -24,7 +26,7 @@ class G4GDMLMaterials {
 public:
    G4GDMLMaterials();
 
-   bool Read(const xercesc::DOMElement* const);
+   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
 };
 
 #endif

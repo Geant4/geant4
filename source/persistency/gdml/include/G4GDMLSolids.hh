@@ -34,6 +34,8 @@
 
 class G4GDMLSolids {
 
+   G4String module;
+
    G4GDMLEvaluator* evaluator;
 
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
@@ -71,7 +73,7 @@ public:
 
    G4GDMLSolids();
 
-   bool Read(const xercesc::DOMElement* const);
+   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
 };
 
 #endif

@@ -23,7 +23,9 @@ G4VPhysicalVolume *G4GDMLSetup::Get(const G4String& name) {
    return new G4PVPlacement(0,G4ThreeVector(),volume,name,0,0,0);
 }
 
-bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
+bool G4GDMLSetup::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+
+   module = newModule;
 
    G4String name;
 
@@ -52,7 +54,7 @@ bool G4GDMLSetup::Read(const xercesc::DOMElement* const element) {
       G4String ref = xercesc::XMLString::transcode(child->getAttribute(ref_attr));
       xercesc::XMLString::release(&ref_attr);
 
-      setupMap[name] = ref;
+      setupMap[module+name] = ref;
 
       return true;
    }

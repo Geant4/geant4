@@ -11,6 +11,8 @@
 
 class G4GDMLDefine {
 
+   G4String module;
+
    G4GDMLEvaluator* evaluator;
 
    std::map<G4String,G4ThreeVector*> positionMap;
@@ -24,7 +26,7 @@ public:
    G4GDMLDefine();
    ~G4GDMLDefine();
 
-   bool Read(const xercesc::DOMElement* const);
+   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
 
    G4ThreeVector *GetPosition(const G4String&);
    G4ThreeVector *GetRotation(const G4String&);

@@ -7,15 +7,10 @@
 #include <xercesc/dom/DOM.hpp>
 
 #include "G4GDMLStructure.hh"
-#include "G4GDMLSetup.hh"
 
 class G4GDMLParser {
-
-   xercesc::XercesDOMParser *Parser;
-
+   xercesc::XercesDOMParser *parser;
    G4GDMLStructure structure;
-   G4GDMLSetup setup;
-
 public:
    G4GDMLParser();
    ~G4GDMLParser();

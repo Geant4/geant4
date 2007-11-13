@@ -3,6 +3,8 @@
 G4GDMLStructure::G4GDMLStructure() {
 
    evaluator = G4GDMLEvaluator::GetInstance();
+
+   parser = NULL;
 }
 
 bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAxis& axis) {
@@ -38,8 +40,8 @@ bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAx
    if (!evaluator->Evaluate(_y,y)) return false;
    if (!evaluator->Evaluate(_z,z)) return false;
 
-   if (_x == 1.0 && _y == 0.0 && _z == 0.0) { axis = kXAxis; return true; }
-   if (_x == 0.0 && _y == 1.0 && _z == 0.0) { axis = kYAxis; return true; }
+   if (_x == 1.0 && _y == 0.0 && _z == 0.0) { axis = kXAxis; return true; } else
+   if (_x == 0.0 && _y == 1.0 && _z == 0.0) { axis = kYAxis; return true; } else
    if (_x == 0.0 && _y == 0.0 && _z == 1.0) { axis = kZAxis; return true; }
 
    G4cout << "GDML ERROR! Only directions along axes are supported!"  << G4endl;
@@ -116,6 +118,32 @@ bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
    return true;
 }
 
+bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4String& file_name) {
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name") { file_name = attribute_value; }
+   }
+
+   if (!gdmlRead(file_name,parser)) return false;
+
+   file_name.erase(file_name.size()-5,5); // remove ".gdml" extension
+
+   return true;
+}
+
 bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
 
    G4String volumeref;
@@ -130,10 +158,13 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="volumeref"  ) { if (!refRead(child,volumeref  )) return false; } else
-      if (tag=="positionref") { if (!refRead(child,positionref)) return false; } else
-      if (tag=="rotationref") { if (!refRead(child,rotationref)) return false; }
+      if (tag=="file"       ) { if (!fileRead(child,volumeref  )) return false; } else
+      if (tag=="volumeref"  ) { if (!refRead (child,volumeref  )) return false; } else
+      if (tag=="positionref") { if (!refRead (child,positionref)) return false; } else
+      if (tag=="rotationref") { if (!refRead (child,rotationref)) return false; }
    }
+
+   volumeref = module + volumeref;
 
    G4LogicalVolume *pCurrentLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(volumeref,false);
 
@@ -145,7 +176,9 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
    G4ThreeVector tlate;
 
-   if (positionref != "") {
+   if (!positionref.empty()) {
+   
+      positionref = module + positionref;
    
       G4ThreeVector *posPtr = solids.define.GetPosition(positionref);
 
@@ -160,7 +193,9 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
    G4RotationMatrix *pRot=0;
 
-   if (rotationref != "") {
+   if (!rotationref.empty()) {
+
+      rotationref = module + rotationref;
 
       G4ThreeVector *anglePtr = solids.define.GetRotation(rotationref);
 
@@ -324,6 +359,9 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) { if (!refRead(child,solidref   )) return false; }
    }
 
+   materialref = module + materialref;
+   solidref = module + solidref;
+ 
    G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(solidref,false); 
 
    if (solidPtr == 0) {
@@ -340,7 +378,7 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       return false;
    }
 
-   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,name,0,0,0);
+   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,module+name,0,0,0);
    
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -358,7 +396,9 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
+bool G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+
+   module = newModule;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -375,5 +415,68 @@ bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
       }
    }
   
+   return true;
+}
+
+bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
+
+   G4String newModule;
+
+   if (parser != NULL) newModule = fileName + "_";
+
+   parser = newParser;
+
+   try {
+
+      parser->parse(fileName.c_str());
+   }
+   catch (const xercesc::XMLException &e) {
+   
+      char* message = xercesc::XMLString::transcode(e.getMessage());
+      G4cout << "XML: " << message << G4endl;
+      xercesc::XMLString::release(&message);
+   }
+   catch (const xercesc::DOMException &e) {
+   
+      char* message = xercesc::XMLString::transcode(e.getMessage());
+      G4cout << "DOM: " << message << G4endl;
+      xercesc::XMLString::release(&message);
+   }
+   catch (...) {
+
+      G4cout << "Unexpected exception!" << G4endl;
+   }
+
+   xercesc::DOMDocument* doc = parser->getDocument();
+
+   if (!doc) {
+   
+      G4cout << "Unable to open document '" << fileName << "'!" << G4endl;
+      return false;
+   }
+
+   xercesc::DOMElement* element = doc->getDocumentElement();
+
+   if (!element) {
+   
+      G4cout << "Empty document!" << G4endl;
+      return false;
+   }
+
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag=="define"   ) { if (!solids.define.Read(child,newModule)) return false; } else
+      if (tag=="materials") { if (!materials.Read    (child,newModule)) return false; } else
+      if (tag=="solids"   ) { if (!solids.Read       (child,newModule)) return false; } else
+      if (tag=="setup"    ) { if (!setup.Read        (child,newModule)) return false; } else
+      if (tag=="structure") { if (!Read              (child,newModule)) return false; }
+   }
+
    return true;
 }

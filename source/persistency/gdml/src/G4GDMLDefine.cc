@@ -75,7 +75,7 @@ bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_y,y,unit)) return false;
    if (!evaluator->Evaluate(_z,z,unit)) return false;
 
-   positionMap[name] = new G4ThreeVector(_x,_y,_z);
+   positionMap[module+name] = new G4ThreeVector(_x,_y,_z);
 
    return true;
 }
@@ -117,12 +117,14 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_y,y,unit)) return false;
    if (!evaluator->Evaluate(_z,z,unit)) return false;
 
-   rotationMap[name] = new G4ThreeVector(_x,_y,_z);
+   rotationMap[module+name] = new G4ThreeVector(_x,_y,_z);
 
    return true;
 }
 
-bool G4GDMLDefine::Read(const xercesc::DOMElement* const element) {
+bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+
+   module = newModule;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
