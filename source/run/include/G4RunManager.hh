@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.50 2007-09-06 06:45:53 asaim Exp $
+// $Id: G4RunManager.hh,v 1.51 2007-11-13 19:25:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,6 +91,7 @@ class G4PrimaryTransformer;
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
+#include <stdlib.h>
 
 class G4RunManager
 {
@@ -346,6 +347,9 @@ class G4RunManager
       G4String dirStr = dir;
       if( dirStr(dirStr.length()-1) != '/' ) dirStr += "/";
       randomNumberStatusDir = dirStr;
+      G4String shellCmd = "mkdir -p ";
+      shellCmd += dirStr;
+      system(shellCmd);
     }
     inline G4String GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }

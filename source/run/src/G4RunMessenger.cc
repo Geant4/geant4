@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.28 2007-11-13 15:55:13 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.29 2007-11-13 19:25:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -164,7 +164,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   
   randDirCmd = new G4UIcmdWithAString("/random/setDirectoryName",this);
   randDirCmd->SetGuidance("Define the directory name of the rndm status files.");
-  randDirCmd->SetGuidance("Directory must be creates before storing the files.");
+  randDirCmd->SetGuidance("Directory will be created if it does not exist.");
   randDirCmd->SetParameterName("fileName",true);
   randDirCmd->SetDefaultValue("./");
   randDirCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
