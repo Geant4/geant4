@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.2 2007-11-13 17:48:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -158,7 +158,10 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int width
 ,int height)
 {  
-  int side = qMin(width, height);
+  int side = width;
+  if (width > height) {
+    side = height;
+  }
   glViewport((width - side) / 2, (height - side) / 2, side, side);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.4 2007-11-13 17:48:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,11 @@
 class QGLWidget;
 class QDialog;
 class QContextMenuEvent;
+#if QT_VERSION < 0x040000
+class QPopupMenu;
+#else
 class QMenu;
+#endif
 class QImage;
 class QAction;
 
@@ -69,7 +73,12 @@ protected:
   virtual void CreateMainWindow (QGLWidget*);
   void manageContextMenuEvent(QContextMenuEvent *e);
   void G4MousePressEvent(QPoint);
+#if QT_VERSION < 0x040000
+  void G4MouseMoveEvent(int, int, Qt::ButtonState);
+#else
   void G4MouseMoveEvent(int, int, Qt::MouseButtons);
+#endif
+
 
 protected:
   G4int WinSize_x;
@@ -84,13 +93,24 @@ private:
   bool generateEPS(QString,int,QImage);  
   bool generatePS_PDF(QString,int,QImage);  
 
+#if QT_VERSION < 0x040000
+  QPopupMenu *fContextMenu;
+#else
   QMenu *fContextMenu;
+#endif
   bool fMouseAction; // 1: rotate 0:move
   QPoint lastPos;
+#if QT_VERSION < 0x040000
+  QPopupMenu *fDrawingWireframe;
+  QPopupMenu *fDrawingLineRemoval;
+  QPopupMenu *fDrawingSurfaceRemoval;
+  QPopupMenu *fDrawingLineSurfaceRemoval;
+#else
   QAction *fDrawingWireframe;
   QAction *fDrawingLineRemoval;
   QAction *fDrawingSurfaceRemoval;
   QAction *fDrawingLineSurfaceRemoval;
+#endif
 
 private slots :
   void actionDrawingWireframe();

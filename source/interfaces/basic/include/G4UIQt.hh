@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.4 2007-11-13 17:48:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -42,12 +42,17 @@
 class QMainWindow;
 class QLineEdit;
 class G4UIsession;
+#if QT_VERSION < 0x040000
+class QListView;
+class QListViewItem;
+#else
 class QListWidget;
+class QTreeWidget;
+class QTreeWidgetItem;
+#endif
 class QTextEdit;
 class QLabel;
 class QDialog;
-class QTreeWidgetItem;
-class QTreeWidget;
 
 // Class description :
 //
@@ -100,8 +105,13 @@ public:
 private:
   void SecondaryLoop(G4String); // a VIRER
   void TerminalHelp(G4String);
+#if QT_VERSION < 0x040000
+  void CreateChildTree(QListViewItem*,G4UIcommandTree*);
+  QListViewItem* FindTreeItem(QListViewItem *,const QString&);
+#else
   void CreateChildTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
+#endif
 
   QString GetCommandList(const G4UIcommand*);
 
@@ -120,8 +130,13 @@ private:
   QLineEdit * fCommandArea;
   QTextEdit *fTextArea;
   QTextEdit *fHelpArea;
+#if QT_VERSION < 0x040000
+  QListView *fCommandHistoryArea;
+  QListView *fHelpTreeWidget;
+#else
   QListWidget *fCommandHistoryArea;
   QTreeWidget *fHelpTreeWidget;
+#endif
   QDialog *fHelpDialog;
 
 signals : 
@@ -132,7 +147,11 @@ private slots :
   void CommandEnteredCallback();
   void ButtonCallback(const QString&);
   void HelpTreeClicCallback();
+#if QT_VERSION < 0x040000
+  void HelpTreeDoubleClicCallback( QListViewItem*, int);
+#else
   void HelpTreeDoubleClicCallback( QTreeWidgetItem*, int);
+#endif
   void ShowHelpCallback();
   void CommandHistoryCallback();
 };
