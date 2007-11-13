@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.74 2007-11-13 14:36:20 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.75 2007-11-13 17:22:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -221,7 +221,7 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   :G4HadronicInteraction("G4ElasticHadrNucleusHE")
 {
-  verboseLevel = 3;
+  verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
   lowestEnergyLimit = 0.0;
 
@@ -470,8 +470,6 @@ G4double G4ElasticHadrNucleusHE::
   G4double Q2 = 0;
 //  G4int    ii, jj;
   iHadrCode = p->GetPDGEncoding();
-
-  verboseLevel = 0;
 
   NumbN = N;
 
@@ -816,48 +814,39 @@ G4double G4ElasticHadrNucleusHE::GetHeavyFq2(G4int Nucleus, G4double * LineF)
   totSum = 0;
 
   LineF[0] = 0;
-    for(ii = 1; ii<ONQ2; ii++)
-      {
-        curSum = 0;
-        aSimp  = 4;   //  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-	for(jj = 0; jj<20; jj++)
-	  {
-            curQ2 = Q2l+jj*ddQ2;
-
-	    curSec  = HadrNucDifferCrSec(Nucleus, curQ2);
-            curSum += curSec*aSimp;
-
-            if(aSimp > 3) aSimp = 2;
-            else          aSimp = 4;
-
- if(jj == 0 && verboseLevel>2)
- G4cout<<"  Q2  "<<curQ2<<"  AIm  "<<aAIm<<"  DIm  "<<aDIm
-       <<"  Diff  "<<curSec<<"  totSum  "<<totSum<<G4endl;
-          }
-
-        Q2l    += dQ2;
-        curSum *= ddQ2/2.3;   //  $$$$$$$$$$$$$$$$$$$$$$$
-        totSum += curSum;
-
-        LineF[ii] = totSum;
-
-  if (verboseLevel>2)
-  G4cout<<"  GetHeavy: Q2  dQ2  totSum  "<<Q2l<<"  "<<dQ2<<"  "<<totSum
-        <<"  curSec  "
-	<<curSec<<"  Tot1  "<<Tott1<<"  DTot "
-        <<Dtot11<<G4endl;
-      }
-
-  if (verboseLevel>2)
+  for(ii = 1; ii<ONQ2; ii++)
     {
-    G4cout<<"  GetHeavy:  totSum  "<<totSum<<"  curSec  "
-	  <<curSec<<"  Tot1  "<<Tott1<<"  DTot "
-          <<Dtot11<<G4endl;
-    G4cout<<" Tot  Slope  ReIm  "<<HadrTot1<<"  "<<HadrSlope1
-          <<"  "<<HadrReIm1<<G4endl;
-    }
-    return curSum;
+      curSum = 0;
+      aSimp  = 4;   
+
+      for(jj = 0; jj<20; jj++)
+	{
+	  curQ2 = Q2l+jj*ddQ2;
+
+	  curSec  = HadrNucDifferCrSec(Nucleus, curQ2);
+	  curSum += curSec*aSimp;
+
+	  if(aSimp > 3) aSimp = 2;
+	  else          aSimp = 4;
+
+	  if(jj == 0 && verboseLevel>2)
+	    G4cout<<"  Q2  "<<curQ2<<"  AIm  "<<aAIm<<"  DIm  "<<aDIm
+		  <<"  Diff  "<<curSec<<"  totSum  "<<totSum<<G4endl;
+	}
+
+      Q2l    += dQ2;
+      curSum *= ddQ2/2.3;   //  $$$$$$$$$$$$$$$$$$$$$$$
+      totSum += curSum;
+
+      LineF[ii] = totSum;
+	
+      if (verboseLevel>2)
+	G4cout<<"  GetHeavy: Q2  dQ2  totSum  "<<Q2l<<"  "<<dQ2<<"  "<<totSum
+	      <<"  curSec  "
+	      <<curSec<<"  totSum  "<< totSum<<"  DTot "
+	      <<curSum<<G4endl;
+    }      
+  return curSum;
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1188,9 +1177,9 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
                            (ImElasticAmpl0+Din1))*2/4/pi;
 
      Tot1   = Tot1-DTot1;
-     Tott1  = Tot1*1.0;
+     //  Tott1  = Tot1*1.0;
      Dtot11 = DTot1;
-     aAIm   =ImElasticAmpl0;
+     aAIm   = ImElasticAmpl0;
      aDIm   = Din1;
 
      return DiffCrSec2*1.0;  //  dSig/d|-t|,  mb/(GeV/c)^-2
@@ -1460,9 +1449,9 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	   << " HadrReIm= " << HadrReIm << " DDSect2= " << DDSect2
 	   << " DDSect3= " << DDSect3 << G4endl;
 
-   HadrTot1   = HadrTot;
-   HadrSlope1 = HadrSlope;
-   HadrReIm1  = HadrReIm;
+  //   HadrTot1   = HadrTot;
+  // HadrSlope1 = HadrSlope;
+  // HadrReIm1  = HadrReIm;
   
   if(Z != 1) return;
 
