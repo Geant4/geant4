@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4geometry.cc,v 1.8 2007-08-07 03:35:53 kmura Exp $
+// $Id: pymodG4geometry.cc,v 1.9 2007-11-13 08:05:27 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4geometry.cc [Geant4Py module]
@@ -70,6 +70,7 @@ void export_G4UnionSolid();
 void export_G4IntersectionSolid();
 void export_G4SubtractionSolid();
 void export_G4TransportationManager();
+void export_G4Navigator();
 void export_G4FieldManager();
 void export_G4Field();
 void export_G4MagneticField();
@@ -111,6 +112,7 @@ BOOST_PYTHON_MODULE(G4geometry)
   export_G4IntersectionSolid();
   export_G4SubtractionSolid();
   export_G4TransportationManager();
+  export_G4Navigator();
   export_G4FieldManager();
   export_G4Field();
   export_G4MagneticField();
