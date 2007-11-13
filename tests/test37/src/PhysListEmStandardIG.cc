@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.5 2007-11-13 11:06:21 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.6 2007-11-13 11:12:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,8 @@
 #include "G4hIonisation.hh"
 #include "G4ionGasIonisation.hh"
 #include "G4CoulombScattering.hh"
+
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

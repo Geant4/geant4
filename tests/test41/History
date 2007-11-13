@@ -15,6 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 09-10-07  V.Ivanchenko (test41-V09-00-04)
+- in standard and standardIG use subcutoff and linlosslimit=10^-6 
 - include standardIG option into run.csh
 - use G4MuMultipleScattering in standardIG physics 
 
