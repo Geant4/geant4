@@ -166,16 +166,16 @@ ntuple->Draw("kineticEnergy","particleId==2","same");
   c3->cd(5); gPad->SetLogy(); 
   // h1->Scale(0.1);
   ntuple->SetLineStyle(1);
-  ntuple->Draw("kineticEnergy","particleId==2 && modelId>5"); 
+  ntuple->Draw("kineticEnergy","particleId==2"); 
   ntuple->SetLineStyle(3);
-  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5","same");
+  ntuple->Draw("kineticEnergy","particleId==2 && coulombOK==1","same");
 
   c3->cd(6); gPad->SetLogy(); 
   // h1->Scale(0.1);
   ntuple->SetLineStyle(1);
-  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5");
+  ntuple->Draw("kineticEnergy","particleId==1");
   ntuple->SetLineStyle(3);
-  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5", "same");
+  ntuple->Draw("kineticEnergy","particleId==1 && coulombOK==1", "same");
 
 
   //___________________________________________________________________________________

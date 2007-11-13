@@ -1,7 +1,8 @@
-# $Id: GNUmakefile,v 1.56 2007-11-13 22:14:40 miheikki Exp $
-G4TARGET := cascade
+# $Id: GNUmakefile,v 1.57 2007-11-13 23:45:43 miheikki Exp $
+#G4TARGET := cascade
+G4TARGET := interface
 #G4TARGET := benchmarks
-#G4TARGET := testEvaporation
+#G4TARGET := evaporation
 #G4EXLIB := true
 
 ifndef G4INSTALL
@@ -11,20 +12,31 @@ endif
 include $(G4INSTALL)/config/binmake.gmk
 # enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
+
+t1:
+	rm -f c.out; date;
+	echo "1 1000 1 40 54 26" >c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 5  10000 1 40 19 9 >> c.out; # Fe (worst case 20 MeV p-Fe p)
+	mv c.out data/data.out; head data/data.out; wc data/data.out; ls -lh data; ls -lat data; date
+
+i1:
+	rm -f c.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/interface 1  > c.out; date; head c.out;
+
+
 c9:  # coulomb test 
 	rm -f c.out; date;
 	echo "0 11000 1 40 2 1" >c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 1  1000 1 40 2   1  >>  c.out; # D
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 2  1000 1 40 9   4  >> c.out; # Be
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 3  1000 1 40 19  9  >> c.out; # F
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 3  1000 1 40 19  9  >> c.out; # F  (2.9 MeV)
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 4  1000 1 40 27  13 >> c.out; # Al
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 5  1000 1 40 54  26 >> c.out; # Fe (worst case 20 MeV p-Fe p)
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 5  1000 1 40 54  26 >> c.out; # Fe (worst case 20 MeV p-Fe p) 6.5MeV Coulob barrier
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 6  1000 1 40 89  39 >> c.out; # Y
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 7  1000 1 40 120 50 >> c.out; # Sn
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 8  1000 1 40 169 69 >> c.out; # Tm
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 8  1000 1 40 169 69 >> c.out; # Tm 12.7 MeV
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 9  1000 1 40 197 79 >> c.out; # Au (best case 20 MeV p-Au p spectrum ~ ok)
 	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 10 1000 1 40 209 83 >> c.out; # Bi 
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 11 1000 1 40 238 92 >> c.out; # U
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 11 1000 1 40 238 92 >> c.out; # U (15.3 MeV counted by G4InuclCollider::inelasticInteractionPossible
 	mv c.out data/data.out; head data/data.out; wc data/data.out; ls -lh data; ls -lat data; date
 
 

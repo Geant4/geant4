@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: testEvaporation.cc,v 1.4 2007-05-25 04:44:45 miheikki Exp $
+// $Id: evaporation.cc,v 1.1 2007-11-13 23:45:43 miheikki Exp $
 // based on V.Lara evaporation test
 #include <iostream>
 #include <iomanip>
