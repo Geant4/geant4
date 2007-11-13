@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2007-11-12 17:04:55 maire Exp $
+$Id: History,v 1.109 2007-11-13 14:37:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+13-11-07 V.Ivant (testem3-V09-00-02)
+- added PhysListEmStandardIG experimental PhysList
+
 12-11-07 mma (testem3-V09-00-01) 
 - HistoManager/HistoMessenger : print selected histos on ascii file
 
