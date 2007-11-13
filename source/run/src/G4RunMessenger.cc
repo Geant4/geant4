@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.26 2007-11-08 15:21:37 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.27 2007-11-13 15:48:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
 #include "G4MaterialScanner.hh"
+#include "G4Tokenizer.hh"
+#include "randomize.hh"
 #include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
@@ -152,6 +154,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
+
+  seedCmd = new G4UIcmdWithAString("/random/setSeeds",this);
+  seedCmd->SetGuidance("Initialize the random number generator with integer seed stream.");
+  seedCmd->SetGuidance("Number of integers should be more than 1.");
+  seedCmd->SetParameterName("IntArray",false);
+  seedCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
   randDirCmd = new G4UIcmdWithAString("/random/setDirectoryName",this);
   randDirCmd->SetGuidance("Define the directory name of the rndm status files.");
@@ -258,6 +266,7 @@ G4RunMessenger::~G4RunMessenger()
   delete runDirectory;
   
   delete randDirCmd;
+  delete seedCmd;
   delete savingFlagCmd;
   delete saveThisRunCmd;
   delete saveThisEventCmd;
@@ -310,7 +319,23 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->PhysicsHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
-  
+ 
+  else if( command==seedCmd )
+  {
+    G4Tokenizer next(newValue);
+    G4int idx=0;
+    long seeds[100];
+    G4String vl;
+    while(!(vl=next()).isNull())
+    { seeds[idx] = (long)(StoI(vl)); idx++; }
+    if(idx<2)
+    { G4cerr << "/random/setSeeds should have at least two integers. Command ignored." << G4endl; }
+    else
+    {
+      seeds[idx] = 0;
+      HepRandom::setTheSeeds(seeds);
+    }
+  }
   else if( command==randDirCmd )
   { runManager->SetRandomNumberStoreDir(newValue); }
   else if( command==savingFlagCmd )
