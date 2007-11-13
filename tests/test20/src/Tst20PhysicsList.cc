@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.8 2007-11-09 19:40:39 pia Exp $
+// $Id: Tst20PhysicsList.cc,v 1.9 2007-11-13 15:22:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -110,7 +110,7 @@ Tst20PhysicsList::Tst20PhysicsList(): G4VUserPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
   cutForProton    = defaultCutValue;
-  SetVerboseLevel(1);
+  // SetVerboseLevel(1);
   physicsListMessenger = new Tst20PhysicsListMessenger(this);
 }
 
