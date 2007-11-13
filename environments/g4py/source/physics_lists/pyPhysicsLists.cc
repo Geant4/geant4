@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.3 2007-06-07 09:06:43 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.4 2007-11-13 09:59:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
-//                                         2005 Q
+//                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
 #include "pyG4Version.hh"
@@ -80,6 +80,10 @@
 #include "QGSP_BERT_TRV.hh"
 #include "QGSP_EMV_NQE.hh"
 #include "QGSP_NQE.hh"
+#endif
+
+#if G4VERSION_NUMBER >= 910
+#include "FTFP_BERT.hh"
 #endif
 
 using namespace boost::python;
@@ -237,6 +241,12 @@ void export_PhysicsLists()
 
   class_<QGSP_NQE, QGSP_NQE*, bases<G4VUserPhysicsList> >
     ("QGSP_NQE", "QGSP_NQE physics list")
+    ;
+#endif
+
+#if G4VERSION_NUMBER >= 910
+  class_<FTFP_BERT, FTFP_BERT*, bases<G4VUserPhysicsList> >
+    ("FTFP_BERT", "FTFP_BERT physics list")
     ;
 #endif
 
