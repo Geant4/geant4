@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.4 2007-10-26 17:00:45 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.5 2007-11-13 11:06:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
-//#include "G4ScreenedNuclearRecoil.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -69,9 +68,7 @@ PhysListEmStandardIG::~PhysListEmStandardIG()
 
 void PhysListEmStandardIG::ConstructProcess()
 {
-  G4double thetamin = 0.2;
- 
-  //  G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
+  G4double thetamin = 0.05;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -142,6 +139,13 @@ void PhysListEmStandardIG::ConstructProcess()
       pmanager->AddDiscreteProcess(cs);
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetSubCutoff(true);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

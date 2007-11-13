@@ -37,6 +37,13 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+
+#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
+
 #include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,12 +87,39 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-            
+
+    } else if (particleName == "mu+" ||
+               particleName == "mu-"    ) {
+
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
+           
+
+    } else if (particleName == "alpha" ||
+               particleName == "He3" ||
+               particleName == "GenericIon") {
+
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+
+    } else if ((!particle->IsShortLived()) &&
+               (particle->GetPDGCharge() != 0.0) &&
+               (particle->GetParticleName() != "chargedgeantino")) {
+
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetStepFunction(0.2, 100*um);
   opt.SetSkin(2.);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
