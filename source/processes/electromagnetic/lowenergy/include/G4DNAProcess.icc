@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.8 2007-11-09 20:11:04 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.9 2007-11-13 14:44:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -108,7 +108,7 @@ G4VParticleChange* G4DNAProcess<TCrossSection,TFinalState>::PostStepDoIt(const G
       aParticleChange.ProposeTrackStatus(fStopAndKill);
       aParticleChange.ProposeEnergy(0.);
       aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
-      aParticleChange.ProposeLocalEnergyDeposit(track.GetKineticEnergy());
+      aParticleChange.ProposeLocalEnergyDeposit(track.GetKineticEnergy() + deposit);
   	
     }
   else
