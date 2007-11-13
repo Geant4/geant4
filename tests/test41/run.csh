@@ -19,6 +19,10 @@ setenv PHYSLIST    emstandard_opt1
 set    phys = "opt1"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
 
+setenv PHYSLIST    standardIG
+set    phys = "optG"
+source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
+
 setenv PHYSLIST    standardSS
 set    phys = "optS"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
