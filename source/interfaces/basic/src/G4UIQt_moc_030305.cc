@@ -2,7 +2,7 @@
 ** G4UIQt meta object code from reading C++ file 'G4UIQt.hh'
 **
 ** Created: Tue Nov 13 18:05:04 2007
-**      by: The Qt MOC ($Id: G4UIQt_moc_030305.cc,v 1.1 2007-11-13 17:03:50 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4UIQt_moc_030305.cc,v 1.2 2007-11-13 17:08:03 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -156,6 +156,7 @@ bool G4UIQt::qt_property( int id, int f, QVariant* v)
 }
 
 bool G4UIQt::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
-#endif // QT_NO_PROPERTIES
+#endif // QT_NO_PROPRERTIES
 
+#endif
 #endif
