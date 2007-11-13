@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.6 2007-11-13 09:00:33 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.7 2007-11-13 10:06:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -114,7 +114,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 	  double tDummy;
 	  double eDummy;
 	  eDiffCrossSection>>tDummy>>eDummy;
-	  if(tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
+	  if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
 	  for (int j=0; j<5; j++)
 	    {
 	      eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
@@ -154,7 +154,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 	  double tDummy;
 	  double eDummy;
 	  pDiffCrossSection>>tDummy>>eDummy;
-	  if(tDummy != pTdummyVec.back()) pTdummyVec.push_back(tDummy);
+	  if (tDummy != pTdummyVec.back()) pTdummyVec.push_back(tDummy);
 	  for (int j=0; j<5; j++)
 	    {
 	      pDiffCrossSection>>pDiffCrossSectionData[j][tDummy][eDummy];
@@ -249,7 +249,7 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
       G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
       G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-      G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
       finalPx /= finalMomentum;
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
@@ -291,7 +291,7 @@ G4double G4FinalStateIonisationBorn::RandomizeEjectedElectronEnergy(G4ParticleDe
 	} while(G4UniformRand()*crossSectionMaximum >
 	      DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+waterStructure.IonisationEnergy(shell))/eV,shell));
 
-      return(secondaryElectronKineticEnergy);
+      return secondaryElectronKineticEnergy;
  
     }
   
@@ -315,7 +315,7 @@ G4double G4FinalStateIonisationBorn::RandomizeEjectedElectronEnergy(G4ParticleDe
 	} while(G4UniformRand()*crossSectionMaximum >= 
 	      DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+waterStructure.IonisationEnergy(shell))/eV,shell));
 
-      return(secondaryElectronKineticEnergy);
+      return secondaryElectronKineticEnergy;
     }
 
   return 0;
@@ -363,14 +363,14 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
 
   if (energyTransfer >= waterStructure.IonisationEnergy(ionizationLevelIndex))
     {
-      G4double valueT1=0;
-      G4double valueT2=0;
-      G4double valueE21=0;
-      G4double valueE22=0;
-      G4double valueE12=0;
-      G4double valueE11=0;
+      G4double valueT1 = 0;
+      G4double valueT2 = 0;
+      G4double valueE21 = 0;
+      G4double valueE22 = 0;
+      G4double valueE12 = 0;
+      G4double valueE11 = 0;
 
-      G4double xs11 = 0;   
+      G4double xs11  =  0;   
       G4double xs12 = 0; 
       G4double xs21 = 0; 
       G4double xs22 = 0; 
@@ -387,12 +387,12 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
 	  std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
 	  std::vector<double>::iterator e21 = e22-1;
 
-	  valueT1  = *t1;
-	  valueT2  = *t2;
-	  valueE21 = *e21;
-	  valueE22 = *e22;
-	  valueE12 = *e12;
-	  valueE11 = *e11;
+	  valueT1  =*t1;
+	  valueT2  =*t2;
+	  valueE21 =*e21;
+	  valueE22 =*e22;
+	  valueE12 =*e12;
+	  valueE11 =*e11;
 
 	  xs11 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
 	  xs12 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
