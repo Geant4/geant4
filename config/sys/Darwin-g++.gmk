@@ -63,8 +63,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
     QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
     QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
-    QTLIBS     := $(QT3LIBS)
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS))
+    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
