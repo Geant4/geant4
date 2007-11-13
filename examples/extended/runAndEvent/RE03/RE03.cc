@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE03.cc,v 1.1 2007-11-13 19:55:43 asaim Exp $
+// $Id: RE03.cc,v 1.2 2007-11-13 21:32:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,6 @@ int main(int argc,char** argv)
  //
  G4RunManager * runManager = new G4RunManager;
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
- scManager->SetVerboseLevel(1);
  scManager->SetScoreWriter(new RE03UserScoreWriter());
 
  // Set mandatory initialization classes

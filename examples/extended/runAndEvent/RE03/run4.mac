@@ -1,4 +1,6 @@
 #
+/score/verbose 1
+#
 # A sample macro of user-defined score writer inherited from G4VScoreWriter 
 # class.
 #
