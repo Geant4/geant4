@@ -1,4 +1,3 @@
-
 {
   cout << endl << "::: Welcome to ROOT" << " v " << gROOT->GetVersionInt() << endl;
   cout << "::: * Aliases defined in rootalias.C" << endl; 
@@ -28,23 +27,23 @@
   //hipStyle->SetTextFont(132);
 
   //*-*  =============================================================
-  //*-*   Font ID       X11                       Win32 TTF       lfItalic  lfWeight  x 10
-  //*-*        1 : times-medium-i-normal      "Times New Roman"      1           4
-  //*-*        2 : times-bold-r-normal        "Times New Roman"      0           7
-  //*-*        3 : times-bold-i-normal        "Times New Roman"      1           7
-  //*-*        4 : helvetica-medium-r-normal  "Arial"                0           4
-  //*-*        5 : helvetica-medium-o-normal  "Arial"                1           4
-  //*-*        6 : helvetica-bold-r-normal    "Arial"                0           7
-  //*-*        7 : helvetica-bold-o-normal    "Arial"                1           7
-  //*-*        8 : courier-medium-r-normal    "Courier New"          0           4
-  //*-*        9 : courier-medium-o-normal    "Courier New"          1           4
-  //*-*       10 : courier-bold-r-normal      "Courier New"          0           7
-  //*-*       11 : courier-bold-o-normal      "Courier New"          1           7
-  //*-*       12 : symbol-medium-r-normal     "Symbol"               0           6
-  //*-*       13 : times-medium-r-normal      "Times New Roman"      0           4
-  //*-*       14 :                            "Wingdings"            0           4
-  //*-*
-  const int kHipFont=102;  // Preferred fonts in orde 102 (courier typewriter),42, 52, 62, 82
+    //*-*   Font ID       X11                       Win32 TTF       lfItalic  lfWeight  x 10
+	//*-*        1 : times-medium-i-normal      "Times New Roman"      1           4
+	//*-*        2 : times-bold-r-normal        "Times New Roman"      0           7
+	//*-*        3 : times-bold-i-normal        "Times New Roman"      1           7
+	//*-*        4 : helvetica-medium-r-normal  "Arial"                0           4
+	//*-*        5 : helvetica-medium-o-normal  "Arial"                1           4
+	//*-*        6 : helvetica-bold-r-normal    "Arial"                0           7
+	//*-*        7 : helvetica-bold-o-normal    "Arial"                1           7
+	//*-*        8 : courier-medium-r-normal    "Courier New"          0           4
+	//*-*        9 : courier-medium-o-normal    "Courier New"          1           4
+	//*-*       10 : courier-bold-r-normal      "Courier New"          0           7
+	//*-*       11 : courier-bold-o-normal      "Courier New"          1           7
+	//*-*       12 : symbol-medium-r-normal     "Symbol"               0           6
+	//*-*       13 : times-medium-r-normal      "Times New Roman"      0           4
+	//*-*       14 :                            "Wingdings"            0           4
+	//*-*
+	const int kHipFont=102;  // Preferred fonts in orde 102 (courier typewriter),42, 52, 62, 82
   //hipStyle->SetTextFont(52);   //42 OK
   hipStyle->SetTextFont(kHipFont);   //42 OK
   hipStyle->SetTextSize(0.03);
@@ -83,7 +82,7 @@
   //hipStyle->SetMarkerStyle(24); // open circle
   //hipStyle->SetMarkerStyle(20); // full circle
 
-  hipStyle->SetMarkerStyle(1);
+  hipStyle->SetMarkerStyle(25);
 
   // use bold lines 
   hipStyle->SetHistLineWidth(1.5);
@@ -107,6 +106,6 @@
   //gStyle->SetPadTickX(1);
   //gStyle->SetPadTickY(1);
 
-  gROOT->SetStyle("clearRetro");
+gROOT->SetStyle("clearRetro");
 }
 

@@ -57,12 +57,14 @@
 #include "G4InuclCollider.hh"
 #include "G4PreCompoundInuclCollider.hh"
 
+G4bool coulombOK;
 G4double kE=1000; // scale energy ok
 
 G4double eInit = 0.0;
 G4double eTot = 0.0;
 G4double sumBaryon = 0.0;
 G4double sumEnergy = 0.0;
+
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -89,7 +91,7 @@ G4int tCoulomb(G4int, G4int, G4int, G4double, G4double, G4double);
 //G4int testINC(G4int, G4int, G4double, G4double, G4double);
 G4int testINCEvap();
 G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
-G4int printData(G4int runId, G4int event);
+G4int printData(G4int runId, G4int event, G4int cok);
 G4int printCross(G4int i);
 
 G4int test();
@@ -119,7 +121,7 @@ int main(int argc, char **argv ) {
     G4cout << "            Z " << Z           << G4endl;
   }
 
-  if (verboseLevel > 0) {
+  if (verboseLevel > 3) { // deside if heade will be written
     //    G4cout << "# cascade.cc with parameters : runId, nCollisions, bulletType,  momZ,  targetA, targetZ" << G4endl;
     G4cout << runId << " " << nCollisions << " " << bulletType  << " " << momZ*kE  << " " << A << " " << Z << G4endl;
   }
@@ -169,9 +171,9 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
     G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
    G4Fissioner*                     fiss = new G4Fissioner;
     G4BigBanger*                     bigb = new G4BigBanger;
-    //    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
+    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
 
-     G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider(colep, cascade, noneq, bigb);
+    // G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider(colep, cascade, noneq, bigb);
 
     std::vector<G4double> targetMomentum(4, 0.0);
     std::vector<G4double>  bulletMomentum(4, 0.0);
@@ -238,33 +240,59 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 
 
 	//	output = collider->collide(bull, targ); 
-	int maxTries=10;
+	//	int maxTries=10;
 	int nTries=0;
 
-    do  // we try to create inelastic interaction
-      {
+	
+	//    do  // we try to create inelastic interaction 
+	  //{
 	//	output = collider->collide(bullet, target );
-	output = collider->collide(bull, targ); 
+ coulombOK= true;
+	output = collider->collide(bull, targ);
+
+	//-------------------------------------
+	// test if protn energy too low
+
+   std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
+  if(!p.empty()) { 
+    for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
+      if (ipart->type() == proton) {
+	G4double e = ipart->getKineticEnergy();
+      if (e < 0.001){
+	//	           G4cout << std::setw(8)  << e    << G4endl; 
+	coulombOK= false;
+      };
+
+      
+      }
+    }
+  }
+  // G4cout << nTries << G4endl;
+  //  G4cout << "coulomb: "<<coulombOK << G4endl;
+    //-----------------------
 	nTries++;
-      } while (
+
+	//   } while (
 	       //	      (nTries < maxTries)                                                               &&
 	       //(output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
 	       //(output.getOutgoingParticles().size()!=0)                                         &&
 	       //(output.getOutgoingParticles().begin()->type()==bullet->type())
 	       //);
 
-	       (nTries < maxTries) &&
-	       output.getOutgoingParticles().size() == 1 &&     // we retry when elastic collision happened
-               output.getNucleiFragments().size() == 1 &&            
-	       output.getOutgoingParticles().begin()->type() == bull->type() &&
-	       output.getNucleiFragments().begin()->getA() == targ->getA() && 
-	       output.getNucleiFragments().begin()->getZ() == targ->getZ() 
-	       );
+	       //	       (nTries < maxTries) &&
+	       //output.getOutgoingParticles().size() == 1 &&     // we retry when elastic collision happened
+               //output.getNucleiFragments().size() == 1 &&            
+	       //output.getOutgoingParticles().begin()->type() == bull->type() &&
+	       //output.getNucleiFragments().begin()->getA() == targ->getA() && 
+	       //output.getNucleiFragments().begin()->getZ() == targ->getZ() &&
+	//     coulombOK
+	//       );
 
 
 
       }
-      printData(runId, i);
+      //  G4cout << ">>>>coulomb: "<<coulombOK << G4endl;
+  printData(runId, i, (int)coulombOK);
       //      printCross(i);
     }
     delete bull;
@@ -435,7 +463,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
   return 0;
 }
 
-G4int printData(G4int runId, G4int i) {
+G4int printData(G4int runId, G4int i, G4int cok) {
 
   G4int verboseLevel = 1;
   if (verboseLevel > 4) {
@@ -504,7 +532,8 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(13) << mom[2] *kE   << 
 	  std::setw(13) << fA           << 
 	  std::setw(13) << fZ           << 
-	  std::setw(13) << fEx    *kE   << G4endl;
+	  std::setw(13) << fEx    *kE   <<
+	  " "  << cok   << G4endl;
 	//	  std::setw(13) << sumBaryon    << 
 	//std::setw(13) << sumEnergy    << G4endl;
       }
@@ -545,7 +574,8 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(13) << mom[3] *kE << 
 	  std::setw(13) << 0            << 
 	  std::setw(13) << 0            << 
-	  std::setw(13) << 0.0          << G4endl;
+	  std::setw(13) << 0.0          << 
+	  " "  << cok   << G4endl;
 	//	  std::setw(13) << sumBaryon    << 
 	// std::setw(13) << sumEnergy    << G4endl;
       }
