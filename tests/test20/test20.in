@@ -33,7 +33,7 @@
 /tracking/verbose 0
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 4
+/run/beamOn 1
 #
 /gun/particle alpha
 #------------------
@@ -41,6 +41,6 @@
 /tracking/verbose 0
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 4
+/run/beamOn 1
 #
 exit

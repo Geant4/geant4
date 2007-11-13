@@ -2,7 +2,7 @@
 # Macro file for test20
 #
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 /run/initialize
 #
 #/calor/setAbsThick 1 mm 
@@ -22,25 +22,25 @@
 /gun/particle e-
 #------------------
 /gun/energy 10000 eV
-/tracking/verbose 2
+/tracking/verbose 0
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 9
 #
 /gun/particle proton
 #------------------
 /gun/energy 1 MeV
-/tracking/verbose 2
+/tracking/verbose 0
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 5
+/run/beamOn 9
 #
 /gun/particle alpha
 #------------------
 /gun/energy 2.67 MeV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 5
+/run/beamOn 9
 #
 exit
