@@ -1,4 +1,4 @@
-$Id: 00README,v 1.7 2007-07-13 05:02:31 kmura Exp $
+$Id: 00README,v 1.8 2007-11-13 08:02:57 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -87,10 +87,15 @@ Fine tuning of the library path:
 
   --with-package-dir=DIR    Geant4 Package dir
 
+  --with-gdml-incdir=DIR    GDML header dir
+  --with-gdml-libdir=DIR    GDML library dir
+
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGL support     [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, $G4VIS_USE_RAYTRACERX]
+  gdml         GDML support (experimental) [disable]
+               also specifying inc/lib directories
 
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
@@ -154,11 +159,11 @@ Notes:
 All users' libraries should be build in shared libaries.
 
 2) Development Environment:
-OS:             SuSE Linux 10.2 (x86-64)
-g++ :           4.1.2
-Python:         2.5
-CLHEP:          1.9.3.1 / 2.0.3.1
-BOOST-Python:   1.33.3
+OS:             SuSE Linux 10.3 (x86-64)
+g++ :           4.2.1
+Python:         2.5.1
+CLHEP:          1.9.3.2 / 2.0.3.2
+BOOST-Python:   1.33.1
 ROOT:           5.16/00
 
 Have A Fun!!
