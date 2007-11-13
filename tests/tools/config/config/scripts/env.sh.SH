@@ -46,6 +46,7 @@ unset  G4LIB_BUILD_G3TOG4
 unset  G4LIB_BUILD_SHARED
 unset  G4LIB_BUILD_STATIC
 unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_BUILD_GDML
 unset  G4LIB_USE_G3TOG4
 unset  G4LIB_USE_GRANULAR
 unset  G4LIB_USE_ZLIB
@@ -530,6 +531,25 @@ echo "On this machine the XAWLIBS=\$XAWLIBS"
 fi
 fi 
 
+
+#
+# Use GDML module
+#
+#+
+if [ X$g4lib_build_gdml = Xy ] ; then
+G4LIB_BUILD_GDML=1
+export G4LIB_BUILD_GDML
+echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+fi 
+
+if [ X$g4lib_build_gdml = Xy ] ; then
+XERCESCROOT=$g4gdml_xercesc_root
+export XERCESCROOT
+echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+fi 
+
+
+
 #
 # Use G3TOG4 module
 #
@@ -682,10 +702,20 @@ echo ''
 if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if [ X$g4lib_build_gdml = X ] ; then
+   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+fi
 export LD_LIBRARY_PATH
+
 else
 LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if [ X$g4lib_build_gdml = X ] ; then
+   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+fi
+
 export LD_LIBRARY_PATH
 fi
 fi
@@ -699,10 +729,20 @@ if [ $G4LIB_BUILD_SHARED ] ; then
 if [ $DYLD_LIBRARY_PATH ] ; then
 DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if [ X$g4lib_build_gdml = X ] ; then
+   DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+fi
+
 export DYLD_LIBRARY_PATH
 else
 DYLD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
 DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if [ X$g4lib_build_gdml = X ] ; then
+   DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+fi
+
 export DYLD_LIBRARY_PATH
 fi
 fi
