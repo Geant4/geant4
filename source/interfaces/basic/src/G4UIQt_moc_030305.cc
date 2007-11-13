@@ -2,15 +2,19 @@
 ** G4UIQt meta object code from reading C++ file 'G4UIQt.hh'
 **
 ** Created: Tue Nov 13 18:13:09 2007
-**      by: The Qt MOC ($Id: G4UIQt_moc_030305.cc,v 1.3 2007-11-13 17:11:20 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4UIQt_moc_030305.cc,v 1.4 2007-11-13 17:38:44 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
+
+#ifdef G4UI_BUILD_QT_SESSION
 
 #undef QT_NO_COMPAT
 #include "../include/G4UIQt.hh"
 #include <qmetaobject.h>
 #include <qapplication.h>
+
+#if QT_VERSION < 0x040202
 
 #include <private/qucomextra_p.h>
 #if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
@@ -150,3 +154,6 @@ bool G4UIQt::qt_property( int id, int f, QVariant* v)
 
 bool G4UIQt::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
 #endif // QT_NO_PROPERTIES
+
+#endif
+#endif
