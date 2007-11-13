@@ -1,8 +1,11 @@
-{
+#include "Riostream.h";
+
+void analyzeEvents() {
+
    gROOT->Reset();
   gROOT->SetStyle("clearRetro");
 
-#include "Riostream.h";
+
 
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
@@ -59,5 +62,5 @@
   
   in.close();
   f->Write();
-
+  if (gROOT->IsBatch()) return;
 }

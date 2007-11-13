@@ -71,7 +71,7 @@
   // markers
 
   //hipStyle->SetMarkerStyle(7);  // strong dot
-  //hipStyle->SetMarkerStyle(2);  // cross +
+  hipStyle->SetMarkerStyle(2);  // cross +
 
   //hipStyle->SetMarkerStyle(26); // open triangle up
   //hipStyle->SetMarkerStyle(22); // triangle up 
