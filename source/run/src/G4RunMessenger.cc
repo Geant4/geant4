@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.27 2007-11-13 15:48:45 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.28 2007-11-13 15:55:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -158,6 +158,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   seedCmd = new G4UIcmdWithAString("/random/setSeeds",this);
   seedCmd->SetGuidance("Initialize the random number generator with integer seed stream.");
   seedCmd->SetGuidance("Number of integers should be more than 1.");
+  seedCmd->SetGuidance("Actual number of integers to be used depends on the individual random number engine.");
   seedCmd->SetParameterName("IntArray",false);
   seedCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
