@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.8 2007-10-24 16:32:48 gunter Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.9 2007-11-13 16:01:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
@@ -36,14 +36,14 @@
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
-    , theParallelFSGenerator(0)
+    , theQuasielastic(0), theProjectileDiffraction(0)
 {
  theParticleChange = new G4HadFinalState;
 }
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) 
     : G4HadronicInteraction("TheoFSGenerator")
-    , theParallelFSGenerator(0)
+    , theQuasielastic(0), theProjectileDiffraction(0)
 {
 }
 
@@ -86,11 +86,42 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
                           thePrimary.Get4Momentum().vect());
   const G4DynamicParticle * aPart = &aTemp;
 
-  if ( theParallelFSGenerator ) {
+  if ( theQuasielastic ) {
   
-     if ( theParallelFSGenerator->GetFraction(theNucleus, *aPart) > G4UniformRand() )
+     if ( theQuasielastic->GetFraction(theNucleus, *aPart) > G4UniformRand() )
      {
-        G4KineticTrackVector *result= theParallelFSGenerator->Scatter(theNucleus, *aPart);
+        G4KineticTrackVector *result= theQuasielastic->Scatter(theNucleus, *aPart);
+	if (result)
+	{
+	    for(unsigned int  i=0; i<result->size(); i++)
+	    {
+	      G4DynamicParticle * aNew = 
+		 new G4DynamicParticle(result->operator[](i)->GetDefinition(),
+                        	       result->operator[](i)->Get4Momentum().e(),
+                        	       result->operator[](i)->Get4Momentum().vect());
+	      theParticleChange->AddSecondary(aNew);
+	      delete result->operator[](i);
+	    }
+	    delete result;
+	   
+	} else 
+	{
+	    theParticleChange->SetStatusChange(isAlive);
+	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
+	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
+ 
+	}
+	return theParticleChange;
+     } 
+  }
+  if ( theProjectileDiffraction) {
+  
+     if ( theProjectileDiffraction->GetFraction(theNucleus, *aPart) > G4UniformRand() )
+        // strictly, this returns fraction on inelastic, so quasielastic should 
+	//    already be substracted, ie. quasielastic should always be used
+	//     before diffractive
+     {
+        G4KineticTrackVector *result= theProjectileDiffraction->Scatter(theNucleus, *aPart);
 	if (result)
 	{
 	    for(unsigned int  i=0; i<result->size(); i++)
@@ -132,7 +163,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
                theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
     if ( !theTransportResult ) {
        G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, text);
+       throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
     } 
   }
   else
@@ -140,7 +171,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     theTransportResult = theDecay.Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
     if ( !theTransportResult ) {
        G4cout << "G4TheoFSGenerator: null ptr from decay propagate " << G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, text);
+       throw G4HadronicException(__FILE__, __LINE__, "Null ptr from decay propagate");
     }   
   }
 
