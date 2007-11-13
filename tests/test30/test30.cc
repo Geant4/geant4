@@ -152,12 +152,16 @@ int main(int argc, char** argv)
   G4double  emaxpi   = 200.*MeV;
   G4double ebinlog   = 2.0*MeV;
   G4double eBound    = 70.*MeV;
+  G4double tetmax    = 180.;
+  G4double costmax   = -1.0;
+  G4double xxl       = 100.;
   G4double kBound    = 0.2;
   G4Material* material = 0;
   G4bool nevap = false;
   G4bool gtran = false;
   G4bool gemis = false;
   G4bool xsbgg = true;
+  G4bool elastic = false;
 
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
@@ -332,6 +336,10 @@ int main(int argc, char** argv)
         for(int k=0; k<nangl; k++) {(*fin) >> ang[k];}
       } else if(line == "#anglespr") {
         for(int k=0; k<nanglpr; k++) {(*fin) >> angpr[k];}
+      } else if(line == "#thetamax") {
+        (*fin) >> tetmax;
+        if(tetmax <= 0.0 || tetmax >= 180.) tetmax = 180.;
+        costmax = std::cos(tetmax*degree); 
       } else if(line == "#range(mm)") {
         (*fin) >> range;
         range *= mm;
@@ -482,12 +490,18 @@ int main(int argc, char** argv)
     G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
     G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
 
+    if(nameGen == "LElastic" || 
+       nameGen == "BertiniElastic" ||
+       nameGen == "elastic" ||
+       nameGen == "HElastic" ||
+       nameGen == "DElastic") elastic = true;
+
     // ------- Histograms
 
     if(usepaw && !isInitH) {
 
       isInitH = true;
-
+    
       histo.add1D("1","Number of Secondaries",100,-0.5,99.5);
       histo.add1D("2","Type of secondary",10,-0.5,9.5);
       histo.add1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
@@ -521,8 +535,8 @@ int main(int argc, char** argv)
 
       histo.add1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
 
-      histo.add1D("25","cos(theta) protons",nbinsa,-1.,1.);
-      histo.add1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
+      histo.add1D("25","cos(theta) protons",nbinsa,costmax,1.);
+      histo.add1D("26","cos(theta) neutrons",nbinsa,costmax,1.);
 
       histo.add1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
 
@@ -570,12 +584,22 @@ int main(int argc, char** argv)
       // neutron double differencial histograms are active by request
       for(i=nangl; i<6; i++) {histo.activate(51+i, false);}
 
-      histo.add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
-      histo.add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
-      histo.add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,-1.,1.);
-      histo.add1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,-1.,1.);
-      histo.add1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
-      histo.add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
+      if(elastic) {
+	histo.add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
+	histo.add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,costmax,1.);
+	histo.add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,costmax,1.);
+	histo.add1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,costmax,1.);
+	histo.add1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,costmax,1.);
+	histo.add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
+	histo.add1D("64","Theta (degree) for primary particle in Lab.Sys.",nbinsa,0.0,tetmax);
+        G4double x2 = std::log10(tetmax);
+        G4double x1 = x2 - std::log10(nbinsa);
+        xxl = x2 - x1;
+	histo.add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
+	// desactivate not needed hist for elastic
+	histo.activate(50, false);
+	for(i=0; i<13; i++) {histo.activate(14+i, false);}
+      }
     }
 
     if(usepaw) {
@@ -592,7 +616,9 @@ int main(int argc, char** argv)
 
     if(nameGen == "LElastic" || nameGen == "BertiniElastic" ) {
       cs = new G4HadronElasticDataSet();
-    } else if (nameGen == "elastic" || nameGen == "HElastic" ) {
+    } else if (nameGen == "elastic" || 
+	       nameGen == "HElastic" || 
+	       nameGen == "DElastic") {
       if(Z == 1) cs = new G4HadronElasticDataSet();
       else if(part == proton || part == neutron) {
 	if(xsbgg) cs = new G4BGGNucleonElasticXS(part);
@@ -635,12 +661,16 @@ int main(int argc, char** argv)
     G4double factor  = 
       cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
     G4double factora = 
-      cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
+      cross_sec*1000.0*(G4double)nbinsa/(twopi*(1.0 - costmax)*barn*(G4double)nevt);
+    G4double factoraa = 
+      cross_sec*1000.0*(G4double)nbinsa/(twopi*tetmax*degree*barn*(G4double)nevt);
+    G4double factoral = 
+      cross_sec*1000.0*(G4double)nbinsa/(twopi*xxl*std::log(10.)*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factora
            << "### factorb = " << factorb
-           << "    cross(b)= " << cross_sec/barn << G4endl;
+           << "    cross(mb)= " << cross_sec*1000./barn << G4endl;
 
     // -------- Limit number of angles
 
@@ -840,6 +870,8 @@ int main(int argc, char** argv)
 	    histo.fill(58,e/MeV,1.0);
 	    histo.fill(60,cost,factora);
 	    histo.fill(62,costcm,factora);
+	    histo.fill(63,thetad,factoraa/std::sin(theta));
+	    histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
 	  }
 
           histo.fill(2,mom.phi()/degree,1.0);

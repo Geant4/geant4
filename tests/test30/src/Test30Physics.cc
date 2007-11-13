@@ -93,6 +93,8 @@
 
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
+#include "HsQGSBInterface.hh"
+#include "G4DiffuseElastic.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -268,6 +270,13 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "qgsb") {
+    HsQGSBInterface* qgsb = new HsQGSBInterface();
+    qgsb->SetMinEnergy(GeV);
+    sg = new Test30VSecondaryGenerator(qgsb, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
     sg = new Test30VSecondaryGenerator(hkm, mat);
@@ -307,6 +316,12 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "HElastic") {
     G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "DElastic") {
+    G4DiffuseElastic* els = new G4DiffuseElastic();
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
