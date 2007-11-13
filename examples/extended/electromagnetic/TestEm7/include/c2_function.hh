@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_function.hh,v 1.50 2007/11/12 13:09:30 marcus Exp
+ * 	\version c2_function.hh,v 1.53 2007/11/12 13:58:57 marcus Exp
  */
 
 #ifndef __has_C2Functions_c2_h
@@ -70,7 +70,7 @@ public:
     /// \brief get versioning information for the header file
     /// \return the CVS Id string
 	const std::string cvs_header_vers() const { return 
-		"c2_function.hh,v 1.50 2007/11/12 13:09:30 marcus Exp";
+		"c2_function.hh,v 1.53 2007/11/12 13:58:57 marcus Exp";
 	}
 	
     /// \brief get versioning information for the source file
@@ -384,6 +384,17 @@ protected:
 template <typename float_type=double> class c2_binary_function : public c2_function<float_type> {
 public:
 	
+	
+	///  \brief function to manage the binary operation, used by c2_binary_function::value_with_derivatives() 
+    /// 
+    /// Normally not used alone, but can be used to combine functions in other contexts. 
+	/// See interpolating_function::binary_operator() for an example.
+	/// \param left the function on the left of the binary operator or outside the composition
+	/// \param right the function to the right of the operator or inside the composition
+    /// \param[in] x the point at which to evaluate the function
+    /// \param[out] yprime the first derivative (if pointer is non-null)
+    /// \param[out] yprime2 the second derivative (if pointer is non-null)
+    /// \return the value of the function
 	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
 					   float_type x, float_type *yprime, float_type *yprime2) const =0;
 	
@@ -412,24 +423,25 @@ public:
 		if(rightown) delete &Right;
 	}
 		
-	/// \brief construct for the case where there is no explicit combiner
-	/// 
-	/// This is only useful for cases where value_with_derivatives() is explicitly overridden.
+protected:
+	/// \brief construct the binary function
 	/// \param left the c2_function to be used in the left side of the binary relation
 	/// \param right the c2_function to be used in the right side of the binary relation
 	c2_binary_function( const c2_function<float_type> &left,  const c2_function<float_type> &right) : 
-		c2_function<float_type>(), 
-		Left(left), Right(right), leftown(false), rightown(false) 
-	 { 
-		  set_domain(
-					(left.xmin() > right.xmin()) ? left.xmin() : right.xmin(), 
-					(left.xmax() < right.xmax()) ? left.xmax() : right.xmax()
-			);
-	  } 
-
-protected:
+	c2_function<float_type>(), 
+	Left(left), Right(right), leftown(false), rightown(false) 
+	{ 
+			set_domain(
+					   (left.xmin() > right.xmin()) ? left.xmin() : right.xmin(), 
+					   (left.xmax() < right.xmax()) ? left.xmax() : right.xmax()
+					   );
+	} 
+	
+	/// \brief construct a 'stub' c2_binary_function, which provides access to the combine() function
+	/// \note Do not evaluate a 'stub' ever.  It is only used so that combine() can be called
     c2_binary_function() : c2_function<float_type>(), 
-		Left(*this), Right(*this) {} // hide default constructor, since its use is almost always an error.
+		Left(*((c2_function<float_type> *)0)), Right(*((c2_function<float_type> *)0)) {}
+	
 	const c2_function<float_type> &Left,  &Right;
 	bool leftown, rightown;
 		
@@ -509,15 +521,14 @@ protected:
 template <typename float_type=double> class  c2_composed_function : public c2_binary_function<float_type> {
 public:
 	
-	/// \brief construct outer(inner(x))
+	/// \brief construct \a outer( \a inner (x))
     /// \note See c2_binary_function for discussion of ownership.
+	/// \param outer the outer function 
+	/// \param inner the inner function
 	c2_composed_function(const c2_function<float_type> &outer, const c2_function<float_type> &inner) : c2_binary_function<float_type>(outer, inner) {}
-	c2_composed_function() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
+	/// \brief Create a stub just for the combiner to avoid statics. 
+	c2_composed_function() : c2_binary_function<float_type>() {} ;
 
-	///  \brief freestanding function to do composition, used by interpolating_function 
-    /// 
-    /// Normally not used, but can be used to implement other c2_binary_function implementations
-    /// of c2_composed_function varieties.
 	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
 						  float_type x, float_type *yprime, float_type *yprime2) const
     {
@@ -542,7 +553,12 @@ public:
 /// \note See c2_binary_function for discussion of ownership.
 template <typename float_type=double> class c2_sum : public c2_binary_function<float_type> {
 public:	
+	/// \brief construct \a left + \a right
+    /// \note See c2_binary_function for discussion of ownership.
+	/// \param left the left function 
+	/// \param right the right function
 	c2_sum(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	/// \brief Create a stub just for the combiner to avoid statics. 
 	c2_sum() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	// function to do derivative arithmetic for sums
@@ -570,7 +586,12 @@ public:
 /// \note See c2_binary_function for discussion of ownership.
 template <typename float_type=double> class c2_diff : public c2_binary_function<float_type> {
 public:	
+	/// \brief construct \a left - \a right
+    /// \note See c2_binary_function for discussion of ownership.
+	/// \param left the left function 
+	/// \param right the right function
 	c2_diff(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	/// \brief Create a stub just for the combiner to avoid statics. 
 	c2_diff() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	// function to do derivative arithmetic for diffs
@@ -598,7 +619,12 @@ public:
 /// \note See c2_binary_function for discussion of ownership.
 template <typename float_type=double> class c2_product : public c2_binary_function<float_type> {
 public:	
+	/// \brief construct \a left * \a right
+    /// \note See c2_binary_function for discussion of ownership.
+	/// \param left the left function 
+	/// \param right the right function
 	c2_product(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	/// \brief Create a stub just for the combiner to avoid statics. 
 	c2_product() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 
 	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
@@ -625,7 +651,12 @@ public:
 /// \note See c2_binary_function for discussion of ownership.
 template <typename float_type=double> class c2_ratio : public c2_binary_function<float_type> {
 public:	
+	/// \brief construct \a left / \a right
+    /// \note See c2_binary_function for discussion of ownership.
+	/// \param left the left function 
+	/// \param right the right function
 	c2_ratio(const c2_function<float_type> &left, const c2_function<float_type> &right) : c2_binary_function<float_type>(left, right) {}
+	/// \brief Create a stub just for the combiner to avoid statics. 
 	c2_ratio() : c2_binary_function<float_type>() {} ; // create a stub just for the combiner to avoid statics
 	
 	virtual float_type combine(const c2_function<float_type> &left, const c2_function<float_type> &right, 
@@ -774,7 +805,7 @@ public:
     ///
     /// This carefully manages the derivative of the composed function at the two ends.
     /// \param rhs the function to apply
-    /// \param combiner a function which defines which binary operation to use.
+    /// \param combining_stub a function which defines which binary operation to use.
     /// \return a new interpolating_function  with the same mappings for x and y
 	interpolating_function <float_type> & binary_operator(const c2_function<float_type> &rhs,
            c2_binary_function<float_type> *combining_stub
