@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.5 2007-11-12 15:08:25 gcosmo Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.6 2007-11-13 09:00:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -101,10 +101,11 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       eFullFileName << path << "/dna/sigmadiff_ionisation_e_born.dat";
       std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
       // eDiffCrossSection(eFullFileName.str().c_str());
-      if(!eDiffCrossSection)
+      if (!eDiffCrossSection)
 	{ 
-	  G4cout<<"ERROR OPENING DATA FILE IN ELECTRON BORN IONIZATION !!! "<<G4endl;
-	  while(1);
+	  // G4cout << "ERROR OPENING DATA FILE IN ELECTRON BORN IONIZATION !!! " << G4endl;
+          G4Exception("G4FinalStateIonisationBorn::ERROR OPENING electron DATA FILE");
+	  while(1); // ---- MGP ---- What is this?
 	}
       
       eTdummyVec.push_back(0.);
@@ -142,8 +143,9 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       //     pDiffCrossSection(pFullFileName.str().c_str());
       if (!pDiffCrossSection)
 	{ 
-	  G4cout<<"ERROR OPENING DATA FILE IN PROTON BORN IONIZATION !!! "<<G4endl;
-	  while(1);
+	  // G4cout<<"ERROR OPENING DATA FILE IN PROTON BORN IONIZATION !!! "<<G4endl;
+	  G4Exception("G4FinalStateIonisationBorn::ERROR OPENING proton DATA FILE");
+	  while(1); // ---- MGP ---- What is this?
 	}
       
       pTdummyVec.push_back(0.);
@@ -161,13 +163,11 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 	      pVecm[tDummy].push_back(eDummy);
 	    }
 	}
-
     }
   else
     {
       G4Exception("G4FinalStateIonisationBorn Constructor: proton is not defined");
     }
-
 }
 
 
@@ -243,18 +243,13 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
 
-      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic +
-							   2.*electron_mass_c2 ));
+      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
 
       //Primary Particle Direction
-      G4double finalPx = totalMomentum*primaryDirection.x()
-	- deltaTotalMomentum*deltaDirection.x();
-      G4double finalPy = totalMomentum*primaryDirection.y()
-	- deltaTotalMomentum*deltaDirection.y();
-      G4double finalPz = totalMomentum*primaryDirection.z()
-	- deltaTotalMomentum*deltaDirection.z();
-      G4double finalMomentum =
-	std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
+      G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
+      G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
+      G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
       finalPx /= finalMomentum;
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
@@ -337,10 +332,10 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
     {
 
       phi = twopi * G4UniformRand();
-      if(secKinetic < 50.*eV) cosTheta = (2.*G4UniformRand())-1.;
-      else if(secKinetic <= 200.*eV) 	
+      if (secKinetic < 50.*eV) cosTheta = (2.*G4UniformRand())-1.;
+      else if (secKinetic <= 200.*eV) 	
 	{
-	  if(G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
+	  if (G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
 	  else cosTheta = G4UniformRand()*(std::sqrt(2.)/2);
 	}
       else	
@@ -355,9 +350,7 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
       G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
       phi = twopi * G4UniformRand();
       cosTheta = std::sqrt(secKinetic / maxSecKinetic);
-    }
-
-				
+    }			
 }
 
 
@@ -366,84 +359,85 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
 							    G4double energyTransfer, 
 							    G4int ionizationLevelIndex)
 {
-  G4double value_t1=0;
-  G4double value_t2=0;
-  G4double value_e21=0;
-  G4double value_e22=0;
-  G4double value_e12=0;
-  G4double value_e11=0;
+  G4double sigma = 0.;
 
-  if (particleDefinition == G4Electron::ElectronDefinition()) 
+  if (energyTransfer >= waterStructure.IonisationEnergy(ionizationLevelIndex))
     {
-      // k should be in eV and energy transfer eV also
-      std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
-      std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
-      std::vector<double>::iterator e11 = e12-1;
+      G4double valueT1=0;
+      G4double valueT2=0;
+      G4double valueE21=0;
+      G4double valueE22=0;
+      G4double valueE12=0;
+      G4double valueE11=0;
 
-      std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
-      std::vector<double>::iterator e21 = e22-1;
+      G4double xs11 = 0;   
+      G4double xs12 = 0; 
+      G4double xs21 = 0; 
+      G4double xs22 = 0; 
 
-      value_t1  = *t1;
-      value_t2  = *t2;
-      value_e21 = *e21;
-      value_e22 = *e22;
-      value_e12 = *e12;
-      value_e11 = *e11;
-    }
-  
-  if (particleDefinition == G4Proton::ProtonDefinition()) 
-    {
-      // k should be in eV and energy transfer eV also
-      std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
-      std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
-      std::vector<double>::iterator e11 = e12-1;
-
-      std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
-      std::vector<double>::iterator e21 = e22-1;
  
-      value_t1  = *t1;
-      value_t2  = *t2;
-      value_e21 = *e21;
-      value_e22 = *e22;
-      value_e12 = *e12;
-      value_e11 = *e11;
-    }
-  
-  G4double xs11=0;   
-  G4double xs12=0; 
-  G4double xs21=0; 
-  G4double xs22=0; 
-  
-  if (particleDefinition == G4Electron::ElectronDefinition()) 
-    {
-      xs11 = eDiffCrossSectionData[ionizationLevelIndex][value_t1][value_e11];
-      xs12 = eDiffCrossSectionData[ionizationLevelIndex][value_t1][value_e12];
-      xs21 = eDiffCrossSectionData[ionizationLevelIndex][value_t2][value_e21];
-      xs22 = eDiffCrossSectionData[ionizationLevelIndex][value_t2][value_e22];
-    }
+      if (particleDefinition == G4Electron::ElectronDefinition()) 
+	{
+	  // k should be in eV and energy transfer eV also
+	  std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
+	  std::vector<double>::iterator t1 = t2-1;
+	  std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
+	  std::vector<double>::iterator e11 = e12-1;
 
-  if (particleDefinition == G4Proton::ProtonDefinition()) 
-    {
-      xs11 = pDiffCrossSectionData[ionizationLevelIndex][value_t1][value_e11];
-      xs12 = pDiffCrossSectionData[ionizationLevelIndex][value_t1][value_e12];
-      xs21 = pDiffCrossSectionData[ionizationLevelIndex][value_t2][value_e21];
-      xs22 = pDiffCrossSectionData[ionizationLevelIndex][value_t2][value_e22];
-    }
+	  std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
+	  std::vector<double>::iterator e21 = e22-1;
 
-  if (xs11==0 || xs12==0 ||xs21==0 ||xs22==0) return (0.);
+	  valueT1  = *t1;
+	  valueT2  = *t2;
+	  valueE21 = *e21;
+	  valueE22 = *e22;
+	  valueE12 = *e12;
+	  valueE11 = *e11;
+
+	  xs11 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
+	  xs12 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
+	  xs21 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
+	  xs22 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+
+	}
+  
+      if (particleDefinition == G4Proton::ProtonDefinition()) 
+	{
+	  // k should be in eV and energy transfer eV also
+	  std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
+	  std::vector<double>::iterator t1 = t2-1;
+	  std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
+	  std::vector<double>::iterator e11 = e12-1;
+
+	  std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
+	  std::vector<double>::iterator e21 = e22-1;
  
-  G4double sigma = QuadInterpolator(value_e11, value_e12, 
-				    value_e21, value_e22, 
-				    xs11, xs12, 
-				    xs21, xs22, 
-				    value_t1, value_t2, 
-				    k, energyTransfer);
+	  valueT1  =*t1;
+	  valueT2  =*t2;
+	  valueE21 =*e21;
+	  valueE22 =*e22;
+	  valueE12 =*e12;
+	  valueE11 =*e11;
 
-  if(energyTransfer < waterStructure.IonisationEnergy(ionizationLevelIndex)) return(0.);
-
-  return(sigma);
+	  xs11 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
+	  xs12 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
+	  xs21 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
+	  xs22 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+	}
+  
+      G4double xsProduct = xs11 * xs12 * xs21 * xs22;
+      // if (xs11==0 || xs12==0 ||xs21==0 ||xs22==0) return (0.);
+      if (xsProduct != 0.)
+	{
+	  sigma = QuadInterpolator(valueE11, valueE12, 
+				   valueE21, valueE22, 
+				   xs11, xs12, 
+				   xs21, xs22, 
+				   valueT1, valueT2, 
+				   k, energyTransfer);
+	}
+    }
+  return sigma;
 }
 
 
@@ -456,7 +450,8 @@ G4double G4FinalStateIonisationBorn::LogLogInterpolate(G4double e1,
   G4double a = (log10(xs2)-log10(xs1)) / (log10(e2)-log10(e1));
   G4double b = log10(xs2) - a*log10(e2);
   G4double sigma = a*log10(e) + b;
-  return (pow(10,sigma));
+  G4double value = (pow(10,sigma));
+  return value;
 }
 
 
@@ -470,7 +465,7 @@ G4double G4FinalStateIonisationBorn::QuadInterpolator(G4double e11, G4double e12
   G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-  return (value);
+  return value;
 }
 
 
