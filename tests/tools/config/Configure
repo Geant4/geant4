@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.13 2007-11-13 17:18:05 bmorgan Exp $
+# $Id: Configure,v 1.14 2007-11-13 17:18:53 bmorgan Exp $
 #
-# Generated on Tue Nov 13 15:18:44 GMT 2007 [metaconfig 3.0 PL70]
+# Generated on Tue Nov 13 17:18:21 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -5601,10 +5601,8 @@ if test "X$g4lib_build_gdml" != "Xn"; then
 
    if test "X$g4gdml_xercesc_root" = "X"; then
       #probe for Xerces, using example from UI and Vis
-      xercesc_root=""
-
-#`find $g4gdml_xercesc_root /usr/include /usr/local/include \
-#/opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+      xercesc_root=`find $g4gdml_xercesc_root /usr/include /usr/local/include \
+/opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
 
       #If we got something, strip off the include/xerces part
       if test "X$xercesc_root" != "X"; then
@@ -5616,7 +5614,7 @@ if test "X$g4lib_build_gdml" != "Xn"; then
       else
          g4gdml_xercesc_root=""
 	 echo " "
-	 echo "checking for XercesC install... no $g4gdml_xercesc_root"
+	 echo "checking for XercesC install... no"
       fi
    fi #END OF XERCES AUTOPROBE
 
