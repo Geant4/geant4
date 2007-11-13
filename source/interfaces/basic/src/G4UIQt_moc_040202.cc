@@ -7,6 +7,8 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
+#if QT_VERSION >= 0x040202
+
 #ifdef G4UI_BUILD_QT_SESSION
 
 #include "../include/G4UIQt.hh"
@@ -100,5 +102,7 @@ void G4UIQt::myClicked(const QString & _t1)
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
+
+#endif
 
 #endif
