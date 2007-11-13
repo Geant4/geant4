@@ -2,7 +2,7 @@
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * The  Geant4 software  is  copyright of the Copyright iveHolders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
@@ -44,13 +44,15 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
+#include "G4ProjectileDiffractiveChannel.hh"
 
 #include "G4ProtonInelasticCrossSection.hh"
 
 class G4QGSPProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4QGSPProtonBuilder(G4bool quasiElastic=false);
+    G4QGSPProtonBuilder(G4bool quasiElastic=false,
+                        G4bool projectileDiffraction=false);
     virtual ~G4QGSPProtonBuilder();
 
   public: 
@@ -67,6 +69,7 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
+    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
     G4double theMin;
 
 };
