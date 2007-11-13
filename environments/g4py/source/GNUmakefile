@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2006-11-20 08:56:26 kmura Exp $
+# $Id: GNUmakefile,v 1.5 2007-11-13 08:05:02 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
@@ -10,6 +10,10 @@ SUBDIR1 += geometry materials particles processes digits_hits
 SUBDIR2 := visualization graphics_reps physics_lists
 SUBDIR3 := python
 SUBDIR4 := boost version
+
+ifeq ($(Q_ENABLE_GDML), 1)
+  SUBDIR2 += gdml
+endif
 
 .PHONY: all install clean uninstall
 
