@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.17 2006-06-29 19:02:34 gunter Exp $
+// $Id: G4PhysicsTable.hh,v 1.18 2007-11-13 17:35:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   G4PhysicsTable();
     // Default constructor.
 
-  explicit G4PhysicsTable(size_t capacity);
+  explicit G4PhysicsTable(size_t cap);
     // Constructor with capacity. Reserves memory for the
     // specified capacity.
 

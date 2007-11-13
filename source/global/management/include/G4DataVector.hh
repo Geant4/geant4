@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.hh,v 1.14 2006-06-29 19:01:22 gunter Exp $
+// $Id: G4DataVector.hh,v 1.15 2007-11-13 17:35:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,10 +56,10 @@ class G4DataVector : public std::vector<G4double>
   G4DataVector();
    // Default constructor.
 
-  explicit G4DataVector(size_t capacity);
+  explicit G4DataVector(size_t cap);
    // Constructor given a 'capacity' defining the initial number of elements.
 
-  G4DataVector(size_t capacity, G4double value);
+  G4DataVector(size_t cap, G4double value);
    // Constructor given a 'capacity' defining the initial number of elements
    // and initialising them to 'value'.
 

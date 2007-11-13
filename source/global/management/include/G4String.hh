@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.6 2006-06-29 19:03:05 gunter Exp $
+// $Id: G4String.hh,v 1.7 2007-11-13 17:35:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,7 @@ public:
   inline G4String ( const G4String& );
   inline G4String ( const G4SubString& );
   inline G4String ( const std::string & );
-  virtual ~G4String () {}
+  ~G4String () {}
 
   inline G4String& operator=(const G4String&);
   inline G4String& operator=(const std::string &);
@@ -163,7 +163,7 @@ public:
   // stripType = 1 end
   // stripType = 2 both
   //
-  inline G4String strip (G4int stripType=trailing, char c=' ');
+  inline G4String strip (G4int strip_Type=trailing, char c=' ');
 
   inline void toLower ();
   inline void toUpper ();
