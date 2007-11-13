@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.5 2007-08-14 09:47:58 vnivanch Exp $
+// $Id: G4mplIonisationModel.hh,v 1.6 2007-11-13 18:36:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -104,16 +104,16 @@ private:
   G4double mass;
   G4double magCharge;
   G4double twoln10;
-  G4double beta2low;
+  G4double betalow;
+  G4double betalim;
   G4double beta2lim;
   G4double bg2lim;
   G4double factlow;
   G4double chargeSquare;
+  G4double dedxlim;
   G4int    nmpl;
   G4double pi_hbarc2_over_mc2;
   G4double approxConst;
-  G4Material* lastMatelial;
-
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.4 2007-08-14 09:47:58 vnivanch Exp $
+// $Id: G4mplIonisationModel.cc,v 1.5 2007-11-13 18:36:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,13 +38,17 @@
 // Creation date: 06.09.2005
 //
 // Modifications:
-// 12.08.2007 Changing low energy approximation and extrapolation. Small bug fixing and refactoring (M. Vladymyrov)
+// 12.08.2007 Changing low energy approximation and extrapolation. 
+//            Small bug fixing and refactoring (M. Vladymyrov)
+// 13.11.2007 Use low-energy asymptotic from [3] (V.Ivanchenko) 
 //
 //
 // -------------------------------------------------------------------
 // References
-// [1] Steven P. Ahlen: Energy loss of relativistic heavy ionizing particles, Rev. Mod. Phys 52(1980), p121
-
+// [1] Steven P. Ahlen: Energy loss of relativistic heavy ionizing particles, 
+//     S.P. Ahlen, Rev. Mod. Phys 52(1980), p121
+// [2] K.A. Milton arXiv:hep-ex/0602040
+// [3] S.P. Ahlen and K. Kinoshita, Phys. Rev. D26 (1982) 2347
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,16 +67,17 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
   twoln10(log(100.0)),
-  beta2low(0.004),
-  beta2lim(0.02),
-  bg2lim(beta2lim*(1.0 + beta2lim)),
-  lastMatelial(0)
+  betalow(0.01),
+  betalim(0.1),
+  beta2lim(betalim*betalim),
+  bg2lim(beta2lim*(1.0 + beta2lim))
 {
   nmpl         = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
   if(nmpl > 6)      nmpl = 6;
   else if(nmpl < 1) nmpl = 1;
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
   chargeSquare = magCharge * magCharge;
+  dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,33 +110,27 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau + 2.0);
   G4double beta2 = bg2 / (gam * gam);
+  G4double beta  = sqrt(beta2);
 
-  // approximation in low energy region
-  G4double dedx0 = 0, dedx = 0;
+  // low-energy asymptotic formula
+  G4double dedx  = dedxlim*beta*material->GetDensity();
 
-  if(beta2 > beta2low) {
-    dedx = ComputeDEDXAhlen(material, bg2);
-  }
+  // above asymptotic
+  if(beta > betalow) {
 
-  if(beta2 < beta2lim) {
-    if(lastMatelial != material){
-      approxConst = ComputeDEDXAhlen(material, bg2lim);
-      lastMatelial = (G4Material *)material;
-    };
-    dedx = dedx0 = approxConst * sqrt(sqrt(abs(beta2 / bg2lim)));
+    // high energy
+    if(beta >= betalim) {
+      dedx = ComputeDEDXAhlen(material, bg2);
 
-    // extrapolation between two formula 
-    if(beta2 > beta2low) {
-   
-      G4double kapa1 = sqrt(abs(beta2)), kapa2 = kapa1;
-      kapa1 -= sqrt(beta2low);
-      kapa2 -= sqrt(beta2lim);
-      kapa1 *= kapa1;
-      kapa2 *= kapa2;
+    } else {
 
-      G4double x = kapa1 * dedx + kapa2 * dedx0;
-      x /= kapa1 + kapa2;
-      dedx = x;
+      G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      G4double dedx2 = ComputeDEDXAhlen(material, bg2lim);
+
+      // extrapolation between two formula 
+      G4double kapa2 = beta - betalow;
+      G4double kapa1 = betalim - beta;
+      dedx = (kapa1*dedx1 + kapa2*dedx2)/(kapa1 + kapa2);
     }
   }
   return dedx;
@@ -141,7 +140,6 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 
 G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4double bg2)
 {
-
   G4double eDensity = material->GetElectronDensity();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double cden  = material->GetIonisation()->GetCdensity();
