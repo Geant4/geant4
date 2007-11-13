@@ -23,61 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.3 2007-11-13 16:19:52 vnivanch Exp $
+// $Id: G4HadronDElasticPhysics.hh,v 1.1 2007-11-13 16:19:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronInelasticQBBC
+// ClassName:   G4HadronDElasticPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 13 November 2007 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronInelasticQBBC_h
-#define G4HadronInelasticQBBC_h 1
+#ifndef G4HadronDElasticPhysics_h
+#define G4HadronDElasticPhysics_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4QGSModel.hh"
-#include "G4QGSParticipants.hh"
-#include "G4FTFModel.hh"
-#include "G4CascadeInterface.hh"
+#include "G4UHadronElasticProcess.hh"
+#include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPElasticData.hh"
 
-#include "G4PiNuclearCrossSection.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
-#include "G4NeutronHPInelasticData.hh"
-#include "G4NeutronHPCaptureData.hh"
-#include "G4NeutronHPFissionData.hh"
-
-class G4HadronicProcess;
-class G4TheoFSGenerator;
-class G4StringChipsParticleLevelInterface;
-class G4ExcitedStringDecay;
-class G4HadronProcessStore;
-class G4GeneratorPrecompoundInterface;
-class G4BinaryCascade;
-class G4PreCompoundModel;
-class G4QuasiElasticChannel;
-
-class G4HadronInelasticQBBC : public G4VPhysicsConstructor
+class G4HadronDElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-
-  G4HadronInelasticQBBC(const G4String& name = "inelastic",
-			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
-			G4bool chips = false, G4bool hp = false, 
-			G4bool glauber = false);
-
-  virtual ~G4HadronInelasticQBBC();
+  G4HadronDElasticPhysics(G4int ver = 0, G4bool hp = false);
+  virtual ~G4HadronDElasticPhysics();
 
 public: 
-
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
@@ -89,36 +64,20 @@ public:
 
 private:
 
-  void Register(G4ParticleDefinition*, G4HadronicProcess*, 
-		G4HadronicInteraction*, const G4String&);
-
-  G4PiNuclearCrossSection thePiCross;
-  G4ProtonInelasticCrossSection  theXSecP;
-  G4NeutronInelasticCrossSection theXSecN;
-
-  G4NeutronHPInelasticData*  theHPXSecI;
-  G4NeutronHPCaptureData*    theHPXSecC;
-  G4NeutronHPFissionData*    theHPXSecF;
-
-  G4HadronProcessStore* store;
-
-  G4PreCompoundModel* thePreEquilib;
-  G4QuasiElasticChannel*    theQuasiElastic;
-  //  G4GeneratorPrecompoundInterface* theCascade;
-  G4BinaryCascade* theCascade;
-  G4StringChipsParticleLevelInterface * theCHIPSCascade;
-  G4QGSModel< G4QGSParticipants > * theQGStringModel;
-  G4ExcitedStringDecay* theQGStringDecay;
-  G4ExcitedStringDecay* theFTFStringDecay;
-  G4FTFModel*           theFTFStringModel;
+  G4String mname;
 
   G4int    verbose;
-  G4bool   ftfFlag;
-  G4bool   bertFlag;
-  G4bool   chipsFlag;
   G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
 
+
 #endif
+
+
+
+
+
+
+
+
