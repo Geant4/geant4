@@ -13,7 +13,7 @@
   int runId, eventId, particleId, modelId,fragmentA, fragmentZ;
   float kineticEnergy, momX, momY, momZ, exitationEnergy;
   int nlines = 0;
-  TFile *f = new TFile("analyzeEvents.root","RECREATE");
+  TFile *f = new TFile("../data/analyzeEvents.root","RECREATE");
 
   TH1F *hpE = new TH1F("hpE","p kinetic energy",100,0,1);
   TH1F *hnE = new TH1F("hnE","n kinetic energy",100,0,1);
@@ -22,13 +22,14 @@
   TH1F *hppE = new TH1F("hppE","pi+ energy",100,0,1);
 
   
-  TNtuple *ntuple = new TNtuple("ntuple","foorified data from cascade.cc  ouput","runId:eventId:particleId:modelId:kineticEnergy:momX:momY:momZ:fragmentA:fragmentZ:exitationEnergy");
+  TNtuple *ntuple = new TNtuple("ntuple","foorified data from cascade.cc  ouput","runId:eventId:particleId:modelId:kineticEnergy:momX:momY:momZ:fragmentA:fragmentZ:exitationEnergy:coulombOK");
   // read first comment line and second line with parameters
 
   char commentLine[80], executable[15];
   //   fgets(&line,80,in);
 
   int runId, nCollisions, bulletType, targetA, targetZ;  
+  int coulombOK;
   float bulletMomZ;
   in >> runId >> nCollisions >> bulletType >> bulletMomZ >> targetA >> targetZ;
 
@@ -42,7 +43,7 @@
   double eMax = bulletMomZ;
 
   while (1) {
-    in >> runId >> eventId >> particleId >> modelId >> kineticEnergy >> momX >> momY >> momZ >> fragmentA >> fragmentZ >> exitationEnergy;
+    in >> runId >> eventId >> particleId >> modelId >> kineticEnergy >> momX >> momY >> momZ >> fragmentA >> fragmentZ >> exitationEnergy >> coulombOK;
     if (!in.good()) break;
     //    if (nlines < 5) printf("x=%8f, y=%8f, z=%8f\n",runId, eventId, particleId);
     if (particleId==proton) hpE->Fill(kineticEnergy/eMax);
@@ -50,7 +51,7 @@
     if (particleId==foton) hgE->Fill(kineticEnergy/eMax);
     if (particleId==pionPlus) hppE->Fill(kineticEnergy/eMax);
 
-    ntuple->Fill(runId, eventId, particleId, modelId, kineticEnergy/eMax, momX/eMax, momY/eMax, momZ/eMax, fragmentA, fragmentZ, exitationEnergy/eMax);
+    ntuple->Fill(runId, eventId, particleId, modelId, kineticEnergy/eMax, momX/eMax, momY/eMax, momZ/eMax, fragmentA, fragmentZ, exitationEnergy/eMax, coulombOK);
     nlines++;
   };
   printf(" found %d lines \n",nlines);

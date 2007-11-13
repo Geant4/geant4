@@ -1,0 +1,262 @@
+void fast();
+
+void coulomb()
+{
+
+  // NOTE: must run first analyzeEvents.C
+  // 0 default
+  // 1 bullet
+  // 2 target
+  // 3 G4ElementaryParticleCollider
+  // 4 G4IntraNucleiCascader
+  // 5 G4NonEquilibriumEvaporator
+  // 6 G4EquilibriumEvaporator
+  // 7 G4Fissioner
+  // 8 G4BigBanger
+  // enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+  // runId, eventId, particleId, modelId, kineticEnergy/eMax, momX/eMax, momY/eMax, momZ/eMax, fragmentA, fragmentZ, exitationEnergy/eMax);
+
+  // run first analyzeEvents.C
+  //  Interactivly: ntuple->Scan("modelId:particleId")
+  gROOT->SetStyle("clearRetro");
+  TFile *f = new TFile("../data/analyzeEvents.root"); // get standard file
+
+  TNtuple *ntuple = (TNtuple*)f->Get("ntuple"); // get standard tuple
+
+  ntuple->Print();
+  ntuple->Show(1); // print first
+ 
+
+  fast();
+
+  //______________________________________________________________________
+  TCanvas *c1 =new TCanvas("c1","c1",0,0,600,400);
+  c1->Divide(3,2);
+ ntuple->SetLineWidth(1);
+  c1->cd(1); gPad->SetLogy(); ntuple->Draw("modelId","","");
+
+  TLatex l;
+  l.SetTextAlign(23);
+  l.SetTextSize(0.03);
+  l.DrawLatex(1,1,"e^{+}e^{-}#rightarrowZ^{0}#rightarrowI#bar{I}, q#bar{q}");
+
+  c1->cd(2);ntuple->Draw("kineticEnergy","particleId==1");
+  //  c1->cd(2); ntuple->Draw("kineticEnergy","particleId==1 && modelId==5");
+
+
+  c1->cd(3); gPad->SetLogy(); ntuple->Draw("fragmentA");
+
+  //  c1->cd(4);ntuple->Draw("modelId:fragmentA >>haz(20,0,20,30,0,30)");
+  c1->cd(4);ntuple->Draw("modelId:fragmentA");
+
+  //  c1->cd(5);ntuple->Draw("momZ >>hmomz(100,0,1)","particleId==1");
+  //ntuple->Draw("momZ >>+hmomz","particleId==2");
+
+  //  c1->cd(5);ntuple->Draw("fragmentA:kineticEnergy >>haz(20,0,20,30,0,30)");
+  c1->cd(5);ntuple->Draw("kineticEnergy:fragmentA","","box");
+
+  c1->cd(6);ntuple->Draw("fragmentZ:fragmentA","","box");
+  //  c1->cd(6);ntuple->Draw("fragmentA:fragmentZ >>haz(20,0,20,30,0,30)");
+
+
+  //__________________________________________________________________________
+  TCanvas *c2 =new TCanvas("c2","c2",600,000,600,400);
+  c2->Divide(3,2);
+  c2->cd(1); ntuple->Draw("particleId","",""); ntuple->Draw("particleId","","E1 same");
+
+  c2->cd(2); ntuple->Draw("modelId:particleId", "", "box");   
+
+  c2->cd(3); ntuple->Draw("kineticEnergy:particleId","","box");   
+
+  c2->cd(4); ntuple->Draw("momX:particleId","","box"); 
+
+  c2->cd(5); ntuple->Draw("momY:particleId","","box"); 
+
+  c2->cd(6); ntuple->Draw("momZ:particleId","","box"); 
+
+  //______________________________________________________________________________
+  TCanvas *c3 =new TCanvas("c3","c3",0,450,600,400);
+  c3->Divide(3,2);
+  ntuple->SetLineStyle(1);
+
+  c3->cd(1); gPad->SetLogy(); ntuple->Draw("kineticEnergy >>h0","particleId==1","");   
+ntuple->Draw("kineticEnergy","particleId==2","same");
+
+  c3->cd(2);gPad->SetLogy(); ntuple->Draw("kineticEnergy","particleId==2"," ");
+
+  c3->cd(3); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+  ntuple->Draw("kineticEnergy >>h1","particleId==2"); 
+  ntuple->Draw("kineticEnergy","particleId==2","E1 same");
+  // h1->Scale(0.1);
+  ntuple->SetLineStyle(3);
+  ntuple->Draw("kineticEnergy","particleId==1","same"); 
+
+
+  TH1F *h2 = new TH1F("h2","h2",100,0,1.1);
+
+  c3->cd(4); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+  ntuple->SetLineStyle(1);
+  ntuple->Draw("kineticEnergy >>h2","particleId==1"); 
+  ntuple->SetLineStyle(3);
+  ntuple->Draw("kineticEnergy","particleId==1 && modelId<6","same"); 
+
+  c3->cd(5); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+  ntuple->SetLineStyle(1);
+  ntuple->Draw("kineticEnergy","particleId==2 && modelId>5"); 
+  ntuple->SetLineStyle(3);
+  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5","same");
+
+  c3->cd(6); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+  ntuple->SetLineStyle(1);
+  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5");
+  ntuple->SetLineStyle(3);
+  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5", "same");
+
+
+  //___________________________________________________________________________________
+  TCanvas *c4 =new TCanvas("c4","c4",400,800,200,200);
+  c4->Divide(3,2);
+  TH1F *h3 = new TH1F("h3","h3",100,0,1.1);
+
+  // enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+  c4->cd(1); gPad->SetLogy(); 
+
+  ntuple->SetLineStyle(1);
+  ntuple->Draw("kineticEnergy >>h3","particleId==1"); 
+  ntuple->SetLineStyle(2);
+  ntuple->SetLineColor(6);
+  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5","same"); 
+  ntuple->SetLineStyle(3);
+  //  ntuple->Draw("kineticEnergy","particleId==1 && modelId>5","same"); 
+
+  c4->cd(2); gPad->SetLogy(); 
+  TH1F *h4 = new TH1F("h4","h4",100,0,1.1);
+  ntuple->SetLineStyle(1);
+  ntuple->SetLineColor(3);
+  ntuple->Draw("kineticEnergy >>h4","particleId==2"); 
+  ntuple->SetLineStyle(2);
+  ntuple->SetLineColor(6);
+   ntuple->Draw("kineticEnergy","particleId==2 && modelId>5","same"); 
+  ntuple->SetLineStyle(2);
+  ntuple->SetLineColor(2);
+  //  ntuple->Draw("kineticEnergy","particleId==2 && coulombOK==1","same"); 
+
+  c4->cd(3); gPad->SetLogy(); 
+  //  TH1F *h4 = new TH1F("h4","h4",100,0,1.1);
+  //ntuple->Draw("kineticEnergy >>h4","particleId==0"); 
+ntuple->Draw("kineticEnergy","particleId==0"); 
+  ntuple->SetLineStyle(3);
+  //ntuple->Draw("kineticEnergy","particleId==0 && coulombOK==1","same"); 
+
+  h3->GetYaxis()->SetLabelOffset(0.00);
+  h3->GetYaxis()->SetTitle("d#sigma/dT (mb/MeV)");
+    h3->GetXaxis()->SetTitle("T / T Max MeV");
+    //h3.GetXaxis()->SetTitle("T / 35 MeV");
+ 
+  c4->cd(4); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy:fragmentA","particleId==0","box"); 
+
+  c4->cd(5); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","fragmentA==2 && particleId==0"); 
+  ntuple->SetLineColor(7);
+  ntuple->Draw("kineticEnergy","fragmentA==4 && particleId==0","same"); 
+  ntuple->SetLineColor(8);
+  ntuple->Draw("kineticEnergy","particleId==0 && fragmentA>20 && fragmentA<70","same"); 
+
+
+  //    c4_1->Print("bi90bert.png");
+    // cc_1->Print("sn35bert.png");
+    //____________________________________________________________________
+  TCanvas *c5 =new TCanvas("c5","c5",600,450,600,400);
+  c5->Divide(3,2);
+  ntuple->SetLineStyle(1);
+  ntuple->SetLineWidth(2);
+
+  c5->cd(1); ntuple->Draw("momX:momY:momZ","particleId==1");
+
+  c5->cd(2); ntuple->Draw("kineticEnergy:momX");
+
+  c5->cd(3); ntuple->Draw("kineticEnergy:momZ");
+
+  ntuple->Draw(">>myList", "particleId==1");
+  TEventList *list = (TEventList*)gDirectory->Get("myList");
+  ntuple->SetEventList(list);
+  ntuple->SetLineStyle(0);
+  ntuple->SetLineWidth(2);
+
+  c5->cd(4); ntuple->Draw("kineticEnergy:momX:momZ"); // now draws only protons
+
+
+  //  ntuple->Draw("kineticEnergy ","runId==25","same"); // now draws only protons
+  l.DrawLatex(0,1,"e^{+}e^{-}#rightarrowZ^{0}#rightarrowI#bar{I}, q#bar{q}");
+
+  c5->cd(5); ntuple->Draw("kineticEnergy:momX ");
+  l.DrawLatex(1,3,"e^{+}e^{-}#rightarrowZ^{0}#rightarrowI#bar{I}, q#bar{q}");
+
+  c5->cd(6); ntuple->Draw("kineticEnergy:momZ ");
+  l.DrawLatex(3,1,"e^{+}e^{-}#rightarrowZ^{0}#rightarrowI#bar{I}, q#bar{q}");
+
+}
+
+
+void fast(){
+  //______________________________________________________________________
+  TCanvas *c0 =new TCanvas("c0","c0",0,0,600,400);
+  c0->Divide(3,4);
+  ntuple->SetLineWidth(1);
+  c0->cd(1); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==5"); 
+
+  ntuple->SetLineWidth(2);
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==1","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==1 && coulombOK==1","same"); 
+  ntuple->SetLineWidth(1);
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==2","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==3","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==4","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==6","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==7","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==8","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==9","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==10","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==11","same"); 
+
+  c0->cd(2); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==2","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==2 && coulombOK==1","same"); 
+  c0->cd(3); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==3","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==3 && coulombOK==1","same"); 
+  c0->cd(4); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==4","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==4 && coulombOK==1","same"); 
+  c0->cd(5); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==5","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==5 && coulombOK==1","same"); 
+  c0->cd(6); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==6","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==6 && coulombOK==1","same"); 
+  c0->cd(7); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==7","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==7 && coulombOK==1","same"); 
+  c0->cd(8); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==8","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==8 && coulombOK==1","same"); 
+  c0->cd(9); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==9","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==9 && coulombOK==1","same"); 
+  c0->cd(10); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==10","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==10 && coulombOK==1","same"); 
+  c0->cd(11); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==11","same"); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==11 && coulombOK==1","same"); 
+
+  c0->cd(12); gPad->SetLogy(); 
+  ntuple->Draw("kineticEnergy","kineticEnergy<0.05 && particleId==1 && runId==11"); 
+  ntuple->Draw("kineticEnergy","kineticEnergy<0.05 && particleId==1 && runId==11 && coulombOK==1","same"); 
+}
