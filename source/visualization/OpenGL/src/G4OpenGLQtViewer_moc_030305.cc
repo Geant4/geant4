@@ -1,18 +1,20 @@
-#if QT_VERSION < 0x040202
-
 /****************************************************************************
 ** G4OpenGLQtViewer meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
 ** Created: Mon Nov 12 10:34:24 2007
-**      by: The Qt MOC ($Id: G4OpenGLQtViewer_moc_030305.cc,v 1.1 2007-11-12 09:37:25 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4OpenGLQtViewer_moc_030305.cc,v 1.2 2007-11-13 15:56:11 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
+
+#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #undef QT_NO_COMPAT
 #include "../include/G4OpenGLQtViewer.hh"
 #include <qmetaobject.h>
 #include <qapplication.h>
+
+#if QT_VERSION < 0x040202
 
 #include <private/qucomextra_p.h>
 #if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
@@ -178,5 +180,7 @@ bool G4OpenGLQtViewer::qt_property( int id, int f, QVariant* v)
 
 bool G4OpenGLQtViewer::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
 #endif // QT_NO_PROPERTIES
+
+#endif
 
 #endif
