@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.hh,v 1.2 2007-11-09 16:20:04 pia Exp $
+// $Id: G4FinalStateIonisationBorn.hh,v 1.3 2007-11-13 15:20:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -111,7 +111,8 @@ class G4Step;
    typedef std::map<double, std::map<double, double> > TriDimensionMap;
    TriDimensionMap eDiffCrossSectionData[6];
    TriDimensionMap pDiffCrossSectionData[6];
-
+   // TriDimensionMap eDiffCrossSectionData;
+   // TriDimensionMap pDiffCrossSectionData;
    std::vector<double> eTdummyVec;
    std::vector<double> pTdummyVec;
 
