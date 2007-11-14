@@ -47,8 +47,13 @@ RE03UserScoreWriter::~RE03UserScoreWriter() {
 void RE03UserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
 
   //
-  G4cout << "User-defined DumpQuantityToFile() method." << G4endl;
-  G4cout << "  -- to obtain a projection of the quantity onto the x-y plane --" << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "User-defined DumpQuantityToFile() method is invoked."
+           << G4endl;
+    G4cout << "  -- to obtain a projection of the quantity <"
+           << psName
+           << "> onto the x-y plane --" << G4endl;
+  }
 
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
