@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.21 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.22 2007-11-14 17:30:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -115,6 +115,7 @@ class G4ScoringManager
         for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
          (*itr)->SetVerboseLevel(vl);
         }
+        if(writer) writer->SetVerboseLevel(vl);
       }
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
@@ -136,6 +137,7 @@ class G4ScoringManager
       {
         if(writer) { delete writer; }
         writer = sw;
+        if(writer) writer->SetVerboseLevel(verboseLevel);
       }
       // Replace score writers.
 };
