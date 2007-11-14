@@ -46,6 +46,7 @@ unset  G4LIB_BUILD_G3TOG4
 unset  G4LIB_BUILD_SHARED
 unset  G4LIB_BUILD_STATIC
 unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_BUILD_GDML
 unset  G4LIB_USE_G3TOG4
 unset  G4LIB_USE_GRANULAR
 unset  G4LIB_USE_ZLIB
@@ -452,6 +453,24 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 fi
 fi 
+
+
+#
+# Use GDML module
+#
+#+
+if [ X$g4lib_build_gdml = Xy ] ; then
+G4LIB_BUILD_GDML=1
+export G4LIB_BUILD_GDML
+echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+fi 
+
+if [ X$g4lib_build_gdml = Xy ] ; then
+XERCESCROOT=$g4gdml_xercesc_root
+export XERCESCROOT
+echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+fi 
+
 
 #
 # Use G3TOG4 module

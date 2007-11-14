@@ -46,6 +46,7 @@ unsetenv  G4LIB_BUILD_G3TOG4
 unsetenv  G4LIB_BUILD_SHARED
 unsetenv  G4LIB_BUILD_STATIC
 unsetenv  G4LIB_BUILD_ZLIB
+unsetenv  G4LIB_BUILD_GDML
 unsetenv  G4LIB_USE_G3TOG4
 unsetenv  G4LIB_USE_GRANULAR
 unsetenv  G4LIB_USE_ZLIB
@@ -388,6 +389,25 @@ setenv XAWLIBS "$g4ui_xawlibs"
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 endif 
 
+
+
+#
+# Use GDML module
+#
+#+
+if ( X$g4lib_build_gdml == Xy ) then
+setenv G4LIB_BUILD_GDML 1
+echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+endif 
+
+if ( X$g4lib_build_gdml == Xy ) then
+setenv XERCESCROOT "$g4gdml_xercesc_root"
+echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+endif
+
+
+
+
 #
 # Use G3TOG4 module
 #
@@ -496,9 +516,19 @@ echo ''
 if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 endif
 endif
 
@@ -511,9 +541,19 @@ if ( ${?G4LIB_BUILD_SHARED} ) then
 if ( ${?DYLD_LIBRARY_PATH} )  then
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 else
 setenv DYLD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+
+if ( ${?G4LIB_BUILD_GDML} ) then
+   setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
+endif
+
 endif
 endif
 

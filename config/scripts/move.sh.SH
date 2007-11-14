@@ -313,6 +313,25 @@ export OGLHOME
 echo "On this machine the OGLHOME=\$OGLHOME"
 fi 
 
+
+#
+# Use GDML module
+#
+#+
+if [ X$g4lib_build_gdml = Xy ] ; then
+G4LIB_BUILD_GDML=1
+export G4LIB_BUILD_GDML
+echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+fi 
+
+if [ X$g4lib_build_gdml = Xy ] ; then
+XERCESCROOT=$g4gdml_xercesc_root
+export XERCESCROOT
+echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+fi 
+
+
+
 #
 # Use G3TOG4 module
 #
