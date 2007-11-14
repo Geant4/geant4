@@ -52,10 +52,12 @@ void exrdmPhysListGeneral::ConstructProcess()
 {
   // Add Decay Process
 
-  G4Decay* fDecayProcess = new G4Decay();
+  //  G4Decay* fDecayProcess = new G4Decay();
   G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
   G4GenericIon* ion = G4GenericIon::GenericIon();
-
+  G4ProcessManager* pmanager = ion->GetProcessManager();
+  pmanager->AddProcess(theRadioactiveDecay, 0, -1, 3);
+  /*
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -74,6 +76,7 @@ void exrdmPhysListGeneral::ConstructProcess()
 
     }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

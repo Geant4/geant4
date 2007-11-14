@@ -31,6 +31,7 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4VPhysicsConstructor;
 class exrdmPhysicsListMessenger;
@@ -42,7 +43,7 @@ class exrdmPhysicsList: public G4VModularPhysicsList
 {
 public:
   exrdmPhysicsList();
-  ~exrdmPhysicsList();
+  virtual ~exrdmPhysicsList();
 
   void ConstructParticle();
 
@@ -59,6 +60,8 @@ public:
 
 private:
 
+  void AddExtraBuilders(G4bool flagHP);
+
   // hide assignment operator
   exrdmPhysicsList & operator=(const exrdmPhysicsList &right);
   exrdmPhysicsList(const exrdmPhysicsList&);
@@ -70,8 +73,10 @@ private:
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  generalPhysicsList;
   G4VPhysicsConstructor*  particleList;
-  //  std::vector<G4VPhysicsConstructor*>  hadronPhys;
   G4VPhysicsConstructor*  hadPhysicsList;
+
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4int nhadcomp;  
 
   exrdmPhysicsListMessenger* pMessenger;
   G4ProductionCuts* DetectorCuts;
