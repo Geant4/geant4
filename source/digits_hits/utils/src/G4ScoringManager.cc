@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.29 2007-11-14 20:41:17 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.30 2007-11-14 22:08:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,13 +53,14 @@ G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 { return fSManager; }
 
 G4ScoringManager::G4ScoringManager()
-:verboseLevel(0),fCurrentMesh(0),writer(0)
+:verboseLevel(0),fCurrentMesh(0)
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
   fColorMapDict = new ColorMapDict();
   fDefaultLinearColorMap = new G4DefaultLinearColorMap("defaultLinearColorMap");
   (*fColorMapDict)[fDefaultLinearColorMap->GetName()] = fDefaultLinearColorMap;
+  writer = new G4VScoreWriter();
 }
 
 G4ScoringManager::~G4ScoringManager()
@@ -156,9 +157,6 @@ void G4ScoringManager::DumpQuantityToFile(G4String meshName,G4String psName,G4St
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
-    if(!writer) {
-      writer = new G4VScoreWriter();
-    }
     writer->SetScoringMesh(mesh);
     writer->DumpQuantityToFile(psName, fileName, option);
   } else {
@@ -171,9 +169,6 @@ void G4ScoringManager::DumpAllQuantitiesToFile(G4String meshName,G4String fileNa
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
   if(mesh) {
-    if(!writer) {
-      writer = new G4VScoreWriter();
-    }
     writer->SetScoringMesh(mesh);
     writer->DumpAllQuantitiesToFile(fileName, option);
   } else {
