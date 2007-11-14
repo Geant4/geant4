@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20RunAction.hh,v 1.5 2007-11-09 18:33:00 pia Exp $
+// $Id: Tst20RunAction.hh,v 1.6 2007-11-14 19:09:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,16 +35,20 @@
 #include "globals.hh"
 
 class G4Run;
+class G4Timer;
 
 class Tst20RunAction : public G4UserRunAction
 {
-  public:
-    Tst20RunAction();
-    virtual ~Tst20RunAction();
+public:
+  Tst20RunAction();
+  virtual ~Tst20RunAction();
 
-  public:
-    virtual void BeginOfRunAction(const G4Run* run);
-    virtual void EndOfRunAction(const G4Run* run);
+  virtual void BeginOfRunAction(const G4Run* run);
+  virtual void EndOfRunAction(const G4Run* run);
+
+private:
+  
+  G4Timer* timer;
 
 };
 

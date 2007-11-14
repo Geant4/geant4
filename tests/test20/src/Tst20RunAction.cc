@@ -24,9 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20RunAction.cc,v 1.4 2006-06-29 21:46:31 gunter Exp $
+// $Id: Tst20RunAction.cc,v 1.5 2007-11-14 19:09:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+
+// Must be the first include statement
+#include "G4Timer.hh"  
+
 
 #include "Tst20RunAction.hh"
 
@@ -36,17 +39,23 @@
 
 Tst20RunAction::Tst20RunAction()
 {
+  timer = new G4Timer;
 }
 
 Tst20RunAction::~Tst20RunAction()
 {
+  delete timer;
 }
 
-void Tst20RunAction::BeginOfRunAction(const G4Run* )
+void Tst20RunAction::BeginOfRunAction(const G4Run*)
 {
+  timer->Start();
 }
 
-void Tst20RunAction::EndOfRunAction(const G4Run* )
+void Tst20RunAction::EndOfRunAction(const G4Run* run)
 {
+  timer->Stop();
+  G4cout << "Time elapsed in " << run->GetNumberOfEvent()
+	 << " events ---- " << *timer << G4endl;
 }
 
