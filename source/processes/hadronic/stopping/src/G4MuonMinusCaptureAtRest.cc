@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.44 2007-07-05 18:19:14 dennis Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.45 2007-11-14 11:12:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -162,7 +162,9 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
       G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position);
       aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
       aParticleChange.AddSecondary( aNewTrack );
+      delete aParticle;
     }
+    delete captureResult;
   }
   
   // Store electromagnetic cascade
