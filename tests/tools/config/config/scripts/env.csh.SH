@@ -517,7 +517,7 @@ if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 
-if ( X$g4lib_build_gdml == Xy ) then
+if ( ${?G4LIB_BUILD_GDML} ) then
    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
 endif
 
@@ -525,7 +525,7 @@ else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 
-if ( X$g4lib_build_gdml == Xy ) then
+if ( ${?G4LIB_BUILD_GDML} ) then
    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
 endif
 
@@ -542,7 +542,7 @@ if ( ${?DYLD_LIBRARY_PATH} )  then
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 
-if ( X$g4lib_build_gdml == Xy ) then
+if ( ${?G4LIB_BUILD_GDML} ) then
    setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
 endif
 
@@ -550,7 +550,7 @@ else
 setenv DYLD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
 setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 
-if ( X$g4lib_build_gdml == Xy ) then
+if ( ${?G4LIB_BUILD_GDML} ) then
    setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
 endif
 
