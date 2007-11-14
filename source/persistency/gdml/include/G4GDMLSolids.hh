@@ -74,6 +74,7 @@ public:
    G4GDMLSolids();
 
    bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
+   G4VSolid* Get(const G4String&) const;
 };
 
 #endif

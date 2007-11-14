@@ -23,6 +23,20 @@ G4VPhysicalVolume *G4GDMLSetup::Get(const G4String& name) {
    return new G4PVPlacement(0,G4ThreeVector(),volume,name,0,0,0);
 }
 
+G4String G4GDMLSetup::GetS(const G4String& name) {
+
+   if (setupMap.find(name) == setupMap.end()) {
+   
+      G4cout << "G4GDML ERROR! setup '" << name << "' was not found!" << G4endl;
+      return name;
+   }
+
+   G4String worldref = setupMap[name];
+
+   return worldref;
+}
+
+
 bool G4GDMLSetup::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
 
    module = newModule;

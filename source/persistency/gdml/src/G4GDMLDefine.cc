@@ -138,7 +138,7 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,const G4String&
       if (tag=="position") { if (!positionRead(child)) return false; } else
       if (tag=="rotation") { if (!rotationRead(child)) return false; } else
       {
-	 G4cout << "GDML ERROR! Unsupported tag in define: " << tag << G4endl;
+	 G4cout << "GDML: Error! Unknown tag in define: " << tag << G4endl;
          return false;
       }
    }
@@ -148,10 +148,22 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,const G4String&
 
 G4ThreeVector* G4GDMLDefine::GetPosition(const G4String& ref) {
 
-   return (positionMap.find(ref) == positionMap.end()) ? (0) : (positionMap[ref]);
+   G4String full_ref = module + ref;
+
+   if (positionMap.find(full_ref) != positionMap.end()) return positionMap[full_ref];
+
+   G4cout << "GDML: Error! Referenced position '" << full_ref << "' was not found!" << G4endl;
+
+   return 0;
 }
 
 G4ThreeVector* G4GDMLDefine::GetRotation(const G4String& ref) {
 
-   return (rotationMap.find(ref) == rotationMap.end()) ? (0) : (rotationMap[ref]);
+   G4String full_ref = module + ref;
+
+   if (rotationMap.find(full_ref) != rotationMap.end()) return rotationMap[full_ref];
+
+   G4cout << "GDML: Error! Referenced rotation '" << full_ref << "' was not found!" << G4endl;
+
+   return 0;
 }

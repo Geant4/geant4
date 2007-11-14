@@ -44,27 +44,17 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
       if (tag=="position") { if (!positionRead(child,position  )) return false; } else
       if (tag=="rotation") { if (!rotationRead(child,rotation  )) return false; } else
       {
-         G4cout << "GDML ERROR! Unsupported tag in boolean solid '" << name << "': " << tag << G4endl;
+         G4cout << "GDML: Error! Unknown tag in boolean solid '" << name << "': " << tag << G4endl;
          return false;
       }
    }
 
-   first_ref = module + first_ref;
-   second_ref = module + second_ref;
+   G4VSolid* firstSolid = Get(first_ref);
+   G4VSolid* secondSolid = Get(second_ref);
 
-   G4VSolid *FirstSolid = G4SolidStore::GetInstance()->GetSolid(first_ref);
+   if (!firstSolid || !secondSolid) {
 
-   if (!FirstSolid) {
-
-      G4cout << "GDML ERROR! Referenced solid '" << first_ref << "' in boolean solid '" << name << "' was not found!" << G4endl;   
-      return false;
-   }
-
-   G4VSolid *SecondSolid = G4SolidStore::GetInstance()->GetSolid(second_ref);
-
-   if (!SecondSolid) {
-
-      G4cout << "GDML ERROR! Referenced solid '" << second_ref << "' in boolean solid '" << name << "' was not found!" << G4endl;   
+      G4cout << "GDML: Error in boolean solid '" << name << "'!" << G4endl;   
       return false;
    }
 
@@ -76,9 +66,9 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    G4Transform3D transform(rot,position);
 
-   if (op==UNION       ) { new G4UnionSolid       (module+name,FirstSolid,SecondSolid,transform); } else
-   if (op==SUBTRACTION ) { new G4SubtractionSolid (module+name,FirstSolid,SecondSolid,transform); } else
-   if (op==INTERSECTION) { new G4IntersectionSolid(module+name,FirstSolid,SecondSolid,transform); }
+   if (op==UNION       ) { new G4UnionSolid       (module+name,firstSolid,secondSolid,transform); } else
+   if (op==SUBTRACTION ) { new G4SubtractionSolid (module+name,firstSolid,secondSolid,transform); } else
+   if (op==INTERSECTION) { new G4IntersectionSolid(module+name,firstSolid,secondSolid,transform); }
 
    return true;
 }
@@ -658,7 +648,7 @@ bool G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element,G4T
 
    if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL || ptr4 == NULL) {
    
-      G4cout << "GDML ERROR! Referenced position was not found in tessellated solid!" << G4endl;   
+      G4cout << "GDML: Error in quadrangular face!" << G4endl;   
       return false;
    }
 
@@ -735,9 +725,9 @@ bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
 
    G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(module+solid,false);
 
-   if (solidPtr == NULL) {
+   if (!solidPtr) {
    
-      G4cout << "GDML ERROR! Referenced solid '" << solid << "' in reflectedSolid '" << name << "' was not found!" << G4endl;   
+      G4cout << "GDML: Error in reflectedSolid '" << name << "'!" << G4endl;   
       return false;
    }
 
@@ -993,7 +983,7 @@ bool G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
 
    if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL || ptr4 == NULL) {
 
-      G4cout << "GDML ERROR! Vertex referenced in tet '" << name << "' was not found!" << G4endl;   
+      G4cout << "GDML: Error in tet '" << name << "'!" << G4endl;   
       return false;
    }
    
@@ -1230,7 +1220,7 @@ bool G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element,G4Tes
 
    if (ptr1 == NULL || ptr2 == NULL || ptr3 == NULL) {
    
-      G4cout << "GDML ERROR! Referenced position was not found in tessellated solid!" << G4endl;   
+      G4cout << "GDML: Error in triangular face!" << G4endl;   
       return false;
    }
 
@@ -1454,10 +1444,22 @@ bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,const G4String&
       if (tag=="subtraction"   ) { if (!booleanRead(child,SUBTRACTION )) return false; } else
       if (tag=="union"         ) { if (!booleanRead(child,UNION       )) return false; } else
       {
-	 G4cout << "GDML ERROR! Unsupported tag in solids: " << tag << G4endl;
+	 G4cout << "GDML: Error! Unknown tag in solids: " << tag << G4endl;
          return false;
       }
    }
 
    return true;
+}
+
+G4VSolid* G4GDMLSolids::Get(const G4String& ref) const {
+
+   G4String full_ref = module + ref;
+
+   G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(full_ref,false);
+
+   if (solidPtr == NULL) 
+      G4cout << "GDML: Error! Referenced solid '" << full_ref << "' was not found!" << G4endl;   
+
+   return solidPtr;
 }

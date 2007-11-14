@@ -17,6 +17,7 @@ class G4GDMLSetup {
    std::map<G4String,G4String> setupMap;
 public:
    G4VPhysicalVolume *Get(const G4String&);
+   G4String GetS(const G4String&);
 
    bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
 };

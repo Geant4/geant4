@@ -27,6 +27,7 @@ public:
    G4GDMLMaterials();
 
    bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
+   G4Material* Get(const G4String&) const;
 };
 
 #endif

@@ -25,9 +25,7 @@ bool G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element,double& 
       const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="value") { value = attribute_value; } else
-      if (attribute_name=="unit ") { unit  = attribute_value; } else
-      {
-      }
+      if (attribute_name=="unit ") { unit  = attribute_value; }
    }
 
    return evaluator->Evaluate(_value,value,unit);
@@ -53,9 +51,7 @@ bool G4GDMLMaterials::DRead(const xercesc::DOMElement* const element,double& _va
       const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="value") { value = attribute_value; } else
-      if (attribute_name=="unit ") { unit  = attribute_value; } else
-      {
-      }
+      if (attribute_name=="unit ") { unit  = attribute_value; }
    }
 
    return evaluator->Evaluate(_value,value,unit);
@@ -83,9 +79,7 @@ bool G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
 
       if (attribute_name=="name"   ) { name    = attribute_value; } else
       if (attribute_name=="formula") { formula = attribute_value; } else
-      if (attribute_name=="Z"      ) { Z       = attribute_value; } else
-      {
-      }
+      if (attribute_name=="Z"      ) { Z       = attribute_value; }
    }
 
    double _Z;
@@ -137,9 +131,7 @@ bool G4GDMLMaterials::fractionRead(const xercesc::DOMElement* const element,doub
       const std::string attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="n"  ) { n   = attribute_value; } else
-      if (attribute_name=="ref") { ref = attribute_value; } else
-      {
-      }
+      if (attribute_name=="ref") { ref = attribute_value; }
    }
 
    return evaluator->Evaluate(_n,n);
@@ -167,9 +159,7 @@ bool G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
 
       if (attribute_name=="name") { name = attribute_value; } else
       if (attribute_name=="Z"   ) { Z    = attribute_value; } else
-      if (attribute_name=="N"   ) { N    = attribute_value; } else
-      {
-      }
+      if (attribute_name=="N"   ) { N    = attribute_value; }
    }
 
    double _Z;
@@ -238,7 +228,7 @@ bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
       if (tag=="atom"    ) { if (!atomRead(child,_a)) return false; } else
       if (tag=="fraction") { nComponents++;                         } else
       {
-	 G4cout << "GDML ERROR! Unsupported tag in material: " << tag << G4endl;
+	 G4cout << "GDML: Error! Unknown tag in material: " << tag << G4endl;
          return false;
       }
    }
@@ -264,6 +254,8 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Ele
 
          std::string ref;
 	 double _n;
+	 
+	 ref = module + ref;
 	 
 	 if (!fractionRead(child,_n,ref)) return false;
 
@@ -304,6 +296,8 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
 	 
 	 if (!fractionRead(child,_n,ref)) return false;
 
+         ref = module + ref;
+
          G4Material *materialPtr = G4Material::GetMaterial(ref,false);
          G4Element *elementPtr = G4Element::GetElement(ref,false);
 
@@ -341,10 +335,22 @@ bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,const G4Stri
       if (tag=="isotope" ) { if (!isotopeRead (child)) return false; } else 
       if (tag=="material") { if (!materialRead(child)) return false; } else 
       {
-	 G4cout << "GDML ERROR! Unsupported tag in materials: " << tag << G4endl;
+	 G4cout << "GDML: Error! Unknown tag in materials: " << tag << G4endl;
          return false;
       }
    }
 
    return true;
+}
+
+G4Material* G4GDMLMaterials::Get(const G4String& ref) const {
+
+   G4String full_ref = module + ref;
+
+   G4Material *materialPtr = G4Material::GetMaterial(full_ref,false);
+
+   if (materialPtr == NULL) 
+      G4cout << "GDML: Error! Referenced material '" << full_ref << "' was not found!" << G4endl;   
+
+   return materialPtr;
 }
