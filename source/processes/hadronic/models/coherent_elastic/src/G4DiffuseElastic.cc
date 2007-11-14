@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.17 2007-11-14 18:41:05 vnivanch Exp $
+// $Id: G4DiffuseElastic.cc,v 1.18 2007-11-14 18:42:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -176,7 +176,7 @@ void G4DiffuseElastic::Initialise()
     fAtomicNumber = (*theElementTable)[jEl]->GetZ();     // atomic number
     fAtomicWeight = (*theElementTable)[jEl]->GetN();     // number of nucleons
     fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
-    if(verbosityLevel > 0)    
+    if(verboseLevel > 0)    
       G4cout<<"G4DiffuseElastic::Initialise() the element: "
 	    <<(*theElementTable)[jEl]->GetName()<<G4endl;
     fElementNumberVector.push_back(fAtomicNumber);
@@ -197,7 +197,7 @@ void G4DiffuseElastic::InitialiseOnFly(G4double Z, G4double A)
   fAtomicNumber = Z;     // atomic number
   fAtomicWeight = A;     // number of nucleons
   fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
-  if(verbosityLevel > 0)    
+  if(verboseLevel > 0)    
     G4cout<<"G4DiffuseElastic::Initialise() the element with Z = "
 	  <<Z<<"; and A = "<<A<<G4endl;
   fElementNumberVector.push_back(fAtomicNumber);
