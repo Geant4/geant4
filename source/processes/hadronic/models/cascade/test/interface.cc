@@ -52,6 +52,7 @@
 #include "G4PVPlacement.hh"
 
 #include "G4CascadeInterface.hh"
+#include "G4IBertini.hh"
 #include "G4ElasticCascadeInterface.hh"
 //#include "G4InuclEvaporation.hh"
 
@@ -186,50 +187,44 @@ private:
   G4VPhysicalVolume* tracker_phys;
 };
 
-
 void test(std::string, int);
 
-
-G4int tCascadeInterface(int runId, int nCascades, double momZ, int A, int Z);
+G4int tCascadeInterface(int runId, int nCascades, double eKin, int A, int Z);
 
 int main(int argc, char **argv ) {
   G4int verboseLevel = 1;
   if (verboseLevel > 3) {
     G4cout << "Geant4 cascade region benchmarks" << G4endl;
   }
-  if (argc < 2)
-    {
+  if (argc < 2) {
       printf("usage: benchmarks <test ID> <parameters>\n");
       return(1);
     }
+
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
   // defaults
   G4int runId      = 1;
   G4int nCollisions = 10;      // collisions to be generated
   G4int  bulletType = proton;    // bullet particle
-  G4double     momZ = 160;      // momentum in z-direction
+  G4double     eKin = 160;      // movement on in z-direction
   G4int        A = 27;      // target atomic weight Al
   G4int        Z = 13;      // target atomic number
-  runId      =           (argc > 1) ? atoi(argv[1]) : runId;
+  runId       =           (argc > 1) ? atoi(argv[1]) : runId;
   nCollisions =           (argc > 2) ? atoi(argv[2]) : nCollisions;
   bulletType  =           (argc > 3) ? atoi(argv[3]) : proton;
-  momZ        = G4double(((argc > 4) ? atoi(argv[4]) : momZ));
-  A           =          (argc > 5) ? atoi(argv[5]) : A;
-Z           =           (argc > 6) ? atoi(argv[6]) : Z;
-
-  //  momZ = momZ/1000.0;
+  eKin        = G4double(((argc > 4) ? atoi(argv[4]) : eKin));
+  A           =           (argc > 5) ? atoi(argv[5]) : A;
+  Z           =           (argc > 6) ? atoi(argv[6]) : Z;
 
   if (verboseLevel > 3) {
     G4cout << " runId        " << runId << G4endl;
     G4cout << " nCollisions " << nCollisions << G4endl;
     G4cout << "  bulletType " << bulletType  << G4endl;
-    G4cout << "        momZ " << momZ        << G4endl;
+    G4cout << "        eKin " << eKin        << G4endl;
     G4cout << "           A " << A           << G4endl;
     G4cout << "           Z " << Z           << G4endl;
   }
-
-  //    G4cout << "        momZ " << momZ        << G4endl;
 
   G4RunManager* runManager = new G4RunManager;
 
@@ -238,18 +233,13 @@ Z           =           (argc > 6) ? atoi(argv[6]) : Z;
 
   G4VUserPhysicsList* physics = new pList();
 
-
   runManager->SetUserInitialization(physics);
-
-
-
   runManager->Initialize();
 
-  test("Cascade interface", tCascadeInterface(runId, nCollisions, momZ, A, Z));
+  test("Cascade interface", tCascadeInterface(runId, nCollisions, eKin, A, Z));
 
   return 0;       
 }
-
 
 void test(std::string txt, int testStatus) {
   G4int verboseLevel=1;
@@ -266,8 +256,7 @@ void test(std::string txt, int testStatus) {
   }
 }
 
-
-int tCascadeInterface(int runId, int nCollisions, double momZ, int A, int Z) {
+int tCascadeInterface(int runId, int nCollisions, double eKin, int A, int Z) {
   G4int verboseLevel = 1;                          
   if (verboseLevel > 3) {
     G4cout << ">>> tCascadeInterface start" << G4endl;
@@ -275,31 +264,8 @@ int tCascadeInterface(int runId, int nCollisions, double momZ, int A, int Z) {
 
   //G4ParticleDefinition *particle = G4PionMinus::PionMinus();  
   //G4ParticleDefinition *particle = G4Neutron::Neutron();  
-  //  G4ParticleDefinition *particle = G4Proton::Proton();  
+  //G4ParticleDefinition *particle = G4Proton::Proton();  
 
-
- //  G4DynamicParticle *projectile = new G4DynamicParticle(); 
-//   projectile->SetDefinition(particle);
-//   //projectile->SetKineticEnergy( 1.0 * GeV);
-//   projectile->SetMomentum(momZ);
-//   projectile->SetMomentumDirection(0.0, 0.0, 1.0);  
-
-//   if (verboseLevel > -1) {
-//     G4cout << "projectile" << G4endl;
-//     G4cout << " type           : " << projectile->GetDefinition()        << G4endl;
-//     G4cout << " kinetic energy : " << projectile->GetKineticEnergy()     << G4endl;
-//     G4cout << " momentum       : " << projectile->GetMomentum()          << G4endl;
-//     G4cout << " p direction    : " << projectile->GetMomentumDirection() << G4endl;
-//   }
-
-//   // Set projectile particle track
-//   G4ThreeVector v;                                            
-//   v.setX(0.0 * fermi); 
-//   v.setY(0.0 * fermi); 
-//   v.setZ(0.0 * fermi);
-//   G4Track aTrack(projectile, 0, v);
-
-  // Set target nucleus
   G4Nucleus targetNucleus;                                        
 
   targetNucleus.SetParameters(A, Z);
@@ -311,29 +277,15 @@ int tCascadeInterface(int runId, int nCollisions, double momZ, int A, int Z) {
     G4cout << " atomic mass    : " << targetNucleus.AtomicMass(A, Z) << G4endl;
   }
 
-  //  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
-
-  //  G4ThreeVector       inVector(0, 0, momZ);
-  G4double Tkin = sqrt(momZ*momZ+938.27*938.27)-938.27;
-
   G4ThreeVector       outVector, aPosition(0., 0., 0.);
 
-  //  if (verboseLevel > 3) {
-  //  G4cout <<  "  inVector " <<inVector.x()<<" " << 
-  //   inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin <<G4endl;
-  //}
-
-  G4DynamicParticle   aParticle;
   G4Proton          * aProton   = G4Proton::Proton();
+  G4DynamicParticle aParticle;
   aParticle.SetDefinition(aProton);
-
-  aParticle.SetKineticEnergy(Tkin);
-aParticle.SetMomentum(momZ);
-aParticle.SetMomentumDirection(0.0, 0.0, 1.0);  
-//  aParticle.SetMomentum(inVector);
-
-
-
+  aParticle.SetKineticEnergy(eKin);
+  aParticle.SetMomentumDirection(0.0, 0.0, 1.0);   
+  aParticle.SetMomentum(sqrt(2*eKin*938.27));
+ 
   const  G4HadProjectile hadProj = G4HadProjectile(aParticle);
 
   G4HadFinalState   * o    = new G4HadFinalState();   
@@ -341,23 +293,25 @@ aParticle.SetMomentumDirection(0.0, 0.0, 1.0);
   // Set the particle table singleton ready:
   //  G4ParticleTable::GetParticleTable()->SetReadiness();
 
-  G4CascadeInterface *theCascade  = new G4CascadeInterface();
-  //G4InclCascadeInterface *theCascade = new G4InclCascadeInterface();
+  G4CascadeInterface *theCascade        = new G4CascadeInterface();
+  G4IBertini *theCascadeDev = new G4IBertini();
  
   for (G4int cascadeID =1 ; cascadeID <= nCollisions; cascadeID++) { 
 
-    o = theCascade->ApplyYourself(hadProj, targetNucleus);
+    if (runId==1) {
+      o = theCascade->ApplyYourself(hadProj, targetNucleus);  // released standard interface
+    } else {
+      o = theCascadeDev->ApplyYourself(hadProj, targetNucleus); // Interface to Development version  
+    }
 
     G4int nPart = o->GetNumberOfSecondaries();
-    //    o.getNucleiFragments().begin()->getZ() == target->getZ();
 
-      G4double kE=1.0;
+    G4double kE=1.0;
     G4int type;    
     for (G4int i =1 ; i < nPart; i++) { 
       G4HadSecondary    * NuclSecond = o->GetSecondary(i);
       G4DynamicParticle * op = NuclSecond->GetParticle();
       type=0; // default
-
 
       if (op->GetDefinition() ==  G4Proton::Proton()  ) type = proton;
       if (op->GetDefinition() ==  G4Neutron::Neutron()  ) type = neutron;
@@ -388,17 +342,14 @@ aParticle.SetMomentumDirection(0.0, 0.0, 1.0);
     }
 
     if (verboseLevel > 3) {
-
       G4cout << "inc " << cascadeID << G4endl;
       G4cout << "  # secondaries " << nPart << G4endl;
       outVector  =  o->GetMomentumChange();
       G4cout << "  momentum change " << outVector << G4endl;
       G4double outE = o->GetEnergyChange();
       G4cout << "  energy change " << outE << G4endl;
-      //    G4double outP = sqrt(outE*outE-938.27*938.27);
     
       for (G4int iSecondary =1 ; iSecondary < nPart; iSecondary++) { 
-
 	G4HadSecondary    * NuclSecond = o->GetSecondary(iSecondary);
 	G4cout << "    secondary         " << iSecondary << G4endl;  
 	G4DynamicParticle * secPart = NuclSecond->GetParticle();
@@ -413,10 +364,7 @@ aParticle.SetMomentumDirection(0.0, 0.0, 1.0);
 	G4cout << "      particle  kin E " << outEkin << G4endl;  
       }
     }
-
   }
-
-  //  delete projectile;
   delete theCascade;
   return 1;   
 }

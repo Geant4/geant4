@@ -1,6 +1,6 @@
 int sx=500, sy=300; // canvas size
-int gx=550, gy=350; // grid for canvas location
-
+int gx=550, gy=350; // grid for canvas locationSo
+enum color {OLD=1, DEV=8, IND=9, };  // black for stable old, gree for development
 void coulomb()
 {
   // 0 default
@@ -37,34 +37,96 @@ void compare(){  // compare interface vs cascade
   TCanvas *c6 =new TCanvas("c6","c6", 2*gx, 3*gy, sx, sy);
   c6->Divide(3,4);
   ntuple->SetLineWidth(1);
-  c6->cd(1); gPad->SetLogy(); 
-  ntuple->SetLineWidth(1); ntuple->SetLineColor(8); // new physics with  green (eight and thin line 1)
-  ntuple->Draw("particleId", "runId==2"); 
 
-  ntuple->SetLineWidth(2); ntuple->SetLineColor(1); // old tested  physics with  black (1 and thik line 2)
-  ntuple->Draw("particleId", "runId==1","same"); 
+  c6->cd(1); gPad->SetLogy(); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD); // old tested  physics with  black (1 and thik line 2)
+     ntuple->Draw("particleId", "runId==1"); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+  ntuple->Draw("particleId", "runId==2", "same"); 
 
   c6->cd(2); gPad->SetLogy(); 
-  ntuple->SetLineWidth(1); ntuple->SetLineColor(8); 
-  ntuple->Draw("kineticEnergy","particleId==1 && runId==2"); 
-  
-  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
-  ntuple->Draw("kineticEnergy","particleId==1 && runId==1","same"); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==1"); 
+
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==2", "same"); 
+  TLatex l61;   l61.SetTextSize(0.1); l61.DrawLatex(1,1,"Proton");
 
   c6->cd(3); gPad->SetLogy(); 
-  ntuple->SetLineWidth(1); ntuple->SetLineColor(8);
-  ntuple->Draw("kineticEnergy","particleId==2 && runId==2"); 
-  
-  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
-  ntuple->Draw("kineticEnergy","particleId==2 && runId==1","same"); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD); 
+  ntuple->Draw("kineticEnergy","particleId==2 && runId==1"); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+  ntuple->Draw("kineticEnergy","particleId==2 && runId==2", "same"); 
+  TLatex l61;   l61.SetTextSize(0.1); l61.DrawLatex(1,1,"Neutron");
+
 
   c6->cd(4); gPad->SetLogy(); 
-    ntuple->SetLineWidth(1); ntuple->SetLineColor(8); 
-  ntuple->Draw("kineticEnergy","particleId==10 && runId==2"); 
+    ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD); 
+  ntuple->Draw("kineticEnergy","particleId==10 && runId==1"); 
   
-  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
-  ntuple->Draw("kineticEnergy","particleId==10 && runId==1","same"); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV);
+  ntuple->Draw("kineticEnergy","particleId==10 && runId==2", "same"); 
+  TLatex l64;   l64.SetTextSize(0.1); l64.DrawLatex(1,1,"Gamma");
 
+  c6->cd(5); gPad->SetLogy(); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->Draw("kineticEnergy","particleId==3 && runId==1"); 
+    ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+   ntuple->Draw("kineticEnergy","particleId==3 && runId==2","same"); 
+  TLatex l65;   l65.SetTextSize(0.1); l65.DrawLatex(1,1,"#pi^{+}");
+
+  c6->cd(6); gPad->SetLogy(); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->Draw("kineticEnergy","particleId==5 && runId==1"); 
+    ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+   ntuple->Draw("kineticEnergy","particleId==5 && runId==2","same"); 
+  TLatex l66;   l66.SetTextSize(0.1); l66.DrawLatex(1,1,"#pi^{-}");
+
+  c6->cd(7); gPad->SetLogy(); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->Draw("kineticEnergy","particleId==7 && runId==1"); 
+    ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV); 
+   ntuple->Draw("kineticEnergy","particleId==7 && runId==2","same"); 
+  TLatex l67;   l67.SetTextSize(0.1); l67.DrawLatex(1,1,"#pi^{0}");
+
+    //  TH1F *h6 = new TH1F("h6","h6",100,0,100);  
+  //  ntuple->Draw("kineticEnergy >>h6","particleId==1 && runId==1"); 
+
+    c6->cd(8); gPad->SetLogy(); 
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->Draw("kineticEnergy","particleId==2 && runId==1"); 
+  TLatex l68;
+  l68.DrawLatex(1,1,"Neutron");
+
+
+  c6->cd(9);
+  ntuple->SetLineWidth(2); ntuple->SetMarkerColor(OLD);
+  ntuple->Draw("momX*momX +momY*momY:kineticEnergy","particleId==1 && runId==1", "box"); 
+    ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV);
+   ntuple->Draw("momX*momX +momY*momY:kineticEnergy","particleId==1 && runId==2"," box same"); 
+  TLatex l69;   l69.SetTextSize(0.1); l69.DrawLatex(1,1,"Ekin vs. pT");
+
+
+  c6->cd(10);
+ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->SetLineWidth(2); ntuple->SetMarkerColor(OLD);
+   ntuple->Draw("momZ*momZ:kineticEnergy","particleId==1 && runId==1","box"); 
+  ntuple->SetLineWidth(1); ntuple->SetMarkerColor(DEV);
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV);
+    ntuple->Draw("momZ*momZ:kineticEnergy","particleId==1 && runId==2","box same"); 
+  TLatex l610;   l610.SetTextSize(0.1); l610.DrawLatex(1,1,"Ekin vs. pII");
+
+  c6->cd(11);
+ntuple->SetLineWidth(2); ntuple->SetLineColor(OLD);
+  ntuple->SetLineWidth(2); ntuple->SetMarkerColor(OLD);
+   ntuple->Draw("momZ*momZ:momX*momX +momY*momY","particleId==1 && runId==1","box"); 
+  ntuple->SetLineWidth(1); ntuple->SetMarkerColor(DEV);
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(DEV);
+    ntuple->Draw("momZ*momZ:momX*momX +momY*momY","particleId==1 && runId==2","box same"); 
+  TLatex l611;   l611.SetTextSize(0.1); l611.DrawLatex(1,1,"pT vs. pII");
+
+
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(1); // Reset to default
 };
 
 
@@ -207,14 +269,15 @@ ntuple->Draw("kineticEnergy","particleId==2","same");
   ntuple->Draw("kineticEnergy","particleId==2"); 
   ntuple->SetLineStyle(3);
   ntuple->Draw("kineticEnergy","particleId==2 && coulombOK==1","same");
+  TLatex l35;  l35.SetTextSize(0.1); l35.DrawLatex(0,1,"Proton");
 
-  c3->cd(6); gPad->SetLogy(); 
+  c3->cd(6);  gPad->SetLogx();  gPad->SetLogy(); 
   // h1->Scale(0.1);
   ntuple->SetLineStyle(1);
-  ntuple->Draw("kineticEnergy","particleId==1");
+  ntuple->Draw("kineticEnergy","particleId==2");
   ntuple->SetLineStyle(3);
-  ntuple->Draw("kineticEnergy","particleId==1 && coulombOK==1", "same");
-
+  ntuple->Draw("kineticEnergy","particleId==2 && coulombOK==1", "same");
+  TLatex l36; l36.SetTextSize(0.1); l36.DrawLatex(0,1,"Proton");
 
   //___________________________________________________________________________________
   TCanvas *c4 =new TCanvas("c4","c4",1*gx,1*gy, sx, sy);
@@ -298,4 +361,5 @@ ntuple->Draw("kineticEnergy","particleId==0");
 
   c5->cd(6); ntuple->Draw("kineticEnergy:momZ ");
   l.DrawLatex(3,1,"e^{+}e^{-}#rightarrowZ^{0}#rightarrowI#bar{I}, q#bar{q}");
+
 }

@@ -189,7 +189,7 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
   G4double px,py,pz;
   px=0.0 ;
   py=0.0 ;
-  pz=momZ; //[GeV]
+  pz=momZ/2; //[GeV]
 
   std::vector<G4double> momentumBullet(4);
   momentumBullet[0] =0.;
@@ -275,7 +275,7 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
     for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
       if (ipart->type() == proton) {
 	G4double e = ipart->getKineticEnergy();
-      if (e < 0.001){
+      if (e < 0.005){
 	//	           G4cout << std::setw(8)  << e    << G4endl; 
 	coulombOK= false;
       };

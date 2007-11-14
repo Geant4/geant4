@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.58 2007-11-14 05:25:55 miheikki Exp $
+# $Id: GNUmakefile,v 1.59 2007-11-14 23:00:21 miheikki Exp $
 #G4TARGET := cascade
 G4TARGET := interface
 #G4TARGET := benchmarks
@@ -13,17 +13,18 @@ include $(G4INSTALL)/config/binmake.gmk
 # enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
 
-t1:
+t1:   #// 197Au79 tested for 30-3000 OK (likewise 54Be26 9Be4 ans 238U92)
 	rm -f c.out; date;
-	echo "0 2000 1 1000 54 26" > c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
-	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 1000 1 1000 54 26  >> c.out; # [l]og
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade   2 1000 1 1000 54 26  >> c.out; # Fe (worst case 20 MeV p-Fe p)
+	echo "0 20000 1 62 27 13" > c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
+	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 10000 1 62 27 13 >> c.out; # // runId 1 uses standard interface
+	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 2 10000 1 62 27 13 >> c.out; # // runId 0 used development version G4IBertini
+#	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade   2 1000 1 1000 197 79  >> c.out; # Fe (worst case 20 MeV p-Fe p)
 	mv c.out data/data.out; head data/data.out; wc data/data.out; ls -lh data; ls -lat data; date
 
 i1:
 	rm -f l.out; date; 
-	echo "1 1000 1 1000 54 26" >l.out  # header info for scripts/analalyzeEvents.C 
-	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 1000 1 1000 54 26  >> l.out; # [l]og
+	echo "1 1000 1 1000 197 79" >l.out  # header info for scripts/analalyzeEvents.C 
+	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 1000 1 1000 197 79  >> l.out; # [l]og
 	mv l.out data/l.out; head data/l.out; wc data/l.out; ls -lh data; ls -lat data; date 
 
 
