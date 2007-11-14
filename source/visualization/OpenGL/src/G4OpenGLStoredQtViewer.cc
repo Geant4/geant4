@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.4 2007-11-13 17:48:51 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.5 2007-11-14 18:58:59 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -255,7 +255,12 @@ void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
 
 void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
 {
+  printf("G4OpenGLStoredQtViewer::mouseMoveEvent\n");
+#if QT_VERSION < 0x040000
   G4MouseMoveEvent(event->x(),event->y(),event->button());
+#else
+  G4MouseMoveEvent(event->x(),event->y(),event->buttons());
+#endif
   //  DrawView();
 }
 
