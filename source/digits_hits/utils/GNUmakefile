@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2007-08-21 09:29:57 akimura Exp $
+# $Id: GNUmakefile,v 1.9 2007-11-14 20:41:17 asaim Exp $
 # --------------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # --------------------------------------------------------------
@@ -21,6 +21,7 @@ CPPFLAGS += \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/divisions/include \
             -I$(G4BASE)/geometry/navigation/include \
 	    -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/digits_hits/hits/include \

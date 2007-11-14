@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.28 2007-11-07 04:12:07 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.29 2007-11-14 20:41:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,8 @@
 #include "G4DefaultLinearColorMap.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
+
+G4int G4ScoringManager::replicaLevel = 2;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {
@@ -66,6 +68,11 @@ G4ScoringManager::~G4ScoringManager()
   fSManager = 0;
   if(writer) delete writer;
 }
+
+void G4ScoringManager::SetReplicaLevel(G4int lvl)
+{ replicaLevel = lvl; }
+G4int G4ScoringManager::GetReplicaLevel()
+{ return replicaLevel; }
 
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {

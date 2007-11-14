@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.22 2007-11-14 17:30:33 asaim Exp $
+// $Id: G4ScoringManager.hh,v 1.23 2007-11-14 20:41:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,6 +66,10 @@ class G4ScoringManager
   public:
       static G4ScoringManager* GetScoringManagerIfExist();
 
+  public:
+      static void SetReplicaLevel(G4int);
+      static G4int GetReplicaLevel();
+
   protected:
       G4ScoringManager();
 
@@ -91,6 +95,7 @@ class G4ScoringManager
 
   private: 
       static G4ScoringManager * fSManager;
+      static G4int replicaLevel;
       G4int verboseLevel;
       G4ScoringMessenger* fMessenger;
       G4ScoreQuantityMessenger* fQuantityMessenger;

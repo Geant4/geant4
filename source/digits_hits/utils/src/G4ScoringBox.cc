@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.47 2007-11-12 13:27:31 asaim Exp $
+// $Id: G4ScoringBox.cc,v 1.48 2007-11-14 20:41:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+#include "G4PVDivision.hh"
 #include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
 #include "G4ScoringBoxParameterisation.hh"
@@ -44,7 +45,8 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit3D.hh"
+
+#include "G4ScoringManager.hh"
 
 #include <map>
 #include <fstream>
@@ -112,8 +114,16 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
   if(fNSegment[0] > 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to x direction" << G4endl;
-    new G4PVReplica(layerName[0], layerLogical[0], boxLogical, kXAxis,
+    if(G4ScoringManager::GetReplicaLevel()>0)
+    {
+      new G4PVReplica(layerName[0], layerLogical[0], boxLogical, kXAxis,
 		    fNSegment[0], fSize[0]/fNSegment[0]*2.);
+    }
+    else
+    {
+      new G4PVDivision(layerName[0], layerLogical[0], boxLogical, kXAxis,
+		    fNSegment[0], fSize[0]/fNSegment[0]*2.);
+    }
   } else if(fNSegment[0] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[0], layerName[0], boxLogical, false, 0);
@@ -140,8 +150,16 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   if(fNSegment[1] > 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to y direction" << G4endl;
-    new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
+    if(G4ScoringManager::GetReplicaLevel()>1)
+    {
+      new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
 		    fNSegment[1], fSize[1]/fNSegment[1]*2.);
+    }
+    else
+    {
+      new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
+		    fNSegment[1], fSize[1]/fNSegment[1]*2.);
+    }
   } else if(fNSegment[1] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), layerLogical[1], layerName[1], layerLogical[0], false, 0);
@@ -195,8 +213,16 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to z direction" << G4endl;
 
-      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
+      if(G4ScoringManager::GetReplicaLevel()>2)
+      { 
+        new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
 		      fNSegment[2], 2.*fSize[2]/fNSegment[2]);
+      }
+      else
+      {
+        new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
+		      fNSegment[2], 2.*fSize[2]/fNSegment[2]);
+      }
     }
   else if(fNSegment[2] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
