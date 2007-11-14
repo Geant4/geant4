@@ -178,7 +178,7 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
     // Uncomment one line below if you want to try different
     // values for the scintillator Birks' coefficient C1, with C2 = 0.
     //C1_scintillator = 1.31e-2; C2_scintillator = 0.0;  // Standard Birks law.
-    //C1_scintillator = 8.5e-3;  C2_scintillator = 0.0;  // Zeus SCSN38, lower limit (-35%)
+    //C1_scintillator = 8.35e-3; C2_scintillator = 0.0;  // Zeus SCSN38, lower limit (-35%)
     //C1_scintillator = 1.59e-2; C2_scintillator = 0.0;  // Pilot B (same paper), upper limit (+21%)
     double rho_scintillator = 1.032;                     // [g/cm^3]
 
