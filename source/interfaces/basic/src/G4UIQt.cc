@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.5 2007-11-13 17:48:51 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.6 2007-11-14 10:38:49 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -631,7 +631,11 @@ void G4UIQt::TerminalHelp(
       if ( selected.count() != 0 ) {
         QTreeWidgetItem * tmp =selected.at( 0 );
         while ( tmp) {
+#if QT_VERSION < 0x040202
+   	      fHelpTreeWidget->setItemExpanded(tmp,false); 
+#else
           tmp->setExpanded(false);
+#endif
           tmp = tmp->parent();
         }
       }
@@ -641,14 +645,26 @@ void G4UIQt::TerminalHelp(
       fHelpTreeWidget->clearSelection();
 
       // set new selection
+#if QT_VERSION >= 0x040000
+#if QT_VERSION < 0x040202
+      fHelpTreeWidget->setItemSelected(findItem,true);
+#else
       findItem->setSelected(true);
+#endif      
+#else
+      findItem->setSelected(true);
+#endif
       
       // expand parent item
       while ( findItem) {
 #if QT_VERSION < 0x040000
         findItem->setOpen(true);
 #else
+#if QT_VERSION < 0x040202
+   	    fHelpTreeWidget->setItemExpanded(findItem,true); 
+#else
         findItem->setExpanded(true);
+#endif
 #endif
         findItem = findItem->parent();
       }
@@ -735,7 +751,11 @@ void G4UIQt::CreateChildTree(
     newItem = new QTreeWidgetItem(aParent);
     newItem->setText(0,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed());
     newItem->setText(1,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed());
+#if QT_VERSION < 0x040202
+   	fHelpTreeWidget->setItemExpanded(newItem,false); 
+#else
     newItem->setExpanded(false);
+#endif
 #endif
       
   }
@@ -830,7 +850,7 @@ QString G4UIQt::GetCommandList (
       txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
       if( ! param->GetParameterGuidance().isNull() )
         txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
-      txt += " Parameter type  : " + QString((char*)(param->GetParameterType()))+ "\n";
+      txt += " Parameter type  : " + QString((char*)(param->GetParameterType())) + "\n";
       if(param->IsOmittable()){
         txt += " Omittable       : True\n";
       } else {
@@ -954,7 +974,11 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
           tmpItem = tmpItem->nextSibling();
         }
 #else
+#if QT_VERSION < 0x040202
+          fCommandHistoryArea->setItemSelected(fCommandHistoryArea->item(selection),true);
+#else
           fCommandHistoryArea->item(selection)->setSelected(true);
+#endif      
           fCommandHistoryArea->setCurrentItem(fCommandHistoryArea->item(selection));
 #endif
         }
@@ -1096,14 +1120,14 @@ void G4UIQt::HelpTreeClicCallback (
   G4UIcommand* command = treeTop->FindPath(item->text (1).toStdString().c_str());
 #endif
   if (command) {
-    fHelpArea->setText(GetCommandList(command));
+    fHelpArea->append(GetCommandList(command));
   } else {
     // this is not a command, this is a sub directory
     // We display the Title
 #if QT_VERSION < 0x040000
-    fHelpArea->setText(item->text (1).ascii());
+    fHelpArea->append(item->text (1).ascii());
 #else
-    fHelpArea->setText(item->text (1).toStdString().c_str());
+    fHelpArea->append(item->text (1).toStdString().c_str());
 #endif
   }
 }

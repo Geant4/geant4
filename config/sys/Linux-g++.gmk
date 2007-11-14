@@ -54,6 +54,19 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef XMLIBS
     XMLIBS    := -lXm -lXpm
   endif
+  ifndef QTHOME
+    QTHOME  := /usr/local/Qt
+  endif
+  ifndef QTFLAGS
+    QTFLAGS   := -I$(QTHOME)/include/Qt
+    QTFLAGS   += -I$(QTHOME)/include
+    MOC       := $(QTHOME)/bin/moc
+  endif
+  ifndef QTLIBS
+    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
+    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
+    QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
+  endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/usr/X11R6/include
   endif
