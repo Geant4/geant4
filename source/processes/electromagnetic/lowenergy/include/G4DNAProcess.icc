@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProcess.icc,v 1.9 2007-11-13 14:44:05 pia Exp $
+// $Id: G4DNAProcess.icc,v 1.10 2007-11-14 19:07:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,6 +62,7 @@ G4double G4DNAProcess<TCrossSection,TFinalState>::GetMeanFreePath(const G4Track&
 	    {
 	      G4double cross = crossSection.CrossSection(track);
 	      if (cross > 0.0) meanFreePath = 1. / (density*cross);
+              if (meanFreePath == 0.) meanFreePath = DBL_MIN;
 	      return meanFreePath;
 	    }
 	}
