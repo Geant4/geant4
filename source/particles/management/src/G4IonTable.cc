@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.47 2007-09-14 07:04:09 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.48 2007-11-14 02:23:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -289,7 +289,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
 {
-  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) ) {
+  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
@@ -315,7 +315,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
 {
   if (L==0) return GetIon(Z,A,E,J);
 
-  if (A < 2 || Z < 0 || Z > A-L || L>A ) {
+  if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
@@ -351,7 +351,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 {
   const G4double EnergyTorelance = 0.1 * keV;
 
-  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0)) {
+  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
@@ -402,7 +402,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   
   const G4double EnergyTorelance = 0.1 * keV;
 
-  if (A < 2 || Z < 0 || Z > A-L || L>A ) {
+  if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
@@ -641,7 +641,7 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 /////////////////
 G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
 {
-  if ( (A<1)  || (Z<0) || (L<0) ) {
+  if ( (A<1)  || (Z<0) || (L<0) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << G4endl;
