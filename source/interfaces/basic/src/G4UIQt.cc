@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.6 2007-11-14 10:38:49 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.7 2007-11-14 11:49:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -105,10 +105,12 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
+  printf("G4UIQt::Initialise\n");
   G4Qt* interactorManager = G4Qt::getInstance ();
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
+  printf("G4UIQt::Initialise build main window\n");
   fMainWindow = new QMainWindow();
 #if QT_VERSION < 0x040000
   fMainWindow->setCaption( tr( "G4UI Session" ));
@@ -222,6 +224,7 @@ G4UIQt::G4UIQt (
   }
 
 
+  printf("G4UIQt::Initialise END\n");
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 }
 
