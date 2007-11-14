@@ -26,9 +26,47 @@ void coulomb()
   ntuple->Show(1); // show first event
  
   // subroutines
+  compare();
   standard();
   fast();
+ 
 }
+
+void compare(){  // compare interface vs cascade
+  //______________________________________________________________________
+  TCanvas *c6 =new TCanvas("c6","c6", 2*gx, 3*gy, sx, sy);
+  c6->Divide(3,4);
+  ntuple->SetLineWidth(1);
+  c6->cd(1); gPad->SetLogy(); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(8); // new physics with  green (eight and thin line 1)
+  ntuple->Draw("particleId", "runId==2"); 
+
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(1); // old tested  physics with  black (1 and thik line 2)
+  ntuple->Draw("particleId", "runId==1","same"); 
+
+  c6->cd(2); gPad->SetLogy(); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(8); 
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==2"); 
+  
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
+  ntuple->Draw("kineticEnergy","particleId==1 && runId==1","same"); 
+
+  c6->cd(3); gPad->SetLogy(); 
+  ntuple->SetLineWidth(1); ntuple->SetLineColor(8);
+  ntuple->Draw("kineticEnergy","particleId==2 && runId==2"); 
+  
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
+  ntuple->Draw("kineticEnergy","particleId==2 && runId==1","same"); 
+
+  c6->cd(4); gPad->SetLogy(); 
+    ntuple->SetLineWidth(1); ntuple->SetLineColor(8); 
+  ntuple->Draw("kineticEnergy","particleId==10 && runId==2"); 
+  
+  ntuple->SetLineWidth(2); ntuple->SetLineColor(1);
+  ntuple->Draw("kineticEnergy","particleId==10 && runId==1","same"); 
+
+};
+
 
 void fast(){  // analyze kinetic energy spectrum of protons for different p-A confiqurations, using target c9 
   //______________________________________________________________________
@@ -86,7 +124,7 @@ void fast(){  // analyze kinetic energy spectrum of protons for different p-A co
   c0->cd(12); gPad->SetLogy(); 
   ntuple->Draw("kineticEnergy","kineticEnergy<0.05 && particleId==1 && runId==11"); 
   ntuple->Draw("kineticEnergy","kineticEnergy<0.05 && particleId==1 && runId==11 && coulombOK==1","same"); 
-}
+};
 
 
 void standard() {

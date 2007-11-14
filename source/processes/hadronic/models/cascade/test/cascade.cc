@@ -74,7 +74,7 @@ enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus
 G4int runId       = 0; 
 G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
-G4double     momZ = 160;      // momentum in z-direction MeV/c
+G4double     momZ = 160;      // momentum in z-direction [MeV/c]
 G4double        A = 27.0;      // target atomic weight Al
 G4double        Z = 13.0;      // target atomic number
 
@@ -109,17 +109,19 @@ int main(int argc, char **argv ) {
   runId       =           (argc > 1) ? atoi(argv[1]) : runId;
   nCollisions =           (argc > 2) ? atoi(argv[2]) : nCollisions;
   bulletType  =           (argc > 3) ? atoi(argv[3]) : proton;
-  momZ        = G4double(((argc > 4) ? atoi(argv[4]) : momZ)) / GeV;
+  momZ        = G4double(((argc > 4) ? atoi(argv[4]) : momZ)) / GeV;  // MeV = 1 an GeV = 1000
   A           = G4double(((argc > 5) ? atoi(argv[5]) : A));
   Z           = G4double(((argc > 6) ? atoi(argv[6]) : Z));
 
   if (verboseLevel > 3) {
     G4cout << " # collisions " << nCollisions << G4endl;
     G4cout << "  bullet type " << bulletType  << G4endl;
-    G4cout << "     momentum " << momZ*kE    << " [MeV]" << G4endl;
+    G4cout << "     momentum " << momZ*kE    << " [MeV]" << G4endl; // kE = 1000; 
     G4cout << "            A " << A           << G4endl;
     G4cout << "            Z " << Z           << G4endl;
   }
+
+  //    G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
 
   if (verboseLevel > 3) { // deside if heade will be written
     //    G4cout << "# cascade.cc with parameters : runId, nCollisions, bulletType,  momZ,  targetA, targetZ" << G4endl;
@@ -176,15 +178,30 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
     // G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider(colep, cascade, noneq, bigb);
 
     std::vector<G4double> targetMomentum(4, 0.0);
-    std::vector<G4double>  bulletMomentum(4, 0.0);
-    G4double mass = 0.93827;
-    bulletMomentum[3] = momZ;
-    bulletMomentum[3] = std::sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
-    bulletMomentum[2] = std::sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
-    bulletMomentum[1] = std::sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
+    //    std::vector<G4double>  bulletMomentum(4, 0.0);
+    //    G4double mass = 0.93827;
 
-    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
+    // Old
+    //    bulletMomentum[3] = momZ;
+    //bulletMomentum[3] = std::sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
+    //bulletMomentum[2] = std::sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
+    //bulletMomentum[1] = std::sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
+  G4double px,py,pz;
+  px=0.0 ;
+  py=0.0 ;
+  pz=momZ; //[GeV]
+
+  std::vector<G4double> momentumBullet(4);
+  momentumBullet[0] =0.;
+  momentumBullet[1] =0;
+  momentumBullet[2] =0;
+  momentumBullet[3] =std::sqrt(px*px+py*py+pz*pz);
+
+  //  G4cout << "momentumBullet[3]" << momentumBullet[3] << G4endl;
+  bull = new G4InuclElementaryParticle(momentumBullet, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
    
+
+
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
       bull->printParticle();

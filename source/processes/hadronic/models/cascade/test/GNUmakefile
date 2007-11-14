@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.57 2007-11-13 23:45:43 miheikki Exp $
+# $Id: GNUmakefile,v 1.58 2007-11-14 05:25:55 miheikki Exp $
 #G4TARGET := cascade
 G4TARGET := interface
 #G4TARGET := benchmarks
@@ -15,12 +15,16 @@ include $(G4INSTALL)/config/binmake.gmk
 
 t1:
 	rm -f c.out; date;
-	echo "1 1000 1 40 54 26" >c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
-	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade 5  10000 1 40 19 9 >> c.out; # Fe (worst case 20 MeV p-Fe p)
+	echo "0 2000 1 1000 54 26" > c.out  # header info for scripts/analalyzeEvents.C : runID totNumOfCollisions bulletType momZ A Z
+	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 1000 1 1000 54 26  >> c.out; # [l]og
+	$(G4INSTALL)/bin/$(G4SYSTEM)/cascade   2 1000 1 1000 54 26  >> c.out; # Fe (worst case 20 MeV p-Fe p)
 	mv c.out data/data.out; head data/data.out; wc data/data.out; ls -lh data; ls -lat data; date
 
 i1:
-	rm -f c.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/interface 1  > c.out; date; head c.out;
+	rm -f l.out; date; 
+	echo "1 1000 1 1000 54 26" >l.out  # header info for scripts/analalyzeEvents.C 
+	$(G4INSTALL)/bin/$(G4SYSTEM)/interface 1 1000 1 1000 54 26  >> l.out; # [l]og
+	mv l.out data/l.out; head data/l.out; wc data/l.out; ls -lh data; ls -lat data; date 
 
 
 c9:  # coulomb test 
