@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.9 2007-09-14 07:04:09 kurasige Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.10 2007-11-14 02:22:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,7 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   if ((quark1==0)||(quark2==0)||(quark3==0)){ 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " meson has three quark ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -160,6 +161,7 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   if ((quark1<quark2)||(quark2<quark3)||(quark1<quark3)) { 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " illegal code for baryon ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -169,6 +171,7 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   if (quark1> NumberOfQuarkFlavor) {
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " ??? unknown quark ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -208,6 +211,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
   if ((quark1 !=0)||(quark2==0)||(quark3==0)){ 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " meson has only quark and anti-quark pair";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -217,6 +221,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
   if (quark2<quark3) { 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " illegal code for meson ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -228,6 +233,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
   if (quark2> NumberOfQuarkFlavor){
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " ??? unknown quark ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -276,6 +282,7 @@ G4int G4PDGCodeChecker::CheckForDiQuarks()
   } else if (quark2>NumberOfQuarkFlavor){
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " ??? unknown quark ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -302,6 +309,7 @@ G4int G4PDGCodeChecker::CheckForQuarks()
   if ( std::abs(quark1)>NumberOfQuarkFlavor ) {
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " ??? unknown quark ";
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -337,6 +345,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
   if (std::abs(totalCharge-thePDGCharge)>0.1*eplus) { 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckCharge  : ";
       G4cout << " illegal electric charge " << thePDGCharge/eplus;
       G4cout << " PDG code=" << code <<G4endl;
     }
@@ -365,8 +374,9 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   if (A < 2 || Z > A-L || L>A || Z<=0 ) {
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
+      G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
       G4cout << " ???  Illegal PDG encoding for nucleus ";
-      G4cout << " PDG code=" << pcode <<G4endl;
+      G4cout << " PDG code=" << code <<G4endl;
     }
 #endif
     return 0;
