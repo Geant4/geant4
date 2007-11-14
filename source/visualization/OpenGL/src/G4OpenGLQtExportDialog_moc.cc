@@ -2,7 +2,7 @@
 ** G4OpenGLQtExportDialog meta object code from reading C++ file 'G4OpenGLQtExportDialog.hh'
 **
 ** Created: Mon Nov 12 10:36:59 2007
-**      by: The Qt MOC ($Id: G4OpenGLQtExportDialog_moc.cc,v 1.4 2007-11-13 18:28:17 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4OpenGLQtExportDialog_moc.cc,v 1.5 2007-11-14 11:49:00 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -14,7 +14,7 @@
 #include <qmetaobject.h>
 #include <qapplication.h>
 
-#if QT_VERSION < 0x040202
+#if QT_VERSION < 0x040000
 
 #include <private/qucomextra_p.h>
 #if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
@@ -132,7 +132,7 @@ bool G4OpenGLQtExportDialog::qt_static_property( QObject* , int , int , QVariant
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#if QT_VERSION >= 0x040202
+#if QT_VERSION >= 0x040000
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 

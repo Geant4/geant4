@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.5 2007-11-13 17:48:51 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.6 2007-11-14 11:49:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1343,11 +1343,17 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   }
 
   if (aFilename.endsWith(".ps")) {
+#if QT_VERSION > 0x040200
     printer.setOutputFormat(QPrinter::PostScriptFormat);
+#endif
   } else {
+#if QT_VERSION > 0x040100
     printer.setOutputFormat(QPrinter::PdfFormat);
+#endif
   }
+#if QT_VERSION > 0x040100
   printer.setOutputFileName(aFilename);
+#endif
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
   paint.drawImage (0,0,aImage );
