@@ -50,17 +50,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     QTHOME  := /sw
   endif
   ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include/Qt
-    QTFLAGS   += -I$(QTHOME)/include
-#    QTFLAGS   += -I$(QTHOME)/lib/QtCore.framework/Versions/Current/Headers
-#    QTFLAFS   += -I$(QTHOME)/lib/QtGui.framework/Versions/Current/Headers
-#    QTFLAGS   += -I$(QTHOME)/lib/QtOpenGL.framework/Versions/Current/Headers
-#    QTFLAGS   += -I$(QTHOME)/lib/QtSql.framework/Versions/Current/Headers
-#    QTFLAGS   += -I$(QTHOME)/lib/QtXml.framework/Versions/Current/Headers
+    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
     MOC       := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
+    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt -lqui
     QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
     QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
     QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
