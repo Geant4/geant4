@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.14 2007-11-09 16:05:23 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.15 2007-11-14 10:05:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -759,11 +759,13 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   motherStep = motherSolid->DistanceToOut(repPoint,repDirection,true,
                                           &validExitNormal,&exitNormal);
 
-  if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
-     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
-  {
-    ourStep += kCarTolerance;
-  }
+  // Push no longer necessary. G4Navigator will now take care of ...
+  //
+  //  if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
+  //     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
+  //  {
+  //    ourStep += kCarTolerance;
+  //  }
 
   if ( motherSafety<ourSafety )
   {
