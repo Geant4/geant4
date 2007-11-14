@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.57 2007-11-07 20:55:27 japost Exp $
+// $Id: G4PathFinder.cc,v 1.58 2007-11-14 10:04:21 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -299,54 +299,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                     "ReductionOfRequestedStepSizeBelowMinimum",
                     FatalException, 
                     "Not part of specification - not implemented.");
-/*
-        // Trial code for this case was created in G4PathFinder.cc 1.54
-
-        possibleStep= proposedStepLength;
-        // Inform that no obstacle found within dist=proposedStepLength
-        //  possibleStep= kInfinity;    // --> The Navigator's convention
-
-        G4ThreeVector oldEndPosition= fEndState.GetPosition(); 
-        G4ThreeVector oldEndDirection= fEndState.GetMomentumDirection();
-
-        // Reset the end point, state
-        //
-        if( ! fFieldExertedForce )
-        { 
-           // Can simply recalculate end position
-
-           G4ThreeVector initialPosition= InitialFieldTrack.GetPosition(); 
-           G4ThreeVector initialDirection=
-                                  InitialFieldTrack.GetMomentumDirection();
-           fEndState.SetPosition( initialPosition + proposedStepLength * initialDirection ); 
-           G4cout << " G4P::CS -> Doing shortening of step: linear " << G4endl; 
-        } else {
-           // The step must be shortened using propagation in field.
-           // 1st solution: do full calculation of the End Point (extra work!)
-           G4FieldTrack currentState= InitialFieldTrack;
-           DoNextCurvedStep( currentState, proposedStepLength, currentVolume ); 
-           // 2nd solution: do only integration of end-point for shorter distance
-           //               -- but it is not guaranteed to be in same volume 
-           //                    due to volume-intersection (in)accuracy. 
-           G4cout << " G4P::CS -> Doing shortening of step: Curved " << G4endl;
-           G4Exception("G4PathFinder::ComputeStep()", "NotYetImplementedPartialStep",
-                       FatalException, "Partial step in case of field not yet implemented."); 
-        } 
-        G4cout << " New step is  = " << proposedStepLength 
-               <<  " end position = " << EndState.GetPosition() 
-               <<  " direction= " << EndState.GetMomentumDirection()
-               << G4endl; 
-        G4cout << " Old step was = " << fTrueMinStep
-               <<  " end position = " << oldEndPosition 
-               <<  " direction= " << oldEndDirection
-               << G4endl;
-
-        // EndState = fEndState; 
-
-        // Reset Minimum step(s) to avoid same work on next request
-        fTrueMinStep= proposedStepLength; 
-        fMinStep= proposedStepLength; 
-*/
      }
      else
      { 
@@ -984,14 +936,16 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            //        to the latest minStep value - to reduce calculations
 
 #ifdef G4DEBUG_PATHFINDER
-	   if( fVerboseLevel > 0) {
-	     G4cout.precision(8); 
-	     G4cout << "PathFinder::ComputeStep> long  proposed step = "
-		    << proposedStepLength
-		    << "  >  safety = " << previousSafety  << " for nav " << num 
-		    << " .  New safety = " << safety << " step= " << step
-		    << G4endl;      
-	   } 
+           if( fVerboseLevel > 0)
+           {
+             G4cout.precision(8); 
+             G4cout << "PathFinder::ComputeStep> long  proposed step = "
+                    << proposedStepLength
+                    << "  >  safety = " << previousSafety
+                    << " for nav " << num 
+                    << " .  New safety = " << safety << " step= " << step
+                    << G4endl;      
+           } 
 #endif
         }
         fCurrentStepSize[num] = step; 

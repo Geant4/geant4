@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.14 2007-11-09 15:51:10 japost Exp $
+// $Id: G4SafetyHelper.cc,v 1.15 2007-11-14 10:04:21 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -39,18 +39,18 @@
 
 #include "globals.hh"
 
-G4SafetyHelper::G4SafetyHelper() : 
-  fUseParallelGeometries(false),     // By default, one geometry only
-  fFirstCall(true),
-  fLastSafetyPosition(0.0,0.0,0.0),
-  fLastSafety(0.0),
-  fRecomputeFactor(0.0)
-  //  fRecomputeFactor(0.2)
+G4SafetyHelper::G4SafetyHelper()
+ : fUseParallelGeometries(false),     // By default, one geometry only
+   fFirstCall(true),
+   fLastSafetyPosition(0.0,0.0,0.0),
+   fLastSafety(0.0),
+   fRecomputeFactor(0.0)
 {
   fpPathFinder= 0; //  Cannot initialise this yet - a loop results
 
   // Initialization of the Navigator pointer is postponed, and must
-  //   be undertaken by another class calling InitialiseHelper()
+  // be undertaken by another class calling InitialiseHelper()
+  //
   fpMassNavigator= 0;  
   fMassNavigatorId= -1; 
 }
@@ -65,6 +65,7 @@ void G4SafetyHelper::InitialiseNavigator()
   fpMassNavigator = pTransportMgr->GetNavigatorForTracking(); 
 
   // Check
+  //
   G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume(); 
   if( worldPV == 0 )
   { 
@@ -85,7 +86,8 @@ void G4SafetyHelper::InitialiseHelper()
 }
 
 G4SafetyHelper::~G4SafetyHelper()
-{}
+{
+}
 
 G4double   
 G4SafetyHelper::CheckNextStep(const G4ThreeVector &position, 
@@ -104,6 +106,7 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
 
   // TO-DO: Can replace this with a call to PathFinder 
   //        giving id of Mass Geometry --> this avoid doing the work twice
+
   return linstep;
 }
 
@@ -112,17 +115,13 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
   G4double newSafety;
 
   // Only recompute (calling Navigator/PathFinder) if 'position'
-  //   is  *not* the safety location
-  //     and has moved 'significantly'
+  // is  *not* the safety location and has moved 'significantly'
+  //
   G4double moveLengthSq = (position-fLastSafetyPosition).mag2();
   G4double safeDistance = fRecomputeFactor*fLastSafety; 
   if(   (moveLengthSq > 0.0 )
      && (moveLengthSq >= safeDistance*safeDistance))    
   {
-    // " G4SafetyHelper::ComputeSafety> Recomputing safety for move " 
-    // G4cout << "G4SF:CS> Recomputed safety - move = " 
-    //        << sqrt(moveLengthSq) << G4endl; 
-
     fLastSafetyPosition = position;
  
     if( !fUseParallelGeometries )
@@ -142,13 +141,11 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
     // return last value if position is not significantly changed
     //
     G4double moveLength = 0;
-    if( moveLengthSq > 0.0 ) 
+    if( moveLengthSq > 0.0 )
+    {
       moveLength= std::sqrt(moveLengthSq); 
+    }
     newSafety = fLastSafety-moveLength;
-    // G4cout << "G4SF:CS> Fast safety - move = " << moveLength << G4endl;
-    // fCount_fastCalc ++; 
-    // if( moveLength == 0.0 ) fCount_Zero ++; 
-    // if( moveLength < kCarTolerance ) fCount_BelowTolerance ++; 
   } 
   return newSafety;
 }
