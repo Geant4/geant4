@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2007-11-09 19:29:02 japost Exp $
+$Id: History,v 1.111 2007-11-14 10:05:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 14th, 2007 - G.Cosmo (geomnav-V09-00-10)
+-----------------------------
+- Removed artificial push in G4ReplicaNavigation::ComputeStep() no longer
+  necessary. G4Navigator now can take care of handling cases of zero steps
+  occurring for tracks stuck on boundaries for 3D replicas.
+- Some minor cleanup.
+
 November 9th, 2007 - J.Apostolakis (geomnav-V09-00-09)
 ----------------------------------
-- G4SafetyHelper: Improved ComputeSafety not to call Navigator if exactly
-                    on safety 'center'.  
-- G4PathFinder: correction to code under #ifdef G4DEBUG_NAVIGATION
+- G4SafetyHelper: Improved ComputeSafety() not to call G4Navigator
+  if exactly on safety 'center'.  
+- G4PathFinder: correction to debug code under #ifdef G4DEBUG_NAVIGATION.
 
 November 9th, 2007 - G.Cosmo (geomnav-V09-00-08)
 ----------------------------
