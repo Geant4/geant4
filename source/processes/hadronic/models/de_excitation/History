@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+17 November 2007 F Lei (hadr-deex-V09-00-05)
+- photon_evaporation
+  bug fix #952. Changes to G4VGammaDeexciation.cc:line 279; 
+			G4NuclearLevelManageer.cc:line 189;
+			G4ContinuumGammaDeexcitation.cc:line133.  
 
 
  01 November 2007 Dennis Wright (hadr-deex-V09-00-04)
