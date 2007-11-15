@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.7 2007-11-08 16:20:49 miheikki Exp $
+$Id: History,v 1.8 2007-11-15 15:04:38 miheikki Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,8 +16,14 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+15 November 2007 - Pekka Kaitaniemi
+-----------------------------------
+- First fix to secondary particle Pt, Px and Phi distributions.
+  o Momentum x-component was transformed incorrectly from spherical to
+  cartesian coordinates.
+
 08 November 2007 - Pekka Kaitaniemi
---------------------------------
+-----------------------------------
 - Started using G4UniformRand as a random number generator. 
   o It is much more sophisticated generator than the original INCL one
   was.  
