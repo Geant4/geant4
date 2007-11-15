@@ -257,10 +257,10 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   static const G4double dP=10.;    // step for the LEN table
   static const G4int    nL=100;    // A#of LENesonance points in E (each MeV from 2 to 106)
   static const G4double Pmin=THmin+(nL-1)*dP; // minE for the HighE part
-  static const G4double Pmax=100000.;       // maxE for the HighE part
-  static const G4int    nH=100;            // A#of HResonance points in lnE
-  static const G4double milP=log(Pmin);    // Low logarithm energy for the HighE part
-  static const G4double malP=log(Pmax);    // High logarithm energy (each 2.75 percent)
+  static const G4double Pmax=300000.;   // maxE for the HighE part
+  static const G4int    nH=100;         // A#of HResonance points in lnE
+  static const G4double milP=log(Pmin); // Low logarithm energy for the HighE part
+  static const G4double malP=log(Pmax); // High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HighE part
   //
   // Associative memory for acceleration
@@ -272,11 +272,10 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   G4cout<<"G4QIonIonCrossSection::CalcCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<G4endl;
 #endif
   G4int dPDG=pPDG/10;                // 10SZZZAAA
-  //G4int zPDG=dPDG/1000;              // 10SZZZ (?)
+  G4int zPDG=dPDG/1000;              // 10SZZZ (?)
   G4int zA=dPDG%1000;                // proj A
-  //G4int sPDG=zPDG/1000;              // 10S    (?)
-  //G4int pZ=zPDG%1000;                // proj Z (?)
-  //G4int pN=zA-pZ;                    // proj N (?)
+  G4int pZ=zPDG%1000;                // proj Z (?)
+  G4int pN=zA-pZ;                    // proj N (?)
   G4double Momentum=TotMom/zA;       // Momentum per nucleon
   if (Momentum<THmin) return 0.;     // @@ This can be dangerouse for the heaviest nuc.!
   G4double sigma=0.;
@@ -298,7 +297,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
       lastHENI = new G4double[nH];   // Allocate memory for the new HEN cross sections
       lastLENE = new G4double[nL];   // Allocate memory for the new LEN cross sections
       lastHENE = new G4double[nH];   // Allocate memory for the new HEN cross sections
-      G4int er=GetFunctions(pA,tA,lastLENI,lastHENI,lastLENE,lastHENE);
+      G4int er=GetFunctions(pZ,pN,tZ,tN,lastLENI,lastHENI,lastLENE,lastHENE);
 	     if(er<1) G4cerr<<"*W*G4QIonIonCroSec::CalcCrossSection: pA="<<tA<<",tA="<<tA<<G4endl;
 #ifdef debug
       G4cout<<"G4QIonIonCrossSection::CalcCS: GetFunctions er="<<er<<",pA="<<pA<<",tA="<<tA
@@ -354,7 +353,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   }
   else                                      // UltraHighE region (not frequent)
   {
-				std::pair<G4double, G4double> inelel = CalculateXS(pA, tA, Momentum);
+				std::pair<G4double, G4double> inelel = CalculateXS(pZ, pN, tZ, tN, Momentum);
     if(XS) sigma=inelel.first;
     else   sigma=inelel.second;
   }
@@ -367,8 +366,8 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
 
 // Linear fit for YN[N] tabulated (from X0 with fixed step DX) function to X point
 
-// Calculate the functions for the log(A) *** Now it is a fake function ***
-G4int G4QIonIonCrossSection::GetFunctions(G4double pA, G4double tA, G4double* li,
+// Calculate the functions for the log(A)
+G4int G4QIonIonCrossSection::GetFunctions(G4int pZ,G4int pN,G4int tZ,G4int tN,G4double* li,
                                           G4double* hi, G4double* le, G4double* he)
 {
   // If change the following, please change in ::CalculateCrossSection:
@@ -383,15 +382,15 @@ G4int G4QIonIonCrossSection::GetFunctions(G4double pA, G4double tA, G4double* li
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HighE part
   static const G4double lP=std::exp(dlP);       // Multiplication factor in the HighE part
   // If the cross section approximation formula is changed - replace from file.
-  if(pA<=.9 || tA<=.9)
+  if(pZ<1 || pN<0 || tZ<1 || pN<0)
   {
-    G4cout<<"***G4QIonIonCrossSection::GetFunctionsp:A="<<pA<<",tA="<<tA<<":NoCS!"<<G4endl;
+    G4cout<<"-W-G4QIonIonCS::GetFunct:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
     return -1;
   }
   G4double Mom=THmin;
   for(G4int k=0; k<nL; k++)
   {
-    std::pair<G4double,G4double> len = CalculateXS(pA, tA, Mom);
+    std::pair<G4double,G4double> len = CalculateXS(pZ, pN, tZ, tN, Mom);
     li[k]=len.first;
     le[k]=len.second;
     Mom+=dP;
@@ -399,7 +398,7 @@ G4int G4QIonIonCrossSection::GetFunctions(G4double pA, G4double tA, G4double* li
   G4double lMom=Pmin;
   for(G4int j=0; j<nH; j++)
   {
-    std::pair<G4double,G4double> len = CalculateXS(pA, tA, Mom);
+    std::pair<G4double,G4double> len = CalculateXS(pZ, pN, pZ, pN, Mom);
     hi[j]=len.first;
     he[j]=len.second;
     lMom*=lP;
@@ -410,15 +409,49 @@ G4int G4QIonIonCrossSection::GetFunctions(G4double pA, G4double tA, G4double* li
   return 1;
 }
 
-// Momentum (Mom) here is p/A (MeV/c), first=InelasticXS, second=ElasticXS
-std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4double pA, G4double tA,
-                                                                G4double Mom)
+// Momentum (Mom=p/A) is in MeV/c, first=InelasticXS, second=ElasticXS (mb)
+std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int pN,G4int tZ,
+                                                                G4int tN, G4double Mom)
 {
-  if(pA>.9 && tA>.9 && Mom>0) return std::make_pair(1.,1.); //@@ fake
-		return std::make_pair(1.,1.);                             //@@ fake
+  static G4VQCrossSection* ElCSman = G4QElasticCrossSection::GetPointer();
+  static G4VQCrossSection* InelPCSman = G4QProtonNuclearCrossSection::GetPointer();
+  static G4VQCrossSection* InelNCSman = G4QNeutronNuclearCrossSection::GetPointer();
+  G4double pA=pZ+pN;
+  G4double tA=tZ+tN;
+  if(pA<.9 || tA<.9 ||pA>239. || tA>239 || Mom < 0.) return std::make_pair(0.,0.);
+  G4double inCS=0.;
+  G4double elCS=0.;
+  if(pA<1.1 || tA<1.1) // Ion-nucleon/nucleon-ion interaction use NA(in,el)
+		{
+    if     (pZ==1 && !pN || tZ==1 && !tN) // proton-nuclear
+    {
+      elCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
+      inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
+    }
+    else if(pN==1 && !pZ)                // neutron-nuclear
+    {
+      elCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
+      inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
+    }
+				else G4cerr<<"-Warn-G4QIICS::CaCS:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
+  }
+  else
+		{
+    G4double P2=Mom*Mom;
+    G4double P4=P2*P2;
+    G4double P8=P4*P4;
+    G4double T=ThresholdMomentum(pZ, pN, tZ, tN); // @@ Can be cashed as lastTH (?)
+    G4double T2=T*T;
+    G4double T4=T2*T2;
+    G4double tot=CalculateTotal(pA, tA, Mom)*P8/(P8+T4*T4); // @@ convert to Indep. Units
+    G4double rat=CalculateElTot(pA, tA, Mom);
+    elCS=tot*rat;
+    inCS=tot-elCS;
+  }
+  return std::make_pair(inCS,elCS);
 }
 
-// Momentum (Mom) here is p/A (MeV/c)
+// Total Ion-ion cross-section (mb), Momentum (Mom) here is p/A (MeV/c=IU)
 G4double G4QIonIonCrossSection::CalculateTotal(G4double pA, G4double tA, G4double Mom)
 {
   G4double y=std::log(Mom/1000.); // Log of momentum in GeV/c
@@ -434,7 +467,7 @@ G4double G4QIonIonCrossSection::CalculateTotal(G4double pA, G4double tA, G4doubl
   return c+d*r*r;
 }
 
-// Momentum (Mom) here is p/A (MeV/c)
+// Ratio elastic/Total, Momentum (Mom) here is p/A (MeV/c=IU)
 G4double G4QIonIonCrossSection::CalculateElTot(G4double pA, G4double tA, G4double Mom)
 {
   G4double y=std::log(Mom/1000.); // Log of momentum in GeV/c
@@ -457,4 +490,18 @@ G4double G4QIonIonCrossSection::CalculateElTot(G4double pA, G4double tA, G4doubl
   G4double h=g*g;
   G4double c=f/(1.+e/h/h);
   return c+d*r*r;
+}
+
+// Electromagnetic momentum/A-threshold (in MeV/c) 
+G4double G4QIonIonCrossSection::ThresholdMomentum(G4int pZ, G4int pN, G4int tZ, G4int tN)
+{
+  static const G4double third=1./3.;
+  static const G4double pM = G4QPDGCode(2212).GetMass(); // Proton mass in MeV
+  static const G4double tpM= pM+pM;       // Doubled proton mass (MeV)
+  if(pZ<.99 || pN<0. || tZ<.99 || tN<0.) return 0.;
+  G4double tA=tZ+tN;
+  G4double pA=pZ+pN;
+  //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
+  G4double dE=pZ*tZ/(std::pow(pA,third)+std::pow(tA,third))/pA; // dE/pA
+  return std::sqrt(dE*(tpM+dE));
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.3 2007-09-04 14:23:08 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.4 2007-11-15 09:36:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -72,7 +72,7 @@ G4int G4QLowEnergy::GetNumberOfNeutronsInTarget() {return nOfNeutrons;}
 // output of the function must be in units of length! L=1/sig_V,sig_V=SUM(n(j,i)*sig(j,i)),
 // where n(i,j) is a number of nuclei of the isotop j of the element i in V=1(lengtUnit^3)
 // ********** All CHIPS cross sections are calculated in the surface units ************
-G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double Q, G4ForceCondition*F)
+G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCondition*F)
 {
   *F = NotForced;
   const G4DynamicParticle* incidentParticle = Track.GetDynamicParticle();
@@ -92,12 +92,25 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double Q, G4ForceC
 #ifdef debug
   G4cout<<"G4QLowEnergy::GetMeanFreePath:"<<nE<<" Elems"<<G4endl;
 #endif
+  G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
   G4int pPDG=0;
   // @@ At present it is made only for n & p, but can be extended if inXS are available
-  if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
-  else if(incidentParticleDefinition == G4Neutron::Neutron()) pPDG=2112;
-  else G4cout<<"G4QLowEnergy::GetMeanFreePath: only nA & pA are implemented"<<G4endl;
-  
+  if      ( incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 100001002;
+  else if ( incidentParticleDefinition ==  G4Alpha::Alpha()           ) pPDG = 100002004;
+  else if ( incidentParticleDefinition ==  G4Triton::Triton()         ) pPDG = 100001003;
+  else if ( incidentParticleDefinition ==  G4He3::He3()               ) pPDG = 100002003;
+  else if ( incidentParticleDefinition ==  G4GenericIon::GenericIon() )
+  {
+    pPDG=incidentParticleDefinition->GetPDGEncoding();
+#ifdef debug
+    G4int B=incidentParticleDefinition->GetBaryonNumber();
+    G4int C=incidentParticleDefinition->GetPDGCharge();
+    prPDG=100000000+1000*C+B;
+    G4cout<<"G4QIonIonElastic::GetMeanFreePath: PDG="<<prPDG<<"="<<pPDG<<G4endl;
+#endif
+  }
+  else G4cout<<"-Warning-G4QLowEnergy::GetMeanFreePath: only AA are implemented"<<G4endl;  
+  Momentum/=incidentParticleDefinition->GetBaryonNumber(); // Divide Mom by projectile A
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
   G4int IPIE=IsoProbInEl.size();            // How many old elements?
@@ -175,13 +188,11 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double Q, G4ForceC
 #ifdef debug
       G4cout<<"G4QLowE::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=true;
-      if(Q==-27.) ccsf=false;
+		    G4bool ccsf=true;                    // Extract inelastic Ion-Ion cross-section
 #ifdef debug
       G4cout<<"G4QLowEnergy::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
-      G4double CSI=CalculateXS(Momentum, Z, N, pPDG); // XS(j,i) for theIsotope
-
+      G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
 #ifdef debug
       G4cout<<"G4QLowEnergy::GetMeanFreePath: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="
             <<Momentum<<", XSec="<<CSI/millibarn<<G4endl;
@@ -207,32 +218,13 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double Q, G4ForceC
 
 G4bool G4QLowEnergy::IsApplicable(const G4ParticleDefinition& particle) 
 {
-  if      (particle == *(        G4Proton::Proton()        )) return true;
-  else if (particle == *(       G4Neutron::Neutron()       )) return true;
-  //else if (particle == *(     G4MuonMinus::MuonMinus()     )) return true; 
-  //else if (particle == *(       G4TauPlus::TauPlus()       )) return true;
-  //else if (particle == *(      G4TauMinus::TauMinus()      )) return true;
-  //else if (particle == *(      G4Electron::Electron()      )) return true;
-  //else if (particle == *(      G4Positron::Positron()      )) return true;
-  //else if (particle == *(         G4Gamma::Gamma()         )) return true;
-  //else if (particle == *(      G4MuonPlus::MuonPlus()      )) return true;
-  //else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
-  //else if (particle == *(    G4NeutrinoMu::NeutrinoMu()    )) return true;
-  //else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
-  //else if (particle == *(      G4PionPlus::PionPlus()      )) return true;
-  //else if (particle == *(      G4KaonPlus::KaonPlus()      )) return true;
-  //else if (particle == *(     G4KaonMinus::KaonMinus()     )) return true;
-  //else if (particle == *(  G4KaonZeroLong::KaonZeroLong()  )) return true;
-  //else if (particle == *( G4KaonZeroShort::KaonZeroShort() )) return true;
-  //else if (particle == *(        G4Lambda::Lambda()        )) return true;
-  //else if (particle == *(     G4SigmaPlus::SigmaPlus()     )) return true;
-  //else if (particle == *(    G4SigmaMinus::SigmaMinus()    )) return true;
-  //else if (particle == *(     G4SigmaZero::SigmaZero()     )) return true;
-  //else if (particle == *(       G4XiMinus::XiMinus()       )) return true;
-  //else if (particle == *(        G4XiZero::XiZero()        )) return true;
-  //else if (particle == *(    G4OmegaMinus::OmegaMinus()    )) return true;
-  //else if (particle == *(   G4AntiNeutron::AntiNeutron()   )) return true;
-  //else if (particle == *(    G4AntiProton::AntiProton()    )) return true;
+  if      (particle == *(     G4Proton::Proton()     )) return true;
+  else if (particle == *(    G4Neutron::Neutron()    )) return true;
+  else if (particle == *(   G4Deuteron::Deuteron()   )) return true;
+  else if (particle == *(      G4Alpha::Alpha()      )) return true;
+  else if (particle == *(     G4Triton::Triton()     )) return true;
+  else if (particle == *(        G4He3::He3()        )) return true;
+  else if (particle == *( G4GenericIon::GenericIon() )) return true;
 #ifdef debug
   G4cout<<"***>>G4QLowEnergy::IsApplicable: projPDG="<<particle.GetPDGEncoding()<<G4endl;
 #endif
@@ -275,8 +267,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
         <<projHadron->Get4Momentum()<<" of PDG="<<particle->GetPDGEncoding()<<", Type="
         <<particle->GetParticleType()<<",SubType="<<particle->GetParticleSubType()<<G4endl;
 #endif
-  G4ForceCondition cond=NotForced;
-  GetMeanFreePath(track, -27., &cond);                  // @@ ?? jus to update parameters?
+  //G4ForceCondition cond=NotForced;
+  //GetMeanFreePath(track, -27., &cond);              // @@ ?? jus to update parameters?
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt: After GetMeanFreePath is called"<<G4endl;
 #endif
@@ -302,36 +294,23 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
   // Not all these particles are implemented yet (see Is Applicable)
-  if      (particle ==          G4Proton::Proton()         ) projPDG= 2212;
-  else if (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
-  //else if (particle ==       G4PionMinus::PionMinus()      ) projPDG= -211;
-  //else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
-  //else if (particle ==        G4KaonPlus::KaonPlus()       ) projPDG=  321;
-  //else if (particle ==       G4KaonMinus::KaonMinus()      ) projPDG= -321;
-  //else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) projPDG=  130;
-  //else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) projPDG=  310;
-  //else if (particle ==        G4MuonPlus::MuonPlus()       ) projPDG=  -13;
-  //else if (particle ==       G4MuonMinus::MuonMinus()      ) projPDG=   13;
-  //else if (particle ==      G4NeutrinoMu::NeutrinoMu()     ) projPDG=   14;
-  //else if (particle ==  G4AntiNeutrinoMu::AntiNeutrinoMu() ) projPDG=  -14;
-  //else if (particle ==        G4Electron::Electron()       ) projPDG=   11;
-  //else if (particle ==        G4Positron::Positron()       ) projPDG=  -11;
-  //else if (particle ==       G4NeutrinoE::NeutrinoE()      ) projPDG=   12;
-  //else if (particle ==   G4AntiNeutrinoE::AntiNeutrinoE()  ) projPDG=  -12;
-  //else if (particle ==           G4Gamma::Gamma()          ) projPDG=   22;
-  //else if (particle ==         G4TauPlus::TauPlus()        ) projPDG=  -15;
-  //else if (particle ==        G4TauMinus::TauMinus()       ) projPDG=   15;
-  //else if (particle ==     G4NeutrinoTau::NeutrinoTau()    ) projPDG=   16;
-  //else if (particle == G4AntiNeutrinoTau::AntiNeutrinoTau()) projPDG=  -16;
-  //else if (particle ==          G4Lambda::Lambda()         ) projPDG= 3122;
-  //else if (particle ==       G4SigmaPlus::SigmaPlus()      ) projPDG= 3222;
-  //else if (particle ==      G4SigmaMinus::SigmaMinus()     ) projPDG= 3112;
-  //else if (particle ==       G4SigmaZero::SigmaZero()      ) projPDG= 3212;
-  //else if (particle ==         G4XiMinus::XiMinus()        ) projPDG= 3312;
-  //else if (particle ==          G4XiZero::XiZero()         ) projPDG= 3322;
-  //else if (particle ==      G4OmegaMinus::OmegaMinus()     ) projPDG= 3334;
-  //else if (particle ==     G4AntiNeutron::AntiNeutron()    ) projPDG=-2112;
-  //else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
+  if      (particle ==      G4Proton::Proton()     ) projPDG= 2212;
+  else if (particle ==     G4Neutron::Neutron()    ) projPDG= 2112;
+  else if (particle ==    G4Deuteron::Deuteron()   ) projPDG= 100001002;
+  else if (particle ==       G4Alpha::Alpha()      ) projPDG= 100002004;
+  else if (particle ==      G4Triton::Triton()     ) projPDG= 100001003;
+  else if (particle ==         G4He3::He3()        ) projPDG= 100002003;
+  else if (particle ==  G4GenericIon::GenericIon() )
+  {
+    projPDG=particle->GetPDGEncoding();
+#ifdef debug
+    G4int B=particle->GetBaryonNumber();
+    G4int C=particle->GetPDGCharge();
+    prPDG=100000000+1000*C+B;
+    G4cout<<"G4QLowEnergy::PostStepDoIt: PDG="<<prPDG<<"="<<projPDG<<G4endl;
+#endif
+  }
+  else G4cout<<"-Warning-G4QLowEnergy::PostStepDoIt:Unknown projectile Ion"<<G4endl;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
 		G4cout<<"G4QLowEnergy::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
@@ -410,7 +389,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt: track is initialized"<<G4endl;
 #endif
-  G4double localtime = track.GetGlobalTime();
+  G4double weight        = track.GetWeight();
+  G4double localtime     = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt: before Touchable extraction"<<G4endl;
@@ -995,6 +975,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   {
     FstSec->Set4Momentum(fst4Mom);
     aNewTrack = new G4Track(FstSec, localtime, position );
+    aNewTrack->SetWeight(weight);                                   //    weighted
     aNewTrack->SetTouchableHandle(trTouchable);
     aParticleChange.AddSecondary( aNewTrack );
     EnMomConservation-=fst4Mom;
@@ -1005,6 +986,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     {
       ResSec->Set4Momentum(res4Mom);
       aNewTrack = new G4Track(ResSec, localtime, position );
+      aNewTrack->SetWeight(weight);                                   //    weighted
       aNewTrack->SetTouchableHandle(trTouchable);
       aParticleChange.AddSecondary( aNewTrack );
       EnMomConservation-=res4Mom;
@@ -1014,6 +996,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
       SecSec->Set4Momentum(snd4Mom);
       aNewTrack = new G4Track(SecSec, localtime, position );
+      aNewTrack->SetWeight(weight);                                   //    weighted
       aNewTrack->SetTouchableHandle(trTouchable);
       aParticleChange.AddSecondary( aNewTrack );
       EnMomConservation-=snd4Mom;
@@ -1054,6 +1037,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       {
         G4DynamicParticle* theEQH = new G4DynamicParticle(theDefinition,h4Mom);
         G4Track* evaQH = new G4Track(theEQH, localtime, position );
+        evaQH->SetWeight(weight);                                   //    weighted
         evaQH->SetTouchableHandle(trTouchable);
         aParticleChange.AddSecondary( evaQH );
       }

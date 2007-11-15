@@ -1708,7 +1708,7 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
         if(y[m]<0.)G4cout<<"G4QPhotNucCS::GetF:y="<<y[m]<<",k="<<k<<",yi="<<yi<<",ya="
                          <<SL[k][m]<<",b="<<b<<",xi="<<xi<<",xa="<<LA[k]<<",a="<<a<<G4endl;
 #endif
-	  }
+      }
       else y[m]=0.;
     }
     r=1;

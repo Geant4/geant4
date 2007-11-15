@@ -30,6 +30,9 @@
 // GEANT4 physics class: G4QIonIonCrossSection -- header file
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 19-Aug-07
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 19-Aug-07
+//-----------------------------------------------------------------------------------------
+// In this class, just as an experiment the real PDG codes (not CHIPS) are used
+//-----------------------------------------------------------------------------------------
 //
 // ****************************************************************************************
 // ********* This HEADER is temporary moved from the chips/interface directory *********
@@ -44,6 +47,11 @@
 #include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "G4VQCrossSection.hh"
+#include "G4QPDGCode.hh"
+#include "G4QElasticCrossSection.hh"
+#include "G4QProtonNuclearCrossSection.hh"
+#include "G4QNeutronNuclearCrossSection.hh"
+
 
 class G4QIonIonCrossSection : public G4VQCrossSection
 {
@@ -60,17 +68,21 @@ public:
   // At present momentum (pMom) must be in GeV(@@ Units),fCS=true:Inelastic, =false:Elastic
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int Z, G4int N, G4int PDG);
 
+  // Momentum=p/A (MeV/c)
   G4double CalculateCrossSection(G4bool fCS, G4int F, G4int I, G4int PDG,
                                  G4int tZ, G4int tN, G4double Momentum);
 
+  G4double ThresholdMomentum(G4int pZ, G4int pN, G4int tZ, G4int tN);// P-Threshold(MeV/c)
+
 private:
-  G4int    GetFunctions(G4double pA, G4double tA, G4double* LI, G4double* HI,  // Inelastic
-                        G4double* LE, G4double* HE);                           // Elastic
+  G4int    GetFunctions(G4int pZ, G4int pN, G4int tZ, G4int tN,
+                        G4double* LI, G4double* HI,  // Inelastic
+                        G4double* LE, G4double* HE); // Elastic
 
   G4double CalculateTotal(G4double pA, G4double tA, G4double Momentum);
   G4double CalculateElTot(G4double pA, G4double tA, G4double Momentum);
-  // first=Inelastic, second=elastic
-  std::pair<G4double,G4double> CalculateXS(G4double pA, G4double tA,G4double Momentum);
+  // Momentum=p/A (MeV/c), first=InelasticCS, second=elasticCS (mb)
+  std::pair<G4double,G4double> CalculateXS(G4int pZ,G4int pN,G4int tZ,G4int tN,G4double P);
 
 // Body
 private:

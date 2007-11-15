@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.2 2007-08-31 09:36:57 mkossov Exp $
+// $Id: G4QLowEnergy.hh,v 1.3 2007-11-15 09:36:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy header ----------------
 //                 by Mikhail Kossov, Aug 2007.
-//  Header of G4QLowEnergy class (hadron+A) of the CHIPS Simulation Branch in GEANT4
+//  Header of G4QLowEnergy class (A+A) of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Hadron-Nuclear Diffractive Interaction Prosesses
+// This is a unique CHIPS class for the Ion-Ion Low Energy Inelastic Interaction Prosesses
 // -------------------------------------------------------------------------------
 // At present (Aug-07) it is not tested.
 // The normalization is based on the temporary G4QIonIonCrossSection class
@@ -69,7 +69,7 @@ class G4QLowEnergy : public G4VDiscreteProcess
 public:
 
   // Constructor
-  G4QLowEnergy(const G4String& processName ="CHIPS_DiffractiveInteraction");
+  G4QLowEnergy(const G4String& processName ="CHIPS_LowEnergyIonIonInelastic");
 
   // Destructor
   ~G4QLowEnergy();

@@ -70,15 +70,15 @@ class G4QDiffractionRatio
 
   // ==> The following will be a protected function for internal CHIPS usage
   // ProjFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
-  // Whoeve uses this member function is responsible for DEL/DESTROY of the G4QHadronVector
+  // Whoever uses this member function is responsible for DEL/DESTROY of G4QHadronVector
   G4QHadronVector* ProjFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
 
-  // ==> The following ill be a protected function for internal CHIPS usage
+  // ==> The following will be a protected function for internal CHIPS usage
   // TargFragment(pPDG,p4M) on a nucleus (tgZ, tgN), result: Vector of secondary hadrons
-  // Whoeve uses this member function is responsible for DEL/DESTROY of the G4QHadronVector
+  // Whoever uses this member function is responsible for DEL/DESTROY of G4QHadronVector
   G4QHadronVector* TargFragment(G4int pPDG, G4LorentzVector p4M, G4int tgZ, G4int tgN);
 
-  // Single Diffraction Taarget Excitation Cross-Section (independent Units)
+  // Single Diffraction Target Excitation Cross-Section (independent Units)
   G4double GetTargSingDiffXS(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
 
  private:
