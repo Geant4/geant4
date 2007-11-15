@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.4 2007-11-15 12:18:11 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.5 2007-11-15 16:12:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -273,8 +273,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
         if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
 	else        Register(particle,hp,theQGSModel,"QGS");
 
-        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else Register(particle,hp,theBERT,"Bertini");
+        Register(particle,hp,theBERT,"Bertini");
+        //if(bertFlag) Register(particle,hp,theBERT,"Bertini");
+	//else         Register(particle,hp,theBIC,"Binary");
 
 	if(glFlag) 
 	  hp->AddDataSet(new G4BGGPionInelasticXS(particle));
@@ -283,15 +284,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "kaon+"     || 
 		pname == "kaon0S"    || 
 		pname == "kaon0L") {
-        if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
-	else {
-	  Register(particle,hp,theQGSModel,"QGS");
-	  Register(particle,hp,theFTFModel,"FTF");
-	}
-
-        if(bertFlag) Register(particle,hp,theBERT,"Bertini");
-	else         Register(particle,hp,theBIC,"Binary");
-
+        Register(particle,hp,theFTFModel,"FTF");
+        Register(particle,hp,theBERT,"Bertini");
 	hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "lambda"    || 
@@ -299,8 +293,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "sigma+"    || 
 		pname == "xi-"       || 
 		pname == "xi0") {
-	Register(particle,hp,theFTFModel,"FTF");
 
+	Register(particle,hp,theFTFModel,"FTF");
 	Register(particle,hp,theBERT,"Bertini");
 	hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
