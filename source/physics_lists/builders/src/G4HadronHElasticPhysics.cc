@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc,v 1.3 2007-11-14 18:45:37 vnivanch Exp $
+// $Id: G4HadronHElasticPhysics.cc,v 1.4 2007-11-15 18:08:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -60,10 +60,9 @@
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 
-G4HadronHElasticPhysics::G4HadronHElasticPhysics(
-    const G4String& name,  G4int ver, G4bool hp, G4bool glauber)
-  : G4VPhysicsConstructor(name), mname(name), verbose(ver), hpFlag(hp), 
-    glFlag(glauber),wasActivated(false)
+G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool hp)
+  : G4VPhysicsConstructor("HElastic"), mname("HElastic"), verbose(ver), 
+    hpFlag(hp), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronHElasticPhysics" << G4endl;
   model = 0;

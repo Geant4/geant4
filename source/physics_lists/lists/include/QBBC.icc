@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.8 2007-11-14 18:45:37 vnivanch Exp $
+// $Id: QBBC.icc,v 1.9 2007-11-15 18:08:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4IonPhysics.hh"
@@ -84,7 +85,7 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): 
 		false, false, false, true));
 
   } else if(type == "QBBC_DEL") {
-    this->RegisterPhysics( new G4HadronHElasticPhysics(ver,false));
+    this->RegisterPhysics( new G4HadronDElasticPhysics(ver,false));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,

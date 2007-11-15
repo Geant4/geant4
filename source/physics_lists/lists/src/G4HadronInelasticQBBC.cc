@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.5 2007-11-15 16:12:27 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.6 2007-11-15 18:08:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -128,9 +128,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(verbose > 1) 
     G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
 
-  G4double minEstring  = 3.5*GeV;
-  G4double maxEcascade = 4.5*GeV;
-  G4double minFtf      = 3.5*GeV;
+  G4double minEstring  = 6.0*GeV;
+  G4double maxEcascade = 9.0*GeV;
+  //  G4double minFtf      = 7.5*GeV;
 
   //Binary
   G4HadronicInteraction* theBIC = new G4BinaryCascade();
@@ -170,7 +170,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theFTFModel->SetTransport(theCHIPSCascade);
   //theFTFModel->SetTransport(theCascade);
   theFTFModel->SetHighEnergyGenerator(theFTFStringModel);
-  theFTFModel->SetMinEnergy(minFtf);
+  theFTFModel->SetMinEnergy(minEstring);
   theFTFModel->SetMaxEnergy(100*TeV);
   theFTFModel->SetQuasiElasticChannel(theQuasiElastic);
 
