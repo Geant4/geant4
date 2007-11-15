@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.1 2007-01-09 10:11:16 allison Exp $
+// $Id: G4OpenGLBitMapStore.hh,v 1.2 2007-11-15 10:14:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 //   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 //   glBitmap(size, size, size/2., size/2., 0., 0., circle);
 
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #ifndef G4OPENGLBITMAPSTORE_HH
 #define G4OPENGLBITMAPSTORE_HH
@@ -71,5 +72,7 @@ namespace G4OpenGLBitMapStore {
   extern std::map<Key, GLubyte*> fStore;
 
 }
+
+#endif
 
 #endif

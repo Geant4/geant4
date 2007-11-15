@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.10 2007-11-10 14:51:28 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.11 2007-11-15 10:14:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -380,3 +382,5 @@ void G4OpenGLViewerMessenger::SetNewValue
     }
 
 }
+
+#endif
