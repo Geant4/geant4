@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectileDiffractiveChannel.cc,v 1.1 2007-11-13 16:01:36 gunter Exp $
+// $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007-11-15 16:07:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,8 +44,8 @@
 #include "G4IonTable.hh"
 #include "G4Lambda.hh"
 
-#define debug_getFraction 1
-#define debug_scatter 1
+//#define debug_getFraction 1
+//#define debug_scatter 1
 
 G4ProjectileDiffractiveChannel::G4ProjectileDiffractiveChannel()
 {
@@ -85,61 +85,77 @@ G4KineticTrackVector * G4ProjectileDiffractiveChannel::Scatter(G4Nucleus &theNuc
 	   #endif
 	
 	G4QHadronVector * result(0);
+	G4KineticTrackVector * ktv(0);
+	G4bool tryAgain;
 	
-	result=theQDiffraction->ProjFragment(pDef->GetPDGEncoding(),
+	do {
+	   tryAgain = false;
+	   result=theQDiffraction->ProjFragment(pDef->GetPDGEncoding(),
 			        thePrimary.Get4Momentum(),Z, A-Z);
 				
-	if (! result || result->size() == 0 )
-	{
-	   if ( result ) delete result;
-	   G4cout << "Warning - G4ProjectileDiffractiveChannel::Scatter no scattering" << G4endl;
-	   return 0;       //no scatter
-	}
-	G4KineticTrackVector * ktv;
-	ktv=new G4KineticTrackVector();
-	std::vector<G4QHadron *>::iterator i;
-	  #ifdef debug_scatter
-	     G4int count(0);
-	  #endif
-	for (i=result->begin(); i!=result->end(); i++)
-	{
-	   G4int pdgCode=(*i)->GetPDGCode();
-	   G4ParticleDefinition * secDef(0);
-	   if ( pdgCode < 90000000) {     // check if ion
-	       secDef= G4ParticleTable::GetParticleTable()->FindParticle(pdgCode);
-	   }else {
-	       G4int N = pdgCode % 1000;
-	       G4int Z = (pdgCode/1000) %1000;
-	       secDef = G4ParticleTable::GetParticleTable()->GetIon(Z,N+Z, 0);
-	       if ( ! secDef ) 
-	       {  // exceptions to the rule!
-	          if ( pdgCode == 90000001 ) secDef= G4Neutron::Neutron();
-		  if ( pdgCode == 91000000 ) secDef= G4Lambda::Lambda();
-	       }	  
-   	   }
-           if (!secDef )
+	   if ( result && result->size() > 0 )
 	   {
-	     G4cout << "Particle with PDG code "<< pdgCode <<" does not exist!!!"<<G4endl;
-	     throw G4HadronicException(__FILE__, __LINE__, "Check your particle table");
-	   }
+	       ktv=new G4KineticTrackVector();
+	       std::vector<G4QHadron *>::iterator i;
+		 #ifdef debug_scatter
+		    G4int count(0);
+		 #endif
+	       for (i=result->begin(); i!=result->end(); i++)
+	       {
+		  G4int pdgCode=(*i)->GetPDGCode();
+		  G4ParticleDefinition * secDef(0);
+		  if ( pdgCode < 80000000) {     // check if ion; should be 90Million, but 89Million is possible
+		      secDef= G4ParticleTable::GetParticleTable()->FindParticle(pdgCode);
+		  }else {
+		      G4int N = pdgCode % 1000;
+		      G4int Z = (pdgCode/1000) %1000;
+		      if ( Z < 500 && N < 500){   // protect for delta being coded as/in nucleus 
+			 secDef = G4ParticleTable::GetParticleTable()->GetIon(Z,N+Z, 0);
+			 if ( ! secDef ) 
+			 {  // exceptions to the rule!
+	        	    if ( pdgCode == 90000001 ) secDef= G4Neutron::Neutron();
+			    if ( pdgCode == 91000000 ) secDef= G4Lambda::Lambda();
+			 }
+		      }	  
+   		  }
+		  
+        	  if  ( secDef ){
 
-	   G4ThreeVector pos=(*i)->GetPosition();  //GetPosition returns const &
-	   G4LorentzVector mom=(*i)->Get4Momentum();
-	   
-	   G4KineticTrack * sPrim=new G4KineticTrack(secDef,
-			   (*i)->GetFormationTime(), pos, mom);
-	   ktv->push_back(sPrim);
-	     #ifdef debug_scatter
-	       G4cout << "G4ProjectileDiffractive sec # "  << ++count << ", "
-	         << secDef->GetParticleName() 
-	         << ", time(ns) " << (*i)->GetFormationTime()/ns
-	         << ", pos " << pos
-	         << ", 4mom " << (*i)->Get4Momentum()
-	         << G4endl;
-	     #endif
-	}
-	std::for_each(result->begin(), result->end(), DeleteQHadron());
-        delete result;
+		      G4ThreeVector pos=(*i)->GetPosition();  //GetPosition returns const &
+		      G4LorentzVector mom=(*i)->Get4Momentum();
+
+		      G4KineticTrack * sPrim=new G4KineticTrack(secDef,
+				      (*i)->GetFormationTime(), pos, mom);
+		      ktv->push_back(sPrim);
+
+			#ifdef debug_scatter
+			  G4cout << "G4ProjectileDiffractive sec # "  << ++count << ", "
+	        	    << "ChipsPDGCode=" << pdgCode << ", "
+	        	    << secDef->GetParticleName() 
+	        	    << ", time(ns) " << (*i)->GetFormationTime()/ns
+	        	    << ", pos " << pos
+	        	    << ", 4mom " << (*i)->Get4Momentum()
+	        	    << G4endl;
+			#endif
+	           } else {
+		       #ifdef debug_scatter
+		         G4cout << "G4ProjectileDiffractiveChannel: Particle with PDG code "<< pdgCode <<" does not converted!!!"<<G4endl;
+		       #endif 
+		       tryAgain=true;
+		   }
+	       }   
+	       std::for_each(result->begin(), result->end(), DeleteQHadron());
+               delete result;
+	       result=0;
+	   }
+	    
+	   if ( result ) delete result;
+	   if ( tryAgain ) {     // QDiffraction returned a "difficult" particle in nucleus
+	       std::for_each(ktv->begin(), ktv->end(), DeleteKineticTrack());
+	       delete ktv;
+	       ktv=0;
+	   }
+	} while ( ! ktv);          
 
 	return ktv;			       
 }
