@@ -23,23 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.hh,v 1.2 2007-11-15 16:58:16 gunter Exp $
+// $Id: HadronPhysicsQGSC_BERT.hh,v 1.1 2007-11-15 16:58:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:   HadronPhysicsQGSC_BERT
 //
-// Author: 2007  Gunter Folger
-//   created from HadronPhysicsFTFP
+// Author: 2007  G.Folger
+//             created from HadronPhysicsQGSC originally by J.P. Wellisch
+//
 // Modified:
-// 23.11.2005 G.Folger: migration to non static particles
-// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
-//
-#ifndef HadronPhysicsFTFP_BERT_h
-#define HadronPhysicsFTFP_BERT_h 1
+
+#ifndef HadronPhysicsQGSC_BERT_h
+#define HadronPhysicsQGSC_BERT_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -48,24 +47,23 @@
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
+#include "G4QGSCPiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
+#include "G4QGSCProtonBuilder.hh"
 #include "G4BertiniProtonBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
+#include "G4QGSCNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
 
-class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
+class HadronPhysicsQGSC_BERT : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTFP_BERT(const G4String& name ="hadron",G4bool quasiElastic=true);
-    virtual ~HadronPhysicsFTFP_BERT();
+    HadronPhysicsQGSC_BERT(const G4String& name ="hadron",G4bool quasiElastic=true);
+    virtual ~HadronPhysicsQGSC_BERT();
 
   public: 
     virtual void ConstructParticle();
@@ -74,17 +72,17 @@ class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
   private:
     void CreateModels();
     G4NeutronBuilder * theNeutrons;
+    G4QGSCNeutronBuilder * theQGSCNeutron;
     G4BertiniNeutronBuilder * theBertiniNeutron;
-    G4FTFPNeutronBuilder * theFTFPNeutron;
     G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
- 
+    
     G4PiKBuilder * thePiK;
+    G4QGSCPiKBuilder * theQGSCPiK;
     G4BertiniPiKBuilder * theBertiniPiK;
-    G4FTFPPiKBuilder * theFTFPPiK;
     
     G4ProtonBuilder * thePro;
+    G4QGSCProtonBuilder * theQGSCPro;    
     G4BertiniProtonBuilder * theBertiniPro;
-    G4FTFPProtonBuilder * theFTFPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
     
