@@ -274,7 +274,10 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 	    nTries++;
 	    //----------------------------
 	    //	    G4double coulumbBarrier = 5.0 * MeV;	   
-	    G4double coulumbBarrier = 7.9 * MeV; // fro 197 79 case 9	   
+	     	    	    G4double coulumbBarrier = 8.7 * MeV; // fro 9 4 Be case 5	   
+			    //	    G4double coulumbBarrier = 8.7 * MeV; // fro 54 26 Fe case 5	   
+		    //	    	    G4double coulumbBarrier = 7.9 * MeV; // fro 197 79Au case 9	   
+		    //G4double coulumbBarrier = 1.0 * MeV; // fro 197 79 case 9	   
 	    std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
 	    if(!p.empty()) { 
 	      for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {

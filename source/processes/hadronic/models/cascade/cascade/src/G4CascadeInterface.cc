@@ -46,6 +46,8 @@
 #include "G4LorentzRotation.hh"
 
 
+//#define BERTDEV 1  // A flag to activate a development version of Bertini cascade
+
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
@@ -194,9 +196,12 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4BigBanger*                     bigb = new G4BigBanger;
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-      G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
+      G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
       G4int  nTries   = 0;  // try counter
 
+#ifdef BERTDEV
+      G4int coulombOK =0;  // flag for correct Coulomb barrier
+#endif
       if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
 
 	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
@@ -232,7 +237,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 		    output.getOutgoingParticles().begin()->type() == proton)
 		   )
 		  );
-
 	} else { // only elastic collision is energetically possible
 	  output = collider->collide(bullet, targetH);
 	}
@@ -253,16 +257,40 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
 	do  // we try to create inelastic interaction
 	  {
+#ifdef BERTDEV
+            coulombOK=0;  // by default coulomb analysis is OK
+#endif
 	    output = collider->collide(bullet, target );
 	    nTries++;
+
+#ifdef BERTDEV
+	    G4double coulumbBarrier = 8.7 * MeV; 
+	    std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
+	    if(!p.empty()) { 
+	      for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
+		if (ipart->type() == proton) {
+		  G4double e = ipart->getKineticEnergy()*GeV;
+		  if (e < coulumbBarrier) coulombOK= 1; // If event with coulomb barrier violation detected -> retry
+		  //		  G4cout << "///AH "<< e << "" << coulumbBarrier <<G4endl;
+		}
+	      }
+	    }
+	  } while( 
+		  (nTries < maxTries) &&  // conditions for next try
+		  (coulombOK==1) &&
+		  ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5) &&  
+		  (output.getOutgoingParticles().size()!=0)                                        
+		  );
+#else
+
 	  } while(
 		   (nTries < maxTries)                                                               &&
 		   (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
 		   (output.getOutgoingParticles().size()!=0) &&
                    (output.getOutgoingParticles().begin()->type()==bullet->type())
-		  );
-
-      }
+		   );
+#endif
+     }
 
   if (verboseLevel > 1) 
     {
