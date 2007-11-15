@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15-Nov-2007  Gunter Folger          hadr-im_r_V09-00-03
+----------------------------------------------------------------
+-  In G4ParticleTypeConverter, remove warning on unknown particle;
+    occurs for eta_prime, k_star+, anti_... etc. in BiC propagate interface
+
 03-Oct-2007  Gunter Folger          hadr-im_r_V09-00-02
 ----------------------------------------------------------------
 -  Incorporate change by Dennis for G4CollisionComposite.cc: SUN compiler
