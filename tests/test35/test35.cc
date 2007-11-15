@@ -159,6 +159,12 @@ int main(int argc, char** argv)
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
+  decays.ConstructProcess();  
+
+  //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  //const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
 
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();

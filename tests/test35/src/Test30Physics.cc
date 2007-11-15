@@ -68,7 +68,7 @@
 #include "G4RPGProtonInelastic.hh"
 #include "G4RPGNeutronInelastic.hh"
 
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
@@ -172,7 +172,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "CHIPS") {
 
-    sg = new Test30VSecondaryGenerator(new G4StringChipsParticleLevelInterface(),mat);
+    sg = new Test30VSecondaryGenerator(new G4QStringChipsParticleLevelInterface(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -280,8 +280,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
-    G4StringChipsParticleLevelInterface* theCascade = 
-      new G4StringChipsParticleLevelInterface;
+    G4QStringChipsParticleLevelInterface* theCascade = 
+      new G4QStringChipsParticleLevelInterface;
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);
