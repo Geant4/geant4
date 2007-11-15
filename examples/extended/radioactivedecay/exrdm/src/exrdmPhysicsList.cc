@@ -77,7 +77,10 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(2);
 
   //default physics
-  particleList = new G4DecayPhysics("decay");
+  particleList = new G4DecayPhysics();
+
+  //default physics
+  raddecayList = new G4RadioactiveDecayPhysics();
 
   // EM physics
   emPhysicsList = new G4EmStandardPhysics();
@@ -93,7 +96,7 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
 exrdmPhysicsList::~exrdmPhysicsList()
 {
   delete pMessenger;
-  delete generalPhysicsList;
+  delete raddecayList;
   delete emPhysicsList;
   if (hadPhysicsList) delete hadPhysicsList;
   if (nhadcomp > 0) {
@@ -117,6 +120,9 @@ void exrdmPhysicsList::ConstructProcess()
   AddTransportation();
   // em
   emPhysicsList->ConstructProcess();
+  // decays
+  particleList->ConstructProcess();
+  raddecayList->ConstructProcess();
   // had
   if (nhadcomp > 0) {
     for(G4int i=0; i<nhadcomp; i++) {

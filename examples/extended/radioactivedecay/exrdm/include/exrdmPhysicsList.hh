@@ -71,7 +71,7 @@ private:
   G4double cutForPositron;
 
   G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  generalPhysicsList;
+  G4VPhysicsConstructor*  raddecayList;
   G4VPhysicsConstructor*  particleList;
   G4VPhysicsConstructor*  hadPhysicsList;
 
