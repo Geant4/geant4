@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.29 2007-11-13 19:25:13 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.30 2007-11-15 09:28:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@
 #include "G4ios.hh"
 #include "G4MaterialScanner.hh"
 #include "G4Tokenizer.hh"
-#include "randomize.hh"
+#include "Randomize.hh"
 #include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
@@ -334,7 +334,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else
     {
       seeds[idx] = 0;
-      HepRandom::setTheSeeds(seeds);
+      CLHEP::HepRandom::setTheSeeds(seeds);
     }
   }
   else if( command==randDirCmd )
