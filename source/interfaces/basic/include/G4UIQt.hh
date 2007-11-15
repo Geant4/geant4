@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.6 2007-11-15 18:24:27 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.7 2007-11-15 18:53:59 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -148,7 +148,11 @@ private slots :
   void CommandEnteredCallback();
   void ButtonCallback(const QString&);
   void HelpTreeClicCallback();
+#if QT_VERSION < 0x040000
+  void HelpTreeDoubleClicCallback( QListViewItem*, int);
+#else
   void HelpTreeDoubleClicCallback( QTreeWidgetItem*, int);
+#endif
   void ShowHelpCallback();
   void CommandHistoryCallback();
 };
