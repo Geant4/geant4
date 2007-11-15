@@ -129,8 +129,8 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
 	  << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation <= 0"
 	  << G4endl;
     }
-
-  if (excitation <= _levelManager->MaxLevelEnergy()) 
+  G4double tolerance = 10*eV;
+  if (excitation <= (_levelManager->MaxLevelEnergy()+ tolerance)) 
     {
       canDo = false;  
       if (_verbose > 0)

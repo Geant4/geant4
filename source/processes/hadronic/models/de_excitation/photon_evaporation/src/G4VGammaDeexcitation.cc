@@ -276,7 +276,11 @@ void G4VGammaDeexcitation::Update()
   if (_transition != 0) 
     {
       _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
-      if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
+      //      if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
+      // the above line is commented out for bug fix #952. It was intruduced for reason that
+      // the k-shell electron is most likely one to be kicked out and there is no time for 
+      // the atom to deexcite before the next IC. But this limitation is causing other problems as 
+      // reported in #952
     }
 
   return;
