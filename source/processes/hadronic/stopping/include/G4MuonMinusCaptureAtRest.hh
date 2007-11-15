@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.18 2007-07-05 18:19:14 dennis Exp $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.19 2007-11-15 10:04:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4MuonMinusCaptureAtRest physics process
@@ -55,9 +55,9 @@
 #include "G4StopElementSelector.hh"
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4ReactionProductVector.hh"
-#include "G4Fancy3DNucleus.hh"
-#include "G4ExcitationHandler.hh"
 
+class G4Fancy3DNucleus;
+class G4ExcitationHandler;
 class G4GHEKinematicsVector;
 
 class G4MuonMinusCaptureAtRest : public G4VRestProcess
@@ -96,8 +96,10 @@ private:
   G4StopElementSelector*   pSelector;
   G4MuMinusCaptureCascade* pEMCascade;
   G4GHEKinematicsVector*   Cascade;
-  G4Fancy3DNucleus         theN;
-  G4ExcitationHandler      theHandler;
+  G4Fancy3DNucleus*        theN;
+  G4ExcitationHandler*     theHandler;
+
+  G4bool isInitialised;
 
 };
 
