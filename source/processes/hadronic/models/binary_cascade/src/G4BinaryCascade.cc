@@ -61,7 +61,7 @@
 #include <typeinfo>
 
 //   turn on general debugging info, and consistency checks
-#define debug_G4BinaryCascade 1
+//#define debug_G4BinaryCascade 1
 
 //  more detailed debugging -- deprecated  
 //#define debug_1_BinaryCascade 1
