@@ -1,4 +1,4 @@
-$Id: History,v 1.416 2007-11-13 15:28:07 allison Exp $
+$Id: History,v 1.417 2007-11-15 10:18:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th November 2007  John Allison
+- opengl-V09-00-03: Re-introduced Qt files. (All files now properly protected.)
 
 13th November 2007  John Allison  (vis-V09-00-02)
 - Removed OpenGL Qt files from tag.  File are still at head - need fixing.
