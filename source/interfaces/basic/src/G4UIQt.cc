@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.9 2007-11-15 10:10:02 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.10 2007-11-15 10:49:33 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -260,7 +260,11 @@ G4UIsession* G4UIQt::SessionStart (
   G4Qt* interactorManager = G4Qt::getInstance ();
 
 #if QT_VERSION >= 0x040000
+#if QT_VERSION >= 0x040200
   fMainWindow->setVisible(true);
+#else
+  fMainWindow->show();
+#endif
 #else
   fMainWindow->show();
 #endif
@@ -1141,6 +1145,7 @@ void G4UIQt::HelpTreeClicCallback (
 #else
     fHelpArea->setText(GetCommandList(command));
 #endif
+#else
     fHelpArea->setText(GetCommandList(command));
 #endif
   } else {
@@ -1153,6 +1158,7 @@ void G4UIQt::HelpTreeClicCallback (
 #else
     fHelpArea->setText(item->text (1));
 #endif
+#else
     fHelpArea->setText(item->text (1));
 #endif
   }
