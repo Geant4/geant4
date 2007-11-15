@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2007-11-15 11:38:43 vnivanch Exp $
+$Id: History,v 1.41 2007-11-15 12:18:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 15-11-2007, V.Ivanchenko phys-lists-V09-00-06
 - G4RadioactiveDecayPhysics optional builder is added
+- QBBC Physics List use correct interface to CHIPS
 
 14-11-2007, V.Ivanchenko phys-lists-V09-00-05
 - G4HadronDElasticPhysics - fixed run time bug - added low-energy model
