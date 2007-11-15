@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.8 2007-11-14 18:50:22 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.9 2007-11-15 10:10:02 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -46,7 +46,6 @@
 #include "G4Qt.hh"
 
 #include <qapplication.h>
-#include <qmainwindow.h>
 #include <qlineedit.h>
 #include <qwidget.h>
 #include <qmenubar.h>
@@ -64,6 +63,7 @@
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
+#include <qmainwindow.h>
 #else
 #include <qaction.h>
 #include <qheader.h>
@@ -105,22 +105,26 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
-  printf("G4UIQt::Initialise\n");
-  G4Qt* interactorManager = G4Qt::getInstance ();
+  printf("G4UIQt::Initialise %d %s\n",argc,argv[0]);
+  G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
   fMainWindow = new QMainWindow();
+
+  printf("G4UIQt::Initialise after main window creation\n");
 #if QT_VERSION < 0x040000
   fMainWindow->setCaption( tr( "G4UI Session" ));
+  fMainWindow->resize(800,600); 
+  fMainWindow->move(50,100);
 #else
   fMainWindow->setWindowTitle( tr("G4UI Session") ); 
-#endif
   fMainWindow->resize(800,600); 
   fMainWindow->move(QPoint(50,100));
+#endif
 
   QSplitter *splitter = new QSplitter(Qt::Vertical);
-  fTextArea = new QTextEdit();
+  fTextArea = new QTextEdit(fMainWindow);
   QPushButton *clearButton = new QPushButton("clear",fMainWindow);
   connect(clearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
 
@@ -182,14 +186,17 @@ G4UIQt::G4UIQt (
   layoutBottom->addWidget(fCommandLabel);
   layoutBottom->addWidget(fCommandArea);
 #if QT_VERSION >= 0x040000
+
   bottomWidget->setLayout(layoutBottom);
   splitter->addWidget(topWidget);
   splitter->addWidget(bottomWidget);
 #endif
 
+
   fMainWindow->setCentralWidget(splitter);
 
 #if QT_VERSION < 0x040000
+
   // Add a quit subMenu
   QPopupMenu *fileMenu = new QPopupMenu( fMainWindow);
   fileMenu->insertItem( "&Quitter",  this, SLOT(close()), CTRL+Key_Q );
@@ -200,7 +207,9 @@ G4UIQt::G4UIQt (
   helpMenu->insertItem( "&Show Help",  this, SLOT(ShowHelpCallback()), CTRL+Key_H );
   fMainWindow->menuBar()->insertItem( QString("&Help"), helpMenu );
 
+
 #else
+
   // Add a quit subMenu
   QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
   fileMenu->addAction("Quitter", fMainWindow, SLOT(close()));
@@ -855,7 +864,7 @@ QString G4UIQt::GetCommandList (
       txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
       if( ! param->GetParameterGuidance().isNull() )
         txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
-      txt += " Parameter type  : " + QString((char*)(param->GetParameterType())) + "\n";
+      txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
       if(param->IsOmittable()){
         txt += " Omittable       : True\n";
       } else {
@@ -1125,14 +1134,26 @@ void G4UIQt::HelpTreeClicCallback (
   G4UIcommand* command = treeTop->FindPath(item->text (1).toStdString().c_str());
 #endif
   if (command) {
+#if QT_VERSION >= 0x040000
+#if QT_VERSION < 0x040200
+    fHelpArea->clear();
     fHelpArea->append(GetCommandList(command));
+#else
+    fHelpArea->setText(GetCommandList(command));
+#endif
+    fHelpArea->setText(GetCommandList(command));
+#endif
   } else {
     // this is not a command, this is a sub directory
     // We display the Title
-#if QT_VERSION < 0x040000
-    fHelpArea->append(item->text (1).ascii());
+#if QT_VERSION >= 0x040000
+#if QT_VERSION < 0x040200
+    fHelpArea->clear();
+    fHelpArea->append(item->text (1));
 #else
-    fHelpArea->append(item->text (1).toStdString().c_str());
+    fHelpArea->setText(item->text (1));
+#endif
+    fHelpArea->setText(item->text (1));
 #endif
   }
 }
