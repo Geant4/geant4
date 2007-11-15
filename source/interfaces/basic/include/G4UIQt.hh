@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.4 2007-11-13 17:48:51 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.5 2007-11-15 17:20:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -143,6 +143,7 @@ signals :
   void myClicked(const QString &text);
 
 private slots :
+  void ExitSession();
   void ClearButtonCallback();
   void CommandEnteredCallback();
   void ButtonCallback(const QString&);

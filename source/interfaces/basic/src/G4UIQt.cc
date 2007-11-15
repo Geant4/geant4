@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.10 2007-11-15 10:49:33 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.11 2007-11-15 17:20:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -59,11 +59,11 @@
 #include <qtextedit.h>
 #include <qsignalmapper.h>
 
+#include <qmainwindow.h>
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
-#include <qmainwindow.h>
 #else
 #include <qaction.h>
 #include <qheader.h>
@@ -131,11 +131,12 @@ G4UIQt::G4UIQt (
 #if QT_VERSION < 0x040000
   fCommandHistoryArea = new QListView();
   fCommandHistoryArea->setSelectionMode(QListView::Single);
+  connect(fCommandHistoryArea, SIGNAL(selectionChanged()), SLOT(CommandHistoryCallback()));
 #else
   fCommandHistoryArea = new QListWidget();
   fCommandHistoryArea->setSelectionMode(QAbstractItemView::SingleSelection);
-#endif
   connect(fCommandHistoryArea, SIGNAL(itemSelectionChanged()), SLOT(CommandHistoryCallback()));
+#endif
   fCommandHistoryArea->installEventFilter(this);
   fCommandLabel = new QLabel("",fMainWindow);
 
@@ -199,7 +200,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QPopupMenu *fileMenu = new QPopupMenu( fMainWindow);
-  fileMenu->insertItem( "&Quitter",  this, SLOT(close()), CTRL+Key_Q );
+  fileMenu->insertItem( "&Quitter",  this, SLOT(exitSession()), CTRL+Key_Q );
   fMainWindow->menuBar()->insertItem( QString("&File"), fileMenu );
 
   // Add a Help menu
@@ -212,7 +213,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
-  fileMenu->addAction("Quitter", fMainWindow, SLOT(close()));
+  fileMenu->addAction("Quitter", this, SLOT(exitSession()));
 
   // Add a Help menu
   QMenu *helpMenu = fMainWindow->menuBar()->addMenu("Help");
@@ -1041,6 +1042,14 @@ void G4UIQt::ClearButtonCallback (
 )
 {
   fTextArea->clear();
+}
+
+/**   Called when user exit session
+*/
+void G4UIQt::ExitSession (
+)
+{
+  SessionTerminate();
 }
 
 

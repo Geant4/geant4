@@ -2,7 +2,7 @@
 ** G4UIQt meta object code from reading C++ file 'G4UIQt.hh'
 **
 ** Created: Tue Nov 13 18:13:09 2007
-**      by: The Qt MOC ($Id: G4UIQt_moc.cc,v 1.6 2007-11-14 10:38:49 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4UIQt_moc.cc,v 1.7 2007-11-15 17:20:23 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -18,7 +18,7 @@
 
 #include <private/qucomextra_p.h>
 #if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
-#error "This file was generated using the moc from 3.3.5. It"
+#error "This file was generated using the moc from 3.3.8. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -56,28 +56,30 @@ QMetaObject* G4UIQt::staticMetaObject()
     if ( metaObj )
 	return metaObj;
     QMetaObject* parentObject = QObject::staticMetaObject();
-    static const QUMethod slot_0 = {"ClearButtonCallback", 0, 0 };
-    static const QUMethod slot_1 = {"CommandEnteredCallback", 0, 0 };
-    static const QUParameter param_slot_2[] = {
+    static const QUMethod slot_0 = {"ExitSession", 0, 0 };
+    static const QUMethod slot_1 = {"ClearButtonCallback", 0, 0 };
+    static const QUMethod slot_2 = {"CommandEnteredCallback", 0, 0 };
+    static const QUParameter param_slot_3[] = {
 	{ 0, &static_QUType_QString, 0, QUParameter::In }
     };
-    static const QUMethod slot_2 = {"ButtonCallback", 1, param_slot_2 };
-    static const QUMethod slot_3 = {"HelpTreeClicCallback", 0, 0 };
-    static const QUParameter param_slot_4[] = {
-	{ 0, &static_QUType_ptr, "QTreeWidgetItem", QUParameter::In },
+    static const QUMethod slot_3 = {"ButtonCallback", 1, param_slot_3 };
+    static const QUMethod slot_4 = {"HelpTreeClicCallback", 0, 0 };
+    static const QUParameter param_slot_5[] = {
+	{ 0, &static_QUType_ptr, "QListViewItem", QUParameter::In },
 	{ 0, &static_QUType_int, 0, QUParameter::In }
     };
-    static const QUMethod slot_4 = {"HelpTreeDoubleClicCallback", 2, param_slot_4 };
-    static const QUMethod slot_5 = {"ShowHelpCallback", 0, 0 };
-    static const QUMethod slot_6 = {"CommandHistoryCallback", 0, 0 };
+    static const QUMethod slot_5 = {"HelpTreeDoubleClicCallback", 2, param_slot_5 };
+    static const QUMethod slot_6 = {"ShowHelpCallback", 0, 0 };
+    static const QUMethod slot_7 = {"CommandHistoryCallback", 0, 0 };
     static const QMetaData slot_tbl[] = {
-	{ "ClearButtonCallback()", &slot_0, QMetaData::Private },
-	{ "CommandEnteredCallback()", &slot_1, QMetaData::Private },
-	{ "ButtonCallback(const QString&)", &slot_2, QMetaData::Private },
-	{ "HelpTreeClicCallback()", &slot_3, QMetaData::Private },
-	{ "HelpTreeDoubleClicCallback(QTreeWidgetItem*,int)", &slot_4, QMetaData::Private },
-	{ "ShowHelpCallback()", &slot_5, QMetaData::Private },
-	{ "CommandHistoryCallback()", &slot_6, QMetaData::Private }
+	{ "ExitSession()", &slot_0, QMetaData::Private },
+	{ "ClearButtonCallback()", &slot_1, QMetaData::Private },
+	{ "CommandEnteredCallback()", &slot_2, QMetaData::Private },
+	{ "ButtonCallback(const QString&)", &slot_3, QMetaData::Private },
+	{ "HelpTreeClicCallback()", &slot_4, QMetaData::Private },
+	{ "HelpTreeDoubleClicCallback(QListViewItem*,int)", &slot_5, QMetaData::Private },
+	{ "ShowHelpCallback()", &slot_6, QMetaData::Private },
+	{ "CommandHistoryCallback()", &slot_7, QMetaData::Private }
     };
     static const QUParameter param_signal_0[] = {
 	{ "text", &static_QUType_QString, 0, QUParameter::In }
@@ -88,7 +90,7 @@ QMetaObject* G4UIQt::staticMetaObject()
     };
     metaObj = QMetaObject::new_metaobject(
 	"G4UIQt", parentObject,
-	slot_tbl, 7,
+	slot_tbl, 8,
 	signal_tbl, 1,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -119,17 +121,14 @@ void G4UIQt::myClicked( const QString& t0 )
 bool G4UIQt::qt_invoke( int _id, QUObject* _o )
 {
     switch ( _id - staticMetaObject()->slotOffset() ) {
-    case 0: ClearButtonCallback(); break;
-    case 1: CommandEnteredCallback(); break;
-    case 2: ButtonCallback((const QString&)static_QUType_QString.get(_o+1)); break;
-    case 3: HelpTreeClicCallback(); break;
-#if QT_VERSION < 0x040000
-    case 4: HelpTreeDoubleClicCallback((QListViewItem*)static_QUType_ptr.get(_o+1),(int)static_QUType_int.get(_o+2)); break;
-#else
-    case 4: HelpTreeDoubleClicCallback((QTreeWidgetItem*)static_QUType_ptr.get(_o+1),(int)static_QUType_int.get(_o+2)); break;
-#endif
-    case 5: ShowHelpCallback(); break;
-    case 6: CommandHistoryCallback(); break;
+    case 0: ExitSession(); break;
+    case 1: ClearButtonCallback(); break;
+    case 2: CommandEnteredCallback(); break;
+    case 3: ButtonCallback((const QString&)static_QUType_QString.get(_o+1)); break;
+    case 4: HelpTreeClicCallback(); break;
+    case 5: HelpTreeDoubleClicCallback((QListViewItem*)static_QUType_ptr.get(_o+1),(int)static_QUType_int.get(_o+2)); break;
+    case 6: ShowHelpCallback(); break;
+    case 7: CommandHistoryCallback(); break;
     default:
 	return QObject::qt_invoke( _id, _o );
     }
@@ -154,6 +153,7 @@ bool G4UIQt::qt_property( int id, int f, QVariant* v)
 
 bool G4UIQt::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
 #endif // QT_NO_PROPERTIES
+
 
 #endif
 #endif

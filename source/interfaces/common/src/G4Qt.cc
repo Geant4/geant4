@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.5 2007-11-15 10:10:02 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.6 2007-11-15 17:20:24 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -93,15 +93,20 @@ G4Qt::G4Qt (
 #if QT_VERSION < 0x040000
     qApp = new QApplication (a_argn, a_args);
     //    QApplication qApp(a_argn, a_args);
+    //    if(&qApp == NULL) {
 #else
     new QApplication (a_argn, a_args);
 #endif
+    if(!qApp) {
 
-    if(qApp==NULL) {
       G4cout        << "G4Qt : Unable to init Qt." << G4endl;
     } else {
       QtInited  = TRUE;
+      //#if QT_VERSION < 0x040000
+      //      SetMainInteractor (&qApp);
+      //#else
       SetMainInteractor (qApp);
+      //#endif
       SetArguments      (a_argn,a_args);
       printf("G4Qt::G4Qt inited Qt END\n");
     }
