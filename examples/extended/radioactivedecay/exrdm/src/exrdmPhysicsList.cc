@@ -29,7 +29,6 @@
 #include "exrdmPhysicsListMessenger.hh"
 
 #include "exrdmPhysListParticles.hh"
-#include "exrdmPhysListGeneral.hh"
 #include "G4EmStandardPhysics.hh"
 #include "exrdmPhysListEmLowEnergy.hh"
 #include "exrdmPhysListHadron.hh"
@@ -56,6 +55,7 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4DecayPhysics.hh"
 
@@ -75,21 +75,16 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
   pMessenger = new exrdmPhysicsListMessenger(this);
 
   SetVerboseLevel(2);
+
   //default physics
-   // Particles
-  //  particleList = new exrdmPhysListParticles("particles");
   particleList = new G4DecayPhysics("decay");
 
   // EM physics
   emPhysicsList = new G4EmStandardPhysics();
   
-  // Had physics (no hadron as default)
-  hadPhysicsList =  0;
-
+  // Had physics 
+  hadPhysicsList = new exrdmPhysListHadron("hadron");
   nhadcomp = 0;
-
-  // General exrdmPhysics
-  generalPhysicsList = new exrdmPhysListGeneral("general");
 
 }
 
@@ -122,8 +117,6 @@ void exrdmPhysicsList::ConstructProcess()
   AddTransportation();
   // em
   emPhysicsList->ConstructProcess();
-  //general
-  generalPhysicsList->ConstructProcess();
   // had
   if (nhadcomp > 0) {
     for(G4int i=0; i<nhadcomp; i++) {
@@ -187,13 +180,14 @@ void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
     delete hadPhysicsList;
     hadPhysicsList = 0;
   }
-  nhadcomp = 5;
+  nhadcomp = 6;
 
   hadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
   hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
 						   flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
+  hadronPhys.push_back( new G4RadioactiveDecayPhysics("radioactiveDecay"));
   hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
 }
 
