@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.15 2007-11-14 10:05:01 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.16 2007-11-15 11:32:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -759,13 +759,18 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   motherStep = motherSolid->DistanceToOut(repPoint,repDirection,true,
                                           &validExitNormal,&exitNormal);
 
-  // Push no longer necessary. G4Navigator will now take care of ...
+  // Push in principle no longer necessary. G4Navigator now takes care of ...
+  // Removing this will however generate warnings for pushed particles from
+  // G4Navigator, particularly for the case of 3D replicas (Cartesian or
+  // combined Radial/Phi cases).
+  // Requires further investigation and eventually reimplementation of
+  // LevelLocate() to take into account point and direction ...
   //
-  //  if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
-  //     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
-  //  {
-  //    ourStep += kCarTolerance;
-  //  }
+  if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
+     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
+  {
+    ourStep += kCarTolerance;
+  }
 
   if ( motherSafety<ourSafety )
   {
