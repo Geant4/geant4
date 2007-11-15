@@ -89,7 +89,7 @@ void exrdmPhysListEmLowEnergy::ConstructProcess()
   
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1,-3,3);
 	    
     } else if (particleName == "e+") {
 
