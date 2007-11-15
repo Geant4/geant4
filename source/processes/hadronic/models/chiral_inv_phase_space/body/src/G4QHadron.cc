@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.50 2007-10-17 13:37:14 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.51 2007-11-15 09:33:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -50,17 +50,17 @@ G4double G4QHadron::widthOfPtSquare = 0.01*GeV*GeV; // ? M.K.
 G4double G4QHadron::minTransverseMass = 1.*keV;     // ? M.K.
 
 G4QHadron::G4QHadron() : theQPDG(0),theMomentum(0.,0.,0.,0.),valQ(0,0,0,0,0,0),nFragm(0),
-  thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),
-  formTime(0.) {}
+  thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
+  Color(),AntiColor(),bindE(0.),formTime(0.) {}
 
 G4QHadron::G4QHadron(G4LorentzVector p) : theQPDG(0),theMomentum(p),valQ(0,0,0,0,0,0),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.) {}
+  Color(),AntiColor(),bindE(0.),formTime(0.) {}
 
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) : theQPDG(PDGCode),theMomentum(p),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.)
+  Color(),AntiColor(),bindE(0.),formTime(0.)
 {
 #ifdef debug
   G4cout<<"G4QHadron must be created with PDG="<<PDGCode<<", 4M="<<p<<G4endl;
@@ -80,7 +80,7 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) : theQPDG(PDGCode),theMom
 // For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) : theQPDG(QPDG),theMomentum(p),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-  bindE(0.),formTime(0.)
+  Color(),AntiColor(),bindE(0.),formTime(0.)
 {
   if(theQPDG.GetQCode()>-1)
   {
@@ -98,7 +98,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) : theQPDG(QPDG),theMome
 // Make sense Chipolino or Quasmon
 G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p): theQPDG(0),theMomentum(p),valQ(QC),
   nFragm(0),thePosition(0.,0.,0.),theCollisionCount(0),isSplit(false),Direction(true),
-		bindE(0.),formTime(0.)
+		Color(),AntiColor(),bindE(0.),formTime(0.)
 {
   G4int curPDG=valQ.GetSPDGCode();
   if(curPDG==10&&valQ.GetBaryonNumber()>0) curPDG=valQ.GetZNSPDGCode();
@@ -108,27 +108,32 @@ G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p): theQPDG(0),theMomentum(p
 
 G4QHadron::G4QHadron(G4int PDGCode, G4double aMass, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4double aMass, G4QContent QC) :
   theQPDG(QPDG),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(p),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC) :
   theQPDG(QPDG),theMomentum(p),valQ(QC),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {}
 
 G4QHadron::G4QHadron(G4QParticle* pPart, G4double maxM) :
   theQPDG(pPart->GetQPDG()),theMomentum(0.,0.,0.,0.),nFragm(0),thePosition(0.,0.,0.),
-  theCollisionCount(0),isSplit(false),Direction(true),bindE(0.),formTime(0.)
+  theCollisionCount(0),isSplit(false),Direction(true),Color(),AntiColor(),bindE(0.),
+  formTime(0.)
 {
 #ifdef debug
   G4cout<<"G4QHadron is created & randomized with maxM="<<maxM<<G4endl;
