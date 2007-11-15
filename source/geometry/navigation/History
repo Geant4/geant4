@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2007-11-14 10:05:26 gcosmo Exp $
+$Id: History,v 1.112 2007-11-15 11:32:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14th, 2007 - G.Cosmo (geomnav-V09-00-11)
+-----------------------------
+- Reintroduced artificial push in G4ReplicaNavigation::ComputeStep().
+  Further investigation and eventually reimplementation of LevelLocate()
+  required to take into account point and direction ...
+
 November 14th, 2007 - G.Cosmo (geomnav-V09-00-10)
 -----------------------------
-- Removed artificial push in G4ReplicaNavigation::ComputeStep() no longer
-  necessary. G4Navigator now can take care of handling cases of zero steps
-  occurring for tracks stuck on boundaries for 3D replicas.
+- Trial to remove artificial push in G4ReplicaNavigation::ComputeStep().
 - Some minor cleanup.
 
 November 9th, 2007 - J.Apostolakis (geomnav-V09-00-09)
