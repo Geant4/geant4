@@ -89,7 +89,7 @@
 #include "G4CascadeElasticInterface.hh"
 #include "G4QuasiElasticChannel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
@@ -220,8 +220,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
-    G4StringChipsParticleLevelInterface* theCascade = 
-      new G4StringChipsParticleLevelInterface;
+    G4QStringChipsParticleLevelInterface* theCascade = 
+      new G4QStringChipsParticleLevelInterface;
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);

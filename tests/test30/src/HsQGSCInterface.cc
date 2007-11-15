@@ -47,7 +47,7 @@
 HsQGSCInterface::HsQGSCInterface() 
 {
   theModel = new G4TheoFSGenerator;
-  theCascade = new G4StringChipsParticleLevelInterface;
+  theCascade = new G4QStringChipsParticleLevelInterface;
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(&theStringModel);
   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
