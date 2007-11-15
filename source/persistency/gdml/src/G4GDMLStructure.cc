@@ -9,9 +9,7 @@ G4GDMLStructure::G4GDMLStructure() {
 
 bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAxis& axis) {
 
-   G4String x;
-   G4String y;
-   G4String z;
+   G4String x,y,z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -27,14 +25,12 @@ bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAx
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="x") { x = attribute_value; }
-      if (attribute_name=="y") { y = attribute_value; }
+      if (attribute_name=="x") { x = attribute_value; } else
+      if (attribute_name=="y") { y = attribute_value; } else
       if (attribute_name=="z") { z = attribute_value; }
    }
 
-   G4double _x;
-   G4double _y;
-   G4double _z;
+   G4double _x,_y,_z;
 
    if (!evaluator->Evaluate(_x,x)) return false;
    if (!evaluator->Evaluate(_y,y)) return false;
@@ -51,12 +47,7 @@ bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAx
 
 bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
 
-   G4String unit;
-   G4String axis;
-   G4String width;
-   G4String offset;
-   G4String number;
-   G4String volumeref;
+   G4String unit,axis,width,offset,number,volumeref;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -72,10 +63,10 @@ bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit"  ) { unit   = attribute_value; }
-      if (attribute_name=="axis"  ) { unit   = attribute_value; }
-      if (attribute_name=="width" ) { width  = attribute_value; }
-      if (attribute_name=="offset") { offset = attribute_value; }
+      if (attribute_name=="unit"  ) { unit   = attribute_value; } else
+      if (attribute_name=="axis"  ) { unit   = attribute_value; } else
+      if (attribute_name=="width" ) { width  = attribute_value; } else
+      if (attribute_name=="offset") { offset = attribute_value; } else
       if (attribute_name=="number") { number = attribute_value; }
    }
 
@@ -90,13 +81,9 @@ bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       if (tag=="volumeref") { if (!refRead(child,volumeref)) return false; } 
    }
 
-   G4LogicalVolume* pLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(volumeref,false);
+   G4LogicalVolume* pLogical = Get(volumeref);
 
-   if (pLogical == 0) {
-   
-      G4cout << "GDML ERROR! Referenced volume '" << volumeref << "' was not found in divisionvol in volume '" << pMother->GetName() << "'!" << G4endl;
-      return false;
-   }
+   if (!pLogical) return false;
 
    EAxis    _axis   = kZAxis;
    G4double _width  = 0.0;
@@ -140,6 +127,7 @@ bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4String
       if (attribute_name=="volname") { volname = attribute_value; }
    }
 
+   evaluator->Push();
    G4String temp = module;  // push
 
    if (!gdmlRead(name,parser)) return false;
@@ -151,15 +139,33 @@ bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4String
    volname = module + volname;
 
    module = temp; // pop
+   evaluator->Pop();
+   
+   return true;
+}
+
+bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
+
+   G4String volumeref,parameterised_position_size;
+
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag=="parameterised_position_size") { ; }  else
+      if (tag=="volumeref"                  ) { if (!refRead(child,volumeref)) return false; } 
+   }
 
    return true;
 }
 
 bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
 
-   G4String volumeref;
-   G4String positionref;
-   G4String rotationref;
+   G4String volumeref,positionref,rotationref;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -175,16 +181,9 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
       if (tag=="rotationref") { if (!refRead (child,rotationref)) return false; }
    }
 
-   volumeref = module + volumeref;
+   G4LogicalVolume *pCurrentLogical = Get(volumeref);
 
-   G4LogicalVolume *pCurrentLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(volumeref,false);
-
-   if (pCurrentLogical == 0) {
-   
-      G4cout << "GDML: Error! Referenced volume '" << volumeref << "' was not found!" << G4endl;
-      G4cout << "GDML: Error in physvol in volume '" << pMotherLogical->GetName() << "'!" << G4endl;
-      return false;
-   }
+   if (!pCurrentLogical) return false;
 
    G4ThreeVector tlate;
 
@@ -192,11 +191,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
    
       G4ThreeVector *posPtr = solids.define.GetPosition(positionref);
 
-      if (posPtr == 0) {
-
-         G4cout << "GDML: Error in physvol in volume '" << pMotherLogical->GetName() << "'!" << G4endl;
-         return false;
-      }
+      if (!posPtr) return false;
 
       tlate = *posPtr;            
    }
@@ -207,11 +202,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
       G4ThreeVector *anglePtr = solids.define.GetRotation(rotationref);
 
-      if (anglePtr == 0) {
-
-         G4cout << "GDML: Error in physvol in volume '" << pMotherLogical->GetName() << "'!" << G4endl;
-         return false;
-      }
+      if (!anglePtr) return false;
 
       pRot = new G4RotationMatrix();
 
@@ -227,8 +218,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
 bool G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element,G4double& _value) {
 
-   G4String value;
-   G4String unit;
+   G4String value,unit;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -293,8 +283,7 @@ bool G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const 
 
 bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
 
-   G4String volumeref;
-   G4String numb;
+   G4String volumeref,numb;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -332,13 +321,9 @@ bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") { if (!replicate_along_axisRead(child,_width,_offset,_axis)) return false; }
    }
 
-   G4LogicalVolume* pLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(volumeref,false);
+   G4LogicalVolume* pLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(module+volumeref,false);
 
-   if (pLogical == 0) {
-   
-      G4cout << "GDML ERROR! Referenced volume '" << volumeref << "' was not found in replicavol in volume '" << pMother->GetName() << "'!" << G4endl;
-      return false;
-   }
+   if (!pLogical) return false;
 
    new G4PVReplica("",pLogical,pMother,_axis,(G4int)_numb,_width,_offset);
 
@@ -347,9 +332,7 @@ bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
 
 bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
-   G4String name;
-   G4String solidref;
-   G4String materialref;
+   G4String name,solidref,materialref;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
@@ -370,11 +353,7 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    G4Material *materialPtr = materials.Get(materialref);
    G4VSolid* solidPtr = solids.Get(solidref);
 
-   if (!solidPtr || !materialPtr) {
-   
-      G4cout << "GDML: Error in volume '" << name << "'!" << G4endl;
-      return false;
-   }
+   if (!solidPtr || !materialPtr) return false;
  
    G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,module+name,0,0,0);
    
@@ -386,8 +365,9 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
   
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="physvol"    ) { if (!physvolRead    (child,volumePtr)) return false; } 
-      if (tag=="replicavol" ) { if (!replicavolRead (child,volumePtr)) return false; }
+      if (tag=="paramvol"   ) { if (!paramvolRead   (child,volumePtr)) return false; } else
+      if (tag=="physvol"    ) { if (!physvolRead    (child,volumePtr)) return false; } else
+      if (tag=="replicavol" ) { if (!replicavolRead (child,volumePtr)) return false; } else
       if (tag=="divisionvol") { if (!divisionvolRead(child,volumePtr)) return false; }
    }
 
@@ -408,7 +388,7 @@ bool G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4Stri
 
       if (tag=="volume") { if (!volumeRead(child)) return false; } else
       {
-	 G4cout << "GDML ERROR! Unknown tag in structure: " << tag << G4endl;
+	 G4cout << "GDML: Error! Unknown tag in structure: " << tag << G4endl;
          return false;
       }
    }
@@ -477,4 +457,16 @@ bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser
    }
 
    return true;
+}
+
+G4LogicalVolume* G4GDMLStructure::Get(const G4String& ref) const {
+
+   G4String full_ref = module + ref;
+
+   G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(full_ref,false);
+
+   if (!volumePtr) 
+      G4cout << "GDML: Error! Referenced volume '" << full_ref << "' was not found!" << G4endl;   
+
+   return volumePtr;
 }

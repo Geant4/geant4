@@ -28,6 +28,7 @@ class G4GDMLStructure {
    bool directionRead           (const xercesc::DOMElement* const,EAxis&);
    bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool fileRead                (const xercesc::DOMElement* const,G4String&);
+   bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool quantityRead            (const xercesc::DOMElement* const,G4double&);
    bool refRead                 (const xercesc::DOMElement* const,G4String&);
@@ -43,6 +44,7 @@ public:
    G4GDMLStructure();
 
    bool gdmlRead(const G4String&,xercesc::XercesDOMParser*);
+   G4LogicalVolume* Get(const G4String&) const;
 };
 
 #endif

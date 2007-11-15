@@ -7,7 +7,8 @@
 #include "G4Types.hh"
 
 class G4GDMLEvaluator {
-   HepTool::Evaluator eval;
+   G4int max_eval,index;
+   HepTool::Evaluator *eval;
 public:
    G4GDMLEvaluator();
    ~G4GDMLEvaluator();
@@ -24,6 +25,9 @@ public:
 // Do NOT change the default unit into "1" because a string is empty by default, so that if an empty
 // string is passed as unit it means no unit or unit of one
 
+   void Push();
+   void Pop();
+   void Init();
 };
 
 #endif

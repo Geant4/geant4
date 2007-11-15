@@ -17,7 +17,7 @@ public:
 
    bool Read(const G4String &fileName);
 
-   G4VPhysicalVolume *GetWorldVolume(const G4String& setupName="Default");
+   G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
 };
 
 #endif
