@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.6 2007-11-14 11:49:00 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.7 2007-11-15 18:24:28 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,13 +81,17 @@ void G4OpenGLQtViewer::SetView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::SetView ++++++++++++++++++++\n");
+#endif
   //   if(!fHDC) return;
   //   if(!fHGLRC) return;
   //   ::wglMakeCurrent(fHDC,fHGLRC);
   //  fWindow->makeCurrent();
   G4OpenGLViewer::SetView ();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::SetView --------------------\n");
+#endif
 }
 
 
@@ -101,7 +105,9 @@ void G4OpenGLQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::ShowView  +++++++++++++++++++++\n");
+#endif
   glFlush ();
   if (!GLWindow) {
     G4cerr << "Visualization window not defined, please choose one before" << G4endl;
@@ -111,7 +117,9 @@ void G4OpenGLQtViewer::ShowView (
 #else
     GLWindow->activateWindow();
 #endif
+#ifdef GEANT4_QT_DEBUG
     printf("G4OpenGLQtViewer::ShowView -----------------------\n");
+#endif
   }
   //   // Empty the Windows message queue :
   //   MSG event;
@@ -129,7 +137,9 @@ void G4OpenGLQtViewer::CreateGLQtContext (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::CreateGLQtContext \n");
+#endif
 }
 
 
@@ -142,7 +152,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
+#endif
 
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
@@ -162,7 +174,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
     while ( (widget=it.current()) != 0 ) {  // for each widget...
       ++it;
       if ((found== false) && (widget->inherits("QMainWindow"))) {
+#ifdef GEANT4_QT_DEBUG
         printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
+#endif
         GLWindow = new QDialog(widget,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
         found = true;
       }
@@ -171,7 +185,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #else
     foreach (QWidget *widget, QApplication::allWidgets()) {
       if ((found== false) && (widget->inherits("QMainWindow"))) {
+#ifdef GEANT4_QT_DEBUG
         printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
+#endif
         GLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
@@ -179,11 +195,15 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #endif
 
     if (found==false) {
+#ifdef GEANT4_QT_DEBUG
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
+#endif
       GLWindow = new QDialog();
     }
   } else {
+#ifdef GEANT4_QT_DEBUG
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
+#endif
     GLWindow = new QDialog();
   }
 
@@ -221,7 +241,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
     WinSize_y = fVP.GetWindowSizeHintY ();
 
   if(!fWindow) return;
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
+#endif
 
   if (!fContextMenu) 
     createPopupMenu();
@@ -245,7 +267,9 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fContextMenu(0)
   ,fMouseAction(true)
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer \n");
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -254,7 +278,9 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::~G4OpenGLQtViewer \n");
+#endif
   delete fContextMenu;
 }
 
@@ -757,7 +783,9 @@ void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
   fVP.SetDrawingStyle(d_style);
 
   updateQWidget();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleDrawingAction\n");
+#endif
 }
 
 
@@ -781,9 +809,13 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
   }
   fVP.SetRepStyle (style);
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation 3%d\n",check);
+#endif
   updateQWidget();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation 4%d\n",check);
+#endif
 }
 
 /**
@@ -841,7 +873,9 @@ void G4OpenGLQtViewer::toggleAntialiasing(bool check) {
   }
 
   updateQWidget();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+#endif
 }
 
 /**
@@ -858,7 +892,9 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
 
   updateQWidget();
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+#endif
 }
 
 /**
@@ -874,7 +910,9 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
   SetNeedKernelVisit (true);
   updateQWidget();
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+#endif
 }
 
 /**
@@ -884,7 +922,9 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
 void G4OpenGLQtViewer::toggleFullScreen(bool check) {
   GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+#endif
 }
 
 /**
@@ -898,16 +938,22 @@ void G4OpenGLQtViewer::toggleMouseAction(bool check) {
     fMouseAction = false;
   }
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
+#endif
 }
 
 
 void G4OpenGLQtViewer::actionControlPanels() {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::actionControlPanels \n");
+#endif
 }
 
 void G4OpenGLQtViewer::actionExitG4() {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::actionExitG4() \n");
+#endif
 }
 
 void G4OpenGLQtViewer::actionCreateEPS() {
@@ -949,10 +995,14 @@ void G4OpenGLQtViewer::actionCreateEPS() {
   }
 #if QT_VERSION < 0x040000
   nomFich += "."+selectedFilter->lower();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::name %s\n",nomFich.ascii());
+#endif
 #else
   nomFich += "."+selectedFilter->toLower();
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::name %s\n",nomFich.toStdString().c_str());
+#endif
 #endif
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,nomFich,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
@@ -962,13 +1012,17 @@ void G4OpenGLQtViewer::actionCreateEPS() {
     //        (exportDialog->getHeight() !=fWindow->height())) {
       
       //      rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
+#ifdef GEANT4_QT_DEBUG
       printf("rescaling\n");
+#endif
       QGLWidget* glResized = fWindow;
       fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2 ).save("/Users/laurentgarnier/Desktop/zzz.jpg","jpg");
       QPixmap * pixmap = new QPixmap(fWindow->renderPixmap (exportDialog->getWidth(),exportDialog->getHeight() )) ;
       //      image = pixmap.toImage();
       //      glResized->resize(exportDialog->getWidth()*2,exportDialog->getHeight()*2);
+#ifdef GEANT4_QT_DEBUG
       printf("rescaling after\n");
+#endif
       //      image = glResized->grabFrameBuffer();
       
       //    } else {
@@ -979,7 +1033,9 @@ void G4OpenGLQtViewer::actionCreateEPS() {
         nomFich.endsWith(".jpeg")) {
       // grabFrameBuffer() :: Returns an image of the frame buffer. If withAlpha is true the alpha channel is included.
       image.save(nomFich,0,exportDialog->getSliderValue());
+#ifdef GEANT4_QT_DEBUG
       printf("saving jpeg quality : %d\n",exportDialog->getSliderValue());
+#endif
     } else if (nomFich.endsWith(".eps")) {
       generateEPS(nomFich,exportDialog->getNbColor(),image);
     } else if (nomFich.endsWith(".ps") ||nomFich.endsWith(".pdf")) {
@@ -991,7 +1047,9 @@ void G4OpenGLQtViewer::actionCreateEPS() {
                nomFich.endsWith(".bmp") ||
                nomFich.endsWith(".xpm")) {
       image.save(nomFich,0,exportDialog->getSliderValue());
+#ifdef GEANT4_QT_DEBUG
       printf("saving ELSE\n");
+#endif
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
@@ -1000,7 +1058,9 @@ void G4OpenGLQtViewer::actionCreateEPS() {
     return;
   }
   
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::actionCreateEPS() \n");
+#endif
 }
 
 /*
@@ -1101,7 +1161,9 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mB
       
     } else if (mButtons & Qt::RightButton) {
       // NEVER DONE BECAUSE OF MOUSE MENU
+#ifdef GEANT4_QT_DEBUG
       //       printf("G4OpenGLQtViewer::mouseMoveEvent Right \n");
+#endif
       //       setXRotation(xRot + dy/2);
       //       setZRotation(zRot + dx/2);
       //       updateQWidget();
@@ -1134,7 +1196,9 @@ void G4OpenGLQtViewer::rescaleImage(
  int aWidth
 ,int aHeight
 ){
+#ifdef GEANT4_QT_DEBUG
   printf("should rescale \n");
+#endif
 }
 
 /**
@@ -1150,7 +1214,9 @@ bool G4OpenGLQtViewer::generateEPS (
 )
 {
   // FIXME
+#ifdef GEANT4_QT_DEBUG
   printf("saving EPS\n");
+#endif
 
   FILE* fp;
 
@@ -1243,7 +1309,9 @@ bool G4OpenGLQtViewer::generateEPS (
     }
     */
   } else if (depth == 8) {
+#ifdef GEANT4_QT_DEBUG
     printf("has 8 bit\n");
+#endif
     for(int y=height-1; y >=0 ; y--) {
       const uchar * s = aImage.scanLine(y);
       for(int x=0; x <width; x++) {
@@ -1266,7 +1334,9 @@ bool G4OpenGLQtViewer::generateEPS (
   G4cerr << "GenerateEPS:: No alpha channel image with Qt3. This is only supported with Qt4" << G4endl;
 #else
     bool alpha = aImage.hasAlphaChannel();
+#ifdef GEANT4_QT_DEBUG
     printf("has else %d alpha %d\n",depth,alpha);
+#endif
     for(int y=height-1; y >=0 ; y--) {
       QRgb * s = (QRgb*)(aImage.scanLine(y));
       for(int x=0; x <width; x++) {

@@ -2,7 +2,7 @@
 ** G4UIQt meta object code from reading C++ file 'G4UIQt.hh'
 **
 ** Created: Tue Nov 13 18:13:09 2007
-**      by: The Qt MOC ($Id: G4UIQt_moc.cc,v 1.7 2007-11-15 17:20:23 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4UIQt_moc.cc,v 1.8 2007-11-15 18:24:28 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -187,7 +187,7 @@ static const uint qt_meta_data_G4UIQt[] = {
        1,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   10, // methods
+       9,   10, // methods
        0,    0, // properties
        0,    0, // enums/sets
 
@@ -196,19 +196,21 @@ static const uint qt_meta_data_G4UIQt[] = {
 
  // slots: signature, parameters, type, tag, flags
       32,   31,   31,   31, 0x08,
-      54,   31,   31,   31, 0x08,
-      79,   31,   31,   31, 0x08,
-     103,   31,   31,   31, 0x08,
-     126,  175,   31,   31, 0x08,
-     177,   31,   31,   31, 0x08,
-     196,   31,   31,   31, 0x08,
+      46,   31,   31,   31, 0x08,
+      68,   31,   31,   31, 0x08,
+      93,   31,   31,   31, 0x08,
+     117,   31,   31,   31, 0x08,
+     140,  189,   31,   31, 0x08,
+     191,   31,   31,   31, 0x08,
+     210,   31,   31,   31, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_G4UIQt[] = {
     "G4UIQt\0myClicked(QString)\0text\0\0"
-    "ClearButtonCallback()\0CommandEnteredCallback()\0"
+    "ExitSession()\0ClearButtonCallback()\0"
+    "CommandEnteredCallback()\0"
     "ButtonCallback(QString)\0HelpTreeClicCallback()\0"
     "HelpTreeDoubleClicCallback(QTreeWidgetItem*,int)\0"
     ",\0ShowHelpCallback()\0CommandHistoryCallback()\0"
@@ -244,15 +246,16 @@ int G4UIQt::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: myClicked((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 1: ClearButtonCallback(); break;
-        case 2: CommandEnteredCallback(); break;
-        case 3: ButtonCallback((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 4: HelpTreeClicCallback(); break;
-        case 5: HelpTreeDoubleClicCallback((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 6: ShowHelpCallback(); break;
-        case 7: CommandHistoryCallback(); break;
+        case 1: ExitSession(); break;
+        case 2: ClearButtonCallback(); break;
+        case 3: CommandEnteredCallback(); break;
+        case 4: ButtonCallback((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 5: HelpTreeClicCallback(); break;
+        case 6: HelpTreeDoubleClicCallback((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 7: ShowHelpCallback(); break;
+        case 8: CommandHistoryCallback(); break;
         }
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

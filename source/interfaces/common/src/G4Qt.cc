@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.6 2007-11-15 17:20:24 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.7 2007-11-15 18:24:28 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -87,9 +87,13 @@ G4Qt::G4Qt (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4Qt::G4Qt try to inited Qt\n");
+#endif
   if(QtInited==FALSE) {  //Qt should be Inited once !
+#ifdef GEANT4_QT_DEBUG
     printf("G4Qt::G4Qt inited Qt\n");
+#endif
 #if QT_VERSION < 0x040000
     qApp = new QApplication (a_argn, a_args);
     //    QApplication qApp(a_argn, a_args);
@@ -108,13 +112,18 @@ G4Qt::G4Qt (
       SetMainInteractor (qApp);
       //#endif
       SetArguments      (a_argn,a_args);
+#ifdef GEANT4_QT_DEBUG
       printf("G4Qt::G4Qt inited Qt END\n");
+#endif
     }
   }
-  if (qApp)
+#ifdef GEANT4_QT_DEBUG
+  if (qApp) {
     printf("G4Qt::qApp exist\n");
-  else
+  }  else {
     printf("G4Qt::qApp not exist\n");
+  }
+#endif
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
 }
 /***************************************************************************/

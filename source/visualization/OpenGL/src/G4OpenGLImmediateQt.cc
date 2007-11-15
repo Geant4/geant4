@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.1 2007-09-28 14:44:13 lgarnier Exp $
+// $Id: G4OpenGLImmediateQt.cc,v 1.2 2007-11-15 18:24:28 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,9 @@ G4VSceneHandler* G4OpenGLImmediateQt::CreateSceneHandler
 
 G4VViewer* G4OpenGLImmediateQt::CreateViewer
 (G4VSceneHandler& scene, const G4String& name) {
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLImmediateQt::CreateViewer \n");
+#endif
   G4VViewer* pView =
     new G4OpenGLImmediateQtViewer
     ((G4OpenGLImmediateSceneHandler&) scene, name);
@@ -75,7 +77,9 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
     G4cerr << "G4OpenGLImmediateQt::CreateViewer: null pointer on"
       " new G4OpenGLImmediateQtViewer." << G4endl;
   }
+#ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLImmediateQt::CreateViewer END \n");
+#endif
    return pView;
 }
 

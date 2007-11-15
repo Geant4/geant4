@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.11 2007-11-15 17:20:23 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.12 2007-11-15 18:24:27 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -105,14 +105,18 @@ G4UIQt::G4UIQt (
 )
   :fHelpDialog(NULL)
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::Initialise %d %s\n",argc,argv[0]);
+#endif
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
   fMainWindow = new QMainWindow();
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::Initialise after main window creation\n");
+#endif
 #if QT_VERSION < 0x040000
   fMainWindow->setCaption( tr( "G4UI Session" ));
   fMainWindow->resize(800,600); 
@@ -200,7 +204,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QPopupMenu *fileMenu = new QPopupMenu( fMainWindow);
-  fileMenu->insertItem( "&Quitter",  this, SLOT(exitSession()), CTRL+Key_Q );
+  fileMenu->insertItem( "&Quitter",  this, SLOT(ExitSession()), CTRL+Key_Q );
   fMainWindow->menuBar()->insertItem( QString("&File"), fileMenu );
 
   // Add a Help menu
@@ -213,7 +217,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
-  fileMenu->addAction("Quitter", this, SLOT(exitSession()));
+  fileMenu->addAction("Quitter", this, SLOT(ExitSession()));
 
   // Add a Help menu
   QMenu *helpMenu = fMainWindow->menuBar()->addMenu("Help");
@@ -273,7 +277,9 @@ G4UIsession* G4UIQt::SessionStart (
   exitSession = false;
 
 
+#ifdef GEANT4_QT_DEBUG
   printf("disable secondary loop\n");
+#endif
   interactorManager->DisableSecondaryLoop (); // TO KEEP
   ((QApplication*)interactorManager->GetMainInteractor())->exec(); 
   // on ne passe pas le dessous ? FIXME ????
@@ -286,7 +292,9 @@ G4UIsession* G4UIQt::SessionStart (
   //   } // TO KEEP
 
   interactorManager->EnableSecondaryLoop ();
+#ifdef GEANT4_QT_DEBUG
   printf("enable secondary loop\n");
+#endif
   return this;
 }
 
@@ -330,7 +338,9 @@ void G4UIQt::PauseSessionStart (
 {
   if (!aState) return;
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::PauseSessionStart\n");
+#endif
   if(aState=="G4_pause> ") {  // TO KEEP
     SecondaryLoop ("Pause, type continue to exit this state"); // TO KEEP
   } // TO KEEP
@@ -353,7 +363,9 @@ void G4UIQt::SecondaryLoop (
 {
   if (!aPrompt) return;
 
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::SecondaryLoop\n");
+#endif
   G4Qt* interactorManager = G4Qt::getInstance (); // TO KEEP ?
   Prompt(aPrompt); // TO KEEP
   exitPause = false; // TO KEEP
@@ -380,7 +392,6 @@ G4int G4UIQt::ReceiveG4cout (
   G4Qt* interactorManager = G4Qt::getInstance ();
   if (!interactorManager) return 0;
   
-  //  printf(" **************** G4 Cout : %s\n",(char*)aString.data());
 #if QT_VERSION < 0x040000
   fTextArea->append(QString((char*)aString.data()).simplifyWhiteSpace());
   fTextArea->verticalScrollBar()->setValue(fTextArea->verticalScrollBar()->maxValue());
@@ -899,7 +910,9 @@ G4bool G4UIQt::GetHelpChoice(
  G4int& aInt
 )
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
+#endif
   return true;
 }
 
@@ -909,7 +922,9 @@ G4bool G4UIQt::GetHelpChoice(
 void G4UIQt::ExitHelp(
 )
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::ExitHelp SHOULD NEVER GO HERE");
+#endif
 }
 
 
@@ -1083,7 +1098,9 @@ void G4UIQt::CommandEnteredCallback (
     } else {
       TerminalHelp(command);
     }
+#ifdef GEANT4_QT_DEBUG
     printf("after \n");
+#endif
     if(exitSession==true) 
       SessionTerminate();
   }
@@ -1184,7 +1201,9 @@ QTreeWidgetItem* item
  ,int nb
 )
 {
+#ifdef GEANT4_QT_DEBUG
   printf("G4UIQt::HelpTreeDoubleClicCallback");
+#endif
   HelpTreeClicCallback();
   fCommandArea->setText(item->text (1));
 }
