@@ -24,39 +24,35 @@
 // ********************************************************************
 //
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4ProcessManager.hh"
+
+#include "G4RadioactiveDecay.hh"
+#include "G4GenericIon.hh"
+#include "globals.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef exrdmPhysListGeneral_h
-#define exrdmPhysListGeneral_h 1
-
-#include "G4VPhysicsConstructor.hh"
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class exrdmPhysListGeneral : public G4VPhysicsConstructor
+G4RadioactiveDecayPhysics::~G4RadioactiveDecayPhysics()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4RadioactiveDecayPhysics::ConstructProcess()
 {
-public: 
-  exrdmPhysListGeneral(const G4String& name = "general");
-  virtual ~exrdmPhysListGeneral();
-
-public: 
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-};
+  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
+  G4GenericIon* ion = G4GenericIon::GenericIon();
+  G4ProcessManager* pmanager = ion->GetProcessManager();
+  pmanager->AddProcess(theRadioactiveDecay, 0, -1, 3);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
-
-
-
-
-
-
 

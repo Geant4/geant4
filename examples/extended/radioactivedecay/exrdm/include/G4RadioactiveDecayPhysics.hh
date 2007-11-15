@@ -24,60 +24,39 @@
 // ********************************************************************
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "exrdmPhysListGeneral.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+#ifndef G4RadioactiveDecayPhysics_h
+#define G4RadioactiveDecayPhysics_h 1
 
-#include "G4Decay.hh"
-#include "G4RadioactiveDecay.hh"
-#include "G4GenericIon.hh"
-#include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-exrdmPhysListGeneral::exrdmPhysListGeneral(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-exrdmPhysListGeneral::~exrdmPhysListGeneral()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void exrdmPhysListGeneral::ConstructProcess()
+class G4RadioactiveDecayPhysics : public G4VPhysicsConstructor
 {
-  // Add Decay Process
+public: 
+  G4RadioactiveDecayPhysics(const G4String& name = "general");
+  virtual ~G4RadioactiveDecayPhysics();
 
-  //  G4Decay* fDecayProcess = new G4Decay();
-  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
-  G4GenericIon* ion = G4GenericIon::GenericIon();
-  G4ProcessManager* pmanager = ion->GetProcessManager();
-  pmanager->AddProcess(theRadioactiveDecay, 0, -1, 3);
-  /*
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (particle == ion) {
-      pmanager->AddProcess(theRadioactiveDecay, 0, -1, 3);
-
-    } else if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-  */
-}
+public: 
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  virtual void ConstructProcess();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+
+
+
 
