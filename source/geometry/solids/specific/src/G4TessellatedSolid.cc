@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.11 2007-10-09 13:20:37 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.12 2007-11-15 13:27:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,6 +41,9 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
+//                    Bug fixes to CalculateExtent
 //
 // 17 September 2007, P R Truscott, QinetiQ Ltd & Richard Holmberg
 //                    Updated extensively prior to this date to deal with
@@ -906,105 +909,86 @@ G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
-         const G4VoxelLimits& pVoxelLimit, const G4AffineTransform& pTransform,
-               G4double& pMin, G4double& pMax) const
+// CalculateExtent
+//
+// Based on correction provided by Stan Seibert, University of Texas.
+//
+G4bool
+G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
+                                    const G4VoxelLimits& pVoxelLimit,
+                                    const G4AffineTransform& pTransform,
+                                          G4double& pMin, G4double& pMax) const
 {
-  if (!pTransform.IsRotated())
-  {
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
+    G4ThreeVectorList transVertexList(vertexList);
 
-    xoffset = pTransform.NetTranslation().x();
-    xMin    = xoffset + xMinExtent;
-    xMax    = xoffset + xMaxExtent;
- 
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance ||
-           xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance    ) return false ;
-      else
-      {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
-      }
-    }
- 
-    yoffset = pTransform.NetTranslation().y();
-    yMin    = yoffset + yMinExtent;
-    yMax    = yoffset + yMaxExtent;
+    // Put solid into transformed frame
+    for (size_t i=0; i<vertexList.size(); i++)
+      { pTransform.ApplyPointTransform(transVertexList[i]); }
 
-    if (pVoxelLimit.IsYLimited())
+    // Find min and max extent in each dimension
+    G4ThreeVector minExtent(kInfinity, kInfinity, kInfinity);
+    G4ThreeVector maxExtent(-kInfinity, -kInfinity, -kInfinity);
+    for (size_t i=0; i<transVertexList.size(); i++)
     {
-      if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-           yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance    ) return false ;
-      else
+      for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; axis++)
       {
-        if (yMin < pVoxelLimit.GetMinYExtent())
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if (yMax > pVoxelLimit.GetMaxYExtent())
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
+        G4double coordinate = transVertexList[i][axis];
+        if (coordinate < minExtent[axis])
+          { minExtent[axis] = coordinate; }
+        if (coordinate > maxExtent[axis])
+          { maxExtent[axis] = coordinate; }
       }
     }
 
-    zoffset = pTransform.NetTranslation().z();
-    zMin    = zoffset + zMinExtent;
-    zMax    = zoffset + zMaxExtent;
-
-    if (pVoxelLimit.IsZLimited())
+    // Check for containment and clamp to voxel boundaries
+    for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; axis++)
     {
-      if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-           zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance    ) return false ;
-      else
+      EAxis geomAxis; // G4 geom classes use different index type
+      switch(axis)
       {
-        if (zMin < pVoxelLimit.GetMinZExtent())
+        case G4ThreeVector::X: geomAxis = kXAxis; break;
+        case G4ThreeVector::Y: geomAxis = kYAxis; break;
+        case G4ThreeVector::Z: geomAxis = kZAxis; break;
+      }
+      G4bool isLimited = pVoxelLimit.IsLimited(geomAxis);
+      G4double voxelMinExtent = pVoxelLimit.GetMinExtent(geomAxis);
+      G4double voxelMaxExtent = pVoxelLimit.GetMaxExtent(geomAxis);
+
+      if (isLimited)
+      {
+        if ( minExtent[axis] > voxelMaxExtent+kCarTolerance ||
+             maxExtent[axis] < voxelMinExtent-kCarTolerance    )
         {
-          zMin = pVoxelLimit.GetMinZExtent() ;
+          return false ;
         }
-        if (zMax > pVoxelLimit.GetMaxZExtent())
+        else
         {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
+          if (minExtent[axis] < voxelMinExtent)
+          {
+            minExtent[axis] = voxelMinExtent ;
+          }
+          if (maxExtent[axis] > voxelMaxExtent)
+          {
+            maxExtent[axis] = voxelMaxExtent;
+          }
         }
       }
     }
 
-    switch (pAxis)
+    // Convert pAxis into G4ThreeVector index
+    G4int vecAxis=0;
+    switch(pAxis)
     {
-      case kXAxis:
-        pMin = xMin ;
-        pMax = xMax ;
-        break ;
-      case kYAxis:
-        pMin=yMin;
-        pMax=yMax;
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
+      case kXAxis: vecAxis = G4ThreeVector::X; break;
+      case kYAxis: vecAxis = G4ThreeVector::Y; break;
+      case kZAxis: vecAxis = G4ThreeVector::Z; break;
+      default: break;
+    } 
+
+    pMin = minExtent[vecAxis] - kCarTolerance;
+    pMax = maxExtent[vecAxis] + kCarTolerance;
 
     return true;
-  }
-  else
-  {
-  }
-  return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
