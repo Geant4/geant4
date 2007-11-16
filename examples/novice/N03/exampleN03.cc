@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.32 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: exampleN03.cc,v 1.33 2007-11-16 10:50:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,13 @@
 #ifdef G4UI_USE_WIN32
 #include "G4UIWin32.hh"
 #endif
+
+#ifdef G4UI_USE_QT
+#include "G4UIQt.hh"
+#include "G4Qt.hh"
+#include <qapplication.h>
+#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -127,6 +134,9 @@ int main(int argc,char** argv)
       UI->ApplyCommand("/control/execute visTutor/gui.mac");      
 #elif defined(G4UI_USE_WIN32)
       session = new G4UIWin32();
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
+#elif defined(G4UI_USE_QT)
+      session = new G4UIQt(argc,argv);
       UI->ApplyCommand("/control/execute visTutor/gui.mac");      
 #else
       session = new G4UIterminal();
