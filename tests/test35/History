@@ -14,20 +14,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-00-03  16 October 2007 V.Ivanchenko
+- added QGSB
+
 test35-V09-00-02  11 October 2007 V.Ivanchenko
-- add INCL and RPG models
+- added INCL and RPG models
 
 test35-V09-00-01  14 August 2007 V.Ivanchenko
 - Histo - use bool vector of active histograms, fix destructor
 
 test35-V09-00-00  31 July 2007 V.Ivanchenko
-- add Histo class
+- added Histo class
 
 test35-V08-03-00 24 May 2007  V.Ivanchenko 
 - substitute autoptr by normal pointers in Histo to avoid crash
 
 test35-V08-02-01  24 April 2007 V.Ivanchenko
-- add quasi-elastic to FTF
+- added quasi-elastic to FTF
 
 test35-V08-02-00  06 Mar 2007 V.Ivanchenko
 - Use 0.0 low limit for QElastic 

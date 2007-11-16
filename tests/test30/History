@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-00-06  16 November 2007 V.Ivanchenko
+- Reduced number of booked histograms (book only what is tested)
+
 test30-V09-00-05  13 November 2007 V.Ivanchenko
 - Added QGSB, FTFB, DElastic
 
