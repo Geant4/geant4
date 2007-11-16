@@ -48,9 +48,7 @@ G4Fragment::G4Fragment() :
 #ifdef PRECOMPOUND_TEST 
   ,theCreatorModel("No name")
 #endif
-{
-  theAngularMomentum = IsotropicRandom3Vector();
-}
+{}
 
 // Copy Constructor
 G4Fragment::G4Fragment(const G4Fragment &right) 
@@ -80,6 +78,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   theA(A),
   theZ(Z),
   theMomentum(aMomentum),
+  theAngularMomentum(0),
   numberOfParticles(0),
   numberOfHoles(0),
   numberOfCharged(0),
@@ -110,6 +109,7 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
+  theAngularMomentum(0),
   numberOfParticles(0),
   numberOfHoles(0),
   numberOfCharged(0),
@@ -120,7 +120,6 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
 #endif
 {
   theExcitationEnergy = CalculateExcitationEnergy(aMomentum);
-  theAngularMomentum = IsotropicRandom3Vector();
 }
 
 
