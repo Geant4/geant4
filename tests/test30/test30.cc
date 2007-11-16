@@ -862,16 +862,18 @@ int main(int argc, char** argv)
         G4double costcm = std::cos(fm.theta());
 
 	if(usepaw) {
-	  if(i==0)  {
-	    histo.fill(57,e/MeV,1.0);
-	    histo.fill(59,cost,factora);
-	    histo.fill(61,costcm,factora);
-	  } else if(i==1) {
-	    histo.fill(58,e/MeV,1.0);
-	    histo.fill(60,cost,factora);
-	    histo.fill(62,costcm,factora);
-	    histo.fill(63,thetad,factoraa/std::sin(theta));
-	    histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+          if(elastic) {
+	    if(i==0)  {
+	      histo.fill(57,e/MeV,1.0);
+	      histo.fill(59,cost,factora);
+	      histo.fill(61,costcm,factora);
+	    } else if(i==1) {
+	      histo.fill(58,e/MeV,1.0);
+	      histo.fill(60,cost,factora);
+	      histo.fill(62,costcm,factora);
+	      histo.fill(63,thetad,factoraa/std::sin(theta));
+	      histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	    }
 	  }
 
           histo.fill(2,mom.phi()/degree,1.0);

@@ -234,7 +234,8 @@ void Histo::fill(G4int i, G4double x, G4double w)
 #endif
     }
   } else {
-    G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
+    if(verbose > 0) 
+      G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
   }
 }
 
@@ -267,7 +268,8 @@ void Histo::activate(G4int i, G4bool val)
   if(i>=0 && i<nHisto) {
     active[i] = val;
   } else {
-    G4cout << "Histo::activate: WARNING! wrong histogram index " << i << G4endl;
+    if(verbose > 0) 
+      G4cout << "Histo::activate: WARNING! wrong histogram index " << i << G4endl;
   }
 }
 
