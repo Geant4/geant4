@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.5 2007-11-06 14:27:29 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.6 2007-11-16 09:39:14 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -225,7 +225,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
     // Get copyNo and translation of new voxel
     //
-    G4int copyNo = param->GetReplicaNo(containerPoint,localDirection);
+    copyNo = param->GetReplicaNo(containerPoint,localDirection);
     G4ThreeVector voxelTranslation = param->GetTranslation( copyNo );
 
     // Move local point until wall of voxel and then put it in the new voxel

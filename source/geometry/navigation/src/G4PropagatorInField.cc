@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.39 2007-11-06 15:59:48 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.40 2007-11-16 09:39:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -1385,17 +1385,17 @@ FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
   return currentFieldMgr;
 }
 
-G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
+G4int G4PropagatorInField::SetVerboseLevel( G4int level )
 {
   G4int oldval= fVerboseLevel;
-  fVerboseLevel= Verbose;
+  fVerboseLevel= level;
 
   // Forward the verbose level 'reduced' to ChordFinder,
   // MagIntegratorDriver ... ? 
   //
   G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
-  integrDriver->SetVerboseLevel( Verbose - 2 ); 
-  G4cout << "Set Driver verbosity to " << Verbose - 2 << G4endl;
+  integrDriver->SetVerboseLevel( fVerboseLevel - 2 ); 
+  G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 
   return oldval;
 }
