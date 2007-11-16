@@ -260,7 +260,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	places.reserve(myA);
 	G4bool		freeplace;
 	static G4double nd2 = sqr(nucleondistance);
-	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a
+	G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
 	G4int jr=0;
 	G4int jx,jy;
