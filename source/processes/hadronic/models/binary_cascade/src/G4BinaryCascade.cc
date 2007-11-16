@@ -2107,7 +2107,6 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 	   //particle cannot go in, put to miss_nucleus
 	     G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
 	     (*iter)->SetState(G4KineticTrack::miss_nucleus);
-	     G4cout << " miss from mass differ" << G4endl;
 	     // Undo correction for Colomb Barrier
 	     G4double barrier=RKprop->GetBarrier((*iter)->GetDefinition()->GetPDGEncoding());
 	     (*iter)->UpdateTrackingMomentum((*iter)->GetTrackingMomentum().e() + barrier); 
