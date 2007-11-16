@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.30 2007-11-15 09:28:25 gcosmo Exp $
+// $Id: G4RunMessenger.cc,v 1.31 2007-11-16 22:37:43 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -151,6 +151,14 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
   cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
   cutCmd->SetGuidance("It is safe to remove invoking this command.");
+
+  constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
+  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
+  constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
+  constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
+  constScoreCmd->AvailableForStates(G4State_Idle);
+
+  materialScanner = new G4MaterialScanner();
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
@@ -235,14 +243,6 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandOld->SetParameterName("fileName",true);
   restoreRandOld->SetDefaultValue("currentRun.rndm");
   restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
-
-  constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
-  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
-  constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
-  constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
-  constScoreCmd->AvailableForStates(G4State_Idle);
-
-  materialScanner = new G4MaterialScanner();
 }
 
 G4RunMessenger::~G4RunMessenger()
