@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.38 2007-03-27 15:41:34 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.39 2007-11-16 20:29:04 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -182,8 +182,7 @@ G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
      "\nall worlds is made, taking the first matching occurence only.  To see"
      "\na representation of the geometry hierarchy of the worlds, try"
      "\n\"/vis/drawTree [worlds]\" or one of the driver/browser combinations"
-     "\nthat have the required functionality, e.g., HepRepFile/XML with the"
-     "\nWIRED3/4 browser.");
+     "\nthat have the required functionality, e.g., HepRep");
   fpCommand->SetParameterName("physical-volume-name", omitable = true);
   fpCommand->SetDefaultValue("world");
 }

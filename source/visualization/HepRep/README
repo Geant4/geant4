@@ -1,8 +1,9 @@
 This G4 Graphics Driver creates a HepRep File suitable for viewing
-by the WIRED Event Display client.  It requires no external packages.
+by the HepRApp, Wired4 or FRED Event Display clients.
+It requires no external packages.
 
 The HepRep graphics format is further described at
-http://heprep.freehep.org
+http://www.slac.stanford.edu/~perl/heprep/
 
 
 Two different drivers are available for either HepRep1 or HepRep2.
@@ -33,15 +34,15 @@ choose to make them visible from within the heprep browser).
 To force culling of invisible objects,
 set G44HEPREPFILE_CULL
 
-View the file using the WIRED3 HepRep Browser, available from:
-http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
+View the file using the HepRApp HepRep Browser, available from:
+http://www.slac.stanford.edu/~perl/HepRApp
 
-WIRED can read xml files in zipped format as well as unzipped,
+HepRApp can read xml files in zipped format as well as unzipped,
 so you can save space by applying gzip to the xml file.
 This will reduce the file to about five percent of its original size.
 
 Joseph Perl
-2 June 2005
+15 November 2007
 
 
 Driver: HepRepXML
