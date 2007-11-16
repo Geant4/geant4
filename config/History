@@ -1,4 +1,4 @@
-$Id: History,v 1.305 2007-11-16 10:44:51 lgarnier Exp $
+$Id: History,v 1.306 2007-11-16 15:52:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th November 2007  Laurent Garnier (config-V09-00-08)
+- Updated setup for Qt in Linux-g++.gmk and Darwin-g++.gmk scripts to
+  support both Qt3 and Qt4.
+
 15th November 2007  Ben Morgan (config-V09-00-07)
 - Update Configure script to handle new 'gdml' sub-module and new data
   libraries (G4ABLADATA and new G4EMLOW version).
@@ -31,16 +35,6 @@ committal in the CVS repository !
 
 10th October 2007  Gunter Folger (config-V09-00-05)
 - Added "incl" (Liege cascade) hadronic model module to binmake.gmk. 
-
-3th October 2007  Laurent Garnier
-- Added setup for Qt in those files :
- - config/G4UI_BUILD.gmk
- - config/G4UI_USE.gmk
- - config/G4VIS_BUILD.gmk
- - config/G4VIS_USE.gmk
- - config/interactivity.gmk
- - config/sys/Darwin-g++.gmk
- - config/sys/Linux-g++.gmk
  
 16th August 2007  Gabriele Cosmo (config-V09-00-04)
 - Corrected definition of OUT internal variable to allow for proper
