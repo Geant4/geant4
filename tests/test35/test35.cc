@@ -151,16 +151,15 @@ int main(int argc, char** argv)
   G4bool xssolang = true;
   G4bool xsbgg    = true;
 
+  G4DecayPhysics decays;
+  decays.ConstructParticle();  
+  //  decays.ConstructProcess();  
+
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-
-  G4DecayPhysics decays;
-  decays.ConstructParticle();  
-  decays.ConstructProcess();  
-
   //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
   // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
@@ -418,8 +417,6 @@ int main(int argc, char** argv)
     else              emax   = m_pmax;
     if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
 
-    G4double pmax = sqrt(energy*(energy + 2.0*mass));
-
     double m_pmin = 0.0;
     double m_ptmax = 0.65;
     double m_pth = 0.2;
@@ -575,9 +572,10 @@ int main(int argc, char** argv)
       dParticle.SetKineticEnergy(e0);
 
       gTrack->SetStep(step);
-      gTrack->SetKineticEnergy(energy);
+      gTrack->SetKineticEnergy(e0);
 
-      labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
+      labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass)), 
+			     e0 + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
       G4int n = aChange->GetNumberOfSecondaries();
