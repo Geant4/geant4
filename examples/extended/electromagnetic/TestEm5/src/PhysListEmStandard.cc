@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.12 2007-06-22 10:48:01 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.13 2007-11-16 17:28:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,6 +125,13 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
   emOptions.SetSkin(2.);
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);    
+  emOptions.SetMaxEnergy(100*TeV);  
+  emOptions.SetDEDXBinning(1200);  
+  emOptions.SetLambdaBinning(1200);  
   
   //energy loss
   //
