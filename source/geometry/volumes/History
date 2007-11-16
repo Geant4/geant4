@@ -1,4 +1,4 @@
-$Id: History,v 1.149 2007-11-01 13:39:28 gcosmo Exp $
+$Id: History,v 1.150 2007-11-16 16:20:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 16th, 2007      G.Cosmo - geomvol-V09-00-01
+- Added inline specification to methods in G4AssemblyTriplet class.
 
 Oct 12th, 2007      P.Gumplinger - geomvol-V09-00-00
 - Minor cleanup: moved typedef to begin of include files and rename to
