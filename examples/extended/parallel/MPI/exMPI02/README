@@ -1,0 +1,24 @@
+$Id: README,v 1.1 2007-11-16 14:28:34 kmura Exp $
+-------------------------------------------------------------------
+
+Example MPI02
+-------------
+
+An example of dosimetry in a water phantom.
+
+* Geometry     : water phantom
+* Primary      : broad beam (200 MeV proton)
+* Physics List : QGSP_BIC
+  You need to set an additional environment variable;
+  $G4LEVELGAMMADATA indicates a directory path for the data of
+  "low energy electromagnetic processes".
+* Analysis     : ROOT histogramming
+  ROOT should be installed under $ROOTSYS.
+
+- Score dose distribution in a water phantom.
+- Learn how to paralleized your applications.
+- Create a ROOT file containing histograms/trees in each node.
+  * treat multiple outputs properly:
+    each slave node generate a ROOT file, whose file name should
+    be different from each other.
+
