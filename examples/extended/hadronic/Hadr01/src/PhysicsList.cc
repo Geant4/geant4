@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.22 2007-11-14 18:59:08 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.23 2007-11-16 16:37:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -68,6 +68,7 @@
 #include "HadronPhysicsLHEP_PRECO_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "HadronPhysicsQGSC.hh"
+#include "HadronPhysicsQGSC_BERT.hh"
 #include "HadronPhysicsQGSC_EFLOW.hh"
 #include "HadronPhysicsQGSP.hh"
 #include "HadronPhysicsQGSP_BERT.hh"
@@ -235,6 +236,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList4();
     hadronPhys.push_back( new HadronPhysicsQGSC("hadron",true));
+    dump = true;
+
+  } else if (name == "QGSC_BERT") {
+
+    SetBuilderList4();
+    hadronPhys.push_back( new HadronPhysicsQGSC_BERT("hadron",true));
     dump = true;
 
   } else if (name == "QGSC_EFLOW") {
@@ -463,7 +470,7 @@ void PhysicsList::List()
 	 << G4endl;
   G4cout << "                            LHEP_PRECO_HP QBBC QBBC_DEL QBBC_HEL QBBC_HP QGSC "
 	 << G4endl; 
-  G4cout << "                            QGSC_EFLOW QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV "
+  G4cout << "                            QGSC_BERT QGSC_EFLOW QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV "
 	 << G4endl; 
   G4cout << "                            QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP QGSP_CASC QGSP_DIF " 
 	 << G4endl; 
