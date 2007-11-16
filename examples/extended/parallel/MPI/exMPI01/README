@@ -1,0 +1,16 @@
+$Id: README,v 1.1 2007-11-16 14:16:46 kmura Exp $
+-------------------------------------------------------------------
+
+Example MPI01
+-------------
+
+A simple application.
+
+* Geometry     : chamber / calorimeter
+* Primary      : particle gun (200 MeV electron as default)
+* Physics List : standard EM
+
+- Particles are transported in a geometry without any scoring.
+- Learn how to parallelized your G4 session.
+
+
