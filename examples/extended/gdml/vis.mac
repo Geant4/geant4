@@ -6,7 +6,7 @@
 /vis/scene/create
 
 # Create a scene handler for a specific graphics system
-/vis/open OGLIX
+/vis/open OGLIXm
 
 # draw scene
 /vis/viewer/zoom 1.4
