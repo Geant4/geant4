@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2007-11-16 04:02:10 kmura Exp $
+$Id: README,v 1.2 2007-11-16 14:04:05 kmura Exp $
 ==========================================================================
 Geant4 MPI Interface
 
@@ -45,23 +45,6 @@ Start with building the G4MPI UI library according to the instruction
 in the directory.
 
 
-How to use:
------------
-* MPI Runtime Environment
-
-1. Make hosts/cluster configuration of your MPI environment.
-
-2. Launch MPI runtime environment, typically executing 
-   lamboot (LAM) / mpdboot (MPICH2).
-
-* Run
-For example,
-
-> mpiexec -n # <your application>
-
-Instead, "mpirun" command is more convenient for LAM users.
-
-
 How to make parallel applications:
 ----------------------------------
 * An example of a main program:
@@ -101,6 +84,54 @@ int main(int argc,char** argv)
 
 LAM/MPI users can use "G4tcsh" as an interactive session shell.
 For other users (Open MPI/MPICH2), plese use G4csh (default).
+
+
+How to use:
+-----------
+* MPI runtime rnvironment
+
+1. Make hosts/cluster configuration of your MPI environment.
+
+2. Launch MPI runtime environment, typically executing 
+   lamboot (LAM) / mpdboot (MPICH2).
+
+* How to run
+For example,
+
+> mpiexec -n # <your application>
+
+Instead, "mpirun" command is more convenient for LAM users.
+
+
+MPI G4UI commands:
+------------------
+G4UI commands handling the G4MPI interface are placed in /mpi/.
+
+Command directory path : /mpi/
+
+Guidance :
+MPI control commands
+
+ Sub-directories :
+ Commands :
+   verbose *        Set verbose level.
+   status *         Show mpi status.
+   execute *        Execute a macro file. (=/control/execute)
+   beamOn *         Start a parallel run w/ thread.
+   .beamOn *        Start a parallel run w/o thread. (=/run/beamOn)
+   masterWeight *   Set weight for master node.
+   showSeeds *      Show seeds of MPI nodes.
+   setMasterSeed *  Set a master seed for the seed generator.
+   setSeed *        Set a seed for a specified node.
+
+* Notes:
+While "/run/beamOn" is executed in foreground, the "/mpi/beamOn" 
+command invokes beam-on in background, so you can input UI commands
+even while event processing.
+
+The original "/control/execute" and "/run/beamOn" are overwritten 
+with "/mpi/execute" and "/mpi/.beamOn" commands, customized for 
+the MPI interface.
 
 
 Examples
