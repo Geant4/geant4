@@ -25,7 +25,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.10 2006-06-29 19:09:25 gunter Exp $
+// $Id: G4UIGainServer.cc,v 1.11 2007-11-16 14:59:35 kmura Exp $
 // $Name: not supported by cvs2svn $
 //
 #ifndef WIN32
@@ -537,7 +537,7 @@ void G4UIGainServer::ListDirectory(G4String newCommand){
 void G4UIGainServer::TerminalHelp(G4String newCommand){
 ///////////////////////////////////////////////
     G4UIcommandTree* treeTop = UI->GetTree();
-    unsigned i = newCommand.index(" ");
+    str_size i = newCommand.index(" ");
     
     if(i!=std::string::npos){
         G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
