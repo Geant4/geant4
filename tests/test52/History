@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007-04-12 14:51:52 guatelli Exp $
+$Id: History,v 1.3 2007-11-16 11:23:39 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-11-2007 Anton Lechner tag test52-V09-00-00
+           Equivalent to CVS head of obsolete version
 
 12-4-2007 Susanna Guatelli (tag test52-V08-02-00)
           - Created, Sandia test       
