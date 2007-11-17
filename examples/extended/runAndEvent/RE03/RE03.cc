@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE03.cc,v 1.3 2007-11-17 00:28:33 asaim Exp $
+// $Id: RE03.cc,v 1.4 2007-11-17 01:26:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,11 @@ int main(int argc,char** argv)
  // Construct the run manager
  //
  G4RunManager * runManager = new G4RunManager;
+
+ // Activate UI-command base scorer
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
+ scManager->SetVerboseLevel(1);
+
 //====================================================================
 // Un-comment this line for user defined score writer
 //    scManager->SetScoreWriter(new RE03UserScoreWriter());

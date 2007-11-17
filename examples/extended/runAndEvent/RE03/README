@@ -2,20 +2,26 @@
  RE03 - An extended example for run and event
  --------------------------------------------
 
- Contact : M.Asai (SLAC), A.Kimura (AIT)
+ Contact : M.Asai (SLAC), A.Kimura (AIT), T.Aso (TNCMT)
+
+****************************************************************
+* IMPORTANT NOTICE for version 9.1                             *
+*  This UI-command base scoring is still in alpha release and  *
+* functionality offered is preliminary. We do not guarantee    *
+* the correctness of the code. Also, we may change any of the  *
+* commands / methods in the near future release.               *
+****************************************************************
 
 1. Introduction
 
  This example demonstrates how to use UI-command base scoring.
 It create parallel world(s) for defining scoring mesh(es).
 
-****************************************************************
-* IMPORTANT NOTICE                                             *
-*  This UI-command base scoring is still in alpha release and  *
-* functionality offered is preliminary. We do not guarantee    *
-* the correctness of the code. Also, we may change any of the  *
-* commands / methods in the near future release.               *
-****************************************************************
+ Since this UI-command base scoring is preliminary, this
+functionality is not provided by default. To get it included,
+the pointer to G4ScoringManager must be accessed. The access
+to the static method G4ScoringManager::GetScoringManager()
+activate this functionality. 
 
 1.1 Geometry and primary particle
 
@@ -43,7 +49,7 @@ entry of one quantity of a mesh for all quantities of the mesh
 one by one in CSV format. To alternate the file format the user
 can implement his/her own score writer deriving from G4VUserScoreWriter
 base class and set it to G4ScoringManager. To demonstrate this,
-E03UserScoreWriter is included in this example. To use this
+RE03UserScoreWriter is included in this example. To use this
 alternative writer, un-comment its instantiation in RE03.cc.
 
 
