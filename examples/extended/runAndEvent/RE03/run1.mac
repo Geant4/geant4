@@ -1,13 +1,10 @@
 ########################################
 #
-/score/verbose 1
-#
 # define scoring mesh
 #
 /score/create/boxMesh boxMesh_1
 #
 /score/mesh/boxSize 100. 100. 100. cm
-/score/mesh/translate/xyz 0. 0. 0. cm
 /score/mesh/nBin 30 30 30
 #
 /score/quantity/energyDeposit eDep
@@ -31,9 +28,9 @@
 # drawing projections
 #
 /score/drawProjection boxMesh_1 eDep
-#
-/vis/viewer/flush
 /score/drawProjection boxMesh_1 nOfStepGamma
+/score/drawProjection boxMesh_1 nOfStepEMinus
+/score/drawProjection boxMesh_1 nOfStepEPlus
 #
 ########################################
 #
@@ -41,7 +38,13 @@
 #
 /vis/scene/create
 /vis/sceneHandler/attach scene-2
-/vis/viewer/flush
 /score/colorMap/setMinMax ! 0. 800.
 /control/loop drawSlice.mac iColumn 0 29 7
+#
+########################################
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_1 nOfStepGamma nOfStepGamma.txt
+#
 #

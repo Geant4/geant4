@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE03.cc,v 1.2 2007-11-13 21:32:31 asaim Exp $
+// $Id: RE03.cc,v 1.3 2007-11-17 00:28:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,11 @@
 #include "RE03DetectorConstruction.hh"
 #include "RE03PhysicsList.hh"
 #include "RE03PrimaryGeneratorAction.hh"
-#include "RE03UserScoreWriter.hh"
+
+//====================================================================
+// Un-comment this line for user defined score writer
+//    #include "RE03UserScoreWriter.hh"
+//====================================================================
 
 int main(int argc,char** argv)
 {
@@ -49,7 +53,10 @@ int main(int argc,char** argv)
  //
  G4RunManager * runManager = new G4RunManager;
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
- scManager->SetScoreWriter(new RE03UserScoreWriter());
+//====================================================================
+// Un-comment this line for user defined score writer
+//    scManager->SetScoreWriter(new RE03UserScoreWriter());
+//====================================================================
 
  // Set mandatory initialization classes
  //

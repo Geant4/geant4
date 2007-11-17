@@ -1,5 +1,4 @@
 ########################################
-/score/verbose 1
 #
 /score/create/boxMesh boxMesh_3a
 #

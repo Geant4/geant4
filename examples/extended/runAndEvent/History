@@ -1,0 +1,22 @@
+$Id: History,v 1.1 2007-11-17 00:28:33 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+            examples/extended/runAndEvent History file
+            ------------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+ 
+Nov. 16, 07 M.Asai (example_RandE-V09-00-00)
+- Introducing RE03.
+- README updated.
+
