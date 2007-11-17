@@ -1945,9 +1945,9 @@ G4int G4ElementaryParticleCollider::getElasticCase(G4int is,
   if(l < 3) { // nucleon nucleon
 
     if(ekin > 2.8) {
-      k = 2;
-
-      if(ekin > 10.0) k = 14;
+      // DHW      k = 2;
+      // DHW      if(ekin > 10.0) k = 14;
+      k = 14;
 
     } else {
     
