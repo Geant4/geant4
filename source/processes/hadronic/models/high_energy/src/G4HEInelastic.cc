@@ -1332,7 +1332,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                 G4double cost = Amax(-1., Amin(1., std::log(2.23*G4UniformRand()+0.383)/0.96));
                 G4double sint = std::sqrt(1. - cost*cost);
                 G4double phi  = twopi*G4UniformRand();
-                G4double pp   = std::sqrt(ekit*(ekit+2*pvMass));
+                G4double pp   = std::sqrt(ekit*(ekit+2*pv[i].getMass()));
                 pv[i].setMomentum( pp*sint*std::sin(phi),
                                    pp*sint*std::cos(phi),
                                    pp*cost          );
@@ -2038,7 +2038,11 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                    pv[i].Print(i); 
 		 }
              }    
-           if (iphmf != pionZeroCode)
+
+	   // Neither pi0s, backward nucleons from intra-nuclear cascade,
+	   // nor evaporation fragments can be leading particles
+
+           if (iphmf != pionZeroCode && pv[i].getSide() > -3)
              { 
                pvmx[7].Sub3( incidentParticle, pv[i] );
                reddec[4] = pvmx[7].Length()/incidentTotalMomentum;
