@@ -44,7 +44,7 @@ public:
    G4GDMLStructure();
 
    bool gdmlRead(const G4String&,xercesc::XercesDOMParser*);
-   G4LogicalVolume* Get(const G4String&) const;
+   G4LogicalVolume* getVolume(const G4String&) const;
 };
 
 #endif

@@ -7,16 +7,13 @@
 #include "G4Types.hh"
 
 class G4GDMLEvaluator {
-   G4int max_eval,index;
-   HepTool::Evaluator *eval;
+   HepTool::Evaluator eval;
 public:
    G4GDMLEvaluator();
-   ~G4GDMLEvaluator();
 
-   static G4GDMLEvaluator *GetInstance();
+   void Set(const G4GDMLEvaluator&);
 
    bool RegisterConstant(const G4String& name,G4double value);
-
    bool Evaluate(G4double& value,const G4String& expression,const G4String& unit="");
 
 // If the expression is an empty string, the value of the expression is considered as zero
@@ -24,10 +21,6 @@ public:
 
 // Do NOT change the default unit into "1" because a string is empty by default, so that if an empty
 // string is passed as unit it means no unit or unit of one
-
-   void Push();
-   void Pop();
-   void Init();
 };
 
 #endif

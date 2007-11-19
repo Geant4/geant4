@@ -1,8 +1,6 @@
 #include "G4GDMLDefine.hh"
 
 G4GDMLDefine::G4GDMLDefine() {
-
-    evaluator = G4GDMLEvaluator::GetInstance();
 }
 
 G4GDMLDefine::~G4GDMLDefine() {
@@ -10,8 +8,7 @@ G4GDMLDefine::~G4GDMLDefine() {
 
 bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
-   G4String name;
-   G4String value;
+   G4String name,value;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -40,11 +37,7 @@ bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
 bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
-   G4String name;
-   G4String unit;
-   G4String x;
-   G4String y;
-   G4String z;
+   G4String name,unit,x,y,z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -67,26 +60,20 @@ bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _x;
-   G4double _y;
-   G4double _z;
+   G4double _x,_y,_z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
    if (!evaluator->Evaluate(_z,z,unit)) return false;
 
-   positionMap[module+name] = new G4ThreeVector(_x,_y,_z);
+   positionMap[prename+name] = new G4ThreeVector(_x,_y,_z);
 
    return true;
 }
 
 bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
-   G4String name;
-   G4String unit;
-   G4String x;
-   G4String y;
-   G4String z;
+   G4String name,unit,x,y,z;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -109,22 +96,21 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
    
-   G4double _x;
-   G4double _y;
-   G4double _z;
+   G4double _x,_y,_z;
 
    if (!evaluator->Evaluate(_x,x,unit)) return false;
    if (!evaluator->Evaluate(_y,y,unit)) return false;
    if (!evaluator->Evaluate(_z,z,unit)) return false;
 
-   rotationMap[module+name] = new G4ThreeVector(_x,_y,_z);
+   rotationMap[prename+name] = new G4ThreeVector(_x,_y,_z);
 
    return true;
 }
 
-bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *eval,const G4String& module) {
 
-   module = newModule;
+   evaluator = eval;
+   prename = module;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -146,24 +132,20 @@ bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,const G4String&
    return true;
 }
 
-G4ThreeVector* G4GDMLDefine::GetPosition(const G4String& ref) {
+G4ThreeVector* G4GDMLDefine::getPosition(const G4String& ref) {
 
-   G4String full_ref = module + ref;
+   if (positionMap.find(ref) != positionMap.end()) return positionMap[ref];
 
-   if (positionMap.find(full_ref) != positionMap.end()) return positionMap[full_ref];
-
-   G4cout << "GDML: Error! Referenced position '" << full_ref << "' was not found!" << G4endl;
+   G4cout << "GDML: Error! Referenced position '" << ref << "' was not found!" << G4endl;
 
    return 0;
 }
 
-G4ThreeVector* G4GDMLDefine::GetRotation(const G4String& ref) {
+G4ThreeVector* G4GDMLDefine::getRotation(const G4String& ref) {
 
-   G4String full_ref = module + ref;
+   if (rotationMap.find(ref) != rotationMap.end()) return rotationMap[ref];
 
-   if (rotationMap.find(full_ref) != rotationMap.end()) return rotationMap[full_ref];
-
-   G4cout << "GDML: Error! Referenced rotation '" << full_ref << "' was not found!" << G4endl;
+   G4cout << "GDML: Error! Referenced rotation '" << ref << "' was not found!" << G4endl;
 
    return 0;
 }

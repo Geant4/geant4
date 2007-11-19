@@ -11,7 +11,7 @@
 
 class G4GDMLDefine {
 
-   G4String module;
+   G4String prename;
 
    G4GDMLEvaluator* evaluator;
 
@@ -26,10 +26,10 @@ public:
    G4GDMLDefine();
    ~G4GDMLDefine();
 
-   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
+   bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
 
-   G4ThreeVector *GetPosition(const G4String&);
-   G4ThreeVector *GetRotation(const G4String&);
+   G4ThreeVector *getPosition(const G4String&);
+   G4ThreeVector *getRotation(const G4String&);
 };
 
 #endif

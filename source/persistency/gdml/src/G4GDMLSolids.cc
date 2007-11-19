@@ -1,13 +1,8 @@
 #include "G4GDMLSolids.hh"
 
-G4GDMLSolids::G4GDMLSolids() {
-
-   evaluator = G4GDMLEvaluator::GetInstance();
-}
-
 bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
 
-   G4String name,first_ref,second_ref;
+   G4String name,first,second;
    G4ThreeVector position,rotation;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
@@ -35,18 +30,18 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="first"   ) { if (!refRead     (child,first_ref )) return false; } else
-      if (tag=="second"  ) { if (!refRead     (child,second_ref)) return false; } else
-      if (tag=="position") { if (!positionRead(child,position  )) return false; } else
-      if (tag=="rotation") { if (!rotationRead(child,rotation  )) return false; } else
+      if (tag=="first"   ) { if (!refRead     (child,first   )) return false; } else
+      if (tag=="second"  ) { if (!refRead     (child,second  )) return false; } else
+      if (tag=="position") { if (!positionRead(child,position)) return false; } else
+      if (tag=="rotation") { if (!rotationRead(child,rotation)) return false; } else
       {
          G4cout << "GDML: Error! Unknown tag in boolean solid '" << name << "': " << tag << G4endl;
          return false;
       }
    }
 
-   G4VSolid* firstSolid = Get(first_ref);
-   G4VSolid* secondSolid = Get(second_ref);
+   G4VSolid* firstSolid = getSolid(prename+first);
+   G4VSolid* secondSolid = getSolid(prename+second);
 
    if (!firstSolid || !secondSolid) return false;
 
@@ -58,9 +53,9 @@ bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    G4Transform3D transform(rot,position);
 
-   if (op==UNION       ) { new G4UnionSolid       (module+name,firstSolid,secondSolid,transform); } else
-   if (op==SUBTRACTION ) { new G4SubtractionSolid (module+name,firstSolid,secondSolid,transform); } else
-   if (op==INTERSECTION) { new G4IntersectionSolid(module+name,firstSolid,secondSolid,transform); }
+   if (op==UNION       ) { new G4UnionSolid       (prename+name,firstSolid,secondSolid,transform); } else
+   if (op==SUBTRACTION ) { new G4SubtractionSolid (prename+name,firstSolid,secondSolid,transform); } else
+   if (op==INTERSECTION) { new G4IntersectionSolid(prename+name,firstSolid,secondSolid,transform); }
 
    return true;
 }
@@ -96,7 +91,7 @@ bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_y,y,lunit)) return false;
    if (!evaluator->Evaluate(_z,z,lunit)) return false;
 
-   new G4Box(module+name,_x*0.5,_y*0.5,_z*0.5);
+   new G4Box(prename+name,_x*0.5,_y*0.5,_z*0.5);
 
    return true;
 }
@@ -141,7 +136,7 @@ bool G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
    if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
-   new G4Cons(module+name,_rmin1,_rmax1,_rmin2,_rmax2,_z*0.5,_startphi,_deltaphi);
+   new G4Cons(prename+name,_rmin1,_rmax1,_rmin2,_rmax2,_z*0.5,_startphi,_deltaphi);
 
    return true;
 }
@@ -181,7 +176,7 @@ bool G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_zcut1,zcut1,lunit)) return false;
    if (!evaluator->Evaluate(_zcut2,zcut2,lunit)) return false;
 
-   new G4Ellipsoid(module+name,_ax,_by,_cz,_zcut1,_zcut2);
+   new G4Ellipsoid(prename+name,_ax,_by,_cz,_zcut1,_zcut2);
 
    return true;
 }
@@ -217,7 +212,7 @@ bool G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_dy   ,dy   ,lunit)) return false;
    if (!evaluator->Evaluate(_dz   ,dz   ,lunit)) return false;
 
-   new G4EllipticalTube(module+name,_dx,_dy,_dz);
+   new G4EllipticalTube(prename+name,_dx,_dy,_dz);
 
    return true;
 }
@@ -258,9 +253,16 @@ bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_outst,outst,aunit)) return false;
    if (!evaluator->Evaluate(_z    ,z    ,lunit)) return false;
 
-   new G4Hype(module+name,_rmin,_rmax,_inst,_outst,_z*0.5);
+   new G4Hype(prename+name,_rmin,_rmax,_inst,_outst,_z*0.5);
 
    return true;
+}
+
+bool G4GDMLSolids::loopRead(const xercesc::DOMElement* const) {
+
+   G4cout << "GDML: Loops are not implemented yet!" << G4endl;
+
+   return false;
 }
 
 bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
@@ -290,7 +292,7 @@ bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
    if (!evaluator->Evaluate(_r,r,lunit)) return false;
 
-   new G4Orb(module+name,_r);
+   new G4Orb(prename+name,_r);
 
    return true;
 }
@@ -333,7 +335,7 @@ bool G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_theta,theta,aunit)) return false;
    if (!evaluator->Evaluate(_phi  ,phi  ,aunit)) return false;
 
-   new G4Para(module+name,_x*0.5,_y*0.5,_z*0.5,_alpha,_theta,_phi);
+   new G4Para(prename+name,_x*0.5,_y*0.5,_z*0.5,_alpha,_theta,_phi);
 
    return true;
 }
@@ -400,7 +402,7 @@ bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polycone(module+name,_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polycone(prename+name,_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
 
    return true;
 }
@@ -471,7 +473,7 @@ bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polyhedra(module+name,_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polyhedra(prename+name,_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
    
    return true;
 }
@@ -536,10 +538,10 @@ bool G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element,G4T
       if (attribute_name=="type") { type = attribute_value; }
    }
 
-   const G4ThreeVector* ptr1 = define.GetPosition(v1);
-   const G4ThreeVector* ptr2 = define.GetPosition(v2);
-   const G4ThreeVector* ptr3 = define.GetPosition(v3);
-   const G4ThreeVector* ptr4 = define.GetPosition(v4);
+   const G4ThreeVector* ptr1 = define.getPosition(prename+v1);
+   const G4ThreeVector* ptr2 = define.getPosition(prename+v2);
+   const G4ThreeVector* ptr3 = define.getPosition(prename+v3);
+   const G4ThreeVector* ptr4 = define.getPosition(prename+v4);
 
    if (!ptr1 || !ptr2 || !ptr3 || !ptr4) return false;
 
@@ -553,18 +555,19 @@ bool G4GDMLSolids::refRead(const xercesc::DOMElement* const element,G4String& re
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
-   if (attributeCount<1) return true;
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
 
-   xercesc::DOMNode* attribute_node = attributes->item(0);
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
 
-   if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) return true;
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
-   const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-   const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-   const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-   if (attribute_name=="ref") { ref = attribute_value; }
+      if (attribute_name=="ref") { ref = attribute_value; }
+   }
 
    return true;
 }
@@ -602,7 +605,7 @@ bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
       if (attribute_name=="dz"   ) { dz    = attribute_value; }
    }
 
-   G4VSolid* solidPtr = Get(solid);
+   G4VSolid* solidPtr = getSolid(prename+solid);
 
    if (!solidPtr) return false;
 
@@ -631,7 +634,7 @@ bool G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    G4Transform3D transform(rot,trans);
    transform = transform*scale;
           
-   new G4ReflectedSolid(module+name,solidPtr,transform);
+   new G4ReflectedSolid(prename+name,solidPtr,transform);
 
    return true;
 }
@@ -747,7 +750,7 @@ bool G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_starttheta,starttheta,aunit)) return false;
    if (!evaluator->Evaluate(_deltatheta,deltatheta,aunit)) return false;
 
-   new G4Sphere(module+name,_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
+   new G4Sphere(prename+name,_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
 
    return true;
 }
@@ -787,6 +790,8 @@ bool G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
       if (tag=="quadrangular") { if (!quadrangularRead(child,tessellated)) return false; }
    }
 
+   tessellated->SetSolidClosed(true);
+
    return true;
 }
 
@@ -815,14 +820,14 @@ bool G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="vertex4") { vertex4 = attribute_value; }
    }
    
-   const G4ThreeVector* ptr1 = define.GetPosition(vertex1);
-   const G4ThreeVector* ptr2 = define.GetPosition(vertex2);
-   const G4ThreeVector* ptr3 = define.GetPosition(vertex3);
-   const G4ThreeVector* ptr4 = define.GetPosition(vertex4);
+   const G4ThreeVector* ptr1 = define.getPosition(prename+vertex1);
+   const G4ThreeVector* ptr2 = define.getPosition(prename+vertex2);
+   const G4ThreeVector* ptr3 = define.getPosition(prename+vertex3);
+   const G4ThreeVector* ptr4 = define.getPosition(prename+vertex4);
 
    if (!ptr1 || !ptr2 || !ptr3 || !ptr4) return false;
    
-   new G4Tet(module+name,*ptr1,*ptr2,*ptr3,*ptr4);
+   new G4Tet(prename+name,*ptr1,*ptr2,*ptr3,*ptr4);
    
    return true;
 }
@@ -864,7 +869,7 @@ bool G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
    if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
-   new G4Torus(module+name,_rmin,_rmax,_rtor,_startphi,_deltaphi);
+   new G4Torus(prename+name,_rmin,_rmax,_rtor,_startphi,_deltaphi);
 
    return true;
 }
@@ -917,7 +922,7 @@ bool G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_x4    ,x4    ,lunit)) return false;
    if (!evaluator->Evaluate(_alpha2,alpha2,aunit)) return false;
 
-   new G4Trap(module+name,_z*0.5,_theta,_phi,_y1*0.5,_x1*0.5,_x2*0.5,_alpha1,_y2*0.5,_x3*0.5,_x4*0.5,_alpha2);
+   new G4Trap(prename+name,_z*0.5,_theta,_phi,_y1*0.5,_x1*0.5,_x2*0.5,_alpha1,_y2*0.5,_x3*0.5,_x4*0.5,_alpha2);
 
    return true;
 }
@@ -957,7 +962,7 @@ bool G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_y2,y2,lunit)) return false;
    if (!evaluator->Evaluate(_z ,z ,lunit)) return false;
 
-   new G4Trd(module+name,_x1*0.5,_x2*0.5,_y1*0.5,_y2*0.5,_z*0.5);
+   new G4Trd(prename+name,_x1*0.5,_x2*0.5,_y1*0.5,_y2*0.5,_z*0.5);
 
    return true;
 }
@@ -986,9 +991,9 @@ bool G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element,G4Tes
       if (attribute_name=="type") { type = attribute_value; }
    }
 
-   const G4ThreeVector* ptr1 = define.GetPosition(v1);
-   const G4ThreeVector* ptr2 = define.GetPosition(v2);
-   const G4ThreeVector* ptr3 = define.GetPosition(v3);
+   const G4ThreeVector* ptr1 = define.getPosition(prename+v1);
+   const G4ThreeVector* ptr2 = define.getPosition(prename+v2);
+   const G4ThreeVector* ptr3 = define.getPosition(prename+v3);
 
    if (!ptr1 || !ptr2 || !ptr3) return false;
 
@@ -1033,7 +1038,7 @@ bool G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_startphi,startphi,aunit)) return false;
    if (!evaluator->Evaluate(_deltaphi,deltaphi,aunit)) return false;
 
-   new G4Tubs(module+name,_rmin,_rmax,_z*0.5,_startphi,_deltaphi);
+   new G4Tubs(prename+name,_rmin,_rmax,_z*0.5,_startphi,_deltaphi);
 
    return true;
 }
@@ -1117,7 +1122,7 @@ bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   new G4ExtrudedSolid(module+name,twoDimVertexList,sectionList);
+   new G4ExtrudedSolid(prename+name,twoDimVertexList,sectionList);
 
    return true;
 }
@@ -1158,9 +1163,10 @@ bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneTyp
    return true;
 }
 
-bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *evalPtr,const G4String& module) {
 
-   module = newModule;
+   evaluator = evalPtr;
+   prename = module;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -1175,6 +1181,7 @@ bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,const G4String&
       if (tag=="ellipsoid"     ) { if (!ellipsoidRead     (child)) return false; } else
       if (tag=="eltube"        ) { if (!eltubeRead        (child)) return false; } else
       if (tag=="hype"          ) { if (!hypeRead          (child)) return false; } else
+      if (tag=="loop"          ) { if (!loopRead          (child)) return false; } else
       if (tag=="orb"           ) { if (!orbRead           (child)) return false; } else
       if (tag=="para"          ) { if (!paraRead          (child)) return false; } else
       if (tag=="polycone"      ) { if (!polyconeRead      (child)) return false; } else
@@ -1200,14 +1207,11 @@ bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,const G4String&
    return true;
 }
 
-G4VSolid* G4GDMLSolids::Get(const G4String& ref) const {
+G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
 
-   G4String full_ref = module + ref;
+   G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
-   G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(full_ref,false);
-
-   if (!solidPtr) 
-      G4cout << "GDML: Error! Referenced solid '" << full_ref << "' was not found!" << G4endl;   
+   if (!solidPtr) G4cout << "GDML: Error! Referenced solid '" << ref << "' was not found!" << G4endl;   
 
    return solidPtr;
 }

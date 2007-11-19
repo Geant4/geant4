@@ -2,7 +2,7 @@
 
 G4GDMLStructure::G4GDMLStructure() {
 
-   evaluator = G4GDMLEvaluator::GetInstance();
+   evaluator = new G4GDMLEvaluator();
 
    parser = NULL;
 }
@@ -81,7 +81,7 @@ bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       if (tag=="volumeref") { if (!refRead(child,volumeref)) return false; } 
    }
 
-   G4LogicalVolume* pLogical = Get(volumeref);
+   G4LogicalVolume* pLogical = getVolume(module+volumeref);
 
    if (!pLogical) return false;
 
@@ -127,20 +127,10 @@ bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4String
       if (attribute_name=="volname") { volname = attribute_value; }
    }
 
-   evaluator->Push();
-   G4String temp = module;  // push
-
-   if (!gdmlRead(name,parser)) return false;
-
-   if (!volname.empty()) return true;
-
-   volname = setup.GetS("Default");
-
-   volname = module + volname;
-
-   module = temp; // pop
-   evaluator->Pop();
+   G4GDMLStructure structure;
    
+   if (!structure.gdmlRead(name,parser)) return false;
+
    return true;
 }
 
@@ -181,7 +171,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
       if (tag=="rotationref") { if (!refRead (child,rotationref)) return false; }
    }
 
-   G4LogicalVolume *pCurrentLogical = Get(volumeref);
+   G4LogicalVolume *pCurrentLogical = getVolume(module+volumeref);
 
    if (!pCurrentLogical) return false;
 
@@ -189,7 +179,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
    if (!positionref.empty()) {
    
-      G4ThreeVector *posPtr = solids.define.GetPosition(positionref);
+      G4ThreeVector *posPtr = solids.define.getPosition(module+positionref);
 
       if (!posPtr) return false;
 
@@ -200,7 +190,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
    if (!rotationref.empty()) {
 
-      G4ThreeVector *anglePtr = solids.define.GetRotation(rotationref);
+      G4ThreeVector *anglePtr = solids.define.getRotation(module+rotationref);
 
       if (!anglePtr) return false;
 
@@ -321,7 +311,7 @@ bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") { if (!replicate_along_axisRead(child,_width,_offset,_axis)) return false; }
    }
 
-   G4LogicalVolume* pLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(module+volumeref,false);
+   G4LogicalVolume* pLogical = getVolume(module+volumeref);
 
    if (!pLogical) return false;
 
@@ -350,8 +340,8 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) { if (!refRead(child,solidref   )) return false; }
    }
 
-   G4Material *materialPtr = materials.Get(materialref);
-   G4VSolid* solidPtr = solids.Get(solidref);
+   G4Material *materialPtr = materials.getMaterial(module+materialref);
+   G4VSolid* solidPtr = solids.getSolid(module+solidref);
 
    if (!solidPtr || !materialPtr) return false;
  
@@ -449,9 +439,9 @@ bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="define"   ) { if (!solids.define.Read(child,newModule)) return false; } else
-      if (tag=="materials") { if (!materials.Read    (child,newModule)) return false; } else
-      if (tag=="solids"   ) { if (!solids.Read       (child,newModule)) return false; } else
+      if (tag=="define"   ) { if (!solids.define.Read(child,evaluator,newModule)) return false; } else
+      if (tag=="materials") { if (!materials.Read    (child,evaluator,newModule)) return false; } else
+      if (tag=="solids"   ) { if (!solids.Read       (child,evaluator,newModule)) return false; } else
       if (tag=="setup"    ) { if (!setup.Read        (child,newModule)) return false; } else
       if (tag=="structure") { if (!Read              (child,newModule)) return false; }
    }
@@ -459,14 +449,11 @@ bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser
    return true;
 }
 
-G4LogicalVolume* G4GDMLStructure::Get(const G4String& ref) const {
+G4LogicalVolume* G4GDMLStructure::getVolume(const G4String& ref) const {
 
-   G4String full_ref = module + ref;
+   G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
-   G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(full_ref,false);
-
-   if (!volumePtr) 
-      G4cout << "GDML: Error! Referenced volume '" << full_ref << "' was not found!" << G4endl;   
+   if (!volumePtr) G4cout << "GDML: Error! Referenced volume '" << ref << "' was not found!" << G4endl;   
 
    return volumePtr;
 }

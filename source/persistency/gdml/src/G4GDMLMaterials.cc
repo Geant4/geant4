@@ -1,10 +1,5 @@
 #include "G4GDMLMaterials.hh"
 
-G4GDMLMaterials::G4GDMLMaterials() {
-
-   evaluator = G4GDMLEvaluator::GetInstance();
-}
-
 bool G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element,double& _value) {
 
    std::string value;
@@ -105,9 +100,9 @@ bool G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   if (nComponents > 0) return mixtureRead(element,new G4Element(module+name,formula,nComponents));
+   if (nComponents > 0) return mixtureRead(element,new G4Element(prename+name,formula,nComponents));
 
-   new G4Element(module+name,formula,_Z,_a);
+   new G4Element(prename+name,formula,_Z,_a);
 
    return true;
 }
@@ -180,7 +175,7 @@ bool G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
       if (tag=="atom") { if (!atomRead(child,_a)) return false; }
    }
 
-   new G4Isotope(module+name,(G4int)_Z,(G4int)_N,_a);
+   new G4Isotope(prename+name,(G4int)_Z,(G4int)_N,_a);
 
    return true;
 }
@@ -233,9 +228,9 @@ bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
       }
    }
 
-   if (nComponents > 0) return mixtureRead(element,new G4Material(module+name,_D,nComponents));
+   if (nComponents > 0) return mixtureRead(element,new G4Material(prename+name,_D,nComponents));
 
-   new G4Material(module+name,_Z,_a,_D);
+   new G4Material(prename+name,_Z,_a,_D);
 
    return true;
 }
@@ -255,7 +250,7 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Ele
          std::string ref;
 	 double _n;
 	 
-	 ref = module + ref;
+	 ref = prename + ref;
 	 
 	 if (!fractionRead(child,_n,ref)) return false;
 
@@ -296,7 +291,7 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
 	 
 	 if (!fractionRead(child,_n,ref)) return false;
 
-         ref = module + ref;
+         ref = prename + ref;
 
          G4Material *materialPtr = G4Material::GetMaterial(ref,false);
          G4Element *elementPtr = G4Element::GetElement(ref,false);
@@ -319,9 +314,10 @@ bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
    return true;
 }
 
-bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
+bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator* eval,const G4String& module) {
 
-   module = newModule;
+   evaluator = eval;
+   prename = module;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -343,14 +339,11 @@ bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,const G4Stri
    return true;
 }
 
-G4Material* G4GDMLMaterials::Get(const G4String& ref) const {
+G4Material* G4GDMLMaterials::getMaterial(const G4String& ref) const {
 
-   G4String full_ref = module + ref;
+   G4Material *materialPtr = G4Material::GetMaterial(ref,false);
 
-   G4Material *materialPtr = G4Material::GetMaterial(full_ref,false);
-
-   if (materialPtr == NULL) 
-      G4cout << "GDML: Error! Referenced material '" << full_ref << "' was not found!" << G4endl;   
+   if (!materialPtr) G4cout << "GDML: Error! Referenced material '" << ref << "' was not found!" << G4endl;   
 
    return materialPtr;
 }

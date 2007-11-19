@@ -11,7 +11,7 @@
 
 class G4GDMLMaterials {
 
-   G4String module;
+   G4String prename;
 
    G4GDMLEvaluator* evaluator;
 
@@ -24,10 +24,8 @@ class G4GDMLMaterials {
    bool mixtureRead  (const xercesc::DOMElement* const,G4Element*);
    bool mixtureRead  (const xercesc::DOMElement* const,G4Material*);
 public:
-   G4GDMLMaterials();
-
-   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
-   G4Material* Get(const G4String&) const;
+   bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
+   G4Material* getMaterial(const G4String&) const;
 };
 
 #endif

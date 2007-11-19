@@ -34,7 +34,7 @@
 
 class G4GDMLSolids {
 
-   G4String module;
+   G4String prename,postname;
 
    G4GDMLEvaluator* evaluator;
 
@@ -47,6 +47,7 @@ class G4GDMLSolids {
    bool ellipsoidRead     (const xercesc::DOMElement* const);
    bool eltubeRead        (const xercesc::DOMElement* const);
    bool hypeRead          (const xercesc::DOMElement* const);
+   bool loopRead          (const xercesc::DOMElement* const);
    bool orbRead           (const xercesc::DOMElement* const);
    bool paraRead          (const xercesc::DOMElement* const);
    bool polyconeRead      (const xercesc::DOMElement* const);
@@ -71,10 +72,8 @@ class G4GDMLSolids {
 public:
    G4GDMLDefine define;   
 
-   G4GDMLSolids();
-
-   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
-   G4VSolid* Get(const G4String&) const;
+   bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String& newModule);
+   G4VSolid* getSolid(const G4String&) const;
 };
 
 #endif
