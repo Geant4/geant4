@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.47 2007-11-15 10:05:14 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.48 2007-11-19 16:49:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -64,7 +64,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   pSelector  = new G4StopElementSelector();
   pEMCascade = new G4MuMinusCaptureCascade();
   theN       = new G4Fancy3DNucleus();
-  theHandler = 0;
+  theHandler = new G4ExcitationHandler();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,11 +96,6 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
   // section
   //
   aParticleChange.Initialize(track);
-
-  if(!isInitialised) {
-    isInitialised = false;
-    theHandler = new G4ExcitationHandler();
-  }
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
