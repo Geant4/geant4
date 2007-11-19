@@ -776,7 +776,7 @@ bool G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="name") { name = attribute_value; }
    }
    
-   G4TessellatedSolid *tessellated = new G4TessellatedSolid(name);
+   G4TessellatedSolid *tessellated = new G4TessellatedSolid(prename+name);
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 

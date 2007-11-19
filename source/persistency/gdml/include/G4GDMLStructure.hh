@@ -27,7 +27,7 @@ class G4GDMLStructure {
 
    bool directionRead           (const xercesc::DOMElement* const,EAxis&);
    bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool fileRead                (const xercesc::DOMElement* const,G4String&);
+   bool fileRead                (const xercesc::DOMElement* const,G4LogicalVolume**);
    bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool quantityRead            (const xercesc::DOMElement* const,G4double&);
@@ -35,7 +35,7 @@ class G4GDMLStructure {
    bool replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
    bool replicavolRead          (const xercesc::DOMElement* const,G4LogicalVolume*);
    bool volumeRead              (const xercesc::DOMElement* const);
-   bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
+   bool Read                    (const xercesc::DOMElement* const);
 public:
    G4GDMLMaterials materials;
    G4GDMLSolids solids;
