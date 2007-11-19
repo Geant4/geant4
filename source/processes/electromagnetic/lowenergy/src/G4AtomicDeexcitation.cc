@@ -414,13 +414,13 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
           partSum += thisProb;
           
-          if (partSum >= (partialProb/totalVacancyAugerProbability) ) {
+          if (partSum >= (partialProb*totalVacancyAugerProbability) ) { // was /
 	    foundFlag = true;
 	    break;
 	  }
           augerIndex++;
         }
-        if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
+        if (partSum >= (partialProb*totalVacancyAugerProbability) ) {break;} // was /
         transitionRandomShellIndex++;
       }
 
