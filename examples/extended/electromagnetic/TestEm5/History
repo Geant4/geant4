@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2007-11-16 17:28:17 maire Exp $
+$Id: History,v 1.90 2007-11-19 14:57:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-11-07 V.Ivant (testem5-V09-00-05)
+- Fixed usage of elstic builders
      
 16-11-07 mma (testem5-V09-00-04) 
 - PhysListEmStandard : PhysicsTables set with 100 bins per decade (EmOptions)

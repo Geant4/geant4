@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.20 2007-11-13 14:39:59 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.21 2007-11-19 14:57:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +43,7 @@
 #include "G4EmStandardPhysics_option2.hh"
 
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -264,15 +265,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmPenelope(name);
 
   } else if (name == "elastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics(name));
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "binary" && !bicIsRegisted) {
