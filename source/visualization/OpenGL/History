@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2007-11-16 11:15:43 lgarnier Exp $
+$Id: History,v 1.102 2007-11-19 19:28:23 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+15th November 2007  Laurent Garnier (opengl-V09-00-04)
+- Added GEANT4_QT_DEBUG flag to more places
 
 15th November 2007  John Allison  (opengl-V09-00-03)
 - Re-introduced Qt files, now properly protected by cpp flags.
