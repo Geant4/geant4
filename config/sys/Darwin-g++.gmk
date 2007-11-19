@@ -27,7 +27,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
-  FC := g77
+  FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
