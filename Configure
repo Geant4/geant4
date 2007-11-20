@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.100 2007-11-14 10:12:29 bmorgan Exp $
+# $Id: Configure,v 1.101 2007-11-20 11:39:05 bmorgan Exp $
 #
-# Generated on Tue Nov 13 17:18:21 GMT 2007 [metaconfig 3.0 PL70]
+# Generated on Tue Nov 20 11:37:00 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2748,7 +2748,7 @@ esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.11
+	g4neutronhpcrosssections=$g4data/G4NDL3.12
 	;;
 esac
 
@@ -2804,7 +2804,7 @@ gans=$ans
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
 		g4ledata=$g4data/G4EMLOW5.1
-		g4neutronhpcrosssections=$g4data/G4NDL3.11
+		g4neutronhpcrosssections=$g4data/G4NDL3.12
 		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
@@ -2865,7 +2865,7 @@ gans=$ans
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='d~'
-		rp="Where is G4NDL3.11 data installed?"
+		rp="Where is G4NDL3.12 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
@@ -5660,7 +5660,12 @@ EOM`
             fi #END OF USER INPUT CHECKING
       done #END OF WHILE LOOP OVER USER INPUT
    fi #END OF USER INPUT SECTION
-   
+
+   #
+   # If a filter on g4gdml_xerces_root is needed to remove common system paths
+   # then it should be put here...
+   #
+
 fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
