@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.8 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLSolids.cc,v 1.9 2007-11-20 09:37:11 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -57,7 +57,7 @@ G4bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const 
       if (attribute_name=="name") { name = attribute_value; }
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -407,7 +407,7 @@ G4bool G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
    std::vector<zplaneType> zplaneList;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -477,7 +477,7 @@ G4bool G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
    std::vector<zplaneType> zplaneList;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -813,7 +813,7 @@ G4bool G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(prename+name);
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -1135,7 +1135,7 @@ G4bool G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
    std::vector<G4TwoVector> twoDimVertexList;
    std::vector<G4ExtrudedSolid::ZSection> sectionList;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -1203,7 +1203,7 @@ G4bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluat
    evaluator = evalPtr;
    prename = module;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 

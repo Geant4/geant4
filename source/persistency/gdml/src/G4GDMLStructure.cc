@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.9 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLStructure.cc,v 1.10 2007-11-20 09:37:11 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -39,7 +39,7 @@ G4GDMLStructure::G4GDMLStructure() {
 
    evaluator = new G4GDMLEvaluator();
 
-   parser = NULL;
+   parser = 0;
 }
 
 G4bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAxis& axis) {
@@ -105,7 +105,7 @@ G4bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element
       if (attribute_name=="number") { number = attribute_value; }
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -176,7 +176,7 @@ G4bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4
 
    G4String volumeref,parameterised_position_size;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -197,7 +197,7 @@ G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4L
 
    G4LogicalVolume* logvol = 0;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -298,7 +298,7 @@ G4bool G4GDMLStructure::refRead(const xercesc::DOMElement* const element,G4Strin
 
 G4bool G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& _width,G4double& _offset,EAxis& _axis) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -342,7 +342,7 @@ G4bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,
 
    if (!evaluator->Evaluate(_numb,numb)) return false;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -371,7 +371,7 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -390,7 +390,7 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
  
    G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,module+name,0,0,0);
    
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -409,7 +409,7 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
 G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -470,7 +470,7 @@ G4bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMPars
       return false;
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 

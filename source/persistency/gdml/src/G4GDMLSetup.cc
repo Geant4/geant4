@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.cc,v 1.7 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLSetup.cc,v 1.8 2007-11-20 09:37:11 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSetup Implementation
@@ -81,7 +81,7 @@ G4bool G4GDMLSetup::Read(const xercesc::DOMElement* const element,const G4String
       if (attribute_name=="name") { name = attribute_value; }
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 

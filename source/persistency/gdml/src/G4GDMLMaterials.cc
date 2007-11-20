@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.6 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLMaterials.cc,v 1.7 2007-11-20 09:37:11 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -119,7 +119,7 @@ G4bool G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
 
    G4int nComponents = 0;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -244,7 +244,7 @@ G4bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
 
    G4int nComponents = 0;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -270,7 +270,7 @@ G4bool G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
 
 G4bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Element *ele) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -308,7 +308,7 @@ G4bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4E
 
 G4bool G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Material *material) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -352,7 +352,7 @@ G4bool G4GDMLMaterials::Read(const xercesc::DOMElement* const element,G4GDMLEval
    evaluator = eval;
    prename = module;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
