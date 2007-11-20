@@ -1,8 +1,6 @@
-# $Id: GNUmakefile,v 1.7 2007-11-16 15:21:38 ztorzsok Exp $
+# $Id: GNUmakefile,v 1.8 2007-11-20 08:37:07 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
-# Author: Radovan Chytracek
-# Date:   04/12/2004.
 # --------------------------------------------------------------
 
 name := load_gdml
@@ -12,12 +10,6 @@ G4EXLIB := true
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
-
-CPPFLAGS += -I$(XERCESCROOT)/include \
-            -DG4LIB_USE_XERCESC
-
-EXTRALIBS += -lG4gdml \
-             -L$(XERCESCROOT)/lib -lxerces-c 
 
 .PHONY: all
 all: lib bin
