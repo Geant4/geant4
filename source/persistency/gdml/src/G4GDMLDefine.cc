@@ -1,3 +1,38 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GDMLDefine.cc,v 1.7 2007-11-20 09:31:44 gcosmo Exp $
+// GEANT4 tag $ Name:$
+//
+// class G4GDMLDefine Implementation
+//
+// Original author: Zoltan Torzsok, November 2007
+//
+// --------------------------------------------------------------------
+
 #include "G4GDMLDefine.hh"
 
 G4GDMLDefine::G4GDMLDefine() {
@@ -6,7 +41,7 @@ G4GDMLDefine::G4GDMLDefine() {
 G4GDMLDefine::~G4GDMLDefine() {
 }
 
-bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
+G4bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
    G4String name,value;
 
@@ -35,7 +70,7 @@ bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
    return evaluator->RegisterConstant(name,_value);
 }
 
-bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
+G4bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
    G4String name,unit,x,y,z;
 
@@ -71,7 +106,7 @@ bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
+G4bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
    G4String name,unit,x,y,z;
 
@@ -107,7 +142,7 @@ bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *eval,const G4String& module) {
+G4bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *eval,const G4String& module) {
 
    evaluator = eval;
    prename = module;

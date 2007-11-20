@@ -1,3 +1,38 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GDMLStructure.cc,v 1.9 2007-11-20 09:31:44 gcosmo Exp $
+// GEANT4 tag $ Name:$
+//
+// class G4GDMLStructure Implementation
+//
+// Original author: Zoltan Torzsok, November 2007
+//
+// --------------------------------------------------------------------
+
 #include "G4GDMLStructure.hh"
 
 G4GDMLStructure::G4GDMLStructure() {
@@ -7,7 +42,7 @@ G4GDMLStructure::G4GDMLStructure() {
    parser = NULL;
 }
 
-bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAxis& axis) {
+G4bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAxis& axis) {
 
    G4String x,y,z;
 
@@ -45,7 +80,7 @@ bool G4GDMLStructure::directionRead(const xercesc::DOMElement* const element,EAx
    return false;
 }
 
-bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
+G4bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
 
    G4String unit,axis,width,offset,number,volumeref;
 
@@ -105,7 +140,7 @@ bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
    return true;
 }
 
-bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4LogicalVolume** logvol) {
+G4bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4LogicalVolume** logvol) {
 
    G4String name;
    G4String volname;
@@ -137,7 +172,7 @@ bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4Logica
    return (*logvol != 0);
 }
 
-bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
+G4bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
 
    G4String volumeref,parameterised_position_size;
 
@@ -156,7 +191,7 @@ bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4Lo
    return true;
 }
 
-bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *mother) {
+G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *mother) {
 
    G4String volumeref,positionref,rotationref;
 
@@ -214,7 +249,7 @@ bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
    return true;
 }
 
-bool G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element,G4double& _value) {
+G4bool G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element,G4double& _value) {
 
    G4String value,unit;
 
@@ -239,7 +274,7 @@ bool G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element,G4do
    return evaluator->Evaluate(_value,value,unit);
 }
 
-bool G4GDMLStructure::refRead(const xercesc::DOMElement* const element,G4String& ref) {
+G4bool G4GDMLStructure::refRead(const xercesc::DOMElement* const element,G4String& ref) {
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -261,7 +296,7 @@ bool G4GDMLStructure::refRead(const xercesc::DOMElement* const element,G4String&
    return true;
 }
 
-bool G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& _width,G4double& _offset,EAxis& _axis) {
+G4bool G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& _width,G4double& _offset,EAxis& _axis) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -279,7 +314,7 @@ bool G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const 
    return true;
 }
 
-bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
+G4bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
 
    G4String volumeref,numb;
 
@@ -328,7 +363,7 @@ bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
    return true;
 }
 
-bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
+G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
    G4String name,solidref,materialref;
 
@@ -372,7 +407,7 @@ bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
+G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != NULL;iter = iter->getNextSibling()) {
 
@@ -392,7 +427,7 @@ bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
    return true;
 }
 
-bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
+G4bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
 
    module = fileName + "::";
 

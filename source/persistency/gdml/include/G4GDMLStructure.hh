@@ -1,3 +1,44 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GDMLStructure.hh,v 1.8 2007-11-20 09:31:44 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLStructure
+//
+// Class description:
+//
+// GDML class for loading physical volumes according to various
+// specifications in Geant4.
+
+// History:
+// - Created.                                  Zoltan Torzsok, November 2007
+// -------------------------------------------------------------------------
+
 #ifndef _G4GDMLSTRUCTURE_INCLUDED_
 #define _G4GDMLSTRUCTURE_INCLUDED_
 
@@ -25,17 +66,17 @@ class G4GDMLStructure {
 
    xercesc::XercesDOMParser* parser;
 
-   bool directionRead           (const xercesc::DOMElement* const,EAxis&);
-   bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool fileRead                (const xercesc::DOMElement* const,G4LogicalVolume**);
-   bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool quantityRead            (const xercesc::DOMElement* const,G4double&);
-   bool refRead                 (const xercesc::DOMElement* const,G4String&);
-   bool replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
-   bool replicavolRead          (const xercesc::DOMElement* const,G4LogicalVolume*);
-   bool volumeRead              (const xercesc::DOMElement* const);
-   bool Read                    (const xercesc::DOMElement* const);
+   G4bool directionRead           (const xercesc::DOMElement* const,EAxis&);
+   G4bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool fileRead                (const xercesc::DOMElement* const,G4LogicalVolume**);
+   G4bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool quantityRead            (const xercesc::DOMElement* const,G4double&);
+   G4bool refRead                 (const xercesc::DOMElement* const,G4String&);
+   G4bool replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
+   G4bool replicavolRead          (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool volumeRead              (const xercesc::DOMElement* const);
+   G4bool Read                    (const xercesc::DOMElement* const);
 public:
    G4GDMLMaterials materials;
    G4GDMLSolids solids;
@@ -43,7 +84,7 @@ public:
 
    G4GDMLStructure();
 
-   bool gdmlRead(const G4String&,xercesc::XercesDOMParser*);
+   G4bool gdmlRead(const G4String&,xercesc::XercesDOMParser*);
    G4LogicalVolume* getVolume(const G4String&) const;
 };
 
