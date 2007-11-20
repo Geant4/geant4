@@ -591,12 +591,14 @@ if [ $UNAMEN = macphsft02.cern.ch ]; then
 
 ## Compiler
 ############
-
+# Get gfortran
+  export PATH=$PATH:/usr/local/bin
+  
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
 # export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
-  export LD_LIBRARY_PATH=$XERCESCROOT/lib
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib:/usr/local/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
