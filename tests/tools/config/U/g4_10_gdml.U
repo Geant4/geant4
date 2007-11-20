@@ -122,7 +122,12 @@ EOM`
             fi #END OF USER INPUT CHECKING
       done #END OF WHILE LOOP OVER USER INPUT
    fi #END OF USER INPUT SECTION
-   
+
+   #
+   # If a filter on g4gdml_xerces_root is needed to remove common system paths
+   # then it should be put here...
+   #
+
 fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
