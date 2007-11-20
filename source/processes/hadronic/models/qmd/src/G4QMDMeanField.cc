@@ -634,14 +634,14 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
                   {
                      id = 0;
                   }
-                  clusters.insert ( std::pair < G4int , G4int > ( id , i ) );
+                  clusters.insert ( std::multimap<G4int,G4int>::value_type ( id , i ) );
                   is_assigned_to [ i ] = id; 
-                  clusters.insert ( std::pair < G4int , G4int > ( id , j ) );
+                  clusters.insert ( std::multimap<G4int,G4int>::value_type ( id , j ) );
                   is_assigned_to [ j ] = id; 
                }
                else
                {
-                  clusters.insert ( std::pair < G4int , G4int > ( is_assigned_to [ i ] , j ) );
+                  clusters.insert ( std::multimap<G4int,G4int>::value_type ( is_assigned_to [ i ] , j ) );
                   is_assigned_to [ j ] = is_assigned_to [ i ]; 
                }
             } 
@@ -650,7 +650,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
 //             j is already belong to some cluester 
                if ( is_assigned_to [ i ] == -1 )
                {
-                  clusters.insert ( std::pair < G4int , G4int > ( is_assigned_to [ j ] , i ) );
+                  clusters.insert ( std::multimap<G4int,G4int>::value_type ( is_assigned_to [ j ] , i ) );
                   is_assigned_to [ i ] = is_assigned_to [ j ]; 
                }
                else
@@ -677,11 +677,11 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
                         { 
                            //std::cout << "move " <<  it->first << " " << it->second << std::endl;
                            is_assigned_to [ it->second ] = is_assigned_to [ j ]; 
-                           clusters_tmp.insert ( std::pair < G4int , G4int >  (  is_assigned_to [ j ] , it->second ) );
+                           clusters_tmp.insert ( std::multimap<G4int,G4int>::value_type (  is_assigned_to [ j ] , it->second ) );
                         }
                         else
                         {
-                           clusters_tmp.insert ( std::pair < G4int , G4int > ( it->first , it->second ) );
+                           clusters_tmp.insert ( std::multimap<G4int,G4int>::value_type ( it->first , it->second ) );
                         }
                      }
 
@@ -694,7 +694,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
             } 
 
             //std::cout << "combination " << i << " " << j << std::endl;
-            comb_map.insert( std::pair< G4int , G4int > ( i , j ) ); 
+            comb_map.insert( std::multimap<G4int,G4int>::value_type ( i , j ) ); 
             cluster_participants.push_back ( j );
 
 
@@ -702,10 +702,10 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
             if ( assign_map.find( cluster_id ) == assign_map.end() ) 
             {  
                is_already_belong_some_cluster[i] = true;
-               assign_map.insert ( std::pair < G4int , G4int > ( cluster_id , i ) );
+               assign_map.insert ( std::multimap<G4int,G4int>::value_type ( cluster_id , i ) );
                hasThisCompany = true; 
             } 
-            assign_map.insert ( std::pair < G4int , G4int > ( cluster_id , j ) );  
+            assign_map.insert ( std::multimap<G4int,G4int>::value_type ( cluster_id , j ) );  
             is_already_belong_some_cluster[j] = true;
 
          } 
@@ -738,7 +738,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    {
  
       //std::cout << i << " cluster has " << clusters.count( i )  << " nucleons." << std::endl;
-      sorted_cluster_map.insert ( std::pair< G4int , G4int > ( clusters.count( i ) , i ) );
+      sorted_cluster_map.insert ( std::multimap<G4int,G4int>::value_type ( clusters.count( i ) , i ) );
 
    }
 
