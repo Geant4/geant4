@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.8 2007-11-20 09:37:11 gcosmo Exp $
+// $Id: G4GDMLDefine.cc,v 1.9 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -39,35 +39,6 @@ G4GDMLDefine::G4GDMLDefine() {
 }
 
 G4GDMLDefine::~G4GDMLDefine() {
-}
-
-G4bool G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
-
-   G4String name,value;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* node = attributes->item(attribute_index);
-
-      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
-
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="name" ) { name  = attribute_value; } else
-      if (attribute_name=="value") { value = attribute_value; }
-   }
-
-   G4double _value;
-
-   if (!evaluator->Evaluate(_value,value)) return false;
-
-   return evaluator->RegisterConstant(name,_value);
 }
 
 G4bool G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
@@ -142,6 +113,35 @@ G4bool G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
+G4bool G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
+
+   G4String name,value;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="value") { value = attribute_value; }
+   }
+
+   G4double _value;
+
+   if (!evaluator->Evaluate(_value,value)) return false;
+
+   return evaluator->RegisterVariable(name,_value);
+}
+
 G4bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *eval,const G4String& module) {
 
    evaluator = eval;
@@ -155,9 +155,10 @@ G4bool G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluat
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="constant") { if (!constantRead(child)) return false; } else
+      if (tag=="constant") { if (!variableRead(child)) return false; } else
       if (tag=="position") { if (!positionRead(child)) return false; } else
       if (tag=="rotation") { if (!rotationRead(child)) return false; } else
+      if (tag=="variable") { if (!variableRead(child)) return false; } else
       {
 	 G4cout << "GDML: Error! Unknown tag in define: " << tag << G4endl;
          return false;

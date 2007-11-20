@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.6 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLSolids.hh,v 1.7 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,7 +112,7 @@ class G4GDMLSolids {
 public:
    G4GDMLDefine define;   
 
-   G4bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String& newModule);
+   G4bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String& prename0,const G4String& postname0);
    G4VSolid* getSolid(const G4String&) const;
 };
 

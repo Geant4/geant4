@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.9 2007-11-20 09:37:11 gcosmo Exp $
+// $Id: G4GDMLSolids.cc,v 1.10 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -88,9 +88,9 @@ G4bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const 
 
    G4Transform3D transform(rot,position);
 
-   if (op==UNION       ) { new G4UnionSolid       (prename+name,firstSolid,secondSolid,transform); } else
-   if (op==SUBTRACTION ) { new G4SubtractionSolid (prename+name,firstSolid,secondSolid,transform); } else
-   if (op==INTERSECTION) { new G4IntersectionSolid(prename+name,firstSolid,secondSolid,transform); }
+   if (op==UNION       ) { new G4UnionSolid       (prename+name+postname,firstSolid,secondSolid,transform); } else
+   if (op==SUBTRACTION ) { new G4SubtractionSolid (prename+name+postname,firstSolid,secondSolid,transform); } else
+   if (op==INTERSECTION) { new G4IntersectionSolid(prename+name+postname,firstSolid,secondSolid,transform); }
 
    return true;
 }
@@ -126,7 +126,9 @@ G4bool G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
    if (!evaluator->Evaluate(_y,y,lunit)) return false;
    if (!evaluator->Evaluate(_z,z,lunit)) return false;
 
-   new G4Box(prename+name,_x*0.5,_y*0.5,_z*0.5);
+   new G4Box(prename+name+postname,_x*0.5,_y*0.5,_z*0.5);
+
+   std::cout << "Box name =" << (prename+name+postname) << std::endl;
 
    return true;
 }
@@ -293,11 +295,19 @@ G4bool G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
    return true;
 }
 
-G4bool G4GDMLSolids::loopRead(const xercesc::DOMElement* const) {
+G4bool G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
 
-   G4cout << "GDML: Loops are not implemented yet!" << G4endl;
+   G4GDMLSolids solids;
 
-   return false;
+   for (int i=0;i<4;i++) {
+
+      std::stringstream ss;
+      ss << postname << "(" << i << ")";
+   
+      solids.Read(element,evaluator,prename,ss.str());
+   }
+
+   return true;
 }
 
 G4bool G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
@@ -1198,10 +1208,12 @@ G4bool G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,zplaneT
    return true;
 }
 
-G4bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *evalPtr,const G4String& module) {
+G4bool G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *evalPtr,const G4String& prename0,const G4String& postname0) {
 
    evaluator = evalPtr;
-   prename = module;
+
+   prename = prename0;
+   postname = postname0;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 

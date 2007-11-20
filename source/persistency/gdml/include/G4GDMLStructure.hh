@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.8 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLStructure.hh,v 1.9 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,8 +69,10 @@ class G4GDMLStructure {
    G4bool directionRead           (const xercesc::DOMElement* const,EAxis&);
    G4bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
    G4bool fileRead                (const xercesc::DOMElement* const,G4LogicalVolume**);
+   G4bool loopRead                (const xercesc::DOMElement* const);
    G4bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
    G4bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool positionRead            (const xercesc::DOMElement* const,G4ThreeVector&);
    G4bool quantityRead            (const xercesc::DOMElement* const,G4double&);
    G4bool refRead                 (const xercesc::DOMElement* const,G4String&);
    G4bool replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);

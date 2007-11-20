@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.5 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.6 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,9 @@ public:
 
    void Set(const G4GDMLEvaluator&);
 
-   G4bool RegisterConstant(const G4String& name,G4double value);
+   G4bool RegisterVariable(const G4String& name,G4double value);
+   G4bool setVariable(const G4String& name,G4double value);
+
    G4bool Evaluate(G4double& value,const G4String& expression,const G4String& unit="");
 
 // If the expression is an empty string, the value of the expression is considered as zero

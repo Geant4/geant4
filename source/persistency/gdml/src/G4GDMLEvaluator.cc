@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.5 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.6 2007-11-20 13:54:04 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -47,8 +47,21 @@ void G4GDMLEvaluator::G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
    memcpy(this,&right,sizeof(G4GDMLEvaluator));
 }
 
-bool G4GDMLEvaluator::RegisterConstant(const G4String &name,G4double value) {
+bool G4GDMLEvaluator::RegisterVariable(const G4String &name,G4double value) {
 
+   eval.setVariable(name.c_str(),value);
+
+   return true;
+}
+
+G4bool G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
+
+   if (!eval.findVariable(name)) {
+   
+      std::cout << "GDML: Error! Referenced variable '" << name << "' was not found!" << std::endl;
+      return false;
+   }
+   
    eval.setVariable(name.c_str(),value);
 
    return true;
