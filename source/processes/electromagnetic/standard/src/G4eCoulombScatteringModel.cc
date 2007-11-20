@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.36 2007-11-11 16:39:43 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.37 2007-11-20 18:43:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,7 +112,9 @@ G4eCoulombScatteringModel::~G4eCoulombScatteringModel()
 void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 					   const G4DataVector&)
 {
-  //  G4cout << "!!! G4eCoulombScatteringModel::Initialise" << G4endl;
+  //  G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
+  // << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+  // << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   if(!isInitialised) {
     isInitialised = true;
 
@@ -121,42 +123,17 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
     else
       fParticleChange = new G4ParticleChangeForGamma();
+  } else {
+    return;
   }
 
-  if(!buildTable || p->GetParticleName() == "GenericIon") return;
+  if(p->GetParticleType() == "nucleus") buildTable = false;
+  if(!buildTable) return;
 
   // Compute log cross section table per atom
   if(!theCrossSectionTable) theCrossSectionTable = new G4PhysicsTable();
-
-  G4PhysicsLogVector* ptrVector;
-  G4double e, value;
+  
   nbins = 2*G4int(log10(highKEnergy/lowKEnergy));
-
-  const  G4ElementTable* elmt = G4Element::GetElementTable();
-  size_t nelm =  G4Element::GetNumberOfElements();
-
-  //  G4cout << "### G4eCoulombScatteringModel: Build table for " 
-  //	 << nelm << " elements for " << p->GetParticleName() << G4endl;
-
-  for(size_t j=0; j<nelm; j++) { 
-
-    const G4Element* elm = (*elmt)[j]; 
-    G4double Z =  elm->GetZ();
-    G4double A =  elm->GetN();
-    G4int iz   = G4int(Z);
-
-    // fill table for the given Z only once
-    if(index[iz] == -1) {
-      ptrVector  = new G4PhysicsLogVector(lowKEnergy, highKEnergy, nbins);
-      index[iz] = j;
-      for(G4int i=0; i<=nbins; i++) {
-	e     = ptrVector->GetLowEdgeEnergy( i ) ;
-	value = CalculateCrossSectionPerAtom(p, e, Z, A);  
-	ptrVector->PutValue( i, log(value) );
-      }
-      theCrossSectionTable->insert(ptrVector);
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,20 +147,43 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(p == particle && kinEnergy == tkin && Z == targetZ &&
      A == targetA && cutEnergy == ecut) return nucXSection;
 
+  //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
+  //	 << p->GetParticleName() << " Z= " << Z << " A= " << A 
+  //	 << " e= " << kinEnergy << G4endl; 
+
   nucXSection = ComputeElectronXSectionPerAtom(p,kinEnergy,Z,A,cutEnergy);
 
   // nuclear cross section
   if(theCrossSectionTable) {
     G4bool b;
-    nucXSection += std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))
-		 ->GetValue(kinEnergy, b));
-  } else nucXSection += CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
-  /*
-  G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom ###" << G4endl;
-  G4cout << " Z= " << Z << " A= " << A 
-	 << " e= " << kinEnergy << " cross(bn)= " << nucXSection/barn; 
-  */
+    G4int iz  = G4int(Z);
+    G4int idx = index[iz];
 
+    // compute table for given Z
+    if(-1 == idx) {
+      idx = theCrossSectionTable->size();
+      index[iz] = idx;
+      G4PhysicsLogVector* ptrVector
+	= new G4PhysicsLogVector(lowKEnergy, highKEnergy, nbins);
+      //  G4cout << "New vector Z= " << iz << " A= " << A << " idx= " << idx << G4endl; 
+      G4double e, value;
+      for(G4int i=0; i<=nbins; i++) {
+	e     = ptrVector->GetLowEdgeEnergy( i ) ;
+	value = CalculateCrossSectionPerAtom(p, e, Z, A);  
+	ptrVector->PutValue( i, log(value) );
+      }
+      theCrossSectionTable->push_back(ptrVector);
+    }
+
+      // take value from the table
+    nucXSection += 
+      std::exp((((*theCrossSectionTable)[idx]))->GetValue(kinEnergy, b));
+
+    // compute value from scratch
+  } else nucXSection += CalculateCrossSectionPerAtom(p, kinEnergy, Z, A);
+  
+  //  G4cout << " cross(bn)= " << nucXSection/barn << G4endl; 
+  
   if(nucXSection < 0.0) nucXSection = 0.0;
   return nucXSection;
 }
@@ -225,7 +225,8 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
     elecXSection = coeff*Z*chargeSquare*invbeta2*(1.0/x1 - 1.0/x2)/mom2;
   }
   //  G4cout << "cut= " << ecut << " e= " << tkin 
-  // << " croosE= " << elecXSection << G4endl;
+  // << " croosE(barn)= " << elecXSection/barn 
+  // << " cosEl= " << cosTetMaxElec << " costmin= " << cosThetaMin << G4endl;
   return elecXSection;
 }
 
@@ -254,13 +255,11 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
       *(1./z1 - 1./z2 + 1./zn1 - 1./zn2 + 
 	2.0*std::log(z1*zn2/(z2*zn1))/d)/(mom2*d1*d1);
   }
-  /*
-  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
-  	 << " cross(b)= " << cross/barn
-  	 << " ctmin= " << cosThetaMin
-  	 << " ctmax= " << cosTetMaxNuc       
-  	 << G4endl;
-  */
+  
+  //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
+  // << " cross(b)= " << cross/barn << " ctmin= " << cosThetaMin
+  // << " ctmax= " << cosTetMaxNuc << G4endl;
+  
   return cross;
 }
 

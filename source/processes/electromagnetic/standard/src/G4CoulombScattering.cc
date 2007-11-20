@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.10 2007-08-13 18:11:14 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.11 2007-11-20 18:43:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     isInitialised = true;
     aParticle = p;
     G4double mass = p->GetPDGMass();
-    if (mass > GeV) {
+    if (mass > GeV || p->GetParticleType() == "nucleus") {
       buildElmTableFlag = false;
       verboseLevel = 0;
     } else {
