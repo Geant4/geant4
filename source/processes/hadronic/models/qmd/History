@@ -13,8 +13,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20-Nov-2007 Gabriele Cosmo (hadr-qmd-V09-00-02)
+- Fixed compilation problem on SUN-CC for handling of 'multimap'
+  structures in G4QMDMeanField.cc.
+
 15-Nov-2007 Tatsumi Koi    (hadr-qmd-V09-00-01)
--   First implmentation of QMD reaction model
+- First implmentation of QMD reaction model
 	based on JQMD (Niita et al., JAERI-Data/Code 99-042)
 	Use Collision library of Geant4
 
