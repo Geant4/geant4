@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.15 2007-11-20 11:38:14 bmorgan Exp $
+# $Id: Configure,v 1.16 2007-11-20 16:58:24 bmorgan Exp $
 #
-# Generated on Tue Nov 20 11:37:00 GMT 2007 [metaconfig 3.0 PL70]
+# Generated on Tue Nov 20 16:57:48 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -5665,10 +5665,14 @@ EOM`
    # If a filter on g4gdml_xerces_root is needed to remove common system paths
    # then it should be put here...
    #
+	if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+		g4gdml_xercesc_root=""
+	fi
 
 fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
+
 echo " "
 
 case "$g4make" in

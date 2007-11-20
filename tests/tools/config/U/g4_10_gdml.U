@@ -127,6 +127,9 @@ EOM`
    # If a filter on g4gdml_xerces_root is needed to remove common system paths
    # then it should be put here...
    #
+	if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+		g4gdml_xercesc_root=""
+	fi
 
 fi #END XERCES PROBE
 
