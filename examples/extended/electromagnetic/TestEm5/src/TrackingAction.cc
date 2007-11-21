@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.14 2007-07-31 16:51:29 maire Exp $
+// $Id: TrackingAction.cc,v 1.15 2007-11-21 17:41:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (aTrack->GetTrackID() == 1) flag = 2;
   if (transmit) eventaction->SetTransmitFlag(flag);
   if (reflect)  eventaction->SetReflectFlag(flag);
-
+      
   //
   //histograms
   //
@@ -90,6 +90,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (transmit && neutral) id = 20;
   else if (reflect  && charged) id = 30;
   else if (reflect  && neutral) id = 40;
+  
+  //energy leakage
+  //
+  if (transmit || reflect) {
+    G4int trackID = aTrack->GetTrackID();
+    G4int index = 0; if (trackID > 1) index = 1;    //primary=0, secondaries=1
+    G4double eleak = aTrack->GetKineticEnergy();
+    if ((aTrack->GetDefinition() == G4Positron::Positron()) && (trackID > 1))
+      eleak += 2*electron_mass_c2;
+    runaction->AddEnergyLeak(eleak,index);  
+  }
 
   histoManager->FillHisto(id, aTrack->GetKineticEnergy());
 
