@@ -156,11 +156,13 @@ examples/extended
   medical:
     DICOM                    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
+    fanoCavity2              Michel.Maire@lapp.in2p3.fr      Michel Maire
     GammaTherapy             Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   optical/LXe                gum@triumf.ca                   Peter Gumplinger
   parallel:
     ParN02, ParN04           gene@ccs.neu.edu                Gene Cooperman
     ExDiane                  MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+    MPI                      Koichi.Murakami@kek.jp          Koichi Murakami
   parameterisations/gflash   Marc.Verderi@in2p3.fr           Marc Verderi
   persistency/P01            Witold.Pokorski@cern.ch         Witold Pokorski
   polarisation/Pol01         Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -168,6 +170,7 @@ examples/extended
   runAndEvent:
     RE01                     asai@slac.stanford.edu          Makoto Asai
     RE02                     asai@slac.stanford.edu          Makoto Asai
+    RE03                     asai@slac.stanford.edu          Makoto Asai
   visualization:
     perspective              John.Allison@man.ac.uk          John Allison
     standalone               John.Allison@man.ac.uk          John Allison
@@ -215,5 +218,6 @@ tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test41                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+      test52                 Anton.Lechner@cern.ch	     Anton Lechner
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison

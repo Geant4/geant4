@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2007-08-28 10:20:06 gcosmo Exp $
+$Id: README,v 1.19 2007-11-21 15:34:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -68,6 +68,7 @@ test50 ## Statistical test suite for e.m. processes:
        ## 3) gamma process' cross section;
        ## 4) e-  backscattering;
        ## 5) e-,e+ transmission.
+test52 ## EM low-energy (standard, low-energy, Penelope)
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________
