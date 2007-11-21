@@ -42,8 +42,8 @@ processes                    John Apostolakis                John Apostolakis
 "/"/util                     dwright@slac.stanford.edu       Dennis Wright
 "/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
-"/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
-"/"/models/cascade           Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/binary_cascade         Gunter.Folger@cern.ch           Gunter Folger
+"/"/"/cascade                Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kosov@cern.ch           Mikhail Kossov
 "/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
 "/"/"/de_excitation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
@@ -72,6 +72,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/"/management           Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/"/qgsm                 Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
+"/"/"/qmd                    tkoi@slac.stanford.edu          Tatsumi Koi
 "/"/"/pre_equilibrium        Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
 "/"/"/theo_high_energy       Gunter.Folger@cern.ch           Gunter Folger
