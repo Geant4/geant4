@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.11 2007-11-20 13:54:05 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.12 2007-11-21 13:23:53 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -116,7 +116,7 @@ G4bool G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element
       if (tag=="volumeref") { if (!refRead(child,volumeref)) return false; } 
    }
 
-   G4LogicalVolume* pLogical = getVolume(module+volumeref);
+   G4LogicalVolume* pLogical = getVolume(file+volumeref);
 
    if (!pLogical) return false;
 
@@ -167,32 +167,21 @@ G4bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4Logi
    
    if (!structure.gdmlRead(name,parser)) return false;
 
-   *logvol = structure.getVolume(structure.module + volname);
+   *logvol = structure.getVolume(structure.file + volname);
 
    return (*logvol != 0);
 }
 
 G4bool G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
 
-   G4String ffor,to,step;
+   G4GDMLStructure structure;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
+   for (int i=0;i<4;i++) {
 
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="for" ) { ffor = attribute_value; } else
-      if (attribute_name=="to"  ) { to   = attribute_value; } else
-      if (attribute_name=="step") { step = attribute_value; }
+      std::stringstream ss;
+      ss << loop << "(" << i << ")";
+   
+      structure.Read(element,file,ss.str());
    }
 
    return true;
@@ -241,14 +230,14 @@ G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4L
 
    if (!volumeref.empty()) {
 
-      logvol = getVolume(module+volumeref);
+      logvol = getVolume(file+volumeref+loop); // only volumeref is onvolved in loops!
 
       if (!logvol) return false;
    }
 
    if (!positionref.empty()) {
    
-      G4ThreeVector* posPtr = solids.define.getPosition(module+positionref);
+      G4ThreeVector* posPtr = solids.define.getPosition(file+positionref); // positionref is not involved in loops!
 
       if (!posPtr) return false;
 
@@ -259,7 +248,7 @@ G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4L
 
    if (!rotationref.empty()) {
 
-      G4ThreeVector* anglePtr = solids.define.getRotation(module+rotationref);
+      G4ThreeVector* anglePtr = solids.define.getRotation(file+rotationref); // rotationref is not involved in loops!
 
       if (!anglePtr) return false;
 
@@ -415,7 +404,7 @@ G4bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,
       if (tag=="replicate_along_axis") { if (!replicate_along_axisRead(child,_width,_offset,_axis)) return false; }
    }
 
-   G4LogicalVolume* pLogical = getVolume(module+volumeref);
+   G4LogicalVolume* pLogical = getVolume(file+volumeref);
 
    if (!pLogical) return false;
 
@@ -444,13 +433,18 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) { if (!refRead(child,solidref   )) return false; }
    }
 
-   G4Material *materialPtr = materials.getMaterial(module+materialref);
-   G4VSolid* solidPtr = solids.getSolid(module+solidref);
+   G4Material *materialPtr = materials.getMaterial(file+materialref); // materialref is not involved in loops!
+   G4VSolid* solidPtr = solids.getSolid(file+solidref+loop); // solidref is involved in loops!
 
    if (!solidPtr || !materialPtr) return false;
  
-   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,module+name,0,0,0);
-   
+   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,file+name+loop,0,0,0);
+
+   return volume_contentRead(element,volumePtr);
+}
+
+G4bool G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
+
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
@@ -459,16 +453,40 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
   
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="paramvol"   ) { if (!paramvolRead   (child,volumePtr)) return false; } else
-      if (tag=="physvol"    ) { if (!physvolRead    (child,volumePtr)) return false; } else
-      if (tag=="replicavol" ) { if (!replicavolRead (child,volumePtr)) return false; } else
-      if (tag=="divisionvol") { if (!divisionvolRead(child,volumePtr)) return false; }
+      if (tag=="loop"       ) { if (!volume_content_loopRead(child,volumePtr)) return false; } else
+      if (tag=="paramvol"   ) { if (!paramvolRead           (child,volumePtr)) return false; } else
+      if (tag=="physvol"    ) { if (!physvolRead            (child,volumePtr)) return false; } else
+      if (tag=="replicavol" ) { if (!replicavolRead         (child,volumePtr)) return false; } else
+      if (tag=="divisionvol") { if (!divisionvolRead        (child,volumePtr)) return false; }
    }
 
    return true;
 }
 
-G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
+G4bool G4GDMLStructure::volume_content_loopRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
+
+   G4GDMLStructure structure;
+
+   for (int i=0;i<4;i++) {
+
+      std::stringstream ss;
+      ss << loop << "(" << i << ")";
+   
+      if (!evaluator->setVariable("x",2.0*(G4float)i)) return false;
+
+      structure.evaluator = evaluator;
+      structure.file = file;
+      structure.loop = ss.str();
+      structure.volume_contentRead(element,volumePtr);
+   }
+
+   return true;
+}
+
+G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4String& file0,const G4String& loop0) {
+
+   file = file0;
+   loop = loop0;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -491,7 +509,7 @@ G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
 
 G4bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
 
-   module = fileName + "::";
+   file = fileName + "_";
 
    parser = newParser;
 
@@ -540,11 +558,11 @@ G4bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMPars
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="define"   ) { if (!solids.define.Read(child,evaluator,module)) return false; } else
-      if (tag=="materials") { if (!materials.Read    (child,evaluator,module)) return false; } else
-      if (tag=="solids"   ) { if (!solids.Read       (child,evaluator,module,"")) return false; } else
-      if (tag=="setup"    ) { if (!setup.Read        (child,module)) return false; } else
-      if (tag=="structure") { if (!Read              (child)) return false; }
+      if (tag=="define"   ) { if (!solids.define.Read(child,evaluator,file)) return false; } else
+      if (tag=="materials") { if (!materials.Read    (child,evaluator,file)) return false; } else
+      if (tag=="solids"   ) { if (!solids.Read       (child,evaluator,file)) return false; } else
+      if (tag=="setup"    ) { if (!setup.Read        (child,file          )) return false; } else
+      if (tag=="structure") { if (!Read              (child,file,loop     )) return false; }
    }
 
    return true;
