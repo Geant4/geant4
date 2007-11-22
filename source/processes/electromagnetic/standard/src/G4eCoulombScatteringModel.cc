@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.37 2007-11-20 18:43:25 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.38 2007-11-22 10:18:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,14 +203,16 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
   elecXSection = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
+  //G4double ekin = kinEnergy;
   SetupTarget(Z, A, ekin);
 
   G4double tmax = tkin;
   if(p == theElectron) tmax *= 0.5;
   else if(p != thePositron) {
     G4double ratio = electron_mass_c2/mass;
-    tmax = 2.0*mom2/
-      (electron_mass_c2*(1.0 + ratio*(tkin/mass + 1.0) + ratio*ratio)); 
+    G4double tau = tkin/mass;
+    tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
+      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
 
   G4double t = std::min(cutEnergy, tmax);
@@ -240,6 +242,7 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   G4double cross = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
+  //G4double ekin = kinEnergy;
   SetupTarget(Z, A, ekin);
 
   if(cosTetMaxNuc < cosThetaMin) {
