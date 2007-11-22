@@ -1,4 +1,4 @@
-$Id: History,v 1.355 2007-11-20 18:43:25 vnivanch Exp $
+$Id: History,v 1.356 2007-11-22 15:33:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 November 07: V.Ivant (emstand-V09-00-18)
+G4UrbanMscModel - change parameter tausmall to avoid lost of numerical 
+                  precision and NaN values
 
 20 November 07: V.Ivant (emstand-V09-00-17)
 G4eCoulombScatteringModel - fixed crash happens at initialisation when 

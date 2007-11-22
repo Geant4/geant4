@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.72 2007-10-29 18:10:17 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.73 2007-11-22 15:33:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,7 +194,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   masslimitmu = 110.*MeV;
 
   taubig        = 8.0;
-  tausmall      = 1.e-20;
+  tausmall      = 1.e-16;
   taulim        = 1.e-6;
   currentTau    = taulim;
   tlimitminfix  = 1.e-6*mm;            
