@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007-11-20 09:32:30 gcosmo Exp $
+$Id: History,v 1.3 2007-11-22 09:04:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 November, 07  Z.Torzsok (gdml-V09-00-02)
+- Handling of embedded loops added.
+- Fixed compilation problems on Windows platform.
 
 19 November, 07  G.Cosmo (gdml-V09-00-01)
 - Better handling of modular GDML files and reflections (Z.Torzsok).
