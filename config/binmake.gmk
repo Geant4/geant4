@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.134 2007-11-19 13:26:38 gcosmo Exp $
+# $Id: binmake.gmk,v 1.135 2007-11-22 14:08:10 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -255,13 +255,13 @@ else
   endif
 endif
 
-ifdef G4LIB_BUILD_ZLIB
+ifdef G4LIB_USE_ZLIB
   LDLIBS2 += -lG4zlib
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
 #
-ifdef G4LIB_BUILD_GDML
+ifdef G4LIB_USE_GDML
   LDLIBS3 += $(GDMLLIBS)
 endif
 LDLIBS3 += $(INTYLIBS)
