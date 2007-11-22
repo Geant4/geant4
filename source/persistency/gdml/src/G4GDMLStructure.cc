@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.15 2007-11-22 09:36:19 gcosmo Exp $
+// $Id: G4GDMLStructure.cc,v 1.16 2007-11-22 15:02:11 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -175,14 +175,49 @@ G4bool G4GDMLStructure::fileRead(const xercesc::DOMElement* const element,G4Logi
 
 G4bool G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
 
-   G4GDMLStructure structure;
+   G4String var;
+   G4String from;
+   G4String to;
+   G4String step;
 
-   for (G4int i=0;i<4;i++) {
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
 
-      std::ostringstream ss;
-      ss << loop << "(" << i << ")";
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="var" ) { var  = attribute_value; } else
+      if (attribute_name=="from") { from = attribute_value; } else
+      if (attribute_name=="to"  ) { to   = attribute_value; } else
+      if (attribute_name=="step") { step = attribute_value; }
+   }
+
+   G4double _var;
+   G4double _from;
+   G4double _to;
+   G4double _step;
    
-      structure.Read(element,file,ss.str());
+   if (!evaluator->Evaluate(_var ,var )) return false;
+   if (!evaluator->Evaluate(_from,from)) return false;
+   if (!evaluator->Evaluate(_to  ,to  )) return false;
+   if (!evaluator->Evaluate(_step,step)) return false;
+
+   if (!from.empty()) _var = _from;
+
+   while (_var <= _to) {
+   
+      evaluator->setVariable(var,_var);
+      Read(element,file,loop);
+
+      _var += _step;
    }
 
    return true;
@@ -231,7 +266,11 @@ G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4L
 
    if (!volumeref.empty()) {
 
-      logvol = getVolume(file+volumeref+loop); // only volumeref is onvolved in loops!
+      G4String ref;
+      
+      if (!solids.nameProcess(ref,volumeref)) return false;
+
+      logvol = getVolume(ref);
 
       if (!logvol) return false;
    }
@@ -422,6 +461,10 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
 
+   G4String _name;
+   
+   if (!solids.nameProcess(_name,name)) return false;
+
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
@@ -435,11 +478,16 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    }
 
    G4Material *materialPtr = materials.getMaterial(file+materialref); // materialref is not involved in loops!
-   G4VSolid* solidPtr = solids.getSolid(file+solidref+loop); // solidref is involved in loops!
+
+   G4String ref;
+      
+   if (!solids.nameProcess(ref,solidref)) return false;
+
+   G4VSolid* solidPtr = solids.getSolid(ref); // solidref is involved in loops!
 
    if (!solidPtr || !materialPtr) return false;
  
-   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,file+name+loop,0,0,0);
+   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,_name,0,0,0);
 
    return volume_contentRead(element,volumePtr);
 }
@@ -454,7 +502,7 @@ G4bool G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const elem
   
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="loop"       ) { if (!volume_content_loopRead(child,volumePtr)) return false; } else
+      if (tag=="loop"       ) { if (!volume_loopRead        (child,volumePtr)) return false; } else
       if (tag=="paramvol"   ) { if (!paramvolRead           (child,volumePtr)) return false; } else
       if (tag=="physvol"    ) { if (!physvolRead            (child,volumePtr)) return false; } else
       if (tag=="replicavol" ) { if (!replicavolRead         (child,volumePtr)) return false; } else
@@ -464,25 +512,56 @@ G4bool G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const elem
    return true;
 }
 
-G4bool G4GDMLStructure::volume_content_loopRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
+G4bool G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
 
-   G4GDMLStructure structure;
+   G4String var;
+   G4String from;
+   G4String to;
+   G4String step;
 
-   for (G4int i=0;i<4;i++) {
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
 
-      std::ostringstream ss;
-      ss << loop << "(" << i << ")";
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="var" ) { var  = attribute_value; } else
+      if (attribute_name=="from") { from = attribute_value; } else
+      if (attribute_name=="to"  ) { to   = attribute_value; } else
+      if (attribute_name=="step") { step = attribute_value; }
+   }
+
+   G4double _var;
+   G4double _from;
+   G4double _to;
+   G4double _step;
    
-      if (!evaluator->setVariable("x",2.0*(G4float)i)) return false;
+   if (!evaluator->Evaluate(_var ,var )) return false;
+   if (!evaluator->Evaluate(_from,from)) return false;
+   if (!evaluator->Evaluate(_to  ,to  )) return false;
+   if (!evaluator->Evaluate(_step,step)) return false;
 
-      structure.evaluator = evaluator;
-      structure.file = file;
-      structure.loop = ss.str();
-      structure.volume_contentRead(element,volumePtr);
+   if (!from.empty()) _var = _from;
+
+   while (_var <= _to) {
+   
+      evaluator->setVariable(var,_var);
+      volume_contentRead(element,volumePtr);
+
+      _var += _step;
    }
 
    return true;
 }
+
 
 G4bool G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4String& file0,const G4String& loop0) {
 

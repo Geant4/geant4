@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.10 2007-11-21 13:23:53 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.11 2007-11-22 15:02:11 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,7 +79,7 @@ class G4GDMLStructure {
    G4bool replicavolRead          (const xercesc::DOMElement* const,G4LogicalVolume*);
    G4bool volumeRead              (const xercesc::DOMElement* const);
    G4bool volume_contentRead      (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool volume_content_loopRead (const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4bool volume_loopRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
    G4bool Read                    (const xercesc::DOMElement* const,const G4String&,const G4String&);
 public:
    G4GDMLMaterials materials;
