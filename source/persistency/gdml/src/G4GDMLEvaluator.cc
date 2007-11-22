@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.6 2007-11-20 13:54:04 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.7 2007-11-22 09:11:15 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -42,12 +42,12 @@ G4GDMLEvaluator::G4GDMLEvaluator() {
    eval.setSystemOfUnits(1.e+3,1./1.60217733e-25,1.e+9,1./1.60217733e-10,1.0,1.0,1.0);
 }
 
-void G4GDMLEvaluator::G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
+void G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
 
    memcpy(this,&right,sizeof(G4GDMLEvaluator));
 }
 
-bool G4GDMLEvaluator::RegisterVariable(const G4String &name,G4double value) {
+G4bool G4GDMLEvaluator::RegisterVariable(const G4String &name,G4double value) {
 
    eval.setVariable(name.c_str(),value);
 
@@ -67,7 +67,7 @@ G4bool G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
    return true;
 }
 
-bool G4GDMLEvaluator::Evaluate(G4double& value,const G4String& expression,const G4String& unit) {
+G4bool G4GDMLEvaluator::Evaluate(G4double& value,const G4String& expression,const G4String& unit) {
 
    G4double _expression = 0.0;
    G4double _unit = 1.0;
