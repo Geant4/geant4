@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.7 2007-11-13 10:06:16 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.8 2007-11-22 08:39:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -447,10 +447,10 @@ G4double G4FinalStateIonisationBorn::LogLogInterpolate(G4double e1,
 						       G4double xs1, 
 						       G4double xs2)
 {
-  G4double a = (log10(xs2)-log10(xs1)) / (log10(e2)-log10(e1));
-  G4double b = log10(xs2) - a*log10(e2);
-  G4double sigma = a*log10(e) + b;
-  G4double value = (pow(10,sigma));
+  G4double a = (std::log10(xs2)-std::log10(xs1)) / (std::log10(e2)-std::log10(e1));
+  G4double b = std::log10(xs2) - a*std::log10(e2);
+  G4double sigma = a*std::log10(e) + b;
+  G4double value = (std::pow(10.,sigma));
   return value;
 }
 
