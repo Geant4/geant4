@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+22-Nov-2007 - A.Ribon (statAccepTest-V09-00-02)
+- Replaced PI with iAIDA. Moreover, added extra 
+  files, with  "-m32"  extension, to allow 
+  building/running in 32-bit compatibility mode
+  in 64-bit architectures.
+
+
 09-Nov-2007 - A.Ribon (statAccepTest-V09-00-01)
 - Migrated to SLC4, g++ 3.4.6, for 32-bit platforms.
 

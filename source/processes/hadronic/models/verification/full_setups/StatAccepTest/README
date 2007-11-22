@@ -1,5 +1,5 @@
 
- Last update: 13-Mar-2007
+ Last update: 22-Nov-2007
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -67,15 +67,15 @@
  information printed out (in the screen) at the end of execution,
  without the ntuple and the histograms, then it is enough to
  not define the environmental variable  G4ANALYSIS_USE . 
- In this case, you do not need any AIDA/PI software.
+ In this case, you do not need AIDA.
 
  If the environmental variable G4ANALYSIS_USE is defined (and
- also AIDA/PI), then the output of the program is an HBOOK ntuple
-  * ntuple.hbook *  which contains some physics variables, like 
- the total energy deposit in the active layers, the total deposit
- in the whole calorimeter, the energy deposit in each active layer,
- and the transverse energy deposition sum over all the active layers, 
- in a certain number of radial bins.
+ you have an AIDA implementation), then the output of the program
+ is an HBOOK ntuple  * ntuple.hbook *  which contains some 
+ physics variables, like the total energy deposit in the active layers,
+ the total deposit in the whole calorimeter, the energy deposit in 
+ each active layer, and the transverse energy deposition sum over all
+ the active layers, in a certain number of radial bins.
 
  In the same HBOOK file, also a number of histograms can be
  produced, describing the following information:
@@ -189,3 +189,12 @@
 
  The subdirectory  dirCPUbench/  is dedicated to some CPU performance
  benchmarks of Geant4 (see the README file in that directory).
+
+ The files that end with  "-m32"  have been added to allow
+ to build/run in 32-bit compatibility mode in 64-bit architectures.
+ For 32-bit architectures, whether you use these files, or the
+ corresponding "normal" ones (i.e. without the  "-m32"  extension),
+ nothing will change: you always build/run in 32-bit mode.
+ For 64-bit architectures, if you use the corresponding "normal"
+ files (i.e. without the  "-m32"  extension), then you build/run
+ in native 64-bit mode.
