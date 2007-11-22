@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.100 2007-10-07 13:31:42 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.101 2007-11-22 11:59:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3430,9 +3430,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           theQHadrons.push_back(candHadr);           // Fill the emergency PHOTON (del.eq.)
           G4QHadron* candHRes = new G4QHadron(rPDG,resQ4Mom);// Creation Hadron for QResid
           FillHadronVector(candHRes);                // Fill "new candHRes" (del.equiv.)
-//#ifdef debug
+#ifdef debug
           G4cerr<<"---Warning---G4Q::HQ:EmergencyHd="<<sPDG<<",E="<<theEnvironment<<G4endl;
-//#endif
+#endif
           ClearQuasmon();                            // This Quasmon is done
           qEnv=theEnvironment;
           return theQHadrons;
