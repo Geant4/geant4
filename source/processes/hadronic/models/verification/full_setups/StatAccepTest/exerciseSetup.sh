@@ -40,6 +40,7 @@ export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP
 #
 export G4UI_USE_TCSH=1
+export G4VIS_NONE=1
 #
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/$G4SYSTEM
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CLHEP_LIB_DIR
@@ -54,10 +55,9 @@ export G4WORKDIR=$PWD
 export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
 export G4ANALYSIS_USE=1
 #
-# --- Aida / PI ---
-# Use my own PI libraries instead of the AFS ones.
-export PI_DIR=$DIR_INSTALLATIONS/dirPI
-export PATH=$PI_DIR/bin:$PATH
+# --- AIDA ---
+export CERNLIB_DIR=$DIR_INSTALLATIONS/dirCERNLIB
+export PATH=$DIR_INSTALLATIONS/diriAIDA/bin:$PATH
 eval `aida-config --runtime sh`
 #
 # --- Statistical toolkit ---
