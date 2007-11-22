@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.12 2007-11-21 13:23:53 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.13 2007-11-22 09:20:47 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -176,7 +176,7 @@ G4bool G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
 
    G4GDMLStructure structure;
 
-   for (int i=0;i<4;i++) {
+   for (G4int i=0;i<4;i++) {
 
       std::stringstream ss;
       ss << loop << "(" << i << ")";
@@ -467,7 +467,7 @@ G4bool G4GDMLStructure::volume_content_loopRead(const xercesc::DOMElement* const
 
    G4GDMLStructure structure;
 
-   for (int i=0;i<4;i++) {
+   for (G4int i=0;i<4;i++) {
 
       std::stringstream ss;
       ss << loop << "(" << i << ")";

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.11 2007-11-21 13:23:53 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.12 2007-11-22 09:20:47 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -297,7 +297,7 @@ G4bool G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
 
    G4GDMLSolids solids;
 
-   for (int i=0;i<4;i++) {
+   for (G4int i=0;i<4;i++) {
 
       std::stringstream ss;
       ss << loop << "(" << i << ")";
