@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.14 2007-11-22 09:32:58 gcosmo Exp $
+// $Id: G4GDMLStructure.cc,v 1.15 2007-11-22 09:36:19 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLStructure.hh"
+#include <sstream>
 
 G4GDMLStructure::G4GDMLStructure() {
 

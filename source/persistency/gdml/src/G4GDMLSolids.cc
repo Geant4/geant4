@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.13 2007-11-22 09:32:58 gcosmo Exp $
+// $Id: G4GDMLSolids.cc,v 1.14 2007-11-22 09:36:19 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLSolids.hh"
+#include <sstream>
 
 G4bool G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
 
