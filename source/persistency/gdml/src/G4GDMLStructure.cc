@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.13 2007-11-22 09:20:47 gcosmo Exp $
+// $Id: G4GDMLStructure.cc,v 1.14 2007-11-22 09:32:58 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -178,7 +178,7 @@ G4bool G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
 
    for (G4int i=0;i<4;i++) {
 
-      std::stringstream ss;
+      std::ostringstream ss;
       ss << loop << "(" << i << ")";
    
       structure.Read(element,file,ss.str());
@@ -469,7 +469,7 @@ G4bool G4GDMLStructure::volume_content_loopRead(const xercesc::DOMElement* const
 
    for (G4int i=0;i<4;i++) {
 
-      std::stringstream ss;
+      std::ostringstream ss;
       ss << loop << "(" << i << ")";
    
       if (!evaluator->setVariable("x",2.0*(G4float)i)) return false;
