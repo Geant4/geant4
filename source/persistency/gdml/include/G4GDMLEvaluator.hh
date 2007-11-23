@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.6 2007-11-20 13:54:04 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.7 2007-11-23 14:57:12 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,8 +43,9 @@
 
 #include <CLHEP/Evaluator/Evaluator.h>
 
-#include "G4String.hh"
 #include "G4Types.hh"
+#include "G4String.hh"
+#include "G4Box.hh"
 
 class G4GDMLEvaluator {
    HepTool::Evaluator eval;
@@ -56,13 +57,9 @@ public:
    G4bool RegisterVariable(const G4String& name,G4double value);
    G4bool setVariable(const G4String& name,G4double value);
 
-   G4bool Evaluate(G4double& value,const G4String& expression,const G4String& unit="");
+   G4bool Evaluate(G4double& value,const G4String& expression,const G4String& unit=""); // obsolete
 
-// If the expression is an empty string, the value of the expression is considered as zero
-// The unit is an empty string by default, what means no unit or unit of one
-
-// Do NOT change the default unit into "1" because a string is empty by default, so that if an empty
-// string is passed as unit it means no unit or unit of one
+   G4double Evaluate(const G4String&);
 };
 
 #endif

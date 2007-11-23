@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.7 2007-11-22 09:11:15 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.8 2007-11-23 14:57:12 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -98,3 +98,22 @@ G4bool G4GDMLEvaluator::Evaluate(G4double& value,const G4String& expression,cons
 
    return true;
 }
+
+G4double G4GDMLEvaluator::Evaluate(const G4String& expression) {
+
+   G4double value = 0.0;
+
+   if (!expression.empty()) {
+   
+      value = eval.evaluate(expression.c_str());
+
+      if (eval.status() != HepTool::Evaluator::OK) {
+
+         eval.print_error();
+         G4Exception("Error in evaluator!");
+      }
+   }
+   
+   return value;
+}
+

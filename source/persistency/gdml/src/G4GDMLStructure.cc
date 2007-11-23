@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.17 2007-11-23 10:31:55 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.18 2007-11-23 14:57:12 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -632,7 +632,7 @@ G4bool G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMPars
 
       if (tag=="define"   ) { if (!solids.define.Read(child,evaluator,file)) return false; } else
       if (tag=="materials") { if (!materials.Read    (child,evaluator,file)) return false; } else
-      if (tag=="solids"   ) { if (!solids.Read       (child,evaluator,file)) return false; } else
+      if (tag=="solids") solids.Read(child,evaluator,file); else
       if (tag=="setup"    ) { if (!setup.Read        (child,file          )) return false; } else
       if (tag=="structure") { if (!Read              (child,file,loop     )) return false; }
    }

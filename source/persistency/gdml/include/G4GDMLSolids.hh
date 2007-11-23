@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.10 2007-11-23 10:31:55 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.11 2007-11-23 14:57:12 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,8 @@
 #include "G4GDMLDefine.hh"
 #include "G4GDMLEvaluator.hh"
 
+#include <sstream>
+
 class G4GDMLSolids {
 
    G4String file;
@@ -79,42 +81,41 @@ class G4GDMLSolids {
    G4GDMLEvaluator* evaluator;
 
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
-   typedef struct zplaneType { double rmin,rmax,z; };
+   typedef struct zplaneType { G4double rmin,rmax,z; };
 
-   G4bool booleanRead       (const xercesc::DOMElement* const,const BooleanOp);
-   G4bool boxRead           (const xercesc::DOMElement* const);
-   G4bool coneRead          (const xercesc::DOMElement* const);
-   G4bool ellipsoidRead     (const xercesc::DOMElement* const);
-   G4bool eltubeRead        (const xercesc::DOMElement* const);
-   G4bool hypeRead          (const xercesc::DOMElement* const);
-   G4bool loopRead          (const xercesc::DOMElement* const);
-   G4bool orbRead           (const xercesc::DOMElement* const);
-   G4bool paraRead          (const xercesc::DOMElement* const);
-   G4bool polyconeRead      (const xercesc::DOMElement* const);
-   G4bool polyhedraRead     (const xercesc::DOMElement* const);
+   void booleanRead(const xercesc::DOMElement* const,const BooleanOp);
+   void boxRead(const xercesc::DOMElement* const);
+   void coneRead(const xercesc::DOMElement* const);
+   void ellipsoidRead(const xercesc::DOMElement* const);
+   void eltubeRead(const xercesc::DOMElement* const);
+   void hypeRead(const xercesc::DOMElement* const);
+   void loopRead(const xercesc::DOMElement* const);
+   void orbRead(const xercesc::DOMElement* const);
+   void paraRead(const xercesc::DOMElement* const);
+   void polyconeRead(const xercesc::DOMElement* const);
+   void polyhedraRead(const xercesc::DOMElement* const);
    G4bool positionRead      (const xercesc::DOMElement* const,G4ThreeVector&);
-   G4bool quadrangularRead  (const xercesc::DOMElement* const,G4TessellatedSolid*);
-   G4bool refRead           (const xercesc::DOMElement* const,G4String&);
-   G4bool reflectedSolidRead(const xercesc::DOMElement* const);
+   G4QuadrangularFacet* quadrangularRead(const xercesc::DOMElement* const);
+   G4String refRead(const xercesc::DOMElement* const);
+   void reflectedSolidRead(const xercesc::DOMElement* const);
    G4bool rotationRead      (const xercesc::DOMElement* const,G4ThreeVector&);
-   G4bool sectionRead       (const xercesc::DOMElement* const,G4ExtrudedSolid::ZSection&,const G4String& lunit);
-   G4bool sphereRead        (const xercesc::DOMElement* const);
-   G4bool tessellatedRead   (const xercesc::DOMElement* const);
-   G4bool tetRead           (const xercesc::DOMElement* const);
-   G4bool torusRead         (const xercesc::DOMElement* const);
-   G4bool trapRead          (const xercesc::DOMElement* const);
-   G4bool trdRead           (const xercesc::DOMElement* const);
-   G4bool triangularRead    (const xercesc::DOMElement* const,G4TessellatedSolid*);
-   G4bool tubeRead          (const xercesc::DOMElement* const);
-   G4bool twoDimVertexRead  (const xercesc::DOMElement* const,G4TwoVector&,const G4String& lunit);
-   G4bool xtruRead          (const xercesc::DOMElement* const);
-   G4bool zplaneRead        (const xercesc::DOMElement* const,zplaneType&,const G4String& lunit);
+   G4ExtrudedSolid::ZSection sectionRead(const xercesc::DOMElement* const,G4double);
+   void sphereRead(const xercesc::DOMElement* const);
+   void tessellatedRead(const xercesc::DOMElement* const);
+   void tetRead(const xercesc::DOMElement* const);
+   void torusRead(const xercesc::DOMElement* const);
+   void trapRead(const xercesc::DOMElement* const);
+   void trdRead(const xercesc::DOMElement* const);
+   G4TriangularFacet* triangularRead(const xercesc::DOMElement* const);
+   void tubeRead(const xercesc::DOMElement* const);
+   G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
+   void xtruRead(const xercesc::DOMElement* const);
+   zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
 public:
    G4GDMLDefine define;   
 
-   G4bool Read(const xercesc::DOMElement* const,G4GDMLEvaluator*,const G4String& file0);
+   void Read(const xercesc::DOMElement* const,G4GDMLEvaluator*,const G4String&);
    G4VSolid* getSolid(const G4String&) const;
-
    std::string nameProcess(const std::string&);
 };
 
