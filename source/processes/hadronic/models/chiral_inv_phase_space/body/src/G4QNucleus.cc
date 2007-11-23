@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.88 2007-11-08 13:55:06 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.89 2007-11-23 08:43:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -4770,6 +4770,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
         }
         else if ((thePDG==221||thePDG==331)&&totMass>mPi+mPi) // "Decay in pipi" case
 	       {
+          delete qH;
           G4LorentzVector fq4M(0.,0.,0.,mPi);
           G4LorentzVector qe4M(0.,0.,0.,mPi);
           if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
@@ -4777,7 +4778,6 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             G4cerr<<"***G4QNucleus::EvaporateNucleus:tM="<<totMass<<"-> pi+ + pi-"<<G4endl;
 		          throw G4QException("G4QNucleus::EvaporateNucleus: H->Pi+Pi DecayIn2 error");
 	         }
-          delete qH;
           G4QHadron* H1 = new G4QHadron(211,fq4M);
 #ifdef pdebug
           G4cout<<"G4QNucleus::EvaporateNucleus:(3) PiPlus="<<fq4M<<G4endl;
@@ -4791,6 +4791,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
 	       }
         else if ((thePDG==221||thePDG==331)&&totMass>mPi0+mPi0) // "Decay in 2pi0" case
 	       {
+          delete qH;
           G4LorentzVector fq4M(0.,0.,0.,mPi0);
           G4LorentzVector qe4M(0.,0.,0.,mPi0);
           if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
@@ -4798,7 +4799,6 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             G4cerr<<"***G4QNucleus::EvaporateNucleus:tM="<<totMass<<"-> pi0 + pi0"<<G4endl;
 		          throw G4QException("G4QNucleus::EvaporateNucleus: H->Pi+Pi DecayIn2 error");
 	         }
-          delete qH;
           G4QHadron* H1 = new G4QHadron(111,fq4M);
 #ifdef pdebug
           G4cout<<"G4QNucleus::EvaporateNucleus:(4) Pi01="<<fq4M<<G4endl;
@@ -4812,6 +4812,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
 	       }
         else if (totMass>totM)                  // "Radiative Hadron decay" case
 	       {
+          delete qH;
           G4LorentzVector fq4M(0.,0.,0.,0.);
           G4LorentzVector qe4M(0.,0.,0.,totM);
           if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
@@ -4819,7 +4820,6 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             G4cerr<<"***G4QNuc::EvaporateNuc:tM="<<totMass<<"->h1M="<<totM<<"+gam"<<G4endl;
 		          throw G4QException("G4QNucleus::EvaporateNucleus: H*->H+gamma DecIn2 error");
 	         }
-          delete qH;
           G4QHadron* H2 = new G4QHadron(thePDG,qe4M);
 #ifdef pdebug
           G4cout<<"G4QNucleus::EvaporateNucleus:(5) tot="<<thePDG<<qe4M<<G4endl;
@@ -4833,6 +4833,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
 	       }
         else if (thePDG==111||thePDG==221||thePDG==331) // "Gamma+Gamma decay" case
 	       {
+          delete qH;
           G4LorentzVector fq4M(0.,0.,0.,0.);
           G4LorentzVector qe4M(0.,0.,0.,0.);
           if(!G4QHadron(q4M).DecayIn2(fq4M,qe4M))
@@ -4840,7 +4841,6 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             G4cerr<<"***G4QNucl::EvaporateNucleus:tM="<<totMass<<"->gamma + gamma"<<G4endl;
 		          throw G4QException("G4QNucleus::EvaporateNucleus: pi/eta->g+g DecIn2 error");
 	         }
-          delete qH;
           G4QHadron* H2 = new G4QHadron(22,qe4M);
 #ifdef pdebug
           G4cout<<"G4QNucleus::EvaporateNucleus:(6) gam1="<<qe4M<<G4endl;

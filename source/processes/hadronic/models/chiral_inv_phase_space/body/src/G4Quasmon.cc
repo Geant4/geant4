@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.101 2007-11-22 11:59:31 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.102 2007-11-23 08:43:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4078,6 +4078,13 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
     G4double xMax=kMax/kLim; // Maximum value for "x"
     G4double vRmax = pow((1.-xMax),n)*(1.+n*xMax);
     vRndm = vRmax + vRndm*(1.-vRmax);
+  }
+  if (vRndm<=0. || vRndm>1.)
+  {
+    G4cout<<"-Warning-G4Quasmon::GetQPM: R="<<vRndm<<",kMi="<<kMin<<",kMa="<<kMax<<",kLi="
+          <<kLim<<G4endl;
+    if(vRndm<=0.) vRndm=1.e-9;
+    else if(vRndm>1.) vRndm=1.;
   }
   if (n==1) return kLim*sqrt(1.-vRndm); // Direct solution for nOfQ==3
   else                                  // Needs iterations
