@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.53 2007-05-18 07:38:00 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.54 2007-11-23 09:08:17 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1789,6 +1789,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
               // (if not -> no intersect)
               //
                if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance)){
+		 sidephi= kSPhi;
 		if(((fSPhi-0.5*kAngTolerance)<=vphi)&&((ePhi+0.5*kAngTolerance)>=vphi))
                     { sphi = kInfinity; }
 				       
