@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2007-10-02 09:34:30 gcosmo Exp $
+$Id: History,v 1.99 2007-11-23 09:32:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2007  T.Nikitina                 geom-csg-V09-00-02
+- Fixed problem of undefined side for valid surface normal in case of Phi
+  section and direction through the center of either A G4Tubs or G4Cons shape.
 
 Oct 2, 2007  T.Nikitina                  geom-csg-V09-00-01
 - G4Torus:
