@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.16 2007-11-22 15:02:11 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.17 2007-11-23 10:31:55 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -244,7 +244,9 @@ G4bool G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4
 
 G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *mother) {
 
-   G4String volumeref,positionref,rotationref;
+   G4String volumeref;
+   G4String positionref;
+   G4String rotationref;
 
    G4LogicalVolume* logvol = 0;
    G4ThreeVector tlate;
@@ -266,11 +268,7 @@ G4bool G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4L
 
    if (!volumeref.empty()) {
 
-      G4String ref;
-      
-      if (!solids.nameProcess(ref,volumeref)) return false;
-
-      logvol = getVolume(ref);
+      logvol = getVolume(solids.nameProcess(volumeref));
 
       if (!logvol) return false;
    }
@@ -455,15 +453,13 @@ G4bool G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,
 
 G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
-   G4String name,solidref,materialref;
+   G4String name;
+   G4String solidref;
+   G4String materialref;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
-
-   G4String _name;
-   
-   if (!solids.nameProcess(_name,name)) return false;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -479,15 +475,11 @@ G4bool G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
    G4Material *materialPtr = materials.getMaterial(file+materialref); // materialref is not involved in loops!
 
-   G4String ref;
-      
-   if (!solids.nameProcess(ref,solidref)) return false;
-
-   G4VSolid* solidPtr = solids.getSolid(ref); // solidref is involved in loops!
+   G4VSolid* solidPtr = solids.getSolid(solids.nameProcess(solidref)); // solidref is involved in loops!
 
    if (!solidPtr || !materialPtr) return false;
  
-   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,_name,0,0,0);
+   G4LogicalVolume *volumePtr = new G4LogicalVolume(solidPtr,materialPtr,solids.nameProcess(name),0,0,0);
 
    return volume_contentRead(element,volumePtr);
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.9 2007-11-22 15:02:11 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.10 2007-11-23 10:31:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@
 
 class G4GDMLSolids {
 
-   G4String file,loop;
+   G4String file;
 
    G4GDMLEvaluator* evaluator;
 
@@ -114,7 +114,8 @@ public:
 
    G4bool Read(const xercesc::DOMElement* const,G4GDMLEvaluator*,const G4String& file0);
    G4VSolid* getSolid(const G4String&) const;
-   G4bool nameProcess(std::string&,const std::string&);
+
+   std::string nameProcess(const std::string&);
 };
 
 #endif
