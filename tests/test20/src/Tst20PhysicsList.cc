@@ -24,8 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.9 2007-11-13 15:22:17 pia Exp $
+<<<<<<< Tst20PhysicsList.cc
+<<<<<<< Tst20PhysicsList.cc
+// $Id: Tst20PhysicsList.cc,v 1.10 2007-11-23 14:00:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: Tst20PhysicsList.cc,v 1.10 2007-11-23 14:00:18 vnivanch Exp $
+=======
+// $Id: Tst20PhysicsList.cc,v 1.10 2007-11-23 14:00:18 vnivanch Exp $
+>>>>>>> 1.9
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.8
 //
 // ------------------------------------------------------------
 
