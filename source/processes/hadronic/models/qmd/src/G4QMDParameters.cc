@@ -1,3 +1,4 @@
+
 // Parameters comes from JQMD 
 // Niita et al., JAERI-Data/Code 99-042
 
@@ -8,7 +9,7 @@ G4QMDParameters* G4QMDParameters::parameters = NULL;
 G4QMDParameters::G4QMDParameters()
 {
 
-   G4double wl = 2.0; // width of wave packet [fm]
+   wl = 2.0; // width of wave packet [fm]
    hbc = 0.1973;      //   h-bar c in GeVfm
 
    //Pauli
