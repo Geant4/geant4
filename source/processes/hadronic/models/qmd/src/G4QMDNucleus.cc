@@ -82,8 +82,8 @@ G4double G4QMDNucleus::GetNuclearMass()
       G4double Asym = 23*MeV; 
 
       G4double BE = Av * A 
-                  - As * std::pow ( G4double(A) , 2.0/3.0 ) 
-                  - Ac * Z*Z/std::pow ( G4double(A) , 1.0/3.0 )
+                  - As * std::pow ( A , 2.0/3.0 ) 
+                  - Ac * Z*Z/std::pow ( A , 1.0/3.0 )
                   - Asym * ( N - Z )* ( N - Z ) / A; 
 
       mass = Z * G4Proton::Proton()->GetPDGMass() 
@@ -191,7 +191,7 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
    //G4cout << "G4BindingEnergy in GeV " << G4NucleiPropertiesTable::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV << G4endl;
 
    excitationEnergy = bindingEnergy + G4NucleiPropertiesTable::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV;
-   G4cout << "excitationEnergy in GeV " << excitationEnergy << G4endl;
+   //G4cout << "excitationEnergy in GeV " << excitationEnergy << G4endl;
    if ( excitationEnergy < 0 ) excitationEnergy = 0.0; 
 
 }
