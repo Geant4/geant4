@@ -59,8 +59,8 @@ class G4QMDReaction : public G4HadronicInteraction
 
       //                            b        pd_proj                pd_targ                  z_p     a_p     z_t     a_t      plab       elab
 //      G4double offSetOfCollision( G4double , G4ParticleDefinition* , G4ParticleDefinition* , G4int , G4int , G4int , G4int , G4double , G4double  );  
-      //                           b          pd_proj                 pd_targ                 plab       elab      bmax
-      void calcOffSetOfCollision( G4double , G4ParticleDefinition* , G4ParticleDefinition* , G4double , G4double , G4double );  
+      //                           b          pd_proj                 pd_targ                 plab       elab      bmax boostToCM
+      void calcOffSetOfCollision( G4double , G4ParticleDefinition* , G4ParticleDefinition* , G4double , G4double , G4double , G4ThreeVector );  
       G4double coulomb_collision_gamma_proj;
       G4double coulomb_collision_rx_proj;
       G4double coulomb_collision_rz_proj;

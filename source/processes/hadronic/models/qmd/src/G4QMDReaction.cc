@@ -58,6 +58,16 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    G4int proj_Z = 0;
    G4int proj_A = 0;
    G4ParticleDefinition* proj_pd = ( G4ParticleDefinition* ) projectile.GetDefinition();
+   if ( proj_pd->GetParticleType() == "nucleus" )
+   {
+      proj_Z = proj_pd->GetAtomicNumber();
+      proj_A = proj_pd->GetAtomicMass();
+   }
+   else
+   {
+      proj_Z = (int)( proj_pd->GetPDGCharge()/eplus );
+      proj_A = 1;
+   }
    G4int targ_Z = int ( target.GetZ() + 0.5 );
    G4int targ_A = int ( target.GetN() + 0.5 );
    G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon( targ_Z , targ_A , 0.0 );
@@ -75,12 +85,37 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
      G4double bmax_0 = std::sqrt( xs_0 )/pi*2;
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 
-     delete proj_dp; 
+     //delete proj_dp; 
 
    G4bool elastic = true;
    
    std::vector< G4QMDNucleus* > nucleuses; // Secondary nuceluses 
-   G4ThreeVector boostToCM; // CM of target and proj; 
+   G4ThreeVector boostToReac; // ReactionSystem (CM or NN); 
+   G4ThreeVector boostBackToLAB; // Reaction System to LAB; 
+
+   G4LorentzVector targ4p( G4ThreeVector( 0.0 ) , targ_pd->GetPDGMass()/GeV );
+   G4ThreeVector boostLABtoCM = targ4p.findBoostToCM( proj_dp->Get4Momentum()/GeV ); // CM of target and proj; 
+
+   G4double p1 = proj_dp->GetMomentum().mag()/GeV/proj_A; 
+   G4double m1 = proj_dp->GetDefinition()->GetPDGMass()/GeV/proj_A;
+   G4double e1 = std::sqrt( p1*p1 + m1*m1 ); 
+   G4double e2 = targ_pd->GetPDGMass()/GeV/targ_A;
+   G4double beta_nn = -p1 / ( e1+e2 );
+
+   G4ThreeVector boostLABtoNN ( 0. , 0. , beta_nn ); // CM of NN; 
+
+   G4double beta_nncm = ( - boostLABtoCM.beta() + boostLABtoNN.beta() ) / ( 1 - boostLABtoCM.beta() * boostLABtoNN.beta() ) ;  
+
+   //std::cout << targ4p << std::endl; 
+   //std::cout << proj_dp->Get4Momentum()<< std::endl; 
+   //std::cout << beta_nncm << std::endl; 
+   G4ThreeVector boostNNtoCM( 0. , 0. , beta_nncm ); // 
+   G4ThreeVector boostCMtoNN( 0. , 0. , -beta_nncm ); // 
+
+   boostToReac = boostLABtoNN; 
+   boostBackToLAB = -boostLABtoNN; 
+
+   delete proj_dp; 
 
    while ( elastic ) 
    {
@@ -98,7 +133,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4double plab = projectile.GetTotalMomentum()/GeV;
       G4double elab = (projectile.GetKineticEnergy() + proj_pd->GetPDGMass() + targ_pd->GetPDGMass() )/GeV;
 
-      calcOffSetOfCollision( b , proj_pd , targ_pd , plab , elab , bmax );
+      calcOffSetOfCollision( b , proj_pd , targ_pd , plab , elab , bmax , boostCMtoNN );
 
 // Projectile
       G4LorentzVector proj4pLAB = projectile.Get4Momentum()/GeV;
@@ -131,10 +166,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       targ->SetTotalPotential( meanField->GetTotalPotential() );
       targ->CalEnergyAndAngularMomentumInCM();
    
-      G4LorentzVector targ4p( G4ThreeVector( 0.0 ) , targ->GetNuclearMass()/GeV );
-
+      //G4LorentzVector targ4p( G4ThreeVector( 0.0 ) , targ->GetNuclearMass()/GeV );
 // Boost Vector to CM
-      boostToCM = targ4p.findBoostToCM( proj4pLAB );
+      //boostToCM = targ4p.findBoostToCM( proj4pLAB );
 
 //    Target 
       for ( G4int i = 0 ; i < targ->GetTotalNumberOfParticipant() ; i++ )
@@ -156,8 +190,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
       }
 
-      G4LorentzVector proj4pCM = CLHEP::boostOf ( proj4pLAB , boostToCM );
-      G4LorentzVector targ4pCM = CLHEP::boostOf ( targ4p , boostToCM );
+      G4LorentzVector proj4pCM = CLHEP::boostOf ( proj4pLAB , boostToReac );
+      G4LorentzVector targ4pCM = CLHEP::boostOf ( targ4p , boostToReac );
 
 
 //    Projectile
@@ -405,7 +439,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
           G4ParticleDefinition* pd = (*itt)->GetDefinition();
           G4LorentzVector p4 ( (*itt)->GetMomentum()/GeV , (*itt)->GetTotalEnergy()/GeV );  //in nucleus(*it) rest system
           G4LorentzVector p4_CM = CLHEP::boostOf( p4 , -nucleus_p4CM.findBoostToCM() );  // Back to CM
-          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , -boostToCM ); // Back to LAB  
+          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
 
           G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
           theParticleChange.AddSecondary( dp ); 
@@ -442,7 +476,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
          G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
          G4LorentzVector p4_CM = nucleus_p4CM;
-         G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , -boostToCM ); // Back to LAB  
+         G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
          theParticleChange.AddSecondary( dp ); 
 
@@ -462,15 +496,15 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
       G4ParticleDefinition* pd = system->GetParticipant( i )->GetDefinition();
       G4LorentzVector p4_CM = system->GetParticipant( i )->Get4Momentum();
-      G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , -boostToCM );
+      G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB );
       G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
       theParticleChange.AddSecondary( dp ); 
 
 /*
-      std::cout << "G4QMDRESULT "
+      G4cout << "G4QMDRESULT "
       << "r" << i << " " << system->GetParticipant ( i ) -> GetPosition() << " "
       << "p" << i << " " << system->GetParticipant ( i ) -> Get4Momentum()
-      << std::endl;
+      << G4endl;
 */
 
    }
@@ -489,7 +523,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 void G4QMDReaction::calcOffSetOfCollision( G4double b , 
 G4ParticleDefinition* pd_proj , 
 G4ParticleDefinition* pd_targ , 
-G4double ptot , G4double etot , G4double bmax )
+G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
 {
    G4double mass_proj = pd_proj->GetPDGMass()/GeV;
    G4double mass_targ = pd_targ->GetPDGMass()/GeV;
@@ -565,6 +599,15 @@ G4double ptot , G4double etot , G4double bmax )
    G4double pzta = pztc;
    G4double epr = epc;
    G4double eta = etc;
+
+// CM -> NN
+   G4double gammacm = boostToCM.gamma();
+   //G4double betacm = -boostToCM.beta();
+   G4double betacm = boostToCM.z();
+   pzpr = pzpc + betacm * gammacm * ( gammacm / ( 1. + gammacm ) * pzpc * betacm + epc );
+   pzta = pztc + betacm * gammacm * ( gammacm / ( 1. + gammacm ) * pztc * betacm + etc );
+   epr = gammacm * ( epc + betacm * pzpc );
+   eta = gammacm * ( etc + betacm * pztc );
 
    //G4double betpr = pzpr / epr;
    //G4double betta = pzta / eta;
