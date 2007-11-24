@@ -118,18 +118,100 @@ void G4QMDMeanField::SetNucleus ( G4QMDNucleus* aNucleus )
 
 void G4QMDMeanField::Cal2BodyQuantities()
 {
+
    if ( system->GetTotalNumberOfParticipant() < 2 ) return;
-   for ( G4int i = 0 ; i < system->GetTotalNumberOfParticipant() ; i++ )
+
+   for ( G4int j = 1 ; j < system->GetTotalNumberOfParticipant() ; j++ )
    {
 
-      G4ThreeVector ri = system->GetParticipant( i )->GetPosition();  
-      G4LorentzVector p4_i = system->GetParticipant( i )->Get4Momentum();  
+      G4ThreeVector rj = system->GetParticipant( j )->GetPosition();
+      G4LorentzVector p4j = system->GetParticipant( j )->Get4Momentum();
 
-      //std::cout << i << " " << ri << std::endl;
-      //std::cout << i << " " << pi << std::endl;
+      for ( G4int i = 0 ; i < j ; i++ )
+      {
 
-      Cal2BodyQuantities( i );
-   } 
+         G4ThreeVector ri = system->GetParticipant( i )->GetPosition();
+         G4LorentzVector p4i = system->GetParticipant( i )->Get4Momentum();
+
+         G4ThreeVector rij = ri - rj;
+         G4ThreeVector pij = (p4i - p4j).v();
+         G4LorentzVector p4ij = p4i - p4j;
+         G4ThreeVector bij = ( p4i + p4j ).boostVector();
+         G4double gammaij = ( p4i + p4j ).gamma();
+
+         G4double eij = ( p4i + p4j ).e();
+
+         G4double rbrb = rij*bij;
+//         G4double bij2 = bij*bij;
+         G4double rij2 = rij*rij;
+         G4double pij2 = pij*pij;
+
+         rbrb = irelcr * rbrb;
+         G4double  gamma2_ij = gammaij*gammaij;
+
+
+         rr2[i][j] = rij2 + gamma2_ij * rbrb*rbrb;
+         rr2[j][i] = rr2[i][j];
+
+         rbij[i][j] = gamma2_ij * rbrb;
+         rbij[j][i] = - rbij[i][j];
+
+         pp2[i][j] = pij2
+                   + irelcr * ( - std::pow ( p4i.e() - p4j.e() , 2 )
+                   + gamma2_ij * std::pow ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
+
+
+         pp2[j][i] = pp2[i][j];
+
+//       Gauss term
+
+         G4double expa1 = - rr2[i][j] * c0w;
+
+         G4double rh1;
+         if ( expa1 > epsx )
+         {
+            rh1 = std::exp( expa1 );
+         }
+         else
+         {
+            rh1 = 0.0;
+         }
+
+         G4int ibry = system->GetParticipant(i)->GetBaryonNumber();
+         G4int jbry = system->GetParticipant(j)->GetBaryonNumber();
+
+
+         rha[i][j] = ibry*jbry*rh1;
+         rha[j][i] = rha[i][j];
+
+//       Coulomb terms
+
+         G4double rrs2 = rr2[i][j] + epscl;
+         G4double rrs = sqrt ( rrs2 );
+
+         G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
+         G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
+
+         G4double erf = 0.0;
+         // T. K. add this protection. 5.8 is good enough for double
+         if ( rrs*c0sw < 5.8 )
+            erf = CLHEP::HepStat::erf ( rrs*c0sw );
+         else
+            erf = 1.0;
+
+         G4double erfij = erf/rrs;
+
+
+         rhe[i][j] = icharge*jcharge * erfij;
+
+         rhe[j][i] = rhe[i][j];
+
+         rhc[i][j] = icharge*jcharge * ( - erfij + clw * rh1 ) / rrs2;
+
+         rhc[j][i] = rhc[i][j];
+
+      }  // i
+   }  // j
 }
 
 
@@ -150,6 +232,23 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       G4ThreeVector rj = system->GetParticipant( j )->GetPosition();  
       G4LorentzVector p4j = system->GetParticipant( j )->Get4Momentum();  
 
+         G4ThreeVector rij = ri - rj;
+         G4ThreeVector pij = (p4i - p4j).v();
+         G4LorentzVector p4ij = p4i - p4j;
+         G4ThreeVector bij = ( p4i + p4j ).boostVector();
+         G4double gammaij = ( p4i + p4j ).gamma();
+
+         G4double eij = ( p4i + p4j ).e();
+
+         G4double rbrb = rij*bij;
+//         G4double bij2 = bij*bij;
+         G4double rij2 = rij*rij;
+         G4double pij2 = pij*pij;
+
+         rbrb = irelcr * rbrb;
+         G4double  gamma2_ij = gammaij*gammaij;
+
+/*
       G4double rbrb = 0.0;
       G4double beta2_ij = 0.0;
       G4double rij2 = 0.0;
@@ -173,6 +272,7 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       rbrb = irelcr * rbrb;
 
       G4double gamma2_ij = 1 / ( 1 - beta2_ij ); 
+*/
 
       rr2[i][j] = rij2 + gamma2_ij * rbrb*rbrb;
       rr2[j][i] = rr2[i][j];
@@ -180,21 +280,15 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       rbij[i][j] = gamma2_ij * rbrb;
       rbij[j][i] = - rbij[i][j];
       
-      //std::cout << "rr2[i][j] " << i << " " << j << " " << rr2[i][j] << std::endl;
-
-      pp2[i][j] = pij2 
-                + irelcr * std::pow (  - ( p4i.e() - p4j.e() ) , 2 ) 
-                + gamma2_ij * ( ( p4i.m2() - p4j.m2() ) / eij )*( ( p4i.m2() - p4j.m2() ) / eij );
+      pp2[i][j] = pij2
+                + irelcr * ( - std::pow ( p4i.e() - p4j.e() , 2 )
+                + gamma2_ij * std::pow ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
 
       pp2[j][i] = pp2[i][j];
-      //std::cout << "pp2[i][j] " << i << " " << j << " " << pp2[i][j] << std::endl;
-
 
 //    Gauss term
 
       G4double expa1 = - rr2[i][j] * c0w;  
-
-      //G4double epsx;
 
       G4double rh1;
       if ( expa1 > epsx ) 
@@ -213,11 +307,7 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       rha[i][j] = ibry*jbry*rh1;  
       rha[j][i] = rha[i][j]; 
 
-      //std::cout << "rha[i][j] " << rha[i][j] << std::endl;
-    
 //    Coulomb terms
-
-      //G4double epscl;
 
       G4double rrs2 = rr2[i][j] + epscl; 
       G4double rrs = sqrt ( rrs2 ); 
@@ -239,13 +329,9 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
 
       rhe[j][i] = rhe[i][j]; 
 
-//      G4double clw;
+//    G4double clw;
 
       rhc[i][j] = icharge*jcharge * ( - erfij + clw * rh1 ) / rrs2;
-
-      //std::cout <<  "rhc " << rrs*c0sw << " " << CLHEP::HepStat::erf ( rrs*c0sw ) << std::endl;
-      //std::cout <<  "rhc " << rrs << " " << c0sw << std::endl;
-      //std::cout <<  "rhc " << erfij << " " << clw  << " " << rh1 << " " <<  rrs2 << std::endl;
 
       rhc[j][i] = rhc[i][j]; 
 
