@@ -1,4 +1,4 @@
-$Id: 00README,v 1.8 2007-11-13 08:02:57 kmura Exp $
+$Id: 00README,v 1.9 2007-11-25 19:37:24 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -90,11 +90,15 @@ Fine tuning of the library path:
   --with-gdml-incdir=DIR    GDML header dir
   --with-gdml-libdir=DIR    GDML library dir
 
+  --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGL support     [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, $G4VIS_USE_RAYTRACERX]
-  gdml         GDML support (experimental) [disable]
+  g4gdml       GDML support (G4 module) [disable]
+  gdml         GDML support (external, experimental) [disable]
                also specifying inc/lib directories
 
 Supported Architectures:

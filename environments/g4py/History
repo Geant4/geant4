@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2007-11-13 08:03:31 kmura Exp $
+$Id: History,v 1.32 2007-11-25 19:37:33 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,9 +14,13 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 November 2007 K.Murakami
+ - add G4 GDML module support
+ - update PL for 9.1
+
 12 November 2007 K.Murakami (1.5.0)
  - add FTFP_BERT in PL for 9.1
- - add GDML support (experimental)
+ - add GDML (external lib.) support (experimental)
  - add exposure of G4Navigator
 
 07 November 2007 K.Murakami
