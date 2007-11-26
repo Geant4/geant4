@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.3 2007-11-20 09:42:57 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.4 2007-11-26 14:34:46 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
    G4GDMLParser parser;
 
-   if (!parser.Read(argv[1])) return 0;
+   parser.Read(argv[1]);
 
    G4RunManager* runManager = new G4RunManager;
    G4VisManager* visManager = new G4VisExecutive;
