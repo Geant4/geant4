@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.8 2007-11-23 14:57:12 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.9 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -47,56 +47,18 @@ void G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
    memcpy(this,&right,sizeof(G4GDMLEvaluator));
 }
 
-G4bool G4GDMLEvaluator::RegisterVariable(const G4String &name,G4double value) {
+void G4GDMLEvaluator::defineVariable(const G4String& name,G4double value) {
+
+   if (eval.findVariable(name)) G4Exception("GDML: Variable '"+name+"' is already defined!");
 
    eval.setVariable(name.c_str(),value);
-
-   return true;
 }
 
-G4bool G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
+void G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
 
-   if (!eval.findVariable(name)) {
-   
-      std::cout << "GDML: Error! Referenced variable '" << name << "' was not found!" << std::endl;
-      return false;
-   }
-   
+   if (!eval.findVariable(name)) G4Exception("GDML: Variable '"+name+"' was not found!");
+
    eval.setVariable(name.c_str(),value);
-
-   return true;
-}
-
-G4bool G4GDMLEvaluator::Evaluate(G4double& value,const G4String& expression,const G4String& unit) {
-
-   G4double _expression = 0.0;
-   G4double _unit = 1.0;
-
-   if (expression != "") {
-   
-      _expression = eval.evaluate(expression.c_str());
-
-      if (eval.status() != HepTool::Evaluator::OK) {
-
-         eval.print_error();
-         return false;
-      }
-   }
-
-   if (unit != "") {
-   
-      _unit = eval.evaluate(unit.c_str());
-
-      if (eval.status() != HepTool::Evaluator::OK) {
-
-         eval.print_error();
-         return false;
-      }
-   }
-
-   value = _expression*_unit;
-
-   return true;
 }
 
 G4double G4GDMLEvaluator::Evaluate(const G4String& expression) {

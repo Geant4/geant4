@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.11 2007-11-23 14:57:12 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.12 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,11 +94,11 @@ class G4GDMLSolids {
    void paraRead(const xercesc::DOMElement* const);
    void polyconeRead(const xercesc::DOMElement* const);
    void polyhedraRead(const xercesc::DOMElement* const);
-   G4bool positionRead      (const xercesc::DOMElement* const,G4ThreeVector&);
+   G4ThreeVector positionRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* quadrangularRead(const xercesc::DOMElement* const);
    G4String refRead(const xercesc::DOMElement* const);
    void reflectedSolidRead(const xercesc::DOMElement* const);
-   G4bool rotationRead      (const xercesc::DOMElement* const,G4ThreeVector&);
+   G4ThreeVector rotationRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection sectionRead(const xercesc::DOMElement* const,G4double);
    void sphereRead(const xercesc::DOMElement* const);
    void tessellatedRead(const xercesc::DOMElement* const);

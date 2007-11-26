@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.7 2007-11-23 14:57:12 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.8 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,11 +54,8 @@ public:
 
    void Set(const G4GDMLEvaluator&);
 
-   G4bool RegisterVariable(const G4String& name,G4double value);
-   G4bool setVariable(const G4String& name,G4double value);
-
-   G4bool Evaluate(G4double& value,const G4String& expression,const G4String& unit=""); // obsolete
-
+   void defineVariable(const G4String&,G4double);
+   void setVariable(const G4String&,G4double);
    G4double Evaluate(const G4String&);
 };
 

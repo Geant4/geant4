@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.5 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLParser.cc,v 1.6 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLParser Implementation
@@ -72,12 +72,12 @@ G4GDMLParser::~G4GDMLParser() {
    }
 }
 
-G4bool G4GDMLParser::Read(const G4String& fileName) {
+void G4GDMLParser::Read(const G4String& fileName) {
 
-     return structure.gdmlRead(fileName,parser);
+   structure.gdmlRead(fileName,parser);
 }
 
-G4VPhysicalVolume *G4GDMLParser::GetWorldVolume(const G4String &setupName) {
+G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String &setupName) {
 
    return structure.setup.Get(setupName);
 }

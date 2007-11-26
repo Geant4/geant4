@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.hh,v 1.6 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLMaterials.hh,v 1.7 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,16 +56,18 @@ class G4GDMLMaterials {
 
    G4GDMLEvaluator* evaluator;
 
-   G4bool atomRead     (const xercesc::DOMElement* const,G4double& _value);
-   G4bool DRead        (const xercesc::DOMElement* const,G4double& _value);
-   G4bool elementRead  (const xercesc::DOMElement* const);
-   G4bool fractionRead (const xercesc::DOMElement* const,G4double& _n,G4String& ref);
-   G4bool isotopeRead  (const xercesc::DOMElement* const);
-   G4bool materialRead (const xercesc::DOMElement* const);
-   G4bool mixtureRead  (const xercesc::DOMElement* const,G4Element*);
-   G4bool mixtureRead  (const xercesc::DOMElement* const,G4Material*);
+   G4double atomRead(const xercesc::DOMElement* const);
+   G4double DRead(const xercesc::DOMElement* const);
+   void elementRead(const xercesc::DOMElement* const);
+   G4double fractionRead(const xercesc::DOMElement* const,G4String& ref);
+   void isotopeRead(const xercesc::DOMElement* const);
+   void materialRead(const xercesc::DOMElement* const);
+   void mixtureRead(const xercesc::DOMElement* const,G4Element*);
+   void mixtureRead(const xercesc::DOMElement* const,G4Material*);
 public:
-   G4bool Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
+   void Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
+   
+   G4Isotope* getIsotope(const G4String&) const;
    G4Material* getMaterial(const G4String&) const;
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.17 2007-11-23 14:57:12 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.18 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -39,11 +39,7 @@ std::string G4GDMLSolids::nameProcess(const std::string& in) {
 
    std::string out(file);
    
-   std::string::size_type open = in.find("]",0);
-
-   if (open != std::string::npos) G4Exception("Bracket mismatch in loop!");
-
-   open = in.find("[",0);
+   std::string::size_type open = in.find("[",0);
 
    out.append(in,0,open);
    
@@ -55,13 +51,9 @@ std::string G4GDMLSolids::nameProcess(const std::string& in) {
    
       std::string expr = in.substr(open+1,close-open-1);
 
-      double _expr;
-   
-      evaluator->Evaluate(_expr,expr);
-   
       std::stringstream ss;
    
-      ss << "[" << _expr << "]";
+      ss << "[" << evaluator->Evaluate(expr) << "]";
    
       out.append(ss.str());
 
@@ -105,10 +97,10 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="first"   ) first = refRead(child);       else
-      if (tag=="second"  ) second = refRead(child);      else
-      if (tag=="position") positionRead(child,position); else
-      if (tag=="rotation") rotationRead(child,rotation); else
+      if (tag=="first"   ) first = refRead(child);         else
+      if (tag=="second"  ) second = refRead(child);        else
+      if (tag=="position") position = positionRead(child); else
+      if (tag=="rotation") rotation = rotationRead(child); else
       G4Exception("GDML: Unknown tag in boolean solid: "+tag);
    }
 
@@ -123,8 +115,8 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
    G4VSolid* firstSolid = getSolid(nameProcess(first));
    G4VSolid* secondSolid = getSolid(nameProcess(second));
 
-   if (op==UNION)        new G4UnionSolid(nameProcess(name),firstSolid,secondSolid,transform);        else
-   if (op==SUBTRACTION)  new G4SubtractionSolid(nameProcess(name),firstSolid,secondSolid,transform);  else
+   if (op==UNION       ) new G4UnionSolid(nameProcess(name),firstSolid,secondSolid,transform);        else
+   if (op==SUBTRACTION ) new G4SubtractionSolid(nameProcess(name),firstSolid,secondSolid,transform);  else
    if (op==INTERSECTION) new G4IntersectionSolid(nameProcess(name),firstSolid,secondSolid,transform);
 }
 
@@ -383,9 +375,9 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="step") step = attribute_value;
    }
 
-   G4double _var  = evaluator->Evaluate(var);
+   G4double _var  = evaluator->Evaluate(var );
    G4double _from = evaluator->Evaluate(from);
-   G4double _to   = evaluator->Evaluate(to);
+   G4double _to   = evaluator->Evaluate(to  );
    G4double _step = evaluator->Evaluate(step);
    
    if (!from.empty()) _var = _from;
@@ -616,7 +608,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
    new G4Polyhedra(nameProcess(name),_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
-G4bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
+G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
 
    G4String unit;
    G4String x;
@@ -643,17 +635,13 @@ G4bool G4GDMLSolids::positionRead(const xercesc::DOMElement* const element,G4Thr
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _x;
-   G4double _y;
-   G4double _z;
+   G4double _unit = evaluator->Evaluate(unit);
 
-   if (!evaluator->Evaluate(_x,x,unit)) return false;
-   if (!evaluator->Evaluate(_y,y,unit)) return false;
-   if (!evaluator->Evaluate(_z,z,unit)) return false;
-
-   vect.set(_x,_y,_z);
-
-   return true;
+   G4double _x = evaluator->Evaluate(x)*_unit;
+   G4double _y = evaluator->Evaluate(y)*_unit;
+   G4double _z = evaluator->Evaluate(z)*_unit;
+   
+   return G4ThreeVector(_x,_y,_z);
 }
 
 G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element) {
@@ -793,7 +781,7 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    new G4ReflectedSolid(nameProcess(name),solidPtr,transform);
 }
 
-G4bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4ThreeVector& vect) {
+G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
 
    G4String unit;
    G4String x;
@@ -820,15 +808,13 @@ G4bool G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element,G4Thr
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _x,_y,_z;
+   G4double _unit = evaluator->Evaluate(unit);
 
-   if (!evaluator->Evaluate(_x,x,unit)) return false;
-   if (!evaluator->Evaluate(_y,y,unit)) return false;
-   if (!evaluator->Evaluate(_z,z,unit)) return false;
-
-   vect.set(_x,_y,_z);
-
-   return true;
+   G4double _x = evaluator->Evaluate(x)*_unit;
+   G4double _y = evaluator->Evaluate(y)*_unit;
+   G4double _z = evaluator->Evaluate(z)*_unit;
+   
+   return G4ThreeVector(_x,_y,_z);
 }
 
 G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4double _lunit) {
@@ -934,7 +920,7 @@ void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") { name = attribute_value; }
+      if (attribute_name=="name") name = attribute_value;
    }
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(nameProcess(name));
@@ -976,11 +962,11 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name   ") { name    = attribute_value; } else
-      if (attribute_name=="vertex1") { vertex1 = attribute_value; } else
-      if (attribute_name=="vertex2") { vertex2 = attribute_value; } else
-      if (attribute_name=="vertex3") { vertex3 = attribute_value; } else
-      if (attribute_name=="vertex4") { vertex4 = attribute_value; }
+      if (attribute_name=="name   ") name    = attribute_value; else
+      if (attribute_name=="vertex1") vertex1 = attribute_value; else
+      if (attribute_name=="vertex2") vertex2 = attribute_value; else
+      if (attribute_name=="vertex3") vertex3 = attribute_value; else
+      if (attribute_name=="vertex4") vertex4 = attribute_value;
    }
    
    const G4ThreeVector* ptr1 = define.getPosition(nameProcess(vertex1));
@@ -1394,7 +1380,7 @@ G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
 
    G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
-   if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' not found!");
+   if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
 
    return solidPtr;
 }

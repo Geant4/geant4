@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.5 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.6 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ public:
    G4GDMLParser();
    ~G4GDMLParser();
 
-   G4bool Read(const G4String &fileName);
+   void Read(const G4String &fileName);
 
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
 };

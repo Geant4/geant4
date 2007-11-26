@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.11 2007-11-22 15:02:11 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.12 2007-11-26 14:31:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,27 +60,27 @@
 
 class G4GDMLStructure {
 
-   G4String file,loop;
+   G4String file;
 
    G4GDMLEvaluator* evaluator;
 
    xercesc::XercesDOMParser* parser;
 
-   G4bool directionRead           (const xercesc::DOMElement* const,EAxis&);
-   G4bool divisionvolRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool fileRead                (const xercesc::DOMElement* const,G4LogicalVolume**);
-   G4bool loopRead                (const xercesc::DOMElement* const);
-   G4bool paramvolRead            (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool physvolRead             (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool positionRead            (const xercesc::DOMElement* const,G4ThreeVector&);
-   G4bool quantityRead            (const xercesc::DOMElement* const,G4double&);
-   G4bool refRead                 (const xercesc::DOMElement* const,G4String&);
-   G4bool replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
-   G4bool replicavolRead          (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool volumeRead              (const xercesc::DOMElement* const);
-   G4bool volume_contentRead      (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool volume_loopRead         (const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4bool Read                    (const xercesc::DOMElement* const,const G4String&,const G4String&);
+   EAxis directionRead(const xercesc::DOMElement* const);
+   void divisionvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
+   void loopRead(const xercesc::DOMElement* const);
+   void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void physvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   G4ThreeVector positionRead(const xercesc::DOMElement* const);
+   G4double quantityRead(const xercesc::DOMElement* const);
+   G4String refRead(const xercesc::DOMElement* const);
+   void replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
+   void replicavolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void volumeRead(const xercesc::DOMElement* const);
+   void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void Read(const xercesc::DOMElement* const,const G4String&);
 public:
    G4GDMLMaterials materials;
    G4GDMLSolids solids;
@@ -88,7 +88,7 @@ public:
 
    G4GDMLStructure();
 
-   G4bool gdmlRead(const G4String&,xercesc::XercesDOMParser*);
+   void gdmlRead(const G4String&,xercesc::XercesDOMParser*);
    G4LogicalVolume* getVolume(const G4String&) const;
 };
 
