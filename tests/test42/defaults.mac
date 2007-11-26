@@ -1,0 +1,6 @@
+#Resets all defaults
+/LXe/detector/defaults
+/LXe/detector/update
+/LXe/oneStepPrimaries false
+/gun/particle gamma
+/gun/energy 511 keV
