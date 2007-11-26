@@ -1,18 +1,22 @@
-#ifndef StatAccepTestVisManager_h
-#define StatAccepTestVisManager_h 1
+#ifdef G4VIS_USE
 
-#include "G4VisManager.hh"
-
-class StatAccepTestVisManager: public G4VisManager {
-
-public:
-
-  StatAccepTestVisManager();
-
-private:
-
-  void RegisterGraphicsSystems ();
-
-};
+ #ifndef StatAccepTestVisManager_h
+ #define StatAccepTestVisManager_h 1
+ 
+ #include "G4VisManager.hh"
+ 
+ class StatAccepTestVisManager: public G4VisManager {
+ 
+ public:
+ 
+   StatAccepTestVisManager();
+ 
+ private:
+ 
+   void RegisterGraphicsSystems ();
+ 
+ };
+ 
+ #endif
 
 #endif

@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+26-Nov-2007 - A.Ribon (statAccepTest-V09-00-03)
+- Fixed problems with visualization.
+
+
 22-Nov-2007 - A.Ribon (statAccepTest-V09-00-02)
 - Replaced PI with iAIDA. Moreover, added extra 
   files, with  "-m32"  extension, to allow 
