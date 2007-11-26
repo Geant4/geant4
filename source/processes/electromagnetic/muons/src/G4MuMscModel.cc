@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.6 2007-11-11 17:40:48 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.7 2007-11-26 12:08:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,6 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicsLogVector.hh"
-//#include "G4Poisson.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,7 +114,7 @@ void G4MuMscModel::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   if(!isInitialized) {
     isInitialized = true;
-    if(p->GetParticleName() == "GenericIon") buildTables = false;
+    if(p->GetParticleType() == "nucleus") buildTables = false;
 
     if (pParticleChange)
       fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
@@ -183,6 +182,7 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   ecut = cutEnergy;
   xSection = 0.0;
   SetupParticle(p);
+  //  G4double ekin = kinEnergy;
   G4double ekin = std::max(keV, kinEnergy);
   SetupTarget(Z, A, ekin);
 
@@ -190,8 +190,9 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   if(p == theElectron) tmax *= 0.5;
   else if(p != thePositron) {
     G4double ratio = electron_mass_c2/mass;
-    tmax = 2.0*mom2/
-      (electron_mass_c2*(1.0 + ratio*(tkin/mass + 1.0) + ratio*ratio));
+    G4double tau = tkin/mass;
+    tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
+      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
   G4double t = std::min(cutEnergy, tmax);
   G4double mom21 = t*(t + 2.0*electron_mass_c2);
@@ -200,21 +201,54 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
   if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
 
+  G4double x, y, x1, x2, x3, x4;
   if(cosTetMaxElec < 1.0) {
-    G4double x2 = screenZ/(1.0 - cosTetMaxElec + screenZ);
-    xSection += (x2 - 1.0 - log(x2))/Z;
+    x = (1.0 - cosTetMaxElec)/screenZ;
+    if(x < numlimit) y = 0.5*x*x*(1.0 - 1.3333333*x + 1.5*x*x); 
+    else             y = log(1.0 + x) - x/(1.0 + x);
+    if(y < 0.0) {
+      nwarnings++;
+      if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) {
+	G4cout << "Electron scattering <0 for L1 " << y 
+	       << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
+	       << " Z= " << Z << "  " 
+	       << particle->GetParticleName() << G4endl;
+	G4cout << " z= " << 1.0-cosTetMaxElec << " screenZ= " << screenZ 
+	       << " x= " << x << G4endl;
+      }
+      y = 0.0;
+    }
+    xSection += y/Z;
   }
   //  G4cout << "cut= " << ecut << " e= " << tkin << " croosE= " 
   //  << xSection/barn << G4endl;
 
   if(cosTetMaxNuc < 1.0) {
-    G4double x1 = screenZ*formfactA;
-    G4double x2 = 1.0 - cosTetMaxNuc + screenZ;
-    G4double x3 = 1.0 - x1; 
-    G4double x4 = 1.0/(formfactA*x2 + x3);
-    G4double x5 = screenZ/x2;
-    xSection += ((1.0 - 2.0*x1/x3)*log(x4/x5) - 1.0 + 
-		 x5 - (1.0 - 4.0*x1)*(1.0 - x4))/(x3*x3); 
+    x  = 1.0 - cosTetMaxNuc;
+    x1 = screenZ*formfactA;
+    x2 = 1.0/(1.0 - x1); 
+    x3 = x/screenZ;
+    if(x3 < numlimit) 
+      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 
+			      - 1.5*x1 + 3.0*x1*x1 + 2.666666*x3*x1);
+    else {
+      x3 = screenZ + x;
+      x4 = 1.0/formfactA + x;
+      y  = ((1.0 + x1)*x2*log(x3/(x4*x1)) - x*(1.0/x3 + 1.0/x4))*x2*x2; 
+    }
+    if(y < 0.0) {
+      nwarnings++;
+      if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) { 
+	G4cout << "Nuclear scattering <0 for L1 " << y 
+	       << " e(MeV)= " << tkin << " Z= " << Z << "  " 
+	       << particle->GetParticleName() << G4endl;
+	G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
+	       << " x= " << " x1= " << x1 << " x2= " << x2 
+	       << " x3= " << x3 << " x4= " << x4 <<G4endl;
+      }
+      y = 0.0;
+    }
+    xSection += y; 
   }
   xSection *= coeff*Z*Z*chargeSquare*invbeta2/mom2; 
   //  G4cout << " croosE= " << xSection/barn << " screenZ= " 
@@ -228,22 +262,23 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
 				      G4double cutEnergy)
 {
   G4double res = 0.0;
-  SetupParticle(particle);
+  G4double res0= 0.0;
   G4double ekin = std::max(keV, kinEnergy);
+  //G4double ekin = kinEnergy;
 
   const G4Material* mat = currentCouple->GetMaterial();
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
   size_t nelm = mat->GetNumberOfElements();
 
-  SetupKinematic(ekin);
-
-  G4double tmax = tkin;
+  G4double tmax = ekin;
+  mom2 = ekin*(ekin + mass*2.0);
   if(particle == theElectron) tmax *= 0.5;
   else if(particle != thePositron) {
     G4double ratio = electron_mass_c2/mass;
-    tmax = 2.0*mom2/
-      (electron_mass_c2*(1.0 + ratio*(tkin/mass + 1.0) + ratio*ratio));
+    G4double tau = ekin/mass;
+    tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
+      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
   G4double t = std::min(cutEnergy, tmax);
   G4double mom21 = t*(t + 2.0*electron_mass_c2);
@@ -252,25 +287,39 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
   cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
   if(cosTetMaxElec < 0.0) cosTetMaxElec = 0.0;
 
-  G4double x, x1, x2, y;
+  G4double x, x1, x2, x3, x4, x5, x6, x23, y, y0, fac;
 
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ();
-    SetupTarget(Z, elm->GetN(), tkin);
+    SetupTarget(Z, elm->GetN(), ekin);
     G4double s = 0.0;  
+    G4double s0= 0.0;  
     G4double costm = cosTetMaxElec;
     if(costm < cosTetMaxNuc) costm = cosTetMaxNuc;
     if(costm < 1.0) {
-      x = 1.0 - costm + screenZ;
-      y = (x - screenZ*(screenZ/x + 2.0*log(x/screenZ)))/Z;
+      x = 1.0 - costm;
+      x1= x/screenZ;
+      s0 = x1/(Z*screenZ*(1.0 + x1));
+      if(x1 < numlimit) {
+	y = x*x1*x1*(1.0 - 1.5*x1 + 1.8*x1*x1)/3.0;
+      } else {
+	x1 += 1.0;
+	y = (x*(1.0 + x1)/x1 - 2.0*screenZ*log(x1));
+      }
       if(y < 0.0) {
         nwarnings++;
-        if(nwarnings < nwarnlimit) 
-	  G4cout << "Electron scattering <0 for L2 " << y << G4endl;
+        if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) {
+	  G4cout << "Electron scattering <0 for L2 " << y 
+		 << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2)
+		 << " Z= " << Z << "  " 
+		 << particle->GetParticleName() << G4endl;
+          G4cout << " z= " << 1.0-costm << " screenZ= " << screenZ 
+		 << " x= " << x << " x1= " << x1 << G4endl;
+	}
         y = 0.0;
       }
-      s += y;
+      s = y/Z;
     }
     //  G4cout << "cut= " << cut << " e= " << tkin << " croosE= " 
     //  << xSection/barn << G4endl;
@@ -278,29 +327,50 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
     // limit main integral because of nuclear size effect
 
     if(cosTetMaxNuc < 1.0) {
-      x1 = screenZ*formfactA;
-      x2 = 1.0 - cosTetMaxNuc + screenZ;
-      G4double x3 = 1.0 - x1; 
-      G4double f  = 1.0/formfactA;
-      G4double d  = f - screenZ;
-      G4double x4 = f/(x2 + d);
-      G4double x5 = screenZ/x2;
-      y = (screenZ*(1.0 - x5) + (d*d - screenZ*(2.0*d - 3.0*screenZ))*(1.0 - x4)/f -
-	   2.0*screenZ*f*log(x4/x5)/d)/(x3*x3); 
+      // Compute second moment
+      x   = 1.0 - cosTetMaxNuc;
+      x1  = screenZ*formfactA;
+      x2  = 1.0/(1.0 - x1); 
+      x23 = x2*x2*x2;
+      x3  = x/screenZ;
+      x5  = 1.0 + x3;
+      x4  = 1.0 + x*formfactA;
+      x6  = 2.0*log(x3/x4);
+      y0  = (x3*(1.0/x5 + x1*x1/x4)/(screenZ*x2) - x6)*x23;
+      if(x3 < numlimit) {
+	y = x*x3*x3*x23*(1.0 - 1.5*x3 - 3.0*x1 + 
+			 3.0*x3*x1 + 3.0*x1*x1 + 1.8*x3*x3)/3.0;
+      } else {
+	y   = (x*(1.0/x3 + 1.0/x4)/x2 - screenZ*x6)*x23; 
+      }
       if(y < 0.0) {
         nwarnings++;
-        if(nwarnings < nwarnlimit) 
-	  G4cout << "Nuclear scattering <0 for L2 " << y << G4endl;
+        if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) { 
+	  G4cout << "Nuclear scattering <0 for L2 " << y 
+		 << " e(MeV)= " << tkin << " Z= " << Z << "  " 
+		 << particle->GetParticleName() << G4endl;
+          G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
+		 << " x= " << x << " x1= " << x1 << " x2= " << x2 
+		 << " x3-1= " << x3-1.0 << " x4-1.0= " << x4-1.0 <<G4endl;
+	}
         y = 0.0;
       }
-      s += y;
+      s0 += y0;
+      s  += y;
     }
 
-    res += Z*Z*s*theAtomNumDensityVector[i]; 
+    fac   = Z*Z*theAtomNumDensityVector[i];
+    res  += s*fac; 
+    res0 += s0*fac; 
   }
-  res *= 0.25*coeff*chargeSquare*invbeta2/mom2; 
-  //  G4cout << " croosE= " << xSection/barn << " screenZ= " 
-  //	 << screenZ << " formF= " << formfactA << G4endl;
+  fac   = coeff*chargeSquare*invbeta2/mom2;
+  res0 *= fac;
+  res  *= 0.25*fac;
+  G4double res1 = 0.5/GetLambda(ekin);
+  if(res0 > 0.0) res -= res1*res1/res0;
+  //  G4cout << "e= " << ekin << " sig0= " << res0 << " sig1= " << res1 << " sig2= " << res
+  // << " screenZ= " << screenZ << " formF= " << formfactA 
+  // << " " << particle->GetParticleName() << " in " << mat->GetName() << G4endl;
   return res; 
 }
 
@@ -319,7 +389,7 @@ G4double G4MuMscModel::ComputeTruePathLengthLimit(
     inside = false;
     SetupParticle(dp->GetDefinition());
     theLambdaTable = theTable;
-    if(newrun && buildTables) BuildTables();
+    if(newrun) BuildTables();
   }
 
   // initialisation for each step  
@@ -356,7 +426,9 @@ G4double G4MuMscModel::ComputeTruePathLengthLimit(
     
     // limit mean scattering angle
   } else {
-    tlimit = std::min(facrange*lambda0, tlimit);
+    G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
+    G4double rlimit = std::max(facrange*lambda0,sqrt(3.4*rcut*lambda0));
+    tlimit = std::min(rlimit, tlimit);
   }
   /*
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
@@ -456,8 +528,9 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 				    G4double safety)
 {
   G4double kinEnergy = dynParticle->GetKineticEnergy();
-  if(kinEnergy == 0.0) return;
+  if(kinEnergy == 0.0 || tPathLength == 0.0) return;
   G4double x1  = 0.5*tPathLength/lambdaeff;
+  //G4double x1  = 0.5*tPathLength/lambda0;
   
   /*
   G4cout << "G4MuMscModel::SampleScattering t(mm)= " << tPathLength
@@ -467,26 +540,37 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   /*
   G4double y1  = 1.0 - x1;
   G4double x2  = tPathLength*GetLambda2(0.5*(preKinEnergy + kinEnergy)); 
-  G4double x3  = (x2 - x1*x1)/(x1*y1);
+  //G4double x2 = tPathLength*GetLambda2(preKinEnergy); 
+  G4double x3 = x2/(x1*y1);
   if(x3 <= 0.0 || x3 >= 0.33) {
     nwarnings++;
     if(nwarnings < nwarnlimit) 
       G4cout << "G4MuMscModel::SampleScattering: ePre(MeV)= " << preKinEnergy/MeV
 	     << " ePost(MeV)= " << kinEnergy/MeV
-	     << " <x>= " << x1 << " sqrt(<x^2>)= " << sqrt(x2)
+	     << " <x>= " << x1 << " x2= " << x2
 	     << " x3= " << x3
 	     << G4endl;
     x3 = std::min(1.0/y1,0.16666);
   }
   G4double x4 = 0.25*(3.0*x3 + sqrt(x3*(x3 + 8.0)))/(1.0 - x3);
+  //  G4cout << "x1= " << x1 << " x3= " << x3 << " x4= " << x4 << G4endl;
   */
-
   G4double x  = G4UniformRand();
-  G4double z;
-  
-  //if(x < y1) z = x1*pow(x/y1,x4);
-  //else       z = 1.0 - y1*pow((1.0 - x)/x1,x4);
- 
+  G4double z;  
+
+  /*
+  G4double z1;  
+  if(x <= y1) {
+    z1 = x4*log(x/y1);
+    if(z1 < numlimit) z = x1*(1.0 + z1 + 0.5*z1*z1);
+    else z = x1*exp(z1);
+
+  } else {
+    z1 = x4*log((1.0 - x)/x1);
+    if(z1 < numlimit) z = x1 - z1 + x1*z1 - 0.5*z1*z1*y1;
+    else z = 1.0 - y1*exp(z1);
+  }
+  */
   z = -x1*log(x);
 
   G4double cost = 1.0 - 2.0*z;
@@ -498,11 +582,13 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double dirx = sint*cos(phi);
   G4double diry = sint*sin(phi);
-
-  //  G4cout << "G4MuMscModel::SampleSecondaries: tstep(mm)= " << truestep/mm
-  //	 << " lambdaeff= " << lambdaeff
-  //	 << " rms= " << rms << G4endl;
-
+  /*
+  G4cout << "G4MuMscModel: step(mm)= " << tPathLength/mm
+	 << " e= " << kinEnergy << " Epre= " << preKinEnergy
+  	 << " lambdaeff= " << lambdaeff
+	 << " sint= " << sint
+  	 << " x1= " << x1 << " sqrt(x2)= " << sqrt(x2) << " x4= " << x4 << G4endl;
+  */
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(dirx,diry,cost);
   newDirection.rotateUz(oldDirection);
@@ -513,14 +599,12 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
     G4double rx = zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
     G4double ry = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
     G4double r  = sqrt(rx*rx + ry*ry);
-/*
-    G4cout << "G4MuMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
-	   << " sinTheta= " << sth << " r(mm)= " << r
-           << " trueStep(mm)= " << truestep 
+    /*
+    G4cout << " r(mm)= " << r << " safety= " << safety
+           << " trueStep(mm)= " << tPathLength
            << " geomStep(mm)= " << zPathLength
            << G4endl;
-*/
-    
+    */
     G4ThreeVector latDirection(rx,ry,0.0);
     latDirection.rotateUz(oldDirection);
 
@@ -535,7 +619,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
     if(fac > 0.) {
       // compute new endpoint of the Step
-      G4ThreeVector newPosition = Position+fac*r*latDirection;
+      G4ThreeVector newPosition = Position+fac*latDirection;
 
       // definitely not on boundary
       if(1. == fac) {
