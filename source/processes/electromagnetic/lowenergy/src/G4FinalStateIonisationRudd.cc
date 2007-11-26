@@ -24,18 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.4 2007-11-09 20:11:04 pia Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.5 2007-11-26 17:27:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Contact Author: Sebastien Incerti (incerti@cenbg.in2p3.fr)
+//                 Maria Grazia Pia  (Maria.Grazia.Pia@cern.ch)
 //
+///
 // Reference: TNS Geant4-DNA paper
 // Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
+//
 // History:
 // -----------
 // Date         Name              Modification
 // 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
+//    Nov 2007  S. Incerti        Implementation
+// 26 Nov 2007  MGP               Cleaned up std::
 //
 // -------------------------------------------------------------------
 
@@ -173,8 +177,8 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
       RandomizeEjectedElectronDirection(definition, k,secondaryKinetic, cosTheta, phi);
 
       G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-      G4double dirX = sinTheta*cos(phi);
-      G4double dirY = sinTheta*sin(phi);
+      G4double dirX = sinTheta*std::cos(phi);
+      G4double dirY = sinTheta*std::sin(phi);
       G4double dirZ = cosTheta;
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
@@ -365,14 +369,14 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
       tau = (0.511/3728.) * k ;
     }
  
-  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
+  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
   G4double v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
   G4double v = std::sqrt(v2);
   G4double wc = 4.*v2 - 2.*v - (Ry/(4.*waterStructure.IonisationEnergy(ionizationLevelIndex)));
 
-  G4double L1 = (C1* pow(v,(D1))) / (1.+ E1*pow(v, (D1+4.)));
-  G4double L2 = C2*pow(v,(D2));
-  G4double H1 = (A1*log(1.+v2)) / (v2+(B1/v2));
+  G4double L1 = (C1* std::pow(v,(D1))) / (1.+ E1*std::pow(v, (D1+4.)));
+  G4double L2 = C2*std::pow(v,(D2));
+  G4double H1 = (A1*std::log(1.+v2)) / (v2+(B1/v2));
   G4double H2 = (A2/v2) + (B2/(v2*v2));
 
   G4double F1 = L1+H1;
@@ -380,7 +384,7 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
 
   G4double sigma = CorrectionFactor(particleDefinition, k/eV) 
     * Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
-    * ( (F1+w*F2) / ( pow((1.+w),3) * ( 1.+exp(alphaConst*(w-wc)/v))) );
+    * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
   if (    particleDefinition == G4Proton::ProtonDefinition() 
 	  || particleDefinition == instance->GetIon("hydrogen")
@@ -426,7 +430,7 @@ G4double G4FinalStateIonisationRudd::DifferentialCrossSection(G4ParticleDefiniti
 	  || particleDefinition == instance->GetIon("alpha++")
 	  ) 
     {
-      sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( pow((1.+w),3) * ( 1.+exp(alphaConst*(w-wc)/v))) );
+      sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
       G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
   
@@ -518,8 +522,8 @@ G4double G4FinalStateIonisationRudd::CorrectionFactor(G4ParticleDefinition* part
   else 
     if (particleDefinition == instance->GetIon("hydrogen")) 
       { 
-	G4double value = (log(k/eV)-4.2)/0.5;
-	return((0.8/(1+exp(value))) + 0.9);
+	G4double value = (std::log(k/eV)-4.2)/0.5;
+	return((0.8/(1+std::exp(value))) + 0.9);
       }
     else 
       {    

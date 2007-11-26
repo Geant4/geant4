@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.8 2007-11-22 08:39:55 gcosmo Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.9 2007-11-26 17:27:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Contact Author: Sebastien Incerti (incerti@cenbg.in2p3.fr)
+//                 Maria Grazia Pia  (Maria.Grazia.Pia@cern.ch)
 //
 // Reference: TNS Geant4-DNA paper
 // Reference for implementation model: NIM. 155, pp. 145-156, 1978
@@ -36,6 +37,8 @@
 // -----------
 // Date         Name              Modification
 // 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
+//    Nov 2007  S. Incerti        Implementation
+// 26 Nov 2007  MGP               Cleaned up std::
 //
 // -------------------------------------------------------------------
 
@@ -237,8 +240,8 @@ const G4FinalStateProduct& G4FinalStateIonisationBorn::GenerateFinalState(const 
       RandomizeEjectedElectronDirection(track.GetDefinition(), k,secondaryKinetic, cosTheta, phi);
 
       G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-      G4double dirX = sinTheta*cos(phi);
-      G4double dirY = sinTheta*sin(phi);
+      G4double dirX = sinTheta*std::cos(phi);
+      G4double dirY = sinTheta*std::sin(phi);
       G4double dirZ = cosTheta;
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
@@ -341,7 +344,7 @@ void G4FinalStateIonisationBorn::RandomizeEjectedElectronDirection(G4ParticleDef
       else	
 	{
 	  G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
-	  cosTheta = std::sqrt(1-sin2O);
+	  cosTheta = std::sqrt(1.-sin2O);
 	}
     }
  
