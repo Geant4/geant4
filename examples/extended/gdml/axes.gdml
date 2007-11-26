@@ -34,7 +34,7 @@
     </materials>
 
     <solids>
-      <box name="WorldBox" x="200" y="200" z="200"/>
+      <box name="WorldBox" x="2000" y="2000" z="2000"/>
       <box name="XBox" x="100" y="005" z="005"/>
       <box name="YBox" x="005" y="200" z="005"/>
       <box name="ZBox" x="005" y="005" z="300"/>
