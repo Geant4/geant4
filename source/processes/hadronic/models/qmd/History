@@ -12,6 +12,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+26-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-05)
+- Fix of typo which introduced at (hadr-qmd-V09-00-04)
+	src/G4QMDNucleus.cc  
 
 20-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-04)
 - Fixed failed initialization of some parameter
