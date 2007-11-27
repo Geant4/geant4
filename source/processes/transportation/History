@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2007-11-27 18:34:44 japost Exp $
+$Id: History,v 1.144 2007-11-27 18:42:13 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -37,6 +37,7 @@ G4Transportation:
 
 Nov  27th, 2007, J.Apostolakis  transport-V09-00-05a 
 ------------------------------
+                  (also called  transport-V09-00-51 to make it canonical)
 G4CoupledTransportation
 - Added updating of particle-looping flag (was commented out.)
 
