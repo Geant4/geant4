@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007-11-20 16:58:25 bmorgan Exp $
+$Id: History,v 1.6 2007-11-27 16:45:34 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th November 2007 Ben Morgan
+- U/g4_05_shared.U, U/g4_08_ui.U: Dependencies added to MAKE lines in these
+unit files to ensure they get correctly sorted in Configure script. Adding the
+Qt UI unit file broke (for unknown reasons) the correct ordering of units.
+
+27th November 2007 Ben Morgan
+- U/g4_08_ui_qt.U: NEW FILE, adds query/probe of Qt based UI module. Only
+performed for Linux-g++ and Darwin-g++ systems. If module is enabled,
+autoprobe for Qt4 is performed, and failur of any of these checks results in
+user being queried for Qt install location. Sets three variables for use in
+.Sh files - g4ui_build_qt_session, g4ui_use_qt and g4_qthome.
+
+- GENERAl NOTE: In getting Qt UI working, have had to add dependency in
+g4_05_shared.U on g4clhep_lib. For some reason, variable g4_qthome causes
+g4_05_shared unit to appear at top of Configure unless this dependency is
+present... Now seemed to have fixed this, and am able to have a separate unit
+for Qt UI that gets sorted after the main UI unit. Not quite sure how the
+dependencies have sorted out here.
+
 
 20th November 2007 Ben Morgan
 - U/g4_10_gdml.U: Added a filter so that if root of xercesc install is
