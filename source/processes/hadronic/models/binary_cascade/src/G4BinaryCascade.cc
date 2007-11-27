@@ -204,16 +204,15 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
     thePropagator->Init(the3DNucleus);
     //      GF Leak on kt??? but where to delete?
-    G4KineticTrack * kt = new G4KineticTrack(definition, 0., initialPosition,
-					     initial4Momentum);
+    G4KineticTrack * kt;// = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);
     do                  // sample impact parameter until collisions are found 
     {
       theCurrentTime=0;
       G4double radius = the3DNucleus->GetOuterRadius()+3*fermi;
       initialPosition=GetSpherePoint(1.1*radius, initial4Momentum);  // get random position
-      kt->SetPosition(initialPosition);         
+      kt = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);
       kt->SetState(G4KineticTrack::outside);
-//    Note: secondaries has been cleared + del by Propagate() in the previous loop event
+       // secondaries has been cleared by Propagate() in the previous loop event
       secondaries= new G4KineticTrackVector;
       secondaries->push_back(kt);
       products = Propagate(secondaries, the3DNucleus);
@@ -264,8 +263,6 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
   ClearAndDestroy(products);
   delete products;
-//GF now in propagate  delete secondaries;
-
 
   delete the3DNucleus;
   the3DNucleus = NULL;  // protect from wrong usage...
@@ -295,7 +292,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   theCurrentTime=0;
 // build theSecondaryList, theProjectileList and theCapturedList
   ClearAndDestroy(&theCapturedList);
-//  ClearAndDestroy(&theSecondaryList);
+  ClearAndDestroy(&theSecondaryList);
   theSecondaryList.clear();
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
@@ -311,7 +308,13 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   }
 
   BuildTargetList();
+
+   #ifdef debug_BIC_GetExcitationEnergy
+     G4cout << "ExcitationEnergy0 " << GetExcitationEnergy() << G4endl;
+   #endif
+
   thePropagator->Init(the3DNucleus);
+
 
   theCutOnP=90*MeV;
   if(nucleus->GetMass()>30) theCutOnP = 70*MeV;
@@ -339,8 +342,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   }
   FindCollisions(&theSecondaryList);
   secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
-  delete secondaries;			// ?GF? should we delete secondaries as well? 
-			//       - not with ApplyYourself, but 
+  delete secondaries; 
 
 // if called stand alone, build theTargetList and find first collisions
 
@@ -717,7 +719,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
 
   G4ping debug("debug_ExcitationEnergy");
 // get A and Z for the residual nucleus
-  #ifdef debug_G4BinaryCascade
+  #if defined(debug_G4BinaryCascade) || defined(debug_BIC_GetExcitationEnergy)
   G4int finalA = theTargetList.size()+theCapturedList.size();
   G4int finalZ = GetTotalCharge(theTargetList)+GetTotalCharge(theCapturedList);
   if ( (currentA - finalA) != 0 || (currentZ - finalZ) != 0 )
@@ -766,7 +768,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
 // ------ debug
   if ( excitationE < 0 )
   {
-     G4cout << "negative ExE final Ion mass" <<nucleusMass<< G4endl;
+     G4cout << "negative ExE final Ion mass " <<nucleusMass<< G4endl;
      G4LorentzVector Nucl_mom=GetFinalNucleusMomentum();
     if(finalZ>.5) G4cout << " Final nuclmom/mass " << Nucl_mom << " " << Nucl_mom.mag()  
 		       << " (A,Z)=("<< finalA <<","<<finalZ <<")"
@@ -830,8 +832,7 @@ void G4BinaryCascade::BuildTargetList()
 	mom = nucleon->GetMomentum();
  //    G4cout << "Nucleus " << pos.mag()/fermi << " " << mom.e() << G4endl;
 	theInitial4Mom += mom;
-//   In the kinetic Model, the potential inside the nucleus is taken into account, and nucleons
-//    are on mass shell.
+//        the potential inside the nucleus is taken into account, and nucleons are on mass shell.
 	mom.setE( std::sqrt( mom.vect().mag2() + sqr(definition->GetPDGMass()) ) );
 	G4KineticTrack * kt = new G4KineticTrack(definition, 0., pos, mom);
 	kt->SetState(G4KineticTrack::inside);
