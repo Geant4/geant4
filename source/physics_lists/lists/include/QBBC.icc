@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.9 2007-11-15 18:08:11 vnivanch Exp $
+// $Id: QBBC.icc,v 1.10 2007-11-27 07:15:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -82,6 +82,13 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): 
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
+		false, false, false, false));
+
+  } else if(type == "QBBCG") {
+    this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,false,true));
+    this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
+    this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+    this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
 		false, false, false, true));
 
   } else if(type == "QBBC_DEL") {
@@ -89,21 +96,21 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): 
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
-		true, false, false, true));
+		true, false, false, false));
 
   } else if(type == "QBBC_HEL") {
     this->RegisterPhysics( new G4HadronHElasticPhysics(ver,false));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
-		true, false, false, true));
+		true, false, false, false));
 
   } else if(type == "QBBC_HP") {
     this->RegisterPhysics( new G4HadronElasticPhysics("hElastic",ver,true,true));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
-		false, false, true, true));
+		false, false, true, false));
 
   } else { 
     G4cout << "QBBC ERROR: Unknown Hadronic Physics Type <" << type
