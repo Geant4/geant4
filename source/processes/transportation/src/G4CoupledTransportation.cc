@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.22 2007-11-27 16:47:42 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.23 2007-11-27 18:25:41 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -235,11 +235,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   fAnyGeometryLimitedStep  = false ;
   if( currentMinimumStep > 0 )  {
       G4double newMassSafety= 0.0;     //  temp. for recalculation
-
-      if( fVerboseLevel > 2 ){
-	G4cout << " Calling PathFinder::ComputeStep() from " 
-	       << " G4CoupledTransportation::AlongStepGPIL " << G4endl;
-      }
 
       // Do the Transport in the field (non recti-linear)
       //
