@@ -1,11 +1,29 @@
 ?RCS:
-?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh g4vis_xmhome g4vis_xmflags g4vis_xmlibs g4ui_xawhome g4ui_xawflags g4ui_xawlibs:\
-	g4lib_build_shared Myread Getfile cat rm test
+?MAKE:g4ui_none g4ui_build_terminal_session g4ui_use_terminal \
+g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm \
+g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 \
+g4ui_use_tcsh g4vis_xmhome g4vis_xmflags g4vis_xmlibs g4ui_xawhome \
+g4ui_xawflags g4ui_xawlibs:\
+	g4lib_build_shared g4debug Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
 ?S:	used for building G4SYSTEM.
 ?S:.
+?S:g4ui_build_qt_session:
+?S:	This variable determines whether the Qt UI will be built 
+?S:.
+?S:g4ui_use_qt:
+?S:	This variable determines whether the Qt UI will be used.
+?S:.
+?S:g4_qthome:
+?S:	This variable holds the path to the Qt installation
+?S:.
+?INIT:#INITIALIZE QT UI OPTIONS
+?INIT:g4ui_build_qt_session='n'
+?INIT:g4ui_use_qt='n'
+?INIT:g4_qthome=''
+?INIT:#END QT UI OPTIONS
 
 echo " "
 
@@ -85,6 +103,9 @@ case "$g4ui_use_tcsh" in
 	g4ui_use_tcsh=y
 	;;
 esac
+
+
+
 
 echo ""
 
@@ -680,4 +701,3 @@ gans=y
 
 ;;
 esac
-

@@ -1,6 +1,6 @@
 ?RCS:
 ?MAKE:g4lib_build_shared g4lib_build_static g4lib_use_shared g4lib_use_static g4lib_use_dyn g4lib_use_dll: \
-	Myread Getfile cat rm test
+	g4clhep_lib Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
