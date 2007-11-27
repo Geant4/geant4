@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.7 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.8 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,6 +59,7 @@ class G4GDMLDefine {
    std::map<G4String,G4ThreeVector*> positionMap;
    std::map<G4String,G4ThreeVector*> rotationMap;
 
+   void constantRead(const xercesc::DOMElement* const); 
    void positionRead(const xercesc::DOMElement* const);
    void rotationRead(const xercesc::DOMElement* const);
    void variableRead(const xercesc::DOMElement* const); 

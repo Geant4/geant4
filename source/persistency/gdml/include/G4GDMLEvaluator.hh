@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.8 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.9 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,14 +49,18 @@
 
 class G4GDMLEvaluator {
    HepTool::Evaluator eval;
+   std::vector<G4String> variableList;
 public:
    G4GDMLEvaluator();
 
    void Set(const G4GDMLEvaluator&);
-
+   void defineConstant(const G4String&,G4double);
    void defineVariable(const G4String&,G4double);
    void setVariable(const G4String&,G4double);
+   void checkVariable(const G4String&);
+
    G4double Evaluate(const G4String&);
+   G4int EvaluateInteger(const G4String&);
 };
 
 #endif

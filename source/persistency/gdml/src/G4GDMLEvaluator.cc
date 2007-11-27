@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.9 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.10 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -47,18 +47,36 @@ void G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
    memcpy(this,&right,sizeof(G4GDMLEvaluator));
 }
 
-void G4GDMLEvaluator::defineVariable(const G4String& name,G4double value) {
+void G4GDMLEvaluator::defineConstant(const G4String& name,G4double value) {
 
-   if (eval.findVariable(name)) G4Exception("GDML: Variable '"+name+"' is already defined!");
+   if (eval.findVariable(name)) G4Exception("GDML: Constant or variable '"+name+"' is already defined!");
 
    eval.setVariable(name.c_str(),value);
 }
 
-void G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
+void G4GDMLEvaluator::defineVariable(const G4String& name,G4double value) {
 
-   if (!eval.findVariable(name)) G4Exception("GDML: Variable '"+name+"' was not found!");
+   if (eval.findVariable(name)) G4Exception("GDML: Constant or variable '"+name+"' is already defined!");
 
    eval.setVariable(name.c_str(),value);
+   variableList.push_back(name);
+}
+
+void G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
+
+   checkVariable(name);
+
+   eval.setVariable(name.c_str(),value);
+}
+
+void G4GDMLEvaluator::checkVariable(const G4String& name) {
+
+   for (std::vector<G4String>::iterator iter = variableList.begin(); iter != variableList.end(); iter++) {
+
+      if (name == *iter) return;
+   }
+
+   G4Exception("GDML: Variable '"+name+"' is not defined!");
 }
 
 G4double G4GDMLEvaluator::Evaluate(const G4String& expression) {
@@ -79,3 +97,14 @@ G4double G4GDMLEvaluator::Evaluate(const G4String& expression) {
    return value;
 }
 
+G4int G4GDMLEvaluator::EvaluateInteger(const G4String& expression) {
+
+   G4double value = Evaluate(expression);
+
+   G4int whole = (G4int)value;
+   G4double frac = value - (G4double)whole;
+
+   if (frac != 0.0) G4Exception("GDML: Expression '"+expression+"' is expected to have an integer value!");
+
+   return whole;
+}

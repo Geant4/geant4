@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.10 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.11 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -36,6 +36,32 @@
 #include "G4GDMLDefine.hh"
 
 G4GDMLDefine::~G4GDMLDefine() {
+}
+
+void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String value;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name" ) { name  = attribute_value; } else
+      if (attribute_name=="value") { value = attribute_value; }
+   }
+
+   evaluator->defineConstant(name,evaluator->Evaluate(value));
 }
 
 void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
@@ -153,7 +179,7 @@ void G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="constant") variableRead(child); else
+      if (tag=="constant") constantRead(child); else
       if (tag=="position") positionRead(child); else
       if (tag=="rotation") rotationRead(child); else
       if (tag=="variable") variableRead(child); else

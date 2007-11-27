@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.19 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.20 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -197,10 +197,12 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="step") step = attribute_value;
    }
 
-   G4double _var  = evaluator->Evaluate(var );
-   G4double _from = evaluator->Evaluate(from);
-   G4double _to   = evaluator->Evaluate(to  );
-   G4double _step = evaluator->Evaluate(step);
+   evaluator->checkVariable(var);
+
+   G4int _var  = evaluator->EvaluateInteger(var );
+   G4int _from = evaluator->EvaluateInteger(from);
+   G4int _to   = evaluator->EvaluateInteger(to  );
+   G4int _step = evaluator->EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 
@@ -494,10 +496,12 @@ void G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G
       if (attribute_name=="step") step = attribute_value;
    }
 
-   G4double _var  = evaluator->Evaluate(var );
-   G4double _from = evaluator->Evaluate(from);
-   G4double _to   = evaluator->Evaluate(to  );
-   G4double _step = evaluator->Evaluate(step);
+   evaluator->checkVariable(var);
+
+   G4int _var  = evaluator->EvaluateInteger(var );
+   G4int _from = evaluator->EvaluateInteger(from);
+   G4int _to   = evaluator->EvaluateInteger(to  );
+   G4int _step = evaluator->EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 

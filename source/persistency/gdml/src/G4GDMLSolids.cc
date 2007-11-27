@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.18 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.19 2007-11-27 13:20:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -51,11 +51,11 @@ std::string G4GDMLSolids::nameProcess(const std::string& in) {
    
       std::string expr = in.substr(open+1,close-open-1);
 
-      std::stringstream ss;
+      std::stringstream stream;
+      
+      stream << "[" << evaluator->EvaluateInteger(expr) << "]";
    
-      ss << "[" << evaluator->Evaluate(expr) << "]";
-   
-      out.append(ss.str());
+      out.append(stream.str());
 
       open = in.find("[",close);
    }
@@ -375,10 +375,12 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="step") step = attribute_value;
    }
 
-   G4double _var  = evaluator->Evaluate(var );
-   G4double _from = evaluator->Evaluate(from);
-   G4double _to   = evaluator->Evaluate(to  );
-   G4double _step = evaluator->Evaluate(step);
+   evaluator->checkVariable(var);
+
+   G4int _var  = evaluator->EvaluateInteger(var );
+   G4int _from = evaluator->EvaluateInteger(from);
+   G4int _to   = evaluator->EvaluateInteger(to  );
+   G4int _step = evaluator->EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 
@@ -577,7 +579,8 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
    G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
    G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;
-   G4double _numsides = evaluator->Evaluate(numsides);
+
+   G4int _numsides = evaluator->EvaluateInteger(numsides);
 
    std::vector<zplaneType> zplaneList;
 
@@ -605,7 +608,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polyhedra(nameProcess(name),_startphi,_deltaphi,(G4int)_numsides,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polyhedra(nameProcess(name),_startphi,_deltaphi,_numsides,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
 G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
