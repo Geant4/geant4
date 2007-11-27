@@ -13,11 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-03)
+20-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-04)
 - Fixed failed initialization of some parameter
 	src/G4QMDParameters.cc  
 - Reduce standard outputted information
-	src/G4QMDNucleus.cc  
+	src/G4QMDNucleus.cc  ( included fix in hadr-qmd-V09-00-03)
 - Reduce multiple calculation of identical and symmetric parameters 
   (enhance computing speed)
 	src/G4QMDMeanField.cc  
@@ -25,6 +25,10 @@ code and to keep track of all tags.
   (usually enhanced stability of ground state nucleus)
 	include/G4QMDReaction.hh
 	src/G4QMDReaction.cc  
+
+22-Nov-2007 Gabriele Cosmo (hadr-qmd-V09-00-03)
+- Fixed compilation problem on WIN32-VC for usage of std::pow() function
+  in file G4QMDNucleus.cc.
 
 20-Nov-2007 Gabriele Cosmo (hadr-qmd-V09-00-02)
 - Fixed compilation problem on SUN-CC for handling of 'multimap'
