@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2007-11-27 18:32:16 japost Exp $
+$Id: History,v 1.143 2007-11-27 18:34:44 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov  27th, 2007, J.Apostolakis  transport-V09-00-08
+------------------------------
+G4CoupledTransportation
+- Added updating of particle-looping flag (was commented out.)
+
+Nov  10th, 2007, J.Apostolakis  transport-V09-00-07
+-------------------------------
+G4Transportation:
+- Put back the default for short step optimisation to 'on'
+
+Nov   9th, 2007, J.Apostolakis  transport-V09-00-06
+------------------------------
+G4Transportation:
+- Update the SafetyHelper using the safety calculated by Navigator
+
+=======================================================================
+======== Tags for Release 9.1 below ===================================
 
 Nov  27th, 2007, J.Apostolakis  transport-V09-00-05a 
 ------------------------------
