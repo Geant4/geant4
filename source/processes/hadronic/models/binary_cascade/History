@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-Nov-2007 Gunter Folger                had-binary-V09-00-05
+-   Correction in G4BinaryCascade for memory leak.
+
 16-Nov-2007 Gunter Folger                had-binary-V09-00-04
 -   remove one line of left over debug printing
 
