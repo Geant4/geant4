@@ -16,9 +16,9 @@ code and to keep track of all tags.
  15 November 2007 Alex Howard (hadr-deex-V09-00-06)
 ---------------------------------------------------
 - Added Jose Manuel Quesada's modification to util/src/G4CoulombBarrier.cc in
-  order to the original Dostrovski's formulation as opposed the modified that
-  was giving to low values.
-
+  order to go back to the original Dostrovski's formulation which is described
+  in the Physics Reference Manual.  The previous implementation (from Vicente
+  Lara) was inconsistent and less to an under-estimate of the Coulomb Barrier.
 
 
  15 November 2007 F Lei (hadr-deex-V09-00-05)
