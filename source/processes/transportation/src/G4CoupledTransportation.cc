@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.21 2007-11-07 20:59:29 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.22 2007-11-27 16:47:42 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -391,7 +391,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
 
   endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
-  // fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
+  fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
 
   fTransportEndSpin = endTrackState.GetSpin();
 
@@ -664,6 +664,8 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   if( fVerboseLevel > 0 ){
      G4cout << " Calling PathFinder::Locate() from " 
 	    << " G4CoupledTransportation::PostStepDoIt " << G4endl;
+     G4cout << "  fAnyGeometryLimitedStep is " << fAnyGeometryLimitedStep << G4endl;
+
   }
   if(fAnyGeometryLimitedStep)
   {  
