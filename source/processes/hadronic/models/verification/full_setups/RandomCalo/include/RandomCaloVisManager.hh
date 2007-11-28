@@ -1,18 +1,22 @@
-#ifndef RandomCaloVisManager_h
-#define RandomCaloVisManager_h 1
+#ifdef G4VIS_USE
 
-#include "G4VisManager.hh"
+ #ifndef RandomCaloVisManager_h
+ #define RandomCaloVisManager_h 1
 
-class RandomCaloVisManager: public G4VisManager {
+ #include "G4VisManager.hh"
 
-public:
+ class RandomCaloVisManager: public G4VisManager {
 
-  RandomCaloVisManager();
+ public:
 
-private:
+   RandomCaloVisManager();
 
-  void RegisterGraphicsSystems ();
+ private:
 
-};
+   void RegisterGraphicsSystems ();
+
+ };
+
+ #endif
 
 #endif

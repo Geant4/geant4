@@ -3,9 +3,11 @@
 #include "G4Event.hh"
 #include "G4ios.hh"
 
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
+#ifdef G4VIS_USE
+ #include "G4TrajectoryContainer.hh"
+ #include "G4Trajectory.hh"
+ #include "G4VVisManager.hh"
+#endif
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -53,6 +55,7 @@ void RandomCaloEventAction::EndOfEventAction( const G4Event* evt ) {
 
   theSteppingAction->reset();
 
+#ifdef G4VIS_USE
   // Extract the trajectories and draw them
   if ( G4VVisManager::GetConcreteInstance() ) {
     G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
@@ -69,6 +72,7 @@ void RandomCaloEventAction::EndOfEventAction( const G4Event* evt ) {
       //	trj->DrawTrajectory( 50 ); // Draw only neutrons
     }
   }
+#endif
 
 }
 
