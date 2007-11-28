@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.10 2007-11-27 13:20:48 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.11 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -40,11 +40,6 @@ G4GDMLEvaluator::G4GDMLEvaluator() {
    eval.clear();
    eval.setStdMath();
    eval.setSystemOfUnits(1.e+3,1./1.60217733e-25,1.e+9,1./1.60217733e-10,1.0,1.0,1.0);
-}
-
-void G4GDMLEvaluator::Set(const G4GDMLEvaluator &right) {
-
-   memcpy(this,&right,sizeof(G4GDMLEvaluator));
 }
 
 void G4GDMLEvaluator::defineConstant(const G4String& name,G4double value) {

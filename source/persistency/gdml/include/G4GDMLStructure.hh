@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.12 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.13 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4SolidStore.hh"
+#include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 
 #include "G4GDMLEvaluator.hh"
@@ -59,8 +60,6 @@
 #include "G4GDMLSetup.hh"
 
 class G4GDMLStructure {
-
-   G4String file;
 
    G4GDMLEvaluator* evaluator;
 
@@ -80,7 +79,7 @@ class G4GDMLStructure {
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-   void Read(const xercesc::DOMElement* const,const G4String&);
+   void Read(const xercesc::DOMElement* const);
 public:
    G4GDMLMaterials materials;
    G4GDMLSolids solids;

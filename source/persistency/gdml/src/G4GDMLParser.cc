@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.6 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLParser.cc,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLParser Implementation
@@ -77,7 +77,13 @@ void G4GDMLParser::Read(const G4String& fileName) {
    structure.gdmlRead(fileName,parser);
 }
 
-G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String &setupName) {
+G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName) {
 
-   return structure.setup.Get(setupName);
+   G4String volumeref = structure.setup.getSetup(setupName);
+
+   G4LogicalVolume* logvol = structure.getVolume(volumeref);
+
+   logvol->SetVisAttributes(G4VisAttributes::Invisible);
+
+   return new G4PVPlacement(0,G4ThreeVector(),logvol,"",0,0,0);
 }

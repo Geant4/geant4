@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.hh,v 1.6 2007-11-20 09:31:44 gcosmo Exp $
+// $Id: G4GDMLSetup.hh,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,18 +45,16 @@
 
 #include <map>
 
-#include "G4LogicalVolumeStore.hh"
+#include "G4String.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4VisAttributes.hh"
-#include "G4PVPlacement.hh"
 
 class G4GDMLSetup {
    G4String module;
    std::map<G4String,G4String> setupMap;
 public:
-   G4VPhysicalVolume* Get(const G4String&);
+   G4String getSetup(const G4String&);
 
-   G4bool Read(const xercesc::DOMElement* const element,const G4String& newModule);
+   void Read(const xercesc::DOMElement* const element,const G4String& newModule);
 };
 
 #endif

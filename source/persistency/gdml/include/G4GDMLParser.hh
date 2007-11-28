@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.6 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLParser.hh,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,13 +49,13 @@
 #include "G4GDMLStructure.hh"
 
 class G4GDMLParser {
-   xercesc::XercesDOMParser *parser;
+   xercesc::XercesDOMParser* parser;
    G4GDMLStructure structure;
 public:
    G4GDMLParser();
    ~G4GDMLParser();
 
-   void Read(const G4String &fileName);
+   void Read(const G4String& fileName);
 
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
 };

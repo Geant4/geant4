@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.8 2007-11-27 13:20:48 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.9 2007-11-28 10:27:18 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,8 +69,8 @@ public:
 
    void Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
 
-   G4ThreeVector *getPosition(const G4String&);
-   G4ThreeVector *getRotation(const G4String&);
+   G4ThreeVector* getPosition(const G4String&);
+   G4ThreeVector* getRotation(const G4String&);
 };
 
 #endif

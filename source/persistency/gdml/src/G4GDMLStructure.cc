@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.20 2007-11-27 13:20:48 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.21 2007-11-28 10:27:19 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -121,7 +121,7 @@ void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       if (tag=="volumeref") volumeref = refRead(child);
    }
 
-   G4LogicalVolume* pLogical = getVolume(file+volumeref);
+   G4LogicalVolume* pLogical = getVolume(solids.nameProcess(volumeref));
 
    G4double _unit = evaluator->Evaluate(unit);
 
@@ -163,11 +163,11 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
       if (attribute_name=="volname") volname = attribute_value;
    }
 
-   G4GDMLStructure structure;
+   G4GDMLStructure structure; // We create a new structure with a new evaluator
    
    structure.gdmlRead(name,parser);
 
-   return structure.getVolume(structure.file + volname);
+   return structure.getVolume(structure.solids.nameProcess(volname));
 }
 
 void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
@@ -209,7 +209,7 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
    while (_var <= _to) {
    
       evaluator->setVariable(var,_var);
-      Read(element,file);
+      Read(element);
 
       _var += _step;
    }
@@ -259,13 +259,13 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
    if (!volumeref.empty()) logvol = getVolume(solids.nameProcess(volumeref));
 
-   if (!positionref.empty()) tlate = *solids.define.getPosition(file+positionref);
+   if (!positionref.empty()) tlate = *solids.define.getPosition(solids.nameProcess(positionref));
 
    G4RotationMatrix* pRot=0;
 
    if (!rotationref.empty()) {
 
-      G4ThreeVector* anglePtr = solids.define.getRotation(file+rotationref);
+      G4ThreeVector* anglePtr = solids.define.getRotation(solids.nameProcess(rotationref));
 
       pRot = new G4RotationMatrix();
 
@@ -332,8 +332,8 @@ G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element)
       const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="value") { value = attribute_value; }
-      if (attribute_name=="unit" ) { unit  = attribute_value; }
+      if (attribute_name=="value") value = attribute_value;
+      if (attribute_name=="unit" ) unit  = attribute_value;
    }
 
    return evaluator->Evaluate(value)*evaluator->Evaluate(unit);
@@ -418,7 +418,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") replicate_along_axisRead(child,_width,_offset,_axis);
    }
 
-   G4LogicalVolume* pLogical = getVolume(file+volumeref);
+   G4LogicalVolume* pLogical = getVolume(solids.nameProcess(volumeref));
 
    new G4PVReplica("",pLogical,pMother,_axis,(G4int)_numb,_width,_offset);
 }
@@ -445,7 +445,7 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) solidref = refRead(child);
    }
 
-   G4Material* materialPtr = materials.getMaterial(file+materialref); 
+   G4Material* materialPtr = materials.getMaterial(solids.nameProcess(materialref)); 
    G4VSolid* solidPtr = solids.getSolid(solids.nameProcess(solidref));
 
    volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,solids.nameProcess(name),0,0,0));
@@ -514,9 +514,7 @@ void G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G
    }
 }
 
-void G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4String& file0) {
-
-   file = file0;
+void G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -534,7 +532,7 @@ void G4GDMLStructure::Read(const xercesc::DOMElement* const element,const G4Stri
 
 void G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
 
-   file = fileName + "_";
+   G4String file = fileName + "_";
 
    parser = newParser;
 
@@ -575,7 +573,7 @@ void G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser
       if (tag=="materials") materials.Read(child,evaluator,file); else
       if (tag=="solids"   ) solids.Read(child,evaluator,file); else
       if (tag=="setup"    ) setup.Read(child,file); else
-      if (tag=="structure") Read(child,file);
+      if (tag=="structure") Read(child);
    }
 }
 
