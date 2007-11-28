@@ -205,6 +205,23 @@ export G4UI_USE_WIN32
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi 
 
+
+#+
+if [ X$g4ui_build_qt_session = Xy ] ; then
+G4UI_BUILD_QT_SESSION=1
+export G4UI_BUILD_QT_SESSION
+echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
+fi 
+
+#+
+if [ X$g4ui_use_qt = Xy ] ; then
+G4UI_USE_QT=1
+export G4UI_USE_QT
+echo "On this machine the G4UI_USE_QT=\$G4UI_USE_QT"
+fi 
+
+
+
 #
 # g4vis
 #
@@ -258,6 +275,15 @@ echo "On this machine the G4VIS_BUILD_VRML_DRIVER=\$G4VIS_BUILD_VRML_DRIVER"
 fi 
 
 #+
+if [ X$g4vis_build_openglqt_driver = Xy ] ; then
+G4VIS_BUILD_OPENGLQT_DRIVER=1
+export G4VIS_BUILD_OPENGLQT_DRIVER
+echo "On this machine the G4VIS_BUILD_OPENGLQT_DRIVER=\$G4VIS_BUILD_OPENGLQT_DRIVER"
+fi 
+
+
+
+#+
 if [ X$g4vis_use_dawn = Xy ] ; then
 G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWN
@@ -307,11 +333,28 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 fi 
 
 #+
+if [ X$g4vis_use_openglqt = Xy ] ; then
+G4VIS_USE_OPENGLQT=1
+export G4VIS_USE_OPENGLQT
+echo "On this machine the G4VIS_USE_OPENGLQT=\$G4VIS_USE_OPENGLQT"
+fi 
+
+
+
+#+
 if [ X$g4vis_oglhome != X ] ; then
 OGLHOME="$g4vis_oglhome"
 export OGLHOME
 echo "On this machine the OGLHOME=\$OGLHOME"
 fi 
+
+#+
+if [ X$g4_qthome != X ] ; then
+QTHOME=$g4_qthome
+export QTHOME
+echo "On this machine the QTHOME=\$QTHOME"
+fi 
+
 
 
 #

@@ -60,6 +60,7 @@ unsetenv  G4UI_USE_TCSH
 unsetenv  G4UI_USE_WIN32
 unsetenv  G4UI_USE_XAW
 unsetenv  G4UI_USE_XM
+unsetenv  G4UI_USE_QT
 
 unsetenv  G4VIS_BUILD_DAWN_DRIVER
 unsetenv  G4VIS_BUILD_OIWIN32_DRIVER
@@ -69,6 +70,7 @@ unsetenv  G4VIS_BUILD_OPENGLXM_DRIVER
 unsetenv  G4VIS_BUILD_OPENGLX_DRIVER
 unsetenv  G4VIS_BUILD_RAYTRACERX_DRIVER
 unsetenv  G4VIS_BUILD_VRML_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLQT_DRIVER
 
 unsetenv  G4VIS_USE_DAWN
 unsetenv  G4VIS_USE_OIWIN32
@@ -78,6 +80,7 @@ unsetenv  G4VIS_USE_OPENGLX
 unsetenv  G4VIS_USE_OPENGLXM
 unsetenv  G4VIS_USE_RAYTRACERX
 unsetenv  G4VIS_USE_VRML
+unsetenv  G4VIS_USE_OPENGLQT
 
 ######################################
 #
@@ -242,6 +245,20 @@ setenv G4UI_USE_WIN32 1
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 endif
 
+#+
+if ( X$g4ui_build_qt_session == Xy ) then
+setenv G4UI_BUILD_QT_SESSION 1
+echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
+endif 
+
+#+
+if ( X$g4ui_use_qt == Xy ) then
+setenv G4UI_USE_QT 1
+echo "On this machine the G4UI_USE_QT=\$G4UI_USE_QT"
+endif 
+
+
+
 #
 # g4vis
 #
@@ -294,6 +311,13 @@ echo "On this machine the G4VIS_BUILD_VRML_DRIVER=\$G4VIS_BUILD_VRML_DRIVER"
 endif
 
 #+
+if ( X$g4vis_build_openglqt_driver == Xy ) then
+setenv G4VIS_BUILD_OPENGLQT_DRIVER 1
+echo "On this machine the G4VIS_BUILD_OPENGLQT_DRIVER=\$G4VIS_BUILD_OPENGLQT_DRIVER"
+endif 
+
+
+#+
 if ( X$g4vis_use_dawn == Xy ) then
 setenv G4VIS_USE_DAWN 1
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
@@ -342,6 +366,12 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 endif
 
 #+
+if ( X$g4vis_use_openglqt == Xy ) then
+setenv G4VIS_USE_OPENGLQT 1
+echo "On this machine the G4VIS_USE_OPENGLQT=\$G4VIS_USE_OPENGLQT"
+endif
+
+#+
 if ( X$g4vis_oglhome != X )  then
 setenv OGLHOME "$g4vis_oglhome"
 echo "On this machine the OGLHOME=\$OGLHOME"
@@ -352,6 +382,14 @@ if ( X$g4vis_oivhome != X )  then
 setenv OIVHOME "$g4vis_oivhome"
 echo "On this machine the OIVHOME=\$OIVHOME"
 endif 
+
+#+
+if ( X$g4_qthome != X ) then
+setenv QTHOME "$g4_qthome"
+echo "On this machine the QTHOME=\$QTHOME"
+endif
+
+
 
 #+
 if ( X$g4vis_build_openglxm_driver != X )  then
