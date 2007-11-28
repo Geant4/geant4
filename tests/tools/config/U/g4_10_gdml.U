@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4lib_build_gdml g4gdml_xercesc_root: g4vis_oglhome Myread Getfile cat rm test
+?MAKE:g4lib_build_gdml g4gdml_xercesc_root: g4vis_oglhome g4vis_build_openglqt_driver Myread Getfile cat rm test
 ?MAKE:		       -pick add $@ %<
 ?S:g4lib_build_gdml:
 ?S:     This variable determines whether to build the GDML plugin module
