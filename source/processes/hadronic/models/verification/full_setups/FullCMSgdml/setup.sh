@@ -1,23 +1,17 @@
 #!/bin/sh
 #
 #-----------------------------------------------------------------
-# Last update: 27-Apr-2007
+# Last update: 28-Nov-2007
 #-----------------------------------------------------------------
 #
 # ==============================
 # === Special setup for GDML ===
 # ==============================
 #
-export XERCESCROOT=/afs/cern.ch/sw/lcg/external/XercesC/2.7.0/slc3_ia32_gcc323
-###export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/Linux-g++
-#
-GDML_BASE=/afs/cern.ch/sw/lcg/app/releases/GDML/GDML_2_9_0/slc3_ia32_gcc323
-###GDML_BASE=/users/ribon/dirGDML/dirInstall/dir2.9.0/slc3_ia32_gcc323
-#
-export GDML_INC=$GDML_BASE/../include
-export GDML_LIB=$GDML_BASE/lib
-#
-export LD_LIBRARY_PATH=$GDML_LIB:$XERCESCROOT/lib:$LD_LIBRARY_PATH
+export G4LIB_BUILD_GDML=1
+export G4LIB_USE_GDML=1
+export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
+export LD_LIBRARY_PATH=$XERCESCROOT/lib:$LD_LIBRARY_PATH
 #
 # ===========================================
 # === Usual setup for Geant4 applications ===
@@ -42,12 +36,12 @@ export LD_LIBRARY_PATH=$GDML_LIB:$XERCESCROOT/lib:$LD_LIBRARY_PATH
 ###clhepversion="1.9.2.3"
 #
 # --- G4 8.2.p01 ---
-g4version="8.2.p01"
-clhepversion="2.0.3.1"
-#
-# --- G4 8.2.ref03 --
-###g4version="geant4.8.2.ref03"
+###g4version="8.2.p01"
 ###clhepversion="2.0.3.1"
+#
+# --- G4 9.0.p01 --
+g4version="geant4.9.0.p01"
+clhepversion="2.0.3.1"
 #
 #**************
 #

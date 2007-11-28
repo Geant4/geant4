@@ -1,7 +1,6 @@
 #include "globals.hh"
 #include "G4VisAttributes.hh"
 #include "MyDetectorConstruction.hh"
-#include "G4Processor/GDMLProcessor.h"
 #include "G4BooleanSolid.hh"
 #include "G4CSGSolid.hh"
 #include "G4UniformMagField.hh"
@@ -17,10 +16,7 @@
 MyDetectorConstruction::MyDetectorConstruction() :
   fieldMgr( 0 ) , uniformMagField( 0 ) , detectorMessenger( 0 ) {
 
-  sxp.Initialize();
-  config.SetURI( "cms.gdml" );                     //***LOOKHERE***
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
+  parser.Read( "cms.gdml" );   //***LOOKHERE***
 
   detectorMessenger = new MyDetectorMessenger( this );
 }
@@ -29,7 +25,6 @@ MyDetectorConstruction::MyDetectorConstruction() :
 MyDetectorConstruction::~MyDetectorConstruction() {
   delete uniformMagField;
   delete detectorMessenger;
-  sxp.Finalize();
 }
 
 
@@ -37,9 +32,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
 
   fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  sxp.Run();
-                                                                                
-  fWorld = (G4VPhysicalVolume *) GDMLProcessor::GetInstance()->GetWorldVolume();
+  fWorld = (G4VPhysicalVolume *) parser.GetWorldVolume();
 
   fWorld->GetLogicalVolume()->SetVisAttributes (G4VisAttributes::Invisible);
   

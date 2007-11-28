@@ -2,6 +2,10 @@
                  History file
                  ------------
 
+28-Nov-2007 - A.Ribon (fullCMSgdml-V09-00-00)
+- Migrated to the new GDML embedded in Geant4 (9.1).
+
+
 27-Apr-2007 - A.Ribon (fullCMSgdml-V08-02-00)
 - Created a new application: full CMS detector imported via GDML.
   Any Physics List can be selected. 

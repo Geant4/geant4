@@ -3,8 +3,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
+#include "G4GDMLParser.hh"
 
 class G4VPhysicalVolume;
 class G4FieldManager;
@@ -28,8 +27,7 @@ private:
   
   G4VPhysicalVolume* fWorld;
 
-  SAXProcessor sxp;
-  ProcessingConfigurator config;
+  G4GDMLParser parser;
 
   G4FieldManager* fieldMgr;
   // Pointer to the field manager.
