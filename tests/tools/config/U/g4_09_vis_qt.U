@@ -212,6 +212,18 @@ EOM`
 
       fi #END TEST G4VIS_BUILD_OPENGLQT_DRIVER = y
 
+      
+      #
+      # Put a filter in here on /usr and /usr/local as QTHOME in line
+      # with other paths - done here as this is the last place QT is
+      # checked for
+      #DEACTIVATED AT PRESENT BECAUSE OF USE OF MOC
+      #
+      #if test "x$g4_qthome" = "x/usr" -o "x$g4_qthome" = "x/usr/local" ; then
+	# g4_qthome=""
+      #fi
+	 
+
    fi #END TEST G4VIS_NONE IS N
 
 fi #END TEST G4SYSTEM IS Linux-g++ OR Darwin-g++

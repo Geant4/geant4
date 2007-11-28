@@ -164,7 +164,7 @@ EOM`
 		     g4_havegoodqt=yes		
 
 		     #Check that this is Qt4...
-		     g4_qtver=`$grep QT_VERSION_STR /usr/include/Qt/qglobal.h | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
+		     g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
 
 		     echo "checking Qt version... $g4_qtver"
 
