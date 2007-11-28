@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.32 2007-10-06 05:33:58 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.33 2007-11-28 06:17:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -768,7 +768,7 @@ void G4ProcessManager::SetProcessOrderingToSecond(
   for (G4int iproc=0; iproc<numberOfProcesses; iproc++) {
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
     if (aAttr->ordProcVector[ivec] !=0 ) {
-      ip = aAttr->idxProcVector[ivec] -1;
+      ip = aAttr->idxProcVector[ivec] ;
       break;
     }
   }
