@@ -60,6 +60,7 @@ unset  G4UI_USE_TCSH
 unset  G4UI_USE_WIN32
 unset  G4UI_USE_XAW
 unset  G4UI_USE_XM
+unset  G4UI_USE_QT
 
 unset  G4VIS_BUILD_DAWN_DRIVER
 unset  G4VIS_BUILD_OIWIN32_DRIVER
@@ -69,6 +70,7 @@ unset  G4VIS_BUILD_OPENGLXM_DRIVER
 unset  G4VIS_BUILD_OPENGLX_DRIVER
 unset  G4VIS_BUILD_RAYTRACERX_DRIVER
 unset  G4VIS_BUILD_VRML_DRIVER
+unset  G4VIS_BUILD_OPENGLQT_DRIVER
 
 unset  G4VIS_USE_DAWN
 unset  G4VIS_USE_OIWIN32
@@ -78,6 +80,7 @@ unset  G4VIS_USE_OPENGLX
 unset  G4VIS_USE_OPENGLXM
 unset  G4VIS_USE_RAYTRACERX
 unset  G4VIS_USE_VRML
+unset  G4VIS_USE_OPENGLQT
 
 
 #
@@ -312,6 +315,27 @@ echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi
 fi 
 
+
+#+
+if [ X$g4ui_build_qt_session = Xy ] ; then
+G4UI_BUILD_QT_SESSION=1
+export G4UI_BUILD_QT_SESSION
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
+fi
+fi 
+
+#+
+if [ X$g4ui_use_qt = Xy ] ; then
+G4UI_USE_QT=1
+export G4UI_USE_QT
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_QT=\$G4UI_USE_QT"
+fi
+fi 
+
+
+
 #
 # g4vis
 #
@@ -388,6 +412,17 @@ fi
 fi 
 
 #+
+if [ X$g4vis_build_openglqt_driver = Xy ] ; then
+G4VIS_BUILD_OPENGLQT_DRIVER=1
+export G4VIS_BUILD_OPENGLQT_DRIVER
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_BUILD_OPENGLQT_DRIVER=\$G4VIS_BUILD_OPENGLQT_DRIVER"
+fi
+fi 
+
+
+
+#+
 if [ X$g4vis_use_dawn = Xy ] ; then
 G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWN
@@ -460,6 +495,17 @@ fi
 fi 
 
 #+
+if [ X$g4vis_use_openglqt = Xy ] ; then
+G4VIS_USE_OPENGLQT=1
+export G4VIS_USE_OPENGLQT
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_USE_OPENGLQT=\$G4VIS_USE_OPENGLQT"
+fi
+fi
+
+
+
+#+
 if [ X$g4vis_oglhome != X ] ; then
 OGLHOME="$g4vis_oglhome"
 export OGLHOME
@@ -476,6 +522,16 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the OIVHOME=\$OIVHOME"
 fi
 fi 
+
+#+
+if [ X$g4_qthome != X ] ; then
+QTHOME=$g4_qthome
+export QTHOME
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the QTHOME=\$QTHOME"
+fi 
+fi
+
 
 #+
 if [ X$g4vis_build_openglxm_driver != X ] ; then
