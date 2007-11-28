@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.73 2007-11-22 15:33:53 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.74 2007-11-28 12:24:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1025,7 +1025,16 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       b = 1./xmeanth ;                               
       bp1 = b+1.;
       bm1 = b-1.;
-      xmean2 = b-0.5*bp1*bm1*log(bp1/bm1);
+      // protection 
+      if(bm1 > 0.)
+        xmean2 = b-0.5*bp1*bm1*log(bp1/bm1);
+      else
+      {
+        b = 1.+tau;
+        bp1 = 2.+tau;
+        bm1 = tau;
+        xmean2 = 1.+tau*(1.-log(2./tau));
+      }
 
       if((xmean1 >= xmeanth) && (xmean2 <= xmeanth))
       {
