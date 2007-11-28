@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.33 2007-11-28 06:17:37 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.34 2007-11-28 17:47:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -717,7 +717,6 @@ void G4ProcessManager::SetProcessOrderingToSecond(
 			G4ProcessVectorDoItIndex idDoIt
 			)
 {
-  G4int      ordDoIt = 1;
   const G4String aErrorMessage(" G4ProcessManager::SetProcessOrderingToSecond");
  
 #ifdef G4VERBOSE
@@ -756,24 +755,29 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     }
   }
 
-  // set ordering parameter to non-zero
-  pAttr->ordProcVector[ivec-1] = ordDoIt;
-  pAttr->ordProcVector[ivec] = ordDoIt;
+  // set ordering parameter to 1
+  pAttr->ordProcVector[ivec-1] = 1;
+  pAttr->ordProcVector[ivec]   = 1;
 
   // find insert position
   G4ProcessVector* pVector = theProcVector[ivec];
   G4int ip =  pVector->entries();
+  G4int tmp = INT_MAX;
 
   // find insert position
   for (G4int iproc=0; iproc<numberOfProcesses; iproc++) {
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
-    if (aAttr->ordProcVector[ivec] !=0 ) {
-      ip = aAttr->idxProcVector[ivec] ;
-      break;
+    if ( aAttr->idxProcVector[ivec] >= 0 ) {
+      if (    (aAttr->ordProcVector[ivec] !=0 )  &&
+	      (tmp >= aAttr->ordProcVector[ivec]) ) {
+	tmp =  aAttr->ordProcVector[ivec];
+	if ( ip > aAttr->idxProcVector[ivec] ) {	  
+	  ip = aAttr->idxProcVector[ivec] ;
+	}
+      }
     }
   }
-  if (ip<0) ip = 0;
-
+  
   // insert 
   InsertAt(ip, aProcess, ivec);
 
@@ -786,7 +790,7 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     G4cout <<"process[" << aProcess->GetProcessName() << "]"<<  G4endl;
     G4cout << aProcess->GetProcessName() << " is inserted at "<< ip;
     G4cout << " in ProcessVetor[" << ivec<< "]";
-    G4cout << " with Ordering parameter = " <<  ordDoIt ;
+    G4cout << " with Ordering parameter = 1 ";
     G4cout << G4endl;
   }
 #endif
