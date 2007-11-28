@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.38 2007-11-22 10:18:22 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.39 2007-11-28 12:36:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -224,7 +224,8 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
   if(cosTetMaxElec < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxElec + screenZ;
-    elecXSection = coeff*Z*chargeSquare*invbeta2*(1.0/x1 - 1.0/x2)/mom2;
+    elecXSection = coeff*Z*chargeSquare*invbeta2*
+      (cosThetaMin - cosTetMaxElec)/(x1*x2*mom2);
   }
   //  G4cout << "cut= " << ecut << " e= " << tkin 
   // << " croosE(barn)= " << elecXSection/barn 
@@ -248,6 +249,7 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   if(cosTetMaxNuc < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin;
     G4double x2 = 1.0 - cosTetMaxNuc;
+    G4double x3 = cosThetaMin - cosTetMaxNuc;
     G4double z1 = x1 + screenZ;
     G4double z2 = x2 + screenZ;
     G4double d  = 1.0/formfactA - screenZ;
@@ -255,8 +257,8 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
     G4double zn1= x1 + d;
     G4double zn2= x2 + d;
     cross = coeff*Z*Z*chargeSquare*invbeta2
-      *(1./z1 - 1./z2 + 1./zn1 - 1./zn2 + 
-	2.0*std::log(z1*zn2/(z2*zn1))/d)/(mom2*d1*d1);
+      *(x3/(z1*z2) + x3/(zn1*zn2) + 
+	2.0*std::log(z1*zn2/(z2*zn1))/d) / (mom2*d1*d1);
   }
   
   //  G4cout << "CalculateCrossSectionPerAtom: e(MeV)= " << tkin 
