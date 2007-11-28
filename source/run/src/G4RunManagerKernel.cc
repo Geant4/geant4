@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.41 2007-05-30 00:42:09 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.42 2007-11-28 02:51:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -305,11 +305,11 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
-  if(numberOfParallelWorld>0)
-  { // Confirm G4CoupledTransportation is used 
-    if(!ConfirmCoupledTransportation())
-    { G4Exception("G4CoupledTransportation must be used for parallel world."); }
-  }
+  //if(numberOfParallelWorld>0)
+  //{ // Confirm G4CoupledTransportation is used 
+  //  if(!ConfirmCoupledTransportation())
+  //  { G4Exception("G4CoupledTransportation must be used for parallel world."); }
+  //}
     
   UpdateRegion();
   BuildPhysicsTables();
