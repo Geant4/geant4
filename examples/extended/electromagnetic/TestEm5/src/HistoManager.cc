@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.20 2007-11-12 17:48:16 maire Exp $
+// $Id: HistoManager.cc,v 1.21 2007-11-28 12:37:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,7 +177,9 @@ void HistoManager::SetHisto(G4int ih,
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
                   "energy of gammas at creation (std::log10(ekin/MeV))",//3
-		  "dummy","dummy","dummy","dummy","dummy","dummy",	//4-9
+                  "x_vertex of charged secondaries (all)",		//4
+                  "x_vertex of charged secondaries (not absorbed)",	//5
+		  "dummy","dummy","dummy","dummy",			//6-9
 		  "(transmit, charged) : kinetic energy at exit",	//10
 		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//11
 		  "(transmit, charged) : space angle: dN/dOmega",	//12

@@ -1,4 +1,4 @@
-$Id: README,v 1.20 2007-11-12 17:48:16 maire Exp $
+$Id: README,v 1.21 2007-11-28 12:37:56 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -97,6 +97,8 @@ $Id: README,v 1.20 2007-11-12 17:48:16 maire Exp $
 	1	"energy deposit in absorber"
 	2	"energy of charged secondaries at creation"
 	3	"energy of gammas at creation (log10(Ekin/MeV))"
+	4       "x_vertex of charged secondaries (all)"
+	5       "x_vertex of charged secondaries (not absorbed)"
 	10	"(transmit, charged) : kinetic energy at exit"
         11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
 	12	"(transmit, charged) : space angle dN/dOmega"

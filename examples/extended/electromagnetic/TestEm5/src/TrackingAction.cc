@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.15 2007-11-21 17:41:19 maire Exp $
+// $Id: TrackingAction.cc,v 1.16 2007-11-28 12:37:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +68,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   G4bool transmit = (position.x() >= xendAbs);
   G4bool reflect  = (position.x() <= xstartAbs);
+  G4bool notabsor = (transmit || reflect);
 
   //transmitted + reflected particles counter
   //
@@ -91,9 +92,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && charged) id = 30;
   else if (reflect  && neutral) id = 40;
   
+  histoManager->FillHisto(id, aTrack->GetKineticEnergy());
+    
   //energy leakage
   //
-  if (transmit || reflect) {
+  if (notabsor) {
     G4int trackID = aTrack->GetTrackID();
     G4int index = 0; if (trackID > 1) index = 1;    //primary=0, secondaries=1
     G4double eleak = aTrack->GetKineticEnergy();
@@ -101,8 +104,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
       eleak += 2*electron_mass_c2;
     runaction->AddEnergyLeak(eleak,index);  
   }
-
-  histoManager->FillHisto(id, aTrack->GetKineticEnergy());
 
   //space angle distribution at exit : dN/dOmega
   //
@@ -163,6 +164,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     histoManager->FillHisto(id,   y);
     histoManager->FillHisto(id,   z);
     histoManager->FillHisto(id+1, r);
+  }
+  
+  //x-vertex of charged secondaries
+  //
+  if ((aTrack->GetParentID() == 1) && charged) {
+    G4double xVertex = (aTrack->GetVertexPosition()).x();
+    histoManager->FillHisto(4, xVertex);
+    if (notabsor) histoManager->FillHisto(5, xVertex); 
   }
 }
 
