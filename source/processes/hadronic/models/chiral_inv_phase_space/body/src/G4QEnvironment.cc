@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.134 2007-11-26 17:35:27 gcosmo Exp $
+// $Id: G4QEnvironment.cc,v 1.135 2007-11-28 13:42:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -37,6 +37,7 @@
  
 //#define debug
 //#define pdebug
+//#define qdebug
 //#define chdebug
 //#define sdebug
 //#define ppdebug
@@ -3878,7 +3879,10 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
 #ifdef pdebug
     G4cout<<"G4QE::EvaporateRes: Baryon="<<thePDG<<qH->Get4Momentum()<<G4endl;
 #endif
-    DecayBaryon(qH); qH=0; // (delete equivalent)
+    DecayBaryon(qH);                     // (delete equivalent)
+#ifdef qdebug
+    qH=0;
+#endif
     return;
   }
   else if(!theBN) // @@ In future it is usefull to add the MesonExcitationDecay (?!)
@@ -3889,7 +3893,10 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
           <<",QC="<<qH->GetQC()<<",MPDG="<<G4QPDGCode(thePDG).GetMass()<<G4endl;
 #endif
     //DecayMeson(qH);                        // @@
-    theQHadrons.push_back(qH); qH=0;
+    theQHadrons.push_back(qH);
+#ifdef qdebug
+    qH=0;
+#endif
     return;
   }
   G4QContent  theQC  = qH->GetQC();          // Quark Content of the hadron
@@ -3916,11 +3923,17 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
   G4double    totMass = q4M.m();             // Get theRealMass of theTotalResidNucleus
   if(fabs(totMass-totGSM)<eps)
   {
-    theQHadrons.push_back(qH); qH=0; // fill As It Is
+    theQHadrons.push_back(qH);               // fill As It Is
+#ifdef qdebug
+     qH=0;
+#endif
   }
   else if(totMass>totGSM)
   {
-    theEnvironment.EvaporateNucleus(qH,&theQHadrons); qH=0;
+    theEnvironment.EvaporateNucleus(qH,&theQHadrons);
+#ifdef qdebug
+    qH=0;
+#endif
   }
   else                                       // Correction must be done
   {
@@ -3934,19 +3947,27 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
       G4cout<<"***G4QE::EvaporResid:GSCorFailed.FillAsItIs,n="<<theQHadrons.size()<<G4endl;
 #endif
       theQHadrons.push_back(qH);             // Correction failed: fill as it is
+#ifdef qdebug
       qH=0;
+#endif
     }
-    else { delete qH; qH=0;}
+    else
+    {
+      delete qH;
+#ifdef qdebug
+      qH=0;
+#endif
+    }
     delete quasH;
   }
+#ifdef qdebug
   if (qH)
   {
-#ifdef pdebug
-    G4cout << "G4QEnvironment::EvaporateResidual: deleted at end - PDG: "
-           << qH->GetPDGCode() <<G4endl;
-#endif
+    G4cout<<"G4QEnvironment::EvaporateResidual: deleted at end, PDG="
+           <<qH->GetPDGCode()<<G4endl;
     delete qH;
   }
+#endif
   return;
 } // End of EvaporateResidual
 
@@ -4307,6 +4328,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       {
         G4cout<<"---Warning---G4QEnv::FSI:Correction error LeaveAsItIs h4m="<<lh4M<<G4endl;
         theQHadrons.push_back(curHadr);// Fill theResidualNucleus asItIs(delete equivalent)
+	       //throw G4QException("G4QEnv::FSI: STOP at Correction Error");
       }
       else
       {
