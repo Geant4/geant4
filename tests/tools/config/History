@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2007-11-27 16:45:34 bmorgan Exp $
+$Id: History,v 1.7 2007-11-28 11:17:22 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th November 2007 Ben Morgan
+- U/g4_10_gdml.U: Dependency on g4_09_vis_qt.U added so that units sort
+correctly.
+
+28th November 2007 Ben Morgan
+- U/g4_09_vis_qt.U: NEW FILE, adds query/probe of OpenGL Qt vis driver. Only
+performed for Linux-g++ and Darwin-g++ systems. If module is enabled,
+autoprobe for Qt4 is performed if q4_qthome variable is null. This may have
+been set earlier by the Qt4 UI module. Failure of any autoprobe tests results
+in user being queried by Qt4 installation path, with checks being done on this
+to confirm Qt4 installation.
 
 27th November 2007 Ben Morgan
 - U/g4_05_shared.U, U/g4_08_ui.U: Dependencies added to MAKE lines in these
