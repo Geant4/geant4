@@ -3,24 +3,23 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            ExampleP01
+                            ExampleP02
                             ----------
 
 	General description
 	-------------------
 
-	This example shows how to store produced hits in a file using
-the 'reflection' technique for persistency provided by the Reflex tool
-also included in ROOT. The Reflex tool allows to create a dictionary
-for the hit class, making then possible to save hit objects in a .root
-file.  The general simulation setup (geometry, physics list, user
-actions, etc...) is taken from ExampleN02.
+	This example shows how to store in a binary file and how to
+read back the geometry tree using the 'reflection' technique for
+persistency provided by the Reflex tool also included in ROOT. The
+Reflex tool allows to create a dictionary for the geometry classes,
+making then possible to save the entire tree in a .root file.  
 
-The provided makefile produces two executables: 'persEx02' and
-'readHits'. The first one is the actual Geant4 simulation application
-with hits persistency. The second one, is just a simple 'reader' for
-the produced .root file (you need to specify the name of the .root
-file as argument).
+The provided makefile produces the executable: 'exampleP02'. In order
+to run it one has to specify the argument, either 'write' or
+'read'. In the first case the geometry is instaciated in the standard
+way and then saved into the root file (geo.root). In the second case,
+the geometry is read from geo.root file.
 
 
 	Building and running the example
@@ -47,19 +46,6 @@ the example can be build by issueing the 'make' command. The final
 executable file can be found in the usual directory:
 
 $G4WORKDIR/bin/$G4SYSTEM/
-
-Ten events will be generated and the produced hits will be stored in
-the hits.root file. In addition, the hits will be printed out on the
-screen so one can then compare them with the 'reader' output.
-        
-In order to read the persistified hits, a small 'reader' application
-has been implemented. It is build by the same makefile as the example
-executable. It can be run in the following way:
-
-readHits hits.root
-
-where the argument is the name of the file to be read. All the hits
-saved in that file will be then read and printed on the screen.
 
 
 	Remark on dictionary generation
