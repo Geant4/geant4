@@ -60,11 +60,9 @@ Official platforms:
 <UL>
 <LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
 <LI>Linux, gcc-3.4.6.<BR>
-    This configuration was tested on <I>32 bits architectures (Intel)</I>
-    and <I>64 bits architectures (AMD)</I> with the Scientific Linux CERN 3
-    (SLC3) distribution (based on RedHat Linux Enterprise 3) and
-    Scientific Linux CERN 4 (SLC4) distribution (based on RedHat Linux
-    Enterprise 4).
+    Tested on <I>32 bits architectures</I> and <I>64 bits architectures</I>
+    (Intel or AMD) with the Scientific Linux CERN 4 (SLC4) distribution
+    (based on RedHat Linux Enterprise 4).
     Versions of Geant4 have also been compiled successfully on other
     Linux distributions, like Debian, Suse or other RedHat systems.</LI>
 <LI>MacOSX 10.4, gcc-4.0.1</LI>
@@ -96,13 +94,13 @@ Platforms configured but not tested and not supported:
 <H2>2. CLHEP and AIDA</H2>
 
 Geant4 9.1 requires the installation of
-<A TARGET="ext" HREF="http://cern.ch/clhep">CLHEP</A>.<BR>
+<A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>.<BR>
 Tests have been performed with <B>CLHEP-2.0.3.2</B><BR>
 <P> </P>
 Geant4 9.1 examples with histogramming cowork with analysis tools compliant
 to AIDA 3.2.1 interfaces.<BR>
 AIDA headers can be downloaded from:
-<A TARGET="ext" HREF="http://aida.freehep.org">http://aida.freehep.org</A>
+<A TARGET="ext" HREF="http://aida.freehep.org/">http://aida.freehep.org</A>
 
 
 <P> </P>
@@ -122,7 +120,9 @@ a recompilation of user applications is required.
 <P> </P>
 <B>Geometry</B>
 <P> </P>
-<blink>!!! ADD TEST HERE !!!</blink>
+A revision of <TT>G4TessellatedSolid</TT> has implied also the name change
+for a couple of public methods. User code making explicit use of such methods
+are required to migrate accordingly.
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
@@ -157,6 +157,16 @@ Please see the last section for the corresponding details.
 <!-- ============================================== -->
 
 <H2>4. New Developments and Capabilities </H2>
+
+<B>GDML detector description persistency</B>
+<UL>
+<LI>A plugin-module for GDML can be optionally installed in Geant4 and will not
+    require dependency on the external GDML (GDML-2.X series) library. The new
+    module includes all the features supported in the old GDML library, except
+    for handling of parameterised volumes and material optical properties, which
+    will be added in a future version of the new plugin. It is however still
+    possible to use the old external GDML library in case if need.</LI>
+</UL>
 
 <B>Standard Electromagnetic physics</B>
 <UL>
@@ -319,9 +329,12 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added cross section and final state policy classes to configure a
         process to kill particles below threshold.</LI>
     <LI>Fixes to handle <TT>Z=100</TT> in the Livermore library and to correct
-        problem report #933.</LI>
-    <LI>Fix in G4PenelopeRayleigh to address problem report #965.</LI>
-    <LI>Correction in G4AtomicDeexcitation, addressing problem Report #986.</LI>
+        problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=933">#933</a>.</LI>
+    <LI>Fix in G4PenelopeRayleigh to address problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=965">#965</a>.</LI>
+    <LI>Correction in G4AtomicDeexcitation, addressing problem Report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=986">#986</a>.</LI>
     <LI>Requires new data set G4EMLOW5.1, where a new dna/directory has been
         added containing Geant4-DNA data tables for interpolation.</LI>
     </UL></LI>
@@ -520,12 +533,12 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 </UL>
 
-
 <A NAME="err-notes">
 <H3><I>Error Propagation</I></H3></A>
 <UL>
 <LI><TT>G4ErrorFreeTrajState</TT>: corrected bug in one of the transformation
-    matrix terms. Addresses problem report #971.</LI>
+    matrix terms. Addresses problem report
+    <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=971">#971</a>.</LI>
 <LI><TT>G4ErrorFreeTrajParam</TT>: corrected normalization of Y and Z
     coordinates.</LI>
 <LI><TT>G4ErrorPropagator</TT>: removed call to <TT>exit()</TT> and some cleanup.</LI>
@@ -538,7 +551,8 @@ please refer to the corresponding History files provided in most packages):
     <TT>SetParticleMomentum()</TT>.</LI>
 <LI>Added UI commands <TT>/gun/momentum</TT> and <TT>/gun/momentumAmp</TT>.</LI>
 <LI>Added private copy constructor and <TT>=, ==, +=</TT> operators to
-    <TT>G4ParticleGun</TT>. Addressing problem report #984.</LI>
+    <TT>G4ParticleGun</TT>. Addressing problem report
+    <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=984">#984</a>.</LI>
 </UL>
 
 <A NAME="gen-notes">
@@ -636,8 +650,8 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Management</B>
     <UL>
     <LI>Fixed typo in forcing minimum number of points in method
-        <TT>G4VSolid::EstimateSurfaceArea()</TT>. Addresses problem
-        report #981.</LI>
+        <TT>G4VSolid::EstimateSurfaceArea()</TT>. Addresses problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=981">#981</a>.</LI>
     </UL></LI>
 <LI><B>Navigation</B>
     <UL>
@@ -696,8 +710,8 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI><TT>G4PropagatorInField</TT>:
         <UL>
-        <LI>Fixes for compilation of code under <TT>G4DEBUG_FIELD</TT>
-            (problem report #982).</LI>
+        <LI>Fixes for compilation of code under <TT>G4DEBUG_FIELD</TT> (problem report
+            <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=982">#982</a>).</LI>
         <LI>Added extra check of method <TT>LocateIntersectionPoint()</TT>
             arguments.</LI>
         </UL></LI>
@@ -723,7 +737,8 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Boosted performance for response of <TT>Inside()</TT> for
         <TT>G4SubtractionSolid</TT> and <TT>G4UnionSolid</TT> according to
-        suggestion in problem report #979.</LI>
+        suggestion in problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=979">#979</a>.</LI>
     </UL></LI>
 <LI><B>Solids (CSG)</B>
     <UL>
@@ -737,7 +752,8 @@ please refer to the corresponding History files provided in most packages):
         <LI>Fixed bug in <TT>SolveNumericJT()</TT>: corrected handling of
             complex roots, <TT>rootsrefined</TT> is used only if the number
             of refined roots is the same as for primary roots. Addresses
-            problem report #969.</LI>
+            problem report
+            <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=969">#969</a>.</LI>
         </UL></LI>
     <LI>Fixed problem of undefined side for valid surface normal in case of
         <TT>Phi</TT> section and direction through the center of either a
@@ -749,7 +765,9 @@ please refer to the corresponding History files provided in most packages):
         <TT>Z</TT> axis.</LI>
     <LI>Revision of <TT>G4TessellatedSolid</TT> classes:
         <UL>
-        <LI>Fixed problem report #931 for proper handling of concave surfaces.
+        <LI>Fixed problem report
+            <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=931">#931</a>
+            for proper handling of concave surfaces.
             Modified classes <TT>G4TessellatedSolid</TT> and
             <TT>G4TriangularFacet</TT>.</LI>
         <LI>Modified data and accessor <TT>centroid</TT> and
@@ -757,7 +775,8 @@ please refer to the corresponding History files provided in most packages):
             replaced by <TT>circumcentre</TT> and <TT>GetCircumcentre()</TT>
             respectively.</LI>
         <LI>Reviewed implementation of <TT>CalculateExtent()</TT> to
-            make it more robust and precise. Addresses problem report #983.</LI>
+            make it more robust and precise. Addresses problem report
+            <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=983">#983</a>.</LI>
         <LI>Added utility class <TT>G4TessellatedGeometryAlgorithms</TT>.</LI>
         </UL></LI>
     <LI>Removed debug printout in <TT>G4Polycone::GetPointOnCone()</TT>.</LI>
@@ -805,8 +824,8 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Management</B>
     <UL>
-    <LI><TT>G4HadronicProcess::FillTotalResult()</TT>: fix addressing problem
-        report #967, replaced call to <TT>aT.GetGlobalTime()</TT> with the
+    <LI><TT>G4HadronicProcess::FillTotalResult()</TT>: fix addressing problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=967">#967</a>, replaced call to <TT>aT.GetGlobalTime()</TT> with the
         internal variable <TT>time</TT>.</LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
@@ -852,7 +871,8 @@ please refer to the corresponding History files provided in most packages):
         module. Protected against occasionally divide by zero.</LI>
     <LI>Corrected the Coulomb-barrier to the formalism of Dostrovski as
         described in the Physics Reference manual.</LI>
-    <LI>Fix in photon evaporation to address problem report #952.</LI>
+    <LI>Fix in photon evaporation to address problem report
+        <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=952">#952</a>.</LI>
     <LI>Suppressed gamma-level file warnings in <TT>G4NuclearLevelManager</TT>.</LI>
     </UL></LI>
 <LI><B>Elastic scattering</B>
