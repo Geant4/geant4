@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.103 2007-11-29 15:16:57 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.104 2007-11-29 18:59:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4109,8 +4109,9 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
 #endif
       f  = 27.;
     }
+    if(x<1.e-27) x=1.e-27;
+    else if(x>.999999999) x=.999999999;
     G4double r  = 1.-x;
-    if (r<1.e-27) r=1.e-27;
     G4double p  = r;
     if (n>2) p  = pow(r,n-1);  // (1-x)**(n-1)
     G4double nx = n*x;
@@ -4125,8 +4126,9 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
     while( abs(d/vRndm) > 0.001 && it <= nitMax) // Solve the equation by Newton method
 	   {
       x  = x + f*od/(r*nx*(fn+1.)); // Calculate the new x value
+      if(x<1.e-27) x=1.e-27;
+      else if(x>.999999999) x=.999999999;
       r  = 1.-x;
-      if (r<1.e-27) r=1.e-27;
       if (n>2) p  = pow(r,n-1);
       else     p  = r;
       nx = n*x;
@@ -4137,7 +4139,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
         if (f>1.0001) f=1.+(f-1.)/2.; // Modify the OptimalStepFactor for the overplay
         if (f<0.9999) f=1.+(1.-f)*2;
         x = (x + ox)/2.;              // Make an intermediate change of "x"
-        if (r<1.e-27) r=1.e-27;
+        if(x<1.e-27) x=1.e-27;
+        else if(x>.999999999) x=.999999999;
         r  = 1.-x;
         if (n>2) p  = pow(r,n-1);
         else     p  = r;
