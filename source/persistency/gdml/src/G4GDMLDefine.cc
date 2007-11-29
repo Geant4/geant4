@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.11 2007-11-27 13:20:48 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.12 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -34,9 +34,6 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLDefine.hh"
-
-G4GDMLDefine::~G4GDMLDefine() {
-}
 
 void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
@@ -140,6 +137,40 @@ void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
    rotationMap[prename+name] = new G4ThreeVector(_x,_y,_z);
 }
 
+void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String x;
+   G4String y;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
+
+      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name") { name = attribute_value; } else
+      if (attribute_name=="x"   ) { x    = attribute_value; } else
+      if (attribute_name=="y"   ) { y    = attribute_value; } else
+      if (attribute_name=="z"   ) { z    = attribute_value; }
+   }
+
+   G4double _x = evaluator->Evaluate(x);
+   G4double _y = evaluator->Evaluate(y);
+   G4double _z = evaluator->Evaluate(z);
+
+   scaleMap[prename+name] = new G4ThreeVector(_x,_y,_z);
+}
+
 void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
 
    G4String name;
@@ -166,10 +197,7 @@ void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
    evaluator->defineVariable(name,evaluator->Evaluate(value));
 }
 
-void G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *eval,const G4String& module) {
-
-   evaluator = eval;
-   prename = module;
+void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -182,6 +210,7 @@ void G4GDMLDefine::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator
       if (tag=="constant") constantRead(child); else
       if (tag=="position") positionRead(child); else
       if (tag=="rotation") rotationRead(child); else
+      if (tag=="scale") scaleRead(child); else
       if (tag=="variable") variableRead(child); else
       G4Exception("GDML: Unknown tag in define: "+tag);
    }
@@ -201,6 +230,15 @@ G4ThreeVector* G4GDMLDefine::getRotation(const G4String& ref) {
    if (rotationMap.find(ref) != rotationMap.end()) return rotationMap[ref];
 
    G4Exception("GDML: Referenced rotation '"+ref+"' was not found!");
+
+   return 0;
+}
+
+G4ThreeVector* G4GDMLDefine::getScale(const G4String& ref) {
+
+   if (scaleMap.find(ref) != scaleMap.end()) return scaleMap[ref];
+
+   G4Exception("GDML: Referenced scale '"+ref+"' was not found!");
 
    return 0;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.9 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.10 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,35 +42,28 @@
 #ifndef _G4GDMLDEFINE_INCLUDED_
 #define _G4GDMLDEFINE_INCLUDED_
 
-#include <xercesc/dom/DOM.hpp>
-
 #include <map>
 
 #include "G4ThreeVector.hh"
+#include "G4GDMLBase.hh"
 
-#include "G4GDMLEvaluator.hh"
-
-class G4GDMLDefine {
-
-   G4String prename;
-
-   G4GDMLEvaluator* evaluator;
-
+class G4GDMLDefine : public G4GDMLBase {
+private:
    std::map<G4String,G4ThreeVector*> positionMap;
    std::map<G4String,G4ThreeVector*> rotationMap;
+   std::map<G4String,G4ThreeVector*> scaleMap;
 
    void constantRead(const xercesc::DOMElement* const); 
    void positionRead(const xercesc::DOMElement* const);
    void rotationRead(const xercesc::DOMElement* const);
+   void scaleRead(const xercesc::DOMElement* const);
    void variableRead(const xercesc::DOMElement* const); 
-
-public:
-   ~G4GDMLDefine();
-
-   void Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
+protected:
+   void defineRead(const xercesc::DOMElement* const element);
 
    G4ThreeVector* getPosition(const G4String&);
    G4ThreeVector* getRotation(const G4String&);
+   G4ThreeVector* getScale(const G4String&);
 };
 
 #endif

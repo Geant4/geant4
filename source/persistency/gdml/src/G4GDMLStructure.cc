@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.21 2007-11-28 10:27:19 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.22 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -34,13 +34,6 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLStructure.hh"
-
-G4GDMLStructure::G4GDMLStructure() {
-
-   evaluator = new G4GDMLEvaluator();
-
-   parser = 0;
-}
 
 EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
 
@@ -121,7 +114,7 @@ void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       if (tag=="volumeref") volumeref = refRead(child);
    }
 
-   G4LogicalVolume* pLogical = getVolume(solids.nameProcess(volumeref));
+   G4LogicalVolume* pLogical = getVolume(nameProcess(volumeref));
 
    G4double _unit = evaluator->Evaluate(unit);
 
@@ -165,9 +158,9 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
 
    G4GDMLStructure structure; // We create a new structure with a new evaluator
    
-   structure.gdmlRead(name,parser);
+   structure.gdmlRead(name);
 
-   return structure.getVolume(structure.solids.nameProcess(volname));
+   return structure.getVolume(structure.nameProcess(volname));
 }
 
 void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
@@ -209,7 +202,7 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
    while (_var <= _to) {
    
       evaluator->setVariable(var,_var);
-      Read(element);
+      structureRead(element);
 
       _var += _step;
    }
@@ -257,15 +250,15 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
       if (tag=="rotationref") rotationref = refRead(child);
    }
 
-   if (!volumeref.empty()) logvol = getVolume(solids.nameProcess(volumeref));
+   if (!volumeref.empty()) logvol = getVolume(nameProcess(volumeref));
 
-   if (!positionref.empty()) tlate = *solids.define.getPosition(solids.nameProcess(positionref));
+   if (!positionref.empty()) tlate = *getPosition(nameProcess(positionref));
 
    G4RotationMatrix* pRot=0;
 
    if (!rotationref.empty()) {
 
-      G4ThreeVector* anglePtr = solids.define.getRotation(solids.nameProcess(rotationref));
+      G4ThreeVector* anglePtr = getRotation(nameProcess(rotationref));
 
       pRot = new G4RotationMatrix();
 
@@ -418,7 +411,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") replicate_along_axisRead(child,_width,_offset,_axis);
    }
 
-   G4LogicalVolume* pLogical = getVolume(solids.nameProcess(volumeref));
+   G4LogicalVolume* pLogical = getVolume(nameProcess(volumeref));
 
    new G4PVReplica("",pLogical,pMother,_axis,(G4int)_numb,_width,_offset);
 }
@@ -445,10 +438,10 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) solidref = refRead(child);
    }
 
-   G4Material* materialPtr = materials.getMaterial(solids.nameProcess(materialref)); 
-   G4VSolid* solidPtr = solids.getSolid(solids.nameProcess(solidref));
+   G4Material* materialPtr = getMaterial(nameProcess(materialref)); 
+   G4VSolid* solidPtr = getSolid(nameProcess(solidref));
 
-   volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,solids.nameProcess(name),0,0,0));
+   volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,nameProcess(name),0,0,0));
 }
 
 void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
@@ -514,7 +507,7 @@ void G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G
    }
 }
 
-void G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
+void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -527,53 +520,6 @@ void G4GDMLStructure::Read(const xercesc::DOMElement* const element) {
       if (tag=="loop"  ) loopRead(child); else
       if (tag=="volume") volumeRead(child); else      
       G4Exception("GDML: Unknown tag in structure: "+tag);
-   }
-}
-
-void G4GDMLStructure::gdmlRead(const G4String& fileName,xercesc::XercesDOMParser* newParser) {
-
-   G4String file = fileName + "_";
-
-   parser = newParser;
-
-   try {
-
-      parser->parse(fileName.c_str());
-   }
-   catch (const xercesc::XMLException &e) {
-   
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "XML: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-   catch (const xercesc::DOMException &e) {
-   
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "DOM: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-
-   xercesc::DOMDocument* doc = parser->getDocument();
-
-   if (!doc) G4Exception("GDML: Unable to open document: "+fileName);
-
-   xercesc::DOMElement* element = doc->getDocumentElement();
-
-   if (!element) G4Exception("GDML: Empty document!");
-
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
-
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
-
-      if (tag=="define"   ) solids.define.Read(child,evaluator,file); else
-      if (tag=="materials") materials.Read(child,evaluator,file); else
-      if (tag=="solids"   ) solids.Read(child,evaluator,file); else
-      if (tag=="setup"    ) setup.Read(child,file); else
-      if (tag=="structure") Read(child);
    }
 }
 

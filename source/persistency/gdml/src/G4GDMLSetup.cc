@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.cc,v 1.9 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLSetup.cc,v 1.10 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSetup Implementation
@@ -43,9 +43,7 @@ G4String G4GDMLSetup::getSetup(const G4String& ref) {
    return setupMap[ref];
 }
 
-void G4GDMLSetup::Read(const xercesc::DOMElement* const element,const G4String& newModule) {
-
-   module = newModule;
+void G4GDMLSetup::setupRead(const xercesc::DOMElement* const element) {
 
    G4String name;
 
@@ -80,6 +78,6 @@ void G4GDMLSetup::Read(const xercesc::DOMElement* const element,const G4String& 
       G4String ref = xercesc::XMLString::transcode(child->getAttribute(ref_attr));
       xercesc::XMLString::release(&ref_attr);
 
-      setupMap[name] = module+ref;
+      setupMap[name] = prename+ref;
    }
 }

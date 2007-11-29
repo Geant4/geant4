@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLParser.cc,v 1.8 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLParser Implementation
@@ -35,51 +35,14 @@
 
 #include "G4GDMLParser.hh"
 
-G4GDMLParser::G4GDMLParser() {
-
-   try {
-
-      xercesc::XMLPlatformUtils::Initialize();
-   }
-   catch(xercesc::XMLException& e) {
-
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cerr << "XML toolkit initialization error: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-
-   parser = new xercesc::XercesDOMParser;
-
-   parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-   parser->setDoNamespaces(true);
-   parser->setDoSchema(true);
-   parser->setValidationSchemaFullChecking(true);
-}
-
-G4GDMLParser::~G4GDMLParser() {
-
-   if (parser) delete parser;
-
-   try {
-
-      xercesc::XMLPlatformUtils::Terminate();
-   }
-   catch(xercesc::XMLException& e) {
-    
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cerr << "XML toolkit termination error: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-}
-
 void G4GDMLParser::Read(const G4String& fileName) {
 
-   structure.gdmlRead(fileName,parser);
+   structure.gdmlRead(fileName);
 }
 
 G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName) {
 
-   G4String volumeref = structure.setup.getSetup(setupName);
+   G4String volumeref = structure.getSetup(setupName);
 
    G4LogicalVolume* logvol = structure.getVolume(volumeref);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.12 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.13 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,8 +40,6 @@
 
 #ifndef _G4GDMLSOLIDS_INCLUDED_
 #define _G4GDMLSOLIDS_INCLUDED_
-
-#include <xercesc/dom/DOM.hpp>
 
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -69,16 +67,11 @@
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
-#include "G4GDMLDefine.hh"
-#include "G4GDMLEvaluator.hh"
+#include "G4GDMLMaterials.hh"
 
 #include <sstream>
 
-class G4GDMLSolids {
-
-   G4String file;
-
-   G4GDMLEvaluator* evaluator;
+class G4GDMLSolids : public G4GDMLMaterials {
 
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct zplaneType { G4double rmin,rmax,z; };
@@ -112,11 +105,8 @@ class G4GDMLSolids {
    void xtruRead(const xercesc::DOMElement* const);
    zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
 public:
-   G4GDMLDefine define;   
-
-   void Read(const xercesc::DOMElement* const,G4GDMLEvaluator*,const G4String&);
+   void solidsRead(const xercesc::DOMElement* const);
    G4VSolid* getSolid(const G4String&) const;
-   std::string nameProcess(const std::string&);
 };
 
 #endif

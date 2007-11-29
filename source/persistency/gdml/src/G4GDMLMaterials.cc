@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.8 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLMaterials.cc,v 1.9 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -296,10 +296,7 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
    }
 }
 
-void G4GDMLMaterials::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator* eval,const G4String& module) {
-
-   evaluator = eval;
-   prename = module;
+void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.hh,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLSetup.hh,v 1.8 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,20 +41,21 @@
 #ifndef _G4GDMLSETUP_INCLUDED_
 #define _G4GDMLSETUP_INCLUDED_
 
-#include <xercesc/dom/DOM.hpp>
-
 #include <map>
 
 #include "G4String.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
 
-class G4GDMLSetup {
-   G4String module;
+#include "G4GDMLSolids.hh"
+
+class G4GDMLSetup : public G4GDMLSolids {
+private:
    std::map<G4String,G4String> setupMap;
+protected:
+   void setupRead(const xercesc::DOMElement* const element);
 public:
    G4String getSetup(const G4String&);
-
-   void Read(const xercesc::DOMElement* const element,const G4String& newModule);
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.hh,v 1.7 2007-11-26 14:31:32 ztorzsok Exp $
+// $Id: G4GDMLMaterials.hh,v 1.8 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,19 +42,13 @@
 #ifndef _G4GDMLMATERIALS_INCLUDED_
 #define _G4GDMLMATERIALS_INCLUDED_
 
-#include <xercesc/dom/DOM.hpp>
+#include "G4GDMLDefine.hh"
 
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
 
-#include "G4GDMLEvaluator.hh"
-
-class G4GDMLMaterials {
-
-   G4String prename;
-
-   G4GDMLEvaluator* evaluator;
+class G4GDMLMaterials : public G4GDMLDefine {
 
    G4double atomRead(const xercesc::DOMElement* const);
    G4double DRead(const xercesc::DOMElement* const);
@@ -65,7 +59,7 @@ class G4GDMLMaterials {
    void mixtureRead(const xercesc::DOMElement* const,G4Element*);
    void mixtureRead(const xercesc::DOMElement* const,G4Material*);
 public:
-   void Read(const xercesc::DOMElement* const element,G4GDMLEvaluator*,const G4String&);
+   void materialsRead(const xercesc::DOMElement* const element);
    
    G4Isotope* getIsotope(const G4String&) const;
    G4Material* getMaterial(const G4String&) const;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.7 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLParser.hh,v 1.8 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,20 +41,11 @@
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/util/XMLUni.hpp>
-#include <xercesc/dom/DOM.hpp>
-
 #include "G4GDMLStructure.hh"
 
 class G4GDMLParser {
-   xercesc::XercesDOMParser* parser;
    G4GDMLStructure structure;
 public:
-   G4GDMLParser();
-   ~G4GDMLParser();
-
    void Read(const G4String& fileName);
 
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");

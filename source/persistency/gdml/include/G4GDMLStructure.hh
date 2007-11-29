@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.13 2007-11-28 10:27:18 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.14 2007-11-29 11:23:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,29 +42,18 @@
 #ifndef _G4GDMLSTRUCTURE_INCLUDED_
 #define _G4GDMLSTRUCTURE_INCLUDED_
 
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/dom/DOM.hpp>
-
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PVDivision.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4SolidStore.hh"
-#include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 
-#include "G4GDMLEvaluator.hh"
-#include "G4GDMLMaterials.hh"
-#include "G4GDMLSolids.hh"
 #include "G4GDMLSetup.hh"
 
-class G4GDMLStructure {
-
-   G4GDMLEvaluator* evaluator;
-
-   xercesc::XercesDOMParser* parser;
-
+class G4GDMLStructure : public G4GDMLSetup {
+private:
    EAxis directionRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
@@ -79,15 +68,8 @@ class G4GDMLStructure {
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-   void Read(const xercesc::DOMElement* const);
+   void structureRead(const xercesc::DOMElement* const);
 public:
-   G4GDMLMaterials materials;
-   G4GDMLSolids solids;
-   G4GDMLSetup setup;
-
-   G4GDMLStructure();
-
-   void gdmlRead(const G4String&,xercesc::XercesDOMParser*);
    G4LogicalVolume* getVolume(const G4String&) const;
 };
 

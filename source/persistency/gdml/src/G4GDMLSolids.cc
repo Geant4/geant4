@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.19 2007-11-27 13:20:48 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.20 2007-11-29 11:24:10 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -34,34 +34,6 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLSolids.hh"
-
-std::string G4GDMLSolids::nameProcess(const std::string& in) {
-
-   std::string out(file);
-   
-   std::string::size_type open = in.find("[",0);
-
-   out.append(in,0,open);
-   
-   while (open != std::string::npos) {
-   
-      std::string::size_type close = in.find("]",open);
-
-      if (close == std::string::npos) G4Exception("Bracket mismatch in loop!");
-   
-      std::string expr = in.substr(open+1,close-open-1);
-
-      std::stringstream stream;
-      
-      stream << "[" << evaluator->EvaluateInteger(expr) << "]";
-   
-      out.append(stream.str());
-
-      open = in.find("[",close);
-   }
-
-   return out;
-}
 
 void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
 
@@ -387,7 +359,7 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
    while (_var <= _to) {
    
       evaluator->setVariable(var,_var);
-      Read(element,evaluator,file);
+      solidsRead(element);
 
       _var += _step;
    }
@@ -676,10 +648,10 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
       if (attribute_name=="type") { type = attribute_value; }
    }
 
-   const G4ThreeVector* ptr1 = define.getPosition(nameProcess(v1));
-   const G4ThreeVector* ptr2 = define.getPosition(nameProcess(v2));
-   const G4ThreeVector* ptr3 = define.getPosition(nameProcess(v3));
-   const G4ThreeVector* ptr4 = define.getPosition(nameProcess(v4));
+   const G4ThreeVector* ptr1 = getPosition(nameProcess(v1));
+   const G4ThreeVector* ptr2 = getPosition(nameProcess(v2));
+   const G4ThreeVector* ptr3 = getPosition(nameProcess(v3));
+   const G4ThreeVector* ptr4 = getPosition(nameProcess(v4));
 
    return new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
@@ -972,10 +944,10 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="vertex4") vertex4 = attribute_value;
    }
    
-   const G4ThreeVector* ptr1 = define.getPosition(nameProcess(vertex1));
-   const G4ThreeVector* ptr2 = define.getPosition(nameProcess(vertex2));
-   const G4ThreeVector* ptr3 = define.getPosition(nameProcess(vertex3));
-   const G4ThreeVector* ptr4 = define.getPosition(nameProcess(vertex4));
+   const G4ThreeVector* ptr1 = getPosition(nameProcess(vertex1));
+   const G4ThreeVector* ptr2 = getPosition(nameProcess(vertex2));
+   const G4ThreeVector* ptr3 = getPosition(nameProcess(vertex3));
+   const G4ThreeVector* ptr4 = getPosition(nameProcess(vertex4));
 
    new G4Tet(nameProcess(name),*ptr1,*ptr2,*ptr3,*ptr4);
 }
@@ -1177,9 +1149,9 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
       if (attribute_name=="type") type = attribute_value;
    }
 
-   const G4ThreeVector* ptr1 = define.getPosition(nameProcess(v1));
-   const G4ThreeVector* ptr2 = define.getPosition(nameProcess(v2));
-   const G4ThreeVector* ptr3 = define.getPosition(nameProcess(v3));
+   const G4ThreeVector* ptr1 = getPosition(nameProcess(v1));
+   const G4ThreeVector* ptr2 = getPosition(nameProcess(v2));
+   const G4ThreeVector* ptr3 = getPosition(nameProcess(v3));
 
    return new G4TriangularFacet(*ptr1,*ptr2,*ptr3,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
@@ -1339,11 +1311,7 @@ G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* con
    return zplane;
 }
 
-void G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator *evalPtr,const G4String& file0) {
-
-   evaluator = evalPtr;
-   
-   file = file0;
+void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -1381,7 +1349,7 @@ void G4GDMLSolids::Read(const xercesc::DOMElement* const element,G4GDMLEvaluator
 
 G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
 
-   G4VSolid *solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
+   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
    if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
 
