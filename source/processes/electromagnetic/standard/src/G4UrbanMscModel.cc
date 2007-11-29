@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.74 2007-11-28 12:24:26 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.75 2007-11-29 14:33:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -848,11 +848,11 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   G4double theta0 = c_highland*charge*sqrt(y)/betacp;
   y = log(y);
   if(mass < masslimite)                 
-    theta0 *= 1.+0.051*y;
+    theta0 *= (1.+0.051*y);
   else if(mass < masslimitmu)
-    theta0 *= 1.+0.044*y;
+    theta0 *= (1.+0.044*y);
   else
-    theta0 *= 1.+0.038*y;
+    theta0 *= (1.+0.038*y);
     
   return theta0;
 }
@@ -967,7 +967,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     if(n > 0)
     {
       G4double tm = KineticEnergy/electron_mass_c2;
-     // ascr - screening parameter
+      // ascr - screening parameter
       G4double ascr = exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
       G4double ascr1 = 1.+0.5*ascr*ascr;
       G4double bp1=ascr1+1.;
@@ -986,19 +986,20 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
         sy += st*sin(phi);
         sz += ct;
       }
-        cth = sz/sqrt(sx*sx+sy*sy+sz*sz);
+      cth = sz/sqrt(sx*sx+sy*sy+sz*sz);
     }
   }
   else
   {
-      if(trueStepLength >= currentRange*dtrl)
-        if(par1*trueStepLength < 1.)
-          tau = -par2*log(1.-par1*trueStepLength) ;
-        // for the case if ioni/brems are inactivated
-        // see the corresponding condition in ComputeGeomPathLength 
-        else if(1.-KineticEnergy/currentKinEnergy > taulim)
-          tau = taubig ;
-
+    if(trueStepLength >= currentRange*dtrl) 
+    {
+      if(par1*trueStepLength < 1.)
+	tau = -par2*log(1.-par1*trueStepLength) ;
+      // for the case if ioni/brems are inactivated
+      // see the corresponding condition in ComputeGeomPathLength 
+      else if(1.-KineticEnergy/currentKinEnergy > taulim)
+	tau = taubig ;
+    }
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
     currentRadLength = couple->GetMaterial()->GetRadlen();
@@ -1011,17 +1012,19 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       G4double a = 1., ea = 0., eaa = 1.;
       G4double xmean1 = 1., xmean2 = 0.;
                                                       
-      G4double xmeanth = exp(-tau);
-
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
-      if(theta0 > tausmall) a = 0.5/(1.-cos(theta0)) ;
-      else                  a = 1.0/(theta0*theta0) ;
+      // protexction for very small angles
+      if(theta0 < tausmall) return cth;
+
+      G4double sth = sin(0.5*theta0);
+      a = 0.25/(sth*sth);
 
       ea = exp(-2.*a);
       eaa = 1.-ea ; 
       xmean1 = (1.+ea)/eaa-1./a;
 
+      G4double xmeanth = exp(-tau);
       b = 1./xmeanth ;                               
       bp1 = b+1.;
       bm1 = b-1.;
@@ -1071,7 +1074,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
             xmean1 = (1.+ea)/eaa-1./a;
             i += 1;
           } while ((std::abs((xmeanth-xmean1)/xmeanth) > 0.05) && (i < imax));
-         prob = 1.;          
+	  prob = 1.;          
         }
       }
 
