@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.14 2007-11-29 11:23:55 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.15 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,6 @@ private:
    void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void structureRead(const xercesc::DOMElement* const);
-public:
    G4LogicalVolume* getVolume(const G4String&) const;
 };
 

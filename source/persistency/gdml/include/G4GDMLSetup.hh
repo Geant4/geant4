@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.hh,v 1.8 2007-11-29 11:23:55 ztorzsok Exp $
+// $Id: G4GDMLSetup.hh,v 1.9 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,8 +44,6 @@
 #include <map>
 
 #include "G4String.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VisAttributes.hh"
 
 #include "G4GDMLSolids.hh"
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.12 2007-11-29 11:24:10 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.13 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -58,7 +58,7 @@ void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="value") { value = attribute_value; }
    }
 
-   evaluator->defineConstant(name,evaluator->Evaluate(value));
+   eval.defineConstant(name,eval.Evaluate(value));
 }
 
 void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
@@ -90,13 +90,13 @@ void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _x = evaluator->Evaluate(x)*_unit;
-   G4double _y = evaluator->Evaluate(y)*_unit;
-   G4double _z = evaluator->Evaluate(z)*_unit;
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
 
-   positionMap[prename+name] = new G4ThreeVector(_x,_y,_z);
+   positionMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
 }
 
 void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
@@ -128,13 +128,13 @@ void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _x = evaluator->Evaluate(x)*_unit;
-   G4double _y = evaluator->Evaluate(y)*_unit;
-   G4double _z = evaluator->Evaluate(z)*_unit;
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
 
-   rotationMap[prename+name] = new G4ThreeVector(_x,_y,_z);
+   rotationMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
 }
 
 void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
@@ -164,11 +164,11 @@ void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _x = evaluator->Evaluate(x);
-   G4double _y = evaluator->Evaluate(y);
-   G4double _z = evaluator->Evaluate(z);
+   G4double _x = eval.Evaluate(x);
+   G4double _y = eval.Evaluate(y);
+   G4double _z = eval.Evaluate(z);
 
-   scaleMap[prename+name] = new G4ThreeVector(_x,_y,_z);
+   scaleMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
 }
 
 void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
@@ -194,7 +194,7 @@ void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="value") { value = attribute_value; }
    }
 
-   evaluator->defineVariable(name,evaluator->Evaluate(value));
+   eval.defineVariable(name,eval.Evaluate(value));
 }
 
 void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {

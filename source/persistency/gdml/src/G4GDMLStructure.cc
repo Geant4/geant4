@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.22 2007-11-29 11:24:10 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.23 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -60,9 +60,9 @@ EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z") { z = attribute_value; }
    }
 
-   G4double _x = evaluator->Evaluate(x);
-   G4double _y = evaluator->Evaluate(y);
-   G4double _z = evaluator->Evaluate(z);
+   G4double _x = eval.Evaluate(x);
+   G4double _y = eval.Evaluate(y);
+   G4double _z = eval.Evaluate(z);
 
    if (_x == 1.0 && _y == 0.0 && _z == 0.0) return kXAxis; else
    if (_x == 0.0 && _y == 1.0 && _z == 0.0) return kYAxis; else
@@ -114,13 +114,13 @@ void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
       if (tag=="volumeref") volumeref = refRead(child);
    }
 
-   G4LogicalVolume* pLogical = getVolume(nameProcess(volumeref));
+   G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _width  = evaluator->Evaluate(width )*_unit;
-   G4double _offset = evaluator->Evaluate(offset)*_unit;
-   G4double _number = evaluator->Evaluate(number);
+   G4double _width  = eval.Evaluate(width )*_unit;
+   G4double _offset = eval.Evaluate(offset)*_unit;
+   G4double _number = eval.Evaluate(number);
 
    EAxis    _axis   = kZAxis;
 
@@ -158,9 +158,9 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
 
    G4GDMLStructure structure; // We create a new structure with a new evaluator
    
-   structure.gdmlRead(name);
+   structure.Parse(name);
 
-   return structure.getVolume(structure.nameProcess(volname));
+   return structure.getVolume(structure.GenerateName(volname));
 }
 
 void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
@@ -190,18 +190,18 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="step") step = attribute_value;
    }
 
-   evaluator->checkVariable(var);
+   eval.checkVariable(var);
 
-   G4int _var  = evaluator->EvaluateInteger(var );
-   G4int _from = evaluator->EvaluateInteger(from);
-   G4int _to   = evaluator->EvaluateInteger(to  );
-   G4int _step = evaluator->EvaluateInteger(step);
+   G4int _var  = eval.EvaluateInteger(var );
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to   = eval.EvaluateInteger(to  );
+   G4int _step = eval.EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 
    while (_var <= _to) {
    
-      evaluator->setVariable(var,_var);
+      eval.setVariable(var,_var);
       structureRead(element);
 
       _var += _step;
@@ -209,6 +209,8 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
 }
 
 void G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
+
+   pMotherLogical = 0;
 
    G4String volumeref;
    G4String parameterised_position_size;
@@ -250,15 +252,15 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
       if (tag=="rotationref") rotationref = refRead(child);
    }
 
-   if (!volumeref.empty()) logvol = getVolume(nameProcess(volumeref));
+   if (!volumeref.empty()) logvol = getVolume(GenerateName(volumeref));
 
-   if (!positionref.empty()) tlate = *getPosition(nameProcess(positionref));
+   if (!positionref.empty()) tlate = *getPosition(GenerateName(positionref));
 
    G4RotationMatrix* pRot=0;
 
    if (!rotationref.empty()) {
 
-      G4ThreeVector* anglePtr = getRotation(nameProcess(rotationref));
+      G4ThreeVector* anglePtr = getRotation(GenerateName(rotationref));
 
       pRot = new G4RotationMatrix();
 
@@ -297,11 +299,11 @@ G4ThreeVector G4GDMLStructure::positionRead(const xercesc::DOMElement* const ele
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _x = evaluator->Evaluate(x)*_unit;
-   G4double _y = evaluator->Evaluate(y)*_unit;
-   G4double _z = evaluator->Evaluate(z)*_unit;
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
    
    return G4ThreeVector(_x,_y,_z);
 }
@@ -329,7 +331,7 @@ G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element)
       if (attribute_name=="unit" ) unit  = attribute_value;
    }
 
-   return evaluator->Evaluate(value)*evaluator->Evaluate(unit);
+   return eval.Evaluate(value)*eval.Evaluate(unit);
 }
 
 G4String G4GDMLStructure::refRead(const xercesc::DOMElement* const element) {
@@ -394,7 +396,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (attribute_name=="numb") numb = attribute_value;
    }
 
-   G4double _numb = evaluator->Evaluate(numb);
+   G4double _numb = eval.Evaluate(numb);
    G4double _width = 0.0;
    G4double _offset = 0.0;
    EAxis _axis;
@@ -411,7 +413,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") replicate_along_axisRead(child,_width,_offset,_axis);
    }
 
-   G4LogicalVolume* pLogical = getVolume(nameProcess(volumeref));
+   G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
    new G4PVReplica("",pLogical,pMother,_axis,(G4int)_numb,_width,_offset);
 }
@@ -438,10 +440,10 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref"   ) solidref = refRead(child);
    }
 
-   G4Material* materialPtr = getMaterial(nameProcess(materialref)); 
-   G4VSolid* solidPtr = getSolid(nameProcess(solidref));
+   G4Material* materialPtr = getMaterial(GenerateName(materialref)); 
+   G4VSolid* solidPtr = getSolid(GenerateName(solidref));
 
-   volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,nameProcess(name),0,0,0));
+   volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0));
 }
 
 void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
@@ -489,18 +491,18 @@ void G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G
       if (attribute_name=="step") step = attribute_value;
    }
 
-   evaluator->checkVariable(var);
+   eval.checkVariable(var);
 
-   G4int _var  = evaluator->EvaluateInteger(var );
-   G4int _from = evaluator->EvaluateInteger(from);
-   G4int _to   = evaluator->EvaluateInteger(to  );
-   G4int _step = evaluator->EvaluateInteger(step);
+   G4int _var  = eval.EvaluateInteger(var );
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to   = eval.EvaluateInteger(to  );
+   G4int _step = eval.EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 
    while (_var <= _to) {
    
-      evaluator->setVariable(var,_var);
+      eval.setVariable(var,_var);
       volume_contentRead(element,volumePtr);
 
       _var += _step;

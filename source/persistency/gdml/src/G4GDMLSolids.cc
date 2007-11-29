@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.20 2007-11-29 11:24:10 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.21 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -84,12 +84,12 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
    G4Transform3D transform(rot,position);
 
-   G4VSolid* firstSolid = getSolid(nameProcess(first));
-   G4VSolid* secondSolid = getSolid(nameProcess(second));
+   G4VSolid* firstSolid = getSolid(GenerateName(first));
+   G4VSolid* secondSolid = getSolid(GenerateName(second));
 
-   if (op==UNION       ) new G4UnionSolid(nameProcess(name),firstSolid,secondSolid,transform);        else
-   if (op==SUBTRACTION ) new G4SubtractionSolid(nameProcess(name),firstSolid,secondSolid,transform);  else
-   if (op==INTERSECTION) new G4IntersectionSolid(nameProcess(name),firstSolid,secondSolid,transform);
+   if (op==UNION       ) new G4UnionSolid(GenerateName(name),firstSolid,secondSolid,transform);        else
+   if (op==SUBTRACTION ) new G4SubtractionSolid(GenerateName(name),firstSolid,secondSolid,transform);  else
+   if (op==INTERSECTION) new G4IntersectionSolid(GenerateName(name),firstSolid,secondSolid,transform);
 }
 
 void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
@@ -121,17 +121,17 @@ void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"    ) z     = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
 
-   G4double _x = evaluator->Evaluate(x)*_lunit;
-   G4double _y = evaluator->Evaluate(y)*_lunit;
-   G4double _z = evaluator->Evaluate(z)*_lunit;
+   G4double _x = eval.Evaluate(x)*_lunit;
+   G4double _y = eval.Evaluate(y)*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
 
    _x *= 0.5;
    _y *= 0.5;
    _z *= 0.5;
 
-   new G4Box(nameProcess(name),_x,_y,_z);
+   new G4Box(GenerateName(name),_x,_y,_z);
 }
 
 void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
@@ -173,20 +173,20 @@ void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin1    = evaluator->Evaluate(rmin1   )*_lunit;
-   G4double _rmax1    = evaluator->Evaluate(rmax1   )*_lunit;
-   G4double _rmin2    = evaluator->Evaluate(rmin2   )*_lunit;
-   G4double _rmax2    = evaluator->Evaluate(rmax2   )*_lunit;
-   G4double _z        = evaluator->Evaluate(z       )*_lunit;
-   G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
-   G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;;
+   G4double _rmin1    = eval.Evaluate(rmin1   )*_lunit;
+   G4double _rmax1    = eval.Evaluate(rmax1   )*_lunit;
+   G4double _rmin2    = eval.Evaluate(rmin2   )*_lunit;
+   G4double _rmax2    = eval.Evaluate(rmax2   )*_lunit;
+   G4double _z        = eval.Evaluate(z       )*_lunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;;
 
    _z *= 0.5;
 
-   new G4Cons(nameProcess(name),_rmin1,_rmax1,_rmin2,_rmax2,_z,_startphi,_deltaphi);
+   new G4Cons(GenerateName(name),_rmin1,_rmax1,_rmin2,_rmax2,_z,_startphi,_deltaphi);
 }
 
 void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
@@ -222,15 +222,15 @@ void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="zcut2") zcut2 = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
 
-   G4double _ax    = evaluator->Evaluate(ax   )*_lunit;
-   G4double _by    = evaluator->Evaluate(by   )*_lunit;
-   G4double _cz    = evaluator->Evaluate(cz   )*_lunit;
-   G4double _zcut1 = evaluator->Evaluate(zcut1)*_lunit;
-   G4double _zcut2 = evaluator->Evaluate(zcut2)*_lunit; 
+   G4double _ax    = eval.Evaluate(ax   )*_lunit;
+   G4double _by    = eval.Evaluate(by   )*_lunit;
+   G4double _cz    = eval.Evaluate(cz   )*_lunit;
+   G4double _zcut1 = eval.Evaluate(zcut1)*_lunit;
+   G4double _zcut2 = eval.Evaluate(zcut2)*_lunit; 
 
-   new G4Ellipsoid(nameProcess(name),_ax,_by,_cz,_zcut1,_zcut2);
+   new G4Ellipsoid(GenerateName(name),_ax,_by,_cz,_zcut1,_zcut2);
 }
 
 void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
@@ -262,13 +262,13 @@ void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="dz"   ) dz    = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
 
-   G4double _dx = evaluator->Evaluate(dx)*_lunit;
-   G4double _dy = evaluator->Evaluate(dy)*_lunit;
-   G4double _dz = evaluator->Evaluate(dz)*_lunit;
+   G4double _dx = eval.Evaluate(dx)*_lunit;
+   G4double _dy = eval.Evaluate(dy)*_lunit;
+   G4double _dz = eval.Evaluate(dz)*_lunit;
 
-   new G4EllipticalTube(nameProcess(name),_dx,_dy,_dz);
+   new G4EllipticalTube(GenerateName(name),_dx,_dy,_dz);
 }
 
 void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
@@ -306,18 +306,18 @@ void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"    ) z     = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin  = evaluator->Evaluate(rmin )*_lunit;
-   G4double _rmax  = evaluator->Evaluate(rmax )*_lunit;;
-   G4double _inst  = evaluator->Evaluate(inst )*_aunit;
-   G4double _outst = evaluator->Evaluate(outst)*_aunit;
-   G4double _z     = evaluator->Evaluate(z    )*_lunit;
+   G4double _rmin  = eval.Evaluate(rmin )*_lunit;
+   G4double _rmax  = eval.Evaluate(rmax )*_lunit;;
+   G4double _inst  = eval.Evaluate(inst )*_aunit;
+   G4double _outst = eval.Evaluate(outst)*_aunit;
+   G4double _z     = eval.Evaluate(z    )*_lunit;
 
    _z *= 0.5;
 
-   new G4Hype(nameProcess(name),_rmin,_rmax,_inst,_outst,_z);
+   new G4Hype(GenerateName(name),_rmin,_rmax,_inst,_outst,_z);
 }
 
 void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
@@ -347,18 +347,18 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="step") step = attribute_value;
    }
 
-   evaluator->checkVariable(var);
+   eval.checkVariable(var);
 
-   G4int _var  = evaluator->EvaluateInteger(var );
-   G4int _from = evaluator->EvaluateInteger(from);
-   G4int _to   = evaluator->EvaluateInteger(to  );
-   G4int _step = evaluator->EvaluateInteger(step);
+   G4int _var  = eval.EvaluateInteger(var );
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to   = eval.EvaluateInteger(to  );
+   G4int _step = eval.EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
 
    while (_var <= _to) {
    
-      evaluator->setVariable(var,_var);
+      eval.setVariable(var,_var);
       solidsRead(element);
 
       _var += _step;
@@ -390,11 +390,11 @@ void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="r"    ) r     = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
    
-   G4double _r = evaluator->Evaluate(r)*_lunit;
+   G4double _r = eval.Evaluate(r)*_lunit;
 
-   new G4Orb(nameProcess(name),_r);
+   new G4Orb(GenerateName(name),_r);
 }
 
 void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
@@ -434,21 +434,21 @@ void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="phi"  ) phi   = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _x     = evaluator->Evaluate(x    )*_lunit;
-   G4double _y     = evaluator->Evaluate(y    )*_lunit;
-   G4double _z     = evaluator->Evaluate(z    )*_lunit;
-   G4double _alpha = evaluator->Evaluate(alpha)*_aunit;
-   G4double _theta = evaluator->Evaluate(theta)*_aunit;
-   G4double _phi   = evaluator->Evaluate(phi  )*_aunit;
+   G4double _x     = eval.Evaluate(x    )*_lunit;
+   G4double _y     = eval.Evaluate(y    )*_lunit;
+   G4double _z     = eval.Evaluate(z    )*_lunit;
+   G4double _alpha = eval.Evaluate(alpha)*_aunit;
+   G4double _theta = eval.Evaluate(theta)*_aunit;
+   G4double _phi   = eval.Evaluate(phi  )*_aunit;
 
    _x *= 0.5;
    _y *= 0.5;
    _z *= 0.5;
 
-   new G4Para(nameProcess(name),_x,_y,_z,_alpha,_theta,_phi);
+   new G4Para(GenerateName(name),_x,_y,_z,_alpha,_theta,_phi);
 }
 
 void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
@@ -480,11 +480,11 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
-   G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
    std::vector<zplaneType> zplaneList;
 
@@ -512,7 +512,7 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polycone(nameProcess(name),_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polycone(GenerateName(name),_startphi,_deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
 void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
@@ -546,13 +546,13 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="numsides") { numsides = attribute_value; }
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
-   G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
-   G4int _numsides = evaluator->EvaluateInteger(numsides);
+   G4int _numsides = eval.EvaluateInteger(numsides);
 
    std::vector<zplaneType> zplaneList;
 
@@ -580,7 +580,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
       z_array[i]    = zplaneList[i].z;
    }
 
-   new G4Polyhedra(nameProcess(name),_startphi,_deltaphi,_numsides,numZPlanes,z_array,rmin_array,rmax_array);
+   new G4Polyhedra(GenerateName(name),_startphi,_deltaphi,_numsides,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
 G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
@@ -610,11 +610,11 @@ G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const elemen
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _x = evaluator->Evaluate(x)*_unit;
-   G4double _y = evaluator->Evaluate(y)*_unit;
-   G4double _z = evaluator->Evaluate(z)*_unit;
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
    
    return G4ThreeVector(_x,_y,_z);
 }
@@ -648,10 +648,10 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
       if (attribute_name=="type") { type = attribute_value; }
    }
 
-   const G4ThreeVector* ptr1 = getPosition(nameProcess(v1));
-   const G4ThreeVector* ptr2 = getPosition(nameProcess(v2));
-   const G4ThreeVector* ptr3 = getPosition(nameProcess(v3));
-   const G4ThreeVector* ptr4 = getPosition(nameProcess(v4));
+   const G4ThreeVector* ptr1 = getPosition(GenerateName(v1));
+   const G4ThreeVector* ptr2 = getPosition(GenerateName(v2));
+   const G4ThreeVector* ptr3 = getPosition(GenerateName(v3));
+   const G4ThreeVector* ptr4 = getPosition(GenerateName(v4));
 
    return new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
@@ -725,20 +725,20 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
       if (attribute_name=="dz"   ) dz    = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _sx = evaluator->Evaluate(sx);
-   G4double _sy = evaluator->Evaluate(sy);
-   G4double _sz = evaluator->Evaluate(sz);
-   G4double _rx = evaluator->Evaluate(rx)*_aunit;
-   G4double _ry = evaluator->Evaluate(ry)*_aunit;
-   G4double _rz = evaluator->Evaluate(rz)*_aunit;
-   G4double _dx = evaluator->Evaluate(dx)*_lunit;
-   G4double _dy = evaluator->Evaluate(dy)*_lunit;
-   G4double _dz = evaluator->Evaluate(dz)*_lunit;
+   G4double _sx = eval.Evaluate(sx);
+   G4double _sy = eval.Evaluate(sy);
+   G4double _sz = eval.Evaluate(sz);
+   G4double _rx = eval.Evaluate(rx)*_aunit;
+   G4double _ry = eval.Evaluate(ry)*_aunit;
+   G4double _rz = eval.Evaluate(rz)*_aunit;
+   G4double _dx = eval.Evaluate(dx)*_lunit;
+   G4double _dy = eval.Evaluate(dy)*_lunit;
+   G4double _dz = eval.Evaluate(dz)*_lunit;
 
-   G4VSolid* solidPtr = getSolid(nameProcess(solid));
+   G4VSolid* solidPtr = getSolid(GenerateName(solid));
 
    G4RotationMatrix rot;
    
@@ -753,7 +753,7 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    G4Transform3D transform(rot,trans);
    transform = transform*scale;
           
-   new G4ReflectedSolid(nameProcess(name),solidPtr,transform);
+   new G4ReflectedSolid(GenerateName(name),solidPtr,transform);
 }
 
 G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
@@ -783,11 +783,11 @@ G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const elemen
       if (attribute_name=="z"   ) { z    = attribute_value; }
    }
 
-   G4double _unit = evaluator->Evaluate(unit);
+   G4double _unit = eval.Evaluate(unit);
 
-   G4double _x = evaluator->Evaluate(x)*_unit;
-   G4double _y = evaluator->Evaluate(y)*_unit;
-   G4double _z = evaluator->Evaluate(z)*_unit;
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
    
    return G4ThreeVector(_x,_y,_z);
 }
@@ -819,10 +819,10 @@ G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* c
       if (attribute_name=="scalingFactor") scalingFactor = attribute_value;
    }
 
-   G4double _zPosition     = evaluator->Evaluate(zPosition    )*_lunit;
-   G4double _xOffset       = evaluator->Evaluate(xOffset      )*_lunit;
-   G4double _yOffset       = evaluator->Evaluate(yOffset      )*_lunit;
-   G4double _scalingFactor = evaluator->Evaluate(scalingFactor);
+   G4double _zPosition     = eval.Evaluate(zPosition    )*_lunit;
+   G4double _xOffset       = eval.Evaluate(xOffset      )*_lunit;
+   G4double _yOffset       = eval.Evaluate(yOffset      )*_lunit;
+   G4double _scalingFactor = eval.Evaluate(scalingFactor);
 
    return G4ExtrudedSolid::ZSection(_zPosition,G4TwoVector(_xOffset,_yOffset),_scalingFactor);
 }
@@ -864,17 +864,17 @@ void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="deltatheta") deltatheta = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin       = evaluator->Evaluate(rmin      )*_lunit;
-   G4double _rmax       = evaluator->Evaluate(rmax      )*_lunit;
-   G4double _startphi   = evaluator->Evaluate(startphi  )*_aunit;
-   G4double _deltaphi   = evaluator->Evaluate(deltaphi  )*_aunit;
-   G4double _starttheta = evaluator->Evaluate(starttheta)*_aunit;
-   G4double _deltatheta = evaluator->Evaluate(deltatheta)*_aunit;
+   G4double _rmin       = eval.Evaluate(rmin      )*_lunit;
+   G4double _rmax       = eval.Evaluate(rmax      )*_lunit;
+   G4double _startphi   = eval.Evaluate(startphi  )*_aunit;
+   G4double _deltaphi   = eval.Evaluate(deltaphi  )*_aunit;
+   G4double _starttheta = eval.Evaluate(starttheta)*_aunit;
+   G4double _deltatheta = eval.Evaluate(deltatheta)*_aunit;
 
-   new G4Sphere(nameProcess(name),_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
+   new G4Sphere(GenerateName(name),_rmin,_rmax,_startphi,_deltaphi,_starttheta,_deltatheta);
 }
 
 void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
@@ -898,7 +898,7 @@ void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="name") name = attribute_value;
    }
    
-   G4TessellatedSolid *tessellated = new G4TessellatedSolid(nameProcess(name));
+   G4TessellatedSolid *tessellated = new G4TessellatedSolid(GenerateName(name));
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -944,12 +944,12 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="vertex4") vertex4 = attribute_value;
    }
    
-   const G4ThreeVector* ptr1 = getPosition(nameProcess(vertex1));
-   const G4ThreeVector* ptr2 = getPosition(nameProcess(vertex2));
-   const G4ThreeVector* ptr3 = getPosition(nameProcess(vertex3));
-   const G4ThreeVector* ptr4 = getPosition(nameProcess(vertex4));
+   const G4ThreeVector* ptr1 = getPosition(GenerateName(vertex1));
+   const G4ThreeVector* ptr2 = getPosition(GenerateName(vertex2));
+   const G4ThreeVector* ptr3 = getPosition(GenerateName(vertex3));
+   const G4ThreeVector* ptr4 = getPosition(GenerateName(vertex4));
 
-   new G4Tet(nameProcess(name),*ptr1,*ptr2,*ptr3,*ptr4);
+   new G4Tet(GenerateName(name),*ptr1,*ptr2,*ptr3,*ptr4);
 }
 
 void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
@@ -987,16 +987,16 @@ void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin     = evaluator->Evaluate(rmin    )*_lunit;
-   G4double _rmax     = evaluator->Evaluate(rmax    )*_lunit;
-   G4double _rtor     = evaluator->Evaluate(rtor    )*_lunit;
-   G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
-   G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;
+   G4double _rmin     = eval.Evaluate(rmin    )*_lunit;
+   G4double _rmax     = eval.Evaluate(rmax    )*_lunit;
+   G4double _rtor     = eval.Evaluate(rtor    )*_lunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
-   new G4Torus(nameProcess(name),_rmin,_rmax,_rtor,_startphi,_deltaphi);
+   new G4Torus(GenerateName(name),_rmin,_rmax,_rtor,_startphi,_deltaphi);
 }
 
 void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
@@ -1046,20 +1046,20 @@ void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="alpha2") alpha2 = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _z      = evaluator->Evaluate(z     )*_lunit;
-   G4double _theta  = evaluator->Evaluate(theta )*_aunit;
-   G4double _phi    = evaluator->Evaluate(phi   )*_aunit;
-   G4double _y1     = evaluator->Evaluate(y1    )*_lunit;
-   G4double _x1     = evaluator->Evaluate(x1    )*_lunit;
-   G4double _x2     = evaluator->Evaluate(x2    )*_lunit;
-   G4double _alpha1 = evaluator->Evaluate(alpha1)*_aunit;
-   G4double _y2     = evaluator->Evaluate(y2    )*_lunit;
-   G4double _x3     = evaluator->Evaluate(x3    )*_lunit;
-   G4double _x4     = evaluator->Evaluate(x4    )*_lunit;
-   G4double _alpha2 = evaluator->Evaluate(alpha2)*_aunit;
+   G4double _z      = eval.Evaluate(z     )*_lunit;
+   G4double _theta  = eval.Evaluate(theta )*_aunit;
+   G4double _phi    = eval.Evaluate(phi   )*_aunit;
+   G4double _y1     = eval.Evaluate(y1    )*_lunit;
+   G4double _x1     = eval.Evaluate(x1    )*_lunit;
+   G4double _x2     = eval.Evaluate(x2    )*_lunit;
+   G4double _alpha1 = eval.Evaluate(alpha1)*_aunit;
+   G4double _y2     = eval.Evaluate(y2    )*_lunit;
+   G4double _x3     = eval.Evaluate(x3    )*_lunit;
+   G4double _x4     = eval.Evaluate(x4    )*_lunit;
+   G4double _alpha2 = eval.Evaluate(alpha2)*_aunit;
 
    _z  *= 0.5;
    _y1 *= 0.5;
@@ -1069,7 +1069,7 @@ void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
    _x3 *= 0.5;
    _x4 *= 0.5;
 
-   new G4Trap(nameProcess(name),_z,_theta,_phi,_y1,_x1,_x2,_alpha1,_y2,_x3,_x4,_alpha2);
+   new G4Trap(GenerateName(name),_z,_theta,_phi,_y1,_x1,_x2,_alpha1,_y2,_x3,_x4,_alpha2);
 }
 
 void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
@@ -1105,13 +1105,13 @@ void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="z"     ) { z      = attribute_value; }
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
 
-   G4double _x1 = evaluator->Evaluate(x1)*_lunit;
-   G4double _x2 = evaluator->Evaluate(x2)*_lunit;
-   G4double _y1 = evaluator->Evaluate(y1)*_lunit;
-   G4double _y2 = evaluator->Evaluate(y2)*_lunit;
-   G4double _z  = evaluator->Evaluate(z )*_lunit;
+   G4double _x1 = eval.Evaluate(x1)*_lunit;
+   G4double _x2 = eval.Evaluate(x2)*_lunit;
+   G4double _y1 = eval.Evaluate(y1)*_lunit;
+   G4double _y2 = eval.Evaluate(y2)*_lunit;
+   G4double _z  = eval.Evaluate(z )*_lunit;
 
    _x1 *= 0.5;
    _x2 *= 0.5;
@@ -1119,7 +1119,7 @@ void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    _y2 *= 0.5;
    _z  *= 0.5;
 
-   new G4Trd(nameProcess(name),_x1,_x2,_y1,_y2,_z);
+   new G4Trd(GenerateName(name),_x1,_x2,_y1,_y2,_z);
 }
 
 G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element) {
@@ -1149,9 +1149,9 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
       if (attribute_name=="type") type = attribute_value;
    }
 
-   const G4ThreeVector* ptr1 = getPosition(nameProcess(v1));
-   const G4ThreeVector* ptr2 = getPosition(nameProcess(v2));
-   const G4ThreeVector* ptr3 = getPosition(nameProcess(v3));
+   const G4ThreeVector* ptr1 = getPosition(GenerateName(v1));
+   const G4ThreeVector* ptr2 = getPosition(GenerateName(v2));
+   const G4ThreeVector* ptr3 = getPosition(GenerateName(v3));
 
    return new G4TriangularFacet(*ptr1,*ptr2,*ptr3,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
@@ -1191,18 +1191,18 @@ void G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="deltaphi") { deltaphi = attribute_value; }
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
-   G4double _aunit = evaluator->Evaluate(aunit);
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin     = evaluator->Evaluate(rmin    )*_lunit;
-   G4double _rmax     = evaluator->Evaluate(rmax    )*_lunit;
-   G4double _z        = evaluator->Evaluate(z       )*_lunit;
-   G4double _startphi = evaluator->Evaluate(startphi)*_aunit;
-   G4double _deltaphi = evaluator->Evaluate(deltaphi)*_aunit;
+   G4double _rmin     = eval.Evaluate(rmin    )*_lunit;
+   G4double _rmax     = eval.Evaluate(rmax    )*_lunit;
+   G4double _z        = eval.Evaluate(z       )*_lunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
    _z *= 0.5;
 
-   new G4Tubs(nameProcess(name),_rmin,_rmax,_z,_startphi,_deltaphi);
+   new G4Tubs(GenerateName(name),_rmin,_rmax,_z,_startphi,_deltaphi);
 }
 
 G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4double _lunit) {
@@ -1228,8 +1228,8 @@ G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const elem
       if (attribute_name=="y") y = attribute_value;
    }
 
-   G4double _x = evaluator->Evaluate(x)*_lunit;
-   G4double _y = evaluator->Evaluate(y)*_lunit;
+   G4double _x = eval.Evaluate(x)*_lunit;
+   G4double _y = eval.Evaluate(y)*_lunit;
 
    return G4TwoVector(_x,_y);
 }
@@ -1257,7 +1257,7 @@ void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="lunit") lunit = attribute_value;
    }
 
-   G4double _lunit = evaluator->Evaluate(lunit);
+   G4double _lunit = eval.Evaluate(lunit);
 
    std::vector<G4TwoVector> twoDimVertexList;
    std::vector<G4ExtrudedSolid::ZSection> sectionList;
@@ -1274,7 +1274,7 @@ void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
       if (tag=="section") sectionList.push_back(sectionRead(child,_lunit));      
    }
 
-   new G4ExtrudedSolid(nameProcess(name),twoDimVertexList,sectionList);
+   new G4ExtrudedSolid(GenerateName(name),twoDimVertexList,sectionList);
 }
 
 G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,G4double _lunit) {
@@ -1304,9 +1304,9 @@ G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* con
 
    zplaneType zplane;
 
-   zplane.rmin = evaluator->Evaluate(rmin)*_lunit;
-   zplane.rmax = evaluator->Evaluate(rmax)*_lunit;
-   zplane.z    = evaluator->Evaluate(z   )*_lunit;
+   zplane.rmin = eval.Evaluate(rmin)*_lunit;
+   zplane.rmax = eval.Evaluate(rmax)*_lunit;
+   zplane.z    = eval.Evaluate(z   )*_lunit;
 
    return zplane;
 }

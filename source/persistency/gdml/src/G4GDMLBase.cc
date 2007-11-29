@@ -1,3 +1,41 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GDMLBase.cc,v 1.2 2007-11-29 13:13:06 ztorzsok Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLStructure
+//
+// Class description:
+//
+// History:
+// - Created.                                  Zoltan Torzsok, November 2007
+// -------------------------------------------------------------------------
+
 #include "G4GDMLBase.hh"
 
 G4GDMLBase::G4GDMLBase() {
@@ -19,13 +57,9 @@ G4GDMLBase::G4GDMLBase() {
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
-
-   evaluator = new G4GDMLEvaluator();
 }
 
 G4GDMLBase::~G4GDMLBase() {
-
-   if (evaluator) delete evaluator;
 
    if (parser) delete parser;
 
@@ -41,7 +75,7 @@ G4GDMLBase::~G4GDMLBase() {
    }
 }
 
-std::string G4GDMLBase::nameProcess(const std::string& in) {
+std::string G4GDMLBase::GenerateName(const std::string& in) {
 
    std::string out(prename);
    
@@ -59,7 +93,7 @@ std::string G4GDMLBase::nameProcess(const std::string& in) {
 
       std::stringstream stream;
       
-      stream << "[" << evaluator->EvaluateInteger(expr) << "]";
+      stream << "[" << eval.EvaluateInteger(expr) << "]";
    
       out.append(stream.str());
 
@@ -69,7 +103,7 @@ std::string G4GDMLBase::nameProcess(const std::string& in) {
    return out;
 }
 
-void G4GDMLBase::gdmlRead(const G4String& fileName) {
+void G4GDMLBase::Parse(const G4String& fileName) {
 
    prename = fileName + "_";
 
@@ -112,4 +146,13 @@ void G4GDMLBase::gdmlRead(const G4String& fileName) {
       if (tag=="setup"    ) setupRead(child); else
       if (tag=="structure") structureRead(child);
    }
+}
+
+G4PVPlacement* G4GDMLBase::getTopVolume(const G4String& setupName) {
+
+   G4LogicalVolume* volume = getVolume(getSetup(setupName));
+
+   volume->SetVisAttributes(G4VisAttributes::Invisible);
+
+   return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
 }

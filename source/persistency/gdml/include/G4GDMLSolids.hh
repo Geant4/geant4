@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.13 2007-11-29 11:23:55 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.14 2007-11-29 13:13:06 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,10 +69,8 @@
 
 #include "G4GDMLMaterials.hh"
 
-#include <sstream>
-
 class G4GDMLSolids : public G4GDMLMaterials {
-
+private:
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct zplaneType { G4double rmin,rmax,z; };
 
@@ -104,7 +102,7 @@ class G4GDMLSolids : public G4GDMLMaterials {
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
    void xtruRead(const xercesc::DOMElement* const);
    zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
-public:
+protected:
    void solidsRead(const xercesc::DOMElement* const);
    G4VSolid* getSolid(const G4String&) const;
 };

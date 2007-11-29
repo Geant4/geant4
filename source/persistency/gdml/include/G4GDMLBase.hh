@@ -1,3 +1,41 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GDMLBase.hh,v 1.2 2007-11-29 13:13:06 ztorzsok Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLStructure
+//
+// Class description:
+//
+// History:
+// - Created.                                  Zoltan Torzsok, November 2007
+// -------------------------------------------------------------------------
+
 #ifndef _G4GDMLBASE_INCLUDED_
 #define _G4GDMLBASE_INCLUDED_
 
@@ -6,27 +44,37 @@
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/dom/DOM.hpp>
 
+#include <sstream>
+
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4VisAttributes.hh"
+
 #include "G4GDMLEvaluator.hh"
 
 class G4GDMLBase {
 private:
    xercesc::XercesDOMParser* parser;
-protected:
-   G4GDMLEvaluator* evaluator;
    G4String prename;
+protected:
+   G4GDMLEvaluator eval;
 
-   std::string nameProcess(const std::string&);
-public:
-   G4GDMLBase();
-   ~G4GDMLBase();
-   
-   void gdmlRead(const G4String&);
+   std::string GenerateName(const std::string&);
 
    virtual void defineRead(const xercesc::DOMElement* const)=0;
    virtual void materialsRead(const xercesc::DOMElement* const)=0;
    virtual void solidsRead(const xercesc::DOMElement* const)=0;
    virtual void structureRead(const xercesc::DOMElement* const)=0;
    virtual void setupRead(const xercesc::DOMElement* const)=0;
+
+   virtual G4LogicalVolume* getVolume(const G4String&) const=0;
+   virtual G4String getSetup(const G4String&)=0;
+public:
+   G4GDMLBase();
+   ~G4GDMLBase();
+   
+   void Parse(const G4String& fileName);
+   G4PVPlacement* getTopVolume(const G4String& setupName);
 };
 
 #endif
