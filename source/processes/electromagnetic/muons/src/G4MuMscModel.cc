@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.7 2007-11-26 12:08:48 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.8 2007-11-29 10:50:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -228,12 +228,12 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
     x1 = screenZ*formfactA;
     x2 = 1.0/(1.0 - x1); 
     x3 = x/screenZ;
+    x4 = 1.0/formfactA + x;
     if(x3 < numlimit) 
       y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 
 			      - 1.5*x1 + 3.0*x1*x1 + 2.666666*x3*x1);
     else {
       x3 = screenZ + x;
-      x4 = 1.0/formfactA + x;
       y  = ((1.0 + x1)*x2*log(x3/(x4*x1)) - x*(1.0/x3 + 1.0/x4))*x2*x2; 
     }
     if(y < 0.0) {
@@ -250,7 +250,7 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
     }
     xSection += y; 
   }
-  xSection *= coeff*Z*Z*chargeSquare*invbeta2/mom2; 
+  xSection *= (coeff*Z*Z*chargeSquare*invbeta2/mom2); 
   //  G4cout << " croosE= " << xSection/barn << " screenZ= " 
   //	 << screenZ << " formF= " << formfactA << G4endl;
   return xSection; 
@@ -365,9 +365,9 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
   }
   fac   = coeff*chargeSquare*invbeta2/mom2;
   res0 *= fac;
-  res  *= 0.25*fac;
+  res  *= (0.25*fac);
   G4double res1 = 0.5/GetLambda(ekin);
-  if(res0 > 0.0) res -= res1*res1/res0;
+  if(res0 > 0.0) res *= (4.0*res0/(9.0*res1*res1));
   //  G4cout << "e= " << ekin << " sig0= " << res0 << " sig1= " << res1 << " sig2= " << res
   // << " screenZ= " << screenZ << " formF= " << formfactA 
   // << " " << particle->GetParticleName() << " in " << mat->GetName() << G4endl;
@@ -538,6 +538,17 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	 << " matIdx= " << currentMaterialIndex << G4endl;
   */
   /*
+  G4double z1 = x1;
+  G4double x2 = tPathLength*GetLambda2(0.5*(preKinEnergy + kinEnergy)); 
+  G4double x3 = 0.0;
+  G4double grej = 1.0;
+  if(x2 < 1.0) {
+    z1 = 0.75*x1*(1.0 + sqrt(1.0 - x2));
+    x3 = (x1 - z1)/(z1*z1);
+    grej += x3;
+  } 
+  */
+  /*
   G4double y1  = 1.0 - x1;
   G4double x2  = tPathLength*GetLambda2(0.5*(preKinEnergy + kinEnergy)); 
   //G4double x2 = tPathLength*GetLambda2(preKinEnergy); 
@@ -555,8 +566,17 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double x4 = 0.25*(3.0*x3 + sqrt(x3*(x3 + 8.0)))/(1.0 - x3);
   //  G4cout << "x1= " << x1 << " x3= " << x3 << " x4= " << x4 << G4endl;
   */
-  G4double x  = G4UniformRand();
-  G4double z;  
+  G4double x, z;  
+  x  = G4UniformRand();
+  z = -x1*log(x);
+
+  //  G4cout << " z1= " << z1 << " grej= " << grej << " x3= " << x3 << " x1= " << x1 << " x2= " << x2 << G4endl;
+  /*
+  do {
+    z = -z1*log(G4UniformRand());
+    x  = G4UniformRand(); 
+  } while (grej*x > 1.0 + x3*z);
+  */
 
   /*
   G4double z1;  
@@ -571,7 +591,6 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
     else z = 1.0 - y1*exp(z1);
   }
   */
-  z = -x1*log(x);
 
   G4double cost = 1.0 - 2.0*z;
   if(cost < -1.0) cost = -1.0;
