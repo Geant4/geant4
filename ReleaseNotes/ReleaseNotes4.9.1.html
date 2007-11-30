@@ -178,6 +178,22 @@ Please see the last section for the corresponding details.
 <LI><blink>!!! ADD TEST HERE !!!</blink></LI>
 </UL>
 
+<B>Command-based scoring</B>
+<UL>
+<LI>With the new command-based scoring, the user can define a parallel world
+    for scoring and three-dimensional scoring mesh in it. The mesh geometry
+    can be independent from the mass geometry, and it is not required to
+    write any source code for applying scoring. An arbitrary number of physics
+    quantities to be scored and filters affecting these scorers can be assigned
+    to the mesh. After scoring has been applied (i.e. after the run), the user
+    can visualize the score map and also dump scores into a file. All available
+    UI commands are listed in the Application Developers Guide, and the new
+    <TT>extended/runAndEvent/RE03</TT> example demonstrates the usage.</LI> 
+<LI>The functionality of command-based scoring is in Beta stage in this release
+    and there are limitations imposed. Commands and methods may as well change
+    in the future releases. Feedback is of course appreciated.</LI>
+</UL>
+
 <P> </P>
 <A NAME="5."></A>
 <HR>
