@@ -583,23 +583,21 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Decay</B>
     <UL>
-    <LI>Added method <TT>DaughterPolarization()</TT> in <TT>G4Decay</TT>.</LI>
     <LI>Added <TT>G4PionDecayMakeSpin</TT> class: set the daughter muon spin
         for 2-body decays of pi, K and K0_long.</LI>
-    <LI>Added forward declaration for <TT>G4VExtDecayer</TT> in
-        <TT>G4DecayWithSpin</TT>.</LI>
+    <LI>Added method <TT>DaughterPolarization()</TT> in <TT>G4Decay</TT>
+        to set polarization vector for daughters.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
-    <LI>Added <TT>SetProcessOrderingToSecond()</TT> and
-       <TT>CheckOrderingParameters()</TT> methods to
-       <TT>G4ProcessManager</TT>.</LI>
-    <LI>Added <TT>DoItIsEnabled</TT> methods in <TT>G4VProcess</TT> and derived
-        classes.</LI>
-    <LI>Removed double definition of <TT>PreparePhysicsTable()</TT> in
-        <TT>G4WrapperProcess</TT>.</LI>
-    <LI>Clean up messages in <TT>G4ProcessManager</TT> and
-        <TT>G4ProcessTable</TT> classes.</LI>
+    <LI>Added method <TT>SetProcessOrderingToSecond()</TT> to
+        <TT>G4ProcessManager</TT>, which puts the process at the second
+        position in the <TT>DoIt</TT> list.</LI>
+    <LI>Added method <TT>CheckOrderingParameters()</TT> to
+        <TT>G4ProcessManager</TT>, in order to check whether given ordering
+        parameters are set for valid <TT>DoIt</TT>s.</LI>
+    <LI>Added methods to <TT>G4VProcess</TT> to indicate that the specified
+        <TT>DoIt</TT> is valid for the process.</LI>
     </UL></LI>
 <LI><B>Optical</B>
     <UL>
@@ -1025,14 +1023,16 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="part-notes">
 <H3><I>Particles</I></H3></A>
 <UL>
-<LI>Added <TT>G4HyperNucleiProperties</TT> class. Added <TT>GetIon()</TT> and
-    <TT>FindIon()</TT> methods for hyper-nuclei in <TT>G4ParticleTable</TT>.
-    Modified <TT>G4PDGCodeChecker</TT> to check for PDG code of nuclei.</LI>
+<LI>Added <TT>G4HyperNucleiProperties</TT> class so that hyper-nuclei can be
+    created for <TT>G4Ions</TT>. <TT>G4ParticleTable</TT> can return a pointer
+    to hyper-nucleus by using <TT>GetIon()</TT> and <TT>FindIon()</TT> methods.</LI>
+<LI>Modified <TT>G4PDGCodeChecker</TT> to support PDG code for hyper-nuclei.</LI>
+<LI>Changed <TT>G4ParticleTable::GetIonTable()</TT> to give 'non-const' pointer
+    in order to allow users to use <TT>G4IonTable::GetIon()</TT> methods
+    directly.</LI>
+<LI>Added check for atomic number (less than 1000) in <TT>G4IonTable</TT>.</LI>
 <LI>Added new classes <TT>G4PionRadiativeDecayChannel</TT> and
     <TT>G4MuonRadiativeDecayChannelWithSpin</TT>.</LI>
-<LI>Added check in <TT>G4IonTable</TT> for atomic number limit.</LI>
-<LI>Added class and method name in printouts. Added units in messages
-    printed out.</LI>
 </UL>
 
 <A NAME="pers-notes">
@@ -1094,7 +1094,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="track-notes">
 <H3><I>Track & Tracking</I></H3></A>
 <UL>
-<LI>Added accessor for non-ionizing energy deposit in <TT>G4Step</TT>.</LI>
+<LI>Added accessors for non-ionizing energy deposit in <TT>G4Step</TT>.</LI>
 <LI>Added protection in <TT>G4Track::GetVolume()</TT> to avoid cases of
     dereferencing of null pointer.</LI>
 <LI><TT>G4SteppingManager</TT>: fix to use Cartesian tolerance in
