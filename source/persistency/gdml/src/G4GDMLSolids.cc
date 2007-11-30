@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.21 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.22 2007-11-30 13:27:24 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -55,7 +55,7 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name") name = attribute_value;
@@ -69,8 +69,8 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="first"   ) first = refRead(child);         else
-      if (tag=="second"  ) second = refRead(child);        else
+      if (tag=="first") first = refRead(child); else
+      if (tag=="second") second = refRead(child); else
       if (tag=="position") position = positionRead(child); else
       if (tag=="rotation") rotation = rotationRead(child); else
       G4Exception("GDML: Unknown tag in boolean solid: "+tag);
@@ -87,15 +87,15 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
    G4VSolid* firstSolid = getSolid(GenerateName(first));
    G4VSolid* secondSolid = getSolid(GenerateName(second));
 
-   if (op==UNION       ) new G4UnionSolid(GenerateName(name),firstSolid,secondSolid,transform);        else
-   if (op==SUBTRACTION ) new G4SubtractionSolid(GenerateName(name),firstSolid,secondSolid,transform);  else
+   if (op==UNION) new G4UnionSolid(GenerateName(name),firstSolid,secondSolid,transform); else
+   if (op==SUBTRACTION) new G4SubtractionSolid(GenerateName(name),firstSolid,secondSolid,transform); else
    if (op==INTERSECTION) new G4IntersectionSolid(GenerateName(name),firstSolid,secondSolid,transform);
 }
 
 void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
    G4String x;
    G4String y;
    G4String z;
@@ -111,14 +111,14 @@ void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name" ) name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="x"    ) x     = attribute_value; else
-      if (attribute_name=="y"    ) y     = attribute_value; else
-      if (attribute_name=="z"    ) z     = attribute_value;
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -137,8 +137,8 @@ void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String rmin1;
    G4String rmax1;
    G4String rmin2;
@@ -158,17 +158,17 @@ void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"    ) name     = attribute_value; else
-      if (attribute_name=="lunit"   ) lunit    = attribute_value; else
-      if (attribute_name=="aunit"   ) aunit    = attribute_value; else
-      if (attribute_name=="rmin1"   ) rmin1    = attribute_value; else
-      if (attribute_name=="rmax1"   ) rmax1    = attribute_value; else
-      if (attribute_name=="rmin2"   ) rmin2    = attribute_value; else
-      if (attribute_name=="rmax2"   ) rmax2    = attribute_value; else
-      if (attribute_name=="z"       ) z        = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin1") rmin1 = attribute_value; else
+      if (attribute_name=="rmax1") rmax1 = attribute_value; else
+      if (attribute_name=="rmin2") rmin2 = attribute_value; else
+      if (attribute_name=="rmax2") rmax2 = attribute_value; else
+      if (attribute_name=="z") z = attribute_value; else
       if (attribute_name=="startphi") startphi = attribute_value; else
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
@@ -176,11 +176,11 @@ void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin1    = eval.Evaluate(rmin1   )*_lunit;
-   G4double _rmax1    = eval.Evaluate(rmax1   )*_lunit;
-   G4double _rmin2    = eval.Evaluate(rmin2   )*_lunit;
-   G4double _rmax2    = eval.Evaluate(rmax2   )*_lunit;
-   G4double _z        = eval.Evaluate(z       )*_lunit;
+   G4double _rmin1 = eval.Evaluate(rmin1)*_lunit;
+   G4double _rmax1 = eval.Evaluate(rmax1)*_lunit;
+   G4double _rmin2 = eval.Evaluate(rmin2)*_lunit;
+   G4double _rmax2 = eval.Evaluate(rmax2)*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
    G4double _startphi = eval.Evaluate(startphi)*_aunit;
    G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;;
 
@@ -192,7 +192,7 @@ void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
    G4String ax;
    G4String by;
    G4String cz;
@@ -210,23 +210,23 @@ void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name") name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="ax"   ) ax    = attribute_value; else
-      if (attribute_name=="by"   ) by    = attribute_value; else
-      if (attribute_name=="cz"   ) cz    = attribute_value; else
+      if (attribute_name=="ax") ax = attribute_value; else
+      if (attribute_name=="by") by = attribute_value; else
+      if (attribute_name=="cz") cz = attribute_value; else
       if (attribute_name=="zcut1") zcut1 = attribute_value; else
       if (attribute_name=="zcut2") zcut2 = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
 
-   G4double _ax    = eval.Evaluate(ax   )*_lunit;
-   G4double _by    = eval.Evaluate(by   )*_lunit;
-   G4double _cz    = eval.Evaluate(cz   )*_lunit;
+   G4double _ax = eval.Evaluate(ax)*_lunit;
+   G4double _by = eval.Evaluate(by)*_lunit;
+   G4double _cz = eval.Evaluate(cz)*_lunit;
    G4double _zcut1 = eval.Evaluate(zcut1)*_lunit;
    G4double _zcut2 = eval.Evaluate(zcut2)*_lunit; 
 
@@ -236,7 +236,7 @@ void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
    G4String dx;
    G4String dy;
    G4String dz;
@@ -252,14 +252,14 @@ void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name") name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="dx"   ) dx    = attribute_value; else
-      if (attribute_name=="dy"   ) dy    = attribute_value; else
-      if (attribute_name=="dz"   ) dz    = attribute_value;
+      if (attribute_name=="dx") dx = attribute_value; else
+      if (attribute_name=="dy") dy = attribute_value; else
+      if (attribute_name=="dz") dz = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -274,8 +274,8 @@ void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String rmin;
    G4String rmax;
    G4String inst;
@@ -293,27 +293,27 @@ void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name") name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
       if (attribute_name=="aunit") aunit = attribute_value; else
-      if (attribute_name=="rmin" ) rmin  = attribute_value; else
-      if (attribute_name=="rmax" ) rmax  = attribute_value; else
-      if (attribute_name=="inst" ) inst  = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="inst") inst = attribute_value; else
       if (attribute_name=="outst") outst = attribute_value; else
-      if (attribute_name=="z"    ) z     = attribute_value;
+      if (attribute_name=="z") z = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin  = eval.Evaluate(rmin )*_lunit;
-   G4double _rmax  = eval.Evaluate(rmax )*_lunit;;
-   G4double _inst  = eval.Evaluate(inst )*_aunit;
+   G4double _rmin = eval.Evaluate(rmin)*_lunit;
+   G4double _rmax = eval.Evaluate(rmax)*_lunit;;
+   G4double _inst = eval.Evaluate(inst)*_aunit;
    G4double _outst = eval.Evaluate(outst)*_aunit;
-   G4double _z     = eval.Evaluate(z    )*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
 
    _z *= 0.5;
 
@@ -338,20 +338,20 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="var" ) var  = attribute_value; else
+      if (attribute_name=="var") var = attribute_value; else
       if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to"  ) to   = attribute_value; else
+      if (attribute_name=="to") to = attribute_value; else
       if (attribute_name=="step") step = attribute_value;
    }
 
    eval.checkVariable(var);
 
-   G4int _var  = eval.EvaluateInteger(var );
+   G4int _var = eval.EvaluateInteger(var);
    G4int _from = eval.EvaluateInteger(from);
-   G4int _to   = eval.EvaluateInteger(to  );
+   G4int _to = eval.EvaluateInteger(to);
    G4int _step = eval.EvaluateInteger(step);
    
    if (!from.empty()) _var = _from;
@@ -368,7 +368,7 @@ void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
    G4String r;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
@@ -382,12 +382,12 @@ void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name") name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="r"    ) r     = attribute_value;
+      if (attribute_name=="r") r = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -400,8 +400,8 @@ void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String x;
    G4String y;
    G4String z;
@@ -420,29 +420,29 @@ void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name" ) name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
       if (attribute_name=="aunit") aunit = attribute_value; else
-      if (attribute_name=="x"    ) x     = attribute_value; else
-      if (attribute_name=="y"    ) y     = attribute_value; else
-      if (attribute_name=="z"    ) z     = attribute_value; else
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value; else
       if (attribute_name=="alpha") alpha = attribute_value; else
       if (attribute_name=="theta") theta = attribute_value; else
-      if (attribute_name=="phi"  ) phi   = attribute_value;
+      if (attribute_name=="phi") phi = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _x     = eval.Evaluate(x    )*_lunit;
-   G4double _y     = eval.Evaluate(y    )*_lunit;
-   G4double _z     = eval.Evaluate(z    )*_lunit;
+   G4double _x = eval.Evaluate(x)*_lunit;
+   G4double _y = eval.Evaluate(y)*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
    G4double _alpha = eval.Evaluate(alpha)*_aunit;
    G4double _theta = eval.Evaluate(theta)*_aunit;
-   G4double _phi   = eval.Evaluate(phi  )*_aunit;
+   G4double _phi = eval.Evaluate(phi)*_aunit;
 
    _x *= 0.5;
    _y *= 0.5;
@@ -454,8 +454,8 @@ void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String startphi;
    G4String deltaphi;
 
@@ -470,12 +470,12 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"    ) name     = attribute_value; else
-      if (attribute_name=="lunit"   ) lunit    = attribute_value; else
-      if (attribute_name=="aunit"   ) aunit    = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
       if (attribute_name=="startphi") startphi = attribute_value; else
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
@@ -518,8 +518,8 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String startphi;
    G4String deltaphi;
    G4String numsides;
@@ -535,15 +535,15 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
-      if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
-      if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="deltaphi") { deltaphi = attribute_value; } else
-      if (attribute_name=="numsides") { numsides = attribute_value; }
+      if (attribute_name=="name") name     = attribute_value; else
+      if (attribute_name=="lunit") lunit    = attribute_value; else
+      if (attribute_name=="aunit" ) aunit    = attribute_value; else
+      if (attribute_name=="startphi") startphi = attribute_value; else
+      if (attribute_name=="deltaphi") deltaphi = attribute_value; else
+      if (attribute_name=="numsides") numsides = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -585,7 +585,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
 G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
 
-   G4String unit;
+   G4String unit("1");
    G4String x;
    G4String y;
    G4String z;
@@ -601,13 +601,13 @@ G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const elemen
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
-      if (attribute_name=="x"   ) { x    = attribute_value; } else
-      if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; }
+      if (attribute_name=="unit") unit = attribute_value; else
+      if (attribute_name=="x") x  = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
    }
 
    G4double _unit = eval.Evaluate(unit);
@@ -638,14 +638,14 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="v1"  ) { v1   = attribute_value; } else
-      if (attribute_name=="v2"  ) { v2   = attribute_value; } else
-      if (attribute_name=="v3"  ) { v3   = attribute_value; } else
-      if (attribute_name=="v4"  ) { v4   = attribute_value; } else
-      if (attribute_name=="type") { type = attribute_value; }
+      if (attribute_name=="v1") v1 = attribute_value; else
+      if (attribute_name=="v2") v2 = attribute_value; else
+      if (attribute_name=="v3") v3 = attribute_value; else
+      if (attribute_name=="v4") v4 = attribute_value; else
+      if (attribute_name=="type") type = attribute_value;
    }
 
    const G4ThreeVector* ptr1 = getPosition(GenerateName(v1));
@@ -671,7 +671,7 @@ G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="ref") ref = attribute_value;
@@ -683,8 +683,8 @@ G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String solid;
    G4String sx;
    G4String sy;
@@ -707,22 +707,22 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name" ) name  = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
       if (attribute_name=="aunit") aunit = attribute_value; else
       if (attribute_name=="solid") solid = attribute_value; else
-      if (attribute_name=="sx"   ) sx    = attribute_value; else
-      if (attribute_name=="sy"   ) sy    = attribute_value; else
-      if (attribute_name=="sz"   ) sz    = attribute_value; else
-      if (attribute_name=="rx"   ) rx    = attribute_value; else
-      if (attribute_name=="ry"   ) ry    = attribute_value; else
-      if (attribute_name=="rz"   ) rz    = attribute_value; else
-      if (attribute_name=="dx"   ) dx    = attribute_value; else
-      if (attribute_name=="dy"   ) dy    = attribute_value; else
-      if (attribute_name=="dz"   ) dz    = attribute_value;
+      if (attribute_name=="sx") sx = attribute_value; else
+      if (attribute_name=="sy") sy = attribute_value; else
+      if (attribute_name=="sz") sz = attribute_value; else
+      if (attribute_name=="rx") rx = attribute_value; else
+      if (attribute_name=="ry") ry = attribute_value; else
+      if (attribute_name=="rz") rz = attribute_value; else
+      if (attribute_name=="dx") dx = attribute_value; else
+      if (attribute_name=="dy") dy = attribute_value; else
+      if (attribute_name=="dz") dz = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -758,7 +758,7 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
 
 G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
 
-   G4String unit;
+   G4String unit("1");
    G4String x;
    G4String y;
    G4String z;
@@ -774,13 +774,13 @@ G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const elemen
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="unit") { unit = attribute_value; } else
-      if (attribute_name=="x"   ) { x    = attribute_value; } else
-      if (attribute_name=="y"   ) { y    = attribute_value; } else
-      if (attribute_name=="z"   ) { z    = attribute_value; }
+      if (attribute_name=="unit") unit = attribute_value; else
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
    }
 
    G4double _unit = eval.Evaluate(unit);
@@ -810,18 +810,18 @@ G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* c
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="zPosition"    ) zPosition     = attribute_value; else
-      if (attribute_name=="xOffset"      ) xOffset       = attribute_value; else
-      if (attribute_name=="yOffset"      ) yOffset       = attribute_value; else
+      if (attribute_name=="zPosition") zPosition = attribute_value; else
+      if (attribute_name=="xOffset") xOffset = attribute_value; else
+      if (attribute_name=="yOffset") yOffset = attribute_value; else
       if (attribute_name=="scalingFactor") scalingFactor = attribute_value;
    }
 
-   G4double _zPosition     = eval.Evaluate(zPosition    )*_lunit;
-   G4double _xOffset       = eval.Evaluate(xOffset      )*_lunit;
-   G4double _yOffset       = eval.Evaluate(yOffset      )*_lunit;
+   G4double _zPosition = eval.Evaluate(zPosition)*_lunit;
+   G4double _xOffset = eval.Evaluate(xOffset)*_lunit;
+   G4double _yOffset = eval.Evaluate(yOffset)*_lunit;
    G4double _scalingFactor = eval.Evaluate(scalingFactor);
 
    return G4ExtrudedSolid::ZSection(_zPosition,G4TwoVector(_xOffset,_yOffset),_scalingFactor);
@@ -830,8 +830,8 @@ G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* c
 void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String rmin;
    G4String rmax;
    G4String startphi;
@@ -850,16 +850,16 @@ void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name")       name       = attribute_value; else
-      if (attribute_name=="lunit")      lunit      = attribute_value; else
-      if (attribute_name=="aunit")      aunit      = attribute_value; else
-      if (attribute_name=="rmin")       rmin       = attribute_value; else
-      if (attribute_name=="rmax")       rmax       = attribute_value; else
-      if (attribute_name=="startphi")   startphi   = attribute_value; else
-      if (attribute_name=="deltaphi")   deltaphi   = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="startphi") startphi = attribute_value; else
+      if (attribute_name=="deltaphi") deltaphi = attribute_value; else
       if (attribute_name=="starttheta") starttheta = attribute_value; else
       if (attribute_name=="deltatheta") deltatheta = attribute_value;
    }
@@ -867,10 +867,10 @@ void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin       = eval.Evaluate(rmin      )*_lunit;
-   G4double _rmax       = eval.Evaluate(rmax      )*_lunit;
-   G4double _startphi   = eval.Evaluate(startphi  )*_aunit;
-   G4double _deltaphi   = eval.Evaluate(deltaphi  )*_aunit;
+   G4double _rmin = eval.Evaluate(rmin)*_lunit;
+   G4double _rmax = eval.Evaluate(rmax)*_lunit;
+   G4double _startphi = eval.Evaluate(startphi)*_aunit;
+   G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
    G4double _starttheta = eval.Evaluate(starttheta)*_aunit;
    G4double _deltatheta = eval.Evaluate(deltatheta)*_aunit;
 
@@ -892,7 +892,7 @@ void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name") name = attribute_value;
@@ -934,10 +934,10 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name   ") name    = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
       if (attribute_name=="vertex1") vertex1 = attribute_value; else
       if (attribute_name=="vertex2") vertex2 = attribute_value; else
       if (attribute_name=="vertex3") vertex3 = attribute_value; else
@@ -955,8 +955,8 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String rmin;
    G4String rmax;
    G4String rtor;
@@ -974,15 +974,15 @@ void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"    ) name     = attribute_value; else
-      if (attribute_name=="lunit"   ) lunit    = attribute_value; else
-      if (attribute_name=="aunit"   ) aunit    = attribute_value; else
-      if (attribute_name=="rmin"    ) rmin     = attribute_value; else
-      if (attribute_name=="rmax"    ) rmax     = attribute_value; else
-      if (attribute_name=="rtor"    ) rtor     = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="rtor") rtor = attribute_value; else
       if (attribute_name=="startphi") startphi = attribute_value; else
       if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
@@ -990,9 +990,9 @@ void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin     = eval.Evaluate(rmin    )*_lunit;
-   G4double _rmax     = eval.Evaluate(rmax    )*_lunit;
-   G4double _rtor     = eval.Evaluate(rtor    )*_lunit;
+   G4double _rmin = eval.Evaluate(rmin)*_lunit;
+   G4double _rmax = eval.Evaluate(rmax)*_lunit;
+   G4double _rtor = eval.Evaluate(rtor)*_lunit;
    G4double _startphi = eval.Evaluate(startphi)*_aunit;
    G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
@@ -1002,8 +1002,8 @@ void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String z;
    G4String theta;
    G4String phi;
@@ -1027,41 +1027,41 @@ void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"  ) name   = attribute_value; else
-      if (attribute_name=="lunit" ) lunit  = attribute_value; else
-      if (attribute_name=="aunit" ) aunit  = attribute_value; else
-      if (attribute_name=="z"     ) z      = attribute_value; else
-      if (attribute_name=="theta" ) theta  = attribute_value; else
-      if (attribute_name=="phi"   ) phi    = attribute_value; else
-      if (attribute_name=="y1"    ) y1     = attribute_value; else
-      if (attribute_name=="x1"    ) x1     = attribute_value; else
-      if (attribute_name=="x2"    ) x2     = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="z") z = attribute_value; else
+      if (attribute_name=="theta") theta  = attribute_value; else
+      if (attribute_name=="phi") phi = attribute_value; else
+      if (attribute_name=="y1") y1 = attribute_value; else
+      if (attribute_name=="x1") x1 = attribute_value; else
+      if (attribute_name=="x2") x2 = attribute_value; else
       if (attribute_name=="alpha1") alpha1 = attribute_value; else
-      if (attribute_name=="y2"    ) y2     = attribute_value; else
-      if (attribute_name=="x3"    ) x3     = attribute_value; else
-      if (attribute_name=="x4"    ) x4     = attribute_value; else
+      if (attribute_name=="y2") y2 = attribute_value; else
+      if (attribute_name=="x3") x3 = attribute_value; else
+      if (attribute_name=="x4") x4 = attribute_value; else
       if (attribute_name=="alpha2") alpha2 = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _z      = eval.Evaluate(z     )*_lunit;
-   G4double _theta  = eval.Evaluate(theta )*_aunit;
-   G4double _phi    = eval.Evaluate(phi   )*_aunit;
-   G4double _y1     = eval.Evaluate(y1    )*_lunit;
-   G4double _x1     = eval.Evaluate(x1    )*_lunit;
-   G4double _x2     = eval.Evaluate(x2    )*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
+   G4double _theta  = eval.Evaluate(theta)*_aunit;
+   G4double _phi = eval.Evaluate(phi)*_aunit;
+   G4double _y1 = eval.Evaluate(y1)*_lunit;
+   G4double _x1 = eval.Evaluate(x1)*_lunit;
+   G4double _x2 = eval.Evaluate(x2)*_lunit;
    G4double _alpha1 = eval.Evaluate(alpha1)*_aunit;
-   G4double _y2     = eval.Evaluate(y2    )*_lunit;
-   G4double _x3     = eval.Evaluate(x3    )*_lunit;
-   G4double _x4     = eval.Evaluate(x4    )*_lunit;
+   G4double _y2 = eval.Evaluate(y2)*_lunit;
+   G4double _x3 = eval.Evaluate(x3)*_lunit;
+   G4double _x4 = eval.Evaluate(x4)*_lunit;
    G4double _alpha2 = eval.Evaluate(alpha2)*_aunit;
 
-   _z  *= 0.5;
+   _z *= 0.5;
    _y1 *= 0.5;
    _x1 *= 0.5;
    _x2 *= 0.5;
@@ -1075,7 +1075,7 @@ void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
 void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
    G4String x1;
    G4String x2;
    G4String y1;
@@ -1093,16 +1093,16 @@ void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"  ) { name   = attribute_value; } else
-      if (attribute_name=="lunit" ) { lunit  = attribute_value; } else
-      if (attribute_name=="x1"    ) { x1     = attribute_value; } else
-      if (attribute_name=="x2"    ) { x2     = attribute_value; } else
-      if (attribute_name=="y1"    ) { y1     = attribute_value; } else
-      if (attribute_name=="y2"    ) { y2     = attribute_value; } else
-      if (attribute_name=="z"     ) { z      = attribute_value; }
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="x1") x1 = attribute_value; else
+      if (attribute_name=="x2") x2 = attribute_value; else
+      if (attribute_name=="y1") y1 = attribute_value; else
+      if (attribute_name=="y2") y2 = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
@@ -1111,13 +1111,13 @@ void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    G4double _x2 = eval.Evaluate(x2)*_lunit;
    G4double _y1 = eval.Evaluate(y1)*_lunit;
    G4double _y2 = eval.Evaluate(y2)*_lunit;
-   G4double _z  = eval.Evaluate(z )*_lunit;
+   G4double _z  = eval.Evaluate(z)*_lunit;
 
    _x1 *= 0.5;
    _x2 *= 0.5;
    _y1 *= 0.5;
    _y2 *= 0.5;
-   _z  *= 0.5;
+   _z *= 0.5;
 
    new G4Trd(GenerateName(name),_x1,_x2,_y1,_y2,_z);
 }
@@ -1140,12 +1140,12 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="v1"  ) v1   = attribute_value; else
-      if (attribute_name=="v2"  ) v2   = attribute_value; else
-      if (attribute_name=="v3"  ) v3   = attribute_value; else
+      if (attribute_name=="v1") v1 = attribute_value; else
+      if (attribute_name=="v2") v2 = attribute_value; else
+      if (attribute_name=="v3") v3 = attribute_value; else
       if (attribute_name=="type") type = attribute_value;
    }
 
@@ -1159,8 +1159,8 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
 void G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
-   G4String aunit;
+   G4String lunit("1");
+   G4String aunit("1");
    G4String rmin;
    G4String rmax;
    G4String z;
@@ -1178,25 +1178,25 @@ void G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"    ) { name     = attribute_value; } else
-      if (attribute_name=="lunit"   ) { lunit    = attribute_value; } else
-      if (attribute_name=="aunit"   ) { aunit    = attribute_value; } else
-      if (attribute_name=="rmin"    ) { rmin     = attribute_value; } else
-      if (attribute_name=="rmax"    ) { rmax     = attribute_value; } else
-      if (attribute_name=="z"       ) { z        = attribute_value; } else
-      if (attribute_name=="startphi") { startphi = attribute_value; } else
-      if (attribute_name=="deltaphi") { deltaphi = attribute_value; }
+      if (attribute_name=="name") name = attribute_value; else
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="z") z = attribute_value; else
+      if (attribute_name=="startphi") startphi = attribute_value; else
+      if (attribute_name=="deltaphi") deltaphi = attribute_value;
    }
 
    G4double _lunit = eval.Evaluate(lunit);
    G4double _aunit = eval.Evaluate(aunit);
 
-   G4double _rmin     = eval.Evaluate(rmin    )*_lunit;
-   G4double _rmax     = eval.Evaluate(rmax    )*_lunit;
-   G4double _z        = eval.Evaluate(z       )*_lunit;
+   G4double _rmin = eval.Evaluate(rmin)*_lunit;
+   G4double _rmax = eval.Evaluate(rmax)*_lunit;
+   G4double _z = eval.Evaluate(z)*_lunit;
    G4double _startphi = eval.Evaluate(startphi)*_aunit;
    G4double _deltaphi = eval.Evaluate(deltaphi)*_aunit;
 
@@ -1221,7 +1221,7 @@ G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const elem
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="x") x = attribute_value; else
@@ -1237,7 +1237,7 @@ G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const elem
 void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String lunit;
+   G4String lunit("1");
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -1250,10 +1250,10 @@ void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value;
    }
 
@@ -1294,19 +1294,19 @@ G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* con
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="rmin" ) rmin  = attribute_value; else
-      if (attribute_name=="rmax" ) rmax  = attribute_value; else
-      if (attribute_name=="z"    ) z     = attribute_value;
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
    }
 
    zplaneType zplane;
 
    zplane.rmin = eval.Evaluate(rmin)*_lunit;
    zplane.rmax = eval.Evaluate(rmax)*_lunit;
-   zplane.z    = eval.Evaluate(z   )*_lunit;
+   zplane.z = eval.Evaluate(z)*_lunit;
 
    return zplane;
 }
@@ -1321,28 +1321,28 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="box"           ) boxRead           (child); else
-      if (tag=="cone"          ) coneRead          (child); else
-      if (tag=="ellipsoid"     ) ellipsoidRead     (child); else
-      if (tag=="eltube"        ) eltubeRead        (child); else
-      if (tag=="hype"          ) hypeRead          (child); else
-      if (tag=="loop"          ) loopRead          (child); else
-      if (tag=="orb"           ) orbRead           (child); else
-      if (tag=="para"          ) paraRead          (child); else
-      if (tag=="polycone"      ) polyconeRead      (child); else
-      if (tag=="polyhedra"     ) polyhedraRead     (child); else
-      if (tag=="sphere"        ) sphereRead        (child); else
+      if (tag=="box") boxRead(child); else
+      if (tag=="cone") coneRead(child); else
+      if (tag=="ellipsoid") ellipsoidRead(child); else
+      if (tag=="eltube") eltubeRead(child); else
+      if (tag=="hype") hypeRead(child); else
+      if (tag=="loop") loopRead(child); else
+      if (tag=="orb") orbRead(child); else
+      if (tag=="para") paraRead(child); else
+      if (tag=="polycone") polyconeRead(child); else
+      if (tag=="polyhedra") polyhedraRead(child); else
+      if (tag=="sphere") sphereRead(child); else
       if (tag=="reflectedSolid") reflectedSolidRead(child); else
-      if (tag=="tessellated"   ) tessellatedRead   (child); else
-      if (tag=="tet"           ) tetRead           (child); else
-      if (tag=="torus"         ) torusRead         (child); else
-      if (tag=="trap"          ) trapRead          (child); else
-      if (tag=="trd"           ) trdRead           (child); else
-      if (tag=="tube"          ) tubeRead          (child); else
-      if (tag=="xtru"          ) xtruRead          (child); else
-      if (tag=="intersection"  ) booleanRead(child,INTERSECTION); else
-      if (tag=="subtraction"   ) booleanRead(child,SUBTRACTION ); else
-      if (tag=="union"         ) booleanRead(child,UNION       ); else
+      if (tag=="tessellated") tessellatedRead(child); else
+      if (tag=="tet") tetRead(child); else
+      if (tag=="torus") torusRead(child); else
+      if (tag=="trap") trapRead(child); else
+      if (tag=="trd") trdRead(child); else
+      if (tag=="tube") tubeRead(child); else
+      if (tag=="xtru") xtruRead(child); else
+      if (tag=="intersection") booleanRead(child,INTERSECTION); else
+      if (tag=="subtraction") booleanRead(child,SUBTRACTION); else
+      if (tag=="union") booleanRead(child,UNION); else
       G4Exception("GDML: Unknown tag in solids: "+tag);
    }
 }

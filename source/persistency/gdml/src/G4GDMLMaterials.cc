@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.10 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLMaterials.cc,v 1.11 2007-11-30 13:27:24 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -51,11 +51,11 @@ G4double G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="value") value = attribute_value; else
-      if (attribute_name=="unit ") unit  = attribute_value;
+      if (attribute_name=="unit") unit = attribute_value;
    }
 
    return eval.Evaluate(value)*eval.Evaluate(unit);
@@ -77,11 +77,11 @@ G4double G4GDMLMaterials::DRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="value") { value = attribute_value; } else
-      if (attribute_name=="unit ") { unit  = attribute_value; }
+      if (attribute_name=="value") value = attribute_value; else
+      if (attribute_name=="unit") unit = attribute_value;
    }
 
    return eval.Evaluate(value)*eval.Evaluate(unit);
@@ -104,12 +104,12 @@ void G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name"   ) name    = attribute_value; else
+      if (attribute_name=="name") name = attribute_value; else
       if (attribute_name=="formula") formula = attribute_value; else
-      if (attribute_name=="Z"      ) Z       = attribute_value;
+      if (attribute_name=="Z") Z = attribute_value;
    }
 
    G4double _Z = eval.Evaluate(Z);
@@ -125,8 +125,8 @@ void G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="atom"    ) _a = atomRead(child); else
-      if (tag=="fraction") nComponents++;        else
+      if (tag=="atom") _a = atomRead(child); else
+      if (tag=="fraction") nComponents++; else
       G4Exception("GDML: Unknown tag in element: "+tag);
    }
 
@@ -149,11 +149,11 @@ G4double G4GDMLMaterials::fractionRead(const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="n"  ) { n   = attribute_value; } else
-      if (attribute_name=="ref") { ref = attribute_value; }
+      if (attribute_name=="n") n = attribute_value; else
+      if (attribute_name=="ref") ref = attribute_value;
    }
 
    return eval.Evaluate(n);
@@ -176,12 +176,12 @@ void G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="Z"   ) Z    = attribute_value; else
-      if (attribute_name=="N"   ) N    = attribute_value;
+      if (attribute_name=="Z") Z = attribute_value; else
+      if (attribute_name=="N") N = attribute_value;
    }
 
    G4double _Z = eval.Evaluate(Z);
@@ -218,11 +218,11 @@ void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="Z"   ) Z    = attribute_value;
+      if (attribute_name=="Z") Z = attribute_value;
    }
   
    G4double _Z = eval.Evaluate(Z);
@@ -239,9 +239,9 @@ void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="D"       ) _D = DRead(child);    else
-      if (tag=="atom"    ) _a = atomRead(child); else
-      if (tag=="fraction") nComponents++;        else
+      if (tag=="D") _D = DRead(child);    else
+      if (tag=="atom") _a = atomRead(child); else
+      if (tag=="fraction") nComponents++; else
       G4Exception("GDML: Unknown tag in material: "+tag);
    }
 
@@ -279,7 +279,7 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="D"       ) { /*already processed*/ } else
+      if (tag=="D") { /*already processed*/ } else
       if (tag=="fraction") {
 
          G4String ref;
@@ -306,8 +306,8 @@ void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="element" ) elementRead(child); else 
-      if (tag=="isotope" ) isotopeRead(child); else 
+      if (tag=="element") elementRead(child); else 
+      if (tag=="isotope") isotopeRead(child); else 
       if (tag=="material") materialRead(child); else 
       G4Exception("GDML: Unknown tag in materials: "+tag);
    }
