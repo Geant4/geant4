@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.75 2007-11-29 14:33:37 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.76 2007-11-30 09:52:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,6 +147,7 @@
 //          - some old inconsistency/bug is cured in SampleCosineTheta,
 //          now 0 <= prob <= 1 in any case (L.Urban) 
 // 26-10-07 different correction parameters for e/mu/hadrons in ComputeTheta0
+// 30-11-07 fix in ComputeTheta0 (L.Urban)
 //
 
 // Class Description:
@@ -845,7 +846,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
   G4double y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*charge*sqrt(y)/betacp;
+  G4double theta0 = c_highland*abs(charge)*sqrt(y)/betacp;
   y = log(y);
   if(mass < masslimite)                 
     theta0 *= (1.+0.051*y);
@@ -1054,17 +1055,9 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
           xmean1 = 0.50*(1.+xmeanth);
           prob = (xmeanth-xmean2)/(xmean1-xmean2);
         }
-        else if(a < 0.2)
-        {
-          // low energy particle, correct a in order to have x1=xth
-          a = xmeanth/(1.-xmeanth);
-          ea = exp(-2.*a);
-          eaa = 1.-ea;
-          prob = 1.;
-        } 
         else
         {
-          // not low energy, correct a in order to have x1=xth
+          //  correct a in order to have x1=xth
           G4int i=0, imax=10;
           do
           {
