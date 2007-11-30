@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.21 2007-11-28 12:37:56 maire Exp $
+// $Id: HistoManager.cc,v 1.22 2007-11-30 11:46:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -244,9 +244,23 @@ void HistoManager::RemoveHisto(G4int ih)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void HistoManager::Scale(G4int ih, G4double fac)
+{
+ if (ih > MaxHisto) {
+    G4cout << "---> warning from HistoManager::Scale() : histo " << ih
+           << "does not exist" << G4endl;
+    return;
+  }
+#ifdef G4ANALYSIS_USE
+  if(exist[ih]) histo[ih]->scale(fac);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) ascii[ih] = true;
+ if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -259,6 +273,8 @@ void HistoManager::PrintHisto(G4int ih)
 void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
+
+ if (!ascii[0]) return;
  
  G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);

@@ -1,4 +1,4 @@
-# $Id: tramu.mac,v 1.7 2007-07-31 16:51:29 maire Exp $
+# $Id: tramu.mac,v 1.8 2007-11-30 11:46:25 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,8 +13,6 @@
 /testem/det/setAbsThick 3 m  
 /testem/det/setAbsYZ    3 m
 #
-##/testem/phys/addPhysics g4v52
-#
 /testem/phys/setCuts 1 mm
 #    
 /run/initialize
@@ -25,9 +23,10 @@
 #
 /testem/histo/setFileName tramu
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 10  50  950 1000 GeV	#energy at exit  
+/testem/histo/setHisto 10  100  950 1000 GeV	#energy at exit  
 #
 /testem/stack/killSecondaries
 #
-/testem/event/printModulo 1000
-/run/beamOn 10000
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

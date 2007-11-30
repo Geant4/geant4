@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2007-11-28 12:37:56 maire Exp $
+$Id: History,v 1.94 2007-11-30 11:46:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+30-11-07 mma
+- HistoManager: add function Scale(). 
+                ascii[0] = flag to control creation of .ascii file
+- RunAction: normalize histo 10 (--> tramu.mac)
+- add subdirectory tramu
      
 28-11-07 mma (testem5-V09-00-07)
 - TrackingAction: new histos (4 and 5) to plot vertex position of secondaries

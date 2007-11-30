@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.13 2007-11-12 17:48:16 maire Exp $
+// $Id: HistoManager.hh,v 1.14 2007-11-30 11:46:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,7 @@ class HistoManager
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
+    void Scale (G4int, G4double);    
     void PrintHisto  (G4int);
     
     G4bool    HistoExist  (G4int id) {return exist[id];}
