@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.2 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.3 2007-11-30 11:58:46 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4GDMLStructure
+// class G4GDMLBase
 //
 // Class description:
 //
@@ -75,7 +75,7 @@ G4GDMLBase::~G4GDMLBase() {
    }
 }
 
-std::string G4GDMLBase::GenerateName(const std::string& in) {
+G4String G4GDMLBase::GenerateName(const G4String& in) {
 
    std::string out(prename);
    

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.9 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLParser.hh,v 1.10 2007-11-30 11:58:46 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,8 +32,6 @@
 //
 // Class description:
 //
-// GDML DOM parser class.
-
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

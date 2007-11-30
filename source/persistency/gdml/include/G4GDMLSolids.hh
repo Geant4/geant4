@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.14 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.15 2007-11-30 11:58:46 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,8 +102,8 @@ private:
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
    void xtruRead(const xercesc::DOMElement* const);
    zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
-protected:
    void solidsRead(const xercesc::DOMElement* const);
+protected:
    G4VSolid* getSolid(const G4String&) const;
 };
 

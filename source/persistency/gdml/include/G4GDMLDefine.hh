@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.10 2007-11-29 11:23:55 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.11 2007-11-30 11:58:46 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,9 +58,8 @@ private:
    void rotationRead(const xercesc::DOMElement* const);
    void scaleRead(const xercesc::DOMElement* const);
    void variableRead(const xercesc::DOMElement* const); 
+   void defineRead(const xercesc::DOMElement* const);
 protected:
-   void defineRead(const xercesc::DOMElement* const element);
-
    G4ThreeVector* getPosition(const G4String&);
    G4ThreeVector* getRotation(const G4String&);
    G4ThreeVector* getScale(const G4String&);
