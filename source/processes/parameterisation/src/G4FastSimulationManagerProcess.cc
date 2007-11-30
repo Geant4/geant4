@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.16 2007-11-30 16:04:19 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.17 2007-11-30 18:05:14 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,8 @@ G4FastSimulationManagerProcess(const G4String& processName,
   fGhostNavigator(0),
   fGhostNavigatorIndex(-1),
   fIsGhostGeometry(false),
+  fGhostSafety(-1.0),
+  fFieldTrack('0'),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
@@ -84,6 +86,8 @@ G4FastSimulationManagerProcess(const G4String&     processName,
   fGhostNavigator(0),
   fGhostNavigatorIndex(-1),
   fIsGhostGeometry(false),
+  fGhostSafety(-1.0),
+  fFieldTrack('0'),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
@@ -108,6 +112,8 @@ G4FastSimulationManagerProcess(const G4String&    processName,
   fGhostNavigator(0),
   fGhostNavigatorIndex(-1),
   fIsGhostGeometry(false),
+  fGhostSafety(-1.0),
+  fFieldTrack('0'),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
@@ -253,6 +259,80 @@ PostStepDoIt(const G4Track&,
   if (finalState->GetTrackStatus() != fStopAndKill) finalState->ProposeTrackStatus(fSuspend);
   
   return finalState;
+}
+
+
+G4double 
+G4FastSimulationManagerProcess::
+AlongStepGetPhysicalInteractionLength(const G4Track&                track,
+				      G4double           previousStepSize,
+				      G4double         currentMinimumStep, 
+				      G4double&            proposedSafety, 
+				      G4GPILSelection*          selection)
+{
+  
+  *selection            = NotCandidateForSelection;
+  G4double returnedStep = DBL_MAX;
+
+  // ---------------------------------------------------
+  // -- Below code valid for ghost geometry, otherwise
+  // -- useless for fast simulation attached to mass
+  // -- geometry. Warn user in case along used for 
+  // -- mass geometry ?
+  // --------------------------------------------------
+  if ( fIsGhostGeometry )
+    {
+      static G4FieldTrack endTrack('0');
+      static ELimited eLimited;
+      
+      if (previousStepSize > 0.) fGhostSafety -= previousStepSize;
+      if (fGhostSafety < 0.)     fGhostSafety = 0.0;
+      
+      // ------------------------------------------
+      // Determination of the proposed step length:
+      // ------------------------------------------
+      if (currentMinimumStep <= fGhostSafety && currentMinimumStep > 0.)
+	{
+	  // -- No chance to limit the step, as proposed move inside safety
+	  returnedStep   = currentMinimumStep;
+	  proposedSafety = fGhostSafety - currentMinimumStep;
+	}
+      else
+	{
+	  // -- Proposed move exceeds safety, need to state
+	  G4FieldTrackUpdator::Update(&fFieldTrack, &track);
+	  returnedStep = fPathFinder->ComputeStep(fFieldTrack,
+						  currentMinimumStep,
+						  fGhostNavigatorIndex,
+						  track.GetCurrentStepNumber(),
+						  fGhostSafety,
+						  eLimited,
+						  endTrack,
+						  track.GetVolume());
+	  
+	  if(eLimited == kDoNot) fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition()); // -- step no limited by ghost
+	  proposedSafety = fGhostSafety;
+	  if      (eLimited == kUnique || eLimited == kSharedOther) *selection     = CandidateForSelection;
+	  else if (eLimited == kSharedTransport)                     returnedStep *= (1.0 + 1.0e-9);   // -- Expand to disable its selection in Step Manager comparison
+	}
+    }
+  
+
+  // ----------------------------------------------
+  // Returns the fGhostSafety as the proposedSafety
+  // The SteppingManager will take care of keeping
+  // the smallest one.
+  // ----------------------------------------------
+  return returnedStep;
+}
+
+G4VParticleChange*
+G4FastSimulationManagerProcess::
+AlongStepDoIt(const G4Track& track,
+	      const G4Step&)
+{
+  fDummyParticleChange.Initialize(track);
+  return &fDummyParticleChange;
 }
 
 

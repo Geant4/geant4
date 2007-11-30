@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.15 2007-11-30 16:04:19 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.16 2007-11-30 18:05:14 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,13 +124,14 @@ public:
   
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step& );
 
-  // -- Not used
-  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
-						 G4double,
-						 G4double,
-						 G4double&,
-						 G4GPILSelection* ) {return DBL_MAX;}
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) {return 0;}
+  // -- Responsible for limiting the step on ghost boundaries:
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track&                track,
+						 G4double           previousStepSize,
+						 G4double         currentMinimumStep, 
+						 G4double&            proposedSafety, 
+						 G4GPILSelection*          selection);
+  G4VParticleChange* AlongStepDoIt(const G4Track& track,
+				   const G4Step&  step);
   
 
   
@@ -157,10 +158,14 @@ private:
   G4Navigator*                    fGhostNavigator;
   G4int                      fGhostNavigatorIndex;
   G4bool                         fIsGhostGeometry;
+  G4double                           fGhostSafety;
+  G4bool                              fOnBoundary;
+  G4FieldTrack                        fFieldTrack;
   
   
   G4FastSimulationManager* fFastSimulationManager;
   G4bool                   fFastSimulationTrigger;
+  G4VParticleChange          fDummyParticleChange;
   G4PathFinder*                       fPathFinder;
   G4TransportationManager* fTransportationManager;
 };
