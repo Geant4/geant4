@@ -1,4 +1,4 @@
-$Id: History,v 1.308 2007-11-22 14:09:08 gcosmo Exp $
+$Id: History,v 1.309 2007-11-30 16:54:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th November 2007  Ben Morgan (config-V09-00-11)
+- Updated Configure script to handle Qt UI build.
+- Updated internal scripts for Configure accordingly.
+
 22nd November 2007  Gabriele Cosmo (config-V09-00-10)
 - Corrected addition of lXercesC and Zlib libraries in binmake.gmk.
 - Added special case for WIN32-VC for names of XercesC libraries in architecture.gmk.
@@ -29,7 +33,7 @@ committal in the CVS repository !
   support both Qt3 and Qt4.
 
 15th November 2007  Ben Morgan (config-V09-00-07)
-- Update Configure script to handle new 'gdml' sub-module and new data
+- Updated Configure script to handle new 'gdml' sub-module and new data
   libraries (G4ABLADATA and new G4EMLOW version).
 - Updated internal scripts for Configure accordingly.
 
