@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.14 2007-05-11 13:50:20 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.15 2007-11-30 16:04:19 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,9 @@
 #include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VParticleChange.hh"
-
+#include "G4FieldTrack.hh"
+class G4PathFinder;
+class G4TransportationManager;
 
 // ---------------------------------------------------------------------
 //
@@ -114,17 +116,23 @@ public:
   void StartTracking(G4Track*);
   void   EndTracking();
   
+
   // -- PostStep methods:
   G4double PostStepGetPhysicalInteractionLength(const G4Track&                track,
 						G4double           previousStepSize,
 						G4ForceCondition*         condition);
   
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step& );
+
+  // -- Not used
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+						 G4double,
+						 G4double,
+						 G4double&,
+						 G4GPILSelection* ) {return DBL_MAX;}
+  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) {return 0;}
   
-  
-  
-  
-  
+
   
   // -- AtRest methods (still there after many years of no use...):
   G4double AtRestGetPhysicalInteractionLength(const G4Track&,
@@ -133,9 +141,7 @@ public:
   G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
   
   
-  // -- unused:
-  G4double AlongStepGetPhysicalInteractionLength(const G4Track&, G4double, G4double, G4double&, G4GPILSelection*) {return 0.0;}
-  G4VParticleChange* AlongStepDoIt(const G4Track& , const G4Step&) {return 0;}
+
   
   
   // -- debug:
@@ -148,12 +154,15 @@ private:
   
   G4bool                          fIsTrackingTime;
   G4bool                             fIsFirstStep;
-  G4Navigator*                         fNavigator;
-  G4int                           fNavigatorIndex;
+  G4Navigator*                    fGhostNavigator;
+  G4int                      fGhostNavigatorIndex;
+  G4bool                         fIsGhostGeometry;
   
   
   G4FastSimulationManager* fFastSimulationManager;
   G4bool                   fFastSimulationTrigger;
+  G4PathFinder*                       fPathFinder;
+  G4TransportationManager* fTransportationManager;
 };
 
 #endif

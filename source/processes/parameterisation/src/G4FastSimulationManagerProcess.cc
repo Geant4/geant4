@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.15 2007-05-11 13:50:20 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.16 2007-11-30 16:04:19 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,67 +47,77 @@
 #include "G4TransportationManager.hh"
 #include "G4PathFinder.hh"
 #include "G4ParticleChange.hh"
+#include "G4FieldTrackUpdator.hh"
 
 #define  PARANOIA
 
 G4FastSimulationManagerProcess::
 G4FastSimulationManagerProcess(const G4String& processName,
-							G4ProcessType       theType) : 
+			       G4ProcessType       theType) : 
   G4VProcess(processName,theType),
   fWorldVolume(0),
   fIsTrackingTime(false),
-  fNavigator(0),
-  fNavigatorIndex(-1),
+  fGhostNavigator(0),
+  fGhostNavigatorIndex(-1),
+  fIsGhostGeometry(false),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
-  SetWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()->GetName());
+  fPathFinder            = G4PathFinder::GetInstance();
+  fTransportationManager = G4TransportationManager::GetTransportationManager();
+  
+  SetWorldVolume(fTransportationManager->GetNavigatorForTracking()->GetWorldVolume()->GetName());
   if (verboseLevel>0) G4cout << "G4FastSimulationManagerProcess `" << GetProcessName() 
 			     << "' is created, and will message geometry with world volume `" 
 			     << fWorldVolume->GetName() << "'." << G4endl;
-  
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->AddFSMP(this);
 }
 
 
 G4FastSimulationManagerProcess::
 G4FastSimulationManagerProcess(const G4String&     processName,
-							const G4String& worldVolumeName,
-							G4ProcessType           theType) :
+			       const G4String& worldVolumeName,
+			       G4ProcessType           theType) :
   G4VProcess(processName,theType),
   fWorldVolume(0),
   fIsTrackingTime(false),
-  fNavigator(0),
-  fNavigatorIndex(-1),
+  fGhostNavigator(0),
+  fGhostNavigatorIndex(-1),
+  fIsGhostGeometry(false),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
+  fPathFinder            = G4PathFinder::GetInstance();
+  fTransportationManager = G4TransportationManager::GetTransportationManager();
+
   SetWorldVolume(worldVolumeName);
   if (verboseLevel>0) G4cout << "G4FastSimulationManagerProcess `" << GetProcessName() 
 			     << "' is created, and will message geometry with world volume `" 
 			     << fWorldVolume->GetName() << "'." << G4endl;
-  
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->AddFSMP(this);
 }
 
 
 G4FastSimulationManagerProcess::
 G4FastSimulationManagerProcess(const G4String&    processName,
-							G4VPhysicalVolume* worldVolume,
-							G4ProcessType      theType) :
+			       G4VPhysicalVolume* worldVolume,
+			       G4ProcessType      theType) :
   G4VProcess(processName,theType),
   fWorldVolume(0),
   fIsTrackingTime(false),
-  fNavigator(0),
-  fNavigatorIndex(-1),
+  fGhostNavigator(0),
+  fGhostNavigatorIndex(-1),
+  fIsGhostGeometry(false),
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
+  fPathFinder            = G4PathFinder::GetInstance();
+  fTransportationManager = G4TransportationManager::GetTransportationManager();
+
   SetWorldVolume(worldVolume);
   if (verboseLevel>0) G4cout << "G4FastSimulationManagerProcess `" << GetProcessName() 
 			     << "' is created, and will message geometry with world volume `" 
 			     << fWorldVolume->GetName() << "'." << G4endl;
-  
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->AddFSMP(this);
 }
 
@@ -130,7 +140,7 @@ SetWorldVolume(G4String newWorldName)
 	   << "': changing world volume at tracking time is not allowed for now. Call ignored !!!" << G4endl;
   else
     {
-      G4VPhysicalVolume* newWorld = G4TransportationManager::GetTransportationManager()->IsWorldExisting(newWorldName);
+      G4VPhysicalVolume* newWorld = fTransportationManager->IsWorldExisting(newWorldName);
       G4String tellWhatIsWrong;
       tellWhatIsWrong = "Volume newWorldName = `"; tellWhatIsWrong +=  newWorldName; tellWhatIsWrong += "' is not a parallel world nor the mass world volume.";
       if (newWorld == 0) G4Exception("G4FastSimulationManagerProcess::SetWorldVolume(const G4String&, G4bool verbose)",
@@ -145,7 +155,6 @@ SetWorldVolume(G4String newWorldName)
 				 << "': setting world volume from to `"<< newWorld->GetName() << "'." << G4endl;
       fWorldVolume = newWorld;
     }
-  
 }
 
 
@@ -154,7 +163,7 @@ G4FastSimulationManagerProcess::
 SetWorldVolume(G4VPhysicalVolume* newWorld)
 {
   if (newWorld) SetWorldVolume(newWorld->GetName());
-  else G4cout << "!!! G4FastSimulationManagerProcess::SetWorldVolume(const G4VPhysicalVolume* newWorld) : null pointer passed. !!! Continuing at your own risks..." << G4endl;
+  else G4Exception("!!! G4FastSimulationManagerProcess::SetWorldVolume(const G4VPhysicalVolume* newWorld) : null pointer passed. !!!");
 }
 
 
@@ -163,18 +172,19 @@ SetWorldVolume(G4VPhysicalVolume* newWorld)
 // --------------------
 void
 G4FastSimulationManagerProcess::
-StartTracking(G4Track*)
+StartTracking(G4Track* track)
 {
   fIsTrackingTime = true;
   fIsFirstStep    = true;
   
   // -- fetch the navigator (and its index) and activate it:
   G4TransportationManager* transportationManager = G4TransportationManager::GetTransportationManager();
-  fNavigator = transportationManager->GetNavigator(fWorldVolume);
-  if (fNavigator != transportationManager->GetNavigatorForTracking())
-    fNavigatorIndex = transportationManager->ActivateNavigator(fNavigator);
-  else
-    fNavigatorIndex = 0;
+  fGhostNavigator                            = transportationManager->GetNavigator(fWorldVolume);
+  fIsGhostGeometry                           = (fGhostNavigator != transportationManager->GetNavigatorForTracking());
+  if (fIsGhostGeometry) fGhostNavigatorIndex = transportationManager->ActivateNavigator(fGhostNavigator);
+  else                  fGhostNavigatorIndex = -1;
+
+  fPathFinder->PrepareNewTrack(track->GetPosition(), track->GetMomentumDirection());
 }
 
 
@@ -183,6 +193,7 @@ G4FastSimulationManagerProcess::
 EndTracking()
 {
   fIsTrackingTime = false;
+  if ( fIsGhostGeometry ) fTransportationManager->DeActivateNavigator(fGhostNavigator); 
 }
 
 
@@ -196,23 +207,24 @@ PostStepGetPhysicalInteractionLength(const G4Track&               track,
 				     G4ForceCondition*        condition)
 {
 #ifdef PARANOIA
-  if ( fNavigator->GetWorldVolume() != fWorldVolume ) G4Exception("!!! ??? INCONSISTENT NAVIGATORS/WORLD VOLUMES ??? !!!");
+  if ( fGhostNavigator->GetWorldVolume() != fWorldVolume ) G4Exception("!!! ??? INCONSISTENT NAVIGATORS/WORLD VOLUMES ??? !!!");
 #endif
   // -- Get current volume, and check for presence of fast simulation manager.
-  // -- For the case of the navigator for tracking (fNavigatorIndex == 0)
+  // -- For the case of the navigator for tracking (fGhostNavigatorIndex == 0)
   // -- we use the track volume. This allows the code to be valid for both
   // -- cases where the PathFinder is used (G4CoupledTranportation) or not
   // -- (G4Transportation).
   const G4VPhysicalVolume* currentVolume(0);
-  if (fNavigatorIndex == 0) currentVolume = track.GetVolume();
-  else                      currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
+  if ( fIsGhostGeometry )  currentVolume = fPathFinder->GetLocatedVolume(fGhostNavigatorIndex);
+  else                     currentVolume = track.GetVolume();
+
   if ( currentVolume )
     {
       fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager();
       if( fFastSimulationManager )
 	{
 	  // Ask for trigger:
-	  fFastSimulationTrigger = fFastSimulationManager->PostStepGetFastSimulationManagerTrigger(track, fNavigator);
+	  fFastSimulationTrigger = fFastSimulationManager->PostStepGetFastSimulationManagerTrigger(track, fGhostNavigator);
 	  if( fFastSimulationTrigger )
 	    {
 	      // Take control over stepping:
@@ -251,17 +263,17 @@ PostStepDoIt(const G4Track&,
 //--------------------------------------------
 G4double 
 G4FastSimulationManagerProcess::
-AtRestGetPhysicalInteractionLength(const G4Track&    track, 
+AtRestGetPhysicalInteractionLength(const G4Track&        track, 
 				   G4ForceCondition* condition)
 {
   const G4VPhysicalVolume* currentVolume(0);
-  if (fNavigatorIndex == 0) currentVolume = track.GetVolume();
-  else                      currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
+  if ( fIsGhostGeometry )  currentVolume = fPathFinder->GetLocatedVolume(fGhostNavigatorIndex);
+  else                     currentVolume = track.GetVolume();
   fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager();
   if( fFastSimulationManager )
     {
       // Ask for trigger:
-      fFastSimulationTrigger = fFastSimulationManager->AtRestGetFastSimulationManagerTrigger(track, fNavigator);
+      fFastSimulationTrigger = fFastSimulationManager->AtRestGetFastSimulationManagerTrigger(track, fGhostNavigator);
       if( fFastSimulationTrigger )
 	{
 	  // Dirty trick to take control over stepping. Does anyone will ever use that ?
@@ -273,7 +285,6 @@ AtRestGetPhysicalInteractionLength(const G4Track&    track,
   // -- no fast simulation occuring there:
   *condition = NotForced;
   return DBL_MAX;
-  
 }
 
 //-----------------------------------------------
