@@ -31,6 +31,7 @@
 
 #include "LXeDetectorConstruction.hh"
 #include "LXePhysicsList.hh"
+#include "PhysicsList.hh"
 #include "LXePrimaryGeneratorAction.hh"
 #include "LXeEventAction.hh"
 #include "LXeStackingAction.hh"
@@ -45,7 +46,10 @@
 #include "G4VisExecutive.hh"
 #endif
 
-//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+///////////////////////////////////////////////////////////////////////////
+//
+// Test for some optical photon transport
+
 int main(int argc, char** argv)
 {
   G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose);
@@ -53,7 +57,20 @@ int main(int argc, char** argv)
   G4RunManager* runManager = new G4RunManager;
 
   runManager->SetUserInitialization(new LXeDetectorConstruction);
-  runManager->SetUserInitialization(new LXePhysicsList);
+
+
+
+
+  // runManager->SetUserInitialization(new LXePhysicsList);
+
+
+
+  runManager->SetUserInitialization(new PhysicsList);
+
+
+
+
+
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
