@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.11 2007-11-30 13:27:24 ztorzsok Exp $
+// $Id: G4GDMLMaterials.cc,v 1.12 2007-11-30 15:20:00 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -184,9 +184,9 @@ void G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
       if (attribute_name=="N") N = attribute_value;
    }
 
-   G4double _Z = eval.Evaluate(Z);
-   G4double _N = eval.Evaluate(N);
-   G4double _a = 0;
+   G4double __Z = eval.Evaluate(Z);
+   G4double __N = eval.Evaluate(N);
+   G4double __a = 0;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -196,10 +196,10 @@ void G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="atom") _a = atomRead(child);
+      if (tag=="atom") __a = atomRead(child);
    }
 
-   new G4Isotope(GenerateName(name),(G4int)_Z,(G4int)_N,_a);
+   new G4Isotope(GenerateName(name),(G4int)__Z,(G4int)__N,__a);
 }
 
 void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
