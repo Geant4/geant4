@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.24 2007-11-30 13:27:24 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.25 2007-11-30 14:51:20 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -233,9 +233,13 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
    G4String volumeref;
    G4String positionref;
    G4String rotationref;
+   G4String scaleref;
 
    G4LogicalVolume* logvol = 0;
-   G4ThreeVector tlate;
+
+   G4ThreeVector position;
+   G4ThreeVector rotation;
+   G4ThreeVector scale(1.0,1.0,1.0);
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -247,65 +251,30 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
 
       if (tag=="file") logvol = fileRead(child); else
       if (tag=="volumeref") volumeref = refRead(child); else
-      if (tag=="position") tlate = positionRead(child); else
+      if (tag=="position") position = positionRead(child); else
+      if (tag=="rotation") rotation = rotationRead(child); else
+      if (tag=="scale") scale = scaleRead(child); else
       if (tag=="positionref") positionref = refRead(child); else
-      if (tag=="rotationref") rotationref = refRead(child);
+      if (tag=="rotationref") rotationref = refRead(child); else
+      if (tag=="scaleref") scaleref = refRead(child);
    }
 
    if (!volumeref.empty()) logvol = getVolume(GenerateName(volumeref));
 
-   if (!positionref.empty()) tlate = *getPosition(GenerateName(positionref));
+   if (!positionref.empty()) position = *getPosition(GenerateName(positionref));
+   if (!rotationref.empty()) rotation = *getRotation(GenerateName(rotationref));
+   if (!scaleref.empty()) scale = *getScale(GenerateName(scaleref));
 
-   G4RotationMatrix* pRot=0;
+   G4RotationMatrix Rot;
 
-   if (!rotationref.empty()) {
-
-      G4ThreeVector* anglePtr = getRotation(GenerateName(rotationref));
-
-      pRot = new G4RotationMatrix();
-
-      pRot->rotateX(anglePtr->x());
-      pRot->rotateY(anglePtr->y());
-      pRot->rotateZ(anglePtr->z());
-   }
- 
-   new G4PVPlacement(pRot,tlate,logvol,"",mother,false,0);
-}
-
-G4ThreeVector G4GDMLStructure::positionRead(const xercesc::DOMElement* const element) {
-
-   G4String unit("1");
-   G4String x;
-   G4String y;
-   G4String z;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="unit") unit = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
-   }
-
-   G4double _unit = eval.Evaluate(unit);
-
-   G4double _x = eval.Evaluate(x)*_unit;
-   G4double _y = eval.Evaluate(y)*_unit;
-   G4double _z = eval.Evaluate(z)*_unit;
+   Rot.rotateX(rotation.x());
+   Rot.rotateY(rotation.y());
+   Rot.rotateZ(rotation.z());
    
-   return G4ThreeVector(_x,_y,_z);
+   G4Transform3D transform(Rot.inverse(),position);
+   transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
+
+   G4ReflectionFactory::Instance()->Place(transform,"",logvol,mother,false,0);
 }
 
 G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element) {

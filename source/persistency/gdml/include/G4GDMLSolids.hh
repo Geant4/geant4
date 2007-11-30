@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.15 2007-11-30 11:58:46 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.16 2007-11-30 14:51:20 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,11 +85,9 @@ private:
    void paraRead(const xercesc::DOMElement* const);
    void polyconeRead(const xercesc::DOMElement* const);
    void polyhedraRead(const xercesc::DOMElement* const);
-   G4ThreeVector positionRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* quadrangularRead(const xercesc::DOMElement* const);
    G4String refRead(const xercesc::DOMElement* const);
    void reflectedSolidRead(const xercesc::DOMElement* const);
-   G4ThreeVector rotationRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection sectionRead(const xercesc::DOMElement* const,G4double);
    void sphereRead(const xercesc::DOMElement* const);
    void tessellatedRead(const xercesc::DOMElement* const);
@@ -104,6 +102,9 @@ private:
    zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
    void solidsRead(const xercesc::DOMElement* const);
 protected:
+   G4ThreeVector positionRead(const xercesc::DOMElement* const);
+   G4ThreeVector rotationRead(const xercesc::DOMElement* const);
+   G4ThreeVector scaleRead(const xercesc::DOMElement* const);
    G4VSolid* getSolid(const G4String&) const;
 };
 

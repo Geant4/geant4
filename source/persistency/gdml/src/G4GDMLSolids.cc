@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.22 2007-11-30 13:27:24 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.23 2007-11-30 14:51:20 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -583,42 +583,6 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
    new G4Polyhedra(GenerateName(name),_startphi,_deltaphi,_numsides,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
-G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
-
-   G4String unit("1");
-   G4String x;
-   G4String y;
-   G4String z;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="unit") unit = attribute_value; else
-      if (attribute_name=="x") x  = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
-   }
-
-   G4double _unit = eval.Evaluate(unit);
-
-   G4double _x = eval.Evaluate(x)*_unit;
-   G4double _y = eval.Evaluate(y)*_unit;
-   G4double _z = eval.Evaluate(z)*_unit;
-   
-   return G4ThreeVector(_x,_y,_z);
-}
-
 G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element) {
 
    G4String v1;
@@ -754,42 +718,6 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    transform = transform*scale;
           
    new G4ReflectedSolid(GenerateName(name),solidPtr,transform);
-}
-
-G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
-
-   G4String unit("1");
-   G4String x;
-   G4String y;
-   G4String z;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="unit") unit = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
-   }
-
-   G4double _unit = eval.Evaluate(unit);
-
-   G4double _x = eval.Evaluate(x)*_unit;
-   G4double _y = eval.Evaluate(y)*_unit;
-   G4double _z = eval.Evaluate(z)*_unit;
-   
-   return G4ThreeVector(_x,_y,_z);
 }
 
 G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4double _lunit) {
@@ -1345,6 +1273,110 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="union") booleanRead(child,UNION); else
       G4Exception("GDML: Unknown tag in solids: "+tag);
    }
+}
+
+G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
+
+   G4String unit("1");
+   G4String x;
+   G4String y;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="unit") unit = attribute_value; else
+      if (attribute_name=="x") x  = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
+   }
+
+   G4double _unit = eval.Evaluate(unit);
+
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
+   
+   return G4ThreeVector(_x,_y,_z);
+}
+
+G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
+
+   G4String unit("1");
+   G4String x;
+   G4String y;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="unit") unit = attribute_value; else
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
+   }
+
+   G4double _unit = eval.Evaluate(unit);
+
+   G4double _x = eval.Evaluate(x)*_unit;
+   G4double _y = eval.Evaluate(y)*_unit;
+   G4double _z = eval.Evaluate(z)*_unit;
+   
+   return G4ThreeVector(_x,_y,_z);
+}
+
+G4ThreeVector G4GDMLSolids::scaleRead(const xercesc::DOMElement* const element) {
+
+   G4String x;
+   G4String y;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
+   }
+
+   G4double _x = eval.Evaluate(x);
+   G4double _y = eval.Evaluate(y);
+   G4double _z = eval.Evaluate(z);
+   
+   return G4ThreeVector(_x,_y,_z);
 }
 
 G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {

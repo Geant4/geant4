@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.15 2007-11-29 13:13:06 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.16 2007-11-30 14:51:20 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@
 #include "G4PVReplica.hh"
 #include "G4SolidStore.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4ReflectionFactory.hh"
 
 #include "G4GDMLSetup.hh"
 
@@ -60,7 +61,6 @@ private:
    void loopRead(const xercesc::DOMElement* const);
    void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void physvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-   G4ThreeVector positionRead(const xercesc::DOMElement* const);
    G4double quantityRead(const xercesc::DOMElement* const);
    G4String refRead(const xercesc::DOMElement* const);
    void replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
@@ -69,6 +69,7 @@ private:
    void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    void structureRead(const xercesc::DOMElement* const);
+protected:
    G4LogicalVolume* getVolume(const G4String&) const;
 };
 
