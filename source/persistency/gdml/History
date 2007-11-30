@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007-11-23 15:21:08 gcosmo Exp $
+$Id: History,v 1.5 2007-11-30 15:11:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 November, 07  Z.Torzsok (gdml-V09-00-04)
+- Fine tuning of the class hierarchy and fixed issue with reflections.
 
 23 November, 07  Z.Torzsok (gdml-V09-00-03)
 - Better handling of embedded loops and first adaptation.
