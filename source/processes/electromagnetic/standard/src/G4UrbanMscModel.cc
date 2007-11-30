@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.76 2007-11-30 09:52:25 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.77 2007-11-30 13:53:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -846,7 +846,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
   G4double y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*abs(charge)*sqrt(y)/betacp;
+  G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
   y = log(y);
   if(mass < masslimite)                 
     theta0 *= (1.+0.051*y);
