@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.6 2007-11-15 18:24:28 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.7 2007-11-30 14:47:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,8 +33,9 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
+//#define GEANT4_QT_DEBUG
+
 #include "G4OpenGLStoredQtViewer.hh"
-#include "G4VisManager.hh"
 
 #include "G4ios.hh"
 
@@ -126,7 +127,6 @@ void G4OpenGLStoredQtViewer::DrawView () {
 
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::DrawView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
-  printf("G4OpenGLStoredQtViewer::DrawView Dialog adress : %d\n",GLWindow);
 #endif
    G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
@@ -307,7 +307,7 @@ void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
   printf("G4OpenGLStoredQtViewer::mouseMoveEvent\n");
 #endif
 #if QT_VERSION < 0x040000
-  G4MouseMoveEvent(event->x(),event->y(),event->button());
+  G4MouseMoveEvent(event->x(),event->y(),event->state());
 #else
   G4MouseMoveEvent(event->x(),event->y(),event->buttons());
 #endif

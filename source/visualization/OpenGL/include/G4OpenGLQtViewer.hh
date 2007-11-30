@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.4 2007-11-13 17:48:51 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.5 2007-11-30 14:47:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,8 +130,9 @@ private slots :
   void toggleHaloing(bool);
   void toggleAux(bool);
   void toggleFullScreen(bool);
-
+#if QT_VERSION >= 0x040000
   void dialogClosed();
+#endif
 };
 
 #endif

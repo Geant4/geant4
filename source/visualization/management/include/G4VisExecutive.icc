@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.17 2007-11-09 15:03:22 lgarnier Exp $
+// $Id: G4VisExecutive.icc,v 1.18 2007-11-30 14:47:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,9 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 
   // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
-  RegisterGraphicsSystem (new G4DAWNFILE);
+#ifdef G4VIS_USE_DAWN
+//  RegisterGraphicsSystem (new G4DAWNFILE);
+#endif
   RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);

@@ -2,7 +2,7 @@
 ** G4OpenGLQtViewer meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
 ** Created: Mon Nov 12 10:34:24 2007
-**      by: The Qt MOC ($Id: G4OpenGLQtViewer_moc.cc,v 1.5 2007-11-14 11:49:00 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4OpenGLQtViewer_moc.cc,v 1.6 2007-11-30 14:47:30 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -99,7 +99,6 @@ QMetaObject* G4OpenGLQtViewer::staticMetaObject()
 	{ 0, &static_QUType_bool, 0, QUParameter::In }
     };
     static const QUMethod slot_15 = {"toggleFullScreen", 1, param_slot_15 };
-    static const QUMethod slot_16 = {"dialogClosed", 0, 0 };
     static const QMetaData slot_tbl[] = {
 	{ "actionDrawingWireframe()", &slot_0, QMetaData::Private },
 	{ "actionDrawingLineRemoval()", &slot_1, QMetaData::Private },
@@ -116,12 +115,11 @@ QMetaObject* G4OpenGLQtViewer::staticMetaObject()
 	{ "toggleAntialiasing(bool)", &slot_12, QMetaData::Private },
 	{ "toggleHaloing(bool)", &slot_13, QMetaData::Private },
 	{ "toggleAux(bool)", &slot_14, QMetaData::Private },
-	{ "toggleFullScreen(bool)", &slot_15, QMetaData::Private },
-	{ "dialogClosed()", &slot_16, QMetaData::Private }
+	{ "toggleFullScreen(bool)", &slot_15, QMetaData::Private }
     };
     metaObj = QMetaObject::new_metaobject(
 	"G4OpenGLQtViewer", parentObject,
-	slot_tbl, 17,
+	slot_tbl, 16,
 	0, 0,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -160,7 +158,6 @@ bool G4OpenGLQtViewer::qt_invoke( int _id, QUObject* _o )
     case 13: toggleHaloing((bool)static_QUType_bool.get(_o+1)); break;
     case 14: toggleAux((bool)static_QUType_bool.get(_o+1)); break;
     case 15: toggleFullScreen((bool)static_QUType_bool.get(_o+1)); break;
-    case 16: dialogClosed(); break;
     default:
 	return QObject::qt_invoke( _id, _o );
     }
@@ -186,6 +183,122 @@ bool G4OpenGLQtViewer::qt_static_property( QObject* , int , int , QVariant* ){ r
 #endif
 
 
+
+#if QT_VERSION >= 0x040000
+#if QT_VERSION < 0x040200
+/****************************************************************************
+** Meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
+**
+** Created: jeu. 22. nov. 11:59:31 2007
+**      by: The Qt Meta Object Compiler version 58 (Qt 4.0.1)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include "../include/G4OpenGLQtViewer.hh"
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'G4OpenGLQtViewer.hh' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 58
+#error "This file was generated using the moc from 4.0.1. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+static const uint qt_meta_data_G4OpenGLQtViewer[] = {
+
+ // content:
+       1,       // revision
+       0,       // classname
+       0,    0, // classinfo
+      17,   10, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+
+ // slots: signature, parameters, type, tag, flags
+      18,   17,   17,   17, 0x08,
+      43,   17,   17,   17, 0x08,
+      70,   17,   17,   17, 0x08,
+     100,   17,   17,   17, 0x08,
+     134,   17,   17,   17, 0x08,
+     156,   17,   17,   17, 0x08,
+     171,   17,   17,   17, 0x08,
+     189,   17,   17,   17, 0x08,
+     214,   17,   17,   17, 0x08,
+     238,   17,   17,   17, 0x08,
+     265,   17,   17,   17, 0x08,
+     288,   17,   17,   17, 0x08,
+     313,   17,   17,   17, 0x08,
+     338,   17,   17,   17, 0x08,
+     358,   17,   17,   17, 0x08,
+     374,   17,   17,   17, 0x08,
+     397,   17,   17,   17, 0x08,
+
+       0        // eod
+};
+
+static const char qt_meta_stringdata_G4OpenGLQtViewer[] = {
+    "G4OpenGLQtViewer\0\0actionDrawingWireframe()\0"
+    "actionDrawingLineRemoval()\0actionDrawingSurfaceRemoval()\0"
+    "actionDrawingLineSurfaceRemoval()\0actionControlPanels()\0"
+    "actionExitG4()\0actionCreateEPS()\0toggleDrawingAction(int)\0"
+    "toggleMouseAction(bool)\0toggleRepresentation(bool)\0"
+    "toggleBackground(bool)\0toggleTransparency(bool)\0"
+    "toggleAntialiasing(bool)\0toggleHaloing(bool)\0toggleAux(bool)\0"
+    "toggleFullScreen(bool)\0dialogClosed()\0"
+};
+
+const QMetaObject G4OpenGLQtViewer::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_G4OpenGLQtViewer,
+      qt_meta_data_G4OpenGLQtViewer, 0 }
+};
+
+const QMetaObject *G4OpenGLQtViewer::metaObject() const
+{
+    return &staticMetaObject;
+}
+
+void *G4OpenGLQtViewer::qt_metacast(const char *_clname)
+{
+    if (!_clname) return 0;
+    if (!strcmp(_clname, qt_meta_stringdata_G4OpenGLQtViewer))
+	return static_cast<void*>(const_cast<G4OpenGLQtViewer*>(this));
+    if (!strcmp(_clname, "G4OpenGLViewer"))
+	return static_cast<G4OpenGLViewer*>(const_cast<G4OpenGLQtViewer*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int G4OpenGLQtViewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: actionDrawingWireframe(); break;
+        case 1: actionDrawingLineRemoval(); break;
+        case 2: actionDrawingSurfaceRemoval(); break;
+        case 3: actionDrawingLineSurfaceRemoval(); break;
+        case 4: actionControlPanels(); break;
+        case 5: actionExitG4(); break;
+        case 6: actionCreateEPS(); break;
+        case 7: toggleDrawingAction(*(int*)_a[1]); break;
+        case 8: toggleMouseAction(*(bool*)_a[1]); break;
+        case 9: toggleRepresentation(*(bool*)_a[1]); break;
+        case 10: toggleBackground(*(bool*)_a[1]); break;
+        case 11: toggleTransparency(*(bool*)_a[1]); break;
+        case 12: toggleAntialiasing(*(bool*)_a[1]); break;
+        case 13: toggleHaloing(*(bool*)_a[1]); break;
+        case 14: toggleAux(*(bool*)_a[1]); break;
+        case 15: toggleFullScreen(*(bool*)_a[1]); break;
+        case 16: dialogClosed(); break;
+        }
+        _id -= 17;
+    }
+    return _id;
+}
+
+
+#else
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
@@ -194,10 +307,6 @@ bool G4OpenGLQtViewer::qt_static_property( QObject* , int , int , QVariant* ){ r
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
-
-#if QT_VERSION >= 0x040000
-
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "../include/G4OpenGLQtViewer.hh"
 #if !defined(Q_MOC_OUTPUT_REVISION)

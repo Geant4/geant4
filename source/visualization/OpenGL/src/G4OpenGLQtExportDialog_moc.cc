@@ -2,7 +2,7 @@
 ** G4OpenGLQtExportDialog meta object code from reading C++ file 'G4OpenGLQtExportDialog.hh'
 **
 ** Created: Mon Nov 12 10:36:59 2007
-**      by: The Qt MOC ($Id: G4OpenGLQtExportDialog_moc.cc,v 1.5 2007-11-14 11:49:00 lgarnier Exp $)
+**      by: The Qt MOC ($Id: G4OpenGLQtExportDialog_moc.cc,v 1.6 2007-11-30 14:47:30 lgarnier Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -123,6 +123,85 @@ bool G4OpenGLQtExportDialog::qt_static_property( QObject* , int , int , QVariant
 #endif
 
 
+#if QT_VERSION >= 0x040000
+#if QT_VERSION < 0x040200
+/****************************************************************************
+** Meta object code from reading C++ file 'G4OpenGLQtExportDialog.hh'
+**
+** Created: jeu. 22. nov. 12:25:13 2007
+**      by: The Qt Meta Object Compiler version 58 (Qt 4.0.1)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include "../include/G4OpenGLQtExportDialog.hh"
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'G4OpenGLQtExportDialog.hh' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 58
+#error "This file was generated using the moc from 4.0.1. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+static const uint qt_meta_data_G4OpenGLQtExportDialog[] = {
+
+ // content:
+       1,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       3,   10, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+
+ // slots: signature, parameters, type, tag, flags
+      24,   23,   23,   23, 0x0a,
+      44,   23,   23,   23, 0x0a,
+      70,   23,   23,   23, 0x0a,
+
+       0        // eod
+};
+
+static const char qt_meta_stringdata_G4OpenGLQtExportDialog[] = {
+    "G4OpenGLQtExportDialog\0\0changeSizeBox(bool)\0"
+    "textWidthChanged(QString)\0textHeightChanged(QString)\0"
+};
+
+const QMetaObject G4OpenGLQtExportDialog::staticMetaObject = {
+    { &QDialog::staticMetaObject, qt_meta_stringdata_G4OpenGLQtExportDialog,
+      qt_meta_data_G4OpenGLQtExportDialog, 0 }
+};
+
+const QMetaObject *G4OpenGLQtExportDialog::metaObject() const
+{
+    return &staticMetaObject;
+}
+
+void *G4OpenGLQtExportDialog::qt_metacast(const char *_clname)
+{
+    if (!_clname) return 0;
+    if (!strcmp(_clname, qt_meta_stringdata_G4OpenGLQtExportDialog))
+	return static_cast<void*>(const_cast<G4OpenGLQtExportDialog*>(this));
+    return QDialog::qt_metacast(_clname);
+}
+
+int G4OpenGLQtExportDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QDialog::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: changeSizeBox(*(bool*)_a[1]); break;
+        case 1: textWidthChanged(*(QString*)_a[1]); break;
+        case 2: textHeightChanged(*(QString*)_a[1]); break;
+        }
+        _id -= 3;
+    }
+    return _id;
+}
+
+#else
+
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtExportDialog.hh'
 **
@@ -132,9 +211,7 @@ bool G4OpenGLQtExportDialog::qt_static_property( QObject* , int , int , QVariant
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#if QT_VERSION >= 0x040000
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "../include/G4OpenGLQtExportDialog.hh"
 #if !defined(Q_MOC_OUTPUT_REVISION)

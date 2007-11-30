@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.7 2007-11-15 18:24:28 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.8 2007-11-30 14:47:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,8 @@
 // 27/06/2003 : G.Barrand : implementation (at last !).
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+
+//#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLQtViewer.hh"
 
@@ -168,16 +170,15 @@ void G4OpenGLQtViewer::CreateMainWindow (
     // look for the main window
     bool found = false;
 #if QT_VERSION < 0x040000
+    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+    // but if I comment them, it doesn't work...
     QWidgetList  *list = QApplication::allWidgets();
     QWidgetListIt it( *list );         // iterate over the widgets
     QWidget * widget;
     while ( (widget=it.current()) != 0 ) {  // for each widget...
       ++it;
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-#ifdef GEANT4_QT_DEBUG
-        printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
-        GLWindow = new QDialog(widget,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+        GLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
         found = true;
       }
     }
@@ -185,13 +186,16 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #else
     foreach (QWidget *widget, QApplication::allWidgets()) {
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-#ifdef GEANT4_QT_DEBUG
-        printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
         GLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
     }
+#endif
+
+#if QT_VERSION < 0x040000
+    glWidget->reparent(GLWindow,0,QPoint(0,0));  
+#else
+    glWidget->setParent(GLWindow);  
 #endif
 
     if (found==false) {
@@ -228,10 +232,12 @@ void G4OpenGLQtViewer::CreateMainWindow (
   // delete the pointer if close this
   //  GLWindow->setAttribute(Qt::WA_DeleteOnClose);
 
+#if QT_VERSION >= 0x040000
   QObject ::connect(GLWindow, 
                     SIGNAL(rejected()),
                     this, 
                     SLOT(dialogClosed()));
+#endif
 
   WinSize_x = 400;
   WinSize_y = 400;
@@ -250,12 +256,16 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
 }
 
+#if QT_VERSION >= 0x040000
 /**  Close the dialog and set the pointer to NULL
  */
 void G4OpenGLQtViewer::dialogClosed() {
-  GLWindow = NULL;
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::dialogClosed END\n");
+#endif
+  //  GLWindow = NULL;
 }
-
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 G4OpenGLQtViewer::G4OpenGLQtViewer (
@@ -302,8 +312,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mMouseAction = new QPopupMenu( fContextMenu );
   Q_CHECK_PTR( mMouseAction );
 
+#if QT_VERSION < 0x030200
+  QAction *rotate = new QAction("&Rotate scene","&Rotate scene",CTRL+Key_N,mMouseAction);
+  QAction *move =  new QAction("&Move scene","&Move scene",CTRL+Key_M,mMouseAction);
+#else
   QAction *rotate = new QAction("&Rotate scene",CTRL+Key_N,mMouseAction);
   QAction *move =  new QAction("&Move scene",CTRL+Key_M,mMouseAction);
+#endif
   rotate->addTo(mMouseAction);
   move->addTo(mMouseAction);
 
@@ -326,8 +341,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QPopupMenu *mRepresentation = new QPopupMenu(fContextMenu);
 
+#if QT_VERSION < 0x030200
+  QAction *polyhedron = new QAction("&Polyhedron","&Polyhedron",CTRL+Key_P,mRepresentation);
+  QAction *nurbs = new QAction("&NURBS","&NURBS",CTRL+Key_N,mRepresentation);
+#else
   QAction *polyhedron = new QAction("&Polyhedron",CTRL+Key_P,mRepresentation);
   QAction *nurbs = new QAction("&NURBS",CTRL+Key_N,mRepresentation);
+#endif
   polyhedron->addTo(mRepresentation);
   nurbs->addTo(mRepresentation);
 
@@ -409,6 +429,28 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   } else {
     mDrawing->clear();
   }
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer:: fDrawingWireframe 1\n");
+#endif
+  QObject ::connect(fDrawingWireframe, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionDrawingWireframe()));
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer:: fDrawingWireframe 2\n");
+#endif
+  QObject ::connect(fDrawingLineRemoval, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionDrawingLineRemoval()));
+  QObject ::connect(fDrawingSurfaceRemoval, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionDrawingSurfaceRemoval()));
+  QObject ::connect(fDrawingLineSurfaceRemoval, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionDrawingLineSurfaceRemoval()));
 #else
   if (d_style == G4ViewParameters::wireframe) {
     fDrawingWireframe->setChecked(true);
@@ -421,8 +463,6 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   } else {
     mDrawing->clear();
   }
-#endif
-
   QObject ::connect(fDrawingWireframe, 
                     SIGNAL(triggered(bool)),
                     this, 
@@ -439,14 +479,21 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SIGNAL(triggered(bool)),
                     this, 
                     SLOT(actionDrawingLineSurfaceRemoval()));
+#endif
+
 
 
 #if QT_VERSION < 0x040000
   QPopupMenu *mBackground = new QPopupMenu(mStyle);
   mStyle->insertItem("&Background color",mBackground);
 
+#if QT_VERSION < 0x030200
+  QAction *white = new QAction("&White","&White",CTRL+Key_W,mBackground);
+  QAction *black =  new QAction("&Black","&Black",CTRL+Key_B,mBackground);
+#else
   QAction *white = new QAction("&White",CTRL+Key_W,mBackground);
   QAction *black =  new QAction("&Black",CTRL+Key_B,mBackground);
+#endif
   white->addTo(mBackground);
   black->addTo(mBackground);
 
@@ -470,12 +517,30 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mActions = new QPopupMenu(fContextMenu);
   fContextMenu->insertItem("&Actions",mActions);
 
+#if QT_VERSION < 0x030200
+  QAction *controlPanels = new QAction("&Control panels","&Control panels",CTRL+Key_C,mActions);
+  QAction *exitG4 =  new QAction("&Exit to G4Vis >","&Exit to G4Vis >",CTRL+Key_E,mActions);
+  QAction *createEPS =  new QAction("&Save as ...","&Save as ...",CTRL+Key_S,mActions);
+#else
   QAction *controlPanels = new QAction("&Control panels",CTRL+Key_C,mActions);
   QAction *exitG4 =  new QAction("&Exit to G4Vis >",CTRL+Key_E,mActions);
   QAction *createEPS =  new QAction("&Save as ...",CTRL+Key_S,mActions);
+#endif
   controlPanels->addTo(mActions);
   exitG4->addTo(mActions);
   createEPS->addTo(mActions);
+  QObject ::connect(controlPanels, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionControlPanels()));
+  QObject ::connect(exitG4, 
+                    SIGNAL(activated()),
+                    this, 
+                    SLOT(actionExitG4()));
+  QObject ::connect(createEPS, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionCreateEPS()));
 
 #else
   // === Action Menu ===
@@ -483,8 +548,6 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QAction *controlPanels = mActions->addAction("Control panels");
   QAction *exitG4 = mActions->addAction("Exit to G4Vis >");
   QAction *createEPS = mActions->addAction("Save as ...");
-#endif
-
   QObject ::connect(controlPanels, 
                     SIGNAL(triggered()),
                     this, 
@@ -497,6 +560,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SIGNAL(triggered()),
                     this,
                     SLOT(actionCreateEPS()));
+#endif
+
 
 
 #if QT_VERSION < 0x040000
@@ -507,8 +572,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mTransparency = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Transparency",mTransparency);
 
+#if QT_VERSION < 0x030200
+  QAction *transparencyOn = new QAction("&On","&On",CTRL+Key_O,mTransparency);
+  QAction *transparencyOff = new QAction("&Off","&Off",CTRL+Key_F,mTransparency);
+#else
   QAction *transparencyOn = new QAction("&On",CTRL+Key_O,mTransparency);
   QAction *transparencyOff = new QAction("&Off",CTRL+Key_F,mTransparency);
+#endif
   transparencyOn->addTo(mTransparency);
   transparencyOff->addTo(mTransparency);
 
@@ -533,8 +603,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mAntialiasing = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Antialiasing",mAntialiasing);
 
+#if QT_VERSION < 0x030200
+  QAction *antialiasingOn = new QAction("&On","&On",CTRL+Key_O,mAntialiasing);
+  QAction *antialiasingOff = new QAction("&Off","&Off",CTRL+Key_F,mAntialiasing);
+#else
   QAction *antialiasingOn = new QAction("&On",CTRL+Key_O,mAntialiasing);
   QAction *antialiasingOff = new QAction("&Off",CTRL+Key_F,mAntialiasing);
+#endif
   antialiasingOn->addTo(mAntialiasing);
   antialiasingOff->addTo(mAntialiasing);
 
@@ -556,8 +631,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mHaloing = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Haloing",mHaloing);
 
+#if QT_VERSION < 0x030200
+  QAction *haloingOn = new QAction("&On","&On",CTRL+Key_O,mHaloing);
+  QAction *haloingOff = new QAction("&Off","&Off",CTRL+Key_F,mHaloing);
+#else
   QAction *haloingOn = new QAction("&On",CTRL+Key_O,mHaloing);
   QAction *haloingOff = new QAction("&Off",CTRL+Key_F,mHaloing);
+#endif
   haloingOn->addTo(mHaloing);
   haloingOff->addTo(mHaloing);
 #else
@@ -577,8 +657,13 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QPopupMenu *mAux = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Auxiliairy edges",mAux);
 
+#if QT_VERSION < 0x030200
+  QAction *auxOn = new QAction("&On","&On",CTRL+Key_O,mAux);
+  QAction *auxOff = new QAction("&Off","&Off",CTRL+Key_F,mAux);
+#else
   QAction *auxOn = new QAction("&On",CTRL+Key_O,mAux);
   QAction *auxOff = new QAction("&Off",CTRL+Key_F,mAux);
+#endif
   auxOn->addTo(mAux);
   auxOff->addTo(mAux);
 
@@ -594,6 +679,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   }
 
 
+#if QT_VERSION >= 0x030200
 #if QT_VERSION < 0x040000
   QPopupMenu *mFullScreen = new QPopupMenu(mSpecial);
   mSpecial->insertItem("Full screen",mFullScreen);
@@ -608,6 +694,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QAction *fullOff = mFullScreen->addAction("Off");
 #endif
   createRadioAction(fullOn,fullOff,SLOT(toggleFullScreen(bool)),2);
+#endif
 
 }
 
@@ -652,8 +739,9 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
   else
     ((QPopupMenu*)action1->parent())->setItemChecked(1,true);
    
-  QObject ::connect(action1, SIGNAL(triggered(bool)),action2, SLOT(toggle()));
-  QObject ::connect(action2, SIGNAL(triggered(bool)),action1, SLOT(toggle()));
+  //FIXME : Should not work on Qt3
+  QObject ::connect(action1, SIGNAL(activated()),action2, SLOT(toggle()));
+  QObject ::connect(action2, SIGNAL(activated()),action1, SLOT(toggle()));
 
   QObject ::connect(action1, SIGNAL(toggled(bool)),this, method.c_str());
 }
@@ -920,8 +1008,11 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
 @param check : 1 , 0
 */
 void G4OpenGLQtViewer::toggleFullScreen(bool check) {
+#if QT_VERSION >= 0x030200
   GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
-
+#else
+  G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
+#endif
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
 #endif

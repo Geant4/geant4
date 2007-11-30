@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2007-11-19 19:45:39 perl Exp $
+$Id: History,v 1.104 2007-11-30 14:47:30 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+30th November 2007  Laurent Garnier
+- Improvements for Qt3
+- moc files : Adding other versions for QT_MOC_REVISION 28,58 and
+   59, but this is not the right solution..
 
 19th November 2007  Joseph Perl (for Laurent Garnier) (opengl-V09-00-04)
 - Added GEANT4_QT_DEBUG flag to more places

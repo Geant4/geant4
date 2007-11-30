@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.3 2007-11-15 18:24:28 lgarnier Exp $
+// $Id: G4OpenGLStoredQt.cc,v 1.4 2007-11-30 14:47:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // OpenGLStoredQt graphics system factory.
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+
+//#define GEANT4_QT_DEBUG
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
@@ -43,7 +45,7 @@
 G4OpenGLStoredQt::G4OpenGLStoredQt ():
   G4VGraphicsSystem ("OpenGLStoredQt",
 		     "OGLSQT",
-		     G4VisFeaturesOfOpenGLIQt (),
+		     G4VisFeaturesOfOpenGLSQt (),
 		     G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
