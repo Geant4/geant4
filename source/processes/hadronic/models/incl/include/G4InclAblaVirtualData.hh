@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaVirtualData.hh,v 1.2 2007-09-11 13:18:43 miheikki Exp $ 
+// $Id: G4InclAblaVirtualData.hh,v 1.3 2007-12-03 19:36:06 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -37,10 +37,9 @@
 
 /**
  * An interface to data used by INCL and ABLA. This interface allows
- * us to abstract the actual source of data. At this time all needed
- * data is hardcoded into class G4InclAblaHardcodedData.
-
- * @see G4InclAblaHardcodedData
+ * us to abstract the actual source of data. Currently the data is
+ * read from datafiles by using class G4InclAblaDataFile.  @see
+ * G4InclAblaDataFile
  */
 
 class G4InclAblaVirtualData {

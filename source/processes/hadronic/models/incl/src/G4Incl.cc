@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.12 2007-11-15 15:04:39 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.13 2007-12-03 19:36:06 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -463,14 +463,6 @@ void G4Incl::processEventIncl()
 
   if(nopart > -1) {
     for(G4int j = 0; j < nopart; j++) {
-      if(ep[j] > calincl->f[2]) { //FIX: Remove unphysical events (Ekin > Ebullet).
-	nopart = -2;
-      }
-    }
-  }
-
-  if(nopart > -1) {
-    for(G4int j = 0; j < nopart; j++) {
       varntp->itypcasc[j] = 1;
       // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
       if(kind[j] == 1) { 
@@ -489,6 +481,7 @@ void G4Incl::processEventIncl()
 	varntp->avv[j] = 1;
 	varntp->zvv[j] = 0;
 	varntp->plab[j] = std::sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
+	//varntp->plab[j] = std::sqrt(ep[j] * (ep[j] + 1879.13126)); // PK mass check
 	multn = multn + 1;
 	mcorem = mcorem - ep[j] - 939.56563;
 	if(verboseLevel > 3) {
@@ -576,7 +569,7 @@ void G4Incl::processEventIncl()
 	numpi = numpi + 1;
 	mcorem = mcorem - ep[j] - 3724.818;
 	if(verboseLevel > 3) {
-	  G4cout <<"G4Incl: He3 produced! " << G4endl;
+	  G4cout <<"G4Incl: He4 produced! " << G4endl;
 	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
 	}
       }
@@ -817,14 +810,6 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 
   if(nopart > -1) {
     for(G4int j = 0; j < nopart; j++) {
-      if(ep[j] > calincl->f[2]) { //FIX: Remove unphysical events (Ekin > Ebullet).
-	nopart = -2;
-      }
-    }
-  }
-
-  if(nopart > -1) {
-    for(G4int j = 0; j < nopart; j++) {
       varntp->itypcasc[j] = 1;
       // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
       if(kind[j] == 1) { 
@@ -987,11 +972,8 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     abla->breakItUp(varntp->massini, varntp->mzini, mcorem, varntp->exini, varntp->jremn,
 		    erecrem, pxrem, pyrem, pzrem, eventnumber);
 
+    //    assert(evaporationResult->ntrack > 0);
     for(G4int evaporatedParticle = 1; evaporatedParticle < evaporationResult->ntrack; evaporatedParticle++) {
-      if(evaporationResult->enerj[evaporatedParticle] > calincl->f[2]) { //Fix: Filter out evaporated particles with too much energy (Ekin > Ebullet).
-	nopart = -2;
-	break;
-      }
       if(evaporationResult->avv[evaporatedParticle] == 0 && evaporationResult->zvv[evaporatedParticle] == 0) { //Fix: Skip "empty" particles with A = 0 and Z = 0
 	continue;
       }
@@ -2542,7 +2524,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   sp1t1 = 0.0;
   sp2t1 = 0.0;
   sp3t1 = 0.0;
-  for(G4int i = 1; i <= (bl3->ia1-1); i++) {
+  for(G4int i = 1; i <= bl3->ia1; i++) {
+  //for(G4int i = 1; i <= (bl3->ia1-1); i++) {
   //  for(G4int i = 1; i < (bl3->ia1-1); i++) {
     bl9->hel[i] = 0;
     bl5->nesc[i] = 0;
@@ -2630,7 +2613,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     sp2t1 = 0.0;
     sp3t1 = 0.0;
     efer = 0.0;
-    for(G4int i = bl3->ia1+1; i <= ia-1; i++) {
+    for(G4int i = bl3->ia1+1; i <= ia; i++) {
     //    for(G4int i = bl3->ia1; i < ia-1; i++) {
     //    for(G4int i = bl3->ia1; i < ia; i++) {
       bl1->ind2[i] = 1;
@@ -2898,7 +2881,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // deutons
   // here for nucleons
   if (kindstruct->kindf7 <= 2) {
-    bl1->eps[1] = g1*fmp + v0; // eps(1)->eps[0]
+    bl1->eps[1] = g1*fmp + v0;
     assert((std::pow(bl1->eps[1],2) - std::pow(fmp,2)) >= 0);
     bl1->p3[1] = std::sqrt(std::pow(bl1->eps[1],2) - std::pow(fmp,2));
     // assert(isnan(energyTest(1)) == false);
@@ -2967,8 +2950,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	arg = std::pow((cobe*(bl1->eps[i])),2)-pm2;
 	if (arg <= 0.) { //then	! put maximum momentum to 0. 
 	  i_emax = 1; //	!find maximum
-	  ener_max = bl1->eps[0]; //eps(1)->eps[0]
-	  for(G4int klm = 1; klm <= bl3->ia1; klm++) { //do klm=2,bl3->ia1	
+	  ener_max = bl1->eps[1];
+	  for(G4int klm = 2; klm <= bl3->ia1; klm++) { //do klm=2,bl3->ia1	
 	    if(bl1->eps[klm] > ener_max) {
 	      ener_max = bl1->eps[klm];
 	      i_emax = klm;
@@ -2990,10 +2973,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	      bl1->p2[bl2->k+1] = bl1->p2[bl2->k];
 	      p3_c[bl2->k+1] = p3_c[bl2->k];
 	    }
-	    eps_c[0] = epsv;  //eps_c(1)->eps_c[0]
-	    bl1->p1[0] = p1v;  //p1(1)->p1[0]
-	    bl1->p2[0] = p2v;  //p2(1)->p2[0]
-	    p3_c[0] = p3v; //p3_c(1)->p3_c(0)		fin permut.
+	    eps_c[1] = epsv;
+	    bl1->p1[1] = p1v;
+	    bl1->p2[1] = p2v;
+	    p3_c[1] = p3v; 	// fin permut.
 	  }
 	  sp1t1 = 0.0;   // re-compute the last one 
 	  sp2t1 = 0.0;
@@ -3172,7 +3155,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	if (t5 < 0.) {
 	  continue;
 	}
-	tref = (-1*t3 - std::sqrt(t5))*(bl1->eps[i]);  
+	tref = (-1.0*t3 - std::sqrt(t5))*(bl1->eps[i]);  
 	// assert(isnan(tref) == false);
 	if (tref > bl4->tmax5) {
 	  continue;
@@ -3875,7 +3858,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // (ici, toujours l2 < l1)
   ncol_2c = ncol_2c + 1;
   if(ncol_2c == 1) {
-    for (G4int icomp = 0; icomp < bl3->ia1; icomp++) {
+    for (G4int icomp = 1; icomp <= bl3->ia1; icomp++) {
       // test on the first collision modified 4/07/2001 for direct and exchange.
       if(icomp == bl9->l1 || icomp == bl9->l2) {
 	xavant = min(t[23],t[27]); //t(24)->t[23], t(28)->t[27]
@@ -4343,9 +4326,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //PK: This workaround avoids a NaN problem encountered with
   //geant4. The problem does not seem to exist if we run in standalone
   //mode.
-  if(((std::pow(ym[npion],2)-std::pow(fmp+fmpi,2))*(std::pow(ym[npion],2)-std::pow(fmp-fmpi,2))) < 0) {
-    ym[npion] = ym[npion]+fmpi+100.0;
-  }
+  //  if(((std::pow(ym[npion],2)-std::pow(fmp+fmpi,2))*(std::pow(ym[npion],2)-std::pow(fmp-fmpi,2))) < 0) {
+  //    ym[npion] = ym[npion]+fmpi+100.0;
+  //  }
   // PK
   // assert(isnan(ym[npion]) == false);
   assert(ym[npion] != 0);
@@ -5195,12 +5178,20 @@ pnu255:
       eout = eout+bl1->eps[i] - fmp;
       //      ic33 = int((std::floor(double(bl1->ind2[i]+3))/double(2)));
       ic33 = (bl1->ind2[i]+3)/2;
-
+      //nopart = nopart + 1;
       kind[nopart] = 3 - ic33;
       if(verboseLevel > 3) {
 	G4cout <<"kind[" << nopart << "] = " << kind[nopart] << G4endl;
       }
       ep[nopart] = bl1->eps[i] - fmp;
+      if(verboseLevel > 2) {
+	if(ep[nopart] > calincl->f[2]) {
+	  G4cout <<"ep[" << nopart << "] = " << ep[nopart] << " > " << calincl->f[2] << G4endl;
+	  G4cout <<"E = " << bl1->eps[nopart] << G4endl;
+	  G4cout <<"px = " << bl1->p1[nopart] << " py = " << bl1->p2[nopart] << " pz = " << bl1->p3[nopart] << G4endl;
+	  G4cout <<"Particle mass = " << fmp << G4endl;
+	}
+      }
       bmass[nopart] = fmp;
       ekout = ekout + ep[nopart];
       ptotl = std::sqrt(std::pow(bl1->p1[i],2) + std::pow(bl1->p2[i],2) + std::pow(bl1->p3[i],2));
@@ -6113,7 +6104,7 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   (*q1_p) = q1;
   (*q2_p) = q2;
   (*q3_p) = q3;
-  (*q4_p) = q4; // :::FIXME::: (*q4_p) = -1*q4;
+  (*q4_p) = q4;
 
   (*np_p) = np;
   (*ip_p) = np;
@@ -6167,12 +6158,12 @@ void G4Incl::decay2(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *wp
   G4double b2 = p2/xe;
   G4double b3 = p3/xe;                                                          
   // PK: NaN workaround
-  if(((std::pow(xi,2)-std::pow(x1+x2,2))*(std::pow(xi,2)-std::pow(x1-x2,2))) < 0) {
-    xi = xi+x2+100.0;
-  }
+  // if(((std::pow(xi,2)-std::pow(x1+x2,2))*(std::pow(xi,2)-std::pow(x1-x2,2))) < 0) {
+  //   xi = xi+x2+100.0;
+  // }
   // PK
   G4double xq = pcm(xi,x1,x2);                                                  
-  // assert(isnan(xq) == false);
+  assert(isnan(xq) == false);
   G4double ctet, stet;
 
   G4double fi, cfi, sfi;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.13 2007-11-15 15:04:39 miheikki Exp $ 
+// $Id: G4Abla.cc,v 1.14 2007-12-03 19:36:06 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -273,7 +273,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     
     for(G4int iloc = 1; iloc <= volant->iv; iloc++) { //DO iloc=1,iv
       // assert(isnan(volant->zpcv[iloc]) == false);
-      assert(volant->acv[iloc] != 0);
+      //      assert(volant->acv[iloc] != 0);
       //      assert(volant->zpcv[iloc] != 0);
       mglms(double(volant->acv[iloc]),double(volant->zpcv[iloc]),0,&el);
       // assert(isnan(el) == false);
@@ -997,20 +997,13 @@ void G4Abla::initEvapora()
   
   for(int z = 0; z < 98; z++) { //do 30  z = 0,98,1                                                 
     for(int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
-      // 			ecld->ecfnz[n][z] = 0.e0;
-      // 			// Added. This extracts data from InclAblaData class (Hardcoded data in this case)
-      // 			ec2sub->ecnz[n][z] = dataInterface->getEcnz(n,z);
-      // 			ecld->ecgnz[n][z] = dataInterface->getEcnz(n,z);
-      // 			ecld->alpha[n][z] = dataInterface->getAlpha(n,z);
-      // 			ecld->vgsld[n][z] = dataInterface->getVgsld(n,z);
       ecld->ecfnz[n][z] = 0.e0;
-//       // Added. This extracts data from InclAblaData class (Hardcoded data in this case)
       ec2sub->ecnz[n][z] = dataInterface->getEcnz(n,z);
       ecld->ecgnz[n][z] = dataInterface->getEcnz(n,z);
       ecld->alpha[n][z] = dataInterface->getAlpha(n,z);
       ecld->vgsld[n][z] = dataInterface->getVgsld(n,z);
-    } //31     continue                                                        
-  } //30   continue                                                          
+    }
+  }
 
   for(int z = 0; z < 500; z++) {
     for(int a = 0; a < 500; a++) {
@@ -4870,7 +4863,7 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 
   for(G4int i = ndec; i <= volant->iv; i++) { //do i=ndec,iv
     intp = i + nopart;
-    varntp->ntrack++;
+    varntp->ntrack = varntp->ntrack + 1;
     if(nint(volant->acv[i]) == 0 && nint(volant->zpcv[i]) == 0) {
       if(verboseLevel > 2) {
 	G4cout <<"Error: Particles with A = 0 Z = 0 detected! " << G4endl;

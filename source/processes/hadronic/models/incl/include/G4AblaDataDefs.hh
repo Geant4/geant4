@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.5 2007-10-31 10:44:22 miheikki Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.6 2007-12-03 19:36:06 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -212,6 +212,14 @@ class G4Volant {
 public:
   G4Volant() {};
   ~G4Volant() {};
+
+  void dump()
+  {
+    G4cout <<"i \t ACV \t ZPCV \t PCV" << G4endl; 
+    for(G4int i = 0; i <= iv; i++) {
+      G4cout << "volant" << i << "\t" << acv[i] << " \t " << zpcv[i] << " \t " << pcv[i] << G4endl;
+    }
+  }
 
   G4double acv[VOLANTSIZE],zpcv[VOLANTSIZE],pcv[VOLANTSIZE],xcv[VOLANTSIZE];
   G4double ycv[VOLANTSIZE],zcv[VOLANTSIZE];
