@@ -1220,43 +1220,45 @@ please refer to the corresponding History files provided in most packages):
     <LI>electromagnetic/TestEm3
         <UL>
         <LI>Updated <TT>TestEm3.in</TT> macro.</LI>
-        <LI>Added <TT>PhysListEmStandardIG</TT> experimental PhysList.
+        <LI>Added <TT>PhysListEmStandardIG</TT> experimental PhysList.</LI>
         <LI><TT>HistoManager/HistoMessenger</TT>: printing selected histos
             on ascii file.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm5</LI>
         <UL>
         <LI>New histogram numbering (see README). Changed all macros
-            accordingly, also in Geant3 version.
+            accordingly, also in Geant3 version.</LI>
         <LI>Reordered processes in <TT>PhysListEmStandardSS</TT>.
         <LI>Added histos 17->20: energy fluence.</LI>
-        <LI>Fixed usage of elastic builders.
+        <LI>Fixed usage of elastic builders.</LI>
         <LI><TT>RunAction</TT>: compute and print energy leakage and energy balance.
         <LI><TT>PhysListEmStandard</TT>: PhysicsTables set with 100 bins per decade (EmOptions).
-        <LI>Added <TT>PhysListEmStandardIG</TT> experimental PhysList
+        <LI>Added <TT>PhysListEmStandardIG</TT> experimental PhysList.</LI>
+        <LI><TT>TrackingAction</TT>: new histos (4,5) to plot vertex position
+            of secondaries.</LI>
         <LI><TT>HistoManager/HistoMessenger</TT>: printing selected histos
             on ascii file.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm7
         <UL>
-        <LI><TT>PhysListStandardSS</TT>: reviewed process ordering.
+        <LI><TT>PhysListStandardSS</TT>: reviewed process ordering.</LI>
         <LI>Added <TT>PhysListStandardIG</TT>, ion <TT>G4ionIonisation</TT>
             process is substituted by <TT>G4ionGasIonisation</TT> and for
             Coulomb scattering the model taking into account the recoil is
             used.</LI>
         <LI>Added class <TT>G4ScreenNuclearRecoil</TT> and ancillary utilities
-            for ion-ion scattering provided by Vanderbuilt University.
-        <LI><TT>PhysListStandardSS</TT>: use <TT>G4ionGasIonisation</TT>.
-        <LI><TT>PhysListStandardIG</TT>: use <TT>G4ScreenNuclearRecoil</TT>.
-        <LI>Fixed usage of elastic builders.
+            for ion-ion scattering provided by Vanderbuilt University.</LI>
+        <LI><TT>PhysListStandardSS</TT>: use <TT>G4ionGasIonisation</TT>.</LI>
+        <LI><TT>PhysListStandardIG</TT>: use <TT>G4ScreenNuclearRecoil</TT>.</LI>
+        <LI>Fixed usage of elastic builders.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm8
         <UL>
         <LI>Use components of physics lists from <TT>physics_list</TT> module.</LI>
-        <LI>Fixed memory leak in the UI interface.
+        <LI>Fixed memory leak in the UI interface.</LI>
         <LI>Removed used lines from PAI physics constructors, added <TT>pai_brem</TT>
             constructor <TT>PhysListEmPAI</TT> in which <TT>AlongStep</TT> from
-            Bremsstrahlung is allowed.
+            Bremsstrahlung is allowed.</LI>
         <LI>Fixed logic in <TT>SteppingAction</TT>.
         </UL></LI>
     <LI>electromagnetic/TestEm9
@@ -1265,7 +1267,7 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>electromagnetic/TestEm11
         <UL>
-        <LI>Added histo 8: energy profile as function of x/range.
+        <LI>Added histo 8: energy profile as function of x/range.</LI>
         <LI>Added input macro <TT>sandia.mac</TT>.</LI>
         <LI><TT>HistoManager/HistoMessenger</TT>: printing selected histos
             on ascii file.</LI>
@@ -1285,7 +1287,7 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>electromagnetic/TestEm18
         <UL>
-        <LI><TT>PhysicsList</TT>: added more <TT>EmOptions</TT>.
+        <LI><TT>PhysicsList</TT>: added more <TT>EmOptions</TT>.</LI>
         <LI><TT>HistoManager/HistoMessenger</TT>: printing selected histos
             on ascii file.</LI>
         </UL></LI>
@@ -1302,7 +1304,7 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>gdml
         <UL>
-        <LI>Updated to co-work with built-in GDML plugin module GDML-3.
+        <LI>Updated to co-work with built-in GDML plugin module GDML-3.</LI>
         <LI>Showing loading of modular GDML files.</LI>
         </UL></LI>
     <LI>hadronic/Hadr01
@@ -1313,19 +1315,19 @@ please refer to the corresponding History files provided in most packages):
     <LI>medical/fanoCavity
         <UL>
         <LI><TT>DetectorConstruction</TT>: <TT>wallRadius</TT> automatically
-            recomputed; added materials graphite and aluminium.
+            recomputed; added materials graphite and aluminium.</LI>
         <LI><TT>PhysicsList</TT>: implemented <TT>G4CoulombScattering</TT>
             process as option; use 100 bins per decade (<TT>emOptions</TT>)
-            in physics tables.
+            in physics tables.</LI>
         <LI><TT>MyKleinNishina</TT>: do not cancel Compton cross-section in
             cavity.</LI>
         <LI><TT>EventAction</TT>: added histogram of energy deposit in cavity
-            per incident gamma.
+            per incident gamma.</LI>
         <LI><TT>RunAction</TT>: compute error on energy deposit and mean
-            kinetic energy.
+            kinetic energy.</LI>
         <LI><TT>HistoManager/HistoMessenger</TT>: printing selected histos
             on ascii file.</LI>
-        <LI>Syntax correction in <TT>DetectorMessenger</TT>.
+        <LI>Syntax correction in <TT>DetectorMessenger</TT>.</LI>
         </UL></LI>
     <LI>medical/fanoCavity2
         <UL>
@@ -1339,6 +1341,12 @@ please refer to the corresponding History files provided in most packages):
             examples showing how applications can be parallelized with
             different MPI compliant libraries, such as LAM/MPI, MPICH2,
             OpenMPI, etc.</LI>
+        </UL></LI>
+    <LI>persistency/P02
+        <UL>
+        <LI>New example showing how to store in a binary file and read back
+            the geometry tree using the 'reflection' technique for
+            persistency.</LI>
         </UL></LI>
     <LI>polarisation/Pol01
         <UL>
@@ -1354,8 +1362,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>radioactivedecay/exrdm
         <UL>
         <LI>Use decay and radiactive decay builders from <TT>physics_lists</TT>
-            module.
-        <LI>Added elastic, stopping, ion and <TT>extraEm</TT> physics.
+            module.</LI>
+        <LI>Added elastic, stopping, ion and <TT>extraEm</TT> physics.</LI>
         <LI>Minor fix to low-energy EM physics builder.</LI>
         </UL></LI>
     <LI>runAndEvent/RE03
@@ -1374,6 +1382,11 @@ please refer to the corresponding History files provided in most packages):
     <LI>N03
         <UL>
         <LI>Added option to activate Qt rendering.</LI>
+        </UL></LI>
+    <LI>N05
+        <UL>
+        <LI>Modified physics list to take into account usage of <TT>Along</TT>
+            method in <TT>G4FastSimulationManagerProcess</TT>.</LI>
         </UL></LI>
     <LI>N06
         <UL>
