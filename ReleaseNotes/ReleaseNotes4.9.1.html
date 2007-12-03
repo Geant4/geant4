@@ -134,7 +134,18 @@ principle the migration is limited to replacing <TT>typedef</TT> statements.
 <P> </P>
 <B>Standard Electromagnetic physics</B>
 <P> </P>
-<blink>!!! ADD TEST HERE !!!</blink>
+<TT>G4Cerenkov</TT> process was modified from being <TT>AlongStep</TT>
+process to be a <TT>PostStep</TT> process. This modification needs a
+modification in custom user Physics List, for which it is imperative to
+change:
+<PRE>
+   pmanager->AddContinuousProcess(theCerenkovProcess);
+</PRE>
+to:
+<PRE>
+   pmanager->AddProcess(theCerenkovProcess);
+   pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+</PRE>
 
 <P> </P>
 <B>Hadronic physics</B>
@@ -187,7 +198,20 @@ Please see the last section for the corresponding details.
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI><blink>!!! ADD TEST HERE !!!</blink></LI>
+<LI>Non-ionizing energy loss is filled by ion ionisation processes and is
+    available to user actions.</LI>
+<LI>The new process <TT>G4ionGasIonisation</TT> is available. It is recommended
+    to be used for simulation of ion transport in low-density media.</LI>
+<LI>The process <TT>G4CoulombScattering</TT> was verified and is proposed to
+    be used instead of the multiple scattering process for simulation of
+    scattering in low-density media.</LI>
+<LI>The <TT>G4ScreenNuclearRecoil</TT> process developed by Vanderbilt
+    University group is available with the extended example <TT>TestEm7</TT>.
+    This process is an alternative to the multiple scattering process for
+    ions.</LI>
+<LI>The simulation of energy loss of the classical magnetic monopole is
+    provided. The example of Physics List with the monopole is available with
+    the new extended example <TT>exotic_physics/monopole</TT>.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -220,7 +244,9 @@ Please see the last section for the corresponding details.
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI><blink>!!! ADD TEST HERE !!!</blink></LI>
+<LI>Small (~5%) speed up of simulation for calorimeters.</LI>
+<LI>Improved simulation of spectrum of muon Bremsstrahlung.</LI>
+<LI>Improved simulation of straggling of ions (Bragg peak for ions).</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -339,9 +365,9 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI><B>High Energy</B>
     <UL>
-    <LI><TT>G4mplIonisationModel</TT>: fixed low-energy parameterization of
-        monopole energy loss; verified mean energy loss. Introduced theoretical
-        asymtotic low-energy parameterization of <TT>dEdx</TT>.</LI>
+    <LI>Introduced theoretical asymtotic low-energy parameterization of
+        <TT>dEdx</TT> and fixed intermediate parameterization between
+        low-energy and high-energy models.</LI>
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
@@ -378,78 +404,67 @@ please refer to the corresponding History files provided in most packages):
         added <TT>ignoreCut</TT> flag, if <TT>true</TT> both models provide
         zero <TT>dEdx</TT> and full cross sections.</LI>
     <LI><TT>G4MuMultipleScattering</TT>, <TT>G4MuMscModel</TT>: new classes
-        for simulation of multiple scattering on muons (beta-version).</LI>
+        for simulation of multiple scattering for muons (beta-version).</LI>
     </UL></LI>
 <LI><B>Polarisation</B>
     <UL>
-    <LI><TT>G4eplusPolarizedAnnihilation</TT>: enabled <TT>AtRest</TT>.</LI>
+    <LI><TT>G4eplusPolarizedAnnihilation</TT>: added <TT>enabledAtRest</TT>
+        flag.</LI>
     <LI>Implemented more general cross section framework; removed dependencies
         to models. Now cross sections can be used independent of any model,
         e.g. in a cross section calculator class.</LI>
     <LI>Added polarized photo-electric effect.</LI>
     <LI>Bug fix in <TT>G4PolarizedAnnihilationCrossSection</TT> correcting
         error in calculation of polarisation dependent total cross section
-        (wrong interaction-length for positrons in applications whe particle
+        (wrong interaction-length for positrons in applications where particle
         and media are polarised).</LI>
     </UL></LI>
 <LI><B>Standard</B>
     <UL>
     <LI><TT>G4UrbanMscModel</TT>:
         <UL>
-        <LI>For skin greater than 0 use range instead of <TT>TrueStepLimit</TT>
-            for the computation of the distance to a boundary. This provides
-            more stable step limitation by <TT>GeomFactor</TT>.</LI>
-        <LI>New, simpler model functions to describe the angular distribution.
-            <TT>theta0</TT> of this distribution has been changed too; now the
-            form of <TT>theta0</TT> is the same as in the Highland formula, but
-            the  parameter values are different for e+/e- and the other (heavy)
-            particles; the change concerns the <TT>UseDistanceToBoundary</TT>
-            case: <TT>tlimitmin = 10</TT> stepmin.</LI>
-            Some cosmetics in <TT>ComputeTruePathLengthLimit()</TT>.
-        <LI>Modified tail of angular distribution. Compare safety with zero
-            after lateral displacement.</LI>
-        <LI>Changed initialisation for ions. Parameters are protected from
-            modification.</LI>
         <LI>Use <TT>SampleScattering()</TT> method instead of
-            <TT>SampleSecondaries()</TT>.
-        <LI>Use different correction to Highland formula for different
-            particle types (electron, muons, others...).</LI>
+            <TT>SampleSecondaries()</TT>.</LI>
+        <LI>For <TT>skin > 0</TT> (computed distance to the geometry boundary):
+            <UL>
+            <LI>use range instead of <TT>TrueStepLimit</TT> for the computation
+                of the distance to a boundary to provide more stable step
+                limitation by <TT>GeomFactor</TT>;</LI>
+            <LI>default values <TT>stepmin = 1 nm</TT>,
+                <TT>tlimitmin = 10*stepmin</TT>;</LI>
+            <LI>default value <TT>10^-16</TT> is used to avoid lost of
+                precision and occasional <TT>NaN</TT> values.</LI>
+            </UL></LI>
+        <LI>New, simpler model functions for mean scattering angle
+            <TT>theta0</TT>. Now the form of <TT>theta0</TT> is the same as
+            in the Highland formula, but the parameter values are different
+            for <TT>e+/e-</TT> and the other (heavy) particles.</LI>
+        <LI>Fixed old bug in sign of <TT>theta0</TT> for negatively charged
+            particles.</LI>
+        <LI>Fixed old bug in <TT>SampleCosineTheta()</TT>: now the value of
+            <TT>prob</TT> is always between <TT>[0,1]</TT>.</LI>
+        <LI>Compare new value of safety with zero after sampling of 
+            lateral displacement to identify if track is on boundary.</LI>
+        <LI>Changed initialisation for ions: protecting parameters from
+            modification.</LI>
         <LI>Tuned <TT>ComputeGeomPathLength()</TT> in order to get better low
-            energy behaviour for heavy particles (mu, hadrons).</LI>
-        <LI>Small modification of <TT>theta0</TT> in <TT>ComputeTheta0()</TT>
-            (based on data).</LI>
-        <LI>Some old inconsistency/bug has been fixed in
-            <TT>SampleCosineTheta()</TT>: now the value of <TT>prob</TT> is
-            always between [0,1].</LI>
-        <LI>Changed parameter <TT>tausmall</TT> to avoid loss of numerical 
-            precision and occasional NaN values...</LI>
+            energy behaviour for heavy particles (<TT>mu</TT>, hadrons).</LI>
         </UL></LI>
     <LI><TT>G4CoulombScattering</TT>, <TT>G4CoulombScatteringModel</TT>,
         <TT>G4eCoulombScatteringModel</TT>:
         <UL>
         <LI>Updated <TT>InitialiseProcess()</TT> and <TT>PrintInfo()</TT>
             methods to ensure that the parameters of models change between
-            runs and to provide more clear information.</LI>
+            runs.</LI>
         <LI>Added nuclear size effect; added separate simulation of scattering
             on atomic electrons taking into account cuts; fixed cross section
             for compounds.</LI>
-        <LI>Fixed bug in computation of screening parameters in
-            <TT>SampleSecondary()</TT> method; reorganised initialisation of
-            kinematics and screening parameters; used <TT>Z(Z+1)</TT> factor
-            to take into account scattering of electrons.</LI>
-        <LI>Introduced energy threshold between models with and without nuclear
-            recoil.</LI>
-        <LI>Fixed bug in <TT>SamplingSecondaries()</TT>.</LI>
-        <LI>Fixed bug in kinematic of the final state.</LI>
-        <LI>Added array to cash screen parameters.</LI>
-        <LI>Updated screen radius model.</LI>
-        <LI>Added cut dependence for scattering off electrons.</LI>
-        <LI>Reorganized protected methods.</LI>
+        <LI>Reorganised initialisation of kinematics and screening
+            parameters.</LI>
         <LI>Using precomputed <TT>Z^1/3</TT> and <TT>log(A)</TT> values to
-            speed up code; revised nuclear size correction.</LI>
+            speed up code.</LI>
         <LI>Fixed crash happening at initialisation when several elements
-            with the same Z are defined.</LI>
-        <LI>Fixed computation of transport cross section.</LI>
+            with the same <TT>Z</TT> are defined.</LI>
         </UL></LI>
     <LI><TT>G4BraggModel</TT>, <TT>G4BraggIonModel</TT>:
         <UL>
@@ -468,19 +483,18 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI><TT>G4IonFluctuations</TT>:
         <UL>
-        <LI>Added dependence on cut in the formula of width on cut;
-            reduces cut dependence of the Bragg peak width for ions;
+        <LI>Added dependence on cut in the formula of width to
+            reduce cut dependence of the Bragg peak width for ions;
             use Fermi energy from <TT>G4Material</TT>.</LI>
         </UL></LI>
     <LI><TT>G4PAIphotonModel</TT>, G4PAIModel</TT>:
         <UL>
-        <LI>Fixed <TT>MaxSecondaryEnergy()</TT> method for e- and e+ and
-            use it for definition of max energy transfer; protected printouts
-            by verbosity flag.</LI>
+        <LI>Fixed <TT>MaxSecondaryEnergy()</TT> method for <TT>e-</TT> and
+            <TT>e+</TT> and use it for definition of max energy transfer;
+            protected printouts by verbosity flag.</LI>
         <LI>General cleanup and fixed memory leak in <TT>G4PAIModel</TT>.</LI>
         </UL></LI>
-    <LI><TT>G4eplusAnnihilation</TT>: enabled <TT>AtRest</TT>.</LI>
-    <LI><TT>G4BohrFluctuations</TT>: minor cleanup.</LI>
+    <LI><TT>G4eplusAnnihilation</TT>: added flag <TT>enabledAtRest</TT>.</LI>
     <LI><TT>G4PAIySection</TT>: new class which substitutes
         <TT>G4PAIxSection</TT>, fixing memory leak problems.</LI>
     <LI><TT>G4ionIonisation</TT>, <TT>G4ionGasIonisation</TT>,
@@ -490,21 +504,21 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI><TT>G4VEnergyLossProcess</TT>:
         <UL>
-        <LI>Use prestep time for subcutoff secondaries and avoid use
-            of the <TT>GetVelocity()</TT> method.</LI>
-        <LI>Simplified energy loss computation for the case of big step,
-            allowing for slight improvent in CPU performance.</LI>
-        <LI>Use STL vectors of <TT>G4VEmModel</TT> instead of local arrays.</LI>
+        <LI>Use prestep time for subcutoff secondaries and avoid precise
+            computation ot the time using <TT>GetVelocity()</TT> method.</LI>
+        <LI>Improved energy loss computation for the case of big step,
+            allowing for slight improvement in CPU performance.</LI>
+        <LI>Use STL vector of <TT>G4VEmModel*</TT> instead of C-array.</LI>
         </UL></LI>
     <LI><TT>G4VEmProcess</TT>:
         <UL>
-        <LI>Added cut to <TT>ComputeCrossSectionPerAtom()</TT> method.</LI>
-        <LI>Added vector of cuts per material for secondaries, which are needed
-            for single scattering process.</LI>
+        <LI>Added cut as a parameter of <TT>ComputeCrossSectionPerAtom()</TT>
+            method allowing models to use the cut (used by single scattering
+            model and potentially by others); added vector of cuts to the list
+            of members of the class.</LI>
         <LI>Integral option now coupled with <TT>buildLambdaTable</TT> option:
             integral cannot be activated if <TT>buildLambdaTable</TT> is not
             activated.</LI>
-        <LI>Use cut in <TT>PostStepDoIt()</TT> (before was zero).</LI>
         </UL></LI>
     <LI><TT>G4VEmModel</TT>:
         <UL>
@@ -517,8 +531,10 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>Fixed memory leak at destruction; proper deletion of
             <TT>G4PhysicsTables</TT>.</LI>
-        <LI>Moved virtual function <TT>PostStepGetPhysicalInteractionLength()</TT>
-            from inline to body of classes.</LI>
+        <LI>Moved virtual functions, like
+            <TT>PostStepGetPhysicalInteractionLength()</TT>
+            from inline to body of classes; moved simple methods from body
+            to inline.</LI>
         <LI>Fixed handling zero cross section in
             <TT>PostStepGetPhysicalInteractionLength()</TT> method to avoid
             problem happening in FanoCavity example when cross section
@@ -527,27 +543,23 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4VEnergyLossProcess</TT>:
         <UL>
         <LI>Simplified logic to switch on/off fluctuations.</LI>
-        <LI>Set default flags of fluctuation to <TT>false</TT>.</LI>
         </UL></LI>
     <LI><TT>G4VMultipleScattering</TT>:
         <UL>
         <LI>Use <TT>SampleScattering()</TT> method in <TT>PostStep</TT>.</LI>
-        <LI>Setting at initialisation that scattering may be 
-            off electrons (needed for single scattering).</LI>
+        <LI>Added vector of cuts for electrons (needed for combined multiple 
+            scattering processes).</LI>
         </UL></LI>
     <LI><TT>G4EmCalculator</TT>: fixed default region name.</LI>
     <LI><TT>G4ionEffectiveCharge</TT>: use Fermi energy from <TT>G4Material</TT>
         and not recalculate it at each step; reorganized formulas: less calls
         to mathematical functions.</LI>
-    <LI><TT>G4VEmProcess</TT>, <TT>G4VEnergyLossProcess</TT>,
-        <TT>G4VMultipleScattering</TT>: cleanup; moved virtual method
-        implementations to source code.</LI>
     <LI><TT>G4EmModelmanager</TT>: added pointers to <TT>G4Gamma</TT> and
         <TT>G4Positron</TT> at initialisation.</LI>
     <LI><TT>G4EmProcessOptions</TT>: added missing initialisation of
         <TT>G4LossTableManager</TT> parameters together with parameters of
-        concrete processes (fixed initialisation when options defined before
-        processes are instantiated).</LI>
+        concrete processes (fixed initialisation when an option is defined
+        before phyics list construct processes).</LI>
     </UL></LI>
 <LI><B>Xrays</B>
     <UL>
@@ -615,10 +627,10 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Optical</B>
     <UL>
     <LI>Added capability of calculating the reflectivity off a metal surface
-        by way of an index of refraction.</LI>
+        by way of a complex index of refraction.</LI>
     <LI>In <TT>G4OpWLS</TT>, allow for the <TT>MeanNumberOfPhotons</TT> to be
         different from 1, in case the constant property
-        <TT>WLSMEANNUMBERPHOTONS</TT> is provided and, if
+        <TT>WLSMEANNUMBERPHOTONS</TT> is provided and, if so,
         <TT>NumPhotons</TT> is sampled with Poisson.</LI>
     </UL></LI>
 <LI><B>Transportation</B>
@@ -1071,6 +1083,7 @@ please refer to the corresponding History files provided in most packages):
 <LI>New physics list QGSC_BERT; use QGSC down to overlap with BERT. LEP is not
     used for proton, neutron, pions, kaons, except for neutron capture and
     neutron induced fission.</LI>
+<LI>New physics list FTFP_BERT: FTFP with Bertini cascade.</LI>
 <LI>New physics list QGSP_BIC2: like QGSP_BIC, but using BIC for low energy
     pions.</LI>
 <LI>Enabling use of projectile diffraction in QGSP-like lists, and created
@@ -1085,7 +1098,6 @@ please refer to the corresponding History files provided in most packages):
 <LI>Added <TT>G4HadronDElasticPhysics</TT> builder and fixed name to
     <TT>G4HadronHElasticPhysics</TT>.</LI>
 <LI><TT>G4EmStandardPhysics_option2</TT>: increased number of bins in tables.</LI>
-<LI>New physics list FTFP_BERT: FTFP with Bertini cascade.</LI>
 <LI>Crossover from Bertini to FTFP at 4-5 GeV. No LEP for inelastic for
     <TT>p,n,pi,K</TT>.</LI>
 <LI><TT>G4LEPNeutronBuilder</TT>: when the limit for <TT>MaxInelastic</TT>
@@ -1285,7 +1297,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>field/field04
         <UL>
         <LI>New example showing how to define/use overlapping field elements.
-            Fields might be either magnetic, electric or both.</LI>
+            Fields might be either magnetic, electric or both
+            (contributed by T.Roberts and Muons Inc., G4BEAMLINE).</LI>
         </UL></LI>
     <LI>gdml
         <UL>
