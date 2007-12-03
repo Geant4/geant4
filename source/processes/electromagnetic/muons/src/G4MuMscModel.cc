@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.8 2007-11-29 10:50:12 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.9 2007-12-03 11:35:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -584,7 +584,6 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
     z1 = x4*log(x/y1);
     if(z1 < numlimit) z = x1*(1.0 + z1 + 0.5*z1*z1);
     else z = x1*exp(z1);
-
   } else {
     z1 = x4*log((1.0 - x)/x1);
     if(z1 < numlimit) z = x1 - z1 + x1*z1 - 0.5*z1*z1*y1;
@@ -617,7 +616,15 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
     G4double rms= sqrt(2.0*x1);
     G4double rx = zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
     G4double ry = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    G4double r  = sqrt(rx*rx + ry*ry);
+    G4double r2 = rx*rx + ry*ry;
+    G4double r  = sqrt(r2);
+    // protection against situation when geometry length > true step length
+    if(zPathLength*zPathLength + r2 > tPathLength*tPathLength) {
+      G4double r0 = sqrt((tPathLength - zPathLength)*(tPathLength + zPathLength));
+      rx *= r0/r;
+      ry *= r0/r;
+      r   = r0;
+    }
     /*
     G4cout << " r(mm)= " << r << " safety= " << safety
            << " trueStep(mm)= " << tPathLength
@@ -628,17 +635,16 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
     latDirection.rotateUz(oldDirection);
 
     G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
-    G4double fac = 1.;
-    if(r >  safety) {
+    G4double fac= 1.;
+    if(r > safety) {
       //  ******* so safety is computed at boundary too ************
       G4double newsafety = safetyHelper->ComputeSafety(Position);
-      if(r > newsafety)
-	fac = newsafety/r ;
+      if(r > newsafety) fac = newsafety/r ;
     }  
 
     if(fac > 0.) {
       // compute new endpoint of the Step
-      G4ThreeVector newPosition = Position+fac*latDirection;
+      G4ThreeVector newPosition = Position + fac*latDirection;
 
       // definitely not on boundary
       if(1. == fac) {
