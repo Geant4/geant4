@@ -168,6 +168,16 @@ Please see the last section for the corresponding details.
     possible to use the old external GDML library in case if need.</LI>
 </UL>
 
+<B>Low Energy Electromagnetic physics</B>
+<UL>
+<LI>Fully functional capabilities of physics processes in liquid water for
+    microdosimetry simulation are provided in this release; details can be
+    found in <I>S. Chauvie et al., "Geant4 physics processes for
+    microdosimetry simulation: design foundation and implementation
+    of the first set of models", IEEE Trans. Nucl. Sci., vol. 54,
+    no. 6, Dec. 2007</I>.</LI>
+</UL>
+
 <B>Standard Electromagnetic physics</B>
 <UL>
 <LI><blink>!!! ADD TEST HERE !!!</blink></LI>
@@ -328,22 +338,18 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
-    <LI>Refactoring of Geant4-DNA domain. Added G4DNAProcess and
-        G4DNAFinalStateProduct.</LI>
-    <LI>Fully working Geant4-DNA electron elastic scattering, screened
-        Rutherford cross section and final state.
-        Removed obsolete *DNA classes.</LI>
-    <LI>Added Brenner-Zaider elastic scattering final state.</LI>
-    <LI>Added electron excitation (Emfietzoglou model), proton Born excitation,
-        electron ionisation (Born) cross section; modified
-        G4DNACrossSectionDataSet to remove inheritance against baseline
-        design.</LI>
-    <LI>Added charge increase/decrease Geant4-DNA cross sections and final
-        states.</LI>
-    <LI>Added Miller-Green excitation, Born ionisation final state and Rudd
-        ionisation.</LI>
-    <LI>Added cross section and final state policy classes to configure a
-        process to kill particles below threshold.</LI>
+    <LI>Refactoring of Geant4-DNA domain. Added <TT>G4DNAProcess</TT> and
+        <TT>G4DNAFinalStateProduct</TT> classes.</LI>
+    <LI>New Geant4-DNA models for electrons: Elastic Scattering (screened
+        Rutherford, Brenner-Zaider), Ionisation (Emfietzoglou), Excitation
+        (Emfietzoglou).</LI>
+    <LI>New Geant4-DNA models for protons: Excitation (Dingfelder,
+        Emfietzoglou), Ionisation (Rudd, Dingfelder 1st Born approximation),
+        Charge Change (Dingfelder).</LI>
+    <LI>New Geant4-DNA models for hydrogen: Excitation (Dingfelder),
+        Ionisation (Dingfelder), Charge Change (Dingfelder).</LI>
+    <LI>New Geant4-DNA models for helium and its charge states: effective
+        charge scaling from proton models.</LI>
     <LI>Fixes to handle <TT>Z=100</TT> in the Livermore library and to correct
         problem report
         <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=933">#933</a>.</LI>
