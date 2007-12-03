@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.11 2007-11-30 11:58:46 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.12 2007-12-03 15:04:33 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,7 @@ private:
    std::map<G4String,G4ThreeVector*> scaleMap;
 
    void constantRead(const xercesc::DOMElement* const); 
+   void matrixRead(const xercesc::DOMElement* const);
    void positionRead(const xercesc::DOMElement* const);
    void rotationRead(const xercesc::DOMElement* const);
    void scaleRead(const xercesc::DOMElement* const);

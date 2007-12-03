@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.14 2007-11-30 13:27:24 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.15 2007-12-03 15:04:33 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -59,6 +59,40 @@ void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
    }
 
    eval.defineConstant(name,eval.Evaluate(value));
+}
+
+void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String rows;
+   G4String cols;
+   G4String values;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="name") name  = attribute_value; else
+      if (attribute_name=="rows") rows = attribute_value; else
+      if (attribute_name=="cols") cols = attribute_value;
+   }
+
+   G4int _rows = eval.EvaluateInteger(rows);
+   G4int _cols = eval.EvaluateInteger(cols);
+
+   values = xercesc::XMLString::transcode(element->getTextContent());
+
+   G4cout << "Matrix values: " << values << G4endl;
 }
 
 void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
@@ -208,6 +242,7 @@ void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="constant") constantRead(child); else
+      if (tag=="matrix") matrixRead(child); else
       if (tag=="position") positionRead(child); else
       if (tag=="rotation") rotationRead(child); else
       if (tag=="scale") scaleRead(child); else
