@@ -225,7 +225,7 @@ void G4SPSEneDistribution::CalculateCdgSpectrum()
     {
       omalpha = 1. - spind[i];
       CDGhist[i+1] = CDGhist[i] + (pfact[i]/omalpha)*
-	(std::pow(ene_line[i+1],omalpha)-std::pow(ene_line[i],omalpha));
+	(std::pow(ene_line[i+1]/keV,omalpha)-std::pow(ene_line[i]/keV,omalpha));
       i++;
     }
   
@@ -893,7 +893,7 @@ void G4SPSEneDistribution::GenerateCdgEnergies()
       omalpha[0] = 1. - 1.4;
       omalpha[1] = 1. - 2.3;
       ene_line[0] = Emin;
-      ene_line[1] = 18.;
+      ene_line[1] = 18.*keV;
       ene_line[2] = Emax;
     }
   if(Emin > 18*keV)
