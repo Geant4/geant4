@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.8 2007-11-15 15:04:38 miheikki Exp $
+$Id: History,v 1.9 2007-12-04 09:52:49 gcosmo Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,11 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+04 December 2007 - Gabriele Cosmo (hadr-incl-V09-00-09)
+---------------------------------
+- Again commented out call to isnan() in G4Incl.cc for allow
+  porting to platforms other than Linux....
 
 15 November 2007 - Pekka Kaitaniemi
 -----------------------------------
