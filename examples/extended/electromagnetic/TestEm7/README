@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2007-07-28 16:39:31 vnivanch Exp $
+$Id: README,v 1.17 2007-12-04 12:06:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -40,11 +40,17 @@ $Id: README,v 1.16 2007-07-28 16:39:31 vnivanch Exp $
     - "livermore"    low-energy EM physics using Livermore data
     - "penelope"     low-energy EM physics implementing Penelope models
     - "standardSS"   standard EM physics with single Coulomb scattering 
-                     instead of multiple scattering
-    - "standardIG"   standard EM physics with single Coulomb scattering 
-                     instead of multiple scattering; in Coulomb scattering
-                     the recoil is taken into account; G4ionIonisation is 
-                     substituted by G4ionGasIonisation
+                     instead of multiple scattering; G4ionIonisation is 
+                     substituted by G4ionGasIonisation for GenericIons
+    - "standardNR"   standard EM physics with single Coulomb scattering 
+                     process G4ScreenedNuclearRecoil instead of the 
+                     multiple scattering; the new process was developed 
+                     by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
+                     University and published in NIM B 277 (2005) 420.
+                     In later Geant4 releases the process will be a part
+                     of Geant4 source, currently it is released together
+                     with its mathematical tool c2_functions in current 
+                     example
     
     Alternatively, the user may use predefined Geant4 builders:
     - "emstandard"        G4EmStandardPhysics builder
