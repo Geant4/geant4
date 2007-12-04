@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: geant4-09-01-cand-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,9 +40,10 @@ theBox : (0,0,0.08)
 /run/beamOn 10000
  buildBhabha cross section 0
  buildBhabha cross section 0
+G4PolarizedPEEffectCrossSection() init
 
-phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
+pol-phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according Polarized-PhotoElectric model
 
 pol-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
@@ -63,7 +64,7 @@ pol-eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 pol-eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -73,7 +74,7 @@ pol-eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 pol-eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -128,39 +129,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.68s Real=8.72s Sys=0s
+  User=0.45s Real=0.45s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.728835 0.652089 0.0897291 0.0110269 0.0631678 0.364531 0.156654 0.778579 0.546934 0.963504 0.574139 0.861241 0.953165 0.720102 0.44319 0.0129219 0.65787 0.263727 0.785415 0.175945 0.51455 0.290382 0.94114 0.874435 
- i_lag = 11, j_lag = 21
- carry = 5.96046e-08, count24 = 18
+ float_seed_table[] = 0.526965 0.116673 0.133732 0.161092 0.733961 0.718651 0.393956 0.0663562 0.301043 0.0118101 0.432136 0.692698 0.0020979 0.0342817 0.810022 0.797922 0.104622 0.3248 0.948129 0.742754 0.900835 0.0748531 0.592095 0.54155 
+ i_lag = 4, j_lag = 14
+ carry = 0, count24 = 16
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31216
-	pol-compt = 270
-	msc = 3547
-	pol-eBrem = 379
-	pol-conv = 209
-	pol-eIoni = 598
-	pol-annihil = 61
-	phot = 167
+	Transportation = 31138
+	pol-compt = 265
+	msc = 3391
+	pol-eBrem = 331
+	pol-conv = 198
+	pol-eIoni = 568
+	pol-annihil = 54
+	pol-phot = 155
  Gamma: 
-Mean Number per Event :1.0122
-Mean Energy :9.5463 MeV +- 1.975 MeV
-Mean Polarization :-0.96112 +- 0.19016
+Mean Number per Event :1.0085
+Mean Energy :9.5904 MeV +- 1.8795 MeV
+Mean Polarization :-0.96585 +- 0.17757
  Electron: 
-Mean Number per Event :0.0336
-Mean Energy :5.2737 MeV +- 2.5005 MeV
-Mean Polarization :-0.73466 +- 0.29668
+Mean Number per Event :0.0337
+Mean Energy :5.195 MeV +- 2.5799 MeV
+Mean Polarization :-0.71056 +- 0.31098
  Positron: 
-Mean Number per Event :0.015
-Mean Energy :4.3803 MeV +- 2.2007 MeV
-Mean Polarization :-0.60679 +- 0.33425
+Mean Number per Event :0.0147
+Mean Energy :4.4154 MeV +- 2.2419 MeV
+Mean Polarization :-0.59462 +- 0.34894
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
