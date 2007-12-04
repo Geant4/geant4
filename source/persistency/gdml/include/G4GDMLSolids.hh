@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.16 2007-11-30 14:51:20 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.17 2007-12-04 13:31:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,7 @@
 class G4GDMLSolids : public G4GDMLMaterials {
 private:
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
-   typedef struct zplaneType { G4double rmin,rmax,z; };
+   typedef struct { G4double rmin,rmax,z; } zplaneType;
 
    void booleanRead(const xercesc::DOMElement* const,const BooleanOp);
    void boxRead(const xercesc::DOMElement* const);
