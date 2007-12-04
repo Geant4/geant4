@@ -260,7 +260,9 @@ processes/hadronic                               hadr-V09-00-01
 - models/im_r_matrix (hadr-im_r_V09-00-03)
   o In G4ParticleTypeConverter, removed warning on unknown particle;
     occurs for eta_prime, k_star+, anti_... etc. in BIC propagate interface.
-- models/incl (hadr-incl-V09-00-07)
+- models/incl (hadr-incl-V09-00-09)
+  o Fixed problem of emitted particles having an anomalous kinetic energy.
+    Also, isotopes are now produced more accurately in INCL.
   o Use G4UniformRand as the standard random number generator in the attempt
     to fix infinite loop in test runs on 64-bit platforms.
   o Fix to secondary particle Pt, Px and Phi distributions.
