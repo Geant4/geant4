@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 04-Dec-2006
+# Last update: 05-Dec-2007
 #
 # This python script, which has no input parameters, makes 3
 # tests for checking the reproducibility of the sequence of
@@ -219,7 +219,7 @@ for iAbsorber in listAbsorbers :
                 if ( isOK ) :
                     print '  *** REPRODUCIBILITY ?  YES *** '
                 else :
-                    isOKforAllCases = 1
+                    isOKforAllCases = 0 
                     print '  *** REPRODUCIBILITY ?  NO  *** '
                 print '  ****************************** \n'
 
