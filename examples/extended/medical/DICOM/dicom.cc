@@ -68,7 +68,7 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
   DicomDetectorConstruction* theGeometry;
   char* nest = getenv( "DICOM_NESTED_PARAM" );
-  if( nest == "1" ) {
+  if( nest && G4String(nest) == "1" ) {
     theGeometry = new NestedParamDicomDetectorConstruction();
   } else {
     theGeometry = new RegularDicomDetectorConstruction();
