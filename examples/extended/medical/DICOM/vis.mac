@@ -1,10 +1,13 @@
-/control/verbose 1
-/run/verbose 1
+/control/verbose 2
+/run/verbose 2
 #visualisation
 /vis/scene/create
 /vis/open OGLIX
-/vis/viewer/zoom 3
+/vis/drawVolume
+/vis/viewer/update
+/vis/viewer/zoom 5
 /vis/viewer/set/viewpointThetaPhi 90 0
-#/vis/viewer/update
-#beamOn
-/run/beamOn 3
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 10
+

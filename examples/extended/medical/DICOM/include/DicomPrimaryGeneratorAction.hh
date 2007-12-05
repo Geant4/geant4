@@ -36,6 +36,9 @@
 // fax (418) 691 5268
 //
 // + Université Laval, Québec (QC) Canada
+//
+// History: 30.11.07  P.Arce modified so that some particles reach patient voxels
+// 
 //*******************************************************
 
 #ifndef DicomPrimaryGeneratorAction_h

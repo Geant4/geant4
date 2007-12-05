@@ -43,9 +43,10 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "DicomGeometry.hh"
+#include "RegularDicomDetectorConstruction.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
+#include "CLHEP/Random/RandFlat.h"
 
 DicomPrimaryGeneratorAction::DicomPrimaryGeneratorAction()
 {
@@ -65,10 +66,11 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="gamma");
   particleGun->SetParticleDefinition(particle);
-  // ---- MGP ---- Numbers in the code should be replaced by const
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.*cm,0.*cm));       
+  G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1);
+  dir /= dir.mag();
+  particleGun->SetParticleMomentumDirection(dir);       
   particleGun->SetParticleEnergy(5.*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-20.)); // put it close to the patient voxels
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

@@ -4,7 +4,7 @@
 |                        README                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-The DICOM application has been developed by the Geant4 users:
+The DICOM application has been orignal developed by the Geant4 users:
 Louis Archambault,*Luc Beaulieu, +Vincent Hubert-Tremblay.
 
 *Centre Hospitalier Universitaire de Quebec (CHUQ),
@@ -16,15 +16,16 @@ web : thomson.phy.ulaval.ca/phys_med
 
 + Université Laval, Québec (QC) Canada
 
-This example illustrates a preliminary version of a Geant4 interface
-to the DICOM image format.
-The example consists in creating an image from dicom files.
+And it has been deeply reviewed by Pedro Arce-
+
+
+This example serves first to convert a DICOM file to a simple ASCII file, where the Hounsfield numbers are converted to materials and densities so that it can be used by GEANT4, and then to create a GEANT4 geometry based on the DICOM file information using the G4PhatomParameterisation (assumes each file represent a Z slice)
 
 --->1) Introduction
 
 DICOM images are read and used as Geometry for simulation. 
 
-Three file .dcm give the experimental set-up 
+Three files .dcm give the experimental set-up 
 (in terms of tissues and  tissue geometry position) are read. 
 It is possible to visualise the reproduced experimental  
 set-up thanks to the use of visualisation packages.
@@ -34,71 +35,72 @@ In the application  the phantom is placed on a table.
  
 ---> 2) Installation:
 
- -example enviroment with the compiler 3.2.3                              
- -a standard Geant4 example GNUmakefile is provided            
-
-setup with:                                                    
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++  
-
-The following environment variables need to be set:            
-G4LEDATA: points to low energy data base - G4EMLOW3.0      
+ - A standard Geant4 example GNUmakefile is provided            
+ - Compile it with 'make' 
 
 visualisation package: OpenGL
 
 ---> 3) Run the example:
+ - To run the environment variable G4LEDATA needs to be set, pointing to the low energy data base, G4EMLOW4.3      
 
-- batch mode:
-  -dicom vis.mac :the geometry is visualised with OPENGL
-  -dicom run.mac :no geometry visualisation
+ - batch mode:
+   - $G4INSTALL/bin/Linux-g++/dicom run.mac 
 
-- interactive mode:
-dicom
-the file default.mac is read in order to visualise the phantom.
+ - interactive mode:
+   - $G4INSTALL/bin/Linux-g++/dicom
+   the file vis.mac is read in order to visualise the phantom with OpenGL
 
---->4) Some details :
+--->4) Input files
+ The file Data.dat has the following information
+  - A line with the compression value (used only to create the .g4dcm, not to read it)
+  - A line with the number of files 
+In case you want to convert DICOM files to GEANT4 text files, you need to add the following lines:
+  - A line for each file name (to these names it will be added the suffix .dcm to read the DICOM files in their original format, and the suffix .g4dcm to read the text files that contain the DICOM information where the Hounsfield numbers have been converted to material and densities)
+  - The number of materials you want to use
+  - A line for each material describing its name and the upper bound of the density interval. The materials should be described in increasing order of density. The voxels with a density between 0. and the first upper bound will be assigned to the first material, those with a density between the first upper bound and the second upper bound will be assigned to the second material, etc.
+
+--->5) Conversion of Hounsfield numbers to materials
+
+After reading the name of files from Data.dat if a file .dcm is found, then it looks for the corresponding .g4dcm file and if not found creates it
+Each file corresponding to a Z slice. The Z slices will be merged at runtime to form a unique patient volume; therefore the different slices have to be contiguous in Z
+
 
 The DICOM images pixel values represent CT (Hounsfield) numbers and they should be
 converted, first, to a given density and then to a material type.  The relation between
-CT number and density is more or less linear.  The one used in this program is represented
-in the table below.
+CT number and density is more or less linear. 
+The file CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to physical density
+The assignment of material densities to materials is done following the information from the file Data.dat (see below). In this case we have used:
 
            #####################################################
            #     Density Range                   Material      #
            #---------------------------------------------------#
            #       mg/cm3                            -         #
            #---------------------------------------------------#
-           #  [ 0.207 , 0.227 ]                 Lungs (inhale) #
-           #  [ 0.481 , 0.534 ]                 Lungs (exhale) #
-           #  [ 0.919 , 0.979 ]                 Adipose        #
-           #  ] 0.979 , 1.004 ]                 Breast         #
-           #  ] 1.004 , 1.043 ]                 Phantom        #
-           #  ] 1.043 , 1.109 ]                 Liver          #
-           #  ] 1.109 , 1.113 ]                 Muscle         #
-           #  ] 1.113 , 1.217 ]                 Trabecular Bone#
+           #  [ 0.    , 0.207 )                 Air            #
+           #  [ 0.207 , 0.481 )                 Lungs (inhale) #
+           #  [ 0.481 , 0.919 )                 Lungs (exhale) #
+           #  [ 0.919 , 0.979 )                 Adipose        #
+           #  [ 0.979 , 1.004 )                 Breast         #
+           #  [ 1.004 , 1.043 )                 Phantom        #
+           #  [ 1.043 , 1.109 )                 Liver          #
+           #  [ 1.109 , 1.113 )                 Muscle         #
+           #  [ 1.113 , 1.496 )                 Trabecular Bone#
            #  [ 1.496 , 1.654 ]                 Dense Bone     #
            #####################################################
 
 Data taken from the International Commission on Radiation Units and measurements (ICRU)
 report 46 was used to build the materials (lung, liver, breast, bones, ...)
 
-5) Contacts
+--->6) DICOM text file format
 
-If you have any questions or wish to notify of updates and/or modification
-please contact:
- 	
-*Louis Archambault at louis.archambault@phy.ulaval.ca
- 
-*Luc Beaulieu at beaulieu@phy.ulaval.ca
+The DICOM files are converted to a simple text format. You may create your own file with the following format (see e.g. 14196616.g4dcm):
+- A line with the number of materials
+- A line for each material with its index and name (the same name of materials that you construct as G4Material's)
+- A line with the number of voxels in X, Y and Z
+- A line with the minimum and maximum extension in X (mm)
+- A line with the minimum and maximum extension in Y (mm)
+- A line with the minimum and maximum extension in Z (mm)
+- nVoxelX*nVoxelY*nVoxelZ lines containing the material indices for each of the voxels
+-  nVoxelX*nVoxelY*nVoxelZ lines containing the material densities for each of the voxels
 
-+ Vincent Hubert-Tremblay
-   <tigre.2@sympatico.ca> or <vihut@phy.ulaval.ca>
-
-*Centre Hospitalier Universitaire de Quebec (CHUQ),
-Hotel-Dieu de Quebec, departement de Radio-oncologie
-11 cote du palais. Quebec, QC, Canada, G1R 2J6
-tel (418) 525-4444 #6720
-fax (418) 691 5268
-web : thomson.phy.ulaval.ca/phys_med 
-
-+ Université Laval, Québec (QC) Canada
+As commented before the DICOM files (.dcm) are assumed to describe one Z slice per file, and therefore the GEANT4 text files (.g4dcm) created from them have also one unique Z slice per file. Nevertheless if you create your own .g4dcm file you may include as many Z slices as desired. In any case you have to respect the rule that the Z slices must be contiguous.

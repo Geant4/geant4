@@ -3,20 +3,16 @@
 14196616
 14196633
 14196650
+10
+Air 0.207
+LungInhale 0.481
+LungExhale 0.919
+AdiposeTissue 0.979
+Breast 1.004
+Water 1.043
+Muscle 1.109
+Liver 1.113
+TrabecularBone 1.496
+DenseBone 1.654
 
-
-
-########################################################
-#         Short explanation of Data.dat                #
-########################################################
-# 2   -> Compression Value                             #
-# 3   -> Total number of images                        #
-# ... -> DICM names without extension                  #
-########################################################
-
-########################################################
-# Please do not include extension after the names      #
-#  of the DICM images. The program will automatically   #
-#  add <.g4> or <.dcm>.                                #
-########################################################
 
