@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.22 2007-11-30 11:46:26 maire Exp $
+// $Id: PhysicsList.cc,v 1.23 2007-12-05 16:22:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@
 #include "G4EmStandardPhysics_option2.hh"
 
 #include "G4HadronElasticPhysics.hh"
-///#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -269,8 +269,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     helIsRegisted = true;
 
   } else if (name == "DElastic" && !helIsRegisted) {
-    ///hadronPhys.push_back( new G4HadronDElasticPhysics());
-    ///helIsRegisted = true;
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegisted = true;
 
   } else if (name == "HElastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronHElasticPhysics());

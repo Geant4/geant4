@@ -1,4 +1,4 @@
-# $Id: tramu.mac,v 1.9 2007-12-04 13:57:04 maire Exp $
+# $Id: tramu.mac,v 1.10 2007-12-05 16:22:17 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -22,7 +22,7 @@
 /gun/energy 1 TeV
 #
 /testem/histo/setFileName tramu/tramu
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setHisto 10  100  950 1000 GeV	#energy at exit  
 #
 /testem/stack/killSecondaries
