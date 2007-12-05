@@ -433,7 +433,7 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 
 }
 
-size_t DicomHandler::ReadMaterialIndices( std::ifstream& finData)
+void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
 {
   size_t nMate;
   G4String mateName;

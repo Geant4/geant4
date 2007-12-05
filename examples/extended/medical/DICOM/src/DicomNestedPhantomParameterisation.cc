@@ -32,7 +32,7 @@ void DicomNestedPhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_
 //
 // Material assignment to geometry.
 //
-G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* currentVol,
+G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* ,
 							 const G4int copyNoZ, 
 							 const G4VTouchable* parentTouch)
 {

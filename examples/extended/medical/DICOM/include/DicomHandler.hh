@@ -90,9 +90,9 @@ private:
 
     void GetInformation(G4int &, char *);
     G4double Pixel2density(G4int pixel);
-    size_t ReadMaterialIndices( std::ifstream& finData);
+    void ReadMaterialIndices( std::ifstream& finData);
     size_t GetMaterialIndex( G4double density );
-  void StoreData(std::ofstream& foutG4DCM);
+    void StoreData(std::ofstream& foutG4DCM);
 
     short compression;
     G4int nFiles;
