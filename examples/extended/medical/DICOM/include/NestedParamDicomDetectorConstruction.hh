@@ -27,22 +27,22 @@
 // History: 30.11.07  First version
 //*******************************************************
 //
-// RegularDicomDetectorConstruction.hh :
+// NestedParamDicomDetectorConstruction.hh :
 //	- Construct the patient using DicomPhantomParameterisationColour
 //*******************************************************
 
-#ifndef RegularDicomDetectorConstruction_h
-#define RegularDicomDetectorConstruction_h 1
+#ifndef NestedParamDicomDetectorConstruction_h
+#define NestedParamDicomDetectorConstruction_h 1
 
 #include "globals.hh"
 #include "DicomDetectorConstruction.hh"
 
-class RegularDicomDetectorConstruction : public DicomDetectorConstruction
+class NestedParamDicomDetectorConstruction : public DicomDetectorConstruction
 {
 public:
 
-  RegularDicomDetectorConstruction();
-  ~RegularDicomDetectorConstruction();
+  NestedParamDicomDetectorConstruction();
+  ~NestedParamDicomDetectorConstruction();
 
 private:
 

@@ -76,6 +76,7 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
 
   ReadPatientData();
 
+  ConstructPatientContainer();
   ConstructPatient();
 
   return world_phys;
@@ -310,7 +311,7 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
     G4Exception("DicomDetectorConstruction::ReadPatientDataFil. File not found " + fname );
   }
   //----- Define density differences (maximum density difference to create a new material)
-  G4double densityDiff = 0.1;
+  G4double densityDiff = 0.1; 
   std::map<G4int,G4double>  fDensityDiffs; // to be able to use a different densityDiff for each material
   for( size_t ii = 0; ii < fOriginalMaterials.size(); ii++ ){
     fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
@@ -332,7 +333,6 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
   G4int voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels; // number of voxels from previously read slices
   for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
     fin >> mateID;
-    G4cout << " mateID " << mateID << G4endl;
     fMateIDs[voxelCopyNo] = mateID;
   }
 
@@ -348,9 +348,8 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
 
     //-- Get density bin: middle point of the bin in which the current density is included 
     float densityBin = fDensityDiffs[mateID] * (G4int(density/fDensityDiffs[mateID])+0.5);
-    G4cout << " density " << density << " bin " << densityBin << G4endl;
     //-- Build the new material name 
-    G4String newMateName = mateOrig->GetName()+ftoa(densityBin);
+    G4String newMateName = mateOrig->GetName()+"__"+ftoa(densityBin);
     
     //-- Look if a material with this name is already created (because a previous voxel was already in this density bin)
     size_t im;
@@ -405,3 +404,49 @@ G4String DicomDetectorConstruction::ftoa(float flo)
   gcvt( flo, 10, ctmp );
   return G4String(ctmp);
 }
+
+
+//-------------------------------------------------------------
+void DicomDetectorConstruction::ConstructPatientContainer()
+{
+  //---- Extract number of voxels and voxel dimensions
+  nVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
+  nVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
+  nVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
+
+  voxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
+  voxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
+  voxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
+#ifdef G4VERBOSE
+  G4cout << " nVoxelX " << nVoxelX << " voxelHalfDimX " << voxelHalfDimX <<G4endl;
+  G4cout << " nVoxelY " << nVoxelY << " voxelHalfDimY " << voxelHalfDimY <<G4endl;
+  G4cout << " nVoxelZ " << nVoxelZ << " voxelHalfDimZ " << voxelHalfDimZ <<G4endl;
+  G4cout << " totalPixels " << nVoxelX*nVoxelY*nVoxelZ <<  G4endl;
+#endif
+
+  //----- Define the volume that contains all the voxels
+  container_solid = new G4Box("PhantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
+  container_logic = 
+    new G4LogicalVolume( container_solid, 
+			 fMaterials[0],  //the material is not important, it will be fully filled by the voxels
+			 "PhantomContainer", 
+			 0, 0, 0 );
+  //--- Place it on the world
+  G4double offsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
+  G4double offsetY = (fZSliceHeaderMerged->GetMaxY() + fZSliceHeaderMerged->GetMinY() ) /2.;
+  G4double offsetZ = (fZSliceHeaderMerged->GetMaxZ() + fZSliceHeaderMerged->GetMinZ() ) /2.;
+  G4ThreeVector posCentreVoxels(offsetX,offsetY,offsetZ);
+#ifdef G4VERBOSE
+  G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
+#endif
+  container_phys = 
+    new G4PVPlacement(0,  // rotation
+		      posCentreVoxels,
+		      container_logic,     // The logic volume
+		      "PhantomContainer",  // Name
+		      world_logic,  // Mother
+		      false,           // No op. bool.
+		      1);              // Copy number
+
+}
+

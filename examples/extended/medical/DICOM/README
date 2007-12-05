@@ -91,7 +91,17 @@ The assignment of material densities to materials is done following the informat
 Data taken from the International Commission on Radiation Units and measurements (ICRU)
 report 46 was used to build the materials (lung, liver, breast, bones, ...)
 
---->6) DICOM text file format
+--->6) Splitting materials in density intervals
+In the class DicomDetectorConstruction, it is defined a density interval
+
+  G4double densityDiff = 0.1;
+
+This means that the voxels of each material will be grouped in density intervals of 0.1 g/cm3 and a new material will be created for each group of voxels.
+
+--->7) Voxel colouring
+The file Colormap.dat defines the colour that will be assigned to the voxels of each material.
+
+--->8) DICOM text file format
 
 The DICOM files are converted to a simple text format. You may create your own file with the following format (see e.g. 14196616.g4dcm):
 - A line with the number of materials
@@ -104,3 +114,25 @@ The DICOM files are converted to a simple text format. You may create your own f
 -  nVoxelX*nVoxelY*nVoxelZ lines containing the material densities for each of the voxels
 
 As commented before the DICOM files (.dcm) are assumed to describe one Z slice per file, and therefore the GEANT4 text files (.g4dcm) created from them have also one unique Z slice per file. Nevertheless if you create your own .g4dcm file you may include as many Z slices as desired. In any case you have to respect the rule that the Z slices must be contiguous.
+
+--->9) Choosing different parameterisation/navigation options
+There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes
+- The non-optimised way, that will be very slow because each time a track exits a voxel it has to loop to all other voxels to know where it is
+- The optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
+- Using G4NestedParameterisation: it handles materials and transformation of voxels. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
+- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material
+
+You can select amont the four options in the following way:
+- By default the example will run with G4RegularNavigation
+- To use the first option at RegularDicomDetectorConstruction you just have to set
+  patient_phys->SetRegularStructureId(0);
+- To use the second option apart from the change above at RegularDicomDetectorConstruction you have to replace (use kUndefined)
+
+  G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
+			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
+
+by 
+
+  G4PVParameterised * patient_phys = new G4PVParameterised("Patient",voxel_logic,container_logic,
+			kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
+- To use the third option you have to set the enviromental variable DICOM_NESTED_PARAM to 1

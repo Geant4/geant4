@@ -74,6 +74,7 @@ protected:
   G4String ftoa(float flo);
   // convert a float to a string
 
+  void ConstructPatientContainer();
   virtual void ConstructPatient() = 0;
   // construct the patient volumes. This method should be implemented for each of the derived classes
 
@@ -85,6 +86,10 @@ protected:
   G4LogicalVolume* world_logic;
   G4VPhysicalVolume* world_phys;
 
+  G4Box* container_solid;
+  G4LogicalVolume* container_logic;
+  G4VPhysicalVolume* container_phys;
+
   G4int fNoFiles; // number of DICOM files
   std::vector<G4Material*> fOriginalMaterials;  // list of original materials 
   std::vector<G4Material*> fMaterials;  // list of new materials created to distinguish different density voxels that have the same original materials
@@ -95,6 +100,8 @@ protected:
   std::vector<DicomPatientZSliceHeader*> fZSliceHeaders; // list of z slice header (one per DICOM files)
   DicomPatientZSliceHeader* fZSliceHeaderMerged; // z slice header resulted from merging all z slice headers
 
+  G4int nVoxelX, nVoxelY, nVoxelZ;
+  G4double voxelHalfDimX,  voxelHalfDimY, voxelHalfDimZ;
 };
 
 #endif

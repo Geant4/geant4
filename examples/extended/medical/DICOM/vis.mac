@@ -3,10 +3,8 @@
 #visualisation
 /vis/scene/create
 /vis/open OGLIX
-/vis/drawVolume
 /vis/viewer/update
 /vis/viewer/zoom 5
-/vis/viewer/set/viewpointThetaPhi 90 0
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /tracking/verbose 1

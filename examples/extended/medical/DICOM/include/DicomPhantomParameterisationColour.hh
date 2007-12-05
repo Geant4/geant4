@@ -23,32 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: P. Arce
-// History: 30.11.07  First version
-//*******************************************************
+// class DicomPhantomParameterisationColour
 //
-// RegularDicomDetectorConstruction.hh :
-//	- Construct the patient using DicomPhantomParameterisationColour
-//*******************************************************
+// Class description:
+// 
+// Class inherited from G4PhantomParameterisation to provide different colour for each material
+// History:
+// - Created.    P. Arce, 5 December 2007
+// *********************************************************************
 
-#ifndef RegularDicomDetectorConstruction_h
-#define RegularDicomDetectorConstruction_h 1
+#ifndef DicomPhantomParameterisationColour_HH
+#define DicomPhantomParameterisationColour_HH
 
-#include "globals.hh"
-#include "DicomDetectorConstruction.hh"
+#include <map>
 
-class RegularDicomDetectorConstruction : public DicomDetectorConstruction
+#include "G4PhantomParameterisation.hh"
+class G4VisAttributes;
+
+class DicomPhantomParameterisationColour : public G4PhantomParameterisation
 {
-public:
-
-  RegularDicomDetectorConstruction();
-  ~RegularDicomDetectorConstruction();
+public:  // with description
+  
+  DicomPhantomParameterisationColour();
+  ~DicomPhantomParameterisationColour();
+  
+  virtual G4Material* ComputeMaterial(const G4int repNo, 
+				      G4VPhysicalVolume *currentVol,
+				      const G4VTouchable *parentTouch=0);
+  
+private:
+  void ReadColourData();
 
 private:
-
-  virtual void ConstructPatient();
-
+  std::map<G4String,G4VisAttributes*> fColours;
 };
 
-#endif
 
+#endif

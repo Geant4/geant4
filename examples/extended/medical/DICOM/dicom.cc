@@ -52,6 +52,7 @@
 #endif
 
 #include "RegularDicomDetectorConstruction.hh"
+#include "NestedParamDicomDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
 #include "DicomHandler.hh"
@@ -65,7 +66,13 @@ int main(int argc,char** argv)
 
   // Initialisation of physics, geometry, primary particles ... 
   G4RunManager* runManager = new G4RunManager;
-  RegularDicomDetectorConstruction* theGeometry = new RegularDicomDetectorConstruction();
+  DicomDetectorConstruction* theGeometry;
+  char* nest = getenv( "DICOM_NESTED_PARAM" );
+  if( nest == "1" ) {
+    theGeometry = new NestedParamDicomDetectorConstruction();
+  } else {
+    theGeometry = new RegularDicomDetectorConstruction();
+  }
   runManager->SetUserInitialization(new DicomPhysicsList);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
