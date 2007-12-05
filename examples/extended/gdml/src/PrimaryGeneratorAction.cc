@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2007-11-20 09:42:57 gcosmo Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2007-12-05 08:25:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() {
   G4String particleName;
   particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="geantino"));
   particleGun->SetParticleEnergy(1.0*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.0, 0.0));
+  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
