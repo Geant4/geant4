@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.12 2007-11-30 15:20:00 gcosmo Exp $
+// $Id: G4GDMLMaterials.cc,v 1.13 2007-12-05 15:44:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -59,6 +59,31 @@ G4double G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element) {
    }
 
    return eval.Evaluate(value)*eval.Evaluate(unit);
+}
+
+G4int G4GDMLMaterials::compositeRead(const xercesc::DOMElement* const element,G4String& ref) {
+
+   G4String n;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="n") n = attribute_value; else
+      if (attribute_name=="ref") ref = attribute_value;
+   }
+
+   return eval.EvaluateInteger(n);
 }
 
 G4double G4GDMLMaterials::DRead(const xercesc::DOMElement* const element) {
@@ -242,7 +267,7 @@ void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
       if (tag=="D") _D = DRead(child);    else
       if (tag=="atom") _a = atomRead(child); else
       if (tag=="fraction") nComponents++; else
-      G4Exception("GDML: Unknown tag in material: "+tag);
+      if (tag=="composite") nComponents++;
    }
 
    if (nComponents>0) mixtureRead(element,new G4Material(GenerateName(name),_D,nComponents));
@@ -265,7 +290,7 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Ele
 	 G4double _n = fractionRead(child,ref);
 
          ele->AddIsotope(getIsotope(GenerateName(ref)),_n);
-      } else G4Exception("GDML: Unknown tag in mixture element: "+tag);
+      }
    }
 }
 
@@ -292,7 +317,16 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
 	 if (elementPtr != 0) material->AddElement(elementPtr,_n);
 
          if ((materialPtr == 0) && (elementPtr == 0)) G4Exception("GDML: Referenced material/element '"+GenerateName(ref)+"' was not found!");   
-      } else G4Exception("GDML: Unknown tag in mixture material: "+tag);
+      } 
+      else if (tag=="composite") {
+      
+         G4String ref;
+	 G4int _n = compositeRead(child,ref);
+
+         G4Element *elementPtr = getElement(GenerateName(ref));
+
+         material->AddElement(elementPtr,_n);
+      }
    }
 }
 
@@ -311,6 +345,15 @@ void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
       if (tag=="material") materialRead(child); else 
       G4Exception("GDML: Unknown tag in materials: "+tag);
    }
+}
+
+G4Element* G4GDMLMaterials::getElement(const G4String& ref) const {
+
+   G4Element* elementPtr = G4Element::GetElement(ref,false);
+
+   if (!elementPtr) G4Exception("GDML: Referenced element '"+ref+"' was not found!"); 
+
+   return elementPtr;
 }
 
 G4Isotope* G4GDMLMaterials::getIsotope(const G4String& ref) const {

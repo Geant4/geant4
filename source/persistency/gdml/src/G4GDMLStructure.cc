@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.25 2007-11-30 14:51:20 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.26 2007-12-05 15:44:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -205,26 +205,6 @@ void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
       structureRead(element);
 
       _var += _step;
-   }
-}
-
-void G4GDMLStructure::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *pMotherLogical) {
-
-   pMotherLogical = 0;
-
-   G4String volumeref;
-   G4String parameterised_position_size;
-
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
-
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
-
-      if (tag=="parameterised_position_size") { ; }  else
-      if (tag=="volumeref") volumeref = refRead(child);
    }
 }
 
