@@ -60,7 +60,7 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
   G4cout << " DicomPatientZSliceHeader reading number of materials " << nmate << G4endl;
 #endif
 
-  for( size_t im = 0; im < nmate; im++ ){
+  for( G4int im = 0; im < nmate; im++ ){
     fin >> mateindex >> matename;
 #ifdef G4VERBOSE
     G4cout << " DicomPatientZSliceHeader reading material " << im << " : " << mateindex << "  " << matename << G4endl;
@@ -121,8 +121,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
 {
   //----- Check that both slices has the same dimensions
   if( fNoVoxelX != rhs.GetNoVoxelX() 
-      || fNoVoxelY != rhs.GetNoVoxelY() 
-      ||  fNoVoxelZ != rhs.GetNoVoxelZ() ) {
+      || fNoVoxelY != rhs.GetNoVoxelY() ) {
     G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different number of voxels: " 
 	   << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX() 
 	   << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
@@ -171,6 +170,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   //----- Add data from second slice header
   temp.SetMinZ( std::min( fMinZ, rhs.GetMinZ() ) );
   temp.SetMaxZ( std::max( fMaxZ, rhs.GetMaxZ() ) );
+  temp.SetNoVoxelZ( fNoVoxelZ + rhs.GetNoVoxelZ() );
 
   return temp;
 }
