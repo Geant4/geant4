@@ -9,5 +9,6 @@
 /vis/viewer/set/viewpointThetaPhi 90 0
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+/tracking/verbose 1
 /run/beamOn 10
 
