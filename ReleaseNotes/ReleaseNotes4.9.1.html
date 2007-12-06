@@ -594,6 +594,8 @@ please refer to the corresponding History files provided in most packages):
 <LI>Added private copy constructor and <TT>=, ==, +=</TT> operators to
     <TT>G4ParticleGun</TT>. Addressing problem report
     <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=984">#984</a>.</LI>
+<LI>Modified <TT>G4SPSEneDistribution</TT> to adress problem report
+    <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=988">#988</a>.</LI>
 </UL>
 
 <A NAME="gen-notes">
@@ -1318,6 +1320,14 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>Physics list updated according to recent changes in hadronics and
             <TT>physics_lists</TT> package. Added QGSC_BERT physics list.</LI>
+        </UL></LI>
+    <LI>medical/DICOM
+        <UL>
+        <LI>Deep review: on the input files and the way how the geometry is
+            built. Now using new specialised fast navigation and parameterisation
+            according to <TT>G4PhantomParameterisation</TT>.</LI>
+        <LI>Added color by voxel and possibility to also use
+            nested-parameterisations.</LI>
         </UL></LI>
     <LI>medical/fanoCavity
         <UL>

@@ -44,10 +44,11 @@ error_propagation                                error_propagation-V09-00-02
 -----------------
 - G4ErrorPropagator: removed call to exit() and some cleanup.
 
-event                                            event-V09-00-02
+event                                            event-V09-00-03
 -----
 - Added private copy constructor and =, ==, += operators to G4ParticleGun.
   Addressing problem report #984.
+- Modified G4SPSEneDistribution to adress problem report #988.
 
 geometry/biasing                                 geombias-V09-00-01
 ----------------
@@ -271,6 +272,8 @@ processes/hadronic                               hadr-V09-00-01
 - models/qmd (hadr-qmd-V09-00-05)
   o First implementation of QMD reaction model based on JQMD
     (Niita et al., JAERI-Data/Code 99-042).
+- models/rpg (hadr-rpg-V09-00-02)
+  o Fixed array bound violation in G4RPGFragmentation.
 - models/theo_high_energy (hadr-theo-HE-V09-00-01)
   o Added channel for projectile diffractive scattering.
 - models/util (hadr-mod-util-V09-00-02)
@@ -354,7 +357,7 @@ examples                                         examples-V09-01-00
   o Updated physics commands in macro files. Updated README.
 - advanced/underground_physics (DMX-V09-00-02)
   o Corrected micrometer unit in macros from mum to um (old bug since 8.2).
-- extended/gdml (exgdml-V09-00-00)
+- extended/gdml (exgdml-V09-00-01)
   o Updated to co-work with built-in GDML plugin module GDML-3.
   o Showing loading of modular GDML files.
 - extended/electromagnetic/TestEm1 (testem1-V09-00-01)
@@ -369,7 +372,7 @@ examples                                         examples-V09-01-00
   o Added PhysListEmStandardIG experimental PhysList
   o TrackingAction: new histos (4,5) to plot vertex position of secondaries.
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
-- extended/electromagnetic/TestEm7 (testem7-V09-00-08)
+- extended/electromagnetic/TestEm7 (testem7-V09-00-09)
   o Added class G4ScreenNuclearRecoil and ancillary utilities for ion-ion
     scattering provided by Vanderbuilt University.
   o PhysListStandardSS: use G4ionGasIonisation.
@@ -390,6 +393,11 @@ examples                                         examples-V09-01-00
 - extended/hadronic/Hadr01 (exhadr01-V09-00-01)
   o Physics list updated according to recent changes in hadronics and
     physics_lists packages. Added QGSC_BERT physics list.
+- extended/medical/DICOM (DICOM-V09-00-01)
+  o Deep review: on the input files and the way how the geometry is
+    built. Now using new specialised fast navigation and parameterisation
+    according to G4PhantomParameterisation.
+  o Added color by voxel and possibility to also use nested-parameterisations. 
 - extended/medical/fanoCavity (fano-V09-00-08)
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
   o Syntax correction in DetectorMessenger.
@@ -404,7 +412,7 @@ examples                                         examples-V09-01-00
 - extended/persistency/P02 (exampleP02-V09-00-00)
   o New example showing how to store in a binary file and read back the
     geometry tree using the 'reflection' technique for persistency.
-- extended/polarisation/Pol01 (expol01-V09-00-00)
+- extended/polarisation/Pol01 (expol01-V09-00-01)
   o Use new polarized photo electric effect, important for polarisation
     transfer from photon to electron in certain regions of the phasespace
     (see E166 experiment).
