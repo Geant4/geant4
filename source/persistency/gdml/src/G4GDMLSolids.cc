@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.24 2007-12-06 09:58:14 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.25 2007-12-06 14:15:09 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -114,7 +114,7 @@ void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
       const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name" ) name  = attribute_value; else
+      if (attribute_name=="name" ) name = attribute_value; else
       if (attribute_name=="lunit") lunit = attribute_value; else
       if (attribute_name=="x") x = attribute_value; else
       if (attribute_name=="y") y = attribute_value; else

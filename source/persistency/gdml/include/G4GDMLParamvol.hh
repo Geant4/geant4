@@ -42,7 +42,11 @@ class G4GDMLParamvol : public G4GDMLSetup {
 private:
    G4GDMLParameterisation* parameterisation;
 
-   void boxRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void box_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void trd_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void trap_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void tube_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void cone_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void parametersRead(const xercesc::DOMElement* const);
    void contentRead(const xercesc::DOMElement* const);
    void loopRead(const xercesc::DOMElement* const);
