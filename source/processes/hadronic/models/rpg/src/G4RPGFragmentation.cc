@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.2 2007-08-15 20:38:01 dennis Exp $
+// $Id: G4RPGFragmentation.cc,v 1.3 2007-12-06 01:13:14 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -382,8 +382,8 @@ ReactionStage(const G4HadProjectile* originalIncident,
     //  define initial state vectors for Lorentz transformations
     //  the pseudoParticles have non-standard masses, hence the "pseudo"
     //
-    G4ReactionProduct pseudoParticle[7];
-    for( i=0; i<7; ++i )pseudoParticle[i].SetZero();
+    G4ReactionProduct pseudoParticle[8];
+    for( i=0; i<8; ++i )pseudoParticle[i].SetZero();
     
     pseudoParticle[0].SetMass( mOriginal*GeV );
     pseudoParticle[0].SetMomentum( 0.0, 0.0, pOriginal*GeV );
