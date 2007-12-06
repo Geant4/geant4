@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.17 2007-12-04 13:31:38 gcosmo Exp $
+// $Id: G4GDMLSolids.hh,v 1.18 2007-12-06 09:58:14 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,6 @@ private:
    void polyconeRead(const xercesc::DOMElement* const);
    void polyhedraRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* quadrangularRead(const xercesc::DOMElement* const);
-   G4String refRead(const xercesc::DOMElement* const);
    void reflectedSolidRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection sectionRead(const xercesc::DOMElement* const,G4double);
    void sphereRead(const xercesc::DOMElement* const);
@@ -106,6 +105,7 @@ protected:
    G4ThreeVector rotationRead(const xercesc::DOMElement* const);
    G4ThreeVector scaleRead(const xercesc::DOMElement* const);
    G4VSolid* getSolid(const G4String&) const;
+   G4String refRead(const xercesc::DOMElement* const);
 };
 
 #endif

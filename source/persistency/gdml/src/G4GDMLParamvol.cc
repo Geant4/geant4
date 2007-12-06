@@ -1,6 +1,6 @@
 #include "G4GDMLParamvol.hh"
 
-void G4GDMLParamvol::box_parametersRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLParamvol::boxRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4String lunit("1");
    G4String x;
@@ -38,30 +38,6 @@ void G4GDMLParamvol::box_parametersRead(const xercesc::DOMElement* const element
    parameter.dimension[2] *= 0.5;
 }
 
-G4String G4GDMLParamvol::refRead(const xercesc::DOMElement* const element) {
-
-   G4String ref;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="ref") ref = attribute_value;
-   }
-
-   return ref;
-}
-
 void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector rotation;
@@ -79,7 +55,7 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
       
       if (tag=="rotation") rotation = rotationRead(child); else
       if (tag=="position") position = positionRead(child); else
-      if (tag=="box_parameters") box_parametersRead(child,parameter);
+      if (tag=="box") boxRead(child,parameter);
    }
 
    parameter.pRot = new G4RotationMatrix();
@@ -91,6 +67,66 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
    parameter.position = position;
 
    parameterisation->addParameter(parameter);
+}
+
+void G4GDMLParamvol::contentRead(const xercesc::DOMElement* const element) {
+
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+       if (tag=="loop") loopRead(child); else
+       if (tag=="parameters") parametersRead(child);
+    }
+}
+
+void G4GDMLParamvol::loopRead(const xercesc::DOMElement* const element) {
+
+   G4String var;
+   G4String from;
+   G4String to;
+   G4String step;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="var") var = attribute_value; else
+      if (attribute_name=="from") from = attribute_value; else
+      if (attribute_name=="to") to = attribute_value; else
+      if (attribute_name=="step") step = attribute_value;
+   }
+
+   eval.checkVariable(var);
+
+   G4int _var = eval.EvaluateInteger(var);
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to = eval.EvaluateInteger(to);
+   G4int _step = eval.EvaluateInteger(step);
+   
+   if (!from.empty()) _var = _from;
+
+   while (_var <= _to) {
+   
+      eval.setVariable(var,_var);
+      contentRead(element);
+
+      _var += _step;
+   }
 }
 
 void G4GDMLParamvol::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* mother) {
@@ -107,11 +143,14 @@ void G4GDMLParamvol::paramvolRead(const xercesc::DOMElement* const element,G4Log
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-       if (tag=="parameters") parametersRead(child);
        if (tag=="volumeref") volumeref = refRead(child);
-    }
+   }
 
-   G4LogicalVolume* logvol = getVolume(volumeref);
+   contentRead(element);
+
+   G4LogicalVolume* logvol = getVolume(GenerateName(volumeref));
+
+   if (parameterisation->getSize()==0) G4Exception("GDML: Error! No parameters are defined in parameterised volume!");
 
    new G4PVParameterised("",logvol,mother,kZAxis,parameterisation->getSize(),parameterisation);
 }

@@ -42,10 +42,10 @@ class G4GDMLParamvol : public G4GDMLSetup {
 private:
    G4GDMLParameterisation* parameterisation;
 
-   void box_parametersRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-
-   G4String refRead(const xercesc::DOMElement* const);
+   void boxRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void parametersRead(const xercesc::DOMElement* const);
+   void contentRead(const xercesc::DOMElement* const);
+   void loopRead(const xercesc::DOMElement* const);
 protected:
    void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
 };

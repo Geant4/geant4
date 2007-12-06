@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.26 2007-12-05 15:44:48 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.27 2007-12-06 09:58:14 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -281,30 +281,6 @@ G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element)
    }
 
    return eval.Evaluate(value)*eval.Evaluate(unit);
-}
-
-G4String G4GDMLStructure::refRead(const xercesc::DOMElement* const element) {
-
-   G4String ref;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="ref") ref = attribute_value;
-   }
-
-   return ref;
 }
 
 void G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& _width,G4double& _offset,EAxis& _axis) {

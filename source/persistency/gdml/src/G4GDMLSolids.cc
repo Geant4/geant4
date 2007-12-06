@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.23 2007-11-30 14:51:20 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.24 2007-12-06 09:58:14 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -618,30 +618,6 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
    const G4ThreeVector* ptr4 = getPosition(GenerateName(v4));
 
    return new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
-}
-
-G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
-
-   G4String ref;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="ref") ref = attribute_value;
-   }
-
-   return ref;
 }
 
 void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) {
@@ -1386,4 +1362,28 @@ G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
    if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
 
    return solidPtr;
+}
+
+G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
+
+   G4String ref;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="ref") ref = attribute_value;
+   }
+
+   return ref;
 }
