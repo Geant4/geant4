@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2007-11-27 18:42:13 japost Exp $
+$Id: History,v 1.145 2007-12-07 16:15:58 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec   7th, 2007, J.Apostolakis  transport-V09-00-09
+------------------------------
+G4Transportation
+- Clear state of all Chord Finders using G4FieldManagerStore
+Requires co-working tag field-V09-00-03.
 
 Nov  27th, 2007, J.Apostolakis  transport-V09-00-08
 ------------------------------
