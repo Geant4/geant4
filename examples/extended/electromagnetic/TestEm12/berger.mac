@@ -1,0 +1,27 @@
+# $Id: berger.mac,v 1.1 2007-12-07 14:50:27 maire Exp $
+#
+# macro for TestEm12 : Dose Point Kernel
+# Berger & Seltzer, Appl. Radiat. Isot. 42(1991) page 917  
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setRadius  3 cm
+#
+/testem/phys/addPhysics  standard	# em physics
+/testem/phys/setCuts 10 um
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 1 MeV
+#
+/testem/histo/setFileType hbook
+/testem/histo/setFileName berger/1MeV
+/testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
+##/testem/histo/printHisto 8			#ascii
+#
+/testem/event/printModulo 4000
+#
+/run/beamOn 40000
