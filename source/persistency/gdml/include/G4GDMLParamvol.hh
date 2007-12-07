@@ -51,6 +51,7 @@ private:
    void orb_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void torus_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void para_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void hype_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
   
    void parametersRead(const xercesc::DOMElement* const);
    void contentRead(const xercesc::DOMElement* const);

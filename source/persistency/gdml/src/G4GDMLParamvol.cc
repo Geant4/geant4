@@ -416,6 +416,51 @@ void G4GDMLParamvol::para_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[2] *= 0.5;
 }
 
+void G4GDMLParamvol::hype_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+
+   G4String lunit("1");
+   G4String aunit("1");
+   G4String rmin;
+   G4String rmax;
+   G4String inst;
+   G4String outst;
+   G4String z;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="inst") inst = attribute_value; else
+      if (attribute_name=="outst") outst = attribute_value; else
+      if (attribute_name=="z") z = attribute_value;
+   }
+
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
+
+   parameter.dimension[0] = eval.Evaluate(rmin)*_lunit;
+   parameter.dimension[1] = eval.Evaluate(rmax)*_lunit;;
+   parameter.dimension[2] = eval.Evaluate(z)*_lunit;
+   parameter.dimension[3] = eval.Evaluate(inst)*_aunit;
+   parameter.dimension[4] = eval.Evaluate(outst)*_aunit;
+
+   parameter.dimension[2] *= 0.5;
+}
+
 void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector rotation;
@@ -441,7 +486,8 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
       if (tag=="sphere_dimensions") cone_dimensionsRead(child,parameter); else
       if (tag=="orb_dimensions") cone_dimensionsRead(child,parameter); else
       if (tag=="torus_dimensions") cone_dimensionsRead(child,parameter); else
-      if (tag=="para_dimensions") cone_dimensionsRead(child,parameter);
+      if (tag=="para_dimensions") cone_dimensionsRead(child,parameter); else
+      if (tag=="hype_dimensions") hype_dimensionsRead(child,parameter);
    }
 
    parameter.pRot = new G4RotationMatrix();
