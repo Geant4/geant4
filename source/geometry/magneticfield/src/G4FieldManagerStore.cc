@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.cc,v 1.1 2007-12-07 15:34:10 japost Exp $
+// $Id: G4FieldManagerStore.cc,v 1.2 2007-12-07 15:50:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FieldManagerStore
@@ -174,3 +174,16 @@ G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 // iterator<G4FieldManager*>  GetIterator()
 // {
 //  iterator *itFM; 
+
+#include "G4ChordFinder.hh" 
+void
+G4FieldManagerStore::ClearAllChordFindersState()
+{
+  G4ChordFinder *pChordFnd;
+   
+  for (iterator itFM=this->begin(); itFM!=this->end(); itFM++)
+  {
+     pChordFnd=  (*itFM)->GetChordFinder(); 
+     if( pChordFnd ) pChordFnd->ResetStepEstimate();
+  }
+}
