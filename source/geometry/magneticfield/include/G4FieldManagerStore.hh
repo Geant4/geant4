@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.hh,v 1.1 2007-12-07 15:34:22 japost Exp $
+// $Id: G4FieldManagerStore.hh,v 1.2 2007-12-07 15:49:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4FieldManagerStore
@@ -75,8 +75,11 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
     static void Clean();
       // Delete all volumes from the store.
 
+    void ClearAllChordFindersState();
+      // Looping over all field managers, call each one to reset step estimate
+
     virtual ~G4FieldManagerStore();
-      // Destructor: takes care to delete allocated logical volumes.
+      // Destructor: takes care to delete allocated field managers.
 
   protected:
   
