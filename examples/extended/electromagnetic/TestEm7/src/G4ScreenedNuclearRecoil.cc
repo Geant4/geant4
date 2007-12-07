@@ -1,33 +1,39 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of     *
-// * Marcus H. Mendenhall and Vanderbilt University, Nashville, TN    *
-// * It was developed independently of the GEANT4 collaboration       *
-// * and any questions about it should be addressed to the author:    *
-// * email marcus.h.mendenhall@vanderbilt.edu                         *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+//
+// $Id: G4ScreenedNuclearRecoil.cc,v 1.3 2007-12-07 17:51:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description
 // Process for screened electromagnetic nuclear elastic scattering; 
 // Physics comes from:
 // Marcus H. Mendenhall and Robert A. Weller, 
-// "Algorithms  for  the rapid  computation  of  classical  cross  sections  for  screened  Coulomb  collisions  "
+// "Algorithms  for  the rapid  computation  of  classical  cross  
+// sections  for  screened  Coulomb  collisions  "
 // Nuclear  Instruments  and  Methods  in  Physics  Research  B58  (1991)  11-17  
 // The only input required is a screening function phi(r/a) which is the ratio
 // of the actual interatomic potential for two atoms with atomic numbers Z1 and Z2,
@@ -76,8 +82,6 @@
 #include "globals.hh"
 
 #include "G4ScreenedNuclearRecoil.hh"
-
-const char G4ScreenedCoulombCrossSectionInfo::CVSVers[]="G4ScreenedNuclearRecoil.cc,v 1.24 2007/11/10 22:48:29 marcus Exp";
 
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
