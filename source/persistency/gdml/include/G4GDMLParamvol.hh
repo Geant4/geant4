@@ -47,6 +47,11 @@ private:
    void trap_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void tube_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
    void cone_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void sphere_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void orb_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void torus_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void para_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+  
    void parametersRead(const xercesc::DOMElement* const);
    void contentRead(const xercesc::DOMElement* const);
    void loopRead(const xercesc::DOMElement* const);

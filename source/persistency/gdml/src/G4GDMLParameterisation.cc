@@ -67,4 +67,36 @@ void G4GDMLParameterisation::ComputeDimensions(G4Cons& cons,const G4int index,co
    cons.SetDeltaPhiAngle(parameterList[index].dimension[6]);
 }
 
+void G4GDMLParameterisation::ComputeDimensions(G4Sphere& sphere,const G4int index,const G4VPhysicalVolume*) const {
 
+   sphere.SetInsideRadius(parameterList[index].dimension[0]);
+   sphere.SetOuterRadius(parameterList[index].dimension[1]);
+   sphere.SetStartPhiAngle(parameterList[index].dimension[2]);
+   sphere.SetDeltaPhiAngle(parameterList[index].dimension[3]);
+   sphere.SetStartThetaAngle(parameterList[index].dimension[4]);
+   sphere.SetDeltaThetaAngle(parameterList[index].dimension[5]);
+}
+
+void G4GDMLParameterisation::ComputeDimensions(G4Orb& orb,const G4int index,const G4VPhysicalVolume*) const {
+
+   orb.SetRadius(parameterList[index].dimension[0]);
+}
+
+void G4GDMLParameterisation::ComputeDimensions(G4Torus& torus,const G4int index,const G4VPhysicalVolume*) const {
+
+   torus.SetAllParameters(parameterList[index].dimension[0], // pRmin
+                          parameterList[index].dimension[1], // pRmax
+			  parameterList[index].dimension[2], // pRtor
+                          parameterList[index].dimension[3], // pSPhi
+			  parameterList[index].dimension[4]); // pDPhi
+}
+
+void G4GDMLParameterisation::ComputeDimensions(G4Para& para,const G4int index,const G4VPhysicalVolume*) const {
+
+   para.SetXHalfLength(parameterList[index].dimension[0]);
+   para.SetYHalfLength(parameterList[index].dimension[1]);
+   para.SetZHalfLength(parameterList[index].dimension[2]);
+   para.SetAlpha(parameterList[index].dimension[3]);
+   para.SetTanAlpha(parameterList[index].dimension[4]);
+   para.SetThetaAndPhi(parameterList[index].dimension[5],parameterList[index].dimension[6]);
+}

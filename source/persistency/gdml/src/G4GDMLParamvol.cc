@@ -249,6 +249,173 @@ void G4GDMLParamvol::cone_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[4] *= 0.5;
 }
 
+void G4GDMLParamvol::sphere_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+
+   G4String lunit("1");
+   G4String aunit("1");
+   G4String rmin;
+   G4String rmax;
+   G4String startphi;
+   G4String deltaphi;
+   G4String starttheta;
+   G4String deltatheta;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="startphi") startphi = attribute_value; else
+      if (attribute_name=="deltaphi") deltaphi = attribute_value; else
+      if (attribute_name=="starttheta") starttheta = attribute_value; else
+      if (attribute_name=="deltatheta") deltatheta = attribute_value;
+   }
+
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
+
+   parameter.dimension[0] = eval.Evaluate(rmin)*_lunit;
+   parameter.dimension[1] = eval.Evaluate(rmax)*_lunit;
+   parameter.dimension[2] = eval.Evaluate(startphi)*_aunit;
+   parameter.dimension[3] = eval.Evaluate(deltaphi)*_aunit;
+   parameter.dimension[4] = eval.Evaluate(starttheta)*_aunit;
+   parameter.dimension[5] = eval.Evaluate(deltatheta)*_aunit;
+}
+
+void G4GDMLParamvol::orb_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+
+   G4String lunit("1");
+   G4String r;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="r") r = attribute_value;
+   }
+
+   G4double _lunit = eval.Evaluate(lunit);
+   
+   parameter.dimension[0] = eval.Evaluate(r)*_lunit;
+}
+
+void G4GDMLParamvol::torus_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+
+   G4String lunit("1");
+   G4String aunit("1");
+   G4String rmin;
+   G4String rmax;
+   G4String rtor;
+   G4String startphi;
+   G4String deltaphi;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="rmin") rmin = attribute_value; else
+      if (attribute_name=="rmax") rmax = attribute_value; else
+      if (attribute_name=="rtor") rtor = attribute_value; else
+      if (attribute_name=="startphi") startphi = attribute_value; else
+      if (attribute_name=="deltaphi") deltaphi = attribute_value;
+   }
+
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
+
+   parameter.dimension[0] = eval.Evaluate(rmin)*_lunit;
+   parameter.dimension[1] = eval.Evaluate(rmax)*_lunit;
+   parameter.dimension[2] = eval.Evaluate(rtor)*_lunit;
+   parameter.dimension[3] = eval.Evaluate(startphi)*_aunit;
+   parameter.dimension[4] = eval.Evaluate(deltaphi)*_aunit;
+}
+
+void G4GDMLParamvol::para_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+
+   G4String lunit("1");
+   G4String aunit("1");
+   G4String x;
+   G4String y;
+   G4String z;
+   G4String alpha;
+   G4String theta;
+   G4String phi;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="lunit") lunit = attribute_value; else
+      if (attribute_name=="aunit") aunit = attribute_value; else
+      if (attribute_name=="x") x = attribute_value; else
+      if (attribute_name=="y") y = attribute_value; else
+      if (attribute_name=="z") z = attribute_value; else
+      if (attribute_name=="alpha") alpha = attribute_value; else
+      if (attribute_name=="theta") theta = attribute_value; else
+      if (attribute_name=="phi") phi = attribute_value;
+   }
+
+   G4double _lunit = eval.Evaluate(lunit);
+   G4double _aunit = eval.Evaluate(aunit);
+
+   parameter.dimension[0] = eval.Evaluate(x)*_lunit;
+   parameter.dimension[1] = eval.Evaluate(y)*_lunit;
+   parameter.dimension[2] = eval.Evaluate(z)*_lunit;
+   parameter.dimension[3] = eval.Evaluate(alpha)*_aunit;
+   parameter.dimension[4] = eval.Evaluate(theta)*_aunit;
+   parameter.dimension[5] = eval.Evaluate(phi)*_aunit;
+
+   parameter.dimension[0] *= 0.5;
+   parameter.dimension[1] *= 0.5;
+   parameter.dimension[2] *= 0.5;
+}
+
 void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector rotation;
@@ -270,7 +437,11 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
       if (tag=="trd_dimensions") trd_dimensionsRead(child,parameter); else
       if (tag=="trap_dimensions") trap_dimensionsRead(child,parameter); else
       if (tag=="tube_dimensions") tube_dimensionsRead(child,parameter); else
-      if (tag=="cone_dimensions") cone_dimensionsRead(child,parameter); 
+      if (tag=="cone_dimensions") cone_dimensionsRead(child,parameter); else
+      if (tag=="sphere_dimensions") cone_dimensionsRead(child,parameter); else
+      if (tag=="orb_dimensions") cone_dimensionsRead(child,parameter); else
+      if (tag=="torus_dimensions") cone_dimensionsRead(child,parameter); else
+      if (tag=="para_dimensions") cone_dimensionsRead(child,parameter);
    }
 
    parameter.pRot = new G4RotationMatrix();
@@ -339,7 +510,6 @@ void G4GDMLParamvol::loopRead(const xercesc::DOMElement* const element) {
    
       eval.setVariable(var,_var);
       contentRead(element);
-
       _var += _step;
    }
 }

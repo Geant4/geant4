@@ -69,10 +69,10 @@ private:
    void ComputeDimensions(G4Trd&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Trap&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Cons&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-   void ComputeDimensions(G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-   void ComputeDimensions(G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-   void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) const {}
+   void ComputeDimensions(G4Sphere&,const G4int,const G4VPhysicalVolume*) const;
+   void ComputeDimensions(G4Orb&,const G4int,const G4VPhysicalVolume*) const;
+   void ComputeDimensions(G4Torus&,const G4int,const G4VPhysicalVolume*) const;
+   void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
    void ComputeDimensions(G4Tubs&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
