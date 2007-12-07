@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.76 2007-11-09 15:42:54 japost Exp $
+// $Id: G4Transportation.cc,v 1.77 2007-12-07 16:18:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -61,6 +61,7 @@
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 class G4VSensitiveDetector;
+#include "G4FieldManagerStore.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -720,7 +721,18 @@ G4Transportation::StartTracking(G4Track* aTrack)
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
   }
-  
+
+  // Make sure to clear the chord finders of all fields (ie managers)
+  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  // iterator<G4FieldManagerStore> itFM= fieldMgrStore->GetIterator(); 
+  // for (itFM=fieldMgrStore->begin(); itFM!=fieldMgrStore()->end(); itFM++)
+  //  {
+  //     G4FieldManager *pFieldMgr= *itFM; 
+  //     G4ChordFinder  pChordFnd=  pFieldMgr->GetChordFinder(); 
+  //     if( pChordFnd ) pChordFnd->ResetStepEstimate();
+  //  }
+  fieldMgrStore->ClearAllChordFindersState(); 
+
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();
