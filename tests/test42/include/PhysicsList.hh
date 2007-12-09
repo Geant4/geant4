@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2007-11-26 16:22:56 grichine Exp $
+// $Id: PhysicsList.hh,v 1.2 2007-12-09 12:02:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,7 @@ private:
 
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  particleList;
+  G4VPhysicsConstructor*  opPhysicsList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   PhysicsListMessenger* pMessenger;

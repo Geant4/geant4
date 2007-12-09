@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2007-11-26 16:22:57 grichine Exp $
+// $Id: PhysicsList.cc,v 1.2 2007-12-09 12:02:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,9 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics.hh"
+#include "LXeOpticalPhysics.hh"
+
+
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
@@ -109,6 +112,9 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   // EM physics
   emPhysicsList = new G4EmStandardPhysics();
+
+  // optical physics
+  opPhysicsList = new LXeOpticalPhysics("optical");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -118,7 +124,10 @@ PhysicsList::~PhysicsList()
   delete pMessenger;
   delete particleList;
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) {
+  delete opPhysicsList;
+
+  for(size_t i=0; i<hadronPhys.size(); i++) 
+  {
     delete hadronPhys[i];
   }
 }
@@ -136,8 +145,11 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  opPhysicsList->ConstructProcess();
   particleList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); i++) {
+
+  for(size_t i=0; i<hadronPhys.size(); i++) 
+  {
     hadronPhys[i]->ConstructProcess();
   }
 

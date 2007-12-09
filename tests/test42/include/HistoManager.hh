@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2007-12-09 09:40:56 grichine Exp $
+// $Id: HistoManager.hh,v 1.2 2007-12-09 12:02:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -152,6 +152,7 @@ private:
   G4int n_neu_forw;
   G4int n_neu_leak;
   G4int n_neu_back;
+  G4int n_optical;
   G4int n_step;
   G4int nHisto;
 

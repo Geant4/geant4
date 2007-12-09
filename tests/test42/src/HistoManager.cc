@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2007-12-09 09:41:11 grichine Exp $
+// $Id: HistoManager.cc,v 1.2 2007-12-09 12:02:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,6 +64,7 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
+#include "G4OpticalPhoton.hh"
 #include "Histo.hh"
 #include "globals.hh"
 
@@ -161,6 +162,7 @@ void HistoManager::BeginOfRun()
   n_neu_forw  = 0;
   n_neu_leak  = 0;
   n_neu_back  = 0;
+  n_optical   = 0;
 
   edepSum     = 0.0;
   edepSum2    = 0.0;
@@ -205,6 +207,7 @@ void HistoManager::EndOfRun()
   G4double xid = x*(G4double)n_deut;
   G4double xia = x*(G4double)n_alpha;
   G4double xio = x*(G4double)n_ions;
+  G4double xop = x*(G4double)n_optical;
 
   edepSum  *= x;
   edepSum2 *= x;
@@ -238,6 +241,7 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of leaked neutrons    " << xnbw << G4endl;
   G4cout << std::setprecision(4) << "Average number of proton leak        " << xpl << G4endl;
   G4cout << std::setprecision(4) << "Average number of pion leak          " << xal << G4endl;
+  G4cout << std::setprecision(4) << "Average number of optical photons    " << xop << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -347,6 +351,9 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
       n_muons++;
       histo->fill(13,e,1.0);    
+    } else if ( pd == G4OpticalPhoton::OpticalPhoton()) {
+      n_optical++;
+      histo->fill(14,e,1.0);    
     }
   }
 }
