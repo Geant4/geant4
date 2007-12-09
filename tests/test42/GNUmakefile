@@ -1,6 +1,7 @@
-# $Id: GNUmakefile,v 1.1 2007-11-26 16:22:56 grichine Exp $
+# $Id: GNUmakefile,v 1.2 2007-12-09 09:42:38 grichine Exp $
+# GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
-# GNUmakefile for LXe example.
+# GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
 
 name := test42
@@ -8,12 +9,30 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = ../../../
 endif
 
 .PHONY: all
 all: lib bin
 
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
+# for the aida-config command see the README file
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config --include`
+  LOADLIBS += `aida-config --lib`
+endif
+
 include $(G4INSTALL)/config/binmake.gmk
+
+histclean:
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
+
+visclean:
+	rm -f g4*.prim g4*.eps g4*.wrl
+	rm -f .DAWN_*
+
