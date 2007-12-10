@@ -56,6 +56,10 @@ geometry/biasing                                 geombias-V09-00-01
   case of splitting to the survival weight when the weight is above the upper
   weight window.
 
+geometry/magneticfield                           field-V09-00-02a
+----------------
+- Some code cleanup in G4MagHelicalStepper.
+
 geometry/navigation                              geomnav-V09-00-12
 -------------------
 - Optimisation in G4RegularNavigation: use voxelBox->DistanceToOut() instead
@@ -184,7 +188,7 @@ processes/electromagnetic/polarisation           empolar-V09-00-02
   interaction-length for positrons in applications whe particle and media
   are polarised).
 
-processes/electromagnetic/standard               emstand-V09-00-21
+processes/electromagnetic/standard               emstand-V09-00-22
 ----------------------------------
 - G4eCoulombScatteringModel:
   o Fixed crash happening at initialisation when several elements with the
@@ -196,6 +200,8 @@ processes/electromagnetic/standard               emstand-V09-00-21
   o Changed parameter 'tausmall' to avoid loss of numerical precision and
     occasional NaN values...
   o Fix for sign of mean scattering angle for negatively charged particles.
+  o Fixed Bragg peak width for C12 beam, return to model in 9.0 for heavy
+    particles.
 
 processes/electromagnetic/utils                  emutils-V09-00-13
 -------------------------------
@@ -234,7 +240,7 @@ processes/hadronic                               hadr-V09-00-01
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-00-10)
   o R&D level implementation of ion-ion elastic and low-energy inelastic.
   o Corrected neutral currents normalization for neutrino-nuclear interactions.
-- models/coherent_elastic (hadr-cohe-V09-00-06)
+- models/coherent_elastic (hadr-cohe-V09-00-07)
   o G4UHadronElasticProcess: introduced verbosity checks within 'VERBOSE'
     flag inside methods called at each step.
   o G4DiffuseElastic: do initialisation of the model for each new target
@@ -246,6 +252,9 @@ processes/hadronic                               hadr-V09-00-01
     (important for heavy targets); fixed model for scattering off hydrogen;
     tuned model parameters for better description of total and elastic cross
     sections.
+  o G4HadronElastic: set high threshold to G4ElasticHadrNucleusHE model to
+    have by default switched off contribution of high-energy elastic
+    (currently with issues of non-reproducibility).
 - models/de_excitation (hadr-deex-V09-00-06)
   o Corrected the Coulomb-barrier to the formalism of Dostrovski as
     described in the Physics Reference manual.
@@ -372,7 +381,7 @@ examples                                         examples-V09-01-00
   o Added PhysListEmStandardIG experimental PhysList
   o TrackingAction: new histos (4,5) to plot vertex position of secondaries.
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
-- extended/electromagnetic/TestEm7 (testem7-V09-00-09)
+- extended/electromagnetic/TestEm7 (testem7-V09-00-10)
   o Added class G4ScreenNuclearRecoil and ancillary utilities for ion-ion
     scattering provided by Vanderbuilt University.
   o PhysListStandardSS: use G4ionGasIonisation.
@@ -390,7 +399,7 @@ examples                                         examples-V09-01-00
 - extended/electromagnetic/TestEm18 (testem18-V09-00-01)
   o PhysicsList: added more EmOptions.
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
-- extended/hadronic/Hadr01 (exhadr01-V09-00-01)
+- extended/hadronic/Hadr01 (exhadr01-V09-00-02)
   o Physics list updated according to recent changes in hadronics and
     physics_lists packages. Added QGSC_BERT physics list.
 - extended/medical/DICOM (DICOM-V09-00-01)
