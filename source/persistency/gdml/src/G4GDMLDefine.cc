@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.15 2007-12-03 15:04:33 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.16 2007-12-10 09:32:38 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -38,7 +38,7 @@
 void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String value;
+   G4double value = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -51,14 +51,14 @@ void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name  = attribute_value; else
-      if (attribute_name=="value") value = attribute_value;
+      if (attName=="name") name = attValue; else
+      if (attName=="value") value = eval.Evaluate(attValue);
    }
 
-   eval.defineConstant(name,eval.Evaluate(value));
+   eval.defineConstant(name,value);
 }
 
 void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
@@ -90,6 +90,9 @@ void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
    G4int _rows = eval.EvaluateInteger(rows);
    G4int _cols = eval.EvaluateInteger(cols);
 
+   _rows = 0;
+   _cols = 0;
+
    values = xercesc::XMLString::transcode(element->getTextContent());
 
    G4cout << "Matrix values: " << values << G4endl;
@@ -98,10 +101,10 @@ void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
 void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String unit("1");
-   G4String x;
-   G4String y;
-   G4String z;
+   G4double unit = 1.0;
+   G4double x = 0.0;
+   G4double y = 0.0;
+   G4double z = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -114,32 +117,30 @@ void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="unit") unit = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="unit") unit = eval.Evaluate(attValue); else
+      if (attName=="x") x = eval.Evaluate(attValue); else
+      if (attName=="y") y = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   G4double _unit = eval.Evaluate(unit);
+   x *= unit;
+   y *= unit;
+   z *= unit;
 
-   G4double _x = eval.Evaluate(x)*_unit;
-   G4double _y = eval.Evaluate(y)*_unit;
-   G4double _z = eval.Evaluate(z)*_unit;
-
-   positionMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
+   positionMap[name] = new G4ThreeVector(x,y,z);
 }
 
 void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String unit("1");
-   G4String x;
-   G4String y;
-   G4String z;
+   G4double unit = 1.0;
+   G4double x = 0.0;
+   G4double y = 0.0;
+   G4double z = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -152,31 +153,29 @@ void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="unit") unit = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="unit") unit = eval.Evaluate(attValue); else
+      if (attName=="x") x = eval.Evaluate(attValue); else
+      if (attName=="y") y = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   G4double _unit = eval.Evaluate(unit);
+   x *= unit;
+   y *= unit;
+   z *= unit;
 
-   G4double _x = eval.Evaluate(x)*_unit;
-   G4double _y = eval.Evaluate(y)*_unit;
-   G4double _z = eval.Evaluate(z)*_unit;
-
-   rotationMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
+   rotationMap[name] = new G4ThreeVector(x,y,z);
 }
 
 void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String x;
-   G4String y;
-   G4String z;
+   G4double x = 1.0;
+   G4double y = 1.0;
+   G4double z = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -189,26 +188,22 @@ void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="x") x = eval.Evaluate(attValue); else
+      if (attName=="y") y = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   G4double _x = eval.Evaluate(x);
-   G4double _y = eval.Evaluate(y);
-   G4double _z = eval.Evaluate(z);
-
-   scaleMap[GenerateName(name)] = new G4ThreeVector(_x,_y,_z);
+   scaleMap[name] = new G4ThreeVector(x,y,z);
 }
 
 void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   G4String value;
+   G4double value = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -221,14 +216,14 @@ void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name = attribute_value; else
-      if (attribute_name=="value") value = attribute_value;
+      if (attName=="name") name = attValue; else
+      if (attName=="value") value = eval.Evaluate(attValue);
    }
 
-   eval.defineVariable(name,eval.Evaluate(value));
+   eval.defineVariable(name,value);
 }
 
 void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {
