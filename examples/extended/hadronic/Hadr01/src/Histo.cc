@@ -116,7 +116,10 @@ void Histo::book()
       if(verbose>0)
 	G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
 
-      histo[i] = hf->createHistogram1D(ids[i], tittles[i], bins[i], xmin[i], xmax[i]);
+      G4String idd;
+      if(histType == "root") idd = "h" +  ids[i];
+      else                   idd = ids[i];
+      histo[i] = hf->createHistogram1D(idd, tittles[i], bins[i], xmin[i], xmax[i]);
     } else {
       histo[i] = 0;
     }
