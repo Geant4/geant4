@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.27 2007-12-06 09:58:14 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.28 2007-12-10 14:36:12 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -37,9 +37,9 @@
 
 EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
 
-   G4String x;
-   G4String y;
-   G4String z;
+   G4double x = 0.0;
+   G4double y = 0.0;
+   G4double z = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -52,25 +52,21 @@ EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="x") x = eval.Evaluate(attValue); else
+      if (attName=="y") y = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   G4double _x = eval.Evaluate(x);
-   G4double _y = eval.Evaluate(y);
-   G4double _z = eval.Evaluate(z);
-
-   if (_x == 1.0 && _y == 0.0 && _z == 0.0) return kXAxis; else
-   if (_x == 0.0 && _y == 1.0 && _z == 0.0) return kYAxis; else
-   if (_x == 0.0 && _y == 0.0 && _z == 1.0) return kZAxis;
+   if (x == 1.0 && y == 0.0 && z == 0.0) return kXAxis; else
+   if (x == 0.0 && y == 1.0 && z == 0.0) return kYAxis; else
+   if (x == 0.0 && y == 0.0 && z == 1.0) return kZAxis;
 
    G4Exception("GDML: Only directions along axes are supported!");
 
-   return kZAxis;
+   return kUndefined;
 }
 
 void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
