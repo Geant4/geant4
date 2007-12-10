@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.7 2007-08-21 09:54:29 tnikitin Exp $ 
+// $Id: G4ExactHelixStepper.cc,v 1.8 2007-12-10 16:29:47 gunter Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
@@ -119,7 +119,7 @@ G4double G4ExactHelixStepper::DistChord()   const
 
       
 	 if(Ang_curve<=pi){
-	   distChord=GetRadHelix()*(1-cos(0.5*Ang_curve));
+	   distChord=GetRadHelix()*(1-std::cos(0.5*Ang_curve));
 	 }
          else 
          if(Ang_curve<twopi){

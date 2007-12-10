@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.6 2007-11-16 09:39:14 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.7 2007-12-10 16:30:01 gunter Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -209,7 +209,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
     // Physical process is limiting the step, don't continue
     //
-    if(fabs(totalNewStep-currentProposedStepLength) < kCarTolerance)
+    if(std::fabs(totalNewStep-currentProposedStepLength) < kCarTolerance)
     { 
       return currentProposedStepLength;
     }

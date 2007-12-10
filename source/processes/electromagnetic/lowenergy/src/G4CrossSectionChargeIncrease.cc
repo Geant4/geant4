@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeIncrease.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
+// $Id: G4CrossSectionChargeIncrease.cc,v 1.3 2007-12-10 16:31:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -176,8 +176,8 @@ G4double G4CrossSectionChargeIncrease::CrossSection(const G4Track& track)
 	  G4double t = k / (proton_mass_c2/electron_mass_c2); 
 	  G4double x = t / rr; 
 	  G4double temp = 4.0 * pi * Bohr_radius/nm * Bohr_radius/nm * fac;
-	  G4double sigmal =  temp * cc * (pow(x,dd));
-	  G4double sigmah = temp * (aa * log(1.0 + x) + bb) / x;
+	  G4double sigmal =  temp * cc * (std::pow(x,dd));
+	  G4double sigmah = temp * (aa * std::log(1.0 + x) + bb) / x;
 	  totalCrossSection = 1.0/(1.0/sigmal + 1.0/sigmah) *m*m;
 	}
       else

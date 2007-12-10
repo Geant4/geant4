@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.4 2007-08-21 12:58:36 gcosmo Exp $
+// $Id: G4Paraboloid.cc,v 1.5 2007-12-10 16:30:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Paraboloid
@@ -922,14 +922,14 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
       rho = RandFlat::shoot(0., 1.);
       rho = std::sqrt(rho);
       rho *= r1;
-      return G4ThreeVector(rho * std::cos(phi), rho * sin(phi), -dz);
+      return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), -dz);
     }
     else
     {
       rho = RandFlat::shoot(0., 1);
       rho = std::sqrt(rho);
       rho *= r2;
-      return G4ThreeVector(rho * std::cos(phi), rho * sin(phi), dz);
+      return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), dz);
     }
   }
   else

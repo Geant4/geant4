@@ -206,7 +206,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 //
 //      Calculate the angle between positron and photon (cosine)
 //
-        cthetaGE = cthetaE*cthetaG+sthetaE*sthetaG*cos(phiE-phiG);
+        cthetaGE = cthetaE*cthetaG+sthetaE*sthetaG*std::cos(phiE-phiG);
 //
 ////      G4cout << x << " " << cthetaE << " " << sthetaE << " "
 ////             << y << " " << cthetaG << " " << sthetaG << " "

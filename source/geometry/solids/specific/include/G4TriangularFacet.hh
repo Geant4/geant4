@@ -17,14 +17,14 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * and is subject to DEFCON 705 IPR conditions.                               *
+// * subject to DEFCON 705 IPR conditions.                            *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.hh,v 1.7 2007-08-23 14:49:23 gcosmo Exp $
+// $Id: G4TriangularFacet.hh,v 1.8 2007-12-10 16:30:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

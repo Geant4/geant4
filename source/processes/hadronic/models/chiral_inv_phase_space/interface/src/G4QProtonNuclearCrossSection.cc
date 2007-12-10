@@ -221,10 +221,10 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
   static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
   static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=log(Pmax);// High logarithm energy (each 2.75 percent)
+  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
+  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=log(.001*Pmin);// Low logarithm energy for the HEN part GeV/c
+  static const G4double milPG=std::log(.001*Pmin);// Low logarithm energy for the HEN part GeV/c
   //
   // Associative memory for acceleration
   //static std::vector <G4double>  spA;  // shadowing coefficients (A-dependent)
@@ -285,7 +285,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   }
   else if (Momentum<Pmax)                     // High Energy region
   {
-    G4double lP=log(Momentum);
+    G4double lP=std::log(Momentum);
 #ifdef debug
     G4cout<<"G4QProtNucCS::CalcCS: before HEN nH="<<nH<<",iE="<<milP<<",dlP="<<dlP<<G4endl;
 #endif

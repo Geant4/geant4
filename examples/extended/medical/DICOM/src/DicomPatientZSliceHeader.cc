@@ -155,8 +155,8 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   }
    
   //----- Check that the slices are contiguous in Z
-  if( fabs( fMinZ - rhs.GetMaxZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() && 
-      fabs( fMaxZ - rhs.GetMinZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() ){
+  if( std::fabs( fMinZ - rhs.GetMaxZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() && 
+      std::fabs( fMaxZ - rhs.GetMinZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() ){
     G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Slices are not contiguous in Z "
 	   << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
 	   << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 

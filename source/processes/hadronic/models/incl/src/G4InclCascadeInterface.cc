@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.cc,v 1.9 2007-12-03 19:36:06 miheikki Exp $ 
+// $Id: G4InclCascadeInterface.cc,v 1.10 2007-12-10 16:32:02 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -126,12 +127,12 @@ G4HadFinalState* G4InclCascadeInterface::ApplyYourself(const G4HadProjectile& aT
   if(bulletType == proton || bulletType == neutron) baryonBullet = 1;
   if(bulletType == proton || bulletType == pionPlus) chargeBullet = 1;
   if(bulletType == pionMinus) chargeBullet = -1;
-  G4int baryonNumber = int(floor(targetA)) + baryonBullet;
-  G4int chargeNumber = int(floor(targetZ)) + chargeBullet;  
+  G4int baryonNumber = int(std::floor(targetA)) + baryonBullet;
+  G4int chargeNumber = int(std::floor(targetZ)) + chargeBullet;  
   G4double mass = aTrack.GetDefinition()->GetPDGMass();
   G4double amass = theNucleus.AtomicMass(targetA, targetZ);
   G4double eKinSum = bulletE;
-  G4LorentzVector labv = G4LorentzVector(0.0, 0.0, sqrt(bulletE*(bulletE + 2.*mass)), bulletE + mass + amass);
+  G4LorentzVector labv = G4LorentzVector(0.0, 0.0, std::sqrt(bulletE*(bulletE + 2.*mass)), bulletE + mass + amass);
   G4cout <<"Energy in the beginning = " << labv.e() / MeV << G4endl;
 #endif
 

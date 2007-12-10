@@ -152,7 +152,7 @@ G4double G4HelixMixedStepper::DistChord()   const
 
       
 	 if(Ang_curve<=pi){
-	   distChord=GetRadHelix()*(1-cos(0.5*Ang_curve));
+	   distChord=GetRadHelix()*(1-std::cos(0.5*Ang_curve));
 	 }
          else 
          if(Ang_curve<twopi){

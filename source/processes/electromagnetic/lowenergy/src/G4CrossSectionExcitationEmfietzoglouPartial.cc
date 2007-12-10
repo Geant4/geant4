@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglouPartial.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglouPartial.cc,v 1.2 2007-12-10 16:31:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -105,8 +105,8 @@ G4double G4CrossSectionExcitationEmfietzoglouPartial::CrossSection(G4double t, G
     {
       G4double excitationSigma = ( aj[level] / (2.*pi*Bohr_radius)) 
 	* (exc / t) 
-	* log(cj[level]*(t/r)) 
-	* pow((1.- (exc/t)), pj[level]);
+	* std::log(cj[level]*(t/r)) 
+	* std::pow((1.- (exc/t)), pj[level]);
       sigma = excitationSigma / density;
     }
   return sigma;

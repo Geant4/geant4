@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.3 2007-10-12 08:27:30 gcosmo Exp $
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.4 2007-12-10 16:30:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -259,8 +259,8 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   static const G4double Pmin=THmin+(nL-1)*dP; // minE for the HighE part
   static const G4double Pmax=300000.;   // maxE for the HighE part
   static const G4int    nH=100;         // A#of HResonance points in lnE
-  static const G4double milP=log(Pmin); // Low logarithm energy for the HighE part
-  static const G4double malP=log(Pmax); // High logarithm energy (each 2.75 percent)
+  static const G4double milP=std::log(Pmin); // Low logarithm energy for the HighE part
+  static const G4double malP=std::log(Pmax); // High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HighE part
   //
   // Associative memory for acceleration
@@ -336,7 +336,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   }
   else if (Momentum<Pmax)                     // High Energy region
   {
-    G4double lP=log(Momentum);
+    G4double lP=std::log(Momentum);
 #ifdef debug
     G4cout<<"G4QIonIonCS::CalcCS:before HEN nH="<<nH<<",iE="<<milP<<",dlP="<<dlP<<G4endl;
 #endif

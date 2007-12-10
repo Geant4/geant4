@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HyperNucleiProperties.cc,v 1.2 2007-10-12 15:00:57 gcosmo Exp $
+// $Id: G4HyperNucleiProperties.cc,v 1.3 2007-12-10 16:30:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -91,7 +91,7 @@ G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int L)
   G4double bs=0.;
   if     (A-L ==2) bs=a2;         // for nnL,npL,ppL
   else if(A-L ==3) bs=a3;         // for 3nL,2npL,n2pL,3pL
-  else if(A-L >3)  bs=b7*exp(-b8/(A-L+1.));
+  else if(A-L >3)  bs=b7*std::exp(-b8/(A-L+1.));
   mass += L*(mL-bs) + eps;
 
   return mass;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.1 2007-10-17 19:13:58 arce Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.2 2007-12-10 16:29:59 gunter Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -185,9 +185,9 @@ CheckVoxelsFillContainer( G4double contX, G4double contY, G4double contZ ) const
 
   // Any bigger value than kCarTolerance will give an error in GetReplicaNo()
   //
-  if( fabs(contX-fNoVoxelX*fVoxelHalfX) >= toleranceForError
-   || fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForError  
-   || fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForError )
+  if( std::fabs(contX-fNoVoxelX*fVoxelHalfX) >= toleranceForError
+   || std::fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForError  
+   || std::fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForError )
   {
     G4cerr << "ERROR - G4PhantomParameterisation::CheckVoxelsFillContainer()"
            << G4endl
@@ -202,9 +202,9 @@ CheckVoxelsFillContainer( G4double contX, G4double contY, G4double contZ ) const
                 "Voxels do not fully fill the container!");
 
   }
-  else if( fabs(contX-fNoVoxelX*fVoxelHalfX) >= toleranceForWarning
-        || fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForWarning  
-        || fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForWarning )
+  else if( std::fabs(contX-fNoVoxelX*fVoxelHalfX) >= toleranceForWarning
+        || std::fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForWarning  
+        || std::fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForWarning )
   {
     G4cerr << "WARNING - G4PhantomParameterisation::CheckVoxelsFillContainer()"
            << G4endl

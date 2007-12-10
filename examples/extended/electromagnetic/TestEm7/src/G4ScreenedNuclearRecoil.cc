@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScreenedNuclearRecoil.cc,v 1.3 2007-12-07 17:51:10 vnivanch Exp $
+// $Id: G4ScreenedNuclearRecoil.cc,v 1.4 2007-12-10 16:28:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -255,7 +255,7 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 		G4double logint=std::log(emax/emin) / (nmfpvals-1) ; // logarithmic increment for tables
 		
 		// compute energy scale for interpolator.  Force exact values at both ends to avoid range errors
-		for (G4int i=1; i<nmfpvals-1; i++) evals[i]=emin*exp(logint*i);
+		for (G4int i=1; i<nmfpvals-1; i++) evals[i]=emin*std::exp(logint*i);
 		evals.front()=emin;
 		evals.back()=emax;
 		
@@ -347,7 +347,7 @@ G4ScreenedNuclearRecoil::~G4ScreenedNuclearRecoil()
 // returns true if it appears the nuclei collided, and we are interested in checking
 G4bool G4ScreenedNuclearRecoil::CheckNuclearCollision(
 			G4double A, G4double a1, G4double apsis) {
-	return avoidReactions && (apsis < (1.1*(pow(A,1.0/3.0)+pow(a1,1.0/3.0)) + 1.4)*fermi);
+	return avoidReactions && (apsis < (1.1*(std::pow(A,1.0/3.0)+std::pow(a1,1.0/3.0)) + 1.4)*fermi);
 	// nuclei are within 1.4 fm (reduced pion Compton wavelength) of each other at apsis, 
 	// this is hadronic, skip it
 }

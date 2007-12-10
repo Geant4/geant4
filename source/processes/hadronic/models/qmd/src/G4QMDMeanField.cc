@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 #include "G4QMDMeanField.hh"
 #include "G4QMDParameters.hh"
 
@@ -187,7 +212,7 @@ void G4QMDMeanField::Cal2BodyQuantities()
 //       Coulomb terms
 
          G4double rrs2 = rr2[i][j] + epscl;
-         G4double rrs = sqrt ( rrs2 );
+         G4double rrs = std::sqrt ( rrs2 );
 
          G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
          G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
@@ -310,7 +335,7 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
 //    Coulomb terms
 
       G4double rrs2 = rr2[i][j] + epscl; 
-      G4double rrs = sqrt ( rrs2 ); 
+      G4double rrs = std::sqrt ( rrs2 ); 
 
       G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
       G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
@@ -503,7 +528,7 @@ G4double G4QMDMeanField::calPauliBlockingFactor( G4int i )
             if ( expa > epsx ) 
             { 
 //   std::cout << "Pauli phase " <<  pf  << std::endl;
-               pf = pf + exp ( expa );
+               pf = pf + std::exp ( expa );
             }
          }
       }

@@ -17,14 +17,14 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
-// * and is subject to DEFCON 705 IPR conditions.                     *
+// * subject to DEFCON 705 IPR conditions.                            *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.9 2007-10-09 13:20:37 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.10 2007-12-10 16:30:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

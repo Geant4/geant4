@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.cc,v 1.7 2007-08-21 09:43:50 tnikitin Exp $
+// $Id: G4HelixExplicitEuler.cc,v 1.8 2007-12-10 16:29:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ G4double G4HelixExplicitEuler::DistChord()   const
 
       
 	 if(Ang_curve<=pi){
-	   distChord=GetRadHelix()*(1-cos(0.5*Ang_curve));
+	   distChord=GetRadHelix()*(1-std::cos(0.5*Ang_curve));
 	 }
          else 
          if(Ang_curve<twopi){

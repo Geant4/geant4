@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.6 2007-11-01 16:09:38 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.7 2007-12-10 16:31:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -708,7 +708,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           sPDG = -211;
           if(-nC==nL && nL==1)             // Only one Sigma- like (nB=1)               |
           {
-            if(fabs(qM-mSigM)<eps)
+            if(std::fabs(qM-mSigM)<eps)
             {
               loh->SetQPDG(G4QPDGCode(3112));  // This is Sigma-                        |
               cont=false;                  // Skip decay                                |
@@ -851,7 +851,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         {
           if(nC==nL && nL==1)                         // Only one Sigma+ like State     |
           {
-            if(fabs(qM-mSigP)<eps)
+            if(std::fabs(qM-mSigP)<eps)
             {
               loh->SetQPDG(G4QPDGCode(3222));         // This is GS Sigma+              |
               cont=false;                  // Skip decay                                |
@@ -964,7 +964,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         G4LorentzVector s4Mom(0.,0.,0.,tsM);
         G4LorentzVector t4Mom(0.,0.,0.,ttM);
         G4double sum=tfM+tsM+ttM;
-        if(fabs(qM-sum)<eps)
+        if(std::fabs(qM-sum)<eps)
         {
           f4Mom=q4M*(tfM/sum);
           s4Mom=q4M*(tsM/sum);
@@ -1158,7 +1158,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         G4LorentzVector n4M(0.,0.,0.,rlM);  // 4-mom of the residual nucleus            |
         G4LorentzVector h4M(0.,0.,0.,MLa);  // 4-mom of the Hyperon                     |
         G4double sum=rlM+MLa;               // Safety sum                               |
-        if(fabs(reM-sum)<eps)               // At rest in CMS                           |
+        if(std::fabs(reM-sum)<eps)               // At rest in CMS                           |
 	       {
           n4M=r4M*(rlM/sum);                // Split tot 4-mom for resNuc               |
           h4M=r4M*(MLa/sum);                // Split tot 4-mom for Hyperon              |
@@ -1225,7 +1225,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         G4LorentzVector n4M(0.,0.,0.,rnM); // Residual nucleus 4-momentum               |
         G4LorentzVector h4M(0.,0.,0.,npiM);// 4-momentum of pions                       |
         G4double sum=rnM+npiM;             // Safety sum                                |
-        if(fabs(reM-sum)<eps)              // At rest                                   |
+        if(std::fabs(reM-sum)<eps)              // At rest                                   |
 	       {
           n4M=r4M*(rnM/sum);               // The residual nucleus part                 |
           h4M=r4M*(npiM/sum);              // The pion part                             |

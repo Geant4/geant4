@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.9 2007-12-03 19:36:06 miheikki Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.10 2007-12-10 16:31:57 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
