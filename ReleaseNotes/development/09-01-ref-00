@@ -21,7 +21,7 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-00-11
+config                                           config-V09-00-12
 ------
 - Introduced G4LIB_BUILD_GDML/G4LIB_USE_GDML flags to trigger compilation
   of the new persistency/gdml sub-module. Added setup for XERCESC. Required
@@ -35,7 +35,7 @@ config                                           config-V09-00-11
   sub-module and new data libraries (G4ABLADATA and new G4EMLOW version).
   Updated internal scripts for Configure accordingly.
 
-digits_hits                                      digits_hits-V09-00-04
+digits_hits                                      digits_hits-V09-00-05
 -----------
 - Introducing command-based scoring mechanism: Beta release.
   Currently shape of scoring cell is limited to box.
@@ -108,6 +108,11 @@ interfaces                                       interfaces-V09-00-03
 - G4UItcsh: added ability to store shell history across sessions.
 - G4UIGainServer: cleared compilation warning.
 
+materials                                        materials-V09-00-08
+---------
+- Made GetZ13() and GetLOGA() in G4NistManager not inlined (since handling
+  static data), to allow for building of DLLs on WIN32-VC platform.
+
 particles                                        particles-V09-00-03
 ---------
 - Added check in G4IonTable for atomic number to be less than '999'.
@@ -121,7 +126,7 @@ persistency                                      persistency-V09-00-00
   parameterised volumes and material optical properties.
 - Moved existing classes to "mctruth" sub-module; renamed libraries.
 
-physics_lists                                    phys-list-V09-00-11
+physics_lists                                    phys-list-V09-00-12
 -------------
 - New physics list QGS_BIC, equivalent to QGSP_BIC, but using binary also for
   pion and for rescattering via the propagate interface; the deexcitation
@@ -131,6 +136,8 @@ physics_lists                                    phys-list-V09-00-11
 - New physics list QGSC_BERT; use QGSC down to overlap with BERT. LEP is not
   used for proton, neutron, pions, kaons, except for neutron capture and
   neutron induced fission.
+- New physics list QGSP_BERT_DIF; as QGSP_BERT with projectile diffraction for
+  proton and neutron enabled.
 - New physics list QGSP_BIC2: like QGSP_BIC, but using BIC for low energy pions.
 - Enabling use of projectile diffraction in QGSP-like lists, and created
   new list using projectile diffraction, QGSP_DIF.
@@ -366,9 +373,6 @@ examples                                         examples-V09-01-00
   o Updated physics commands in macro files. Updated README.
 - advanced/underground_physics (DMX-V09-00-02)
   o Corrected micrometer unit in macros from mum to um (old bug since 8.2).
-- extended/gdml (exgdml-V09-00-01)
-  o Updated to co-work with built-in GDML plugin module GDML-3.
-  o Showing loading of modular GDML files.
 - extended/electromagnetic/TestEm1 (testem1-V09-00-01)
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
 - extended/electromagnetic/TestEm3 (testem3-V09-00-02)
@@ -399,6 +403,9 @@ examples                                         examples-V09-01-00
 - extended/electromagnetic/TestEm18 (testem18-V09-00-01)
   o PhysicsList: added more EmOptions.
   o HistoManager/HistoMessenger: printing selected histos on ascii file.
+- extended/gdml (exgdml-V09-00-02)
+  o Updated to co-work with built-in GDML plugin module GDML-3.
+  o Showing loading of modular GDML files.
 - extended/hadronic/Hadr01 (exhadr01-V09-00-02)
   o Physics list updated according to recent changes in hadronics and
     physics_lists packages. Added QGSC_BERT physics list.
