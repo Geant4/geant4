@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2007-12-05 08:43:55 gcosmo Exp $
+$Id: History,v 1.12 2007-12-11 13:09:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 11th, 2007  G.Cosmo - exgdml-V09-00-02
+- Protected usage of G4UItcsh in main().
 
 December 5th, 2007  Z.Torzsok - exgdml-V09-00-01
 - Corrected call to parser in main.

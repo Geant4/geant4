@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.4 2007-11-26 14:34:46 ztorzsok Exp $
+// $Id: load_gdml.cc,v 1.5 2007-12-11 13:09:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+// #include "G4UItcsh.hh"
 #include "G4TransportationManager.hh"
 #include "G4VisExecutive.hh"
 
@@ -71,7 +71,12 @@ int main(int argc, char **argv) {
 
    G4UImanager* UI = G4UImanager::GetUIpointer();
 
-   G4UIsession * session = new G4UIterminal(new G4UItcsh);
+   G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+   session = new G4UIterminal(new G4UItcsh);
+#else
+   session = new G4UIterminal();
+#endif
 
    UI->ApplyCommand("/control/execute vis.mac"); 
 
