@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.75 2007-11-13 17:22:51 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.76 2007-12-11 11:39:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -585,9 +585,6 @@ G4double G4ElasticHadrNucleusHE::
 
   G4int index = NumbOnE*ONQ2;
 
-  G4double Weight= 1.0;
-  G4double rmax  = 1.0;
-
   // Select kinematics for node energy
   G4double T     = Energy[NumbOnE];
   hLabMomentum2  = T*(T + 2.*hMass);
@@ -609,22 +606,18 @@ G4double G4ElasticHadrNucleusHE::
     DefineHadronValues(Z);
 
     if(verboseLevel >0)
-    {
-    G4cout<<"1  plab  T  "<<plab<<"  "<<T<<"  sigTot  B  ReIm  "
-          <<HadrTot<<"  "<<HadrSlope<<"  "<<HadrReIm<<G4endl;
-    G4cout<<"  R1  R2  Aeff  p  "<<R1<<"  "<<R2<<"  "<<Aeff<<"  "
-          <<Pnucl<<G4endl;
-    }
-//    G4int AWeight = pElD->AtomicWeight;
+      {
+	G4cout<<"1  plab  T  "<<plab<<"  "<<T<<"  sigTot  B  ReIm  "
+	      <<HadrTot<<"  "<<HadrSlope<<"  "<<HadrReIm<<G4endl;
+	G4cout<<"  R1  R2  Aeff  p  "<<R1<<"  "<<R2<<"  "<<Aeff<<"  "
+	      <<Pnucl<<G4endl;
+      }
 
-///    Weight = GetLightFq2(Z, AWeight, Q2max);
-
-    pElD->CrossSecMaxQ2[NumbOnE] = Weight;
+    pElD->CrossSecMaxQ2[NumbOnE] = 1.0;
 
     if(verboseLevel > 1)
       G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
 	    << " length= " << length 
-	    << " Weight "<<Weight
 	    << " Q2max= " << Q2max 
 	    << " ekin= " << ekin <<G4endl;
     
@@ -637,104 +630,24 @@ G4double G4ElasticHadrNucleusHE::
 
     for(G4int ii=0; ii<ONQ2; ii++)
       {
-   if(verboseLevel > 2)
-   G4cout<<"  ii LineFq2  "<<ii<<"  "<<LineFq2[ii]/LineFq2[ONQ2-1]
-         <<"  dF(q2) "<<LineFq2[ii]-LineFq2[ii-1]<<G4endl;
+        if(verboseLevel > 2)
+	  G4cout<<"  ii LineFq2  "<<ii<<"  "<<LineFq2[ii]/LineFq2[ONQ2-1]
+		<<"  dF(q2) "<<LineFq2[ii]-LineFq2[ii-1]<<G4endl;
 
         pElD->TableCrossSec[index+ii] = LineFq2[ii]/LineFq2[ONQ2-1];
 
       }
-
+    
     pElD->dnkE[NumbOnE] = ONQ2;
-    rmax = 1;
-/*
-    for(G4int ii=1; ii<ONQ0; ii++)
-    {
-	Q2 = pElD->TableQ2[ii];
-
-	if(Q2 < Q2max) Buf = GetLightFq2(Z, AWeight, Q2)/Weight;
-	else           Buf = 1.0;
-
-	pElD->TableCrossSec[index+ii] = Buf;
-
-	if(verboseLevel > 1)
-	  G4cout<<" HadrNucleusQ2_2: ii= " << ii << " Q2= "
-		<<Q2 <<" p= " <<Buf<<" B*W "<<Buf*Weight<<G4endl;
-
-
-
-	CrSec = HadrNucDifferCrSec(NumbN, Q2);   //$$$$$$$$$$$$$$$$$$$
-
-	if(verboseLevel > 1)
-	G4cout<<" ii  Q2  DiffCrSec  "<<ii<<"  "<<Q2<<"  "<<CrSec<<G4endl;
-
-    }   // for ii
-
-    rmax    = Buf;
-    length  = ONQ0;
-    pElD->dnkE[NumbOnE] = ONQ0;
-*/
+    length = ONQ2;
   } 
-  else 
-  {
-    rmax = pElD->TableCrossSec[index+length-1];
-  }
 
   G4double* dNumbFQ2 = &(pElD->TableCrossSec[index]);
 
-  // No more vector needed
-
-  if(rmax >= Rand) 
-  {
-
-    for( iNumbQ2 = 1; iNumbQ2<length; iNumbQ2++ ) 
+  for( iNumbQ2 = 1; iNumbQ2<length; iNumbQ2++ ) 
     {
       if(Rand <= pElD->TableCrossSec[index+iNumbQ2]) break;
     }
-
-  
-  } 
-
-/*
-  else // Build second part of the vector
-  {    
-    if(!isIni) 
-    {
-      R1    = pElD->R1;
-      R2    = pElD->R2;
-      Aeff  = pElD->Aeff;
-      Pnucl = pElD->Pnucl;
-      hLabMomentum = std::sqrt(hLabMomentum2);
-      DefineHadronValues(Z);
-      Weight = pElD->CrossSecMaxQ2[NumbOnE];
-    }
-    G4int AWeight = pElD->AtomicWeight;
-     
-    // Stop building when find out the node
-
-    for(iNumbQ2 = length; iNumbQ2<ONQ2; iNumbQ2++) 
-    {
-
-      Q2 = pElD->TableQ2[iNumbQ2];
-
-      if(Q2 < Q2max) Buf = GetLightFq2(Z, AWeight, Q2)/Weight;
-      else           Buf = 1.0;
-
-      pElD->TableCrossSec[index+iNumbQ2] = Buf;
-
-  if(verboseLevel > 1)
-  G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
-        << " iNumbQ2= " << iNumbQ2 << " Q2= "
-        <<Q2 <<" Buf= " <<Buf<<" B*W "<<Buf*Weight<<G4endl;
-      
-      if(Rand <= Buf) 
-      {
-	pElD->dnkE[NumbOnE] = iNumbQ2+1;
-	break;
-      }
-    }   
-  }
-*/
   Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
 
   if(tmax < Q2max) Q2 *= tmax/Q2max;
