@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.29 2007-12-11 09:57:34 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.30 2007-12-11 14:55:00 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -153,51 +153,6 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
    structure.Parse(name);
 
    return structure.getVolume(structure.GenerateName(volname));
-}
-
-void G4GDMLStructure::loopRead(const xercesc::DOMElement* const element) {
-
-   G4String var;
-   G4String from;
-   G4String to;
-   G4String step;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="var") var  = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
-   }
-
-   eval.checkVariable(var);
-
-   G4int _var = eval.EvaluateInteger(var );
-   G4int _from = eval.EvaluateInteger(from);
-   G4int _to = eval.EvaluateInteger(to  );
-   G4int _step = eval.EvaluateInteger(step);
-   
-   if (!from.empty()) _var = _from;
-
-   while (_var <= _to) {
-   
-      eval.setVariable(var,_var);
-      structureRead(element);
-
-      _var += _step;
-   }
 }
 
 void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *mother) {
@@ -421,8 +376,8 @@ void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="loop") loopRead(child); else
       if (tag=="volume") volumeRead(child); else      
+      if (tag=="loop") looopRead(child,&G4GDMLBase::structureRead); else
       G4Exception("GDML: Unknown tag in structure: "+tag);
    }
 }

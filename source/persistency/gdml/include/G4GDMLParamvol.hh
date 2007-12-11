@@ -54,8 +54,7 @@ private:
    void hype_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
   
    void parametersRead(const xercesc::DOMElement* const);
-   void contentRead(const xercesc::DOMElement* const);
-   void loopRead(const xercesc::DOMElement* const);
+   void paramvol_contentRead(const xercesc::DOMElement* const);
 protected:
    void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
 };

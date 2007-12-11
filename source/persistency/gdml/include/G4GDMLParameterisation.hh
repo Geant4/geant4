@@ -57,6 +57,8 @@ public:
       G4RotationMatrix* pRot;
       G4ThreeVector position;
       G4double dimension[16];
+
+      PARAMETER() { memset(dimension,0,sizeof(dimension)); }
    };
 
    G4int getSize() const;

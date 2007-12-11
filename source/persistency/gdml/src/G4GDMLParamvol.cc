@@ -2,10 +2,7 @@
 
 void G4GDMLParamvol::box_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
-   G4String lunit("1");
-   G4String x;
-   G4String y;
-   G4String z;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -18,24 +15,18 @@ void G4GDMLParamvol::box_dimensionsRead(const xercesc::DOMElement* const element
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="x") x = attribute_value; else
-      if (attribute_name=="y") y = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="lunit") lunit = eval.Evaluate(attValue); else
+      if (attName=="x") parameter.dimension[0] = eval.Evaluate(attValue); else
+      if (attName=="y") parameter.dimension[1] = eval.Evaluate(attValue); else
+      if (attName=="z") parameter.dimension[2] = eval.Evaluate(attValue);
    }
 
-   G4double _lunit = eval.Evaluate(lunit);
-
-   parameter.dimension[0] = eval.Evaluate(x)*_lunit;
-   parameter.dimension[1] = eval.Evaluate(y)*_lunit;
-   parameter.dimension[2] = eval.Evaluate(z)*_lunit;
-
-   parameter.dimension[0] *= 0.5;
-   parameter.dimension[1] *= 0.5;
-   parameter.dimension[2] *= 0.5;
+   parameter.dimension[0] *= 0.5*lunit;
+   parameter.dimension[1] *= 0.5*lunit;
+   parameter.dimension[2] *= 0.5*lunit;
 }
 
 void G4GDMLParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
@@ -501,7 +492,7 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
    parameterisation->addParameter(parameter);
 }
 
-void G4GDMLParamvol::contentRead(const xercesc::DOMElement* const element) {
+void G4GDMLParamvol::paramvol_contentRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -511,53 +502,9 @@ void G4GDMLParamvol::contentRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-       if (tag=="loop") loopRead(child); else
+       if (tag=="loop") looopRead(child,&G4GDMLBase::paramvol_contentRead); else
        if (tag=="parameters") parametersRead(child);
     }
-}
-
-void G4GDMLParamvol::loopRead(const xercesc::DOMElement* const element) {
-
-   G4String var;
-   G4String from;
-   G4String to;
-   G4String step;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="var") var = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
-   }
-
-   eval.checkVariable(var);
-
-   G4int _var = eval.EvaluateInteger(var);
-   G4int _from = eval.EvaluateInteger(from);
-   G4int _to = eval.EvaluateInteger(to);
-   G4int _step = eval.EvaluateInteger(step);
-   
-   if (!from.empty()) _var = _from;
-
-   while (_var <= _to) {
-   
-      eval.setVariable(var,_var);
-      contentRead(element);
-      _var += _step;
-   }
 }
 
 void G4GDMLParamvol::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* mother) {
@@ -577,7 +524,7 @@ void G4GDMLParamvol::paramvolRead(const xercesc::DOMElement* const element,G4Log
        if (tag=="volumeref") volumeref = refRead(child);
    }
 
-   contentRead(element);
+   paramvol_contentRead(element);
 
    G4LogicalVolume* logvol = getVolume(GenerateName(volumeref));
 

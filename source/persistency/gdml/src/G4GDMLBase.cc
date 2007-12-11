@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.4 2007-12-05 15:44:48 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.5 2007-12-11 14:54:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -145,6 +145,51 @@ void G4GDMLBase::Parse(const G4String& fileName) {
       if (tag=="solids") solidsRead(child); else
       if (tag=="setup") setupRead(child); else
       if (tag=="structure") structureRead(child);
+   }
+}
+
+void G4GDMLBase::looopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
+
+   G4String var;
+   G4String from;
+   G4String to;
+   G4String step;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="var") var = attribute_value; else
+      if (attribute_name=="from") from = attribute_value; else
+      if (attribute_name=="to") to = attribute_value; else
+      if (attribute_name=="step") step = attribute_value;
+   }
+
+   eval.checkVariable(var);
+
+   G4int _var = eval.EvaluateInteger(var);
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to = eval.EvaluateInteger(to);
+   G4int _step = eval.EvaluateInteger(step);
+   
+   if (!from.empty()) _var = _from;
+
+   while (_var <= _to) {
+   
+      eval.setVariable(var,_var);
+      (this->*func)(element);
+
+      _var += _step;
    }
 }
 

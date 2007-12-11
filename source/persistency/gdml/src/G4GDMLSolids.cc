@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.27 2007-12-10 14:36:12 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.28 2007-12-11 14:55:00 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -298,51 +298,6 @@ void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
    z *= 0.5*lunit;
 
    new G4Hype(name,rmin,rmax,inst,outst,z);
-}
-
-void G4GDMLSolids::loopRead(const xercesc::DOMElement* const element) {
-
-   G4String var;
-   G4String from;
-   G4String to;
-   G4String step;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="var") var = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
-   }
-
-   eval.checkVariable(var);
-
-   G4int _var = eval.EvaluateInteger(var);
-   G4int _from = eval.EvaluateInteger(from);
-   G4int _to = eval.EvaluateInteger(to);
-   G4int _step = eval.EvaluateInteger(step);
-   
-   if (!from.empty()) _var = _from;
-
-   while (_var <= _to) {
-   
-      eval.setVariable(var,_var);
-      solidsRead(element);
-
-      _var += _step;
-   }
 }
 
 void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
@@ -1124,7 +1079,6 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="ellipsoid") ellipsoidRead(child); else
       if (tag=="eltube") eltubeRead(child); else
       if (tag=="hype") hypeRead(child); else
-      if (tag=="loop") loopRead(child); else
       if (tag=="orb") orbRead(child); else
       if (tag=="para") paraRead(child); else
       if (tag=="polycone") polyconeRead(child); else
@@ -1141,6 +1095,7 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="intersection") booleanRead(child,INTERSECTION); else
       if (tag=="subtraction") booleanRead(child,SUBTRACTION); else
       if (tag=="union") booleanRead(child,UNION); else
+      if (tag=="loop") looopRead(child,&G4GDMLBase::solidsRead); else
       G4Exception("GDML: Unknown tag in solids: "+tag);
    }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.18 2007-12-06 09:58:14 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.19 2007-12-11 14:54:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,6 @@ private:
    void ellipsoidRead(const xercesc::DOMElement* const);
    void eltubeRead(const xercesc::DOMElement* const);
    void hypeRead(const xercesc::DOMElement* const);
-   void loopRead(const xercesc::DOMElement* const);
    void orbRead(const xercesc::DOMElement* const);
    void paraRead(const xercesc::DOMElement* const);
    void polyconeRead(const xercesc::DOMElement* const);

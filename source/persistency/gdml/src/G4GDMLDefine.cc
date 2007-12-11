@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.cc,v 1.16 2007-12-10 09:32:38 ztorzsok Exp $
+// $Id: G4GDMLDefine.cc,v 1.17 2007-12-11 14:55:00 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLDefine Implementation
@@ -127,11 +127,7 @@ void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
       if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   x *= unit;
-   y *= unit;
-   z *= unit;
-
-   positionMap[name] = new G4ThreeVector(x,y,z);
+   positionMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
 void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
@@ -163,11 +159,7 @@ void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
       if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   x *= unit;
-   y *= unit;
-   z *= unit;
-
-   rotationMap[name] = new G4ThreeVector(x,y,z);
+   rotationMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
 void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {

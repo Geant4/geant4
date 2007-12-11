@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.18 2007-12-06 09:58:14 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.19 2007-12-11 14:54:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,6 @@ private:
    EAxis directionRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
-   void loopRead(const xercesc::DOMElement* const);
    void physvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
    G4double quantityRead(const xercesc::DOMElement* const);
    void replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
