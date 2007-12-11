@@ -150,7 +150,10 @@ to:
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
-<blink>!!! ADD TEST HERE !!!</blink>
+  Gamma level file warnings in G4NuclearLevelManager.cc have been 
+  suppressed, so if an isotope has no data, no warning will be issued.
+  To turn them on again, set the pre-compiler flag
+  CPPFLAGS += -DGAMMAFILEWARNING and re-build your version of Geant4.
 
 <P> </P>
 <B>Physics Lists</B>
@@ -216,7 +219,18 @@ Please see the last section for the corresponding details.
 
 <B>Hadronic physics</B>
 <UL>
-<LI><blink>!!! ADD TEST HERE !!!</blink></LI>
+<LI>G4BinaryCascade::Propagate() method is now complete.  This allows the user 
+    to use Binary cascade as a transport model within the high energy framework
+    (G4TheoFSGenerator::SetTransport()).  This feature is aimed at expert users. </LI>
+<LI>Alpha release of INCL cascade code.  This will be an alternative to the 
+    Binary and Bertini cascades already offered by Geant4 and will be valid up
+    3 GeV.  The code is not yet validated.</LI>
+<LI>Alpha release of QMD (quantum molecular dynamics) nucleus-nucleus interaction
+    code.  The code is not yet validated.</li>
+<LI>High precision neutrons: G4NDL 3.12 is now released.  This uses JENDL entries
+    for Cd isotopes, and adds four new elements with their corresponding isotopes:
+    Hg, Ra, Br, and La. </LI>
+
 </UL>
 
 <B>Command-based scoring</B>
@@ -250,7 +264,26 @@ Please see the last section for the corresponding details.
 
 <B>Hadronic physics</B>
 <UL>
-<LI><blink>!!! ADD TEST HERE !!!</blink></LI>
+<LI>Fixed problem reported by ATLAS of high energy collision of sigma+ and a 
+    nucleon producing a high energy backward proton.  This problem has been in 
+    the hadronic code since the beginning and was due to incorrectly selecting
+    evaporated nucleons as leading particles.  At 1 TeV incident energy, this 
+    type of event occurred 0.5% to 1% of the time when the HEP models are used.
+    After the fix, no high energy backward nucleons are observed, with the effect
+    that such events will not exist to mimic exotic reactions.</LI>
+<LI>Bug fixes and completed implementation of theory in G4PreCompoundModel 
+    and G4Evaporation have produced a 10-15% increase in neutron flux for 2.5 GeV/c 
+    protons incident on Pb.</LI>
+<LI>Correct time now set for secondaries, instead of global time.  This will 
+    primarily affect neutron times for users of the HP neutron package.</LI>
+<LI>An angular distribution bug in Bertini cascade was fixed.  Previously,
+    double differential cross sections showed an excess of events at high 
+    energy and small to medium scattering angles.  The fix removes this by
+    using an exp(t) distribution for nucleon-nucleon scattering above 2.8 GeV.  
+    This will result in only a small reduction of average particle energy in 
+    the secondaries.</LI>
+<LI>Bug fix in quasi-elastic scattering may cause shower shapes to be a bit 
+    shorter and wider when using QGSC/QGSP physics lists.</LI>
 </UL>  
 
 <P> </P>
