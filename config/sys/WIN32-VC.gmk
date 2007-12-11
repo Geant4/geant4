@@ -80,7 +80,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              /libpath:$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
+             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
@@ -103,6 +103,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              /libpath:$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
+             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
 endif
