@@ -138,7 +138,6 @@ physics_lists                                    phys-list-V09-00-12
   neutron induced fission.
 - New physics list QGSP_BERT_DIF; as QGSP_BERT with projectile diffraction for
   proton and neutron enabled.
-- New physics list QGSP_BIC2: like QGSP_BIC, but using BIC for low energy pions.
 - Enabling use of projectile diffraction in QGSP-like lists, and created
   new list using projectile diffraction, QGSP_DIF.
 - Added possibility to activate G4SynchrotronRadiation and mu-nuclear
