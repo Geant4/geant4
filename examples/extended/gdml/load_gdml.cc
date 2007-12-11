@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.5 2007-12-11 13:09:39 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.6 2007-12-11 13:13:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4UIterminal.hh"
-// #include "G4UItcsh.hh"
+#include "G4UItcsh.hh"
 #include "G4TransportationManager.hh"
 #include "G4VisExecutive.hh"
 
