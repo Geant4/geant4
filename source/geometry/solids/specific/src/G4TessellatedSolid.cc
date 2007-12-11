@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.13 2007-12-10 16:30:30 gunter Exp $
+// $Id: G4TessellatedSolid.cc,v 1.14 2007-12-11 15:28:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -943,7 +943,7 @@ G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
     // Check for containment and clamp to voxel boundaries
     for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; axis++)
     {
-      EAxis geomAxis; // G4 geom classes use different index type
+      EAxis geomAxis = kXAxis; // G4 geom classes use different index type
       switch(axis)
       {
         case G4ThreeVector::X: geomAxis = kXAxis; break;
