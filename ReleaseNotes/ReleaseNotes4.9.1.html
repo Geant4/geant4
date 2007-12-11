@@ -244,7 +244,6 @@ Please see the last section for the corresponding details.
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>Small (~5%) speed up of simulation for calorimeters.</LI>
 <LI>Improved simulation of spectrum of muon Bremsstrahlung.</LI>
 <LI>Improved simulation of straggling of ions (Bragg peak for ions).</LI>
 </UL>
@@ -365,9 +364,10 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI><B>High Energy</B>
     <UL>
-    <LI>Introduced theoretical asymtotic low-energy parameterization of
-        <TT>dEdx</TT> and fixed intermediate parameterization between
-        low-energy and high-energy models.</LI>
+    <LI><TT>G4mplIonisation</TT>: introduced theoretical asymtotic low-energy
+        parameterization of <TT>dEdx</TT> and fixed intermediate
+        parameterization between low-energy and high-energy models
+        for classical magnetic monopole..</LI>
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
@@ -450,6 +450,10 @@ please refer to the corresponding History files provided in most packages):
         <LI>Tuned <TT>ComputeGeomPathLength()</TT> in order to get better low
             energy behaviour for heavy particles (<TT>mu</TT>, hadrons).</LI>
         </UL></LI>
+    <LI><TT>G4UrbanMscModel90</TT>: new class which keeps the version of
+        sampling of scattering angle as the one of version 9.0 but includes
+        also protections and fixes of <TT>G4UrbanMscModel</TT>.
+        Used by <TT>G4hMultipleScattering</TT>.</LI>
     <LI><TT>G4CoulombScattering</TT>, <TT>G4CoulombScatteringModel</TT>,
         <TT>G4eCoulombScatteringModel</TT>:
         <UL>
