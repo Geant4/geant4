@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2007-12-09 12:02:34 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2007-12-11 14:40:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
   myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
 
-  myMPT1->AddConstProperty("SCINTILLATIONYIELD",200./MeV);
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD",2./MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 0.1*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",0.3*ns);

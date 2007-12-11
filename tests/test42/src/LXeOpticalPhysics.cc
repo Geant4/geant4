@@ -61,7 +61,13 @@ void LXeOpticalPhysics::ConstructParticle()
 void LXeOpticalPhysics::ConstructProcess()
 {
   theScintProcess = new G4Scintillation();
-  theCerenkovProcess=new G4Cerenkov();
+
+  // theCerenkovProcess=new G4Cerenkov();
+  theCerenkovProcess=new Ts42Cerenkov();
+
+
+
+
   theAbsorptionProcess=new G4OpAbsorption();
   theRayleighScattering=new G4OpRayleigh();
   theBoundaryProcess=new G4OpBoundaryProcess();

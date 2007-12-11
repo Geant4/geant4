@@ -34,6 +34,7 @@
 
 #include "G4Scintillation.hh"
 #include "G4Cerenkov.hh"
+#include "Ts42Cerenkov.hh"
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
 #include "G4OpBoundaryProcess.hh"
@@ -60,7 +61,11 @@ public:
 protected:
   
   G4Scintillation* theScintProcess;
-  G4Cerenkov* theCerenkovProcess;
+
+
+  // G4Cerenkov* theCerenkovProcess;
+  Ts42Cerenkov* theCerenkovProcess;
+
   G4OpAbsorption* theAbsorptionProcess;
   G4OpRayleigh* theRayleighScattering;
   G4OpBoundaryProcess* theBoundaryProcess;
