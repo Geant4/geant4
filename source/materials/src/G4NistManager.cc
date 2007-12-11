@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.14 2007-10-18 11:14:33 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.15 2007-12-11 13:32:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,6 +172,28 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4NistManager::GetZ13(G4double Z)
+{
+  G4int iz = G4int(Z);
+  G4double x = (Z - G4double(iz))/(3.0*Z);
+  if(iz > 255) iz = 255;
+  else if(iz < 0) iz = 0;
+  return POWERZ13[iz]*(1.0 + x);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4NistManager::GetLOGA(G4double A)
+{
+  G4int ia = G4int(A);
+  G4double x = (A - G4double(ia))/A;
+  if(ia > 255) ia = 255;
+  else if(ia < 0) ia = 0;
+  return LOGA[ia] + x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
