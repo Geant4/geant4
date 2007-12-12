@@ -97,15 +97,15 @@ void G4GDMLParameterisation::ComputeDimensions(G4Para& para,const G4int index,co
    para.SetYHalfLength(parameterList[index].dimension[1]);
    para.SetZHalfLength(parameterList[index].dimension[2]);
    para.SetAlpha(parameterList[index].dimension[3]);
-   para.SetTanAlpha(parameterList[index].dimension[4]);
-   para.SetThetaAndPhi(parameterList[index].dimension[5],parameterList[index].dimension[6]);
+   para.SetTanAlpha(tan(parameterList[index].dimension[3]));
+   para.SetThetaAndPhi(parameterList[index].dimension[4],parameterList[index].dimension[5]);
 }
 
 void G4GDMLParameterisation::ComputeDimensions(G4Hype& hype,const G4int index,const G4VPhysicalVolume*) const {
 
    hype.SetInnerRadius(parameterList[index].dimension[0]);
    hype.SetOuterRadius(parameterList[index].dimension[1]);
-   hype.SetZHalfLength(parameterList[index].dimension[2]);
-   hype.SetInnerStereo(parameterList[index].dimension[3]);
-   hype.SetOuterStereo(parameterList[index].dimension[4]);
+   hype.SetZHalfLength(parameterList[index].dimension[4]);
+   hype.SetInnerStereo(parameterList[index].dimension[2]);
+   hype.SetOuterStereo(parameterList[index].dimension[3]);
 }

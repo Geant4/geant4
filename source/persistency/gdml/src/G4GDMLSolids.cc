@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.29 2007-12-12 10:26:36 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.30 2007-12-12 14:18:33 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -71,8 +71,8 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
 
       if (tag=="first") first = refRead(child); else
       if (tag=="second") second = refRead(child); else
-      if (tag=="position") position = positionRead(child); else
-      if (tag=="rotation") rotation = rotationRead(child); else
+      if (tag=="position") position = vectorRead(child); else
+      if (tag=="rotation") rotation = vectorRead(child); else
       G4Exception("GDML: Unknown tag in boolean solid: "+tag);
    }
 
@@ -1100,7 +1100,7 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
    }
 }
 
-G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const element) {
+G4ThreeVector G4GDMLSolids::vectorRead(const xercesc::DOMElement* const element) {
 
    G4double unit = 1.0;
 
@@ -1129,46 +1129,6 @@ G4ThreeVector G4GDMLSolids::positionRead(const xercesc::DOMElement* const elemen
    return vec*unit;
 }
 
-G4ThreeVector G4GDMLSolids::rotationRead(const xercesc::DOMElement* const element) {
-
-   return positionRead(element); // Both position and rotation are having the same attributes!
-}
-
-G4ThreeVector G4GDMLSolids::scaleRead(const xercesc::DOMElement* const element) {
-
-   G4ThreeVector vec;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attName=="x") vec.setX(eval.Evaluate(attValue)); else
-      if (attName=="y") vec.setY(eval.Evaluate(attValue)); else
-      if (attName=="z") vec.setZ(eval.Evaluate(attValue));
-   }
-
-   return vec;
-}
-
-G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
-
-   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
-
-   if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
-
-   return solidPtr;
-}
-
 G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
 
    G4String ref;
@@ -1191,4 +1151,13 @@ G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
    }
 
    return ref;
+}
+
+G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
+
+   G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
+
+   if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
+
+   return solidPtr;
 }

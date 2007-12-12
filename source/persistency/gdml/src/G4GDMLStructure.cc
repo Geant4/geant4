@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.31 2007-12-12 10:26:36 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.32 2007-12-12 14:18:33 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -173,9 +173,9 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element) {
 
       if (tag=="file") logvol = fileRead(child); else
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child))); else
-      if (tag=="position") position = positionRead(child); else
-      if (tag=="rotation") rotation = rotationRead(child); else
-      if (tag=="scale") scale = scaleRead(child); else
+      if (tag=="position") position = vectorRead(child); else
+      if (tag=="rotation") rotation = vectorRead(child); else
+      if (tag=="scale") scale = vectorRead(child); else
       if (tag=="positionref") position = *getPosition(GenerateName(refRead(child))); else
       if (tag=="rotationref") rotation = *getRotation(GenerateName(refRead(child))); else
       if (tag=="scaleref") scale = *getScale(GenerateName(refRead(child)));
