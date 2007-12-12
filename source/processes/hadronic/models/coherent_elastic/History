@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+  G4ElasticHadrNucleusHE - fixed non-reproducibility
+  G4HadronElastic - return back threshold to G4ElasticHadrNucleusHE 
+                    model 1 GeV
+
 10 Dec 2007 -  V.Ivanchenko (hadr-cohe-V09-00-07)
+------------------------------------------------
   G4HadronElastic - set threshold to G4ElasticHadrNucleusHE model
                     DBL_MAX
 
