@@ -406,7 +406,7 @@ examples                                         examples-V09-01-00
 - extended/gdml (exgdml-V09-00-02)
   o Updated to co-work with built-in GDML plugin module GDML-3.
   o Showing loading of modular GDML files.
-- extended/hadronic/Hadr01 (exhadr01-V09-00-02)
+- extended/hadronic/Hadr01 (exhadr01-V09-00-03)
   o Physics list updated according to recent changes in hadronics and
     physics_lists packages. Added QGSC_BERT physics list.
 - extended/medical/DICOM (DICOM-V09-00-01)
