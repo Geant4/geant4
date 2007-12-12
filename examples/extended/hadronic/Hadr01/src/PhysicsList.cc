@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.23 2007-11-16 16:37:09 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.24 2007-12-12 12:00:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -75,8 +75,6 @@
 #include "HadronPhysicsQGSP_BERT_HP.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
 #include "HadronPhysicsQGSP_BIC_HP.hh"
-#include "HadronPhysicsQGSP_CASC.hh"
-#include "HadronPhysicsQGS_BIC.hh"
 
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
@@ -289,12 +287,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC_HP("hadron",true));
     dump = true;
 
-  } else if (name == "QGSP_CASC") {
-
-    SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP_CASC("hadron",true));
-    dump = true;
-
   } else if (name == "QGSP_DIF") {
 
     SetBuilderList1();
@@ -327,13 +319,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     SetBuilderList4();
     hadronPhys.push_back( new HadronPhysicsQGSP("hadron",true));
     dump = true;
-
-  } else if (name == "QGS_BIC") {
-
-    SetBuilderList0();
-    hadronPhys.push_back( new HadronPhysicsQGS_BIC("hadron",true));
-    dump = true;
-
 
   } else {
 
@@ -472,9 +457,9 @@ void PhysicsList::List()
 	 << G4endl; 
   G4cout << "                            QGSC_BERT QGSC_EFLOW QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV "
 	 << G4endl; 
-  G4cout << "                            QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP QGSP_CASC QGSP_DIF " 
+  G4cout << "                            QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP QGSP_DIF " 
 	 << G4endl; 
-  G4cout << "                            QGSP_EMV QGSP_EMX QGSP_NQE QGSP_QEL QGS_BIC "
+  G4cout << "                            QGSP_EMV QGSP_EMX QGSP_NQE QGSP_QEL  "
 	 << G4endl; 
 }
 

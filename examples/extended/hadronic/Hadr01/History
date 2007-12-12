@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2007-12-10 10:26:58 vnivanch Exp $
+$Id: History,v 1.23 2007-12-12 12:00:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-12-07  V.Ivant (exhadr01-V09-00-03)
+- remove experimental PhysLists: QGS_BIC, QGSP_CASC
 
 07-12-07  V.Ivant (exhadr01-V09-00-02)
 - If type of histograms "root" then added "h" in front of histograms id

@@ -33,8 +33,5 @@ $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 setenv PHYSLIST QBBC_DEL
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
-setenv PHYSLIST QGS_BIC
-$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
 echo "Done!"
 #
