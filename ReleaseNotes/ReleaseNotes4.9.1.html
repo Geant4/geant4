@@ -199,25 +199,22 @@ Please see the last section for the corresponding details.
 
 <B>Geometry</B>
 <UL>
-<LI>Introduced new specific navigation and parameterisation for regular
-    structures and phantoms. The new algorithm allows for faster navigation
-    and more efficient use of memory in geometries consisting of regular
-    patterns, like parameterisation of voxels in phantoms for medical studies.
-    The example available in <TT>extended/medical/DICOM</TT> has been
-    reviewed to demonstrate the usage of the new navigation technique and
-    allowing for a comparison against traditional algorithms (non optimised,
-    classical 3D optimisation and nested parameterisations).</LI>
+<LI>Introduced new  navigation for phantoms and similar regular
+    structures. The new algorithm provides  fast navigation
+    and no memory overhead for  voxels phantoms and similar geometries.
+    An option is available to skip volume boundaries, when the volumes on either side hold the same material. The example  in <TT>extended/medical/DICOM</TT> has been
+    revised to demonstrate the usage of the new parameterisation required and the corresponding navigation. In addition it
+    enables  comparison against existing algorithms, including the nested parameterisation (which had reduced memory overhead) and the older  3D optimisation.</LI>
 </UL>
 
 <B>GDML detector description persistency</B>
 <UL>
-<LI>A plugin-module for GDML can be optionally installed in Geant4 and will not
-    require dependency on the external GDML (GDML-2.X series) library. The new
+<LI>A plugin-module for GDML can be installed optionally  in Geant4.  This replaces the dependency on the external GDML (GDML-2.X series) library. The new
     module includes all the features supported in the old GDML library for
     importing GDML descriptions, except for handling of parameterised volumes
-    and material optical properties, which will be added in a future version
-    of the new plugin. It is however still possible to use the old external
-    GDML library if needed.</LI>
+    and material optical properties. (These will be added in a future version
+    of the new plugin.) It remains possible to use the old external
+    GDML library, if needed.</LI>
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
