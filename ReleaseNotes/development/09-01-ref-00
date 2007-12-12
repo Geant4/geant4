@@ -86,7 +86,7 @@ geometry/solids/CSG                              geom-csg-V09-00-02
 - Fixed problem of undefined side for valid surface normal in case of Phi
   section and direction through the center of either a G4Tubs or G4Cons shape.
 
-geometry/solids/specific                         geom-specific-V09-00-08
+geometry/solids/specific                         geom-specific-V09-00-08a
 ------------------------
 - Reviewed implementation of G4TessellatedSolid::CalculateExtent() to
   make it more robust and precise. Addresses problem report #983.
