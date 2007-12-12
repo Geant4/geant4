@@ -162,8 +162,21 @@ and re-build the library in
 <P> </P>
 <B>Physics Lists</B>
 <P> </P>
-<blink>!!! ADD TEST HERE !!!</blink>
-
+<P>
+There are no items for migration of user code for the use of reference physics
+lists.
+<P>Several new physics list are offered offering new configurations or new
+modeling options. Feedback via the hypernews forum on physics
+lists on these is welcome. The new physics lists are:<br>
+<b>FTFP_BERT</b> and <b>QGSC_BERT</b>: Both these new lists reduce the use of
+parameterized modeling. For proton, neutron, pion and Koan induced inelastic
+hadronic interactions the parameterized model is not used.</b>
+<b>QGSP_DIF</b> and <b>QGSP_BERT_DIF</b>: For diffractive scattering for proton and
+neutron at high energies a diffractive scattering model provided by CHIPS is
+used.<br>
+<b>QGS_BIC</b> and <b>FTF_BIC</b>: These two lists offer new developments of
+Binary cascade, please see the detailed notes.
+  
 <P> </P>
 <B>Data Sets</B>
 <P> </P>
@@ -236,10 +249,12 @@ Please see the last section for the corresponding details.
 
 <B>Hadronic physics</B>
 <UL>
-<LI><TT>G4BinaryCascade::Propagate()</TT> method is now complete.  This allows
+<LI><TT>G4BinaryCascade::Propagate()</TT> method is first released.  This allows
     the user to use Binary cascade as a transport model within the high energy
     framework (<TT>G4TheoFSGenerator::SetTransport()</TT>). This feature is
-    aimed for expert use. </LI>
+    aimed for expert use, validation is starting.</br></br>
+    A bug fix for incident pions now allows binary cascade to be used for 
+    pions, validation is in progress.</LI>
 <LI>Alpha release of INCL cascade code. This will become an alternative to the 
     Binary and Bertini cascades already offered in Geant4 and will be valid up
     to <TT>3 GeV</TT>. The code is not yet validated.</LI>
@@ -939,10 +954,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Collected many changes for propagate interface.</LI>
     <LI>Fix for pion incident at low energy: cannot go to deexcitation
         directly.</LI>
-    <LI><TT>G4BinaryLightIon</TT>: adapted to changes in BIC.</LI>
-    <LI>Fixes for propagate: particles can decay outside nucleus; corrected
-        counting for late particles</LI>
-    <LI>Deactivated general debug printout in <TT>G4BinaryCascade</TT>.</LI>
+    <LI><TT>G4BinaryLightIon</TT>: adapted to changes in Binary Cascade.</LI>
     </UL></LI>
 <LI><B>Cascade</B>
     <UL>
