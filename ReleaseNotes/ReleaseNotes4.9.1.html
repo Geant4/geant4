@@ -713,46 +713,41 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Parameterisation</B>
     <UL>
-    <LI>Added <TT>Along</TT> methods to <TT>G4FastSimulationManaterProcess</TT>.</LI>
+    <LI>Added <TT>Along</TT> methods to <TT>G4FastSimulationManagerProcess</TT>.</LI>
     <LI>Minor corrections to <TT>G4FastSimulationManagerProcess</TT>: added
         call to <TT>G4PathFinder::PrepareNewTrack()</TT>; deactivated ghost
         navigator in <TT>EndOfTracking()</TT> method.</LI>
     </UL></LI>
 <LI><B>Transportation</B>
     <UL>
-    <LI><TT>G4CoupledTransportation</TT>:
-        <UL>
-        <LI>First fix for problem in condition for relocating when only a
-            parallel geometry limited the step.</LI>
-        <LI>Changed condition for recalculation of the safety used, as
-            currently it improves stability.</LI>
-        <LI>Corrected treatment of time integration.</LI>
-        <LI>Use momentum change flag in particle-change (optimisation).</LI>
-        <LI>Also reset looping counter when no field or charge is present.</LI>
-        <LI>Fix for case of zero proposed step: missed to set end position.</LI>
-        <LI>Improved condition that regulates relocation when any geometry
-            (including a parallel geometry) limits the step.</LI>
-        </UL></LI>
+ 
     <LI><TT>G4Transportation</TT>:
         <UL>
-        <LI>Modification to disable specific optimisation in <TT>G4Navigator</TT>
-            for small linear step (i.e. when a track does less than the safety);
-            the fix is relevant only if there is no field, or the particle is
-            neutral; temporary measure (in current form) to improve comparison
-            of old and new transportation classes.</LI>
+        <LI>Modified behaviour of  <TT>G4Navigator</TT>
+            for small straight steps - when a track does less than the safety. 
+			Before only a simple, quick estimation of the starting point's safety was done, using the 
+			last available value of the isotropic safety (from the Navigator). 
+			Now the navigator is called to compute this safety. This  improves the value 
+			and avoids roundoff issues. It gives better stability in comparisons with 
+			CoupledTransportation. The costs are additional calls to the Navigator. 
+			A new  method  <TT>EnableShortStepOptimisation</TT> controls this. 
+			Note:  this only affects  neutral particles and charged particles when no field is present.  </LI>
         <LI>Fixed <TT>StartTracking()</TT> to reset number of looping steps
-            and to clear propagator state (safety issue in case of
-            overlaps).</LI>
-        <LI>New method (and class member) for flagging on short
-            step-optimisation; when <TT>true</TT>, the optimisation is
-            <TT>on</TT>; steps shorter than the safety will not call
-            <TT>G4Navigator</TT>, so long as the particle goes straight
-            (i.e. it is not charged or there is no field).</LI>
-        <LI>Moved call to <TT>ConfigureForTrack()</TT> in
-            <TT>AlongStepGPIL()</TT> before the check for zero field. Needed
-            to enable a user to switch a global field on (off was already
-            possible), as a track goes between volume (or regions)
-            of a setup; in response to a request from ATLAS.</TT>
+            and to clear propagator state ( issue with caching of safety, which is multi-valued in case of
+            overlaps, is now addressed.)</LI>
+        <LI> Change to enable a user to switch on a global field (off was already
+            possible), when a track goes between volume (or regions) of a setup. Was response 
+			to requirement of ATLAS. Done by moving the call to <tt>ConfigureForTrack()</tt> 
+		    before the check for zero field, in <tt>AlongStepGPIL()</tt>.</LI>
+        </UL></LI>
+	<LI><TT>G4CoupledTransportation</TT>:
+        <UL>
+        <LI>Fix for problem in condition for relocation. It was incorrect when only a
+            parallel geometry limited the step.</LI>
+        <LI>Changed condition for recalculation of the safety used, to improve  stability to roundoff.</LI>
+        <LI>Corrected treatment of time integration.</LI>
+        <LI>Fix to reset looping counter also when no field or charge is present.</LI>
+        <LI>Fix for case of zero proposed step: missed to set end position.</LI>
         </UL></LI>
     </UL></LI>
 </UL>
