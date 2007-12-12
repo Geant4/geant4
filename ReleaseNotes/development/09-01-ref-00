@@ -303,10 +303,11 @@ processes/hadronic                               hadr-V09-00-01
     occurrence in PionPlusExchange, KaonZeroShortExchange, and
     NeutronExchange.
 
-processes/management                             procman-V09-00-05
+processes/management                             procman-V09-00-05a
 --------------------
 - Fixed bug in SetProcessOrderingToSecond() method of G4ProcessManager for
   order of processes when parallel worlds are activated.
+- Moved virtual methods definitions in G4WrapperProcess to be not inline.
 
 processes/parameterisation                       param-V09-00-01
 --------------------------
