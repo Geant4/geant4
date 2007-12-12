@@ -111,7 +111,6 @@ class G4TessellatedGeometryAlgorithms
   private:
 
     static G4TessellatedGeometryAlgorithms *fInstance;
-    G4double                              sqrEpsilon;
 };
 
 #include "G4TessellatedGeometryAlgorithms.icc"

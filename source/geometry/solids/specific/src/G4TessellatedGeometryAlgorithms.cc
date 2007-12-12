@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.4 2007-12-10 16:30:25 gunter Exp $
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.5 2007-12-12 16:51:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -67,7 +67,6 @@ G4TessellatedGeometryAlgorithms* G4TessellatedGeometryAlgorithms::fInstance = 0;
 //
 G4TessellatedGeometryAlgorithms::G4TessellatedGeometryAlgorithms ()
 {
-  sqrEpsilon = DBL_EPSILON * DBL_EPSILON;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,8 +222,8 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
   G4double sqrLen1  = D1.mag2();
   location[0]       = G4TwoVector(0.0,0.0);
   location[1]       = G4TwoVector(0.0,0.0);
-  
-  if (sqrKross > sqrEpsilon * sqrLen0 * sqrLen1)
+
+  if (sqrKross > DBL_EPSILON * DBL_EPSILON * sqrLen0 * sqrLen1)
   {
 //
 //
@@ -250,7 +249,10 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
   G4double sqrLenE = E.mag2();
   kross            = cross(E,D0);
   sqrKross         = kross * kross;
-  if (sqrKross > sqrEpsilon * sqrLen0 * sqrLenE) return 0; //Lines are different.
+  if (sqrKross > DBL_EPSILON * DBL_EPSILON * sqrLen0 * sqrLenE)
+  {
+    return 0; //Lines are different.
+  }
 //
 //
 // Lines are the same.  Test for overlap.
