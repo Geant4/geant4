@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.19 2007-12-11 14:54:59 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.20 2007-12-12 10:26:36 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,17 +54,18 @@
 #include "G4GDMLParamvol.hh"
 
 class G4GDMLStructure : public G4GDMLParamvol {
-private:
+
+   G4LogicalVolume *pMotherLogical;
+
    EAxis directionRead(const xercesc::DOMElement* const);
-   void divisionvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
-   void physvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void physvolRead(const xercesc::DOMElement* const);
    G4double quantityRead(const xercesc::DOMElement* const);
    void replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
-   void replicavolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void replicavolRead(const xercesc::DOMElement* const);
    void volumeRead(const xercesc::DOMElement* const);
-   void volume_contentRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-   void volume_loopRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+   void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
 protected:
    G4LogicalVolume* getVolume(const G4String&) const;

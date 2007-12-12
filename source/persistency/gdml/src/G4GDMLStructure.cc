@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.30 2007-12-11 14:55:00 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.31 2007-12-12 10:26:36 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -69,7 +69,7 @@ EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
    return kUndefined;
 }
 
-void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
+void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element) {
 
    G4double unit = 1.0;
    G4double width = 0.0;
@@ -122,7 +122,7 @@ void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element,G
 
    G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
-   new G4PVDivision("",pLogical,pMother,axis,number,width,offset);
+   new G4PVDivision("",pLogical,pMotherLogical,axis,number,width,offset);
 }
 
 G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const element) {
@@ -155,12 +155,12 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
    return structure.getVolume(structure.GenerateName(volname));
 }
 
-void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4LogicalVolume *mother) {
+void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element) {
 
    G4LogicalVolume* logvol = 0;
 
-   G4ThreeVector position;
-   G4ThreeVector rotation;
+   G4ThreeVector position(0.0,0.0,0.0);
+   G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector scale(1.0,1.0,1.0);
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -190,7 +190,7 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element,G4Log
    G4Transform3D transform(Rot.inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4ReflectionFactory::Instance()->Place(transform,"",logvol,mother,false,0);
+   G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0);
 }
 
 G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element) {
@@ -235,7 +235,7 @@ void G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const 
    }
 }
 
-void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4LogicalVolume* pMother) {
+void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element) {
 
    G4int numb = 0;
 
@@ -274,7 +274,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element,G4
       if (tag=="replicate_along_axis") replicate_along_axisRead(child,width,offset,axis);
    }
 
-   new G4PVReplica("",pLogical,pMother,axis,numb,width,offset);
+   new G4PVReplica("",pLogical,pMotherLogical,axis,numb,width,offset);
 }
 
 void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
@@ -300,10 +300,12 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
 
-   volume_contentRead(element,new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0));
+   pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
+
+   volume_contentRead(element);
 }
 
-void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
+void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -313,56 +315,11 @@ void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const elemen
   
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="loop") volume_loopRead(child,volumePtr); else
-      if (tag=="paramvol") paramvolRead(child,volumePtr); else
-      if (tag=="physvol") physvolRead(child,volumePtr); else
-      if (tag=="replicavol") replicavolRead(child,volumePtr); else
-      if (tag=="divisionvol") divisionvolRead(child,volumePtr);
-   }
-}
-
-void G4GDMLStructure::volume_loopRead(const xercesc::DOMElement* const element,G4LogicalVolume* volumePtr) {
-
-   G4String var;
-   G4String from;
-   G4String to;
-   G4String step;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="var") var  = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
-   }
-
-   eval.checkVariable(var);
-
-   G4int _var  = eval.EvaluateInteger(var);
-   G4int _from = eval.EvaluateInteger(from);
-   G4int _to   = eval.EvaluateInteger(to);
-   G4int _step = eval.EvaluateInteger(step);
-   
-   if (!from.empty()) _var = _from;
-
-   while (_var <= _to) {
-   
-      eval.setVariable(var,_var);
-      volume_contentRead(element,volumePtr);
-
-      _var += _step;
+      if (tag=="paramvol") paramvolRead(child,pMotherLogical); else
+      if (tag=="physvol") physvolRead(child); else
+      if (tag=="replicavol") replicavolRead(child); else
+      if (tag=="divisionvol") divisionvolRead(child); else
+      if (tag=="loop") loopRead(child,&G4GDMLBase::volume_contentRead);
    }
 }
 
@@ -377,7 +334,7 @@ void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="volume") volumeRead(child); else      
-      if (tag=="loop") looopRead(child,&G4GDMLBase::structureRead); else
+      if (tag=="loop") loopRead(child,&G4GDMLBase::structureRead); else
       G4Exception("GDML: Unknown tag in structure: "+tag);
    }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.5 2007-12-11 14:54:59 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.6 2007-12-12 10:26:36 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,7 +148,7 @@ void G4GDMLBase::Parse(const G4String& fileName) {
    }
 }
 
-void G4GDMLBase::looopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
+void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
 
    G4String var;
    G4String from;

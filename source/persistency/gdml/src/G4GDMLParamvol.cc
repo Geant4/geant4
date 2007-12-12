@@ -31,12 +31,7 @@ void G4GDMLParamvol::box_dimensionsRead(const xercesc::DOMElement* const element
 
 void G4GDMLParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
-   G4String lunit("1");
-   G4String x1;
-   G4String x2;
-   G4String y1;
-   G4String y2;
-   G4String z;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -49,30 +44,22 @@ void G4GDMLParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="lunit") lunit = attribute_value; else
-      if (attribute_name=="x1") x1 = attribute_value; else
-      if (attribute_name=="x2") x2 = attribute_value; else
-      if (attribute_name=="y1") y1 = attribute_value; else
-      if (attribute_name=="y2") y2 = attribute_value; else
-      if (attribute_name=="z") z = attribute_value;
+      if (attName=="lunit") lunit = eval.Evaluate(attValue); else
+      if (attName=="x1") parameter.dimension[0] = eval.Evaluate(attValue); else
+      if (attName=="x2") parameter.dimension[1] = eval.Evaluate(attValue); else
+      if (attName=="y1") parameter.dimension[2] = eval.Evaluate(attValue); else
+      if (attName=="y2") parameter.dimension[3] = eval.Evaluate(attValue); else
+      if (attName=="z") parameter.dimension[4] = eval.Evaluate(attValue);
    }
 
-   G4double _lunit = eval.Evaluate(lunit);
-
-   parameter.dimension[0] = eval.Evaluate(x1)*_lunit;
-   parameter.dimension[1] = eval.Evaluate(x2)*_lunit;
-   parameter.dimension[2] = eval.Evaluate(y1)*_lunit;
-   parameter.dimension[3] = eval.Evaluate(y2)*_lunit;
-   parameter.dimension[4] = eval.Evaluate(z)*_lunit;
-
-   parameter.dimension[0] *= 0.5;
-   parameter.dimension[1] *= 0.5;
-   parameter.dimension[2] *= 0.5;
-   parameter.dimension[3] *= 0.5;
-   parameter.dimension[4] *= 0.5;
+   parameter.dimension[0] *= 0.5*lunit;
+   parameter.dimension[1] *= 0.5*lunit;
+   parameter.dimension[2] *= 0.5*lunit;
+   parameter.dimension[3] *= 0.5*lunit;
+   parameter.dimension[4] *= 0.5*lunit;
 }
 
 void G4GDMLParamvol::trap_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
@@ -502,8 +489,8 @@ void G4GDMLParamvol::paramvol_contentRead(const xercesc::DOMElement* const eleme
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-       if (tag=="loop") looopRead(child,&G4GDMLBase::paramvol_contentRead); else
-       if (tag=="parameters") parametersRead(child);
+       if (tag=="parameters") parametersRead(child); else
+       if (tag=="loop") loopRead(child,&G4GDMLBase::paramvol_contentRead);
     }
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.hh,v 1.5 2007-12-11 14:54:59 ztorzsok Exp $
+// $Id: G4GDMLBase.hh,v 1.6 2007-12-12 10:26:36 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -52,7 +52,6 @@
 #include "G4GDMLEvaluator.hh"
 
 class G4GDMLBase {
-private:
    xercesc::XercesDOMParser* parser; // This should be a static member
    G4String prename;
 protected:
@@ -63,7 +62,7 @@ protected:
    virtual G4LogicalVolume* getVolume(const G4String&) const=0;
    virtual G4String getSetup(const G4String&)=0;
 
-   void looopRead(const xercesc::DOMElement* const,void(G4GDMLBase::*func)(const xercesc::DOMElement* const));
+   void loopRead(const xercesc::DOMElement* const,void(G4GDMLBase::*)(const xercesc::DOMElement* const));
 public:
    G4GDMLBase();
    ~G4GDMLBase();
@@ -73,6 +72,7 @@ public:
    virtual void setupRead(const xercesc::DOMElement* const)=0;
    virtual void solidsRead(const xercesc::DOMElement* const)=0;
    virtual void paramvol_contentRead(const xercesc::DOMElement* const)=0;
+   virtual void volume_contentRead(const xercesc::DOMElement* const)=0;
    virtual void structureRead(const xercesc::DOMElement* const)=0;
 
    void Parse(const G4String& fileName);

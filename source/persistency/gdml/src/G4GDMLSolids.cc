@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.28 2007-12-11 14:55:00 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.29 2007-12-12 10:26:36 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -1095,7 +1095,7 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="intersection") booleanRead(child,INTERSECTION); else
       if (tag=="subtraction") booleanRead(child,SUBTRACTION); else
       if (tag=="union") booleanRead(child,UNION); else
-      if (tag=="loop") looopRead(child,&G4GDMLBase::solidsRead); else
+      if (tag=="loop") loopRead(child,&G4GDMLBase::solidsRead); else
       G4Exception("GDML: Unknown tag in solids: "+tag);
    }
 }

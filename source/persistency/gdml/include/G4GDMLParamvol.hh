@@ -39,7 +39,7 @@
 #include "G4GDMLSetup.hh"
 
 class G4GDMLParamvol : public G4GDMLSetup {
-private:
+
    G4GDMLParameterisation* parameterisation;
 
    void box_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
