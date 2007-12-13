@@ -163,25 +163,6 @@ and re-build the library in
 <TT>processes/hadronic/models/de_excitation/photon_evaporation</TT> of Geant4.
 
 <P> </P>
-<B>Physics Lists</B>
-<P> </P>
-<P>
-There are no items for migration of user code for the reference physics lists.<BR>
-Several new physics lists are offered, providing new configurations or new
-modeling options. Feedback via the Hypernews Forum on physics lists is welcome.
-The new physics lists are:
-<UL>
-<LI><B>FTFP_BERT</B> and <B>QGSC_BERT</B>: both of these reduce the use of
-    parameterized modeling. For proton, neutron, pion and kaon induced
-    inelastic hadronic interactions the parameterized model is not used.</LI>
-<LI><B>QGSP_DIF</B> and <B>QGSP_BERT_DIF</B>: for diffractive scattering of
-    proton and neutron at high energies a diffractive scattering model
-    provided by CHIPS is used.</LI>
-<LI><B>QGS_BIC</B> and <B>FTF_BIC</B>: offering new developments of
-    Binary cascade. For more details, see the detailed notes.</LI>
-</UL>
-
-<P> </P>
 <B>Fast Parameterised Simulation</B>
 <P> </P>
 The process <TT>G4FastSimulationManagerProcess</TT> (<TT>G4FSMP</TT>) can be
@@ -271,7 +252,7 @@ Please see the last section for the corresponding details.
 <LI><TT>G4BinaryCascade::Propagate()</TT> method is first released.  This allows
     the user to use Binary cascade as a transport model within the high energy
     framework (<TT>G4TheoFSGenerator::SetTransport()</TT>). This feature is
-    aimed for expert use, validation is starting.</br></br>
+    aimed for expert use, validation is starting.<BR>
     A bug fix for incident pions now allows binary cascade to be used for 
     pions, validation is in progress.</LI>
 <LI>Alpha release of INCL cascade code. This will become an alternative to the 
@@ -283,6 +264,24 @@ Please see the last section for the corresponding details.
     JENDL entries for Cd isotopes, and adds four new elements with their
     corresponding isotopes: <TT>Hg</TT>, <TT>Ra</TT>, <TT>Br</TT>, and
     <TT>La</TT>.</LI>
+</UL>
+
+<P> </P>
+<B>Physics Lists</B>
+<P> </P>
+<P>
+Several new physics lists are offered, providing new configurations or new
+modeling options. Feedback via the Hypernews Forum on physics lists is welcome.
+The new physics lists are:
+<UL>
+<LI><B>FTFP_BERT</B> and <B>QGSC_BERT</B>: both of these reduce the use of
+    parameterized modeling. For proton, neutron, pion and kaon induced
+    inelastic hadronic interactions the parameterized model is not used.</LI>
+<LI><B>QGSP_DIF</B> and <B>QGSP_BERT_DIF</B>: for diffractive scattering of
+    proton and neutron at high energies a diffractive scattering model
+    provided by CHIPS is used.</LI>
+<LI><B>QGS_BIC</B> and <B>FTF_BIC</B>: offering new developments of
+    Binary cascade. For more details, see the detailed notes.</LI>
 </UL>
 
 <B>Command-based scoring</B>
