@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -61,7 +61,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -74,7 +74,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -92,7 +92,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -109,14 +109,14 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -138,7 +138,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -156,7 +156,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -164,7 +164,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -196,9 +196,9 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.22
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.18
+Internal Real Elapsed Time is: 0.24
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5312 hits are stored in Tst34HitsCollection 
@@ -209,9 +209,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.2
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.2
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5313 hits are stored in Tst34HitsCollection 
@@ -222,9 +222,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.17
+Internal Real Elapsed Time is: 0.2
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.17
+Internal GetUserElapsed Time: 0.2
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5310 hits are stored in Tst34HitsCollection 
@@ -235,9 +235,9 @@ Internal GetUserElapsed Time: 0.17
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.2
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.2
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
   5314 hits are stored in Tst34HitsCollection 
@@ -248,9 +248,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.2
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.2
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
   5314 hits are stored in Tst34HitsCollection 
@@ -261,69 +261,69 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.17
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.17
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
-  5339 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9765 (GeV)
+  5327 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9731 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 6
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal Real Elapsed Time is: 0.2
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
-  5319 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9742 (GeV)
+  5318 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.963 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 7
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
-  5321 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9765 (GeV)
+  5327 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9768 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
-  5319 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9431 (GeV)
+  5330 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9655 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
-  5318 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9509 (GeV)
+  5316 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9567 (GeV)
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 14.68
+Total Real Elapsed Time is: 19.23
 Total System Elapsed Time: 0.05
-Total GetUserElapsed Time: 13.95
+Total GetUserElapsed Time: 18.67
 ******************************************

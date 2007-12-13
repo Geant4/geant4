@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -138,7 +138,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e-
@@ -152,7 +152,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e+
@@ -176,7 +176,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -191,7 +191,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 hIoni:   tables are built for  anti_proton
@@ -200,7 +200,7 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for mu+
@@ -213,7 +213,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu+
@@ -231,7 +231,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu-
@@ -250,7 +250,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for pi-
@@ -264,7 +264,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 1 GeV in 70 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
@@ -321,7 +321,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1298.78s Real=1430.52s Sys=7.57s
+  User=1241.43s Real=1366.2s Sys=7.54s
 
  ======================== run summary ======================
 
@@ -329,18 +329,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.938 MeV +- 218.656 keV
+ Total Energy deposited        = 3.939 MeV +- 214.508 keV
 
- Track length of primary track = 2.016 cm  +- 2.762 mm 
+ Track length of primary track = 2.016 cm  +- 2.774 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.314 cm  +- 4.200 mm 
+ Projected range               = 1.314 cm  +- 4.196 mm 
 
- Nb of steps of primary track  = 238.53 +- 30.79	 Step size= 84.494 um  +- 4.516 um 
+ Nb of steps of primary track  = 238.44 +- 30.73	 Step size= 84.539 um  +- 4.514 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2005829460, 1137979291
+ Current couple of seeds = 1657344995, 1592221949
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

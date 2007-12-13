@@ -1,37 +1,13 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 10 *****
-
- Material: Beryllium     density:  1.848 g/cm3   RadL:  35.267 cm   Imean:  63.600 eV 
-   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Imean: 166.400 eV 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Imean: 173.600 eV 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Imean: 187.200 eV 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Imean: 321.900 eV 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Imean: 790.000 eV 
-   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Imean: 820.000 eV 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+***** Table : Nb of materials = 2 *****
 
  Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  70.893 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
@@ -42,911 +18,46 @@
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
 
-/run/verbose 2
+/run/verbose 1
 /run/initialize
-userDetector->Construct() start.
 
- The  WORLD   is made of 20000mm of Air, the transverse size (R) of the world is 20000 mm. 
- The ABSORBER is made of 10000mm of Lead, the transverse size (R) is 10000 mm. 
- Z position of the (middle of the) absorber 0  mm.
-
-World is registered to the default region.
-physicsList->Construct() start.
-physicsList->Construct() start.
-physicsList->setCut() start.
+ The  WORLD   is made of 0.002mm of Air, the transverse size (R) of the world is 0.002 mm 
+ The ABSORBER is made of 0.001mm of Water, the transverse size (R) is 0.001 mm 
+ Z position of the (middle of the) absorber 0  mm
+PhysicsList::SetCuts:CutLength : 1 um 
 #
-/calor/setAbsThick 10 cm
-/calor/setAbsRad 12.0 cm
-/calor/update
-
- The  WORLD   is made of 200mm of Air, the transverse size (R) of the world is 240 mm. 
- The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
- Z position of the (middle of the) absorber 0  mm.
-
-Obsolete world logical volume is removed from the default region.
-World is registered to the default region.
+#/calor/setAbsThick 1 mm
+#/calor/setAbsRad 1 mm
+#/calor/update
 #
-/lowenergy/lowlimG 2.5e-4
-Tst20PhysicsList::SetCuts:Gamma cut in energy: 0.00025 (MeV)
-/lowenergy/lowlimE 2.5e-4
-Tst20PhysicsList::SetCuts:Electron cut in energy: 0.00025 (MeV)
-/lowenergy/cutG .01 micrometer
-G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
-/lowenergy/cutE .01 micrometer
-G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
-/lowenergy/secphotcut 10 eV
-Low energy secondary photons cut is now set to: 1e-05 (MeV)
-for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 /run/initialize
 /process/list
-     Transportation,                msc,              eIoni,              eBrem
-            annihil,      LowEnergyIoni,          LowEnBrem,    polarLowEnCompt
-    LowEnConversion,     LowEnPhotoElec,      LowEnRayleigh
+     Transportation,         DNAProcess,                msc,              eIoni
+              eBrem,            annihil,       LowEnCompton,    LowEnConversion
+     LowEnPhotoElec,      LowEnRayleigh
 /particle/list
-                 e+,                 e-,              gamma,           geantino
-
+              alpha,             alpha+,        anti_proton,                 e+
+                 e-,              gamma,           geantino,             helium
+           hydrogen,             proton,
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
 #
-/calor/setAbsMat Aluminium
-#=========================
-/gun/particle gamma
-#------------------
-#
-/gun/energy 10 keV
-/gun/polarization 1. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 18 are loaded
-G4AugerData for Element no. 26 are loaded
-G4AugerData for Element no. 29 are loaded
-G4AugerData for Element no. 79 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
-
-LowEnergyIoni:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
-
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.33111 keV    e- 130.147 keV    e+ 127.666 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.9         0 0.000119   0.0772    0.0772    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -49.9   0.00988                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -49.9   0.00988        0        0         0    Absorber initStep
-    1        0        0    -49.9         0  0.00988  0.00122   0.00122    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.04s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.06s Real=1.06s Sys=0s
-#
-/gun/energy 2 keV
-/gun/polarization 0. 1. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155 0.000806  0.000806    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00045                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00045        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00045 1.15e-05  1.15e-05    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.06s Real=1.06s Sys=0s
-#
-/gun/energy 600 eV
-/gun/polarization 0. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000119 0.000165  0.000165    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000481                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000481        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000481 1.24e-05  1.24e-05    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.03s Real=1.04s Sys=0s
-#
-/gun/energy 300 eV
-/gun/polarization 0. 0. 1.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05 0.000241  0.000241    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000219                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000219        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000219 5.77e-06  5.77e-06    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.05s Real=1.05s Sys=0s
-#
-/calor/setAbsMat Lead
-#====================
-#
-/gun/particle gamma
-#------------------
-#
-/gun/energy 10 keV
-/gun/polarization 1. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
-LowEnergyIoni:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
-
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00382   0.0057    0.0057    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00618                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00618        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00618 0.000305  0.000305    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.58s Real=1.63s Sys=0.05s
-#
-/gun/energy 2 keV
-/gun/polarization 0. 1. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000412  0.00251   0.00251    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00159                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00159        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00159 4.59e-05  4.59e-05    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.51s Real=1.53s Sys=0.02s
-#
-/gun/energy 600 eV
-/gun/polarization 0. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148 1.21e-05  1.21e-05    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000452                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000452        0        0         0    Absorber initStep
-    1 7.08e-07 1.37e-06      -50  0.000386 6.61e-05 3.03e-06  3.03e-06    Absorber msc
-    2 1.25e-06 7.77e-07      -50  0.000331 5.47e-05 3.03e-06  6.07e-06    Absorber msc
-    3 3.38e-06 6.77e-07      -50         0 0.000331 9.77e-06  1.58e-05    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.55s Real=1.56s Sys=0.01s
-#
-/gun/energy 300 eV
-/gun/polarization 0. 0. 1.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000111 0.000115  0.000115    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000189                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000189        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000189 7.07e-06  7.07e-06    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.38s Real=1.39s Sys=0.01s
-#
 /calor/setAbsMat Water
 #======================
 #
-/gun/particle gamma
+/gun/particle e-
 #------------------
-#
-/gun/energy 10 keV
-/gun/polarization 1. 0. 0.
-/tracking/verbose 2
+/gun/energy 10000 eV
+/tracking/verbose 0
 /run/beamOn 1
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
-LowEnergyIoni:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
-
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -958,96 +69,32 @@ annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000582  0.000582    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00946                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00946        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00946   0.0215    0.0215    Absorber msc
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=1094.8s Real=1094.95s Sys=0.13s
+Time elapsed in 1 events ---- User=1094.8s Real=1094.95s Sys=0.13s
 /tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+/run/beamOn 9
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1056,588 +103,890 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=2.11s Real=2.19s Sys=0.08s
+  Number of events processed : 9
+  User=9625.05s Real=9626.65s Sys=1.2s
+Time elapsed in 9 events ---- User=9625.05s Real=9626.66s Sys=1.2s
 #
-/gun/energy 2 keV
-/gun/polarization 0. 1. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00863   0.00863    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00146                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00146   0.0215    0.0215    Absorber msc
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1s Real=1s Sys=0s
-#
-/gun/energy 600 eV
-/gun/polarization 0. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000185  0.000185    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  6.27e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1        0        0      -50         0 6.27e-05   0.0215    0.0215    Absorber msc
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.99s Real=0.99s Sys=0s
-#
-/gun/energy 300 eV
-/gun/polarization 0. 0. 1.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 2.92e-05 0.000412  0.000412    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000271                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000271        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000271   0.0215    0.0215    Absorber msc
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.96s Real=0.96s Sys=0s
-#
-/gun/particle gamma
+/gun/particle proton
 #------------------
-/process/inactivate LowEnRayleigh
-/run/physicsModified
-/process/inactivate polarLowEnCompton
- illegal process (or type) name 
-/process/inactivate LowEnPhotoElec
-/run/physicsModified
-/process/inactivate eIoni
-/run/physicsModified
-/process/inactivate LowEnergyIoni
-/run/physicsModified
-/process/inactivate msc
-/run/physicsModified
-/process/inactivate eBrem
-/run/physicsModified
-/process/inactivate LowEnBrem
-/run/physicsModified
-/calor/setAbsMat Aluminium
-#======================
+/gun/energy 1 MeV
 /tracking/verbose 0
-/gun/energy 2 MeV
-/run/beamOn 1000
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
-LowEnergyIoni:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
-
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+/run/beamOn 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 ====================================================================
 
 Start Run processing.
+The data set has 5 components
+
+--- Component 0 ---
+Point: 100000 - Data value : 38.3124
+Point: 108902 - Data value : 35.8786
+Point: 118597 - Data value : 33.588
+Point: 129155 - Data value : 31.4315
+Point: 140653 - Data value : 29.4055
+Point: 153174 - Data value : 27.5009
+Point: 166810 - Data value : 25.712
+Point: 181660 - Data value : 24.0329
+Point: 197832 - Data value : 22.4568
+Point: 215443 - Data value : 20.979
+Point: 234623 - Data value : 19.5929
+Point: 255510 - Data value : 18.2939
+Point: 278256 - Data value : 17.0772
+Point: 303027 - Data value : 15.9377
+Point: 330003 - Data value : 14.8708
+Point: 359381 - Data value : 13.8723
+Point: 391375 - Data value : 12.9385
+Point: 426216 - Data value : 12.0651
+Point: 464159 - Data value : 11.2456
+Point: 505480 - Data value : 10.4824
+Point: 550479 - Data value : 9.74719
+Point: 599484 - Data value : 9.07403
+Point: 652852 - Data value : 8.4509
+Point: 710971 - Data value : 7.86901
+Point: 774264 - Data value : 7.32537
+Point: 843191 - Data value : 6.81839
+Point: 918254 - Data value : 6.34558
+Point: 1e+06 - Data value : 5.90462
+Point: 1.08902e+06 - Data value : 5.49346
+Point: 1.18597e+06 - Data value : 5.11016
+Point: 1.29155e+06 - Data value : 4.75298
+Point: 1.40653e+06 - Data value : 4.42016
+Point: 1.53174e+06 - Data value : 4.11012
+Point: 1.6681e+06 - Data value : 3.82139
+Point: 1.8166e+06 - Data value : 3.55247
+Point: 1.97832e+06 - Data value : 3.30211
+Point: 2.15443e+06 - Data value : 3.06907
+Point: 2.34623e+06 - Data value : 2.85145
+Point: 2.5551e+06 - Data value : 2.64969
+Point: 2.78256e+06 - Data value : 2.45545
+Point: 3.03027e+06 - Data value : 2.2788
+Point: 3.30003e+06 - Data value : 2.11608
+Point: 3.59381e+06 - Data value : 1.96462
+Point: 3.91375e+06 - Data value : 1.82393
+Point: 4.26216e+06 - Data value : 1.69309
+Point: 4.64159e+06 - Data value : 1.57152
+Point: 5.0548e+06 - Data value : 1.45852
+Point: 5.50479e+06 - Data value : 1.35354
+Point: 5.99484e+06 - Data value : 1.256
+Point: 6.52852e+06 - Data value : 1.1654
+Point: 7.10971e+06 - Data value : 1.08126
+Point: 7.74264e+06 - Data value : 1.00312
+Point: 8.43191e+06 - Data value : 0.930564
+Point: 9.18254e+06 - Data value : 0.863205
+Point: 1e+07 - Data value : 0.800674
+Point: 1.08902e+07 - Data value : 0.742381
+Point: 1.18597e+07 - Data value : 0.688506
+Point: 1.29155e+07 - Data value : 0.636722
+Point: 1.40653e+07 - Data value : 0.589782
+Point: 1.53174e+07 - Data value : 0.54666
+Point: 1.6681e+07 - Data value : 0.506657
+Point: 1.8166e+07 - Data value : 0.469506
+Point: 1.97832e+07 - Data value : 0.435071
+Point: 2.15443e+07 - Data value : 0.403147
+Point: 2.34623e+07 - Data value : 0.373541
+Point: 2.5551e+07 - Data value : 0.346086
+Point: 2.78256e+07 - Data value : 0.320636
+Point: 3.03027e+07 - Data value : 0.297043
+Point: 3.30003e+07 - Data value : 0.275172
+Point: 3.59381e+07 - Data value : 0.254901
+Point: 3.91375e+07 - Data value : 0.236114
+Point: 4.26216e+07 - Data value : 0.218704
+Point: 4.64159e+07 - Data value : 0.202572
+Point: 5.0548e+07 - Data value : 0.187558
+Point: 5.50479e+07 - Data value : 0.173708
+Point: 5.99484e+07 - Data value : 0.160397
+Point: 6.52852e+07 - Data value : 0.148366
+Point: 7.10971e+07 - Data value : 0.137337
+Point: 7.74264e+07 - Data value : 0.127123
+Point: 8.43191e+07 - Data value : 0.117652
+Point: 9.18254e+07 - Data value : 0.108887
+--- Component 1 ---
+Point: 100000 - Data value : 76.6937
+Point: 108902 - Data value : 71.5737
+Point: 118597 - Data value : 66.7748
+Point: 129155 - Data value : 62.2767
+Point: 140653 - Data value : 58.0676
+Point: 153174 - Data value : 54.1316
+Point: 166810 - Data value : 50.4204
+Point: 181660 - Data value : 46.9747
+Point: 197832 - Data value : 43.7597
+Point: 215443 - Data value : 40.6897
+Point: 234623 - Data value : 37.8769
+Point: 255510 - Data value : 35.2523
+Point: 278256 - Data value : 32.7986
+Point: 303027 - Data value : 30.5225
+Point: 330003 - Data value : 28.3943
+Point: 359381 - Data value : 26.4102
+Point: 391375 - Data value : 24.5645
+Point: 426216 - Data value : 22.8434
+Point: 464159 - Data value : 21.2383
+Point: 505480 - Data value : 19.7407
+Point: 550479 - Data value : 18.3444
+Point: 599484 - Data value : 17.0479
+Point: 652852 - Data value : 15.846
+Point: 710971 - Data value : 14.725
+Point: 774264 - Data value : 13.6738
+Point: 843191 - Data value : 12.7009
+Point: 918254 - Data value : 11.7967
+Point: 1e+06 - Data value : 10.9349
+Point: 1.08902e+06 - Data value : 10.1441
+Point: 1.18597e+06 - Data value : 9.41603
+Point: 1.29155e+06 - Data value : 8.73904
+Point: 1.40653e+06 - Data value : 8.11054
+Point: 1.53174e+06 - Data value : 7.5249
+Point: 1.6681e+06 - Data value : 6.98061
+Point: 1.8166e+06 - Data value : 6.47614
+Point: 1.97832e+06 - Data value : 6.00525
+Point: 2.15443e+06 - Data value : 5.57347
+Point: 2.34623e+06 - Data value : 5.17127
+Point: 2.5551e+06 - Data value : 4.79704
+Point: 2.78256e+06 - Data value : 4.44935
+Point: 3.03027e+06 - Data value : 4.12647
+Point: 3.30003e+06 - Data value : 3.8265
+Point: 3.59381e+06 - Data value : 3.54848
+Point: 3.91375e+06 - Data value : 3.28827
+Point: 4.26216e+06 - Data value : 3.04865
+Point: 4.64159e+06 - Data value : 2.82061
+Point: 5.0548e+06 - Data value : 2.61425
+Point: 5.50479e+06 - Data value : 2.41949
+Point: 5.99484e+06 - Data value : 2.24119
+Point: 6.52852e+06 - Data value : 2.07661
+Point: 7.10971e+06 - Data value : 1.9242
+Point: 7.74264e+06 - Data value : 1.78271
+Point: 8.43191e+06 - Data value : 1.65149
+Point: 9.18254e+06 - Data value : 1.52981
+Point: 1e+07 - Data value : 1.41699
+Point: 1.08902e+07 - Data value : 1.31243
+Point: 1.18597e+07 - Data value : 1.21555
+Point: 1.29155e+07 - Data value : 1.12577
+Point: 1.40653e+07 - Data value : 1.04256
+Point: 1.53174e+07 - Data value : 0.965444
+Point: 1.6681e+07 - Data value : 0.894039
+Point: 1.8166e+07 - Data value : 0.827253
+Point: 1.97832e+07 - Data value : 0.766014
+Point: 2.15443e+07 - Data value : 0.70773
+Point: 2.34623e+07 - Data value : 0.6551
+Point: 2.5551e+07 - Data value : 0.605709
+Point: 2.78256e+07 - Data value : 0.56043
+Point: 3.03027e+07 - Data value : 0.518606
+Point: 3.30003e+07 - Data value : 0.479892
+Point: 3.59381e+07 - Data value : 0.44405
+Point: 3.91375e+07 - Data value : 0.410862
+Point: 4.26216e+07 - Data value : 0.380133
+Point: 4.64159e+07 - Data value : 0.351724
+Point: 5.0548e+07 - Data value : 0.325414
+Point: 5.50479e+07 - Data value : 0.301055
+Point: 5.99484e+07 - Data value : 0.278529
+Point: 6.52852e+07 - Data value : 0.257676
+Point: 7.10971e+07 - Data value : 0.238382
+Point: 7.74264e+07 - Data value : 0.220531
+Point: 8.43191e+07 - Data value : 0.203855
+Point: 9.18254e+07 - Data value : 0.188569
+--- Component 2 ---
+Point: 100000 - Data value : 53.493
+Point: 108902 - Data value : 49.9001
+Point: 118597 - Data value : 46.5382
+Point: 129155 - Data value : 43.3565
+Point: 140653 - Data value : 40.4347
+Point: 153174 - Data value : 37.6728
+Point: 166810 - Data value : 35.0534
+Point: 181660 - Data value : 32.6156
+Point: 197832 - Data value : 30.3869
+Point: 215443 - Data value : 28.291
+Point: 234623 - Data value : 26.284
+Point: 255510 - Data value : 24.4818
+Point: 278256 - Data value : 22.7975
+Point: 303027 - Data value : 21.1833
+Point: 330003 - Data value : 19.6607
+Point: 359381 - Data value : 18.3227
+Point: 391375 - Data value : 17.0336
+Point: 426216 - Data value : 15.8364
+Point: 464159 - Data value : 14.7142
+Point: 505480 - Data value : 13.662
+Point: 550479 - Data value : 12.7042
+Point: 599484 - Data value : 11.7994
+Point: 652852 - Data value : 10.9629
+Point: 710971 - Data value : 10.1888
+Point: 774264 - Data value : 9.45889
+Point: 843191 - Data value : 8.77918
+Point: 918254 - Data value : 8.15055
+Point: 1e+06 - Data value : 7.55641
+Point: 1.08902e+06 - Data value : 7.01184
+Point: 1.18597e+06 - Data value : 6.50963
+Point: 1.29155e+06 - Data value : 6.03802
+Point: 1.40653e+06 - Data value : 5.60036
+Point: 1.53174e+06 - Data value : 5.19398
+Point: 1.6681e+06 - Data value : 4.81935
+Point: 1.8166e+06 - Data value : 4.46623
+Point: 1.97832e+06 - Data value : 4.14533
+Point: 2.15443e+06 - Data value : 3.84646
+Point: 2.34623e+06 - Data value : 3.56756
+Point: 2.5551e+06 - Data value : 3.30884
+Point: 2.78256e+06 - Data value : 3.06907
+Point: 3.03027e+06 - Data value : 2.84624
+Point: 3.30003e+06 - Data value : 2.639
+Point: 3.59381e+06 - Data value : 2.44637
+Point: 3.91375e+06 - Data value : 2.26718
+Point: 4.26216e+06 - Data value : 2.101
+Point: 4.64159e+06 - Data value : 1.94763
+Point: 5.0548e+06 - Data value : 1.80478
+Point: 5.50479e+06 - Data value : 1.67207
+Point: 5.99484e+06 - Data value : 1.54512
+Point: 6.52852e+06 - Data value : 1.43144
+Point: 7.10971e+06 - Data value : 1.32596
+Point: 7.74264e+06 - Data value : 1.22807
+Point: 8.43191e+06 - Data value : 1.13739
+Point: 9.18254e+06 - Data value : 1.05342
+Point: 1e+07 - Data value : 0.975564
+Point: 1.08902e+07 - Data value : 0.903493
+Point: 1.18597e+07 - Data value : 0.836845
+Point: 1.29155e+07 - Data value : 0.774919
+Point: 1.40653e+07 - Data value : 0.717482
+Point: 1.53174e+07 - Data value : 0.664295
+Point: 1.6681e+07 - Data value : 0.615043
+Point: 1.8166e+07 - Data value : 0.569408
+Point: 1.97832e+07 - Data value : 0.527063
+Point: 2.15443e+07 - Data value : 0.487702
+Point: 2.34623e+07 - Data value : 0.451745
+Point: 2.5551e+07 - Data value : 0.418106
+Point: 2.78256e+07 - Data value : 0.386407
+Point: 3.03027e+07 - Data value : 0.356699
+Point: 3.30003e+07 - Data value : 0.330038
+Point: 3.59381e+07 - Data value : 0.30539
+Point: 3.91375e+07 - Data value : 0.282544
+Point: 4.26216e+07 - Data value : 0.261383
+Point: 4.64159e+07 - Data value : 0.241776
+Point: 5.0548e+07 - Data value : 0.223699
+Point: 5.50479e+07 - Data value : 0.206938
+Point: 5.99484e+07 - Data value : 0.191416
+Point: 6.52852e+07 - Data value : 0.177033
+Point: 7.10971e+07 - Data value : 0.163778
+Point: 7.74264e+07 - Data value : 0.151494
+Point: 8.43191e+07 - Data value : 0.140127
+Point: 9.18254e+07 - Data value : 0.129608
+--- Component 3 ---
+Point: 100000 - Data value : 31.9542
+Point: 108902 - Data value : 30.4805
+Point: 118597 - Data value : 29.0657
+Point: 129155 - Data value : 27.6277
+Point: 140653 - Data value : 26.3093
+Point: 153174 - Data value : 24.9652
+Point: 166810 - Data value : 23.6118
+Point: 181660 - Data value : 22.397
+Point: 197832 - Data value : 21.2702
+Point: 215443 - Data value : 20.1448
+Point: 234623 - Data value : 19.02
+Point: 255510 - Data value : 18.0877
+Point: 278256 - Data value : 17.1293
+Point: 303027 - Data value : 16.1567
+Point: 330003 - Data value : 15.2598
+Point: 359381 - Data value : 14.4106
+Point: 391375 - Data value : 13.6334
+Point: 426216 - Data value : 12.845
+Point: 464159 - Data value : 12.0588
+Point: 505480 - Data value : 11.4045
+Point: 550479 - Data value : 10.7488
+Point: 599484 - Data value : 10.0615
+Point: 652852 - Data value : 9.45592
+Point: 710971 - Data value : 8.89291
+Point: 774264 - Data value : 8.34013
+Point: 843191 - Data value : 7.84203
+Point: 918254 - Data value : 7.36156
+Point: 1e+06 - Data value : 6.90574
+Point: 1.08902e+06 - Data value : 6.48535
+Point: 1.18597e+06 - Data value : 6.06571
+Point: 1.29155e+06 - Data value : 5.68921
+Point: 1.40653e+06 - Data value : 5.32723
+Point: 1.53174e+06 - Data value : 4.98918
+Point: 1.6681e+06 - Data value : 4.66796
+Point: 1.8166e+06 - Data value : 4.35727
+Point: 1.97832e+06 - Data value : 4.08472
+Point: 2.15443e+06 - Data value : 3.82205
+Point: 2.34623e+06 - Data value : 3.57567
+Point: 2.5551e+06 - Data value : 3.34276
+Point: 2.78256e+06 - Data value : 3.12508
+Point: 3.03027e+06 - Data value : 2.91828
+Point: 3.30003e+06 - Data value : 2.7263
+Point: 3.59381e+06 - Data value : 2.54421
+Point: 3.91375e+06 - Data value : 2.37459
+Point: 4.26216e+06 - Data value : 2.21561
+Point: 4.64159e+06 - Data value : 2.06776
+Point: 5.0548e+06 - Data value : 1.93
+Point: 5.50479e+06 - Data value : 1.79835
+Point: 5.99484e+06 - Data value : 1.67308
+Point: 6.52852e+06 - Data value : 1.55922
+Point: 7.10971e+06 - Data value : 1.45268
+Point: 7.74264e+06 - Data value : 1.35346
+Point: 8.43191e+06 - Data value : 1.26102
+Point: 9.18254e+06 - Data value : 1.17433
+Point: 1e+07 - Data value : 1.09399
+Point: 1.08902e+07 - Data value : 1.01868
+Point: 1.18597e+07 - Data value : 0.9483
+Point: 1.29155e+07 - Data value : 0.882516
+Point: 1.40653e+07 - Data value : 0.820993
+Point: 1.53174e+07 - Data value : 0.763067
+Point: 1.6681e+07 - Data value : 0.710078
+Point: 1.8166e+07 - Data value : 0.660576
+Point: 1.97832e+07 - Data value : 0.614701
+Point: 2.15443e+07 - Data value : 0.571777
+Point: 2.34623e+07 - Data value : 0.531783
+Point: 2.5551e+07 - Data value : 0.493377
+Point: 2.78256e+07 - Data value : 0.458555
+Point: 3.03027e+07 - Data value : 0.425221
+Point: 3.30003e+07 - Data value : 0.395061
+Point: 3.59381e+07 - Data value : 0.366969
+Point: 3.91375e+07 - Data value : 0.340884
+Point: 4.26216e+07 - Data value : 0.316575
+Point: 4.64159e+07 - Data value : 0.293963
+Point: 5.0548e+07 - Data value : 0.272897
+Point: 5.50479e+07 - Data value : 0.253318
+Point: 5.99484e+07 - Data value : 0.235026
+Point: 6.52852e+07 - Data value : 0.218231
+Point: 7.10971e+07 - Data value : 0.202629
+Point: 7.74264e+07 - Data value : 0.188083
+Point: 8.43191e+07 - Data value : 0.174549
+Point: 9.18254e+07 - Data value : 0.16199
+--- Component 4 ---
+Point: 100000 - Data value : 37.0738
+Point: 108902 - Data value : 35.3901
+Point: 118597 - Data value : 33.7808
+Point: 129155 - Data value : 32.1407
+Point: 140653 - Data value : 30.6132
+Point: 153174 - Data value : 29.1024
+Point: 166810 - Data value : 27.6751
+Point: 181660 - Data value : 26.2533
+Point: 197832 - Data value : 25.0028
+Point: 215443 - Data value : 23.7453
+Point: 234623 - Data value : 22.4922
+Point: 255510 - Data value : 21.3565
+Point: 278256 - Data value : 20.3228
+Point: 303027 - Data value : 19.2759
+Point: 330003 - Data value : 18.236
+Point: 359381 - Data value : 17.2494
+Point: 391375 - Data value : 16.3314
+Point: 426216 - Data value : 15.4024
+Point: 464159 - Data value : 14.5615
+Point: 505480 - Data value : 13.7731
+Point: 550479 - Data value : 12.9897
+Point: 599484 - Data value : 12.1813
+Point: 652852 - Data value : 11.4853
+Point: 710971 - Data value : 10.8305
+Point: 774264 - Data value : 10.1982
+Point: 843191 - Data value : 9.51621
+Point: 918254 - Data value : 8.95349
+Point: 1e+06 - Data value : 8.42257
+Point: 1.08902e+06 - Data value : 7.90773
+Point: 1.18597e+06 - Data value : 7.41899
+Point: 1.29155e+06 - Data value : 6.9676
+Point: 1.40653e+06 - Data value : 6.5314
+Point: 1.53174e+06 - Data value : 6.11118
+Point: 1.6681e+06 - Data value : 5.7371
+Point: 1.8166e+06 - Data value : 5.37889
+Point: 1.97832e+06 - Data value : 5.03959
+Point: 2.15443e+06 - Data value : 4.71894
+Point: 2.34623e+06 - Data value : 4.41961
+Point: 2.5551e+06 - Data value : 4.13315
+Point: 2.78256e+06 - Data value : 3.86424
+Point: 3.03027e+06 - Data value : 3.6121
+Point: 3.30003e+06 - Data value : 3.37947
+Point: 3.59381e+06 - Data value : 3.15975
+Point: 3.91375e+06 - Data value : 2.95355
+Point: 4.26216e+06 - Data value : 2.75987
+Point: 4.64159e+06 - Data value : 2.57944
+Point: 5.0548e+06 - Data value : 2.40896
+Point: 5.50479e+06 - Data value : 2.24944
+Point: 5.99484e+06 - Data value : 2.09869
+Point: 6.52852e+06 - Data value : 1.9563
+Point: 7.10971e+06 - Data value : 1.81931
+Point: 7.74264e+06 - Data value : 1.69483
+Point: 8.43191e+06 - Data value : 1.58124
+Point: 9.18254e+06 - Data value : 1.47411
+Point: 1e+07 - Data value : 1.3737
+Point: 1.08902e+07 - Data value : 1.27997
+Point: 1.18597e+07 - Data value : 1.19227
+Point: 1.29155e+07 - Data value : 1.11053
+Point: 1.40653e+07 - Data value : 1.03425
+Point: 1.53174e+07 - Data value : 0.962782
+Point: 1.6681e+07 - Data value : 0.896615
+Point: 1.8166e+07 - Data value : 0.834944
+Point: 1.97832e+07 - Data value : 0.777129
+Point: 2.15443e+07 - Data value : 0.723154
+Point: 2.34623e+07 - Data value : 0.672817
+Point: 2.5551e+07 - Data value : 0.625929
+Point: 2.78256e+07 - Data value : 0.582287
+Point: 3.03027e+07 - Data value : 0.541597
+Point: 3.30003e+07 - Data value : 0.501319
+Point: 3.59381e+07 - Data value : 0.465889
+Point: 3.91375e+07 - Data value : 0.432965
+Point: 4.26216e+07 - Data value : 0.402231
+Point: 4.64159e+07 - Data value : 0.373694
+Point: 5.0548e+07 - Data value : 0.347118
+Point: 5.50479e+07 - Data value : 0.322324
+Point: 5.99484e+07 - Data value : 0.299331
+Point: 6.52852e+07 - Data value : 0.278116
+Point: 7.10971e+07 - Data value : 0.258303
+Point: 7.74264e+07 - Data value : 0.239861
+Point: 8.43191e+07 - Data value : 0.222703
+Point: 9.18254e+07 - Data value : 0.206763
+The data set has 5 components
+
+--- Component 0 ---
+Point: 100000 - Data value : 38.3124
+Point: 108902 - Data value : 35.8786
+Point: 118597 - Data value : 33.588
+Point: 129155 - Data value : 31.4315
+Point: 140653 - Data value : 29.4055
+Point: 153174 - Data value : 27.5009
+Point: 166810 - Data value : 25.712
+Point: 181660 - Data value : 24.0329
+Point: 197832 - Data value : 22.4568
+Point: 215443 - Data value : 20.979
+Point: 234623 - Data value : 19.5929
+Point: 255510 - Data value : 18.2939
+Point: 278256 - Data value : 17.0772
+Point: 303027 - Data value : 15.9377
+Point: 330003 - Data value : 14.8708
+Point: 359381 - Data value : 13.8723
+Point: 391375 - Data value : 12.9385
+Point: 426216 - Data value : 12.0651
+Point: 464159 - Data value : 11.2456
+Point: 505480 - Data value : 10.4824
+Point: 550479 - Data value : 9.74719
+Point: 599484 - Data value : 9.07403
+Point: 652852 - Data value : 8.4509
+Point: 710971 - Data value : 7.86901
+Point: 774264 - Data value : 7.32537
+Point: 843191 - Data value : 6.81839
+Point: 918254 - Data value : 6.34558
+Point: 1e+06 - Data value : 5.90462
+Point: 1.08902e+06 - Data value : 5.49346
+Point: 1.18597e+06 - Data value : 5.11016
+Point: 1.29155e+06 - Data value : 4.75298
+Point: 1.40653e+06 - Data value : 4.42016
+Point: 1.53174e+06 - Data value : 4.11012
+Point: 1.6681e+06 - Data value : 3.82139
+Point: 1.8166e+06 - Data value : 3.55247
+Point: 1.97832e+06 - Data value : 3.30211
+Point: 2.15443e+06 - Data value : 3.06907
+Point: 2.34623e+06 - Data value : 2.85145
+Point: 2.5551e+06 - Data value : 2.64969
+Point: 2.78256e+06 - Data value : 2.45545
+Point: 3.03027e+06 - Data value : 2.2788
+Point: 3.30003e+06 - Data value : 2.11608
+Point: 3.59381e+06 - Data value : 1.96462
+Point: 3.91375e+06 - Data value : 1.82393
+Point: 4.26216e+06 - Data value : 1.69309
+Point: 4.64159e+06 - Data value : 1.57152
+Point: 5.0548e+06 - Data value : 1.45852
+Point: 5.50479e+06 - Data value : 1.35354
+Point: 5.99484e+06 - Data value : 1.256
+Point: 6.52852e+06 - Data value : 1.1654
+Point: 7.10971e+06 - Data value : 1.08126
+Point: 7.74264e+06 - Data value : 1.00312
+Point: 8.43191e+06 - Data value : 0.930564
+Point: 9.18254e+06 - Data value : 0.863205
+Point: 1e+07 - Data value : 0.800674
+Point: 1.08902e+07 - Data value : 0.742381
+Point: 1.18597e+07 - Data value : 0.688506
+Point: 1.29155e+07 - Data value : 0.636722
+Point: 1.40653e+07 - Data value : 0.589782
+Point: 1.53174e+07 - Data value : 0.54666
+Point: 1.6681e+07 - Data value : 0.506657
+Point: 1.8166e+07 - Data value : 0.469506
+Point: 1.97832e+07 - Data value : 0.435071
+Point: 2.15443e+07 - Data value : 0.403147
+Point: 2.34623e+07 - Data value : 0.373541
+Point: 2.5551e+07 - Data value : 0.346086
+Point: 2.78256e+07 - Data value : 0.320636
+Point: 3.03027e+07 - Data value : 0.297043
+Point: 3.30003e+07 - Data value : 0.275172
+Point: 3.59381e+07 - Data value : 0.254901
+Point: 3.91375e+07 - Data value : 0.236114
+Point: 4.26216e+07 - Data value : 0.218704
+Point: 4.64159e+07 - Data value : 0.202572
+Point: 5.0548e+07 - Data value : 0.187558
+Point: 5.50479e+07 - Data value : 0.173708
+Point: 5.99484e+07 - Data value : 0.160397
+Point: 6.52852e+07 - Data value : 0.148366
+Point: 7.10971e+07 - Data value : 0.137337
+Point: 7.74264e+07 - Data value : 0.127123
+Point: 8.43191e+07 - Data value : 0.117652
+Point: 9.18254e+07 - Data value : 0.108887
+--- Component 1 ---
+Point: 100000 - Data value : 76.6937
+Point: 108902 - Data value : 71.5737
+Point: 118597 - Data value : 66.7748
+Point: 129155 - Data value : 62.2767
+Point: 140653 - Data value : 58.0676
+Point: 153174 - Data value : 54.1316
+Point: 166810 - Data value : 50.4204
+Point: 181660 - Data value : 46.9747
+Point: 197832 - Data value : 43.7597
+Point: 215443 - Data value : 40.6897
+Point: 234623 - Data value : 37.8769
+Point: 255510 - Data value : 35.2523
+Point: 278256 - Data value : 32.7986
+Point: 303027 - Data value : 30.5225
+Point: 330003 - Data value : 28.3943
+Point: 359381 - Data value : 26.4102
+Point: 391375 - Data value : 24.5645
+Point: 426216 - Data value : 22.8434
+Point: 464159 - Data value : 21.2383
+Point: 505480 - Data value : 19.7407
+Point: 550479 - Data value : 18.3444
+Point: 599484 - Data value : 17.0479
+Point: 652852 - Data value : 15.846
+Point: 710971 - Data value : 14.725
+Point: 774264 - Data value : 13.6738
+Point: 843191 - Data value : 12.7009
+Point: 918254 - Data value : 11.7967
+Point: 1e+06 - Data value : 10.9349
+Point: 1.08902e+06 - Data value : 10.1441
+Point: 1.18597e+06 - Data value : 9.41603
+Point: 1.29155e+06 - Data value : 8.73904
+Point: 1.40653e+06 - Data value : 8.11054
+Point: 1.53174e+06 - Data value : 7.5249
+Point: 1.6681e+06 - Data value : 6.98061
+Point: 1.8166e+06 - Data value : 6.47614
+Point: 1.97832e+06 - Data value : 6.00525
+Point: 2.15443e+06 - Data value : 5.57347
+Point: 2.34623e+06 - Data value : 5.17127
+Point: 2.5551e+06 - Data value : 4.79704
+Point: 2.78256e+06 - Data value : 4.44935
+Point: 3.03027e+06 - Data value : 4.12647
+Point: 3.30003e+06 - Data value : 3.8265
+Point: 3.59381e+06 - Data value : 3.54848
+Point: 3.91375e+06 - Data value : 3.28827
+Point: 4.26216e+06 - Data value : 3.04865
+Point: 4.64159e+06 - Data value : 2.82061
+Point: 5.0548e+06 - Data value : 2.61425
+Point: 5.50479e+06 - Data value : 2.41949
+Point: 5.99484e+06 - Data value : 2.24119
+Point: 6.52852e+06 - Data value : 2.07661
+Point: 7.10971e+06 - Data value : 1.9242
+Point: 7.74264e+06 - Data value : 1.78271
+Point: 8.43191e+06 - Data value : 1.65149
+Point: 9.18254e+06 - Data value : 1.52981
+Point: 1e+07 - Data value : 1.41699
+Point: 1.08902e+07 - Data value : 1.31243
+Point: 1.18597e+07 - Data value : 1.21555
+Point: 1.29155e+07 - Data value : 1.12577
+Point: 1.40653e+07 - Data value : 1.04256
+Point: 1.53174e+07 - Data value : 0.965444
+Point: 1.6681e+07 - Data value : 0.894039
+Point: 1.8166e+07 - Data value : 0.827253
+Point: 1.97832e+07 - Data value : 0.766014
+Point: 2.15443e+07 - Data value : 0.70773
+Point: 2.34623e+07 - Data value : 0.6551
+Point: 2.5551e+07 - Data value : 0.605709
+Point: 2.78256e+07 - Data value : 0.56043
+Point: 3.03027e+07 - Data value : 0.518606
+Point: 3.30003e+07 - Data value : 0.479892
+Point: 3.59381e+07 - Data value : 0.44405
+Point: 3.91375e+07 - Data value : 0.410862
+Point: 4.26216e+07 - Data value : 0.380133
+Point: 4.64159e+07 - Data value : 0.351724
+Point: 5.0548e+07 - Data value : 0.325414
+Point: 5.50479e+07 - Data value : 0.301055
+Point: 5.99484e+07 - Data value : 0.278529
+Point: 6.52852e+07 - Data value : 0.257676
+Point: 7.10971e+07 - Data value : 0.238382
+Point: 7.74264e+07 - Data value : 0.220531
+Point: 8.43191e+07 - Data value : 0.203855
+Point: 9.18254e+07 - Data value : 0.188569
+--- Component 2 ---
+Point: 100000 - Data value : 53.493
+Point: 108902 - Data value : 49.9001
+Point: 118597 - Data value : 46.5382
+Point: 129155 - Data value : 43.3565
+Point: 140653 - Data value : 40.4347
+Point: 153174 - Data value : 37.6728
+Point: 166810 - Data value : 35.0534
+Point: 181660 - Data value : 32.6156
+Point: 197832 - Data value : 30.3869
+Point: 215443 - Data value : 28.291
+Point: 234623 - Data value : 26.284
+Point: 255510 - Data value : 24.4818
+Point: 278256 - Data value : 22.7975
+Point: 303027 - Data value : 21.1833
+Point: 330003 - Data value : 19.6607
+Point: 359381 - Data value : 18.3227
+Point: 391375 - Data value : 17.0336
+Point: 426216 - Data value : 15.8364
+Point: 464159 - Data value : 14.7142
+Point: 505480 - Data value : 13.662
+Point: 550479 - Data value : 12.7042
+Point: 599484 - Data value : 11.7994
+Point: 652852 - Data value : 10.9629
+Point: 710971 - Data value : 10.1888
+Point: 774264 - Data value : 9.45889
+Point: 843191 - Data value : 8.77918
+Point: 918254 - Data value : 8.15055
+Point: 1e+06 - Data value : 7.55641
+Point: 1.08902e+06 - Data value : 7.01184
+Point: 1.18597e+06 - Data value : 6.50963
+Point: 1.29155e+06 - Data value : 6.03802
+Point: 1.40653e+06 - Data value : 5.60036
+Point: 1.53174e+06 - Data value : 5.19398
+Point: 1.6681e+06 - Data value : 4.81935
+Point: 1.8166e+06 - Data value : 4.46623
+Point: 1.97832e+06 - Data value : 4.14533
+Point: 2.15443e+06 - Data value : 3.84646
+Point: 2.34623e+06 - Data value : 3.56756
+Point: 2.5551e+06 - Data value : 3.30884
+Point: 2.78256e+06 - Data value : 3.06907
+Point: 3.03027e+06 - Data value : 2.84624
+Point: 3.30003e+06 - Data value : 2.639
+Point: 3.59381e+06 - Data value : 2.44637
+Point: 3.91375e+06 - Data value : 2.26718
+Point: 4.26216e+06 - Data value : 2.101
+Point: 4.64159e+06 - Data value : 1.94763
+Point: 5.0548e+06 - Data value : 1.80478
+Point: 5.50479e+06 - Data value : 1.67207
+Point: 5.99484e+06 - Data value : 1.54512
+Point: 6.52852e+06 - Data value : 1.43144
+Point: 7.10971e+06 - Data value : 1.32596
+Point: 7.74264e+06 - Data value : 1.22807
+Point: 8.43191e+06 - Data value : 1.13739
+Point: 9.18254e+06 - Data value : 1.05342
+Point: 1e+07 - Data value : 0.975564
+Point: 1.08902e+07 - Data value : 0.903493
+Point: 1.18597e+07 - Data value : 0.836845
+Point: 1.29155e+07 - Data value : 0.774919
+Point: 1.40653e+07 - Data value : 0.717482
+Point: 1.53174e+07 - Data value : 0.664295
+Point: 1.6681e+07 - Data value : 0.615043
+Point: 1.8166e+07 - Data value : 0.569408
+Point: 1.97832e+07 - Data value : 0.527063
+Point: 2.15443e+07 - Data value : 0.487702
+Point: 2.34623e+07 - Data value : 0.451745
+Point: 2.5551e+07 - Data value : 0.418106
+Point: 2.78256e+07 - Data value : 0.386407
+Point: 3.03027e+07 - Data value : 0.356699
+Point: 3.30003e+07 - Data value : 0.330038
+Point: 3.59381e+07 - Data value : 0.30539
+Point: 3.91375e+07 - Data value : 0.282544
+Point: 4.26216e+07 - Data value : 0.261383
+Point: 4.64159e+07 - Data value : 0.241776
+Point: 5.0548e+07 - Data value : 0.223699
+Point: 5.50479e+07 - Data value : 0.206938
+Point: 5.99484e+07 - Data value : 0.191416
+Point: 6.52852e+07 - Data value : 0.177033
+Point: 7.10971e+07 - Data value : 0.163778
+Point: 7.74264e+07 - Data value : 0.151494
+Point: 8.43191e+07 - Data value : 0.140127
+Point: 9.18254e+07 - Data value : 0.129608
+--- Component 3 ---
+Point: 100000 - Data value : 31.9542
+Point: 108902 - Data value : 30.4805
+Point: 118597 - Data value : 29.0657
+Point: 129155 - Data value : 27.6277
+Point: 140653 - Data value : 26.3093
+Point: 153174 - Data value : 24.9652
+Point: 166810 - Data value : 23.6118
+Point: 181660 - Data value : 22.397
+Point: 197832 - Data value : 21.2702
+Point: 215443 - Data value : 20.1448
+Point: 234623 - Data value : 19.02
+Point: 255510 - Data value : 18.0877
+Point: 278256 - Data value : 17.1293
+Point: 303027 - Data value : 16.1567
+Point: 330003 - Data value : 15.2598
+Point: 359381 - Data value : 14.4106
+Point: 391375 - Data value : 13.6334
+Point: 426216 - Data value : 12.845
+Point: 464159 - Data value : 12.0588
+Point: 505480 - Data value : 11.4045
+Point: 550479 - Data value : 10.7488
+Point: 599484 - Data value : 10.0615
+Point: 652852 - Data value : 9.45592
+Point: 710971 - Data value : 8.89291
+Point: 774264 - Data value : 8.34013
+Point: 843191 - Data value : 7.84203
+Point: 918254 - Data value : 7.36156
+Point: 1e+06 - Data value : 6.90574
+Point: 1.08902e+06 - Data value : 6.48535
+Point: 1.18597e+06 - Data value : 6.06571
+Point: 1.29155e+06 - Data value : 5.68921
+Point: 1.40653e+06 - Data value : 5.32723
+Point: 1.53174e+06 - Data value : 4.98918
+Point: 1.6681e+06 - Data value : 4.66796
+Point: 1.8166e+06 - Data value : 4.35727
+Point: 1.97832e+06 - Data value : 4.08472
+Point: 2.15443e+06 - Data value : 3.82205
+Point: 2.34623e+06 - Data value : 3.57567
+Point: 2.5551e+06 - Data value : 3.34276
+Point: 2.78256e+06 - Data value : 3.12508
+Point: 3.03027e+06 - Data value : 2.91828
+Point: 3.30003e+06 - Data value : 2.7263
+Point: 3.59381e+06 - Data value : 2.54421
+Point: 3.91375e+06 - Data value : 2.37459
+Point: 4.26216e+06 - Data value : 2.21561
+Point: 4.64159e+06 - Data value : 2.06776
+Point: 5.0548e+06 - Data value : 1.93
+Point: 5.50479e+06 - Data value : 1.79835
+Point: 5.99484e+06 - Data value : 1.67308
+Point: 6.52852e+06 - Data value : 1.55922
+Point: 7.10971e+06 - Data value : 1.45268
+Point: 7.74264e+06 - Data value : 1.35346
+Point: 8.43191e+06 - Data value : 1.26102
+Point: 9.18254e+06 - Data value : 1.17433
+Point: 1e+07 - Data value : 1.09399
+Point: 1.08902e+07 - Data value : 1.01868
+Point: 1.18597e+07 - Data value : 0.9483
+Point: 1.29155e+07 - Data value : 0.882516
+Point: 1.40653e+07 - Data value : 0.820993
+Point: 1.53174e+07 - Data value : 0.763067
+Point: 1.6681e+07 - Data value : 0.710078
+Point: 1.8166e+07 - Data value : 0.660576
+Point: 1.97832e+07 - Data value : 0.614701
+Point: 2.15443e+07 - Data value : 0.571777
+Point: 2.34623e+07 - Data value : 0.531783
+Point: 2.5551e+07 - Data value : 0.493377
+Point: 2.78256e+07 - Data value : 0.458555
+Point: 3.03027e+07 - Data value : 0.425221
+Point: 3.30003e+07 - Data value : 0.395061
+Point: 3.59381e+07 - Data value : 0.366969
+Point: 3.91375e+07 - Data value : 0.340884
+Point: 4.26216e+07 - Data value : 0.316575
+Point: 4.64159e+07 - Data value : 0.293963
+Point: 5.0548e+07 - Data value : 0.272897
+Point: 5.50479e+07 - Data value : 0.253318
+Point: 5.99484e+07 - Data value : 0.235026
+Point: 6.52852e+07 - Data value : 0.218231
+Point: 7.10971e+07 - Data value : 0.202629
+Point: 7.74264e+07 - Data value : 0.188083
+Point: 8.43191e+07 - Data value : 0.174549
+Point: 9.18254e+07 - Data value : 0.16199
+--- Component 4 ---
+Point: 100000 - Data value : 37.0738
+Point: 108902 - Data value : 35.3901
+Point: 118597 - Data value : 33.7808
+Point: 129155 - Data value : 32.1407
+Point: 140653 - Data value : 30.6132
+Point: 153174 - Data value : 29.1024
+Point: 166810 - Data value : 27.6751
+Point: 181660 - Data value : 26.2533
+Point: 197832 - Data value : 25.0028
+Point: 215443 - Data value : 23.7453
+Point: 234623 - Data value : 22.4922
+Point: 255510 - Data value : 21.3565
+Point: 278256 - Data value : 20.3228
+Point: 303027 - Data value : 19.2759
+Point: 330003 - Data value : 18.236
+Point: 359381 - Data value : 17.2494
+Point: 391375 - Data value : 16.3314
+Point: 426216 - Data value : 15.4024
+Point: 464159 - Data value : 14.5615
+Point: 505480 - Data value : 13.7731
+Point: 550479 - Data value : 12.9897
+Point: 599484 - Data value : 12.1813
+Point: 652852 - Data value : 11.4853
+Point: 710971 - Data value : 10.8305
+Point: 774264 - Data value : 10.1982
+Point: 843191 - Data value : 9.51621
+Point: 918254 - Data value : 8.95349
+Point: 1e+06 - Data value : 8.42257
+Point: 1.08902e+06 - Data value : 7.90773
+Point: 1.18597e+06 - Data value : 7.41899
+Point: 1.29155e+06 - Data value : 6.9676
+Point: 1.40653e+06 - Data value : 6.5314
+Point: 1.53174e+06 - Data value : 6.11118
+Point: 1.6681e+06 - Data value : 5.7371
+Point: 1.8166e+06 - Data value : 5.37889
+Point: 1.97832e+06 - Data value : 5.03959
+Point: 2.15443e+06 - Data value : 4.71894
+Point: 2.34623e+06 - Data value : 4.41961
+Point: 2.5551e+06 - Data value : 4.13315
+Point: 2.78256e+06 - Data value : 3.86424
+Point: 3.03027e+06 - Data value : 3.6121
+Point: 3.30003e+06 - Data value : 3.37947
+Point: 3.59381e+06 - Data value : 3.15975
+Point: 3.91375e+06 - Data value : 2.95355
+Point: 4.26216e+06 - Data value : 2.75987
+Point: 4.64159e+06 - Data value : 2.57944
+Point: 5.0548e+06 - Data value : 2.40896
+Point: 5.50479e+06 - Data value : 2.24944
+Point: 5.99484e+06 - Data value : 2.09869
+Point: 6.52852e+06 - Data value : 1.9563
+Point: 7.10971e+06 - Data value : 1.81931
+Point: 7.74264e+06 - Data value : 1.69483
+Point: 8.43191e+06 - Data value : 1.58124
+Point: 9.18254e+06 - Data value : 1.47411
+Point: 1e+07 - Data value : 1.3737
+Point: 1.08902e+07 - Data value : 1.27997
+Point: 1.18597e+07 - Data value : 1.19227
+Point: 1.29155e+07 - Data value : 1.11053
+Point: 1.40653e+07 - Data value : 1.03425
+Point: 1.53174e+07 - Data value : 0.962782
+Point: 1.6681e+07 - Data value : 0.896615
+Point: 1.8166e+07 - Data value : 0.834944
+Point: 1.97832e+07 - Data value : 0.777129
+Point: 2.15443e+07 - Data value : 0.723154
+Point: 2.34623e+07 - Data value : 0.672817
+Point: 2.5551e+07 - Data value : 0.625929
+Point: 2.78256e+07 - Data value : 0.582287
+Point: 3.03027e+07 - Data value : 0.541597
+Point: 3.30003e+07 - Data value : 0.501319
+Point: 3.59381e+07 - Data value : 0.465889
+Point: 3.91375e+07 - Data value : 0.432965
+Point: 4.26216e+07 - Data value : 0.402231
+Point: 4.64159e+07 - Data value : 0.373694
+Point: 5.0548e+07 - Data value : 0.347118
+Point: 5.50479e+07 - Data value : 0.322324
+Point: 5.99484e+07 - Data value : 0.299331
+Point: 6.52852e+07 - Data value : 0.278116
+Point: 7.10971e+07 - Data value : 0.258303
+Point: 7.74264e+07 - Data value : 0.239861
+Point: 8.43191e+07 - Data value : 0.222703
+Point: 9.18254e+07 - Data value : 0.206763
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=1.92s Real=1.94s Sys=0.02s
-/gun/energy 100 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.05s Real=1.05s Sys=0s
-/calor/setAbsMat Lead
-#======================
+  Number of events processed : 1
+  User=216.31s Real=217s Sys=0.61s
+Time elapsed in 1 events ---- User=216.31s Real=217s Sys=0.61s
 /tracking/verbose 0
-/gun/energy 2 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+/run/beamOn 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 ====================================================================
 
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=8.47s Real=8.67s Sys=0.2s
-/gun/energy 100 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=4.79s Real=4.9s Sys=0.09s
-/calor/setAbsMat Water
-#======================
+  Number of events processed : 1
+  User=121.61s Real=121.9s Sys=0.28s
+Time elapsed in 1 events ---- User=121.61s Real=121.9s Sys=0.28s
+#
+/gun/particle alpha
+#------------------
+/gun/energy 2.67 MeV
 /tracking/verbose 0
-/gun/energy 2 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+/run/beamOn 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1646,40 +995,18 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=1.15s Real=1.15s Sys=0s
-/gun/energy 100 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+  Number of events processed : 1
+  User=639.87s Real=641.39s Sys=1.5s
+Time elapsed in 1 events ---- User=639.87s Real=641.39s Sys=1.5s
+/tracking/verbose 0
+/run/beamOn 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1688,50 +1015,16 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 1000
-  User=0.72s Real=0.72s Sys=0s
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
+  Number of events processed : 1
+  User=625.73s Real=627.2s Sys=1.45s
+Time elapsed in 1 events ---- User=625.73s Real=627.2s Sys=1.45s
+#
 G4 kernel has come to Quit state.
-G4SDManager deleted.
-LowEnBrem for e- in Water : 23 calls
-LowEnConversion for gamma in Aluminium : 457 calls
-LowEnConversion for gamma in Lead : 1488 calls
-LowEnConversion for gamma in Water : 126 calls
-LowEnPhotoElec for gamma in Air : 12 calls
-LowEnPhotoElec for gamma in Aluminium : 4059 calls
-LowEnPhotoElec for gamma in Lead : 4011 calls
-LowEnPhotoElec for gamma in Water : 4018 calls
-LowEnRayleigh for gamma in Aluminium : 32 calls
-LowEnRayleigh for gamma in Lead : 42 calls
-LowEnRayleigh for gamma in Water : 58 calls
-LowEnergyIoni for e- in Air : 35 calls
-LowEnergyIoni for e- in Aluminium : 4054 calls
-LowEnergyIoni for e- in Lead : 3979 calls
-LowEnergyIoni for e- in Water : 1516 calls
-Transportation for e+ in Air : 1399 calls
-Transportation for e- in Air : 6440 calls
-Transportation for e- in Lead : 1 calls
-Transportation for gamma in Air : 5294 calls
-Transportation for gamma in Lead : 2 calls
-annihil for e+ in Air : 1 calls
-annihil for e+ in Aluminium : 45 calls
-annihil for e+ in Lead : 623 calls
-annihil for e+ in Water : 4 calls
-msc for e- in Air : 20 calls
-msc for e- in Aluminium : 254 calls
-msc for e- in Lead : 1916 calls
-msc for e- in Water : 3884 calls
-polarLowEnCompt for gamma in Air : 5 calls
-polarLowEnCompt for gamma in Aluminium : 3729 calls
-polarLowEnCompt for gamma in Lead : 37510 calls
-polarLowEnCompt for gamma in Water : 861 calls
-EventManager deleted.
-Default detector region deleted.
-UImanager deleted.
-Units table cleared.
-StateManager deleted.
-RunManagerKernel is deleted.
-RunManager is deleting.
+DNAProcess for alpha in Water : 5179 calls
+DNAProcess for alpha+ in Water : 55 calls
+DNAProcess for e- in Water : 68047 calls
+DNAProcess for helium in Water : 2 calls
+DNAProcess for proton in Water : 1029 calls
+Transportation for alpha in Water : 2 calls
+Transportation for e- in Water : 8 calls
+Transportation for proton in Water : 2 calls

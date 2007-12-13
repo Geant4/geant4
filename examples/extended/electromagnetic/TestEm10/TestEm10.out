@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -66,7 +66,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -127,7 +127,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 1 s
+total time for build X-ray TR energy loss tables = 1.04 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -137,7 +137,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -202,7 +202,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 1 s
+total time for build X-ray TR energy loss tables = 1.05 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -215,7 +215,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -227,7 +227,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -244,7 +244,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -262,7 +262,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -275,7 +275,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 ========= Table of registered couples ==============================
 
@@ -314,26 +314,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=40.75s Real=42.01s Sys=1.08s
+  User=41.54s Real=42.67s Sys=1.11s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=44.0656 +- 0.606197  mm  
+    mean charged track length   in absorber=43.8791 +- 0.504856  mm  
 
-            mean energy deposit in absorber=0.0528138 +- 0.000920107  MeV 
+            mean energy deposit in absorber=0.0518824 +- 0.000873635  MeV 
 
- mean number of steps in absorber (charged) =8.858 +- 0.252756      
- mean number of steps in absorber (neutral) =2.815 +- 0.054907      
+ mean number of steps in absorber (charged) =8.695 +- 0.236808      
+ mean number of steps in absorber (neutral) =2.832 +- 0.0524574      
 
-   mean number of charged secondaries = 3.657 +- 0.0820204
+   mean number of charged secondaries = 3.608 +- 0.0792864
 
-   mean number of neutral secondaries = 0.045 +- 0.00670634
+   mean number of neutral secondaries = 0.044 +- 0.00648568
 
-   mean number of e-s =3.656  and e+s =0.001
+   mean number of e-s =3.608  and e+s =0
 
-(number) transmission coeff=0.494  reflection coeff=0.014
+(number) transmission coeff=0.498  reflection coeff=0.024
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=56
+#entries=1000    #underflows=0    #overflows=46
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -344,69 +344,69 @@ Run Summary
     6   9.23077           0           0
     7   10.7692           0           0
     8   12.3077           1       0.001
-    9   13.8462           5       0.005
-   10   15.3846           9       0.009
-   11   16.9231          16       0.016
-   12   18.4615          10        0.01
-   13        20          21       0.021
-   14   21.5385          17       0.017
-   15   23.0769          22       0.022
-   16   24.6154          28       0.028
+    9   13.8462           1       0.001
+   10   15.3846          10        0.01
+   11   16.9231          18       0.018
+   12   18.4615          15       0.015
+   13        20          13       0.013
+   14   21.5385          23       0.023
+   15   23.0769          24       0.024
+   16   24.6154          29       0.029
    17   26.1538          18       0.018
-   18   27.6923          25       0.025
-   19   29.2308          30        0.03
-   20   30.7692          22       0.022
-   21   32.3077          30        0.03
-   22   33.8462          21       0.021
-   23   35.3846          34       0.034
-   24   36.9231          37       0.037
-   25   38.4615          34       0.034
-   26        40          29       0.029
-   27   41.5385          36       0.036
-   28   43.0769          25       0.025
-   29   44.6154          23       0.023
-   30   46.1538          29       0.029
-   31   47.6923          22       0.022
-   32   49.2308          24       0.024
-   33   50.7692          22       0.022
-   34   52.3077          28       0.028
-   35   53.8462          24       0.024
-   36   55.3846          17       0.017
-   37   56.9231          20        0.02
-   38   58.4615          18       0.018
-   39        60          16       0.016
-   40   61.5385          20        0.02
-   41   63.0769          19       0.019
-   42   64.6154          12       0.012
-   43   66.1538          12       0.012
-   44   67.6923           9       0.009
-   45   69.2308          12       0.012
-   46   70.7692          15       0.015
-   47   72.3077          10        0.01
-   48   73.8462          11       0.011
+   18   27.6923          23       0.023
+   19   29.2308          27       0.027
+   20   30.7692          34       0.034
+   21   32.3077          18       0.018
+   22   33.8462          35       0.035
+   23   35.3846          26       0.026
+   24   36.9231          38       0.038
+   25   38.4615          27       0.027
+   26        40          26       0.026
+   27   41.5385          24       0.024
+   28   43.0769          26       0.026
+   29   44.6154          30        0.03
+   30   46.1538          31       0.031
+   31   47.6923          23       0.023
+   32   49.2308          23       0.023
+   33   50.7692          26       0.026
+   34   52.3077          32       0.032
+   35   53.8462          25       0.025
+   36   55.3846          26       0.026
+   37   56.9231          26       0.026
+   38   58.4615          15       0.015
+   39        60          23       0.023
+   40   61.5385          16       0.016
+   41   63.0769          14       0.014
+   42   64.6154          14       0.014
+   43   66.1538          14       0.014
+   44   67.6923          13       0.013
+   45   69.2308          20        0.02
+   46   70.7692          16       0.016
+   47   72.3077           7       0.007
+   48   73.8462           9       0.009
    49   75.3846           9       0.009
-   50   76.9231           7       0.007
-   51   78.4615           9       0.009
-   52        80          16       0.016
-   53   81.5385           9       0.009
-   54   83.0769           5       0.005
-   55   84.6154          11       0.011
+   50   76.9231           4       0.004
+   51   78.4615          10        0.01
+   52        80          11       0.011
+   53   81.5385           6       0.006
+   54   83.0769           6       0.006
+   55   84.6154          10        0.01
    56   86.1538           7       0.007
-   57   87.6923           5       0.005
+   57   87.6923           4       0.004
    58   89.2308           5       0.005
-   59   90.7692           3       0.003
-   60   92.3077           5       0.005
-   61   93.8462          12       0.012
+   59   90.7692           6       0.006
+   60   92.3077           3       0.003
+   61   93.8462           2       0.002
    62   95.3846           3       0.003
-   63   96.9231           3       0.003
-   64   98.4615           2       0.002
+   63   96.9231           4       0.004
+   64   98.4615           5       0.005
 
- Emp =       0.0369231   width=      0.0430769  MeV 
+ Emp =       0.0369231   width=      0.0476923  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1649978133, 1819841216
+ Current couple of seeds = 1475465879, 1720338131
 ----------------------------------------
 
 ========= Table of registered couples ==============================

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -148,7 +148,7 @@ eBrem:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -161,7 +161,7 @@ eBrem:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -178,7 +178,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
@@ -192,7 +192,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -200,7 +200,7 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -212,7 +212,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -229,7 +229,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -247,7 +247,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -260,7 +260,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -303,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.6s Real=5.6s Sys=0s
+  User=5.5s Real=5.5s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -315,7 +315,7 @@ Run Summary
  Psi            :	506.49 mrad +- 0.00036939 mrad  (29.02 deg +- 2.1164e-05 deg)
 
  Theta_plane    :	1811.3 mrad  (103.78 deg)
- phi correlation:	0.26313 +- 0.05675  (std::cos(phi_pos - phi_dir))
+ phi correlation:	0.26313 +- 0.056751  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -369,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.4s Real=5.4s Sys=0s
+  User=5.3s Real=5.3s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -380,8 +380,8 @@ Run Summary
  lateralDisplac :	923.68 nm  +- 256.83 fm 
  Psi            :	148.35 mrad +- 8.7703e-05 mrad  (8.4998 deg +- 5.025e-06 deg)
 
- Theta_plane    :	231.01 mrad  (13.236 deg)
- phi correlation:	0.073605 +- 0.13026  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	231.09 mrad  (13.241 deg)
+ phi correlation:	0.073719 +- 0.1302  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 

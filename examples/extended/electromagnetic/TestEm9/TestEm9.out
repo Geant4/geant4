@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-00    (28-August-2007)
+ Geant4 version Name: global-V09-00-02    (14-December-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,7 +112,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -125,7 +125,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -148,7 +148,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
@@ -162,7 +162,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -170,7 +170,7 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -182,7 +182,7 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -199,7 +199,7 @@ muIoni:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -217,7 +217,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -230,7 +230,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 ========= Table of registered couples ==============================
 
@@ -298,33 +298,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=83.82s Real=83.87s Sys=0s
+  User=84.54s Real=84.56s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1325
-Average number of gamma      698
-Average number of e+         48.1
-Average number of steps      3986
-Edep 1x1 =                   0.8369 +- 0.002583  res=  3.087 %
-Edep 3x3 =                   0.9608 +- 0.001116  res=  1.161 %
-Edep 5x5 =                   0.9812 +- 0.000781  res=  0.7959 %
+Average number of e-         1315
+Average number of gamma      697.1
+Average number of e+         48.38
+Average number of steps      3966
+Edep 1x1 =                   0.8299 +- 0.00282  res=  3.398 %
+Edep 3x3 =                   0.9584 +- 0.001213  res=  1.265 %
+Edep 5x5 =                   0.9797 +- 0.0007927  res=  0.8091 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8359 +- 0.002757  res=  3.298 %
-Edep 3x3 =                   0.9588 +- 0.001515  res=  1.58 %
-Edep 5x5 =                   0.9794 +- 0.001374  res=  1.403 %
+Edep 1x1 =                   0.8291 +- 0.002911  res=  3.511 %
+Edep 3x3 =                   0.9576 +- 0.001329  res=  1.388 %
+Edep 5x5 =                   0.9783 +- 0.001096  res=  1.12 %
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8369  delEdep1x1= 0.009823 nrms= 3.303
-Erms1x1: 0.02583  delErms1x1= -0.003906 nrms= -1.314
-Edep3x3: 0.9608  delEdep3x3= 0.003781 nrms= 2.94
-Erms3x3: 0.01116  delErms3x3= -0.001704 nrms= -1.325
-Edep5x5: 0.9812  delEdep5x5= 0.00192 nrms= 2.172
-Erms5x5: 0.00781  delErms5x5= -0.00103 nrms= -1.166
-<<<<<END>>>>>   IS NOT ACCEPTED
+Edep1x1: 0.8299  delEdep1x1= 0.002762 nrms= 0.9287
+Erms1x1: 0.0282  delErms1x1= -0.001543 nrms= -0.5188
+Edep3x3: 0.9584  delEdep3x3= 0.001382 nrms= 1.075
+Erms3x3: 0.01213  delErms3x3= -0.000732 nrms= -0.5692
+Edep5x5: 0.9797  delEdep5x5= 0.0004336 nrms= 0.4905
+Erms5x5: 0.007927  delErms5x5= -0.0009134 nrms= -1.033
+<<<<<END>>>>>   IS ACCEPTED
 
 #
 G4 kernel has come to Quit state.
