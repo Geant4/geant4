@@ -85,5 +85,6 @@ cp $g4_test/test1002.out         $g4_src/examples/advanced/microbeam/microbeam.o
 cp $g4_test/test1003.out         $g4_src/examples/advanced/raredecay_calorimetry/PhotIn.out
 cp $g4_test/test2001.out         $g4_src/examples/extended/medical/GammaTherapy/GammaTherapy.out
 cp $g4_test/test2002.out         $g4_src/examples/extended/medical/fanoCavity/fanoCavity.out
+cp $g4_test/test2003.out         $g4_src/examples/extended/medical/fanoCavity2/fanoCavity2.out
 cp $g4_test/test6001.out         $g4_src/examples/extended/hadronic/Hadr01/hadr01.out
 cp $g4_test/test7001.out         $g4_src/examples/extended/polarisation/Pol01/pol01.out
