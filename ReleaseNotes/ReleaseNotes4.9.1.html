@@ -182,17 +182,18 @@ The new physics lists are:
 </UL>
 
 <P> </P>
-<B>Fast Simulation</B>
+<B>Fast Parameterised Simulation</B>
 <P> </P>
 The process <TT>G4FastSimulationManagerProcess</TT> (<TT>G4FSMP</TT>) can be
 used for triggering fast simulation models attached to the regions of the mass
 geometry or to regions of parallel (ghost) geometries.<BR>
 In the first case, the user has to attach an instance of the <TT>G4FSMP</TT>
 process as a <TT>PostStep</TT> process to particles having a fast simulation
-model in the mass geometry.<BR>
-In the second case, the <TT>G4FSMP</TT> process has to be attached as an
-<TT>AlongStep+PostStep</TT> process to particles having fast simulation models
-bound to regions of the ghost geometry.<BR>
+model in the mass geometry; this remains unchanged.<BR>
+A change is required in the second case, of a ghost geometry: the
+<TT>G4FSMP</TT> process now must be attached as an <TT>AlongStep+PostStep</TT>
+process to particles having fast simulation models bound to regions of the
+ghost geometry.<BR>
 The <TT>AlongGetPhysicalInteractionLength()</TT> method of the <TT>G4FSMP</TT>
 process has to appear second last in this case (i.e. after the Multiple
 Scattering, but before the Transportation processes). An example is given in
