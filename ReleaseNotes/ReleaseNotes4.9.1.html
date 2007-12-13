@@ -954,9 +954,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added <TT>log(0)</TT> protection in
         <TT>G4NeutronInelasticCrossSection</TT> and
         <TT>G4ProtonInelasticCrossSection</TT>.</LI>
-    <LI>Changed <TT>log</TT> to <TT>std::log</TT> in
-        <TT>G4HadronNucleonXsc</TT> and
-        <TT>G4GlauberGribovCrossSection</TT>.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
@@ -966,9 +963,8 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>
-    <LI>Collected many changes for propagate interface.</LI>
-    <LI>Fix for pion incident at low energy: cannot go to deexcitation
-        directly.</LI>
+    <LI>Developments for propagate interface.</LI>
+    <LI>Correcting bug for pion incident at low energy causing crash in Precompound</LI>
     <LI><TT>G4BinaryLightIon</TT>: adapted to changes in Binary Cascade.</LI>
     </UL></LI>
 <LI><B>Cascade</B>
@@ -1169,31 +1165,31 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="lst-notes">
 <H3><I>Physics lists</I></H3></A>
 <UL>
+<LI>New physics lists QGSP_DIF and QGSP_BERT_DIF; as QGSP or QGSP_BERT with projectile diffraction
+    for proton and neutron enabled.</LI>
+<LI>New physics list QGSC_BERT; use QGSC down in energy to overlap with BERT. LEP is not
+    used for proton, neutron, pions, kaons, except for neutron capture and
+    neutron induced fission.</LI>
+<LI>New physics list FTFP_BERT: FTFP with Bertini cascade.The energy ranges of FTFP and BERT 
+    overlap, so LEP is not used for proton, neutron, pions, kaons, except for neutron capture and
+    neutron induced fission.</LI>
 <LI>New physics list QGS_BIC, equivalent to QGSP_BIC, but using binary also for
     pion and for rescattering via the propagate interface; the deexcitation
     implicitely uses precompound.</LI>
-<LI>New physics list FTF_BIC, equivalent to QGS_BIC but for pions LEP is not used,
-    as BIC is used up to 5 GeV, thus overlapping with FTF starting at 4 GeV.</LI>
-<LI>New physics list QGSC_BERT; use QGSC down to overlap with BERT. LEP is not
-    used for proton, neutron, pions, kaons, except for neutron capture and
-    neutron induced fission.</LI>
-<LI>New physics list QGSP_BERT_DIF; as QGSP_BERT with projectile diffraction
-    for proton and neutron enabled.</LI>
-<LI>New physics list FTFP_BERT: FTFP with Bertini cascade.</LI>
-<LI>Enabling use of projectile diffraction in QGSP-like lists, and created
-    new list using projectile diffraction, QGSP_DIF.</LI>
-<LI>Added possibility to activate <TT>G4SynchrotronRadiation</TT> and mu-nuclear
-    betwen runs.</LI>
-<LI>Added optional builder <TT>G4RadioactiveDecayPhysics</TT>.</LI>
 <LI>Several fixes in QBBC: fixed bug in adding of cross section for pions
     and mesons; tuned energy thresholds between string and cascade models;
     corrected interface to CHIPS model; reviewed options: QBBC, QBBC_DEL,
     QBBC_HEL, QBBC_HP.</LI>
+<LI>New physics list FTF_BIC, equivalent to QGS_BIC but using FTF model for high
+    energy interactions.  For protons, neutrons and pions LEP is not used,
+    as BIC is used up to 5 GeV, thus overlapping with FTF starting at 4 GeV.</LI>
+<LI>Added possibility to activate <TT>G4SynchrotronRadiation</TT> and mu-nuclear
+    betwen runs.</LI>
+<LI>Change QGSP builders to enable use of projectile diffraction in QGSP-like lists.</LI>
+<LI>Added optional builder <TT>G4RadioactiveDecayPhysics</TT>.</LI>
 <LI>Added <TT>G4HadronDElasticPhysics</TT> builder and fixed name to
     <TT>G4HadronHElasticPhysics</TT>.</LI>
 <LI><TT>G4EmStandardPhysics_option2</TT>: increased number of bins in tables.</LI>
-<LI>Crossover from Bertini to FTFP at 4-5 GeV. No LEP for inelastic for
-    <TT>p,n,pi,K</TT>.</LI>
 <LI><TT>G4LEPNeutronBuilder</TT>: when the limit for <TT>MaxInelastic</TT>
     is zero, do NOT add LEP for inelastic. Change needed for FTFP_BERT list.</LI>
 </UL>
