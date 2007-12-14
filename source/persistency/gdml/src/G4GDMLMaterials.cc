@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.13 2007-12-05 15:44:48 ztorzsok Exp $
+// $Id: G4GDMLMaterials.cc,v 1.14 2007-12-14 10:29:15 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -330,6 +330,57 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
    }
 }
 
+void G4GDMLMaterials::opticalsurfaceRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4String smodel;
+   G4String sfinish;
+   G4String stype;
+   G4double value = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="model") smodel = attValue; else
+      if (attName=="finish") sfinish = attValue; else
+      if (attName=="type") stype = attValue; else
+      if (attName=="value") value = eval.Evaluate(attValue);
+   }
+
+   G4OpticalSurfaceModel model; 
+   G4OpticalSurfaceFinish finish;
+   G4SurfaceType type;   
+   
+   if (smodel="unified") model = unified; else 
+   model = glisur;
+
+   if (sfinish=="polishedfrontpainted") finish = polishedfrontpainted; else
+   if (sfinish=="polishedbackpainted") finish = polishedbackpainted; else
+   if (sfinish=="groundfrontpainted") finish = groundfrontpainted; else
+   if (sfinish=="groundbackpainted") finish = groundbackpainted; else
+   if (sfinish=="ground") finish = ground; else
+   finish = polished;
+
+   if (stype=="dielectric_metal") type = dielectric_metal; else
+   if (stype=="x_ray") type = x_ray; else
+   if (stype=="firsov") type = firsov; else   
+   type = dielectric_dielectric;
+
+   new G4OpticalSurface(name,model,finish,type,value);
+}
+
 void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -343,6 +394,7 @@ void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
       if (tag=="element") elementRead(child); else 
       if (tag=="isotope") isotopeRead(child); else 
       if (tag=="material") materialRead(child); else 
+      if (tag=="opticalsurface") opticalsurfaceRead(child); else 
       G4Exception("GDML: Unknown tag in materials: "+tag);
    }
 }
