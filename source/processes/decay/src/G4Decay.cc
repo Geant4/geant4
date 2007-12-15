@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.27 2007-10-06 07:01:09 kurasige Exp $
+// $Id: G4Decay.cc,v 1.28 2007-12-15 12:29:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
 #include "G4VExtDecayer.hh"
+#include "G4DecayProcessType.hh"
 
 // constructor
 G4Decay::G4Decay(const G4String& processName)
@@ -63,11 +64,15 @@ G4Decay::G4Decay(const G4String& processName)
                                 HighestValue(20.0),
                                 pExtDecayer(0)
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(DECAY));
+
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout << "G4Decay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
+
   pParticleChange = &fParticleChangeForDecay;
 }
 
@@ -426,4 +431,15 @@ G4double G4Decay::AtRestGetPhysicalInteractionLength(
       theNumberOfInteractionLengthLeft * GetMeanLifeTime(track, condition);
   }
   return fRemainderLifeTime;
+}
+
+
+void G4Decay::SetExtDecayer(G4VExtDecayer* val)
+{
+  pExtDecayer = val;
+
+  // set Process Sub Type
+  if ( pExtDecayer !=0 ) {
+    SetProcessSubType(static_cast<int>(DECAY_External));
+  }
 }

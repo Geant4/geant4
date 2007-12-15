@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.18 2007-07-23 23:13:04 kurasige Exp $
+// $Id: G4Decay.hh,v 1.19 2007-12-15 12:29:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -202,12 +202,6 @@ inline
 			    )
 {
   return DecayIt(aTrack, aStep);
-}
-
-inline
- void G4Decay::SetExtDecayer(G4VExtDecayer* val)
-{
-  pExtDecayer = val;
 }
 
 inline
