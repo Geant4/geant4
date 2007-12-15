@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2007-12-12 10:11:26 gcosmo Exp $
+$Id: History,v 1.54 2007-12-15 12:25:32 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Dec. 12, 2007   G.Cosmo
-- Moved inline definitions of virtual methods in G4WrapperProcess to
-  .cc file. Included in tag "procman-V09-00-05a".
-
-- Nov. 29, 2007   H.Kurashige 
+- Dec. 15, 2007   H.Kurashige (procman-V09-01-00)
 - allow zero mean free path for PostStepDoIt
 - add ProcessSubType to G4VProcess
+
+- Dec. 12, 2007   G.Cosmo (procman-V09-00-05a)
+- Moved inline definitions of virtual methods in G4WrapperProcess to
+  .cc file. Included in tag "procman-V09-00-".
 
 - Nov. 28, 2007   H.Kurashige (procman-V09-00-05)
 - Fix a bug SetProcessOrderingToSecond method of G4ProcessManager.
