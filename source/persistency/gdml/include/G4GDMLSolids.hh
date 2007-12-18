@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.21 2007-12-12 14:18:33 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.22 2007-12-18 10:28:49 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,7 +97,7 @@ class G4GDMLSolids : public G4GDMLMaterials {
    void tubeRead(const xercesc::DOMElement* const);
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
    void xtruRead(const xercesc::DOMElement* const);
-   zplaneType zplaneRead(const xercesc::DOMElement* const,G4double);
+   zplaneType zplaneRead(const xercesc::DOMElement* const);
    void solidsRead(const xercesc::DOMElement* const);
 protected:
    G4ThreeVector vectorRead(const xercesc::DOMElement* const);

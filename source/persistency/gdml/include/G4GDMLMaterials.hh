@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.hh,v 1.13 2007-12-14 10:29:15 ztorzsok Exp $
+// $Id: G4GDMLMaterials.hh,v 1.14 2007-12-18 10:28:49 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,9 +61,9 @@ class G4GDMLMaterials : public G4GDMLDefine {
    void mixtureRead(const xercesc::DOMElement* const,G4Material*);
    void opticalsurfaceRead(const xercesc::DOMElement* const);
    void materialsRead(const xercesc::DOMElement* const);
-protected:
    G4Element* getElement(const G4String&) const;
    G4Isotope* getIsotope(const G4String&) const;
+protected:
    G4Material* getMaterial(const G4String&) const;
 };
 

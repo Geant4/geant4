@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.30 2007-12-12 14:18:33 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.31 2007-12-18 10:28:49 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -419,7 +419,7 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="zplane") zplaneList.push_back(zplaneRead(child,lunit));
+      if (tag=="zplane") zplaneList.push_back(zplaneRead(child));
    }
 
    G4int numZPlanes = zplaneList.size();
@@ -430,9 +430,9 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
    for (G4int i=0;i<numZPlanes;i++) {
    
-      rmin_array[i] = zplaneList[i].rmin;
-      rmax_array[i] = zplaneList[i].rmax;
-      z_array[i]    = zplaneList[i].z;
+      rmin_array[i] = zplaneList[i].rmin*lunit;
+      rmax_array[i] = zplaneList[i].rmax*lunit;
+      z_array[i]    = zplaneList[i].z*lunit;
    }
 
    new G4Polycone(name,startphi,deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
@@ -482,7 +482,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="zplane") zplaneList.push_back(zplaneRead(child,lunit));
+      if (tag=="zplane") zplaneList.push_back(zplaneRead(child));
    }
 
    G4int numZPlanes = zplaneList.size();
@@ -493,9 +493,9 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
    for (G4int i=0;i<numZPlanes;i++) {
    
-      rmin_array[i] = zplaneList[i].rmin;
-      rmax_array[i] = zplaneList[i].rmax;
-      z_array[i] = zplaneList[i].z;
+      rmin_array[i] = zplaneList[i].rmin*lunit;
+      rmax_array[i] = zplaneList[i].rmax*lunit;
+      z_array[i] = zplaneList[i].z*lunit;
    }
 
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,z_array,rmin_array,rmax_array);
@@ -1038,7 +1038,7 @@ void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
    new G4ExtrudedSolid(name,twoDimVertexList,sectionList);
 }
 
-G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element,G4double lunit) {
+G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element) {
 
    zplaneType zplane;
 
@@ -1056,9 +1056,9 @@ G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* con
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="rmin") zplane.rmin = eval.Evaluate(attValue)*lunit; else
-      if (attName=="rmax") zplane.rmax = eval.Evaluate(attValue)*lunit; else
-      if (attName=="z") zplane.z = eval.Evaluate(attValue)*lunit;
+      if (attName=="rmin") zplane.rmin = eval.Evaluate(attValue); else
+      if (attName=="rmax") zplane.rmax = eval.Evaluate(attValue); else
+      if (attName=="z") zplane.z = eval.Evaluate(attValue);
    }
 
    return zplane;

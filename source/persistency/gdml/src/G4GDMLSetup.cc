@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.cc,v 1.12 2007-12-06 09:58:14 ztorzsok Exp $
+// $Id: G4GDMLSetup.cc,v 1.13 2007-12-18 10:28:49 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSetup Implementation
@@ -58,10 +58,10 @@ void G4GDMLSetup::setupRead(const xercesc::DOMElement* const element) {
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
 
-      const G4String attribute_name  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name = attribute_value;
+      if (attName=="name") name = attValue;
    }
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -72,10 +72,6 @@ void G4GDMLSetup::setupRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag != "world") continue;
-
-      G4String ref = refRead(child);
-
-      setupMap[name] = GenerateName(ref);
+      if (tag == "world") setupMap[name] = GenerateName(refRead(child));
    }
 }
