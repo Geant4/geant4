@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.4 2007-12-19 18:57:44 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.5 2007-12-19 19:21:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 #include "PhysListEmStandardIG.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -131,6 +132,13 @@ void PhysListEmStandardIG::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1, 2,2);      
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetSubCutoff(true);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
