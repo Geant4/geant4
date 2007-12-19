@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.14 2007-11-21 17:41:19 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.15 2007-12-19 18:34:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -99,21 +100,21 @@ void PhysListEmStandard::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1, 4,4);
              
     } else if (particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2,2);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering, -1,1,1);
-      pmanager->AddProcess(new G4hIonisation,        -1,2,2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1,1,1);
+      pmanager->AddProcess(new G4hIonisation,         -1,2,2);
     }
   }
 
