@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.5 2007-12-19 19:21:41 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.6 2007-12-19 19:41:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,7 +133,7 @@ void PhysListEmStandardIG::ConstructProcess()
     }
   }
   G4EmProcessOptions opt;
-  opt.SetSubCutoff(true);
+  opt.SetStepFunction(0.2, 100*um);
   opt.SetMinEnergy(0.1*keV);
   opt.SetMaxEnergy(100.*GeV);
   opt.SetDEDXBinning(360);
