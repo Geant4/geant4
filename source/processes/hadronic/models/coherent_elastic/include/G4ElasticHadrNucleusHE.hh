@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.44 2007-12-19 17:56:23 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.45 2007-12-19 18:27:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -267,5 +267,12 @@ G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int n, G4int m )
   else                     return 0.;
 }
 
+////////////////////////////////////////////////////////////////
+
+inline
+G4double G4ElasticHadrNucleusHE::GetDistrFun(G4double Q2)
+{
+  return GetFt(Q2)/FmaxT;
+}
 
 #endif
