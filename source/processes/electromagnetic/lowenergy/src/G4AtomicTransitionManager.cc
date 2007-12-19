@@ -318,7 +318,7 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::iterator pos;
 	G4DataVector transProb = transition->TransitionProbabilities();
 	G4double totalRadTransProb = 0;
 	
-      for (size_t j = 1; j<transProb.size(); j++)
+	for (size_t j = 0; j<transProb.size(); j++) // AM -- corrected, it was 1
 	{
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}
@@ -360,7 +360,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
       G4DataVector transProb = transition->TransitionProbabilities();
       G4double totalRadTransProb = 0;
       
-      for(size_t j = 1; j<transProb.size(); j++)
+      for(size_t j = 0; j<transProb.size(); j++) // AM -- Corrected, was 1
 	{
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}
