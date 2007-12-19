@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.43 2007-11-13 17:22:51 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.44 2007-12-19 17:56:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -156,14 +156,9 @@ public:
 
   void     GetKinematics(const G4ParticleDefinition * aHadron,
 		          G4double MomentumH);
-public:
-  //    G4double R1, R2, Pnucl, Aeff, HadrTot1, HadrSlope1, HadrReIm1, Tott1;
-
 private:
 
-
   void     Binom();
-
 
   //  fields
 
