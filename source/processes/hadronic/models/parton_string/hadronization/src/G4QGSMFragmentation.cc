@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.6 2007-04-24 14:55:23 gunter Exp $
+// $Id: G4QGSMFragmentation.cc,v 1.7 2007-12-20 15:38:07 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -228,7 +228,8 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 //-----------------------------------------------------------------------------------------
 
 G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron,
-	G4FragmentingString * string)
+                                                  G4FragmentingString * string,    // Uzhi
+                                                  G4FragmentingString * newString) // Uzhi
 {
        G4double HadronMass = pHadron->GetPDGMass();
 

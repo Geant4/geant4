@@ -79,18 +79,28 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 	decaying=None;
 	if ( old.decaying == Left )
 	{
+//G4cout<<" Left "<<G4endl;
+//G4cout<<"Pt right "<<Ptright<<G4endl;
+//G4cout<<"Pt left  "<<Ptleft <<G4endl;
 		RightParton= old.RightParton;
 		Ptright    = old.Ptright;
 		LeftParton = newdecay;
 		Ptleft     = old.Ptleft - momentum->vect();
 		Ptleft.setZ(0.);
+//G4cout<<"Pt right "<<Ptright<<G4endl;
+//G4cout<<"Pt left  "<<Ptleft <<G4endl;
 	} else if ( old.decaying == Right )
 	{
+//G4cout<<" Right "<<G4endl;
+//G4cout<<"Pt right "<<Ptright<<G4endl;
+//G4cout<<"Pt left  "<<Ptleft <<G4endl;
 		RightParton = newdecay;
 		Ptright     = old.Ptright - momentum->vect();
 		Ptright.setZ(0.);
 		LeftParton  = old.LeftParton;
 		Ptleft      = old.Ptleft;
+//G4cout<<"Pt right "<<Ptright<<G4endl;
+//G4cout<<"Pt left  "<<Ptleft <<G4endl;
 	} else
 	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
@@ -100,6 +110,27 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 	
 	//G4double Eold=0.5 * (old.Pplus + old.Pminus);
 	//G4double Enew=0.5 * (Pplus + Pminus);
+}
+
+
+//---------------------------------------------------------------------------------
+
+G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,  // Uzhi
+					 G4ParticleDefinition * newdecay) // Uzhi
+{                                                                         // Uzhi
+	decaying=None;                                                    // Uzhi
+	if ( old.decaying == Left )                                       // Uzhi
+	{                                                                 // Uzhi
+		RightParton= old.RightParton;                             // Uzhi
+		LeftParton = newdecay;                                    // Uzhi
+	} else if ( old.decaying == Right )                               // Uzhi
+	{                                                                 // Uzhi
+		RightParton = newdecay;                                   // Uzhi
+		LeftParton  = old.LeftParton;                             // Uzhi
+	} else                                                            // Uzhi
+	{
+		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
+	}
 }
 
 
@@ -213,4 +244,9 @@ G4double G4FragmentingString::Mass2() const
 G4double G4FragmentingString::Mass() const
 {
 	return std::sqrt(this->Mass2());
+}
+
+G4double G4FragmentingString::MassT2() const
+{
+	return Pplus*Pminus;
 }

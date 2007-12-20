@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh,v 1.4 2007-04-24 14:55:23 gunter Exp $
+// $Id: G4LundStringFragmentation.hh,v 1.5 2007-12-20 15:38:06 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -43,31 +43,41 @@
 class G4LundStringFragmentation: public G4VLongitudinalStringDecay
     {
 public:
-    G4LundStringFragmentation();
-//    G4LundStringFragmentation(G4double sigmaPt);
-     G4LundStringFragmentation(const G4LundStringFragmentation &right);
-     virtual ~G4LundStringFragmentation();
-     virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
-public:
+    G4LundStringFragmentation();
+    G4LundStringFragmentation(const G4LundStringFragmentation &right);
+    virtual ~G4LundStringFragmentation();
+
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;
     int operator!=(const G4LundStringFragmentation &right) const;
 
+    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
 private:
-   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
+   void SetMinimalStringMass(const G4FragmentingString  * const string);		    
+   void SetMinimalStringMass2(const G4double aValue);	
 
-   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, G4FragmentingString * string);
-   virtual G4bool SplitLast(G4FragmentingString * string, 
-		    G4KineticTrackVector * LeftVector,
-		    G4KineticTrackVector * RightVector);
-   void SetMinimalStringMass(const G4FragmentingString  * const string);		    
-   void SetMinimalStringMass2(const G4double aValue);		    
 
+   virtual G4bool SplitLast(G4FragmentingString * string, 
+		            G4KineticTrackVector * LeftVector,
+		            G4KineticTrackVector * RightVector);
+
+   virtual void Sample4Momentum(G4LorentzVector* Mom,     G4double Mass, 
+                                G4LorentzVector* AntiMom, G4double AntiMass, 
+                                G4double InitialMass); 
+
+   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
+                                        G4FragmentingString * string,
+                                        G4FragmentingString * newString); // Uzhi
+
+   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
+                                  G4int PartonEncoding,  
+                                  G4ParticleDefinition* pHadron,
+                                  G4double Px, G4double Py);      
+	    
 private:
    G4double MinimalStringMass;
    G4double MinimalStringMass2;
