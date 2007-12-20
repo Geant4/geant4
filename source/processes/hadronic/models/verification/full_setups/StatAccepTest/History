@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+20-Dec-2007 - A.Ribon (statAccepTest-V09-01-00)
+- Added the printing of a random number at the
+  end of each event, to monitor reproducibility.
+
+
 28-Nov-2007 - A.Ribon (statAccepTest-V09-00-04)
 - Ready for the December 2007 release (G4 9.1).
 

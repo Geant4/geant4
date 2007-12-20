@@ -96,16 +96,19 @@ void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
 
   theSteppingAction->reset();
 
-  G4cout << " ---  StatAccepTestEventAction::EndOfEventAction  ---  event= " 
+  //G4cout << " ---  StatAccepTestEventAction::EndOfEventAction  ---  event= " 
+  G4cout << " ---  EndOfEventAction  ---  event= " 
 	 << evt->GetEventID() << "   t=";
   eventTimer->Stop();
   G4double timeEventInSeconds = 0.0;
   if ( eventTimer->IsValid() ) {
     timeEventInSeconds = eventTimer->GetUserElapsed();
-    G4cout << timeEventInSeconds << "s" << G4endl;
+    G4cout << timeEventInSeconds << "s";
   } else {
-    G4cout << "UNDEFINED" << G4endl;
+    G4cout << "UNDEFINED";
   }
+
+  G4cout << "   random=" << CLHEP::HepRandom::getTheEngine()->flat() << G4endl;
 
   // Fill the histograms/ntuple.
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
