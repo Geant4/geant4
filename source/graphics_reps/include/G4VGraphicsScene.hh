@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.10 2007-07-17 17:52:20 allison Exp $
+// $Id: G4VGraphicsScene.hh,v 1.11 2008-01-04 22:20:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -127,7 +127,9 @@ public: // With description
 
   virtual void EndPrimitives () = 0;
 
-  virtual void BeginPrimitives2D () = 0;
+  virtual void BeginPrimitives2D
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
   virtual void EndPrimitives2D () = 0;
   // The x,y coordinates of the primitives passed to AddPrimitive are
   // intrepreted as screen coordinates, -1 < x,y < 1.  The
