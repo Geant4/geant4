@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.16 2006-11-01 11:14:05 allison Exp $
+// $Id: MyEventAction.cc,v 1.17 2008-01-04 21:53:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@
 #include "G4Text.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Polyhedron.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -163,5 +164,11 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     pVVisManager->Draw(transientTube, transientTubeAtts,
 		       G4Translate3D(500.*cm, 300.*cm, -500.*cm));
 
+    // A blue rectangle in fixed position on the screen
+    G4PolyhedronBox rectangle(0.1, 0.2, 0.1);
+    G4VisAttributes rectangleAtts(G4Colour(0., 0., 1.));
+    rectangleAtts.SetForceSolid(true);
+    rectangle.SetVisAttributes(rectangleAtts);
+    pVVisManager->Draw2D(rectangle, G4Translate3D(0.7, 0.5, 0.));
   }
 }
