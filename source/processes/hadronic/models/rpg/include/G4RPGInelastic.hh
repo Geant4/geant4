@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
+// $Id: G4RPGInelastic.hh,v 1.2 2008-01-04 23:20:50 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -38,6 +38,7 @@
 // Base class for re-parameterized Gheisha-style models.
 
 #include "globals.hh"
+#include <vector>
 #include "G4FastVector.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ReactionProduct.hh"
@@ -109,12 +110,28 @@ class G4RPGInelastic : public G4HadronicInteraction
 
    G4RPGTwoBody twoBody;
 
+   std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
+
+   G4int sampleFlat(std::vector<G4double> sigma) const;
+
+   void CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
+                   G4int &vecLen,
+                   G4ReactionProduct &currentParticle,
+                   G4ReactionProduct &targetParticle,
+                   G4double Q, G4double B, G4double S);
+
+   enum {pi0, pip, pim, kp, km, k0, k0b, pro, neu, 
+         lam, sp, s0, sm, xi0, xim, om, ap, an};
+
+   static G4ParticleDefinition* particleDef[18];
+
  private:
    
    G4double cache;
    G4ThreeVector what;
 
+   static const G4double energyScale[30];
+
  };
  
 #endif
- 
