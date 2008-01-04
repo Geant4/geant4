@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.67 2007-07-10 17:49:27 allison Exp $
+// $Id: G4VisManager.hh,v 1.68 2008-01-04 22:03:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -249,7 +249,26 @@ public: // With description
   void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  void Draw2D (const G4Text&);
+  virtual void Draw2D (const G4Circle&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4NURBS&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4Polyhedron&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4Polyline&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4Polymarker&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4Square&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
+
+  virtual void Draw2D (const G4Text&,
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of

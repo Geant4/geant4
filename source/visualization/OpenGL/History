@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2007-11-30 14:47:30 lgarnier Exp $
+$Id: History,v 1.105 2008-01-04 22:07:01 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+4th January 2008  John Allison  (opengl-V09-01-00)
+- Implemented extended 2D interface.
 
 30th November 2007  Laurent Garnier
 - Improvements for Qt3

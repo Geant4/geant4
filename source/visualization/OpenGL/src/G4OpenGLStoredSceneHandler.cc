@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.34 2007-04-04 16:50:27 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.35 2008-01-04 22:07:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,7 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& syste
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
-fTopPODL (0),
-fProcessing2D (false)
+fTopPODL (0)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
@@ -137,6 +136,9 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
+    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    glMultMatrixd (oglt.GetGLMatrix ());
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   }
 }
 
@@ -238,15 +240,14 @@ void G4OpenGLStoredSceneHandler::EndPrimitives ()
   G4OpenGLSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
+void G4OpenGLStoredSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
 {
-  G4OpenGLSceneHandler::BeginPrimitives2D();
-  fProcessing2D = true;
+  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
 }
 
 void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
 {
-  fProcessing2D = false;
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 

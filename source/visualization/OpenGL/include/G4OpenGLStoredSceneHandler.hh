@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.24 2007-04-04 16:50:26 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.25 2008-01-04 22:07:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ public:
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
-  void BeginPrimitives2D ();
+  void BeginPrimitives2D (const G4Transform3D& objectTransformation);
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
@@ -110,9 +110,6 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
-
-private:
-  G4bool fProcessing2D;
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.51 2007-05-25 15:41:38 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.52 2008-01-04 22:07:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,7 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      const G4String& name):
   G4VSceneHandler (system, id, name),
   fPickName(0),
+  fProcessing2D (false),
   fProcessingPolymarker(false)
 {}
 
@@ -123,13 +124,16 @@ void G4OpenGLSceneHandler::EndPrimitives ()
   G4VSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLSceneHandler::BeginPrimitives2D ()
+void G4OpenGLSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
 {
-  G4VSceneHandler::BeginPrimitives2D ();
+  G4VSceneHandler::BeginPrimitives2D (objectTransformation);
+  fProcessing2D = true;
 }
 
 void G4OpenGLSceneHandler::EndPrimitives2D ()
 {
+  fProcessing2D = false;
   G4VSceneHandler::EndPrimitives2D ();
 }
 
@@ -514,7 +518,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     }
-    glEnable (GL_LIGHTING);
+    if (!fProcessing2D) glEnable (GL_LIGHTING);
     break;
   case (G4ViewParameters::wireframe):
   default:
@@ -604,7 +608,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       if (drawing_style == G4ViewParameters::hlhsr) {
-	glEnable (GL_LIGHTING);
+	if (!fProcessing2D) glEnable (GL_LIGHTING);
       }
       glEnable (GL_DEPTH_TEST);
       glDepthFunc (GL_LEQUAL);    
@@ -758,7 +762,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
     // << "Using hidden surface removal." << G4endl;
   case (G4ViewParameters::hsr):
     {
-      glEnable (GL_LIGHTING);
+      if (!fProcessing2D) glEnable (GL_LIGHTING);
       glEnable (GL_DEPTH_TEST);
       glEnable (GL_AUTO_NORMAL);
       glEnable (GL_NORMALIZE);
