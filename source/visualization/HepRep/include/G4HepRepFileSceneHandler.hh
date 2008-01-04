@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.29 2006-06-29 21:17:08 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.30 2008-01-04 22:11:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,7 +114,7 @@ public:
   void BeginModeling();
   void EndModeling();
   
-  void BeginPrimitives2D();
+  void BeginPrimitives2D(const G4Transform3D& objectTransformation);
   void EndPrimitives2D();
 
   //////////////////////////////////////////////////////////////
