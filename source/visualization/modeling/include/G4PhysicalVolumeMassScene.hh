@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.8 2006-11-05 20:38:09 allison Exp $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.9 2008-01-04 21:59:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,7 +114,7 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
-  virtual void BeginPrimitives2D () {}
+  virtual void BeginPrimitives2D (const G4Transform3D&) {}
   virtual void EndPrimitives2D () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)      {}
