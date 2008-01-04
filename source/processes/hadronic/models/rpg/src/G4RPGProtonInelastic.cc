@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGProtonInelastic.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
+// $Id: G4RPGProtonInelastic.cc,v 1.2 2008-01-04 23:25:00 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -31,8 +31,8 @@
 #include "Randomize.hh"
  
 G4HadFinalState*
-G4RPGProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                     G4Nucleus &targetNucleus )
+G4RPGProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                    G4Nucleus& targetNucleus )
 {
   theParticleChange.Clear();
   const G4HadProjectile *originalIncident = &aTrack;
@@ -48,20 +48,8 @@ G4RPGProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
   // create the target particle
   //
   G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-  if( verboseLevel > 1 )
-  {
-    const G4Material *targetMaterial = aTrack.GetMaterial();
-    G4cout << "G4RPGProtonInelastic::ApplyYourself called" << G4endl;
-    G4cout << "kinetic energy = " 
-           << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-    G4cout << "target material = " 
-           << targetMaterial->GetName() << ", ";
-    G4cout << "target particle = " 
-           << originalTarget->GetDefinition()->GetParticleName()
-           << G4endl;
-  }
 
-  if( originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9. )
+  if (originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9. )
   {
     SlowProton( originalIncident, targetNucleus );
     delete originalTarget;
@@ -122,14 +110,13 @@ G4RPGProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
   G4int vecLen = 0;
   vec.Initialize( 0 );
 
-  Cascade( vec, vecLen,
-           originalIncident, currentParticle, targetParticle,
-           incidentHasChanged, targetHasChanged, quasiElastic );
+  InitialCollision(vec, vecLen, currentParticle, targetParticle,
+                   incidentHasChanged, targetHasChanged, quasiElastic);
 
-  CalculateMomenta( vec, vecLen,
-                    originalIncident, originalTarget, modifiedOriginal,
-                    targetNucleus, currentParticle, targetParticle,
-                    incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen,
+                   originalIncident, originalTarget, modifiedOriginal,
+                   targetNucleus, currentParticle, targetParticle,
+                   incidentHasChanged, targetHasChanged, quasiElastic);
 
   SetUpChange( vec, vecLen,
                currentParticle, targetParticle,
@@ -138,6 +125,7 @@ G4RPGProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
   delete originalTarget;
   return &theParticleChange;
 }
+
 
 void
 G4RPGProtonInelastic::SlowProton(const G4HadProjectile *originalIncident,
@@ -193,275 +181,122 @@ G4RPGProtonInelastic::SlowProton(const G4HadProjectile *originalIncident,
     delete vec[i];
   }
 }
- 
-void G4RPGProtonInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,256> &vec,
-   G4int &vecLen,
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4bool &incidentHasChanged,
-   G4bool &targetHasChanged,
-   G4bool &quasiElastic )
+
+
+// Initial Collision
+//   selects the particle types arising from the initial collision of
+//   the proton and target nucleon.  Secondaries are assigned to forward 
+//   and backward reaction hemispheres, but final state energies and 
+//   momenta are not calculated here.
+
+void 
+G4RPGProtonInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec,
+                                  G4int& vecLen,
+                                  G4ReactionProduct& currentParticle,
+                                  G4ReactionProduct& targetParticle,
+                                  G4bool& incidentHasChanged,
+                                  G4bool& targetHasChanged,
+                                  G4bool& quasiElastic)
 {
-  // Derived from H. Fesefeldt's original FORTRAN code CASP
-  //
-  // Proton undergoes interaction with nucleon within a nucleus.  Check if 
-  // it is energetically possible to produce pions/kaons.  In not, assume 
-  // nuclear excitation occurs and input particle is degraded in energy. No 
-  // other particles are produced.
-  // If reaction is possible, find the correct number of 
-  // pions/protons/neutrons produced using an interpolation to multiplicity 
-  // data.  Replace some pions or protons/neutrons by kaons or strange 
-  // baryons according to the average multiplicity per Inelastic reaction.
-  //
-  // The center of mass energy is based on the initial energy, before
-  // Fermi motion and evaporation effects are taken into account
-  //
-  const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-  const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-  const G4double targetMass = targetParticle.GetMass()/MeV;
-  G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
-                                      targetMass*targetMass +
-                                      2.0*targetMass*etOriginal );
-  G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-  if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-  {      // not energetically possible to produce pion(s)
-    quasiElastic = true;
-    return;
-  }
-  static G4bool first = true;
-  const G4int numMul = 1200;
-  const G4int numSec = 60;
-  static G4double protmul[numMul], protnorm[numSec]; // proton constants
-  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-  // np = number of pi+, nm = number of pi-, nz = number of pi0
-  G4int counter, nt=0, np=0, nm=0, nz=0;
-  const G4double c = 1.25;    
-  const G4double b[] = { 0.70, 0.35 };
-  if( first )      // compute normalization constants, this will only be Done once
-  {
-    first = false;
-    G4int i;
-    for( i=0; i<numMul; ++i )protmul[i] = 0.0;
-    for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
-    counter = -1;
-    for( np=0; np<(numSec/3); ++np )
-    {
-      for( nm=std::max(0,np-2); nm<=np; ++nm )
-      {
-        for( nz=0; nz<numSec/3; ++nz )
-        {
-          if( ++counter < numMul )
-          {
-            nt = np+nm+nz;
-            if( nt>0 && nt<=numSec )
-            {
-              protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c) /
-                (Factorial(2-np+nm)*Factorial(np-nm) );
-              protnorm[nt-1] += protmul[counter];
-            }
-          }
-        }
+  G4double KE = currentParticle.GetKineticEnergy()/GeV;
+
+  G4int mult;
+  G4int partType;
+  std::vector<G4int> fsTypes;
+  G4int part1; 
+  G4int part2;
+
+  G4double testCharge;
+  G4double testBaryon;
+  G4double testStrange;
+ 
+  // Get particle types according to incident and target types
+ 
+  if (targetParticle.GetDefinition() == particleDef[pro]) {
+    mult = GetMultiplicityT1(KE);
+    fsTypes = GetFSPartTypesForPP(mult, KE);
+
+    part1 = fsTypes[0];
+    part2 = fsTypes[1];
+    currentParticle.SetDefinition(particleDef[part1]);
+    targetParticle.SetDefinition(particleDef[part2]);
+    if (part1 == pro) {
+      if (part2 == neu) {
+        if (G4UniformRand() > 0.5) {
+          incidentHasChanged = true;
+          targetParticle.SetDefinition(particleDef[part1]);
+          currentParticle.SetDefinition(particleDef[part2]);
+	} else {
+          targetHasChanged = true;
+	}
+      } else if (part2 > neu && part2 < xi0) {
+        targetHasChanged = true;
       }
+
+    } else {  // neutron
+      targetHasChanged = true;
+      incidentHasChanged = true;
     }
-    for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
-    for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
-    counter = -1;
-    for( np=0; np<numSec/3; ++np )
-    {
-      for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
-      {
-        for( nz=0; nz<numSec/3; ++nz )
-        {
-          if( ++counter < numMul )
-          {
-            nt = np+nm+nz;
-            if( nt>0 && nt<=numSec )
-            {
-              neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c) /
-                (Factorial(1-np+nm)*Factorial(1+np-nm) );
-              neutnorm[nt-1] += neutmul[counter];
-            }
-          }
-        }
+
+    testCharge = 2.0;
+    testBaryon = 2.0;
+    testStrange = 0.0;
+ 
+  } else {   // target was a neutron
+    mult = GetMultiplicityT0(KE);
+    fsTypes = GetFSPartTypesForPN(mult, KE);
+
+    part1 = fsTypes[0];
+    part2 = fsTypes[1];
+    currentParticle.SetDefinition(particleDef[part1]);
+    targetParticle.SetDefinition(particleDef[part2]);
+    if (part1 == pro) {
+      if (part2 == pro) {
+        targetHasChanged = true;
+      } else if (part2 == neu) {
+        if (G4UniformRand() > 0.5) {
+          incidentHasChanged = true;
+          targetHasChanged = true;
+          targetParticle.SetDefinition(particleDef[part1]);
+          currentParticle.SetDefinition(particleDef[part2]);
+	}
+      } else {  // hyperon 
+        targetHasChanged = true;
       }
+
+    } else {  // neutron
+      incidentHasChanged = true;
+      if (part2 > neu && part2 < xi0) targetHasChanged = true;
     }
-    for( i=0; i<numSec; ++i )
-    {
-      if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-      if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
-    }
-  }   // end of initialization
-    
-  const G4double expxu =  82.;          // upper bound for arg. of exp
-  const G4double expxl = -expxu;        // lower bound for arg. of exp
-  G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-  G4ParticleDefinition *aProton = G4Proton::Proton();
-  G4int ieab = static_cast<G4int>(availableEnergy*5.0/GeV);
-  const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
-  G4double test, w0, wp, wt, wm;
-    if( (availableEnergy < 2.0*GeV) && (G4UniformRand() >= supp[ieab]) )
-    {
-      // suppress high multiplicity events at low momentum
-      // only one pion will be produced
-      
-      np = nm = nz = 0;
-      if( targetParticle.GetDefinition() == aProton )
-      {
-        test = std::exp( std::min( expxu, std::max(
-         expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
-        w0 = test/2.0;
-        wp = test;
-        if( G4UniformRand() < w0/(w0+wp) )
-          nz = 1;
-        else
-          np = 1;
-      }
-      else // target is a neutron
-      {
-        test = std::exp( std::min( expxu, std::max(
-         expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
-        w0 = test;
-        wp = test/2.0;        
-        test = std::exp( std::min( expxu, std::max(
-         expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
-        wm = test/2.0;
-        wt = w0+wp+wm;
-        wp += w0;
-        G4double ran = G4UniformRand();
-        if( ran < w0/wt )
-          nz = 1;
-        else if( ran < wp/wt )
-          np = 1;
-        else
-          nm = 1;
-      }
-    }
-    else // (availableEnergy >= 2.0*GeV) || (random number < supp[ieab])
-    {
-      G4double n, anpn;
-      GetNormalizationConstant( availableEnergy, n, anpn );
-      G4double ran = G4UniformRand();
-      G4double dum, excs = 0.0;
-      if( targetParticle.GetDefinition() == aProton )
-      {
-        counter = -1;
-        for( np=0; np<numSec/3 && ran>=excs; ++np )
-        {
-          for( nm=std::max(0,np-2); nm<=np && ran>=excs; ++nm )
-          {
-            for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
-            {
-              if( ++counter < numMul )
-              {
-                nt = np+nm+nz;
-                if( nt>0 && nt<=numSec )
-                {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                  if( std::fabs(dum) < 1.0 )
-                  {
-                    if( test >= 1.0e-10 )excs += dum*test;
-                  } else {
-                    excs += dum*test;
-                  }
-                }
-              }
-            }
-          }
-        }
-        if( ran >= excs )  // 3 previous loops continued to the end
-        {
-          quasiElastic = true;
-          return;
-        }
-      }
-      else  // target must be a neutron
-      {
-        counter = -1;
-        for( np=0; np<numSec/3 && ran>=excs; ++np )
-        {
-          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
-          {
-            for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
-            {
-              if( ++counter < numMul )
-              {
-                nt = np+nm+nz;
-                if( nt>0 && nt<=numSec )
-                {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                  if( std::fabs(dum) < 1.0 )
-                  {
-                    if( test >= 1.0e-10 )excs += dum*test;
-                  } else {
-                    excs += dum*test;
-                  }
-                }
-              }
-            }
-          }
-        }
-        if( ran >= excs )  // 3 previous loops continued to the end
-        {
-          quasiElastic = true;
-          return;
-        }
-      }
-      np--; nm--; nz--;
-    }
-    if( targetParticle.GetDefinition() == aProton )
-    {
-      switch( np-nm )
-      {
-       case 1:
-         if( G4UniformRand() < 0.5 )
-         {
-           targetParticle.SetDefinitionAndUpdateE( aNeutron );
-           targetHasChanged = true;
-         } else {
-           currentParticle.SetDefinitionAndUpdateE( aNeutron );
-           incidentHasChanged = true;
-         }
-         break;
-       case 2:
-         currentParticle.SetDefinitionAndUpdateE( aNeutron );
-         targetParticle.SetDefinitionAndUpdateE( aNeutron );
-         incidentHasChanged = true;
-         targetHasChanged = true;
-         break;
-       default:
-         break;
-      }
-    }
-    else  // target is a neutron
-    {
-      switch( np-nm )
-      {
-       case 0:
-         if( G4UniformRand() < 0.333333 )
-         {
-           currentParticle.SetDefinitionAndUpdateE( aNeutron );
-           targetParticle.SetDefinitionAndUpdateE( aProton );
-           incidentHasChanged = true;
-           targetHasChanged = true;
-         }
-         break;
-       case 1:
-         currentParticle.SetDefinitionAndUpdateE( aNeutron );
-         incidentHasChanged = true;
-         break;
-       default:
-         targetParticle.SetDefinitionAndUpdateE( aProton );
-         targetHasChanged = true;
-         break;
-      }
-    }
-    SetUpPions( np, nm, nz, vec, vecLen );
-    return;
+
+    testCharge = 1.0;
+    testBaryon = 2.0;
+    testStrange = 0.0;
   }
 
- /* end of file */
+  if (mult == 2 && !incidentHasChanged && !targetHasChanged)
+                                              quasiElastic = true;
  
+  // Remove incident and target from fsTypes
+ 
+  fsTypes.erase(fsTypes.begin());
+  fsTypes.erase(fsTypes.begin());
+
+  // Remaining particles are secondaries.  Put them into vec.
+ 
+  G4ReactionProduct* rp(0);
+  for(G4int i=0; i < mult-2; ++i ) {
+    partType = fsTypes[i];
+    rp = new G4ReactionProduct();
+    rp->SetDefinition(particleDef[partType]);
+    (G4UniformRand() < 0.5) ? rp->SetSide(-1) : rp->SetSide(1);
+    vec.SetElement(vecLen++, rp);
+  }
+
+  // Check conservation of charge, strangeness, baryon number
+ 
+  CheckQnums(vec, vecLen, currentParticle, targetParticle,
+             testCharge, testBaryon, testStrange);
+ 
+  return;
+}
