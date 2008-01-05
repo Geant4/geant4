@@ -1,8 +1,9 @@
 /run/verbose 1
 /control/verbose 1
-/tracking/verbose 0
+/tracking/verbose 1
 
 /testem/det/setAbsorberMat  G4_POLYETHYLENE
+/testem/det/setAbsorberMat  G4_Fe
 /testem/det/setWidth        4.74 mm
 
 #/testem/phys/addPhysics  standard
