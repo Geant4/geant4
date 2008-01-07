@@ -40,11 +40,11 @@
       <box name="ZBox" x="005" y="005" z="300"/>
       <box name="Origin" x="10" y="10" z="10"/>
       <tessellated name="Arrow">
-         <quadrangular v1="v1" v2="v2" v3="v3" v4="v4"/>
-         <triangular v1="v1" v2="v2" v3="v5"/>
-         <triangular v1="v2" v2="v3" v3="v5"/>
-         <triangular v1="v3" v2="v4" v3="v5"/>
-         <triangular v1="v4" v2="v1" v3="v5"/>
+         <quadrangular vertex1="v1" vertex2="v2" vertex3="v3" vertex4="v4"/>
+         <triangular vertex1="v1" vertex2="v2" vertex3="v5"/>
+         <triangular vertex1="v2" vertex2="v3" vertex3="v5"/>
+         <triangular vertex1="v3" vertex2="v4" vertex3="v5"/>
+         <triangular vertex1="v4" vertex2="v1" vertex3="v5"/>
      </tessellated>
     </solids>
 
