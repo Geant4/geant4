@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.21 2006-06-29 16:50:47 gunter Exp $
+// $Id: RunAction.cc,v 1.22 2008-01-07 13:50:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +86,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 #endif
     
   histoName[0] = "testem2";
-  histoType    = "hbook";  
+  histoType    = "hbook";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
