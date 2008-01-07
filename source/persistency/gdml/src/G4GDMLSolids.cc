@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.31 2007-12-18 10:28:49 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.32 2008-01-07 13:37:07 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -524,10 +524,10 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="v1") ptr1 = getPosition(GenerateName(attValue)); else
-      if (attName=="v2") ptr2 = getPosition(GenerateName(attValue)); else
-      if (attName=="v3") ptr3 = getPosition(GenerateName(attValue)); else
-      if (attName=="v4") ptr4 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex1") ptr1 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex2") ptr2 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex3") ptr3 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex4") ptr4 = getPosition(GenerateName(attValue)); else
       if (attName=="type") type = attValue;
    }
 
@@ -919,9 +919,9 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="v1") ptr1 = getPosition(GenerateName(attValue)); else
-      if (attName=="v2") ptr2 = getPosition(GenerateName(attValue)); else
-      if (attName=="v3") ptr3 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex1") ptr1 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex2") ptr2 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex3") ptr3 = getPosition(GenerateName(attValue)); else
       if (attName=="type") type = attValue;
    }
 
