@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.10 2008-01-05 18:29:30 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.11 2008-01-07 09:44:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -193,14 +193,14 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
     tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
       (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
-  cosTetMaxElec = 1.0;
+  cosTetMaxElec = cosTetMaxNuc;
   G4double t = std::min(cutEnergy, tmax);
   G4double mom21 = t*(t + 2.0*electron_mass_c2);
   G4double t1 = tkin - t;
   if(t1 > 0.0) {
     G4double mom22 = t1*(t1 + 2.0*mass);
     G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-    if(ctm > -1.0 && ctm < 1.0) cosTetMaxElec = ctm;
+    if(ctm > cosTetMaxNuc && ctm <= 1.0) cosTetMaxElec = ctm;
   }
 
   G4double x, y, x1, x2, x3, x4;
@@ -281,7 +281,7 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
     tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
       (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
-  cosTetMaxElec = 1.0;
+  cosTetMaxElec = cosTetMaxNuc;
   G4double t = std::min(cutEnergy, tmax);
   G4double mom0  = ekin*(ekin + mass*2.0);
   G4double mom21 = t*(t + 2.0*electron_mass_c2);
@@ -289,7 +289,7 @@ G4double G4MuMscModel::ComputeLambda2(G4double kinEnergy,
   if(t1 > 0.0) {
     G4double mom22 = t1*(t1 + 2.0*mass);
     G4double ctm = (mom0 + mom22 - mom21)*0.5/sqrt(mom0*mom22);
-    if(ctm > -1.0 && ctm < 1.0) cosTetMaxElec = ctm;
+    if(ctm > cosTetMaxNuc && ctm <= 1.0) cosTetMaxElec = ctm;
   }
 
   G4double x, x1, x2, x3, x4, x5, y;
@@ -446,7 +446,7 @@ G4double G4MuMscModel::ComputeGeomPathLength(G4double truelength)
     zPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
 
     // medium step
-  } else if(tPathLength < currentRange*dtrl) {
+  } else if(tau < 1.0) {
     zPathLength = lambda0*(1.0 - exp(-tau));
 
   } else if(tkin < mass) {
@@ -457,8 +457,9 @@ G4double G4MuMscModel::ComputeGeomPathLength(G4double truelength)
     lambdaeff = 1.0/(par1*par3);
     G4double x = tPathLength/currentRange;
     G4double x1;
-    if(x < numlimit) x1 = x*(1.0  - 0.5*x + x*x/3.0);
+    if(x < numlimit) x1 = x*(1.0  + 0.5*x + x*x/3.0);
     else             x1 = log(1.0 - x); 
+
     zPathLength = lambdaeff*(1.-exp(par3*x1));
 
   } else {
@@ -492,15 +493,15 @@ G4double G4MuMscModel::ComputeTrueStepLength(G4double geomStepLength)
   zPathLength  = geomStepLength;
   G4double tau = geomStepLength/lambda0;
   if(tau < numlimit) {
-    tPathLength *= (1.0 + 0.5*tau - tau*tau/3.0); 
+    tPathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
   
-  } else if(par1 <  0.) {
+  } else if(tau < 1.0) {
     tPathLength = -lambda0*log(1.0 - tau); 
 
   } else {
     G4double x = par1*par3*geomStepLength;
     if(x < numlimit) 
-      tPathLength = (1.- exp(- x*(1.- 0.5*x + x*x/3.0)/par3))/par1 ;
+      tPathLength = (1.- exp(- x*(1.+ 0.5*x + x*x/3.0)/par3))/par1 ;
     else if (x < 1.0)  
       tPathLength = (1.-exp(log(1.- x)/par3))/par1;
     else 
@@ -521,8 +522,8 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   
   G4double x1, x2;  
   G4double e  = 0.5*(preKinEnergy + kinEnergy);
-  G4double t1 = tPathLength/GetLambda(e);
-  G4double t2 = tPathLength*GetLambda2(e); 
+  G4double t1 = zPathLength/GetLambda(e);
+  G4double t2 = zPathLength*GetLambda2(e); 
 
   if(t1 < numlimit) x1 = 0.5*t1*(1 - 0.5*t1);
   else              x1 = 0.5*(1.0 - exp(-t1));
