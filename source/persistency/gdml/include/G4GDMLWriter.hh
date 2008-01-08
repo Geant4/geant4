@@ -33,14 +33,18 @@
 #ifndef _G4GDMLWRITER_INCLUDED_
 #define _G4GDMLWRITER_INCLUDED_
 
+#include <iostream>
+
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/framework/StdOutFormatTarget.hpp>
+
+#include "G4LogicalVolume.hh"
 
 class G4GDMLWriter {
 public:
-   G4GDMLWriter();
-   ~G4GDMLWriter();
+   void Write(xercesc::DOMNode*);
 };
 
 #endif

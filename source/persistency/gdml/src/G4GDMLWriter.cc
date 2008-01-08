@@ -30,8 +30,35 @@
 
 #include "G4GDMLWriter.hh"
 
-G4GDMLWriter::G4GDMLWriter() {
-}
+void G4GDMLWriter::Write(xercesc::DOMNode* node) {
 
-G4GDMLWriter::~G4GDMLWriter() {
+   XMLCh tempStr[100];
+
+   xercesc::XMLString::transcode("LS", tempStr, 99);
+   xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
+   xercesc::DOMWriter* theSerializer = ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
+
+   xercesc::XMLFormatTarget *myFormTarget = new xercesc::StdOutFormatTarget();
+
+   try {
+      theSerializer->writeNode(myFormTarget,*node);
+   } catch (const xercesc::XMLException& toCatch) {
+   
+      char* message = xercesc::XMLString::transcode(toCatch.getMessage());
+      G4cout << "Exception message is: \n" << message << "\n" << G4endl;
+      xercesc::XMLString::release(&message);
+      return;
+   } catch (const xercesc::DOMException& toCatch) {
+   
+      char* message = xercesc::XMLString::transcode(toCatch.msg);
+      G4cout << "Exception message is: \n" << message << "\n" << G4endl;
+      xercesc::XMLString::release(&message);
+      return;
+   } catch (...) {
+      
+      G4cout << "Unexpected Exception \n" << G4endl;
+      return;
+   }        
+
+   theSerializer->release();
 }

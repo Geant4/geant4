@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.hh,v 1.7 2008-01-08 08:50:42 ztorzsok Exp $
+// $Id: G4GDMLBase.hh,v 1.8 2008-01-08 14:15:05 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -53,6 +53,7 @@
 
 class G4GDMLBase {
    xercesc::XercesDOMParser* parser; // This should be a static member
+   xercesc::DOMEntityResolver* myEntityResolver;
    G4String prename;
 protected:
    G4GDMLEvaluator eval;

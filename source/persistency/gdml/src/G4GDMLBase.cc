@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.8 2008-01-08 12:06:49 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.9 2008-01-08 14:15:05 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,8 @@ G4GDMLBase::G4GDMLBase() {
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
+
+//   myEntityResolver = new xercesc::XMLEntityResolver();
 }
 
 G4GDMLBase::~G4GDMLBase() {
@@ -106,6 +108,8 @@ G4String G4GDMLBase::GenerateName(const G4String& in) {
 void G4GDMLBase::Parse(const G4String& fileName) {
 
    prename = fileName;
+
+   G4cout << "Entity resolver: " << parser->getXMLEntityResolver() << G4endl;
 
    try {
 
