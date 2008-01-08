@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.7 2008-01-08 08:50:42 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.8 2008-01-08 12:06:49 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -159,6 +159,15 @@ void G4GDMLBase::DOCTYPERead(const xercesc::DOMDocumentType* const doctype) {
 
    const xercesc::DOMNamedNodeMap* const entities = doctype->getEntities();
    XMLSize_t entityCount = entities->getLength();
+
+   for (XMLSize_t entity_index=0;entity_index<entityCount;entity_index++) {
+
+      xercesc::DOMNode* entity_node = entities->item(entity_index);
+
+      if (entity_node->getNodeType() != xercesc::DOMNode::ENTITY_NODE) continue;
+
+      const xercesc::DOMEntity* const entity = dynamic_cast<xercesc::DOMEntity*>(entity_node);   
+   }
 }
 
 void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
