@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.hh,v 1.6 2007-12-12 10:26:36 ztorzsok Exp $
+// $Id: G4GDMLBase.hh,v 1.7 2008-01-08 08:50:42 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -76,6 +76,7 @@ public:
    virtual void structureRead(const xercesc::DOMElement* const)=0;
 
    void Parse(const G4String& fileName);
+   void DOCTYPERead(const xercesc::DOMDocumentType* const);
    G4PVPlacement* getTopVolume(const G4String& setupName);
 };
 

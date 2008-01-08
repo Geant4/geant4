@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.6 2007-12-12 10:26:36 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.7 2008-01-08 08:50:42 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,7 @@ G4GDMLBase::~G4GDMLBase() {
 
 G4String G4GDMLBase::GenerateName(const G4String& in) {
 
-   std::string out(prename);
+   std::string out(prename+"_");
    
    std::string::size_type open = in.find("[",0);
 
@@ -105,7 +105,7 @@ G4String G4GDMLBase::GenerateName(const G4String& in) {
 
 void G4GDMLBase::Parse(const G4String& fileName) {
 
-   prename = fileName + "_";
+   prename = fileName;
 
    try {
 
@@ -134,6 +134,13 @@ void G4GDMLBase::Parse(const G4String& fileName) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
+      if (iter->getNodeType() == xercesc::DOMNode::DOCUMENT_TYPE_NODE) { 
+      
+         const xercesc::DOMDocumentType* const child = dynamic_cast<xercesc::DOMDocumentType*>(iter);
+         DOCTYPERead(child);
+         continue;
+      }
+      
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
@@ -146,6 +153,12 @@ void G4GDMLBase::Parse(const G4String& fileName) {
       if (tag=="setup") setupRead(child); else
       if (tag=="structure") structureRead(child);
    }
+}
+
+void G4GDMLBase::DOCTYPERead(const xercesc::DOMDocumentType* const doctype) {
+
+   const xercesc::DOMNamedNodeMap* const entities = doctype->getEntities();
+   XMLSize_t entityCount = entities->getLength();
 }
 
 void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
