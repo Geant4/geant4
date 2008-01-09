@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.9 2008-01-08 14:15:05 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.10 2008-01-09 13:37:25 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,8 +57,6 @@ G4GDMLBase::G4GDMLBase() {
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
-
-//   myEntityResolver = new xercesc::XMLEntityResolver();
 }
 
 G4GDMLBase::~G4GDMLBase() {
@@ -109,8 +107,6 @@ void G4GDMLBase::Parse(const G4String& fileName) {
 
    prename = fileName;
 
-   G4cout << "Entity resolver: " << parser->getXMLEntityResolver() << G4endl;
-
    try {
 
       parser->parse(fileName.c_str());
@@ -138,13 +134,6 @@ void G4GDMLBase::Parse(const G4String& fileName) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
-      if (iter->getNodeType() == xercesc::DOMNode::DOCUMENT_TYPE_NODE) { 
-      
-         const xercesc::DOMDocumentType* const child = dynamic_cast<xercesc::DOMDocumentType*>(iter);
-         DOCTYPERead(child);
-         continue;
-      }
-      
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
@@ -156,21 +145,6 @@ void G4GDMLBase::Parse(const G4String& fileName) {
       if (tag=="solids") solidsRead(child); else
       if (tag=="setup") setupRead(child); else
       if (tag=="structure") structureRead(child);
-   }
-}
-
-void G4GDMLBase::DOCTYPERead(const xercesc::DOMDocumentType* const doctype) {
-
-   const xercesc::DOMNamedNodeMap* const entities = doctype->getEntities();
-   XMLSize_t entityCount = entities->getLength();
-
-   for (XMLSize_t entity_index=0;entity_index<entityCount;entity_index++) {
-
-      xercesc::DOMNode* entity_node = entities->item(entity_index);
-
-      if (entity_node->getNodeType() != xercesc::DOMNode::ENTITY_NODE) continue;
-
-      const xercesc::DOMEntity* const entity = dynamic_cast<xercesc::DOMEntity*>(entity_node);   
    }
 }
 

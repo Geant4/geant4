@@ -38,13 +38,13 @@
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/StdOutFormatTarget.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
 
 #include "G4LogicalVolume.hh"
 
 class G4GDMLWriter {
 public:
-   void Write(xercesc::DOMNode*);
+   void Write();
 };
 
 #endif

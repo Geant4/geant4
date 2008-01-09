@@ -30,18 +30,36 @@
 
 #include "G4GDMLWriter.hh"
 
-void G4GDMLWriter::Write(xercesc::DOMNode* node) {
+void G4GDMLWriter::Write() {
+
+   xercesc::XMLPlatformUtils::Initialize();
 
    XMLCh tempStr[100];
+   xercesc::DOMImplementation* impl;
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
-   xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
-   xercesc::DOMWriter* theSerializer = ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
+   impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
+   xercesc::DOMWriter* writer = ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
 
-   xercesc::XMLFormatTarget *myFormTarget = new xercesc::StdOutFormatTarget();
+   xercesc::XMLString::transcode("Range", tempStr, 99);
+   impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
+
+   xercesc::XMLString::transcode("root", tempStr, 99);
+   xercesc::DOMDocument* doc = impl->createDocument(0,tempStr,0);
+   xercesc::DOMElement* root = doc->getDocumentElement();
+
+   xercesc::XMLString::transcode("FirstElement", tempStr, 99);
+   xercesc::DOMElement*   e1 = doc->createElement(tempStr);
+   root->appendChild(e1);
+
+   xercesc::XMLString::transcode("SecondElement", tempStr, 99);
+   xercesc::DOMElement*   e2 = doc->createElement(tempStr);
+   root->appendChild(e2);
+
+   xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget("test.xml");
 
    try {
-      theSerializer->writeNode(myFormTarget,*node);
+      writer->writeNode(myFormTarget,*root);
    } catch (const xercesc::XMLException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.getMessage());
@@ -60,5 +78,8 @@ void G4GDMLWriter::Write(xercesc::DOMNode* node) {
       return;
    }        
 
-   theSerializer->release();
+   if (myFormTarget)
+      delete myFormTarget;
+
+   writer->release();
 }

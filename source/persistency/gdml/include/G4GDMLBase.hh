@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.hh,v 1.8 2008-01-08 14:15:05 ztorzsok Exp $
+// $Id: G4GDMLBase.hh,v 1.9 2008-01-09 13:37:24 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -52,8 +52,7 @@
 #include "G4GDMLEvaluator.hh"
 
 class G4GDMLBase {
-   xercesc::XercesDOMParser* parser; // This should be a static member
-   xercesc::DOMEntityResolver* myEntityResolver;
+   xercesc::XercesDOMParser* parser;
    G4String prename;
 protected:
    G4GDMLEvaluator eval;
@@ -77,7 +76,6 @@ public:
    virtual void structureRead(const xercesc::DOMElement* const)=0;
 
    void Parse(const G4String& fileName);
-   void DOCTYPERead(const xercesc::DOMDocumentType* const);
    G4PVPlacement* getTopVolume(const G4String& setupName);
 };
 
