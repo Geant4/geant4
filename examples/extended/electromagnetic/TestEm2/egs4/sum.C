@@ -3,21 +3,21 @@
 
    // Draw histogram filled by Geant4 TestEm2 simulation
    TFile f("./04jan08.root");
-   TH1D* h1d = (TH1D*) f.Get("4");
-   h1d->SetTitle("30 GeV e- on 20 X0 Fe : energy dep, longit profil");
+   TH1D* h1d = (TH1D*) f.Get("5");
+   h1d->SetTitle("30 GeV e- on 20 X0 Fe : cumul longit energy dep");
    h1d->GetXaxis()->SetTitle("depth (X0)");
-   h1d->GetYaxis()->SetTitle("(100/E0) (dE/dt)");
+   h1d->GetYaxis()->SetTitle("100 Edep/E0");
    h1d->SetStats(kFALSE);  // Eliminate statistics box
    h1d->Draw("HIST");
 
    // pdg.ascii came from egs4 simulation
    ifstream in;
-   in.open("pdg.ascii");
+   in.open("sum.ascii");
 
-   // Create a new histogramm which egs4.acsii values
+   // Create a new histogram with sum.acsii values
    int nb_bins = 40;   
-   float x_min = 0;
-   float x_max = 20;
+   float x_min = 0.25;
+   float x_max = 20.25;
    TH1F* h1f = new TH1F("h1f","",nb_bins,x_min,x_max);
 
    Float_t x, y;
@@ -28,7 +28,7 @@
    }
    in.close();
 
-   // Draw histogram fill by egs4.acsii values
+   // Draw histogram fill by sum.acsii values
    h1f->SetLineColor(2);
    h1f->Draw("SAME");
 
