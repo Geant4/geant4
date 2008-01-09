@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.3 2008-01-04 23:17:04 dennis Exp $
+// $Id: G4RPGInelastic.cc,v 1.4 2008-01-09 22:27:00 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -167,30 +167,30 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
     }
   }
  
-void G4RPGInelastic::CalculateMomenta(
-  G4FastVector<G4ReactionProduct,256> &vec,
-  G4int &vecLen,
-  const G4HadProjectile *originalIncident,
-  const G4DynamicParticle *originalTarget,
-  G4ReactionProduct &modifiedOriginal,
-  G4Nucleus &targetNucleus,
-  G4ReactionProduct &currentParticle,
-  G4ReactionProduct &targetParticle,
-  G4bool &incidentHasChanged,
-  G4bool &targetHasChanged,
-  G4bool quasiElastic )
+void 
+G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
+                                 G4int& vecLen,
+                                 const G4HadProjectile* originalIncident,
+                                 const G4DynamicParticle* originalTarget,
+                                 G4ReactionProduct& modifiedOriginal,
+                                 G4Nucleus& targetNucleus,
+                                 G4ReactionProduct& currentParticle,
+                                 G4ReactionProduct& targetParticle,
+                                 G4bool& incidentHasChanged,
+                                 G4bool& targetHasChanged,
+                                 G4bool quasiElastic)
 {
   cache = 0;
   what = originalIncident->Get4Momentum().vect();
 
   G4ReactionProduct leadingStrangeParticle;
 
-  strangeProduction.ReactionStage(originalIncident, modifiedOriginal,
-                                  incidentHasChanged, originalTarget,
-                                  targetParticle, targetHasChanged,
-                                  targetNucleus, currentParticle,
-                                  vec, vecLen,
-				  false, leadingStrangeParticle);
+  //  strangeProduction.ReactionStage(originalIncident, modifiedOriginal,
+  //                                  incidentHasChanged, originalTarget,
+  //                                  targetParticle, targetHasChanged,
+  //                                  targetNucleus, currentParticle,
+  //                                  vec, vecLen,
+  //				  false, leadingStrangeParticle);
 
   if( quasiElastic )
   {
@@ -265,13 +265,21 @@ void G4RPGInelastic::CalculateMomenta(
   std::vector<G4ReactionProduct> savevec;
   for (G4int i = 0; i < vecLen; i++) savevec.push_back(*vec[i]);
 
-  if( annihilation || (vecLen >= 6) ||
-      (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
+  // Call fragmentation code if
+  //   1) there is annihilation, or
+  //   2) there are more than 5 secondaries, or
+  //   3) incident KE is > 1 GeV AND
+  //        ( incident is a kaon AND rand < 0.5 OR twsup )
+  //          
+  if( annihilation || (vecLen > 5) ||
+      modifiedOriginal.GetKineticEnergy()/GeV >= 1.0 &&
+
       (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
          originalIncident->GetDefinition() == G4KaonMinus::KaonMinus() ||
          originalIncident->GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
          originalIncident->GetDefinition() == G4KaonZeroShort::KaonZeroShort()) &&
-        rand1 < 0.5) || rand2 > twsup[vecLen]) )
+	  rand1 < 0.5) 
+          || rand2 > twsup[vecLen]) )
 
     finishedGenXPt =
       fragmentation.ReactionStage(originalIncident, modifiedOriginal,
@@ -281,11 +289,7 @@ void G4RPGInelastic::CalculateMomenta(
                                   vec, vecLen,
                                   leadFlag, leadingStrangeParticle);
 
-  if( finishedGenXPt )
-  {
-    Rotate(vec, vecLen);
-    return;
-  }
+  if (finishedGenXPt) return;
 
   G4bool finishedTwoClu = false;
   if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
@@ -312,12 +316,14 @@ void G4RPGInelastic::CalculateMomenta(
       }
     }
 
-    pionSuppression.ReactionStage(originalIncident, modifiedOriginal,
-                                  incidentHasChanged, originalTarget,
-                                  targetParticle, targetHasChanged,
-                                  targetNucleus, currentParticle,
-                                  vec, vecLen,
-                                  false, leadingStrangeParticle);
+    // Big violations of energy conservation in this method - don't use
+    // 
+    //    pionSuppression.ReactionStage(originalIncident, modifiedOriginal,
+    //                                  incidentHasChanged, originalTarget,
+    //                                  targetParticle, targetHasChanged,
+    //                                  targetNucleus, currentParticle,
+    //                                  vec, vecLen,
+    //                                  false, leadingStrangeParticle);
 
     try
     {
@@ -336,11 +342,7 @@ void G4RPGInelastic::CalculateMomenta(
     }
   }
 
-  if( finishedTwoClu )
-  {
-    Rotate(vec, vecLen);
-    return;
-  }
+  if (finishedTwoClu) return;
 
   twoBody.ReactionStage(originalIncident, modifiedOriginal,
                         incidentHasChanged, originalTarget,
@@ -350,7 +352,7 @@ void G4RPGInelastic::CalculateMomenta(
                         false, leadingStrangeParticle);
 }
 
- 
+/*
  void G4RPGInelastic::
  Rotate(G4FastVector<G4ReactionProduct,256> &vec, G4int &vecLen)
  {
@@ -364,6 +366,7 @@ void G4RPGInelastic::CalculateMomenta(
      vec[i]->SetMomentum(momentum);
    }
  }      
+*/
 
 void 
 G4RPGInelastic::SetUpChange(G4FastVector<G4ReactionProduct,256> &vec,
