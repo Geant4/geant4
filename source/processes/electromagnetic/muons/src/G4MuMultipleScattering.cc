@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.4 2008-01-05 18:29:30 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.5 2008-01-09 10:19:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4MuMultipleScattering::G4MuMultipleScattering(G4double tet,
   dtrl              = 0.05;
   samplez           = false ; 
   isInitialized     = false;  
-  SetRangeFactor(0.2);
+  SetRangeFactor(0.5);
   SetLateralDisplasmentFlag(true);
 }
 
@@ -95,7 +95,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetRangeFactor(0.2);
+    SetRangeFactor(0.5);
   }
 
   // initialisation of parameters

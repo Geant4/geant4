@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.4 2007-11-09 19:48:09 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.5 2008-01-09 10:19:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,7 +70,7 @@ class G4MuMscModel : public G4eCoulombScatteringModel
 
 public:
 
-  G4MuMscModel(G4double frange = 0.2,
+  G4MuMscModel(G4double frange = 0.5,
 	       G4double thetaMax = 0.04,
 	       G4double tMax = TeV*TeV, 
 	       const G4String& nam = "MuMscUni");

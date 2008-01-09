@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.12 2008-01-08 10:00:33 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.13 2008-01-09 10:19:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -415,9 +415,13 @@ G4double G4MuMscModel::ComputeTruePathLengthLimit(
     
     // limit mean scattering angle
   } else {
+    G4double rlimit = facrange*lambda0;
+    if(rlimit < tlimit) tlimit = rlimit;
     G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-    G4double rlimit = std::max(facrange*lambda0,sqrt(3.4*rcut*lambda0));
-    tlimit = std::min(rlimit, tlimit);
+    if(rcut < tlimit) {
+      rlimit = std::pow(2.0*rcut*rcut*lambda0,0.33333333);
+      if(rlimit < tlimit) tlimit = rlimit;
+    }
   }
   /*
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
