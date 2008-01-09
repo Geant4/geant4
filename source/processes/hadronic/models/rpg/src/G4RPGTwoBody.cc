@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.2 2007-08-15 20:38:37 dennis Exp $
+// $Id: G4RPGTwoBody.cc,v 1.3 2008-01-09 22:20:24 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,12 +80,10 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
                             targetMass*targetMass +
                             2.0*targetMass*etCurrent );  // in GeV
 
-  if( (pCurrent < 0.1) || (cmEnergy < 0.01) ) // 2-body scattering not possible
-  {
+  if (cmEnergy < 0.01) { // 2-body scattering not possible
     targetParticle.SetMass( 0.0 );  // flag that the target particle doesn't exist
-  }
-  else
-  {
+
+  } else {
     // Projectile momentum in cm
 
     G4double pf = targetMass*pCurrent/cmEnergy;
