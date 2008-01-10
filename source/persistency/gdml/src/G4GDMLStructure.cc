@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.33 2008-01-10 12:12:33 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.34 2008-01-10 13:03:15 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -35,7 +35,7 @@
 
 #include "G4GDMLStructure.hh"
 
-void G4GDMLStructure::auxiliaryRead(const xercesc::DOMElement* const element,AuxListType& auxList) {
+G4GDMLStructure::AuxPairType G4GDMLStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
 
    G4String auxtype;
    G4String auxvalue;
@@ -58,7 +58,7 @@ void G4GDMLStructure::auxiliaryRead(const xercesc::DOMElement* const element,Aux
       if (attName=="auxvalue") auxvalue = attValue;
    }
 
-   auxList.push_back(AuxPairType(auxtype,auxvalue));
+   return AuxPairType(auxtype,auxvalue);
 }
 
 EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
@@ -176,7 +176,7 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
 
    G4GDMLStructure structure; // We create a new structure with a new evaluator
    
-   structure.Parse(name);
+   structure.Read(name);
 
    return structure.getVolume(structure.GenerateName(volname));
 }
@@ -324,7 +324,7 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="auxiliary") auxiliaryRead(child,auxList); else
+      if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
       if (tag=="materialref") materialPtr = getMaterial(GenerateName(refRead(child))); else
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
@@ -379,7 +379,8 @@ G4LogicalVolume* G4GDMLStructure::getVolume(const G4String& ref) const {
    return volumePtr;
 }
 
-G4GDMLStructure::AuxMapType* G4GDMLStructure::getAuxiliaryMap() {
+G4GDMLStructure::AuxListType G4GDMLStructure::getVolumeAuxiliaryInformation(const G4LogicalVolume* const ptr) {
 
-   return &auxMap;
+     if (auxMap.find(ptr) != auxMap.end()) return auxMap[ptr];
+     else return G4GDMLStructure::AuxListType();
 }

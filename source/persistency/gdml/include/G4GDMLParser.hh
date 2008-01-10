@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.10 2007-11-30 11:58:46 ztorzsok Exp $
+// $Id: G4GDMLParser.hh,v 1.11 2008-01-10 13:03:15 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,11 +41,6 @@
 
 #include "G4GDMLStructure.hh"
 
-class G4GDMLParser {
-   G4GDMLStructure structure;
-public:
-   void Read(const G4String& fileName) { structure.Parse(fileName); }
-   G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return structure.getTopVolume(setupName); }
-};
+class G4GDMLParser : public G4GDMLStructure {};
 
 #endif

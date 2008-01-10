@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.10 2008-01-09 13:37:25 ztorzsok Exp $
+// $Id: G4GDMLBase.cc,v 1.11 2008-01-10 13:03:15 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,7 +103,7 @@ G4String G4GDMLBase::GenerateName(const G4String& in) {
    return out;
 }
 
-void G4GDMLBase::Parse(const G4String& fileName) {
+void G4GDMLBase::Read(const G4String& fileName) {
 
    prename = fileName;
 
@@ -193,7 +193,7 @@ void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBa
    }
 }
 
-G4PVPlacement* G4GDMLBase::getTopVolume(const G4String& setupName) {
+G4PVPlacement* G4GDMLBase::getWorldVolume(const G4String& setupName) {
 
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
 
