@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.6 2007-12-11 13:13:25 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.7 2008-01-10 13:02:07 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,10 +59,12 @@ int main(int argc, char **argv) {
 
    parser.Read(argv[1]);
 
+   G4GDMLParser::AuxListType AuxList = parser.getVolumeAuxiliaryInformation(NULL);
+
    G4RunManager* runManager = new G4RunManager;
    G4VisManager* visManager = new G4VisExecutive;
 
-   runManager->SetUserInitialization(new DetectorConstruction(parser.GetWorldVolume()));
+   runManager->SetUserInitialization(new DetectorConstruction(parser.getWorldVolume()));
    runManager->SetUserInitialization(new PhysicsList);
    runManager->SetUserAction(new PrimaryGeneratorAction);
 
