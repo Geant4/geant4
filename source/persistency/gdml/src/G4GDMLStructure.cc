@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.32 2007-12-12 14:18:33 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.33 2008-01-10 12:12:33 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -34,6 +34,32 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLStructure.hh"
+
+void G4GDMLStructure::auxiliaryRead(const xercesc::DOMElement* const element,AuxListType& auxList) {
+
+   G4String auxtype;
+   G4String auxvalue;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="auxtype") auxtype = attValue; else
+      if (attName=="auxvalue") auxvalue = attValue;
+   }
+
+   auxList.push_back(AuxPairType(auxtype,auxvalue));
+}
 
 EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
 
@@ -284,6 +310,8 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
 
+   AuxListType auxList;
+
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
@@ -296,11 +324,14 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
+      if (tag=="auxiliary") auxiliaryRead(child,auxList); else
       if (tag=="materialref") materialPtr = getMaterial(GenerateName(refRead(child))); else
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
 
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
+
+   if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
 
    volume_contentRead(element);
 }
@@ -346,4 +377,9 @@ G4LogicalVolume* G4GDMLStructure::getVolume(const G4String& ref) const {
    if (!volumePtr) G4Exception("GDML: Referenced volume '"+ref+"' was not found!");
 
    return volumePtr;
+}
+
+G4GDMLStructure::AuxMapType* G4GDMLStructure::getAuxiliaryMap() {
+
+   return &auxMap;
 }

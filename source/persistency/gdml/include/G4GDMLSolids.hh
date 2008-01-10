@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.22 2007-12-18 10:28:49 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.23 2008-01-10 12:12:32 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,9 @@
 #include "G4Trd.hh"
 #include "G4TriangularFacet.hh"
 #include "G4Tubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
 #include "G4UnionSolid.hh"
 
 #include "G4GDMLMaterials.hh"
