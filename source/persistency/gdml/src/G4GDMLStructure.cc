@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.34 2008-01-10 13:03:15 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.35 2008-01-10 13:25:48 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -383,4 +383,9 @@ G4GDMLStructure::AuxListType G4GDMLStructure::getVolumeAuxiliaryInformation(cons
 
      if (auxMap.find(ptr) != auxMap.end()) return auxMap[ptr];
      else return G4GDMLStructure::AuxListType();
+}
+
+const G4GDMLStructure::AuxMapType* G4GDMLStructure::getAuxiliaryMap() {
+
+   return &auxMap;
 }

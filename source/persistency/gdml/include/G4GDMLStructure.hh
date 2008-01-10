@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.22 2008-01-10 13:03:15 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.23 2008-01-10 13:25:48 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,8 +57,9 @@ class G4GDMLStructure : public G4GDMLParamvol {
 public:
    typedef std::pair<G4String,G4String> AuxPairType;
    typedef std::vector<AuxPairType> AuxListType;
+   typedef std::map<const G4LogicalVolume* const,AuxListType> AuxMapType;
 private:
-   std::map<const G4LogicalVolume* const,AuxListType> auxMap;
+   AuxMapType auxMap;
 
    G4LogicalVolume *pMotherLogical;
 
@@ -77,6 +78,7 @@ protected:
    G4LogicalVolume* getVolume(const G4String&) const;
 public:
    AuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
+   const AuxMapType* getAuxiliaryMap();
 };
 
 #endif
