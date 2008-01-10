@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.7 2008-01-10 13:02:07 ztorzsok Exp $
+// $Id: load_gdml.cc,v 1.8 2008-01-10 13:27:07 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,8 @@ int main(int argc, char **argv) {
 
    parser.Read(argv[1]);
 
-   G4GDMLParser::AuxListType AuxList = parser.getVolumeAuxiliaryInformation(NULL);
+   G4GDMLParser::AuxListType AuxList = parser.getVolumeAuxiliaryInformation(NULL); // These two methods are provided to acces volume auxiliary information
+   const G4GDMLParser::AuxMapType* AuxMap = parser.getAuxiliaryMap();
 
    G4RunManager* runManager = new G4RunManager;
    G4VisManager* visManager = new G4VisExecutive;
