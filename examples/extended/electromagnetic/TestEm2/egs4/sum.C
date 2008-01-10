@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histogram filled by Geant4 TestEm2 simulation
-   TFile f("./04jan08.root");
+   TFile f("./10jan08.root");
    TH1D* h1d = (TH1D*) f.Get("5");
    h1d->SetTitle("30 GeV e- on 20 X0 Fe : cumul longit energy dep");
    h1d->GetXaxis()->SetTitle("depth (X0)");
