@@ -1,6 +1,4 @@
 
-
-
 {
    gROOT->Reset();
 
@@ -8,12 +6,12 @@
    TFile f("./Al.1033keV.root");
    TH1D* h1d = (TH1D*) f.Get("8");
    h1d->SetTitle("Depth dose distribution of 1033 keV e- in Al");
-   h1d->GetXaxis()->SetTitle("Edep (Mev.cm2/g) along x/r0                    t/r0");
-   h1d->GetYaxis()->SetTitle("MeV*cm^2/g");
+   h1d->GetXaxis()->SetTitle("Edep (Mev.cm2/g) along x/r0                    x/r0");
+   h1d->GetYaxis()->SetTitle("MeV*cm2/g");
    h1d->SetStats(kFALSE);  // Eliminate statistics box
    h1d->Draw("HIST");
 
-   // data2.ascii came from Mars14
+   // data2.ascii came from Sandia
    ifstream in;
    in.open("./data/Al_1033keV.ascii");
 
@@ -43,6 +41,4 @@
    legend->AddEntry(h1d,"G4-9.1","l");
    legend->AddEntry(pt,"Sandia data","P");
    legend->Draw();
-
-
 }

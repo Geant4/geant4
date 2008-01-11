@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2008-01-11 13:01:56 jjacquem Exp $
+$Id: History,v 1.19 2008-01-11 14:30:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10-01-08 j.jacquemier
+10-01-08 j.jacquemier (testem11-V09-01-00)
 - add setfileOption in HistoMessenger
 
 06-12-07 mma

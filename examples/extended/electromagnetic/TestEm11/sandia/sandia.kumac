@@ -22,7 +22,7 @@ opt liny
 set dmod 1 ; set hcol 1 ; set plci 1
 h/pl //lun1/8
 key 0.6 3.0 1 'G4 9.1-cand-01' ! l
-atitle 't/r0' 'MeV*cm**2/g'
+atitle 'x/r0' 'MeV*cm**2/g'
 
 * *** data
 * G.J.Lockwood et al.
