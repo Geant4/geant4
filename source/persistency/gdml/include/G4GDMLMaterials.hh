@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.hh,v 1.14 2007-12-18 10:28:49 ztorzsok Exp $
+// $Id: G4GDMLMaterials.hh,v 1.15 2008-01-11 12:21:21 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,14 +42,14 @@
 #ifndef _G4GDMLMATERIALS_INCLUDED_
 #define _G4GDMLMATERIALS_INCLUDED_
 
-#include "G4GDMLDefine.hh"
+#include "G4GDMLReadDefine.hh"
 
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
 #include "G4OpticalSurface.hh"
 
-class G4GDMLMaterials : public G4GDMLDefine {
+class G4GDMLMaterials : public G4GDMLReadDefine {
    G4double atomRead(const xercesc::DOMElement* const);
    G4int compositeRead(const xercesc::DOMElement* const,G4String&);
    G4double DRead(const xercesc::DOMElement* const);

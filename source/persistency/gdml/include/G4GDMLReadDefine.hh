@@ -23,12 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLDefine.hh,v 1.14 2008-01-11 10:35:59 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLDefine
+// class G4GDMLReadDefine
 //
 // Class description:
 //
@@ -39,15 +34,15 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLDEFINE_INCLUDED_
-#define _G4GDMLDEFINE_INCLUDED_
+#ifndef _G4GDMLREADDEFINE_INCLUDED_
+#define _G4GDMLREADDEFINE_INCLUDED_
 
 #include <map>
 
 #include "G4ThreeVector.hh"
 #include "G4GDMLRead.hh"
 
-class G4GDMLDefine : public G4GDMLRead {
+class G4GDMLReadDefine : public G4GDMLRead {
 
    std::map<G4String,G4ThreeVector*> positionMap;
    std::map<G4String,G4ThreeVector*> rotationMap;

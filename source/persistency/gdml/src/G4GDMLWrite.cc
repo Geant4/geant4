@@ -34,7 +34,6 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
    xercesc::XMLPlatformUtils::Initialize();
 
-   XMLCh tempStr[100];
    xercesc::DOMImplementation* impl;
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
@@ -45,21 +44,15 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
 
    xercesc::XMLString::transcode("gdml", tempStr, 99);
-   xercesc::DOMDocument* doc = impl->createDocument(0,tempStr,0);
+   doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* root = doc->getDocumentElement();
-
-   xercesc::XMLString::transcode("FirstElement", tempStr, 99);
-   xercesc::DOMElement*   e1 = doc->createElement(tempStr);
-   root->appendChild(e1);
-
-   xercesc::XMLString::transcode("SecondElement", tempStr, 99);
-   xercesc::DOMElement*   e2 = doc->createElement(tempStr);
-   root->appendChild(e2);
 
    xercesc::XMLString::transcode("format-pretty-print", tempStr, 99);
    writer->setFeature(tempStr,true);
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
+
+   solidsWrite(root);
 
    try {
       writer->writeNode(myFormTarget,*root);

@@ -39,7 +39,7 @@
 
 class G4GDMLWriteSolids : public G4GDMLWrite {
 private:
-   void solidsWrite();
+   void solidsWrite(xercesc::DOMElement*);
 };
 
 #endif

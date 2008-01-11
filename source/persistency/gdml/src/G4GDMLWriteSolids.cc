@@ -30,10 +30,14 @@
 
 #include "G4GDMLWriteSolids.hh"
 
-void G4GDMLWriteSolids::solidsWrite() {
+void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
    const G4int solidCount = solidList->size();
+
+   xercesc::XMLString::transcode("solids",tempStr,99);
+   xercesc::DOMElement* solids = doc->createElement(tempStr);
+   element->appendChild(solids);
 
    for (G4int i=0;i<solidCount;i++) {
    

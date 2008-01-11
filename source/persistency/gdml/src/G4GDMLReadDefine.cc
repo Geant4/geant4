@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLDefine.cc,v 1.17 2007-12-11 14:55:00 ztorzsok Exp $
-// GEANT4 tag $ Name:$
-//
-// class G4GDMLDefine Implementation
-//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLDefine.hh"
+#include "G4GDMLReadDefine.hh"
 
-void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double value = 0.0;
@@ -61,7 +55,7 @@ void G4GDMLDefine::constantRead(const xercesc::DOMElement* const element) {
    eval.defineConstant(name,value);
 }
 
-void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4String rows;
@@ -98,7 +92,7 @@ void G4GDMLDefine::matrixRead(const xercesc::DOMElement* const element) {
    G4cout << "Matrix values: " << values << G4endl;
 }
 
-void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double unit = 1.0;
@@ -130,7 +124,7 @@ void G4GDMLDefine::positionRead(const xercesc::DOMElement* const element) {
    positionMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
-void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double unit = 1.0;
@@ -162,7 +156,7 @@ void G4GDMLDefine::rotationRead(const xercesc::DOMElement* const element) {
    rotationMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
-void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double x = 1.0;
@@ -192,7 +186,7 @@ void G4GDMLDefine::scaleRead(const xercesc::DOMElement* const element) {
    scaleMap[name] = new G4ThreeVector(x,y,z);
 }
 
-void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double value = 0.0;
@@ -218,7 +212,7 @@ void G4GDMLDefine::variableRead(const xercesc::DOMElement* const element) {
    eval.defineVariable(name,value);
 }
 
-void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -238,29 +232,23 @@ void G4GDMLDefine::defineRead(const xercesc::DOMElement* const element) {
    }
 }
 
-G4ThreeVector* G4GDMLDefine::getPosition(const G4String& ref) {
+G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
 
-   if (positionMap.find(ref) != positionMap.end()) return positionMap[ref];
+   if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML: Referenced position '"+ref+"' was not found!");
 
-   G4Exception("GDML: Referenced position '"+ref+"' was not found!");
-
-   return 0;
+   return positionMap[ref];
 }
 
-G4ThreeVector* G4GDMLDefine::getRotation(const G4String& ref) {
+G4ThreeVector* G4GDMLReadDefine::getRotation(const G4String& ref) {
 
-   if (rotationMap.find(ref) != rotationMap.end()) return rotationMap[ref];
+   if (rotationMap.find(ref) == rotationMap.end()) G4Exception("GDML: Referenced rotation '"+ref+"' was not found!");
 
-   G4Exception("GDML: Referenced rotation '"+ref+"' was not found!");
-
-   return 0;
+   return rotationMap[ref];
 }
 
-G4ThreeVector* G4GDMLDefine::getScale(const G4String& ref) {
+G4ThreeVector* G4GDMLReadDefine::getScale(const G4String& ref) {
 
-   if (scaleMap.find(ref) != scaleMap.end()) return scaleMap[ref];
+   if (scaleMap.find(ref) == scaleMap.end()) G4Exception("GDML: Referenced scale '"+ref+"' was not found!");
 
-   G4Exception("GDML: Referenced scale '"+ref+"' was not found!");
-
-   return 0;
+   return scaleMap[ref];
 }
