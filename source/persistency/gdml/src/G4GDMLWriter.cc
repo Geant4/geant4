@@ -44,7 +44,7 @@ void G4GDMLWriter::Write() {
    xercesc::XMLString::transcode("Range", tempStr, 99);
    impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
 
-   xercesc::XMLString::transcode("root", tempStr, 99);
+   xercesc::XMLString::transcode("gdml", tempStr, 99);
    xercesc::DOMDocument* doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* root = doc->getDocumentElement();
 
@@ -55,6 +55,9 @@ void G4GDMLWriter::Write() {
    xercesc::XMLString::transcode("SecondElement", tempStr, 99);
    xercesc::DOMElement*   e2 = doc->createElement(tempStr);
    root->appendChild(e2);
+
+   xercesc::XMLString::transcode("format-pretty-print", tempStr, 99);
+   writer->setFeature(tempStr,true);
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget("test.xml");
 
@@ -82,4 +85,6 @@ void G4GDMLWriter::Write() {
       delete myFormTarget;
 
    writer->release();
+
+   xercesc::XMLPlatformUtils::Terminate();
 }
