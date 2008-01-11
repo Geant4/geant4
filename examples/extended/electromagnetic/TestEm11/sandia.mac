@@ -1,4 +1,4 @@
-# $Id: sandia.mac,v 1.2 2007-12-07 12:50:56 maire Exp $
+# $Id: sandia.mac,v 1.3 2008-01-11 13:01:57 jjacquem Exp $
 #
 # limit the step size from histo 8
 #
@@ -23,6 +23,8 @@
 /gun/energy 1033 keV
 #
 /testem/histo/setFileType hbook
+#/testem/histo/setFileType root
+#/testem/histo/setFileOption export=root
 /testem/histo/setFileName sandia/Al.1033keV
 /testem/histo/setHisto 8 100 0.  1.0 none	#normalized Edep profile
 ###/testem/histo/setHisto 8 100 0.  0.5 none

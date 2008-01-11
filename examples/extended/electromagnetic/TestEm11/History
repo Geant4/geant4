@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2007-12-07 12:50:56 maire Exp $
+$Id: History,v 1.18 2008-01-11 13:01:56 jjacquem Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+10-01-08 j.jacquemier
+- add setfileOption in HistoMessenger
+
 06-12-07 mma
 - new subdirectory sandia (from O. Kadri)
      
