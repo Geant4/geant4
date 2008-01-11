@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.9 2007-05-18 18:39:54 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.10 2008-01-11 19:55:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,6 +204,7 @@ private:
   G4double     HN[31];
   G4double     MSH[93];
   G4double     TAU[93];
+  G4double     Z23[100];
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* curParticle;
