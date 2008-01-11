@@ -35,12 +35,10 @@
 
 #include "G4SolidStore.hh"
 
-#include "G4GDMLWriter.hh"
+#include "G4GDMLWrite.hh"
 
-class G4GDMLWriteSolids : public G4GDMLWriter {
+class G4GDMLWriteSolids : public G4GDMLWrite {
    void solidsWrite();
-protected:
-public:
 };
 
 #endif

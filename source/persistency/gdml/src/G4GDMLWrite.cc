@@ -28,9 +28,9 @@
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLWriter.hh"
+#include "G4GDMLWrite.hh"
 
-void G4GDMLWriter::Write() {
+void G4GDMLWrite::Write() {
 
    xercesc::XMLPlatformUtils::Initialize();
 

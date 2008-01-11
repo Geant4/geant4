@@ -30,8 +30,8 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLWRITER_INCLUDED_
-#define _G4GDMLWRITER_INCLUDED_
+#ifndef _G4GDMLWRITE_INCLUDED_
+#define _G4GDMLWRITE_INCLUDED_
 
 #include <iostream>
 
@@ -42,7 +42,7 @@
 
 #include "G4LogicalVolume.hh"
 
-class G4GDMLWriter {
+class G4GDMLWrite {
 public:
    void Write();
 };
