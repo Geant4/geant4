@@ -33,12 +33,14 @@
 #ifndef _G4GDMLWRITESOLIDS_INCLUDED_
 #define _G4GDMLWRITESOLIDS_INCLUDED_
 
+#include "G4Box.hh"
 #include "G4SolidStore.hh"
 
 #include "G4GDMLWrite.hh"
 
 class G4GDMLWriteSolids : public G4GDMLWrite {
 private:
+   void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void solidsWrite(xercesc::DOMElement*);
 };
 

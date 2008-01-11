@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Class description:
-//
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
@@ -51,6 +48,7 @@ G4GDMLRead::G4GDMLRead() {
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
+   parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
 }
 
 G4GDMLRead::~G4GDMLRead() {

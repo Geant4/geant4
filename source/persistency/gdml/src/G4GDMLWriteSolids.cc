@@ -30,6 +30,13 @@
 
 #include "G4GDMLWriteSolids.hh"
 
+void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* element,const G4Box* const box) {
+
+   xercesc::XMLString::transcode("box",tempStr,99);
+   xercesc::DOMElement* boxElement = doc->createElement(tempStr);
+   element->appendChild(boxElement);
+}
+
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
@@ -42,5 +49,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
    for (G4int i=0;i<solidCount;i++) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
+
+      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solids,boxPtr); }
    }
 }
