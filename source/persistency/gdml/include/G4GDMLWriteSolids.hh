@@ -38,6 +38,7 @@
 #include "G4GDMLWrite.hh"
 
 class G4GDMLWriteSolids : public G4GDMLWrite {
+private:
    void solidsWrite();
 };
 

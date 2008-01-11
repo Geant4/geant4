@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLDefine.hh,v 1.13 2007-12-12 10:26:36 ztorzsok Exp $
+// $Id: G4GDMLDefine.hh,v 1.14 2008-01-11 10:35:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,9 +45,9 @@
 #include <map>
 
 #include "G4ThreeVector.hh"
-#include "G4GDMLBase.hh"
+#include "G4GDMLRead.hh"
 
-class G4GDMLDefine : public G4GDMLBase {
+class G4GDMLDefine : public G4GDMLRead {
 
    std::map<G4String,G4ThreeVector*> positionMap;
    std::map<G4String,G4ThreeVector*> rotationMap;

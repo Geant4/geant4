@@ -44,7 +44,7 @@
 
 class G4GDMLWrite {
 public:
-   void Write();
+   void Write(const G4String&,const G4LogicalVolume*);
 };
 
 #endif

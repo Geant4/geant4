@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.35 2008-01-10 13:25:48 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.36 2008-01-11 10:35:59 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -350,7 +350,7 @@ void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const elemen
       if (tag=="physvol") physvolRead(child); else
       if (tag=="replicavol") replicavolRead(child); else
       if (tag=="divisionvol") divisionvolRead(child); else
-      if (tag=="loop") loopRead(child,&G4GDMLBase::volume_contentRead);
+      if (tag=="loop") loopRead(child,&G4GDMLRead::volume_contentRead);
    }
 }
 
@@ -365,7 +365,7 @@ void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="volume") volumeRead(child); else      
-      if (tag=="loop") loopRead(child,&G4GDMLBase::structureRead); else
+      if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
       G4Exception("GDML: Unknown tag in structure: "+tag);
    }
 }

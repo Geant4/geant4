@@ -30,7 +30,7 @@
 
 #include "G4GDMLWrite.hh"
 
-void G4GDMLWrite::Write() {
+void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
    xercesc::XMLPlatformUtils::Initialize();
 
@@ -59,7 +59,7 @@ void G4GDMLWrite::Write() {
    xercesc::XMLString::transcode("format-pretty-print", tempStr, 99);
    writer->setFeature(tempStr,true);
 
-   xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget("test.xml");
+   xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
    try {
       writer->writeNode(myFormTarget,*root);

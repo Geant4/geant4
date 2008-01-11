@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.hh,v 1.10 2008-01-10 13:03:15 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.1 2008-01-11 10:35:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -51,7 +51,7 @@
 
 #include "G4GDMLEvaluator.hh"
 
-class G4GDMLBase {
+class G4GDMLRead {
    xercesc::XercesDOMParser* parser;
    G4String prename;
 protected:
@@ -62,10 +62,10 @@ protected:
    virtual G4LogicalVolume* getVolume(const G4String&) const=0;
    virtual G4String getSetup(const G4String&)=0;
 
-   void loopRead(const xercesc::DOMElement* const,void(G4GDMLBase::*)(const xercesc::DOMElement* const));
+   void loopRead(const xercesc::DOMElement* const,void(G4GDMLRead::*)(const xercesc::DOMElement* const));
 public:
-   G4GDMLBase();
-   ~G4GDMLBase();
+   G4GDMLRead();
+   ~G4GDMLRead();
 
    virtual void defineRead(const xercesc::DOMElement* const)=0;
    virtual void materialsRead(const xercesc::DOMElement* const)=0;

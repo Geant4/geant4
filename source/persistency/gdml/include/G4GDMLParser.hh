@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.11 2008-01-10 13:03:15 ztorzsok Exp $
+// $Id: G4GDMLParser.hh,v 1.12 2008-01-11 10:35:59 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,10 @@
 #define _G4GDMLPARSER_INCLUDED_
 
 #include "G4GDMLStructure.hh"
+#include "G4GDMLWriteSolids.hh"
 
-class G4GDMLParser : public G4GDMLStructure {};
+class G4GDML : public G4GDMLStructure, public G4GDMLWriteSolids {};
+
+typedef G4GDML G4GDMLParser;
 
 #endif

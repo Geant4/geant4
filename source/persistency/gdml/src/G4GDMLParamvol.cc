@@ -403,7 +403,7 @@ void G4GDMLParamvol::paramvol_contentRead(const xercesc::DOMElement* const eleme
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
        if (tag=="parameters") parametersRead(child); else
-       if (tag=="loop") loopRead(child,&G4GDMLBase::paramvol_contentRead);
+       if (tag=="loop") loopRead(child,&G4GDMLRead::paramvol_contentRead);
     }
 }
 

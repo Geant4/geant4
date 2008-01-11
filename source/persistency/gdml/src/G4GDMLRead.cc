@@ -24,21 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.11 2008-01-10 13:03:15 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLBase
-//
 // Class description:
 //
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#include "G4GDMLBase.hh"
+#include "G4GDMLRead.hh"
 
-G4GDMLBase::G4GDMLBase() {
+G4GDMLRead::G4GDMLRead() {
 
    try {
 
@@ -59,7 +53,7 @@ G4GDMLBase::G4GDMLBase() {
    parser->setValidationSchemaFullChecking(true);
 }
 
-G4GDMLBase::~G4GDMLBase() {
+G4GDMLRead::~G4GDMLRead() {
 
    if (parser) delete parser;
 
@@ -75,7 +69,7 @@ G4GDMLBase::~G4GDMLBase() {
    }
 }
 
-G4String G4GDMLBase::GenerateName(const G4String& in) {
+G4String G4GDMLRead::GenerateName(const G4String& in) {
 
    std::string out(prename+"_");
    
@@ -103,7 +97,7 @@ G4String G4GDMLBase::GenerateName(const G4String& in) {
    return out;
 }
 
-void G4GDMLBase::Read(const G4String& fileName) {
+void G4GDMLRead::Read(const G4String& fileName) {
 
    prename = fileName;
 
@@ -148,7 +142,7 @@ void G4GDMLBase::Read(const G4String& fileName) {
    }
 }
 
-void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBase::*func)(const xercesc::DOMElement* const)) {
+void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
 
    G4String var;
    G4String from;
@@ -193,7 +187,7 @@ void G4GDMLBase::loopRead(const xercesc::DOMElement* const element,void(G4GDMLBa
    }
 }
 
-G4PVPlacement* G4GDMLBase::getWorldVolume(const G4String& setupName) {
+G4PVPlacement* G4GDMLRead::getWorldVolume(const G4String& setupName) {
 
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
 
