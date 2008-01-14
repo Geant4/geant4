@@ -1,0 +1,83 @@
+macro tramu.kumac
+*
+set * ; opt * 
+*
+filecase keep
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
+
+title 'Energy deposited in 530 um of Si by 1 MeV e-'
+*
+h/file 1 530um.hbook
+*
+opt liny
+*
+set dmod 1 ; set hcol 1 ; set plci 1
+h/pl //lun1/1
+key 0.6 7.6  1 'G4-9.1-ref-00' ! l
+*
+exec data
+* 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl 2 s 
+key 0.6 7.0  2 'Berger data' ! l
+*
+atitle 'Ekin (MeV)' 'nb / MeV'
+
+exec Redraw-Axis
+close 1
+
+return
+
+macro data
+*
+* e- 1 MeV in Silicon 530 um 
+* M.J. Berger et al. NIM 69 (p.181) 1969
+* distribution of energy deposition
+* (from 110 keV to 1.03 MeV by bin of 10 keV --> 93 bins) 
+*
+* *** read data
+fname = '530um.ascii'
+vector/create nb(1)
+vector/read nb [fname] ! 'O'
+nbin = nb(1)
+*
+vector/create vect(2,[nbin])
+vector/read vect [fname] ! 'C'
+**vector/write vect ! (1x,f6.1,3x,e12.6) 
+*
+* *** create and fill histogram		    
+Emin= 0.110
+Emax= 1.030		     
+create/1dhisto 2 'e- 1 MeV in Silicon' [nbin] [Emin] [Emax]
+put/contents 2 vect(2)
+   
+**h/pl 2
+
+* *** save histo
+*
+**h/file 111 data.hbook ! n
+**hrout 0
+ 
+return 
+	     
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
+  
