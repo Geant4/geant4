@@ -32,32 +32,11 @@
 
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
 
-   xercesc::XMLString::transcode("box",tempStr,99);
-   xercesc::DOMElement* boxElement = doc->createElement(tempStr);
-
-   xercesc::XMLString::transcode("name",tempStr,99);
-   xercesc::DOMAttr* name = doc->createAttribute(tempStr);
-   
-   xercesc::XMLString::transcode(box->GetName(),tempStr,99);
-   name->setValue(tempStr);
-
-   xercesc::XMLString::transcode("x",tempStr,99);
-   xercesc::DOMAttr* xAtt = doc->createAttribute(tempStr);
-
-   G4String str;
-
-   std::ostringstream ostream;
-
-   ostream << (2.0*box->GetXHalfLength());
-
-   str = ostream.str();
-
-   xercesc::XMLString::transcode(str,tempStr,99);
-   xAtt->setValue(tempStr);
-
-   boxElement->setAttributeNode(name);
-   boxElement->setAttributeNode(xAtt);
-
+   xercesc::DOMElement* boxElement = newElement("box");
+   boxElement->setAttributeNode(newAttribute("name",box->GetName()));
+   boxElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()));
+   boxElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()));
+   boxElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()));
    solidsElement->appendChild(boxElement);
 }
 
@@ -66,14 +45,14 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
    const G4int solidCount = solidList->size();
 
-   xercesc::XMLString::transcode("solids",tempStr,99);
-   xercesc::DOMElement* solids = doc->createElement(tempStr);
-   element->appendChild(solids);
+   xercesc::DOMElement* solidsElement = newElement("solids");
 
    for (G4int i=0;i<solidCount;i++) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
 
-      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solids,boxPtr); }
+      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); }
    }
+
+   element->appendChild(solidsElement);
 }

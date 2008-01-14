@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLSolids.cc,v 1.34 2008-01-11 10:35:59 ztorzsok Exp $
-// GEANT4 tag $ Name:$
-//
-// class G4GDMLSolids Implementation
-//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLSolids.hh"
+#include "G4GDMLReadSolids.hh"
 
-void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
+void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
 
    G4String name;
    G4String first;
@@ -92,7 +86,7 @@ void G4GDMLSolids::booleanRead(const xercesc::DOMElement* const element,const Bo
    if (op==INTERSECTION) new G4IntersectionSolid(name,firstSolid,secondSolid,transform);
 }
 
-void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -134,7 +128,7 @@ void G4GDMLSolids::boxRead(const xercesc::DOMElement* const element) {
    else new G4TwistedBox(name,PhiTwist,x,y,z);
 }
 
-void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -184,7 +178,7 @@ void G4GDMLSolids::coneRead(const xercesc::DOMElement* const element) {
    new G4Cons(name,rmin1,rmax1,rmin2,rmax2,z,startphi,deltaphi);
 }
 
-void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -226,7 +220,7 @@ void G4GDMLSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    new G4Ellipsoid(name,ax,by,cz,zcut1,zcut2);
 }
 
-void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::eltubeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -262,7 +256,7 @@ void G4GDMLSolids::eltubeRead(const xercesc::DOMElement* const element) {
    new G4EllipticalTube(name,dx,dy,dz);
 }
 
-void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -306,7 +300,7 @@ void G4GDMLSolids::hypeRead(const xercesc::DOMElement* const element) {
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -336,7 +330,7 @@ void G4GDMLSolids::orbRead(const xercesc::DOMElement* const element) {
    new G4Orb(name,r);
 }
 
-void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -383,7 +377,7 @@ void G4GDMLSolids::paraRead(const xercesc::DOMElement* const element) {
    new G4Para(name,x,y,z,alpha,theta,phi);
 }
 
-void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -444,7 +438,7 @@ void G4GDMLSolids::polyconeRead(const xercesc::DOMElement* const element) {
    new G4Polycone(name,startphi,deltaphi,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
-void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::polyhedraRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -507,7 +501,7 @@ void G4GDMLSolids::polyhedraRead(const xercesc::DOMElement* const element) {
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,z_array,rmin_array,rmax_array);
 }
 
-G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* const element) {
+G4QuadrangularFacet* G4GDMLReadSolids::quadrangularRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector* ptr1 = 0;
    G4ThreeVector* ptr2 = 0;
@@ -540,7 +534,7 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
    return new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
 
-void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::reflectedSolidRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -608,7 +602,7 @@ void G4GDMLSolids::reflectedSolidRead(const xercesc::DOMElement* const element) 
    new G4ReflectedSolid(name,getSolid(solid),transform);
 }
 
-G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* const element,G4double lunit) {
+G4ExtrudedSolid::ZSection G4GDMLReadSolids::sectionRead(const xercesc::DOMElement* const element,G4double lunit) {
 
    G4double zPosition = 0.0;
    G4TwoVector Offset;
@@ -637,7 +631,7 @@ G4ExtrudedSolid::ZSection G4GDMLSolids::sectionRead(const xercesc::DOMElement* c
    return G4ExtrudedSolid::ZSection(zPosition,Offset,scalingFactor);
 }
 
-void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::sphereRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -684,7 +678,7 @@ void G4GDMLSolids::sphereRead(const xercesc::DOMElement* const element) {
    new G4Sphere(name,rmin,rmax,startphi,deltaphi,starttheta,deltatheta);
 }
 
-void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::tessellatedRead(const xercesc::DOMElement* const element) {
 
    G4String name;
 
@@ -722,7 +716,7 @@ void G4GDMLSolids::tessellatedRead(const xercesc::DOMElement* const element) {
    tessellated->SetSolidClosed(true);
 }
 
-void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::tetRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    
@@ -755,7 +749,7 @@ void G4GDMLSolids::tetRead(const xercesc::DOMElement* const element) {
    new G4Tet(name,*ptr1,*ptr2,*ptr3,*ptr4);
 }
 
-void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::torusRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -799,7 +793,7 @@ void G4GDMLSolids::torusRead(const xercesc::DOMElement* const element) {
    new G4Torus(name,rmin,rmax,rtor,startphi,deltaphi);
 }
 
-void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -867,7 +861,7 @@ void G4GDMLSolids::trapRead(const xercesc::DOMElement* const element) {
    else new G4TwistedTrap(name,PhiTwist,z,theta,phi,y1,x1,x2,y2,x3,x4,Alph);
 }
 
-void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -915,7 +909,7 @@ void G4GDMLSolids::trdRead(const xercesc::DOMElement* const element) {
    else new G4TwistedTrd(name,x1,x2,y1,y2,z,PhiTwist);
 }
 
-G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const element) {
+G4TriangularFacet* G4GDMLReadSolids::triangularRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector* ptr1 = 0;
    G4ThreeVector* ptr2 = 0;
@@ -946,7 +940,7 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
    return new G4TriangularFacet(*ptr1,*ptr2,*ptr3,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
 }
 
-void G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::tubeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -990,7 +984,7 @@ void G4GDMLSolids::tubeRead(const xercesc::DOMElement* const element) {
    new G4Tubs(name,rmin,rmax,z,startphi,deltaphi);
 }
 
-G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4double lunit) {
+G4TwoVector G4GDMLReadSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4double lunit) {
 
    G4TwoVector vec;
    
@@ -1015,7 +1009,7 @@ G4TwoVector G4GDMLSolids::twoDimVertexRead(const xercesc::DOMElement* const elem
    return vec;
 }
 
-void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::xtruRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -1056,7 +1050,7 @@ void G4GDMLSolids::xtruRead(const xercesc::DOMElement* const element) {
    new G4ExtrudedSolid(name,twoDimVertexList,sectionList);
 }
 
-G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* const element) {
+G4GDMLReadSolids::zplaneType G4GDMLReadSolids::zplaneRead(const xercesc::DOMElement* const element) {
 
    zplaneType zplane;
 
@@ -1082,7 +1076,7 @@ G4GDMLSolids::zplaneType G4GDMLSolids::zplaneRead(const xercesc::DOMElement* con
    return zplane;
 }
 
-void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -1121,7 +1115,7 @@ void G4GDMLSolids::solidsRead(const xercesc::DOMElement* const element) {
    }
 }
 
-G4ThreeVector G4GDMLSolids::vectorRead(const xercesc::DOMElement* const element) {
+G4ThreeVector G4GDMLReadSolids::vectorRead(const xercesc::DOMElement* const element) {
 
    G4double unit = 1.0;
 
@@ -1150,7 +1144,7 @@ G4ThreeVector G4GDMLSolids::vectorRead(const xercesc::DOMElement* const element)
    return vec*unit;
 }
 
-G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
+G4String G4GDMLReadSolids::refRead(const xercesc::DOMElement* const element) {
 
    G4String ref;
 
@@ -1174,7 +1168,7 @@ G4String G4GDMLSolids::refRead(const xercesc::DOMElement* const element) {
    return ref;
 }
 
-G4VSolid* G4GDMLSolids::getSolid(const G4String& ref) const {
+G4VSolid* G4GDMLReadSolids::getSolid(const G4String& ref) const {
 
    G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 

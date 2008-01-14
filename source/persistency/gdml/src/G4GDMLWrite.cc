@@ -30,6 +30,41 @@
 
 #include "G4GDMLWrite.hh"
 
+xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
+
+   xercesc::XMLString::transcode(name,tempStr,99);
+   xercesc::DOMAttr* att = doc->createAttribute(tempStr);
+
+   xercesc::XMLString::transcode(value,tempStr,99);
+   att->setValue(tempStr);
+
+   return att;
+}
+
+xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4double& value) {
+
+   xercesc::XMLString::transcode(name,tempStr,99);
+   xercesc::DOMAttr* att = doc->createAttribute(tempStr);
+
+   std::ostringstream ostream;
+   ostream << value;
+
+   G4String str = ostream.str();
+
+   xercesc::XMLString::transcode(str,tempStr,99);
+   att->setValue(tempStr);
+
+   return att;
+}
+
+xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
+
+   xercesc::XMLString::transcode(name,tempStr,99);
+
+   return doc->createElement(tempStr);
+}
+
+
 void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
    xercesc::XMLPlatformUtils::Initialize();
@@ -50,11 +85,10 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
       writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
 
-   G4cout << "XML: " << writer->getFeature(xercesc::XMLUni::fgDOMXMLDeclaration) << G4endl; 
-
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
    solidsWrite(root);
+   structureWrite(root);
 
    try {
       writer->writeNode(myFormTarget,*root);

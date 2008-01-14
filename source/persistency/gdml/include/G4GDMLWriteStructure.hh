@@ -24,26 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.13 2008-01-14 14:04:19 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLParser
-//
 // Class description:
 //
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLPARSER_INCLUDED_
-#define _G4GDMLPARSER_INCLUDED_
+#ifndef _G4GDMLWRITESTRUCTURE_INCLUDED_
+#define _G4GDMLWRITESTRUCTURE_INCLUDED_
 
-#include "G4GDMLStructure.hh"
-#include "G4GDMLWriteStructure.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4Material.hh"
+#include "G4VPhysicalVolume.hh"
 
-class G4GDML : public G4GDMLStructure, public G4GDMLWriteStructure {};
+#include "G4GDMLWriteSolids.hh"
 
-typedef G4GDML G4GDMLParser;
+class G4GDMLWriteStructure : public G4GDMLWriteSolids {
+   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
+   void volumeWrite(xercesc::DOMElement*);
+private:
+   void structureWrite(xercesc::DOMElement*);
+};
 
 #endif
