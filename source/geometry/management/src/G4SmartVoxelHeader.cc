@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.28 2006-06-29 18:33:42 gunter Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.29 2008-01-14 11:29:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -988,6 +988,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 
   // Fill nodes: Step through extent lists
   //
+  G4bool init = true;
   for (nVol=0; nVol<nCandidates; nVol++)
   {
     G4int nodeNo, minContainingNode, maxContainingNode;
@@ -1014,9 +1015,11 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       }
       for (nodeNo=minContainingNode; nodeNo<=maxContainingNode; nodeNo++)
       {
+        if (init) { (*nodeList)[nodeNo]->Reserve(nCandidates); }
         (*nodeList)[nodeNo]->Insert((*pCandidates)[nVol]);
       }
     }
+    init = false;
   }
 
   // All nodes filled
