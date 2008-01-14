@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007-11-30 15:11:22 gcosmo Exp $
+$Id: History,v 1.6 2008-01-14 14:09:46 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 January 2008 Z.Torzsok
+- Reader is now capable of resolving entities
+
+08 January 2008 Z.Torzsok
+- Vertex referencing is fixed in tessellated solid 
+  (using the identifier "vertex" according to the schema)
+
+07 January 2008 Z.Torzsok
+- Starting to implement the writer
 
 30 November, 07  Z.Torzsok (gdml-V09-00-04)
 - Fine tuning of the class hierarchy and fixed issue with reflections.
