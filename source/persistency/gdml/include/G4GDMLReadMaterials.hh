@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLMaterials.hh,v 1.15 2008-01-11 12:21:21 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLMaterials
-//
 // Class description:
 //
 // GDML class for loading isotopes, elements and materials according to
@@ -39,8 +32,8 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLMATERIALS_INCLUDED_
-#define _G4GDMLMATERIALS_INCLUDED_
+#ifndef _G4GDMLREADMATERIALS_INCLUDED_
+#define _G4GDMLREADMATERIALS_INCLUDED_
 
 #include "G4GDMLReadDefine.hh"
 
@@ -49,7 +42,7 @@
 #include "G4Material.hh"
 #include "G4OpticalSurface.hh"
 
-class G4GDMLMaterials : public G4GDMLReadDefine {
+class G4GDMLReadMaterials : public G4GDMLReadDefine {
    G4double atomRead(const xercesc::DOMElement* const);
    G4int compositeRead(const xercesc::DOMElement* const,G4String&);
    G4double DRead(const xercesc::DOMElement* const);

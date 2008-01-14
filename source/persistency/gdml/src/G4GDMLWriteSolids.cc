@@ -34,6 +34,15 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* element,const G4Box* const
 
    xercesc::XMLString::transcode("box",tempStr,99);
    xercesc::DOMElement* boxElement = doc->createElement(tempStr);
+
+   xercesc::XMLString::transcode("name",tempStr,99);
+   xercesc::DOMAttr* name = doc->createAttribute(tempStr);
+   
+   xercesc::XMLString::transcode("zoli",tempStr,99);
+   name->setValue(tempStr);
+   
+   boxElement->setAttributeNode(name);
+   
    element->appendChild(boxElement);
 }
 

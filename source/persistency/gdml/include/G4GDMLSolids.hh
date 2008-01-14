@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.hh,v 1.23 2008-01-10 12:12:32 ztorzsok Exp $
+// $Id: G4GDMLSolids.hh,v 1.24 2008-01-14 09:09:37 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,9 +70,9 @@
 #include "G4TwistedTrd.hh"
 #include "G4UnionSolid.hh"
 
-#include "G4GDMLMaterials.hh"
+#include "G4GDMLReadMaterials.hh"
 
-class G4GDMLSolids : public G4GDMLMaterials {
+class G4GDMLSolids : public G4GDMLReadMaterials {
 
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct { G4double rmin,rmax,z; } zplaneType;

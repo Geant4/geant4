@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMaterials.cc,v 1.15 2007-12-17 10:11:07 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.1 2008-01-14 09:09:37 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -33,9 +33,9 @@
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLMaterials.hh"
+#include "G4GDMLReadMaterials.hh"
 
-G4double G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const element) {
 
    G4double value = 0.0;
    G4String unit("g/mole");
@@ -61,7 +61,7 @@ G4double G4GDMLMaterials::atomRead(const xercesc::DOMElement* const element) {
    return value*eval.Evaluate(unit);
 }
 
-G4int G4GDMLMaterials::compositeRead(const xercesc::DOMElement* const element,G4String& ref) {
+G4int G4GDMLReadMaterials::compositeRead(const xercesc::DOMElement* const element,G4String& ref) {
 
    G4int n = 0;
 
@@ -86,7 +86,7 @@ G4int G4GDMLMaterials::compositeRead(const xercesc::DOMElement* const element,G4
    return n;
 }
 
-G4double G4GDMLMaterials::DRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const element) {
 
    G4double value = 0.0;
    G4String unit("g/cm3");
@@ -112,7 +112,7 @@ G4double G4GDMLMaterials::DRead(const xercesc::DOMElement* const element) {
    return value*eval.Evaluate(unit);
 }
 
-void G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4String formula;
@@ -158,7 +158,7 @@ void G4GDMLMaterials::elementRead(const xercesc::DOMElement* const element) {
    else new G4Element(GenerateName(name),formula,Z,a);
 }
 
-G4double G4GDMLMaterials::fractionRead(const xercesc::DOMElement* const element,G4String& ref) {
+G4double G4GDMLReadMaterials::fractionRead(const xercesc::DOMElement* const element,G4String& ref) {
 
    G4double n = 0.0;
 
@@ -183,7 +183,7 @@ G4double G4GDMLMaterials::fractionRead(const xercesc::DOMElement* const element,
    return n;
 }
 
-void G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::isotopeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
 
@@ -224,7 +224,7 @@ void G4GDMLMaterials::isotopeRead(const xercesc::DOMElement* const element) {
    new G4Isotope(GenerateName(name),Z,N,a);
 }
 
-void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    
@@ -270,7 +270,7 @@ void G4GDMLMaterials::materialRead(const xercesc::DOMElement* const element) {
    else new G4Material(GenerateName(name),Z,a,D);
 }
 
-void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Element *ele) {
+void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Element *ele) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -290,7 +290,7 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Ele
    }
 }
 
-void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Material *material) {
+void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Material *material) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -326,7 +326,7 @@ void G4GDMLMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Mat
    }
 }
 
-void G4GDMLMaterials::opticalsurfaceRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4String smodel;
@@ -377,7 +377,7 @@ void G4GDMLMaterials::opticalsurfaceRead(const xercesc::DOMElement* const elemen
    new G4OpticalSurface(name,model,finish,type,value);
 }
 
-void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -395,7 +395,7 @@ void G4GDMLMaterials::materialsRead(const xercesc::DOMElement* const element) {
    }
 }
 
-G4Element* G4GDMLMaterials::getElement(const G4String& ref) const {
+G4Element* G4GDMLReadMaterials::getElement(const G4String& ref) const {
 
    G4Element* elementPtr = G4Element::GetElement(ref,false);
 
@@ -404,7 +404,7 @@ G4Element* G4GDMLMaterials::getElement(const G4String& ref) const {
    return elementPtr;
 }
 
-G4Isotope* G4GDMLMaterials::getIsotope(const G4String& ref) const {
+G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref) const {
 
    G4Isotope* isotopePtr = G4Isotope::GetIsotope(ref,false);
 
@@ -413,7 +413,7 @@ G4Isotope* G4GDMLMaterials::getIsotope(const G4String& ref) const {
    return isotopePtr;
 }
 
-G4Material* G4GDMLMaterials::getMaterial(const G4String& ref) const {
+G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref) const {
 
    G4Material *materialPtr = G4Material::GetMaterial(ref,false);
 

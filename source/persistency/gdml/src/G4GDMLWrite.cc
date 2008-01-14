@@ -47,8 +47,10 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* root = doc->getDocumentElement();
 
-   xercesc::XMLString::transcode("format-pretty-print", tempStr, 99);
-   writer->setFeature(tempStr,true);
+   if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
+      writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
+
+   G4cout << "XML: " << writer->getFeature(xercesc::XMLUni::fgDOMXMLDeclaration) << G4endl; 
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
