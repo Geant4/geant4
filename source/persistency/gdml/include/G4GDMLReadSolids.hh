@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLSolids.hh,v 1.24 2008-01-14 09:09:37 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLSolids
-//
 // Class description:
 //
 // GDML class for loading solids according to specifications in Geant4.
@@ -38,8 +31,8 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLSOLIDS_INCLUDED_
-#define _G4GDMLSOLIDS_INCLUDED_
+#ifndef _G4GDMLREADSOLIDS_INCLUDED_
+#define _G4GDMLREADSOLIDS_INCLUDED_
 
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -72,7 +65,7 @@
 
 #include "G4GDMLReadMaterials.hh"
 
-class G4GDMLSolids : public G4GDMLReadMaterials {
+class G4GDMLReadSolids : public G4GDMLReadMaterials {
 
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct { G4double rmin,rmax,z; } zplaneType;

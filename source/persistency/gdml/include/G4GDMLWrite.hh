@@ -43,10 +43,12 @@
 #include "G4LogicalVolume.hh"
 
 class G4GDMLWrite {
-protected:
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
-   std::stringstream stream;
+protected:
+   xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
+   xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
+   xercesc::DOMElement* newElement(const G4String&);
 public:
    void Write(const G4String&,const G4LogicalVolume*);
    virtual void solidsWrite(xercesc::DOMElement*)=0;
