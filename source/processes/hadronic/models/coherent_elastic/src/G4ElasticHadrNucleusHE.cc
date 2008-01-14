@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.78 2007-12-19 18:27:16 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.79 2008-01-14 10:39:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -745,7 +745,7 @@ G4double G4ElasticHadrNucleusHE::GetHeavyFq2(G4int Nucleus, G4double* LineF)
 	      <<curSec<<"  totSum  "<< totSum<<"  DTot "
 	      <<curSum<<G4endl;
     }      
-  return curSum;
+  return totSum;
 }
 
 ////////////////////////////////////////////////////////////////////////
