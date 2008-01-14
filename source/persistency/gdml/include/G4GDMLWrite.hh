@@ -46,6 +46,7 @@ class G4GDMLWrite {
 protected:
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
+   std::stringstream stream;
 public:
    void Write(const G4String&,const G4LogicalVolume*);
    virtual void solidsWrite(xercesc::DOMElement*)=0;

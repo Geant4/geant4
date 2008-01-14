@@ -30,7 +30,7 @@
 
 #include "G4GDMLWriteSolids.hh"
 
-void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* element,const G4Box* const box) {
+void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
 
    xercesc::XMLString::transcode("box",tempStr,99);
    xercesc::DOMElement* boxElement = doc->createElement(tempStr);
@@ -38,12 +38,27 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* element,const G4Box* const
    xercesc::XMLString::transcode("name",tempStr,99);
    xercesc::DOMAttr* name = doc->createAttribute(tempStr);
    
-   xercesc::XMLString::transcode("zoli",tempStr,99);
+   xercesc::XMLString::transcode(box->GetName(),tempStr,99);
    name->setValue(tempStr);
-   
+
+   xercesc::XMLString::transcode("x",tempStr,99);
+   xercesc::DOMAttr* xAtt = doc->createAttribute(tempStr);
+
+   G4String str;
+
+   std::ostringstream ostream;
+
+   ostream << (2.0*box->GetXHalfLength());
+
+   str = ostream.str();
+
+   xercesc::XMLString::transcode(str,tempStr,99);
+   xAtt->setValue(tempStr);
+
    boxElement->setAttributeNode(name);
-   
-   element->appendChild(boxElement);
+   boxElement->setAttributeNode(xAtt);
+
+   solidsElement->appendChild(boxElement);
 }
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
