@@ -23,59 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.12 2008-01-14 12:11:39 vnivanch Exp $
+// $Id: PhysListEmStandardNR.hh,v 1.1 2008-01-14 12:11:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
-#include "RunAction.hh"
-#include "G4SteppingManager.hh"
-#include "Randomize.hh"
+#ifndef PhysListEmStandardNR_h
+#define PhysListEmStandardNR_h 1
+
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,RunAction* RuAct)
-:detector(det),runAction(RuAct)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+class PhysListEmStandardNR : public G4VPhysicsConstructor
 {
- G4double edep = aStep->GetTotalEnergyDeposit();
- if (edep <= 0.) return;
+public: 
+  PhysListEmStandardNR(const G4String& name = "standardNR");
+  virtual ~PhysListEmStandardNR();
 
- // G4cout << "edep= " << edep << "NIEL= " << aStep->GetNonIonizingEnergyDeposit()<<G4endl;
-
- runAction->FillEdep(edep,aStep->GetNonIonizingEnergyDeposit());
-
- if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
  
- //Bragg curve
- //	
- G4StepPoint* prePoint  = aStep->GetPreStepPoint();
- G4StepPoint* postPoint = aStep->GetPostStepPoint();
-   
- G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
- G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
- runAction->FillHisto(0, x/mm , edep);
-
- //fill tallies
- //
- G4TouchableHandle touchable = prePoint->GetTouchableHandle();
- G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
- if (lVolume == detector->GetLogicalTally())
-     runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
-}
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+
+
 
 
