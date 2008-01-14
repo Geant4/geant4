@@ -11,16 +11,14 @@
    h1d->SetStats(kFALSE);  // Eliminate statistics box
    h1d->Draw("HIST");
 
-   // data2.ascii came from Sandia
-   ifstream in;
-   in.open("./data/Al_1033keV.ascii");
-
 /* data
 * G.J.Lockwood et al.
 *     Sandia report SAND79-0414.UC-34a, February 1987
 * O.Kadri et al. NIM B 258 (2007) 381
 */
 
+   ifstream in;
+   in.open("./data/Al_1033keV.ascii");
 
    TMarker *pt;
    Double_t x, y;
