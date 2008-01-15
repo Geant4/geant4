@@ -75,6 +75,10 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+# Uncomment the following lines for building on MacOSX 10.5 "Leopard"
+#    OGLLIBS   += -dylib_file \
+#                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:\
+#                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
   endif
 
   define build-granular-shared-lib
