@@ -89,6 +89,7 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
    solidsWrite(root);
    structureWrite(root);
+   setupWrite(root,logvol);
 
    try {
       writer->writeNode(myFormTarget,*root);

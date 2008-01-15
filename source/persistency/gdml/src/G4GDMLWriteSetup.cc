@@ -24,54 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSetup.cc,v 1.13 2007-12-18 10:28:49 ztorzsok Exp $
-// GEANT4 tag $ Name:$
-//
-// class G4GDMLSetup Implementation
-//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLSetup.hh"
+#include "G4GDMLWriteSetup.hh"
 
-G4String G4GDMLSetup::getSetup(const G4String& ref) {
+void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* element,const G4LogicalVolume* const logvol) {
 
-   if (setupMap.find(ref) == setupMap.end())
-      G4Exception("GDML: Referenced setup '"+ref+"' was not found!");
+   xercesc::DOMElement* setupElement = newElement("setup");
+   setupElement->setAttributeNode(newAttribute("version","1.0"));
+   setupElement->setAttributeNode(newAttribute("name","Default"));
 
-   return setupMap[ref];
-}
+   xercesc::DOMElement* worldElement = newElement("world");
+   worldElement->setAttributeNode(newAttribute("ref",logvol->GetName()));
+   setupElement->appendChild(worldElement);
 
-void G4GDMLSetup::setupRead(const xercesc::DOMElement* const element) {
-
-   G4String name;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attName=="name") name = attValue;
-   }
-
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
-
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
-
-      if (tag == "world") setupMap[name] = GenerateName(refRead(child));
-   }
+   element->appendChild(setupElement);
 }

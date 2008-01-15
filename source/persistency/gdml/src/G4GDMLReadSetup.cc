@@ -23,32 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Original author: Zoltan Torzsok, November 2007
 //
-// Class description:
-//
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-#ifndef _G4GDMLWRITESTRUCTURE_INCLUDED_
-#define _G4GDMLWRITESTRUCTURE_INCLUDED_
+#include "G4GDMLReadSetup.hh"
 
-#define RAD2DEG(x) (180.0*(x)/3.141596)
+G4String G4GDMLReadSetup::getSetup(const G4String& ref) {
 
-#include "G4LogicalVolumeStore.hh"
-#include "G4Material.hh"
-#include "G4VPhysicalVolume.hh"
+   if (setupMap.find(ref) == setupMap.end())
+      G4Exception("GDML: Referenced setup '"+ref+"' was not found!");
 
-#include "G4GDMLWriteSolids.hh"
+   return setupMap[ref];
+}
 
-class G4GDMLWriteStructure : public G4GDMLWriteSolids {
-   G4ThreeVector getRotation(const G4RotationMatrix&);
-   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void positionWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void rotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void volumeWrite(xercesc::DOMElement*);
-private:
-   void structureWrite(xercesc::DOMElement*);
-};
+void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
 
-#endif
+   G4String name;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName  = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = attValue;
+   }
+
+   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag == "world") setupMap[name] = GenerateName(refRead(child));
+   }
+}

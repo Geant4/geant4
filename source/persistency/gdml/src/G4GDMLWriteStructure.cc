@@ -30,15 +30,67 @@
 
 #include "G4GDMLWriteStructure.hh"
 
+G4ThreeVector G4GDMLWriteStructure::getRotation(const G4RotationMatrix& mat) {
+
+   G4double x,y,z;
+
+   G4double cosb = sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
+
+   if (cosb > 16*FLT_EPSILON) {
+
+      x = atan2(mat.zy(),mat.zz());
+      y = atan2(-mat.zx(),cosb);
+      z = atan2(mat.yx(),mat.xx());
+   }
+   else {
+
+      x = atan2(-mat.yz(),mat.yy());
+      y = atan2(-mat.zx(),cosb);
+      z = 0.0;
+   }
+
+   x = RAD2DEG(x);
+   y = RAD2DEG(y);
+   z = RAD2DEG(z);
+
+   return G4ThreeVector(-x,-y,-z);
+}
+
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPhysicalVolume* const physvol) {
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
-
    physvolElement->appendChild(volumerefElement);
+
+   G4ThreeVector pos = physvol->GetObjectTranslation();
+   G4ThreeVector rot = getRotation(physvol->GetObjectRotationValue());
+
+   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
+   if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
+
    element->appendChild(physvolElement);
+}
+
+void G4GDMLWriteStructure::positionWrite(xercesc::DOMElement* element,const G4ThreeVector& pos) {
+
+   xercesc::DOMElement* positionElement = newElement("position");
+   positionElement->setAttributeNode(newAttribute("x",pos.x()));
+   positionElement->setAttributeNode(newAttribute("y",pos.y()));
+   positionElement->setAttributeNode(newAttribute("z",pos.z()));
+   positionElement->setAttributeNode(newAttribute("unit","mm"));
+   element->appendChild(positionElement);
+}
+
+void G4GDMLWriteStructure::rotationWrite(xercesc::DOMElement* element,const G4ThreeVector& rot) {
+
+   xercesc::DOMElement* rotationElement = newElement("rotation");
+   rotationElement->setAttributeNode(newAttribute("x",rot.x()));
+   rotationElement->setAttributeNode(newAttribute("y",rot.y()));
+   rotationElement->setAttributeNode(newAttribute("z",rot.z()));
+   rotationElement->setAttributeNode(newAttribute("unit","deg"));
+   element->appendChild(rotationElement);
 }
 
 void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
