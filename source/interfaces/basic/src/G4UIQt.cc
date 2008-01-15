@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.13 2007-11-30 14:28:50 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.14 2008-01-15 11:04:26 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 
-//#define DEBUG
+//#define GEANT4_QT_DEBUG
 
 #ifdef G4UI_BUILD_QT_SESSION
 
@@ -131,20 +131,11 @@ G4UIQt::G4UIQt (
 
   // Set layouts
 
-#if QT_VERSION < 0x040000
-
   QWidget* topWidget = new QWidget(splitter);
   QWidget* bottomWidget = new QWidget(splitter);
 
   QVBoxLayout *layoutTop = new QVBoxLayout(topWidget);
   QVBoxLayout *layoutBottom = new QVBoxLayout(bottomWidget);
-#else
-  QWidget* topWidget = new QWidget();
-  QWidget* bottomWidget = new QWidget();
-
-  QVBoxLayout *layoutTop = new QVBoxLayout;
-  QVBoxLayout *layoutBottom = new QVBoxLayout;
-#endif
 
   // fill them
 
@@ -162,8 +153,8 @@ G4UIQt::G4UIQt (
   connect(clearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
 
 #if QT_VERSION < 0x040000
-  fCommandHistoryArea = new QListView(bottomWidget);
 
+  fCommandHistoryArea = new QListView(bottomWidget);
   fCommandHistoryArea->setSorting (-1, FALSE);
   fCommandHistoryArea->setSelectionMode(QListView::Single);
   fCommandHistoryArea->addColumn("");
@@ -545,13 +536,11 @@ void G4UIQt::TerminalHelp(
   if (!fHelpDialog) {
 #if QT_VERSION < 0x040000
     fHelpDialog = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+#else
+    fHelpDialog = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+#endif
     QVBoxLayout *vLayout = new QVBoxLayout(fHelpDialog);
     QSplitter *splitter = new QSplitter(Qt::Horizontal,fHelpDialog);
-#else
-    QVBoxLayout *vLayout = new QVBoxLayout();
-    fHelpDialog = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
-#endif
     QPushButton *exitButton = new QPushButton("Exit",fHelpDialog);
     connect(exitButton, SIGNAL(clicked()), fHelpDialog,SLOT(close()));
 
@@ -581,11 +570,7 @@ void G4UIQt::TerminalHelp(
     //    QList<QTreeWidgetItem *> items;
 #endif
 
-#if QT_VERSION < 0x040000
     fHelpArea = new QTextEdit(splitter);
-#else
-    fHelpArea = new QTextEdit();
-#endif
     fHelpArea->setReadOnly(true);
 
     G4int treeSize = treeTop->GetTreeEntry();
@@ -619,12 +604,13 @@ void G4UIQt::TerminalHelp(
       //      items.append(newItem);
     }
 
+
 #if QT_VERSION < 0x040000
     connect(fHelpTreeWidget, SIGNAL(selectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
-    connect(fHelpTreeWidget, SIGNAL(doubleClicked (QListViewItem*)),this, SLOT(HelpTreeDoubleClicCallback(QListViewItem*)));
+    connect(fHelpTreeWidget, SIGNAL(doubleClicked (QListViewItem*)),this, SLOT(HelpTreeDoubleClicCallback()));
 #else
     connect(fHelpTreeWidget, SIGNAL(itemSelectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
-    connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback(QTreeWidgetItem*)));  
+    connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback()));  
 #endif
 
     // Set layouts
@@ -1250,16 +1236,34 @@ void G4UIQt::HelpTreeClicCallback (
 /**   This callback is activated when user double clic on a item in the help tree
 */
 void G4UIQt::HelpTreeDoubleClicCallback (
-#if QT_VERSION < 0x040000
-QListViewItem* item
-#else
-QTreeWidgetItem* item
-,int
-#endif
 )
 {
   HelpTreeClicCallback();
-  fCommandArea->setText(item->text (1));
+
+#if QT_VERSION < 0x040000
+  QListViewItem* item =  NULL;
+#else
+  QTreeWidgetItem* item =  NULL;
+#endif
+  if (!fHelpTreeWidget)
+    return ;
+
+  if (!fHelpArea)
+    return;
+  
+#if QT_VERSION < 0x040000
+  item =fHelpTreeWidget->selectedItem();
+#else
+  QList<QTreeWidgetItem *> list =fHelpTreeWidget->selectedItems();
+  if (list.isEmpty())
+    return;
+  item = list.first();
+#endif
+  if (!item)
+    return;
+
+  fCommandArea->clear();
+  fCommandArea->setText(item->text(1));
 }
 
 

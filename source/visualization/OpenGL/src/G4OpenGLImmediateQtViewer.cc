@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.3 2007-11-15 18:24:28 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.4 2008-01-15 11:05:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,7 +138,7 @@ void G4OpenGLImmediateQtViewer::DrawView () {
 
    //Make sure current viewer is attached and clean...
    //Qt version needed
-   glViewport (0, 0, WinSize_x, WinSize_y);
+   //   glViewport (0, 0, WinSize_x, WinSize_y);
 
    if(style!=G4ViewParameters::hlr &&
       haloing_enabled) {
@@ -190,15 +190,7 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int width
 ,int height)
 {  
-  int side = width;
-  if (width > height) {
-    side = height;
-  }
-  glViewport((width - side) / 2, (height - side) / 2, side, side);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-  glMatrixMode(GL_MODELVIEW);
+  setupViewport(width,height);
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLImmediateQtViewer::resizeGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
 #endif
@@ -222,7 +214,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
    WinSize_x = (G4int) width();
    WinSize_y = (G4int) height();
 
-   glViewport (0, 0, width(), height());
+   setupViewport(width(),height());
 
    SetView();
 #ifdef GEANT4_QT_DEBUG

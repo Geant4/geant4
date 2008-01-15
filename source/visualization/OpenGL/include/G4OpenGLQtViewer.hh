@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.5 2007-11-30 14:47:30 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.6 2008-01-15 11:05:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,12 +67,15 @@ public:
   void SetView ();
   void ShowView ();
   virtual void updateQWidget()=0;
+  void setupViewport(int, int);
 
 protected:
   void CreateGLQtContext ();
   virtual void CreateMainWindow (QGLWidget*);
   void manageContextMenuEvent(QContextMenuEvent *e);
   void G4MousePressEvent(QPoint);
+  void G4MouseReleaseEvent(QPoint p);
+  void G4MouseDoubleClickEvent(QPoint p);
 #if QT_VERSION < 0x040000
   void G4MouseMoveEvent(int, int, Qt::ButtonState);
 #else
@@ -91,6 +94,7 @@ private:
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
   void rescaleImage(int, int);
   bool generateEPS(QString,int,QImage);  
+  bool generateVectorEPS (QString,int,int,QImage);
   bool generatePS_PDF(QString,int,QImage);  
 
 #if QT_VERSION < 0x040000
@@ -98,14 +102,23 @@ private:
 #else
   QMenu *fContextMenu;
 #endif
-  bool fMouseAction; // 1: rotate 0:move
+  enum mouseActions {ROTATE, MOVE, ZOOM, PICK}; 
+  mouseActions fMouseAction; // 1: rotate 0:move
   QPoint lastPos;
 #if QT_VERSION < 0x040000
+  QPopupMenu *fMouseRotate;
+  QPopupMenu *fMouseMove;
+  QPopupMenu *fMouseZoom;
+  QPopupMenu *fMousePick;
   QPopupMenu *fDrawingWireframe;
   QPopupMenu *fDrawingLineRemoval;
   QPopupMenu *fDrawingSurfaceRemoval;
   QPopupMenu *fDrawingLineSurfaceRemoval;
 #else
+  QAction *fMouseRotate;
+  QAction *fMouseMove;
+  QAction *fMouseZoom;
+  QAction *fMousePick;
   QAction *fDrawingWireframe;
   QAction *fDrawingLineRemoval;
   QAction *fDrawingSurfaceRemoval;
@@ -113,16 +126,18 @@ private:
 #endif
 
 private slots :
+  void actionMouseRotate();
+  void actionMouseMove();
+  void actionMouseZoom();
+  void actionMousePick();
   void actionDrawingWireframe();
   void actionDrawingLineRemoval();
   void actionDrawingSurfaceRemoval();
   void actionDrawingLineSurfaceRemoval();
-  void actionControlPanels();
-  void actionExitG4();
   void actionCreateEPS();
 
   void toggleDrawingAction(int);
-  void toggleMouseAction(bool);
+  void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
   void toggleBackground(bool);
   void toggleTransparency(bool);
@@ -130,9 +145,8 @@ private slots :
   void toggleHaloing(bool);
   void toggleAux(bool);
   void toggleFullScreen(bool);
-#if QT_VERSION >= 0x040000
+  // Only use for Qt>4.0
   void dialogClosed();
-#endif
 };
 
 #endif

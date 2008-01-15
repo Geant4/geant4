@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.4 2008-01-15 11:05:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,12 +65,18 @@ public:
 protected:
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
 
 private : 
   bool hasToRepaint;
   bool readyToPaint;
+  bool zoomAction;
   int nbPaint;
+  QPoint beginZoom;
+  QPoint endZoom;
+  //  QImage glBufferImage;
 };
 
 #endif

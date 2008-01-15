@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.8 2007-11-30 14:47:30 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.9 2008-01-15 11:05:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,19 @@ void G4OpenGLQtViewer::SetView (
 #endif
 }
 
+/**
+ * Set the viewport of the scene
+ */
+void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
+{
+  int side = qMin(aWidth, aHeight);
+  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
+  glMatrixMode(GL_MODELVIEW);
+}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,9 +123,8 @@ void G4OpenGLQtViewer::ShowView (
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::ShowView  +++++++++++++++++++++\n");
 #endif
-  glFlush ();
   if (!GLWindow) {
-    G4cerr << "Visualization window not defined, please choose one before" << G4endl;
+    G4cerr << "Visualization window not defined, please choose one before\n" << G4endl;
   } else {
 #if QT_VERSION < 0x040000
     GLWindow->setActiveWindow();
@@ -123,6 +135,7 @@ void G4OpenGLQtViewer::ShowView (
     printf("G4OpenGLQtViewer::ShowView -----------------------\n");
 #endif
   }
+  glFlush ();
   //   // Empty the Windows message queue :
   //   MSG event;
   //   while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
@@ -186,7 +199,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #else
     foreach (QWidget *widget, QApplication::allWidgets()) {
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-        GLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        GLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
     }
@@ -211,11 +224,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     GLWindow = new QDialog();
   }
 
-#if QT_VERSION < 0x040000
   QHBoxLayout *mainLayout = new QHBoxLayout(GLWindow);
-#else
-  QHBoxLayout *mainLayout = new QHBoxLayout;
-#endif
 
   mainLayout->addWidget(fWindow);
 
@@ -275,7 +284,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
   ,fContextMenu(0)
-  ,fMouseAction(true)
+  ,fMouseAction(ROTATE)
 {
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer \n");
@@ -291,7 +300,6 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::~G4OpenGLQtViewer \n");
 #endif
-  delete fContextMenu;
 }
 
 
@@ -305,35 +313,98 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 #else
   fContextMenu = new QMenu("All");
 #endif
-  Q_CHECK_PTR( fContextMenu );
+
+#if QT_VERSION < 0x040000
+  QPopupMenu *mMouseAction = new QPopupMenu( fContextMenu );
+  fContextMenu->insertItem("&Mouse actions");
+#else
+  QMenu *mMouseAction = fContextMenu->addMenu("&Mouse actions");
+#endif
 
 #if QT_VERSION < 0x040000
   // === Mouse menu ===
-  QPopupMenu *mMouseAction = new QPopupMenu( fContextMenu );
-  Q_CHECK_PTR( mMouseAction );
 
-#if QT_VERSION < 0x030200
-  QAction *rotate = new QAction("&Rotate scene","&Rotate scene",CTRL+Key_N,mMouseAction);
-  QAction *move =  new QAction("&Move scene","&Move scene",CTRL+Key_M,mMouseAction);
-#else
-  QAction *rotate = new QAction("&Rotate scene",CTRL+Key_N,mMouseAction);
-  QAction *move =  new QAction("&Move scene",CTRL+Key_M,mMouseAction);
-#endif
-  rotate->addTo(mMouseAction);
-  move->addTo(mMouseAction);
+  fMouseRotate = new QPopupMenu(mMouseAction);
+  mMouseAction->insertItem("&Rotate",fMouseRotate);
 
-  fContextMenu->insertItem( "&Mouse action", mMouseAction);
+  mMouseAction->setCheckable(true);
+  fMouseRotate->setCheckable(true);
+
+  fMouseMove = new QPopupMenu(mMouseAction);
+  mMouseAction->insertItem("&Move",fMouseMove);
+  fMouseMove->setCheckable(true);
+
+  fMouseZoom = new QPopupMenu(mMouseAction);
+  mMouseAction->insertItem("&Zoom",fMouseZoom);
+  fMouseZoom->setCheckable(true);
+
+  fMousePick = new QPopupMenu(mMouseAction);
+  mMouseAction->insertItem("&Pick",fMousePick);
+  fMousePick->setCheckable(true);
 
 #else
   // === Mouse menu ===
-  QMenu *mMouseAction = fContextMenu->addMenu("&Mouse action");
 
-  QAction *rotate = mMouseAction->addAction("&Rotate scene");
-  QAction *move = mMouseAction->addAction("&Move scene");
+  fMouseRotate = mMouseAction->addAction("Rotate");
+  fMouseRotate->setCheckable(true);
+
+  fMouseMove = mMouseAction->addAction("Move");
+  fMouseMove->setCheckable(true);
+
+  fMouseZoom = mMouseAction->addAction("Zoom");
+  fMouseZoom->setCheckable(true);
+
+  fMousePick = mMouseAction->addAction("Pick");
+  fMousePick->setCheckable(true);
 #endif
 
   // INIT mMouse
-  createRadioAction(rotate,move,SLOT(toggleMouseAction(bool)),1);
+#if QT_VERSION < 0x040000
+  fMouseRotate->setItemCheckeded(0,true);
+
+  QObject ::connect(fMouseRotate, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionMouseRotate()));
+
+  QObject ::connect(fMouseMove, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionMouseMove()));
+
+  QObject ::connect(fMouseZoom, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionMouseZoom()));
+
+  QObject ::connect(fMousePick, 
+                    SIGNAL(activated(int)),
+                    this, 
+                    SLOT(actionMousePick()));
+
+#else
+  fMouseRotate->setChecked(true);
+
+  QObject ::connect(fMouseRotate, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMouseRotate()));
+
+  QObject ::connect(fMouseMove, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMouseMove()));
+
+  QObject ::connect(fMouseZoom, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMouseZoom()));
+
+  QObject ::connect(fMousePick, 
+                    SIGNAL(triggered(bool)),
+                    this, 
+                    SLOT(actionMousePick()));
+#endif
 
 #if QT_VERSION < 0x040000
   // === Style Menu ===
@@ -518,25 +589,11 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fContextMenu->insertItem("&Actions",mActions);
 
 #if QT_VERSION < 0x030200
-  QAction *controlPanels = new QAction("&Control panels","&Control panels",CTRL+Key_C,mActions);
-  QAction *exitG4 =  new QAction("&Exit to G4Vis >","&Exit to G4Vis >",CTRL+Key_E,mActions);
   QAction *createEPS =  new QAction("&Save as ...","&Save as ...",CTRL+Key_S,mActions);
 #else
-  QAction *controlPanels = new QAction("&Control panels",CTRL+Key_C,mActions);
-  QAction *exitG4 =  new QAction("&Exit to G4Vis >",CTRL+Key_E,mActions);
   QAction *createEPS =  new QAction("&Save as ...",CTRL+Key_S,mActions);
 #endif
-  controlPanels->addTo(mActions);
-  exitG4->addTo(mActions);
   createEPS->addTo(mActions);
-  QObject ::connect(controlPanels, 
-                    SIGNAL(activated()),
-                    this, 
-                    SLOT(actionControlPanels()));
-  QObject ::connect(exitG4, 
-                    SIGNAL(activated()),
-                    this, 
-                    SLOT(actionExitG4()));
   QObject ::connect(createEPS, 
                     SIGNAL(activated()),
                     this,
@@ -545,17 +602,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 #else
   // === Action Menu ===
   QMenu *mActions = fContextMenu->addMenu("&Actions");
-  QAction *controlPanels = mActions->addAction("Control panels");
-  QAction *exitG4 = mActions->addAction("Exit to G4Vis >");
   QAction *createEPS = mActions->addAction("Save as ...");
-  QObject ::connect(controlPanels, 
-                    SIGNAL(triggered()),
-                    this, 
-                    SLOT(actionControlPanels()));
-  QObject ::connect(exitG4, 
-                    SIGNAL(triggered()),
-                    this, 
-                    SLOT(actionExitG4()));
   QObject ::connect(createEPS, 
                     SIGNAL(triggered()),
                     this,
@@ -701,7 +748,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 void G4OpenGLQtViewer::manageContextMenuEvent(QContextMenuEvent *e)
 {
   if (!GLWindow) {
-    G4cerr << "Visualization window not defined, please choose one before" << G4endl;
+    G4cerr << "Visualization window not defined, please choose one before\n" << G4endl;
   } else {
   
     if (!fContextMenu) 
@@ -766,6 +813,40 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
 #endif
 
 /**
+   Slot activate when mouseAction->rotate menu is set 
+ */
+void G4OpenGLQtViewer::actionMouseRotate() {
+  emit toggleMouseAction(ROTATE);
+}
+
+/**
+   Slot activate when mouseAction->move menu is set 
+ */
+void G4OpenGLQtViewer::actionMouseMove() {
+  emit toggleMouseAction(MOVE);
+}
+
+/**
+   Slot activate when mouseAction->pick menu is set 
+ */
+void G4OpenGLQtViewer::actionMouseZoom() {
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::actionMouseZoom \n");
+#endif
+  emit toggleMouseAction(ZOOM);
+}
+
+/**
+   Slot activate when mouseAction->zoom menu is set 
+ */
+void G4OpenGLQtViewer::actionMousePick() {
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::actionMousePick \n");
+#endif
+  emit toggleMouseAction(PICK);
+}
+
+/**
    Slot activate when drawing->wireframe menu is set 
  */
 void G4OpenGLQtViewer::actionDrawingWireframe() {
@@ -794,6 +875,71 @@ void G4OpenGLQtViewer::actionDrawingLineSurfaceRemoval() {
 }
 
 
+/**
+   Slot activated when mouse action is toggle
+   @param aAction : ROTATE, MOVE, ZOOM
+ */
+void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
+  
+  if (aAction == ROTATE) {
+#if QT_VERSION < 0x040000
+    fMouseRotate->setItemChecked (0,true);
+    fMouseMove->setItemChecked (0,false);
+    fMouseZoom->setItemChecked (0,false);
+    fMousePick->setItemChecked (0,false);
+#else
+    fMouseRotate->setChecked (true);
+    fMouseMove->setChecked (false);
+    fMouseZoom->setChecked (false);
+    fMousePick->setChecked (false);
+#endif
+    fMouseAction = ROTATE;
+    fVP.SetPicking(false);
+  } else  if (aAction == MOVE) {
+#if QT_VERSION < 0x040000
+    fMouseRotate->setItemChecked (0,false);
+    fMouseMove->setItemChecked (0,true);
+    fMouseZoom->setItemChecked (0,false);
+    fMousePick->setItemChecked (0,false);
+#else
+    fMouseRotate->setChecked (false);
+    fMouseMove->setChecked (true);
+    fMouseZoom->setChecked (false);
+    fMousePick->setChecked (false);
+#endif
+    fMouseAction = MOVE;
+    fVP.SetPicking(false);
+  } else  if (aAction == ZOOM) {
+#if QT_VERSION < 0x040000
+    fMouseRotate->setItemChecked (0,false);
+    fMouseMove->setItemChecked (0,false);
+    fMouseZoom->setItemChecked (0,true);
+    fMousePick->setItemChecked (0,false);
+#else
+    fMouseRotate->setChecked (false);
+    fMouseMove->setChecked (false);
+    fMouseZoom->setChecked (true);
+    fMousePick->setChecked (false);
+#endif
+    fMouseAction = ZOOM;
+    fVP.SetPicking(false);
+  } else  if (aAction == PICK) {
+#if QT_VERSION < 0x040000
+    fMouseRotate->setItemChecked (0,false);
+    fMouseMove->setItemChecked (0,false);
+    fMouseZoom->setItemChecked (0,false);
+    fMousePick->setItemChecked (0,true);
+#else
+    fMouseRotate->setChecked (false);
+    fMouseMove->setChecked (false);
+    fMouseZoom->setChecked (false);
+    fMousePick->setChecked (true);
+#endif
+    fVP.SetPicking(true);
+    fMouseAction = PICK;
+  }
+
+}
 /**
    Slot activated when drawing menu is toggle
    Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
@@ -1011,39 +1157,10 @@ void G4OpenGLQtViewer::toggleFullScreen(bool check) {
 #if QT_VERSION >= 0x030200
   GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
 #else
-  G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
+  G4cerr << "This version of G4UI Could not generate the selected format\n" << G4endl;
 #endif
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
-}
-
-/**
-   SLOT Activate by a click on the mouse action menu
-   @param check : 1 , 0
-*/
-void G4OpenGLQtViewer::toggleMouseAction(bool check) {
-  if (check) { // rotate scene
-    fMouseAction = true;
-  } else { // move scene
-    fMouseAction = false;
-  }
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
-}
-
-
-void G4OpenGLQtViewer::actionControlPanels() {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionControlPanels \n");
-#endif
-}
-
-void G4OpenGLQtViewer::actionExitG4() {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionExitG4() \n");
 #endif
 }
 
@@ -1065,84 +1182,100 @@ void G4OpenGLQtViewer::actionCreateEPS() {
   filters += "eps;;";
   filters += "ps;;";
   filters += "pdf";
-  QString* selectedFilter = new QString();
+  QString* selectedFormat = new QString();
 #if QT_VERSION < 0x040000
   QString nomFich =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
                                                     GLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
-                                                    selectedFilter ); 
+                                                    selectedFormat ); 
 #else
   QString nomFich =  QFileDialog::getSaveFileName ( GLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
-                                                    selectedFilter ); 
+                                                    selectedFormat ); 
 #endif
   // bmp jpg jpeg png ppm xbm xpm
   if (nomFich == "") {
     return;
   }
 #if QT_VERSION < 0x040000
-  nomFich += "."+selectedFilter->lower();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::name %s\n",nomFich.ascii());
-#endif
+  nomFich += "."+QString(selectedFormat->ascii());
+  QString format = selectedFormat->lower();
 #else
-  nomFich += "."+selectedFilter->toLower();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::name %s\n",nomFich.toStdString().c_str());
+  nomFich += "."+QString(selectedFormat->toStdString().c_str());
+  QString format = selectedFormat->toLower();
 #endif
-#endif
-  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,nomFich,fWindow->height(),fWindow->width());
+  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
     QImage image;
-    //    if ((exportDialog->getWidth() !=fWindow->width()) ||
-    //        (exportDialog->getHeight() !=fWindow->height())) {
+    bool res = false;
+    if ((exportDialog->getWidth() !=fWindow->width()) ||
+        (exportDialog->getHeight() !=fWindow->height())) {
+      if (format != QString("eps")) {
+      G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need\n" << G4endl;
       
-      //      rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
-#ifdef GEANT4_QT_DEBUG
-      printf("rescaling\n");
-#endif
-      QGLWidget* glResized = fWindow;
-      fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2 ).save("/Users/laurentgarnier/Desktop/zzz.jpg","jpg");
-      QPixmap * pixmap = new QPixmap(fWindow->renderPixmap (exportDialog->getWidth(),exportDialog->getHeight() )) ;
-      //      image = pixmap.toImage();
+      //    rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
+      //      QGLWidget* glResized = fWindow;
+
+      // FIXME :
+      // L.Garnier : I've try to implement change size function, but the problem is 
+      // the renderPixmap function call the QGLWidget to resize and it doesn't draw
+      // the content of this widget... It only draw the background.
+
+      //      fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2,true );
+
+      //      QPixmap pixmap = fWindow->renderPixmap ();
+      
+      //      image = pixmap->toImage();
       //      glResized->resize(exportDialog->getWidth()*2,exportDialog->getHeight()*2);
-#ifdef GEANT4_QT_DEBUG
-      printf("rescaling after\n");
-#endif
       //      image = glResized->grabFrameBuffer();
-      
-      //    } else {
-      // image = fWindow->grabFrameBuffer();
-      //  }    
-    // jpeg format
-    if (nomFich.endsWith(".jpg") || 
-        nomFich.endsWith(".jpeg")) {
-      // grabFrameBuffer() :: Returns an image of the frame buffer. If withAlpha is true the alpha channel is included.
-      image.save(nomFich,0,exportDialog->getSliderValue());
-#ifdef GEANT4_QT_DEBUG
-      printf("saving jpeg quality : %d\n",exportDialog->getSliderValue());
-#endif
-    } else if (nomFich.endsWith(".eps")) {
-      generateEPS(nomFich,exportDialog->getNbColor(),image);
-    } else if (nomFich.endsWith(".ps") ||nomFich.endsWith(".pdf")) {
-      generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
-    } else if (nomFich.endsWith(".tif") ||
-               nomFich.endsWith(".tiff") ||
-               nomFich.endsWith(".jpg") ||
-               nomFich.endsWith(".png") ||
-               nomFich.endsWith(".bmp") ||
-               nomFich.endsWith(".xpm")) {
-      image.save(nomFich,0,exportDialog->getSliderValue());
-#ifdef GEANT4_QT_DEBUG
-      printf("saving ELSE\n");
+      }      
+    } else {
+      image = fWindow->grabFrameBuffer();
+    }    
+    if (format == QString("eps")) {
+      if (exportDialog->getVectorEPS()) {
+        res = generateVectorEPS(nomFich,exportDialog->getWidth(),exportDialog->getHeight(),image);
+      } else {
+        res = generateEPS(nomFich,exportDialog->getNbColor(),image);
+      }
+    } else if ((format == "ps") || (format == "pdf")) {
+      res = generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
+    } else if ((format == "tif") ||
+               (format == "tiff") ||
+               (format == "jpg") ||
+               (format == "jpeg") ||
+               (format == "png") ||
+               (format == "pbm") ||
+               (format == "pgm") ||
+               (format == "ppm") ||
+               (format == "bmp") ||
+               (format == "xbm") ||
+               (format == "xpm")) {
+#if QT_VERSION < 0x040000
+      res = image.save(nomFich,selectedFormat->ascii(),exportDialog->getSliderValue());
+#else
+      res = image.save(nomFich,0,exportDialog->getSliderValue());
 #endif
     } else {
-      G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
+      G4cerr << "This version of G4UI Could not generate the selected format\n" << G4endl;
+    }
+    if (res == false) {
+#if QT_VERSION < 0x040000
+      G4cerr << "Error while saving file... "<<nomFich.ascii()<<"\n" << G4endl;
+#else
+      G4cerr << "Error while saving file... "<<nomFich.toStdString().c_str()<<"\n" << G4endl;
+#endif
+    } else {
+#if QT_VERSION < 0x040000
+      G4cout << "File "<<nomFich.ascii()<<" has been saved \n" << G4endl;
+#else
+      G4cout << "File "<<nomFich.toStdString().c_str()<<" has been saved \n" << G4endl;
+#endif
     }
     
   } else { // cancel selected
@@ -1180,6 +1313,9 @@ void Graph::exportToSVG(const QString& fname)
 void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 {
   lastPos = p;
+  if (fMouseAction == PICK){  // pick
+    Pick(p.x(),p.y());
+  }
 }
 
 /**
@@ -1196,8 +1332,7 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mB
 {
   int dx = pos_x - lastPos.x();
   int dy = pos_y - lastPos.y();
-  
-  if (fMouseAction) {  // rotate
+  if (fMouseAction == ROTATE) {  // rotate
     if (mButtons & Qt::LeftButton) {
       //phi spin stuff here
       
@@ -1252,37 +1387,44 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mB
       
     } else if (mButtons & Qt::RightButton) {
       // NEVER DONE BECAUSE OF MOUSE MENU
-#ifdef GEANT4_QT_DEBUG
-      //       printf("G4OpenGLQtViewer::mouseMoveEvent Right \n");
-#endif
       //       setXRotation(xRot + dy/2);
       //       setZRotation(zRot + dx/2);
       //       updateQWidget();
     }
-  } else {  // move
-
-    float dx = pos_x - lastPos.x();
-    float dy = pos_y - lastPos.y();
-    
-    G4Point3D stp
-      = GetSceneHandler()->GetScene()->GetStandardTargetPoint();
-    
-    G4Point3D tp = stp + fVP.GetCurrentTargetPoint ();
-    
-    const G4Vector3D& upVector = fVP.GetUpVector ();
-    const G4Vector3D& vpVector = fVP.GetViewpointDirection ();
-    
-    G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
-    G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
-    
-    tp += -dx * unitRight + dy * unitUp;
-    fVP.SetCurrentTargetPoint (tp - stp);
-    
-    updateQWidget();
+  } else   if (fMouseAction == MOVE){  // move
+    if (mButtons & Qt::LeftButton) {
+      
+      float dx = pos_x - lastPos.x();
+      float dy = pos_y - lastPos.y();
+      
+      G4Point3D stp
+        = GetSceneHandler()->GetScene()->GetStandardTargetPoint();
+      
+      G4Point3D tp = stp + fVP.GetCurrentTargetPoint ();
+      
+      const G4Vector3D& upVector = fVP.GetUpVector ();
+      const G4Vector3D& vpVector = fVP.GetViewpointDirection ();
+      
+      G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
+      G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
+      
+      tp += -dx * unitRight + dy * unitUp;
+      fVP.SetCurrentTargetPoint (tp - stp);
+      
+      updateQWidget();
+    }
+  } else   if (fMouseAction == ZOOM){  // zoom
+    if (mButtons & Qt::LeftButton) {
+      G4cerr << "Zoom not implemented for the moment\n" << G4endl;
+    }
   }
   lastPos = QPoint(pos_x, pos_y);
 }
 
+/** This is the benning of a rescale function. It does nothing for the moment
+    @param aWidth : new width
+    @param aHeight : new height
+*/
 void G4OpenGLQtViewer::rescaleImage(
  int aWidth
 ,int aHeight
@@ -1290,10 +1432,74 @@ void G4OpenGLQtViewer::rescaleImage(
 #ifdef GEANT4_QT_DEBUG
   printf("should rescale \n");
 #endif
+  GLfloat* feedback_buffer;
+  GLint returned;
+  FILE* file;
+  
+//   feedback_buffer = new GLfloat[size];
+//   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
+//   glRenderMode (GL_FEEDBACK);
+  
+//   glViewport (0, 0, aWidth, aHeight);
+//   DrawView();
+//   returned = glRenderMode (GL_RENDER);
+
 }
 
 /**
-   Generate Postscript form image
+   Generate Vectorial Encapsulated Postscript form image
+   @param aFilename : name of file
+   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
+   @param aImage : Image to print
+*/
+bool G4OpenGLQtViewer::generateVectorEPS (
+ QString aFilename
+,int aWidth
+,int aHeight
+,QImage aImage
+)
+{
+  // Print vectored PostScript
+  
+  G4int size = 5000000;
+
+  GLfloat* feedback_buffer;
+  GLint returned;
+  FILE* file;
+  
+  feedback_buffer = new GLfloat[size];
+  glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
+  glRenderMode (GL_FEEDBACK);
+  
+  int side = qMin(aWidth, aHeight);
+  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  DrawView();
+
+  returned = glRenderMode (GL_RENDER);
+  
+  
+#if QT_VERSION < 0x040000
+  file = fopen (aFilename.ascii(), "w");
+#else
+  file = fopen (aFilename.toStdString().c_str(), "w");
+#endif
+  if (file) {
+    spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
+  } else {
+#if QT_VERSION < 0x040000
+    G4cerr << "Could not open "<< aFilename.ascii()<<"\n" << G4endl;
+#else
+    G4cerr << "Could not open "<< aFilename.toStdString().c_str()<<"\n" << G4endl;
+#endif
+  }
+  
+  delete[] feedback_buffer;
+
+  return true;
+}
+
+/**
+   Generate Encapsulated Postscript form image
    @param aFilename : name of file
    @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
    @param aImage : Image to print
@@ -1311,16 +1517,7 @@ bool G4OpenGLQtViewer::generateEPS (
 
   FILE* fp;
 
-  if ((!aImage.isGrayscale ()) &&(aInColor ==1 )) {
-#if QT_VERSION < 0x040000
-    aImage.convertDepth(1,Qt::MonoOnly);
-#else
-    aImage.convertToFormat ( aImage.format(), Qt::MonoOnly);
-#endif
-  }
-  const uchar * pixels = aImage.bits ();
-    
-  if (pixels == NULL)
+  if (aImage.bits () == NULL)
     return false;
   
 #if QT_VERSION < 0x040000
@@ -1381,28 +1578,12 @@ bool G4OpenGLQtViewer::generateEPS (
     size = size*3;
   
   int i = 0;
-  if (depth == 1) {
-    //  To be implemented
-    //    QImage::Endian bitOrder = aImage.bitOrder();
-    /*    for(int y=0; y < height; y++) {
-      const uchar * s = aImage.scanLine(y);
-      for(int x=0; x < width; x++) {
-        // need to copy bit for bit...
-        bool b = (bitOrder == QImage::LittleEndian) ?
-          (*(s + (x >> 3)) >> (x & 7)) & 1 :
-          (*(s + (x >> 3)) << (x & 7)) & 0x80 ;
-        if (b)
-          pixel[i >> 3] ^= (0x80 >> (i & 7));
-        i++;
-      }
-      // we need to align to 8 bit here
-      i = (i+7) & 0xffffff8;
-    }
-    */
-  } else if (depth == 8) {
-#ifdef GEANT4_QT_DEBUG
-    printf("has 8 bit\n");
-#endif
+  //  if ( aInColor ==1 ) {
+  // FIXME : L. Garnier. For the moment 10 dec 2007, I could not find a way
+  // to save correctly grayscale Image. I mean that color or grayscale image
+  // have the same file save size !
+  
+  /* } else*/ if (depth == 8) {
     for(int y=height-1; y >=0 ; y--) {
       const uchar * s = aImage.scanLine(y);
       for(int x=0; x <width; x++) {
@@ -1422,12 +1603,9 @@ bool G4OpenGLQtViewer::generateEPS (
     }
   } else {
 #if QT_VERSION < 0x040000
-  G4cerr << "GenerateEPS:: No alpha channel image with Qt3. This is only supported with Qt4" << G4endl;
+    bool alpha = aImage.hasAlphaBuffer();
 #else
     bool alpha = aImage.hasAlphaChannel();
-#ifdef GEANT4_QT_DEBUG
-    printf("has else %d alpha %d\n",depth,alpha);
-#endif
     for(int y=height-1; y >=0 ; y--) {
       QRgb * s = (QRgb*)(aImage.scanLine(y));
       for(int x=0; x <width; x++) {
@@ -1469,6 +1647,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 ,QImage aImage
 )
 {
+
 #if QT_VERSION < 0x040000
 #ifdef Q_WS_MAC || Q_WS_X11
   QPrinter printer;
@@ -1492,16 +1671,23 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   paint.drawImage (0,0,aImage );
   paint.end();
 #else
-  G4cerr << "This fonction is only supported on Mac OsX or X11 with Qt3. Full platform supported with Qt4" << G4endl;
+  G4cerr << "This fonction is only supported on Mac OsX or X11 with Qt3. Full platform supported with Qt4\n" << G4endl;
 #endif
 #else
   QPrinter printer;
   //  printer.setPageSize(pageSize);
-  if (aInColor == 1) {
-    printer.setColorMode(QPrinter::GrayScale);
-  } else {
-    printer.setColorMode(QPrinter::Color);
+
+  // FIXME : L. Garnier 4/12/07
+  // This is not working, it does nothing. Image is staying in color mode
+  // So I have desactivate the B/W button in GUI
+  if ((!aImage.isGrayscale ()) &&(aInColor ==1 )) {
+#if QT_VERSION < 0x040000
+    aImage = aImage.convertDepth(1,Qt::MonoOnly);
+#else
+    aImage = aImage.convertToFormat ( aImage.format(), Qt::MonoOnly);
+#endif
   }
+
 
   if (aFilename.endsWith(".ps")) {
 #if QT_VERSION > 0x040200
@@ -1517,7 +1703,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 #endif
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
-  paint.drawImage (0,0,aImage );
+  paint.drawImage (0,0,aImage);
   paint.end();
 #endif
   return true;

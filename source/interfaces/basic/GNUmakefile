@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2007-10-29 18:49:45 asaim Exp $
+# $Id: GNUmakefile,v 1.5 2008-01-15 11:04:26 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/basic library.  John Allison, 6/7/98.
 
@@ -7,6 +7,9 @@ name := G4UIbasic
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+# Definition of macro for moc files (for Qt use only)
+MOC_MACRO = -DG4UI_BUILD_QT_SESSION
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk
