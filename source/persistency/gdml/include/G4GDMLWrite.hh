@@ -53,6 +53,7 @@ public:
    void Write(const G4String&,const G4LogicalVolume*);
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
+   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
 };
 
 #endif

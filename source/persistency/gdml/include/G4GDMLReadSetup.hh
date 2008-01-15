@@ -23,23 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLSetup.hh,v 1.11 2008-01-14 11:27:54 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLSetup
-//
-// Class description:
-//
 // GDML class for geometry setup of physical volumes.
-
+//
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLSETUP_INCLUDED_
-#define _G4GDMLSETUP_INCLUDED_
+#ifndef _G4GDMLREADSETUP_INCLUDED_
+#define _G4GDMLREADSETUP_INCLUDED_
 
 #include <map>
 
@@ -47,7 +38,7 @@
 
 #include "G4GDMLReadSolids.hh"
 
-class G4GDMLSetup : public G4GDMLReadSolids {
+class G4GDMLReadSetup : public G4GDMLReadSolids {
 private:
    std::map<G4String,G4String> setupMap;
    void setupRead(const xercesc::DOMElement* const element);

@@ -23,40 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// Class description:
+//
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLPARAMVOL_INCLUDED_
-#define _G4GDMLPARAMVOL_INCLUDED_
+#ifndef _G4GDMLWRITESETUP_INCLUDED_
+#define _G4GDMLWRITESETUP_INCLUDED_
 
-#include "G4LogicalVolume.hh"
-#include "G4PVParameterised.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4GDMLWriteStructure.hh"
 
-#include "G4GDMLParameterisation.hh"
-#include "G4GDMLReadSetup.hh"
-
-class G4GDMLParamvol : public G4GDMLReadSetup {
-
-   G4GDMLParameterisation* parameterisation;
-
-   void box_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void trd_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void trap_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void tube_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void cone_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void sphere_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void orb_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void torus_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void para_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void hype_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-  
-   void parametersRead(const xercesc::DOMElement* const);
-   void paramvol_contentRead(const xercesc::DOMElement* const);
-protected:
-   void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+class G4GDMLWriteSetup : public G4GDMLWriteStructure {
+private:
+   void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
 };
 
 #endif
