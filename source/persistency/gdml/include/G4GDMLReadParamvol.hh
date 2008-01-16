@@ -27,8 +27,8 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLPARAMVOL_INCLUDED_
-#define _G4GDMLPARAMVOL_INCLUDED_
+#ifndef _G4GDMLREADPARAMVOL_INCLUDED_
+#define _G4GDMLREADPARAMVOL_INCLUDED_
 
 #include "G4LogicalVolume.hh"
 #include "G4PVParameterised.hh"
@@ -38,7 +38,7 @@
 #include "G4GDMLParameterisation.hh"
 #include "G4GDMLReadSetup.hh"
 
-class G4GDMLParamvol : public G4GDMLReadSetup {
+class G4GDMLReadParamvol : public G4GDMLReadSetup {
 
    G4GDMLParameterisation* parameterisation;
 

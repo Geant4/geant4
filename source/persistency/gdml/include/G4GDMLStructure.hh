@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.hh,v 1.23 2008-01-10 13:25:48 ztorzsok Exp $
+// $Id: G4GDMLStructure.hh,v 1.24 2008-01-16 10:04:07 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,9 +51,9 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ReflectionFactory.hh"
 
-#include "G4GDMLParamvol.hh"
+#include "G4GDMLReadParamvol.hh"
 
-class G4GDMLStructure : public G4GDMLParamvol {
+class G4GDMLStructure : public G4GDMLReadParamvol {
 public:
    typedef std::pair<G4String,G4String> AuxPairType;
    typedef std::vector<AuxPairType> AuxListType;

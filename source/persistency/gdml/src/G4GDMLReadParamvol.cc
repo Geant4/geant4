@@ -1,6 +1,6 @@
-#include "G4GDMLParamvol.hh"
+#include "G4GDMLReadParamvol.hh"
 
-void G4GDMLParamvol::box_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::box_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
 
@@ -29,7 +29,7 @@ void G4GDMLParamvol::box_dimensionsRead(const xercesc::DOMElement* const element
    parameter.dimension[2] *= 0.5*lunit;
 }
 
-void G4GDMLParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
 
@@ -62,7 +62,7 @@ void G4GDMLParamvol::trd_dimensionsRead(const xercesc::DOMElement* const element
    parameter.dimension[4] *= 0.5*lunit;
 }
 
-void G4GDMLParamvol::trap_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::trap_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -109,7 +109,7 @@ void G4GDMLParamvol::trap_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[10] *= aunit;
 }
 
-void G4GDMLParamvol::tube_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::tube_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -144,7 +144,7 @@ void G4GDMLParamvol::tube_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[4] *= aunit;
 }
 
-void G4GDMLParamvol::cone_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::cone_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -183,7 +183,7 @@ void G4GDMLParamvol::cone_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[6] *= aunit;
 }
 
-void G4GDMLParamvol::sphere_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::sphere_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -220,7 +220,7 @@ void G4GDMLParamvol::sphere_dimensionsRead(const xercesc::DOMElement* const elem
    parameter.dimension[5] *= aunit;
 }
 
-void G4GDMLParamvol::orb_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::orb_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
 
@@ -245,7 +245,7 @@ void G4GDMLParamvol::orb_dimensionsRead(const xercesc::DOMElement* const element
    parameter.dimension[0] *= lunit;
 }
 
-void G4GDMLParamvol::torus_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::torus_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -280,7 +280,7 @@ void G4GDMLParamvol::torus_dimensionsRead(const xercesc::DOMElement* const eleme
    parameter.dimension[4] *= aunit;
 }
 
-void G4GDMLParamvol::para_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::para_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -317,7 +317,7 @@ void G4GDMLParamvol::para_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[5] = aunit;
 }
 
-void G4GDMLParamvol::hype_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
+void G4GDMLReadParamvol::hype_dimensionsRead(const xercesc::DOMElement* const element,G4GDMLParameterisation::PARAMETER& parameter) {
 
    G4double lunit = 1.0;
    G4double aunit = 1.0;
@@ -352,7 +352,7 @@ void G4GDMLParamvol::hype_dimensionsRead(const xercesc::DOMElement* const elemen
    parameter.dimension[4] = 0.5*lunit;
 }
 
-void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector rotation;
    G4ThreeVector position;
@@ -392,7 +392,7 @@ void G4GDMLParamvol::parametersRead(const xercesc::DOMElement* const element) {
    parameterisation->addParameter(parameter);
 }
 
-void G4GDMLParamvol::paramvol_contentRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadParamvol::paramvol_contentRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -407,7 +407,7 @@ void G4GDMLParamvol::paramvol_contentRead(const xercesc::DOMElement* const eleme
     }
 }
 
-void G4GDMLParamvol::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* mother) {
+void G4GDMLReadParamvol::paramvolRead(const xercesc::DOMElement* const element,G4LogicalVolume* mother) {
 
    G4String volumeref;
 
