@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.34 2007-11-28 17:47:57 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.35 2008-01-16 12:53:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1029,14 +1029,15 @@ void G4ProcessManager::CreateGPILvectors()
 
 
 
-
-
 //////////////////////////////////////////
 void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
-  for (G4int idx = 0; idx<theProcessList->entries(); idx++){
-    if (GetAttribute(idx)->isActive)
+  for (G4int idx = idx<theProcessList->entries()-1; idx>=0; idx -= 1 ){
+    // processes in the ProcessList are invoked in the reverse order
+    // in order that transportation will be called at the last 
+    if (GetAttribute(idx)->isActive) {
       ((*theProcessList)[idx])->StartTracking(aTrack);
+    }
   }
   if(aTrack) duringTracking = true;
 }
@@ -1045,8 +1046,9 @@ void G4ProcessManager::StartTracking(G4Track* aTrack)
 void G4ProcessManager::EndTracking()
 {
   for (G4int idx = 0; idx<theProcessList->entries(); idx++){
-    if (GetAttribute(idx)->isActive)
+    if (GetAttribute(idx)->isActive){
       ((*theProcessList)[idx])->EndTracking();
+    }
   }
   duringTracking = false;
 }
