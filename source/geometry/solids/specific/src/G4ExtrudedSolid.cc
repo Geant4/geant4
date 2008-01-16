@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.7 2007-05-02 14:59:31 gunter Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.8 2008-01-16 11:53:50 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -460,20 +460,6 @@ G4bool G4ExtrudedSolid::MakeFacets()
 
   G4bool good;
   
-  // The quadrangular sides
-  //
-  for ( G4int iz = 0; iz < fNz-1; ++iz ) 
-  {
-    for ( G4int i = 0; i < fNv; ++i )
-    {
-      G4int j = (i+1) % fNv;
-      good = AddFacet( new G4QuadrangularFacet
-                        ( GetVertex(iz, j), GetVertex(iz, i), 
-                          GetVertex(iz+1, i), GetVertex(iz+1, j), ABSOLUTE) );
-      if ( ! good ) { return false; }
-    }
-  }  
-
   // Decomposition of polygonal sides in the facets
   //
   if ( fNv == 3 )
@@ -505,6 +491,20 @@ G4bool G4ExtrudedSolid::MakeFacets()
     if ( ! good ) { return false; }
   }
     
+  // The quadrangular sides
+  //
+  for ( G4int iz = 0; iz < fNz-1; ++iz ) 
+  {
+    for ( G4int i = 0; i < fNv; ++i )
+    {
+      G4int j = (i+1) % fNv;
+      good = AddFacet( new G4QuadrangularFacet
+                        ( GetVertex(iz, j), GetVertex(iz, i), 
+                          GetVertex(iz+1, i), GetVertex(iz+1, j), ABSOLUTE) );
+      if ( ! good ) { return false; }
+    }
+  }  
+
   SetSolidClosed(true);
 
   return good;
