@@ -23,8 +23,8 @@
       <box name="WorldBox" y="1000" x="1000" z="1000"/>
       <xtru name="Extruded">
         <twoDimVertex x="0" y="0"/>
-        <twoDimVertex x="XSize" y="0"/>
         <twoDimVertex x="0" y="YSize"/>
+        <twoDimVertex x="XSize" y="0"/>
         <section zOrder="0" zPosition="0" xOffset="0" yOffset="0" scalingFactor="1.0"/>
         <section zOrder="1" zPosition="ZSize" xOffset="0" yOffset="0" scalingFactor="0.5"/>
       </xtru>
