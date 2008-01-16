@@ -24,37 +24,27 @@
 // ********************************************************************
 //
 //
-// Class description:
+// Original author: Zoltan Torzsok, November 2007
 //
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-#ifndef _G4GDMLWRITE_INCLUDED_
-#define _G4GDMLWRITE_INCLUDED_
+#include "G4GDMLWriteMaterials.hh"
 
-#include <iostream>
+void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/LocalFileFormatTarget.hpp>
+   xercesc::DOMElement* materialsElement = newElement("materials");
 
-#include "G4LogicalVolume.hh"
+/*
+   const G4SolidStore* solidList = G4SolidStore::GetInstance();
+   const G4int solidCount = solidList->size();
 
-class G4GDMLWrite {
-   xercesc::DOMDocument* doc;
-   XMLCh tempStr[100];
-protected:
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
-   xercesc::DOMElement* newElement(const G4String&);
-public:
-   void Write(const G4String&,const G4LogicalVolume*);
-   virtual void materialsWrite(xercesc::DOMElement*)=0;
-   virtual void solidsWrite(xercesc::DOMElement*)=0;
-   virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-};
 
-#endif
+   for (G4int i=0;i<solidCount;i++) {
+   
+      const G4VSolid* solidPtr = (*solidList)[i];
+
+      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); }
+   }
+*/
+   element->appendChild(materialsElement);
+}

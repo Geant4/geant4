@@ -85,11 +85,12 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
       writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
 
-   xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
-
+   materialsWrite(root);
    solidsWrite(root);
    structureWrite(root);
    setupWrite(root,logvol);
+
+   xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
    try {
       writer->writeNode(myFormTarget,*root);

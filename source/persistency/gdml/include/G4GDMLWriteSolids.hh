@@ -36,9 +36,9 @@
 #include "G4Box.hh"
 #include "G4SolidStore.hh"
 
-#include "G4GDMLWrite.hh"
+#include "G4GDMLWriteMaterials.hh"
 
-class G4GDMLWriteSolids : public G4GDMLWrite {
+class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void solidsWrite(xercesc::DOMElement*);
