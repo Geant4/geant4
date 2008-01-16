@@ -93,7 +93,7 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
    try {
-      writer->writeNode(myFormTarget,*root);
+      writer->writeNode(myFormTarget,*doc);
    } catch (const xercesc::XMLException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.getMessage());
