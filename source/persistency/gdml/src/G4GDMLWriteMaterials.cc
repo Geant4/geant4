@@ -30,21 +30,53 @@
 
 #include "G4GDMLWriteMaterials.hh"
 
+void G4GDMLWriteMaterials::atomWrite(xercesc::DOMElement* element,G4double a) {
+
+   a /= (g/mole);
+
+   xercesc::DOMElement* atomElement = newElement("atom");
+   atomElement->setAttributeNode(newAttribute("unit","g/mole"));
+   atomElement->setAttributeNode(newAttribute("value",a));
+   element->appendChild(atomElement);
+}
+
+void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,G4double d) {
+
+   d /= (g/cm3);
+
+   xercesc::DOMElement* DElement = newElement("D");
+   DElement->setAttributeNode(newAttribute("unit","g/cm3"));
+   DElement->setAttributeNode(newAttribute("value",d));
+   element->appendChild(DElement);
+}
+
+void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element) {
+
+   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
+   const G4int materialCount = materialList->size();
+
+   for (G4int i=0;i<materialCount;i++) {
+   
+      const G4Material* materialPtr = (*materialList)[i];
+
+      xercesc::DOMElement* materialElement = newElement("material");
+    
+      materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
+      materialElement->setAttributeNode(newAttribute("Z",materialPtr->GetZ()));
+    
+      atomWrite(materialElement,materialPtr->GetA());    
+    
+      DWrite(materialElement,materialPtr->GetDensity());
+      
+      element->appendChild(materialElement);
+   }
+}
+
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
    xercesc::DOMElement* materialsElement = newElement("materials");
 
-/*
-   const G4SolidStore* solidList = G4SolidStore::GetInstance();
-   const G4int solidCount = solidList->size();
+   materialWrite(materialsElement);
 
-
-   for (G4int i=0;i<solidCount;i++) {
-   
-      const G4VSolid* solidPtr = (*solidList)[i];
-
-      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); }
-   }
-*/
    element->appendChild(materialsElement);
 }

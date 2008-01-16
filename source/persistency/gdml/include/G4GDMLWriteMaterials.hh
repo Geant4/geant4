@@ -33,9 +33,14 @@
 #ifndef _G4GDMLWRITEMATERIALS_INCLUDED_
 #define _G4GDMLWRITEMATERIALS_INCLUDED_
 
+#include "G4Material.hh"
+
 #include "G4GDMLWrite.hh"
 
 class G4GDMLWriteMaterials : public G4GDMLWrite {
+   void atomWrite(xercesc::DOMElement*,G4double);
+   void DWrite(xercesc::DOMElement*,G4double);
+   void materialWrite(xercesc::DOMElement*);
 private:
    void materialsWrite(xercesc::DOMElement*);
 };
