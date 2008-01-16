@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2008-01-15 13:04:10 ztorzsok Exp $
+$Id: History,v 1.8 2008-01-16 12:20:05 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 January 2008 Z.Torzsok
+- Starting the materials section
 
 15 January 2008 Z.Torzsok
 - Writer implements the setup section too
