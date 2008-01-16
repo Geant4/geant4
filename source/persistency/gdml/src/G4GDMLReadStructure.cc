@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLStructure.cc,v 1.36 2008-01-11 10:35:59 ztorzsok Exp $
-// GEANT4 tag $ Name:$
-//
-// class G4GDMLStructure Implementation
-//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------
 
-#include "G4GDMLStructure.hh"
+#include "G4GDMLReadStructure.hh"
 
-G4GDMLStructure::AuxPairType G4GDMLStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
+G4GDMLReadStructure::AuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
 
    G4String auxtype;
    G4String auxvalue;
@@ -61,7 +55,7 @@ G4GDMLStructure::AuxPairType G4GDMLStructure::auxiliaryRead(const xercesc::DOMEl
    return AuxPairType(auxtype,auxvalue);
 }
 
-EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
+EAxis G4GDMLReadStructure::directionRead(const xercesc::DOMElement* const element) {
 
    G4double x = 0.0;
    G4double y = 0.0;
@@ -95,7 +89,7 @@ EAxis G4GDMLStructure::directionRead(const xercesc::DOMElement* const element) {
    return kUndefined;
 }
 
-void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const element) {
 
    G4double unit = 1.0;
    G4double width = 0.0;
@@ -151,7 +145,7 @@ void G4GDMLStructure::divisionvolRead(const xercesc::DOMElement* const element) 
    new G4PVDivision("",pLogical,pMotherLogical,axis,number,width,offset);
 }
 
-G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const element) {
+G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4String volname;
@@ -174,14 +168,14 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
       if (attName=="volname") volname = attValue;
    }
 
-   G4GDMLStructure structure; // We create a new structure with a new evaluator
+   G4GDMLReadStructure structure; // We create a new structure with a new evaluator
    
    structure.Read(name);
 
    return structure.getVolume(structure.GenerateName(volname));
 }
 
-void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) {
 
    G4LogicalVolume* logvol = 0;
 
@@ -219,7 +213,7 @@ void G4GDMLStructure::physvolRead(const xercesc::DOMElement* const element) {
    G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0);
 }
 
-G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadStructure::quantityRead(const xercesc::DOMElement* const element) {
 
    G4double value = 0.0;
    G4double unit = 1.0;
@@ -245,7 +239,7 @@ G4double G4GDMLStructure::quantityRead(const xercesc::DOMElement* const element)
    return value*unit;
 }
 
-void G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& width,G4double& offset,EAxis& axis) {
+void G4GDMLReadStructure::replicate_along_axisRead(const xercesc::DOMElement* const element,G4double& width,G4double& offset,EAxis& axis) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -261,7 +255,7 @@ void G4GDMLStructure::replicate_along_axisRead(const xercesc::DOMElement* const 
    }
 }
 
-void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const element) {
 
    G4int numb = 0;
 
@@ -303,7 +297,7 @@ void G4GDMLStructure::replicavolRead(const xercesc::DOMElement* const element) {
    new G4PVReplica("",pLogical,pMotherLogical,axis,numb,width,offset);
 }
 
-void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
 
    G4String name;
 
@@ -336,7 +330,7 @@ void G4GDMLStructure::volumeRead(const xercesc::DOMElement* const element) {
    volume_contentRead(element);
 }
 
-void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -354,7 +348,7 @@ void G4GDMLStructure::volume_contentRead(const xercesc::DOMElement* const elemen
    }
 }
 
-void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -370,7 +364,7 @@ void G4GDMLStructure::structureRead(const xercesc::DOMElement* const element) {
    }
 }
 
-G4LogicalVolume* G4GDMLStructure::getVolume(const G4String& ref) const {
+G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
 
    G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
@@ -379,13 +373,13 @@ G4LogicalVolume* G4GDMLStructure::getVolume(const G4String& ref) const {
    return volumePtr;
 }
 
-G4GDMLStructure::AuxListType G4GDMLStructure::getVolumeAuxiliaryInformation(const G4LogicalVolume* const ptr) {
+G4GDMLReadStructure::AuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(const G4LogicalVolume* const ptr) {
 
      if (auxMap.find(ptr) != auxMap.end()) return auxMap[ptr];
-     else return G4GDMLStructure::AuxListType();
+     else return G4GDMLReadStructure::AuxListType();
 }
 
-const G4GDMLStructure::AuxMapType* G4GDMLStructure::getAuxiliaryMap() {
+const G4GDMLReadStructure::AuxMapType* G4GDMLReadStructure::getAuxiliaryMap() {
 
    return &auxMap;
 }

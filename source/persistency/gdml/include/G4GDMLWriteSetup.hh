@@ -33,9 +33,9 @@
 #ifndef _G4GDMLWRITESETUP_INCLUDED_
 #define _G4GDMLWRITESETUP_INCLUDED_
 
-#include "G4GDMLWriteStructure.hh"
+#include "G4GDMLWriteSolids.hh"
 
-class G4GDMLWriteSetup : public G4GDMLWriteStructure {
+class G4GDMLWriteSetup : public G4GDMLWriteSolids {
 private:
    void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
 };

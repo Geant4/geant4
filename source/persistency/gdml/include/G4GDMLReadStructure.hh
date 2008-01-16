@@ -23,24 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLStructure.hh,v 1.24 2008-01-16 10:04:07 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLStructure
-//
-// Class description:
-//
-// GDML class for loading physical volumes according to various
-// specifications in Geant4.
-
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLSTRUCTURE_INCLUDED_
-#define _G4GDMLSTRUCTURE_INCLUDED_
+#ifndef _G4GDMLREADSTRUCTURE_INCLUDED_
+#define _G4GDMLREADSTRUCTURE_INCLUDED_
 
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -53,7 +41,7 @@
 
 #include "G4GDMLReadParamvol.hh"
 
-class G4GDMLStructure : public G4GDMLReadParamvol {
+class G4GDMLReadStructure : public G4GDMLReadParamvol {
 public:
    typedef std::pair<G4String,G4String> AuxPairType;
    typedef std::vector<AuxPairType> AuxListType;

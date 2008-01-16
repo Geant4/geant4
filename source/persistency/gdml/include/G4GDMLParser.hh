@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GDMLParser.hh,v 1.14 2008-01-15 09:33:18 ztorzsok Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLParser
-//
-// Class description:
-//
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
@@ -39,10 +30,10 @@
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
-#include "G4GDMLStructure.hh"
-#include "G4GDMLWriteSetup.hh"
+#include "G4GDMLReadStructure.hh"
+#include "G4GDMLWriteStructure.hh"
 
-class G4GDML : public G4GDMLStructure, public G4GDMLWriteSetup {};
+class G4GDML : public G4GDMLReadStructure, public G4GDMLWriteStructure {};
 
 typedef G4GDML G4GDMLParser;
 
