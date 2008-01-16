@@ -1,4 +1,4 @@
-$Id: History,v 1.362 2008-01-14 12:06:55 vnivanch Exp $
+$Id: History,v 1.363 2008-01-16 16:42:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 January 08: V.Ivant (emstand-V09-01-01)
+G4PAIModel, G4PAIPhotonModel - added an extra protection garanteed
+ correct usage of the last bin of the table of nergy transfers 
 
 14 January 08: V.Ivant (emstand-V09-01-00)
 - G4hIonisation, G4ionIonisation, G4ionGasIonisation - fixed
