@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.18 2008-01-15 10:59:12 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.19 2008-01-16 08:20:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -457,10 +457,12 @@ int main()
      //  G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
 G4cout << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
-       << hpwXsc/millibarn << " mb \t"<< barashXsc/millibarn << " mb \t" << G4endl;      
+       << hpwXsc/millibarn << " mb \t"<< barashXsc/millibarn << " mb \t"
+       << neutronhpXsc/millibarn << " mb \t" << G4endl;      
 writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
        << hpwXsc/millibarn << " mb \t"<< barashXsc/millibarn << " mb \t"
        << neutronhpXsc/millibarn << " mb \t" << G4endl;      
+
 
     // writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
 
