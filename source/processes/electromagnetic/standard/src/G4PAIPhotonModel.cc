@@ -950,35 +950,36 @@ G4double
 G4PAIPhotonModel::GetEnergyTransfer( G4PhysicsTable* pTable, G4int iPlace, 
                                      G4double position, G4int iTransfer )
 { 
-  G4double x1, x2, y1, y2, energyTransfer ;
+  G4int iTransferMax;
+  G4double x1, x2, y1, y2, energyTransfer;
 
   if(iTransfer == 0)
   {
-    energyTransfer = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+    energyTransfer = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   }  
   else
   {
-    if ( iTransfer >= G4int((*pTable)(iPlace)->GetVectorLength()) )
-    {
-      iTransfer = (*pTable)(iPlace)->GetVectorLength() - 1 ;
-    }
-    y1 = (*(*pTable)(iPlace))(iTransfer-1) ;
-    y2 = (*(*fPAItransferTable)(iPlace))(iTransfer) ;
+    iTransferMax = G4int((*pTable)(iPlace)->GetVectorLength());
 
-    x1 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-    x2 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+    if ( iTransfer >= iTransferMax)  iTransfer = iTransferMax - 1;
+    
+    y1 = (*(*pTable)(iPlace))(iTransfer-1);
+    y2 = (*(*fPAItransferTable)(iPlace))(iTransfer);
 
-    if ( x1 == x2 )    energyTransfer = x2 ;
+    x1 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+    x2 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
+
+    if ( x1 == x2 )    energyTransfer = x2;
     else
     {
-      if ( y1 == y2  ) energyTransfer = x1 + (x2 - x1)*G4UniformRand() ;
+      if ( y1 == y2  ) energyTransfer = x1 + (x2 - x1)*G4UniformRand();
       else
       {
-        energyTransfer = x1 + (position - y1)*(x2 - x1)/(y2 - y1) ;
+        energyTransfer = x1 + (position - y1)*(x2 - x1)/(y2 - y1);
       }
     }
   }
-  return energyTransfer ;
+  return energyTransfer;
 }
 
 ///////////////////////////////////////////////////////////////////////
