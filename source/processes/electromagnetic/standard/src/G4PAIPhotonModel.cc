@@ -926,14 +926,21 @@ G4PAIPhotonModel::GetPostStepTransfer( G4PhysicsTable* pTable,
 
         // G4cout<<position<<"\t" ;
 
-      for( iTransfer = 0;
- iTransfer < G4int((*pTable)(iPlace)->GetVectorLength()); iTransfer++ )
+      G4int iTrMax1, iTrMax2, iTrMax;
+
+      iTrMax1 = G4int((*pTable)(iPlace)->GetVectorLength());
+      iTrMax2 = G4int((*pTable)(iPlace+1)->GetVectorLength());
+
+      if (iTrMax1 >= iTrMax2) iTrMax = iTrMax2;
+      else                    iTrMax = iTrMax1;
+
+      for( iTransfer = 0; iTransfer < iTrMax; iTransfer++ )
       {
           if( position >=
           ( (*(*pTable)(iPlace))(iTransfer)*W1 +
             (*(*pTable)(iPlace+1))(iTransfer)*W2) ) break ;
       }
-      transfer = GetEnergyTransfer(pTable,iPlace,position,iTransfer);
+      transfer = GetEnergyTransfer(pTable, iPlace, position, iTransfer);
     }
   } 
   //  G4cout<<"PAIPhotonModel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl ; 

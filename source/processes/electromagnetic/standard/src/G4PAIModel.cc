@@ -665,8 +665,16 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
 
         // G4cout<<position<<"\t" ;
 
-      for( iTransfer = 0;
- iTransfer < G4int((*fPAItransferTable)(iPlace)->GetVectorLength()); iTransfer++ )
+      G4int iTrMax1, iTrMax2, iTrMax;
+
+      iTrMax1 = G4int((*fPAItransferTable)(iPlace)->GetVectorLength());
+      iTrMax2 = G4int((*fPAItransferTable)(iPlace+1)->GetVectorLength());
+
+      if (iTrMax1 >= iTrMax2) iTrMax = iTrMax2;
+      else                    iTrMax = iTrMax1;
+
+
+      for( iTransfer = 0; iTransfer < iTrMax; iTransfer++ )
       {
           if( position >=
           ( (*(*fPAItransferTable)(iPlace))(iTransfer)*W1 +
