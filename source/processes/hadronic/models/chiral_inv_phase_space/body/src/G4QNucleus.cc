@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.91 2007-11-28 13:42:13 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.92 2008-01-17 13:26:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3764,8 +3764,8 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
   /// @@@@@@@ *** TEMPORARY TO AVOID HYPERMUCLEI FOR GEANT4 *** @@@@@@@
   if(thePDG>91000000) //@@MadeForGeant4@@: If there is a Lambda, substitute it by A neutron
   {
-    G4int S=(thePDG-90000000)/1000000;
-    thePDG-=S*999999;                       // S Neutrons instead of S Lambdas
+    G4int SSS=(thePDG-90000000)/1000000;
+    thePDG-=SSS*999999;                       // S Neutrons instead of S Lambdas
     qH->SetQPDG(G4QPDGCode(thePDG));
   }
   /// @@@ *** ^^^ END OF TEMPORARY ^^^ *** @@@
