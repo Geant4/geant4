@@ -30,33 +30,14 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLWRITE_INCLUDED_
-#define _G4GDMLWRITE_INCLUDED_
+#ifndef _G4GDMLWRITEDEFINE_INCLUDED_
+#define _G4GDMLWRITEDEFINE_INCLUDED_
 
-#include <iostream>
+#include "G4GDMLWrite.hh"
 
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/LocalFileFormatTarget.hpp>
-
-#include "G4LogicalVolume.hh"
-
-class G4GDMLWrite {
-   xercesc::DOMDocument* doc;
-   XMLCh tempStr[100];
-protected:
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
-   xercesc::DOMElement* newElement(const G4String&);
-
-   virtual void defineWrite(xercesc::DOMElement*)=0;
-   virtual void materialsWrite(xercesc::DOMElement*)=0;
-   virtual void solidsWrite(xercesc::DOMElement*)=0;
-   virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-public:
-   void Write(const G4String&,const G4LogicalVolume*);
+class G4GDMLWriteDefine : public G4GDMLWrite {
+private:
+   void defineWrite(xercesc::DOMElement*);
 };
 
 #endif

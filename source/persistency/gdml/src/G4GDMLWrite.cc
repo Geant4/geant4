@@ -80,15 +80,16 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
    xercesc::XMLString::transcode("gdml", tempStr, 99);
    doc = impl->createDocument(0,tempStr,0);
-   xercesc::DOMElement* root = doc->getDocumentElement();
+   xercesc::DOMElement* gdml = doc->getDocumentElement();
 
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
       writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
 
-   materialsWrite(root);
-   solidsWrite(root);
-   structureWrite(root);
-   setupWrite(root,logvol);
+   defineWrite(gdml);
+   materialsWrite(gdml);
+   solidsWrite(gdml);
+   structureWrite(gdml);
+   setupWrite(gdml,logvol);
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 

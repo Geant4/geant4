@@ -34,6 +34,8 @@
 #define _G4GDMLWRITESOLIDS_INCLUDED_
 
 #include "G4Box.hh"
+#include "G4TessellatedSolid.hh"
+
 #include "G4SolidStore.hh"
 
 #include "G4GDMLWriteMaterials.hh"
@@ -41,6 +43,7 @@
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
+   void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
    void solidsWrite(xercesc::DOMElement*);
 };
 

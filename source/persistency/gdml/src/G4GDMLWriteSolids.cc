@@ -37,7 +37,23 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box*
    boxElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()));
    boxElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()));
    boxElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()));
+   boxElement->setAttributeNode(newAttribute("lunit","mm"));
    solidsElement->appendChild(boxElement);
+}
+
+void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
+
+   xercesc::DOMElement* tessellatedElement = newElement("tessellated");
+   tessellatedElement->setAttributeNode(newAttribute("name",tessellated->GetName()));
+
+   const size_t n = tessellated->GetNumberOfFacets();
+   
+   for (size_t i = 0;i<n;i++) {
+   
+      const G4VFacet* facet = tessellated->GetFacet(i);
+   }
+
+   solidsElement->appendChild(tessellatedElement);
 }
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
@@ -51,7 +67,8 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
 
-      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); }
+      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
+      if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); }
    }
 
    element->appendChild(solidsElement);

@@ -33,8 +33,6 @@
 #ifndef _G4GDMLWRITESTRUCTURE_INCLUDED_
 #define _G4GDMLWRITESTRUCTURE_INCLUDED_
 
-#define RAD2DEG(x) (180.0*(x)/3.141596)
-
 #include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"

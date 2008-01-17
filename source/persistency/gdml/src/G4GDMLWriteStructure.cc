@@ -49,11 +49,11 @@ G4ThreeVector G4GDMLWriteStructure::getRotation(const G4RotationMatrix& mat) {
       z = 0.0;
    }
 
-   x = RAD2DEG(x);
-   y = RAD2DEG(y);
-   z = RAD2DEG(z);
+   x = -x/CLHEP::degree;
+   y = -y/CLHEP::degree;
+   z = -z/CLHEP::degree;
 
-   return G4ThreeVector(-x,-y,-z);
+   return G4ThreeVector(x,y,z);
 }
 
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPhysicalVolume* const physvol) {

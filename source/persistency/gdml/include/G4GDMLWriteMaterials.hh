@@ -35,9 +35,9 @@
 
 #include "G4Material.hh"
 
-#include "G4GDMLWrite.hh"
+#include "G4GDMLWriteDefine.hh"
 
-class G4GDMLWriteMaterials : public G4GDMLWrite {
+class G4GDMLWriteMaterials : public G4GDMLWriteDefine {
    void atomWrite(xercesc::DOMElement*,G4double);
    void DWrite(xercesc::DOMElement*,G4double);
    void materialWrite(xercesc::DOMElement*);
