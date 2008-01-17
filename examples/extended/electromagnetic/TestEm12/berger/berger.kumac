@@ -12,48 +12,42 @@ set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
 set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
 
 title 'e- 1 MeV in water : Dose Point Kernel'
+*
 h/file 1 1mev.hbook
-
+*
+opt grid
+*
 set dmod 1 ; set hcol 4 ; set plci 4
 h/pl //lun1/8
-key 0.2 0.6  1 'G4-9.1' ! l
+key 0.2 0.65  1 'G4-9.1-ref-00' ! l
+atitle 'r/r0'  'DPK'
 
-**exec data
- 
-**set dmod 2 ; set hcol 2 ; set plci 2
-**h/pl 1 s 
-**key 960 0.065  2 'Berger-Seltzer' ! l
+* *** data
+* Berger & Seltzer, Appl. Radiat. Isot. 42(1991) page 917
+*  
+fname = 'data/1MeV-DPK.ascii'
 
-atitle r/r0  DPK
+vector/create nb(1)
+vector/read nb [fname] ! 'O'
+nbin = nb(1)
+vector/create vect(2,[nbin])
+vector/read vect [fname] ! 'C'
+***vector/write vect ! (1x,f6.4,3x,f5.3)
+
+set mtyp 22
+set pmci 2
+graph [nbin] vect(1) vect(2)  P
+
+vector/create xmark(1)
+vector/create mark(1)
+vector/input xmark 0.15
+vector/input mark  0.55
+graph 1 xmark mark P
+itx   0.24 0.54 'Etran simul'
+			           
 exec Redraw-Axis
-**close 1 ; close 2
-
+close 1
 return
-
-macro data
-*
-* Berger & Seltzer, Appl. Radiat. Isot. 42(1991) page 917  
-*
-* *** read data
-**nbin=100
-**vector/create vect(2,[nbin])
-**vector/read vect mars14.ascii
-***vector/write vect ! (1x,f6.1,3x,e12.6) 
-*
-* *** create and fill histogram		    
-**Emin= 950.
-**Emax= 1000.		     
-**create/1dhisto 1 '3m iron.  muon 1TeV/c' [nbin] [Emin] [Emax]
-**put/contents 1 vect(2)
-   
-**h/pl 1
-
-* *** save histo
-*
-**h/file 111 mars14.hbook ! n
-**hrout 0
- 
-return 
 	     
 Macro Redraw-Axis
 set plci 1
