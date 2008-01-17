@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.28 2006-10-26 14:30:05 allison Exp $
+// $Id: ExN03EventAction.cc,v 1.29 2008-01-17 17:31:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,11 +65,11 @@ ExN03EventAction::~ExN03EventAction()
 
 void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 {  
- G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0) { 
-   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-   CLHEP::HepRandom::showEngineStatus();
- }
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%printModulo == 0) { 
+    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+    CLHEP::HepRandom::showEngineStatus();
+}
  
  // initialisation per event
  EnergyAbs = EnergyGap = 0.;
@@ -102,7 +102,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
                                         << G4BestUnit(TrackLGap,"Length")
        << G4endl;
 	  
-  }  
+  }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
