@@ -33,8 +33,7 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
-class G4GDML : public G4GDMLReadStructure, public G4GDMLWriteStructure {};
-
-typedef G4GDML G4GDMLParser;
+typedef G4GDMLReadStructure G4GDMLParser;
+typedef G4GDMLWriteStructure G4GDMLWriter;
 
 #endif
