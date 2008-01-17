@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.hh,v 1.2 2007-12-07 15:49:48 japost Exp $
+// $Id: G4FieldManagerStore.hh,v 1.3 2008-01-17 09:39:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4FieldManagerStore
@@ -38,11 +38,8 @@
 //
 // All FieldManagers should be registered with G4FieldManagerStore,
 // and removed on their destruction. 
-// Intended principally to enable reseting of 'state' at start of event.
+// Intended principally to enable resetting of 'state' at start of event.
 // The underlying container initially has a capacity of 100.
-//
-// If much additional functionality is added, should consider containment
-// instead of inheritance for std::vector<T>.
 //
 // Member data:
 //
@@ -58,7 +55,6 @@
 #include <vector>
 
 #include "G4FieldManager.hh"
-// #include "G4VStoreNotifier.hh"
 
 class G4FieldManagerStore : public std::vector<G4FieldManager*>
 {
@@ -70,8 +66,6 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
       // Remove the logical volume from the collection.
     static G4FieldManagerStore* GetInstance();
       // Get a ptr to the unique G4FieldManagerStore, creating it if necessary.
-    // static void SetNotifier(G4VStoreNotifier* pNotifier);
-      // Assign a notifier for allocation/deallocation of the logical volumes.
     static void Clean();
       // Delete all volumes from the store.
 
@@ -88,7 +82,6 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
   private:
 
     static G4FieldManagerStore* fgInstance;
-    // static G4VStoreNotifier* fgNotifier;
     static G4bool locked;
 };
 

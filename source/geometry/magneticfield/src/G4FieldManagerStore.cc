@@ -24,28 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.cc,v 1.2 2007-12-07 15:50:08 japost Exp $
+// $Id: G4FieldManagerStore.cc,v 1.3 2008-01-17 09:39:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FieldManagerStore
 //
-// Implementation for singleton container - copied from LogicalVolumeStore
+// Implementation for singleton container
 //
 // History:
-// 07.12.07 J.Apostolakis Adapted for FieldManagerStore
-// 10.07.95 P.Kent        Initial version (of LogicalVolumeStore)
+// 07.12.07 J.Apostolakis Adapted from G4LogicalVolumeStore
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"
 #include "G4FieldManagerStore.hh"
-// #include "G4GeometryManager.hh"
+#include "G4ChordFinder.hh" 
 
 // ***************************************************************************
 // Static class variables
 // ***************************************************************************
 //
 G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
-// G4VStoreNotifier* G4FieldManagerStore::fgNotifier = 0;
 G4bool G4FieldManagerStore::locked = false;
 
 // ***************************************************************************
@@ -74,17 +72,6 @@ G4FieldManagerStore::~G4FieldManagerStore()
 //
 void G4FieldManagerStore::Clean()
 {
-#if 0
-  // Do nothing if geometry is closed
-  //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
-  {
-    G4cout << "WARNING - Attempt to delete the field manager store"
-           << " while geometry closed !" << G4endl;
-    return;
-  }
-#endif
-
   // Locks store for deletion of field managers. De-registration will be
   // performed at this stage. G4FieldManagers will not de-register themselves.
   //
@@ -99,7 +86,6 @@ void G4FieldManagerStore::Clean()
 
   for(iterator pos=store->begin(); pos!=store->end(); pos++)
   {
-    // if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     if (*pos) { delete *pos; }
     i++;
   }
@@ -115,18 +101,6 @@ void G4FieldManagerStore::Clean()
   store->clear();
 }
 
-#if 0 
-// ***************************************************************************
-// Associate user notifier to the store
-// ***************************************************************************
-//
-void G4FieldManagerStore::SetNotifier(G4VStoreNotifier* pNotifier)
-{
-  GetInstance();
-  fgNotifier = pNotifier;
-}
-#endif
-
 // ***************************************************************************
 // Add field manager to container
 // ***************************************************************************
@@ -134,7 +108,6 @@ void G4FieldManagerStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4FieldManagerStore::Register(G4FieldManager* pFieldManager)
 {
   GetInstance()->push_back(pFieldManager);
-  // if (fgNotifier) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -145,7 +118,6 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    // if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (*i==pFieldMgr)  //   For LogVol was **i == *pLogVolume ... Reason?
@@ -171,19 +143,21 @@ G4FieldManagerStore* G4FieldManagerStore::GetInstance()
   return fgInstance;
 }
 
-// iterator<G4FieldManager*>  GetIterator()
-// {
-//  iterator *itFM; 
-
-#include "G4ChordFinder.hh" 
+// ***************************************************************************
+// Globally reset the state
+// ***************************************************************************
+//
 void
 G4FieldManagerStore::ClearAllChordFindersState()
 {
   G4ChordFinder *pChordFnd;
    
-  for (iterator itFM=this->begin(); itFM!=this->end(); itFM++)
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
-     pChordFnd=  (*itFM)->GetChordFinder(); 
-     if( pChordFnd ) pChordFnd->ResetStepEstimate();
+    pChordFnd = (*i)->GetChordFinder();
+    if( pChordFnd )
+    {
+      pChordFnd->ResetStepEstimate();
+    }
   }
 }
