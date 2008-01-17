@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.cc,v 1.3 2008-01-17 09:39:08 gcosmo Exp $
+// $Id: G4FieldManagerStore.cc,v 1.4 2008-01-17 10:56:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FieldManagerStore
@@ -79,10 +79,6 @@ void G4FieldManagerStore::Clean()
 
   size_t i=0;
   G4FieldManagerStore* store = GetInstance();
-
-#ifdef G4DEBUG
-  G4cout << "Deleting Field Managers ... ";
-#endif
 
   for(iterator pos=store->begin(); pos!=store->end(); pos++)
   {
