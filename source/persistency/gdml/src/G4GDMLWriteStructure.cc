@@ -96,13 +96,15 @@ void G4GDMLWriteStructure::rotationWrite(xercesc::DOMElement* element,const G4Th
 void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
 
    const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();
-   const G4int volumeCount = volumeList->size();
+   const size_t volumeCount = volumeList->size();
 
-   for (G4int i=0;i<volumeCount;i++) {
+   for (size_t i=0;i<volumeCount;i++) {
 
       const G4LogicalVolume* volumePtr = (*volumeList)[i];
 
       xercesc::DOMElement* volumeElement = newElement("volume");
+      element->appendChild(volumeElement);
+
       volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
       xercesc::DOMElement* materialrefElement = newElement("materialref");
@@ -119,8 +121,6 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
       
          physvolWrite(volumeElement,volumePtr->GetDaughter(j));
       }
-
-      element->appendChild(volumeElement);
    }
 }
 
