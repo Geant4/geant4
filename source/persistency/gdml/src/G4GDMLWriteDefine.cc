@@ -32,7 +32,19 @@
 
 void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
 
-   xercesc::DOMElement* defineElement = newElement("define");
+   defineElement = newElement("define");
 
    element->appendChild(defineElement);
 }
+
+void G4GDMLWriteDefine::addPosition(const G4String& name,const G4ThreeVector& P) {
+
+   xercesc::DOMElement* positionElement = newElement("position");
+   positionElement->setAttributeNode(newAttribute("name",name));
+   positionElement->setAttributeNode(newAttribute("x",P.x()));
+   positionElement->setAttributeNode(newAttribute("y",P.y()));
+   positionElement->setAttributeNode(newAttribute("z",P.z()));
+   positionElement->setAttributeNode(newAttribute("unit","mm"));
+   defineElement->appendChild(positionElement);
+}
+

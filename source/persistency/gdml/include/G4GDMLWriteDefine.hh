@@ -35,9 +35,15 @@
 
 #include "G4GDMLWrite.hh"
 
+#include <sstream>
+
 class G4GDMLWriteDefine : public G4GDMLWrite {
 private:
+   xercesc::DOMElement* defineElement;
+
    void defineWrite(xercesc::DOMElement*);
+protected:
+   void addPosition(const G4String&,const G4ThreeVector&);
 };
 
 #endif

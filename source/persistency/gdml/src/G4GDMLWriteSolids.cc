@@ -33,35 +33,66 @@
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
 
    xercesc::DOMElement* boxElement = newElement("box");
+   solidsElement->appendChild(boxElement);
+
    boxElement->setAttributeNode(newAttribute("name",box->GetName()));
    boxElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()));
    boxElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()));
    boxElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()));
    boxElement->setAttributeNode(newAttribute("lunit","mm"));
-   solidsElement->appendChild(boxElement);
 }
 
 void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
 
    xercesc::DOMElement* tessellatedElement = newElement("tessellated");
+   solidsElement->appendChild(tessellatedElement);
+
    tessellatedElement->setAttributeNode(newAttribute("name",tessellated->GetName()));
 
-   const size_t n = tessellated->GetNumberOfFacets();
+   const size_t NumFacets = tessellated->GetNumberOfFacets();
+   size_t NumVertex = 0;
    
-   for (size_t i = 0;i<n;i++) {
+   for (size_t i=0;i<NumFacets;i++) {
    
       const G4VFacet* facet = tessellated->GetFacet(i);
-   }
+      const size_t NumVertexPerFacet = facet->GetNumberOfVertices();
 
-   solidsElement->appendChild(tessellatedElement);
+      G4String FacetTag;
+      
+      if (NumVertexPerFacet==3) { FacetTag="triangular"; } else
+      if (NumVertexPerFacet==4) { FacetTag="quadrangular"; } else
+      G4Exception("GDML WRITER: Facet should contain 3 or 4 vertices!");
+
+      xercesc::DOMElement* facetElement = newElement(FacetTag);
+      tessellatedElement->appendChild(facetElement);
+
+      for (size_t j=0;j<NumVertexPerFacet;j++) {
+      
+         std::stringstream name_stream;
+         std::stringstream ref_stream;
+
+         name_stream << "vertex" << (j+1);
+	 ref_stream << tessellated->GetName() << "_" << "vertex" << NumVertex;
+
+         G4String name = name_stream.str();
+         G4String ref = ref_stream.str();
+
+         facetElement->setAttributeNode(newAttribute(name,ref));
+
+         addPosition(ref,facet->GetVertex(j));
+
+         NumVertex++;
+      }
+   }
 }
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
+   xercesc::DOMElement* solidsElement = newElement("solids");
+   element->appendChild(solidsElement);
+
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
    const G4int solidCount = solidList->size();
-
-   xercesc::DOMElement* solidsElement = newElement("solids");
 
    for (G4int i=0;i<solidCount;i++) {
    
@@ -70,6 +101,4 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); }
    }
-
-   element->appendChild(solidsElement);
 }
