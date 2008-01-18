@@ -14,16 +14,22 @@
 
 #include "QGSC_EMV.hh"
 #include "QGSC.hh"
+#include "QGSC_BERT.hh"
 
 #include "QGSP.hh"
+#include "QGSP_DIF.hh"
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BERT.hh"
+#include "QGSP_BERT_DIF.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_EMV.hh"
 #include "QGSP_EMX.hh"
 #include "QGSP_QEL.hh"
-#include "QGSP_CASC.hh"
+//#include "QGSP_CASC.hh"
+
+#include "QGS_BIC.hh"
+#include "FTF_BIC.hh"
 
 #include "CLHEP/Random/RanluxEngine.h" 
 
@@ -49,16 +55,23 @@ int main(int argc,char** argv) {
 
   G4VModularPhysicsList *thePL16 = new QGSC_EMV;
   G4VModularPhysicsList *thePL17 = new QGSC;
+  G4VModularPhysicsList *thePL18 = new QGSC_BERT;
 
   G4VModularPhysicsList *thePL20 = new QGSP_BERT_HP; 
   G4VModularPhysicsList *thePL21 = new QGSP_BERT;
+  G4VModularPhysicsList *thePL21a = new QGSP_BERT_DIF;
   G4VModularPhysicsList *thePL22 = new QGSP_BIC_HP; 
   G4VModularPhysicsList *thePL23 = new QGSP_BIC;
   G4VModularPhysicsList *thePL24 = new QGSP_EMV;
   G4VModularPhysicsList *thePL25 = new QGSP_EMX;
   G4VModularPhysicsList *thePL27 = new QGSP;
+  G4VModularPhysicsList *thePL27a = new QGSP_DIF;
   G4VModularPhysicsList *thePL28 = new QGSP_QEL;
-  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
+//  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
+  
+  G4VModularPhysicsList *thePL30 = new QGS_BIC;
+  G4VModularPhysicsList *thePL31 = new FTF_BIC;
+  
 
 
   delete runManager; 
