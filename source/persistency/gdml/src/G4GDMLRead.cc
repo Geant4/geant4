@@ -29,47 +29,9 @@
 
 #include "G4GDMLRead.hh"
 
-G4GDMLRead::G4GDMLRead() {
-
-   try {
-
-      xercesc::XMLPlatformUtils::Initialize();
-   }
-   catch(xercesc::XMLException& e) {
-
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cerr << "XML toolkit initialization error: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-
-   parser = new xercesc::XercesDOMParser;
-
-   parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-   parser->setDoNamespaces(true);
-   parser->setDoSchema(true);
-   parser->setValidationSchemaFullChecking(true);
-   parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
-}
-
-G4GDMLRead::~G4GDMLRead() {
-
-   if (parser) delete parser;
-
-   try {
-
-      xercesc::XMLPlatformUtils::Terminate();
-   }
-   catch(xercesc::XMLException& e) {
-    
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cerr << "XML toolkit termination error: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-}
-
 G4String G4GDMLRead::GenerateName(const G4String& in) {
 
-   std::string out(prename+"_");
+   std::string out(prename);
    
    std::string::size_type open = in.find("[",0);
 
@@ -95,9 +57,17 @@ G4String G4GDMLRead::GenerateName(const G4String& in) {
    return out;
 }
 
-void G4GDMLRead::Read(const G4String& fileName) {
+void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
-   prename = fileName;
+   xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
+
+   parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+   parser->setDoNamespaces(true);
+   parser->setDoSchema(true);
+   parser->setValidationSchemaFullChecking(true);
+   parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
+
+   if (external) prename = fileName+"_";
 
    try {
 
@@ -138,6 +108,8 @@ void G4GDMLRead::Read(const G4String& fileName) {
       if (tag=="setup") setupRead(child); else
       if (tag=="structure") structureRead(child);
    }
+
+   if (parser) delete parser;
 }
 
 void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {

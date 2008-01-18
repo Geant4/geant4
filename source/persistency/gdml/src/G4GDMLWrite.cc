@@ -67,8 +67,6 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 
 void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 
-   xercesc::XMLPlatformUtils::Initialize();
-
    xercesc::DOMImplementation* impl;
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
@@ -117,6 +115,4 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
       delete myFormTarget;
 
    writer->release();
-
-   xercesc::XMLPlatformUtils::Terminate();
 }

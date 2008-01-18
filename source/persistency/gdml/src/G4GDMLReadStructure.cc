@@ -170,7 +170,7 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
 
    G4GDMLReadStructure structure; // We create a new structure with a new evaluator
    
-   structure.Read(name);
+   structure.Read(name,true); // true: it is an external file
 
    return structure.getVolume(structure.GenerateName(volname));
 }

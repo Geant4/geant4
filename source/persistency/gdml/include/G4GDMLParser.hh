@@ -33,7 +33,17 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
-typedef G4GDMLReadStructure G4GDMLParser;
-typedef G4GDMLWriteStructure G4GDMLWriter;
+class G4GDMLParser {
+   G4GDMLReadStructure reader;
+   G4GDMLWriteStructure writer;
+public:
+   G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
+   ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
+
+   void Read(const G4String& fname) { reader.Read(fname); }
+   void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol); }
+
+   G4VPhysicalVolume* getWorldVolume() { return reader.getWorldVolume(); }
+};
 
 #endif
