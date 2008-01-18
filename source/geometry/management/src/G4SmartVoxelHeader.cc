@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.29 2008-01-14 11:29:12 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.30 2008-01-18 09:44:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -423,6 +423,7 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
   }
   for (nVol=0; nVol<nReplicas; nVol++)
   {
+    nodeList[nVol]->Reserve(1);     // Allocate space for one single slice
     nodeList[nVol]->Insert(nVol);   // Insert replication of number
   }                                 // identical to voxel number
 
@@ -900,7 +901,6 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       }
     }
 #endif
-
   }
 
   // Extents of all daughters known
@@ -988,7 +988,6 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 
   // Fill nodes: Step through extent lists
   //
-  G4bool init = true;
   for (nVol=0; nVol<nCandidates; nVol++)
   {
     G4int nodeNo, minContainingNode, maxContainingNode;
@@ -1015,11 +1014,11 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       }
       for (nodeNo=minContainingNode; nodeNo<=maxContainingNode; nodeNo++)
       {
-        if (init) { (*nodeList)[nodeNo]->Reserve(nCandidates); }
-        (*nodeList)[nodeNo]->Insert((*pCandidates)[nVol]);
+        G4SmartVoxelNode* vNode = (*nodeList)[nodeNo];
+        vNode->Reserve(vNode->GetNoContained()+1);
+        vNode->Insert((*pCandidates)[nVol]);
       }
     }
-    init = false;
   }
 
   // All nodes filled
