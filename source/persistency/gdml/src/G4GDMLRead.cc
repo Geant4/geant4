@@ -67,7 +67,12 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
    parser->setValidationSchemaFullChecking(true);
    parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
 
-   if (external) prename = fileName+"_";
+   if (external) { 
+   
+      prename = fileName;
+      prename.remove(prename.length()-5,5); // remove ".gdml"
+      prename += "_";
+   }
 
    try {
 
