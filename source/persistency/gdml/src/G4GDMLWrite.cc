@@ -30,7 +30,7 @@
 
 #include "G4GDMLWrite.hh"
 
-G4ThreeVector G4GDMLWrite::getRotation(const G4RotationMatrix& mat) {
+G4ThreeVector G4GDMLWrite::getAngles(const G4RotationMatrix& mat) {
 
    G4double x,y,z;
 

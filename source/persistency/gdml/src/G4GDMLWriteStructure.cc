@@ -39,7 +39,7 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    physvolElement->appendChild(volumerefElement);
 
    G4ThreeVector pos = physvol->GetObjectTranslation();
-   G4ThreeVector rot = getRotation(physvol->GetObjectRotationValue());
+   G4ThreeVector rot = getAngles(physvol->GetObjectRotationValue());
 
    if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);

@@ -46,7 +46,7 @@ class G4GDMLWrite {
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 protected:
-   G4ThreeVector getRotation(const G4RotationMatrix&);
+   G4ThreeVector getAngles(const G4RotationMatrix&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
    xercesc::DOMElement* newElement(const G4String&);

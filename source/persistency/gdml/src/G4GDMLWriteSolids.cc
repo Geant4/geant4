@@ -52,7 +52,7 @@ void G4GDMLWriteSolids::reflectedSolidWrite(xercesc::DOMElement* solidsElement,c
    G4Translate3D  translation;
 
    reflectedSolid->GetTransform3D().getDecomposition(scale,rotation,translation);
-   G4ThreeVector angles = getRotation(rotation.getRotation());
+   G4ThreeVector angles = getAngles(rotation.getRotation());
 
    reflectedSolidElement->setAttributeNode(newAttribute("name",reflectedSolid->GetName()));
    reflectedSolidElement->setAttributeNode(newAttribute("solid",reflectedSolid->GetConstituentMovedSolid()->GetName()));
