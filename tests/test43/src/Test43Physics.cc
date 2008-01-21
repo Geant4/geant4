@@ -258,7 +258,7 @@ G4VProcess* Test43Physics::GetProcess(const G4String& gen_name,
      theProcess->SetSecondaryGenerator(sg);
      man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "QGSM") {
+  } else if(gen_name == "QGSP") {
      G4TheoFSGenerator * model = new G4TheoFSGenerator;
 
      G4QGSModel< G4QGSParticipants > *theStringModel = new G4QGSModel< G4QGSParticipants >;
