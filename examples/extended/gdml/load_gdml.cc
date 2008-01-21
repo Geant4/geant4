@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.8 2008-01-10 13:27:07 ztorzsok Exp $
+// $Id: load_gdml.cc,v 1.9 2008-01-21 13:05:33 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,20 +47,33 @@
 
 #include "G4GDMLParser.hh"
 
-int main(int argc, char **argv) {
+int main(int argc,char **argv) {
+
+   G4cout << G4endl;
+   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>" << G4endl;
+   G4cout << G4endl;
 
    if (argc<2) {
    
-      G4cout << "Usage: load_gdml <filename>" << G4endl;
-      return 0;
+      G4cout << "Error! Mandatory input file is not specified!" << G4endl;
+      G4cout << G4endl;
+      return -1;
    }
 
    G4GDMLParser parser;
-
    parser.Read(argv[1]);
 
-   G4GDMLParser::AuxListType AuxList = parser.getVolumeAuxiliaryInformation(NULL); // These two methods are provided to acces volume auxiliary information
-   const G4GDMLParser::AuxMapType* AuxMap = parser.getAuxiliaryMap();
+   if (argc==3) {
+
+      parser.Write(argv[2],parser.getWorldVolume()->GetLogicalVolume());
+   }
+   
+   if (argc>3) {
+
+      G4cout << "Error! Too many arguments!" << G4endl;
+      G4cout << G4endl;
+      return -1;
+   }
 
    G4RunManager* runManager = new G4RunManager;
    G4VisManager* visManager = new G4VisExecutive;
