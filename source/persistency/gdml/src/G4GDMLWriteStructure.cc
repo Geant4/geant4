@@ -30,32 +30,6 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-G4ThreeVector G4GDMLWriteStructure::getRotation(const G4RotationMatrix& mat) {
-
-   G4double x,y,z;
-
-   G4double cosb = sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
-
-   if (cosb > 16*FLT_EPSILON) {
-
-      x = atan2(mat.zy(),mat.zz());
-      y = atan2(-mat.zx(),cosb);
-      z = atan2(mat.yx(),mat.xx());
-   }
-   else {
-
-      x = atan2(-mat.yz(),mat.yy());
-      y = atan2(-mat.zx(),cosb);
-      z = 0.0;
-   }
-
-   x = -x/CLHEP::degree;
-   y = -y/CLHEP::degree;
-   z = -z/CLHEP::degree;
-
-   return G4ThreeVector(x,y,z);
-}
-
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPhysicalVolume* const physvol) {
 
    xercesc::DOMElement* physvolElement = newElement("physvol");

@@ -40,7 +40,6 @@
 #include "G4GDMLWriteSetup.hh"
 
 class G4GDMLWriteStructure : public G4GDMLWriteSetup {
-   G4ThreeVector getRotation(const G4RotationMatrix&);
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void positionWrite(xercesc::DOMElement*,const G4ThreeVector&);
    void rotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
