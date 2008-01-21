@@ -328,6 +328,13 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
    if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
 
    volume_contentRead(element);
+
+   // Make sure that at the moment "pMotherLogical" is the last in the list!
+   // Addittional logical volumes, coming from external files, must be prior to "pMotherLogical" in the list!
+   // This arranging only matters when we read modular GDML files and we write it out into a single GDML file!
+
+   G4LogicalVolumeStore::GetInstance()->DeRegister(pMotherLogical); 
+   G4LogicalVolumeStore::GetInstance()->Register(pMotherLogical);
 }
 
 void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const element) {

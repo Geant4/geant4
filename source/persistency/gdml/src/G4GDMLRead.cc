@@ -61,6 +61,8 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
+   G4cout << "Parser pointer: " << parser << G4endl;
+
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
