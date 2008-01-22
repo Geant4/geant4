@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2008-01-22 09:50:31 ztorzsok Exp $
+$Id: History,v 1.11 2008-01-22 10:43:57 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,11 +18,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 22 January 2008 Z.Torzsok
-- Extruded solid is added
+- Extruded solid is added to writer
+- "Reading multiple GDML files and writing out into a single GDML file" - optimized.
+  >> The mother volume is moved to the end of the list after its daugthers are processed...
+  >> ... only when necessary, when new logical volumes come from the daughters!
 
 21 Januray 2008 Z.Torzsok
-- Reflected solid is added
-
+- Reflected solid is added to writer
+- "Reading multiple GDML files and writing out into a single GDML file" - problem solved.
+  
+  >> If I instantiate a logical volume (let's say the mother volume), it will be added to the end of list of volumes (G4LogicalVolumeStore).
+  >> Once this logical volume is instantiated we can add daughters
+  >> If a daughter refers to an external file, additional logical volumes will come
+  >> These logical volumes will be added to the list as well, AFTER the mother volume
+  >> In the mother volume these logical volumes can be referenced...
+  >> ...but these logical volumes are not instantiated yet when we instantiate the mother!
+  >> That's why we move the mother volume at the end of the list after the daughters are processed.
+  
 18 Januray 2008 Z.Torzsok
 - The class hierarchy of the GDML parser/writer is finished:
 
