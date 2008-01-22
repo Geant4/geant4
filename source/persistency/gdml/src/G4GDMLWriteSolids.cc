@@ -106,14 +106,55 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
 
          facetElement->setAttributeNode(newAttribute(name,ref));
 
-         addPosition(ref,facet->GetVertex(j));
+         addPosition(ref,facet->GetVertex(j)); // Add position to define section!
 
          NumVertex++;
       }
    }
 }
 
+void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4ExtrudedSolid* const xtru) {
+
+   xercesc::DOMElement* xtruElement = newElement("xtru");
+   solidsElement->appendChild(xtruElement);
+
+   xtruElement->setAttributeNode(newAttribute("name",xtru->GetName()));
+   xtruElement->setAttributeNode(newAttribute("lunit","mm"));
+
+   const G4int NumVertex = xtru->GetNofVertices();
+   
+   for (G4int i=0;i<NumVertex;i++) {
+   
+      xercesc::DOMElement* twoDimVertexElement = newElement("twoDimVertex");
+      xtruElement->appendChild(twoDimVertexElement);
+
+      const G4TwoVector vertex = xtru->GetVertex(i);
+
+      twoDimVertexElement->setAttributeNode(newAttribute("x",vertex.x()));
+      twoDimVertexElement->setAttributeNode(newAttribute("y",vertex.y()));
+   }
+
+   const G4int NumSection = xtru->GetNofZSections();
+
+   for (G4int i=0;i<NumSection;i++) {
+   
+      xercesc::DOMElement* sectionElement = newElement("section");
+      xtruElement->appendChild(sectionElement);
+
+      const G4ExtrudedSolid::ZSection section = xtru->GetZSection(i);
+
+      sectionElement->setAttributeNode(newAttribute("zOrder",i));
+      sectionElement->setAttributeNode(newAttribute("zPosition",section.fZ));
+      sectionElement->setAttributeNode(newAttribute("xOffset",section.fOffset.x()));
+      sectionElement->setAttributeNode(newAttribute("yOffset",section.fOffset.y()));
+      sectionElement->setAttributeNode(newAttribute("scalingFactor",section.fScale));
+   }
+}
+
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
+
+   // Extruded solid (xtru) is based on tessellated solid so it must be processed
+   // prior to tessellated solid
 
    xercesc::DOMElement* solidsElement = newElement("solids");
    element->appendChild(solidsElement);
@@ -127,6 +168,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4ReflectedSolid* reflectedSolidPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) { reflectedSolidWrite(solidsElement,reflectedSolidPtr); } else
+      if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); }
    }
 }

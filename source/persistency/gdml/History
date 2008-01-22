@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2008-01-21 09:24:24 ztorzsok Exp $
+$Id: History,v 1.10 2008-01-22 09:50:31 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 January 2008 Z.Torzsok
+- Extruded solid is added
+
+21 Januray 2008 Z.Torzsok
+- Reflected solid is added
 
 18 Januray 2008 Z.Torzsok
 - The class hierarchy of the GDML parser/writer is finished:
