@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.3 2008-01-22 09:53:29 arce Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.4 2008-01-22 15:02:36 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
 //
 // May 2007 Pedro Arce,   first version
-// 22.01.07 Pedro Arce, bug correction in GetReplicaNo to catch overflows in x and Y (thanks to Simon Stute)
 //
 // --------------------------------------------------------------------
 
@@ -281,7 +280,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     {
       if( nx == G4int(fNoVoxelX) )  
       {
-	nx -= 1;       
+        nx -= 1;       
       }
     }
   }
@@ -298,7 +297,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     {
       if( ny == G4int(fNoVoxelY) )  
       {
-	ny -= 1;       
+        ny -= 1;       
       }
     }
   }
@@ -315,7 +314,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     {
       if( nz == G4int(fNoVoxelZ) )  
       {
-	nz -= 1;       
+        nz -= 1;       
       }
     }
   }
@@ -358,18 +357,21 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   if( !isOK )
   {
     G4cerr << "WARNING - G4PhantomParameterisation::GetReplicaNo()" << G4endl
-  	   << "          LocalPoint: " << localPoint << G4endl
-	   << "          LocalDir: " << localDir << G4endl
-	   << "          Voxel container size: " << fContainerWallX
-	   << " " << fContainerWallY << " " << fContainerWallZ 
-	   << "localPoint - wall " << localPoint.x()-fContainerWallX << " " << localPoint.y()-fContainerWallY << " " << localPoint.z()-fContainerWallZ << G4endl;
-     G4Exception("G4PhantomParameterisation::GetReplicaNo()",
-		"Wrong-copy-number", JustWarning,
-		"Corrected the copy number! It was negative or too big");
+           << "          LocalPoint: " << localPoint << G4endl
+           << "          LocalDir: " << localDir << G4endl
+           << "          Voxel container size: " << fContainerWallX
+           << " " << fContainerWallY << " " << fContainerWallZ << G4endl
+           << "          LocalPoint - wall: "
+           << localPoint.x()-fContainerWallX << " "
+           << localPoint.y()-fContainerWallY << " "
+           << localPoint.z()-fContainerWallZ << G4endl;
+    G4Exception("G4PhantomParameterisation::GetReplicaNo()",
+                "Wrong-copy-number", JustWarning,
+                "Corrected the copy number! It was negative or too big");
     copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
   }
 
-  //  CheckCopyNo( copyNo ); // not needed, just for debugging code
+  // CheckCopyNo( copyNo ); // not needed, just for debugging code
 
   return copyNo;
 }

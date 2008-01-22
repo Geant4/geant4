@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.3 2008-01-22 09:47:00 arce Exp $
+// $Id: G4PhantomParameterisation.hh,v 1.4 2008-01-22 15:02:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -155,7 +155,6 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     void CheckVoxelsFillContainer( G4double contX, G4double contY,
                                    G4double contZ ) const;
       // Check that the voxels fill it completely.
-
 
   private:
 
