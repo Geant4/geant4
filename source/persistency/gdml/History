@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2008-01-22 10:43:57 ztorzsok Exp $
+$Id: History,v 1.12 2008-01-22 13:42:11 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,10 +18,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 22 January 2008 Z.Torzsok
+
 - Extruded solid is added to writer
+
 - "Reading multiple GDML files and writing out into a single GDML file" - optimized.
   >> The mother volume is moved to the end of the list after its daugthers are processed...
   >> ... only when necessary, when new logical volumes come from the daughters!
+
+- Reflected solid is removed from the written GDML files. Scale transformation is used instead.
 
 21 Januray 2008 Z.Torzsok
 - Reflected solid is added to writer
