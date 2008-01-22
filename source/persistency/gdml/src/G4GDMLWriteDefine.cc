@@ -30,13 +30,6 @@
 
 #include "G4GDMLWriteDefine.hh"
 
-void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
-
-   defineElement = newElement("define");
-
-   element->appendChild(defineElement);
-}
-
 void G4GDMLWriteDefine::addPosition(const G4String& name,const G4ThreeVector& P) {
 
    xercesc::DOMElement* positionElement = newElement("position");
@@ -48,3 +41,40 @@ void G4GDMLWriteDefine::addPosition(const G4String& name,const G4ThreeVector& P)
    defineElement->appendChild(positionElement);
 }
 
+void G4GDMLWriteDefine::positionWrite(xercesc::DOMElement* element,const G4ThreeVector& pos) {
+
+   xercesc::DOMElement* positionElement = newElement("position");
+   element->appendChild(positionElement);
+
+   positionElement->setAttributeNode(newAttribute("x",pos.x()));
+   positionElement->setAttributeNode(newAttribute("y",pos.y()));
+   positionElement->setAttributeNode(newAttribute("z",pos.z()));
+   positionElement->setAttributeNode(newAttribute("unit","mm"));
+}
+
+void G4GDMLWriteDefine::rotationWrite(xercesc::DOMElement* element,const G4ThreeVector& rot) {
+
+   xercesc::DOMElement* rotationElement = newElement("rotation");
+   element->appendChild(rotationElement);
+
+   rotationElement->setAttributeNode(newAttribute("x",rot.x()));
+   rotationElement->setAttributeNode(newAttribute("y",rot.y()));
+   rotationElement->setAttributeNode(newAttribute("z",rot.z()));
+   rotationElement->setAttributeNode(newAttribute("unit","deg"));
+}
+
+void G4GDMLWriteDefine::scaleWrite(xercesc::DOMElement* element,const G4ThreeVector& scl) {
+
+   xercesc::DOMElement* scaleElement = newElement("scale");
+   element->appendChild(scaleElement);
+
+   scaleElement->setAttributeNode(newAttribute("x",scl.x()));
+   scaleElement->setAttributeNode(newAttribute("y",scl.y()));
+   scaleElement->setAttributeNode(newAttribute("z",scl.z()));
+}
+
+void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
+
+   defineElement = newElement("define");
+   element->appendChild(defineElement);
+}

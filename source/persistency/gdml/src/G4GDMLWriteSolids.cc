@@ -42,33 +42,6 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box*
    boxElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
-void G4GDMLWriteSolids::reflectedSolidWrite(xercesc::DOMElement* solidsElement,const G4ReflectedSolid* const reflectedSolid) {
-
-   xercesc::DOMElement* reflectedSolidElement = newElement("reflectedSolid");
-   solidsElement->appendChild(reflectedSolidElement);
-
-   G4Scale3D  scale;
-   G4Rotate3D rotation;
-   G4Translate3D  translation;
-
-   reflectedSolid->GetTransform3D().getDecomposition(scale,rotation,translation);
-   G4ThreeVector angles = getAngles(rotation.getRotation());
-
-   reflectedSolidElement->setAttributeNode(newAttribute("name",reflectedSolid->GetName()));
-   reflectedSolidElement->setAttributeNode(newAttribute("solid",reflectedSolid->GetConstituentMovedSolid()->GetName()));
-   reflectedSolidElement->setAttributeNode(newAttribute("sx",scale.xx()));
-   reflectedSolidElement->setAttributeNode(newAttribute("sy",scale.yy()));
-   reflectedSolidElement->setAttributeNode(newAttribute("sz",scale.zz()));
-   reflectedSolidElement->setAttributeNode(newAttribute("rx",angles.x()));
-   reflectedSolidElement->setAttributeNode(newAttribute("ry",angles.y()));
-   reflectedSolidElement->setAttributeNode(newAttribute("rz",angles.z()));
-   reflectedSolidElement->setAttributeNode(newAttribute("tx",translation.dx()));
-   reflectedSolidElement->setAttributeNode(newAttribute("ty",translation.dy()));
-   reflectedSolidElement->setAttributeNode(newAttribute("tz",translation.dz()));
-   reflectedSolidElement->setAttributeNode(newAttribute("lunit","mm"));
-   reflectedSolidElement->setAttributeNode(newAttribute("aunit","degree"));
-}
-
 void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
 
    xercesc::DOMElement* tessellatedElement = newElement("tessellated");
@@ -153,9 +126,6 @@ void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4Ext
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
-   // Extruded solid (xtru) is based on tessellated solid so it must be processed
-   // prior to tessellated solid
-
    xercesc::DOMElement* solidsElement = newElement("solids");
    element->appendChild(solidsElement);
 
@@ -167,7 +137,6 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       const G4VSolid* solidPtr = (*solidList)[i];
 
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
-      if (const G4ReflectedSolid* reflectedSolidPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) { reflectedSolidWrite(solidsElement,reflectedSolidPtr); } else
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); }
    }

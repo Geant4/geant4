@@ -48,11 +48,7 @@ G4ThreeVector G4GDMLWrite::getAngles(const G4RotationMatrix& mat) {
       z = 0.0;
    }
 
-   x = -x/CLHEP::degree;
-   y = -y/CLHEP::degree;
-   z = -z/CLHEP::degree;
-
-   return G4ThreeVector(x,y,z);
+   return G4ThreeVector(x,y,z)/CLHEP::degree;
 }
 
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {

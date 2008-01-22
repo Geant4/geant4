@@ -41,8 +41,6 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteSetup {
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void positionWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void rotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
    void volumeWrite(xercesc::DOMElement*);
 private:
    void structureWrite(xercesc::DOMElement*);

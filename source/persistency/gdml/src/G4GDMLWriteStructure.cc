@@ -33,38 +33,35 @@
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPhysicalVolume* const physvol) {
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
+   element->appendChild(physvolElement);
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
    physvolElement->appendChild(volumerefElement);
 
-   G4ThreeVector pos = physvol->GetObjectTranslation();
-   G4ThreeVector rot = getAngles(physvol->GetObjectRotationValue());
+   G4Transform3D transform(physvol->GetObjectRotationValue(),physvol->GetObjectTranslation());
 
-   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
+   G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
+
+   if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
+      
+      transform = transform*reflectedPtr->GetTransform3D();
+      solidPtr = reflectedPtr->GetConstituentMovedSolid();
+   }
+
+   G4Scale3D scale;
+   G4Rotate3D rotation;
+   G4Translate3D translation;
+
+   transform.getDecomposition(scale,rotation,translation);
+
+   G4ThreeVector scl(scale.xx(),scale.yy(),scale.zz());
+   G4ThreeVector rot = -getAngles(rotation.getRotation());
+   G4ThreeVector pos(translation.dx(),translation.dy(),translation.dz());
+
+   if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
-
-   element->appendChild(physvolElement);
-}
-
-void G4GDMLWriteStructure::positionWrite(xercesc::DOMElement* element,const G4ThreeVector& pos) {
-
-   xercesc::DOMElement* positionElement = newElement("position");
-   positionElement->setAttributeNode(newAttribute("x",pos.x()));
-   positionElement->setAttributeNode(newAttribute("y",pos.y()));
-   positionElement->setAttributeNode(newAttribute("z",pos.z()));
-   positionElement->setAttributeNode(newAttribute("unit","mm"));
-   element->appendChild(positionElement);
-}
-
-void G4GDMLWriteStructure::rotationWrite(xercesc::DOMElement* element,const G4ThreeVector& rot) {
-
-   xercesc::DOMElement* rotationElement = newElement("rotation");
-   rotationElement->setAttributeNode(newAttribute("x",rot.x()));
-   rotationElement->setAttributeNode(newAttribute("y",rot.y()));
-   rotationElement->setAttributeNode(newAttribute("z",rot.z()));
-   rotationElement->setAttributeNode(newAttribute("unit","deg"));
-   element->appendChild(rotationElement);
+   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
 }
 
 void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
@@ -85,8 +82,15 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
       materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
       volumeElement->appendChild(materialrefElement);
 
+      G4VSolid* solidPtr = volumePtr->GetSolid();
+
+      if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
+      
+         solidPtr = reflectedPtr->GetConstituentMovedSolid();
+      }
+
       xercesc::DOMElement* solidrefElement = newElement("solidref");
-      solidrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetSolid()->GetName()));
+      solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
       volumeElement->appendChild(solidrefElement);
 
       const G4int daughterCount = volumePtr->GetNoDaughters();
@@ -101,8 +105,7 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* element) {
 
    xercesc::DOMElement* structureElement = newElement("structure");
+   element->appendChild(structureElement);
 
    volumeWrite(structureElement);
-
-   element->appendChild(structureElement);
 }

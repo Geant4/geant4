@@ -46,7 +46,6 @@
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
-   void reflectedSolidWrite(xercesc::DOMElement*,const G4ReflectedSolid* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
    void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
    void solidsWrite(xercesc::DOMElement*);
