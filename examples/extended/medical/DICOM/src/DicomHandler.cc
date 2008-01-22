@@ -303,15 +303,10 @@ void DicomHandler::GetInformation(G4int & tagDictionary, char * data) {
 	std::printf("[0x00280120] Pixel Padding Value US or SS 1 -> %s\n", data);
 
     } else if(tagDictionary == 0x00280030 ) { // Pixel Spacing
-	char * buff = new char[LINEBUFFSIZE];
-	char * sepPos = index(data, '\\');
-	char * termPos = rindex(data, '\0');
-	std::strncpy(buff, data, sepPos - data);
-	pixelSpacingX = atof(buff);
-	std::strncpy(buff, sepPos+1, termPos - sepPos - 1);
-	pixelSpacingY = atof(buff);
-	std::printf("[0x00280030] Pixel Spacing (mm) -> %s\n", data);
-	delete [] buff;
+      G4String datas(data);
+      int iss = datas.find('\\');
+      pixelSpacingX = atof( datas.substr(0,iss).c_str() );
+      pixelSpacingY = atof( datas.substr(iss+2,datas.length()).c_str() );
 
     } else if(tagDictionary == 0x00200037 ) { // Image Orientation ( not used )
 	std::printf("[0x00200037] Image Orientation (Patient) -> %s\n", data);
@@ -439,6 +434,8 @@ void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
   G4String mateName;
   G4double densityMax;
   finData >> nMate;
+  if( finData.eof() ) return;
+
   G4cout << " ReadMaterialIndices " << nMate << G4endl;
   for( size_t ii = 0; ii < nMate; ii++ ){
     finData >> mateName >> densityMax;
