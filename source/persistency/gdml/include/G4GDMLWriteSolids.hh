@@ -34,19 +34,22 @@
 #define _G4GDMLWRITESOLIDS_INCLUDED_
 
 #include "G4Box.hh"
+#include "G4Cons.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4TessellatedSolid.hh"
+#include "G4Tubs.hh"
 
 #include "G4SolidStore.hh"
-#include "G4Transform3D.hh"
 
 #include "G4GDMLWriteMaterials.hh"
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
+   void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
+   void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
    void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
    void solidsWrite(xercesc::DOMElement*);
 };

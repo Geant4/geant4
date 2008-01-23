@@ -42,6 +42,23 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box*
    boxElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::coneWrite(xercesc::DOMElement* solidsElement,const G4Cons* const cone) {
+
+   xercesc::DOMElement* coneElement = newElement("cone");
+   solidsElement->appendChild(coneElement);
+
+   coneElement->setAttributeNode(newAttribute("name",cone->GetName()));
+   coneElement->setAttributeNode(newAttribute("rmin1",cone->GetInnerRadiusMinusZ()));
+   coneElement->setAttributeNode(newAttribute("rmax1",cone->GetOuterRadiusMinusZ()));
+   coneElement->setAttributeNode(newAttribute("rmin2",cone->GetInnerRadiusPlusZ()));
+   coneElement->setAttributeNode(newAttribute("rmax2",cone->GetOuterRadiusPlusZ()));
+   coneElement->setAttributeNode(newAttribute("z",2.0*cone->GetZHalfLength()));
+   coneElement->setAttributeNode(newAttribute("startphi",cone->GetStartPhiAngle()));
+   coneElement->setAttributeNode(newAttribute("deltaphi",cone->GetDeltaPhiAngle()));
+   coneElement->setAttributeNode(newAttribute("lunit","mm"));
+   coneElement->setAttributeNode(newAttribute("aunit","degree"));
+}
+
 void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
 
    xercesc::DOMElement* tessellatedElement = newElement("tessellated");
@@ -84,6 +101,21 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
          NumVertex++;
       }
    }
+}
+
+void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tubs* const tube) {
+
+   xercesc::DOMElement* tubeElement = newElement("tube");
+   solidsElement->appendChild(tubeElement);
+
+   tubeElement->setAttributeNode(newAttribute("name",tube->GetName()));
+   tubeElement->setAttributeNode(newAttribute("rmin",tube->GetInnerRadius()));
+   tubeElement->setAttributeNode(newAttribute("rmax",tube->GetOuterRadius()));
+   tubeElement->setAttributeNode(newAttribute("z",2.0*tube->GetZHalfLength()));
+   tubeElement->setAttributeNode(newAttribute("startphi",tube->GetStartPhiAngle()));
+   tubeElement->setAttributeNode(newAttribute("deltaphi",tube->GetDeltaPhiAngle()));
+   tubeElement->setAttributeNode(newAttribute("lunit","mm"));
+   tubeElement->setAttributeNode(newAttribute("aunit","degree"));
 }
 
 void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4ExtrudedSolid* const xtru) {
@@ -130,14 +162,16 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
    element->appendChild(solidsElement);
 
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
-   const G4int solidCount = solidList->size();
+   const size_t solidCount = solidList->size();
 
-   for (G4int i=0;i<solidCount;i++) {
+   for (size_t i=0;i<solidCount;i++) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
 
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
+      if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
-      if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); }
+      if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
+      if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); }
    }
 }
