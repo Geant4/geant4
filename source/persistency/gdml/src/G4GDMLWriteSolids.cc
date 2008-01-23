@@ -30,6 +30,45 @@
 
 #include "G4GDMLWriteSolids.hh"
 
+void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4BooleanSolid* const boolean) {
+
+   G4String tag;
+
+   if (dynamic_cast<const G4IntersectionSolid* const>(boolean)) { tag = "intersection"; } else
+   if (dynamic_cast<const G4SubtractionSolid* const>(boolean)) { tag = "subtraction"; } else
+   if (dynamic_cast<const G4UnionSolid* const>(boolean)) { tag = "union"; } else return;
+
+   G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));
+   G4VSolid* secondPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(1));
+
+   G4ThreeVector pos;
+   G4ThreeVector rot;
+   
+   if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(secondPtr)) {
+   
+      pos = disp->GetObjectTranslation();
+      rot = getAngles(disp->GetObjectRotation());
+   
+      secondPtr = disp->GetConstituentMovedSolid();
+   }
+
+   xercesc::DOMElement* booleanElement = newElement(tag);
+   solidsElement->appendChild(booleanElement);
+
+   booleanElement->setAttributeNode(newAttribute("name",boolean->GetName()));
+
+   xercesc::DOMElement* firstElement = newElement("first");
+   xercesc::DOMElement* secondElement = newElement("second");
+   booleanElement->appendChild(firstElement);
+   booleanElement->appendChild(secondElement);
+
+   firstElement->setAttributeNode(newAttribute("ref",firstPtr->GetName()));
+   secondElement->setAttributeNode(newAttribute("ref",secondPtr->GetName()));
+
+   positionWrite(booleanElement,pos);
+   rotationWrite(booleanElement,rot);
+}
+
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
 
    xercesc::DOMElement* boxElement = newElement("box");
@@ -168,6 +207,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
 
+      if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else

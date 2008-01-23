@@ -33,12 +33,16 @@
 #ifndef _G4GDMLWRITESOLIDS_INCLUDED_
 #define _G4GDMLWRITESOLIDS_INCLUDED_
 
+#include "G4BooleanSolid.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4ReflectedSolid.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4Tubs.hh"
+#include "G4UnionSolid.hh"
 
 #include "G4SolidStore.hh"
 
@@ -46,6 +50,7 @@
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
+   void booleanWrite(xercesc::DOMElement*,const G4BooleanSolid* const);
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
