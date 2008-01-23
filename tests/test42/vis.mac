@@ -15,10 +15,13 @@
 #    /vis/viewer/create
 #
 # Create a scene handler and a viewer for the OGLIX driver
+#
 /vis/open OGLIX
 #
 /vis/viewer/set/style wireframe
+#
 # Set direction from target to camera.
+#
 /vis/viewer/set/viewpointVector 1 1.5 1.1
 #/vis/viewer/set/viewpointThetaPhi 90 180 deg
 #/vis/viewer/zoom 1.4

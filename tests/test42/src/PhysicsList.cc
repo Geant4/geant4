@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2007-12-09 12:02:34 grichine Exp $
+// $Id: PhysicsList.cc,v 1.3 2008-01-23 16:06:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@
 #include "HadronPhysicsQGSP_BERT_HP.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
 #include "HadronPhysicsQGSP_BIC_HP.hh"
-#include "HadronPhysicsQGSP_CASC.hh"
+// #include "HadronPhysicsQGSP_CASC.hh"
 #include "HadronPhysicsQGS_BIC.hh"
 
 #include "G4HadronInelasticQLHEP.hh"
@@ -304,7 +304,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QGSP_CASC") {
 
     SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP_CASC("hadron",true));
+    // hadronPhys.push_back( new HadronPhysicsQGSP_CASC("hadron",true));
     dump = true;
 
   } else if (name == "QGSP_DIF") {
