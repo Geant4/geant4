@@ -39,25 +39,24 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
    physvolElement->appendChild(volumerefElement);
 
-   G4Transform3D transform(physvol->GetObjectRotationValue(),physvol->GetObjectTranslation());
-
    G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
 
-   if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
+   G4ThreeVector scl(1.0,1.0,1.0);
+   G4ThreeVector rot = -getAngles(physvol->GetObjectRotationValue());
+   G4ThreeVector pos = physvol->GetObjectTranslation();
+
+   if (physvol->GetLogicalVolume()->GetNoDaughters() == 0) {  // The referenced volume is a leaf
+
+      if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
       
-      transform = transform*reflectedPtr->GetTransform3D();
-      solidPtr = reflectedPtr->GetConstituentMovedSolid();
+         solidPtr = reflectedPtr->GetConstituentMovedSolid();
+         G4Transform3D scale = reflectedPtr->GetTransform3D();
+
+         scl.setX(scale(0,0));
+         scl.setY(scale(1,1));
+         scl.setZ(scale(2,2));
+      }
    }
-
-   G4Scale3D scale;
-   G4Rotate3D rotation;
-   G4Translate3D translation;
-
-   transform.getDecomposition(scale,rotation,translation);
-
-   G4ThreeVector scl(scale.xx(),scale.yy(),scale.zz());
-   G4ThreeVector rot = -getAngles(rotation.getRotation());
-   G4ThreeVector pos(translation.dx(),translation.dy(),translation.dz());
 
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);

@@ -40,7 +40,7 @@
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine {
    void atomWrite(xercesc::DOMElement*,G4double);
    void DWrite(xercesc::DOMElement*,G4double);
-   void materialWrite(xercesc::DOMElement*);
+   void materialWrite(xercesc::DOMElement*,const G4Material* const);
 private:
    void materialsWrite(xercesc::DOMElement*);
 };

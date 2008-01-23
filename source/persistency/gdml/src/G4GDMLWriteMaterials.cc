@@ -50,33 +50,43 @@ void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,G4double d) {
    element->appendChild(DElement);
 }
 
-void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element) {
+void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Material* const materialPtr) {
 
-   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
-   const G4int materialCount = materialList->size();
+   xercesc::DOMElement* materialElement = newElement("material");
+   element->appendChild(materialElement);
 
-   for (G4int i=0;i<materialCount;i++) {
+   materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
+   DWrite(materialElement,materialPtr->GetDensity());
+
+   const size_t NumberOfElements = materialPtr->GetNumberOfElements();
+
+   if (NumberOfElements>1) { 
    
-      const G4Material* materialPtr = (*materialList)[i];
+      const G4double* MassFractionVector = materialPtr->GetFractionVector();
 
-      xercesc::DOMElement* materialElement = newElement("material");
-    
-      materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
-      materialElement->setAttributeNode(newAttribute("Z",materialPtr->GetZ()));
-    
-      atomWrite(materialElement,materialPtr->GetA());    
-    
-      DWrite(materialElement,materialPtr->GetDensity());
+      for (size_t i=0;i<NumberOfElements;i++) {
       
-      element->appendChild(materialElement);
+         xercesc::DOMElement* fractionElement = newElement("fraction");
+         materialElement->appendChild(fractionElement);
+
+         fractionElement->setAttributeNode(newAttribute("n",MassFractionVector[i]));
+         fractionElement->setAttributeNode(newAttribute("ref",materialPtr->GetElement(i)->GetName()));
+      }
+ 
+   } else {
+   
+      materialElement->setAttributeNode(newAttribute("Z",materialPtr->GetZ()));
+      atomWrite(materialElement,materialPtr->GetA());
    }
 }
 
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
    xercesc::DOMElement* materialsElement = newElement("materials");
-
-   materialWrite(materialsElement);
-
    element->appendChild(materialsElement);
+   
+   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
+   const size_t materialCount = materialList->size();
+
+   for (size_t i=0;i<materialCount;i++) materialWrite(materialsElement,(*materialList)[i]);
 }
