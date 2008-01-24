@@ -98,6 +98,27 @@ void G4GDMLWriteSolids::coneWrite(xercesc::DOMElement* solidsElement,const G4Con
    coneElement->setAttributeNode(newAttribute("aunit","degree"));
 }
 
+void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G4Polycone* const polycone) {
+
+   xercesc::DOMElement* polyconeElement = newElement("polycone");
+   solidsElement->appendChild(polyconeElement);
+
+   polyconeElement->setAttributeNode(newAttribute("name",polycone->GetName()));
+   polyconeElement->setAttributeNode(newAttribute("startphi",polycone->GetOriginalParameters()->Start_angle/CLHEP::degree));
+   polyconeElement->setAttributeNode(newAttribute("deltaphi",polycone->GetOriginalParameters()->Opening_angle/CLHEP::degree));
+   polyconeElement->setAttributeNode(newAttribute("lunit","mm"));
+   polyconeElement->setAttributeNode(newAttribute("aunit","degree"));
+
+   const size_t num_zplanes = polycone->GetOriginalParameters()->Num_z_planes;
+
+   const G4double* z_array = polycone->GetOriginalParameters()->Z_values;
+   const G4double* rmin_array = polycone->GetOriginalParameters()->Rmin;
+   const G4double* rmax_array = polycone->GetOriginalParameters()->Rmax;
+
+   for (size_t i=0;i<num_zplanes;i++)
+      zplaneWrite(polyconeElement,z_array[i],rmin_array[i],rmax_array[i]);
+}
+
 void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
 
    xercesc::DOMElement* tessellatedElement = newElement("tessellated");
@@ -237,6 +258,16 @@ void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4Ext
    }
 }
 
+void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double& z,const G4double& rmin,const G4double& rmax) {
+
+   xercesc::DOMElement* zplaneElement = newElement("zplane");
+   element->appendChild(zplaneElement);
+   
+   zplaneElement->setAttributeNode(newAttribute("z",z));
+   zplaneElement->setAttributeNode(newAttribute("rmin",rmin));
+   zplaneElement->setAttributeNode(newAttribute("rmax",rmax));
+}
+
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
 
    xercesc::DOMElement* solidsElement = newElement("solids");
@@ -252,6 +283,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
+      if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
       if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
