@@ -170,6 +170,20 @@ void G4GDMLWriteSolids::trapWrite(xercesc::DOMElement* solidsElement,const G4Tra
    trapElement->setAttributeNode(newAttribute("aunit","degree"));
 }
 
+void G4GDMLWriteSolids::trdWrite(xercesc::DOMElement* solidsElement,const G4Trd* const trd) {
+
+   xercesc::DOMElement* trdElement = newElement("trd");
+   solidsElement->appendChild(trdElement);
+
+   trdElement->setAttributeNode(newAttribute("name",trd->GetName()));
+   trdElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()));
+   trdElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()));
+   trdElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()));
+   trdElement->setAttributeNode(newAttribute("y2",2.0*trd->GetYHalfLength1()));
+   trdElement->setAttributeNode(newAttribute("z",2.0*trd->GetZHalfLength()));
+   trdElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tubs* const tube) {
 
    xercesc::DOMElement* tubeElement = newElement("tube");
@@ -241,6 +255,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
       if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
+      if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
       if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); }
    }
 }
