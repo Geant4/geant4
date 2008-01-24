@@ -41,6 +41,7 @@
 #include "G4ReflectedSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4TessellatedSolid.hh"
+#include "G4Trap.hh"
 #include "G4Tubs.hh"
 #include "G4UnionSolid.hh"
 
@@ -54,6 +55,7 @@ private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
+   void trapWrite(xercesc::DOMElement*,const G4Trap* const);
    void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
    void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
    void solidsWrite(xercesc::DOMElement*);
