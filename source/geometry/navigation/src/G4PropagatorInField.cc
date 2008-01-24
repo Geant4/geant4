@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.41 2008-01-24 08:23:28 tnikitin Exp $
+// $Id: G4PropagatorInField.cc,v 1.42 2008-01-24 08:54:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -718,11 +718,10 @@ G4PropagatorInField::LocateIntersectionPoint(
                     - CurrentA_PointVelocity.GetPosition() ).mag2(); 
         curveDist = CurrentB_PointVelocity.GetCurveLength()
                     - CurrentA_PointVelocity.GetCurveLength();
-	// if( curveDist*(curveDist+2*perMillion ) < linDistSq )
-        //
+
         // Change this condition for very strict parameters of propagation 
         //
-         if( curveDist*curveDist*(1+2* fEpsilonStep ) < linDistSq )
+        if( curveDist*curveDist*(1+2* fEpsilonStep ) < linDistSq )
         {
           // Re-integrate to obtain a new B
           //
@@ -758,19 +757,30 @@ G4PropagatorInField::LocateIntersectionPoint(
                  << "The final curve point is not further along"
                  << " than the original!" << G4endl;
 
-	  if( recalculatedEndPoint )G4cerr<<"Recalculation of EndPoint was called with fEpsStep="<<fEpsilonStep<<G4endl;
+          if( recalculatedEndPoint )
+          {
+            G4cerr << "Recalculation of EndPoint was called with fEpsStep= "
+                   << fEpsilonStep << G4endl;
+          }
           G4cerr.precision(20);
-          G4cerr << " Point A (Curve start)   is " << CurveStartPointVelocity << G4endl;
-          G4cerr << " Point B (Curve   end)   is " << CurveEndPointVelocity << G4endl;
-          G4cerr << " Point A (Current start) is " << CurrentA_PointVelocity << G4endl;
-          G4cerr << " Point B (Current end)   is " << CurrentB_PointVelocity << G4endl;
-          G4cerr << " Point S (Sub start)     is " << SubStart_PointVelocity << G4endl;
-          G4cerr << " Point E (Trial Point)   is " << CurrentE_Point << G4endl;
-          G4cerr << " Point F (Intersection)  is " << ApproxIntersecPointV << G4endl;
-          G4cerr << "        LocateIntersection parameters are : Substep no="<<substep_no
+          G4cerr << " Point A (Curve start)   is " << CurveStartPointVelocity
                  << G4endl;
-	    G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth="<<depth<<G4endl;
-
+          G4cerr << " Point B (Curve   end)   is " << CurveEndPointVelocity
+                 << G4endl;
+          G4cerr << " Point A (Current start) is " << CurrentA_PointVelocity
+                 << G4endl;
+          G4cerr << " Point B (Current end)   is " << CurrentB_PointVelocity
+                 << G4endl;
+          G4cerr << " Point S (Sub start)     is " << SubStart_PointVelocity
+                 << G4endl;
+          G4cerr << " Point E (Trial Point)   is " << CurrentE_Point
+                 << G4endl;
+          G4cerr << " Point F (Intersection)  is " << ApproxIntersecPointV
+                 << G4endl;
+          G4cerr << "        LocateIntersection parameters are : Substep no= "
+                 << substep_no << G4endl;
+          G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
+                 << depth << G4endl;
 
           G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
                       "FatalError", FatalException,
