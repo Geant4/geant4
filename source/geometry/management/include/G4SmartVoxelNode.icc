@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.icc,v 1.6 2008-01-14 11:29:11 gcosmo Exp $
+// $Id: G4SmartVoxelNode.icc,v 1.7 2008-01-24 15:47:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,9 +51,21 @@ G4int G4SmartVoxelNode::GetNoContained() const
 }
 
 inline
+G4int G4SmartVoxelNode::GetCapacity() const
+{
+  return fcontents.capacity();
+}
+
+inline
 void G4SmartVoxelNode::Reserve(G4int noSlices)
 {
   fcontents.reserve(noSlices);
+}
+
+inline
+void G4SmartVoxelNode::Shrink()
+{
+  G4SliceVector(fcontents).swap(fcontents);
 }
 
 inline

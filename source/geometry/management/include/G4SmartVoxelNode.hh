@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.11 2008-01-14 11:29:11 gcosmo Exp $
+// $Id: G4SmartVoxelNode.hh,v 1.12 2008-01-24 15:47:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelNode
@@ -80,9 +80,15 @@ class G4SmartVoxelNode
     inline G4int GetNoContained() const;
       // Return the number of volumes inside the node.
 
+    inline G4int GetCapacity() const;
+      // Return the maximum capacity of the buffer.
+
     inline void Reserve(G4int noSlices);
       // Reserve memory in the vector of slices according to the specified
       // quantity, relative to the maximum number of slices.
+
+    inline void Shrink();
+      // Shrink buffer capacity to actual size to reduce wasted memory.
 
     inline G4int GetMaxEquivalentSliceNo() const;
       // Return the maximum slice (node/header) number with the same contents,
