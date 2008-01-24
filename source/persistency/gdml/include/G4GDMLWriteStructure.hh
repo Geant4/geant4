@@ -36,6 +36,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 
 #include "G4GDMLWriteSetup.hh"
 
