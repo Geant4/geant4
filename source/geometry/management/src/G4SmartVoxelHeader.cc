@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.30 2008-01-18 09:44:19 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.31 2008-01-24 15:46:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -423,7 +423,6 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
   }
   for (nVol=0; nVol<nReplicas; nVol++)
   {
-    nodeList[nVol]->Reserve(1);     // Allocate space for one single slice
     nodeList[nVol]->Insert(nVol);   // Insert replication of number
   }                                 // identical to voxel number
 
@@ -1014,9 +1013,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
       }
       for (nodeNo=minContainingNode; nodeNo<=maxContainingNode; nodeNo++)
       {
-        G4SmartVoxelNode* vNode = (*nodeList)[nodeNo];
-        vNode->Reserve(vNode->GetNoContained()+1);
-        vNode->Insert((*pCandidates)[nVol]);
+        (*nodeList)[nodeNo]->Insert((*pCandidates)[nVol]);
       }
     }
   }
