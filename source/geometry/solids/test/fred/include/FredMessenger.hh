@@ -36,6 +36,7 @@
 
 enum VolumeType {
 	TUBS,
+        ORB,
 	SPHERE,
 	BOX,
 	PCON,
@@ -57,7 +58,7 @@ enum VolumeType {
 	TORUS2,
 	TRD
 };
-#define FRED_VOLUMETYPE_NUM 21
+#define FRED_VOLUMETYPE_NUM 22
 
 enum GunType {
 	SPRAY,

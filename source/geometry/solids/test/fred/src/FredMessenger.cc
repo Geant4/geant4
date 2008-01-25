@@ -60,6 +60,7 @@ FredMessenger::FredMessenger( )
 	volumeNames[PGON4] = "PGON4";
 	volumeNames[VOXEL] = "VOXEL";
 	volumeNames[BOOL1]  =  "BOOL1";
+	volumeNames[ORB] = "ORB";
 	volumeNames[SPHERE] = "SPHERE";
 	volumeNames[CONE]  =  "CONE";
 	volumeNames[CONE2] = "CONE2";
@@ -120,6 +121,7 @@ FredMessenger::FredMessenger( )
 			 + volumeNames[PGON3] + " "
 			 + volumeNames[PGON4] + " "
 			 + volumeNames[BOOL1] + " "
+			 + volumeNames[ORB] + " "
 			 + volumeNames[SPHERE] + " "
 			 + volumeNames[PGON] + " "
 			 + volumeNames[TRAP] + " "
