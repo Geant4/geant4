@@ -36,8 +36,9 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    element->appendChild(physvolElement);
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
    physvolElement->appendChild(volumerefElement);
+
+   volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
 
    G4Transform3D transform(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
 
@@ -50,6 +51,22 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    G4ThreeVector scl(1.0,1.0,1.0);
    G4ThreeVector rot = getAngles(rotation);
    G4ThreeVector pos(transform(0,3),transform(1,3),transform(2,3));
+
+   // Reflection is stored as a reflected solid and propagates down to the leaves!
+
+   if (physvol->GetLogicalVolume()->GetNoDaughters()==0) { // The referenced volume is a LEAF...
+      
+      G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
+      
+      if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) { //.. and it is reflected
+
+         G4Transform3D scale = refl->GetTransform3D();
+      	 
+	 scl.setX(scale(0,0));  // We assume that this is a pure scaling transformation!!!
+	 scl.setY(scale(1,1));
+	 scl.setZ(scale(2,2));
+      }
+   }
 
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
