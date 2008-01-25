@@ -43,11 +43,11 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
 
    G4ThreeVector pos;
    G4ThreeVector rot;
+
+   if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(secondPtr)) {
    
-   while (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(secondPtr)) {
-   
-      pos += disp->GetObjectTranslation();
-      rot += getAngles(disp->GetObjectRotation());
+      pos = disp->GetObjectTranslation();
+      rot = getAngles(disp->GetObjectRotation());
    
       secondPtr = disp->GetConstituentMovedSolid();
    }
