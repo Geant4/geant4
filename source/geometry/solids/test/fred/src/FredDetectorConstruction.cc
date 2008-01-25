@@ -43,6 +43,7 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Orb.hh"
 #include "G4Sphere.hh"
 #include "G4Torus.hh"
 #include "G4Trap.hh"
@@ -54,7 +55,7 @@
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
 
-#include "../../Boolean/include/G4SubtractionSolid.hh"
+#include "G4SubtractionSolid.hh"
 
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
@@ -129,8 +130,8 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       // Rib thickness 0.41, height 6.42
       startPhi = -std::atan2( 0.5*0.41, 6.42 );
       deltaPhi = -2.0*startPhi;
-      testVolume = new G4Polyhedra( "natalia",
-									startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );
+      testVolume = new G4Polyhedra("natalia",
+                                    startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );
   }
   break;
 		
@@ -138,6 +139,11 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     testVolume = new G4Box( "voxel_test", 1*m, 1*m, 1*m );
     break;
 	
+  case ORB:
+    testVolume = new G4Orb ("orb_test", 1.0*m);
+    fprintf(stderr,"OK defining an Orb\n");
+    break;
+    
   case SPHERE:
     testVolume = new G4Sphere ("sphere_test",0.8*m,1.0*m, startPhi, deltaPhi,0.0, pi);
     fprintf(stderr,"OK defining a Sphere\n");

@@ -42,6 +42,7 @@
 #include "G4Para.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
+#include "G4Orb.hh"
 #include "G4Sphere.hh"
 #include "G4Torus.hh"
 #include "G4Tubs.hh"
@@ -123,6 +124,14 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	G4String trdPath = prefix+"G4Trd";
 	trdCmd = new G4UIcmdWithPargs( trdPath, this, trdArgs, 5 );
 	trdCmd->SetGuidance( "Declare a G4Trd solid" );
+
+	//
+	// Declare G4Orb
+	//
+	orbArgs[0] = new G4UIcmdPargDouble( "r", 1.0, m );
+	G4String orbPath = prefix+"G4Orb";
+	orbCmd = new G4UIcmdWithPargs( orbPath, this, orbArgs, 1 );
+	orbCmd->SetGuidance( "Declare a G4Orb solid" );
 
 	//
 	// Declare G4Sphere
@@ -284,6 +293,9 @@ G4InteractiveSolid::~G4InteractiveSolid()
 	delete trdCmd;
 	DeleteArgArray( trdArgs,       sizeof(      trdArgs)/sizeof(G4UIcmdParg**) );
 
+	delete orbCmd;
+	DeleteArgArray( orbArgs,       sizeof(      orbArgs)/sizeof(G4UIcmdParg**) );
+
 	delete sphereCmd;
 	DeleteArgArray( sphereArgs,    sizeof(   sphereArgs)/sizeof(G4UIcmdParg**) );
 
@@ -420,6 +432,23 @@ void G4InteractiveSolid::MakeMeATrd( G4String values )
 	}
 	else
 		G4cerr << "G4Trd not created" << G4endl;
+}
+
+
+//
+// MakeMeAnOrb
+//
+void G4InteractiveSolid::MakeMeAnOrb( G4String values )
+{
+	if (orbCmd->GetArguments( values )) {
+		delete solid;
+		
+		G4UIcmdPargDouble **dArg = (G4UIcmdPargDouble **)orbArgs;
+		
+		solid = new G4Orb( "interactiveOrb", dArg[0]->GetValue());
+	}
+	else
+		G4cerr << "G4Orb not created" << G4endl;
 }
 
 
@@ -862,6 +891,8 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeATrap( newValues );
 	else if (command == trdCmd) 
 		MakeMeATrd( newValues );
+	else if (command == orbCmd) 
+		MakeMeAnOrb( newValues );
 	else if (command == sphereCmd) 
 		MakeMeASphere( newValues );
 	else if (command == torusCmd) 
@@ -907,6 +938,8 @@ G4String G4InteractiveSolid::GetCurrentValue( G4UIcommand *command )
 		return ConvertArgsToString( 	  trapArgs, sizeof(	trapArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == trdCmd)
 		return ConvertArgsToString( 	   trdArgs, sizeof(	 trdArgs)/sizeof(G4UIcmdParg**) );
+	else if (command == orbCmd)
+		return ConvertArgsToString( 	   orbArgs, sizeof(  orbArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == sphereCmd)
 		return ConvertArgsToString( 	sphereArgs, sizeof(   sphereArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == torusCmd)

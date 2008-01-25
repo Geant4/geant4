@@ -87,6 +87,10 @@ protected:
   G4UIcmdWithPargs	*trdCmd;
   void MakeMeATrd( G4String values );
 	
+  G4UIcmdParg		*orbArgs[1];
+  G4UIcmdWithPargs	*orbCmd;
+  void MakeMeAnOrb( G4String values );
+	
   G4UIcmdParg		*sphereArgs[6];
   G4UIcmdWithPargs	*sphereCmd;
   void MakeMeASphere( G4String values );
