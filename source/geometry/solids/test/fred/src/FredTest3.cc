@@ -33,6 +33,7 @@
 #include "Randomize.hh"
 #include "G4VSolid.hh"
 #include "G4UImanager.hh"
+#include "G4GeometryTolerance.hh"
 
 #include <time.h>
 #include <iomanip>
@@ -139,13 +140,12 @@ void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 	//
 	// Output test parameters
 	//
-	time_t now = time(0);
-        char timebuf[25];
-        timebuf[24]=0;
-        strncpy( ctime(&now), timebuf, 24 );
-	G4String dateTime( timebuf );
+	time_t now;
+	time(&now);
+	G4String dateTime(ctime(&now));
 	
-	logger << "% Fred test3 logged output " << dateTime << G4endl;
+	logger << "% Fred test3 logged output " << dateTime;
+	logger << "% volume =    " << testVolume->GetName() << G4endl;
 	logger << "% target =    " << target << G4endl;
 	logger << "% widths =    " << widths << G4endl;
 	logger << "% grids  =    " << grids  << G4endl;
@@ -178,6 +178,7 @@ void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 	G4int nError = 0;
 	
 	for(;;) {
+  
 		//
 		// Generate a random point
 		//
@@ -221,12 +222,9 @@ void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 	
 	}
 
-	now = time(0);
-        char timebuf2[25];
-        timebuf2[24]=0;
-        strncpy( ctime(&now), timebuf2, 24 );
-	G4String dateTime2( timebuf2 );
-	logger << dateTime2 << G4endl;
+	time(&now);
+	G4String dateTime2(ctime(&now));
+	logger << dateTime2;
 
 	logger << "% Statistics: points=" << nPoint << " errors reported=" << nError << G4endl;
 
@@ -253,6 +251,8 @@ G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
 	//
 	G4int error = GetLoggedPV( logger, errorIndex, p, v );
 	if (error) return error;
+	
+        G4cout << "DebugError:  p=" << p << ",  v=" << v << G4endl; 
 			
 	//
 	// Setup fred to simulate this event
@@ -264,6 +264,8 @@ G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
 	// please do something better.
 	//
 	G4UImanager *UI = G4UImanager::GetUIpointer();
+
+	UI->ApplyCommand( "/tracking/verbose 1" );
 
 	UI->ApplyCommand( "/fred/gun G4" );
 	
@@ -302,7 +304,7 @@ G4int FredTest3::DebugInside( const G4VSolid *testVolume, std::istream &logger, 
 	//
 	// Call
 	//
-	testVolume->Inside( p );
+	G4cout << "testVolume->Inside(p): " << testVolume->Inside( p ) << G4endl; 
 	return 0;
 }
 
@@ -325,7 +327,7 @@ G4int FredTest3::DebugToInP( const G4VSolid *testVolume, std::istream &logger, c
 	//
 	// Call
 	//
-	testVolume->DistanceToIn( p );
+	G4cout << "testVolume->DistanceToIn(p): " <<  testVolume->DistanceToIn( p )  << G4endl; 
 	return 0;
 }
 
@@ -349,10 +351,11 @@ G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, std::istream &logger, 
 	// Call
 	//
 	G4double answer = testVolume->DistanceToIn( p, v );
+	G4cout << "testVolume->DistanceToIn(p,v): " << answer << G4endl; 
 	
 	p += answer*v;
 	
-	testVolume->Inside(p);
+	G4cout << "testVolume->Inside(p+=answer*v):" <<  p << " " << testVolume->Inside(p) << G4endl;
 	return 0;
 }
 
@@ -375,7 +378,8 @@ G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, std::istream &logger, 
 	//
 	// Call
 	//
-	testVolume->DistanceToOut( p );
+	G4cout << "testVolume->DistanceToOut(p): " << testVolume->DistanceToOut( p ) << G4endl; 
+
 	return 0;
 }
 
@@ -394,15 +398,18 @@ G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger,
 	//
 	G4int error = GetLoggedPV( logger, errorIndex, p, v );
 	if (error) return error;
-	
+
 	//
 	// Call
 	//
-	G4double answer = testVolume->DistanceToOut( p, v );
+	G4bool validNorm;
+	G4ThreeVector norm;
+	G4double answer = testVolume->DistanceToOut( p, v, true, &validNorm, &norm);
+	G4cout << "testVolume->DistanceToOut( p, v ): " << answer << " validNorm: " << validNorm << G4endl; 
 	
 	p += answer*v;
+	G4cout << "testVolume->Inside(p += answer*v): " << testVolume->Inside(p) << G4endl; 
 	
-	testVolume->Inside(p);
 	return 0;
 }
 
@@ -418,19 +425,24 @@ G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger,
 void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 				  const FredTest3PointList *inside, const G4ThreeVector point, std::ostream &logger )
 {
-	G4int i, n = inside->NumPoints();
-	
+	// Check if point is really outside
 	G4double safeDistance = testVolume->DistanceToIn( point );
 	if (safeDistance <= 0.0) {
 		ReportError( nError, point, 0, "T0: DistanceToIn(p) <= 0", logger );
 		return;
 	}
 	
-	for( i=0; i < n; i++ ) {
+	// Loop over inside points
+	for( G4int i=0; i < inside->NumPoints(); i++ ) {
+  
+  		// Direction vector from tested point to the inside point
 		G4ThreeVector vr = (*inside)[i] - point;
 		G4ThreeVector v = vr.unit();
 		
+  		// Distance from the outside point to solid in direction
+  		// to the tested inside point
 		G4double dist = testVolume->DistanceToIn( point, v );
+
 		if (dist <= 0) {
 			ReportError( nError, point, v, "T0: DistanceToIn(p,v) <= 0", logger );
 			continue;
@@ -444,8 +456,12 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			continue;
 		}
 		
+  		// Tested point moved to the solid surface
+  		// (in direction to the tested inside point): 
 		G4ThreeVector p = point + dist*v;
 		
+  		// Inside(p) should return kSurface.
+  		// If kOutside is returned, report undershoots; if kInside, report overshoots
 		EInside insideOrNot = testVolume->Inside( p );
 		if (insideOrNot == kOutside) {
 			ReportError( nError, point, v, "T0: DistanceToIn(p,v) undershoots", logger );
@@ -456,30 +472,39 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			continue;
 		}
 		
+  		// DistanceToIn for the computed point on the surface
 		dist = testVolume->DistanceToIn( p );
-		if (dist != 0) {
+		//if (dist != 0) {
+		if (dist > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) {
 			ReportError( nError, p, v, "T02: DistanceToIn(p) should be zero", logger );
 			continue;
 		}
 		
+  		// DistanceToOut for the computed point on the surface
 		dist = testVolume->DistanceToOut( p );
-		if (dist != 0) {
+		//if (dist != 0) {
+		if (dist > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) {
 			ReportError( nError, p, v, "T02: DistanceToOut(p) should be zero", logger );
 			continue;
 		}
 		
+  		// DistanceToIn with direction for the computed point on the surface
 		dist = testVolume->DistanceToIn( p, v );
-		if (dist != 0) {
+		//if (dist != 0) {
+		if (dist > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) {
 			ReportError( nError, p, v, "T02: DistanceToIn(p,v) should be zero", logger );
 			continue;
 		}	
 		
+  		// DistanceToOut with direction for the computed point on the surface
 		G4bool validNorm;
 		G4ThreeVector norm;
 		
 		dist = testVolume->DistanceToOut( p, v, true, &validNorm, &norm );
-		if (dist == 0) continue;
-		
+		// if (dist == 0) continue;
+		// if (dist < G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) continue;
+       		// Why quit here withour Error ??? 
+    
 		if (dist == kInfinity) {
 			ReportError( nError, p, v, "T02: DistanceToOut(p,v) == kInfinity", logger );
 			continue;
@@ -492,6 +517,9 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			}
 		}
 		
+  		// The point on surface (entering point) moved to the second point
+  		// on the surface (exiting point)
+  		// (in direction to the tested inside point):
 		G4ThreeVector p2 = p + v*dist;
 		
 		insideOrNot = testVolume->Inside(p2);
@@ -504,6 +532,10 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 			continue;
 		}
 			
+  		// DistanceToIn from the exiting point (in the exiting direction)
+  		// If infinity, there is no intersectin with solid anymore, what means that the solid
+  		// lied entirely between entering and existing points, and the validNorm should have been true.
+                
 		dist = testVolume->DistanceToIn(p2,v);
 		if (validNorm) {
 			if (dist != kInfinity) {
@@ -528,21 +560,25 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 				 const FredTest3PointList *outside, const G4ThreeVector point, std::ostream &logger )
 {
-	G4int i, n = outside->NumPoints();
-	
+	// Check if point is really inside
 	G4double safeDistance = testVolume->DistanceToOut( point );
 	if (safeDistance <= 0.0) {
 		ReportError( nError, point, 0, "TI: DistanceToOut(p) <= 0", logger );
 		return;
 	}
 	
-	for( i=0; i < n; i++ ) {
+	// Loop over outside points
+	for( G4int i=0; i < outside->NumPoints(); i++ ) {
+
+  		// Direction vector from tested point to the outside point
 		G4ThreeVector vr = (*outside)[i] - point;
 		G4ThreeVector v = vr.unit();
 
 		G4bool validNorm;
 		G4ThreeVector norm;
 		
+  		// Distance from the inside point to solid border in direction
+  		// to the tested outside point
 		G4double dist = testVolume->DistanceToOut( point, v, true, &validNorm, &norm );
 		if (dist <= 0) {
 			ReportError( nError, point, v, "TI: DistanceToOut(p,v) <= 0", logger );
@@ -553,7 +589,7 @@ void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 			continue;
 		}
 		if (dist < safeDistance+1E-10) {
-			ReportError( nError, point, v, "TI: DistanceToOut(p,v) < DistanceToIn(p)", logger );
+			ReportError( nError, point, v, "TI: DistanceToOut(p,v) < DistanceToOut(p)", logger );
 			continue;
 		}
 
@@ -564,6 +600,8 @@ void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 			}
 		}
 		
+  		// Tested point moved to the solid surface
+  		// (in direction to the tested outside point): 
 		G4ThreeVector p = point + v*dist;
 		
 		EInside insideOrNot = testVolume->Inside(p);
@@ -709,7 +747,7 @@ FredTest3PointList::FredTest3PointList( G4int size )
 
 FredTest3PointList::~FredTest3PointList()
 {
-	delete pointList;
+	delete [] pointList;
 }
 
 void FredTest3PointList::AddPoint( G4ThreeVector newPoint )
