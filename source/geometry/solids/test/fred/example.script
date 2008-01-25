@@ -1,6 +1,7 @@
-/vis/open VRML2FILE
+#/vis/open VRML2FILE
+#/vis/open OGLIX
+/vis/open OIX
 /vis/viewer/set/style wireframe
-#/vis/open VRML1FILE
 
 /fred/volume BOX
 /fred/gun G4
@@ -9,7 +10,7 @@
 /run/initialize 
 
 /vis/drawVolume test
-/vis/viewer/zoom 16
+#/vis/viewer/zoom 16
 #/vis/viewer/zoom 2
 /tracking/storeTrajectory 1
 /run/beamOn
