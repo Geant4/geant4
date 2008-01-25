@@ -106,6 +106,15 @@ List of fixes included in this public patch since the public release 9.1:
 
   o Examples:
     --------
+    + extended/electromagnetic/TestEm7:
+      o Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
+        process is used ("standardNR");
+      o Added computation of mean NIEL energy loss.
+      o Deactivated nuclear stopping in G4ionIonisation for PhysListStandardIG
+        physics list ("standardNR"), since already simulated by
+        G4ScreenNuclearRecoil process.
+      o Set 'linLossLimit=10^-6' and 'nbuns=360' both for "standard" and
+        "standardNR" physics lists.
     + extended/gdml:
       o Added entity.gdml and materials.xml to demonstrate the ability of
         the parser of resolving entities.
