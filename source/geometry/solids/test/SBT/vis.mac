@@ -1,0 +1,12 @@
+# $Id: vis.mac,v 1.1 2008-01-25 17:07:38 ivana Exp $
+# New Geant4 macro for visulization, common for all tests
+# By I. Hrivnacova, IPN Orsay; 25/01/2008
+
+#/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/create OIX
+/vis/scene/create
+/vis/sceneHandler/attach
+/vis/viewer/create
+/vis/sceneHandler/attach
+/vis/scene/add/axes 
+/vis/viewer/flush
