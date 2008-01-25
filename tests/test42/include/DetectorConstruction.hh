@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2007-12-09 09:40:56 grichine Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2008-01-25 15:29:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -49,6 +49,7 @@ class CheckVolumeSD;
 class TargetSD;
 class G4LogicalVolume;
 class DetectorMessenger;
+class Tst42DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,12 +71,28 @@ public:
 
   void UpdateGeometry();
 
+  void SetDetectorSetUp(G4String s) {fSetUp = s;};
+
+
+private:
+
+  G4VPhysicalVolume* ConstructPhotoDetector();
+
+
+  G4VPhysicalVolume* Hadr01Construct();
+  G4VPhysicalVolume* CMSPWOsimpleConstruct();
+ 
+
+
 private:
 
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
   G4double radius;
+
+  G4String fSetUp;
+
 
   G4Material*  targetMaterial;
   G4Material*  worldMaterial;
@@ -88,6 +105,7 @@ private:
   G4LogicalVolume* logicWorld;
 
   DetectorMessenger* detectorMessenger;
+  Tst42DetectorMessenger* fTst42DetMessenger;
 
 };
 
