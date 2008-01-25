@@ -1,32 +1,57 @@
 #!/bin/sh
+#
+# $Id: sbt.sh,v 1.2 2008-01-25 17:09:50 ivana Exp $
 # 
-# This script must be run from the top level directory where is SBT installed
-##############################################################################
+# This script must be run from the top level directory where is SBT installed;
+# it calls the SBT program with the selected geant4 macro in SBT/geant4 directory.
+# The argument has to specify the solid name.
 
-if [ $# -ne 2 ]
+if [ $# -ne 1 ]
 then
   echo
-  echo "Usage: $0 sbtexecutable solidname"
+  echo "Usage: sbt.sh solidname"
   echo
   exit 1
 fi
 
-echo `pwd`
+SOLID=$1
+INPUT=geant4/${SOLID}.geant4
+OUTPUT=log/SBT.${SOLID}.out
+LOG=log/SBT.${SOLID}.log
 
-export EXE=$1
-shift
-export SOLID=$1
-shift
-
-export INPUT=geant4/${SOLID}.geant4
-export LOG=log/SBT.${SOLID}.log
-
-export COUNTERR="awk -f script/counterr.awk log/${SOLID}.*.log"
-export COUNTVOXELERR="awk -f script/countvoxelerr.awk log/${SOLID}v.*.log"
+COUNTERR="awk -f script/counterr.awk log/${SOLID}.*.log"
+COUNTVOXELERR="awk -f script/countvoxelerr.awk log/${SOLID}v.*.log"
 
 rm -f ${LOG}
-rm -f sbt.out
+rm -f ${OUTPUT}
+rm -f tmp.out
 
-time ${EXE} < ${INPUT} 2>&1 > ${LOG} 2>&1 > sbt.out
-time ${COUNTERR} 2>&1 >> sbt.out
-time ${COUNTVOXELERR} 2>&1 >> sbt.out
+# Run the test
+#
+{ time SBT < ${INPUT} >& ${LOG}; } >& tmp.out
+
+# Print the time and error statistics
+#
+echo "SBT test for $SOLID"  >> ${OUTPUT}
+echo >> ${OUTPUT}
+
+# Run tests
+if [ "`ls log/${SOLID}.*.log 2> /dev/null`" != "" ]
+then 
+  ${COUNTERR} >> ${OUTPUT}
+else
+  echo "No run test output"  >> ${OUTPUT}   
+fi
+
+# Voxel tests
+if [ "`ls log/${SOLID}v.*.log 2> /dev/null`" != "" ]
+then 
+  ${COUNTVOXELERR} >> ${OUTPUT}
+else
+  echo "No voxel test output" >> ${OUTPUT}  
+fi
+
+echo >> ${OUTPUT}
+echo "Time:"  >> ${OUTPUT}
+cat tmp.out >> ${OUTPUT}
+rm -f tmp.out
