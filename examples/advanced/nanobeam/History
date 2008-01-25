@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2007-08-23 07:51:15 gcosmo Exp $
+$Id: History,v 1.2 2008-01-25 20:38:56 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,5 @@ $Id: History,v 1.1 2007-08-23 07:51:15 gcosmo Exp $
                        Package History file
                        --------------------
 
-23 Aug 2007 - G.Cosmo
-- Created module.
-
+25 January 2008 - tag nanobeam-V09-01-01 - S. Incerti
+- first version of nanobeam example committed
