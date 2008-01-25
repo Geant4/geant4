@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2008-01-23 14:36:29 ztorzsok Exp $
+$Id: History,v 1.15 2008-01-25 12:53:17 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 January 2008 Z.Torzsok
+- Bugs fixed in the writer (G4GMLWriteStructure::physvolWrite):
+>> The signs of the rotational angles were incorrect in certain cases (180 degree,90 degree,...)
+>> The reflection was incorrect in case of reflecting a subtree 
+- Now the package is capable of reading and writing back the LHCb geometry correctly.
 
 23 January 2008 Z.Torzsok
 - Composite materials added to writer
