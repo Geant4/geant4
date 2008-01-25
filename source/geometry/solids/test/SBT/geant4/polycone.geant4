@@ -15,14 +15,14 @@ test/maxPoints 1000
 # Start with a nice and easy case
 #
 /solid/G4Polycone 0 360 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
-/test/errorFileName  ../log/polycone.a1.log
+/test/errorFileName  log/polycone.a1.log
 /test/run
 #
 # --- polycone.a2.log
 # Up the ante and generate points on a grid
 #
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.a2.log
+/test/errorFileName  log/polycone.a2.log
 /test/run
 #
 #
@@ -31,14 +31,14 @@ test/maxPoints 1000
 #
 /solid/G4Polycone 0 90 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.b1.log
+/test/errorFileName  log/polycone.b1.log
 /test/run
 #
 # --- polycone.b2.log
 # Up the ante and generate points on a grid
 #
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.b2.log
+/test/errorFileName  log/polycone.b2.log
 /test/run
 #
 # --- polycone.c1.log
@@ -46,14 +46,14 @@ test/maxPoints 1000
 #
 /solid/G4Polycone 0 360 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.c1.log
+/test/errorFileName  log/polycone.c1.log
 /test/run
 #
 # --- polycone.b2.log
 # Up the ante and generate points on a grid
 #
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.c2.log
+/test/errorFileName  log/polycone.c2.log
 /test/run
 #
 # --- polycone.d1.log
@@ -61,14 +61,14 @@ test/maxPoints 1000
 #
 /solid/G4Polycone 0 90 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.d1.log
+/test/errorFileName  log/polycone.d1.log
 /test/run
 #
 # --- polycone.d2.log
 # Up the ante and generate points on a grid
 #
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.d2.log
+/test/errorFileName  log/polycone.d2.log
 /test/run
 #
 # --- polycone.e1.log
@@ -76,14 +76,14 @@ test/maxPoints 1000
 #
 /solid/G4Polycone -1 2 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.e1.log
+/test/errorFileName  log/polycone.e1.log
 /test/run
 #
 # --- polycone.e2.log
 # Up the ante and generate points on a grid
 #
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.e2.log
+/test/errorFileName  log/polycone.e2.log
 /test/run
 #
 # --- polycone.f1.log 
@@ -92,13 +92,13 @@ test/maxPoints 1000
 #
 /solid/G4Polycone 10 250 10 (0.6,0.6,1.0,1.0,1.1,0.9,0.0,0.0,0.4,0.5) (-1.0,0.0,0.0,0.8,1.0,1.0,0.8,0.0,0.0,-1.0)
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.f1.log
+/test/errorFileName  log/polycone.f1.log
 /test/run
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.f2.log
+/test/errorFileName  log/polycone.f2.log
 /test/run
 /test/gridSizes 0.1 0.1 0.1 m
-/test/errorFileName  ../log/polycone.f3.log
+/test/errorFileName  log/polycone.f3.log
 /test/run
 #
 # --- polycone.g1.log
@@ -107,10 +107,10 @@ test/maxPoints 1000
 #
 /solid/G4Polycone -10 355 16 (0.7,0.7,0.8,0.9,1.0,1.0,0.5,0.5,0.0,0.4,0.4,0.4,0.5,0.5,0.6,0.6) (-1.0,-0.5,-0.5,-1.0,-1.0,0.7,0.7,1.0,1.0,0.7,0.7,-1.0,-1.0,-0.5,-0.5,-1.0)
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.g1.log
+/test/errorFileName  log/polycone.g1.log
 /test/run
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.g2.log
+/test/errorFileName  log/polycone.g2.log
 /test/run
 #
 # --- polycone.h1.log
@@ -119,10 +119,10 @@ test/maxPoints 1000
 /solid/G4Polycone2 -10 355 8 (-0.2,-0.1,-0.1,0,0.1,0.2,0.3,0.4) (0.3,0.3,0,0,0,0,0.4,0.4) (0.7,0.7,0.7,0.4,0.4,0.8,0.8,0.8)
 #/solid/G4Polycone -10 355 16 (0.7,0.7,0.7,0.4,0.4,0.8,0.8,0.6,0.4,0.4,0.0,0.0,0.0,0.0,0.3,0.3) (-0.2,-0.1,-0.1,0.0,0.1,0.2,0.3,0.4,0.4,0.3,0.2,0.1,0.0,-0.1,-0.1,-0.2)
 /test/gridSizes 0 0 0 m
-/test/errorFileName  ../log/polycone.h1.log
+/test/errorFileName  log/polycone.h1.log
 /test/run
 /test/gridSizes 0.02 0.02 0.02 m
-/test/errorFileName  ../log/polycone.h2.log
+/test/errorFileName  log/polycone.h2.log
 /test/run
 #
 
