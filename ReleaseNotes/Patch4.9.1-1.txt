@@ -48,9 +48,9 @@ List of fixes included in this public patch since the public release 9.1:
   o Electromagnetic Processes:
     -------------------------
     + Muons:
-      o G4MuMscModel: fixed sampling for mu-msc modela; dded computation
+      o G4MuMscModel: fixed sampling for mu-msc models; added computation
         of the second moment of the distribution.
-      o G4MUMultipleScattering: modified default 'RangeFactor'.
+      o G4MuMultipleScattering: modified default 'RangeFactor'.
     + Standard:
       o G4PAIModel, G4PAIPhotonModel: added extra protection to guarantee
         correct usage of the last bin for the table of energy transfers.
