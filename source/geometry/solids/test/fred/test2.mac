@@ -1,0 +1,52 @@
+# $Id: test2.mac,v 1.1 2008-01-25 17:14:32 ivana Exp $
+# New Geant4 macro for test2
+# By I. Hrivnacova, IPN Orsay; 25/01/2008
+
+# select GRID gun
+/fred/gun GRID
+
+# select SHADOW draw mode
+/fred/draw SHADOW
+
+# select test volume
+#/fred/volume NATALIA
+#/fred/volume VOXEL
+#/fred/volume ORB
+#/fred/volume SPHERE
+#/fred/volume CONE
+#/fred/volume CONE2
+#/fred/volume TUBS
+/fred/volume BOX
+#/fred/volume BOOL1
+#/fred/volume PCON
+#/fred/volume TRAP
+#/fred/volume PARA
+#/fred/volume TORUS1
+#/fred/volume TORUS2
+#/fred/volume TRD
+#/fred/volume PCON2
+#/fred/volume PCON3
+#/fred/volume PCON4
+#/fred/volume PGON
+#/fred/volume PGON2
+#/fred/volume PGON3
+#/fred/volume PGON4
+
+# initialize
+/run/initialize
+
+# initialize x-windows OpenGL viewer
+/control/execute draw.script
+
+# select a large but not too time consuming number of tracks
+/gridGun/n1 40
+/gridGun/n2 40
+
+# run script 1
+/control/execute grids1.script
+
+# run script 2
+/control/execute grids2.script
+
+# run script 3
+/control/execute grids3.script

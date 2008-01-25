@@ -1,0 +1,37 @@
+# $Id: test1.mac,v 1.1 2008-01-25 17:14:31 ivana Exp $
+# New Geant4 macro for test1
+# By I. Hrivnacova, IPN Orsay; 25/01/2008
+
+#/fred/volume NATALIA
+#/fred/volume VOXEL
+#/fred/volume ORB
+#/fred/volume SPHERE
+#/fred/volume CONE
+#/fred/volume CONE2
+#/fred/volume TUBS
+/fred/volume BOX
+#/fred/volume BOOL1
+#/fred/volume PCON
+#/fred/volume TRAP
+#/fred/volume PARA
+#/fred/volume TORUS1
+#/fred/volume TORUS2
+#/fred/volume TRD
+#/fred/volume PCON2
+#/fred/volume PCON3
+#/fred/volume PCON4
+#/fred/volume PGON
+#/fred/volume PGON2
+#/fred/volume PGON3
+#/fred/volume PGON4
+
+
+/fred/gun SPRAY
+#/gun/position -50 -50 -50
+#/gun/direction 5 5 0 
+/run/initialize 
+
+/control/execute vis.mac
+/vis/drawVolume test
+/tracking/storeTrajectory 1
+/run/beamOn 1

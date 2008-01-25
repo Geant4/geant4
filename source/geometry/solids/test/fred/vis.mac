@@ -1,0 +1,13 @@
+# $Id: vis.mac,v 1.1 2008-01-25 17:14:32 ivana Exp $
+# New Geant4 macro for visulization, common for all tests
+# By I. Hrivnacova, IPN Orsay; 25/01/2008
+
+#/vis/open OGLSXm
+/vis/open OIX
+#/vis/viewer/set/style wireframe
+/vis/viewer/set/style s
+/fred/draw NORMAL
+/tracking/storeTrajectory 1
+/vis/drawVolume test
+/fred/draw NORMAL
+
