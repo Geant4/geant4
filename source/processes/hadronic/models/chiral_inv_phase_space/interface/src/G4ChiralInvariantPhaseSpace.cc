@@ -128,9 +128,10 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
   
   // Fill the particle change.
   G4DynamicParticle * theSec;
-  //#ifdef CHIPSdebug
-  G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="<<output->size()<<G4endl;
-  //#endif
+#ifdef CHIPSdebug
+  G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="
+	 <<output->size()<<G4endl;
+#endif
   unsigned int particle;
   for( particle = 0; particle < output->size(); particle++)
   {
@@ -141,9 +142,10 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
     }
     theSec = new G4DynamicParticle;  
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
-    //#ifdef CHIPSdebug
-    G4cout << "G4ChiralInvariantPhaseSpace: h#"<<particle<<", PDG="<<pdgCode<<G4endl;
-    //#endif
+#ifdef CHIPSdebug
+    G4cout << "G4ChiralInvariantPhaseSpace: h#"<<particle
+	   <<", PDG="<<pdgCode<<G4endl;
+#endif
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
