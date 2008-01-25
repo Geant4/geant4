@@ -38,11 +38,11 @@
 #include "G4Circle.hh"
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
-#include <iomanip>
-#include <sstream>
-
+#include "G4GeometryTolerance.hh"
 #include "G4SolidStore.hh"
 
+#include <iomanip>
+#include <sstream>
 #include <time.h>
 
 #define DEBUG 0
@@ -151,12 +151,8 @@ void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 	  // Output test parameters
 	  //
   time_t now = time(0);
-  //	G4String dateTime( ctime(&now), 24 );		// AFAIK, this is standard c++
-  //      it looks like the above is missing from STLInterface
-  char timebuf[25];
-  timebuf[24]=0;
-  strncpy( ctime(&now), timebuf, 24 );
-  G4String dateTime( timebuf );
+  time(&now);
+  G4String dateTime(ctime(&now));
 
   {
     /* 
@@ -172,7 +168,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
   }
 
 
-  logger << "% SBT logged output " << dateTime << G4endl;
+  logger << "% SBT logged output " << dateTime;
   logger << "% " << CurrentSolid << G4endl;
   logger << "% target =    " << target << G4endl;
   logger << "% widths =    " << widths << G4endl;
@@ -264,11 +260,9 @@ void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 
   }
 
-  now = time(0);
-  //	G4String dateTime2( ctime(&now), 24 );		
-  strncpy( ctime(&now), timebuf, 24 );
-  G4String dateTime2( timebuf );
-  logger << dateTime2 << G4endl;
+  time(&now);
+  G4String dateTime2(ctime(&now));
+  logger << dateTime2;
 
   logger << "% Statistics: points=" << nPoint << " errors=" << CountErrors()
 	 << " errors reported=" << nError << G4endl;
@@ -291,38 +285,43 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
 {
   G4ThreeVector p, v;
 
-  //
-  // Recover information from log file
-  //
-  G4int error = GetLoggedPV( logger, errorIndex, p, v );
-  if (error) return error;
-
   // Now required for drawing
   G4Transform3D  objectTransformation; 
 
-  //
-  // Draw away
-  //
-  // visManager->ClearView();
+  if ( errorIndex > 0 ) {
 
-  //
-  // This draws the trajectory
-  //    
-  G4VisAttributes blueStuff( G4Color(0,0,1) );
+    //
+    // Recover information from log file
+    //
+    G4int error = GetLoggedPV( logger, errorIndex, p, v );
+    if (error) return error;
 
-  G4Polyline polyline;
-  polyline.push_back( p );
-  polyline.push_back( p + 4*v*m );
-  polyline.SetVisAttributes( blueStuff );
-  visManager->Draw( polyline, objectTransformation);
+    G4cout << "DrawError:  p=" << p << ",  v=" << v << G4endl; 
 
-  //
-  // This draws the initial point p
-  //
-  G4Circle circle(p);
-  circle.SetWorldSize( 5*cm );
-  circle.SetVisAttributes( blueStuff );
-  visManager->Draw( circle, objectTransformation);
+    //
+    // Draw away
+    //
+    // visManager->ClearView();
+
+    //
+    // This draws the trajectory
+    //    
+    G4VisAttributes blueStuff( G4Color(0,0,1) );
+
+    G4Polyline polyline;
+    polyline.push_back( p );
+    polyline.push_back( p + 4*v*m );
+    polyline.SetVisAttributes( blueStuff );
+    visManager->Draw( polyline, objectTransformation);
+
+    //
+    // This draws the initial point p
+    //
+    G4Circle circle(p);
+    circle.SetWorldSize( 5*cm );
+    circle.SetVisAttributes( blueStuff );
+    visManager->Draw( circle, objectTransformation);
+  }
 
   //
   // This draws the target solid
@@ -354,7 +353,7 @@ G4int SBTrun::DebugInside( const G4VSolid *testVolume, std::istream &logger, con
   //
   // Call
   //
-  testVolume->Inside( p );
+  G4cout << "testVolume->Inside(p): " << testVolume->Inside( p ) << G4endl; 
   return 0;
 }
 
@@ -377,7 +376,7 @@ G4int SBTrun::DebugToInP( const G4VSolid *testVolume, std::istream &logger, cons
   //
   // Call
   //
-  testVolume->DistanceToIn( p );
+  G4cout << "testVolume->DistanceToIn(p): " <<  testVolume->DistanceToIn( p ) << G4endl; 
   return 0;
 }
 
@@ -401,10 +400,11 @@ G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, std::istream &logger, con
   // Call
   //
   G4double answer = testVolume->DistanceToIn( p, v );
+  G4cout << "testVolume->DistanceToIn(p,v): " << answer << G4endl; 
 
   p += answer*v;
 
-  testVolume->Inside(p);
+  G4cout << "testVolume->Inside(p+=answer*v):" <<  p << " " << testVolume->Inside(p) << G4endl;
   return 0;
 }
 
@@ -427,7 +427,7 @@ G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, std::istream &logger, con
   //
   // Call
   //
-  testVolume->DistanceToOut( p );
+  G4cout << "testVolume->DistanceToOut(p): " << testVolume->DistanceToOut( p ) << G4endl; 
   return 0;
 }
 
@@ -450,11 +450,14 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, co
   //
   // Call
   //
+  G4bool validNorm;
+  G4ThreeVector norm;
   G4double answer = testVolume->DistanceToOut( p, v );
+  G4cout << "testVolume->DistanceToOut( p, v ): " << answer << " validNorm: " << validNorm << G4endl; 
 
   p += answer*v;
+  G4cout << "testVolume->Inside(p += answer*v): " << testVolume->Inside(p) << G4endl; 
 
-  testVolume->Inside(p);
   return 0;
 }
 
@@ -512,14 +515,16 @@ void SBTrun::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 
     dist = testVolume->DistanceToIn( p );
 
-    if (dist != 0) {
+    //if (dist != 0) {
+    if (dist > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) {
       ReportError( nError, p, v, safeDistance, "T02: DistanceToIn(p) should be zero", logger );
       // logger << "Dist != 0 : " << dist << endl;
       continue;
     }
 
     dist = testVolume->DistanceToOut( p );
-    if (dist != 0) {
+    //if (dist != 0) {
+    if (dist > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) {
       ReportError( nError, p, v, safeDistance, "T02: DistanceToOut(p) should be zero", logger );
       continue;
     }
