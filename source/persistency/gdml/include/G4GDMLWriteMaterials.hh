@@ -33,6 +33,8 @@
 #ifndef _G4GDMLWRITEMATERIALS_INCLUDED_
 #define _G4GDMLWRITEMATERIALS_INCLUDED_
 
+#include "G4Element.hh"
+#include "G4Isotope.hh"
 #include "G4Material.hh"
 
 #include "G4GDMLWriteDefine.hh"
@@ -40,6 +42,8 @@
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine {
    void atomWrite(xercesc::DOMElement*,G4double);
    void DWrite(xercesc::DOMElement*,G4double);
+   void isotopeWrite(xercesc::DOMElement*,const G4Isotope* const);
+   void elementWrite(xercesc::DOMElement*,const G4Element* const);
    void materialWrite(xercesc::DOMElement*,const G4Material* const);
 private:
    void materialsWrite(xercesc::DOMElement*);

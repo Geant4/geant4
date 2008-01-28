@@ -50,6 +50,25 @@ void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,G4double d) {
    element->appendChild(DElement);
 }
 
+void G4GDMLWriteMaterials::isotopeWrite(xercesc::DOMElement* element,const G4Isotope* const isotopePtr) {
+
+   xercesc::DOMElement* isotopeElement = newElement("isotope");
+   element->appendChild(isotopeElement);
+
+   isotopeElement->setAttributeNode(newAttribute("name",isotopePtr->GetName()));
+}
+
+void G4GDMLWriteMaterials::elementWrite(xercesc::DOMElement* element,const G4Element* const elementPtr) {
+
+   xercesc::DOMElement* elementElement = newElement("element");
+   element->appendChild(elementElement);
+
+   elementElement->setAttributeNode(newAttribute("name",elementPtr->GetName()));
+
+   elementElement->setAttributeNode(newAttribute("Z",elementPtr->GetZ()));
+   atomWrite(elementElement,elementPtr->GetA());
+}
+
 void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Material* const materialPtr) {
 
    xercesc::DOMElement* materialElement = newElement("material");
@@ -84,9 +103,22 @@ void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
    xercesc::DOMElement* materialsElement = newElement("materials");
    element->appendChild(materialsElement);
+
+   const G4IsotopeTable* isotopeList = G4Isotope::GetIsotopeTable();
+   const size_t isotopeCount = isotopeList->size();
+
+   for (size_t i=0;i<isotopeCount;i++)
+      isotopeWrite(materialsElement,(*isotopeList)[i]);
+
+   const G4ElementTable* elementList = G4Element::GetElementTable();
+   const size_t elementCount = elementList->size();
+
+   for (size_t i=0;i<elementCount;i++)
+      elementWrite(materialsElement,(*elementList)[i]);
    
    const G4MaterialTable* materialList = G4Material::GetMaterialTable();
    const size_t materialCount = materialList->size();
 
-   for (size_t i=0;i<materialCount;i++) materialWrite(materialsElement,(*materialList)[i]);
+   for (size_t i=0;i<materialCount;i++)
+      materialWrite(materialsElement,(*materialList)[i]);
 }
