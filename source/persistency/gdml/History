@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2008-01-25 12:53:17 ztorzsok Exp $
+$Id: History,v 1.16 2008-01-28 13:51:50 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 January 2008 Z.Torzsok
+- Element added to writer
+- Polyhedra added to writer
+- Torus added to writer
+- Now the package is able to read/write the CMS geometry
 
 25 January 2008 Z.Torzsok
 - Bugs fixed in the writer (G4GMLWriteStructure::physvolWrite):
