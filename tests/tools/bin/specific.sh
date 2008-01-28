@@ -701,7 +701,10 @@ if [ $UNAMEN = pcg4speed2.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ $UNAMEN = lxplus072.cern.ch ]; then
+if [ $UNAMEN = lxplus071.cern.ch ]; then
+# Special G4 flag for FPE exceptions on Linux systems
+ export G4FPE_DEBUG=1
+ 
   export DEBOPT=${DEBOPT}_slc4_i32
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
@@ -712,11 +715,14 @@ if [ $UNAMEN = lxplus072.cern.ch ]; then
 
 # Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
 
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+  export LD_LIBRARY_PATH=$XERCESCROOT/lib
 #  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
 
   # G4 build flags :
@@ -727,7 +733,7 @@ if [ $UNAMEN = lxplus072.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ $UNAMEN = lxplus071.cern.ch ]; then
+if [ $UNAMEN = lxplus072.cern.ch ]; then
 # Special G4 flag for FPE exceptions on Linux systems
  export G4FPE_DEBUG=1
  
