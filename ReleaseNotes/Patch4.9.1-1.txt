@@ -71,9 +71,13 @@ List of fixes included in this public patch since the public release 9.1:
       o Fixed problem of non-reproducibility induced by G4QElasticCrossSection.
       o Reduce memory allocation induced by use std::deque collection in    (*)
         G4QHadron class; temporary workaround by replacing it with std::list.
-      o Moved some unnecessary inline methods to implementation.
+      o G4ChiralInvariantPhaseSpace: moved some unnecessary inline methods to 
+        implementation and fixed non-reproducibility due to difference in 
+        initialisation.
+      o G4StringChipsInterface: fixed non-reproducibility due to difference in
+        initialisation.
       o Commented out debug printout in G4Quasmon.
-      o Fixed compilation warning on SUN/CC compiler.
+      o Fixed compilation warning on SUN/CC compiler in G4QNucleus.
     + models/coherent_elastic:
       o G4DiffuseElastic: removed dependency on other elastic models.
       o G4ElasticHadrNucleusHE: fixed non-reproducibility problem.
@@ -89,7 +93,7 @@ List of fixes included in this public patch since the public release 9.1:
       o Fixed naming of convention for external files in G4GDMLStructure.
 
   o Physics Lists:
-    + G4EmExtraPhysics: fixed swapping of synkrotron radiation and mu-nuclear
+    + G4EmExtraPhysics: fixed swapping of synchrotron radiation and mu-nuclear
       activation. Addressing problem report #993.
 
   o Track:
@@ -110,11 +114,9 @@ List of fixes included in this public patch since the public release 9.1:
       o Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
         process is used ("standardNR");
       o Added computation of mean NIEL energy loss.
-      o Deactivated nuclear stopping in G4ionIonisation for PhysListStandardIG
-        physics list ("standardNR"), since already simulated by
-        G4ScreenNuclearRecoil process.
-      o Set 'linLossLimit=10^-6' and 'nbuns=360' both for "standard" and
-        "standardNR" physics lists.
+      o Fixed experimental physics lists if single scattering models are used 
+        instead of multiple scattering. Set nuclear stopping flag for ionisation 
+        to "false".
     + extended/gdml:
       o Added entity.gdml and materials.xml to demonstrate the ability of
         the parser of resolving entities.
