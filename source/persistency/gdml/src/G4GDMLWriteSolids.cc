@@ -36,8 +36,9 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
 
    if (dynamic_cast<const G4IntersectionSolid* const>(boolean)) { tag = "intersection"; } else
    if (dynamic_cast<const G4SubtractionSolid* const>(boolean)) { tag = "subtraction"; } else
-   if (dynamic_cast<const G4UnionSolid* const>(boolean)) { tag = "union"; } else return;
-
+   if (dynamic_cast<const G4UnionSolid* const>(boolean)) { tag = "union"; }
+   else { tag = "undefined"; }
+   
    G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));
    G4VSolid* secondPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(1));
 
@@ -117,6 +118,30 @@ void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G
 
    for (size_t i=0;i<num_zplanes;i++)
       zplaneWrite(polyconeElement,z_array[i],rmin_array[i],rmax_array[i]);
+}
+
+void G4GDMLWriteSolids::polyhedraWrite(xercesc::DOMElement* solidsElement,const G4Polyhedra* const polyhedra) {
+
+   xercesc::DOMElement* polyhedraElement = newElement("polyhedra");
+   solidsElement->appendChild(polyhedraElement);
+
+   polyhedraElement->setAttributeNode(newAttribute("name",polyhedra->GetName()));
+   polyhedraElement->setAttributeNode(newAttribute("startphi",polyhedra->GetOriginalParameters()->Start_angle/CLHEP::degree));
+   polyhedraElement->setAttributeNode(newAttribute("deltaphi",polyhedra->GetOriginalParameters()->Opening_angle/CLHEP::degree));
+   polyhedraElement->setAttributeNode(newAttribute("numsides",polyhedra->GetOriginalParameters()->numSide));
+   polyhedraElement->setAttributeNode(newAttribute("aunit","degree"));
+   polyhedraElement->setAttributeNode(newAttribute("lunit","mm"));
+
+   const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
+
+   const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
+   const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
+   const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
+
+   G4double convertRad = cos(0.5*polyhedra->GetOriginalParameters()->Opening_angle/polyhedra->GetOriginalParameters()->numSide);
+
+   for (size_t i=0;i<num_zplanes;i++)
+      zplaneWrite(polyhedraElement,z_array[i],rmin_array[i]*convertRad,rmax_array[i]*convertRad);
 }
 
 void G4GDMLWriteSolids::sphereWrite(xercesc::DOMElement* solidsElement,const G4Sphere* const sphere) {
@@ -300,6 +325,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
       if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
+      if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
       if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
       if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else

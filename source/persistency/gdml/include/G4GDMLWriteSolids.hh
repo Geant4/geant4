@@ -39,6 +39,7 @@
 #include "G4ExtrudedSolid.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4Sphere.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4TessellatedSolid.hh"
@@ -57,6 +58,7 @@ private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void polyconeWrite(xercesc::DOMElement*,const G4Polycone* const);
+   void polyhedraWrite(xercesc::DOMElement*,const G4Polyhedra* const);
    void sphereWrite(xercesc::DOMElement*,const G4Sphere* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
    void trapWrite(xercesc::DOMElement*,const G4Trap* const);
