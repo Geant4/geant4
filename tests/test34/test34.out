@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -91,7 +91,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -108,7 +108,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
@@ -155,7 +155,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
@@ -163,7 +163,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -196,9 +196,9 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.24
+Internal Real Elapsed Time is: 0.23
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.21
+Internal GetUserElapsed Time: 0.22
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5312 hits are stored in Tst34HitsCollection 
@@ -209,9 +209,9 @@ Internal GetUserElapsed Time: 0.21
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.2
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5313 hits are stored in Tst34HitsCollection 
@@ -222,9 +222,9 @@ Internal GetUserElapsed Time: 0.2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.2
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5310 hits are stored in Tst34HitsCollection 
@@ -248,9 +248,9 @@ Internal GetUserElapsed Time: 0.2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.2
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
   5314 hits are stored in Tst34HitsCollection 
@@ -261,9 +261,9 @@ Internal GetUserElapsed Time: 0.2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.2
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.2
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
   5327 hits are stored in Tst34HitsCollection 
@@ -274,9 +274,9 @@ Internal GetUserElapsed Time: 0.19
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.19
+Internal Real Elapsed Time is: 0.21
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5318 hits are stored in Tst34HitsCollection 
@@ -287,9 +287,9 @@ Internal GetUserElapsed Time: 0.19
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5327 hits are stored in Tst34HitsCollection 
@@ -300,9 +300,9 @@ Internal GetUserElapsed Time: 0.19
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
   5330 hits are stored in Tst34HitsCollection 
@@ -313,9 +313,9 @@ Internal GetUserElapsed Time: 0.19
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.21
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
   5316 hits are stored in Tst34HitsCollection 
@@ -323,7 +323,7 @@ Internal GetUserElapsed Time: 0.19
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 19.23
-Total System Elapsed Time: 0.05
-Total GetUserElapsed Time: 18.67
+Total Real Elapsed Time is: 19.05
+Total System Elapsed Time: 0.09
+Total GetUserElapsed Time: 18.74
 ******************************************

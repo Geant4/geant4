@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,8 +16,8 @@
 /testem/det/tallyPosition -5. 0. 0. cm
 /testem/det/tallyPosition 0. 0. 0. cm
 /testem/det/tallyPosition 5. 0. 0. cm
-/testem/phys/addPhysics standard 
-PhysicsList::AddPhysicsList: <standard>
+/testem/phys/addPhysics emstandard 
+PhysicsList::AddPhysicsList: <emstandard>
 /run/initialize
 
 ***** Table : Nb of materials = 4 *****
@@ -62,149 +62,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
 /run/beamOn 10000
-
-phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
-
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
-
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
-
-ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping 1
-
-      Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 ========= Table of registered couples ==============================
 
@@ -254,26 +111,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=519.33s Real=703.96s Sys=7.13s
+  User=401.37s Real=658.39s Sys=6.49s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- projected Range= 17.6842 cm    rms= 3.38486 mm 
- mean number of primary steps = 185.903
+ Projected Range= 17.6818 cm    rms= 2.06573 mm 
+ Mean number of primary steps = 180.328
+ Total energy deposit= 160 MeV
+ NIEL energy deposit = 1.30027 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.61625 GeV	0.288516 % 	9.24506e-05 Gy
- tally 1: 	 	4.99089 GeV	0.311931 % 	9.99536e-05 Gy
- tally 2: 	 	3.2655 GeV	0.204094 % 	6.53989e-05 Gy
- tally 3: 	 	1.91167 GeV	0.11948 % 	3.82855e-05 Gy
+ tally 0: 	 	4.59621 GeV	0.287263 % 	9.20493e-05 Gy
+ tally 1: 	 	4.98544 GeV	0.31159 % 	9.98444e-05 Gy
+ tally 2: 	 	3.374 GeV	0.210875 % 	6.75718e-05 Gy
+ tally 3: 	 	2.00025 GeV	0.125016 % 	4.00595e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1436866818, 1372743716
+ Current couple of seeds = 1426145946, 1099580709
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -303,7 +162,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1436866818, 1372743716
+ Current couple of seeds = 1426145946, 1099580709
 ----------------------------------------
 Start Run processing.
 
@@ -311,26 +170,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=144.32s Real=155.54s Sys=0.8s
+  User=99.29s Real=121.65s Sys=0.67s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- projected Range= 16.7092 cm    rms= 759.06 um 
- mean number of primary steps = 94.931
+ Projected Range= 16.4523 cm    rms= 735.564 um 
+ Mean number of primary steps = 108.503
+ Total energy deposit= 3.49997 GeV
+ NIEL energy deposit = 51.3244 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	12.1185 GeV	0.346242 % 	0.000242699 Gy
- tally 1: 	 	13.5739 GeV	0.387827 % 	0.000271848 Gy
- tally 2: 	 	15.0017 GeV	0.42862 % 	0.000300442 Gy
- tally 3: 	 	20.6443 GeV	0.589837 % 	0.000413448 Gy
+ tally 0: 	 	11.5394 GeV	0.329697 % 	0.000231102 Gy
+ tally 1: 	 	13.244 GeV	0.378401 % 	0.000265241 Gy
+ tally 2: 	 	15.9139 GeV	0.454683 % 	0.000318711 Gy
+ tally 3: 	 	22.3781 GeV	0.639373 % 	0.00044817 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 332474889, 1996155240
+ Current couple of seeds = 812005910, 1965043176
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/update
@@ -379,149 +240,6 @@ tally 3: position = 5 0 0 cm
 /gun/energy 100 MeV
 /run/beamOn 1000
 
-phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
-
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
-
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
-
-ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping 1
-
-      Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Parametrised model 
-
-hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
-
-hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
-      Lambda tables from threshold to 100 TeV in 480 bins.
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
@@ -551,7 +269,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 332474889, 1996155240
+ Current couple of seeds = 812005910, 1965043176
 ----------------------------------------
 Start Run processing.
 
@@ -559,17 +277,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=87.74s Real=109.99s Sys=0.86s
+  User=67.95s Real=98.02s Sys=0.73s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- projected Range= 2.11404 cm    rms= 3.56198 mm 
- mean number of primary steps = 17.674
+ Projected Range= 2.10941 cm    rms= 3.71787 mm 
+ Mean number of primary steps = 8.334
+ Total energy deposit= 289.183 MeV
+ NIEL energy deposit = 40.562 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	386.397 MeV	0.386397 % 	7.73846e-06 Gy
- tally 1: 	 	725.19 keV	0.00072519 % 	1.45235e-08 Gy
+ tally 0: 	 	420.146 MeV	0.420146 % 	8.41435e-06 Gy
+ tally 1: 	 	673.566 keV	0.000673566 % 	1.34897e-08 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
@@ -578,6 +298,6 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1461246333, 1184902472
+ Current couple of seeds = 1729596926, 735400891
 ----------------------------------------
 G4 kernel has come to Quit state.

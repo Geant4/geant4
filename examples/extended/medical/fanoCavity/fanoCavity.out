@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,7 +110,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 10 GeV in 800 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
       CSDA range table up to 10 GeV in 800 bins.
 
@@ -159,7 +159,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=747.74s Real=747.87s Sys=0s
+  User=721.3s Real=721.53s Sys=0.01s
 
  ======================== run summary ======================
 

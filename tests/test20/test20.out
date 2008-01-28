@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -84,8 +84,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1094.8s Real=1094.95s Sys=0.13s
-Time elapsed in 1 events ---- User=1094.8s Real=1094.95s Sys=0.13s
+  User=1090.52s Real=1090.7s Sys=0.1s
+Time elapsed in 1 events ---- User=1090.52s Real=1090.7s Sys=0.1s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -104,8 +104,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=9625.05s Real=9626.65s Sys=1.2s
-Time elapsed in 9 events ---- User=9625.05s Real=9626.66s Sys=1.2s
+  User=9604.84s Real=9607.32s Sys=0.96s
+Time elapsed in 9 events ---- User=9604.84s Real=9607.32s Sys=0.96s
 #
 /gun/particle proton
 #------------------
@@ -952,8 +952,8 @@ Point: 9.18254e+07 - Data value : 0.206763
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=216.31s Real=217s Sys=0.61s
-Time elapsed in 1 events ---- User=216.31s Real=217s Sys=0.61s
+  User=214.24s Real=215.08s Sys=0.59s
+Time elapsed in 1 events ---- User=214.24s Real=215.08s Sys=0.59s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -972,8 +972,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=121.61s Real=121.9s Sys=0.28s
-Time elapsed in 1 events ---- User=121.61s Real=121.9s Sys=0.28s
+  User=120.45s Real=120.74s Sys=0.29s
+Time elapsed in 1 events ---- User=120.45s Real=120.74s Sys=0.29s
 #
 /gun/particle alpha
 #------------------
@@ -996,8 +996,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=639.87s Real=641.39s Sys=1.5s
-Time elapsed in 1 events ---- User=639.87s Real=641.39s Sys=1.5s
+  User=632.57s Real=634.06s Sys=1.45s
+Time elapsed in 1 events ---- User=632.57s Real=634.06s Sys=1.45s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -1016,8 +1016,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=625.73s Real=627.2s Sys=1.45s
-Time elapsed in 1 events ---- User=625.73s Real=627.2s Sys=1.45s
+  User=615.43s Real=617.2s Sys=1.54s
+Time elapsed in 1 events ---- User=615.44s Real=617.21s Sys=1.54s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 5179 calls
