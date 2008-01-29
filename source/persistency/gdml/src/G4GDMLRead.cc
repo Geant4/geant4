@@ -61,8 +61,6 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
-//   G4cout << "Parser pointer: " << parser << G4endl;
-
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
@@ -116,7 +114,7 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
       if (tag=="structure") structureRead(child);
    }
 
-   if (parser) delete parser;
+   delete parser;
 }
 
 void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {

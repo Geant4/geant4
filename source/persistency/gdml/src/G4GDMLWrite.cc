@@ -132,8 +132,6 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
       return;
    }        
 
-   if (myFormTarget)
-      delete myFormTarget;
-
+   delete myFormTarget;
    writer->release();
 }

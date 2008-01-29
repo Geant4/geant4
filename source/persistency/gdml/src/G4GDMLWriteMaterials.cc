@@ -50,6 +50,26 @@ void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,G4double d) {
    element->appendChild(DElement);
 }
 
+void G4GDMLWriteMaterials::PWrite(xercesc::DOMElement* element,G4double P) {
+
+   P /= pascal;
+
+   xercesc::DOMElement* PElement = newElement("P");
+   PElement->setAttributeNode(newAttribute("unit","pascal"));
+   PElement->setAttributeNode(newAttribute("value",P));
+   element->appendChild(PElement);
+}
+
+void G4GDMLWriteMaterials::TWrite(xercesc::DOMElement* element,G4double T) {
+
+   T /= kelvin;
+
+   xercesc::DOMElement* TElement = newElement("T");
+   TElement->setAttributeNode(newAttribute("unit","K"));
+   TElement->setAttributeNode(newAttribute("value",T));
+   element->appendChild(TElement);
+}
+
 void G4GDMLWriteMaterials::isotopeWrite(xercesc::DOMElement* element,const G4Isotope* const isotopePtr) {
 
    xercesc::DOMElement* isotopeElement = newElement("isotope");
@@ -75,8 +95,11 @@ void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Ma
    element->appendChild(materialElement);
 
    materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
-   DWrite(materialElement,materialPtr->GetDensity());
 
+   DWrite(materialElement,materialPtr->GetDensity());
+   PWrite(materialElement,materialPtr->GetPressure());
+   TWrite(materialElement,materialPtr->GetTemperature());
+  
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
 
    if (NumberOfElements>1) { 
