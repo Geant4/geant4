@@ -1,4 +1,4 @@
-$Id: History,v 1.419 2008-01-04 22:17:08 allison Exp $
+$Id: History,v 1.420 2008-01-29 22:39:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+29th January 2008  John Allison  (vis-V09-01-01)
+- visman-V09-01-01: Re-instated G4DAWNFILE (somehow got lost!!)
 
 4th January 2008  John Allison  (vis-V09-01-00 with greps-V09-01-00)
 - Draw2D capability, already available for G4Text, extended to:
