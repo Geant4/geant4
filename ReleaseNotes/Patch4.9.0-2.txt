@@ -20,14 +20,14 @@ List of fixes included in this public patch since the public release 9.0.p01:
         SetParticleMomentum().
       o Added private copy constructor and =, ==, += operators to
         Addressing problem report #984.
-      o Modified G4SPSEneDistribution to adress problem report #988.
+    + Modified G4SPSEneDistribution to adress problem report #988.
 
   o Geometry:
     --------
-    + management:
+    + management: (*)
       o Fixed typo in forcing minimum number of points in method
         G4VSolid::EstimateSurfaceArea(). Addresses problem report #981.
-    + navigation:
+    + navigation: (*)
       o G4PropagatorInField:
         - Fixes for compilation of code under G4DEBUG_FIELD
           (problem report #982).
@@ -36,15 +36,15 @@ List of fixes included in this public patch since the public release 9.0.p01:
           verbosity in case of error for negative step.
           Fixes rare problem observed in production by ATLAS.
         - Added extra check of method LocateIntersectionPoint() arguments.
-    + solids/Boolean:
+    + solids/Boolean: (*)
       o Boosted performance for response of Inside() for G4SubtractionSolid
         and G4UnionSolid according to suggestion in problem report #979.
-    + solids/BREPS:
+    + solids/BREPS: (*)
       o Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of
         particle passing the border of two touching surfaces.
       o G4BREPSolidBox: fixed problem in the constructor in definition of
         the side for the normal to surface.
-    + solids/CSG:
+    + solids/CSG: (*)
       o G4Torus:
         - Fixed bug in CalculateExtent() for case of non-rotated full-Phi
           torus definition: added protection against negative value for sqrt()
@@ -55,7 +55,7 @@ List of fixes included in this public patch since the public release 9.0.p01:
       o Fixed problem of undefined side for valid surface normal in case of
         'Phi' section and direction through the center of either a G4Tubs or
         G4Cons shape.
-    + solids/specific:
+    + solids/specific: (*)
       o Removed debug printout in G4Polycone::GetPointOnCone().
 
   o Global:
@@ -70,7 +70,7 @@ List of fixes included in this public patch since the public release 9.0.p01:
 
   o Hadronic Processes:
     ------------------
-    + management:
+    + management: (*)
       o G4HadronicProcess::FillTotalResult(): fix addressing problem report
         #967, replaced call to 'aT.GetGlobalTime()' with an internal variable.
     + models/cascade:
@@ -79,14 +79,14 @@ List of fixes included in this public patch since the public release 9.0.p01:
     + models/chiral_inv_phase_space:  (*)
       o Reduced memory allocation induced by use std::deque collection in
         G4QHadron class; temporary workaround by replacing it with std::list.
-    + models/high_energy:
+    + models/high_energy: (*)
       o G4HEInelastic::TuningOfHighEnergyCascading(): fixed incorrect
         assignment of leading particle to low energy backward nucleons and
         fragments. This bug caused high energy backward particles to be
         emitted from high energy collisions.
       o G4HEPionMinusInelastic: fixed incorrect 'Imax' in sampling of charge
         exchange.
-    + stopping:
+    + stopping: (*)
       o G4StopElementSelector: fixed typo in Primakoff formula for
         capture velocity.
       o G4MuonMinusCaptureAtRest: fixed old memory leak.
