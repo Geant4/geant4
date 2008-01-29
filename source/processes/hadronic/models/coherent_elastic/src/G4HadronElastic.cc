@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.56 2007-12-11 11:39:35 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.57 2008-01-29 10:05:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -245,20 +245,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double cost = 1. - 2.0*t/tmax;
   G4double sint;
 
-  if( cost >= 1.0 ) 
-  {
-    cost = 1.0;
-    sint = 0.0;
-  }
-  else if( cost <= -1.0) 
-  {
-    cost = -1.0;
-    sint =  0.0;
-  }
+  // if sampled t is out of physics range then no scattering
+  if( cost >= 1.0  || cost < -1) 
+    {
+      cost = 1.0;
+      sint = 0.0;
+    }
   else  
-  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }    
+    {
+      sint = std::sqrt((1.0-cost)*(1.0+cost));
+    }    
   if (verboseLevel>1) 
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
