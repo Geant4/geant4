@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.10 2008-01-15 11:04:26 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.11 2008-01-30 11:16:17 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -38,6 +38,7 @@
 #include "G4VInteractiveSession.hh"
 
 #include <qobject.h>
+#include <qmap.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -106,6 +107,12 @@ private:
   void SecondaryLoop(G4String); // a VIRER
   void TerminalHelp(G4String);
 #if QT_VERSION < 0x040000
+  QListView * CreateHelpTree();
+#else
+  QTreeWidget * CreateHelpTree();
+#endif
+
+#if QT_VERSION < 0x040000
   void CreateChildTree(QListViewItem*,G4UIcommandTree*);
   QListViewItem* FindTreeItem(QListViewItem *,const QString&);
 #else
@@ -118,6 +125,9 @@ private:
   G4bool GetHelpChoice(G4int&) ;// have to be implemeted because we heritate from G4VBasicShell
   void ExitHelp();// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
+  void ActivateCommand(G4String);
+  QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+
 
 private:
 
@@ -138,7 +148,8 @@ private:
   QTreeWidget *fHelpTreeWidget;
 #endif
   QDialog *fHelpDialog;
-
+  QLineEdit *helpLine;
+ 
 signals : 
   void myClicked(const QString &text);
 
@@ -151,6 +162,7 @@ private slots :
   void HelpTreeDoubleClicCallback();
   void ShowHelpCallback();
   void CommandHistoryCallback();
+  void lookForHelpStringCallback();
 };
 
 #endif
