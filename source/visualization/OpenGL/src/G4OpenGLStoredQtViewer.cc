@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.8 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.9 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#define GEANT4_QT_DEBUG
+//#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLStoredQtViewer.hh"
 
@@ -51,6 +51,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler),
   QGLWidget(QGLFormat(QGL::SampleBuffers))             // FIXME : gerer le pb du parent !
 {
+  setFocusPolicy(Qt::StrongFocus); // enable keybord events
   nbPaint =0;
   hasToRepaint =false;
   if (fViewId < 0) return;  // In case error in base class instantiation.
@@ -297,13 +298,22 @@ void G4OpenGLStoredQtViewer::paintGL()
 
 void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
 {
-  if ((event->buttons() & Qt::LeftButton) && (event->modifiers() & Qt::NoModifier)) {
+  if ((event->buttons() & Qt::LeftButton)
+      && !((event->modifiers() & Qt::ShiftModifier)
+           || (event->modifiers() & Qt::ControlModifier)
+           || (event->modifiers() & Qt::AltModifier)
+           || (event->modifiers() & Qt::MetaModifier))) {
 #ifdef GEANT4_QT_DEBUG
     printf("G4OpenGLStoredQtViewer::mousePressEvent\n");
 #endif
     setMouseTracking(true);
     G4MousePressEvent(event->pos());
   }
+}
+
+void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event) 
+{
+  G4keyPressEvent(event);
 }
 
 /**
@@ -331,9 +341,9 @@ void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
 {
 
 #if QT_VERSION < 0x040000
-  G4MouseMoveEvent(event->x(),event->y(),event->state());
+  G4MouseEvent(event->x(),event->y(),event->state());
 #else
-  G4MouseMoveEvent(event->x(),event->y(),event->buttons());
+  G4MouseEvent(event->x(),event->y(),event->buttons());
 #endif
 }
 

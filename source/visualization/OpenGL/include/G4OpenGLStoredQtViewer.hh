@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.4 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.5 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,7 @@ protected:
   void mouseDoubleClickEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
+  void keyPressEvent (QKeyEvent * event); 
 
 private : 
   bool hasToRepaint;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.5 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.6 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,13 +148,13 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   sizeGroupBox->setLayout(sizeGroupBoxLayout);
   sizeWidgetLayout->addWidget(sizeGroupBox);
   
-  connect( sizeButtonGroupBox, SIGNAL( buttonClicked(int) ), this, SLOT( changeSizeBox()) );
+  connect( sizeButtonGroupBox, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeSizeBox()) );
 #endif
   original->setChecked( true );
 
 
   // height
-  heightWidget = new QWidget(this);
+  heightWidget = new QWidget(sizeWidget);
 
   QHBoxLayout *heightLineLayout = new QHBoxLayout(heightWidget);
 
@@ -182,7 +182,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
 
   // width
-  widthWidget = new QWidget(this);
+  widthWidget = new QWidget(sizeWidget);
 
   QHBoxLayout *widthLineLayout = new QHBoxLayout(widthWidget);
 
@@ -370,7 +370,7 @@ int G4OpenGLQtExportDialog::getWidth()
   return width->text().toInt();
 }
 
-bool G4OpenGLQtExportDialog::getTransparency()
+int G4OpenGLQtExportDialog::getTransparency()
 {
   if (!boxTransparency) return -1;
   return boxTransparency->isChecked();

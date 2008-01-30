@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.9 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.10 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,10 +47,10 @@
 #include "G4Normal3D.hh"
 #include "G4Scene.hh"
 #include "G4OpenGLQtExportDialog.hh"
-
+#include "G4UnitsTable.hh"
 #include "G4Qt.hh"
-#include "G4UIsession.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommandTree.hh"
 #include <qapplication.h>
 #include <qlayout.h>
 #include <qdialog.h>
@@ -284,7 +284,10 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
   ,fContextMenu(0)
-  ,fMouseAction(ROTATE)
+  ,fMouseAction(STYLE1)
+  ,fDeltaSceneTranslation(1/100)
+  ,fDeltaZoom(2)
+  ,holdKeyEvent(false)
 {
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer \n");
@@ -412,28 +415,46 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QPopupMenu *mRepresentation = new QPopupMenu(fContextMenu);
 
+  QPopupMenu *mProjection = new QPopupMenu(fContextMenu);
+
 #if QT_VERSION < 0x030200
   QAction *polyhedron = new QAction("&Polyhedron","&Polyhedron",CTRL+Key_P,mRepresentation);
   QAction *nurbs = new QAction("&NURBS","&NURBS",CTRL+Key_N,mRepresentation);
+
+  QAction *ortho = new QAction("&Orthographic","&Orthographic",CTRL+Key_O,mProjection);
+  QAction *perspective = new QAction("&Perspective","&Perspective",CTRL+Key_P,mProjection);
 #else
   QAction *polyhedron = new QAction("&Polyhedron",CTRL+Key_P,mRepresentation);
   QAction *nurbs = new QAction("&NURBS",CTRL+Key_N,mRepresentation);
+
+  QAction *ortho = new QAction("&Orthographic",CTRL+Key_O,mProjection);
+  QAction *perspective = new QAction("&Perspective",CTRL+Key_P,mProjection);
 #endif
   polyhedron->addTo(mRepresentation);
   nurbs->addTo(mRepresentation);
 
+  ortho->addTo(mProjection);
+  perspective->addTo(mProjection);
+
   mStyle->insertItem("&Representation",mRepresentation);
+  mStyle->insertItem("&Projection",mProjection);
   fContextMenu->insertItem("&Style",mStyle);
+
 
 #else
   // === Style Menu ===
   QMenu *mStyle = fContextMenu->addMenu("&Style");
 
   QMenu *mRepresentation = mStyle->addMenu("&Representation");
+  QMenu *mProjection = mStyle->addMenu("&Projection");
   QAction *polyhedron = mRepresentation->addAction("Polyhedron");
   QAction *nurbs = mRepresentation->addAction("NURBS");
+
+  QAction *ortho = mProjection->addAction("Orthographic");
+  QAction *perspective = mProjection->addAction("Persepective");
 #endif
-  // INIT mStyle
+
+  // INIT mRepresentation
   G4ViewParameters::RepStyle style;
   style = fVP.GetRepStyle();
   if (style == G4ViewParameters::polyhedron) {
@@ -444,6 +465,12 @@ void G4OpenGLQtViewer::createPopupMenu()    {
     mRepresentation->clear();
   }
 
+  // INIT mProjection
+  if (fVP.GetFieldHalfAngle() == 0) {
+    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),1);
+  } else {
+    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),2);
+  }
 
 #if QT_VERSION < 0x040000
   // === Drawing Menu ===
@@ -740,7 +767,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QAction *fullOn = mFullScreen->addAction("On");
   QAction *fullOff = mFullScreen->addAction("Off");
 #endif
-  createRadioAction(fullOn,fullOff,SLOT(toggleFullScreen(bool)),2);
+  createRadioAction(fullOn,fullOff,SLOT(toggleFullScreen()),2);
 #endif
 
 }
@@ -816,14 +843,14 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
    Slot activate when mouseAction->rotate menu is set 
  */
 void G4OpenGLQtViewer::actionMouseRotate() {
-  emit toggleMouseAction(ROTATE);
+  emit toggleMouseAction(STYLE1);
 }
 
 /**
    Slot activate when mouseAction->move menu is set 
  */
 void G4OpenGLQtViewer::actionMouseMove() {
-  emit toggleMouseAction(MOVE);
+  emit toggleMouseAction(STYLE2);
 }
 
 /**
@@ -833,7 +860,7 @@ void G4OpenGLQtViewer::actionMouseZoom() {
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::actionMouseZoom \n");
 #endif
-  emit toggleMouseAction(ZOOM);
+  emit toggleMouseAction(STYLE3);
 }
 
 /**
@@ -843,7 +870,7 @@ void G4OpenGLQtViewer::actionMousePick() {
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::actionMousePick \n");
 #endif
-  emit toggleMouseAction(PICK);
+  emit toggleMouseAction(STYLE4);
 }
 
 /**
@@ -877,11 +904,16 @@ void G4OpenGLQtViewer::actionDrawingLineSurfaceRemoval() {
 
 /**
    Slot activated when mouse action is toggle
-   @param aAction : ROTATE, MOVE, ZOOM
+   @param aAction : STYLE1, STYLE2, STYLE3
  */
 void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
   
-  if (aAction == ROTATE) {
+  if (aAction == STYLE1) {
+    G4cout << "Clic and move mouse to rotate Volume \n" << G4endl;
+    G4cout << "Press left/right arrows to move camera left/right\n" << G4endl;
+    G4cout << "Press up/down arrows to move camera up/down\n" << G4endl;
+    G4cout << "Press SHIFT+up/down arrows to move camera toward/forward\n" << G4endl;
+    G4cout << "Press +/- to zoom into volume\n" << G4endl;
 #if QT_VERSION < 0x040000
     fMouseRotate->setItemChecked (0,true);
     fMouseMove->setItemChecked (0,false);
@@ -893,9 +925,10 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
     fMouseZoom->setChecked (false);
     fMousePick->setChecked (false);
 #endif
-    fMouseAction = ROTATE;
+    fMouseAction = STYLE1;
     fVP.SetPicking(false);
-  } else  if (aAction == MOVE) {
+  } else  if (aAction == STYLE2) {
+    G4cout << "Clic and move mouse to move Volume \n" << G4endl;
 #if QT_VERSION < 0x040000
     fMouseRotate->setItemChecked (0,false);
     fMouseMove->setItemChecked (0,true);
@@ -907,9 +940,10 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
     fMouseZoom->setChecked (false);
     fMousePick->setChecked (false);
 #endif
-    fMouseAction = MOVE;
+    fMouseAction = STYLE2;
     fVP.SetPicking(false);
-  } else  if (aAction == ZOOM) {
+  } else  if (aAction == STYLE3) {
+    G4cout << "Clic and move mouse to rotate Volume \n" << G4endl;
 #if QT_VERSION < 0x040000
     fMouseRotate->setItemChecked (0,false);
     fMouseMove->setItemChecked (0,false);
@@ -921,9 +955,9 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
     fMouseZoom->setChecked (true);
     fMousePick->setChecked (false);
 #endif
-    fMouseAction = ZOOM;
+    fMouseAction = STYLE3;
     fVP.SetPicking(false);
-  } else  if (aAction == PICK) {
+  } else  if (aAction == STYLE4) {
 #if QT_VERSION < 0x040000
     fMouseRotate->setItemChecked (0,false);
     fMouseMove->setItemChecked (0,false);
@@ -936,7 +970,7 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
     fMousePick->setChecked (true);
 #endif
     fVP.SetPicking(true);
-    fMouseAction = PICK;
+    fMouseAction = STYLE4;
   }
 
 }
@@ -1043,14 +1077,71 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
   }
   fVP.SetRepStyle (style);
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation 3%d\n",check);
-#endif
   updateQWidget();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation 4%d\n",check);
-#endif
 }
+
+/**
+   SLOT Activate by a click on the projection menu
+   Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
+   KernelVisitDecision () will be call and will set the fNeedKernelVisit
+   to 1. See G4XXXStoredViewer::CompareForKernelVisit for explanations.
+   It will cause a redraw of the view
+   @param check : 1 orthographic, 2 perspective
+   @see G4OpenGLStoredQtViewer::DrawView
+   @see G4XXXStoredViewer::CompareForKernelVisit
+*/
+void G4OpenGLQtViewer::toggleProjection(bool check) {
+
+  if (check == 1) {
+    fVP.SetFieldHalfAngle (0);
+  } else {
+
+    // look for the default parameter hidden in G4UIcommand parameters
+    G4UImanager* UI = G4UImanager::GetUIpointer();
+    if(UI==NULL)
+      return;
+    G4UIcommandTree * treeTop = UI->GetTree();
+
+    // find command
+    G4UIcommand* command = treeTop->FindPath("/vis/viewer/set/projection");
+    if (!command)
+      return;
+
+    // find param
+    G4UIparameter * angleParam = NULL;
+    for(G4int i=0;  i<command->GetParameterEntries(); i++)
+    {
+      if( command->GetParameter(i)->GetParameterName() == "field-half-angle" ) {
+        angleParam = command->GetParameter(i);
+      }
+    }
+    if (!angleParam)
+      return;
+
+    // find unit
+    G4UIparameter * unitParam = NULL;
+    for(G4int i=0;  i<command->GetParameterEntries(); i++)
+    {
+      if( command->GetParameter(i)->GetParameterName() == "unit" ) {
+        unitParam = command->GetParameter(i);
+      }
+    }
+    if (!unitParam)
+      return;
+
+    G4double defaultValue = command->ConvertToDouble(angleParam->GetDefaultValue())
+                            * G4UnitDefinition::GetValueOf(unitParam->GetDefaultValue()); 
+    if (defaultValue > 89.5 || defaultValue <= 0.0) {
+      G4cerr << "Field half angle should be 0 < angle <= 89.5 degrees. Check your default Field half angle parameter\n";
+    } else {
+      G4cout << "Perspective view has been set to default value. Field half angle="<<angleParam->GetDefaultValue() <<" \n" << G4endl;
+      fVP.SetFieldHalfAngle (defaultValue);
+      SetView ();
+    }
+  }  
+  updateQWidget();
+}
+
 
 /**
    SLOT Activate by a click on the background menu
@@ -1107,9 +1198,6 @@ void G4OpenGLQtViewer::toggleAntialiasing(bool check) {
   }
 
   updateQWidget();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
@@ -1126,9 +1214,6 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
 
   updateQWidget();
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
@@ -1144,23 +1229,16 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
   SetNeedKernelVisit (true);
   updateQWidget();
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
-#endif
 }
 
 /**
    SLOT Activate by a click on the full screen menu
-@param check : 1 , 0
 */
-void G4OpenGLQtViewer::toggleFullScreen(bool check) {
+void G4OpenGLQtViewer::toggleFullScreen() {
 #if QT_VERSION >= 0x030200
   GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
 #else
   G4cerr << "This version of G4UI Could not generate the selected format\n" << G4endl;
-#endif
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::toggleRepresentation %d\n",check);
 #endif
 }
 
@@ -1312,11 +1390,12 @@ void Graph::exportToSVG(const QString& fname)
 */
 void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 {
-  lastPos = p;
-  if (fMouseAction == PICK){  // pick
+  fLastPos = p;
+  if (fMouseAction == STYLE4){  // pick
     Pick(p.x(),p.y());
   }
 }
+
 
 /**
    @param pos_x mouse x position
@@ -1325,100 +1404,120 @@ void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 */
 
 #if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mButtons)
+void G4OpenGLQtViewer::G4MouseEvent(int pos_x, int pos_y,Qt::ButtonState mButtons)
 #else
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons)
+void G4OpenGLQtViewer::G4MouseEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons)
 #endif
 {
-  int dx = pos_x - lastPos.x();
-  int dy = pos_y - lastPos.y();
-  if (fMouseAction == ROTATE) {  // rotate
+  int dx = fLastPos.x() - pos_x;
+  int dy = fLastPos.y() - pos_y;
+  if (fMouseAction == STYLE1) {  // rotate
     if (mButtons & Qt::LeftButton) {
-      //phi spin stuff here
-      
-      G4Vector3D vp = fVP.GetViewpointDirection ().unit ();
-      G4Vector3D up = fVP.GetUpVector ().unit ();
-      
-      G4Vector3D yprime = (up.cross(vp)).unit();
-      G4Vector3D zprime = (vp.cross(yprime)).unit();
-      
-      G4double delta_alpha;
-      G4double delta_theta;
-      
-      if (fVP.GetLightsMoveWithCamera()) {
-        delta_alpha = dy;
-        delta_theta = -dx;
-      } else {
-        delta_alpha = -dy;
-        delta_theta = dx;
-      }    
-
-      delta_alpha *= deg;
-      delta_theta *= deg;
-
-      G4Vector3D new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
-      
-      G4Vector3D new_up;
-      if (fVP.GetLightsMoveWithCamera()) {
-        new_up = (new_vp.cross(yprime)).unit();
-        fVP.SetUpVector(new_up);
-      } else {
-        new_up = up;
-      }
-      ////////////////
-      // Rotates by fixed azimuthal angle delta_theta.
-
-      G4double cosalpha = new_up.dot (new_vp.unit());
-      G4double sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
-      yprime = (new_up.cross (new_vp.unit())).unit ();
-      G4Vector3D xprime = yprime.cross (new_up);
-      // Projection of vp on plane perpendicular to up...
-      G4Vector3D a1 = sinalpha * xprime;
-      // Required new projection...
-      G4Vector3D a2 =
-        sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
-      // Required Increment vector...
-      G4Vector3D delta = a2 - a1;
-      // So new viewpoint is...
-      G4Vector3D viewPoint = new_vp.unit() + delta;
-
-      fVP.SetViewAndLights (viewPoint);
-      updateQWidget();
-      
-    } else if (mButtons & Qt::RightButton) {
-      // NEVER DONE BECAUSE OF MOUSE MENU
-      //       setXRotation(xRot + dy/2);
-      //       setZRotation(zRot + dx/2);
-      //       updateQWidget();
+      G4MouseRotateEvent(dx,dy);
     }
-  } else   if (fMouseAction == MOVE){  // move
+  } else   if (fMouseAction == STYLE2){  // move
     if (mButtons & Qt::LeftButton) {
-      
-      float dx = pos_x - lastPos.x();
-      float dy = pos_y - lastPos.y();
-      
-      G4Point3D stp
-        = GetSceneHandler()->GetScene()->GetStandardTargetPoint();
-      
-      G4Point3D tp = stp + fVP.GetCurrentTargetPoint ();
-      
-      const G4Vector3D& upVector = fVP.GetUpVector ();
-      const G4Vector3D& vpVector = fVP.GetViewpointDirection ();
-      
-      G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
-      G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
-      
-      tp += -dx * unitRight + dy * unitUp;
-      fVP.SetCurrentTargetPoint (tp - stp);
-      
-      updateQWidget();
+      G4MouseMoveEvent(dx,dy,0);
     }
-  } else   if (fMouseAction == ZOOM){  // zoom
+  } else   if (fMouseAction == STYLE3){  // zoom
     if (mButtons & Qt::LeftButton) {
       G4cerr << "Zoom not implemented for the moment\n" << G4endl;
     }
   }
-  lastPos = QPoint(pos_x, pos_y);
+  fLastPos = QPoint(pos_x, pos_y);
+}
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::G4MouseMoveEvent(int dx, int dy, int dz)
+{
+  G4Point3D stp
+    = GetSceneHandler()->GetScene()->GetStandardTargetPoint();
+  
+  G4Point3D tp = stp + fVP.GetCurrentTargetPoint ();
+  
+  const G4Vector3D& upVector = fVP.GetUpVector ();
+  const G4Vector3D& vpVector = fVP.GetViewpointDirection ();
+  
+  G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
+  G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
+  
+#ifdef GEANT4_QT_DEBUG
+  G4cout << fVP<<G4endl;
+  printf("Mouse event Target Point : %f %f %f\n",tp.x(),tp.y(),tp.z());
+  printf("Mouse event upVector : %f %f %f\n",upVector.x(),upVector.y(),upVector.z());
+  printf("Mouse event vpVector Point : %f %f %f\n",vpVector.x(),vpVector.y(),vpVector.z());
+  printf("Mouse event unitRight Point : %f %f %f\n",unitRight.x(),unitRight.y(),unitRight.z());
+  printf("Mouse event unitUp Point : %f %f %f\n",unitUp.x(),unitUp.y(),unitUp.z());
+#endif
+  tp += -dx * unitRight + dy * unitUp + dz * vpVector;
+  fVP.SetCurrentTargetPoint (tp - stp);
+  
+  updateQWidget();
+}
+
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::G4MouseRotateEvent(int dx, int dy)
+{
+  //phi spin stuff here
+  
+  G4Vector3D vp = fVP.GetViewpointDirection ().unit ();
+  G4Vector3D up = fVP.GetUpVector ().unit ();
+  
+  G4Vector3D yprime = (up.cross(vp)).unit();
+  G4Vector3D zprime = (vp.cross(yprime)).unit();
+  
+  G4double delta_alpha;
+  G4double delta_theta;
+  
+  if (fVP.GetLightsMoveWithCamera()) {
+    delta_alpha = dy;
+    delta_theta = -dx;
+  } else {
+    delta_alpha = -dy;
+    delta_theta = dx;
+  }    
+  
+  delta_alpha *= deg;
+  delta_theta *= deg;
+  
+  G4Vector3D new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
+  
+  G4Vector3D new_up;
+  if (fVP.GetLightsMoveWithCamera()) {
+    new_up = (new_vp.cross(yprime)).unit();
+    fVP.SetUpVector(new_up);
+  } else {
+    new_up = up;
+  }
+  ////////////////
+  // Rotates by fixed azimuthal angle delta_theta.
+  
+  G4double cosalpha = new_up.dot (new_vp.unit());
+  G4double sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
+  yprime = (new_up.cross (new_vp.unit())).unit ();
+  G4Vector3D xprime = yprime.cross (new_up);
+  // Projection of vp on plane perpendicular to up...
+  G4Vector3D a1 = sinalpha * xprime;
+  // Required new projection...
+  G4Vector3D a2 =
+    sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
+  // Required Increment vector...
+  G4Vector3D delta = a2 - a1;
+  // So new viewpoint is...
+  G4Vector3D viewPoint = new_vp.unit() + delta;
+  
+  fVP.SetViewAndLights (viewPoint);
+  updateQWidget();
+  
 }
 
 /** This is the benning of a rescale function. It does nothing for the moment
@@ -1711,8 +1810,55 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 
 #endif
 
-/*
+void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
+{
+  if (holdKeyEvent)
+    return;
 
+  holdKeyEvent = true;
+
+  if (event->key() == Qt::Key_Escape) { // escaped from full screen
+    toggleFullScreen();
+    
+  }  else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ShiftModifier)) // go backward
+    {
+      G4MouseMoveEvent(0,0,1);
+    }
+  else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ShiftModifier))  // go forward
+    {
+      G4MouseMoveEvent(0,0,-1);
+    }
+ else if (event->key() == Qt::Key_Down) // go down
+    {
+      G4MouseMoveEvent(0,1,0);
+    }
+  else if (event->key() == Qt::Key_Up)  // go up
+    {
+      G4MouseMoveEvent(0,-1,0);
+    }
+  else if (event->key() == Qt::Key_Left) // go left
+    {
+      G4MouseMoveEvent(-1,0,0);
+    }
+  else if (event->key() == Qt::Key_Right) // go right
+    {
+      G4MouseMoveEvent(1,0,0);
+    }
+  else if (event->key() == Qt::Key_Plus) // zoom in
+    {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()*fDeltaZoom); 
+      updateQWidget();
+    }
+  else if (event->key() == Qt::Key_Minus) // zoom out
+    {
+      fVP.SetZoomFactor(fVP.GetZoomFactor()/fDeltaZoom); 
+      updateQWidget();
+    }
+  holdKeyEvent = false;
+}
+
+/*
+  
 void MultiLayer::exportToSVG(const QString& fname)
 {
   QPicture picture;

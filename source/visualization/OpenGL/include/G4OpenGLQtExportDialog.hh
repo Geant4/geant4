@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh,v 1.4 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.hh,v 1.5 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -80,7 +80,7 @@ class G4OpenGLQtExportDialog : public QDialog
   int getHeight();
 
   /** return the value of the transparency if format has a transparency, instead return -1 */
-  bool getTransparency();
+  int getTransparency();
 
   /** return the numbers of colors in the picture if format has a BW/Color widget, instead return -1 */
   int getNbColor();

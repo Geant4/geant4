@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.6 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.7 2008-01-30 10:54:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,8 @@ class QMenu;
 #endif
 class QImage;
 class QAction;
+class QMouseEvent;
+class QKeyEvent;
 
 class G4OpenGLSceneHandler;
 
@@ -77,10 +79,13 @@ protected:
   void G4MouseReleaseEvent(QPoint p);
   void G4MouseDoubleClickEvent(QPoint p);
 #if QT_VERSION < 0x040000
-  void G4MouseMoveEvent(int, int, Qt::ButtonState);
+  void G4MouseEvent(int, int, Qt::ButtonState);
 #else
-  void G4MouseMoveEvent(int, int, Qt::MouseButtons);
+  void G4MouseEvent(int, int, Qt::MouseButtons);
 #endif
+  void G4MouseRotateEvent(int, int);
+  void G4MouseMoveEvent(int, int, int);
+  void G4keyPressEvent (QKeyEvent * event); 
 
 
 protected:
@@ -102,9 +107,15 @@ private:
 #else
   QMenu *fContextMenu;
 #endif
-  enum mouseActions {ROTATE, MOVE, ZOOM, PICK}; 
+  enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
   mouseActions fMouseAction; // 1: rotate 0:move
-  QPoint lastPos;
+  QPoint fLastPos;
+  /** delta of scene translation. This delta is put in % of the scene view */
+  float fDeltaSceneTranslation;
+  /** delta of left right move. This delta is put in % of the scene view */
+  float fDeltaZoom;
+  /** To ensure key event are keep one by one */
+  bool holdKeyEvent;
 #if QT_VERSION < 0x040000
   QPopupMenu *fMouseRotate;
   QPopupMenu *fMouseMove;
@@ -139,12 +150,13 @@ private slots :
   void toggleDrawingAction(int);
   void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
+  void toggleProjection(bool);
   void toggleBackground(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);
   void toggleHaloing(bool);
   void toggleAux(bool);
-  void toggleFullScreen(bool);
+  void toggleFullScreen();
   // Only use for Qt>4.0
   void dialogClosed();
 };
