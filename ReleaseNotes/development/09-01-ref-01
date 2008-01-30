@@ -4,13 +4,25 @@
 
 Some of the development/fixes included since the last development tag are:
 
- o 
+ o Fixes for event reprodubility in physics initialisation and cases of
+   multiple local field managers.
+ o Fixes in BREPS polyhedra and box and in G4ExtrudedSolid, correcting order of
+   construction of facets.
+ o Fixes in GDML plugin for vertex referencing of tessellated-solids and for
+   entity resolution. Fixed naming convention for files.
+ o Fixes for memory management in CHIPS.
+ o Extended Draw2D features for G4Circle, G4Polyhedron, G4Polyline, G4Polymarker
+   and G4Square. Adapted visualization drivers.
+ o New 'nanobeam' advanced example, simulating the beam optics of the nanobeam line
+   installed on the AIFIRA electrostatic accelerator facility located at CENBG.
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(*)  Fixes included in release 9.1.p01
+
 Summarised, the list of changes is the following:
 
-config                                           config-V09-01-00
+config                                           config-V09-01-00           (*)
 ------
 - Added commented lines for OpenGL setup in Darwin-g++.gmk for MacOS
   10.5 Leopard, pending fix from Apple.
