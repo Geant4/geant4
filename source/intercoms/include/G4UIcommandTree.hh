@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.15 2006-06-29 19:08:11 gunter Exp $
+// $Id: G4UIcommandTree.hh,v 1.16 2008-01-30 11:20:03 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@ class G4UIcommandTree
       void AddNewCommand(G4UIcommand * newCommand);
       void RemoveCommand(G4UIcommand * aCommand);
       G4UIcommand * FindPath(const char* commandPath);
+      G4UIcommandTree * FindCommandTree(const char* commandPath);
       void List();
       void ListCurrent();
       void ListCurrentWithNum();
