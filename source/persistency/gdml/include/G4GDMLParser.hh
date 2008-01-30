@@ -40,10 +40,10 @@ public:
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& fname) { reader.Read(fname); }
+   void Read(const G4String& fname) { reader.Read(fname,false); /* false: not an external file! */ }
    void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol); }
 
-   G4VPhysicalVolume* getWorldVolume() { return reader.getWorldVolume(); }
+   G4VPhysicalVolume* getWorldVolume(const G4String& setup="Default") { return reader.getWorldVolume(setup); }
 };
 
 #endif

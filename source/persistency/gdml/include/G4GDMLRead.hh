@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.2 2008-01-18 10:10:57 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.3 2008-01-30 13:43:12 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -71,8 +71,8 @@ public:
    virtual void volume_contentRead(const xercesc::DOMElement* const)=0;
    virtual void structureRead(const xercesc::DOMElement* const)=0;
 
-   void Read(const G4String&,bool=false);
-   G4PVPlacement* getWorldVolume(const G4String& setupName="Default");
+   void Read(const G4String&,bool);
+   G4PVPlacement* getWorldVolume(const G4String& setupName);
 };
 
 #endif
