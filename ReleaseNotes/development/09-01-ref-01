@@ -1,0 +1,212 @@
+
+                       geant4-09-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o 
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-00
+------
+- Added commented lines for OpenGL setup in Darwin-g++.gmk for MacOS
+  10.5 Leopard, pending fix from Apple.
+
+geometry/magneticfield                           field-V09-01-00            (*)
+----------------------
+- New class G4FieldManagerStore. It enables resetting of all chord
+  finders' state. Needed to address problem reported by user.
+- G4CashKarpRKF45: deleted un-needed duplicate (and unused) instance variable
+  'fNumberOfVariables', already defined in G4MagIntegratorStepper.
+- Some code cleanup.
+
+geometry/management                              geommng-V09-01-01
+-------------------
+- Added methods Reserve() and Shrink() to G4SmartVoxelNode to reserve and
+  shrink respectively the memory allocated for the buffer of slices; to be
+  used for studying ways of reducing memory waste when building nodes in
+  G4SmartVoxelHeader for large geometry setups.
+
+geometry/navigation                              geomnav-V09-01-01          (*)
+-------------------
+- G4PropagatorInField: changed condition for 'ReEstimationEndPoint'
+  in order to better handle very strict parameters of propagation.
+  Also added more verbosity in case of error for negative step.
+  Fixes rare problem observed in production by ATLAS.
+- G4PhantomParameterisation:
+  o Bug fix in GetReplicaNo() to catch overflows in X and Y.
+    (on suggestion by S.Stute)
+  o Made CheckVoxelsFillContainer() visible in public interface.
+
+geometry/solids/BREPS                            breps-V09-01-00            (*)
+---------------------
+- Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of particle
+  passing the border of two touching surfaces.
+- G4BREPSolidBox: fixed problem in the constructor in definition of the
+  side for the normal to surface.
+
+geometry/solids/specific                         geom-specific-V09-01-00    (*)
+------------------------
+- In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before
+  quadrangular ones, following logic behind G4TessellatedSolid.
+
+global                                           global-V09-01-00           (*)
+------
+- Changed date for release 9.1.p01.
+
+graphics_reps                                    greps-V09-01-01
+-------------
+- HepPolyhedron: fixed bug and improved visualization for paraboloid.       (*)
+- G4VVisManager::Draw2D methods, already available for G4Text have been
+  extended to: G4Circle, G4Polyhedron, G4Polyline, G4Polymarker, G4Square.
+
+interfaces                                       interfaces-V09-01-00       (*)
+----------
+- G4UItcsh: fixed problem with Ctl-D termination for bash users.
+- G4UIQt: some improvements for Qt3, corrected bugs.
+- G4UIQt_moc: added other versions for QT_MOC_REVISION 28,58,59.
+- GAG/GNUmakefile: removed unnecessary dependency.
+
+persistency/gdml                                 gdml-V09-01-00             (*)
+----------------
+- Fixed vertex referencing for tessellated-solid in G4GDMLSolids.
+- Fixed entity resolution in G4GDMLBase.
+- Fixed naming of convention for external files in G4GDMLStructure.
+
+physics_lists                                    phys-list-V09-01-00        (*)
+-------------
+- G4EmExtraPhysics: fixed problem report #993 related to swap of synchrotron
+  radiation and mu-nuclear activation.
+
+processes/electromagnetic/muons                  emmuons-V09-01-00
+-------------------------------
+- G4MuMscModel: fixes on sampling and distribution computation.
+- G4MuMultipleScattering: modified default 'RangeFactor'.
+
+processes/electromagnetic/standard               emstand-V09-01-01          (*)
+----------------------------------
+- G4PAIModel, G4PAIPhotonModel: added extra protection to garantee
+  correct usage of bins in the table of energy transfers.
+  Addresses problem report #995.
+- G4hIonisation, G4ionIonisation, G4ionGasIonisation: fixed
+  computation of non-ionizing energy loss: at the last ionization step
+  and at energies above 2 MeV for protons.
+- G4eCoulombScatteringModel: using safer numerical espression.
+
+processes/electromagnetic/utils                  emutils-V09-01-00          (*)
+-------------------------------
+- G4EmCorrections: improved CPU by usage of expansions and precalculated
+  values of Z^0.23.
+- G4VEnergyLossProcess: fixed list of "collaborative" processes needed
+  for sub-cutoff option.
+
+processes/decay                                  decay-V09-01-00
+---------------
+- Added class G4DecayProcessType and introduced process sub-type.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-01-00)                                     (*)
+  o G4PhotoNuclearCrossSection and G4ElectroNuclearCrossSection: fixed
+    wrong return value (was zero instead of pseudo-inf) and commented out
+    extra debug warning. Moved unnecessary inline methods to implementation.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-01-01)            (*)
+  o Reduced memory allocation induced by use std::deque collection in
+    G4QHadron class; temporary workaround by replacing it with std::list.
+  o Commented out debug printout in G4Quasmon.
+  o Fixed compilation warning on SUN/CC compiler in G4QNucleus.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-01)      (*)
+  o Fixed problem of non-reproducibility induced by G4QElasticCrossSection.
+  o G4StringChipsInterface: fixed non-reproducibility due to difference in
+    number of initial particles defined at initialisation.
+  o G4ChiralInvariantPhaseSpace: moved some unnecessary inline methods to
+    implementation and fixed non-reproducibility due to difference in
+    initialisation.
+- models/coherent_elastic (hadr-cohe-V09-01-01)
+  o G4DiffuseElastic: removed dependency on other elastic models.           (*)
+  o G4ElasticHadrNucleusHE: fixed non-reproducibility problem.              (*)
+    Removed commented part of old code and added more formatting.
+  o G4HadronElastic: restored threshold to G4ElasticHadrNucleusHE           (*)
+    model at 1 GeV.
+  o G4HadronElastic: added extra protection; if sampled 't' is out of the
+    physics range then do not allow scattering.
+  o G4UHadronElasticProcess: adopt call to G4QElasticCrossSection with option
+    "false", so that parameters for sampling of scattering gets precalculated.
+
+processes/management                             procman-V09-01-00
+--------------------
+- Allow for zero mean free path for PostStepDoIt().
+- Added 'ProcessSubType' to G4VProcess.
+
+processes/transportation                         transport-V09-01-00        (*)
+------------------------
+- G4Transportation & G4CoupledTransportation: allow for clearing the
+  state of all chord-finders using G4FieldManagerStore. Assures for
+  event reproducibility in case multiple local fields are used.
+- Syncronised files with CVS HEAD.
+
+track                                            track-V09-01-00            (*)
+-----
+- Added non-ionizing energy loss to EM physics (classes
+  G4ParticleChangeForGamma and G4ParticleChangeForLoss).
+
+visualization                                    vis-V09-01-01
+-------------
+- Draw2D capability, already available for G4Text, extended to:
+  G4Circle, G4Polyhedron, G4Polyline, G4Polymarker, G4Square.
+- management: implemented extended 2D interface.
+- modeling: adapted to new BeginPrimitives2D signature.
+- HepRep: Adapted to new BeginPrimitives2D signature.
+- OpenGL: Implemented extended 2D interface.
+- Updated unit tests.
+
+examples                                         examples-V09-01-01
+--------
+- Updated reference outputs.
+- advanced/nanobeam (nanobeam-V09-01-01)
+  o New application simulating the beam optics of the nanobeam line installed
+    on the AIFIRA electrostatic accelerator facility located at CENBG in
+    Bordeaux-Gradignan, France.
+- extended/electromagnetic/TestEm0 (testem0-V09-01-00)
+  o Compute max energy transferable.
+- extended/electromagnetic/TestEm1 (testem1-V09-01-00)
+  o HistoManager: protect creation of ascii file.
+- extended/electromagnetic/TestEm2 (testem2-V09-01-01)
+  o New subdirectory 'egs4', with results from pdg. Replaced run04.mac.
+- extended/electromagnetic/TestEm5 (testem5-V09-01-01)
+  o New subdirectory 'berger' and 'mumsc' and related scripts.
+  o PhysListEmStandard: select G4hMultipleScattering for muon and proton.
+  o Normalize histo 1.
+- extended/electromagnetic/TestEm7 (testem7-V09-01-01)                      (*)
+  o Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
+    process is used ("standardNR");
+  o Added computation of mean NIEL energy loss.
+  o Fixed experimental physics lists if single scattering models are used
+    instead of multiple scattering. Set nuclear stopping flag for ionisation
+    to "false".
+- extended/electromagnetic/TestEm11 (testem11-V09-01-00)
+  o Added 'setfileOption' in HistoMessenger.
+- extended/electromagnetic/TestEm12 (testem12-V09-01-01)
+  o Updated macro berger.mac: setCuts 2um (=1keV).
+- extended/electromagnetic/TestEm14 (testem14-V09-01-00)
+- extended/electromagnetic/TestEm15 (testem15-V09-01-00)
+- extended/electromagnetic/TestEm18 (testem18-V09-01-00)
+  o HistoManager: ascii[0] = flag to control creation of .ascii file.
+- extended/gdml (exgdml-V09-01-00)                                          (*)
+  o Added entity.gdml and materials.xml to demonstrate the ability of
+    the parser of resolving entities.
+  o Fixed axes.gdml and diamond.gdml according to tessellated-solid
+    specifications.
+- extended/medical/DICOM (DICOM-V09-01-00)                                  (*)
+  o Fix to not use 'rindex' in DicomHandler class to avoid problems
+    on Windows.
+- novice/N03 (exampleN03-V09-01-00)
+  o Made visManager available in batch mode.
+  o Some cosmetics.
+
+tests                                            tests-V09-01-01
+-----
+- Updated reference outputs and tools.
