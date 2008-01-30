@@ -86,7 +86,8 @@ List of fixes included in this public patch since the public release 8.3.p01:
       o Changed default for isotope production to off. Fixes a memory leak.
       o Removed effective charge calculation and unused variable 'newWeight'.
     + models/chiral_inv_phase_space:
-      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection.
+      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection
+        and G4StringChipsInterface.
       o Reduced memory allocation induced by use std::deque collection in
         G4QHadron class; temporary workaround by replacing it with std::list.
     + models/high_energy:
