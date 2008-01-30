@@ -77,6 +77,7 @@ List of fixes included in this public patch since the public release 9.0.p01:
       o Fixed angular distribution for nucleon-nucleon elastic scattering
         above 2.8 GeV.
     + models/chiral_inv_phase_space:  (*)
+      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection.
       o Reduced memory allocation induced by use std::deque collection in
         G4QHadron class; temporary workaround by replacing it with std::list.
     + models/high_energy: (*)
