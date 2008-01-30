@@ -21,7 +21,7 @@ List of fixes included in this public patch since the public release 9.1:
       o G4PropagatorInField: changed condition for 'ReEstimationEndPoint'
         in order to better handle very strict parameters of propagation.
         Also added more verbosity in case of error for negative step.
-        Fixes rare problem observed in production by ATLAS.
+        Fixes rare problem observed in production by ATLAS.  (*)
       o G4PhantomParameterisation: bug fix in GetReplicaNo() to catch
         overflows in X and Y.
         Made CheckVoxelsFillContainer() visible in public interface.
@@ -68,14 +68,15 @@ List of fixes included in this public patch since the public release 9.1:
         wrong return value (was zero instead of pseudo-inf) and commented out 
         extra debug warning. Moved unnecessary inline methods to implementation.
     + models/chiral_inv_phase_space:
-      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection.
+      o Fixed problem of non-reproducibility induced by
+        G4QElasticCrossSection.  (*)
       o Reduce memory allocation induced by use std::deque collection in    (*)
         G4QHadron class; temporary workaround by replacing it with std::list.
       o G4ChiralInvariantPhaseSpace: moved some unnecessary inline methods to 
         implementation and fixed non-reproducibility due to difference in 
         initialisation.
       o G4StringChipsInterface: fixed non-reproducibility due to difference in
-        initialisation.
+        initialisation.  (*)
       o Commented out debug printout in G4Quasmon.
       o Fixed compilation warning on SUN/CC compiler in G4QNucleus.
     + models/coherent_elastic:
