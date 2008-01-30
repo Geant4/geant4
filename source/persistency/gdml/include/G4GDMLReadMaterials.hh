@@ -35,17 +35,20 @@
 #ifndef _G4GDMLREADMATERIALS_INCLUDED_
 #define _G4GDMLREADMATERIALS_INCLUDED_
 
-#include "G4GDMLReadDefine.hh"
-
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
 #include "G4OpticalSurface.hh"
+#include "G4NistManager.hh"
+
+#include "G4GDMLReadDefine.hh"
 
 class G4GDMLReadMaterials : public G4GDMLReadDefine {
    G4double atomRead(const xercesc::DOMElement* const);
    G4int compositeRead(const xercesc::DOMElement* const,G4String&);
    G4double DRead(const xercesc::DOMElement* const);
+   G4double PRead(const xercesc::DOMElement* const);
+   G4double TRead(const xercesc::DOMElement* const);
    void elementRead(const xercesc::DOMElement* const);
    G4double fractionRead(const xercesc::DOMElement* const,G4String&);
    void isotopeRead(const xercesc::DOMElement* const);
@@ -54,10 +57,10 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine {
    void mixtureRead(const xercesc::DOMElement* const,G4Material*);
    void opticalsurfaceRead(const xercesc::DOMElement* const);
    void materialsRead(const xercesc::DOMElement* const);
-   G4Element* getElement(const G4String&) const;
-   G4Isotope* getIsotope(const G4String&) const;
 protected:
-   G4Material* getMaterial(const G4String&) const;
+   G4Element* getElement(const G4String&,bool verbose=true) const;
+   G4Isotope* getIsotope(const G4String&,bool verbose=true) const;
+   G4Material* getMaterial(const G4String&,bool verbose=true) const;
 };
 
 #endif

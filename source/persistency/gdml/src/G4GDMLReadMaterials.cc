@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.1 2008-01-14 09:09:37 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.2 2008-01-30 12:38:42 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -112,11 +112,62 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const element) {
    return value*eval.Evaluate(unit);
 }
 
+G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const element) {
+
+   G4double value = STP_Pressure;
+   G4String unit("pascal");
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="value") value = eval.Evaluate(attValue); else
+      if (attName=="unit") unit = attValue;
+   }
+
+   return value*eval.Evaluate(unit);
+}
+
+G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const element) {
+
+   G4double value = STP_Temperature;
+   G4String unit("K");
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="value") value = eval.Evaluate(attValue); else
+      if (attName=="unit") unit = attValue;
+   }
+
+   return value*eval.Evaluate(unit);
+}
+
 void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const element) {
 
    G4String name;
    G4String formula;
-
    G4double a = 0.0;
    G4double Z = 0.0;
 
@@ -227,10 +278,12 @@ void G4GDMLReadMaterials::isotopeRead(const xercesc::DOMElement* const element) 
 void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element) {
 
    G4String name;
-   
    G4double Z = 0.0;
    G4double a = 0.0;
    G4double D = 0.0;
+   G4State state = kStateUndefined;
+   G4double T = STP_Temperature;
+   G4double P = STP_Pressure;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -247,10 +300,16 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="name") name = attValue; else
-      if (attName=="Z") Z = eval.Evaluate(attValue);
+      if (attName=="Z") Z = eval.Evaluate(attValue); else
+      if (attName=="state") {
+      
+         if (attValue=="solid") state = kStateSolid; else
+         if (attValue=="liquid") state = kStateLiquid; else
+         if (attValue=="gas") state = kStateGas;
+      }
    }
-  
-   G4int nComponents = 0;
+
+   size_t nComponents = 0;
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -260,14 +319,16 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="D") D = DRead(child);    else
+      if (tag=="D") D = DRead(child); else
+      if (tag=="P") P = PRead(child); else
+      if (tag=="T") T = TRead(child); else
       if (tag=="atom") a = atomRead(child); else
       if (tag=="fraction") nComponents++; else
       if (tag=="composite") nComponents++;
    }
 
-   if (nComponents>0) mixtureRead(element,new G4Material(GenerateName(name),D,nComponents));
-   else new G4Material(GenerateName(name),Z,a,D);
+   if (nComponents==0) new G4Material(GenerateName(name),Z,a,D,state,T,P);
+   else mixtureRead(element,new G4Material(GenerateName(name),D,nComponents,state,T,P));
 }
 
 void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Element *ele) {
@@ -301,13 +362,15 @@ void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="D") { /*already processed*/ } else
+      if (tag=="P") { /*already processed*/ } else
+      if (tag=="T") { /*already processed*/ } else
       if (tag=="fraction") {
 
          G4String ref;
 	 G4double n = fractionRead(child,ref);
 	 
-         G4Material *materialPtr = G4Material::GetMaterial(GenerateName(ref),false);
-         G4Element *elementPtr = G4Element::GetElement(GenerateName(ref),false);
+         G4Material *materialPtr = getMaterial(GenerateName(ref),false);
+         G4Element *elementPtr = getElement(GenerateName(ref),false);
 
          if (materialPtr != 0) material->AddMaterial(materialPtr,n); else
 	 if (elementPtr != 0) material->AddElement(elementPtr,n);
@@ -395,29 +458,33 @@ void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const element
    }
 }
 
-G4Element* G4GDMLReadMaterials::getElement(const G4String& ref) const {
+G4Element* G4GDMLReadMaterials::getElement(const G4String& ref,bool verbose) const {
 
    G4Element* elementPtr = G4Element::GetElement(ref,false);
 
-   if (!elementPtr) G4Exception("GDML: Referenced element '"+ref+"' was not found!"); 
+   if (!elementPtr) elementPtr = G4NistManager::Instance()->FindOrBuildElement(ref);
+
+   if (verbose && !elementPtr) G4Exception("GDML: Referenced element '"+ref+"' was not found!"); 
 
    return elementPtr;
 }
 
-G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref) const {
+G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref,bool verbose) const {
 
    G4Isotope* isotopePtr = G4Isotope::GetIsotope(ref,false);
 
-   if (!isotopePtr) G4Exception("GDML: Referenced isotope '"+ref+"' was not found!"); 
+   if (verbose && !isotopePtr) G4Exception("GDML: Referenced isotope '"+ref+"' was not found!"); 
 
    return isotopePtr;
 }
 
-G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref) const {
+G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref,bool verbose) const {
 
    G4Material *materialPtr = G4Material::GetMaterial(ref,false);
 
-   if (!materialPtr) G4Exception("GDML: Referenced material '"+ref+"' was not found!"); 
+   if (!materialPtr) materialPtr = G4NistManager::Instance()->FindOrBuildMaterial(ref);
+
+   if (verbose && !materialPtr) G4Exception("GDML: Referenced material '"+ref+"' was not found!"); 
 
    return materialPtr;
 }

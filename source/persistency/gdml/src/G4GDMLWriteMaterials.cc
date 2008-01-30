@@ -80,6 +80,14 @@ void G4GDMLWriteMaterials::isotopeWrite(xercesc::DOMElement* element,const G4Iso
 
 void G4GDMLWriteMaterials::elementWrite(xercesc::DOMElement* element,const G4Element* const elementPtr) {
 
+   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
+   const size_t materialCount = materialList->size();
+
+   // If the element is registered both as a material and an element, we dump it only once as a material!
+
+   for (size_t i=0;i<materialCount;i++)
+      if ((*materialList)[i]->GetName() == elementPtr->GetName()) return;
+
    xercesc::DOMElement* elementElement = newElement("element");
    element->appendChild(elementElement);
 
@@ -94,7 +102,16 @@ void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Ma
    xercesc::DOMElement* materialElement = newElement("material");
    element->appendChild(materialElement);
 
+   G4State state = materialPtr->GetState();
+
+   G4String state_str("undefined");
+   
+   if (state=kStateSolid) { state_str = "solid"; } else
+   if (state=kStateLiquid) { state_str = "liquid"; } else
+   if (state=kStateGas) { state_str = "gas"; }
+
    materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
+   materialElement->setAttributeNode(newAttribute("state",state_str));
 
    DWrite(materialElement,materialPtr->GetDensity());
    PWrite(materialElement,materialPtr->GetPressure());
