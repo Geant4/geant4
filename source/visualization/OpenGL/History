@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2008-01-30 10:54:13 lgarnier Exp $
+$Id: History,v 1.108 2008-01-30 11:16:42 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,6 @@ History file for visualization/OpenGL
  - Add moving camera on left/right/up/down arrown, going forward/backward
    on SHIFT+up/down, zoom in with +/- keys
  - Add a context menu entry for projection perspective/orthographic
- - Add a search area in the help widget
  - Fix some bugs on windows in export dialog
 
 15th January 2007, Laurent Garnier
