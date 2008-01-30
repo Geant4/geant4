@@ -39,6 +39,11 @@ List of fixes included in this public patch since the public release 9.1:
     ------
     + Changed date for patch-01 to release 9.1.
 
+  o Graphics Representations:
+    ------------------------
+    + HepPolyhedron: fixed bug and improvement in the visualization of
+      G4Paraboloid.
+
   o Interfaces:
     ----------
     + G4UItcsh: fixed problem with <Ctl-D> termination for bash users.
