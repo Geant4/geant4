@@ -212,6 +212,34 @@ void G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const element) {
    eval.defineVariable(name,value);
 }
 
+void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4double unit = 1.0;
+   G4double value = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = attValue; else
+      if (attName=="value") value = eval.Evaluate(attValue); else
+      if (attName=="unit") unit = eval.Evaluate(attValue);
+   }
+
+   quantityMap[name] = value*unit;
+}
+
 void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const element) {
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -228,27 +256,36 @@ void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const element) {
       if (tag=="rotation") rotationRead(child); else
       if (tag=="scale") scaleRead(child); else
       if (tag=="variable") variableRead(child); else
-      G4Exception("GDML: Unknown tag in define: "+tag);
+      if (tag=="quantity") quantityRead(child); else
+      G4Exception("GDML Reader: ERROR! Unknown tag in define: "+tag);
    }
 }
 
 G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
 
-   if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML: Referenced position '"+ref+"' was not found!");
+   if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Referenced position '"+ref+"' was not found!");
 
    return positionMap[ref];
 }
 
 G4ThreeVector* G4GDMLReadDefine::getRotation(const G4String& ref) {
 
-   if (rotationMap.find(ref) == rotationMap.end()) G4Exception("GDML: Referenced rotation '"+ref+"' was not found!");
+   if (rotationMap.find(ref) == rotationMap.end()) G4Exception("GDML Reader: ERROR! Referenced rotation '"+ref+"' was not found!");
 
    return rotationMap[ref];
 }
 
 G4ThreeVector* G4GDMLReadDefine::getScale(const G4String& ref) {
 
-   if (scaleMap.find(ref) == scaleMap.end()) G4Exception("GDML: Referenced scale '"+ref+"' was not found!");
+   if (scaleMap.find(ref) == scaleMap.end()) G4Exception("GDML Reader: ERROR! Referenced scale '"+ref+"' was not found!");
 
    return scaleMap[ref];
 }
+
+G4double G4GDMLReadDefine::getQuantity(const G4String& ref) {
+
+   if (quantityMap.find(ref) == quantityMap.end()) G4Exception("GDML Reader: ERROR! Referenced quantity '"+ref+"' was not found!");
+
+   return quantityMap[ref];
+}
+

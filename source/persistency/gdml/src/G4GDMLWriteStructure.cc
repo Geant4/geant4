@@ -73,42 +73,32 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
 }
 
-void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element) {
+void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element,const G4LogicalVolume* const volumePtr) {
 
-   const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();
-   const size_t volumeCount = volumeList->size();
+   xercesc::DOMElement* volumeElement = newElement("volume");
+   element->appendChild(volumeElement);
 
-   for (size_t i=0;i<volumeCount;i++) {
+   volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
-      const G4LogicalVolume* volumePtr = (*volumeList)[i];
+   xercesc::DOMElement* materialrefElement = newElement("materialref");
+   materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
+   volumeElement->appendChild(materialrefElement);
 
-      xercesc::DOMElement* volumeElement = newElement("volume");
-      element->appendChild(volumeElement);
+   G4VSolid* solidPtr = volumePtr->GetSolid();
 
-      volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
-
-      xercesc::DOMElement* materialrefElement = newElement("materialref");
-      materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
-      volumeElement->appendChild(materialrefElement);
-
-      G4VSolid* solidPtr = volumePtr->GetSolid();
-
-      if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
+   if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
       
-         solidPtr = reflectedPtr->GetConstituentMovedSolid();
-      }
-
-      xercesc::DOMElement* solidrefElement = newElement("solidref");
-      solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
-      volumeElement->appendChild(solidrefElement);
-
-      const G4int daughterCount = volumePtr->GetNoDaughters();
-
-      for (G4int j=0;j<daughterCount;j++) {
-      
-         physvolWrite(volumeElement,volumePtr->GetDaughter(j));
-      }
+      solidPtr = reflectedPtr->GetConstituentMovedSolid();
    }
+
+   xercesc::DOMElement* solidrefElement = newElement("solidref");
+   solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
+   volumeElement->appendChild(solidrefElement);
+
+   const G4int daughterCount = volumePtr->GetNoDaughters();
+
+   for (G4int j=0;j<daughterCount;j++)
+      physvolWrite(volumeElement,volumePtr->GetDaughter(j));
 }
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* element) {
@@ -116,5 +106,9 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* element) {
    xercesc::DOMElement* structureElement = newElement("structure");
    element->appendChild(structureElement);
 
-   volumeWrite(structureElement);
+   const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();
+   const size_t volumeCount = volumeList->size();
+
+   for (size_t i=0;i<volumeCount;i++)
+      volumeWrite(structureElement,(*volumeList)[i]);
 }

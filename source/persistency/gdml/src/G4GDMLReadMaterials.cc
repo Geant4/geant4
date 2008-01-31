@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.2 2008-01-30 12:38:42 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.3 2008-01-31 11:30:56 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -201,8 +201,7 @@ void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const element) 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="atom") a = atomRead(child); else
-      if (tag=="fraction") nComponents++; else
-      G4Exception("GDML: Unknown tag in element: "+tag);
+      if (tag=="fraction") nComponents++;
    }
 
    if (nComponents>0) mixtureRead(element,new G4Element(GenerateName(name),formula,nComponents));
@@ -319,10 +318,13 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
+      if (tag=="atom") a = atomRead(child); else
+      if (tag=="Dref") D = getQuantity(GenerateName(refRead(child))); else
+      if (tag=="Pref") P = getQuantity(GenerateName(refRead(child))); else
+      if (tag=="Tref") T = getQuantity(GenerateName(refRead(child))); else
       if (tag=="D") D = DRead(child); else
       if (tag=="P") P = PRead(child); else
       if (tag=="T") T = TRead(child); else
-      if (tag=="atom") a = atomRead(child); else
       if (tag=="fraction") nComponents++; else
       if (tag=="composite") nComponents++;
    }
@@ -361,9 +363,6 @@ void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="D") { /*already processed*/ } else
-      if (tag=="P") { /*already processed*/ } else
-      if (tag=="T") { /*already processed*/ } else
       if (tag=="fraction") {
 
          G4String ref;
@@ -375,7 +374,7 @@ void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G
          if (materialPtr != 0) material->AddMaterial(materialPtr,n); else
 	 if (elementPtr != 0) material->AddElement(elementPtr,n);
 
-         if ((materialPtr == 0) && (elementPtr == 0)) G4Exception("GDML: Referenced material/element '"+GenerateName(ref)+"' was not found!");   
+         if ((materialPtr == 0) && (elementPtr == 0)) G4Exception("GDML Reader: ERROR! Referenced material/element '"+GenerateName(ref)+"' was not found!");   
       } 
       else if (tag=="composite") {
       
@@ -454,7 +453,7 @@ void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const element
       if (tag=="isotope") isotopeRead(child); else 
       if (tag=="material") materialRead(child); else 
       if (tag=="opticalsurface") opticalsurfaceRead(child); else 
-      G4Exception("GDML: Unknown tag in materials: "+tag);
+      G4Exception("GDML Reader: ERROR! Unknown tag in materials: "+tag);
    }
 }
 
@@ -464,7 +463,7 @@ G4Element* G4GDMLReadMaterials::getElement(const G4String& ref,bool verbose) con
 
    if (!elementPtr) elementPtr = G4NistManager::Instance()->FindOrBuildElement(ref);
 
-   if (verbose && !elementPtr) G4Exception("GDML: Referenced element '"+ref+"' was not found!"); 
+   if (verbose && !elementPtr) G4Exception("GDML Reader: ERROR! Referenced element '"+ref+"' was not found!"); 
 
    return elementPtr;
 }
@@ -473,7 +472,7 @@ G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref,bool verbose) con
 
    G4Isotope* isotopePtr = G4Isotope::GetIsotope(ref,false);
 
-   if (verbose && !isotopePtr) G4Exception("GDML: Referenced isotope '"+ref+"' was not found!"); 
+   if (verbose && !isotopePtr) G4Exception("GDML Reader: ERROR! Referenced isotope '"+ref+"' was not found!"); 
 
    return isotopePtr;
 }
@@ -484,7 +483,7 @@ G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref,bool verbose) c
 
    if (!materialPtr) materialPtr = G4NistManager::Instance()->FindOrBuildMaterial(ref);
 
-   if (verbose && !materialPtr) G4Exception("GDML: Referenced material '"+ref+"' was not found!"); 
+   if (verbose && !materialPtr) G4Exception("GDML Reader: ERROR! Referenced material '"+ref+"' was not found!"); 
 
    return materialPtr;
 }

@@ -1111,7 +1111,7 @@ void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="subtraction") booleanRead(child,SUBTRACTION); else
       if (tag=="union") booleanRead(child,UNION); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::solidsRead); else
-      G4Exception("GDML: Unknown tag in solids: "+tag);
+      G4Exception("GDML Reader: ERROR! Unknown tag in solids: "+tag);
    }
 }
 
@@ -1144,35 +1144,11 @@ G4ThreeVector G4GDMLReadSolids::vectorRead(const xercesc::DOMElement* const elem
    return vec*unit;
 }
 
-G4String G4GDMLReadSolids::refRead(const xercesc::DOMElement* const element) {
-
-   G4String ref;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attName=="ref") ref = attValue;
-   }
-
-   return ref;
-}
-
 G4VSolid* G4GDMLReadSolids::getSolid(const G4String& ref) const {
 
    G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
-   if (!solidPtr) G4Exception("GDML: Referenced solid '"+ref+"' was not found!");
+   if (!solidPtr) G4Exception("GDML Reader: ERROR! Referenced solid '"+ref+"' was not found!");
 
    return solidPtr;
 }

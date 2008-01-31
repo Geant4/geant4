@@ -93,11 +93,11 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
    xercesc::DOMDocument* doc = parser->getDocument();
 
-   if (!doc) G4Exception("GDML: Unable to open document: "+fileName);
+   if (!doc) G4Exception("GDML Reader: ERROR! Unable to open document: "+fileName);
 
    xercesc::DOMElement* element = doc->getDocumentElement();
 
-   if (!element) G4Exception("GDML: Empty document!");
+   if (!element) G4Exception("GDML Reader: ERROR! Empty document!");
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -160,6 +160,30 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
 
       _var += _step;
    }
+}
+
+G4String G4GDMLRead::refRead(const xercesc::DOMElement* const element) {
+
+   G4String ref;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="ref") ref = attValue;
+   }
+
+   return ref;
 }
 
 G4PVPlacement* G4GDMLRead::getWorldVolume(const G4String& setupName) {

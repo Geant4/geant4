@@ -428,7 +428,7 @@ void G4GDMLReadParamvol::paramvolRead(const xercesc::DOMElement* const element,G
 
    G4LogicalVolume* logvol = getVolume(GenerateName(volumeref));
 
-   if (parameterisation->getSize()==0) G4Exception("GDML: Error! No parameters are defined in parameterised volume!");
+   if (parameterisation->getSize()==0) G4Exception("GDML Reader: ERROR! No parameters are defined in parameterised volume!");
 
    new G4PVParameterised("",logvol,mother,kUndefined,parameterisation->getSize(),parameterisation);
 }

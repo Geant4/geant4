@@ -369,7 +369,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const element
 
       if (tag=="volume") volumeRead(child); else      
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
-      G4Exception("GDML: Unknown tag in structure: "+tag);
+      G4Exception("GDML Reader: ERROR! Unknown tag in structure: "+tag);
    }
 }
 
@@ -377,7 +377,7 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
 
    G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
-   if (!volumePtr) G4Exception("GDML: Referenced volume '"+ref+"' was not found!");
+   if (!volumePtr) G4Exception("GDML Reader: ERROR! Referenced volume '"+ref+"' was not found!");
 
    return volumePtr;
 }
