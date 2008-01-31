@@ -337,6 +337,17 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
       volumeList->DeRegister(pMotherLogical);  // "pMotherLogical" must be the last in the list, since the new volume can be referenced!
       volumeList->Register(pMotherLogical);    // This arranging only matters if multiple GDML files are written out into a single GDML file.
    }
+
+   const size_t daughterCount = pMotherLogical->GetNoDaughters();
+
+   for (size_t i=0;i<daughterCount;i++) {
+   
+      std::stringstream stream;
+      stream << pMotherLogical->GetName() << "_" << "daughter" << i;
+      G4String daughterName = stream.str();
+ 
+       pMotherLogical->GetDaughter(i)->SetName(daughterName);
+   }
 }
 
 void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const element) {
