@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.13 2006-06-29 19:55:39 gunter Exp $
+// $Id: G4Scintillation.hh,v 1.14 2008-02-01 15:00:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,7 +172,7 @@ public: // With description
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
 
-private:
+protected:
 
         void BuildThePhysicsTable();
         // It builds either the fast or slow scintillation integral table; 
@@ -182,12 +182,11 @@ private:
         // Class Data Members
         ///////////////////////
 
-protected:
 
         G4PhysicsTable* theSlowIntegralTable;
         G4PhysicsTable* theFastIntegralTable;
 
-private:
+
 
 	G4bool fTrackSecondariesFirst;
 
