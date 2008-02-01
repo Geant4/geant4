@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.8 2008-01-16 11:53:50 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.9 2008-02-01 22:51:43 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -304,6 +304,24 @@ G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
 
 //_____________________________________________________________________________
 
+G4double 
+G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
+{
+  // Return the angle of the vertex in po
+
+  G4TwoVector t1 = pa - po;
+  G4TwoVector t2 = pb - po;
+  
+  G4double result
+    = (atan2(t1.y(), t1.x()) - atan2(t2.y(), t2.x()));
+
+  if ( result < 0 ) result += 2*pi;
+
+  return result;
+}
+
+//_____________________________________________________________________________
+
 G4VFacet*
 G4ExtrudedSolid::MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const
 {
@@ -397,6 +415,21 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //        << c1->second << "  " << c2->second
     //        << "  " << c3->second << G4endl;  
 
+    // skip concave vertices
+    //
+    G4double angle = GetAngle(c2->first, c3->first, c1->first);
+    //G4cout << angle << G4endl; 
+    if ( angle > pi ) {
+      // G4cout << "Skipping concave vertex " << c2->second << G4endl;
+
+      // try next three consecutive vertices
+      //
+      c1 = c2;
+      c2 = c3;
+      ++c3; 
+      if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
+    }
+
     G4bool good = true;
     std::vector< Vertex >::iterator it;
     for ( it=verticesToBeDone.begin(); it != verticesToBeDone.end(); ++it )
@@ -404,6 +437,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       // skip vertices of tested triangle
       //
       if ( it == c1 || it == c2 || it == c3 ) { continue; }
+
       if ( IsPointInside(c1->first, c2->first, c3->first, it->first) )
       {
         // G4cout << "Point " << it->second << " is inside" << G4endl;
