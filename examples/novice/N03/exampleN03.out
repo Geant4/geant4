@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-01-00    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -66,6 +66,36 @@
 ---> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
 ------------------------------------------------------------
 ExN03PhysicsList::SetCuts:CutLength : 1 mm 
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
@@ -550,3 +580,5 @@ hIoni:   tables are built for  pi-
  mean trackLength in Gap      : 2.8245592 m   +- 0 fm 
 ------------------------------------------------------------
 
+Graphics systems deleted.
+Visualization Manager deleting...

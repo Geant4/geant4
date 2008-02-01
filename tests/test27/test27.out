@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
+ Geant4 version Name: global-V09-01-00    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -197,7 +197,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=24s Real=24s Sys=0.22s
+  User=24s Real=24s Sys=0.13s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -543,7 +543,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.83s Real=5.86s Sys=0.03s
+  User=5.85s Real=5.91s Sys=0.04s
 #
 #
 # deuteron at 200 MeV in U
@@ -585,7 +585,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.11s Sys=0s
+  User=0.11s Real=0.12s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -667,7 +667,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.29s Sys=0.02s
+  User=0.29s Real=0.29s Sys=0s
 #
 # .....end deuteron.............
 #
@@ -710,7 +710,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.23s Real=6.4s Sys=0.07s
+  User=6.35s Real=6.41s Sys=0.03s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -792,7 +792,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.86s Real=2.87s Sys=0s
+  User=2.86s Real=2.89s Sys=0.02s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -833,7 +833,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -874,7 +874,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -915,7 +915,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.03s Real=0.05s Sys=0.02s
 #
 # .....end alpha............
 #
@@ -959,7 +959,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=33.71s Real=34.08s Sys=0.12s
+  User=33.86s Real=34.24s Sys=0.09s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1001,7 +1001,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.06s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1043,7 +1043,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.7s Real=7.74s Sys=0.02s
+  User=7.72s Real=7.78s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1223,7 +1223,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.45s Real=4.48s Sys=0.01s
+  User=4.44s Real=4.48s Sys=0.01s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1271,7 +1271,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=0.54s Sys=0.05s
+  User=0.52s Real=0.55s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1365,7 +1365,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.89s Real=0.97s Sys=0s
+  User=0.86s Real=0.97s Sys=0.03s
 #
 # .....end C(12,6)++............
 #
@@ -1562,7 +1562,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.35s Real=0.36s Sys=0s
+  User=0.34s Real=0.36s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
