@@ -99,6 +99,20 @@ void G4GDMLWriteSolids::coneWrite(xercesc::DOMElement* solidsElement,const G4Con
    coneElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::ellipsoidWrite(xercesc::DOMElement* solidsElement,const G4Ellipsoid* const ellipsoid) {
+
+   xercesc::DOMElement* ellipsoidElement = newElement("ellipsoid");
+   solidsElement->appendChild(ellipsoidElement);
+
+   ellipsoidElement->setAttributeNode(newAttribute("name",ellipsoid->GetName()));
+   ellipsoidElement->setAttributeNode(newAttribute("ax",ellipsoid->GetSemiAxisMax(0)));
+   ellipsoidElement->setAttributeNode(newAttribute("by",ellipsoid->GetSemiAxisMax(1)));
+   ellipsoidElement->setAttributeNode(newAttribute("cz",ellipsoid->GetSemiAxisMax(2)));
+   ellipsoidElement->setAttributeNode(newAttribute("zcut1",ellipsoid->GetZBottomCut()));
+   ellipsoidElement->setAttributeNode(newAttribute("zcut2",ellipsoid->GetZTopCut()));
+   ellipsoidElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G4Polycone* const polycone) {
 
    xercesc::DOMElement* polyconeElement = newElement("polycone");
@@ -339,6 +353,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
+      if (const G4Ellipsoid* ellipsoidPtr = dynamic_cast<const G4Ellipsoid*>(solidPtr)) { ellipsoidWrite(solidsElement,ellipsoidPtr); } else
       if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
       if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
       if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
