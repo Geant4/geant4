@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2008-01-30 11:16:42 lgarnier Exp $
+$Id: History,v 1.109 2008-02-01 06:27:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+1st February 2007  John Allison
+- G4OpenGLQtViewer.cc: Fix #ifdef QT protection.
+- G4OpenGLSceneHandler.cc: Small improvement to logic of setting GL_LIGHTING.
 
 30th January 2007, Laurent Garnier
  - Add moving camera on left/right/up/down arrown, going forward/backward
