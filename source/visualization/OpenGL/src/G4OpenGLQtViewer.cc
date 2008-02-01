@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.10 2008-01-30 10:54:13 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.11 2008-02-01 06:26:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1808,8 +1808,6 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   return true;
 }
 
-#endif
-
 void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
 {
   if (holdKeyEvent)
@@ -1880,3 +1878,5 @@ void MultiLayer::exportToSVG(const QString& fname)
   picture.save(fname, "svg");
 }
 */
+
+#endif
