@@ -113,6 +113,18 @@ void G4GDMLWriteSolids::ellipsoidWrite(xercesc::DOMElement* solidsElement,const 
    ellipsoidElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::eltubeWrite(xercesc::DOMElement* solidsElement,const G4EllipticalTube* const eltube) {
+
+   xercesc::DOMElement* eltubeElement = newElement("eltube");
+   solidsElement->appendChild(eltubeElement);
+
+   eltubeElement->setAttributeNode(newAttribute("name",eltube->GetName()));
+   eltubeElement->setAttributeNode(newAttribute("dx",eltube->GetDx()));
+   eltubeElement->setAttributeNode(newAttribute("dy",eltube->GetDy()));
+   eltubeElement->setAttributeNode(newAttribute("dz",eltube->GetDz()));
+   eltubeElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G4Polycone* const polycone) {
 
    xercesc::DOMElement* polyconeElement = newElement("polycone");
@@ -354,6 +366,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
       if (const G4Ellipsoid* ellipsoidPtr = dynamic_cast<const G4Ellipsoid*>(solidPtr)) { ellipsoidWrite(solidsElement,ellipsoidPtr); } else
+      if (const G4EllipticalTube* eltubePtr = dynamic_cast<const G4EllipticalTube*>(solidPtr)) { eltubeWrite(solidsElement,eltubePtr); } else
       if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
       if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
       if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else

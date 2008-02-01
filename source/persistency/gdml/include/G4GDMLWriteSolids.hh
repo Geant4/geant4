@@ -37,6 +37,7 @@
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Ellipsoid.hh"
+#include "G4EllipticalTube.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
@@ -60,6 +61,7 @@ private:
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void ellipsoidWrite(xercesc::DOMElement*,const G4Ellipsoid* const);
+   void eltubeWrite(xercesc::DOMElement*,const G4EllipticalTube* const);
    void polyconeWrite(xercesc::DOMElement*,const G4Polycone* const);
    void polyhedraWrite(xercesc::DOMElement*,const G4Polyhedra* const);
    void sphereWrite(xercesc::DOMElement*,const G4Sphere* const);
