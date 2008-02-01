@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.5 2007-09-27 14:01:12 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.6 2008-02-01 18:09:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 23-05-03 Add control on parthalogical cases (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 27-09-07 Use FermiEnergy from material, add cut dependence (V.Ivanchenko)
+// 01-02-08 Add protection for small energies and optimise the code (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -99,8 +100,8 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
                                                      G4double& length,
                                                      G4double& meanLoss)
 {
+  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
-  //  G4cout << "### meanLoss= " << meanLoss << G4endl;
 
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
@@ -108,7 +109,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   G4double navr = minNumberInteractionsBohr;
 
   navr = meanLoss*meanLoss/siga;
-  //  G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
+  G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
 
   // Gaussian fluctuation
   if (navr >= minNumberInteractionsBohr) {
@@ -138,7 +139,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     loss = meanLoss*n/navr;
   }
 
-  //  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
+  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;
 }
 
@@ -163,9 +164,10 @@ G4double G4IonFluctuations::Dispersion(
   G4double electronDensity = material->GetElectronDensity();
   kineticEnergy  = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
-  //G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
-  //	 << " tmax= " << tmax << " l= " << length << " q^2= " << chargeSquare << G4endl;
   beta2 = kineticEnergy*(kineticEnergy + 2.*particleMass)/(etot*etot);
+  G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
+  	 << " tmax= " << tmax << " l= " << length 
+	 << " q^2= " << chargeSquare << " beta2=" << beta2<< G4endl;
 
   G4double siga = (1. - beta2*0.5)*tmax*length*electronDensity*
     twopi_mc2_rcl2*chargeSquare/beta2;
@@ -173,35 +175,40 @@ G4double G4IonFluctuations::Dispersion(
   // Low velocity - additional ion charge fluctuations according to
   // Q.Yang et al., NIM B61(1991)149-155.
   G4double zeff  = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-  //G4cout << "siga= " << siga << " zeff= " << zeff << " c= " << c << G4endl;
+  G4cout << "siga= " << siga << " zeff= " << zeff << " charge= " << charge <<G4endl;
+
+  G4double fac;
 
   // correction factors with cut dependence  
-  if ( beta2 < 3.0*theBohrBeta2*zeff ) {
+  if ( beta2 < 3.0*theBohrBeta2*zeff ) fac = CoeffitientB (material, zeff);
+  else                                 fac = RelativisticFactor(material, zeff);
 
-    G4double a = CoeffitientA (zeff);
-    G4double b = CoeffitientB (material, zeff);
-    //     G4cout << "a= " << a <<  " b= " << b << G4endl;
-    siga *= (1. + (a*chargeSqRatio + b - 1.0)*2.0*electron_mass_c2*beta2/tmax);
-  } else {
+  // taking into account the cut
+  if(fac > 1.01) 
+    siga *= (1.0 + (fac - 1.)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
 
-    // H.Geissel et al. NIM B, 195 (2002) 3.
-    siga *= (1. + RelativisticFactor(material, zeff)*2.0*electron_mass_c2*beta2/
-	     (tmax*(1.0 - beta2)));
-  }
-  //  G4cout << "siga= " << siga << G4endl;
+  G4cout << "siga= " << siga << G4endl;
 
   return siga;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
+G4double G4IonFluctuations::CoeffitientA(G4double&)
+{
+  return 1.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& zeff)
 {
   // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
 
   // Reduced energy in MeV/AMU
-  G4double energy = kineticEnergy * amu_c2/(particleMass*MeV) ;
+  G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
+
   static G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
  {-0.5615, -0.5898,  0.5205, -0.7258},
@@ -246,7 +253,7 @@ G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
  {-0.3977, -0.3608,  1.0260, -0.5852},
  {-0.3972, -0.3600,  1.0260, -0.5842},
 
-{-0.3985, -0.3803,  1.0200, -0.6013},
+ {-0.3985, -0.3803,  1.0200, -0.6013},
  {-0.3985, -0.3979,  1.0150, -0.6168},
  {-0.3968, -0.3990,  1.0160, -0.6195},
  {-0.3971, -0.4432,  1.0050, -0.6591},
@@ -314,21 +321,10 @@ G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
   if( 0 > iz ) iz = 0 ;
   if(95 < iz ) iz = 95 ;
 
-  G4double q = 1.0 / (1.0 + a[iz][0]*pow(energy,a[iz][1])+
-                          + a[iz][2]*pow(energy,a[iz][3])) ;
-
-  return q ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& zeff)
-{
-  // The aproximation of energy loss fluctuations
-  // Q.Yang et al., NIM B61(1991)149-155.
-
-  // Reduced energy in MeV/AMU
-  G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
+  G4double s1 = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
+	            + a[iz][2]*pow(energy,a[iz][3]);
+  if(s1 > DBL_MIN) s1 = 1.0/s1;
+  else             s1 = 0.0;
 
   G4int i = 0 ;
   G4double factor = 1.0 ;
@@ -369,12 +365,16 @@ G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& z
     }
   }
 
-  G4double x = b[i][2] * (1.0 - exp( - energy * b[i][3] )) ;
+  G4double x = b[i][2];
+  G4double y = energy * b[i][3];
+  if(y <= 0.2) x *= (y*(y - 0.5*y));
+  else         x *= (1.0 - exp(-y));
 
-  G4double q = factor * x * b[i][0] /
-             ((energy - b[i][1])*(energy - b[i][1]) + x*x) ;
+  y = energy - b[i][1];
 
-  return q ;
+  G4double s2 = factor * x * b[i][0] / (y*y + x*x);
+
+  return s1*chargeSqRatio + s2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
