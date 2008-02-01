@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.6 2008-02-01 18:09:00 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.7 2008-02-01 18:35:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,7 +100,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
                                                      G4double& length,
                                                      G4double& meanLoss)
 {
-  G4cout << "### meanLoss= " << meanLoss << G4endl;
+  //  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
 
   G4double siga = Dispersion(material,dp,tmax,length);
@@ -109,7 +109,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   G4double navr = minNumberInteractionsBohr;
 
   navr = meanLoss*meanLoss/siga;
-  G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
+  //G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
 
   // Gaussian fluctuation
   if (navr >= minNumberInteractionsBohr) {
@@ -139,7 +139,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     loss = meanLoss*n/navr;
   }
 
-  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
+  //  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;
 }
 
@@ -165,9 +165,9 @@ G4double G4IonFluctuations::Dispersion(
   kineticEnergy  = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
   beta2 = kineticEnergy*(kineticEnergy + 2.*particleMass)/(etot*etot);
-  G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
-  	 << " tmax= " << tmax << " l= " << length 
-	 << " q^2= " << chargeSquare << " beta2=" << beta2<< G4endl;
+  //G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
+  //	 << " tmax= " << tmax << " l= " << length 
+  //	 << " q^2= " << chargeSquare << " beta2=" << beta2<< G4endl;
 
   G4double siga = (1. - beta2*0.5)*tmax*length*electronDensity*
     twopi_mc2_rcl2*chargeSquare/beta2;
@@ -175,7 +175,7 @@ G4double G4IonFluctuations::Dispersion(
   // Low velocity - additional ion charge fluctuations according to
   // Q.Yang et al., NIM B61(1991)149-155.
   G4double zeff  = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-  G4cout << "siga= " << siga << " zeff= " << zeff << " charge= " << charge <<G4endl;
+  //G4cout << "siga= " << siga << " zeff= " << zeff << " charge= " << charge <<G4endl;
 
   G4double fac;
 
@@ -187,7 +187,7 @@ G4double G4IonFluctuations::Dispersion(
   if(fac > 1.01) 
     siga *= (1.0 + (fac - 1.)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
 
-  G4cout << "siga= " << siga << G4endl;
+  //  G4cout << "siga= " << siga << G4endl;
 
   return siga;
 }
@@ -367,7 +367,7 @@ G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& z
 
   G4double x = b[i][2];
   G4double y = energy * b[i][3];
-  if(y <= 0.2) x *= (y*(y - 0.5*y));
+  if(y <= 0.2) x *= (y*(1.0 - 0.5*y));
   else         x *= (1.0 - exp(-y));
 
   y = energy - b[i][1];
