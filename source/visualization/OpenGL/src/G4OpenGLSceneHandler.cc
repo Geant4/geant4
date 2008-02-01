@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.52 2008-01-04 22:07:01 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.53 2008-02-01 06:26:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -467,6 +467,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
   G4bool clipping = pViewer->fVP.IsSection() || pViewer->fVP.IsCutaway();
 
+  // Lighting disabled unless otherwise requested
+  glDisable (GL_LIGHTING);
+
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
     // Set up as for hidden line removal but paint polygon faces later...
@@ -493,7 +496,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
     }
-    glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::hsr):
@@ -525,7 +527,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
     glDisable (GL_CULL_FACE);
-    glDisable (GL_LIGHTING);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
@@ -603,6 +604,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		 // state changes below, then glBegin again.  Avoids
 		 // having glBegin/End pairs *inside* loop in the more
 		 // usual case of no hidden line removal.
+
+      // Lighting disabled unless otherwise requested
+      glDisable (GL_LIGHTING);
 
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
@@ -711,6 +715,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   glEnd ();
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
   glDepthMask (1);              // Revert to default for next primitive.
+  glDisable (GL_LIGHTING);      // Revert to default for next primitive.
 }
 
 //Method for handling G4NURBS objects for drawing solids.
