@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2007-08-28 10:20:39 gcosmo Exp $
+$Id: README,v 1.13 2008-02-01 11:59:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -124,6 +124,9 @@ Advanced level examples
  microbeam
    - Simulation of the cellular irradiation beam line installed on the AIFIRA
      electrostatic accelerator facility located at CENBG, France
+ nanobeam
+   - Simulation of the beam optics of the nanobeam line installed on the AIFIRA
+     electrostatic accelerator facility located at CENBG, France.
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
