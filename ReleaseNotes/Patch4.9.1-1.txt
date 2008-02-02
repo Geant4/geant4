@@ -34,6 +34,9 @@ List of fixes included in this public patch since the public release 9.1:
       o In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before
         quadrangular ones, following logic behind G4TessellatedSolid.
         Fixes occasional crashes when defining solids with mixed facets.
+        Corrected triangularization of polygon, now correctly handling case
+        of concave shapes.
+      o Corrected order of arguments in G4Paraboloid constructor.  
 
   o Global:
     ------
