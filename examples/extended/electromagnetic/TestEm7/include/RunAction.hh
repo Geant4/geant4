@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.12 2008-01-14 12:11:39 vnivanch Exp $
+// $Id: RunAction.hh,v 1.13 2008-02-04 18:15:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,8 @@ public:
   G4double GetOffsetX()   {return offsetX;} 
   void     FillHisto(G4int id, G4double x, G4double weight = 1.0);
     
-  void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+  void AddProjRange (G4double x) 
+  {projRange += x; projRange2 += x*x; nRange++;};
   void AddPrimaryStep() {nPrimarySteps++;};
                    
 private:  
@@ -83,6 +84,7 @@ private:
   G4double                projRange, projRange2;
   G4double                edeptot, eniel;
   G4int                   nPrimarySteps;
+  G4int                   nRange;
            
   AIDA::IAnalysisFactory* af;  
   AIDA::ITree*            tree;

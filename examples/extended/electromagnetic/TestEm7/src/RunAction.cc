@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.21 2008-01-14 12:11:39 vnivanch Exp $
+// $Id: RunAction.cc,v 1.22 2008-02-04 18:15:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,6 +155,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize projected range, tallies, Ebeam, and book histograms
   //
   nPrimarySteps = 0;
+  nRange = 0;
   projRange = projRange2 = 0.;
   edeptot = eniel = 0.;
   for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
@@ -185,7 +186,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 
   //compute projected range and straggling
   //
-  projRange /= NbofEvents; projRange2 /= NbofEvents;
+  if(nRange > 0) {
+    projRange /= nRange; 
+    projRange2 /= nRange;
+  }
   G4double rms = projRange2 - projRange*projRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
