@@ -36,7 +36,10 @@ List of fixes included in this public patch since the public release 9.1:
         Fixes occasional crashes when defining solids with mixed facets.
         Corrected triangularization of polygon, now correctly handling case
         of concave shapes.
-      o Corrected order of arguments in G4Paraboloid constructor.  
+      o Corrected order of arguments in G4Paraboloid constructor.
+    + volumes:
+      o Fixed problem of double-deletion of rotation matrix in destructor
+        of G4AssemblyVolume.
 
   o Global:
     ------
