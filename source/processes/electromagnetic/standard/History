@@ -1,4 +1,4 @@
-$Id: History,v 1.364 2008-02-04 18:01:23 vnivanch Exp $
+$Id: History,v 1.365 2008-02-04 18:05:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 February 08: V.Ivant (emstand-V09-01-03)
+- G4hIonisation, G4ionIonisation, G4ionGasIonisation - add extra 
+   protections in computation of non-ionizing energy loss
 
 04 February 08: V.Ivant (emstand-V09-01-02)
 G4IonFluctuations - added protection in computation of dispersion 
