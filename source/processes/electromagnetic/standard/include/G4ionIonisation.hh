@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.50 2007-11-09 11:45:45 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.51 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,8 @@ protected:
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,
 				    G4double& eloss,
-				    G4double& length);
+				    G4double& niel,
+                                    G4double length);
 
   inline void InitialiseMassCharge(const G4Track&);
 

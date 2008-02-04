@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.45 2008-01-14 11:59:45 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.46 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -174,12 +174,14 @@ void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
 void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					   const G4DynamicParticle* dp,
 					   G4double& eloss,
-					   G4double& s)
+					   G4double& niel,
+                                           G4double s)
 {
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
   if(eloss < preKinEnergy) {
-    //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio << " eth= " << eth<<  G4endl;
+    //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
+    //<< " eth= " << eth<<  G4endl;
     if(preKinEnergy*massRatio > eth)
       eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
     else {
@@ -192,9 +194,15 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                       mat,preKinEnergy-eloss));
   }
   if(nuclearStopping && preKinEnergy*massRatio < 50.*eth*charge2) {
-    G4double nloss = s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
-    eloss += nloss;
-    //  G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    G4double e = preKinEnergy - eloss*0.5;
+    if(e <= 0.0) e = 0.5*preKinEnergy;
+    G4double nloss = s*corr->NuclearDEDX(part,mat,e);
+    if(eloss + nloss > preKinEnergy) {
+      nloss *= (preKinEnergy/(eloss + nloss));
+      eloss = preKinEnergy - nloss;
+    }
+    niel += nloss;
+    //       G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }

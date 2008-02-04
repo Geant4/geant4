@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.hh,v 1.2 2007-08-13 06:13:30 vnivanch Exp $
+// $Id: G4ionGasIonisation.hh,v 1.3 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,7 +81,8 @@ protected:
                            const G4MaterialCutsCouple*,
                            const G4DynamicParticle*,
                                  G4double& eloss,
-                                 G4double& length);
+                                 G4double& niel,
+                                 G4double length);
 
 private:
 
@@ -99,6 +100,8 @@ private:
   G4double                    currMassRatio;
   G4double                    atomXS;
   G4double                    preStepKinEnergy;
+  G4double                    currCharge2;
+  G4double                    currTh;
 
   G4int                       currentIonZ;
   G4int                       ionZ;

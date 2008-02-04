@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.70 2008-01-14 11:59:45 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.71 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,14 +190,20 @@ void G4hIonisation::PrintInfo()
 void G4hIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					 const G4DynamicParticle* dp,
 					 G4double& eloss,
-					 G4double& s)
+					 G4double& niel,
+					 G4double s)
 {
   G4double ekin = dp->GetKineticEnergy();
   if(nuclearStopping && ekin < ethnuc) {
-    G4double nloss = s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),
-					 ekin - eloss*0.5);
-    eloss += nloss;
-    //  G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    G4double e = ekin - eloss*0.5;
+    if(e <= 0.0) e = 0.5*ekin;
+    G4double nloss = s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),e);
+    if(eloss + nloss > ekin) {
+      nloss *= (ekin/(eloss + nloss));
+      eloss = ekin - nloss;
+    }
+    niel += nloss;
+    //    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }

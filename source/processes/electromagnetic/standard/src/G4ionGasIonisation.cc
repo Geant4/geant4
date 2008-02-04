@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.4 2008-01-14 11:59:45 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.5 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -76,6 +76,7 @@ void G4ionGasIonisation::InitialiseEnergyLossProcess(
 		      const G4ParticleDefinition* bpart)
 {
   G4ionIonisation::InitialiseEnergyLossProcess(part, bpart);
+  currTh = BetheBlochEnergyThreshold();
   if(initialised) return;
 
   currParticle = part;
@@ -112,6 +113,7 @@ void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
   }
   // any step 
   G4double q = eplus*currentIonZ;
+  currCharge2= currentIonZ*currentIonZ;
   SetDynamicMassCharge(currMassRatio, q*q);
   preStepKinEnergy = track.GetKineticEnergy();
 }
@@ -121,15 +123,17 @@ void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
 void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					      const G4DynamicParticle* dp,
 					      G4double& eloss,
-					      G4double& s)
+					      G4double& niel,
+                                              G4double s)
 {
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
+
   // add corrections
   if(eloss < preStepKinEnergy) {
 
     // use Bethe-Bloch with corrections
-    if(preStepKinEnergy*currMassRatio > BetheBlochEnergyThreshold())
+    if(preStepKinEnergy*currMassRatio > currTh)
       eloss += s*corr->HighOrderCorrections(part,mat,preStepKinEnergy);
 
     // effective number of collisions
@@ -142,9 +146,18 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
   }
 
   // use nuclear stopping 
-  if(NuclearStoppingFlag()) {
-    G4double nloss = s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
-    eloss += nloss;
+  if(NuclearStoppingFlag() && 
+     preStepKinEnergy*currMassRatio < 50.*currTh*currCharge2) {
+    G4double e = preStepKinEnergy - eloss*0.5;
+    if(e <= 0.0) e = 0.5*preStepKinEnergy;
+    G4double nloss = s*corr->NuclearDEDX(part,mat,e);
+    if(eloss + nloss > preStepKinEnergy) {
+      nloss *= (preStepKinEnergy/(eloss + nloss));
+      eloss = preStepKinEnergy - nloss;
+    }
+    niel += nloss;
+    //    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
 }

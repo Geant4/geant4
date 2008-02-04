@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.38 2008-01-14 11:59:45 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.39 2008-02-04 17:52:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,7 +109,8 @@ protected:
                            const G4MaterialCutsCouple*,
 	             	   const G4DynamicParticle*,
 			         G4double& eloss,
-			         G4double& length);
+			         G4double& niel,
+                                 G4double length);
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
