@@ -253,9 +253,9 @@ int main()
   // Arrays of CMS crystal dimensions, table 3.2 from ECAL TDR
 
   G4double cmsAF[17] = { 21.83, 21.83, 21.83, 21.83, 21.83, 
-                         21.83, 21.83, 21.83, 
-                         21.83, 21.83, 21.83,
-                         21.83, 21.83, 21.83                };
+                         21.83, 21.83, 21.83, 21.83, 
+                         21.83, 21.83, 21.83, 21.83,
+                         21.83, 21.83, 21.83, 21.83         };
 
   G4double cmsBF[17] = { 23.59, 22.22, 22.34, 22.47, 22.61, 
                          22.60, 22.55, 22.67, 22.82,
@@ -265,7 +265,7 @@ int main()
   G4double cmsCF[17] = { 21.85, 21.87, 21.91, 21.94, 21.97, 
                          22.00, 22.03, 22.05, 22.08, 
                          22.10, 22.12, 22.14, 22.15, 
-                         22.17, 22.18, 22.20, 22.24         };
+                         22.17, 22.18, 22.20, 22.21         };
 
 
   G4double cmsAR[17] = { 25.84, 25.81, 25.75, 25.67, 25.56,
@@ -282,6 +282,38 @@ int main()
                          25.63, 25.52, 25.39, 25.26, 
                          25.12, 24.97, 24.83, 24.68, 
                          24.54, 24.40, 24.27, 24.15         };
+
+  iMax = 17;
+
+  G4double meanAF = 0.,  meanBF = 0.,  meanCF = 0.,  
+           meanAR = 0.,  meanBR = 0.,  meanCR = 0.;
+  
+  for(i=0;i<iMax;i++)
+  {
+    meanAF += cmsAF[i];
+    meanBF += cmsBF[i];
+    meanCF += cmsCF[i];
+    meanAR += cmsAR[i];
+    meanBR += cmsBR[i];
+    meanCR += cmsCR[i];
+  }
+  meanAF /= iMax;
+  meanCF /= iMax;
+  meanBF /= iMax;
+  meanAR /= iMax;
+  meanBR /= iMax;
+  meanCR /= iMax;
+
+  G4double meanBFR  = 0.5*(meanBF + meanBR);
+  G4double meanAFR  = 0.5*(meanAF + meanAR);
+  G4double meanCFR  = 0.5*(meanCF + meanCR);
+  G4double meanACFR = 0.5*(meanCFR + meanAFR);
+
+  G4cout <<"meanAF = " << meanAF << "; meanBF = "<<meanBF << "; meanCF = " << meanCF << G4endl;
+
+  G4cout << "meanAR = " << meanAR << "; meanBR = "<<meanBR << "; meanCR = "<<meanCR << G4endl;
+
+  G4cout << "meanACFR = " << meanACFR << "; meanBFR = "<<meanBFR << G4endl;
 
   return 1 ;
 }
