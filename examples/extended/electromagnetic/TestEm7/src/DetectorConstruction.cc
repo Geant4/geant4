@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.8 2007-01-11 15:41:46 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2008-02-04 10:25:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,6 +116,13 @@ void DetectorConstruction::DefineMaterials()
     new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
   Air->AddElement(N, fractionmass=0.7);
   Air->AddElement(O, fractionmass=0.3);
+
+  density     = 1.e-5*g/cm3;
+  pressure    = 2.e-2*bar;
+  temperature = STP_Temperature;  // From PhysicalConstants.h .
+  G4Material* vac = new G4Material( "TechVacuum", density, 1,
+                           kStateGas, temperature, pressure );
+  vac->AddMaterial( Air, 1. );
 
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
