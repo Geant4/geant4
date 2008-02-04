@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.123 2008-01-11 19:55:29 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.124 2008-02-04 18:12:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -737,7 +737,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double length = step.GetStepLength();
   if(length <= DBL_MIN) return &fParticleChange;
   G4double eloss  = 0.0;
-
+  G4double esecdep = 0.0;
+ 
   /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
@@ -754,8 +755,13 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
+  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
+
   // stopping
   if (length >= fRange) {
+    eloss = preStepKinEnergy;
+    CorrectionsAlongStep(currentCouple, dynParticle, eloss, esecdep, length);
     fParticleChange.SetProposedKineticEnergy(0.0);
     fParticleChange.ProposeLocalEnergyDeposit(preStepKinEnergy);
     return &fParticleChange;
@@ -784,9 +790,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     */
   }
 
-  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-  G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
-  /*    
+  /*
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -800,7 +804,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   G4double cut  = (*theCuts)[currentMaterialIndex];
   G4double esec = 0.0;
-  G4double esecdep = 0.0;
 
   // SubCutOff 
   if(useSubCutoff) {
@@ -884,7 +887,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   // Corrections, which cannot be tabulated
-  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
+  CorrectionsAlongStep(currentCouple, dynParticle, eloss, esecdep, length);
 
   // Sample fluctuations
   if (lossFluctuationFlag) {
@@ -896,7 +899,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
       eloss = fluc->SampleFluctuations(currentMaterial,dynParticle,
 				       tmax,length,eloss);
-      /*           
+      /*                      
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
              << " fluc= " << (eloss-eloss0)/MeV

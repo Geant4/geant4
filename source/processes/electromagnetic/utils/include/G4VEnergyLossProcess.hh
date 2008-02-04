@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.76 2007-11-07 18:38:49 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.77 2008-02-04 18:12:54 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -148,7 +148,8 @@ protected:
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,
 				    G4double& eloss,
-				    G4double& length);
+				    G4double& niel,
+				    G4double length);
 
   //------------------------------------------------------------------------
   // Generic methods common to all ContinuousDiscrete processes 
@@ -827,8 +828,7 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() con
 inline void G4VEnergyLossProcess::CorrectionsAlongStep(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
-			     G4double&,
-			     G4double&)
+			     G4double&, G4double&, G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
