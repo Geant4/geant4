@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.4 2008-01-25 15:29:42 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2008-02-04 17:09:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructPhotoDetector()
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//
+// The first Hadr01 geometry
 
 G4VPhysicalVolume* DetectorConstruction::Hadr01Construct()
 {
@@ -275,7 +275,7 @@ G4VPhysicalVolume* DetectorConstruction::Hadr01Construct()
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//
+// Simple set-up with PbWO4 crystal with dimensions close to CMS ECAL
 
 G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 {

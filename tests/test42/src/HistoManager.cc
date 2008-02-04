@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2007-12-09 12:02:34 grichine Exp $
+// $Id: HistoManager.cc,v 1.3 2008-02-04 17:09:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,7 +76,8 @@ HistoManager* HistoManager::fManager = 0;
 
 HistoManager* HistoManager::GetPointer()
 {
-  if(!fManager) {
+  if(!fManager) 
+  {
     static HistoManager manager;
     fManager = &manager;
   }
@@ -279,7 +280,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
   G4double e = track->GetKineticEnergy();
 
   // Primary track
-  if(0 == track->GetParentID()) {
+  if(0 == track->GetParentID()) 
+  {
 
     n_evt++;
     primaryKineticEnergy = e;
@@ -294,7 +296,9 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 	     << G4endl;
 
     // Secondary track
-  } else {
+  } 
+  else 
+  {
     if(1 < verbose) 
       G4cout << "=== Secondary " << name 
 	     << " kinE(MeV)= " << e/MeV
@@ -302,14 +306,21 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 	     << "; pos(mm)= " << track->GetPosition()/mm 
 	     << ";  dir= " << track->GetMomentumDirection() 
 	     << G4endl;
+
     e = std::log10(e/MeV);
-    if(pd == G4Gamma::Gamma()) {
+
+    if(pd == G4Gamma::Gamma()) 
+    {
       n_gam++;
       histo->fill(1,e,1.0);
-    } else if ( pd == G4Electron::Electron()) {
+    } 
+    else if ( pd == G4Electron::Electron()) 
+    {
       n_elec++;
       histo->fill(2,e,1.0);
-    } else if ( pd == G4Positron::Positron()) {
+    } 
+    else if ( pd == G4Positron::Positron()) 
+    {
       n_posit++;
       histo->fill(3,e,1.0);
     } else if ( pd == G4Proton::Proton()) {
@@ -336,10 +347,14 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4KaonPlus::KaonPlus() || pd == G4KaonMinus::KaonMinus()) {
       n_kaons++;
       histo->fill(8,e,1.0);
-    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || pd == G4KaonZeroLong::KaonZeroLong()) {
+    } 
+    else if ( pd == G4KaonZeroShort::KaonZeroShort() || pd == G4KaonZeroLong::KaonZeroLong()) 
+    {
       n_kaons++;
       histo->fill(9,e,1.0);
-    } else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) {
+    } 
+    else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) 
+   {
       n_deut++;
       histo->fill(10,e,1.0);
     } else if ( pd == G4He3::He3() || pd == G4Alpha::Alpha()) {
@@ -364,7 +379,9 @@ void HistoManager::AddTargetStep(const G4Step* step)
 {
   n_step++;
   G4double edep = step->GetTotalEnergyDeposit();
-  if(edep >= DBL_MIN) { 
+
+  if(edep >= DBL_MIN) 
+  { 
     const G4Track* track = step->GetTrack();
     currentDef = track->GetDefinition(); 
     currentKinEnergy = track->GetKineticEnergy();
@@ -376,6 +393,7 @@ void HistoManager::AddTargetStep(const G4Step* step)
     G4double z = pos.z() - absZ0;
 
     // scoring
+
     edepEvt += edep;
     histo->fill(0,z,edep);
 
@@ -405,34 +423,49 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
   G4bool isLeaking = false;
 
   // Forward 
-  if(z > -absZ0 && dir.z() > 0.0) {
+  if(z > -absZ0 && dir.z() > 0.0) 
+  {
     if(pd == neutron) {
       n_neu_forw++;
       histo->fill(15,e,1.0);
     } else isLeaking = true;
 
     // Backward
-  } else if (z < absZ0 && dir.z() < 0.0) {
-    if(pd == neutron) {
+  } 
+  else if (z < absZ0 && dir.z() < 0.0) 
+  {
+    if(pd == neutron) 
+    {
       n_neu_leak++;
       histo->fill(16,e,1.0);
-    } else isLeaking = true;
+    } 
+    else isLeaking = true;
 
     // Side
-  } else if (std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0) {
+  } 
+  else if (std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0) 
+  {
     isLeaking = true;
-    if(pd == neutron) {
+
+    if(pd == neutron) 
+    {
       n_neu_back++;
       histo->fill(14,e,1.0);
-    } else isLeaking = true;
+    } 
+    else isLeaking = true;
   }
 
   // protons and pions
-  if(isLeaking) {
-    if(pd == G4Proton::Proton()) {
+
+  if(isLeaking) 
+  {
+    if(pd == G4Proton::Proton()) 
+    {
       histo->fill(17,e,1.0);
       n_prot_leak++;
-    } else if (pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+    } 
+    else if (pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) 
+    {
       histo->fill(18,e,1.0);
       n_pion_leak++;
     }
@@ -451,7 +484,8 @@ void HistoManager::SetVerbose(G4int val)
 
 void HistoManager::SetTargetMaterial(const G4Material* mat)         
 {
-  if(mat) {
+  if(mat) 
+  {
     material = mat;
     elm = (*(material->GetElementVector()))[0];
   }
