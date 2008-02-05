@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2008-01-12 12:00:25 kurasige Exp $
+$Id: History,v 1.101 2008-02-05 01:46:57 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb. 5, 2008 Hisaya Kurashige (track-V09-01-01)
+- reset non-ionizing energy loss in G4Step::ResetTotalEnergyDeposit
+  in order to initialize NIEL in each step
+
 Jan. 12, 2008 Hisaya Kurashige (track-V09-01-00)
 - add non-ionizing energy loss to EM physics (V.Ivanchenko)
 
