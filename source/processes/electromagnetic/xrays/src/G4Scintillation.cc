@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.26 2006-06-29 19:56:11 gunter Exp $
+// $Id: G4Scintillation.cc,v 1.27 2008-02-05 22:05:45 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -179,24 +179,51 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double ScintillationYield = aMaterialPropertiesTable->
                                       GetConstProperty("SCINTILLATIONYIELD");
+        ScintillationYield *= YieldFactor;
+
         G4double ResolutionScale    = aMaterialPropertiesTable->
                                       GetConstProperty("RESOLUTIONSCALE");
 
-        ScintillationYield = YieldFactor * ScintillationYield;
+        // Birks law saturation:
 
-	G4double MeanNumberOfPhotons = ScintillationYield * TotalEnergyDeposit;
+        G4double constBirks         = aMaterialPropertiesTable->
+                                      GetConstProperty("BIRKSCONSTANT");
+
+        G4double MeanNumberOfPhotons;
+
+        if (constBirks > DBL_MIN)
+        {
+          G4double length      = aStep.GetStepLength();
+
+          if (length > DBL_MIN)
+          {
+            MeanNumberOfPhotons  = ScintillationYield*TotalEnergyDeposit;
+            MeanNumberOfPhotons /= 1 + constBirks*TotalEnergyDeposit/length;
+          } 
+          else
+          {
+            MeanNumberOfPhotons = ScintillationYield*length/constBirks;
+          }
+        } 
+        else
+        {
+          MeanNumberOfPhotons  = ScintillationYield*TotalEnergyDeposit;
+        }
 
         G4int NumPhotons;
-        if (MeanNumberOfPhotons > 10.) {
+
+        if (MeanNumberOfPhotons > 10.)
+        {
           G4double sigma = ResolutionScale * sqrt(MeanNumberOfPhotons);
           NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
-        else {
+        else
+        {
           NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
-	if (NumPhotons <= 0) {
-
+	if (NumPhotons <= 0)
+        {
 	   // return unchanged particle and no secondaries 
 
 	   aParticleChange.SetNumberOfSecondaries(0);
