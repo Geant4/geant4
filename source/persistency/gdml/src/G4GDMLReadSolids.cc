@@ -29,7 +29,7 @@
 
 #include "G4GDMLReadSolids.hh"
 
-void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const element,const BooleanOp op) {
+void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanElement,const BooleanOp op) {
 
    G4String name;
    G4String first;
@@ -38,7 +38,7 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const element,cons
    G4ThreeVector position;
    G4ThreeVector rotation;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = booleanElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -55,7 +55,7 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const element,cons
       if (attName=="name") name = GenerateName(attValue);
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = booleanElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -86,7 +86,7 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const element,cons
    if (op==INTERSECTION) new G4IntersectionSolid(name,firstSolid,secondSolid,transform);
 }
 
-void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const boxElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -96,7 +96,7 @@ void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const element) {
    G4double y = 0.0;
    G4double z = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = boxElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -128,7 +128,7 @@ void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const element) {
    else new G4TwistedBox(name,PhiTwist,x,y,z);
 }
 
-void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const coneElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -141,7 +141,7 @@ void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const element) {
    G4double startphi = 0.0;
    G4double deltaphi = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = coneElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -178,7 +178,7 @@ void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const element) {
    new G4Cons(name,rmin1,rmax1,rmin2,rmax2,z,startphi,deltaphi);
 }
 
-void G4GDMLReadSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::ellipsoidRead(const xercesc::DOMElement* const ellipsoidElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -188,7 +188,7 @@ void G4GDMLReadSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    G4double zcut1 = 0.0;
    G4double zcut2 = 0.0; 
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = ellipsoidElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -220,7 +220,7 @@ void G4GDMLReadSolids::ellipsoidRead(const xercesc::DOMElement* const element) {
    new G4Ellipsoid(name,ax,by,cz,zcut1,zcut2);
 }
 
-void G4GDMLReadSolids::eltubeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::eltubeRead(const xercesc::DOMElement* const eltubeElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -228,7 +228,7 @@ void G4GDMLReadSolids::eltubeRead(const xercesc::DOMElement* const element) {
    G4double dy = 0.0;
    G4double dz = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = eltubeElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -256,7 +256,7 @@ void G4GDMLReadSolids::eltubeRead(const xercesc::DOMElement* const element) {
    new G4EllipticalTube(name,dx,dy,dz);
 }
 
-void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const hypeElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -267,7 +267,7 @@ void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const element) {
    G4double outst = 0.0;
    G4double z = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = hypeElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -300,13 +300,13 @@ void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const element) {
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const orbElement) {
 
    G4String name;
    G4double lunit = 1.0;
    G4double r = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = orbElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -330,7 +330,7 @@ void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const element) {
    new G4Orb(name,r);
 }
 
-void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const paraElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -342,7 +342,7 @@ void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const element) {
    G4double theta = 0.0;
    G4double phi = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = paraElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -367,12 +367,12 @@ void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const element) {
       if (attName=="phi") phi = eval.Evaluate(attValue);
    }
 
-   x = 0.5*lunit;
-   y = 0.5*lunit;
-   z = 0.5*lunit;
-   alpha = aunit;
-   theta = aunit;
-   phi = aunit;
+   x *= 0.5*lunit;
+   y *= 0.5*lunit;
+   z *= 0.5*lunit;
+   alpha *= aunit;
+   theta *= aunit;
+   phi *= aunit;
 
    new G4Para(name,x,y,z,alpha,theta,phi);
 }

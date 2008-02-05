@@ -125,6 +125,95 @@ void G4GDMLWriteSolids::eltubeWrite(xercesc::DOMElement* solidsElement,const G4E
    eltubeElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4ExtrudedSolid* const xtru) {
+
+   xercesc::DOMElement* xtruElement = newElement("xtru");
+   solidsElement->appendChild(xtruElement);
+
+   xtruElement->setAttributeNode(newAttribute("name",xtru->GetName()));
+   xtruElement->setAttributeNode(newAttribute("lunit","mm"));
+
+   const G4int NumVertex = xtru->GetNofVertices();
+   
+   for (G4int i=0;i<NumVertex;i++) {
+   
+      xercesc::DOMElement* twoDimVertexElement = newElement("twoDimVertex");
+      xtruElement->appendChild(twoDimVertexElement);
+
+      const G4TwoVector vertex = xtru->GetVertex(i);
+
+      twoDimVertexElement->setAttributeNode(newAttribute("x",vertex.x()));
+      twoDimVertexElement->setAttributeNode(newAttribute("y",vertex.y()));
+   }
+
+   const G4int NumSection = xtru->GetNofZSections();
+
+   for (G4int i=0;i<NumSection;i++) {
+   
+      xercesc::DOMElement* sectionElement = newElement("section");
+      xtruElement->appendChild(sectionElement);
+
+      const G4ExtrudedSolid::ZSection section = xtru->GetZSection(i);
+
+      sectionElement->setAttributeNode(newAttribute("zOrder",i));
+      sectionElement->setAttributeNode(newAttribute("zPosition",section.fZ));
+      sectionElement->setAttributeNode(newAttribute("xOffset",section.fOffset.x()));
+      sectionElement->setAttributeNode(newAttribute("yOffset",section.fOffset.y()));
+      sectionElement->setAttributeNode(newAttribute("scalingFactor",section.fScale));
+   }
+}
+
+void G4GDMLWriteSolids::hypeWrite(xercesc::DOMElement* solidsElement,const G4Hype* const hype) {
+
+   xercesc::DOMElement* hypeElement = newElement("hype");
+   solidsElement->appendChild(hypeElement);
+
+   hypeElement->setAttributeNode(newAttribute("name",hype->GetName()));
+   hypeElement->setAttributeNode(newAttribute("rmin",hype->GetInnerRadius()));
+   hypeElement->setAttributeNode(newAttribute("rmax",hype->GetOuterRadius()));
+   hypeElement->setAttributeNode(newAttribute("inst",hype->GetInnerStereo()/CLHEP::degree));
+   hypeElement->setAttributeNode(newAttribute("outst",hype->GetOuterStereo()/CLHEP::degree));
+   hypeElement->setAttributeNode(newAttribute("z",2.0*hype->GetZHalfLength()));
+   hypeElement->setAttributeNode(newAttribute("aunit","degree"));
+   hypeElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
+void G4GDMLWriteSolids::orbWrite(xercesc::DOMElement* solidsElement,const G4Orb* const orb) {
+
+   xercesc::DOMElement* orbElement = newElement("orb");
+   solidsElement->appendChild(orbElement);
+
+   orbElement->setAttributeNode(newAttribute("name",orb->GetName()));
+   orbElement->setAttributeNode(newAttribute("r",orb->GetRadius()));
+   orbElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
+void G4GDMLWriteSolids::paraWrite(xercesc::DOMElement* solidsElement,const G4Para* const para) {
+
+   xercesc::DOMElement* paraElement = newElement("para");
+   solidsElement->appendChild(paraElement);
+
+   G4ThreeVector simaxis = para->GetSymAxis();
+
+   G4cout << "simaxis.x = " << simaxis.x() << G4endl;
+   G4cout << "simaxis.y = " << simaxis.y() << G4endl;
+   G4cout << "simaxis.z = " << simaxis.z() << G4endl;
+
+   G4double alpha = atan(para->GetTanAlpha());
+   G4double theta = acos(simaxis.z());
+   G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+
+   paraElement->setAttributeNode(newAttribute("name",para->GetName()));
+   paraElement->setAttributeNode(newAttribute("x",2.0*para->GetXHalfLength()));
+   paraElement->setAttributeNode(newAttribute("y",2.0*para->GetYHalfLength()));
+   paraElement->setAttributeNode(newAttribute("z",2.0*para->GetZHalfLength()));
+   paraElement->setAttributeNode(newAttribute("alpha",alpha/CLHEP::degree));
+   paraElement->setAttributeNode(newAttribute("theta",theta/CLHEP::degree));
+   paraElement->setAttributeNode(newAttribute("phi",phi/CLHEP::degree));
+   paraElement->setAttributeNode(newAttribute("aunit","degree"));
+   paraElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G4Polycone* const polycone) {
 
    xercesc::DOMElement* polyconeElement = newElement("polycone");
@@ -302,44 +391,6 @@ void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tub
    tubeElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
-void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4ExtrudedSolid* const xtru) {
-
-   xercesc::DOMElement* xtruElement = newElement("xtru");
-   solidsElement->appendChild(xtruElement);
-
-   xtruElement->setAttributeNode(newAttribute("name",xtru->GetName()));
-   xtruElement->setAttributeNode(newAttribute("lunit","mm"));
-
-   const G4int NumVertex = xtru->GetNofVertices();
-   
-   for (G4int i=0;i<NumVertex;i++) {
-   
-      xercesc::DOMElement* twoDimVertexElement = newElement("twoDimVertex");
-      xtruElement->appendChild(twoDimVertexElement);
-
-      const G4TwoVector vertex = xtru->GetVertex(i);
-
-      twoDimVertexElement->setAttributeNode(newAttribute("x",vertex.x()));
-      twoDimVertexElement->setAttributeNode(newAttribute("y",vertex.y()));
-   }
-
-   const G4int NumSection = xtru->GetNofZSections();
-
-   for (G4int i=0;i<NumSection;i++) {
-   
-      xercesc::DOMElement* sectionElement = newElement("section");
-      xtruElement->appendChild(sectionElement);
-
-      const G4ExtrudedSolid::ZSection section = xtru->GetZSection(i);
-
-      sectionElement->setAttributeNode(newAttribute("zOrder",i));
-      sectionElement->setAttributeNode(newAttribute("zPosition",section.fZ));
-      sectionElement->setAttributeNode(newAttribute("xOffset",section.fOffset.x()));
-      sectionElement->setAttributeNode(newAttribute("yOffset",section.fOffset.y()));
-      sectionElement->setAttributeNode(newAttribute("scalingFactor",section.fScale));
-   }
-}
-
 void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double& z,const G4double& rmin,const G4double& rmax) {
 
    xercesc::DOMElement* zplaneElement = newElement("zplane");
@@ -350,10 +401,10 @@ void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double&
    zplaneElement->setAttributeNode(newAttribute("rmax",rmax));
 }
 
-void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
+void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
 
    xercesc::DOMElement* solidsElement = newElement("solids");
-   element->appendChild(solidsElement);
+   gdmlElement->appendChild(solidsElement);
 
    const G4SolidStore* solidList = G4SolidStore::GetInstance();
    const size_t solidCount = solidList->size();
@@ -367,10 +418,13 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* element) {
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
       if (const G4Ellipsoid* ellipsoidPtr = dynamic_cast<const G4Ellipsoid*>(solidPtr)) { ellipsoidWrite(solidsElement,ellipsoidPtr); } else
       if (const G4EllipticalTube* eltubePtr = dynamic_cast<const G4EllipticalTube*>(solidPtr)) { eltubeWrite(solidsElement,eltubePtr); } else
+      if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
+      if (const G4Hype* hypePtr = dynamic_cast<const G4Hype*>(solidPtr)) { hypeWrite(solidsElement,hypePtr); } else
+      if (const G4Orb* orbPtr = dynamic_cast<const G4Orb*>(solidPtr)) { orbWrite(solidsElement,orbPtr); } else
+      if (const G4Para* paraPtr = dynamic_cast<const G4Para*>(solidPtr)) { paraWrite(solidsElement,paraPtr); } else
       if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
       if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
       if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
-      if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
       if (const G4Torus* torusPtr = dynamic_cast<const G4Torus*>(solidPtr)) { torusWrite(solidsElement,torusPtr); } else
       if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else

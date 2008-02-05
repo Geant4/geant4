@@ -39,6 +39,9 @@
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalTube.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4Hype.hh"
+#include "G4Orb.hh"
+#include "G4Para.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
@@ -62,6 +65,10 @@ private:
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
    void ellipsoidWrite(xercesc::DOMElement*,const G4Ellipsoid* const);
    void eltubeWrite(xercesc::DOMElement*,const G4EllipticalTube* const);
+   void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
+   void hypeWrite(xercesc::DOMElement*,const G4Hype* const);
+   void orbWrite(xercesc::DOMElement*,const G4Orb* const);
+   void paraWrite(xercesc::DOMElement*,const G4Para* const);
    void polyconeWrite(xercesc::DOMElement*,const G4Polycone* const);
    void polyhedraWrite(xercesc::DOMElement*,const G4Polyhedra* const);
    void sphereWrite(xercesc::DOMElement*,const G4Sphere* const);
@@ -70,7 +77,6 @@ private:
    void trapWrite(xercesc::DOMElement*,const G4Trap* const);
    void trdWrite(xercesc::DOMElement*,const G4Trd* const);
    void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
-   void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
    void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
    void solidsWrite(xercesc::DOMElement*);
 };
