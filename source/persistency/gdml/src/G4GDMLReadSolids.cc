@@ -91,7 +91,6 @@ void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const boxElement) {
    G4String name;
    G4double lunit = 1.0;
    G4double aunit = 1.0;
-   G4double PhiTwist = 0.0;
    G4double x = 0.0;
    G4double y = 0.0;
    G4double z = 0.0;
@@ -113,19 +112,16 @@ void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const boxElement) {
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
-      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue); else
       if (attName=="x") x = eval.Evaluate(attValue); else
       if (attName=="y") y = eval.Evaluate(attValue); else
       if (attName=="z") z = eval.Evaluate(attValue);
    }
 
-   PhiTwist *= aunit;
    x *= 0.5*lunit;
    y *= 0.5*lunit;
    z *= 0.5*lunit;
 
-   if (PhiTwist==0.0) new G4Box(name,x,y,z);
-   else new G4TwistedBox(name,PhiTwist,x,y,z);
+   new G4Box(name,x,y,z);
 }
 
 void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const coneElement) {
@@ -377,7 +373,7 @@ void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const paraElement) {
    new G4Para(name,x,y,z,alpha,theta,phi);
 }
 
-void G4GDMLReadSolids::polyconeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadSolids::polyconeRead(const xercesc::DOMElement* const polyconeElement) {
 
    G4String name;
    G4double lunit = 1.0;
@@ -385,7 +381,7 @@ void G4GDMLReadSolids::polyconeRead(const xercesc::DOMElement* const element) {
    G4double startphi = 0.0;
    G4double deltaphi = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = polyconeElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -411,7 +407,7 @@ void G4GDMLReadSolids::polyconeRead(const xercesc::DOMElement* const element) {
 
    std::vector<zplaneType> zplaneList;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = polyconeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -798,7 +794,6 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
    G4String name;
    G4double lunit = 1.0;
    G4double aunit = 1.0;
-   G4double PhiTwist = 0.0;
    G4double z = 0.0;
    G4double theta = 0.0;
    G4double phi = 0.0;
@@ -810,7 +805,6 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
    G4double x3 = 0.0;
    G4double x4 = 0.0;
    G4double alpha2 = 0.0;
-   G4double Alph = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -829,7 +823,6 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
-      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue); else
       if (attName=="z") z = eval.Evaluate(attValue); else
       if (attName=="theta") theta = eval.Evaluate(attValue); else
       if (attName=="phi") phi = eval.Evaluate(attValue); else
@@ -841,10 +834,8 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
       if (attName=="x3") x3 = eval.Evaluate(attValue); else
       if (attName=="x4") x4 = eval.Evaluate(attValue); else
       if (attName=="alpha2") alpha2 = eval.Evaluate(attValue);
-      if (attName=="Alph") Alph = eval.Evaluate(attValue);
    }
 
-   PhiTwist *= aunit;
    z *= 0.5*lunit;
    theta *= aunit;
    phi *= aunit;
@@ -857,8 +848,7 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const element) {
    x4 *= 0.5*lunit;
    alpha2 *= aunit;
 
-   if (PhiTwist == 0.0) new G4Trap(name,z,theta,phi,y1,x1,x2,alpha1,y2,x3,x4,alpha2);
-   else new G4TwistedTrap(name,PhiTwist,z,theta,phi,y1,x1,x2,y2,x3,x4,Alph);
+   new G4Trap(name,z,theta,phi,y1,x1,x2,alpha1,y2,x3,x4,alpha2);
 }
 
 void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const element) {
@@ -871,7 +861,6 @@ void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const element) {
    G4double y1 = 0.0;
    G4double y2 = 0.0;
    G4double z = 0.0;
-   G4double PhiTwist = 0.0;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -894,8 +883,7 @@ void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const element) {
       if (attName=="x2") x2 = eval.Evaluate(attValue); else
       if (attName=="y1") y1 = eval.Evaluate(attValue); else
       if (attName=="y2") y2 = eval.Evaluate(attValue); else
-      if (attName=="z") z = eval.Evaluate(attValue); else
-      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue);
+      if (attName=="z") z = eval.Evaluate(attValue);
    }
 
    x1 *= 0.5*lunit;
@@ -903,10 +891,8 @@ void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const element) {
    y1 *= 0.5*lunit;
    y2 *= 0.5*lunit;
    z *= 0.5*lunit;
-   PhiTwist *= aunit;
 
-   if (PhiTwist==0.0) new G4Trd(name,x1,x2,y1,y2,z);
-   else new G4TwistedTrd(name,x1,x2,y1,y2,z,PhiTwist);
+   new G4Trd(name,x1,x2,y1,y2,z);
 }
 
 G4TriangularFacet* G4GDMLReadSolids::triangularRead(const xercesc::DOMElement* const element) {
@@ -982,6 +968,155 @@ void G4GDMLReadSolids::tubeRead(const xercesc::DOMElement* const element) {
    deltaphi *= aunit;
 
    new G4Tubs(name,rmin,rmax,z,startphi,deltaphi);
+}
+
+void G4GDMLReadSolids::twistedboxRead(const xercesc::DOMElement* const twistedboxElement) {
+
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double PhiTwist = 0.0;
+   G4double x = 0.0;
+   G4double y = 0.0;
+   G4double z = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = twistedboxElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="lunit") lunit = eval.Evaluate(attValue); else
+      if (attName=="aunit") aunit = eval.Evaluate(attValue); else
+      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue); else
+      if (attName=="x") x = eval.Evaluate(attValue); else
+      if (attName=="y") y = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue);
+   }
+
+   PhiTwist *= aunit;
+   x *= 0.5*lunit;
+   y *= 0.5*lunit;
+   z *= 0.5*lunit;
+
+   new G4TwistedBox(name,PhiTwist,x,y,z);
+}
+
+void G4GDMLReadSolids::twistedtrapRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double PhiTwist = 0.0;
+   G4double z = 0.0;
+   G4double theta = 0.0;
+   G4double phi = 0.0;
+   G4double y1 = 0.0;
+   G4double x1 = 0.0;
+   G4double x2 = 0.0;
+   G4double y2 = 0.0;
+   G4double x3 = 0.0;
+   G4double x4 = 0.0;
+   G4double Alph = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="lunit") lunit = eval.Evaluate(attValue); else
+      if (attName=="aunit") aunit = eval.Evaluate(attValue); else
+      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue); else
+      if (attName=="theta") theta = eval.Evaluate(attValue); else
+      if (attName=="phi") phi = eval.Evaluate(attValue); else
+      if (attName=="y1") y1 = eval.Evaluate(attValue); else
+      if (attName=="x1") x1 = eval.Evaluate(attValue); else
+      if (attName=="x2") x2 = eval.Evaluate(attValue); else
+      if (attName=="y2") y2 = eval.Evaluate(attValue); else
+      if (attName=="x3") x3 = eval.Evaluate(attValue); else
+      if (attName=="x4") x4 = eval.Evaluate(attValue); else
+      if (attName=="Alph") Alph = eval.Evaluate(attValue);
+   }
+
+   PhiTwist *= aunit;
+   z *= 0.5*lunit;
+   theta *= aunit;
+   phi *= aunit;
+   y1 *= 0.5*lunit;
+   x1 *= 0.5*lunit;
+   x2 *= 0.5*lunit;
+   y2 *= 0.5*lunit;
+   x3 *= 0.5*lunit;
+   x4 *= 0.5*lunit;
+
+   new G4TwistedTrap(name,PhiTwist,z,theta,phi,y1,x1,x2,y2,x3,x4,Alph);
+}
+
+void G4GDMLReadSolids::twistedtrdRead(const xercesc::DOMElement* const element) {
+
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double x1 = 0.0;
+   G4double x2 = 0.0;
+   G4double y1 = 0.0;
+   G4double y2 = 0.0;
+   G4double z = 0.0;
+   G4double PhiTwist = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="lunit") lunit = eval.Evaluate(attValue); else
+      if (attName=="aunit") aunit = eval.Evaluate(attValue); else
+      if (attName=="x1") x1 = eval.Evaluate(attValue); else
+      if (attName=="x2") x2 = eval.Evaluate(attValue); else
+      if (attName=="y1") y1 = eval.Evaluate(attValue); else
+      if (attName=="y2") y2 = eval.Evaluate(attValue); else
+      if (attName=="z") z = eval.Evaluate(attValue); else
+      if (attName=="PhiTwist") PhiTwist = eval.Evaluate(attValue);
+   }
+
+   x1 *= 0.5*lunit;
+   x2 *= 0.5*lunit;
+   y1 *= 0.5*lunit;
+   y2 *= 0.5*lunit;
+   z *= 0.5*lunit;
+   PhiTwist *= aunit;
+
+   new G4TwistedTrd(name,x1,x2,y1,y2,z,PhiTwist);
 }
 
 G4TwoVector G4GDMLReadSolids::twoDimVertexRead(const xercesc::DOMElement* const element,G4double lunit) {
@@ -1103,9 +1238,9 @@ void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const element) {
       if (tag=="trap") trapRead(child); else
       if (tag=="trd") trdRead(child); else
       if (tag=="tube") tubeRead(child); else
-      if (tag=="twistedbox") boxRead(child); else
-      if (tag=="twistedtrap") trapRead(child); else
-      if (tag=="twistedtrd") trdRead(child); else
+      if (tag=="twistedbox") twistedboxRead(child); else
+      if (tag=="twistedtrap") twistedtrapRead(child); else
+      if (tag=="twistedtrd") twistedtrdRead(child); else
       if (tag=="xtru") xtruRead(child); else
       if (tag=="intersection") booleanRead(child,INTERSECTION); else
       if (tag=="subtraction") booleanRead(child,SUBTRACTION); else

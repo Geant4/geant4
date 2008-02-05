@@ -89,6 +89,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    void torusRead(const xercesc::DOMElement* const);
    void trapRead(const xercesc::DOMElement* const);
    void trdRead(const xercesc::DOMElement* const);
+   void twistedboxRead(const xercesc::DOMElement* const);
+   void twistedtrapRead(const xercesc::DOMElement* const);
+   void twistedtrdRead(const xercesc::DOMElement* const);
    G4TriangularFacet* triangularRead(const xercesc::DOMElement* const);
    void tubeRead(const xercesc::DOMElement* const);
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
