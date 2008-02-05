@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.10 2008-02-05 07:09:09 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.11 2008-02-05 11:25:24 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -532,7 +532,7 @@ G4bool G4ExtrudedSolid::MakeFacets()
     fTriangles.push_back(triangle1);
 
     std::vector<G4int> triangle2(3);
-    triangle2[0] = 1;
+    triangle2[0] = 0;
     triangle2[1] = 2;
     triangle2[2] = 3;
     fTriangles.push_back(triangle2);
