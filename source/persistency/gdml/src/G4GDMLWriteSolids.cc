@@ -319,6 +319,27 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
    }
 }
 
+void G4GDMLWriteSolids::tetWrite(xercesc::DOMElement* solidsElement,const G4Tet* const tet) {
+
+   xercesc::DOMElement* tetElement = newElement("tet");
+   solidsElement->appendChild(tetElement);
+
+   G4String tetName = tet->GetName();
+
+   std::vector<G4ThreeVector> vertexList = tet->GetVertices();
+
+   tetElement->setAttributeNode(newAttribute("name",tetName));
+   tetElement->setAttributeNode(newAttribute("vertex1",tetName+"_vertex1"));
+   tetElement->setAttributeNode(newAttribute("vertex2",tetName+"_vertex2"));
+   tetElement->setAttributeNode(newAttribute("vertex3",tetName+"_vertex3"));
+   tetElement->setAttributeNode(newAttribute("vertex4",tetName+"_vertex4"));
+
+   addPosition(tetName+"_vertex1",vertexList[0]);
+   addPosition(tetName+"_vertex2",vertexList[1]);
+   addPosition(tetName+"_vertex3",vertexList[2]);
+   addPosition(tetName+"_vertex4",vertexList[3]);
+}
+
 void G4GDMLWriteSolids::torusWrite(xercesc::DOMElement* solidsElement,const G4Torus* const torus) {
 
    xercesc::DOMElement* torusElement = newElement("torus");
@@ -426,6 +447,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
       if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
       if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
       if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
+      if (const G4Tet* tetPtr = dynamic_cast<const G4Tet*>(solidPtr)) { tetWrite(solidsElement,tetPtr); } else
       if (const G4Torus* torusPtr = dynamic_cast<const G4Torus*>(solidPtr)) { torusWrite(solidsElement,torusPtr); } else
       if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
       if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else

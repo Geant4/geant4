@@ -29,12 +29,12 @@
 
 #include "G4GDMLReadDefine.hh"
 
-void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const constantElement) {
 
    G4String name;
    G4double value = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = constantElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -55,14 +55,14 @@ void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const element) {
    eval.defineConstant(name,value);
 }
 
-void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement) {
 
    G4String name;
    G4String rows;
    G4String cols;
    G4String values;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = matrixElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -87,12 +87,12 @@ void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const element) {
    _rows = 0;
    _cols = 0;
 
-   values = xercesc::XMLString::transcode(element->getTextContent());
+   values = xercesc::XMLString::transcode(matrixElement->getTextContent());
 
    G4cout << "Matrix values: " << values << G4endl;
 }
 
-void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement) {
 
    G4String name;
    G4double unit = 1.0;
@@ -100,7 +100,7 @@ void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const element) {
    G4double y = 0.0;
    G4double z = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = positionElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -124,7 +124,7 @@ void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const element) {
    positionMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
-void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const rotationElement) {
 
    G4String name;
    G4double unit = 1.0;
@@ -132,7 +132,7 @@ void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const element) {
    G4double y = 0.0;
    G4double z = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = rotationElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -156,14 +156,14 @@ void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const element) {
    rotationMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
 }
 
-void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const scaleElement) {
 
    G4String name;
    G4double x = 1.0;
    G4double y = 1.0;
    G4double z = 1.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = scaleElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -186,12 +186,12 @@ void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const element) {
    scaleMap[name] = new G4ThreeVector(x,y,z);
 }
 
-void G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const variableElement) {
 
    G4String name;
    G4double value = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = variableElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -240,9 +240,9 @@ void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element) {
    quantityMap[name] = value*unit;
 }
 
-void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = defineElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -259,6 +259,35 @@ void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const element) {
       if (tag=="quantity") quantityRead(child); else
       G4Exception("GDML Reader: ERROR! Unknown tag in define: "+tag);
    }
+}
+
+G4ThreeVector G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vectorElement) {
+
+   G4double unit = 1.0;
+
+   G4ThreeVector vec;
+
+   const xercesc::DOMNamedNodeMap* const attributes = vectorElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="unit") unit = eval.Evaluate(attValue); else
+      if (attName=="x") vec.setX(eval.Evaluate(attValue)); else
+      if (attName=="y") vec.setY(eval.Evaluate(attValue)); else
+      if (attName=="z") vec.setZ(eval.Evaluate(attValue));
+   }
+
+   return vec*unit;
 }
 
 G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {

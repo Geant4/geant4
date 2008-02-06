@@ -99,7 +99,6 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    zplaneType zplaneRead(const xercesc::DOMElement* const);
    void solidsRead(const xercesc::DOMElement* const);
 protected:
-   G4ThreeVector vectorRead(const xercesc::DOMElement* const);
    G4VSolid* getSolid(const G4String&) const;
 };
 

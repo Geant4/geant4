@@ -48,6 +48,7 @@
 #include "G4Sphere.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4TessellatedSolid.hh"
+#include "G4Tet.hh"
 #include "G4Torus.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
@@ -73,6 +74,7 @@ private:
    void polyhedraWrite(xercesc::DOMElement*,const G4Polyhedra* const);
    void sphereWrite(xercesc::DOMElement*,const G4Sphere* const);
    void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
+   void tetWrite(xercesc::DOMElement*,const G4Tet* const);
    void torusWrite(xercesc::DOMElement*,const G4Torus* const);
    void trapWrite(xercesc::DOMElement*,const G4Trap* const);
    void trdWrite(xercesc::DOMElement*,const G4Trd* const);
