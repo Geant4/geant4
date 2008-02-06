@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2008-02-05 12:39:56 ztorzsok Exp $
+$Id: History,v 1.22 2008-02-06 11:26:49 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 february 2008 Z.Torzsok
+- Tet added to writer (succesfully tested)
+- Twistedbox added to writer (succesfully tested)
+
 5 February 2008 Z.Torzsok
 - Hype orb and para added to writer
+  Succesfully tested, except the para.
+  Para is do not completely understood by me.
 
 1 February 2008 Z.Torzsok
 - Ellipsoid added to writer (succesfully tested)

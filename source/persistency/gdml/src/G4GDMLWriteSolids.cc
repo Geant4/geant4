@@ -412,6 +412,20 @@ void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tub
    tubeElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::twistedboxWrite(xercesc::DOMElement* solidsElement,const G4TwistedBox* const twistedbox) {
+
+   xercesc::DOMElement* twistedboxElement = newElement("twistedbox");
+   solidsElement->appendChild(twistedboxElement);
+
+   twistedboxElement->setAttributeNode(newAttribute("name",twistedbox->GetName()));
+   twistedboxElement->setAttributeNode(newAttribute("x",2.0*twistedbox->GetXHalfLength()));
+   twistedboxElement->setAttributeNode(newAttribute("y",2.0*twistedbox->GetYHalfLength()));
+   twistedboxElement->setAttributeNode(newAttribute("z",2.0*twistedbox->GetZHalfLength()));
+   twistedboxElement->setAttributeNode(newAttribute("PhiTwist",twistedbox->GetPhiTwist()/CLHEP::degree));
+   twistedboxElement->setAttributeNode(newAttribute("aunit","degree"));
+   twistedboxElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double& z,const G4double& rmin,const G4double& rmax) {
 
    xercesc::DOMElement* zplaneElement = newElement("zplane");
@@ -434,6 +448,9 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
    
       const G4VSolid* solidPtr = (*solidList)[i];
 
+      if (dynamic_cast<const G4DisplacedSolid*>(solidPtr)) continue; // Transformed solid is handled elsewhere (see G4GDMLWriteStructure::physvolWrite)
+      if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) continue; // Reflected solid is a transformed solid as well...
+      
       if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
       if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
       if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
@@ -451,6 +468,8 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
       if (const G4Torus* torusPtr = dynamic_cast<const G4Torus*>(solidPtr)) { torusWrite(solidsElement,torusPtr); } else
       if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
       if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
-      if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); }
+      if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); } else
+      if (const G4TwistedBox* twistedboxPtr = dynamic_cast<const G4TwistedBox*>(solidPtr)) { twistedboxWrite(solidsElement,twistedboxPtr); } else
+      G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
    }
 }

@@ -45,6 +45,7 @@
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Sphere.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4TessellatedSolid.hh"
@@ -53,6 +54,7 @@
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
+#include "G4TwistedBox.hh"
 #include "G4UnionSolid.hh"
 
 #include "G4SolidStore.hh"
@@ -79,6 +81,7 @@ private:
    void trapWrite(xercesc::DOMElement*,const G4Trap* const);
    void trdWrite(xercesc::DOMElement*,const G4Trd* const);
    void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
+   void twistedboxWrite(xercesc::DOMElement*,const G4TwistedBox* const);
    void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
    void solidsWrite(xercesc::DOMElement*);
 };
