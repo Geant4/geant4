@@ -426,6 +426,22 @@ void G4GDMLWriteSolids::twistedboxWrite(xercesc::DOMElement* solidsElement,const
    twistedboxElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::twistedtrdWrite(xercesc::DOMElement* solidsElement,const G4TwistedTrd* const twistedtrd) {
+
+   xercesc::DOMElement* twistedtrdElement = newElement("twistedtrd");
+   solidsElement->appendChild(twistedtrdElement);
+
+   twistedtrdElement->setAttributeNode(newAttribute("name",twistedtrd->GetName()));
+   twistedtrdElement->setAttributeNode(newAttribute("x1",2.0*twistedtrd->GetX1HalfLength()));
+   twistedtrdElement->setAttributeNode(newAttribute("x2",2.0*twistedtrd->GetX2HalfLength()));
+   twistedtrdElement->setAttributeNode(newAttribute("y1",2.0*twistedtrd->GetY1HalfLength()));
+   twistedtrdElement->setAttributeNode(newAttribute("y2",2.0*twistedtrd->GetY2HalfLength()));
+   twistedtrdElement->setAttributeNode(newAttribute("z",2.0*twistedtrd->GetZHalfLength()));
+   twistedtrdElement->setAttributeNode(newAttribute("PhiTwist",twistedtrd->GetPhiTwist()/CLHEP::degree));
+   twistedtrdElement->setAttributeNode(newAttribute("aunit","degree"));
+   twistedtrdElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double& z,const G4double& rmin,const G4double& rmax) {
 
    xercesc::DOMElement* zplaneElement = newElement("zplane");
@@ -470,6 +486,7 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
       if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
       if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); } else
       if (const G4TwistedBox* twistedboxPtr = dynamic_cast<const G4TwistedBox*>(solidPtr)) { twistedboxWrite(solidsElement,twistedboxPtr); } else
+      if (const G4TwistedTrd* twistedtrdPtr = dynamic_cast<const G4TwistedTrd*>(solidPtr)) { twistedtrdWrite(solidsElement,twistedtrdPtr); } else
       G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
    }
 }
