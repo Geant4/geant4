@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.1 2007-03-30 15:25:54 gunter Exp $
+// $Id: G4QuasiElasticChannel.cc,v 1.2 2008-02-07 11:17:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,8 @@
 #include "G4QuasiElasticChannel.hh"
 
 #include "G4HadTmpUtil.hh"		//lrint
+
+//#define debug_scatter
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
 {
