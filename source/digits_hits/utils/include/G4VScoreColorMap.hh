@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.hh,v 1.3 2007-11-06 17:17:14 asaim Exp $
+// $Id: G4VScoreColorMap.hh,v 1.4 2008-02-07 13:34:39 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +32,8 @@
 #define G4VScoreColorMap_h 1
 
 #include "globals.hh"
+
+class G4VVisManager;
 
 class G4VScoreColorMap
 {
@@ -62,11 +64,17 @@ class G4VScoreColorMap
       inline G4double GetMax() const
       { return fMaxVal; }
 
+  // draw a color chart
+  virtual void DrawColorChart(G4int nPoint = 5);
+  virtual void DrawColorChartBar(G4int nPoint);
+  virtual void DrawColorChartText(G4int nPoint);
+
   protected:
       G4String fName;
       G4bool ifFloat;
       G4double fMinVal;
       G4double fMaxVal;
+  G4VVisManager * fVisManager;
 };
 
 #endif
