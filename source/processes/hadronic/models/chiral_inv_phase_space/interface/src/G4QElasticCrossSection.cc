@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.33 2008-01-16 12:21:53 vnivanch Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.34 2008-02-07 08:01:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -181,7 +181,8 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
   G4bool in=false;                     // By default the isotope must be found in the AMDB
-  if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
+//GF the block will update parameters, needed for quasi-eleastic
+//GF  if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
   {
     in = false;                        // By default the isotope haven't be found in AMDB  
     lastP   = 0.;                      // New momentum history (nothing to compare with)
@@ -290,32 +291,36 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
       colCS[lastI]=lastCS;
     }
   } // End of parameters udate
-  else if(pEn<=lastTH)
-  {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
-    //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-    return 0.;                         // Momentum is below the Threshold Value -> CS=0
-  }
-  //  else if(std::fabs(lastP/pMom-1.)<tolerance)
-  else if(lastP == pMom) // V.Ivanchenko safe solution
-  {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
-    //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-    G4cout<<"G4QElCS::GetCrSec:***SAME***, onlyCS="<<onlyCS<<G4endl;
-#endif
-    return lastCS*millibarn;     // Use theLastCS
-  }
-  else
-  {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
-#endif
-    lastCS=CalculateCrossSection(fCS,1,lastI,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
-    lastP=pMom;
-  }
+
+// GF
+//	  else if(pEn<=lastTH)
+//	  {
+//	#ifdef pdebug
+//	    G4cout<<"G4QElCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
+//	    //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+//	#endif
+//	    return 0.;                         // Momentum is below the Threshold Value -> CS=0
+//	  }
+//	  //  else if(std::fabs(lastP/pMom-1.)<tolerance)
+//	  else if(lastP == pMom) // V.Ivanchenko safe solution
+//	  {
+//	#ifdef pdebug
+//	    G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
+//	    //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+//	    G4cout<<"G4QElCS::GetCrSec:***SAME***, onlyCS="<<onlyCS<<G4endl;
+//	#endif
+//	    return lastCS*millibarn;     // Use theLastCS
+//	  }
+//	  else
+//	  {
+//	#ifdef pdebug
+//	    G4cout<<"G4QElCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+//	#endif
+//	    lastCS=CalculateCrossSection(fCS,1,lastI,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
+//	    lastP=pMom;
+//	  }
+// GF
+
 #ifdef pdebug
   G4cout<<"G4QElCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
   //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST

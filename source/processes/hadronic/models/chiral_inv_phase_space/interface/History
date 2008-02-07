@@ -1,0 +1,18 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/chiral_inv_phase_space/interface 
+	
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+7-Feb-2008 Gunter Folger
+- Modify src/G4QElasticCrossSection.cc to fix problem with quasi-elastic. 
+  When run together with elastic, the parameters to sample T were not updated,
+  this fix is to always update these.  

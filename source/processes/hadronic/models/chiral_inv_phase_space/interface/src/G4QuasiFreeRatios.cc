@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.16 2007-08-09 13:04:37 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.17 2008-02-07 08:01:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -867,7 +867,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
   G4double maxt=CSmanager->GetHMaxT();            // max possible -t
 #ifdef ppdebug
-  G4cout<<"G4QFR::Scat:PDG="<<pPDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<G4endl;
+  G4cout<<"G4QFR::Scat:PDG="<<PDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<", Z="<<Z<<",N="<<N<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);
