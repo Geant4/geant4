@@ -55,7 +55,9 @@
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
 #include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
 #include "G4UnionSolid.hh"
 
 #include "G4SolidStore.hh"
@@ -83,7 +85,9 @@ private:
    void trdWrite(xercesc::DOMElement*,const G4Trd* const);
    void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
    void twistedboxWrite(xercesc::DOMElement*,const G4TwistedBox* const);
+   void twistedtrapWrite(xercesc::DOMElement*,const G4TwistedTrap* const);
    void twistedtrdWrite(xercesc::DOMElement*,const G4TwistedTrd* const);
+   void twistedtubsWrite(xercesc::DOMElement*,const G4TwistedTubs* const);
    void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
    void solidsWrite(xercesc::DOMElement*);
 };

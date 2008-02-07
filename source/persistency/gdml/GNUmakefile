@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2008-01-16 09:50:36 ztorzsok Exp $
+# $Id: GNUmakefile,v 1.9 2008-02-07 11:25:07 ztorzsok Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -13,6 +13,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/global/HEPGeometry/include \
+            -I$(G4INSTALL)/source/global/HEPNumerics/include \
             -I$(G4INSTALL)/source/digits_hits/hits/include \
             -I$(G4INSTALL)/source/digits_hits/digits/include \
             -I$(G4INSTALL)/source/particles/management/include \

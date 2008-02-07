@@ -61,6 +61,7 @@
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
 #include "G4UnionSolid.hh"
 
 #include "G4GDMLReadMaterials.hh"
@@ -75,6 +76,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    void coneRead(const xercesc::DOMElement* const);
    void ellipsoidRead(const xercesc::DOMElement* const);
    void eltubeRead(const xercesc::DOMElement* const);
+   void xtruRead(const xercesc::DOMElement* const);
    void hypeRead(const xercesc::DOMElement* const);
    void orbRead(const xercesc::DOMElement* const);
    void paraRead(const xercesc::DOMElement* const);
@@ -89,13 +91,13 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    void torusRead(const xercesc::DOMElement* const);
    void trapRead(const xercesc::DOMElement* const);
    void trdRead(const xercesc::DOMElement* const);
+   void tubeRead(const xercesc::DOMElement* const);
    void twistedboxRead(const xercesc::DOMElement* const);
    void twistedtrapRead(const xercesc::DOMElement* const);
    void twistedtrdRead(const xercesc::DOMElement* const);
+   void twistedtubsRead(const xercesc::DOMElement* const);
    G4TriangularFacet* triangularRead(const xercesc::DOMElement* const);
-   void tubeRead(const xercesc::DOMElement* const);
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
-   void xtruRead(const xercesc::DOMElement* const);
    zplaneType zplaneRead(const xercesc::DOMElement* const);
    void solidsRead(const xercesc::DOMElement* const);
 protected:

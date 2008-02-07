@@ -426,6 +426,25 @@ void G4GDMLWriteSolids::twistedboxWrite(xercesc::DOMElement* solidsElement,const
    twistedboxElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteSolids::twistedtrapWrite(xercesc::DOMElement* solidsElement,const G4TwistedTrap* const twistedtrap) {
+
+   xercesc::DOMElement* twistedtrapElement = newElement("twistedtrap");
+   solidsElement->appendChild(twistedtrapElement);
+
+   twistedtrapElement->setAttributeNode(newAttribute("name",twistedtrap->GetName()));
+   twistedtrapElement->setAttributeNode(newAttribute("y1",2.0*twistedtrap->GetY1HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("x1",2.0*twistedtrap->GetX1HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("x2",2.0*twistedtrap->GetX2HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("y2",2.0*twistedtrap->GetY2HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("x3",2.0*twistedtrap->GetX3HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("x4",2.0*twistedtrap->GetX4HalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("z",2.0*twistedtrap->GetZHalfLength()));
+   twistedtrapElement->setAttributeNode(newAttribute("Alph",twistedtrap->GetTiltAngleAlpha()/CLHEP::degree));
+   twistedtrapElement->setAttributeNode(newAttribute("theta",twistedtrap->GetPolarAngleTheta()/CLHEP::degree));
+   twistedtrapElement->setAttributeNode(newAttribute("phi",twistedtrap->GetAzimuthalAnglePhi()/CLHEP::degree));
+   twistedtrapElement->setAttributeNode(newAttribute("PhiTwist",twistedtrap->GetPhiTwist()/CLHEP::degree));
+}
+
 void G4GDMLWriteSolids::twistedtrdWrite(xercesc::DOMElement* solidsElement,const G4TwistedTrd* const twistedtrd) {
 
    xercesc::DOMElement* twistedtrdElement = newElement("twistedtrd");
@@ -440,6 +459,21 @@ void G4GDMLWriteSolids::twistedtrdWrite(xercesc::DOMElement* solidsElement,const
    twistedtrdElement->setAttributeNode(newAttribute("PhiTwist",twistedtrd->GetPhiTwist()/CLHEP::degree));
    twistedtrdElement->setAttributeNode(newAttribute("aunit","degree"));
    twistedtrdElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
+void G4GDMLWriteSolids::twistedtubsWrite(xercesc::DOMElement* solidsElement,const G4TwistedTubs* const twistedtubs) {
+
+   xercesc::DOMElement* twistedtubsElement = newElement("twistedtubs");
+   solidsElement->appendChild(twistedtubsElement);
+
+   twistedtubsElement->setAttributeNode(newAttribute("name",twistedtubs->GetName()));
+   twistedtubsElement->setAttributeNode(newAttribute("twistedangle",twistedtubs->GetPhiTwist()/CLHEP::degree));
+   twistedtubsElement->setAttributeNode(newAttribute("endinnerrad",twistedtubs->GetInnerRadius()));
+   twistedtubsElement->setAttributeNode(newAttribute("endouterrad",twistedtubs->GetOuterRadius()));
+   twistedtubsElement->setAttributeNode(newAttribute("zlen",2.0*twistedtubs->GetZHalfLength()));
+   twistedtubsElement->setAttributeNode(newAttribute("phi",twistedtubs->GetDPhi()/CLHEP::degree));
+   twistedtubsElement->setAttributeNode(newAttribute("aunit","degree"));
+   twistedtubsElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
 void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double& z,const G4double& rmin,const G4double& rmax) {
@@ -486,7 +520,9 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
       if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
       if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); } else
       if (const G4TwistedBox* twistedboxPtr = dynamic_cast<const G4TwistedBox*>(solidPtr)) { twistedboxWrite(solidsElement,twistedboxPtr); } else
+      if (const G4TwistedTrap* twistedtrapPtr = dynamic_cast<const G4TwistedTrap*>(solidPtr)) { twistedtrapWrite(solidsElement,twistedtrapPtr); } else
       if (const G4TwistedTrd* twistedtrdPtr = dynamic_cast<const G4TwistedTrd*>(solidPtr)) { twistedtrdWrite(solidsElement,twistedtrdPtr); } else
+      if (const G4TwistedTubs* twistedtubsPtr = dynamic_cast<const G4TwistedTubs*>(solidPtr)) { twistedtubsWrite(solidsElement,twistedtubsPtr); } else
       G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
    }
 }
