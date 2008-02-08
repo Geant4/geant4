@@ -38,6 +38,7 @@
 #include "G4SolidStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ReflectionFactory.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 #include "G4GDMLReadParamvol.hh"
 

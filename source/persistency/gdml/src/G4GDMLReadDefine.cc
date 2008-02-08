@@ -58,8 +58,7 @@ void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const constantEle
 void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement) {
 
    G4String name;
-   G4String rows;
-   G4String cols;
+   G4int coldim=0;
    G4String values;
 
    const xercesc::DOMNamedNodeMap* const attributes = matrixElement->getAttributes();
@@ -73,23 +72,39 @@ void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(node);   
 
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="name") name  = attribute_value; else
-      if (attribute_name=="rows") rows = attribute_value; else
-      if (attribute_name=="cols") cols = attribute_value;
+      if (attName=="name") name  = GenerateName(attValue); else
+      if (attName=="coldim") coldim = eval.EvaluateInteger(attValue); else
+      if (attName=="values") values = attValue;
    }
 
-   G4int _rows = eval.EvaluateInteger(rows);
-   G4int _cols = eval.EvaluateInteger(cols);
+   std::stringstream MatrixElementStream(values);
 
-   _rows = 0;
-   _cols = 0;
+   G4int row = 0;
+   G4int col = 0;
+   
+   while (!MatrixElementStream.eof()) {
+   
+      std::stringstream MatrixElementNameStream;
+      MatrixElementNameStream << name << "[" << row << "][" << col << "]";
+      G4String MatrixElementName = MatrixElementNameStream.str();
 
-   values = xercesc::XMLString::transcode(matrixElement->getTextContent());
+      G4String MatrixElementString;
+      MatrixElementStream >> MatrixElementString;
+      G4double MatrixElementValue = eval.Evaluate(MatrixElementString);
 
-   G4cout << "Matrix values: " << values << G4endl;
+      G4cout << "matrix element: " << MatrixElementName << G4endl;
+
+      eval.defineConstant(MatrixElementName,MatrixElementValue);
+
+      col++;
+      
+      if (col==coldim) { col=0; row++; }
+   }
+
+   if (col != 0) G4Exception("GDML Reader: ERROR! Matrix '"+name+"' is not filled correctly!");
 }
 
 void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement) {

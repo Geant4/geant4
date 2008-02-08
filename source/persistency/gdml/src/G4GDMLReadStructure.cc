@@ -210,7 +210,9 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) 
    G4Transform3D transform(Rot.inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0);
+   G4String name = logvol->GetName() + "_in_" + pMotherLogical->GetName();
+
+   G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0);
 }
 
 G4double G4GDMLReadStructure::quantityRead(const xercesc::DOMElement* const element) {
@@ -336,17 +338,6 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
 
       volumeList->DeRegister(pMotherLogical);  // "pMotherLogical" must be the last in the list, since the new volume can be referenced!
       volumeList->Register(pMotherLogical);    // This arranging only matters if multiple GDML files are written out into a single GDML file.
-   }
-
-   const size_t daughterCount = pMotherLogical->GetNoDaughters();
-
-   for (size_t i=0;i<daughterCount;i++) {
-   
-      std::stringstream stream;
-      stream << pMotherLogical->GetName() << "_" << "daughter" << i;
-      G4String daughterName = stream.str();
- 
-       pMotherLogical->GetDaughter(i)->SetName(daughterName);
    }
 }
 
