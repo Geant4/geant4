@@ -30,27 +30,6 @@
 
 #include "G4GDMLWrite.hh"
 
-G4ThreeVector G4GDMLWrite::getAngles(const G4RotationMatrix& mat) {
-
-   G4double x,y,z;
-
-   G4double cosb = sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
-
-   if (cosb > 16*FLT_EPSILON) {
-
-      x = atan2(mat.zy(),mat.zz());
-      y = atan2(-mat.zx(),cosb);
-      z = atan2(mat.yx(),mat.xx());
-   } else {
-
-      x = atan2(-mat.yz(),mat.yy());
-      y = atan2(-mat.zx(),cosb);
-      z = 0.0;
-   }
-
-   return G4ThreeVector(x,y,z)/CLHEP::degree;
-}
-
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
 
    xercesc::XMLString::transcode(name,tempStr,99);
@@ -84,7 +63,6 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 
    return doc->createElement(tempStr);
 }
-
 
 void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
 

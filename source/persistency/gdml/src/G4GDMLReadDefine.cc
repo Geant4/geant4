@@ -80,31 +80,17 @@ void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement
       if (attName=="values") values = attValue;
    }
 
-   std::stringstream MatrixElementStream(values);
+   std::stringstream MatrixValueStream(values);
+   std::vector<G4double> valueList;
 
-   G4int row = 0;
-   G4int col = 0;
+   while (!MatrixValueStream.eof()) {
    
-   while (!MatrixElementStream.eof()) {
-   
-      std::stringstream MatrixElementNameStream;
-      MatrixElementNameStream << name << "[" << row << "][" << col << "]";
-      G4String MatrixElementName = MatrixElementNameStream.str();
-
-      G4String MatrixElementString;
-      MatrixElementStream >> MatrixElementString;
-      G4double MatrixElementValue = eval.Evaluate(MatrixElementString);
-
-      G4cout << "matrix element: " << MatrixElementName << G4endl;
-
-      eval.defineConstant(MatrixElementName,MatrixElementValue);
-
-      col++;
-      
-      if (col==coldim) { col=0; row++; }
+      G4String MatrixValue;
+      MatrixValueStream >> MatrixValue;
+      valueList.push_back(eval.Evaluate(MatrixValue));
    }
 
-   if (col != 0) G4Exception("GDML Reader: ERROR! Matrix '"+name+"' is not filled correctly!");
+   eval.defineMatrix(name,coldim,valueList);
 }
 
 void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement) {

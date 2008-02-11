@@ -30,6 +30,27 @@
 
 #include "G4GDMLWriteDefine.hh"
 
+G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {
+
+   G4double x,y,z;
+
+   G4double cosb = sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
+
+   if (cosb > 16*FLT_EPSILON) {
+
+      x = atan2(mat.zy(),mat.zz());
+      y = atan2(-mat.zx(),cosb);
+      z = atan2(mat.yx(),mat.xx());
+   } else {
+
+      x = atan2(-mat.yz(),mat.yy());
+      y = atan2(-mat.zx(),cosb);
+      z = 0.0;
+   }
+
+   return G4ThreeVector(x,y,z)/CLHEP::degree;
+}
+
 void G4GDMLWriteDefine::addPosition(const G4String& name,const G4ThreeVector& P) {
 
    xercesc::DOMElement* positionElement = newElement("position");
