@@ -138,11 +138,13 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
       const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="var") var = attribute_value; else
+      if (attribute_name=="for") var = attribute_value; else
       if (attribute_name=="from") from = attribute_value; else
       if (attribute_name=="to") to = attribute_value; else
       if (attribute_name=="step") step = attribute_value;
    }
+
+   if (var.empty()) G4Exception("GDML Reader: ERROR! No variable is determined for loop!");
 
    eval.checkVariable(var);
 
@@ -153,6 +155,10 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    
    if (!from.empty()) _var = _from;
 
+   if (_from == _to) G4Exception("GDML Reader: ERROR! Empty loop!");
+   if (_from < _to && _step <= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
+   if (_from > _to && _step >= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
+   
    while (_var <= _to) {
    
       eval.setVariable(var,_var);
