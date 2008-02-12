@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 24-Jun-2006
+# Last update: 12-Feb-2008
 #
 # This python script, which has no input parameters, makes 3
 # tests for checking the reproducibility of the sequence of
@@ -24,11 +24,11 @@
 # numbers, which use the same starting seed, and then look
 # at the random number which is printed at the end of the
 # execution of the application, are the following:
-#   1) run twice  2*number_of_events ;
-#   2) run first  number_of_events  and then, in the same
-#      job, run another  number_of_events ;
-#   3) run first  number_of_events  ; then, in another job,
-#      run another  number_of_events+1  starting with the
+#   1) run twice  number_of_events_1 + number_of_event_2 ;
+#   2) run first  number_of_events_1  and then, in the same
+#      job, run another  number_of_events_2 ;
+#   3) run first  number_of_events_1  ; then, in another job,
+#      run another  number_of_events_2 + 1  starting with the
 #      seed that has been saved at the beginning of the last
 #      event (currentEvent.rndm).
 # The reproducibility is guaranteed if the same final random
@@ -91,7 +91,8 @@ isHomogeneous = "0"
 
 BfieldValue = "0 tesla"
 
-NumEvents = "10"
+NumEvents1 = "10"
+NumEvents2 = "1"
 
 #***endLOOKHERE***
 
@@ -101,7 +102,8 @@ print '  Absorber      = ', Absorber
 print '  Active        = ', Active
 print '  isHomogeneous = ', isHomogeneous
 print '  BfieldValue   = ', BfieldValue
-print '  NumEvents     = ', NumEvents
+print '  NumEvents1    = ', NumEvents1
+print '  NumEvents2    = ', NumEvents2
 
 # --- Write Geant4 command files ---
 for i in range(3) :
@@ -133,15 +135,15 @@ for i in range(3) :
     g4file.write( "/mydet/radiusBinNumber 10 \n" )	
     g4file.write( "/mydet/update \n" )
     if ( i == 0 ) :
-        N = str( 2 * int( NumEvents ) )
+        N = str( int( NumEvents1 ) + int( NumEvents2) )
         g4file.write( "/run/beamOn " + N + " \n" )
     elif ( i == 1 ) :
-        g4file.write( "/run/beamOn " + NumEvents + " \n" )
-        g4file.write( "/run/beamOn " + NumEvents + " \n" )
+        g4file.write( "/run/beamOn " + NumEvents1 + " \n" )
+        g4file.write( "/run/beamOn " + NumEvents2 + " \n" )
     else :
-        g4file.write( "/run/beamOn " + NumEvents + " \n" )
+        g4file.write( "/run/beamOn " + NumEvents1 + " \n" )
         g4file.write( "/random/resetEngineFrom currentEvent.rndm \n" )
-        N = str( int( NumEvents ) + 1 )
+        N = str( int( NumEvents2 ) + 1 )
         g4file.write( "/run/beamOn " + N + " \n" )
     g4file.close()
 
