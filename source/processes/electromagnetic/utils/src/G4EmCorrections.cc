@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.23 2008-01-11 19:55:29 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.24 2008-02-12 09:42:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@ G4EmCorrections::G4EmCorrections()
   nIons      = 0;
   verbose    = 1;
   massFactor = 1.0;
+  eth        = 2.0*MeV;
   nist = G4NistManager::Instance();
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
@@ -115,6 +116,49 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
 	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
 	   << " Sum= " << sum << G4endl; 
+
+  sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
+  return sum;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
+						  const G4Material* mat,
+						  G4double e)
+{
+// . Z^3 Barkas effect in the stopping power of matter for charged particles
+//   J.C Ashley and R.H.Ritchie
+//   Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
+//   and ICRU49 report
+//   valid for kineticEnergy < 0.5 MeV
+//   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
+
+  SetupKinematics(p, mat, e);
+  if(tau <= 0.0) return 0.0;
+
+  G4double Barkas = BarkasCorrection (p, mat, e);
+  G4double Bloch  = BlochCorrection (p, mat, e);
+  G4double Mott   = MottCorrection (p, mat, e);
+  G4double FSize  = FiniteSizeCorrection (p, mat, e);
+
+  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
+
+  if(verbose > 1)
+    G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
+	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
+	   << " Sum= " << sum << G4endl; 
+
+  G4double escaled = eth*mass/proton_mass_c2;
+
+  Barkas  = BarkasCorrection (p, mat, escaled);
+  Bloch   = BlochCorrection (p, mat, escaled);
+  //Mott    = MottCorrection (p, mat, escaled);
+  //FSize   = FiniteSizeCorrection (p, mat, escaled);
+
+  //  G4double sum1 = (2.0*(Barkas + Bloch) + FSize + Mott);
+  G4double sum1 = 2.0*(Barkas + Bloch);
+  sum -= sum1*escaled/e;
 
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
   return sum;
@@ -732,7 +776,7 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
   size_t nbins = dVector.GetVectorLength();
   size_t n = 0;
   for(; n<nbins; n++) {
-    if(dVector.GetLowEdgeEnergy(n) > 2.0*MeV) break;
+    if(dVector.GetLowEdgeEnergy(n) > eth) break;
   }
   if(n < nbins) nbins = n + 1;
   G4LPhysicsFreeVector* v =

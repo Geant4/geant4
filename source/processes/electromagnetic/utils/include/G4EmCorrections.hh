@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.10 2008-01-11 19:55:29 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.11 2008-02-12 09:42:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,7 +74,11 @@ public:
 
   G4double HighOrderCorrections(const G4ParticleDefinition* p,
                                 const G4Material* material,
-                                      G4double kineticEnergy);
+				G4double kineticEnergy);
+
+  G4double IonHighOrderCorrections(const G4ParticleDefinition* p,
+				   const G4Material* material,
+				   G4double kineticEnergy);
 
   G4double Bethe(const G4ParticleDefinition* p,
                  const G4Material* material,
@@ -217,6 +221,7 @@ private:
   G4double  kinEnergy;
   G4double  mass;
   G4double  massFactor;
+  G4double  eth;
   G4double  tau;
   G4double  gamma;
   G4double  bg2;
