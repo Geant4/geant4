@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.5 2008-02-04 17:52:45 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.6 2008-02-12 09:42:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,7 +134,7 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
 
     // use Bethe-Bloch with corrections
     if(preStepKinEnergy*currMassRatio > currTh)
-      eloss += s*corr->HighOrderCorrections(part,mat,preStepKinEnergy);
+      eloss += s*corr->IonHighOrderCorrections(part,mat,preStepKinEnergy);
 
     // effective number of collisions
     G4double x = mat->GetElectronDensity()*s*atomXS;

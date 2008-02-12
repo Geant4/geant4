@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.46 2008-02-04 17:52:45 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.47 2008-02-12 09:42:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     stopDataActive(true),
     nuclearStopping(true)
 {
-  //  SetLinearLossLimit(0.0.05);
+  //  SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
   SetVerboseLevel(1);
@@ -181,13 +181,15 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   const G4Material* mat = couple->GetMaterial();
   if(eloss < preKinEnergy) {
     //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
-    //<< " eth= " << eth<<  G4endl;
-    if(preKinEnergy*massRatio > eth)
-      eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
-    else {
+    //	   << " eth= " << eth<< " eloss0= " << eloss <<  G4endl;
+    if(preKinEnergy*massRatio > eth) {
+      eloss += s*corr->IonHighOrderCorrections(part,mat,preKinEnergy);
+      //G4cout << "Above th: eloss= " << eloss << G4endl;
+    } else {
 
       if(stopDataActive)
 	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
+      //G4cout << "Below th: eloss= " << eloss << G4endl;
 
     }
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
@@ -202,7 +204,7 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
       eloss = preKinEnergy - nloss;
     }
     niel += nloss;
-    //       G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    //G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
