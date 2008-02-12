@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.5 2008-02-12 11:42:24 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.6 2008-02-12 14:54:31 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -53,6 +53,7 @@
 
 class G4GDMLRead {
    G4String prename;
+   G4int InLoop;
 protected:
    G4GDMLEvaluator eval;
 

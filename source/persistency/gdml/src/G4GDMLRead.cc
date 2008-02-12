@@ -29,32 +29,9 @@
 
 #include "G4GDMLRead.hh"
 
-G4String G4GDMLRead::GenerateName(const G4String& in) {
+G4String G4GDMLRead::GenerateName(const G4String& name) {
 
-   std::string out(prename);
-   
-   std::string::size_type open = in.find("[",0);
-
-   out.append(in,0,open);
-   
-   while (open != std::string::npos) {
-   
-      std::string::size_type close = in.find("]",open);
-
-      if (close == std::string::npos) G4Exception("Bracket mismatch in loop!");
-   
-      std::string expr = in.substr(open+1,close-open-1);
-
-      std::stringstream stream;
-      
-      stream << "[" << eval.EvaluateInteger(expr) << "]";
-   
-      out.append(stream.str());
-
-      open = in.find("[",close);
-   }
-
-   return out;
+   return prename + ((InLoop>0) ? eval.SolveBrackets(name) : name);
 }
 
 void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
@@ -99,6 +76,8 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    if (_from < _to && _step <= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
    if (_from > _to && _step >= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
    
+   InLoop++;
+   
    while (_var <= _to) {
    
       eval.setVariable(var,_var);
@@ -106,9 +85,21 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
 
       _var += _step;
    }
+
+   InLoop--;
 }
 
 void G4GDMLRead::Read(const G4String& fileName,bool external) {
+
+   InLoop = 0;
+   prename.clear();
+
+   if (external) { 
+   
+      prename = fileName;
+      prename.remove(prename.length()-5,5); // remove ".gdml"
+      prename += "_";
+   }
 
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
@@ -117,13 +108,6 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
    parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
-
-   if (external) { 
-   
-      prename = fileName;
-      prename.remove(prename.length()-5,5); // remove ".gdml"
-      prename += "_";
-   }
 
    try {
 
