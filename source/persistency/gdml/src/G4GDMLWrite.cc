@@ -64,7 +64,7 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
    return doc->createElement(tempStr);
 }
 
-void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
+void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
 
    xercesc::DOMImplementation* impl;
 
@@ -86,7 +86,7 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* logvol) {
    materialsWrite(gdml);
    solidsWrite(gdml);
    structureWrite(gdml);
-   setupWrite(gdml,logvol);
+   setupWrite(gdml,logvol->GetName());
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 

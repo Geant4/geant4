@@ -54,9 +54,9 @@ protected:
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
+   virtual void setupWrite(xercesc::DOMElement*,const G4String&)=0;
 public:
-   void Write(const G4String&,const G4LogicalVolume*);
+   void Write(const G4String&,const G4LogicalVolume* const);
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.4 2008-01-31 11:30:56 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.5 2008-02-12 11:42:24 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -57,12 +57,7 @@ protected:
    G4GDMLEvaluator eval;
 
    G4String GenerateName(const G4String&);
-
-   virtual G4LogicalVolume* getVolume(const G4String&) const=0;
-   virtual G4String getSetup(const G4String&)=0;
-
    void loopRead(const xercesc::DOMElement* const,void(G4GDMLRead::*)(const xercesc::DOMElement* const));
-   G4String refRead(const xercesc::DOMElement* const);
 public:
    virtual void defineRead(const xercesc::DOMElement* const)=0;
    virtual void materialsRead(const xercesc::DOMElement* const)=0;
@@ -71,9 +66,10 @@ public:
    virtual void paramvol_contentRead(const xercesc::DOMElement* const)=0;
    virtual void volume_contentRead(const xercesc::DOMElement* const)=0;
    virtual void structureRead(const xercesc::DOMElement* const)=0;
+   virtual G4LogicalVolume* getVolume(const G4String&) const=0;
+   virtual G4String getSetup(const G4String&)=0;
 
    void Read(const G4String&,bool);
-   G4PVPlacement* getWorldVolume(const G4String& setupName);
 };
 
 #endif

@@ -172,7 +172,8 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
    
    structure.Read(name,true); // true: it is an external file
 
-   return structure.getVolume(structure.GenerateName(volname));
+   if (volname.empty()) return structure.getVolume(structure.getSetup("Default"));
+   else return structure.getVolume(structure.GenerateName(volname));
 }
 
 void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) {

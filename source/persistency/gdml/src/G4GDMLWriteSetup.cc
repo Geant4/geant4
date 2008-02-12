@@ -30,7 +30,7 @@
 
 #include "G4GDMLWriteSetup.hh"
 
-void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const logvol) {
+void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4String& logvolName) {
 
    xercesc::DOMElement* setupElement = newElement("setup");
    gdmlElement->appendChild(setupElement);
@@ -39,6 +39,6 @@ void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4Logic
    setupElement->setAttributeNode(newAttribute("name","Default"));
 
    xercesc::DOMElement* worldElement = newElement("world");
-   worldElement->setAttributeNode(newAttribute("ref",logvol->GetName()));
+   worldElement->setAttributeNode(newAttribute("ref",logvolName));
    setupElement->appendChild(worldElement);
 }

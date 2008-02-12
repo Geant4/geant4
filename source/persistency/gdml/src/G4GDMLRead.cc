@@ -57,6 +57,57 @@ G4String G4GDMLRead::GenerateName(const G4String& in) {
    return out;
 }
 
+void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
+
+   G4String var;
+   G4String from;
+   G4String to;
+   G4String step;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attribute_name=="for") var = attribute_value; else
+      if (attribute_name=="from") from = attribute_value; else
+      if (attribute_name=="to") to = attribute_value; else
+      if (attribute_name=="step") step = attribute_value;
+   }
+
+   if (var.empty()) G4Exception("GDML Reader: ERROR! No variable is determined for loop!");
+
+   eval.checkVariable(var);
+
+   G4int _var = eval.EvaluateInteger(var);
+   G4int _from = eval.EvaluateInteger(from);
+   G4int _to = eval.EvaluateInteger(to);
+   G4int _step = eval.EvaluateInteger(step);
+   
+   if (!from.empty()) _var = _from;
+
+   if (_from == _to) G4Exception("GDML Reader: ERROR! Empty loop!");
+   if (_from < _to && _step <= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
+   if (_from > _to && _step >= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
+   
+   while (_var <= _to) {
+   
+      eval.setVariable(var,_var);
+      (this->*func)(element);
+
+      _var += _step;
+   }
+}
+
 void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
@@ -115,88 +166,4 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
    }
 
    delete parser;
-}
-
-void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
-
-   G4String var;
-   G4String from;
-   G4String to;
-   G4String step;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attribute_name=="for") var = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
-   }
-
-   if (var.empty()) G4Exception("GDML Reader: ERROR! No variable is determined for loop!");
-
-   eval.checkVariable(var);
-
-   G4int _var = eval.EvaluateInteger(var);
-   G4int _from = eval.EvaluateInteger(from);
-   G4int _to = eval.EvaluateInteger(to);
-   G4int _step = eval.EvaluateInteger(step);
-   
-   if (!from.empty()) _var = _from;
-
-   if (_from == _to) G4Exception("GDML Reader: ERROR! Empty loop!");
-   if (_from < _to && _step <= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
-   if (_from > _to && _step >= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
-   
-   while (_var <= _to) {
-   
-      eval.setVariable(var,_var);
-      (this->*func)(element);
-
-      _var += _step;
-   }
-}
-
-G4String G4GDMLRead::refRead(const xercesc::DOMElement* const element) {
-
-   G4String ref;
-
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attName=="ref") ref = attValue;
-   }
-
-   return ref;
-}
-
-G4PVPlacement* G4GDMLRead::getWorldVolume(const G4String& setupName) {
-
-   G4LogicalVolume* volume = getVolume(getSetup(setupName));
-
-   volume->SetVisAttributes(G4VisAttributes::Invisible);
-
-   return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
 }

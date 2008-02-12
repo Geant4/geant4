@@ -291,6 +291,30 @@ G4ThreeVector G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vect
    return vec*unit;
 }
 
+G4String G4GDMLReadDefine::refRead(const xercesc::DOMElement* const element) {
+
+   G4String ref;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="ref") ref = attValue;
+   }
+
+   return ref;
+}
+
 G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
 
    if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Referenced position '"+ref+"' was not found!");

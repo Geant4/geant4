@@ -43,7 +43,14 @@ public:
    void Read(const G4String& fname) { reader.Read(fname,false); /* false: not an external file! */ }
    void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol); }
 
-   G4VPhysicalVolume* getWorldVolume(const G4String& setup="Default") { return reader.getWorldVolume(setup); }
+   G4VPhysicalVolume* getWorldVolume(const G4String& setupName="Default") { 
+   
+      G4LogicalVolume* volume = reader.getVolume(reader.getSetup(setupName));
+
+      volume->SetVisAttributes(G4VisAttributes::Invisible);
+
+      return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
+   }
 };
 
 #endif

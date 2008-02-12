@@ -63,9 +63,8 @@ private:
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
-protected:
-   G4LogicalVolume* getVolume(const G4String&) const;
 public:
+   G4LogicalVolume* getVolume(const G4String&) const;
    AuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    const AuxMapType* getAuxiliaryMap();
 };
