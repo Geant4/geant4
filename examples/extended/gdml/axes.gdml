@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" 
-  xsi:noNamespaceSchemaLocation="/afs/cern.ch/user/z/ztorzsok/scratch0/GDML2/GDMLSchema/gdml.xsd">
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
 
-    <define>
+   <define>
       <constant name="XLength" value="100"/>
       <constant name="YLength" value="200"/>
       <constant name="ZLength" value="300"/>
@@ -20,20 +19,20 @@
       <position name="v3" x="-10" y="-10" z="0"/>
       <position name="v4" x="+10" y="-10" z="0"/>
       <position name="v5" x="0" y="0" z="30"/>
-    </define>
+   </define>
 
-    <materials>
-      <material Z="1.0" name="AIR">
-        <D value="1e-25"/>
-        <atom value="1.00794"/>
+   <materials>
+      <material Z="1.0" name="AIR" state="gas">
+         <D value="1e-25"/>
+         <atom value="1.00794"/>
       </material>
-      <material name="ALU" Z="13.0">
-        <D value="2.70"/>
-	<atom value="26.98"/>
+      <material name="ALU" state="solid" Z="13.0">
+         <D value="2.70"/>
+         <atom value="26.98"/>
       </material>
-    </materials>
+   </materials>
 
-    <solids>
+   <solids>
       <box name="WorldBox" x="2000" y="2000" z="2000"/>
       <box name="XBox" x="100" y="005" z="005"/>
       <box name="YBox" x="005" y="200" z="005"/>
@@ -45,70 +44,68 @@
          <triangular vertex1="v2" vertex2="v3" vertex3="v5"/>
          <triangular vertex1="v3" vertex2="v4" vertex3="v5"/>
          <triangular vertex1="v4" vertex2="v1" vertex3="v5"/>
-     </tessellated>
-    </solids>
+      </tessellated>
+   </solids>
 
-    <structure>
-
+   <structure>
       <volume name="vXBox">
-        <materialref ref="ALU"/>
-	<solidref ref="XBox"/>
+         <materialref ref="ALU"/>
+         <solidref ref="XBox"/>
       </volume>
       <volume name="vYBox">
-        <materialref ref="ALU"/>
-	<solidref ref="YBox"/>
+         <materialref ref="ALU"/>
+         <solidref ref="YBox"/>
       </volume>
       <volume name="vZBox">
-        <materialref ref="ALU"/>
-	<solidref ref="ZBox"/>
+         <materialref ref="ALU"/>
+         <solidref ref="ZBox"/>
       </volume>
       <volume name="vOrigin">
-        <materialref ref="ALU"/>
-	<solidref ref="Origin"/>
+         <materialref ref="ALU"/>
+         <solidref ref="Origin"/>
       </volume>
       <volume name="vArrow">
-        <materialref ref="ALU"/>
-	<solidref ref="Arrow"/>
+         <materialref ref="ALU"/>
+         <solidref ref="Arrow"/>
       </volume>
-
       <volume name="TOP">
-        <materialref ref="AIR"/>
-        <solidref ref="WorldBox"/>
-        <physvol>
-          <volumeref ref="vXBox"/>
-          <positionref ref="XBoxPos"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vYBox"/>
-          <positionref ref="YBoxPos"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vZBox"/>
-          <positionref ref="ZBoxPos"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vOrigin"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vArrow"/>
-          <rotationref ref="XArrowRot"/>
-          <positionref ref="XArrowPos"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vArrow"/>
-          <rotationref ref="YArrowRot"/>
-          <positionref ref="YArrowPos"/>
-	</physvol>
-        <physvol>
-          <volumeref ref="vArrow"/>
-          <rotationref ref="ZArrowRot"/>
-          <positionref ref="ZArrowPos"/>
-	</physvol>
+         <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
+         <physvol>
+            <volumeref ref="vXBox"/>
+            <positionref ref="XBoxPos"/>
+	 </physvol>
+         <physvol>
+            <volumeref ref="vYBox"/>
+            <positionref ref="YBoxPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vZBox"/>
+            <positionref ref="ZBoxPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vOrigin"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <rotationref ref="XArrowRot"/>
+            <positionref ref="XArrowPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <rotationref ref="YArrowRot"/>
+            <positionref ref="YArrowPos"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="vArrow"/>
+            <rotationref ref="ZArrowRot"/>
+            <positionref ref="ZArrowPos"/>
+         </physvol>
       </volume>
-    </structure>
+   </structure>
 
-    <setup version="1.0" name="Default">
+   <setup version="1.0" name="Default">
       <world ref="TOP"/>
-    </setup>
+   </setup>
 
-  </gdml>
+</gdml>

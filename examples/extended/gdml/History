@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2008-01-16 16:12:11 gcosmo Exp $
+$Id: History,v 1.14 2008-02-12 13:55:27 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 February 2008 Z.Torzsok
+- Example files are cleaned up
+
+21 January 2008, Z.Torzsok
+- The GDML example is nicely polished now:
+
+     load_gdml <input_gdml_file> <output_gdml file>
+
+  The input file is mandatory, the output file is optional.
+  Displays usage instructions and complains in case of unnecessary arguments.
 
 January 16th, 2008  Z.Torszok - exgdml-V09-01-00
 - Added entity.gdml and materials.xml to demonstrate the ability of the parser
