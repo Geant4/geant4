@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" 
-  xsi:noNamespaceSchemaLocation="/afs/cern.ch/user/z/ztorzsok/scratch0/GDML2/GDMLSchema/gdml.xsd">
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
 
-    <define>
+   <define>
       <position name="pos" x="200" y="200" z="200"/>
-    </define>
+   </define>
 
-    <materials>
+   <materials>
       <material Z="1.0" name="AIR">
-        <D value="1e-25"/>
-        <atom value="1.00794"/>
+         <D value="1e-25"/>
+         <atom value="1.00794"/>
       </material>
       <material name="ALU" Z="13.0">
-        <D value="2.70"/>
-	<atom value="26.98"/>
+         <D value="2.70"/>
+         <atom value="26.98"/>
       </material>
-    </materials>
+   </materials>
 
-    <solids>
+   <solids>
       <box name="WorldBox" x="1000" y="1000" z="1000"/>
-    </solids>
+   </solids>
 
-    <structure>
-
+   <structure>
       <volume name="MAIN">
-        <materialref ref="AIR"/>
-        <solidref ref="WorldBox"/>
-        <physvol>
-           <file name="diamond.gdml" volname="TOP"/>
-           <positionref ref="pos"/>
-	</physvol>
-        <physvol>
-           <file name="axes.gdml" volname="TOP"/>
-	</physvol>
+         <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
+         <physvol>
+            <file name="axes.gdml"/>
+         </physvol>
+         <physvol>
+            <file name="scale.gdml" volname="VDiamond"/>
+            <position x="100" y="100" z="0"/>
+         </physvol>
       </volume>
-    </structure>
+   </structure>
 
-    <setup version="1.0" name="Default">
+   <setup version="1.0" name="Default">
       <world ref="MAIN"/>
-    </setup>
+   </setup>
 
-  </gdml>
+</gdml>

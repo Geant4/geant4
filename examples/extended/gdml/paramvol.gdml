@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xsi:noNamespaceSchemaLocation="/afs/cern.ch/user/z/ztorzsok/scratch0/GDML2/GDMLSchema/gdml.xsd">
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
 
    <define>
       <constant name="box_num" value="20"/>
       <variable name="i" value="0"/>   
+      <variable name="j" value="0"/>   
    </define>
 
    <materials>
@@ -32,11 +33,13 @@
          <materialref ref="AIR"/>
          <paramvol>
             <volumeref ref="vBox"/>
-               <loop var="i" from="0" to="box_num" step="1">
+               <loop for="i" from="0" to="box_num" step="1">
+               <loop for="j" from="0" to="box_num" step="1">
                   <parameters>
-                     <position x="1000*(i/box_num-0.5)" y="200*sin(2.0*pi*i/box_num)"/>
-		     <box x="32" y="32" z="32"/>
+                     <position x="1000*(i/box_num-0.5)" y="200*sin(2.0*pi*i/box_num)*cos(2.0*pi*j/box_num)" z="1000*(j/box_num-0.5)"/>
+		     <box_dimensions x="20" y="20" z="20"/>
                   </parameters>
+               </loop>
                </loop>
          </paramvol>
       </volume>

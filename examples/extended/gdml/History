@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2008-02-12 13:55:27 ztorzsok Exp $
+$Id: History,v 1.15 2008-02-12 14:30:23 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 12 February 2008 Z.Torzsok
 - Example files are cleaned up
+- Added example file featuring matrices
+- Removed diamond.gdml because it uses reflected solid what is marked obsolete
 
 21 January 2008, Z.Torzsok
 - The GDML example is nicely polished now:
