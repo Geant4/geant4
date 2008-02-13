@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.49 2008-02-13 10:01:40 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.50 2008-02-13 12:37:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -181,8 +181,8 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
   if(eloss < preKinEnergy) {
-    //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
-    //	   << " eth= " << eth<< " eloss0= " << eloss <<  G4endl;
+    //G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
+    //	   << " eth= " << eth<< " eloss0= " << eloss << " s= " << s << G4endl;
    
     if(preKinEnergy*massRatio > eth) {
       eloss += s*corr->IonHighOrderCorrections(part,mat,preKinEnergy);
@@ -190,9 +190,9 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     } else {
       
       // Correction for effective charge 
-      if(stopDataActive)
-	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
-      //G4cout << "Below th: eloss= " << eloss << G4endl;
+      //      if(stopDataActive)
+      eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
+      //G4cout << "Below th: eloss= " << eloss << "   " << stopDataActive << G4endl;
 
     }
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
@@ -207,7 +207,7 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
       eloss = preKinEnergy - nloss;
     }
     niel += nloss;
-    //G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    //   G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
