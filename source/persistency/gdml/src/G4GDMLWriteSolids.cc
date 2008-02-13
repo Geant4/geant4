@@ -41,15 +41,22 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    
    G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));
    G4VSolid* secondPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(1));
+   G4ThreeVector firstpos,firstrot;
+   G4ThreeVector pos,rot;
+   bool IsFirstDisplaced = false;
 
-   G4ThreeVector pos;
-   G4ThreeVector rot;
+   if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(firstPtr)) {
+   
+      firstpos = disp->GetObjectTranslation();
+      firstrot = getAngles(disp->GetObjectRotation());
+      firstPtr = disp->GetConstituentMovedSolid();
+      IsFirstDisplaced = true;
+   }
 
    if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(secondPtr)) {
    
       pos = disp->GetObjectTranslation();
       rot = getAngles(disp->GetObjectRotation());
-   
       secondPtr = disp->GetConstituentMovedSolid();
    }
 
@@ -62,12 +69,17 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    xercesc::DOMElement* secondElement = newElement("second");
    booleanElement->appendChild(firstElement);
    booleanElement->appendChild(secondElement);
-
    firstElement->setAttributeNode(newAttribute("ref",firstPtr->GetName()));
    secondElement->setAttributeNode(newAttribute("ref",secondPtr->GetName()));
 
    positionWrite(booleanElement,pos);
    rotationWrite(booleanElement,rot);
+
+   if (IsFirstDisplaced) {
+   
+      firstpositionWrite(booleanElement,firstpos);
+      firstrotationWrite(booleanElement,firstrot);
+   }
 }
 
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {

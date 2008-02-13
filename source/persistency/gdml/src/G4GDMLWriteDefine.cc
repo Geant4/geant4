@@ -84,6 +84,28 @@ void G4GDMLWriteDefine::rotationWrite(xercesc::DOMElement* element,const G4Three
    rotationElement->setAttributeNode(newAttribute("unit","deg"));
 }
 
+void G4GDMLWriteDefine::firstpositionWrite(xercesc::DOMElement* element,const G4ThreeVector& pos) {
+
+   xercesc::DOMElement* positionElement = newElement("firstposition");
+   element->appendChild(positionElement);
+
+   positionElement->setAttributeNode(newAttribute("x",pos.x()));
+   positionElement->setAttributeNode(newAttribute("y",pos.y()));
+   positionElement->setAttributeNode(newAttribute("z",pos.z()));
+   positionElement->setAttributeNode(newAttribute("unit","mm"));
+}
+
+void G4GDMLWriteDefine::firstrotationWrite(xercesc::DOMElement* element,const G4ThreeVector& rot) {
+
+   xercesc::DOMElement* rotationElement = newElement("firstrotation");
+   element->appendChild(rotationElement);
+
+   rotationElement->setAttributeNode(newAttribute("x",rot.x()));
+   rotationElement->setAttributeNode(newAttribute("y",rot.y()));
+   rotationElement->setAttributeNode(newAttribute("z",rot.z()));
+   rotationElement->setAttributeNode(newAttribute("unit","deg"));
+}
+
 void G4GDMLWriteDefine::scaleWrite(xercesc::DOMElement* element,const G4ThreeVector& scl) {
 
    xercesc::DOMElement* scaleElement = newElement("scale");
