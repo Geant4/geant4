@@ -34,9 +34,10 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanEleme
    G4String name;
    G4String first;
    G4String second;
-
    G4ThreeVector position;
    G4ThreeVector rotation;
+   G4ThreeVector firstposition;
+   G4ThreeVector firstrotation;
 
    const xercesc::DOMNamedNodeMap* const attributes = booleanElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -67,19 +68,22 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanEleme
       if (tag=="second") second = refRead(child); else
       if (tag=="position") position = vectorRead(child); else
       if (tag=="rotation") rotation = vectorRead(child); else
-      G4Exception("GDML: Unknown tag in boolean solid: "+tag);
+      if (tag=="firstposition") firstposition = vectorRead(child); else
+      if (tag=="firstrotation") firstrotation = vectorRead(child); else
+      G4Exception("GDML Reader: ERROR! Unknown tag in boolean solid: "+tag);
    }
-
-   G4RotationMatrix rot;
-
-   rot.rotateX(rotation.x());
-   rot.rotateY(rotation.y());
-   rot.rotateZ(rotation.z());
-
-   G4Transform3D transform(rot,position);
 
    G4VSolid* firstSolid = getSolid(GenerateName(first));
    G4VSolid* secondSolid = getSolid(GenerateName(second));
+
+   G4Transform3D transform(getRotationMatrix(rotation),position);
+
+   if ((firstrotation.x() != 0.0 || firstrotation.y() != 0.0 || firstrotation.z() != 0.0)||
+       (firstposition.x() != 0.0 || firstposition.y() != 0.0 || firstposition.z() != 0.0)) {
+   
+      G4Transform3D firsttransform(getRotationMatrix(firstrotation),firstposition);
+      firstSolid = new G4DisplacedSolid(GenerateName("displaced_"+first),firstSolid,firsttransform);
+   }
 
    if (op==UNION) new G4UnionSolid(name,firstSolid,secondSolid,transform); else
    if (op==SUBTRACTION) new G4SubtractionSolid(name,firstSolid,secondSolid,transform); else
@@ -577,15 +581,9 @@ void G4GDMLReadSolids::reflectedSolidRead(const xercesc::DOMElement* const refle
    G4double lunit = 1.0;
    G4double aunit = 1.0;
    G4String solid;
-   G4double sx = 1.0;
-   G4double sy = 1.0;
-   G4double sz = 1.0;
-   G4double rx = 0.0;
-   G4double ry = 0.0;
-   G4double rz = 0.0;
-   G4double dx = 0.0;
-   G4double dy = 0.0;
-   G4double dz = 0.0;
+   G4ThreeVector scale(1.0,1.0,1.0);
+   G4ThreeVector rotation;
+   G4ThreeVector position;
 
    const xercesc::DOMNamedNodeMap* const attributes = reflectedSolidElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -605,36 +603,22 @@ void G4GDMLReadSolids::reflectedSolidRead(const xercesc::DOMElement* const refle
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
       if (attName=="solid") solid = GenerateName(attValue); else
-      if (attName=="sx") sx = eval.Evaluate(attValue); else
-      if (attName=="sy") sy = eval.Evaluate(attValue); else
-      if (attName=="sz") sz = eval.Evaluate(attValue); else
-      if (attName=="rx") rx = eval.Evaluate(attValue); else
-      if (attName=="ry") ry = eval.Evaluate(attValue); else
-      if (attName=="rz") rz = eval.Evaluate(attValue); else
-      if (attName=="dx") dx = eval.Evaluate(attValue); else
-      if (attName=="dy") dy = eval.Evaluate(attValue); else
-      if (attName=="dz") dz = eval.Evaluate(attValue);
+      if (attName=="sx") scale.setX(eval.Evaluate(attValue)); else
+      if (attName=="sy") scale.setY(eval.Evaluate(attValue)); else
+      if (attName=="sz") scale.setZ(eval.Evaluate(attValue)); else
+      if (attName=="rx") rotation.setX(eval.Evaluate(attValue)); else
+      if (attName=="ry") rotation.setY(eval.Evaluate(attValue)); else
+      if (attName=="rz") rotation.setZ(eval.Evaluate(attValue)); else
+      if (attName=="dx") position.setX(eval.Evaluate(attValue)); else
+      if (attName=="dy") position.setY(eval.Evaluate(attValue)); else
+      if (attName=="dz") position.setZ(eval.Evaluate(attValue));
    }
 
-   rx *= aunit;
-   ry *= aunit;
-   rz *= aunit;
-   dx *= lunit;
-   dy *= lunit;
-   dz *= lunit;
+   rotation *= aunit;
+   position *= lunit;
 
-   G4RotationMatrix rot;
-   
-   rot.rotateX(rx);
-   rot.rotateY(ry);
-   rot.rotateZ(rz);
-
-   G4ThreeVector trans(dx,dy,dz);
-
-   G4Scale3D scale(sx,sy,sz);
-
-   G4Transform3D transform(rot,trans);
-   transform = transform*scale;
+   G4Transform3D transform(getRotationMatrix(rotation),position);
+   transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
           
    new G4ReflectedSolid(name,getSolid(solid),transform);
 }

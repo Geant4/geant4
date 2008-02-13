@@ -343,3 +343,13 @@ G4double G4GDMLReadDefine::getQuantity(const G4String& ref) {
    return quantityMap[ref];
 }
 
+G4RotationMatrix G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles) {
+
+   G4RotationMatrix rot;
+
+   rot.rotateX(angles.x());
+   rot.rotateY(angles.y());
+   rot.rotateZ(angles.z());
+
+   return rot;
+}

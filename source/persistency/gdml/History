@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2008-02-11 14:31:58 ztorzsok Exp $
+$Id: History,v 1.26 2008-02-13 12:20:40 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 February 2008 Z.Torzsok
+- The following function is added to G4GDMLReadDefine: getRotationMatrix
+  this function converts rotation angles into a rotation matrix
+  This wad used in physvol, reflectedSolid and boolean solid.
+  Now this conversion is in one place
+- firstrotation and firstposition is added to boolean solid in G4GDMLReadSolids
+  Now the first solid can be transformed too
 
 11 February 2008 Z.Torzsok
 - Matrices are added (succesfully tested)

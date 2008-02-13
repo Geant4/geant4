@@ -64,6 +64,7 @@ protected:
    G4ThreeVector* getRotation(const G4String&);
    G4ThreeVector* getScale(const G4String&);
    G4double getQuantity(const G4String&);
+   G4RotationMatrix getRotationMatrix(const G4ThreeVector&);
 };
 
 #endif
