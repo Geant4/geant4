@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.24 2008-02-12 09:42:35 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.25 2008-02-13 10:02:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,12 +55,12 @@
 
 #include "G4EmCorrections.hh"
 #include "Randomize.hh"
-#include "G4NistManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4VEmModel.hh"
 #include "G4Proton.hh"
 #include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -123,6 +123,26 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4EmCorrections::IonBarkasCorrection(const G4ParticleDefinition* p,
+					      const G4Material* mat,
+					      G4double e)
+{
+// . Z^3 Barkas effect in the stopping power of matter for charged particles
+//   J.C Ashley and R.H.Ritchie
+//   Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
+//   and ICRU49 report
+//   valid for kineticEnergy < 0.5 MeV
+
+  SetupKinematics(p, mat, e);
+  G4double res = 0.0;
+  if(tau > 0.0) 
+    res = 2.0*BarkasCorrection(p, mat, e)*
+      material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 						  const G4Material* mat,
 						  G4double e)
@@ -134,6 +154,23 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 //   valid for kineticEnergy < 0.5 MeV
 //   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
 
+  G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
+  if(Z >= 100) Z = 99;
+  G4int i;
+
+  // fill vector
+  if(thcorr[Z].size() == 0) {
+    thcorr[Z].resize(ncouples);
+    G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    const G4Proton* prot = G4Proton::Proton();
+    for(i=0; i<ncouples; i++) {
+      (thcorr[Z])[i] = ethscaled*IonBarkasCorrection(p,currmat[i],ethscaled);
+    } 
+    for(i=0; i<ncouples; i++) {
+      (thcorr[Z])[i] -= ethscaled*IonBarkasCorrection(prot,currmat[i],eth);
+    }
+  }
+
   SetupKinematics(p, mat, e);
   if(tau <= 0.0) return 0.0;
 
@@ -142,25 +179,24 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   G4double Mott   = MottCorrection (p, mat, e);
   G4double FSize  = FiniteSizeCorrection (p, mat, e);
 
-  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
+  G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + FSize + Mott;
 
   if(verbose > 1)
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
 	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
 	   << " Sum= " << sum << G4endl; 
 
-  G4double escaled = eth*mass/proton_mass_c2;
-
-  Barkas  = BarkasCorrection (p, mat, escaled);
-  Bloch   = BlochCorrection (p, mat, escaled);
-  //Mott    = MottCorrection (p, mat, escaled);
-  //FSize   = FiniteSizeCorrection (p, mat, escaled);
-
-  //  G4double sum1 = (2.0*(Barkas + Bloch) + FSize + Mott);
-  G4double sum1 = 2.0*(Barkas + Bloch);
-  sum -= sum1*escaled/e;
-
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
+
+  // correction to correction
+  for(i=0; i<ncouples; i++) {
+    if(currmat[i] == material) {
+      sum -= (thcorr[Z])[i]/e; 
+      break;
+    }
+  }
+  if(verbose > 1)
+    G4cout << " Sum= " << sum << G4endl; 
   return sum;
 }
 
@@ -523,45 +559,6 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 {
   SetupKinematics(p, mat, e);
   G4double mterm = pi*fine_structure_const*beta*charge;
-  /*
-  G4double mterm = 0.0; 
-  if(beta > 0.0) {
-
-    // Estimation of mean square root of the ionisation potential 
-    G4double Zeff = 0.0;
-    G4double norm = 0.0;
-
-    for (G4int i = 0; i<numberOfElements; i++) {
-      G4double Z = (*theElementVector)[i]->GetZ();
-      Zeff += Z*atomDensity[i];
-      norm += atomDensity[i];
-    }
-    Zeff *= (2.0/norm);
-    G4double ze1 = std::log(Zeff);
-    G4double eexc= material->GetIonisation()->GetMeanExcitationEnergy()*ze1*ze1/Zeff;
-
-    G4double invbeta = 1.0/beta;
-    G4double invbeta2= invbeta*invbeta;
-    G4double za  = charge*fine_structure_const;
-    G4double za2 = za*za;
-    G4double za3 = za2*za;
-    G4double x   = za*invbeta;
-    G4double cosx;
-    if(x < COSEB[13]) {
-      G4int i = Index(x,COSEB,14);
-      cosx    = Value(x,COSEB[i], COSEB[i+1],COSXI[i],COSXI[i+1]);
-    } else {
-      cosx = COSXI[13]*COSEB[13]/x;
-    }
-
-    mterm =
-      za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/(2.0*electron_mass_c2*bg2))));
-      + za2*(3.246 - 0.451*beta2)
-      + za3*(1.522*beta + 0.987*invbeta)
-      + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
-      + za3*za2*(1.254*beta + 0.222*invbeta - 1.17*invbeta*invbeta2);
-  }
-*/  
   return mterm;
 }
 
@@ -615,7 +612,7 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
     
     //ions
   } else {
-    G4double xp = 0.8426*GeV/std::pow(mass/proton_mass_c2,-0.33333333);
+    G4double xp = 0.8426*GeV/A13;
     G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
     if(x <= numlim) term = -x*(1.0 - 0.5*x);
     else            term = -std::log(1.0 + x);
@@ -819,6 +816,20 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
     }
   }
   return v;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmCorrections::InitialiseForNewRun()
+{
+  G4ProductionCutsTable* tb = G4ProductionCutsTable::GetProductionCutsTable();
+  ncouples = tb->GetTableSize();
+  currmat.resize(ncouples);
+  G4int i;
+  for(i=0; i<100; i++) {thcorr[i].clear();}
+  for(i=0; i<ncouples; i++) {
+    currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

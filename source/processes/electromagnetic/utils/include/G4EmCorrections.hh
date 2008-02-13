@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.11 2008-02-12 09:42:35 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.12 2008-02-13 10:02:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,11 +57,11 @@
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4NistManager.hh"
 
 class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
-class G4NistManager;
 
 class G4EmCorrections
 {
@@ -79,6 +79,10 @@ public:
   G4double IonHighOrderCorrections(const G4ParticleDefinition* p,
 				   const G4Material* material,
 				   G4double kineticEnergy);
+
+  G4double IonBarkasCorrection(const G4ParticleDefinition* p,
+			       const G4Material* material,
+			       G4double kineticEnergy);
 
   G4double Bethe(const G4ParticleDefinition* p,
                  const G4Material* material,
@@ -139,6 +143,8 @@ public:
   G4ionEffectiveCharge* GetIonEffectiveCharge(G4VEmModel* m = 0);
 
   G4int GetNumberOfStoppingVectors();
+
+  void InitialiseForNewRun();
 
 private:
 
@@ -210,6 +216,10 @@ private:
   G4double     TAU[93];
   G4double     Z23[100];
 
+  std::vector<const G4Material*> currmat;
+  G4DataVector thcorr[100];
+  G4int        ncouples;
+
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* curParticle;
   const G4Material*           material;
@@ -232,6 +242,7 @@ private:
   G4double  tmax0;
   G4double  charge;
   G4double  q2;
+  G4double  A13;
 
   G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge;
@@ -294,14 +305,14 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     G4double ratio = electron_mass_c2/mass;
     tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
     tmax0 = tmax;
+    A13   = nist->GetZ13(mass/proton_mass_c2); 
     charge  = p->GetPDGCharge()/eplus;
     if(charge < 1.5)  q2 = charge*charge;
     else {
       q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
       charge = std::sqrt(q2);
     }
-    if(mass > 120.*MeV)
-      tmax = std::min(tmax,51200.*electron_mass_c2*std::pow(proton_mass_c2/mass,0.666667));
+    if(mass > 120.*MeV) tmax = std::min(tmax,51200.*electron_mass_c2/(A13*A13));
   }
   if(mat != material) {
     material = mat;
