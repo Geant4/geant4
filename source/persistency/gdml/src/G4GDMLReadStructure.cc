@@ -199,7 +199,8 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) 
       if (tag=="scale") scale = vectorRead(child); else
       if (tag=="positionref") position = *getPosition(GenerateName(refRead(child))); else
       if (tag=="rotationref") rotation = *getRotation(GenerateName(refRead(child))); else
-      if (tag=="scaleref") scale = *getScale(GenerateName(refRead(child)));
+      if (tag=="scaleref") scale = *getScale(GenerateName(refRead(child))); else
+      G4Exception("GDML Reader: ERROR! Unknown tag in physvol: "+tag);
    }
 
    G4RotationMatrix Rot;
@@ -352,11 +353,13 @@ void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const el
   
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
+      if (tag=="auxiliary" || tag=="materialref" || tag=="solidref") { } else // These are already processed in volmeRead
       if (tag=="paramvol") paramvolRead(child,pMotherLogical); else
       if (tag=="physvol") physvolRead(child); else
       if (tag=="replicavol") replicavolRead(child); else
       if (tag=="divisionvol") divisionvolRead(child); else
-      if (tag=="loop") loopRead(child,&G4GDMLRead::volume_contentRead);
+      if (tag=="loop") loopRead(child,&G4GDMLRead::volume_contentRead); else
+      G4Exception("GDML Reader: ERROR! Unknown tag in volume: "+tag);
    }
 }
 

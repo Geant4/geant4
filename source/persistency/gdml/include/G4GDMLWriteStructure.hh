@@ -41,9 +41,9 @@
 #include "G4GDMLWriteSetup.hh"
 
 class G4GDMLWriteStructure : public G4GDMLWriteSetup {
+private:
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void volumeWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
-private:
    void structureWrite(xercesc::DOMElement*);
 };
 

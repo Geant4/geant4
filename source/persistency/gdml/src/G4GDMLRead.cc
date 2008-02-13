@@ -146,7 +146,8 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
       if (tag=="materials") materialsRead(child); else
       if (tag=="solids") solidsRead(child); else
       if (tag=="setup") setupRead(child); else
-      if (tag=="structure") structureRead(child);
+      if (tag=="structure") structureRead(child); else
+      G4Exception("GDML Reader: ERROR! Unknown tag in gdml: "+tag);
    }
 
    delete parser;
