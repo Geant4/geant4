@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.48 2008-02-13 10:00:00 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.49 2008-02-13 10:01:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,8 +65,6 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
-#include "G4Alpha.hh"
-#include "G4He3.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
