@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.9 2007-09-27 00:10:51 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.10 2008-02-13 07:47:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -375,6 +375,7 @@ void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
   fGhostStep->SetTrack(step.GetTrack());
   fGhostStep->SetStepLength(step.GetStepLength());
   fGhostStep->SetTotalEnergyDeposit(step.GetTotalEnergyDeposit());
+  fGhostStep->SetNonIonizingEnergyDeposit(step.GetNonIonizingEnergyDeposit());
   fGhostStep->SetControlFlag(step.GetControlFlag());
 
   *fGhostPreStepPoint = *(step.GetPreStepPoint());
