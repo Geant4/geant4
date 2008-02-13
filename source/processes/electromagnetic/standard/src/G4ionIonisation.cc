@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.47 2008-02-12 09:42:13 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.48 2008-02-13 10:00:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,8 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
+#include "G4Alpha.hh"
+#include "G4He3.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
@@ -88,7 +90,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   //  SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
-  SetVerboseLevel(1);
+  //  SetVerboseLevel(1);
   corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
@@ -103,6 +105,7 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 		      const G4ParticleDefinition* part,
 		      const G4ParticleDefinition* bpart)
 {
+  if(part == G4GenericIon::GenericIon()) corr->InitialiseForNewRun();
   if(isInitialised) return;
 
   theParticle = part;
@@ -182,11 +185,13 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   if(eloss < preKinEnergy) {
     //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
     //	   << " eth= " << eth<< " eloss0= " << eloss <<  G4endl;
+   
     if(preKinEnergy*massRatio > eth) {
       eloss += s*corr->IonHighOrderCorrections(part,mat,preKinEnergy);
       //G4cout << "Above th: eloss= " << eloss << G4endl;
     } else {
-
+      
+      // Correction for effective charge 
       if(stopDataActive)
 	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
       //G4cout << "Below th: eloss= " << eloss << G4endl;

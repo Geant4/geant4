@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.13 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.14 2008-02-13 10:00:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -222,7 +222,8 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
 
   //High order correction only for hadrons
-  if(!isIon) dedx += corr->HighOrderCorrections(p,material,kineticEnergy);
+  if(isIon) dedx += corr->IonBarkasCorrection(p,material,kineticEnergy);
+  else      dedx += corr->HighOrderCorrections(p,material,kineticEnergy);
 
   return dedx;
 }
