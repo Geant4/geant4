@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.12 2008-02-13 10:02:26 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.13 2008-02-13 12:39:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -170,6 +170,10 @@ private:
 
   G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2,
                                             G4double m1, G4double m2);
+
+  G4double ComputeIonCorrections(const G4ParticleDefinition* p,
+				 const G4Material* material,
+				 G4double kineticEnergy);
 
   // hide assignment operator
   G4EmCorrections & operator=(const G4EmCorrections &right);
