@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.14 2007-12-11 15:28:50 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.15 2008-02-14 15:34:14 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,6 +150,21 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
 {
   if (&s == this) { return; }
 
+  dirTolerance = 1.0E-14;
+  
+  geometryType = "G4TessellatedSolid";
+  facets.clear();
+  solidClosed  = false;
+  
+  xMinExtent =  kInfinity;
+  xMaxExtent = -kInfinity;
+  yMinExtent =  kInfinity;
+  yMaxExtent = -kInfinity;
+  zMinExtent =  kInfinity;
+  zMaxExtent = -kInfinity;
+
+  SetRandomVectorSet();
+
   CopyObjects (s);
 }
 
@@ -184,12 +199,13 @@ void G4TessellatedSolid::DeleteObjects ()
 void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
 {
   size_t n = s.GetNumberOfFacets();
-  for (size_t i=0; i<n; n++)
+  for (size_t i=0; i<n; i++)
   {
     G4VFacet *facetClone = (s.GetFacet(i))->GetClone();
     AddFacet(facetClone);
   }
-  solidClosed = s.GetSolidClosed();
+  
+  if ( s.GetSolidClosed() ) SetSolidClosed(true);
 
 //  cubicVolume = s.GetCubicVolume();  
 }
