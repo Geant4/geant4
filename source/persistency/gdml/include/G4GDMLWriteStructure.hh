@@ -35,6 +35,7 @@
 
 #include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
+#include "G4PVReplica.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ReflectedSolid.hh"
 
@@ -43,6 +44,7 @@
 class G4GDMLWriteStructure : public G4GDMLWriteSetup {
 private:
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
+   void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void volumeWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
    void structureWrite(xercesc::DOMElement*);
 };

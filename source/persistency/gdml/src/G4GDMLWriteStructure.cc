@@ -30,10 +30,10 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPhysicalVolume* const physvol) {
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol) {
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
-   element->appendChild(physvolElement);
+   volumeElement->appendChild(physvolElement);
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    physvolElement->appendChild(volumerefElement);
@@ -73,10 +73,54 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* element,const G4VPh
    if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
 }
 
-void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element,const G4LogicalVolume* const volumePtr) {
+void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
+
+   EAxis axis = kUndefined;
+   G4int nReplicas = 0;
+   G4double width = 0.0;
+   G4double offset = 0.0;
+   G4bool consuming = false;
+
+   replicavol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+
+   G4ThreeVector direction;
+   if (axis==kXAxis) direction.set(1.0,0.0,0.0); else
+   if (axis==kYAxis) direction.set(0.0,1.0,0.0); else
+   if (axis==kZAxis) direction.set(0.0,0.0,1.0); else
+   G4Exception("GDML Writer: ERROR! No valid axis has been defined for replica!");
+
+   xercesc::DOMElement* replicavolElement = newElement("replicavol");
+   volumeElement->appendChild(replicavolElement);
+   replicavolElement->setAttributeNode(newAttribute("numb",nReplicas));
+
+   xercesc::DOMElement* volumerefElement = newElement("volumeref");
+   replicavolElement->appendChild(volumerefElement);
+   volumerefElement->setAttributeNode(newAttribute("ref",replicavol->GetLogicalVolume()->GetName()));
+
+   xercesc::DOMElement* replicate_along_axisElement = newElement("replicate_along_axis");
+   replicavolElement->appendChild(replicate_along_axisElement);
+
+   xercesc::DOMElement* directionElement = newElement("direction");
+   replicate_along_axisElement->appendChild(directionElement);
+   directionElement->setAttributeNode(newAttribute("x",direction.x()));
+   directionElement->setAttributeNode(newAttribute("y",direction.y()));
+   directionElement->setAttributeNode(newAttribute("z",direction.z()));
+
+   xercesc::DOMElement* widthElement = newElement("width");
+   replicate_along_axisElement->appendChild(widthElement);
+   widthElement->setAttributeNode(newAttribute("value",width));
+   widthElement->setAttributeNode(newAttribute("unit","mm"));
+
+   xercesc::DOMElement* offsetElement = newElement("offset");
+   replicate_along_axisElement->appendChild(offsetElement);
+   offsetElement->setAttributeNode(newAttribute("value",offset));
+   offsetElement->setAttributeNode(newAttribute("unit","mm"));
+}
+
+void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,const G4LogicalVolume* const volumePtr) {
 
    xercesc::DOMElement* volumeElement = newElement("volume");
-   element->appendChild(volumeElement);
+   structureElement->appendChild(volumeElement);
 
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
@@ -97,14 +141,19 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* element,const G4Logi
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
 
-   for (G4int j=0;j<daughterCount;j++)
-      physvolWrite(volumeElement,volumePtr->GetDaughter(j));
+   for (G4int i=0;i<daughterCount;i++) {
+   
+      const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
+   
+      if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else
+      physvolWrite(volumeElement,physvol);
+   }
 }
 
-void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* element) {
+void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
 
    xercesc::DOMElement* structureElement = newElement("structure");
-   element->appendChild(structureElement);
+   gdmlElement->appendChild(structureElement);
 
    const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();
    const size_t volumeCount = volumeList->size();

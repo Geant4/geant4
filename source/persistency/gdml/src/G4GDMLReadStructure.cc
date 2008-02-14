@@ -82,9 +82,8 @@ EAxis G4GDMLReadStructure::directionRead(const xercesc::DOMElement* const elemen
 
    if (x == 1.0 && y == 0.0 && z == 0.0) return kXAxis; else
    if (x == 0.0 && y == 1.0 && z == 0.0) return kYAxis; else
-   if (x == 0.0 && y == 0.0 && z == 1.0) return kZAxis;
-
-   G4Exception("GDML: Only directions along axes are supported!");
+   if (x == 0.0 && y == 0.0 && z == 1.0) return kZAxis; else
+   G4Exception("GDML Reader: Only directions along axes are supported in replica!");
 
    return kUndefined;
 }
