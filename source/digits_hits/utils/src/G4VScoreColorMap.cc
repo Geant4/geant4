@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.2 2008-02-07 13:34:39 akimura Exp $
+// $Id: G4VScoreColorMap.cc,v 1.3 2008-02-14 10:45:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,7 +60,7 @@ void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
 
   G4double min = this->GetMin();
   G4double max = this->GetMax();
-  G4double smin = -0.9*.98, smax = smin + 0.05*(_nPoint)*0.83, step=0.001;
+  G4double smin = -0.89, smax = smin + 0.05*(_nPoint)*0.83, step=0.001;
   G4double c[4];
   for(G4double y = smin; y < smax; y+=step) {
     G4double ra = (y-smin)/(smax-smin), rb = 1.-ra;
@@ -84,10 +84,10 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
     G4double a = n/(_nPoint-1.), b = 1.-a;
     G4double v = (a*max + b*min)/(a+b);
     // background color
-    for(int l = 0; l < 20; l++) {
+    for(int l = 0; l < 21; l++) {
       G4Polyline line;
-      line.push_back(G4Point3D(-0.9, -0.9+0.05*n+0.002*l, 0.));
-      line.push_back(G4Point3D(-0.8, -0.9+0.05*n+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.908, -0.905+0.05*n+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.705, -0.905+0.05*n+0.002*l, 0.));
       G4VisAttributes attblack(black);
       line.SetVisAttributes(&attblack);
       fVisManager->Draw2D(line);
