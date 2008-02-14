@@ -1,4 +1,4 @@
-$Id: History,v 1.366 2008-02-13 10:51:49 vnivanch Exp $
+$Id: History,v 1.367 2008-02-14 14:49:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 February 08: V.Ivant (emstand-V09-01-04)
+14 February 08: V.Ivant (emstand-V09-01-04)
 - G4ionIonisation, G4ionGasIonisation - use new method to compute 
   corrections: IonHighOrderCorrections
 - G4BetheBlochModel - when computing dedx for ions use new 
   method IonBarkasCorrection
 - G4IonFluctuations - added protection to the computation of
-  the correction factor to dispertion which provide smooth 
+  the correction factor to dispersion which provide smooth 
   transition to small velocities of an ion
 
 04 February 08: V.Ivant (emstand-V09-01-03)
@@ -32,17 +32,17 @@ committal in the CVS repository !
 
 04 February 08: V.Ivant (emstand-V09-01-02)
 G4IonFluctuations - added protection in computation of dispersion 
-  on allowing have a corrected dispertion below Bohr value
+  on allowing have a corrected dispersion below Bohr value
 
 16 January 08: V.Ivant (emstand-V09-01-01)
-G4PAIModel, G4PAIPhotonModel - added an extra protection garanteed
- correct usage of the last bin of the table of nergy transfers 
+G4PAIModel, G4PAIPhotonModel - added an extra protection guaranteed
+ correct usage of the last bin of the table of energy transfers 
 
 14 January 08: V.Ivant (emstand-V09-01-00)
 - G4hIonisation, G4ionIonisation, G4ionGasIonisation - fixed
-   computation of non-ionizing energy loss: at the last ioniztion step
+   computation of non-ionizing energy loss: at the last ionization step
    and at energies above 2 MeV for protons;
-- G4eCoulombScatteringModel - use more safe numerical espression
+- G4eCoulombScatteringModel - use more safe numerical expression
 
 07 December 07: V.Ivant (emstand-V09-00-22)
 G4UrbanMscModel90 is created on base of G4UrbanMscModel of release 9.0
@@ -92,7 +92,7 @@ G4eCoulombScatteringModel - fixed computation of transport cross section
          - use different correction to Highland formula for different
            particle type (electron, muons, others)
          - tuning ComputeGeomPathLength in order to get better low 
-           energy behaviour for heavy particles (mu, hadrons)
+           energy behavior for heavy particles (mu, hadrons)
          - small modification of theta0 in ComputeTheta0 (based on data)
          - some old inconsistency/bug has been cured in SampleCosineTheta
            now the variable prob is always in [0,1]
@@ -125,7 +125,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 15 August 07: V.Ivant (emstand-V09-00-07)
 - G4eCoulombScatteringModel and G4CoulombScatteringModel - fixed bug in 
   computation of screening parameters in SampleSecondary method; 
-  reorganised initialisation of kinematics and screening parameters;
+  reorganized initialisation of kinematics and screening parameters;
   used Z(Z+1) factor to take into account scattering off e-
 
 13 August 07: V.Ivant (emstand-V09-00-06)
@@ -159,7 +159,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4eCoulombScatteringModel - updated screen radius model
 - G4ionIonisation - remove obsolete method DefineMassCharge
 - G4ionGasIonisation - new ion ionisation process with descrete ion charge and
-                       no equilibrium btween ion and media 
+                       no equilibrium between ion and media 
 - G4BraggModel, G4BraggIonModel - more safe computation of scattering angle
 
 16 July 07: V.Ivant (emstand-V09-00-01)
@@ -200,7 +200,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4VEmModel - changed interface of SampleSecondary method, it become 
   void, extra parameter std::vector<G4DynamicParticle*>*, all
   classes using or inhereting this interface are modified.
-  About 5% speadup of EM shower simulation
+  About 5% speedup of EM shower simulation
 
 21 May 07:  V.Ivanchenko (emstand-V08-03-05)
 - G4ionIonisation - added InitialiseMassCharge method; remove
@@ -213,10 +213,10 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - remove obsolete G4VeEnergyLoss and G4VhEnergyLoss 
 
 18 May 07:  V.Ivanchenko (emstand-V08-03-02)
-- G4MultipleScattering, G4hMultipleScattering - reorganise methods 
+- G4MultipleScattering, G4hMultipleScattering - reorganized methods 
                                                 for setting msc
                                                 parameters
-- G4UrbanMscModel - reorganise initialisation; use G4MscStepLimitType
+- G4UrbanMscModel - reorganized initialisation; use G4MscStepLimitType
                     enumerator to choose step limit algorithm
                                                 
 
