@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 12-Feb-2008
+# Last update: 14-Feb-2008
 #
 # This python script, which has no input parameters, makes 3
 # tests for checking the reproducibility of the sequence of
@@ -59,6 +59,24 @@
 #     from the similar script  reproducibility.py , which
 #     considers a single case instead of looping over all
 #     possible cases.
+#
+# NB) When using this script to test reproducibility, it is
+#     convenient to activate biasing, in order to test more
+#     uniformily the high-energy models and the low-energy ones.
+#     To do so, you have to do the following:
+#       -  uncomment the following line in the main program
+#          (mainStatAccepTest.cc):
+#          //runManager->SetUserAction(new StatAccepTestStackingAction);
+#       -  check whether the default biasing parameters
+#          (see "***LOOKHERE***" in src/StatAccepTestStackingAction.cc)
+#          are ok for you.
+#          We suggest to change only one parameter:
+#            neutronKillingEnergyThreshold( 0.0 )
+#          (to avoid to kill neutrons below 1 MeV).
+#     Using biasing, with the typical 100 GeV beam energy, it is
+#     possible to increase by an order of magnitude the number of
+#     events. A reasonable choice is:  NumEvents1 = "1000"
+#                                      NumEvents2 = "100"
 #
 #----------------------------------------------------------------
 
