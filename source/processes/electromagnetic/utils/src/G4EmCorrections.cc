@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.26 2008-02-13 12:39:26 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.27 2008-02-14 14:50:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -189,7 +189,8 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 //   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
 
   G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
-  if(Z >= 100) Z = 99;
+  if(Z >= 100)   Z = 99;
+  else if(Z < 1) Z = 1;
   G4int i;
 
   // fill vector
@@ -205,7 +206,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 
   // correction to correction
   for(i=0; i<ncouples; i++) {
-    if(currmat[i] == material) {
+    if(currmat[i] == mat) {
       sum -= (thcorr[Z])[i]/e; 
       break;
     }

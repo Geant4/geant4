@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.8 2006-08-15 16:21:39 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.hh,v 1.9 2008-02-14 14:50:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 
 class G4Material;
 class G4ParticleDefinition;
+class G4NistManager;
 
 class G4ionEffectiveCharge 
 {
@@ -83,7 +84,15 @@ private:
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right);
   G4ionEffectiveCharge(const G4ionEffectiveCharge&);
 
+  G4NistManager*              nist;
+
+  const G4ParticleDefinition* lastPart;
+  const G4Material*           lastMat;
+  G4double                    lastKinEnergy;
+
   G4double                    chargeCorrection;
+  G4double                    effCharge;
+
   G4double                    energyHighLimit;
   G4double                    energyLowLimit;
   G4double                    energyBohr;
