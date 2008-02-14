@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.35 2008-02-14 15:04:38 vnivanch Exp $
+// $Id: RunAction.cc,v 1.36 2008-02-14 15:06:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,10 +189,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     }
   G4cout << "\n------------------------------------------------------------\n";
 
-  G4cout << "### Beam particle " 
+  G4cout << " Beam particle " 
 	 << Primary->GetParticleGun()->
     GetParticleDefinition()->GetParticleName()
-	 << "  E= " << G4BestUnit(beamEnergy,"Energy") << G4endl;
+	 << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
   
   //Energy flow
   //
