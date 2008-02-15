@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2008-02-04 17:09:16 grichine Exp $
+// $Id: HistoManager.cc,v 1.4 2008-02-15 15:02:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -134,8 +134,9 @@ void HistoManager::bookHisto()
   histo->add1D("h19","log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
   histo->add1D("h20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("h21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
-  histo->add1D("h22","Energy deposition (GeV) in the target",
-	       nBinsE,0.0,edepMax,GeV);
+  histo->add1D("h22","Energy deposition (GeV) in the target",nBinsE,0.0,edepMax,GeV);
+  histo->add1D("h23","Log10 Energy (MeV) of optical photons",nBinsE,-4.,6.,1.0);
+	       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -368,7 +369,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       histo->fill(13,e,1.0);    
     } else if ( pd == G4OpticalPhoton::OpticalPhoton()) {
       n_optical++;
-      histo->fill(14,e,1.0);    
+      histo->fill(22,e,1.0);    
     }
   }
 }
