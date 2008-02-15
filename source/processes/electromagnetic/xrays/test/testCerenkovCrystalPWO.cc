@@ -56,17 +56,6 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
-#include "G4VXTRenergyLoss.hh"
-#include "G4RegularXTRadiator.hh"
-#include "G4TransparentRegXTRadiator.hh"
-#include "G4GammaXTRadiator.hh"
-#include "G4StrawTubeXTRadiator.hh"
-
-#include "G4XTRGammaRadModel.hh"
-#include "G4XTRRegularRadModel.hh"
-#include "G4XTRTransparentRegRadModel.hh"
-
-#include "G4SynchrotronRadiation.hh"
 #include "G4Cerenkov.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -155,6 +144,9 @@ G4double TransmissionBC(G4double photonEnergy, G4double gamma)
 
 G4double TransmissionABC(G4double photonEnergy, G4double gamma)
 {
+
+
+
   G4double beta, cosA, sinA, cosB, sinB, nA, nB, thickA, cosC, sinC, tmp, rAB, rBC, result;
 
   if( gamma < 1.) gamma = 1.;
@@ -212,6 +204,9 @@ int main()
 {
   G4int i, iMax = 20;
   G4double energy, refA, refB, gamma, numberBC, numberABC, beta, protonMass, protonMom;
+
+  std::ofstream writef("PbWO4.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
 
   /*
   for(i=0;i<iMax;i++)
@@ -314,6 +309,94 @@ int main()
   G4cout << "meanAR = " << meanAR << "; meanBR = "<<meanBR << "; meanCR = "<<meanCR << G4endl;
 
   G4cout << "meanACFR = " << meanACFR << "; meanBFR = "<<meanBFR << G4endl;
+
+
+  G4double lambda[14] = { 375., 400., 425., 450., 475., 
+                          500., 525., 550., 575., 600., 
+                          625., 650., 675., 700.               };
+
+  G4double omega, photonEnergy[14], meanRefInd[14], ratio, ratio2, cofInd;
+
+  iMax = 14;
+
+  for( i = 0; i < iMax; i++ ) lambda[i] *= nanometer;
+
+  for( i = 0; i < iMax; i++ )
+  {
+    omega = 2*pi*hbarc/lambda[i];
+    photonEnergy[i] = omega;
+    G4cout<<lambda[i]/nanometer<<" nm;      "<<omega/eV<<" eV"<<G4endl;
+  }
+
+
+  G4double ordinaryRefInd[14] =  { 2.452, 2.393, 2.353, 2.323, 2.301,
+                                   2.284, 2.270, 2.259, 2.250, 2.242, 
+                                   2.236, 2.230, 2.226, 2.221              };
+
+
+  G4double extraordinaryRefInd[14] =  { 2.297, 2.260, 2.236, 2.218, 2.205, 
+                                        2.194, 2.186, 2.178, 2.173, 2.169,
+                                        2.164, 2.161, 2.158, 2.156            };
+
+  G4double fastSpectrum[14] =  { 37., 84., 117., 121., 102., 
+                                        72., 46., 23., 9., 0.,
+                                        0., 0., 0., 0.        };
+
+  // in mm from plot
+
+  G4double alphaCof[14] =  { 42, 34, 34, 27, 20, 
+                             15, 13, 11, 10, 10, 
+                             10, 10, 10, 10           };
+
+
+  G4cout<<G4endl;
+
+  for( i = 0; i < iMax; i++ )
+  {
+    ratio  = ordinaryRefInd[i]/extraordinaryRefInd[i];
+    ratio2 = ratio*ratio;
+    cofInd = std::sqrt( ratio2 - 1. );
+    meanRefInd[i] = std::asin(cofInd/ratio)*ordinaryRefInd[i]/cofInd;
+    G4cout << lambda[i]/nanometer<<" nm;      " << photonEnergy[i]/eV << " eV"
+	   << "\t"<< ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t" << extraordinaryRefInd[i] << G4endl;
+
+    writef
+      // <<lambda[i]/nanometer<<" * nanometer      "<<photonEnergy[i]/eV<<" * eV"
+	  <<"\t"<<ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t"<<extraordinaryRefInd[i]<<G4endl;
+  }
+  G4cout<<G4endl;
+
+  for( i = iMax - 1; i >= 0; i-- )
+  {
+    G4cout << photonEnergy[i]/eV << "*eV, " ; // << G4endl;
+  }
+
+  G4cout<<G4endl;
+
+  for( i = iMax - 1; i >= 0; i-- )
+  {
+    G4cout << meanRefInd[i]  << ", " ; // << G4endl;
+  }
+  G4cout<<G4endl;
+
+  for( i = iMax - 1; i >= 0; i-- )
+  {
+    G4cout << fastSpectrum[i]  << ", " ; // << G4endl;
+  }
+  G4cout<<G4endl;
+
+  G4double aCof, absLength;
+
+  for( i = iMax - 1; i >= 0; i-- )
+  {
+    aCof = alphaCof[i]*0.025/166.5;
+
+    absLength = 1/aCof;
+
+    G4cout << absLength  << "*cm, " ; // << G4endl;
+  }
+  G4cout<<G4endl;
+
 
   return 1 ;
 }
