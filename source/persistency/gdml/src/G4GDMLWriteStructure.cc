@@ -117,6 +117,37 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    offsetElement->setAttributeNode(newAttribute("unit","mm"));
 }
 
+void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,const G4PVDivision* const divisionvol) {
+
+   EAxis axis = kUndefined;
+   G4int number = 0;
+   G4double width = 0.0;
+   G4double offset = 0.0;
+   G4bool consuming = false;
+
+   divisionvol->GetReplicationData(axis,number,width,offset,consuming);
+
+   G4String unitString("mm");
+   G4String axisString("kUndefined");
+   if (axis==kXAxis) axisString = "kXAxis"; else
+   if (axis==kYAxis) axisString = "kYAxis"; else
+   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
+   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+
+   xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
+   volumeElement->appendChild(divisionvolElement);
+   divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
+   divisionvolElement->setAttributeNode(newAttribute("number",number));
+   divisionvolElement->setAttributeNode(newAttribute("width",width));
+   divisionvolElement->setAttributeNode(newAttribute("offset",offset));
+   divisionvolElement->setAttributeNode(newAttribute("unit",unitString));
+
+   xercesc::DOMElement* volumerefElement = newElement("volumeref");
+   divisionvolElement->appendChild(volumerefElement);
+   volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
+}
+
 void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,const G4LogicalVolume* const volumePtr) {
 
    xercesc::DOMElement* volumeElement = newElement("volume");
@@ -145,6 +176,7 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,con
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
    
+      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) divisionvolWrite(volumeElement,divisionvol); else
       if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else
       physvolWrite(volumeElement,physvol);
    }

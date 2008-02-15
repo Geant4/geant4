@@ -88,7 +88,7 @@ EAxis G4GDMLReadStructure::directionRead(const xercesc::DOMElement* const elemen
    return kUndefined;
 }
 
-void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divisionvolElement) {
 
    G4double unit = 1.0;
    G4double width = 0.0;
@@ -97,7 +97,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const eleme
    G4String volumeref;
    EAxis axis = kUndefined;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = divisionvolElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -128,7 +128,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const eleme
    width *= unit;
    offset *= unit;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = divisionvolElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -141,7 +141,12 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const eleme
 
    G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
-   new G4PVDivision("",pLogical,pMotherLogical,axis,number,width,offset);
+   G4String name = pLogical->GetName() + "_in_" + pMotherLogical->GetName();
+
+   if (number != 0 && width == 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,offset); else
+   if (number == 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,width,offset); else
+   if (number != 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,width,offset); else
+   G4Exception("GDML Reader: ERROR! Both number and width are zeros in divisionvol!");
 }
 
 G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const element) {
@@ -175,7 +180,7 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
    else return structure.getVolume(structure.GenerateName(volname));
 }
 
-void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolElement) {
 
    G4LogicalVolume* logvol = 0;
 
@@ -183,7 +188,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const element) 
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector scale(1.0,1.0,1.0);
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = physvolElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -294,7 +299,7 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const elemen
    new G4PVReplica("",pLogical,pMotherLogical,axis,numb,width,offset);
 }
 
-void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElement) {
 
    G4String name;
 
@@ -304,10 +309,10 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
    AuxListType auxList;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
-   name = xercesc::XMLString::transcode(element->getAttribute(name_attr));
+   name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = volumeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -327,7 +332,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
    const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();   
    const size_t volumeCount = volumeList->size();
 
-   volume_contentRead(element);
+   volume_contentRead(volumeElement);
 
    if (volumeCount != volumeList->size()) {   // New logical volume can come from "volume_contentRead()".
 
@@ -336,9 +341,9 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const element) {
    }
 }
 
-void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const volumeElement) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = volumeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
@@ -356,9 +361,9 @@ void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const el
    }
 }
 
-void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structureElement) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = structureElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
