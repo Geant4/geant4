@@ -75,21 +75,17 @@ protected:
   G4UIcmdWithPargs	*boxCmd;
   void MakeMeABox( G4String values );
 	
-  G4UIcmdParg		*paraArgs[6];
-  G4UIcmdWithPargs	*paraCmd;
-  void MakeMeAPara( G4String values );
-	
-  G4UIcmdParg		*trapArgs[11];
-  G4UIcmdWithPargs	*trapCmd;
-  void MakeMeATrap( G4String values );
-	
-  G4UIcmdParg		*trdArgs[5];
-  G4UIcmdWithPargs	*trdCmd;
-  void MakeMeATrd( G4String values );
+  G4UIcmdParg		*consArgs[7];
+  G4UIcmdWithPargs	*consCmd;
+  void MakeMeACons( G4String values );
 	
   G4UIcmdParg		*orbArgs[1];
   G4UIcmdWithPargs	*orbCmd;
   void MakeMeAnOrb( G4String values );
+	
+  G4UIcmdParg		*paraArgs[6];
+  G4UIcmdWithPargs	*paraCmd;
+  void MakeMeAPara( G4String values );
 	
   G4UIcmdParg		*sphereArgs[6];
   G4UIcmdWithPargs	*sphereCmd;
@@ -99,14 +95,34 @@ protected:
   G4UIcmdWithPargs	*torusCmd;
   void MakeMeATorus( G4String values );
 	
+  G4UIcmdParg		*trapArgs[11];
+  G4UIcmdWithPargs	*trapCmd;
+  void MakeMeATrap( G4String values );
+	
+  G4UIcmdParg		*trdArgs[5];
+  G4UIcmdWithPargs	*trdCmd;
+  void MakeMeATrd( G4String values );
+	
   G4UIcmdParg		*tubsArgs[5];
   G4UIcmdWithPargs	*tubsCmd;
   void MakeMeATubs( G4String values );
 	
-  G4UIcmdParg		*consArgs[7];
-  G4UIcmdWithPargs	*consCmd;
-  void MakeMeACons( G4String values );
+  G4UIcmdParg		*ellipsoidArgs[5];
+  G4UIcmdWithPargs	*ellipsoidCmd;
+  void MakeMeAnEllipsoid( G4String values );
 	
+  G4UIcmdParg		*elConeArgs[4];
+  G4UIcmdWithPargs	*elConeCmd;
+  void MakeMeAnEllipticalCone( G4String values );
+	
+  G4UIcmdParg		*elTubeArgs[6];
+  G4UIcmdWithPargs	*elTubeCmd;
+  void MakeMeAnEllipticalTube( G4String values );
+
+  G4UIcmdParg		*extrudedArgs[8];
+  G4UIcmdWithPargs	*extrudedCmd;
+  void MakeMeAnExtrudedSolid( G4String values );
+
   G4UIcmdParg		*hypeArgs[5];
   G4UIcmdWithPargs	*hypeCmd;
   void MakeMeAHype( G4String values );
@@ -127,9 +143,37 @@ protected:
   G4UIcmdWithPargs	*polyhedra2Cmd;
   void MakeMeAPolyhedra2( G4String values );
 	
-  G4UIcmdParg		*ellipticalTubeArgs[6];
-  G4UIcmdWithPargs	*ellipticalTubeCmd;
-  void MakeMeAnEllipticalTube( G4String values );
+  G4UIcmdParg		*tesselArgs[9];
+  G4UIcmdWithPargs	*tesselCmd;
+  void MakeMeATessellatedSolid( G4String values );
+	
+  G4UIcmdParg		*tessel2Args[8];
+  G4UIcmdWithPargs	*tessel2Cmd;
+  void MakeMeATessellatedSolid2( G4String values );
+
+  G4UIcmdParg		*tetArgs[4];
+  G4UIcmdWithPargs	*tetCmd;
+  void MakeMeATet( G4String values );
+	
+  G4UIcmdParg		*twistedBoxArgs[4];
+  G4UIcmdWithPargs	*twistedBoxCmd;
+  void MakeMeATwistedBox( G4String values );
+	
+  G4UIcmdParg		*twistedTrapArgs[5];
+  G4UIcmdWithPargs	*twistedTrapCmd;
+  void MakeMeATwistedTrap( G4String values );
+	
+  G4UIcmdParg		*twistedTrap2Args[11];
+  G4UIcmdWithPargs	*twistedTrap2Cmd;
+  void MakeMeATwistedTrap2( G4String values );
+	
+  G4UIcmdParg		*twistedTrdArgs[6];
+  G4UIcmdWithPargs	*twistedTrdCmd;
+  void MakeMeATwistedTrd( G4String values );
+	
+  G4UIcmdParg		*twistedTubsArgs[7];
+  G4UIcmdWithPargs	*twistedTubsCmd;
+  void MakeMeATwistedTubs( G4String values );
 	
   G4UIcmdWithPargs	*dircTestCmd;
   void MakeMeDircTest();
