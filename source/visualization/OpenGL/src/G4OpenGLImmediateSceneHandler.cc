@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.28 2008-01-04 22:07:01 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.29 2008-02-18 08:53:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,7 +170,8 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
+//////  glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
+  glOrtho (-1., 1., -1., 1., -1., 1.);
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
