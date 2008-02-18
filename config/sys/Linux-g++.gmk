@@ -60,7 +60,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef QTFLAGS
     QTFLAGS   := -I$(QTHOME)/include/Qt
     QTFLAGS   += -I$(QTHOME)/include
-    MOC       := $(QTHOME)/bin/moc
+  endif
+  ifndef QTMOC
+    QTMOC       := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt-mt

@@ -51,7 +51,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef QTFLAGS
     QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
-    MOC       := $(QTHOME)/bin/moc
+  endif
+  ifndef QTMOC
+    QTMOC       := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui

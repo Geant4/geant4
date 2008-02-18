@@ -1,4 +1,4 @@
-$Id: History,v 1.312 2008-01-15 11:14:58 lgarnier Exp $
+$Id: History,v 1.313 2008-02-18 11:06:18 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th February 2007, Laurent Garnier
+ - common.gmk,WIN32-VC,Darwin-g++,Linux-g++ : Improvments for autogeneration of MOC files for QT
 
 15th January 2007, Laurent Garnier
  - common.gmk : Added a function to autogenerate the moc files for Qt driver
@@ -59,6 +62,17 @@ committal in the CVS repository !
 10th October 2007  Gunter Folger (config-V09-00-05)
 - Added "incl" (Liege cascade) hadronic model module to binmake.gmk. 
  
+ 
+3th October 2007  Laurent Garnier 
+- Added setup for Qt in those files : 
+- config/G4UI_BUILD.gmk 
+- config/G4UI_USE.gmk 
+- config/G4VIS_BUILD.gmk 
+- config/G4VIS_USE.gmk 
+- config/interactivity.gmk 
+- config/sys/Darwin-g++.gmk 
+- config/sys/Linux-g++.gmk 
+
 16th August 2007  Gabriele Cosmo (config-V09-00-04)
 - Corrected definition of OUT internal variable to allow for proper
   linking also of unit tests.
