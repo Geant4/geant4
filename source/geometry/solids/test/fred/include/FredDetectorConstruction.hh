@@ -35,6 +35,7 @@
 #include "FredMessenger.hh"
 
 class G4VPhysicalVolume;
+class G4ExtrudedSolid;
 
 #include "G4VUserDetectorConstruction.hh"
 
@@ -49,6 +50,11 @@ class FredDetectorConstruction : public G4VUserDetectorConstruction
 	inline G4VSolid	  *GetTestVolume() {return testVolume;}
 	
 	private:
+        G4ExtrudedSolid*  CreateExtrudedSolid1() const;
+        G4ExtrudedSolid*  CreateExtrudedSolid2() const;
+        G4ExtrudedSolid*  CreateExtrudedSolid3() const;
+        G4ExtrudedSolid*  CreateExtrudedSolid4() const;
+        
 	FredMessenger	*messenger;
 	G4VSolid	*testVolume;
 };
