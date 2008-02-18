@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.54 2007-11-23 09:08:17 tnikitin Exp $
+// $Id: G4Cons.cc,v 1.55 2008-02-18 16:21:35 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2184,12 +2184,11 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   //
   G4double Aone, Atwo, Athree, Afour, Afive, slin, slout, phi;
   G4double zRand, cosu, sinu, rRand1, rRand2, chose, rone, rtwo, qone, qtwo;
-    
   rone = (fRmax1-fRmax2)/(2.*fDz);
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
-  qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
-  qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
-  
+  qone=0.;qtwo=0.;
+  if(fRmax1!=fRmax2)qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
+  if(fRmin1!=fRmin2)qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
   slin   = std::sqrt(sqr(fRmin1-fRmin2)+sqr(2.*fDz));
   slout  = std::sqrt(sqr(fRmax1-fRmax2)+sqr(2.*fDz));
   Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout;       
