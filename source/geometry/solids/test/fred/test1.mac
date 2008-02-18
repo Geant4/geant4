@@ -1,35 +1,51 @@
-# $Id: test1.mac,v 1.1 2008-01-25 17:14:31 ivana Exp $
+# $Id: test1.mac,v 1.2 2008-02-18 10:48:57 ivana Exp $
 # New Geant4 macro for test1
 # By I. Hrivnacova, IPN Orsay; 25/01/2008
 
 #/fred/volume NATALIA
 #/fred/volume VOXEL
-#/fred/volume ORB
-#/fred/volume SPHERE
+/fred/volume BOX
 #/fred/volume CONE
 #/fred/volume CONE2
-#/fred/volume TUBS
-/fred/volume BOX
-#/fred/volume BOOL1
-#/fred/volume PCON
-#/fred/volume TRAP
+#/fred/volume ORB
 #/fred/volume PARA
+#/fred/volume SPHERE
 #/fred/volume TORUS1
 #/fred/volume TORUS2
+#/fred/volume TRAP
 #/fred/volume TRD
+#/fred/volume TUBS
+#/fred/volume ELLIPS
+#/fred/volume ELCONE
+#/fred/volume ELTUBE
+#/fred/volume EXTRU1
+#/fred/volume EXTRU2
+#/fred/volume EXTRU3
+#/fred/volume EXTRU4
+#/fred/volume HYPE
+#/fred/volume PCON
 #/fred/volume PCON2
 #/fred/volume PCON3
 #/fred/volume PCON4
 #/fred/volume PGON
 #/fred/volume PGON2
 #/fred/volume PGON3
-#/fred/volume PGON4
+#/fred/volume TESSEL1
+#/fred/volume TESSEL2
+#/fred/volume TESSEL3
+#/fred/volume TESSEL4
+#/fred/volume TET
+#/fred/volume TWBOX
+#/fred/volume TWTRAP1
+#/fred/volume TWTRAP2
+#/fred/volume BOOL1
 
 
 /fred/gun SPRAY
 #/gun/position -50 -50 -50
 #/gun/direction 5 5 0 
 /run/initialize 
+/tracking/verbose 1
 
 /control/execute vis.mac
 /vis/drawVolume test

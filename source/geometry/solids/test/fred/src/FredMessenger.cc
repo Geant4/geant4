@@ -47,33 +47,46 @@ FredMessenger::FredMessenger( )
 {
 	testVolume = 0;
 
-	volumeNames[TUBS]  = "TUBS";		// Yeah, yeah. Really cheezy, I know
-	volumeNames[BOX]   = "BOX";
-	volumeNames[PCON]  = "PCON";
-	volumeNames[PCON2]  = "PCON2";
-	volumeNames[PCON3]  = "PCON3";
-	volumeNames[PCON4]  = "PCON4";
-	volumeNames[NATALIA] = "NATALIA";
-	volumeNames[PGON]  = "PGON";
-	volumeNames[PGON2] = "PGON2";
-	volumeNames[PGON3] = "PGON3";
-	volumeNames[PGON4] = "PGON4";
-	volumeNames[VOXEL] = "VOXEL";
+	volumeNames[NATALIA] = "NATALIA";       // Yeah, yeah. Really cheezy, I know
+	volumeNames[VOXEL]   = "VOXEL";
+
+	volumeNames[BOX]     = "BOX";
+	volumeNames[CONE]    = "CONE";
+	volumeNames[CONE2]   = "CONE2";
+	volumeNames[ORB]     = "ORB";
+ 	volumeNames[PARA]    = "PARA";
+	volumeNames[SPHERE]  = "SPHERE";
+ 	volumeNames[TORUS1]  = "TORUS1";
+ 	volumeNames[TORUS2]  = "TORUS2";
+	volumeNames[TRAP]    = "TRAP";
+ 	volumeNames[TRD]     = "TRD";
+	volumeNames[TUBS]    = "TUBS";
+
+ 	volumeNames[ELLIPS]  = "ELLIPS";
+ 	volumeNames[ELCONE]  = "ELCONE";
+ 	volumeNames[ELTUBE]  = "ELTUBE";
+ 	volumeNames[EXTRU1]  = "EXTRU1";
+ 	volumeNames[EXTRU2]  = "EXTRU2";
+ 	volumeNames[EXTRU3]  = "EXTRU3";
+ 	volumeNames[EXTRU4]  = "EXTRU4";
+ 	volumeNames[HYPE]    = "HYPE";
+ 	volumeNames[PCON]    = "PCON";
+	volumeNames[PCON2]   = "PCON2";
+	volumeNames[PCON3]   = "PCON3";
+	volumeNames[PCON4]   = "PCON4";
+	volumeNames[PGON]    = "PGON";
+	volumeNames[PGON2]   = "PGON2";
+	volumeNames[PGON3]   = "PGON3";
+ 	volumeNames[TESSEL1] = "TESSEL1";
+ 	volumeNames[TESSEL2] = "TESSEL2";
+ 	volumeNames[TESSEL3] = "TESSEL3";
+ 	volumeNames[TESSEL4] = "TESSEL4";
+ 	volumeNames[TET]     = "TET";
+ 	volumeNames[TWBOX]   = "TWBOX";
+ 	volumeNames[TWTRAP1] = "TWTRAP1";
+ 	volumeNames[TWTRAP2] = "TWTRAP2";
+
 	volumeNames[BOOL1]  =  "BOOL1";
-	volumeNames[ORB] = "ORB";
-	volumeNames[SPHERE] = "SPHERE";
-	volumeNames[CONE]  =  "CONE";
-	volumeNames[CONE2] = "CONE2";
-	volumeNames[VOXEL] = "VOXEL";
-	volumeNames[NATALIA] = "NATALIA";
-	volumeNames[BOOL1]  =  "BOOL1";
-	volumeNames[CONE]  =  "CONE";
-	volumeNames[CONE2] = "CONE2";
-	volumeNames[TRAP] = "TRAP";
- 	volumeNames[PARA] = "PARA";
- 	volumeNames[TORUS1] = "TORUS1";
- 	volumeNames[TORUS2] = "TORUS2";
- 	volumeNames[TRD] = "TRD";
 
 	gunNames[SPRAY] = "SPRAY";
 	gunNames[GRID]  = "GRID";
@@ -107,29 +120,43 @@ FredMessenger::FredMessenger( )
 	volumeTypeNameCmd->SetGuidance( "Test Volume Type" );
 	volumeTypeNameCmd->SetParameterName( "VolumeType", true );
 	
-        G4String choices = volumeNames[TUBS] + " "
+        G4String choices = volumeNames[NATALIA] + " "
+			 + volumeNames[VOXEL] + " "
 		         + volumeNames[BOX]  + " "
-			 + volumeNames[PGON] + " "
+			 + volumeNames[CONE] + " "
+			 + volumeNames[CONE2] + " "
+			 + volumeNames[ORB] + " "
+			 + volumeNames[PARA] + " "
+			 + volumeNames[SPHERE] + " "
+			 + volumeNames[TORUS1] + " "
+			 + volumeNames[TORUS2] + " "
+			 + volumeNames[TRAP] + " "
+			 + volumeNames[TRD] + " "
+                         + volumeNames[TUBS] + " "
+			 + volumeNames[ELLIPS] + " " 
+			 + volumeNames[ELCONE] + " " 
+			 + volumeNames[ELTUBE] + " " 
+			 + volumeNames[EXTRU1] + " " 
+			 + volumeNames[EXTRU2] + " " 
+			 + volumeNames[EXTRU3] + " " 
+			 + volumeNames[EXTRU4] + " " 
+			 + volumeNames[HYPE] + " " 
 			 + volumeNames[PCON] + " "
 			 + volumeNames[PCON2] + " "
 			 + volumeNames[PCON3] + " "
 			 + volumeNames[PCON4] + " "
-			 + volumeNames[CONE] + " "
-			 + volumeNames[CONE2] + " "
-			 + volumeNames[NATALIA] + " "
+			 + volumeNames[PGON] + " "
 			 + volumeNames[PGON2] + " "
 			 + volumeNames[PGON3] + " "
-			 + volumeNames[PGON4] + " "
-			 + volumeNames[BOOL1] + " "
-			 + volumeNames[ORB] + " "
-			 + volumeNames[SPHERE] + " "
-			 + volumeNames[PGON] + " "
-			 + volumeNames[TRAP] + " "
-			 + volumeNames[PARA] + " "
-			 + volumeNames[TORUS1] + " "
-			 + volumeNames[TORUS2] + " "
-			 + volumeNames[TRD] + " "
-			 + volumeNames[VOXEL];
+			 + volumeNames[TESSEL1] + " " 
+			 + volumeNames[TESSEL2] + " " 
+			 + volumeNames[TESSEL3] + " " 
+			 + volumeNames[TESSEL4] + " " 
+			 + volumeNames[TET] + " " 
+			 + volumeNames[TWBOX] + " " 
+			 + volumeNames[TWTRAP1] + " " 
+			 + volumeNames[TWTRAP2] + " " 
+			 + volumeNames[BOOL1];
 	volumeTypeNameCmd->SetCandidates( choices );
 	
 	volumeTypeNameCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
