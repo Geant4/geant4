@@ -177,6 +177,7 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,con
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
    
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) divisionvolWrite(volumeElement,divisionvol); else
+      if (physvol->IsParameterised()) paramvolWrite(volumeElement,physvol); else
       if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else
       physvolWrite(volumeElement,physvol);
    }

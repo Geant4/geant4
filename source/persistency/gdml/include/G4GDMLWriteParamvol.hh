@@ -30,25 +30,17 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLWRITESTRUCTURE_INCLUDED_
-#define _G4GDMLWRITESTRUCTURE_INCLUDED_
+#ifndef _G4GDMLWRITEPARAMVOL_INCLUDED_
+#define _G4GDMLWRITEPARAMVOL_INCLUDED_
 
-#include "G4LogicalVolumeStore.hh"
-#include "G4Material.hh"
-#include "G4PVDivision.hh"
-#include "G4PVReplica.hh"
+#include "G4PVParameterised.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4ReflectedSolid.hh"
 
-#include "G4GDMLWriteParamvol.hh"
+#include "G4GDMLWriteSetup.hh"
 
-class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
-private:
-   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
-   void volumeWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
-   void structureWrite(xercesc::DOMElement*);
+class G4GDMLWriteParamvol : public G4GDMLWriteSetup {
+protected:
+   void paramvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
 };
 
 #endif

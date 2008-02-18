@@ -146,7 +146,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
    if (number != 0 && width == 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,offset); else
    if (number == 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,width,offset); else
    if (number != 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,width,offset); else
-   G4Exception("GDML Reader: ERROR! Both number and width are zeros in divisionvol!");
+   G4Exception("GDML Reader: ERROR! Both number and width are zeros in divisionvol: "+name);
 }
 
 G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const element) {
