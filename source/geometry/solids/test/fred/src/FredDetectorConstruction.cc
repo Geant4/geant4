@@ -54,6 +54,15 @@
 #include "G4BREPSolidPCone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4EllipticalTube.hh"
+#include "G4ExtrudedSolid.hh"
+#include "G4Hype.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4Tet.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
 
 #include "G4SubtractionSolid.hh"
 
@@ -75,6 +84,75 @@ FredDetectorConstruction::FredDetectorConstruction( FredMessenger *ourMessenger 
 FredDetectorConstruction::~FredDetectorConstruction()
 {;}
 
+
+//
+// Private methods
+//
+G4ExtrudedSolid*  FredDetectorConstruction::CreateExtrudedSolid1() const
+{
+  // Extruded solid with triangular polygon
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(  0.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  
+
+  return new G4ExtrudedSolid("test_xtru1", polygon, 30.*cm, 
+                             G4TwoVector(), 1.0, G4TwoVector(), 1.0);
+}                             
+
+G4ExtrudedSolid*  FredDetectorConstruction::CreateExtrudedSolid2() const
+{
+  // Box defined as Extruded solid
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(-30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  
+  return new G4ExtrudedSolid("test_xtru2", polygon, 30.*cm, 
+                             G4TwoVector(), 1.0, G4TwoVector(), 1.0);
+}
+
+G4ExtrudedSolid*  FredDetectorConstruction::CreateExtrudedSolid3() const
+{
+  // Extruded solid with 4 z-sections
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(-30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm, -30.*cm));
+  
+  std::vector<G4ExtrudedSolid::ZSection> zsections;
+  zsections.push_back(G4ExtrudedSolid::ZSection(-40.*cm, G4TwoVector(-20.*cm, 10.*cm), 1.5));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 10.*cm, G4TwoVector(  0.*cm,  0.*cm), 0.5));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 15.*cm, G4TwoVector(  0.*cm,  0.*cm), 0.7));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 40.*cm, G4TwoVector( 20.*cm, 20.*cm), 0.9));
+
+  return new G4ExtrudedSolid("test_xtru3", polygon, zsections);
+}
+
+G4ExtrudedSolid*  FredDetectorConstruction::CreateExtrudedSolid4() const
+{
+  // Another extruded solid, where polygon decomposition was failing
+  // in Geant4 9.1
+  std::vector<G4TwoVector> polygon; 
+  polygon.push_back( G4TwoVector(-20.*cm,  10.*cm) );
+  polygon.push_back( G4TwoVector(-20.*cm,  25.*cm) );
+  polygon.push_back( G4TwoVector( 10.*cm,  25.*cm) );
+  polygon.push_back( G4TwoVector( 10.*cm, -10.*cm) );
+  polygon.push_back( G4TwoVector( 20.*cm, -10.*cm) );
+  polygon.push_back( G4TwoVector( 20.*cm, -25.*cm) );
+  polygon.push_back( G4TwoVector(-10.*cm, -25.*cm) );
+  polygon.push_back( G4TwoVector(-10.*cm,  10.*cm) );
+  
+  return new G4ExtrudedSolid("test_xtru3", polygon, 20.*cm, 
+                             G4TwoVector(), 1.0, G4TwoVector(), 1.0);
+}
 
 //
 // Construct: Build the detector
@@ -122,203 +200,331 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     deltaPhi = messenger->DeltaPhi()*deg;
   G4int	 numSide  = messenger->NumSide();
 
-  switch( messenger->SelectedVolume() ) {
-  case NATALIA: {
-    G4double	z_values[3] = { -60.76*mm, -49.14*mm, 102.68*mm };
-    G4double	rmin[3]	    = {  6.24*mm, 0*mm, 0*mm },
-      rmax[3]     = {  6.24*mm, 6.24*mm, 6.24*mm };
+  switch ( messenger->SelectedVolume() ) {
+  
+    //
+    // special tests
+    //
+
+    case NATALIA: {
+      G4double	z_values[3] = { -60.76*mm, -49.14*mm, 102.68*mm };
+      G4double	rmin[3]	    = {  6.24*mm, 0*mm, 0*mm };
+      G4double	rmax[3]     = {  6.24*mm, 6.24*mm, 6.24*mm };
       // Rib thickness 0.41, height 6.42
       startPhi = -std::atan2( 0.5*0.41, 6.42 );
       deltaPhi = -2.0*startPhi;
       testVolume = new G4Polyhedra("natalia",
                                     startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );
-  }
-  break;
-		
-  case VOXEL:
-    testVolume = new G4Box( "voxel_test", 1*m, 1*m, 1*m );
-    break;
+      }                                    
+      break;
+
+    case VOXEL:
+      testVolume = new G4Box( "test_voxel", 1*m, 1*m, 1*m );
+      break;
 	
-  case ORB:
-    testVolume = new G4Orb ("orb_test", 1.0*m);
-    fprintf(stderr,"OK defining an Orb\n");
-    break;
+  //
+  // CSG solids
+  //
+  
+    case BOX:
+      testVolume = new G4Box( "test_box", 1*m, 1*m, 1*m );
+      break;
+		
+    case CONE:
+      testVolume = new G4Cons("test_cone",
+			      1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
+      fprintf(stderr,"OK defining a Cone \n");
+      break;
+
+    case CONE2:
+      // try to do a cone with a 'pick'
+      testVolume = new G4Cons( "test_cone2",
+			       1*m, 1.2*m, 0.0*m, 0.2*m, 1*m, startPhi, deltaPhi );
+      fprintf(stderr,"OK defining a Cone2 \n");
+      break;
+		
+    case ORB:
+      testVolume = new G4Orb ("test_orb", 1.0*m);
+      fprintf(stderr,"OK defining an Orb\n");
+      break;
     
-  case SPHERE:
-    testVolume = new G4Sphere ("sphere_test",0.8*m,1.0*m, startPhi, deltaPhi,0.0, pi);
-    fprintf(stderr,"OK defining a Sphere\n");
-    break;
-    
-  case CONE:
-    testVolume = new G4Cons( "cone_test",
-			     1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
-    break;
+    case PARA:
+      testVolume = new G4Para("test_para",
+			       1.0*m, 1.6*m, 2.6*m, 0.0*m, 1.0*m, 2.0*m);
+      fprintf(stderr,"OK defining a Para \n");
+      break;
+
+    case SPHERE:
+      testVolume = new G4Sphere ("test_sphere", 0.8*m, 1.0*m, startPhi, deltaPhi, 0.0, pi);
+      fprintf(stderr,"OK defining a Sphere \n");
+      break;
+      
+    case TORUS1:
+      testVolume = new G4Torus("test_torus1",
+			        0.2*m, 0.4*m, 1.2*m, startPhi, deltaPhi);
+      fprintf(stderr,"OK defining a Torus1 \n");
+      break;
+ 	
+    case TORUS2: 
+      testVolume = new G4Torus("test_torus2",
+			       0.8*m, 1.4*m, 1.8*m, startPhi, deltaPhi);
+      fprintf(stderr,"OK defining a Torus2 \n");
+      break;
+  
+    case TRAP:
+      testVolume = new G4Trap ("test_trap",
+			       1.0*m, 0.0, pi,
+			       2.4*m,1.0*m,2.0*m, 0.0,
+			       2.4*m,1.0*m,2.0*m, pi);
+      fprintf(stderr,"OK defining a Trap \n");
+      break;
+  
+    case TRD:
+      testVolume = new G4Trd("test_trd",
+			   0.2*m, 0.8*m, 0.8*m, 1.2*m, 4*m) ;
+      fprintf(stderr,"OK defining a Trd \n");
+      break;
+	
+    case TUBS:
+      testVolume = new G4Tubs( "test_tubs", 1.0*m, 1.2*m, 1*m, startPhi, deltaPhi );
+      fprintf(stderr,"OK defining a Tubs \n");
+      break;
+      
+  //
+  // specific solids
+  //
+  
+      
+    case ELLIPS:
+      testVolume = new G4Ellipsoid( "test_ellipsoid",
+                                      0.5*m, 0.8*m, 1.0*m, -0.4*m, 0.8*m );
+      break;
+
+    case ELCONE:
+      testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.6, 0.75*m, 0.25*m);
+      break;
+
+    case ELTUBE:
+      testVolume = new G4EllipticalTube( "test_eltube", 0.4*m, 0.8*m, 1.0*m );
+      break;
+  
+    case EXTRU1:
+      testVolume = CreateExtrudedSolid1();
+      break;
+  
+    case EXTRU2:
+      testVolume = CreateExtrudedSolid2();
+      break;
+  
+    case EXTRU3:
+      testVolume = CreateExtrudedSolid3();
+      break;
+  
+    case EXTRU4:
+      testVolume = CreateExtrudedSolid4();
+      break;
+  
+    case HYPE:
+      testVolume = new G4Hype("test_hype", 0.2*m, 0.3*m, 0.7*rad, 0.7*rad, 0.5*m);
+      break;
+  
+    case PCON: {
+      G4double  z_values[2] = { -1.0*m, 1.0*m };
+      G4double  rmin[2]     = {  1.0*m, 1.2*m };
+      G4double  rmax[2]     = {  1.2*m, 1.4*m };
+      testVolume = new G4Polycone( "test_pcon",
+                                   startPhi, deltaPhi, 2, z_values, rmin, rmax );
+      }
+      break;
+  
+    case PCON2: {
+      G4double  z_values[5] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m };
+      G4double  rmin[5]     = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m };
+      G4double  rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
+      testVolume = new G4Polycone( "test_pcon2",
+                                   startPhi, deltaPhi, 5, z_values, rmin, rmax );
+      }                                   
+      break;
+		
+    case PCON3: {
+      G4double  z_values[8] = { -1.0*m, -0.5*m, -0.5*m, -1.0*m, -1.0*m,  0.7*m,  0.7*m,  1.0*m };
+      G4double  rmin[8]     = {  0.6*m,  0.6*m,  0.5*m,  0.5*m,  0.4*m,  0.4*m,  0.4*m,  0.0*m };
+      G4double  rmax[8]     = {  0.7*m,  0.7*m,  0.8*m,  0.9*m,  1.0*m,  1.0*m,  0.5*m,  0.5*m };
+      testVolume = new G4Polycone( "test_pcon3", 
+                                   startPhi, deltaPhi, 8, z_values, rmin, rmax );
+      }                                   
+      break;
+		
+    case PCON4: {
+      G4double RMINVec[8];
+      RMINVec[0] = 30*cm;
+      RMINVec[1] = 30*cm;
+      RMINVec[2] =  0*cm;
+      RMINVec[3] =  0*cm;
+      RMINVec[4] =  0*cm; 
+      RMINVec[5] =  0*cm;
+      RMINVec[6] = 40*cm;
+      RMINVec[7] = 40*cm;  
+
+      G4double RMAXVec[8];
+      RMAXVec[0] = 70*cm;
+      RMAXVec[1] = 70*cm;
+      RMAXVec[2] = 70*cm;
+      RMAXVec[3] = 40*cm;
+      RMAXVec[4] = 40*cm;
+      RMAXVec[5] = 80*cm;
+      RMAXVec[6] = 80*cm;
+      RMAXVec[7] = 60*cm; 
+
+      G4double Z_Values[8];
+      Z_Values[0] =-20*cm;
+      Z_Values[1] =-10*cm;
+      Z_Values[2] =-10*cm;
+      Z_Values[3] =  0*cm;
+      Z_Values[4] = 10*cm;
+      Z_Values[5] = 20*cm;
+      Z_Values[6] = 30*cm;
+      Z_Values[7] = 40*cm;
+
+      testVolume = new G4Polycone ("test_pcon4",
+                                   startPhi, deltaPhi, 8, Z_Values, RMINVec, RMAXVec );
+      }                                   
+      break;
+
+    case PGON: {
+      G4double z_values[2] = { -1.0*m, 1.0*m };
+      G4double rmin[2]     = {  0.8*m, 1.0*m };
+      G4double rmax[2]     = {  1.0*m, 1.2*m };
+      testVolume = new G4Polyhedra( "test_pgon",
+                                  startPhi, deltaPhi, numSide, 2, z_values, rmin, rmax );
+      }                                  
+      break;
+		
+    case PGON2: {
+      G4double z_values[5] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m };
+      G4double rmin[5]     = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m };
+      G4double rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
+      testVolume = new G4Polyhedra( "test_pgon2",
+                                  startPhi, deltaPhi, numSide, 5, z_values, rmin, rmax );
+      }                                  
+      break;
+
+    case PGON3: {
+      G4double z_values[6] = { -0.6*m, 0.0*m,-1.0*m, 0.5*m, 0.5*m, 1.0*m };
+      G4double rmin[6]     = {  0.5*m, 0.5*m, 0.4*m, 0.4*m, 0.8*m, 0.8*m };
+      G4double rmax[6]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.0*m, 1.1*m };
+      testVolume = new G4Polyhedra( "test_pgon3",
+                                    startPhi, deltaPhi, numSide, 6, z_values, rmin, rmax );
+      }                                    
+      break;
+
+    case TESSEL1: {
+      // Extruded solid with triangular polygon
+      // (the same as test_xtru1, but redefined via tessels
+
+      G4TessellatedSolid* tessel = new G4TessellatedSolid("test_tessel1");
+      
+      tessel->AddFacet(
+                new G4TriangularFacet(G4ThreeVector(-0.3*m,-0.3*m,-0.3*m),
+                                      G4ThreeVector( 0.0*m, 0.3*m,-0.3*m),
+                                      G4ThreeVector( 0.3*m,-0.3*m,-0.3*m),
+                                      ABSOLUTE));
+      tessel->AddFacet(
+                new G4TriangularFacet(G4ThreeVector( 0.3*m,-0.3*m, 0.3*m),
+                                      G4ThreeVector( 0.0*m, 0.3*m, 0.3*m),
+                                      G4ThreeVector(-0.3*m,-0.3*m, 0.3*m),
+                                      ABSOLUTE));
+      tessel->AddFacet(
+                new G4QuadrangularFacet(G4ThreeVector( 0.0*m, 0.3*m,-0.3*m),
+                                        G4ThreeVector(-0.3*m,-0.3*m,-0.3*m),
+                                        G4ThreeVector(-0.3*m,-0.3*m, 0.3*m),
+                                        G4ThreeVector( 0.0*m, 0.3*m, 0.3*m),
+                                        ABSOLUTE));
+      tessel->AddFacet(
+                new G4QuadrangularFacet(G4ThreeVector( 0.3*m,-0.3*m,-0.3*m),
+                                        G4ThreeVector( 0.0*m, 0.3*m,-0.3*m),
+                                        G4ThreeVector( 0.0*m, 0.3*m, 0.3*m),
+                                        G4ThreeVector( 0.3*m,-0.3*m, 0.3*m),
+                                        ABSOLUTE));
+      tessel->AddFacet(
+                new G4QuadrangularFacet(G4ThreeVector(-0.3*m,-0.3*m,-0.3*m),
+                                        G4ThreeVector( 0.3*m,-0.3*m,-0.3*m),
+                                        G4ThreeVector( 0.3*m,-0.3*m, 0.3*m),
+                                        G4ThreeVector(-0.3*m,-0.3*m, 0.3*m),
+                                        ABSOLUTE));
+      tessel->SetSolidClosed(true);
+      testVolume = tessel;
+      G4cout << *tessel << G4endl;
+/*
+      G4ExtrudedSolid* xtru1 = CreateExtrudedSolid1();
+      testVolume = new G4TessellatedSolid(*xtru1);
+      testVolume->SetName("test_tessel1"); 
+      G4cout << *((G4TessellatedSolid*)testVolume) << G4endl;
+*/
+      }
+      break;
+  
+    case TESSEL2: {
+      G4ExtrudedSolid* xtru2 = CreateExtrudedSolid2();
+      testVolume = new G4TessellatedSolid(*xtru2);
+      testVolume->SetName("test_tessel2"); 
+      delete xtru2;  
+      }                   
+      break;
+  
+    case TESSEL3: {
+      G4ExtrudedSolid* xtru3 = CreateExtrudedSolid3();
+      testVolume = new G4TessellatedSolid(*xtru3);
+      testVolume->SetName("test_tessel3"); 
+      delete xtru3;
+      }                     
+      break;
+  
+    case TESSEL4: {
+      G4ExtrudedSolid* xtru4 = CreateExtrudedSolid4();
+      testVolume = new G4TessellatedSolid(*xtru4);
+      testVolume->SetName("test_tessel4"); 
+      delete xtru4;
+      }                     
+      break;
  
+    case TET:
+      testVolume = new G4Tet( "test_tet", 
+                              G4ThreeVector( 0.0*m,  0.0*m,  1.0*m),
+                              G4ThreeVector(-1.0*m, -1.0*m, -1.0*m),
+                              G4ThreeVector(+1.0*m, -1.0*m, -1.0*m),
+                              G4ThreeVector( 0.0*m,  1.0*m, -1.0*m));
+      break;
+
+    case TWBOX:
+      testVolume = new G4TwistedBox( "test_twbox", 30.0*deg, 1.0*m,  1.0*m,  1.0*m);
+      break;
+
+    case TWTRAP1:
+      testVolume = new G4TwistedTrap( "test_twtrap1", 
+                                      30.0*deg, 0.8*m, 1.0*m, 1.0*m, 1.0*m );
+      break;
+
+    case TWTRAP2:
+      testVolume = new G4TwistedTrap( "test_twtrap2",
+                                      30.0*deg, 1268.0*mm, 0.0*deg, 0.0*deg, 
+                                      295.0*mm, 1712.2*mm, 1870.29*mm, 
+                                      295.0*mm, 1712.2*mm, 1870.29*mm, 0.0*deg );
+      break;
 
 
-  case CONE2:
-    /* try to do a cone with a 'pick' */
-	  
-    testVolume = new G4Cons( "cone2_test",
-			     1*m, 1.2*m, 0.0*m, 0.2*m, 1*m, startPhi, deltaPhi );
-    break;
-		
-  case TUBS:
-    testVolume = new G4Tubs( "test_tube", 1.0*m, 1.2*m, 1*m, startPhi, deltaPhi );
-    break;
+  //
+  // Boolean solids
+  //
 
-  case BOX:
-    testVolume = new G4Box( "testbox", 1*m, 1*m, 1*m );
-    break;
-		
-  case BOOL1: {
-    G4Box	*outside = new G4Box( "testboolout", 1*m, 1*m, 1*m );
-    G4Tubs 	*inside = new G4Tubs( "testboolin", 0.0, 0.4*m, 1*m, 0, 360*deg );
-    G4Transform3D tran = G4Translate3D( 0.4*m, 0.0, 0.0 );
+    case BOOL1:
+      G4Box	*outside = new G4Box( "testboolout", 1*m, 1*m, 1*m );
+      G4Tubs 	*inside = new G4Tubs( "testboolin", 0.0, 0.4*m, 1*m, 0, 360*deg );
+      G4Transform3D tran = G4Translate3D( 0.4*m, 0.0, 0.0 );
 
-    testVolume = new G4SubtractionSolid( "testbool", (G4VSolid *)outside, (G4VSolid *)inside, tran );
-  }
-  break;
+      testVolume = new G4SubtractionSolid( "testbool", (G4VSolid *)outside, (G4VSolid *)inside, tran );
+      break;
 
-  case PCON: {
-    G4double      z_values[2] = { -1.0*m, 1.0*m };
-    G4double      rmin[2]	  = { 1.0*m, 1.2*m },
-      rmax[2]	  = { 1.2*m, 1.4*m };
-      testVolume = new G4Polycone( "testpcone", 
-								   startPhi, deltaPhi, 2, z_values, rmin, rmax );
-  }
-  break;
-
-  case TRAP: {
-	G4String Name = "testTrapezoid";
-	testVolume = new G4Trap (Name,
-							 1.0*m,
-							 0.0,pi,
-							 2.4*m,1.0*m,2.0*m,
-							 0.0,
-							 2.4*m,1.0*m,2.0*m,
-							 pi);
-  }
-  break;
-  
-  case PARA: {
-	testVolume = new G4Para("testParallepiped",
-							1.0*m,1.6*m,2.6*m,
-							0.0,1.0,2.0);
-  }
-  break;
-  
-  case TORUS1: {
-	/* a torus */
-	testVolume = new G4Torus("testTorus",
-				 0.2*m, 0.4*m, 1.2*m,
-				 startPhi, deltaPhi);
- 	
-  }
-  break;
-  
-  case TORUS2: {
-	/* another torus */
-	testVolume = new G4Torus("testTorus",
-				 0.8*m, 1.4*m, 1.8*m,
-				 startPhi, deltaPhi);
- 	
-  }
-  break;
-  
-  case TRD: {
-	testVolume = new G4Trd("TestTrapezoid",
-						   0.2*m,0.8*m,
-						   0.8*m,1.2*m,
-						   4*m) ;
-  }
-	
-  case PCON2: {
-    G4double	z_values[5] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m };
-    G4double	rmin[5]	    = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m },
-      rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
-      testVolume = new G4Polycone( "testpcone", 
-								   startPhi, deltaPhi, 5, z_values, rmin, rmax );
-  }
-  break;
-		
-  case PCON3: {
-    G4double	z_values[8] = { -1.0*m, -0.5*m, -0.5*m, -1.0*m, -1.0*m,  0.7*m,  0.7*m,  1.0*m };
-    G4double	rmin[8]     = {  0.6*m,  0.6*m,  0.5*m,  0.5*m,  0.4*m,  0.4*m,  0.4*m,  0.0*m },
-      rmax[8]     = {  0.7*m,  0.7*m,  0.8*m,  0.9*m,  1.0*m,  1.0*m,  0.5*m,  0.5*m };
-      testVolume = new G4Polycone( "testpcone", 
-								   startPhi, deltaPhi, 8, z_values, rmin, rmax );
-  }
-  break;
-		
-  case PCON4: {
-    double RMINVec[8];
-    RMINVec[0] = 30*cm;
-    RMINVec[1] = 30*cm;
-    RMINVec[2] =  0*cm;
-    RMINVec[3] =  0*cm;
-    RMINVec[4] =  0*cm; 
-    RMINVec[5] =  0*cm;
-    RMINVec[6] = 40*cm;
-    RMINVec[7] = 40*cm;  
-
-    double RMAXVec[8];
-    RMAXVec[0] = 70*cm;
-    RMAXVec[1] = 70*cm;
-    RMAXVec[2] = 70*cm;
-    RMAXVec[3] = 40*cm;
-    RMAXVec[4] = 40*cm;
-    RMAXVec[5] = 80*cm;
-    RMAXVec[6] = 80*cm;
-    RMAXVec[7] = 60*cm; 
-
-    double Z_Values[8];
-    Z_Values[0] =-20*cm;
-    Z_Values[1] =-10*cm;
-    Z_Values[2] =-10*cm;
-    Z_Values[3] =  0*cm;
-    Z_Values[4] = 10*cm;
-    Z_Values[5] = 20*cm;
-    Z_Values[6] = 30*cm;
-    Z_Values[7] = 40*cm;
-
-    testVolume = new G4Polycone ("MyPCone",
-								 startPhi       ,
-								 deltaPhi     ,
-								 8        ,
-								 Z_Values ,
-								 RMINVec  ,
-								 RMAXVec   );
-  }
-  break;
-
-  case PGON2:
-    rot->rotateZ( 360*deg/16 );
-  case PGON: {
-    G4double	z_values[2] = { -1.0*m, 1.0*m };
-    G4double	rmin[2]	    = { 0.8*m, 1.0*m },
-      rmax[2]     = { 1.0*m, 1.2*m };
-      testVolume = new G4Polyhedra( "testpgon",
-									startPhi, deltaPhi, numSide, 2, z_values, rmin, rmax );
-  }
-  break;
-		
-  case PGON3: {
-    G4double	z_values[5] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m };
-    G4double	rmin[5]	    = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m },
-      rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
-      testVolume = new G4Polyhedra( "testpgon",
-									startPhi, deltaPhi, numSide, 5, z_values, rmin, rmax );
-  }
-  break;
-  case PGON4: {
-    G4double	z_values[6] = { -0.6*m, 0.0*m,-1.0*m, 0.5*m, 0.5*m, 1.0*m };
-    G4double	rmin[6]	    = {  0.5*m, 0.5*m, 0.4*m, 0.4*m, 0.8*m, 0.8*m },
-      rmax[6]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.0*m, 1.1*m };
-      testVolume = new G4Polyhedra( "testpgon",
-									startPhi, deltaPhi, numSide, 6, z_values, rmin, rmax );
-  }
-  break;
   }
 
   G4LogicalVolume	  *testLog  = new G4LogicalVolume( testVolume, Vaccuum, "test_log", 0, 0, 0 );
