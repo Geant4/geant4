@@ -236,14 +236,10 @@ void SBTvoxel::RunTest( const G4VSolid *testVolume, std::ostream &logger )
   // Output test parameters
   //
   time_t now = time(0);
-//  G4String dateTime( ctime(&now), 24 );    // AFAIK, this is standard c++
-//      it looks like the above is missing from STLInterface
-  char timebuf[25];
-  timebuf[24]=0;
-  strncpy( ctime(&now), timebuf, 24 );
-  G4String dateTime( timebuf );
+  time(&now);
+  G4String dateTime(ctime(&now));
   
-  logger << "% SBT voxel logged output " << dateTime << G4endl;
+  logger << "% SBT voxel logged output " << dateTime;
   logger << "% target =    " << target << G4endl;
   logger << "% widths =    " << widths << G4endl;
   logger << "% maxVoxels = " << maxVoxels << G4endl;
@@ -330,10 +326,8 @@ void SBTvoxel::RunTest( const G4VSolid *testVolume, std::ostream &logger )
   }
   
   now = time(0);
-//  G4String dateTime2( ctime(&now), 24 );    
-  strncpy( ctime(&now), timebuf, 24 );
-  G4String dateTime2( timebuf );
-  logger << dateTime2 << G4endl;
+  G4String dateTime2(ctime(&now));
+  logger << dateTime2;
 
   logger << "% Statistics: voxels=" << nVoxel << " errors=" << nError << G4endl;
          
@@ -416,6 +410,9 @@ G4bool SBTvoxel::TestOneVoxel( const G4VSolid *testVolume,
       // We give the solid an extra "kCarTolerance" space, since
       // some solids like to add this value to their return values
       //
+      
+      // logger << std::setw(20) << std::setprecision(20);
+      
       if ( voxel.IsLimited(axes[i]) ) {
         if (min < voxel.GetMinExtent(axes[i])-1.1*kCarTolerance) {
           numError++;
