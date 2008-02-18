@@ -37,7 +37,6 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    physvolElement->appendChild(volumerefElement);
-
    volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
 
    G4Transform3D transform(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());

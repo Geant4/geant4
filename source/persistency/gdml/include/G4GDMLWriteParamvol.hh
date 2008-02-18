@@ -34,11 +34,15 @@
 #define _G4GDMLWRITEPARAMVOL_INCLUDED_
 
 #include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
 #include "G4VPhysicalVolume.hh"
 
 #include "G4GDMLWriteSetup.hh"
 
 class G4GDMLWriteParamvol : public G4GDMLWriteSetup {
+private:
+   void box_dimensionsWrite(xercesc::DOMElement*,const G4Box* const);
+   void parametersWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4int&);
 protected:
    void paramvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
 };
