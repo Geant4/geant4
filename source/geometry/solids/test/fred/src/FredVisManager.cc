@@ -72,8 +72,8 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
+#ifdef G4VIS_USE_RAYTRACERX
+#include "G4RayTracerX.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -123,8 +123,8 @@ void FredVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
  
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
+#ifdef G4VIS_USE_RAYTRACERX
+  RegisterGraphicsSystem (new G4RayTracerX);
 #endif
  
 #ifdef G4VIS_USE_VRML
