@@ -40,6 +40,22 @@ void G4GDMLWriteParamvol::box_dimensionsWrite(xercesc::DOMElement* parametersEle
    box_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteParamvol::cone_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Cons* const cone) {
+
+   xercesc::DOMElement* cone_dimensionsElement = newElement("cone_dimensions");
+   parametersElement->appendChild(cone_dimensionsElement);
+   cone_dimensionsElement->setAttributeNode(newAttribute("name",cone->GetName()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmin1",cone->GetInnerRadiusMinusZ()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmax1",cone->GetOuterRadiusMinusZ()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmin2",cone->GetInnerRadiusPlusZ()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmax2",cone->GetOuterRadiusPlusZ()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("z",2.0*cone->GetZHalfLength()));
+   cone_dimensionsElement->setAttributeNode(newAttribute("startphi",cone->GetStartPhiAngle()/CLHEP::degree));
+   cone_dimensionsElement->setAttributeNode(newAttribute("deltaphi",cone->GetDeltaPhiAngle()/CLHEP::degree));
+   cone_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   cone_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,const G4VPhysicalVolume* const paramvol,const G4int& index) {
 
    paramvol->GetParameterisation()->ComputeTransformation(index,const_cast<G4VPhysicalVolume*>(paramvol));
@@ -55,6 +71,11 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
    
       paramvol->GetParameterisation()->ComputeDimensions(*box,index,const_cast<G4VPhysicalVolume*>(paramvol));
       box_dimensionsWrite(parametersElement,box);
+   } else
+   if (G4Cons* cone = dynamic_cast<G4Cons*>(solid)) {
+   
+      paramvol->GetParameterisation()->ComputeDimensions(*cone,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      cone_dimensionsWrite(parametersElement,cone);
    }
 }
 
