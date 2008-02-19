@@ -53,12 +53,9 @@ private:
    G4LogicalVolume *pMotherLogical;
 
    AuxPairType auxiliaryRead(const xercesc::DOMElement* const);
-   EAxis directionRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
    void physvolRead(const xercesc::DOMElement* const);
-   G4double quantityRead(const xercesc::DOMElement* const);
-   void replicate_along_axisRead(const xercesc::DOMElement* const,G4double&,G4double&,EAxis&);
    void replicavolRead(const xercesc::DOMElement* const);
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const);

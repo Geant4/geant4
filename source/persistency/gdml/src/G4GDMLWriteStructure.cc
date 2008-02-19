@@ -75,45 +75,32 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
 
    EAxis axis = kUndefined;
-   G4int nReplicas = 0;
+   G4int number = 0;
    G4double width = 0.0;
    G4double offset = 0.0;
    G4bool consuming = false;
 
-   replicavol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+   replicavol->GetReplicationData(axis,number,width,offset,consuming);
 
-   G4ThreeVector direction;
-   if (axis==kXAxis) direction.set(1.0,0.0,0.0); else
-   if (axis==kYAxis) direction.set(0.0,1.0,0.0); else
-   if (axis==kZAxis) direction.set(0.0,0.0,1.0); else
-   G4Exception("GDML Writer: ERROR! No valid axis has been defined for replica!");
+   G4String unitString("mm");
+   G4String axisString("kUndefined");
+   if (axis==kXAxis) axisString = "kXAxis"; else
+   if (axis==kYAxis) axisString = "kYAxis"; else
+   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
+   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
    volumeElement->appendChild(replicavolElement);
-   replicavolElement->setAttributeNode(newAttribute("numb",nReplicas));
+   replicavolElement->setAttributeNode(newAttribute("axis",axisString));
+   replicavolElement->setAttributeNode(newAttribute("number",number));
+   replicavolElement->setAttributeNode(newAttribute("width",width));
+   replicavolElement->setAttributeNode(newAttribute("offset",offset));
+   replicavolElement->setAttributeNode(newAttribute("unit",unitString));
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    replicavolElement->appendChild(volumerefElement);
    volumerefElement->setAttributeNode(newAttribute("ref",replicavol->GetLogicalVolume()->GetName()));
-
-   xercesc::DOMElement* replicate_along_axisElement = newElement("replicate_along_axis");
-   replicavolElement->appendChild(replicate_along_axisElement);
-
-   xercesc::DOMElement* directionElement = newElement("direction");
-   replicate_along_axisElement->appendChild(directionElement);
-   directionElement->setAttributeNode(newAttribute("x",direction.x()));
-   directionElement->setAttributeNode(newAttribute("y",direction.y()));
-   directionElement->setAttributeNode(newAttribute("z",direction.z()));
-
-   xercesc::DOMElement* widthElement = newElement("width");
-   replicate_along_axisElement->appendChild(widthElement);
-   widthElement->setAttributeNode(newAttribute("value",width));
-   widthElement->setAttributeNode(newAttribute("unit","mm"));
-
-   xercesc::DOMElement* offsetElement = newElement("offset");
-   replicate_along_axisElement->appendChild(offsetElement);
-   offsetElement->setAttributeNode(newAttribute("value",offset));
-   offsetElement->setAttributeNode(newAttribute("unit","mm"));
 }
 
 void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,const G4PVDivision* const divisionvol) {
