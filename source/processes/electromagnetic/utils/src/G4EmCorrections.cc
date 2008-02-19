@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.27 2008-02-14 14:50:43 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.28 2008-02-19 16:39:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -197,8 +197,12 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   if(thcorr[Z].size() == 0) {
     thcorr[Z].resize(ncouples);
     G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+
     for(i=0; i<ncouples; i++) {
-      (thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled);
+      G4double x = EffectiveChargeCorrection(p,mat,ethscaled) - 1.0;
+      if(x != 0.0) x *= ionModel->ComputeDEDXPerVolume(mat, p, ethscaled, ethscaled);
+
+      (thcorr[Z])[i] = ethscaled*(x - ComputeIonCorrections(p,mat,ethscaled));
     } 
   }
 
@@ -207,7 +211,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   // correction to correction
   for(i=0; i<ncouples; i++) {
     if(currmat[i] == mat) {
-      sum -= (thcorr[Z])[i]/e; 
+      sum += (thcorr[Z])[i]/e; 
       break;
     }
   }
