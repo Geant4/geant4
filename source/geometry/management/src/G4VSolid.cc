@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.35 2007-10-24 14:09:27 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.36 2008-02-20 11:16:02 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -70,6 +70,20 @@ G4VSolid::G4VSolid(const G4String& name)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Protected copy constructor
+//
+
+G4VSolid::G4VSolid(const G4VSolid& rhs)
+  : kCarTolerance(rhs.kCarTolerance),
+    fshapeName(rhs.fshapeName)
+{
+    // Register to store
+    //
+    G4SolidStore::GetInstance()->Register(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
@@ -90,6 +104,22 @@ G4VSolid::~G4VSolid()
 {
     G4SolidStore::GetInstance()->DeRegister(this);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4VSolid& G4VSolid::operator = (const G4VSolid& rhs) 
+{
+  // check assignment to self
+  if (this == &rhs) return *this;
+
+  // copy data
+  kCarTolerance = rhs.kCarTolerance;
+  fshapeName = rhs.fshapeName;
+
+  return *this;
+}  
 
 //////////////////////////////////////////////////////////////////////////
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.26 2007-05-11 13:30:12 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.27 2008-02-20 11:16:02 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,6 +230,11 @@ class G4VSolid
       // persistifiable objects.
 
   protected:  // with description
+    G4VSolid(const G4VSolid& rhs);
+      // Copy constructor
+
+    G4VSolid& operator = (const G4VSolid& rhs); 
+      // Assignment operator
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
 				       const G4VoxelLimits& pVoxelLimit,
