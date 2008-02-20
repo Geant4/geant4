@@ -202,7 +202,7 @@ G4double TransmissionABC(G4double photonEnergy, G4double gamma)
 
 int main()
 {
-  G4int i, iMax = 20;
+  G4int i, iMax = 20, k, kMax;
   G4double energy, refA, refB, gamma, numberBC, numberABC, beta, protonMass, protonMom;
 
   std::ofstream writef("PbWO4.dat", std::ios::out ) ;
@@ -243,7 +243,7 @@ int main()
     G4cout<<"protonMom = "<<protonMom<<"; numberBC = "<<numberBC
           <<"; numberABC = "<<numberABC<<G4endl;  
   }
-  */
+  
 
   // Arrays of CMS crystal dimensions, table 3.2 from ECAL TDR
 
@@ -397,6 +397,66 @@ int main()
   }
   G4cout<<G4endl;
 
+  */
+
+  G4double aE, bE, delta, sinT, cosT, sinP, BA, B, D, theta, phi, beta2;
+  G4double  det2, det, y1, y2, y3, y4, b2pm, b2re;
+    
+  iMax = 10;
+  kMax = 12;
+
+  // ref. index values for 
+
+  aE    = 2.323*2.323;
+  bE    = 2.218*2.218;
+  delta = bE - aE;
+  beta2 = 0.194; // 1.;
+  G4cout<<"1/aE ="<<1/aE<<"\t"<<"1/bE ="<<1/bE<<G4endl<<G4endl;
+  writef<<"1/aE ="<<1/aE<<"\t"<<"1/bE ="<<1/bE<<G4endl<<G4endl;
+  G4cout<<"beta = "<<std::sqrt(beta2)<<"\t"<<"beta2 = "<<beta2<<G4endl<<G4endl;
+  writef<<"beta = "<<std::sqrt(beta2)<<"\t"<<"beta2 = "<<beta2<<G4endl<<G4endl;
+
+  for( i = 0; i <= iMax; i++) 
+  {
+    theta = i*90*degree/iMax;
+    cosT  = std::cos(theta);
+    sinT  = std::sin(theta);
+
+    b2pm  = cosT*cosT/aE + sinT*sinT/bE; 
+
+    G4cout<<"theta = "<<theta/degree<<" degrees"<<"\t"<<b2pm<<G4endl<<G4endl;
+    writef<<"theta = "<<theta/degree<<" degrees"<<"\t"<<b2pm<<G4endl<<G4endl;
+
+    for( k = 0; k <= kMax; k++) 
+    {
+      phi = k*360*degree/kMax;
+      sinP = std::sin(phi);
+      
+      B    =  delta*sinT*sinT*sinP*sinP + aE;
+      BA   =  delta*cosT*cosT + aE*(1 - bE*beta2);
+      D    = -delta*cosT*sinT*sinP;
+      det2 =  D*D - B*BA;
+      b2re =  ( 1 + delta*cosT*cosT/B )/bE;
+
+      if( det2 < 0.)
+      {
+	G4cout<<phi/degree<<"\t"<<"no y1,2"<<G4endl;
+	writef<<phi/degree<<"\t"<<"no y1,2"<<G4endl;
+      }
+      else
+      {
+        det = std::sqrt(det2);
+        y1  = (-D + det)/B;
+        y2  = (-D - det)/B;
+        // y3  = (D + det)/B;
+        // y4  = (D - det)/B;
+	G4cout<<phi/degree<<"\t"<<y1<<"\t"<<y2<<"\t"<<b2re<<"\t"<<b2pm-b2re<<G4endl;
+	writef<<phi/degree<<"\t"<<y1<<"\t"<<y2<<"\t"<<b2re<<"\t"<<b2pm-b2re<<G4endl;
+      }
+    }    
+    G4cout<<G4endl;
+    writef<<G4endl;
+  }
 
   return 1 ;
 }
