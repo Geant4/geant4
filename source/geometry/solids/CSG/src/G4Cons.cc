@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.55 2008-02-18 16:21:35 tnikitin Exp $
+// $Id: G4Cons.cc,v 1.56 2008-02-20 08:56:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,19 +35,8 @@
 // History:
 //
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 26.07.04 V.Grichine: bugs fixed in   Distance ToIn(p,v):dIn=dOut=0 in 3/10^8
-// 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
-// 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
-// 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
-// 17.08.00 V.Grichine: if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
-// 08.08.00 V.Grichine: more stable roots 2-equation in DistanceToOut(p,v,...)
-// 06.03.00 V.Grichine: modifications in DistanceToOut(p,v,...) 
-// 18.11.99 V.Grichine: side = kNull initialisation in DistanceToOut(p,v,...)
-// 28.04.99 V.Grichine: bugs fixed in  Distance ToOut(p,v,...) and  
-//                      Distance ToIn(p,v)
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 13.09.96 V.Grichine: final modifications to commit
-// ~1994    P.Kent: main part of geometry functions
+// 13.09.96 V.Grichine: Review and final modifications
+// ~1994    P.Kent: Created, as main part of the geometry prototype
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"
@@ -2186,9 +2175,9 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   G4double zRand, cosu, sinu, rRand1, rRand2, chose, rone, rtwo, qone, qtwo;
   rone = (fRmax1-fRmax2)/(2.*fDz);
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
-  qone=0.;qtwo=0.;
-  if(fRmax1!=fRmax2)qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
-  if(fRmin1!=fRmin2)qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
+  qone=0.; qtwo=0.;
+  if(fRmax1!=fRmax2) { qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2); }
+  if(fRmin1!=fRmin2) { qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2); }
   slin   = std::sqrt(sqr(fRmin1-fRmin2)+sqr(2.*fDz));
   slout  = std::sqrt(sqr(fRmax1-fRmax2)+sqr(2.*fDz));
   Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout;       
