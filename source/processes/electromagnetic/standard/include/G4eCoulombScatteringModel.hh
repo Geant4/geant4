@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.20 2007-10-24 10:42:05 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.21 2008-02-20 18:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,11 +118,18 @@ protected:
 
 private:
 
+  inline G4double FormFactorMev2(G4double Z, G4double A);
+
   // hide assignment operator
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
   G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&);
 
 protected:
+ 
+  G4double SampleCosineTheta(const G4Material*,
+                             const G4ParticleDefinition*,
+                             G4double kinEnergy,
+                             G4double cutEnergy);
 
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
@@ -167,6 +174,7 @@ private:
   G4double                  highKEnergy;
   G4double                  alpha2;
   G4double                  faclim;
+  G4double                  FF[100];
 
   G4int                     nbins;
   G4int                     nmax;
@@ -217,11 +225,25 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A,
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
       cosTetMaxNuc = 0.0;
-    // A.V. Butkevich et al., NIM A 488 (2002) 282
-    x =  fNistManager->GetLOGA(A);
-    formfactA = mom2*constn*std::exp(0.54*x);
+    formfactA = mom2*FormFactorMev2(Z, A);
   } 
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4double G4eCoulombScatteringModel::FormFactorMev2(G4double Z, 
+							  G4double A)
+{
+  // A.V. Butkevich et al., NIM A 488 (2002) 282
+  G4int iz = G4int(Z);
+  if(iz > 99) iz = 99;
+  G4double res = FF[iz];
+  if(res == 0.0) { 
+    res = constn*std::exp(0.54*fNistManager->GetLOGA(A));
+    FF[iz] = res;
+  }
+  return res;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

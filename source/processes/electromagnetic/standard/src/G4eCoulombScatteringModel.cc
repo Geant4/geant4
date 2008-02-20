@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.40 2008-01-07 08:32:01 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.41 2008-02-20 18:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   elecXSection = nucXSection = 0.0;
   ecut = DBL_MAX;
   particle = 0;
-  for(size_t j=0; j<100; j++) {index[j] = -1;} 
+  for(size_t j=0; j<100; j++) {
+    index[j] = -1;
+    FF[j]    = 0.0;
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -279,53 +282,17 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		const G4MaterialCutsCouple* couple,
 		const G4DynamicParticle* dp,
 		G4double cutEnergy,
-		G4double maxEnergy)
+		G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
   G4double kinEnergy = dp->GetKineticEnergy();
 
-  // Select atom and setup
-  SetupParticle(p);
-  const G4Element* elm = 
-    SelectRandomAtom(aMaterial,p,kinEnergy,cutEnergy,maxEnergy);
-  G4double Z  = elm->GetZ();
-  G4double A  = elm->GetN();
+  G4double cost = 
+    SampleCosineTheta(aMaterial,p,kinEnergy,cutEnergy);
+  if(std::fabs(cost) > 1.0) return;
 
-  G4double cross = 
-    ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cutEnergy,maxEnergy);
-
-  G4double costm = cosTetMaxNuc;
-  G4double formf = formfactA;
-  if(G4UniformRand()*cross < elecXSection) {
-    costm = cosTetMaxElec;
-    formf = 0.0;
-  }
-  /*
-  G4cout << "G4eCoul...SampleSecondaries: e(MeV)= " << tkin 
-  	 << " ctmin= " << cosThetaMin
-  	 << " ctmaxN= " << cosTetMaxNuc
-  	 << " ctmax= " << costm
-  	 << " Z= " << Z << " A= " << A
-  	 << " cross= " << cross/barn << " crossE= " << elecXSection/barn
-  	 << G4endl;
-  */
-  if(costm >= cosThetaMin) return; 
-
-  G4double x1 = 1. - cosThetaMin + screenZ;
-  G4double x2 = 1. - costm;
-  G4double x3 = cosThetaMin - costm;
-  G4double grej,  z, z1; 
-  do {
-    z  = G4UniformRand()*x3;
-    z1 = (x1*x2 - screenZ*z)/(x1 + z);
-    if(z1 < 0.0) z1 = 0.0;
-    else if(z1 > 2.0) z1 = 2.0;
-    grej = 1.0/(1.0 + formf*z1);
-  } while ( G4UniformRand() > grej*grej );  
-  
-  G4double cost = 1.0 - z1;
-  G4double sint= sqrt(z1*(2.0 - z1));
+  G4double sint= sqrt((1.0 - cost)*(1.0 + cost));
   /*
   if(sint > 0.1) 
     G4cout<<"## SampleSecondaries: e(MeV)= " << kinEnergy
@@ -342,6 +309,54 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   fParticleChange->ProposeMomentumDirection(newDirection);   
  
   return;
+}
+
+G4double G4eCoulombScatteringModel::SampleCosineTheta(
+				       const G4Material* mat,
+				       const G4ParticleDefinition* p,
+				       G4double kinEnergy,
+				       G4double cutEnergy)
+{
+  // Select atom and setup
+  SetupParticle(p);
+  const G4Element* elm = 
+    SelectRandomAtom(mat,p,kinEnergy,cutEnergy,kinEnergy);
+  G4double Z  = elm->GetZ();
+  G4double A  = elm->GetN();
+
+  G4double cross = 
+    ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cutEnergy,kinEnergy);
+
+  G4double costm = cosTetMaxNuc;
+  G4double formf = formfactA;
+  if(G4UniformRand()*cross < elecXSection) {
+    costm = cosTetMaxElec;
+    formf = 0.0;
+  }
+  /*
+  G4cout << "G4eCoul...SampleSecondaries: e(MeV)= " << tkin 
+  	 << " ctmin= " << cosThetaMin
+  	 << " ctmaxN= " << cosTetMaxNuc
+  	 << " ctmax= " << costm
+  	 << " Z= " << Z << " A= " << A
+  	 << " cross= " << cross/barn << " crossE= " << elecXSection/barn
+  	 << G4endl;
+  */
+  if(costm >= cosThetaMin) return 2.0; 
+
+  G4double x1 = 1. - cosThetaMin + screenZ;
+  G4double x2 = 1. - costm;
+  G4double x3 = cosThetaMin - costm;
+  G4double grej,  z, z1; 
+  do {
+    z  = G4UniformRand()*x3;
+    z1 = (x1*x2 - screenZ*z)/(x1 + z);
+    if(z1 < 0.0) z1 = 0.0;
+    else if(z1 > 2.0) z1 = 2.0;
+    grej = 1.0/(1.0 + formf*z1);
+  } while ( G4UniformRand() > grej*grej );  
+  
+  return 1.0 - z1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.367 2008-02-14 14:49:56 vnivanch Exp $
+$Id: History,v 1.368 2008-02-20 18:59:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 February 08: V.Ivant (emstand-V09-01-05)
+G4eCoulombScatteringModel - speedup run-time computations using
+  precomputed nuclear form-factors per element
 
 14 February 08: V.Ivant (emstand-V09-01-04)
 - G4ionIonisation, G4ionGasIonisation - use new method to compute 
