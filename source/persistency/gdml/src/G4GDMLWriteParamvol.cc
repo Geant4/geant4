@@ -40,6 +40,19 @@ void G4GDMLWriteParamvol::box_dimensionsWrite(xercesc::DOMElement* parametersEle
    box_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
 }
 
+void G4GDMLWriteParamvol::trd_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Trd* const trd) {
+
+   xercesc::DOMElement* trd_dimensionsElement = newElement("trd_dimensions");
+   parametersElement->appendChild(trd_dimensionsElement);
+   trd_dimensionsElement->setAttributeNode(newAttribute("name",trd->GetName()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("y2",2.0*trd->GetYHalfLength2()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trd->GetZHalfLength()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+}
+
 void G4GDMLWriteParamvol::cone_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Cons* const cone) {
 
    xercesc::DOMElement* cone_dimensionsElement = newElement("cone_dimensions");
@@ -71,6 +84,11 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
    
       paramvol->GetParameterisation()->ComputeDimensions(*box,index,const_cast<G4VPhysicalVolume*>(paramvol));
       box_dimensionsWrite(parametersElement,box);
+   } else
+   if (G4Trd* trd = dynamic_cast<G4Trd*>(solid)) {
+   
+      paramvol->GetParameterisation()->ComputeDimensions(*trd,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      trd_dimensionsWrite(parametersElement,trd);
    } else
    if (G4Cons* cone = dynamic_cast<G4Cons*>(solid)) {
    
