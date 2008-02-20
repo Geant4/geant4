@@ -77,8 +77,8 @@ private:
    void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Hype&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Tubs&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-   void ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+   void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const;
+   void ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const;
 };
 
 #endif

@@ -109,3 +109,15 @@ void G4GDMLParameterisation::ComputeDimensions(G4Hype& hype,const G4int index,co
    hype.SetInnerStereo(parameterList[index].dimension[2]);
    hype.SetOuterStereo(parameterList[index].dimension[3]);
 }
+
+void G4GDMLParameterisation::ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const {
+
+   G4Exception("GDML Writer: ERROR! Polycone is not supported in parameterised volume!");
+}
+
+void G4GDMLParameterisation::ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {
+
+   G4Exception("GDML Writer: ERROR! Polyhedra is not supported in parameterised volume!");
+}
+
+
