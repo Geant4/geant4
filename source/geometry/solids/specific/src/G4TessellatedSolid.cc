@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.15 2008-02-14 15:34:14 ivana Exp $
+// $Id: G4TessellatedSolid.cc,v 1.16 2008-02-20 09:06:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -205,7 +205,7 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
     AddFacet(facetClone);
   }
   
-  if ( s.GetSolidClosed() ) SetSolidClosed(true);
+  if ( s.GetSolidClosed() )  { SetSolidClosed(true); }
 
 //  cubicVolume = s.GetCubicVolume();  
 }
