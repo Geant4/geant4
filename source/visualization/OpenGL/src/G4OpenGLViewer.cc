@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.34 2007-05-24 18:27:13 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.35 2008-02-20 12:26:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,18 +371,16 @@ void G4OpenGLViewer::print() {
   // Print vectored PostScript
   
   G4int size = 5000000;
-
-  GLfloat* feedback_buffer;
-  GLint returned;
-  FILE* file;
-  
-  feedback_buffer = new GLfloat[size];
+  GLfloat* feedback_buffer = new GLfloat[size];
   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
   glRenderMode (GL_FEEDBACK);
   
   DrawView();
+
+  GLint returned;
   returned = glRenderMode (GL_RENDER);
   
+  FILE* file;
   if (print_string) {
     file = fopen (print_string, "w");
     if (file) {
