@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2007-12-09 09:41:11 grichine Exp $
+// $Id: HistoMessenger.cc,v 1.2 2008-02-20 09:57:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -42,6 +42,7 @@
 #include "HistoMessenger.hh"
 
 #include "Histo.hh"
+#include "HistoManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -68,6 +69,12 @@ HistoMessenger::HistoMessenger(Histo* man) : histo (man)
   printCmd->SetGuidance("Print histogram by ID, if ID=0 - all.");
   printCmd->SetParameterName("pr",false);
   printCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+   
+  photonCmd = new G4UIcmdWithAnInteger("/testhadr/photonBias",this);
+  photonCmd->SetGuidance("Bias parameter for optical photons");
+  photonCmd->SetParameterName("pr",false);
+  photonCmd->SetDefaultValue(100);
+  photonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   histoCmd = new G4UIcommand("/testhadr/SetHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
@@ -110,7 +117,7 @@ HistoMessenger::~HistoMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == factoryCmd)
     histo->setFileName(newValues);
@@ -124,7 +131,11 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == printCmd)
     histo->print(printCmd->GetNewIntValue(newValues));
     
-  if (command == histoCmd) { 
+  if (command == photonCmd)
+    HistoManager::GetPointer()->SetPhotonBias(photonCmd->GetNewIntValue(newValues));
+    
+  if (command == histoCmd) 
+  { 
     G4int ih, nbBins;
     G4double vmin,vmax; 
     G4String unit;

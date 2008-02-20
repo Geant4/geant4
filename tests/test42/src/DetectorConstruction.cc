@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.6 2008-02-15 15:02:29 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2008-02-20 09:57:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -230,7 +230,12 @@ G4VPhysicalVolume* DetectorConstruction::Hadr01Construct()
   myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
   myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
 
-  myMPT1->AddConstProperty("SCINTILLATIONYIELD",2./MeV);
+  G4double phYield = 200./MeV;
+  phYield /= HistoManager::GetPointer()->GetPhotonBias();
+  G4double birksConst = 0.;
+
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
+  myMPT1->AddConstProperty("BIRKSCONSTANT",birksConst);   
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT",10*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",36*ns);
@@ -324,49 +329,34 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 //
 // ------------ Generate & Add Material Properties Table ------------
 //
-  const G4int nEntries = 32;
+  const G4int nEntries = 14;
 
   G4double PhotonEnergy[nEntries] =
-            { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
-              2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
-              2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
-              2.532*eV, 2.585*eV, 2.640*eV, 2.697*eV,
-              2.757*eV, 2.820*eV, 2.885*eV, 2.954*eV,
-              3.026*eV, 3.102*eV, 3.181*eV, 3.265*eV,
-              3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
-              3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
+            { 1.7712*eV,  1.8368*eV,  1.90745*eV, 1.98375*eV, 2.0664*eV, 
+              2.15625*eV, 2.25426*eV, 2.3616*eV,  2.47968*eV, 2.61019*eV, 
+              2.75521*eV, 2.91728*eV, 3.09961*eV, 3.30625*eV              };
 //
 // PbWO4
 //
   G4double RefractiveIndex1[nEntries] =
-            { 2.3435, 2.344,  2.3445, 2.345,  2.3455,
-              2.346,  2.3465, 2.347,  2.3475, 2.348,
-              2.3485, 2.3492, 2.35,   2.3505, 2.351,
-              2.3518, 2.3522, 2.3530, 2.3535, 2.354,
-              2.3545, 2.355,  2.3555, 2.356,  2.3568,
-              2.3572, 2.358,  2.3585, 2.359,  2.3595,
-              2.36,   2.3608};
+            { 2.17728, 2.18025, 2.18357, 2.18753, 2.19285, 
+              2.19813, 2.20441, 2.21337, 2.22328, 2.23619, 
+              2.25203, 2.27381, 2.30282, 2.34666            };
 
  G4double Absorption1[nEntries] =
-           {3.448*m,  4.082*m,  6.329*m,  9.174*m, 12.346*m, 13.889*m,
-           15.152*m, 17.241*m, 18.868*m, 20.000*m, 26.316*m, 35.714*m,
-           45.455*m, 47.619*m, 52.632*m, 52.632*m, 55.556*m, 52.632*m,
-           52.632*m, 47.619*m, 45.455*m, 41.667*m, 37.037*m, 33.333*m,
-           30.000*m, 28.500*m, 27.000*m, 24.500*m, 22.000*m, 19.500*m,
-           17.500*m, 14.500*m };
+           { 666*cm, 666*cm, 666*cm, 666*cm, 666*cm, 
+             666*cm, 605.455*cm, 512.308*cm, 444*cm, 333*cm, 
+             246.667*cm, 195.882*cm, 195.882*cm, 158.571*cm         };
 
   G4double ScintilFast[nEntries] =
-            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00 };
+            { 0, 0, 0, 0, 0, 
+              9, 23, 46, 72, 102, 
+              121, 117, 84, 37                };
+
   G4double ScintilSlow[nEntries] =
-            { 0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00,
-              7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 4.00,
-              3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00,
-              4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
-              7.00, 6.00, 5.00, 4.00 };
+            { 0, 0, 0, 0, 0, 
+              9, 23, 46, 72, 102, 
+              121, 117, 84, 37               };
 
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
@@ -375,7 +365,12 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
   myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
 
-  myMPT1->AddConstProperty("SCINTILLATIONYIELD",2./MeV);
+  G4double phYield = 200./MeV;
+  phYield /= HistoManager::GetPointer()->GetPhotonBias();
+  G4double birksConst = 0.;
+
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
+  myMPT1->AddConstProperty("BIRKSCONSTANT",birksConst);   
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 0.1*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",0.3*ns);

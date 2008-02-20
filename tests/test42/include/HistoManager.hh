@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.2 2007-12-09 12:02:34 grichine Exp $
+// $Id: HistoManager.hh,v 1.3 2008-02-20 09:57:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -90,6 +90,8 @@ public:
   void SetTargetLength(G4double val)            {length  = val;};
   void SetNumberOfSlices(G4int val)             {nSlices = val;};
   void SetNumberOfBinsE(G4int val)              {nBinsE  = val;};
+  void SetPhotonBias(G4int val)              {phBias  = val;};
+  const G4int GetPhotonBias() const        {return phBias;};
 
   G4double Length()         const               {return length;};
   G4int    NumberOfSlices() const               {return nSlices;};
@@ -128,6 +130,7 @@ private:
   G4double absZ0;
   G4double primaryKineticEnergy;
   G4double currentKinEnergy;
+  G4int phBias;
  
   G4int verbose;
   G4int nBinsE;

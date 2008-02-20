@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2008-02-15 15:02:29 grichine Exp $
+// $Id: HistoManager.cc,v 1.5 2008-02-20 09:57:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -97,6 +97,7 @@ HistoManager::HistoManager()
   beamFlag  = true;
   material  = 0;
   elm       = 0;
+  phBias    = 100;
   histo     = new Histo(verbose);
   neutron   = G4Neutron::Neutron();
 }
@@ -135,7 +136,7 @@ void HistoManager::bookHisto()
   histo->add1D("h20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("h21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
   histo->add1D("h22","Energy deposition (GeV) in the target",nBinsE,0.0,edepMax,GeV);
-  histo->add1D("h23","Log10 Energy (MeV) of optical photons",nBinsE,-4.,6.,1.0);
+  histo->add1D("h23","Energy (eV) of optical photons",nBinsE,1.5,3.5,1.0);
 	       
 }
 
@@ -277,20 +278,22 @@ void HistoManager::EndOfEvent()
 void HistoManager::ScoreNewTrack(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition();
-  G4String name = pd->GetParticleName();
-  G4double e = track->GetKineticEnergy();
+  G4String                  name = pd->GetParticleName();
+  G4double                  eKin = track->GetKineticEnergy();
 
   // Primary track
-  if(0 == track->GetParentID()) 
+
+  if( 0 == track->GetParentID() ) 
   {
 
     n_evt++;
-    primaryKineticEnergy = e;
+    primaryKineticEnergy = eKin;
     primaryDef = pd;
     G4ThreeVector dir = track->GetMomentumDirection();
+
     if(1 < verbose) 
       G4cout << "### Primary " << name 
-	     << " kinE(MeV)= " << e/MeV
+	     << " kinE(MeV)= " << eKin/MeV
 	     << "; m(MeV)= " << pd->GetPDGMass()/MeV
 	     << "; pos(mm)= " << track->GetPosition()/mm 
 	     << ";  dir= " << track->GetMomentumDirection() 
@@ -302,13 +305,14 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
   {
     if(1 < verbose) 
       G4cout << "=== Secondary " << name 
-	     << " kinE(MeV)= " << e/MeV
+	     << " kinE(MeV)= " << eKin/MeV
 	     << "; m(MeV)= " << pd->GetPDGMass()/MeV
 	     << "; pos(mm)= " << track->GetPosition()/mm 
 	     << ";  dir= " << track->GetMomentumDirection() 
 	     << G4endl;
 
-    e = std::log10(e/MeV);
+    G4double e = std::log10(eKin/MeV);
+    // G4double ePh = std::log10(eKin/eV);
 
     if(pd == G4Gamma::Gamma()) 
     {
@@ -367,9 +371,13 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
       n_muons++;
       histo->fill(13,e,1.0);    
-    } else if ( pd == G4OpticalPhoton::OpticalPhoton()) {
+    } 
+    else if ( pd == G4OpticalPhoton::OpticalPhoton()) 
+    {
       n_optical++;
-      histo->fill(22,e,1.0);    
+      // G4cout<<eKin/eV<<", ";
+      // histo->fill(22,ePh,1.0);    
+      histo->fill(22,eKin/eV,1.0);    
     }
   }
 }

@@ -10,7 +10,9 @@
 /testhadr/TargetRadius     100 cm
 /testhadr/TargetLength     230 cm
 /testhadr/NumberDivZ       10
-/testhadr/PrintModulo      1
+/testhadr/PrintModulo      10
+#
+/testhadr/photonBias      500
 #
 /testhadr/CutsAll          0.7 mm
 #/testhadr/Physics          PHYSLIST
@@ -39,5 +41,5 @@
 /gun/energy 5. GeV
 #/gun/energy 0.1 GeV
 #/gun/energy 40. GeV
-/run/beamOn 10
+/run/beamOn 50
 #

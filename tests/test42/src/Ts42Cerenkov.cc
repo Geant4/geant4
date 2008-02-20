@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Ts42Cerenkov.cc,v 1.1 2007-12-11 14:41:49 grichine Exp $
+// $Id: Ts42Cerenkov.cc,v 1.2 2008-02-20 09:57:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -65,6 +65,7 @@
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "Ts42Cerenkov.hh"
+#include "HistoManager.hh"
 
 using namespace std;
 
@@ -565,7 +566,7 @@ Ts42Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
 	G4double NumPhotons = Rfact * charge/eplus * charge/eplus *
                                  (dp - ge * BetaInverse*BetaInverse);
 
-	NumPhotons *= 0.01;
+	NumPhotons /= HistoManager::GetPointer()->GetPhotonBias();
 
 	return NumPhotons;		
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.1 2007-12-09 09:40:56 grichine Exp $
+// $Id: HistoMessenger.hh,v 1.2 2008-02-20 09:57:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -71,6 +71,7 @@ private:
   G4UIcmdWithAString*     fileCmd;
   G4UIcmdWithAString*     optCmd;
   G4UIcmdWithAnInteger*   printCmd;
+  G4UIcmdWithAnInteger*   photonCmd;
   G4UIcommand*            histoCmd;    
  
 };
