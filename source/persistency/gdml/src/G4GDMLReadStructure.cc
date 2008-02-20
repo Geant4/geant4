@@ -29,6 +29,13 @@
 
 #include "G4GDMLReadStructure.hh"
 
+void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
+
+   std::stringstream stream;
+   stream << physvol->GetLogicalVolume()->GetName() << "_" << physvol;
+   physvol->SetName(GenerateName(stream.str()));
+}
+
 G4GDMLReadStructure::AuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
 
    G4String auxtype;
@@ -113,15 +120,15 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
    if (number != 0 && width == 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,offset); else
    if (number == 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,width,offset); else
    if (number != 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,width,offset); else
-   G4Exception("GDML Reader: ERROR! Both number and width are zeros in divisionvol: "+name);
+   G4Exception("GDML Reader: ERROR! Both 'number' and 'width' are zeros in divisionvol: "+name);
 }
 
-G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const element) {
+G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement) {
 
    G4String name;
    G4String volname;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = fileElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -149,11 +156,28 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
 
 void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolElement) {
 
+   G4String name;
    G4LogicalVolume* logvol = 0;
-
    G4ThreeVector position(0.0,0.0,0.0);
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector scale(1.0,1.0,1.0);
+
+   const xercesc::DOMNamedNodeMap* const attributes = physvolElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = attValue;
+   }
 
    for (xercesc::DOMNode* iter = physvolElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -177,9 +201,13 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4String name = logvol->GetName() + "_in_" + pMotherLogical->GetName();
+   G4PhysicalVolumesPair pvPair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
 
-   G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0);
+   if (name.empty()) {
+
+      if (pvPair.first != 0) GeneratePhysvolName(pvPair.first);
+      if (pvPair.second != 0) GeneratePhysvolName(pvPair.second);
+   }
 }
 
 void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replicavolElement) {

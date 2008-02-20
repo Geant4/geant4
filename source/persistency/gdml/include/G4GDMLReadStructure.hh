@@ -52,6 +52,7 @@ private:
 
    G4LogicalVolume *pMotherLogical;
 
+   void GeneratePhysvolName(G4VPhysicalVolume*);
    AuxPairType auxiliaryRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
