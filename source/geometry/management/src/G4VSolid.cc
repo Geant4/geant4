@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.36 2008-02-20 11:16:02 ivana Exp $
+// $Id: G4VSolid.cc,v 1.37 2008-02-20 15:24:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -74,8 +74,7 @@ G4VSolid::G4VSolid(const G4String& name)
 //
 
 G4VSolid::G4VSolid(const G4VSolid& rhs)
-  : kCarTolerance(rhs.kCarTolerance),
-    fshapeName(rhs.fshapeName)
+  : kCarTolerance(rhs.kCarTolerance), fshapeName(rhs.fshapeName)
 {
     // Register to store
     //
@@ -111,14 +110,16 @@ G4VSolid::~G4VSolid()
 
 G4VSolid& G4VSolid::operator = (const G4VSolid& rhs) 
 {
-  // check assignment to self
-  if (this == &rhs) return *this;
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
 
-  // copy data
-  kCarTolerance = rhs.kCarTolerance;
-  fshapeName = rhs.fshapeName;
+   // Copy data
+   //
+   kCarTolerance = rhs.kCarTolerance;
+   fshapeName = rhs.fshapeName;
 
-  return *this;
+   return *this;
 }  
 
 //////////////////////////////////////////////////////////////////////////
