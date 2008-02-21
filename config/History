@@ -1,4 +1,4 @@
-$Id: History,v 1.314 2008-02-21 16:40:39 gcosmo Exp $
+$Id: History,v 1.315 2008-02-21 16:52:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 - Replaced g77 with gfortran for Linux-g++ and Linux-icc platforms.
 
 15th February 2008  Laurent Garnier
-- common.gmk: added a function to autogenerate the moc files for Qt driver
+- common.gmk: added ability to autogenerate moc files for Qt driver.
 - WIN32-VC: added flags to build Qt driver on Windows.
 - Darwin-g++, Linux-g++: improvements for autogeneration of MOC files for Qt.
 
