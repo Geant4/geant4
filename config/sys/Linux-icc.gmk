@@ -27,7 +27,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
   CC := gcc
-  FC := g77
+  FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
   AR := ar r
