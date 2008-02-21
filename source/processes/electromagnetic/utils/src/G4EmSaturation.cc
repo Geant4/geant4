@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.3 2008-02-21 09:44:34 vnivanch Exp $
+// $Id: G4EmSaturation.cc,v 1.4 2008-02-21 18:11:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,17 +53,15 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmSaturation::G4EmSaturation()
 {
   verbose = 1;
-  gamma = 0;
+  pointers = false;
   curMaterial = 0;
   curBirks = 0.0;
   nMaterials = 0;
-  manager = G4LossTableManager::Instance();
   Initialise();
 }
 
@@ -87,6 +85,15 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
   G4double bfactor = FindBirksCoefficient(couple->GetMaterial());
 
   if(bfactor > 0.0) { 
+
+    if(!pointers) {
+      pointers = true;
+      manager = G4LossTableManager::Instance();
+      gamma = G4Gamma::Gamma();
+      electron = G4Electron::Electron();
+      proton = G4Proton::Proton();
+      neutron = G4Neutron::Neutron();
+    }
 
     // atomic relaxations
     if(p == gamma) {
@@ -181,13 +188,6 @@ G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
       curBirks = matData[i];
       return curBirks;
     }
-  }
-
-  if(!gamma) {
-    gamma = G4Gamma::Gamma();
-    electron = G4Electron::Electron();
-    proton = G4Proton::Proton();
-    neutron = G4Neutron::Neutron();
   }
 
   // seach in the Geant4 list

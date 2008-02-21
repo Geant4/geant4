@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh,v 1.1 2008-02-20 19:05:01 vnivanch Exp $
+// $Id: G4EmSaturation.hh,v 1.2 2008-02-21 18:11:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,7 +106,7 @@ private:
   const G4ParticleDefinition* electron;
   const G4ParticleDefinition* neutron;
   const G4ParticleDefinition* proton;
-  G4LossTableManager*   manager;
+  G4LossTableManager*         manager;
 
   // cash
   const G4Material*           curMaterial;
@@ -116,6 +116,7 @@ private:
   G4int    verbose;             
   G4int    nMaterials;
   G4int    nG4Birks;
+  G4bool   pointers;
 
   // list of materials used in run time
   std::vector<G4double>             matData;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.86 2008-02-21 09:44:34 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.87 2008-02-21 18:11:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -844,6 +844,20 @@ void G4LossTableManager::SetBremsstrahlungTh(G4double val)
 G4double G4LossTableManager::BremsstrahlungTh() const
 {
   return bremsTh;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmCorrections* G4LossTableManager::EmCorrections() 
+{
+  return emCorrections;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmSaturation* G4LossTableManager::EmSaturation()
+{
+  return emSaturation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
