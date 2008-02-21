@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.49 2008-02-21 09:22:13 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.50 2008-02-21 09:44:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,6 +90,7 @@ class G4ParticleDefinition;
 class G4VMultipleScattering;
 class G4VEmProcess;
 class G4EmCorrections;
+class G4EmSaturation;
 class G4LossTableBuilder;
 
 class G4LossTableManager
@@ -428,7 +429,7 @@ inline G4EmCorrections* G4LossTableManager::EmCorrections()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4EmSaturation* G4LossTableManager::GetEmSaturation();
+inline G4EmSaturation* G4LossTableManager::GetEmSaturation()
 {
   return emSaturation;
 }

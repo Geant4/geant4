@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.85 2008-02-21 09:22:13 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.86 2008-02-21 09:44:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,6 +69,7 @@
 //          left ionisation table for further usage (VI)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
+// 21-02-08 Add G4EmSaturation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -90,6 +91,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmCorrections.hh"
+#include "G4EmSaturation.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.2 2008-02-21 09:23:48 vnivanch Exp $
+// $Id: G4EmSaturation.cc,v 1.3 2008-02-21 09:44:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -219,8 +219,10 @@ void G4EmSaturation::DumpBirksCoefficients()
   if(nMaterials > 0) {
     G4cout << "### Birks coeffitients used in run time" << G4endl;
     for(G4int i=0; i<nMaterials; i++) {
-      G4cout << "   " << matNames[i] << "   " 
-	     << matData[i]*mm/MeV << " mm/MeV" << G4endl;
+      G4cout << "   " << matNames[i] << "     " 
+	     << matData[i]*MeV/mm << " mm/MeV" << "     "
+	     << matData[i]*matPointers[i]->GetDensity()*MeV*cm2/g << " g/cm^2/MeV" 
+	     << G4endl;
     }
   }
 }
@@ -233,7 +235,7 @@ void G4EmSaturation::DumpG4BirksCoefficients()
     G4cout << "### Birks coeffitients for Geant4 materials" << G4endl;
     for(G4int i=0; i<nG4Birks; i++) {
       G4cout << "   " << g4MatNames[i] << "   " 
-	     << g4MatData[i]*mm/MeV << " mm/MeV" << G4endl;
+	     << g4MatData[i]*MeV/mm << " mm/MeV" << G4endl;
     }
   }
 }
