@@ -46,21 +46,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     XMLIBS    := -L/sw/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
   endif
-  ifndef QTHOME
-    QTHOME  := /sw
-  endif
-  ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
-  endif
-  ifndef QTMOC
-    QTMOC       := $(QTHOME)/bin/moc
-  endif
-  ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
-    QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
-    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
-  endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
 #   XAWFLAGS   := -I/usr/X11R6/include         ##### some installations.
@@ -81,6 +66,21 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 #    OGLLIBS   += -dylib_file \
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:\
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+  endif
+  ifndef QTHOME
+    QTHOME     := /sw
+  endif
+  ifndef QTFLAGS
+    QTFLAGS    := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+  endif
+  ifndef QTMOC
+    QTMOC      := $(QTHOME)/bin/moc
+  endif
+  ifndef QTLIBS
+    QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
+    QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
+    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
+    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
 
   define build-granular-shared-lib
