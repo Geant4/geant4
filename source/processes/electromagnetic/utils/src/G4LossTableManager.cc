@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.84 2007-06-14 07:28:48 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.85 2008-02-21 09:22:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -125,6 +125,7 @@ G4LossTableManager::~G4LossTableManager()
   delete theMessenger;
   delete tableBuilder;
   delete emCorrections;
+  delete emSaturation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -151,6 +152,7 @@ G4LossTableManager::G4LossTableManager()
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   emCorrections= new G4EmCorrections();
+  emSaturation = new G4EmSaturation();
   integral = true;
   integralActive = false;
   buildCSDARange = false;
