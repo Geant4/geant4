@@ -35,21 +35,19 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     UI32LIBS  := gdi32.lib user32.lib
   endif
   ifndef QTHOME
-    QTHOME  := /usr
+    QTHOME    := /usr
   endif
   ifndef QTFLAGS
     QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
   endif
   ifndef QTMOC
-    QTMOC       := $(QTHOME)/bin/moc
+    QTMOC     := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
-    QT4LIBS    := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib QtSql4.lib QtXml4.lib
-    QT4LIBS    += -lG4baryons -lG4biasing -lG4bosons -lG4brep -lG4csg -lG4cuts -lG4decay -lG4detector -lG4detutils -lG4digits -lG4emhighenergy -lG4emlowenergy -lG4empolar -lG4emstandard -lG4emutils -lG4error_propagation -lG4event -lG4geombias -lG4geomBoolean -lG4geomdivision -lG4geometrymng -lG4gflash -lG4globman -lG4graphics_reps -lG4hadronic_ablation -lG4hadronic_abrasion -lG4hadronic_bert_cascade -lG4hadronic_binary -lG4hadronic_body_ci -lG4hadronic_coherent_elastic -lG4hadronic_deex_evaporation -lG4hadronic_deex_fermi_breakup -lG4hadronic_deex_fission -lG4hadronic_deex_gem_evaporation -lG4hadronic_deex_handler -lG4hadronic_deex_management -lG4hadronic_deex_multifragmentation -lG4hadronic_deex_photon_evaporation -lG4hadronic_deex_util -lG4hadronic_em_dissociation -lG4hadronic_HE -lG4hadronic_hetcpp_evaporation -lG4hadronic_hetcpp_utils -lG4hadronic_interface_ci -lG4hadronic_iso -lG4hadronic_LE -lG4hadronic_leading_particle -lG4hadronic_mgt -lG4hadronic_proc -lG4hadronic_qgstring -lG4hadronic_radioactivedecay -lG4hadronic_stop -lG4hadronic_util -lG4hadronic_xsect -lG4had_im_r_matrix -lG4had_lll_fis -lG4had_mod_man -lG4had_mod_util -lG4had_muon_nuclear -lG4had_neu_hp -lG4had_preequ_exciton -lG4had_string_diff -lG4had_string_frag -lG4had_string_man -lG4had_theo_max -lG4hepnumerics -lG4hits -lG4intercoms -lG4ions -lG4leptons -lG4magneticfield -lG4materials -lG4mesons -lG4modeling -lG4muons -lG4navigation -lG4OpenGL -lG4optical -lG4parameterisation -lG4partman -lG4partutils -lG4persistency -lG4phys_builders -lG4phys_lists -lG4procman -lG4RayTracer -lG4readout -lG4run -lG4scoring -lG4shortlived -lG4specsolids -lG4track -lG4tracking -lG4transportation -lG4Tree -lG4UIbasic -lG4UIcommon -lG4UIGAG -lG4visHepRep -lG4visXXX -lG4vis_management -lG4volumes -lG4VRML -lG4xrays
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo $(QT4LIBS) || echo $(QT3LIBS))
+    QT3LIBS   := -L$(QTHOME)/lib -lqt-mt
+    QT4LIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib QtSql4.lib QtXml4.lib
+    QTLIBS    := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
-
 
 #
 # Building DLLs (G.Barrand)
