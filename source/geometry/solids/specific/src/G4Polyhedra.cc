@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.37 2008-02-21 13:44:20 tnikitin Exp $
+// $Id: G4Polyhedra.cc,v 1.38 2008-02-21 17:03:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -782,15 +782,16 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   }
   else
   {
-    for (j=0; j< numPlanes-1; j++)
-      {
-      if((chose>=Achose1 && chose < Achose2)||j==numPlanes-2){ 
-	Flag = j; break; 
-        }
+    for (j=0; j<numPlanes-1; j++)
+    {
+      if( ((chose >= Achose1) && (chose < Achose2)) || (j == numPlanes-2) )
+      { 
+        Flag = j; break; 
+      }
       Achose1 += numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
       Achose2 = Achose1 + numSide*(aVector1[j+1]+aVector2[j+1])
                         + 2.*aVector3[j+1];
-      }
+    }
   }
 
   // at this point we have chosen a subsection
