@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2008-02-20 09:06:43 gcosmo Exp $
+$Id: History,v 1.133 2008-02-21 17:09:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-Feb-2008, T.Nikitina (geom-specific-V09-01-04)
+- G4Polyhedra: fixed problem of out-of-bound access to vectors in
+  GetPointOnSurface().
 
 20-Feb-2008, I.Hrivnacova (geom-specific-V09-01-03)
 - G4TessellatedSolid: fixed bug in copy-constructor and internal method
