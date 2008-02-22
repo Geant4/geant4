@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.hh,v 1.2 2008-01-04 23:20:50 dennis Exp $
+// $Id: G4RPGInelastic.hh,v 1.3 2008-02-22 22:17:25 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -76,7 +76,7 @@ class G4RPGInelastic : public G4HadronicInteraction
                    G4FastVector<G4ReactionProduct,256> &vec,
                    G4int &vecLen);
     
-   void Rotate(G4FastVector<G4ReactionProduct,256> &vec, G4int &vecLen);
+   //   void Rotate(G4FastVector<G4ReactionProduct,256> &vec, G4int &vecLen);
 
    void GetNormalizationConstant(const G4double availableEnergy,
                                  G4double &n,
