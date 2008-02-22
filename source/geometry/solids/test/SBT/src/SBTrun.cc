@@ -184,9 +184,9 @@ void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
   SBTrunPointList surface(100);
 
   //
-  // Set iostream precision to 14 digits
+  // Set iostream precision to 20 digits
   //
-  logger << std::setprecision(14);
+  logger << std::setprecision(20);
 
   //
   // Set clock
@@ -201,7 +201,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, std::ostream &logger )
   G4int nPoint = 0;
   G4int nError = 0;
 
-  std::setprecision(16);
+  std::setprecision(20);
 
   for(;;) {
     //
@@ -288,6 +288,12 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
   // Now required for drawing
   G4Transform3D  objectTransformation; 
 
+  //
+  // This draws the target solid
+  //
+  G4VisAttributes redStuff( G4Color(1,0,0) );
+  visManager->Draw( *testVolume, redStuff, objectTransformation );
+
   if ( errorIndex > 0 ) {
 
     //
@@ -322,12 +328,6 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, std::istream &logger,
     circle.SetVisAttributes( blueStuff );
     visManager->Draw( circle, objectTransformation);
   }
-
-  //
-  // This draws the target solid
-  //
-  G4VisAttributes redStuff( G4Color(1,0,0) );
-  visManager->Draw( *testVolume, redStuff, objectTransformation );
 
   // visManager->Show();
 
@@ -461,6 +461,32 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, co
   return 0;
 }
 
+//
+// DebugSurfNorm
+//
+// Recover previously logged error and invoke G4VSolid::SurfaceNormal(p)
+//
+G4int SBTrun::DebugSurfNorm( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const
+{	
+  G4ThreeVector p, v;
+
+  //
+  // Recover information from log file
+  //
+  G4int error = GetLoggedPV( logger, errorIndex, p, v );
+  if (error) return error;
+
+  //
+  // Call
+  //
+  G4ThreeVector norm = testVolume->SurfaceNormal(p);
+  G4cout << "testVolume->SurfaceNormal(p): " << norm << G4endl; 
+
+  G4double answer = norm.dot(v);
+  G4cout << "norm.dot(v): " << answer << G4endl; 
+
+  return 0;
+}
 
 //
 // --------------------------------------
@@ -848,8 +874,6 @@ G4int SBTrun::CountErrors() const
 G4int SBTrun::GetLoggedPV( std::istream &logger, const G4int errorIndex,
 			   G4ThreeVector &p, G4ThreeVector &v        ) const
 {
-  logger >> std::setprecision(14);		// I wonder if this is necessary?
-
   //
   // Search for the requested error index, skipping comments along the way
   //
