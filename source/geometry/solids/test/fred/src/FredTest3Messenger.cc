@@ -109,6 +109,12 @@ FredTest3Messenger::FredTest3Messenger()
 	runCmd->SetGuidance( "Execute test 3" );
 	
 	//
+	// Run debug command
+	//
+	runDebugCmd = new G4UIcmdWithoutParameter( "/fred/test3/runDebug", this );
+	runDebugCmd->SetGuidance( "Debug all errors listed in log file" );
+
+	//
 	// Debug commands
 	//
 	debugCmd = new G4UIcmdWithAnInteger( "/fred/test3/debug", this );
@@ -171,6 +177,43 @@ void FredTest3Messenger::InvokeTest3()
 	// Run the test
 	//
 	tester->RunTest( testVolume, logFile );
+}
+
+
+//
+// InvokeRunDebug
+//
+//
+void FredTest3Messenger::InvokeRunDebug()
+{
+	//
+	// Is there a volume to test?
+	//
+	// If I was really clever (I'm not) I would also check
+	// to make sure we have the same volume type and even the
+	// same volume parameters.
+	//
+	if (testVolume == 0) {
+		G4cerr << "Please initialize geometry before running test 3" << G4endl;
+		return;
+	}
+
+	//
+	// Open input file
+	//
+	std::ifstream logFile( errorFile );
+	if (!logFile) {
+		G4cerr << "Cannot open input file " << errorFile << G4endl;
+		return;
+	}
+	
+	//
+	// Debug run
+	//
+
+	// Run the debug test
+	//
+	tester->RunDebug( testVolume, logFile );
 }
 
 
@@ -275,6 +318,9 @@ void FredTest3Messenger::SetNewValue( G4UIcommand *command, G4String newValues )
 	else if (command == runCmd) {
 		InvokeTest3();
 	}
+	else if (command == runDebugCmd) {
+		InvokeRunDebug();
+	}
 	else if (command == debugCmd) {
 		FredTest3Messenger::DebugError debugger( testVolume, tester );
 		Debug( debugCmd->GetNewIntValue( newValues ), &debugger );
@@ -329,6 +375,9 @@ G4String FredTest3Messenger::GetCurrentValue( G4UIcommand *command )
 		return errorFile;
 	}
 	else if (command == runCmd) {
+		return "";
+	}
+	else if (command == runDebugCmd) {
 		return "";
 	}
 	else if (command == debugCmd ||

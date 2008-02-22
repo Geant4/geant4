@@ -103,6 +103,7 @@ class FredTest3Messenger : public G4UImessenger
 	};
 	
         void InvokeTest3();
+        void InvokeRunDebug();
         void Debug( const G4int errorIndex, FredTest3Messenger::Debugger *debugger );
 	
 	private:
@@ -119,6 +120,7 @@ class FredTest3Messenger : public G4UImessenger
 	G4UIcmdWithAnInteger		*maxErrorsCmd;
 	G4UIcmdWithAString		*errorFileCmd;
 	G4UIcmdWithoutParameter		*runCmd;
+	G4UIcmdWithoutParameter		*runDebugCmd;
 	G4UIcmdWithAnInteger		*debugCmd;
 	G4UIcmdWithAnInteger		*debugInsideCmd;
 	G4UIcmdWithAnInteger		*debugToInPCmd;
