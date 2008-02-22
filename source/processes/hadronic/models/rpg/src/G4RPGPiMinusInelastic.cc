@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiMinusInelastic.cc,v 1.2 2008-01-05 00:08:15 dennis Exp $
+// $Id: G4RPGPiMinusInelastic.cc,v 1.3 2008-02-22 22:30:30 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -36,7 +36,7 @@ G4RPGPiMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 {
   const G4HadProjectile* originalIncident = &aTrack;
 
-  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+  if (originalIncident->GetKineticEnergy()<= 0.1) {
     theParticleChange.SetStatusChange(isAlive);
     theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
@@ -94,7 +94,7 @@ G4RPGPiMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   G4int vecLen = 0;
   vec.Initialize( 0 );
     
-  const G4double cutOff = 0.1*MeV;
+  const G4double cutOff = 0.1;
   if( currentParticle.GetKineticEnergy() > cutOff )
     InitialCollision(vec, vecLen, currentParticle, targetParticle,
                      incidentHasChanged, targetHasChanged, quasiElastic);
@@ -202,8 +202,8 @@ G4RPGPiMinusInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec
     vec.SetElement(vecLen++, rp);
   }
 
-  if (mult == 2 && !incidentHasChanged && !targetHasChanged) 
-                                              quasiElastic = true;
+  //  if (mult == 2 && !incidentHasChanged && !targetHasChanged) 
+  //                                              quasiElastic = true;
 
   // Check conservation of charge, strangeness, baryon number
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGProtonInelastic.cc,v 1.2 2008-01-04 23:25:00 dennis Exp $
+// $Id: G4RPGProtonInelastic.cc,v 1.3 2008-02-22 22:28:58 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -36,7 +36,7 @@ G4RPGProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 {
   theParticleChange.Clear();
   const G4HadProjectile *originalIncident = &aTrack;
-  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
+  if (originalIncident->GetKineticEnergy()<= 0.1) 
   {
     theParticleChange.SetStatusChange(isAlive);
     theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
@@ -56,43 +56,39 @@ G4RPGProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     return &theParticleChange;
   }
 
-  //
   // Fermi motion and evaporation
   // As of Geant3, the Fermi energy calculation had not been Done
-  //
-  G4double ek = originalIncident->GetKineticEnergy()/MeV;
-  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+
+  G4double ek = originalIncident->GetKineticEnergy();
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass();
   G4ReactionProduct modifiedOriginal;
   modifiedOriginal = *originalIncident;
     
   G4double tkin = targetNucleus.Cinema( ek );
   ek += tkin;
-  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  modifiedOriginal.SetKineticEnergy(ek);
   G4double et = ek + amas;
   G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-  if( pp > 0.0 )
-  {
+  G4double pp = modifiedOriginal.GetMomentum().mag();
+  if (pp > 0.0) {
     G4ThreeVector momentum = modifiedOriginal.GetMomentum();
     modifiedOriginal.SetMomentum( momentum * (p/pp) );
   }
   //
   // calculate black track energies
   //
-  tkin = targetNucleus.EvaporationEffects( ek );
+  tkin = targetNucleus.EvaporationEffects(ek);
   ek -= tkin;
-  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  modifiedOriginal.SetKineticEnergy(ek);
   et = ek + amas;
   p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-  pp = modifiedOriginal.GetMomentum().mag()/MeV;
-  if( pp > 0.0 )
-  {
+  pp = modifiedOriginal.GetMomentum().mag();
+  if (pp > 0.0) {
     G4ThreeVector momentum = modifiedOriginal.GetMomentum();
     modifiedOriginal.SetMomentum( momentum * (p/pp) );
   }
   const G4double cutOff = 0.1;
-  if( modifiedOriginal.GetKineticEnergy()/MeV <= cutOff )
-  {
+  if (modifiedOriginal.GetKineticEnergy() < cutOff) {
     SlowProton( originalIncident, targetNucleus );
     delete originalTarget;
     return &theParticleChange;
@@ -133,7 +129,7 @@ G4RPGProtonInelastic::SlowProton(const G4HadProjectile *originalIncident,
 {
   const G4double A = targetNucleus.GetN();    // atomic weight
   const G4double Z = targetNucleus.GetZ();    // atomic number
-//  G4double currentKinetic = originalIncident->GetKineticEnergy()/MeV;
+//  G4double currentKinetic = originalIncident->GetKineticEnergy();
   //
   // calculate Q-value of reactions
   //
@@ -274,9 +270,6 @@ G4RPGProtonInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec,
     testStrange = 0.0;
   }
 
-  if (mult == 2 && !incidentHasChanged && !targetHasChanged)
-                                              quasiElastic = true;
- 
   // Remove incident and target from fsTypes
  
   fsTypes.erase(fsTypes.begin());

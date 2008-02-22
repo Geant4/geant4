@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.cc,v 1.2 2008-01-04 23:48:35 dennis Exp $
+// $Id: G4RPGNeutronInelastic.cc,v 1.3 2008-02-22 22:26:58 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -77,10 +77,10 @@ G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   //
   tkin = targetNucleus.EvaporationEffects( ek );
   ek -= tkin;
-  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  modifiedOriginal.SetKineticEnergy(ek);
   et = ek + amas;
   p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  pp = modifiedOriginal.GetMomentum().mag();
   if( pp > 0.0 )
   {
     G4ThreeVector momentum = modifiedOriginal.GetMomentum();
@@ -331,8 +331,8 @@ G4RPGNeutronInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec
     testStrange = 0.0;
   }
 
-  if (mult == 2 && !incidentHasChanged && !targetHasChanged)
-                                              quasiElastic = true;
+  //  if (mult == 2 && !incidentHasChanged && !targetHasChanged)
+  //                                              quasiElastic = true;
   
   // Remove incident and target from fsTypes
   

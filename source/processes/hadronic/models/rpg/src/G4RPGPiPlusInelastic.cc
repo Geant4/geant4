@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiPlusInelastic.cc,v 1.2 2008-01-04 23:59:58 dennis Exp $
+// $Id: G4RPGPiPlusInelastic.cc,v 1.3 2008-02-22 22:31:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -35,7 +35,7 @@ G4RPGPiPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                      G4Nucleus& targetNucleus)
 {
   const G4HadProjectile *originalIncident = &aTrack;
-  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+  if (originalIncident->GetKineticEnergy()<= 0.1) {
     theParticleChange.SetStatusChange(isAlive);
     theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
@@ -95,7 +95,7 @@ G4RPGPiPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
-    const G4double cutOff = 0.1*MeV;
+    const G4double cutOff = 0.1;
     if( currentParticle.GetKineticEnergy() > cutOff )
       InitialCollision(vec, vecLen, currentParticle, targetParticle,
                        incidentHasChanged, targetHasChanged, quasiElastic);
@@ -191,6 +191,8 @@ G4RPGPiPlusInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec,
   fsTypes.erase(fsTypes.begin()+choose);
 
   // Remaining particles are secondaries.  Put them into vec.
+  //   Improve this by randomizing secondary order, then alternate
+  //   which secondary is put into forward or backward hemisphere
 
   G4ReactionProduct* rp(0);
   for(G4int i=0; i < mult-2; ++i ) {
@@ -202,8 +204,8 @@ G4RPGPiPlusInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec,
     vec.SetElement(vecLen++, rp);
   }
  
-  if (mult == 2 && !incidentHasChanged && !targetHasChanged) 
-                                              quasiElastic = true;
+  //  if (mult == 2 && !incidentHasChanged && !targetHasChanged) 
+  //                                              quasiElastic = true;
 
   // Check conservation of charge, strangeness, baryon number
 
