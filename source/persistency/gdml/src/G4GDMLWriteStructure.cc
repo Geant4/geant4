@@ -34,6 +34,7 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
    volumeElement->appendChild(physvolElement);
+   physvolElement->setAttributeNode(newAttribute("name",physvol->GetName()));
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    physvolElement->appendChild(volumerefElement);

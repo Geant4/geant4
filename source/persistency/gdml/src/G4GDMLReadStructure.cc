@@ -36,6 +36,12 @@ void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
    physvol->SetName(GenerateName(stream.str()));
 }
 
+void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const assemblyElement) {
+
+   pAssembly = new G4AssemblyVolume();
+   pMotherLogical = 0;
+}
+
 G4GDMLReadStructure::AuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
 
    G4String auxtype;
@@ -115,12 +121,12 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
 
    G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
-   G4String name = pLogical->GetName() + "_in_" + pMotherLogical->GetName();
+   G4PVDivision* divisionvolPtr = 0;
+   if (number != 0 && width == 0.0) divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,number,offset); else
+   if (number == 0 && width != 0.0) divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,width,offset); else
+   divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,number,width,offset); 
 
-   if (number != 0 && width == 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,offset); else
-   if (number == 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,width,offset); else
-   if (number != 0 && width != 0.0) new G4PVDivision(name,pLogical,pMotherLogical,axis,number,width,offset); else
-   G4Exception("GDML Reader: ERROR! Both 'number' and 'width' are zeros in divisionvol: "+name);
+   GeneratePhysvolName(divisionvolPtr);
 }
 
 G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement) {
@@ -201,12 +207,12 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4PhysicalVolumesPair pvPair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
 
    if (name.empty()) {
 
-      if (pvPair.first != 0) GeneratePhysvolName(pvPair.first);
-      if (pvPair.second != 0) GeneratePhysvolName(pvPair.second);
+      if (pair.first != 0) GeneratePhysvolName(pair.first);
+      if (pair.second != 0) GeneratePhysvolName(pair.second);
    }
 }
 
@@ -263,14 +269,11 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
 
    G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
 
-   G4String name = pLogical->GetName() + "_in_" + pMotherLogical->GetName();
-
-   new G4PVReplica(name,pLogical,pMotherLogical,axis,number,width,offset);
+   G4PVReplica* replicaPtr = new G4PVReplica("",pLogical,pMotherLogical,axis,number,width,offset);
+   GeneratePhysvolName(replicaPtr);
 }
 
 void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElement) {
-
-   G4String name;
 
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
@@ -278,7 +281,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    AuxListType auxList;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
-   name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
+   G4String name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
 
    for (xercesc::DOMNode* iter = volumeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -294,6 +297,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
 
+   pAssembly = 0;
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
 
    if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
@@ -340,7 +344,8 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="volume") volumeRead(child); else      
+//      if (tag=="assembly") assemblyRead(child); else
+      if (tag=="volume") volumeRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
       G4Exception("GDML Reader: ERROR! Unknown tag in structure: "+tag);
    }

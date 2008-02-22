@@ -30,6 +30,7 @@
 #ifndef _G4GDMLREADSTRUCTURE_INCLUDED_
 #define _G4GDMLREADSTRUCTURE_INCLUDED_
 
+#include "G4AssemblyVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PVDivision.hh"
@@ -50,9 +51,13 @@ public:
 private:
    AuxMapType auxMap;
 
+   G4AssemblyVolume *pAssembly;
    G4LogicalVolume *pMotherLogical;
 
+   std::map<G4String,G4AssemblyVolume*> assemblyMap;
+
    void GeneratePhysvolName(G4VPhysicalVolume*);
+   void assemblyRead(const xercesc::DOMElement* const);
    AuxPairType auxiliaryRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
