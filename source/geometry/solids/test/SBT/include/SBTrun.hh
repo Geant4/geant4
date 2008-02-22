@@ -77,6 +77,7 @@ class SBTrun {
 	G4int DebugToInPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
 	G4int DebugToOutP( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
 	G4int DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
+	G4int DebugSurfNorm( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
 
 	inline void SetTarget( const G4ThreeVector &newTarget ) { target = newTarget; }
 	inline G4ThreeVector GetTarget() const { return target; }
