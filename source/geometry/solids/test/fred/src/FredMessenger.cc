@@ -85,6 +85,8 @@ FredMessenger::FredMessenger( )
  	volumeNames[TWBOX]   = "TWBOX";
  	volumeNames[TWTRAP1] = "TWTRAP1";
  	volumeNames[TWTRAP2] = "TWTRAP2";
+ 	volumeNames[TWTRD]   = "TWTRD";
+ 	volumeNames[TWTUBS]  = "TWTUBS";
 
 	volumeNames[BOOL1]  =  "BOOL1";
 
@@ -156,6 +158,8 @@ FredMessenger::FredMessenger( )
 			 + volumeNames[TWBOX] + " " 
 			 + volumeNames[TWTRAP1] + " " 
 			 + volumeNames[TWTRAP2] + " " 
+			 + volumeNames[TWTRD] + " " 
+			 + volumeNames[TWTUBS] + " " 
 			 + volumeNames[BOOL1];
 	volumeTypeNameCmd->SetCandidates( choices );
 	

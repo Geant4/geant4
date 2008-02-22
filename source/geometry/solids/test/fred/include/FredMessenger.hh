@@ -71,9 +71,11 @@ enum VolumeType {
         TET,
         TWBOX,
         TWTRAP1,
-        TWTRAP2
+        TWTRAP2,
+        TWTRD,
+        TWTUBS
 };
-#define FRED_VOLUMETYPE_NUM 37
+#define FRED_VOLUMETYPE_NUM 39
 
 enum GunType {
 	SPRAY,

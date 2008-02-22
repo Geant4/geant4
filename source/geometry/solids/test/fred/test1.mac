@@ -1,4 +1,4 @@
-# $Id: test1.mac,v 1.2 2008-02-18 10:48:57 ivana Exp $
+# $Id: test1.mac,v 1.3 2008-02-22 09:57:57 ivana Exp $
 # New Geant4 macro for test1
 # By I. Hrivnacova, IPN Orsay; 25/01/2008
 
@@ -38,6 +38,8 @@
 #/fred/volume TWBOX
 #/fred/volume TWTRAP1
 #/fred/volume TWTRAP2
+#/fred/volume TWTRD
+#/fred/volume TWTUBS
 #/fred/volume BOOL1
 
 
