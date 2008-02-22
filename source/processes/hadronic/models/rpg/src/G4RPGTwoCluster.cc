@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoCluster.cc,v 1.2 2007-08-15 20:38:48 dennis Exp $
+// $Id: G4RPGTwoCluster.cc,v 1.3 2008-02-22 22:35:12 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -127,7 +127,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4double backwardMass = targetParticle.GetMass()/GeV;
   G4double bMass = backwardMass;
 
-  G4int backwardNucleonCount = 1;  // number of nucleons in backward hemisphere
+  //  G4int backwardNucleonCount = 1;  // number of nucleons in backward hemisphere
     
   for( i=0; i<vecLen; ++i )
   {
@@ -162,9 +162,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4int nuclearExcitationCount = G4Poisson( xtarg );
 
   if(atomicWeight<1.0001) nuclearExcitationCount = 0;
-  G4int extraNucleonCount = 0;
-  G4double extraMass = 0.0;
-  G4double extraNucleonMass = 0.0;
+  //  G4int extraNucleonCount = 0;
+  //  G4double extraMass = 0.0;
+  //  G4double extraNucleonMass = 0.0;
   if( nuclearExcitationCount > 0 )
   {
     G4int momentumBin = std::min( 4, G4int(pOriginal/3.0) );     
@@ -182,9 +182,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
           pVec->SetDefinition( aProton );
         else
           pVec->SetDefinition( aNeutron );
-        ++backwardNucleonCount;
-        ++extraNucleonCount;
-        extraNucleonMass += pVec->GetMass()/GeV;
+	// Not used        ++backwardNucleonCount;
+	// Not used        ++extraNucleonCount;
+	// Not used        extraNucleonMass += pVec->GetMass()/GeV;
       }
       else
       {                                       // add a pion
@@ -195,15 +195,22 @@ ReactionStage(const G4HadProjectile* originalIncident,
           pVec->SetDefinition( aPiZero );
         else
           pVec->SetDefinition( aPiMinus );
+
+	// DHW: add following two lines to correct energy balance
+	//        ++backwardCount;
+	//        backwardMass += pVec->GetMass()/GeV;
       }
       pVec->SetSide( -2 );    // backside particle
-      extraMass += pVec->GetMass()/GeV;
+      // Not used     extraMass += pVec->GetMass()/GeV;
       pVec->SetNewlyAdded( true );
       vec.SetElement( vecLen++, pVec );
     }
   }
 
-  // Masses of particles added from cascade not included in energy balance
+  // Masses of particles added from cascade not included in energy balance.
+  // That's correct for nucleons from the intra-nuclear cascade but not for 
+  // pions from the cascade.
+ 
   G4double forwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +cMass - forwardMass;
   G4double backwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +bMass - backwardMass;
   G4double eAvailable = centerofmassEnergy - (forwardMass+backwardMass);
