@@ -13,7 +13,7 @@ test/maxPoints 1000
 /voxel/errorFileName log/spherev.a1.log
 /voxel/run
 /test/gridSizes 0.2 0.2 0.2 m
-/test/errorFileName  log/spere.a2.log
+/test/errorFileName  log/sphere.a2.log
 /test/run
 #
 # --- sphere.b1.log
