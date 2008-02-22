@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2008-01-14 12:06:18 vnivanch Exp $
+$Id: History,v 1.108 2008-02-22 14:30:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 February 08:  V.Ivanchenko (emmuons-V09-01-01)
+G4MuMscModel - added sampling of tail distribution
+
 14 January 08:  V.Ivanchenko (emmuons-V09-01-00)
 G4MuMscModel - added computation of the second moment of the distribution;
                fixed sampling
-G4MUMultipleScattering - modified default RangeFactor
+G4MuMultipleScattering - modified default RangeFactor
 
 12 November 07:  V.Ivanchenko (emmuons-V09-00-04)
 11 November 07:  V.Ivanchenko (emmuons-V09-00-03)

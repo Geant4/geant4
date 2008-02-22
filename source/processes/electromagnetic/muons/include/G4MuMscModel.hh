@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.5 2008-01-09 10:19:08 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.6 2008-02-22 14:30:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -120,6 +120,11 @@ private:
 
   G4double ComputeLambda2(G4double kinEnergy, G4double cut);
 
+  G4double ComputeXSectionPerVolume(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double kinEnergy, 
+				    G4double cut);
+
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
   //  hide assignment operator
@@ -155,6 +160,9 @@ private:
   G4double par1;
   G4double par2;
   G4double par3;
+  G4double xsec1;
+  G4double xsec2;
+  G4double zcorr;
 
   G4int    currentMaterialIndex;
 
