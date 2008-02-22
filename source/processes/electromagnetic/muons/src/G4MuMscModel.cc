@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.15 2008-02-22 14:30:39 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.16 2008-02-22 14:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,19 +33,21 @@
 //
 // File name:   G4MuMscModel
 //
-// Author:      Laszlo Mu
+// Author:      V.Ivanchenko on base of Laszlo Urban model
 //
-// Creation date: 03.03.2001
+// Creation date: 26.10.2007
 //
 // Modifications:
 //
-// 27-03-03 Move model part from G4MultipleScattering80 (V.Ivanchenko)
+// 22-02-08 Introduce sampling of the tail function (V.Ivanchenko)
 //
 
 // Class Description:
 //
 // Implementation of the model of multiple scattering based on
-// H.W.Lewis Phys Rev 78 (1950) 526 and others
+// H.W.Lewis Phys Rev 78 (1950) 526; 
+// J.M. Fernandez-Varea et al., NIM B73 (1993) 447;
+// G.Wentzel, Z. Phys. 40 (1927) 590.
 
 // -------------------------------------------------------------------
 //
@@ -80,7 +82,6 @@ G4MuMscModel::G4MuMscModel(G4double frange,
     theLambda2Table(0),
     dtrl(0.05),
     facrange(frange),
-    thetaLimit(thetaMax),
     numlimit(0.2),
     lowBinEnergy(keV),
     highBinEnergy(PeV),

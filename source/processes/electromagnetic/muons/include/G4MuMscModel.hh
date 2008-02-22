@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.6 2008-02-22 14:30:39 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.7 2008-02-22 14:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,8 @@
 //
 // Implementation of the model of multiple scattering based on
 // H.W.Lewis Phys Rev 78 (1950) 526 and L.Urban model
+// J.M. Fernandez-Varea et al., NIM B73 (1993) 447;
+// G.Wentzel, Z. Phys. 40 (1927) 590.
 
 // -------------------------------------------------------------------
 //
@@ -141,7 +143,6 @@ private:
 
   G4double dtrl;
   G4double facrange;
-  G4double thetaLimit;
   G4double numlimit;
   G4double tlimitminfix;
   G4double invsqrt12;
@@ -190,16 +191,6 @@ void G4MuMscModel::SetLateralDisplasmentFlag(G4bool val)
 { 
   latDisplasment = val;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-inline
-void G4MuMscModel::SetThetaLimit(G4double val) 
-{ 
-  thetaLimit = val;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void G4MuMscModel::SetRangeFactor(G4double val) 
