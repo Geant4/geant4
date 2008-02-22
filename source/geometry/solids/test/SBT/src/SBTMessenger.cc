@@ -154,6 +154,10 @@ SBTMessenger::SBTMessenger( const G4String prefix, const G4SolidQuery *theSolidQ
 	debugToOutPVCmd = new G4UIcmdWithAnInteger( com, this );
 	debugToOutPVCmd->SetGuidance( "Call G4VSolid::DistanceToOut(p,v) for error listed in log file" );
 
+	com = prefix+"debugSurfNorm";
+	debugSurfNormCmd = new G4UIcmdWithAnInteger( com, this );
+	debugSurfNormCmd->SetGuidance( "Call G4VSolid::SurfaceNormal(p) for error listed in log file" );
+
 	//
 	// Pause command
 	//
@@ -292,6 +296,10 @@ G4int SBTMessenger::DebugToOutPV::DebugMe( std::ifstream &logFile, const G4int e
 	return tester->DebugToOutPV( testSolid, logFile, errorIndex );
 }
 
+G4int SBTMessenger::DebugSurfNorm::DebugMe( std::ifstream &logFile, const G4int errorIndex )
+{
+	return tester->DebugSurfNorm( testSolid, logFile, errorIndex );
+}
 
 //
 // SetNewValue
@@ -345,6 +353,10 @@ void SBTMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 		SBTMessenger::DebugToOutPV debugger( solidQuery->GetSolid(), tester );
 		Debug( debugToOutPVCmd->GetNewIntValue( newValues ), &debugger );
 	}
+	else if (command == debugSurfNormCmd) {
+		SBTMessenger::DebugSurfNorm debugger( solidQuery->GetSolid(), tester );
+		Debug( debugSurfNormCmd->GetNewIntValue( newValues ), &debugger );
+	}
 	else if (command == pauseCmd) {
 	  char c;
 	  
@@ -388,7 +400,8 @@ G4String SBTMessenger::GetCurrentValue( G4UIcommand *command )
 		 command == debugToInPCmd ||
 		 command == debugToInPVCmd ||
 		 command == debugToOutPCmd ||
-		 command == debugToOutPVCmd    ) {
+		 command == debugToOutPVCmd  ||
+		 command == debugSurfNormCmd    ) {
 		return "";
 	}
 	

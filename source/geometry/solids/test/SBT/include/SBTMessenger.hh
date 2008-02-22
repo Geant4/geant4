@@ -112,6 +112,11 @@ class SBTMessenger : public G4UImessenger
 		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
 	};
 	
+	class DebugSurfNorm : public SBTMessenger::Debugger  {
+		public:
+		DebugSurfNorm( const G4VSolid *aSolid, const SBTrun *aTester ) : Debugger(aSolid,aTester) {;}
+		G4int DebugMe( std::ifstream &logFile, const G4int errorIndex );
+	};
         void InvokeTest3();
         void Debug( const G4int errorIndex, SBTMessenger::Debugger *debugger );
 	
@@ -136,6 +141,7 @@ class SBTMessenger : public G4UImessenger
 	G4UIcmdWithAnInteger		*debugToInPVCmd;
 	G4UIcmdWithAnInteger		*debugToOutPCmd;
 	G4UIcmdWithAnInteger		*debugToOutPVCmd;
+	G4UIcmdWithAnInteger		*debugSurfNormCmd;
 	G4UIcmdWithoutParameter		*pauseCmd;
 };
 
