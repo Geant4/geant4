@@ -67,6 +67,7 @@ class FredTest3 {
 	void SetDefaults();
 	
 	void RunTest( const G4VSolid *testVolume, std::ostream &logger );
+	void RunDebug( const G4VSolid *testVolume, std::istream &logger );
 
 	G4int DebugError( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;
 	G4int DebugInside( const G4VSolid *testVolume, std::istream &logger, const G4int errorIndex ) const;

@@ -241,6 +241,22 @@ void FredTest3::RunTest( const G4VSolid *testVolume, std::ostream &logger )
 //
 // Recover previously logged error and setup particle gun appropriately
 //
+void FredTest3::RunDebug( const G4VSolid* solid, std::istream &logger )
+{
+
+	G4UImanager *UI = G4UImanager::GetUIpointer();
+        G4int errorIndex = 0;
+        while ( ! DebugError(solid, logger, ++errorIndex) ) {
+
+ 	        UI->ApplyCommand( "/run/beamOn 1" );
+        }        
+}
+
+//
+// DebugError
+//
+// Recover previously logged error and setup particle gun appropriately
+//
 G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
                              const G4int errorIndex ) const
 {
@@ -252,7 +268,7 @@ G4int FredTest3::DebugError( const G4VSolid *, std::istream &logger,
 	G4int error = GetLoggedPV( logger, errorIndex, p, v );
 	if (error) return error;
 	
-        G4cout << "DebugError:  p=" << p << ",  v=" << v << G4endl; 
+        G4cout << "DebugError  " << errorIndex << ":  p=" << p << ",  v=" << v << G4endl; 
 			
 	//
 	// Setup fred to simulate this event
@@ -699,6 +715,7 @@ G4int FredTest3::GetLoggedPV( std::istream &logger, const G4int errorIndex,
 			      G4ThreeVector &p, G4ThreeVector &v        ) const
 {
 	logger >> std::setprecision(14);		// I wonder if this is necessary?
+        logger.seekg(0);
 
 	//
 	// Search for the requested error index, skipping comments along the way
@@ -711,6 +728,7 @@ G4int FredTest3::GetLoggedPV( std::istream &logger, const G4int errorIndex,
 		G4int thisIndex;
 		
 		logger >> thisIndex;
+                
 		if (thisIndex == errorIndex) break;
 		
 		logger.ignore( 99999, '\n' );
