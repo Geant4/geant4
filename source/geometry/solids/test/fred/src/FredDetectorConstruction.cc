@@ -63,6 +63,8 @@
 #include "G4Tet.hh"
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
 
 #include "G4SubtractionSolid.hh"
 
@@ -232,8 +234,23 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
 		
     case CONE:
       testVolume = new G4Cons("test_cone",
-			      1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
-      fprintf(stderr,"OK defining a Cone \n");
+      			      1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
+      // SBT test - case c
+      // testVolume = new G4Cons("test_cone",
+      //                              0.0*m, 1.0*m, 0.5*m, 1.0*m, 1*m, 0.0, 360.0*deg );
+      // SBT test - case d
+      // testVolume = new G4Cons("test_cone",
+      //                              0.0*m, 1.0*m, 0.0*m, 1.0*m, 1*m, 0.0, 90.0*deg );
+      // SBT test - case e
+      // testVolume = new G4Cons("test_cone",
+      //                              0.0*m, 1.0*m, 0.0*m, 1.0*m, 1*m, 20.0*deg, 181.0*deg );
+      // SBT test - case f
+      // testVolume = new G4Cons("test_cone",
+      //                              0.5*m, 1.0*m, 0.7*m, 1.2*m, 1*m, 20.0*deg, 350.0*deg );
+      // SBT test - case g
+      // testVolume = new G4Cons("test_cone",
+      //                              0.0*m, 0.2*m, 0.8*m, 1.0*m, 0.0001*m, 10.0*deg, 90.0*deg );
+     fprintf(stderr,"OK defining a Cone \n");
       break;
 
     case CONE2:
@@ -249,19 +266,60 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       break;
     
     case PARA:
+      // SBT test case b
       testVolume = new G4Para("test_para",
-			       1.0*m, 1.6*m, 2.6*m, 0.0*m, 1.0*m, 2.0*m);
+                                     1.0*m, 1.0*m, 1.0*m, 30.0*deg, 0.0*deg, 0.0*deg);
+      // SBT test case c
+      // testVolume = new G4Para("test_para",
+      //			       1.0*m, 1.0*m, 1.0*m, 30.0*deg, 30.0*deg, 0.0*deg);
+      // SBT test case d
+      // testVolume = new G4Para("test_para",
+      //			       1.0*m, 1.0*m, 1.0*m, 30.0*deg, 30.0*deg, 30.0*deg);
+      // SBT test case e
+      // testVolume = new G4Para("test_para",
+      //			       0.001*m, 1.0*m, 2.0*m, 30.0*deg, 30.0*deg, 30.0*deg);
       fprintf(stderr,"OK defining a Para \n");
       break;
 
     case SPHERE:
       testVolume = new G4Sphere ("test_sphere", 0.8*m, 1.0*m, startPhi, deltaPhi, 0.0, pi);
+      // SBT test case a
+      // testVolume = new G4Sphere ("test_sphere", 0.0*m, 1.0*m, 0.0*deg, 360.0*deg, 0.0*deg, 180.0*deg);
+      // SBT test case b
+      // testVolume = new G4Sphere ("test_sphere", 0.5*m, 1.0*m, 0.0*deg, 360.0*deg, 0.0*deg, 180.0*deg);
+      // SBT test case c
+      // testVolume = new G4Sphere ("test_sphere", 0.0*m, 1.0*m, 0.0*deg, 90.0*deg, 0.0*deg, 180.0*deg);
+      // SBT test case d
+      // testVolume = new G4Sphere ("test_sphere", 0.5*m, 1.0*m, 0.0*deg, 90.0*deg, 0.0*deg, 180.0*deg);
+      // SBT test case e
+      // testVolume = new G4Sphere ("test_sphere", 0.0*m, 1.0*m, 0.0*deg, 360.0*deg, 0.0*deg, 90.0*deg);
+      // SBT test case e
+      // testVolume = new G4Sphere ("test_sphere", 0.5*m, 1.0*m, 0.0*deg, 360.0*deg, 0.0*deg, 90.0*deg);
+      // SBT test case f
+      // testVolume = new G4Sphere ("test_sphere", 0.0*m, 1.0*m, 0.0*deg, 90.0*deg, 0.0*deg, 90.0*deg);
+      // SBT test case g
+      // testVolume = new G4Sphere ("test_sphere", 0.5*m, 1.0*m, 0.0*deg, 90.0*deg, 0.0*deg, 90.0*deg);
       fprintf(stderr,"OK defining a Sphere \n");
       break;
       
     case TORUS1:
       testVolume = new G4Torus("test_torus1",
-			        0.2*m, 0.4*m, 1.2*m, startPhi, deltaPhi);
+                                      0.2*m, 0.4*m, 1.2*m, startPhi, deltaPhi);
+      // SBT test case a
+      // testVolume = new G4Torus("test_torus1",
+      //			        0.0*m, 0.4*m, 1.0*m, 0.0*deg, 360.0*deg);
+      // SBT test case b
+      // testVolume = new G4Torus("test_torus1",
+      //			        0.2*m, 0.4*m, 1.0*m, 0.0*deg, 360.0*deg);
+      // SBT test case c
+      // testVolume = new G4Torus("test_torus1",
+      //			        0.0*m, 0.4*m, 1.0*m, 0.0*deg, 90.0*deg);
+      // SBT test case d
+      // testVolume = new G4Torus("test_torus1",
+      //			        0.2*m, 0.4*m, 1.0*m, 0.0*deg, 90.0*deg);
+      // SBT test case e
+      // testVolume = new G4Torus("test_torus1",
+      //			        0.399*m, 0.4*m, 1.0*m, 0.0*deg, 90.0*deg);
       fprintf(stderr,"OK defining a Torus1 \n");
       break;
  	
@@ -287,6 +345,11 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
 	
     case TUBS:
       testVolume = new G4Tubs( "test_tubs", 1.0*m, 1.2*m, 1*m, startPhi, deltaPhi );
+
+      // SBT test - case c
+      // testVolume = new G4Tubs( "test_tubs", 0.0*m, 1.0*m, 1.0*m, 0.0*deg, 90.0*deg );
+      // SBT test - case e
+      // testVolume = new G4Tubs( "test_tubs", 0.00999*m, 0.01001*m, 1*m, 10.0*deg, 260.0*deg );
       fprintf(stderr,"OK defining a Tubs \n");
       break;
       
@@ -297,15 +360,40 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       
     case ELLIPS:
       testVolume = new G4Ellipsoid( "test_ellipsoid",
-                                      0.5*m, 0.8*m, 1.0*m, -0.4*m, 0.8*m );
-      break;
+                                     0.5*m, 0.8*m, 1.0*m, -0.4*m, 0.8*m );
+      // SBT test - case a
+      // testVolume = new G4Ellipsoid( "test_ellipsoid",
+      //                                1.0*m, 1.0*m, 1.0*m, 0.0*m, 0.0*m );
+      // SBT test - case b
+      // testVolume = new G4Ellipsoid( "test_ellipsoid",
+      //                                0.5*m, 0.8*m, 1.0*m, 0.0*m, 0.0*m );
+      // SBT test - case c
+      // testVolume = new G4Ellipsoid( "test_ellipsoid",
+      //                                0.5*m, 0.8*m, 1.0*m, -0.4*m, 10.0*m );
+      // SBT test - case d
+      // testVolume = new G4Ellipsoid( "test_ellipsoid",
+      //                                0.5*m, 0.8*m, 1.0*m, -10.0*m, 0.8*m );
+      // SBT test - case e
+      // testVolume = new G4Ellipsoid( "test_ellipsoid",
+      //                                0.5*m, 0.8*m, 1.0*m, -0.4*m, 0.8*m );
+     break;
 
     case ELCONE:
       testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.6, 0.75*m, 0.25*m);
-      break;
+      // SBT test - case a
+      // testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.3, 0.75*m, 0.25*m);
+      // SBT test - case b
+      // testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.3, 0.75*m, 0.75*m);
+      // SBT test - case c
+      // testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.6, 0.75*m, 0.25*m);
+      // SBT test - case d
+      //testVolume = new G4EllipticalCone( "test_elcone", 0.3, 0.6, 0.75*m, 0.75*m);
+     break;
 
     case ELTUBE:
       testVolume = new G4EllipticalTube( "test_eltube", 0.4*m, 0.8*m, 1.0*m );
+      // SBT test - case a
+      //testVolume = new G4EllipticalTube( "test_eltube", 1.0*m, 1.0*m, 1.0*m );
       break;
   
     case EXTRU1:
@@ -326,6 +414,8 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
   
     case HYPE:
       testVolume = new G4Hype("test_hype", 0.2*m, 0.3*m, 0.7*rad, 0.7*rad, 0.5*m);
+      // SBT test - case c
+      testVolume = new G4Hype("test_hype", 0.5*m, 1.0*m, 2.0*rad, 2.0*rad, 1.0*m);
       break;
   
     case PCON: {
@@ -334,6 +424,26 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       G4double  rmax[2]     = {  1.2*m, 1.4*m };
       testVolume = new G4Polycone( "test_pcon",
                                    startPhi, deltaPhi, 2, z_values, rmin, rmax );
+/*
+      // SBT test case d
+      G4double rv[17] = { 0.0*m, 0.2*m, 0.3*m, 0.32*m, 0.32*m, 0.4*m, 0.4*m, 0.5*m, 0.5*m, 0.8*m, 
+                          0.8*m, 0.9*m, 0.9*m, 0.8*m, 0.8*m, 0.3*m, 0.0*m };
+      G4double zv[17] = { -0.5*m, -0.5*m, -1.1*m, -1.1*m, -0.4*m, -0.4*m, -1.0*m, -1.0*m, -0.4*m,
+                          -1.0*m, 0.0*m, 0.0*m, 0.2*m, 0.2*m, 1.0*m, 0.0*m, 1.0 };
+      testVolume = new G4Polycone ("test_pcon4", 0.0*deg, 90.0*deg, 17, rv, zv );
+
+      // SBT test case e
+      G4double rv[17] = { 0.0*m, 0.2*m, 0.3*m, 0.32*m, 0.32*m, 0.4*m, 0.4*m, 0.5*m, 0.5*m, 0.8*m, 
+                          0.8*m, 0.9*m, 0.9*m, 0.8*m, 0.8*m, 0.3*m, 0.0*m };
+      G4double zv[17] = { -0.5*m, -0.5*m, -1.1*m, -1.1*m, -0.4*m, -0.4*m, -1.0*m, -1.0*m, -0.4*m, 
+                          -1.0*m, 0.0*m, 0.0*m, 0.2*m, 0.2*m, 1.0*m, 0.0*m, 1.0*m };
+      testVolume = new G4Polycone ("test_pcon4", -1.0*deg, 2.0*deg, 17, rv, zv );
+
+      // SBT test case f
+      G4double rv[10] = { 0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m, 0.9*m, 0.0*m, 0.0*m, 0.4*m, 0.5*m };
+      G4double zv[10] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m, 1.0*m, 0.8*m, 0.0*m, 0.0*m, -1.0*m };
+      testVolume = new G4Polycone ("test_pcon4", 10.0*deg, 250.0*deg, 10, rv, zv );
+*/
       }
       break;
   
@@ -397,6 +507,27 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       G4double rmax[2]     = {  1.0*m, 1.2*m };
       testVolume = new G4Polyhedra( "test_pgon",
                                   startPhi, deltaPhi, numSide, 2, z_values, rmin, rmax );
+/*
+      // SBT test case c
+      G4double rv[17] = { 0.0*m, 0.2*m, 0.3*m, 0.32*m, 0.32*m, 0.4*m, 0.4*m, 0.5*m, 0.5*m, 0.8*m, 
+                          0.8*m, 0.9*m, 0.9*m, 0.8*m, 0.8*m, 0.3*m, 0.0*m };
+      G4double zv[17] = { -0.5*m, -0.5*m, -1.1*m, -1.1*m, -0.4*m, -0.4*m, -1.0*m, -1.0*m, -0.4*m, 
+                          -1.0*m, 0.0*m, 0.0*m, 0.2*m, 0.2*m, 1.0*m, 0.0*m, 1.0*m };
+      testVolume = new G4Polyhedra ("test_pgon", 0.0*deg, 360.0*deg, 6, 17, rv, zv );
+
+      // SBT test case d
+      G4double rv[17] = { 0.0*m, 0.2*m, 0.3*m, 0.32*m, 0.32*m, 0.4*m, 0.4*m, 0.5*m, 0.5*m, 0.8*m, 
+                          0.8*m, 0.9*m, 0.9*m, 0.8*m, 0.8*m, 0.3*m, 0.0*m };
+      G4double zv[17] = { -0.5*m, -0.5*m, -1.1*m, -1.1*m, -0.4*m, -0.4*m, -1.0*m, -1.0*m, -0.4*m, 
+                          -1.0*m, 0.0*m, 0.0*m, 0.2*m, 0.2*m, 1.0*m, 0.0*m, 1.0*m };
+      testVolume = new G4Polyhedra ("test_pgon", 0.0*deg, 90.0*deg, 2, 17, rv, zv );
+
+      // SBT test case f
+      G4double   zv[6] = { -0.6*m, 0.0*m, -1.0*m, 0.5*m, 0.5*m, 1.0*m };
+      G4double rmin[6] = { 0.5*m, 0.5*m, 0.4*m, 0.4*m, 0.8*m, 0.8*m};
+      G4double rmax[6] = { 0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.0*m, 1.1*m };
+      testVolume = new G4Polyhedra ("test_pgon", 0.0*deg, 270.0*deg, 6, 6, zv, rmin, rmax );
+*/
       }                                  
       break;
 		
@@ -494,22 +625,44 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
                               G4ThreeVector(-1.0*m, -1.0*m, -1.0*m),
                               G4ThreeVector(+1.0*m, -1.0*m, -1.0*m),
                               G4ThreeVector( 0.0*m,  1.0*m, -1.0*m));
+/*
+      // SBT test case d
+      testVolume = new G4Tet( "test_tet", 
+                              G4ThreeVector( 0.0*m, 0.0*m, 1.73205080756887719*m),
+                              G4ThreeVector( 0.0*m, 1.63299316185545207*m, -0.577350269189625842*m),
+                              G4ThreeVector(-1.41421356237309515*m, -0.816496580927726034*m, -0.577350269189625842*m),
+                              G4ThreeVector( 1.41421356237309515*m, -0.816496580927726034*m, -0.577350269189625842*m));
+*/
       break;
 
     case TWBOX:
+      // SBT test case a
       testVolume = new G4TwistedBox( "test_twbox", 30.0*deg, 1.0*m,  1.0*m,  1.0*m);
       break;
 
     case TWTRAP1:
-      testVolume = new G4TwistedTrap( "test_twtrap1", 
+       testVolume = new G4TwistedTrap( "test_twtrap1", 
                                       30.0*deg, 0.8*m, 1.0*m, 1.0*m, 1.0*m );
       break;
 
     case TWTRAP2:
+      // SBT test case a
       testVolume = new G4TwistedTrap( "test_twtrap2",
                                       30.0*deg, 1268.0*mm, 0.0*deg, 0.0*deg, 
                                       295.0*mm, 1712.2*mm, 1870.29*mm, 
                                       295.0*mm, 1712.2*mm, 1870.29*mm, 0.0*deg );
+      break;
+
+    case TWTRD:
+      // SBT test case c
+      testVolume = new G4TwistedTrd( "test_twtrd",
+                                      0.5*m, 1.5*m, 0.25*m, 1.0*m, 1.0*m, 30.0*deg );
+      break;
+
+    case TWTUBS:
+      // SBT test case a
+      testVolume = new G4TwistedTubs( "test_twtubs",
+                                      30.0*deg, 0.8*m, 1.0*m, -1.0*m, 1.0*m, 1, 90.0*deg );
       break;
 
 
