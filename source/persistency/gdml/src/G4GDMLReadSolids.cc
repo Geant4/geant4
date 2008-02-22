@@ -34,10 +34,10 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanEleme
    G4String name;
    G4String first;
    G4String second;
-   G4ThreeVector position;
-   G4ThreeVector rotation;
-   G4ThreeVector firstposition;
-   G4ThreeVector firstrotation;
+   G4ThreeVector position(0.0,0.0,0.0);
+   G4ThreeVector rotation(0.0,0.0,0.0);
+   G4ThreeVector firstposition(0.0,0.0,0.0);
+   G4ThreeVector firstrotation(0.0,0.0,0.0);
 
    const xercesc::DOMNamedNodeMap* const attributes = booleanElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -66,10 +66,10 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanEleme
 
       if (tag=="first") first = refRead(child); else
       if (tag=="second") second = refRead(child); else
-      if (tag=="position") position = vectorRead(child); else
-      if (tag=="rotation") rotation = vectorRead(child); else
-      if (tag=="firstposition") firstposition = vectorRead(child); else
-      if (tag=="firstrotation") firstrotation = vectorRead(child); else
+      if (tag=="position") vectorRead(child,position); else
+      if (tag=="rotation") vectorRead(child,rotation); else
+      if (tag=="firstposition") vectorRead(child,firstposition); else
+      if (tag=="firstrotation") vectorRead(child,firstrotation); else
       G4Exception("GDML Reader: ERROR! Unknown tag in boolean solid: "+tag);
    }
 

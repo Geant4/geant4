@@ -58,7 +58,7 @@ class G4GDMLReadDefine : public G4GDMLRead {
    void quantityRead(const xercesc::DOMElement* const); 
    void defineRead(const xercesc::DOMElement* const);
 protected:
-   G4ThreeVector vectorRead(const xercesc::DOMElement* const);
+   void vectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String refRead(const xercesc::DOMElement* const);
    G4ThreeVector* getPosition(const G4String&);
    G4ThreeVector* getRotation(const G4String&);

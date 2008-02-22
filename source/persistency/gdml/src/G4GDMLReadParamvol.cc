@@ -354,8 +354,8 @@ void G4GDMLReadParamvol::hype_dimensionsRead(const xercesc::DOMElement* const el
 
 void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element) {
 
-   G4ThreeVector rotation;
-   G4ThreeVector position;
+   G4ThreeVector rotation(0.0,0.0,0.0);
+   G4ThreeVector position(0.0,0.0,0.0);
 
    G4GDMLParameterisation::PARAMETER parameter;
 
@@ -367,8 +367,8 @@ void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
       
-      if (tag=="rotation") rotation = vectorRead(child); else
-      if (tag=="position") position = vectorRead(child); else
+      if (tag=="rotation") vectorRead(child,rotation); else
+      if (tag=="position") vectorRead(child,position); else
       if (tag=="box_dimensions") box_dimensionsRead(child,parameter); else
       if (tag=="trd_dimensions") trd_dimensionsRead(child,parameter); else
       if (tag=="trap_dimensions") trap_dimensionsRead(child,parameter); else

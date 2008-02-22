@@ -262,11 +262,9 @@ void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement
    }
 }
 
-G4ThreeVector G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vectorElement) {
+void G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vectorElement,G4ThreeVector& vec) {
 
    G4double unit = 1.0;
-
-   G4ThreeVector vec;
 
    const xercesc::DOMNamedNodeMap* const attributes = vectorElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -288,7 +286,7 @@ G4ThreeVector G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vect
       if (attName=="z") vec.setZ(eval.Evaluate(attValue));
    }
 
-   return vec*unit;
+   vec *= unit;
 }
 
 G4String G4GDMLReadDefine::refRead(const xercesc::DOMElement* const element) {

@@ -195,9 +195,9 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
 
       if (tag=="file") logvol = fileRead(child); else
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child))); else
-      if (tag=="position") position = vectorRead(child); else
-      if (tag=="rotation") rotation = vectorRead(child); else
-      if (tag=="scale") scale = vectorRead(child); else
+      if (tag=="position") vectorRead(child,position); else
+      if (tag=="rotation") vectorRead(child,rotation); else
+      if (tag=="scale") vectorRead(child,scale); else
       if (tag=="positionref") position = *getPosition(GenerateName(refRead(child))); else
       if (tag=="rotationref") rotation = *getRotation(GenerateName(refRead(child))); else
       if (tag=="scaleref") scale = *getScale(GenerateName(refRead(child))); else
@@ -207,7 +207,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,true);
 
    if (name.empty()) {
 
