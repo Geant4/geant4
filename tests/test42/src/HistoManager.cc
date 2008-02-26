@@ -23,27 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2008-02-20 09:57:35 grichine Exp $
+// $Id: HistoManager.cc,v 1.6 2008-02-26 15:08:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager
 //
-//
-// Author:      V.Ivanchenko 30/01/01
-//
-// Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
-// 16.11.2006 Add beamFlag (V.Ivanchenko)
+// Based on V. Ivantchenko class from Hadr01 example
 //
 //----------------------------------------------------------------------------
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////
 
 #include "HistoManager.hh"
+#include "G4VProcess.hh"
 #include "G4UnitsTable.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -67,6 +61,10 @@
 #include "G4OpticalPhoton.hh"
 #include "Histo.hh"
 #include "globals.hh"
+#include "G4Timer.hh"
+
+using namespace std;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -98,6 +96,7 @@ HistoManager::HistoManager()
   material  = 0;
   elm       = 0;
   phBias    = 100;
+
   histo     = new Histo(verbose);
   neutron   = G4Neutron::Neutron();
 }
@@ -115,6 +114,7 @@ void HistoManager::bookHisto()
 {
   histo->add1D("h1","Energy deposition (MeV/mm/event) in the target",
 	       nSlices,0.0,length/mm,MeV/mm);
+
   histo->add1D("h2","Log10 Energy (MeV) of gammas",nBinsE,-5.,5.,1.0);
   histo->add1D("h3","Log10 Energy (MeV) of electrons",nBinsE,-5.,5.,1.0);
   histo->add1D("h4","Log10 Energy (MeV) of positrons",nBinsE,-5.,5.,1.0);
@@ -136,7 +136,11 @@ void HistoManager::bookHisto()
   histo->add1D("h20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("h21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
   histo->add1D("h22","Energy deposition (GeV) in the target",nBinsE,0.0,edepMax,GeV);
+
   histo->add1D("h23","Energy (eV) of optical photons",nBinsE,1.5,3.5,1.0);
+  histo->add1D("h24","Energy (eV) of cerenkov photons",nBinsE,1.5,3.5,1.0);
+  histo->add1D("h25","Energy (eV) of scintillation photons",nBinsE,1.5,3.5,1.0);
+  histo->add1D("h26","Number of optical photons per event",nBinsE/5,3.e6,3.e7,1.0);
 	       
 }
 
@@ -144,6 +148,7 @@ void HistoManager::bookHisto()
 
 void HistoManager::BeginOfRun()
 {
+  fTimer.Start();
   absZ0       = -0.5*length;
   n_evt       = 0;
   n_elec      = 0;
@@ -166,30 +171,60 @@ void HistoManager::BeginOfRun()
   n_neu_leak  = 0;
   n_neu_back  = 0;
   n_optical   = 0;
+  n_cerenkov  = 0;
+  n_scint     = 0;
+  nOptEvent   = 0;
+
 
   edepSum     = 0.0;
   edepSum2    = 0.0;
 
   bookHisto();
+
   histo->book();
 
   if(verbose > 0) 
+  {
     G4cout << "HistoManager: Histograms are booked and run has been started"
            <<G4endl<<"  BeginOfRun (After histo->book)"<< G4endl;
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////
+
+void HistoManager::BeginOfEvent()
+{
+  edepEvt     = 0.0;
+  nOptEvent   = 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void HistoManager::EndOfEvent()
+{
+  edepSum  += edepEvt;
+  edepSum2 += edepEvt*edepEvt;
+
+  histo->fill(21,edepEvt,1.0);
+
+  histo->fill(25, G4double(nOptEvent), 1.0);  // h26
+  fOpEventNumbers.push_back(nOptEvent);
+}
+
+//////////////////////////////////////////////////////////////////////////
 
 void HistoManager::EndOfRun()
 {
-
+  fTimer.Stop();
   G4cout << "HistoManager: End of run actions are started" << G4endl;
 
   // Average values
   G4cout<<"========================================================"<<G4endl;
 
-  G4double x = (G4double)n_evt;
-  if(n_evt > 0) x = 1.0/x;
+  G4double x, y = (G4double)n_evt;
+
+  if(n_evt > 0) x = 1.0/y;
+  else          x = 0.;
 
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
@@ -211,12 +246,17 @@ void HistoManager::EndOfRun()
   G4double xia = x*(G4double)n_alpha;
   G4double xio = x*(G4double)n_ions;
   G4double xop = x*(G4double)n_optical;
+  G4double xce = x*(G4double)n_cerenkov;
+  G4double xsc = x*(G4double)n_scint;
 
   edepSum  *= x;
   edepSum2 *= x;
   edepSum2 -= edepSum*edepSum;
+
   if(edepSum2 > 0.0) edepSum2 = std::sqrt(edepSum2);
   else               edepSum2 = 0.0;
+
+
 
   G4cout                         << "Beam particle                        "
 				 << primaryDef->GetParticleName() <<G4endl;
@@ -245,35 +285,54 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of proton leak        " << xpl << G4endl;
   G4cout << std::setprecision(4) << "Average number of pion leak          " << xal << G4endl;
   G4cout << std::setprecision(4) << "Average number of optical photons    " << xop << G4endl;
+  G4cout << std::setprecision(4) << "Average number of cerenkov photons    " << xce << G4endl;
+  G4cout << std::setprecision(4) << "Average number of scintillation photons    " << xsc << G4endl
+         << G4endl;
+
+  G4double mean, rms, sum1 = 0., sum2 = 0.;
+  std::size_t i, iMax = fOpEventNumbers.size();
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum1 += fOpEventNumbers[i];
+  }
+  mean = sum1*x;
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum2 += (fOpEventNumbers[i]-mean)*(fOpEventNumbers[i]-mean);
+  }
+  if(y > 1.)
+  {
+    rms = sum2/(y-1.);
+
+    G4cout <<"mean op/event = "<<mean<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
+  }
+  else
+  {
+    G4cout <<"mean op/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
+  }
+  G4cout<<"Total time of "<<n_evt<<" = "<<fTimer.GetUserElapsed()<<" s"<<endl<<G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms
-  for(G4int i=0; i<nHisto; i++) {
+
+  for( G4int i = 0; i < nHisto; i++ ) 
+  {
     histo->scale(i,x);
   }
 
   if(verbose > 1) histo->print(0);
+
   histo->save();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::BeginOfEvent()
-{
-  edepEvt = 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::EndOfEvent()
-{
-  edepSum  += edepEvt;
-  edepSum2 += edepEvt*edepEvt;
-  histo->fill(21,edepEvt,1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////
+//
+// It is called from StakingManager::ClassifyNewTrack(const G4Track* track)
+// It counts new secondary spectrums and some global energies. 
+//
 
 void HistoManager::ScoreNewTrack(const G4Track* track)
 {
@@ -328,28 +387,42 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     {
       n_posit++;
       histo->fill(3,e,1.0);
-    } else if ( pd == G4Proton::Proton()) {
+    } 
+    else if ( pd == G4Proton::Proton()) 
+    {
       n_proton++;
       histo->fill(4,e,1.0);
-    } else if ( pd == neutron) {
+    } 
+    else if ( pd == neutron) 
+    {
       n_neutron++;
       histo->fill(5,e,1.0);
-    } else if ( pd == G4AntiProton::AntiProton()) {
+    } 
+    else if ( pd == G4AntiProton::AntiProton()) 
+    {
       n_aproton++;
-    } else if ( pd == G4PionPlus::PionPlus() ) {
+    } 
+    else if ( pd == G4PionPlus::PionPlus() ) 
+    {
       n_cpions++;
       histo->fill(6,e,1.0);
       histo->fill(19,e,1.0);
 
-    } else if ( pd == G4PionMinus::PionMinus()) {
+    } 
+    else if ( pd == G4PionMinus::PionMinus()) 
+    {
       n_cpions++;
       histo->fill(6,e,1.0);
       histo->fill(20,e,1.0);
 
-    } else if ( pd == G4PionZero::PionZero()) {
+    } 
+    else if ( pd == G4PionZero::PionZero()) 
+    {
       n_pi0++;
       histo->fill(7,e,1.0);
-    } else if ( pd == G4KaonPlus::KaonPlus() || pd == G4KaonMinus::KaonMinus()) {
+    } 
+    else if ( pd == G4KaonPlus::KaonPlus() || pd == G4KaonMinus::KaonMinus()) 
+    {
       n_kaons++;
       histo->fill(8,e,1.0);
     } 
@@ -359,43 +432,64 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       histo->fill(9,e,1.0);
     } 
     else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) 
-   {
+    {
       n_deut++;
       histo->fill(10,e,1.0);
-    } else if ( pd == G4He3::He3() || pd == G4Alpha::Alpha()) {
+    } 
+    else if ( pd == G4He3::He3() || pd == G4Alpha::Alpha()) 
+    {
       n_alpha++;
       histo->fill(11,e,1.0);
-    } else if ( pd->GetParticleType() == "nucleus") {
+    } 
+    else if ( pd->GetParticleType() == "nucleus") 
+    {
       n_ions++;
       histo->fill(12,e,1.0);
-    } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
+    } 
+    else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) 
+    {
       n_muons++;
       histo->fill(13,e,1.0);    
     } 
     else if ( pd == G4OpticalPhoton::OpticalPhoton()) 
     {
       n_optical++;
-      // G4cout<<eKin/eV<<", ";
-      // histo->fill(22,ePh,1.0);    
-      histo->fill(22,eKin/eV,1.0);    
+      histo->fill(22,eKin/eV,1.0);  // h23
+      
+      nOptEvent += phBias;
+
+      if( track->GetCreatorProcess()->GetProcessName() == "Cerenkov")
+      {
+        n_cerenkov++;
+        histo->fill(23,eKin/eV,1.0);  // h24
+      }
+      else
+      {
+        n_scint++;
+        histo->fill(24,eKin/eV,1.0);  // h25
+      }
     }
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// From TargetSD::ProcessHits(const G4Step* step, G4TouchableHistory*)
+// 
 
 void HistoManager::AddTargetStep(const G4Step* step)
 {
   n_step++;
+
   G4double edep = step->GetTotalEnergyDeposit();
 
   if(edep >= DBL_MIN) 
   { 
     const G4Track* track = step->GetTrack();
-    currentDef = track->GetDefinition(); 
-    currentKinEnergy = track->GetKineticEnergy();
+    currentDef           = track->GetDefinition(); 
+    currentKinEnergy     = track->GetKineticEnergy();
 
-    G4ThreeVector pos = 
+    G4ThreeVector pos    = 
       (step->GetPreStepPoint()->GetPosition() +
        step->GetPostStepPoint()->GetPosition())*0.5;
 
@@ -404,44 +498,53 @@ void HistoManager::AddTargetStep(const G4Step* step)
     // scoring
 
     edepEvt += edep;
+
     histo->fill(0,z,edep);
 
     if(1 < verbose) 
+    {
       G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
 	     << "; z(mm)= " << z/mm
 	     << "; step(mm)= " << step->GetStepLength()/mm
 	     << " by " << currentDef->GetParticleName()
 	     << " E(MeV)= " << currentKinEnergy/MeV
 	     << G4endl;
+    }
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// From CheckVolumeSD::ProcessHits(const G4Step* step, G4TouchableHistory*)
+//
 
 void HistoManager::AddLeakingParticle(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition(); 
-  G4double e = std::log10(track->GetKineticEnergy()/MeV);
+  G4double                     e = std::log10(track->GetKineticEnergy()/MeV);
 
   G4ThreeVector pos = track->GetPosition();
   G4ThreeVector dir = track->GetMomentumDirection();
-  G4double x = pos.x();
-  G4double y = pos.y();
-  G4double z = pos.z();
+  G4double x        = pos.x();
+  G4double y        = pos.y();
+  G4double z        = pos.z();
  
   G4bool isLeaking = false;
 
   // Forward 
-  if(z > -absZ0 && dir.z() > 0.0) 
+
+  if( z > -absZ0 && dir.z() > 0.0 ) 
   {
-    if(pd == neutron) {
+    if( pd == neutron ) 
+    {
       n_neu_forw++;
       histo->fill(15,e,1.0);
-    } else isLeaking = true;
+    } 
+    else isLeaking = true;
 
     // Backward
   } 
-  else if (z < absZ0 && dir.z() < 0.0) 
+  else if ( z < absZ0 && dir.z() < 0.0 ) 
   {
     if(pd == neutron) 
     {
@@ -452,11 +555,11 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
 
     // Side
   } 
-  else if (std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0) 
+  else if ( std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0 ) 
   {
     isLeaking = true;
 
-    if(pd == neutron) 
+    if( pd == neutron ) 
     {
       n_neu_back++;
       histo->fill(14,e,1.0);
@@ -466,22 +569,22 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
 
   // protons and pions
 
-  if(isLeaking) 
+  if( isLeaking ) 
   {
-    if(pd == G4Proton::Proton()) 
+    if( pd == G4Proton::Proton() ) 
     {
-      histo->fill(17,e,1.0);
       n_prot_leak++;
+      histo->fill(17,e,1.0);
     } 
-    else if (pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) 
+    else if ( pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) 
     {
-      histo->fill(18,e,1.0);
       n_pion_leak++;
+      histo->fill(18,e,1.0);
     }
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////
 
 void HistoManager::SetVerbose(G4int val)        
 {
@@ -489,7 +592,7 @@ void HistoManager::SetVerbose(G4int val)
   histo->setVerbose(val);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////
 
 void HistoManager::SetTargetMaterial(const G4Material* mat)         
 {
@@ -500,12 +603,14 @@ void HistoManager::SetTargetMaterial(const G4Material* mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////
 
 void HistoManager::Fill(G4int id, G4double x, G4double w)
 {
   histo->fill(id, x, w);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//
+////////////////////////////////////////////////////////////////////////////////
 

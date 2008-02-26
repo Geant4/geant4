@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2008-02-20 09:57:34 grichine Exp $
+// $Id: HistoManager.hh,v 1.4 2008-02-26 15:08:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -53,8 +53,14 @@
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4Timer.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+using namespace std;
+
+
+///////////////////////////////////////////////////////////////////////////////////
 
 class Histo;
 class G4Track;
@@ -155,7 +161,14 @@ private:
   G4int n_neu_forw;
   G4int n_neu_leak;
   G4int n_neu_back;
+
   G4int n_optical;
+  G4int n_scint;
+  G4int n_cerenkov;
+  G4int nOptEvent;
+  std::vector<G4int> fOpEventNumbers;
+  G4Timer fTimer;
+
   G4int n_step;
   G4int nHisto;
 
