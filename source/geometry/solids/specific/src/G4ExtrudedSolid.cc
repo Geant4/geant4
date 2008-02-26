@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.11 2008-02-05 11:25:24 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.12 2008-02-26 13:23:43 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -639,6 +639,11 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     if ( IsPointInside(fPolygon[(*it)[0]], fPolygon[(*it)[1]],
                        fPolygon[(*it)[2]], pscaled) )  { inside = true; }
+
+    if ( IsSameLine(pscaled, fPolygon[(*it)[0]], fPolygon[(*it)[1]]) ||
+         IsSameLine(pscaled, fPolygon[(*it)[1]], fPolygon[(*it)[2]]) ||
+         IsSameLine(pscaled, fPolygon[(*it)[2]], fPolygon[(*it)[0]]) )
+                                                       { inside = true; }
     ++it;
   } while ( (inside == false) && (it != fTriangles.end()) );
   
