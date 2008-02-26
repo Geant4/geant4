@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.34 2008-02-07 08:01:58 gunter Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.35 2008-02-26 14:53:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -210,7 +210,7 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-	//        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//        if(std::fabs(lastP/pMom-1.)<tolerance) //VI (do not use tolerance)
         if(lastP == pMom)   // V.Ivanchenko safe solution
         {
 #ifdef pdebug
@@ -436,7 +436,8 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
 #endif
   if(lastLP>lPMin && lastLP<=lastPIN)   // Linear fit is made using precalculated tables
   {
-    if(std::fabs(lastLP-lastPIN)<.0001) // Just take the highest tabulated value
+    if(lastLP==lastPIN) // VI do not use tolerance
+      //    if(std::fabs(lastLP-lastPIN)<.0001) // Just take the highest tabulated value
     {
       G4double shift=(lastLP-lPMin)/dlnP+.000001; // Log distance from lPMin
       G4int    blast=static_cast<int>(shift); // this is a bin number of the lower edge (0)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.11 2006-12-04 10:44:22 mkossov Exp $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.12 2008-02-26 14:53:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,7 +129,8 @@ G4double G4QElectronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//       if(std::fabs(lastP/pMom-1.)<tolerance) // VI (do not use tolerance) 
+        if(lastP == pMom)
         {
 #ifdef pdebug
           G4cout<<"G4QENCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -218,7 +219,8 @@ G4double G4QElectronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  //  else if(std::fabs(lastP/pMom-1.)<tolerance) // VI (do not use tolerance)
+  else if(lastP == pMom)  
   {
 #ifdef pdebug
     G4cout<<"G4QENCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;

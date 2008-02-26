@@ -124,7 +124,8 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+	//        if(std::fabs(lastP/pMom-1.)<tolerance) // VI do not use tolerance
+        if(lastP == pMom)
         {
 #ifdef pdebug
           G4cout<<"G4QPhCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -213,7 +214,8 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  //  else if(std::fabs(lastP/pMom-1.)<tolerance) // VI (do not use tolerance)
+  else if(lastP == pMom)
   {
 #ifdef pdebug
     G4cout<<"G4QPhCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
