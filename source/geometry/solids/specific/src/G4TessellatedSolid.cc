@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.16 2008-02-20 09:06:16 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.17 2008-02-26 13:20:43 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -747,8 +747,10 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
           (*f)->Distance(p,kCarTolerance) <= 0.5*kCarTolerance)
       {
         // We are on a surface. Return zero.
-        *validNorm = extremeFacets.count(*f);
-        *n         = SurfaceNormal(p);
+        if (calcNorm) {
+          *validNorm = extremeFacets.count(*f);
+          *n         = SurfaceNormal(p);
+        }  
         return 0.0;
       }
       if (dist >= 0.0 && dist < minDist)
