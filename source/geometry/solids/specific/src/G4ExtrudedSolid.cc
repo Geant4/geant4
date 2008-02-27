@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.12 2008-02-26 13:23:43 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.13 2008-02-27 12:32:48 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -266,8 +266,28 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
   {
     return std::fabs(p.x() - l1.x()) < kCarTolerance; 
   }
+
   return std::fabs (p.y() - l1.y() - ((l2.y() - l1.y())/(l2.x() - l1.x()))
                                     *(p.x() - l1.x())) < kCarTolerance;
+ }
+
+//_____________________________________________________________________________
+
+G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,  
+                                   G4TwoVector l1, G4TwoVector l2) const
+{
+  // Return true if p is on the line through l1, l2 and lies between
+  // l1 and l2 
+
+  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance || 
+       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance ||
+       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance|| 
+       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance )
+       
+  return false;     
+
+  return IsSameLine(p, l1, l2); 
+                                        
  }
 
 //_____________________________________________________________________________
@@ -639,10 +659,10 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     if ( IsPointInside(fPolygon[(*it)[0]], fPolygon[(*it)[1]],
                        fPolygon[(*it)[2]], pscaled) )  { inside = true; }
-
-    if ( IsSameLine(pscaled, fPolygon[(*it)[0]], fPolygon[(*it)[1]]) ||
-         IsSameLine(pscaled, fPolygon[(*it)[1]], fPolygon[(*it)[2]]) ||
-         IsSameLine(pscaled, fPolygon[(*it)[2]], fPolygon[(*it)[0]]) )
+                       
+    if ( IsSameLineSegment(pscaled, fPolygon[(*it)[0]], fPolygon[(*it)[1]]) ||
+         IsSameLineSegment(pscaled, fPolygon[(*it)[1]], fPolygon[(*it)[2]]) ||
+         IsSameLineSegment(pscaled, fPolygon[(*it)[2]], fPolygon[(*it)[0]]) )
                                                        { inside = true; }
     ++it;
   } while ( (inside == false) && (it != fTriangles.end()) );
