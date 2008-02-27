@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.7 2007-12-03 19:36:05 miheikki Exp $ 
+// $Id: G4Abla.hh,v 1.8 2008-02-27 17:40:08 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -43,14 +43,7 @@ class G4Abla {
 
 public:
   /**
-   *   
-   * We support Doxygen with JavaDoc style.
-   *
-   * \author{pekka.kaitaniemi@helsinki.fi}
-   */
-
-  /**
-   * A constructor.
+   * Basic constructor.
    */
   G4Abla();
 
@@ -64,18 +57,19 @@ public:
   G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp);
 
   /**
-   *
+   * Constructor that is to be used only for testing purposes.
+   * @param aHazard random seeds
+   * @param aVolant data structure for ABLA output   
    */
   G4Abla(G4Hazard *hazard, G4Volant *volant);
 
   /**
-   * A destructor.
-   * A more elaborate description of the destructor.
+   * Basic destructor.
    */
   ~G4Abla();
 
   /**
-   *
+   * Set verbosity level.
    */
   void setVerboseLevel(G4int level);
 
@@ -101,14 +95,21 @@ public:
 public:
   /**
    * Initialize ABLA evaporation code.
+   *
    */
   void initEvapora();
 
   /**
-   * qrot including damping                                                
+   * Coefficient of collective enhancement including damping                         
    * Input: z,a,bet,sig,u                                                  
    * Output: qr - collective enhancement factor                            
    * See  junghans et al., nucl. phys. a 629 (1998) 635                    
+   * @param z charge number
+   * @param a mass number
+   * @param bet beta deformation
+   * @param sig perpendicular spin cut-off factor
+   * @param u Energy
+   * @return Coefficient of collective enhancement   
    */
   void qrot(G4double z, G4double a, G4double bet, G4double sig, G4double u, G4double *qr);
 
@@ -314,6 +315,7 @@ public:
 
 private:
   G4int verboseLevel;
+  G4int ilast;
 
   G4Pace *pace;
   G4Hazard *hazard;

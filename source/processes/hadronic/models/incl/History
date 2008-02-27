@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.9 2007-12-04 09:52:49 gcosmo Exp $
+$Id: History,v 1.10 2008-02-27 17:40:08 miheikki Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,10 +16,40 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+27 February 2008 - Pekka Kaitaniemi
+-----------------------------------
+- INCL/ABLA changes since Geant4 9.1:
+  o Initialized variables to zero and improved coding style.
+  o Variable "bet" needs to be part of G4Fiss.
+  o Fixed a variable definition. Variable "homega" is part of "G4Fiss".
+  o Fixed an index off-by-one bug in G4Abla.
+  o Fix an infinite loop.
+  o Move the stored event number to the class definition.
+  o Added a possible (commented) fix for ABLA output off-by-one problem.
+  o Cleaned up G4Abla::qrot comments.
+- Changes to the test suite since Geant4 9.1:
+  o Added more tests.
+  o New test system.
+  o Compare FORTRAN and C++ results.
+  o Preliminary GUI for running plotting scripts.
+
 04 December 2007 - Gabriele Cosmo (hadr-incl-V09-00-09)
 ---------------------------------
 - Again commented out call to isnan() in G4Incl.cc for allow
   porting to platforms other than Linux....
+
+03 December 2007 - Pekka Kaitaniemi
+-----------------------------------
+- Added bugfixes to INCL nucleon array handling. Several off-by-one
+  bugs were fixed. These fixes help with INCL neutron energy spectra. 
+- 4-momentum conservation problem was noticed to be mainly ABLA
+  related. 
+  o INCL alone violates energy conservation only by less than 20 MeV.
+  o ABLA has problems with baryon number conservation. Some produced
+  nucleons are not given back to INCL and Geant4. This is probably the
+  main reason for 4-momentum conservation violations.
+- Added 4-momentum and baryon number conservation checking code to the
+  interfaces (behind flag DEBUGINCL).
 
 15 November 2007 - Pekka Kaitaniemi
 -----------------------------------
