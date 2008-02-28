@@ -84,8 +84,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1099.05s Real=1099.24s Sys=0.1s
-Time elapsed in 1 events ---- User=1099.05s Real=1099.24s Sys=0.1s
+  User=1078.67s Real=1078.83s Sys=0.11s
+Time elapsed in 1 events ---- User=1078.67s Real=1078.83s Sys=0.11s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -104,8 +104,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=9651.47s Real=9683.83s Sys=1.2s
-Time elapsed in 9 events ---- User=9651.47s Real=9683.84s Sys=1.2s
+  User=9499.02s Real=9500.9s Sys=1.04s
+Time elapsed in 9 events ---- User=9499.02s Real=9500.91s Sys=1.05s
 #
 /gun/particle proton
 #------------------
@@ -952,8 +952,8 @@ Point: 9.18254e+07 - Data value : 0.206763
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=217.57s Real=218.46s Sys=0.49s
-Time elapsed in 1 events ---- User=217.57s Real=218.46s Sys=0.49s
+  User=213.59s Real=214.19s Sys=0.48s
+Time elapsed in 1 events ---- User=213.59s Real=214.19s Sys=0.48s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -972,8 +972,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=122.19s Real=122.45s Sys=0.23s
-Time elapsed in 1 events ---- User=122.19s Real=122.45s Sys=0.23s
+  User=120.02s Real=120.28s Sys=0.25s
+Time elapsed in 1 events ---- User=120.02s Real=120.28s Sys=0.25s
 #
 /gun/particle alpha
 #------------------
@@ -996,8 +996,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=636.14s Real=638.8s Sys=1.46s
-Time elapsed in 1 events ---- User=636.14s Real=638.8s Sys=1.46s
+  User=625.56s Real=626.99s Sys=1.39s
+Time elapsed in 1 events ---- User=625.56s Real=626.99s Sys=1.39s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -1016,8 +1016,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=629.49s Real=631.41s Sys=1.27s
-Time elapsed in 1 events ---- User=629.49s Real=631.42s Sys=1.28s
+  User=611.75s Real=613.24s Sys=1.47s
+Time elapsed in 1 events ---- User=611.75s Real=613.24s Sys=1.47s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 5179 calls

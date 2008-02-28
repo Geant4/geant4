@@ -321,7 +321,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1286.91s Real=1468.03s Sys=9.93s
+  User=1250.17s Real=1370s Sys=7.79s
 
  ======================== run summary ======================
 

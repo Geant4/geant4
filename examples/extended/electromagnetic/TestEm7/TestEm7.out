@@ -20,13 +20,17 @@
 PhysicsList::AddPhysicsList: <emstandard>
 /run/initialize
 
-***** Table : Nb of materials = 4 *****
+***** Table : Nb of materials = 5 *****
 
  Material:    Water     density:  1.000 g/cm3   RadL:  36.084 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: TechVacuum     density:  0.010 mg/cm3  RadL:  36.786 km   Imean:  85.684 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -111,28 +115,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=403.67s Real=532.6s Sys=9.74s
+  User=399.58s Real=511.53s Sys=6.11s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.6818 cm    rms= 2.06573 mm 
- Mean number of primary steps = 180.328
- Total energy deposit= 160 MeV
- NIEL energy deposit = 1.30027 MeV
+ Projected Range= 17.6827 cm    rms= 2.11919 mm 
+ Mean number of primary steps = 180.33
+ Total energy deposit= 159.998 MeV
+ NIEL energy deposit = 50.2473 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.59621 GeV	0.287263 % 	9.20493e-05 Gy
- tally 1: 	 	4.98544 GeV	0.31159 % 	9.98444e-05 Gy
- tally 2: 	 	3.374 GeV	0.210875 % 	6.75718e-05 Gy
- tally 3: 	 	2.00025 GeV	0.125016 % 	4.00595e-05 Gy
+ tally 0: 	 	4.56003 GeV	0.285002 % 	9.13247e-05 Gy
+ tally 1: 	 	4.97633 GeV	0.311021 % 	9.96621e-05 Gy
+ tally 2: 	 	3.35137 GeV	0.20946 % 	6.71185e-05 Gy
+ tally 3: 	 	1.96201 GeV	0.122625 % 	3.92936e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1426145946, 1099580709
+ Current couple of seeds = 445804390, 1305139465
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -162,7 +166,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1426145946, 1099580709
+ Current couple of seeds = 445804390, 1305139465
 ----------------------------------------
 Start Run processing.
 
@@ -170,39 +174,43 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=98.97s Real=115.88s Sys=0.96s
+  User=95.59s Real=107.31s Sys=0.75s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4523 cm    rms= 735.564 um 
- Mean number of primary steps = 108.503
+ Projected Range= 16.4729 cm    rms= 491.601 um 
+ Mean number of primary steps = 108.694
  Total energy deposit= 3.49997 GeV
- NIEL energy deposit = 51.3244 MeV
+ NIEL energy deposit = 1.39154 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.5394 GeV	0.329697 % 	0.000231102 Gy
- tally 1: 	 	13.244 GeV	0.378401 % 	0.000265241 Gy
- tally 2: 	 	15.9139 GeV	0.454683 % 	0.000318711 Gy
- tally 3: 	 	22.3781 GeV	0.639373 % 	0.00044817 Gy
+ tally 0: 	 	11.1887 GeV	0.319678 % 	0.000224079 Gy
+ tally 1: 	 	12.8441 GeV	0.366973 % 	0.000257231 Gy
+ tally 2: 	 	15.485 GeV	0.442429 % 	0.000310122 Gy
+ tally 3: 	 	23.4839 GeV	0.670969 % 	0.000470317 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 812005910, 1965043176
+ Current couple of seeds = 607079282, 441920763
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/update
 
-***** Table : Nb of materials = 5 *****
+***** Table : Nb of materials = 6 *****
 
  Material:    Water     density:  1.000 g/cm3   RadL:  36.084 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: TechVacuum     density:  0.010 mg/cm3  RadL:  36.786 km   Imean:  85.684 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -269,7 +277,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 812005910, 1965043176
+ Current couple of seeds = 607079282, 441920763
 ----------------------------------------
 Start Run processing.
 
@@ -277,19 +285,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=68.66s Real=82.71s Sys=0.98s
+  User=64.32s Real=77.97s Sys=0.68s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.10941 cm    rms= 3.71787 mm 
- Mean number of primary steps = 8.334
- Total energy deposit= 289.183 MeV
- NIEL energy deposit = 40.562 keV
+ Projected Range= 2.15013 cm    rms= 1.58261 mm 
+ Mean number of primary steps = 8.407
+ Total energy deposit= 287.199 MeV
+ NIEL energy deposit = 19.6606 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	420.146 MeV	0.420146 % 	8.41435e-06 Gy
- tally 1: 	 	673.566 keV	0.000673566 % 	1.34897e-08 Gy
+ tally 0: 	 	430.611 MeV	0.430611 % 	8.62394e-06 Gy
+ tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
@@ -298,6 +306,122 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1729596926, 735400891
+ Current couple of seeds = 1726950670, 531279769
+----------------------------------------
+/testem/det/setMat TechVacuum
+/testem/det/update
+
+***** Table : Nb of materials = 6 *****
+
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.084 cm   Imean:  75.000 eV 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: TechVacuum     density:  0.010 mg/cm3  RadL:  36.786 km   Imean:  85.684 eV   temperature: 273.15 K  pressure:   0.02 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: Galactic     density:  0.000 mg/cm3  RadL: 204322175.595 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Imean:  75.000 eV 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+
+ Material:    G4_Cu     density:  8.960 g/cm3   RadL:   1.436 cm   Imean: 322.000 eV 
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+   --->  Isotope:    Cu   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope:    Cu   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+
+---------------------------------------------------------
+---> The Absorber is 20 cm  of TechVacuum
+
+---------------------------------------------------------
+---> There are 4 tallies : 2 2 2 mm  of G4_WATER  (mass : 8 mg)
+tally 0: position = -9.9 0 0 cm 
+tally 1: position = -5 0 0 cm 
+tally 2: position = 0 0 0 fm 
+tally 3: position = 5 0 0 cm 
+
+---------------------------------------------------------
+/gun/particle alpha
+/gun/energy 0.265 keV
+/run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_WATER
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : G4_Cu
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 24.6072 keV    e- 1.39521 MeV    e+ 1.31192 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : TechVacuum
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 3 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1726950670, 531279769
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.12s Real=0.83s Sys=0.06s
+
+ The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 mg/cm3)
+
+ Projected Range= 184.277 um    rms= 162.364 um 
+ Mean number of primary steps = 2.62
+ Total energy deposit= 265 eV 
+ NIEL energy deposit = 242.898 eV 
+
+---------------------------------------------------------
+ Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
+ tally 0: 	 	11.8259 keV	44.626 % 	2.3684e-10 Gy
+ tally 1: 	 	0 eV 	0 % 	0 Gy
+ tally 2: 	 	0 eV 	0 % 	0 Gy
+ tally 3: 	 	0 eV 	0 % 	0 Gy
+
+---------------------------------------------------------
+
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1680816297, 676362508
 ----------------------------------------
 G4 kernel has come to Quit state.

@@ -1,0 +1,207 @@
+
+*************************************************************
+ Geant4 version Name: global-V09-01-00    (25-January-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+
+***** Table : Nb of materials = 2 *****
+
+ Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  70.893 eV 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:   Vacuum     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+### NIST DataBase for Materials is used
+G4Material: Mean excitation energy is changed for G4_Ni Iold= 310.8eV; Inew= 311 eV;
+PhysicsList::SetCuts:CutLength : 1 um 
+ ********************** 
+ **** CONFIGURATION *** 
+ ********************** 
+
+=====> You have selected :
+-> Square quadrupole field
+   G1 (T/m) = -11.9646
+   G2 (T/m) = 16.4947
+   G3 (T/m) = 9.86677
+   G4 (T/m) = -6.24449
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 28 are loaded
+AugerTransitionTable complete
+
+IONI:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parametrised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyBremsstrahlung.
+
+LowEnBrem:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parameterised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyIonisation.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+hLowEIoni:    Knock-on electron cross sections . 
+        Good description above the mean excitation energy.
+        Delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 10 eV  to 0.1 TeV  in 360 bins.
+        Electronic stopping power model is  ICRU_R49p
+        from 1 keV  to 2 MeV .
+
+        Parametrisation model for antiprotons is  ICRU_R49p
+        from 25 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+        Nuclear stopping power model is ICRU_R49
+
+hLowEIoni:    Knock-on electron cross sections . 
+        Good description above the mean excitation energy.
+        Delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 10 eV  to 0.1 TeV  in 360 bins.
+        Electronic stopping power model is  ICRU_R49p
+        from 1 keV  to 2 MeV .
+
+        Parametrisation model for antiprotons is  ICRU_R49p
+        from 25 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+        Nuclear stopping power model is ICRU_R49
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+-> Event= 1: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.58385 Y(microns)=-0.458404 THETA(mrad)=-5.83676 PHI(mrad)=-9.13058
+
+-> Event= 2: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.48774272 Y(microns)=-0.30076502 THETA(mrad)=-1.9441053 PHI(mrad)=-9.1296997
+
+-> Event= 3: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.48774272 Y(microns)=-0.30076502 THETA(mrad)=1.9441053 PHI(mrad)=-9.1296997
+
+-> Event= 4: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.5838482 Y(microns)=-0.45840363 THETA(mrad)=5.8367565 PHI(mrad)=-9.130576
+
+-> Event= 5: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.3370651 Y(microns)=-0.11859839 THETA(mrad)=-5.8363538 PHI(mrad)=-3.0434489
+
+-> Event= 6: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.40547238 Y(microns)=-0.066081793 THETA(mrad)=-1.9439705 PHI(mrad)=-3.0431584
+
+-> Event= 7: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.40547238 Y(microns)=-0.066081793 THETA(mrad)=1.9439705 PHI(mrad)=-3.0431584
+
+-> Event= 8: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.3370651 Y(microns)=-0.11859839 THETA(mrad)=5.8363538 PHI(mrad)=-3.0434489
+
+-> Event= 9: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.3370651 Y(microns)=0.11859839 THETA(mrad)=-5.8363538 PHI(mrad)=3.0434489
+
+-> Event= 10: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.40547238 Y(microns)=0.066081793 THETA(mrad)=-1.9439705 PHI(mrad)=3.0431584
+
+-> Event= 11: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.40547238 Y(microns)=0.066081793 THETA(mrad)=1.9439705 PHI(mrad)=3.0431584
+
+-> Event= 12: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.3370651 Y(microns)=0.11859839 THETA(mrad)=5.8363538 PHI(mrad)=3.0434489
+
+-> Event= 13: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-3.5838482 Y(microns)=0.45840363 THETA(mrad)=-5.8367565 PHI(mrad)=9.130576
+
+-> Event= 14: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=-0.48774272 Y(microns)=0.30076502 THETA(mrad)=-1.9441053 PHI(mrad)=9.1296997
+
+-> Event= 15: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=0.48774272 Y(microns)=0.30076502 THETA(mrad)=1.9441053 PHI(mrad)=9.1296997
+
+-> Event= 16: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
+    =>IMAGE : X(microns)=3.5838482 Y(microns)=0.45840363 THETA(mrad)=5.8367565 PHI(mrad)=9.130576
+
+-> Event= 17: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.7166522 Y(microns)=-0.11833167 THETA(mrad)=-5.8315729 PHI(mrad)=-9.1248957
+
+-> Event= 18: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.1338808 Y(microns)=0.039100002 THETA(mrad)=-1.9423792 PHI(mrad)=-9.1240198
+
+-> Event= 19: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.1338808 Y(microns)=0.039100002 THETA(mrad)=1.9423792 PHI(mrad)=-9.1240198
+
+-> Event= 20: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.7166522 Y(microns)=-0.11833167 THETA(mrad)=5.8315729 PHI(mrad)=-9.1248957
+
+-> Event= 21: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.4704794 Y(microns)=-0.0052714165 THETA(mrad)=-5.8311717 PHI(mrad)=-3.0415554
+
+-> Event= 22: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.21590225 Y(microns)=0.047137884 THETA(mrad)=-1.9422452 PHI(mrad)=-3.0412656
+
+-> Event= 23: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.21590225 Y(microns)=0.047137884 THETA(mrad)=1.9422452 PHI(mrad)=-3.0412656
+
+-> Event= 24: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.4704794 Y(microns)=-0.0052714165 THETA(mrad)=5.8311717 PHI(mrad)=-3.0415554
+
+-> Event= 25: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.4704794 Y(microns)=0.0052714165 THETA(mrad)=-5.8311717 PHI(mrad)=3.0415554
+
+-> Event= 26: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.21590225 Y(microns)=-0.047137884 THETA(mrad)=-1.9422452 PHI(mrad)=3.0412656
+
+-> Event= 27: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.21590225 Y(microns)=-0.047137884 THETA(mrad)=1.9422452 PHI(mrad)=3.0412656
+
+-> Event= 28: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.4704794 Y(microns)=0.0052714165 THETA(mrad)=5.8311717 PHI(mrad)=3.0415554
+
+-> Event= 29: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-1.7166522 Y(microns)=0.11833167 THETA(mrad)=-5.8315729 PHI(mrad)=9.1248957
+
+-> Event= 30: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=0.1338808 Y(microns)=-0.039100002 THETA(mrad)=-1.9423792 PHI(mrad)=9.1240198
+
+-> Event= 31: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=-0.1338808 Y(microns)=-0.039100002 THETA(mrad)=1.9423792 PHI(mrad)=9.1240198
+
+-> Event= 32: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+    =>IMAGE : X(microns)=1.7166522 Y(microns)=0.11833167 THETA(mrad)=5.8315729 PHI(mrad)=9.1248957
+

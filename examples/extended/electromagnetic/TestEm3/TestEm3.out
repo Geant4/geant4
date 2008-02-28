@@ -272,7 +272,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=197.4s Real=201.29s Sys=0.09s
+  User=187.5s Real=190.4s Sys=0.1s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
@@ -281,6 +281,7 @@ Run Summary
    liquidArgon: 202.61 MeV +- 14.65 MeV     7.231 +- 0.7231 %      99.6 cm  +- 7.58 cm 
 
 ------------------------------------------------------------
+ Beam particle e-  E = 1 GeV
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
