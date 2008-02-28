@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.35 2007-10-11 13:52:04 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.36 2008-02-28 17:17:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,13 +103,13 @@ using namespace std;
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-  minPairEnergy(4.*electron_mass_c2),
-  lowestKinEnergy(1.*GeV),
-  factorForCross(4.*fine_structure_const*fine_structure_const
+    particle(0),
+    factorForCross(4.*fine_structure_const*fine_structure_const
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
     sqrte(sqrt(exp(1.))),
     currentZ(0),
-    particle(0),
+    minPairEnergy(4.*electron_mass_c2),
+    lowestKinEnergy(1.*GeV),
     nzdat(5),
     ntdat(8),
     nbiny(1000),
@@ -121,6 +121,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     samplingTablesAreFilled(false)
 {
   SetLowEnergyLimit(minPairEnergy);
+  nist = G4NistManager::Instance();
 
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
@@ -132,24 +133,6 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 
 G4MuPairProductionModel::~G4MuPairProductionModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
-                                               const G4MaterialCutsCouple* )
-{
-  return minPairEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(!particle) {
-    particle = p;
-    particleMass = particle->GetPDGMass();
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.24 2007-11-08 11:48:28 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.25 2008-02-28 17:17:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,11 +45,12 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 03-08-05 Angular correlations according to PRM (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 03-08-05 Angular correlations according to PRM (V.Ivanchenko)
 // 13-02-06 add ComputeCrossSectionPerAtom (mma)
 // 21-03-06 Fix problem of initialisation in case when cuts are not defined (VI)
 // 07-11-07 Improve sampling of final state (A.Bogdanov)
+// 28-02-08 Use precomputed Z^1/3 and Log(A) (V.Ivanchenko)
 //
 
 //
@@ -99,6 +100,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
     samplingTablesAreFilled(false)
 {
   theGamma = G4Gamma::Gamma();
+  nist = G4NistManager::Instance();
   if(p) SetParticle(p);
 }
 
@@ -111,24 +113,6 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
     for(size_t i=0; i<n; i++) {
       delete partialSumSigma[i];
     }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-                                               const G4MaterialCutsCouple*)
-{
-  return minThreshold;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(!particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
   }
 }
 
@@ -314,8 +298,8 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
   G4double rab0=delta*sqrte ;
 
-  G4double z13 = exp(-log(Z)/3.) ;
-  G4double dn  = 1.54*exp(0.27*log(A)) ;
+  G4double z13 = 1.0/nist->GetZ13(Z);
+  G4double dn  = 1.54*exp(0.27*nist->GetLOGA(A));
 
   G4double b,b1,dnstar ;
 

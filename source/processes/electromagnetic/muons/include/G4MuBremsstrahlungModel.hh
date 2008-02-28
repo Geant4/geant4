@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.17 2007-10-11 09:25:31 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.18 2008-02-28 17:17:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,14 +44,15 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 13-02-06 add ComputeCrossSectionPerAtom (mma)
+// 13-02-06 Add ComputeCrossSectionPerAtom (mma)
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
+// 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
 //
 
 //
 // Class Description:
 //
-// Implementation of energy loss for gamma emission by muons
+// Implementation of bremssrahlung by muons
 
 // -------------------------------------------------------------------
 //
@@ -60,6 +61,7 @@
 #define G4MuBremsstrahlungModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4NistManager.hh"
 
 class G4Element;
 class G4ParticleChangeForLoss;
@@ -77,8 +79,6 @@ public:
   void SetParticle(const G4ParticleDefinition*);
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
@@ -107,52 +107,58 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy);
 
-protected:
+  G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
+  
+  G4double ComputeMicroscopicCrossSection(G4double tkin,
+					  G4double Z,
+					  G4double A,
+					  G4double cut);
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kineticEnergy);
+  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
+						   G4double Z,
+						   G4double A,
+						   G4double gammaEnergy);
 
-public:
-
- G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
-
- G4double ComputeMicroscopicCrossSection(G4double tkin,
-                                           G4double Z,
-                                           G4double A,
-                                           G4double cut);
-
- G4double ComputeDMicroscopicCrossSection(G4double tkin,
-                                          G4double Z,
-                                          G4double A,
-                                          G4double gammaEnergy);
+  inline void SetLowestKineticEnergy(G4double e);
 
   inline void SetIgnoreCutFlag(G4bool);
 
   inline G4bool IgnoreCutFlag() const;
 
+protected:
+
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kineticEnergy);
+
 private:
 
- G4DataVector* ComputePartialSumSigma(const G4Material* material,
-				      G4double tkin, G4double cut);
+  G4DataVector* ComputePartialSumSigma(const G4Material* material,
+				       G4double tkin, G4double cut);
 
- const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
- void MakeSamplingTables();
+  void MakeSamplingTables();
 
 
   // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
 
-  G4ParticleDefinition*       theGamma;
+protected:
+
   const G4ParticleDefinition* particle;
+  G4NistManager* nist;
+  G4double mass;
+
+private:
+
+  G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double lowestKinEnergy;
   G4double minThreshold;
-  G4double mass;
 
   // tables for sampling
   G4int nzdat,ntdat,NBIN;
@@ -169,9 +175,9 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
-                                 const G4ParticleDefinition*,
-				 G4double kineticEnergy)
+inline 
+G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						     G4double kineticEnergy)
 {
   return kineticEnergy;
 }
@@ -188,6 +194,33 @@ inline void G4MuBremsstrahlungModel::SetIgnoreCutFlag(G4bool val)
 inline G4bool G4MuBremsstrahlungModel::IgnoreCutFlag() const
 {
   return ignoreCut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4MuBremsstrahlungModel::SetLowestKineticEnergy(G4double e) 
+{
+  lowestKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
+                                               const G4MaterialCutsCouple*)
+{
+  return minThreshold;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.24 2007-10-11 13:52:03 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.25 2008-02-28 17:17:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 13-02-06 Add ComputeCrossSectionPerAtom (mma)
 // 12-05-06 Add parameter to SelectRandomAtom (A.Bogdanov) 
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
+// 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
 
 //
 // Class Description:
@@ -61,6 +62,7 @@
 #define G4MuPairProductionModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4NistManager.hh"
 #include <vector>
 
 class G4Element;
@@ -69,7 +71,6 @@ class G4ParticleChangeForGamma;
 
 class G4MuPairProductionModel : public G4VEmModel
 {
-
 public:
 
   G4MuPairProductionModel(const G4ParticleDefinition* p = 0,
@@ -77,14 +78,8 @@ public:
 
   virtual ~G4MuPairProductionModel();
 
-  void SetParticle(const G4ParticleDefinition*);
-
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
 			
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
@@ -104,19 +99,11 @@ public:
                                 G4double kineticEnergy,
                                 G4double cutEnergy);
 
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double tmin,
-			 G4double maxEnergy);
-
-protected:
-
-  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				     G4double kineticEnergy);
-
-
-public:
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
   G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut,
                             G4double tmax);
@@ -125,13 +112,27 @@ public:
                                           G4double Z,
                                           G4double cut);
 
-  G4double ComputeDMicroscopicCrossSection(G4double tkin,
-                                           G4double Z,
-                                           G4double pairEnergy);
+  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
+						   G4double Z,
+						   G4double pairEnergy);
+
+  inline void SetLowestKineticEnergy(G4double e);
+
+  inline G4double MinEnergyCut(const G4ParticleDefinition*,
+			       const G4MaterialCutsCouple*);
+
+  inline void SetParticle(const G4ParticleDefinition*);
 
   inline void SetIgnoreCutFlag(G4bool);
 
   inline G4bool IgnoreCutFlag() const;
+
+protected:
+
+  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				     G4double kineticEnergy);
+
+  inline void SetCurrentElement(G4double Z);
 
 private:
 
@@ -143,8 +144,6 @@ private:
 
   void MakeSamplingTables();
 
-  void SetCurrentElement(G4double Z);
-
   inline G4double InterpolatedIntegralCrossSection(
 		     G4double dt, G4double dz, G4int iz,
 		     G4int it, G4int iy, G4double z);
@@ -153,13 +152,10 @@ private:
   G4MuPairProductionModel & operator=(const  G4MuPairProductionModel &right);
   G4MuPairProductionModel(const  G4MuPairProductionModel&);
 
-  G4ParticleDefinition*       theElectron;
-  G4ParticleDefinition*       thePositron;
-  G4ParticleChangeForLoss*    fParticleChange;
-  G4ParticleChangeForGamma*   gParticleChange;
+protected:
 
-  G4double minPairEnergy;
-  G4double lowestKinEnergy;
+  const G4ParticleDefinition* particle;
+  G4NistManager*              nist;
 
   G4double factorForCross;
   G4double sqrte;
@@ -169,14 +165,24 @@ private:
   G4double z23;
   G4double lnZ;
 
-  const G4ParticleDefinition* particle;
+  static G4double xgi[8],wgi[8];
+
+private:
+
+  G4ParticleDefinition*       theElectron;
+  G4ParticleDefinition*       thePositron;
+  G4ParticleChangeForLoss*    fParticleChange;
+  G4ParticleChangeForGamma*   gParticleChange;
+
+  G4double minPairEnergy;
+  G4double lowestKinEnergy;
 
   // tables for sampling
   G4int nzdat;
   G4int ntdat;
   G4int nbiny;
   size_t nmaxElements;
-  static G4double zdat[5],adat[5],tdat[8],xgi[8],wgi[8];
+  static G4double zdat[5],adat[5],tdat[8];
   G4double ya[1001],proba[5][8][1001];
 
   G4double ymin;
@@ -188,6 +194,47 @@ private:
   G4bool  samplingTablesAreFilled;
   std::vector<G4double>   partialSum;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4MuPairProductionModel::SetLowestKineticEnergy(G4double e) 
+{
+  lowestKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
+                                               const G4MaterialCutsCouple* )
+{
+  return minPairEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!particle) {
+    particle = p;
+    particleMass = particle->GetPDGMass();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4MuPairProductionModel::SetIgnoreCutFlag(G4bool val)
+{
+  ignoreCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4MuPairProductionModel::IgnoreCutFlag() const
+{
+  return ignoreCut;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -205,9 +252,9 @@ inline void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    z13 = std::pow(Z,0.333333333);
+    z13 = nist->GetZ13(Z);
     z23 = z13*z13;
-    lnZ = std::log(Z);
+    lnZ = nist->GetLOGA(Z);
   }
 }
 
@@ -224,20 +271,6 @@ inline G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(
   G4double f1 = fac1*proba[iz-1][it  ][iy] + 
                 (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
   return (f0 + (f1-f0)*dt)*z*(z+1.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4MuPairProductionModel::SetIgnoreCutFlag(G4bool val)
-{
-  ignoreCut = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4bool G4MuPairProductionModel::IgnoreCutFlag() const
-{
-  return ignoreCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
