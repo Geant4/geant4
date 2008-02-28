@@ -99,7 +99,7 @@ HADRONICSDIRS = test02 test11 test12 test13 test15 test16 test21 test22 test23 t
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
-ADV_EXAMPLES += 02 03 08
+ADV_EXAMPLES += 02 03 04 08
 
 HADR_EXAMPLES += 01
 
@@ -468,6 +468,12 @@ examples_links_source:
          ln -s $$exdir $$testdir; \
          ln -s microbeam.mac  $$testdir/test1002.in;  \
          ln -s microbeam.out $$testdir/test1002.out; :
+
+	@testdir=test1004; \
+	exdir=$(G4INSTALL)/examples/advanced/nanobeam; \
+         ln -s $$exdir $$testdir; \
+         ln -s macros/coef-square.mac  $$testdir/test1004.in;  \
+         ln -s nanobeam.out $$testdir/test1004.out; :	 
 	 
 	@testdir=test1003; \
 	exdir=$(G4INSTALL)/examples/advanced/raredecay_calorimetry; \
@@ -554,7 +560,9 @@ examples_links_binaries:
 
 # ADV_EXAMPLES
 	@ln -s Microbeam $(G4WORKDIR)/bin/$(G4SYSTEM)/test1002; \
+	ln -s Nanobeam $(G4WORKDIR)/bin/$(G4SYSTEM)/test1004; \
 	ln -s PhotIn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003; \
+	ln -s CRCharging $(G4WORKDIR)/bin/$(G4SYSTEM)/test1008; \
         ln -s GammaTherapy $(G4WORKDIR)/bin/$(G4SYSTEM)/test2001; \
         ln -s fanoCavity $(G4WORKDIR)/bin/$(G4SYSTEM)/test2002; \
 	ln -s fanoCavity2 $(G4WORKDIR)/bin/$(G4SYSTEM)/test2003; \
@@ -707,6 +715,8 @@ clean_examples_links_binaries:
 # Advanced
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1002;:
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1004;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1008;:
 	
 # Hadronic
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test6001;:
