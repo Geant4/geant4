@@ -83,6 +83,8 @@ cp $g4_test/test704.out          $g4_src/examples/extended/field/field04/field04
 cp $g4_test/test801.out          $g4_src/examples/extended/biasing/B01/exampleB01.out
 cp $g4_test/test1002.out         $g4_src/examples/advanced/microbeam/microbeam.out
 cp $g4_test/test1003.out         $g4_src/examples/advanced/raredecay_calorimetry/PhotIn.out
+cp $g4_test/test1004.out         $g4_src/examples/advanced/nanobeam/nanobeam.out
+cp $g4_test/test1008.out         $g4_src/examples/advanced/cosmicray_charging/shoot.out
 cp $g4_test/test2001.out         $g4_src/examples/extended/medical/GammaTherapy/GammaTherapy.out
 cp $g4_test/test2002.out         $g4_src/examples/extended/medical/fanoCavity/fanoCavity.out
 cp $g4_test/test2003.out         $g4_src/examples/extended/medical/fanoCavity2/fanoCavity2.out
