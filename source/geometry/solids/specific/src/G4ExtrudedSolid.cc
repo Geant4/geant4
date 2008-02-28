@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.13 2008-02-27 12:32:48 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.14 2008-02-28 10:31:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -283,12 +283,12 @@ G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,
        p.x() > std::max(l1.x(), l2.x()) + kCarTolerance ||
        p.y() < std::min(l1.y(), l2.y()) - kCarTolerance|| 
        p.y() > std::max(l1.y(), l2.y()) + kCarTolerance )
-       
-  return false;     
+  {
+    return false;
+  }
 
-  return IsSameLine(p, l1, l2); 
-                                        
- }
+  return IsSameLine(p, l1, l2);
+}
 
 //_____________________________________________________________________________
 
