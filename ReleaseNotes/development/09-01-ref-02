@@ -1,0 +1,131 @@
+
+                       geant4-09-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Replaced g77 with gfortran for Linux-g++ and Linux-icc platforms.
+ o Fixes to G4TessellatedSolid and G4ExtrudedSolids.
+ o Added new correction methods in order to provide a smooth transition
+   between low-energy parameterization and Bethe-Bloch model in EM standard.
+ o Fix in combined use of quasi-elastic/elastic hadronic models to correctly
+   update parameters to sample T.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-01
+------
+- Replaced g77 with gfortran for Linux-g++ and Linux-icc platforms.
+- common.gmk: added ability to autogenerate moc files for Qt driver.
+- WIN32-VC: added flags to build Qt driver on Windows.
+- Darwin-g++, Linux-g++: improvements for autogeneration of MOC files for Qt.
+
+geometry/management                              geommng-V09-01-02
+-------------------
+- Implemented missing protected copy-contructor and assignment operator
+  for G4VSolid.
+
+geometry/solids/CSG                              geom-csg-V09-01-00
+-------------------
+- Added protection against NaN in G4Cons::GetPointOnSurface() in the case
+  the check is run for Rmax1==Rmax2.
+
+geometry/solids/specific                         geom-specific-V09-01-06
+------------------------
+- G4TessellatedSolid:
+  o Fixed bug in copy-constructor and internal method CopyObjects() for
+    cloning of facets.
+  o Fix in DistanceToOut(p,v,..) to compute normal only if specified by
+    flag in input.
+- G4ExtrudedSolid:
+  o Corrected triangularization of polygon, now correctly handling case
+    of concave shapes.
+  o Fix in Inside(p) for correctly handling the case of points located on
+    the edges of triangles which are not the outline edges of the polygon.
+    Added new internal method IsSameLineSegment() to be used instead of
+    IsSameLine().
+  o Fix in MakeFacets() to fill 'fTriangles' also in case of polygon with
+    3 or 4 vertices, as they are needed for Inside(p).
+- G4Polyhedra: fixed problem of out-of-bound access to vectors in
+  GetPointOnSurface().
+- Corrected order of arguments in G4Paraboloid constructor.
+
+geometry/volumes                                 geomvol-V09-01-00
+----------------
+- Fixed problem of double-deletion of rotation matrix in destructor
+  of G4AssemblyVolume.
+
+global                                           global-V09-01-01
+------
+- Removed useless specification of units in implementation of
+  G4GeometryTolerance::SetSurfaceTolerance().
+
+processes/electromagnetic/muons                  emmuons-V09-01-01
+-------------------------------
+- G4MuMscModel: added sampling of tail distribution.
+
+processes/electromagnetic/standard               emstand-V09-01-05
+----------------------------------
+- G4eCoulombScatteringModel: speedup run-time computations using
+  precomputed nuclear form-factors per element.
+- G4BetheBlochModel: when computing dEdx for ions using new method
+  IonBarkasCorrection().
+- G4ionIonisation, G4ionGasIonisation:
+  o Using new method to compute corrections IonHighOrderCorrections().
+  o Added extra protections in computation of non-ionizing energy loss.
+- G4IonFluctuations:
+  o Added protection to the computation of the correction factor to dispersion
+    which provide smooth transition to small velocities of an ion.
+  o Added protection in computation of dispersion on allowing have a corrected
+    dispersion below Bohr value.
+
+processes/electromagnetic/utils                  emutils-V09-01-04
+-------------------------------
+- G4EmSaturation: new helper class.
+- G4EmCorrections:
+  o Added IonBarkasCorrection(), IonHighOrderCorrections() and
+    ComputeIonCorrections() methods in order to provide a smooth transition
+    between low-energy parameterization and Bethe-Bloch model.
+  o Added correction on effective charge for NIST materials in the
+    'IonHighOrderCorrections' method.
+- G4LossTableManager: added GetEmSaturation() method.
+- G4ionEffectiveCharge: using precomputed Z^1/3 values, using expansions
+  of exp() and pow() functions; do not perform recomputation if arguments
+  of methods unchanged.
+- G4VEnergyLossProcess: fixed computation of NIEL at the last step of a
+  particle.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-02)
+  o Fixed problem in G4QElasticCrossSection for quasi-elastic: when run
+    together with elastic, the parameters to sample T used to be not updated;
+    the fix implies these to be always updated.
+
+processes/scoring                                procscore-V09-01-00
+-----------------
+- Added copying of non-ionizing energy deposit in G4Step.
+
+track                                            track-V09-01-01
+-----
+- Reset non-ionizing energy loss in G4Step::ResetTotalEnergyDeposit()
+  in order to initialize NIEL in each step.
+
+examples                                         examples-V09-01-02
+--------
+- Updated reference outputs.
+- advanced/nanobeam (nanobeam-V09-01-03)
+  o Added empty directory 'results' required at run-time.
+- extended/electromagnetic/TestEm3 (testem3-V09-01-00)
+  o Added line with beam particle type and its energy.
+- extended/electromagnetic/TestEm7 (testem7-V09-01-02)
+  o Added material 'TechVacuum' with density 1.e-5*g/cm3 to test ion transport.
+  o Fixed computation of range: excluding back-scattering.
+  o Added macro test for alpha particles in 'TechVacuum'.
+
+tests                                            tests-V09-01-02
+-----
+- Updated reference outputs and tools.
