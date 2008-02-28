@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.7 2008-02-20 09:57:34 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2008-02-28 10:32:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -61,13 +61,14 @@
 #include "G4ios.hh"
 
 #include "TargetSD.hh"
+#include "CathodeSD.hh"
 #include "CheckVolumeSD.hh"
 #include "G4SDManager.hh"
 #include "HistoManager.hh"
 #include "G4NistManager.hh"
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -80,17 +81,20 @@ DetectorConstruction::DetectorConstruction()
 
   radius = 10.*cm;
 
-  targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWo4");
-  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
   // Prepare sensitive detectors
+
   checkSD = new CheckVolumeSD("checkSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( checkSD );
+
   targetSD = new TargetSD("targetSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( targetSD );
+
+  cathodeSD = new CathodeSD("cathodeSD");
+  (G4SDManager::GetSDMpointer())->AddNewDetector( cathodeSD );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+////////////////////////////////////////////////////////////////////
 
 DetectorConstruction::~DetectorConstruction()
 { 
@@ -114,6 +118,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructPhotoDetector()
 {
+  DefineMaterials();
+
   if(fSetUp == "hadr01")
   {
     return Hadr01Construct();
@@ -126,6 +132,95 @@ G4VPhysicalVolume* DetectorConstruction::ConstructPhotoDetector()
   {
     return Hadr01Construct();
   }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+//
+
+void  DetectorConstruction::DefineMaterials()
+{
+  // Application materials
+
+  targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWo4");
+  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  wallMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  cathodeMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_GLASS_PLATE");
+
+// PWO (PbWO4                  Material Properties Table
+
+  const G4int nEntries = 14;
+
+  G4double PhotonEnergy[nEntries] =
+            { 1.7712*eV,  1.8368*eV,  1.90745*eV, 1.98375*eV, 2.0664*eV, 
+              2.15625*eV, 2.25426*eV, 2.3616*eV,  2.47968*eV, 2.61019*eV, 
+              2.75521*eV, 2.91728*eV, 3.09961*eV, 3.30625*eV              };
+
+  G4double RefractiveIndex1[nEntries] =
+            { 2.17728, 2.18025, 2.18357, 2.18753, 2.19285, 
+              2.19813, 2.20441, 2.21337, 2.22328, 2.23619, 
+              2.25203, 2.27381, 2.30282, 2.34666            };
+
+ G4double Absorption1[nEntries] =
+           { 666*cm, 666*cm, 666*cm, 666*cm, 666*cm, 
+             666*cm, 605.455*cm, 512.308*cm, 444*cm, 333*cm, 
+             246.667*cm, 195.882*cm, 195.882*cm, 158.571*cm         };
+
+  G4double ScintilFast[nEntries] =
+            { 0, 0, 0, 0, 0, 
+              9, 23, 46, 72, 102, 
+              121, 117, 84, 37                };
+
+  G4double ScintilSlow[nEntries] =
+            { 0, 0, 0, 0, 0, 
+              9, 23, 46, 72, 102, 
+              121, 117, 84, 37               };
+
+  G4MaterialPropertiesTable* pwoMPT = new G4MaterialPropertiesTable();
+
+  pwoMPT->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries);
+  pwoMPT->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries);
+  pwoMPT->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
+  pwoMPT->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
+
+  G4double phYield = 200./MeV;
+
+  phYield /= HistoManager::GetPointer()->GetPhotonBias();
+
+  G4double birksConst = 0.;
+
+  pwoMPT->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
+  pwoMPT->AddConstProperty("BIRKSCONSTANT",birksConst);   
+  pwoMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
+  pwoMPT->AddConstProperty("FASTTIMECONSTANT", 0.1*ns);
+  pwoMPT->AddConstProperty("SLOWTIMECONSTANT",0.3*ns);
+  pwoMPT->AddConstProperty("YIELDRATIO",0.8);
+
+  targetMaterial->SetMaterialPropertiesTable(pwoMPT);
+
+  // Glass (G4_GLASS_PLATE) material Property Table
+
+  const G4int LXe_NUMENTRIES = 3;
+  G4double LXe_Energy[LXe_NUMENTRIES] = { 7.0*eV , 7.07*eV, 7.14*eV };
+
+
+
+
+
+  G4double Glass_RIND[LXe_NUMENTRIES]={1.49,1.49,1.49};
+  G4double Glass_AbsLength[LXe_NUMENTRIES]={420.*cm,420.*cm,420.*cm};
+
+  G4MaterialPropertiesTable* glassMPT = new G4MaterialPropertiesTable();
+
+  glassMPT->AddProperty("ABSLENGTH",LXe_Energy,Glass_AbsLength,LXe_NUMENTRIES);
+  glassMPT->AddProperty("RINDEX",LXe_Energy,Glass_RIND,LXe_NUMENTRIES);
+
+  cathodeMaterial->SetMaterialPropertiesTable(glassMPT);
+
+
+
+
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -155,33 +250,39 @@ G4VPhysicalVolume* DetectorConstruction::Hadr01Construct()
   // World
   //
   // G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ,0.,twopi);
-  G4Box* solidW = new G4Box("World",worldR,worldR, worldZ);
-  logicWorld = new G4LogicalVolume( solidW,worldMaterial,"World");
-  G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
+
+  G4Box* solidW = new G4Box("World", worldR, worldR, worldZ);
+  logicWorld    = new G4LogicalVolume( solidW, worldMaterial,"World");
+  G4VPhysicalVolume* world = new G4PVPlacement( 0, G4ThreeVector(),
                                        logicWorld,"World",0,false,0);
   //
   // Check volume
   //
   // G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  G4Box* solidC = new G4Box("Check",checkR,checkR,checkZ);
-  logicCheck = new G4LogicalVolume( solidC,worldMaterial,"World");
+
+  G4Box* solidC = new G4Box("Check", checkR, checkR, checkZ);
+  logicCheck = new G4LogicalVolume( solidC, worldMaterial,"World");
   //  G4VPhysicalVolume* physC = 
-  new G4PVPlacement(0,G4ThreeVector(),logicCheck,"World",logicWorld,false,0);
+  new G4PVPlacement(0,G4ThreeVector(), logicCheck,"World", logicWorld, false,0);
+
   logicCheck->SetSensitiveDetector(checkSD);
 
   //
   // Target volume
   //
   // G4Tubs* solidA = new G4Tubs("Target",0.,radius,sliceZ,0.,twopi);
-  G4Box* solidA = new G4Box("Target",radius,radius,sliceZ);
-  logicTarget = new G4LogicalVolume( solidA,targetMaterial,"Target");
+  G4Box* solidA = new G4Box("Target", radius, radius, sliceZ);
+  logicTarget   = new G4LogicalVolume( solidA, targetMaterial, "Target");
   logicTarget->SetSensitiveDetector(targetSD);
 
   G4double z = sliceZ - targetZ;
 
-  for(G4int i=0; i<nSlices; i++) {
-    // physC = 
+  for(G4int i = 0; i < nSlices; i++ ) 
+  {
+    // physC =
+ 
     new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),logicTarget,"Target",logicCheck,false,i);
+
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices
@@ -190,58 +291,6 @@ G4VPhysicalVolume* DetectorConstruction::Hadr01Construct()
          << "  Width(mm)= " << 2.0*sliceZ/mm
          << "  Total Length(mm)= " << 2.0*targetZ/mm
          <<  "  ###" << G4endl;
-
-//
-// ------------ Generate & Add Material Properties Table ------------
-//
-  const G4int nEntries = 14;
-
-  G4double PhotonEnergy[nEntries] =
-            { 1.7712*eV,  1.8368*eV,  1.90745*eV, 1.98375*eV, 2.0664*eV, 
-              2.15625*eV, 2.25426*eV, 2.3616*eV,  2.47968*eV, 2.61019*eV, 
-              2.75521*eV, 2.91728*eV, 3.09961*eV, 3.30625*eV              };
-//
-// PbWO4
-//
-  G4double RefractiveIndex1[nEntries] =
-            { 2.17728, 2.18025, 2.18357, 2.18753, 2.19285, 
-              2.19813, 2.20441, 2.21337, 2.22328, 2.23619, 
-              2.25203, 2.27381, 2.30282, 2.34666            };
-
- G4double Absorption1[nEntries] =
-           { 666*cm, 666*cm, 666*cm, 666*cm, 666*cm, 
-             666*cm, 605.455*cm, 512.308*cm, 444*cm, 333*cm, 
-             246.667*cm, 195.882*cm, 195.882*cm, 158.571*cm         };
-
-  G4double ScintilFast[nEntries] =
-            { 0, 0, 0, 0, 0, 
-              9, 23, 46, 72, 102, 
-              121, 117, 84, 37                };
-
-  G4double ScintilSlow[nEntries] =
-            { 0, 0, 0, 0, 0, 
-              9, 23, 46, 72, 102, 
-              121, 117, 84, 37               };
-
-  G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
-
-  myMPT1->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries);
-  myMPT1->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries);
-  myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
-  myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
-
-  G4double phYield = 200./MeV;
-  phYield /= HistoManager::GetPointer()->GetPhotonBias();
-  G4double birksConst = 0.;
-
-  myMPT1->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
-  myMPT1->AddConstProperty("BIRKSCONSTANT",birksConst);   
-  myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
-  myMPT1->AddConstProperty("FASTTIMECONSTANT",10*ns);
-  myMPT1->AddConstProperty("SLOWTIMECONSTANT",36*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",1.0);
-
-  targetMaterial->SetMaterialPropertiesTable(myMPT1);
 
 
 
@@ -277,107 +326,89 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   G4SolidStore::GetInstance()->Clean();
 
   // Sizes
-  G4double checkR  = radius + mm;
-  G4double worldR  = radius + cm;
+
+  G4double checkR  = radius + 0.01*mm;
+  G4double worldR  = radius + 100.*cm;
+
   G4double targetZ = HistoManager::GetPointer()->Length()*0.5; 
-  G4double checkZ  = targetZ + mm;
-  G4double worldZ  = targetZ + cm;
+  G4double checkZ  = targetZ + 0.01*mm;
+  G4double worldZ  = targetZ + 100.*cm;
 
   G4int nSlices    = HistoManager::GetPointer()->NumberOfSlices();
+
   G4double sliceZ  = targetZ/G4double(nSlices);
 
   //
-  // World
-  //
+  // World and check leakage volume
+  
+  // worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWo4");
+
   // G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ,0.,twopi);
-  G4Box* solidW = new G4Box("World",worldR,worldR, worldZ);
-  logicWorld = new G4LogicalVolume( solidW,worldMaterial,"World");
-  G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
-                                       logicWorld,"World",0,false,0);
+
+  G4Box* solidW = new G4Box("World", worldR, worldR, worldZ);
+  logicWorld    = new G4LogicalVolume( solidW, worldMaterial,"World");
+
+  logicWorld->SetSensitiveDetector(checkSD);
+
+  G4VPhysicalVolume* world = new G4PVPlacement(0, G4ThreeVector(), 
+                                       logicWorld, "World", 0, false, 0);
   //
-  // Check volume
+  // Wall volume
   //
   // G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  G4Box* solidC = new G4Box("Check",checkR,checkR,checkZ);
-  logicCheck = new G4LogicalVolume( solidC,worldMaterial,"World");
+
+  G4Box* solidC = new G4Box("Check", checkR, checkR, checkZ);
+  logicCheck    = new G4LogicalVolume( solidC, wallMaterial, "World");
+
   //  G4VPhysicalVolume* physC = 
-  new G4PVPlacement(0,G4ThreeVector(),logicCheck,"World",logicWorld,false,0);
-  logicCheck->SetSensitiveDetector(checkSD);
+
+  new G4PVPlacement(0,G4ThreeVector(), logicCheck, "World", logicWorld, false, 0);
+
+  // logicCheck->SetSensitiveDetector(checkSD);
 
   //
   // Target volume
   //
   // G4Tubs* solidA = new G4Tubs("Target",0.,radius,sliceZ,0.,twopi);
-  G4Box* solidA = new G4Box("Target",radius,radius,sliceZ);
-  logicTarget = new G4LogicalVolume( solidA,targetMaterial,"Target");
+
+  G4Box* solidA = new G4Box("Target", radius, radius, sliceZ);
+  logicTarget   = new G4LogicalVolume( solidA, targetMaterial, "Target");
+
   logicTarget->SetSensitiveDetector(targetSD);
+
+  //
+  // PhotoCathode volume inside crystal (target) close to up Z
+  
+  G4double phDelta = radius/3., phThickness = 0.001*mm;
+
+  G4Box* solidCathode = new G4Box("Target",radius-phDelta,radius-phDelta,phThickness);
+  logicCathode = new G4LogicalVolume( solidCathode, cathodeMaterial,"Cathode");
+
+  logicCathode->SetSensitiveDetector(cathodeSD);
+
+  new G4PVPlacement(0,G4ThreeVector(0.0,0.0,targetZ-3*phThickness), 
+                    logicCathode,"Cathode",logicTarget,false,0);
+
+
+
+
 
   G4double z = sliceZ - targetZ;
 
-  for(G4int i=0; i<nSlices; i++) {
+  for(G4int i = 0; i < nSlices; i++ ) 
+  {
     // physC = 
-    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),logicTarget,"Target",logicCheck,false,i);
+
+    new G4PVPlacement(0,G4ThreeVector( 0.0, 0.0, z ),logicTarget,"Target",logicCheck,false,i);
+
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices
          << " of " << targetMaterial->GetName() 
-         << " disks with R(mm)= " << radius/mm
+         << " box   with R(mm)= " << radius/mm
          << "  Width(mm)= " << 2.0*sliceZ/mm
          << "  Total Length(mm)= " << 2.0*targetZ/mm
          <<  "  ###" << G4endl;
-
-//
-// ------------ Generate & Add Material Properties Table ------------
-//
-  const G4int nEntries = 14;
-
-  G4double PhotonEnergy[nEntries] =
-            { 1.7712*eV,  1.8368*eV,  1.90745*eV, 1.98375*eV, 2.0664*eV, 
-              2.15625*eV, 2.25426*eV, 2.3616*eV,  2.47968*eV, 2.61019*eV, 
-              2.75521*eV, 2.91728*eV, 3.09961*eV, 3.30625*eV              };
-//
-// PbWO4
-//
-  G4double RefractiveIndex1[nEntries] =
-            { 2.17728, 2.18025, 2.18357, 2.18753, 2.19285, 
-              2.19813, 2.20441, 2.21337, 2.22328, 2.23619, 
-              2.25203, 2.27381, 2.30282, 2.34666            };
-
- G4double Absorption1[nEntries] =
-           { 666*cm, 666*cm, 666*cm, 666*cm, 666*cm, 
-             666*cm, 605.455*cm, 512.308*cm, 444*cm, 333*cm, 
-             246.667*cm, 195.882*cm, 195.882*cm, 158.571*cm         };
-
-  G4double ScintilFast[nEntries] =
-            { 0, 0, 0, 0, 0, 
-              9, 23, 46, 72, 102, 
-              121, 117, 84, 37                };
-
-  G4double ScintilSlow[nEntries] =
-            { 0, 0, 0, 0, 0, 
-              9, 23, 46, 72, 102, 
-              121, 117, 84, 37               };
-
-  G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
-
-  myMPT1->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries);
-  myMPT1->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries);
-  myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
-  myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
-
-  G4double phYield = 200./MeV;
-  phYield /= HistoManager::GetPointer()->GetPhotonBias();
-  G4double birksConst = 0.;
-
-  myMPT1->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
-  myMPT1->AddConstProperty("BIRKSCONSTANT",birksConst);   
-  myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
-  myMPT1->AddConstProperty("FASTTIMECONSTANT", 0.1*ns);
-  myMPT1->AddConstProperty("SLOWTIMECONSTANT",0.3*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",0.8);
-
-  targetMaterial->SetMaterialPropertiesTable(myMPT1);
-
 
 
 
@@ -385,6 +416,7 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
 
   // colors
+
   logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
 
   G4VisAttributes* regWcolor = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
@@ -398,7 +430,7 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   return world;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+///////////////////////////////////////////////////////////////////////
 
 void DetectorConstruction::SetTargetMaterial(const G4String& mat)
 {
@@ -413,7 +445,7 @@ void DetectorConstruction::SetTargetMaterial(const G4String& mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+///////////////////////////////////////////////////////////////////////
 
 void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 {
@@ -427,14 +459,14 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+////////////////////////////////////////////////////////////////////////
 
 void DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//////////////////////////////////////////////////////////////////////////
 
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
@@ -444,4 +476,6 @@ void DetectorConstruction::SetTargetRadius(G4double val)
   } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+//
+///////////////////////////////////////////////////////////////////////////

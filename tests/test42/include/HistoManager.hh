@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2008-02-26 15:08:47 grichine Exp $
+// $Id: HistoManager.hh,v 1.5 2008-02-28 10:32:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -91,6 +91,7 @@ public:
 
   void ScoreNewTrack(const G4Track*);
   void AddTargetStep(const G4Step*);
+  void AddCathodeStep(const G4Step*);
   void AddLeakingParticle(const G4Track*);
 
   void SetTargetLength(G4double val)            {length  = val;};
@@ -167,6 +168,7 @@ private:
   G4int n_cerenkov;
   G4int nOptEvent;
   std::vector<G4int> fOpEventNumbers;
+  std::vector<G4int> fPhElEventNumbers;
   G4Timer fTimer;
 
   G4int n_step;

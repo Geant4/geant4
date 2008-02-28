@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2008-02-26 15:08:47 grichine Exp $
+// $Id: HistoManager.cc,v 1.7 2008-02-28 10:32:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -478,6 +478,47 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 // 
 
 void HistoManager::AddTargetStep(const G4Step* step)
+{
+  n_step++;
+
+  G4double edep = step->GetTotalEnergyDeposit();
+
+  if(edep >= DBL_MIN) 
+  { 
+    const G4Track* track = step->GetTrack();
+    currentDef           = track->GetDefinition(); 
+    currentKinEnergy     = track->GetKineticEnergy();
+
+    G4ThreeVector pos    = 
+      (step->GetPreStepPoint()->GetPosition() +
+       step->GetPostStepPoint()->GetPosition())*0.5;
+
+    G4double z = pos.z() - absZ0;
+
+    // scoring
+
+    edepEvt += edep;
+
+    histo->fill(0,z,edep);
+
+    if(1 < verbose) 
+    {
+      G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
+	     << "; z(mm)= " << z/mm
+	     << "; step(mm)= " << step->GetStepLength()/mm
+	     << " by " << currentDef->GetParticleName()
+	     << " E(MeV)= " << currentKinEnergy/MeV
+	     << G4endl;
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// From CathodeSD::ProcessHits(const G4Step* step, G4TouchableHistory*)
+// 
+
+void HistoManager::AddCathodeStep(const G4Step* step)
 {
   n_step++;
 
