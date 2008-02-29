@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.30 2008-02-29 17:50:05 vnivanch Exp $
+// $Id: G4hBremsstrahlung.hh,v 1.1 2008-02-29 17:50:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,40 +31,26 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4MuBremsstrahlung
+// File name:     G4hBremsstrahlung
 //
-// Author:        Laszlo Urban
+// Author:        Vladimir Ivanchenko on base of model for muons
 //
-// Creation date: 30.09.1997
+// Creation date: 01.03.2008
 //
 // Modifications:
 //
-// 10/02/00 modifications , new e.m. structure, L.Urban
-// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 29-10-01 all static functions no more inlined (mma)
-// 10-05-02 V.Ivanchenko update to new design
-// 26-12-02 secondary production moved to derived classes (VI)
-// 24-01-03 Make models region aware (V.Ivanchenko)
-// 05-02-03 Fix compilation warnings (V.Ivanchenko)
-// 08-08-03 STD substitute standard  (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
-// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
-// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 // Class Description:
 //
-// This class manages the Bremsstrahlung process for muons.
+// This class manages the Bremsstrahlung process for hadrons
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
 //
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4MuBremsstrahlung_h
-#define G4MuBremsstrahlung_h 1
+#ifndef G4hBremsstrahlung_h
+#define G4hBremsstrahlung_h 1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,14 +62,14 @@
 
 class G4ParticleDefinition;
 
-class G4MuBremsstrahlung : public G4VEnergyLossProcess
+class G4hBremsstrahlung : public G4VEnergyLossProcess
 
 {
 public:
 
-  G4MuBremsstrahlung(const G4String& processName = "muBrems");
+  G4hBremsstrahlung(const G4String& processName = "hBrems");
 
-  virtual ~G4MuBremsstrahlung();
+  virtual ~G4hBremsstrahlung();
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
@@ -101,8 +87,8 @@ protected:
 
 private:
 
-  G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right);
-  G4MuBremsstrahlung(const G4MuBremsstrahlung&);
+  G4hBremsstrahlung & operator=(const G4hBremsstrahlung &right);
+  G4hBremsstrahlung(const G4hBremsstrahlung&);
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
@@ -116,15 +102,15 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4bool G4MuBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
+G4bool G4hBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 110.0*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
+G4double G4hBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
 					      const G4Material*,
 					      G4double)
 {

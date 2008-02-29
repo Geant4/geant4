@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.38 2007-05-22 17:35:58 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.39 2008-02-29 17:50:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,8 +90,9 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                     const G4ParticleDefinition*)
+void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
+				 const G4ParticleDefinition* part,
+				 const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 
@@ -115,7 +116,7 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*
 
 void G4MuBremsstrahlung::PrintInfo()
 {
-  G4cout << "      Parametrised model "
+  G4cout << "      Theoretical model "
          << G4endl;
 }
 
