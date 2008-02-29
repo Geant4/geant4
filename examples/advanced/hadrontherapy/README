@@ -8,7 +8,7 @@
 
                                    AUTHORS 
 
-G.A.P. CIRRONE(a *), G.CUTTONE(a), F. DI ROSA(a), G.RUSSO(a)
+G.A.P. CIRRONE(a *), G.CUTTONE(a), F. DI ROSA(a), F.ROMANO, G.RUSSO(a)
 a. Laboratori Nazionali del Sud - Istituto Nazionale di Fisica Nucleare
    95123 Catania, Italy
 * e-mail:cirrone@lns.infn.it
@@ -216,9 +216,13 @@ Setup for analysis: AIDA 3.2.1
 Users can download the analysis tools from:  
 http://aida.freehep.org/
 
-Note that the same information can be stored in any different format.
-Please contact cirrone@lns.infn.it if you want store the information in 
-a different format.
+Note that the same information can be stored in different format, 
+like .root or .xml using the same AIDA interface.
+Alternatively users that are more confident with ASCII format, can derive
+their table with energy deposited in each voxel working inside the 
+HadrontherapyMatrix.
+
+Please contact cirrone@lns.infn.it for more details.
 
 ---------------------------------------------------------------------------
 
