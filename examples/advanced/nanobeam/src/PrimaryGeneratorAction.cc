@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-01-25 20:49:24 sincerti Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2008-02-29 08:22:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PrimaryGeneratorAction.hh"
@@ -191,7 +191,7 @@ if (emission==2)
 	aR = -1;
 	e0= G4RandGauss::shoot(3*MeV,5.0955e-5*MeV);  // AIFIRA ENERGY RESOLUTION
 	while (aR < 0) aR = G4RandGauss::shoot(0.10e-3 , 0.06e-3/2.35) * rad; // old =0.08e-3 displacement
-	angle = G4UniformRand() * 2 * M_PI *rad;
+	angle = G4UniformRand() * 2 * CLHEP::pi *rad;
 	theta = aR * std::cos(angle);
 	phi = aR * std::sin(angle);
 	rR = XYofAngle(aR);
