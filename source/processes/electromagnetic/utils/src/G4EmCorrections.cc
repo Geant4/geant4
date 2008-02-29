@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.28 2008-02-19 16:39:53 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.29 2008-02-29 10:36:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 13.05.2006 V.Ivanchenko Add corrections for ion stopping
 // 08.05.2007 V.Ivanchenko Use G4IonTable for ion mass instead of NistTable to avoid
 //                         division by zero
+// 29.02.2008 V.Ivanchenko use expantions for log and power function
 //
 //
 // Class Description:
@@ -611,8 +612,8 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
     G4double xp = 0.8426*GeV;
     G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
     G4double ksi2 = 2.79285*2.79285;
-    if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) + 0.5*x);
-    else term = -x*(1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) - std::log(1.0 + x);
+    if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) + 1.0 - 0.5*x);
+    else term = -x*(1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) - std::log(1.0 + x);
     G4double b  = xp*0.5/mass;
     G4double c  = xp*mass/(electron_mass_c2*(mass + e));
     G4double lb = b*b;
@@ -688,6 +689,7 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
   if (er >= ed[0])       nloss = a[0];
   else {
+    // the table is inverse in energy
     for (G4int i=102; i>=0; i--)
     {
       if (er <= ed[i]) {
