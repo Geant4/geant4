@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.3 2008-01-25 20:49:24 sincerti Exp $
+$Id: README,v 1.4 2008-03-01 09:04:29 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -145,8 +145,6 @@ image-enge.mac : using Enge's analytical field model
 grid-square.mac : using square magnetic field model
 grid-map.mac : using 3D map magnetic field model
 grid-enge.mac : using Enge's analytical field model
-
-If file.mac is omitted, the coef-square.mac file is used by default.
 
 ---->5. PHYSICS
 

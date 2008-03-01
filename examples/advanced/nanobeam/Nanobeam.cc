@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.1 2008-01-25 20:49:23 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.2 2008-03-01 09:04:29 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -87,8 +87,7 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI session for interactive mode.
   { 
     // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = new G4UIterminal;
-    UI->ApplyCommand("/control/execute ./macros/coef-square.mac");    
+    G4UIsession * session = new G4UIterminal;    
     session->SessionStart();
     delete session;
   }

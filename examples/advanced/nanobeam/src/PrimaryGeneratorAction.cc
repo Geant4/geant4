@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.3 2008-02-29 08:22:19 sincerti Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.4 2008-03-01 09:04:29 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PrimaryGeneratorAction.hh"
@@ -68,6 +68,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   numEvent=anEvent->GetEventID()+1;
   G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0,e0,de;
   shoot=false;
+
+  x0=0; y0=0; z0=0; theta=0; phi=0; e0=0;
 
 // Coefficient computation
 
