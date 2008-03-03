@@ -329,6 +329,11 @@ G4double G4GDMLReadDefine::getConstant(const G4String& ref) {
    return eval.getConstant(ref);
 }
 
+G4double G4GDMLReadDefine::getVariable(const G4String& ref) {
+
+   return eval.getVariable(ref);
+}
+
 G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
 
    if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Referenced position '"+ref+"' was not found!");

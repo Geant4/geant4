@@ -51,6 +51,27 @@ public:
 
       return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
    }
+
+   G4double getConstant(const G4String& name) { return reader.getConstant(name); }
+   G4double getVariable(const G4String& name) { return reader.getVariable(name); }
+
+   G4ThreeVector getPosition(const G4String& name) {
+   
+      G4ThreeVector *ptr = reader.getPosition(name);
+      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
+   }
+
+   G4ThreeVector getRotation(const G4String& name) {
+   
+      G4ThreeVector *ptr = reader.getRotation(name);
+      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
+   }
+
+   G4ThreeVector getScale(const G4String& name) {
+   
+      G4ThreeVector *ptr = reader.getScale(name);
+      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
+   }
 };
 
 #endif
