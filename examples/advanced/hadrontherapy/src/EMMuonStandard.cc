@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyMuonStandard.cc; May 2005
+// $Id: EMMuonStandard.cc; February 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -36,6 +36,9 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+//
+// This class manages the electromagnetic processes for muons
+// using the Standard Electromagnetic Models of Geant4
 // ----------------------------------------------------------------------------
 
 #include "EMMuonStandard.hh"
@@ -74,22 +77,15 @@ void EMMuonStandard::ConstructProcess()
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
 
-
   // ***********************************
   // *** Muon+/-: Common Definitions ***
   // ***********************************
-
-  G4EmProcessOptions* muonEmProcessOptions = new G4EmProcessOptions;
-  muonEmProcessOptions -> SetDEDXBinning(480);
-
+  
   G4MultipleScattering* muonMultipleScatteringProcess = new G4MultipleScattering();
   G4MuIonisation* muonIonisationProcess = new G4MuIonisation();
   G4MuBremsstrahlung* muonBremsstrahlungProcess = new G4MuBremsstrahlung();
   G4MuPairProduction* muonPairProductionProcess = new G4MuPairProduction();
-
-  G4StepLimiter* muonStepLimiter = new G4StepLimiter();
-
-
+  
   // *************
   // *** Muon+ ***
   // *************
@@ -100,7 +96,6 @@ void EMMuonStandard::ConstructProcess()
   processManager -> AddProcess(muonIonisationProcess);
   processManager -> AddProcess(muonBremsstrahlungProcess);
   processManager -> AddProcess(muonPairProductionProcess);
-  processManager -> AddProcess(muonStepLimiter, -1, -1, 3);
  
   processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxAlongStep,1);
   processManager -> SetProcessOrdering(muonIonisationProcess,         idxAlongStep,2);
@@ -123,7 +118,6 @@ void EMMuonStandard::ConstructProcess()
   processManager -> AddProcess(muonIonisationProcess);
   processManager -> AddProcess(muonBremsstrahlungProcess);
   processManager -> AddProcess(muonPairProductionProcess);
-  processManager -> AddProcess(muonStepLimiter, -1, -1, 3);
  
   processManager -> SetProcessOrdering(muonMultipleScatteringProcess, idxAlongStep,1);
   processManager -> SetProcessOrdering(muonIonisationProcess,         idxAlongStep,2);
@@ -134,5 +128,15 @@ void EMMuonStandard::ConstructProcess()
   processManager -> SetProcessOrdering(muonIonisationProcess,         idxPostStep,2);
   processManager -> SetProcessOrdering(muonBremsstrahlungProcess,     idxPostStep,3);
   processManager -> SetProcessOrdering(muonPairProductionProcess,     idxPostStep,4);
+
+  // Options activated to improve accuracy; 
+  // Usefull for a medical application
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 10*um);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
  
 }

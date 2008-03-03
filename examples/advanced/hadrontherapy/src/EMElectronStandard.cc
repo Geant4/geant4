@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+//// $Id: EMElectronStandard.cc; February 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -35,6 +35,9 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+//
+// This class manages the electromagnetic processes for electrons
+// using the Standard Models of Geant4
 // --------------------------------------------------------------
 
 #include "EMElectronStandard.hh"
@@ -70,20 +73,25 @@ void EMElectronStandard::ConstructProcess()
   // *** Electron ***
   // ****************
 
-  G4EmProcessOptions* electronEmProcessOptions = new G4EmProcessOptions();
-  electronEmProcessOptions -> SetDEDXBinning(480);
-
   G4MultipleScattering* electronMultipScatProcess = new G4MultipleScattering();
   G4eIonisation* electronIonisationProcess = new G4eIonisation();
   G4eBremsstrahlung* electronBremsstrProcess = new G4eBremsstrahlung();
 
-  G4StepLimiter* electronStepLimiter = new G4StepLimiter();
-
   G4ParticleDefinition* particle = G4Electron::Electron(); 
   G4ProcessManager* processManager = particle -> GetProcessManager();
+
   processManager -> AddProcess(electronMultipScatProcess, -1, 1, 1);
   processManager -> AddProcess(electronIonisationProcess, -1, 2, 2);
   processManager -> AddProcess(electronBremsstrProcess, -1, -1, 3);
-  processManager -> AddProcess(electronStepLimiter, -1, -1,  3);
+
+  // Options activated to improve accuracy; 
+  // Usefull for a medical application
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 10*um);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 
 }

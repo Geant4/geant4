@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyAnalisysManager.cc;  May 2005
+// $Id: HadrontherapyAnalisysManager.cc; February 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -125,9 +125,17 @@ void HadrontherapyAnalysisManager::book()
   aFact = AIDA_createAnalysisFactory();
   AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
 
-  // Create the .hbk file
+  // Create the .hbk or the .root file
   G4String fileName = "hadrontherapy.hbk";
+  G4String rootFileName = "hadrontherapy.root";
+  
+  std::string opts = "export=root";
+ 
   theTree = treeFact -> create(fileName,"hbook",false,true);
+  theTree = treeFact -> create(rootFileName,"ROOT",false,true,opts);
+
+  // Factories are not "managed" by an AIDA analysis system.
+  // They must be deleted by the AIDA user code.
   delete treeFact;
 
   // Create the histogram and the ntuple factory

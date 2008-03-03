@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPositronStandard.cc May 2005
+// EMPositronStandard.cc February 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -36,6 +36,9 @@
 // (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
 // 
 // * cirrone@lns.infn.it
+//
+// This class manages the electromagnetic processes for positrons
+// using the Standard Electromagnetic Models of Geant4
 // ----------------------------------------------------------------------------
 
 #include "EMPositronStandard.hh"
@@ -74,15 +77,11 @@ void EMPositronStandard::ConstructProcess()
   // *** Positron ***
   // ****************
 
-  G4EmProcessOptions* positronEmProcessOptions = new G4EmProcessOptions();
-  positronEmProcessOptions -> SetDEDXBinning(480);
-
   G4MultipleScattering* positronMultipScatProcess = new G4MultipleScattering();
   G4eIonisation* positronIonisationProcess = new G4eIonisation();
   G4eBremsstrahlung* positronBremsstrProcess = new G4eBremsstrahlung();
   G4eplusAnnihilation* positronAnnihilationProcess = new G4eplusAnnihilation();
 
-  G4StepLimiter* positronStepLimiter = new G4StepLimiter();
 
   G4ParticleDefinition* particle = G4Positron::Positron(); 
   G4ProcessManager* processManager = particle -> GetProcessManager();
@@ -90,6 +89,14 @@ void EMPositronStandard::ConstructProcess()
   processManager -> AddProcess(positronIonisationProcess, -1, 2, 2);
   processManager -> AddProcess(positronBremsstrProcess, -1, -1, 3);
   processManager -> AddProcess(positronAnnihilationProcess, 0, -1, 4);
-  processManager -> AddProcess(positronStepLimiter, -1, -1,  3);
 
+  // Options activated to improve accuracy; 
+  // Usefull for a medical application
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 10*um);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 }

@@ -8,8 +8,20 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
 
+03.03.2008 G.A.P,Cirrone tag hadrontherapy-V09-01-01
+           - Added the generation of .root file;
+	   - Removed a segmentation due to an uncorect pointer
+	     in the EMHadronIonStandard class;
+	   - Added options for an accurate use of Standard electromagnetic models
+	     in the EMHadronIonStandard, EMElectronStandard, 
+	     EMPositronStandard and EMMuonStandard classes;
+	   - Added a macro file (physicsElectromagneticStandard.mac) 
+ 	     for the use of Hadrontherapy with the Standard Electromagnetic models;
+	   - Corrected in the defaultMacro.mac, a wrong command for the 
+ 	     activation of the Standard Electromagnetic models;
+         
 29.02.2007 G.A.P.Cirrone tag hadrontherapy-V09-01-00
-	 - Updated README
+	   - Updated README
 
 16.11.2007 Anton Lechner tag hadrontherapy-V09-00-00
            Updated physics commands in macro files
