@@ -36,7 +36,7 @@ void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
    physvol->SetName(GenerateName(stream.str()));
 }
 
-void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const assemblyElement) {
+void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const) {
 
    pAssembly = new G4AssemblyVolume();
    pMotherLogical = 0;
