@@ -28,6 +28,7 @@
 //
 // --------------------------------------------------------------------
 
+#include <sstream>
 #include "G4GDMLWrite.hh"
 
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
