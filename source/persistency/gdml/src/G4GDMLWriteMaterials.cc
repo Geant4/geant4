@@ -106,9 +106,9 @@ void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Ma
 
    G4String state_str("undefined");
    
-   if (state=kStateSolid) { state_str = "solid"; } else
-   if (state=kStateLiquid) { state_str = "liquid"; } else
-   if (state=kStateGas) { state_str = "gas"; }
+   if (state==kStateSolid) { state_str = "solid"; } else
+   if (state==kStateLiquid) { state_str = "liquid"; } else
+   if (state==kStateGas) { state_str = "gas"; }
 
    materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
    materialElement->setAttributeNode(newAttribute("state",state_str));
