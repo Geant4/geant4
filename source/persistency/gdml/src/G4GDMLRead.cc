@@ -63,7 +63,7 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
 
    if (var.empty()) G4Exception("GDML Reader: ERROR! No variable is determined for loop!");
 
-   eval.checkVariable(var);
+   if (!eval.isVariable(var)) G4Exception("GDML Reader: ERROR! Variable is not defined in loop!");
 
    G4int _var = eval.EvaluateInteger(var);
    G4int _from = eval.EvaluateInteger(from);

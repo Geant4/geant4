@@ -29,6 +29,17 @@
 
 #include "G4GDMLReadDefine.hh"
 
+G4RotationMatrix G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles) {
+
+   G4RotationMatrix rot;
+
+   rot.rotateX(angles.x());
+   rot.rotateY(angles.y());
+   rot.rotateZ(angles.z());
+
+   return rot;
+}
+
 void G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const constantElement) {
 
    G4String name;
@@ -313,6 +324,11 @@ G4String G4GDMLReadDefine::refRead(const xercesc::DOMElement* const element) {
    return ref;
 }
 
+G4double G4GDMLReadDefine::getConstant(const G4String& ref) {
+
+   return eval.getConstant(ref);
+}
+
 G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
 
    if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Referenced position '"+ref+"' was not found!");
@@ -339,15 +355,4 @@ G4double G4GDMLReadDefine::getQuantity(const G4String& ref) {
    if (quantityMap.find(ref) == quantityMap.end()) G4Exception("GDML Reader: ERROR! Referenced quantity '"+ref+"' was not found!");
 
    return quantityMap[ref];
-}
-
-G4RotationMatrix G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles) {
-
-   G4RotationMatrix rot;
-
-   rot.rotateX(angles.x());
-   rot.rotateY(angles.y());
-   rot.rotateZ(angles.z());
-
-   return rot;
 }

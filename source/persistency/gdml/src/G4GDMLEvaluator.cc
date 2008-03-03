@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.12 2008-02-11 13:26:33 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.13 2008-03-03 10:41:32 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -44,15 +44,13 @@ G4GDMLEvaluator::G4GDMLEvaluator() {
 
 void G4GDMLEvaluator::defineConstant(const G4String& name,G4double value) {
 
-   if (eval.findVariable(name)) G4Exception("GDML: Constant or variable '"+name+"' is already defined!");
-
+   if (eval.findVariable(name)) G4Exception("GDML Evaluator: ERROR! Redefinition of constant or variable: "+name);
    eval.setVariable(name.c_str(),value);
 }
 
 void G4GDMLEvaluator::defineVariable(const G4String& name,G4double value) {
 
-   if (eval.findVariable(name)) G4Exception("GDML: Constant or variable '"+name+"' is already defined!");
-
+   if (eval.findVariable(name)) G4Exception("GDML Evaluator: ERROR! Redefinition of constant or variable: "+name);
    eval.setVariable(name.c_str(),value);
    variableList.push_back(name);
 }
@@ -61,9 +59,9 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,G4int coldim,std::vector
 
    const G4int size = valueList.size();
 
-   if (size == 0) G4Exception("GDML Reader: ERROR! Matrix '"+name+"' is empty!");
-   if (size == 1) G4Exception("GDML Reader: ERROR! Matrix '"+name+"' has only one element! Define a constant instead!");
-   if (size % coldim != 0) G4Exception("GDML Reader: ERROR! Matrix '"+name+"' is not filled correctly!");
+   if (size == 0) G4Exception("GDML Evaluator: ERROR! Matrix '"+name+"' is empty!");
+   if (size == 1) G4Exception("GDML Evaluator: ERROR! Matrix '"+name+"' has only one element! Define a constant instead!");
+   if (size % coldim != 0) G4Exception("GDML Evaluator: ERROR! Matrix '"+name+"' is not filled correctly!");
 
    if ((size == coldim) || (coldim == 1)) { // Row- or column matrix
    
@@ -89,18 +87,18 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,G4int coldim,std::vector
 
 void G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
 
-   checkVariable(name);
+   if (!isVariable(name)) G4Exception("GDML Reader: ERROR! Variable '"+name+"' is not defined!");
    eval.setVariable(name.c_str(),value);
 }
 
-void G4GDMLEvaluator::checkVariable(const G4String& name) {
+bool G4GDMLEvaluator::isVariable(const G4String& name) {
 
    for (std::vector<G4String>::iterator iter = variableList.begin(); iter != variableList.end(); iter++) {
 
-      if (name == *iter) return;
+      if (name == *iter) return true;
    }
 
-   G4Exception("GDML Reader: ERROR! Variable '"+name+"' is not defined!");
+   return false;
 }
 
 G4String G4GDMLEvaluator::SolveBrackets(const G4String& in) {
@@ -110,7 +108,7 @@ G4String G4GDMLEvaluator::SolveBrackets(const G4String& in) {
 
    if (open==close) return in;
 
-   if (open>close) G4Exception("GDML Reader: ERROR! Bracket mismatch: "+in);
+   if (open>close) G4Exception("GDML Evaluator: ERROR! Bracket mismatch: "+in);
 
    std::string::size_type begin = open;
    std::string::size_type end = 0;
@@ -148,7 +146,7 @@ G4double G4GDMLEvaluator::Evaluate(const G4String& in) {
       if (eval.status() != HepTool::Evaluator::OK) {
 
          eval.print_error();
-         G4Exception("GDML Reader: Error in expression: "+expression);
+         G4Exception("GDML Evaluator: Error in expression: "+expression);
       }
    }
    
@@ -165,7 +163,20 @@ G4int G4GDMLEvaluator::EvaluateInteger(const G4String& expression) {
    G4int whole = (G4int)value;
    G4double frac = value - (G4double)whole;
 
-   if (frac != 0.0) G4Exception("GDML Reader: ERROR! Expression '"+expression+"' is expected to have an integer value!");
+   if (frac != 0.0) G4Exception("GDML Evaluator: ERROR! Expression '"+expression+"' is expected to have an integer value!");
 
    return whole;
+}
+
+G4double G4GDMLEvaluator::getConstant(const G4String& name) {
+
+   if (isVariable(name)) G4Exception("GDML Evaluator: ERROR! Constant '"+name+"' is not defined! It is a variable!");
+   if (!eval.findVariable(name)) G4Exception("GDML Evaluator: ERROR! Constant '"+name+"' is not defined!"); 
+   return Evaluate(name);
+}
+
+G4double G4GDMLEvaluator::getVariable(const G4String& name) {
+
+   if (!isVariable(name)) G4Exception("GDML Evaluator: ERROR! Variable '"+name+"' is not a defined!");
+   return Evaluate(name);
 }

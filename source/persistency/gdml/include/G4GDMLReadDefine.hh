@@ -43,7 +43,7 @@
 #include "G4GDMLRead.hh"
 
 class G4GDMLReadDefine : public G4GDMLRead {
-
+private:
    std::map<G4String,G4ThreeVector*> positionMap;
    std::map<G4String,G4ThreeVector*> rotationMap;
    std::map<G4String,G4ThreeVector*> scaleMap;
@@ -58,13 +58,16 @@ class G4GDMLReadDefine : public G4GDMLRead {
    void quantityRead(const xercesc::DOMElement* const); 
    void defineRead(const xercesc::DOMElement* const);
 protected:
+   G4RotationMatrix getRotationMatrix(const G4ThreeVector&);
    void vectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String refRead(const xercesc::DOMElement* const);
+public:
+   G4double getConstant(const G4String&);
+   G4double getVariable(const G4String&);
    G4ThreeVector* getPosition(const G4String&);
    G4ThreeVector* getRotation(const G4String&);
    G4ThreeVector* getScale(const G4String&);
    G4double getQuantity(const G4String&);
-   G4RotationMatrix getRotationMatrix(const G4ThreeVector&);
 };
 
 #endif
