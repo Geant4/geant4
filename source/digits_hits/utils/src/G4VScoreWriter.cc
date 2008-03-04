@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.4 2007-11-11 01:00:44 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.5 2008-03-04 23:19:09 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -206,6 +206,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 }
 
 G4int G4VScoreWriter::GetIndex(G4int x, G4int y, G4int z) const {
-  return x + y*fNMeshSegments[0] + z*fNMeshSegments[0]*fNMeshSegments[1];
+    //return x + y*fNMeshSegments[0] + z*fNMeshSegments[0]*fNMeshSegments[1];
+    return x*fNMeshSegments[1]*fNMeshSegments[2] +y*fNMeshSegments[2]+z;
 }
 
