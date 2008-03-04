@@ -43,13 +43,18 @@
 
 #include "G4GDMLReadParamvol.hh"
 
+struct G4GDMLAuxPairType {
+
+   G4String type;
+   G4double value;
+};
+
+typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
+typedef std::map<G4String,G4GDMLAuxListType> G4GDMLAuxMapType;
+
 class G4GDMLReadStructure : public G4GDMLReadParamvol {
-public:
-   typedef std::pair<G4String,G4String> AuxPairType;
-   typedef std::vector<AuxPairType> AuxListType;
-   typedef std::map<const G4LogicalVolume* const,AuxListType> AuxMapType;
 private:
-   AuxMapType auxMap;
+   G4GDMLAuxMapType auxMap;
 
    G4AssemblyVolume *pAssembly;
    G4LogicalVolume *pMotherLogical;
@@ -58,7 +63,7 @@ private:
 
    void GeneratePhysvolName(G4VPhysicalVolume*);
    void assemblyRead(const xercesc::DOMElement* const);
-   AuxPairType auxiliaryRead(const xercesc::DOMElement* const);
+   G4GDMLAuxPairType auxiliaryRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
    void physvolRead(const xercesc::DOMElement* const);
@@ -68,8 +73,7 @@ private:
    void structureRead(const xercesc::DOMElement* const);
 public:
    G4LogicalVolume* getVolume(const G4String&) const;
-   AuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
-   const AuxMapType* getAuxiliaryMap();
+   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String&);
 };
 
 #endif

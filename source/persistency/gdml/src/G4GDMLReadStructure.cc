@@ -42,10 +42,9 @@ void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const) {
    pMotherLogical = 0;
 }
 
-G4GDMLReadStructure::AuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
+G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
 
-   G4String auxtype;
-   G4String auxvalue;
+   G4GDMLAuxPairType auxpair;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -61,11 +60,14 @@ G4GDMLReadStructure::AuxPairType G4GDMLReadStructure::auxiliaryRead(const xerces
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="auxtype") auxtype = attValue; else
-      if (attName=="auxvalue") auxvalue = attValue;
+      if (attName=="auxtype") auxpair.type = attValue; else
+      if (attName=="auxvalue") auxpair.value = eval.Evaluate(attValue);
    }
 
-   return AuxPairType(auxtype,auxvalue);
+   auxpair.type = "zoltan";
+   auxpair.value= 111.0;
+
+   return auxpair;
 }
 
 void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divisionvolElement) {
@@ -277,8 +279,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
 
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
-
-   AuxListType auxList;
+   G4GDMLAuxListType auxList;
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    G4String name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
@@ -300,7 +301,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    pAssembly = 0;
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
 
-   if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
+   if (!auxList.empty()) auxMap[pMotherLogical->GetName()] = auxList;
 
    const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();   
    const size_t volumeCount = volumeList->size();
@@ -360,13 +361,8 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
    return volumePtr;
 }
 
-G4GDMLReadStructure::AuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(const G4LogicalVolume* const ptr) {
+G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(const G4String& name) {
 
-     if (auxMap.find(ptr) != auxMap.end()) return auxMap[ptr];
-     else return G4GDMLReadStructure::AuxListType();
-}
-
-const G4GDMLReadStructure::AuxMapType* G4GDMLReadStructure::getAuxiliaryMap() {
-
-   return &auxMap;
+     if (auxMap.find(name) != auxMap.end()) return auxMap[name];
+     else return G4GDMLAuxListType();
 }

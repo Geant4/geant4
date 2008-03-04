@@ -43,34 +43,20 @@ public:
    void Read(const G4String& fname) { reader.Read(fname,false); /* false: not an external file! */ }
    void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol); }
 
+   G4double getConstant(const G4String& name) { return reader.getConstant(name); }
+   G4double getVariable(const G4String& name) { return reader.getVariable(name); }
+   G4double getQuantity(const G4String& name) { return reader.getQuantity(name); }
+   G4ThreeVector getPosition(const G4String& name) { return *reader.getPosition(name); }
+   G4ThreeVector getRotation(const G4String& name) { return *reader.getRotation(name); }
+   G4ThreeVector getScale(const G4String& name) { return *reader.getScale(name); }
+   G4GDMLMatrix getMatrix(const G4String& name) { return *reader.getMatrix(name); }
+   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(name); }
+
    G4VPhysicalVolume* getWorldVolume(const G4String& setupName="Default") { 
    
       G4LogicalVolume* volume = reader.getVolume(reader.getSetup(setupName));
-
       volume->SetVisAttributes(G4VisAttributes::Invisible);
-
       return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
-   }
-
-   G4double getConstant(const G4String& name) { return reader.getConstant(name); }
-   G4double getVariable(const G4String& name) { return reader.getVariable(name); }
-
-   G4ThreeVector getPosition(const G4String& name) {
-   
-      G4ThreeVector *ptr = reader.getPosition(name);
-      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
-   }
-
-   G4ThreeVector getRotation(const G4String& name) {
-   
-      G4ThreeVector *ptr = reader.getRotation(name);
-      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
-   }
-
-   G4ThreeVector getScale(const G4String& name) {
-   
-      G4ThreeVector *ptr = reader.getScale(name);
-      return G4ThreeVector(ptr->x(),ptr->y(),ptr->z());
    }
 };
 
