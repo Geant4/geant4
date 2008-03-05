@@ -470,7 +470,9 @@ G4RotationMatrix
         angle = strtod(rotation.substr(place+1).c_str(),&p) * deg;
         G4cout << "Angle: " << angle/deg << "deg " << G4endl;
 
-        if (!p || (*p != ',' && *p != '\0')) {
+//        if (!p || (*p != ',' && *p != '\0')) {
+        if (!p || (*p != (char)',' && *p != (char)'\0')) {
+//        if (!p || (strncmp(*p,",",1) != 0  && strncmp(*p,"\0",1) != 0)) {
            G4cerr << "Invalid rotation specification: " << 
                                                   rotation.c_str() << G4endl;
            return rot;
