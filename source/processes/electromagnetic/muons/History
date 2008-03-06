@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2008-03-06 11:37:59 vnivanch Exp $
+$Id: History,v 1.110 2008-03-06 18:38:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,7 @@ committal in the CVS repository !
                             be used by G4hBremsstrahlungModel 
 - G4MuPairProductionModel - remove ignoreCut flag,  set some members protected 
 			    to be used by G4hBremsstrahlungModel
+- SubType for all processes is initialized
 
 22 February 08:  V.Ivanchenko (emmuons-V09-01-01)
 G4MuMscModel - added sampling of tail distribution

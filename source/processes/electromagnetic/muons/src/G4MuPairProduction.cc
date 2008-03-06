@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.49 2008-02-29 17:50:05 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.50 2008-03-06 18:38:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,7 +88,9 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(8);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
