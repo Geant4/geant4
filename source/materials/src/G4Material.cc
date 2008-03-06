@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.38 2007-10-18 11:30:48 vnivanch Exp $
+// $Id: G4Material.cc,v 1.39 2008-03-06 18:08:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -259,9 +259,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
      if (std::abs(1.-wtSum) > perThousand) {
-       G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
-                 "the Delta is > 0.001"
-                 "(the weights are NOT renormalized; the results may be wrong)" 
+       G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
+              <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
      }
      for (i=0;i<fNumberOfElements;i++) {
@@ -320,9 +319,8 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
      if (std::abs(1.-wtSum) > perThousand) {
-       G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
-                 "the Delta is > 0.001"
-                 "(the weights are NOT renormalized; the results may be wrong)" 
+       G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
+              <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
      }
      for (i=0;i<fNumberOfElements;i++) {
