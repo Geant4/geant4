@@ -29,6 +29,13 @@
 
 #include "G4GDMLReadDefine.hh"
 
+G4GDMLMatrix::G4GDMLMatrix() {
+
+   rows = 0;
+   cols = 0;
+   m = 0;
+}
+
 G4GDMLMatrix::G4GDMLMatrix(size_t rows0,size_t cols0) { 
    
    rows = rows0;
@@ -126,21 +133,20 @@ void G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement
    }
 
    eval.defineMatrix(name,coldim,valueList);
-   G4GDMLMatrix* matPtr = new G4GDMLMatrix(valueList.size()/coldim,coldim);
+
+   G4GDMLMatrix matrix(valueList.size()/coldim,coldim);
 
    for (size_t i=0;i<valueList.size();i++)
-      matPtr->set(i/coldim,i%coldim,valueList[i]);
+      matrix.set(i/coldim,i%coldim,valueList[i]);
 
-   matrixMap[name] = matPtr;
+   matrixMap[name] = matrix;
 }
 
 void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement) {
 
    G4String name;
    G4double unit = 1.0;
-   G4double x = 0.0;
-   G4double y = 0.0;
-   G4double z = 0.0;
+   G4ThreeVector position;
 
    const xercesc::DOMNamedNodeMap* const attributes = positionElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -158,21 +164,19 @@ void G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionEle
 
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
-      if (attName=="x") x = eval.Evaluate(attValue); else
-      if (attName=="y") y = eval.Evaluate(attValue); else
-      if (attName=="z") z = eval.Evaluate(attValue);
+      if (attName=="x") position.setX(eval.Evaluate(attValue)); else
+      if (attName=="y") position.setY(eval.Evaluate(attValue)); else
+      if (attName=="z") position.setZ(eval.Evaluate(attValue));
    }
 
-   positionMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
+   positionMap[name] = position*unit;
 }
 
 void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const rotationElement) {
 
    G4String name;
    G4double unit = 1.0;
-   G4double x = 0.0;
-   G4double y = 0.0;
-   G4double z = 0.0;
+   G4ThreeVector rotation;
 
    const xercesc::DOMNamedNodeMap* const attributes = rotationElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -190,20 +194,18 @@ void G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const rotationEle
 
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
-      if (attName=="x") x = eval.Evaluate(attValue); else
-      if (attName=="y") y = eval.Evaluate(attValue); else
-      if (attName=="z") z = eval.Evaluate(attValue);
+      if (attName=="x") rotation.setX(eval.Evaluate(attValue)); else
+      if (attName=="y") rotation.setY(eval.Evaluate(attValue)); else
+      if (attName=="z") rotation.setZ(eval.Evaluate(attValue));
    }
 
-   rotationMap[name] = new G4ThreeVector(x*unit,y*unit,z*unit);
+   rotationMap[name] = rotation*unit;
 }
 
 void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const scaleElement) {
 
    G4String name;
-   G4double x = 1.0;
-   G4double y = 1.0;
-   G4double z = 1.0;
+   G4ThreeVector scale(1.0,1.0,1.0);
 
    const xercesc::DOMNamedNodeMap* const attributes = scaleElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -220,12 +222,12 @@ void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const scaleElement) 
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="name") name = GenerateName(attValue); else
-      if (attName=="x") x = eval.Evaluate(attValue); else
-      if (attName=="y") y = eval.Evaluate(attValue); else
-      if (attName=="z") z = eval.Evaluate(attValue);
+      if (attName=="x") scale.setX(eval.Evaluate(attValue)); else
+      if (attName=="y") scale.setY(eval.Evaluate(attValue)); else
+      if (attName=="z") scale.setZ(eval.Evaluate(attValue));
    }
 
-   scaleMap[name] = new G4ThreeVector(x,y,z);
+   scaleMap[name] = scale;
 }
 
 void G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const variableElement) {
@@ -371,28 +373,28 @@ G4double G4GDMLReadDefine::getQuantity(const G4String& ref) {
    return quantityMap[ref];
 }
 
-G4ThreeVector* G4GDMLReadDefine::getPosition(const G4String& ref) {
+G4ThreeVector G4GDMLReadDefine::getPosition(const G4String& ref) {
 
    if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Position '"+ref+"' was not found!");
 
    return positionMap[ref];
 }
 
-G4ThreeVector* G4GDMLReadDefine::getRotation(const G4String& ref) {
+G4ThreeVector G4GDMLReadDefine::getRotation(const G4String& ref) {
 
    if (rotationMap.find(ref) == rotationMap.end()) G4Exception("GDML Reader: ERROR! Rotation '"+ref+"' was not found!");
 
    return rotationMap[ref];
 }
 
-G4ThreeVector* G4GDMLReadDefine::getScale(const G4String& ref) {
+G4ThreeVector G4GDMLReadDefine::getScale(const G4String& ref) {
 
    if (scaleMap.find(ref) == scaleMap.end()) G4Exception("GDML Reader: ERROR! Scale '"+ref+"' was not found!");
 
    return scaleMap[ref];
 }
 
-G4GDMLMatrix* G4GDMLReadDefine::getMatrix(const G4String& ref) {
+G4GDMLMatrix G4GDMLReadDefine::getMatrix(const G4String& ref) {
 
    if (matrixMap.find(ref) == matrixMap.end()) G4Exception("GDML Reader: ERROR! Matrix '"+ref+"' was not found!");
 

@@ -46,11 +46,21 @@ public:
    G4double getConstant(const G4String& name) { return reader.getConstant(name); }
    G4double getVariable(const G4String& name) { return reader.getVariable(name); }
    G4double getQuantity(const G4String& name) { return reader.getQuantity(name); }
-   G4ThreeVector getPosition(const G4String& name) { return *reader.getPosition(name); }
-   G4ThreeVector getRotation(const G4String& name) { return *reader.getRotation(name); }
-   G4ThreeVector getScale(const G4String& name) { return *reader.getScale(name); }
-   G4GDMLMatrix getMatrix(const G4String& name) { return *reader.getMatrix(name); }
-   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(name); }
+   G4ThreeVector getPosition(const G4String& name) { return reader.getPosition(name); }
+   G4ThreeVector getRotation(const G4String& name) { return reader.getRotation(name); }
+   G4ThreeVector getScale(const G4String& name) { return reader.getScale(name); }
+   G4GDMLMatrix getMatrix(const G4String& name) { return reader.getMatrix(name); }
+
+   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String& name) {
+   
+      G4GDMLAuxPairType aux;
+      aux.type = "abc";
+      aux.value = 1.1;
+
+      G4GDMLAuxListType auxlist;
+      auxlist.push_back(aux);
+      return auxlist;
+   }
 
    G4VPhysicalVolume* getWorldVolume(const G4String& setupName="Default") { 
    

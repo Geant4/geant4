@@ -544,12 +544,11 @@ void G4GDMLReadSolids::polyhedraRead(const xercesc::DOMElement* const polyhedraE
 
 G4QuadrangularFacet* G4GDMLReadSolids::quadrangularRead(const xercesc::DOMElement* const quadrangularElement) {
 
-   G4ThreeVector* ptr1 = 0;
-   G4ThreeVector* ptr2 = 0;
-   G4ThreeVector* ptr3 = 0;
-   G4ThreeVector* ptr4 = 0;
-
-   G4String type;
+   G4ThreeVector vertex1;
+   G4ThreeVector vertex2;
+   G4ThreeVector vertex3;
+   G4ThreeVector vertex4;
+   G4FacetVertexType type = ABSOLUTE;
 
    const xercesc::DOMNamedNodeMap* const attributes = quadrangularElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -565,14 +564,14 @@ G4QuadrangularFacet* G4GDMLReadSolids::quadrangularRead(const xercesc::DOMElemen
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="vertex1") ptr1 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex2") ptr2 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex3") ptr3 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex4") ptr4 = getPosition(GenerateName(attValue)); else
-      if (attName=="type") type = attValue;
+      if (attName=="vertex1") vertex1 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex2") vertex2 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex3") vertex3 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex4") vertex4 = getPosition(GenerateName(attValue)); else
+      if (attName=="type") { if (attValue=="RELATIVE") type = RELATIVE; }
    }
 
-   return new G4QuadrangularFacet(*ptr1,*ptr2,*ptr3,*ptr4,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
+   return new G4QuadrangularFacet(vertex1,vertex2,vertex3,vertex4,type);
 }
 
 void G4GDMLReadSolids::reflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement) {
@@ -740,11 +739,10 @@ void G4GDMLReadSolids::tessellatedRead(const xercesc::DOMElement* const tessella
 void G4GDMLReadSolids::tetRead(const xercesc::DOMElement* const tetElement) {
 
    G4String name;
-   
-   G4ThreeVector* ptr1 = 0;
-   G4ThreeVector* ptr2 = 0;
-   G4ThreeVector* ptr3 = 0;
-   G4ThreeVector* ptr4 = 0;
+   G4ThreeVector vertex1;
+   G4ThreeVector vertex2;
+   G4ThreeVector vertex3;
+   G4ThreeVector vertex4;
    
    const xercesc::DOMNamedNodeMap* const attributes = tetElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -761,13 +759,13 @@ void G4GDMLReadSolids::tetRead(const xercesc::DOMElement* const tetElement) {
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="name") name = GenerateName(attValue); else
-      if (attName=="vertex1") ptr1 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex2") ptr2 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex3") ptr3 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex4") ptr4 = getPosition(GenerateName(attValue));
+      if (attName=="vertex1") vertex1 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex2") vertex2 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex3") vertex3 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex4") vertex4 = getPosition(GenerateName(attValue));
    }
 
-   new G4Tet(name,*ptr1,*ptr2,*ptr3,*ptr4);
+   new G4Tet(name,vertex1,vertex2,vertex3,vertex4);
 }
 
 void G4GDMLReadSolids::torusRead(const xercesc::DOMElement* const torusElement) {
@@ -922,11 +920,10 @@ void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const trdElement) {
 
 G4TriangularFacet* G4GDMLReadSolids::triangularRead(const xercesc::DOMElement* const triangularElement) {
 
-   G4ThreeVector* ptr1 = 0;
-   G4ThreeVector* ptr2 = 0;
-   G4ThreeVector* ptr3 = 0;
-
-   G4String type;
+   G4ThreeVector vertex1;
+   G4ThreeVector vertex2;
+   G4ThreeVector vertex3;
+   G4FacetVertexType type = ABSOLUTE;
 
    const xercesc::DOMNamedNodeMap* const attributes = triangularElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -942,13 +939,13 @@ G4TriangularFacet* G4GDMLReadSolids::triangularRead(const xercesc::DOMElement* c
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="vertex1") ptr1 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex2") ptr2 = getPosition(GenerateName(attValue)); else
-      if (attName=="vertex3") ptr3 = getPosition(GenerateName(attValue)); else
-      if (attName=="type") type = attValue;
+      if (attName=="vertex1") vertex1 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex2") vertex2 = getPosition(GenerateName(attValue)); else
+      if (attName=="vertex3") vertex3 = getPosition(GenerateName(attValue)); else
+      if (attName=="type") { if (attValue=="RELATIVE") type = RELATIVE; }
    }
 
-   return new G4TriangularFacet(*ptr1,*ptr2,*ptr3,(type=="RELATIVE")?(RELATIVE):(ABSOLUTE));
+   return new G4TriangularFacet(vertex1,vertex2,vertex3,type);
 }
 
 void G4GDMLReadSolids::tubeRead(const xercesc::DOMElement* const tubeElement) {

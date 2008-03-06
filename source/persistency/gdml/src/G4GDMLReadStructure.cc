@@ -64,9 +64,6 @@ G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* 
       if (attName=="auxvalue") auxpair.value = eval.Evaluate(attValue);
    }
 
-   auxpair.type = "zoltan";
-   auxpair.value= 111.0;
-
    return auxpair;
 }
 
@@ -200,9 +197,9 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
       if (tag=="position") vectorRead(child,position); else
       if (tag=="rotation") vectorRead(child,rotation); else
       if (tag=="scale") vectorRead(child,scale); else
-      if (tag=="positionref") position = *getPosition(GenerateName(refRead(child))); else
-      if (tag=="rotationref") rotation = *getRotation(GenerateName(refRead(child))); else
-      if (tag=="scaleref") scale = *getScale(GenerateName(refRead(child))); else
+      if (tag=="positionref") position = getPosition(GenerateName(refRead(child))); else
+      if (tag=="rotationref") rotation = getRotation(GenerateName(refRead(child))); else
+      if (tag=="scaleref") scale = getScale(GenerateName(refRead(child))); else
       G4Exception("GDML Reader: ERROR! Unknown tag in physvol: "+tag);
    }
 
@@ -280,6 +277,12 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
    G4GDMLAuxListType auxList;
+   G4GDMLAuxPairType auxpair;
+   
+   auxpair.type = "zoltan";
+   auxpair.value= 111.0;
+      
+   auxList.push_back(auxpair);
 
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    G4String name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
@@ -293,7 +296,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
+//      if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
       if (tag=="materialref") materialPtr = getMaterial(GenerateName(refRead(child))); else
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }

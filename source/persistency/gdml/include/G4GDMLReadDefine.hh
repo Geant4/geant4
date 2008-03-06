@@ -46,6 +46,7 @@ class G4GDMLMatrix {
    G4double *m;
    size_t rows,cols;
 public:
+   G4GDMLMatrix();
    G4GDMLMatrix(size_t rows0,size_t cols0);
    ~G4GDMLMatrix();
 
@@ -56,10 +57,10 @@ public:
 class G4GDMLReadDefine : public G4GDMLRead {
 private:
    std::map<G4String,G4double> quantityMap;
-   std::map<G4String,G4ThreeVector*> positionMap;
-   std::map<G4String,G4ThreeVector*> rotationMap;
-   std::map<G4String,G4ThreeVector*> scaleMap;
-   std::map<G4String,G4GDMLMatrix*> matrixMap;
+   std::map<G4String,G4ThreeVector> positionMap;
+   std::map<G4String,G4ThreeVector> rotationMap;
+   std::map<G4String,G4ThreeVector> scaleMap;
+   std::map<G4String,G4GDMLMatrix> matrixMap;
 
    void constantRead(const xercesc::DOMElement* const); 
    void matrixRead(const xercesc::DOMElement* const);
@@ -77,10 +78,10 @@ public:
    G4double getConstant(const G4String&);
    G4double getVariable(const G4String&);
    G4double getQuantity(const G4String&);
-   G4ThreeVector* getPosition(const G4String&);
-   G4ThreeVector* getRotation(const G4String&);
-   G4ThreeVector* getScale(const G4String&);
-   G4GDMLMatrix* getMatrix(const G4String&);
+   G4ThreeVector getPosition(const G4String&);
+   G4ThreeVector getRotation(const G4String&);
+   G4ThreeVector getScale(const G4String&);
+   G4GDMLMatrix getMatrix(const G4String&);
 };
 
 #endif
