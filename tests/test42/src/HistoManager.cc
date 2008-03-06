@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.7 2008-02-28 10:32:31 grichine Exp $
+// $Id: HistoManager.cc,v 1.8 2008-03-06 09:24:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -194,8 +194,12 @@ void HistoManager::BeginOfRun()
 
 void HistoManager::BeginOfEvent()
 {
-  edepEvt     = 0.0;
-  nOptEvent   = 0;
+  edepEvt        = 0.0;
+  nOptEvent      = 0;
+
+  nOpCathode     = 0;
+  nOpCrCathode   = 0;
+  nOpScCathode   = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -209,6 +213,11 @@ void HistoManager::EndOfEvent()
 
   histo->fill(25, G4double(nOptEvent), 1.0);  // h26
   fOpEventNumbers.push_back(nOptEvent);
+
+
+  fOpCathodeEvNumbers.push_back(nOpCathode);
+  fOpCrCathodeEvNumbers.push_back(nOpCrCathode);
+  fOpScCathodeEvNumbers.push_back(nOpScCathode);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -312,6 +321,34 @@ void HistoManager::EndOfRun()
   {
     G4cout <<"mean op/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
   }
+
+  iMax = fOpEventNumbers.size();
+  sum1 = 0.; 
+  sum2 = 0.;
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum1 += fOpCathodeEvNumbers[i];
+  }
+  mean = sum1*x;
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum2 += (fOpCathodeEvNumbers[i]-mean)*(fOpCathodeEvNumbers[i]-mean);
+  }
+  if(y > 1.)
+  {
+    rms = sum2/(y-1.);
+
+    G4cout <<"mean cathode/event = "<<mean<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
+  }
+  else
+  {
+    G4cout <<"mean cathode/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
+  }
+
+
+
   G4cout<<"Total time of "<<n_evt<<" = "<<fTimer.GetUserElapsed()<<" s"<<endl<<G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
@@ -520,15 +557,31 @@ void HistoManager::AddTargetStep(const G4Step* step)
 
 void HistoManager::AddCathodeStep(const G4Step* step)
 {
-  n_step++;
+  // n_step++;
+  // G4double edep = step->GetTotalEnergyDeposit();
 
-  G4double edep = step->GetTotalEnergyDeposit();
+   
+  // const 
+  G4Track* track = step->GetTrack();
+  currentDef     = track->GetDefinition(); 
 
-  if(edep >= DBL_MIN) 
-  { 
-    const G4Track* track = step->GetTrack();
-    currentDef           = track->GetDefinition(); 
-    currentKinEnergy     = track->GetKineticEnergy();
+  if( currentDef != G4OpticalPhoton::OpticalPhotonDefinition() ) return;
+  else
+  {
+    nOpCathode +=  phBias;
+
+    if( track->GetCreatorProcess()->GetProcessName()=="Scintillation" )
+    {
+      nOpScCathode +=  phBias;
+    }        
+    else if( track->GetCreatorProcess()->GetProcessName()=="Cerenkov" )
+    {
+      nOpCrCathode +=  phBias;
+    }        
+    track->SetTrackStatus(fStopAndKill);
+  }
+  /*
+  currentKinEnergy     = track->GetKineticEnergy();
 
     G4ThreeVector pos    = 
       (step->GetPreStepPoint()->GetPosition() +
@@ -540,8 +593,8 @@ void HistoManager::AddCathodeStep(const G4Step* step)
 
     edepEvt += edep;
 
-    histo->fill(0,z,edep);
-
+    //    histo->fill(0,z,edep);
+    
     if(1 < verbose) 
     {
       G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
@@ -551,7 +604,7 @@ void HistoManager::AddCathodeStep(const G4Step* step)
 	     << " E(MeV)= " << currentKinEnergy/MeV
 	     << G4endl;
     }
-  }
+    */  
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.5 2008-02-28 10:32:31 grichine Exp $
+// $Id: HistoManager.hh,v 1.6 2008-03-06 09:24:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -167,8 +167,20 @@ private:
   G4int n_scint;
   G4int n_cerenkov;
   G4int nOptEvent;
+  G4int nOpCathode;
+  G4int nOpCrCathode;
+  G4int nOpScCathode;
+
+
   std::vector<G4int> fOpEventNumbers;
+
+
   std::vector<G4int> fPhElEventNumbers;
+  std::vector<G4int> fOpCathodeEvNumbers;
+  std::vector<G4int> fOpCrCathodeEvNumbers;
+  std::vector<G4int> fOpScCathodeEvNumbers;
+
+
   G4Timer fTimer;
 
   G4int n_step;

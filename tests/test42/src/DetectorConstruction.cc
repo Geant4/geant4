@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.8 2008-02-28 10:32:31 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2008-03-06 09:24:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -46,6 +46,9 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
 
 #include "G4RunManager.hh"
 
@@ -109,6 +112,8 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  DefineMaterials();
+
   return ConstructPhotoDetector();
 }
 
@@ -118,7 +123,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructPhotoDetector()
 {
-  DefineMaterials();
 
   if(fSetUp == "hadr01")
   {
@@ -142,9 +146,9 @@ void  DetectorConstruction::DefineMaterials()
 {
   // Application materials
 
-  targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWo4");
-  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
-  wallMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  targetMaterial  = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWO4");
+  worldMaterial   = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  wallMaterial    = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
   cathodeMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_GLASS_PLATE");
 
 // PWO (PbWO4                  Material Properties Table
@@ -199,28 +203,20 @@ void  DetectorConstruction::DefineMaterials()
   targetMaterial->SetMaterialPropertiesTable(pwoMPT);
 
   // Glass (G4_GLASS_PLATE) material Property Table
+  
+  const G4int glassNum = 3;
+  G4double LXe_Energy[glassNum] = { 1.7712*eV , 2.25426*eV, 3.30625*eV };
 
-  const G4int LXe_NUMENTRIES = 3;
-  G4double LXe_Energy[LXe_NUMENTRIES] = { 7.0*eV , 7.07*eV, 7.14*eV };
-
-
-
-
-
-  G4double Glass_RIND[LXe_NUMENTRIES]={1.49,1.49,1.49};
-  G4double Glass_AbsLength[LXe_NUMENTRIES]={420.*cm,420.*cm,420.*cm};
+  G4double glassRind[glassNum] = { 1.49, 1.49, 1.49 };
+  G4double glassAbsLength[glassNum]={420.*cm,420.*cm,420.*cm};
 
   G4MaterialPropertiesTable* glassMPT = new G4MaterialPropertiesTable();
 
-  glassMPT->AddProperty("ABSLENGTH",LXe_Energy,Glass_AbsLength,LXe_NUMENTRIES);
-  glassMPT->AddProperty("RINDEX",LXe_Energy,Glass_RIND,LXe_NUMENTRIES);
+  glassMPT->AddProperty("ABSLENGTH",LXe_Energy,glassAbsLength,glassNum);
+  glassMPT->AddProperty("RINDEX",LXe_Energy,glassRind,glassNum);
 
   cathodeMaterial->SetMaterialPropertiesTable(glassMPT);
-
-
-
-
-
+  
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -341,7 +337,7 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   //
   // World and check leakage volume
   
-  // worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWo4");
+  // worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_PbWO4");
 
   // G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ,0.,twopi);
 
@@ -362,7 +358,8 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   //  G4VPhysicalVolume* physC = 
 
-  new G4PVPlacement(0,G4ThreeVector(), logicCheck, "World", logicWorld, false, 0);
+  G4VPhysicalVolume* physCheck =  new G4PVPlacement(0,
+                G4ThreeVector(), logicCheck, "World", logicWorld, false, 0);
 
   // logicCheck->SetSensitiveDetector(checkSD);
 
@@ -386,11 +383,12 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   logicCathode->SetSensitiveDetector(cathodeSD);
 
-  new G4PVPlacement(0,G4ThreeVector(0.0,0.0,targetZ-3*phThickness), 
+  G4VPhysicalVolume* physCathode = new G4PVPlacement(0,
+                G4ThreeVector(0.0,0.0,targetZ-3*phThickness), 
                     logicCathode,"Cathode",logicTarget,false,0);
 
 
-
+  G4VPhysicalVolume* physTarget; 
 
 
   G4double z = sliceZ - targetZ;
@@ -399,20 +397,60 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   {
     // physC = 
 
-    new G4PVPlacement(0,G4ThreeVector( 0.0, 0.0, z ),logicTarget,"Target",logicCheck,false,i);
+  physTarget =  new G4PVPlacement(0,
+         G4ThreeVector( 0.0, 0.0, z ),logicTarget,"Target",logicCheck,false,i);
 
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices
-         << " of " << targetMaterial->GetName() 
-         << " box   with R(mm)= " << radius/mm
-         << "  Width(mm)= " << 2.0*sliceZ/mm
-         << "  Total Length(mm)= " << 2.0*targetZ/mm
+         << " slices of " << targetMaterial->GetName() 
+         << " box   with XY(mm)= " << radius/mm
+         << "  slizeZ(mm) = " << 2.0*sliceZ/mm
+         << "  Total Length(mm) = " << 2.0*targetZ/mm
          <<  "  ###" << G4endl;
 
+  // Optical surfaces PWO-Al and PWO-glass
+
+  const G4int num = 2;
+
+  G4double refl = 0.8, phEnergy[num] = {1.7712*eV, 3.30625*eV};
+
+ // Scintillator housing properties PWO-Al
+
+  G4double reflectivity[num] = { refl, refl };
+  G4double efficiency[num]   = { 0.0, 0.0 };
+
+  G4MaterialPropertiesTable* pwoAlMPT = new G4MaterialPropertiesTable();
+  pwoAlMPT->AddProperty("REFLECTIVITY", phEnergy, reflectivity, num);
+  pwoAlMPT->AddProperty("EFFICIENCY", phEnergy, efficiency, num);
+
+  G4OpticalSurface* pwoAlOpSurface =
+    new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
+  pwoAlOpSurface->SetMaterialPropertiesTable(pwoAlMPT);
 
 
+ // Photocathode surface properties PWO-glass
 
+  G4double photocath_EFF[num]  = { 1., 1. };    //Enables 'detection' of photons
+  G4double photocath_REFL[num] = { 0., 0. };
+
+  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
+  photocath_mt->AddProperty("EFFICIENCY",phEnergy,photocath_EFF,num);
+  photocath_mt->AddProperty("REFLECTIVITY",phEnergy,photocath_REFL,num);
+
+  G4OpticalSurface* photocath_opsurf=
+    new G4OpticalSurface("photocath_opsurf",glisur,polished,
+                         dielectric_metal);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+
+
+  // G4LogicalBorderSurface* pwoAl = 
+ 
+  new G4LogicalBorderSurface("pwoAl",  physTarget, physCheck, pwoAlOpSurface);
+
+  // G4LogicalBorderSurface* pwoCathode = 
+
+  new G4LogicalBorderSurface("pwoAl",  physTarget, physCathode, pwoAlOpSurface);
 
 
   // colors
