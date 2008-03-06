@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.3 2006-06-29 19:32:34 gunter Exp $
+// $Id: G4AnnihiToMuPair.cc,v 1.4 2008-03-06 18:44:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -65,6 +65,8 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
  HighestEnergyLimit = 1000*TeV;
  
  CrossSecFactor = 1.;
+ SetProcessSubType(4);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

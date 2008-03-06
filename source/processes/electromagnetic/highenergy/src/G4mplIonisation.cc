@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.5 2007-05-31 11:13:31 vnivanch Exp $
+// $Id: G4mplIonisation.cc,v 1.6 2008-03-06 18:44:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   if(magneticCharge == 0.0) magneticCharge = eplus*0.5/fine_structure_const;
 
   SetVerboseLevel(0);
+  SetProcessSubType(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

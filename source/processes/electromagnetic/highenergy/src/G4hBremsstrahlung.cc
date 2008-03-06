@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlung.cc,v 1.1 2008-03-06 11:47:11 vnivanch Exp $
+// $Id: G4hBremsstrahlung.cc,v 1.2 2008-03-06 18:44:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,7 +60,9 @@ G4hBremsstrahlung::G4hBremsstrahlung(const G4String& name)
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(3);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

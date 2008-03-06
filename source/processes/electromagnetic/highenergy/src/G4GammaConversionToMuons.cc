@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.4 2006-06-29 19:32:40 gunter Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.5 2008-03-06 18:44:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -50,7 +50,9 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     LowestEnergyLimit (4*G4MuonPlus::MuonPlus()->GetPDGMass()), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
-{ }
+{ 
+  SetProcessSubType(5);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
