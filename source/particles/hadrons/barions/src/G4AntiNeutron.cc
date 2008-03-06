@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.21 2007-03-11 07:17:34 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.22 2008-03-06 15:41:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,8 +64,11 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-   anInstance = new G4ParticleDefinition(
-                 name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
+   // use constants in CLHEP
+  // static const double  neutron_mass_c2 = 939.56563 * MeV;
+
+  anInstance = new G4ParticleDefinition(
+                 name, neutron_mass_c2, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

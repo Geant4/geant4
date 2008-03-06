@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.cc,v 1.13 2007-03-11 07:17:34 kurasige Exp $
+// $Id: G4Proton.cc,v 1.14 2008-03-06 15:41:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,8 +63,11 @@ G4Proton* G4Proton::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  // use constants in CLHEP
+  //  static const double   proton_mass_c2 = 938.27231 * MeV;
+
    anInstance = new G4Ions(
-                 name,   0.9382723*GeV,       0.0*MeV,       eplus, 
+                 name,  proton_mass_c2,       0.0*MeV,       eplus, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            +1,        2212,

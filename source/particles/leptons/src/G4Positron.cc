@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.13 2007-03-15 06:53:58 kurasige Exp $
+// $Id: G4Positron.cc,v 1.14 2008-03-06 15:41:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,13 +63,16 @@ G4Positron* G4Positron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  // use constants in CLHEP
+  //  static const double electron_mass_c2 = 0.51099906 * MeV;
+
    anInstance = new G4ParticleDefinition(
-                 name,  0.51099906*MeV,       0.0*MeV,    +1.*eplus, 
-		    1,               0,             0,          
-		    0,               0,             0,             
-	     "lepton",              -1,             0,          -11,
-		 true,            -1.0,          NULL,
-                false,             "e"
+                name, electron_mass_c2,       0.0*MeV,    +1.*eplus, 
+		   1,                0,             0,          
+		   0,                0,             0,             
+	    "lepton",               -1,             0,          -11,
+		true,             -1.0,          NULL,
+               false,              "e"
               );
  
     // Bohr Magnetron
