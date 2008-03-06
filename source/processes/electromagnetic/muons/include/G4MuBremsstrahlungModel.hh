@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.18 2008-02-28 17:17:35 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.19 2008-03-06 11:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 13-02-06 Add ComputeCrossSectionPerAtom (mma)
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 // 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
+// 06-03-08 Remove obsolete methods and members (V.Ivanchenko) 
 //
 
 //
@@ -121,10 +122,6 @@ public:
 
   inline void SetLowestKineticEnergy(G4double e);
 
-  inline void SetIgnoreCutFlag(G4bool);
-
-  inline G4bool IgnoreCutFlag() const;
-
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -136,9 +133,6 @@ private:
 				       G4double tkin, G4double cut);
 
   const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
-  void MakeSamplingTables();
-
 
   // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
@@ -160,17 +154,7 @@ private:
   G4double lowestKinEnergy;
   G4double minThreshold;
 
-  // tables for sampling
-  G4int nzdat,ntdat,NBIN;
-  static G4double zdat[5],adat[5],tdat[8];
-  G4double ya[1001], proba[5][8][1001];
-  G4double cutFixed;
-
-  G4bool  ignoreCut;
-
   std::vector<G4DataVector*> partialSumSigma;
-  G4bool  samplingTablesAreFilled;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,20 +164,6 @@ G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(const G4ParticleDefinition*
 						     G4double kineticEnergy)
 {
   return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4MuBremsstrahlungModel::SetIgnoreCutFlag(G4bool val)
-{
-  ignoreCut = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4bool G4MuBremsstrahlungModel::IgnoreCutFlag() const
-{
-  return ignoreCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

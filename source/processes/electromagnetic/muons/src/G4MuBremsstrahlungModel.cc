@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.25 2008-02-28 17:17:35 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.26 2008-03-06 11:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,14 +74,6 @@
 #include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// static members
-//
-G4double G4MuBremsstrahlungModel::zdat[]={1., 4., 13., 29., 92.};
-G4double G4MuBremsstrahlungModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
-G4double G4MuBremsstrahlungModel::tdat[]={1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8,
-                                          1.e9, 1.e10};
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
@@ -90,14 +82,9 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
+    fParticleChange(0),
     lowestKinEnergy(1.0*GeV),
-    minThreshold(1.0*keV),
-    nzdat(5),
-    ntdat(8),
-    NBIN(1000),
-    cutFixed(0.98*keV),
-    ignoreCut(false),
-    samplingTablesAreFilled(false)
+    minThreshold(1.0*keV)
 {
   theGamma = G4Gamma::Gamma();
   nist = G4NistManager::Instance();
@@ -131,7 +118,8 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
         G4ProductionCutsTable::GetProductionCutsTable();
   if(theCoupleTable) {
     G4int numOfCouples = theCoupleTable->GetTableSize();
-    
+
+    // clear old data    
     G4int nn = partialSumSigma.size();
     G4int nc = cuts.size();
     if(nn > 0) {
@@ -141,11 +129,11 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
       } 
       partialSumSigma.clear();
     }
+    // fill new data
     if (numOfCouples>0) {
       for (G4int i=0; i<numOfCouples; i++) {
         G4double cute = DBL_MAX;
         if(i < nc) cute = cuts[i];
-        if(cute < cutFixed || ignoreCut) cute = cutFixed;
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
@@ -154,12 +142,15 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
       }
     }
   }
-  if(!samplingTablesAreFilled) MakeSamplingTables();
-  if(pParticleChange)
-    fParticleChange = 
-      reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+
+  // define pointer to G4ParticleChange
+  if(!fParticleChange) {
+    if(pParticleChange)
+      fParticleChange = 
+	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    else
+      fParticleChange = new G4ParticleChangeForLoss();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,11 +162,11 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (kineticEnergy <= lowestKinEnergy || ignoreCut) return dedx;
+  if (kineticEnergy <= lowestKinEnergy) return dedx;
 
   G4double tmax = kineticEnergy;
   G4double cut  = min(cutEnergy,tmax);
-  if(cut < cutFixed) cut = cutFixed;
+  if(cut < minThreshold) cut = minThreshold;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector =
@@ -255,7 +246,7 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
   G4double aaa = log(vcut);
   G4double bbb = log(vmax);
   G4int    kkk = (G4int)((bbb-aaa)/ak1)+k2 ;
-  G4double hhh = (bbb-aaa)/float(kkk);
+  G4double hhh = (bbb-aaa)/G4double(kkk);
 
   G4double aa = aaa;
 
@@ -347,7 +338,7 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
                                                  G4double)
 {
   G4double cut  = min(cutEnergy, kineticEnergy);
-  if(cut < cutFixed || ignoreCut) cut = cutFixed;
+  if(cut < minThreshold) cut = minThreshold;
   G4double cross =
     ComputeMicroscopicCrossSection (kineticEnergy, Z, A/(g/mole), cut);
   return cross;
@@ -367,7 +358,7 @@ G4double G4MuBremsstrahlungModel::CrossSectionPerVolume(
   
   G4double tmax = min(maxEnergy, kineticEnergy);
   G4double cut  = min(cutEnergy, tmax);
-  if(cut < cutFixed || ignoreCut) cut = cutFixed;
+  if(cut < minThreshold) cut = minThreshold;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector =
@@ -421,71 +412,6 @@ G4DataVector* G4MuBremsstrahlungModel::ComputePartialSumSigma(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuBremsstrahlungModel::MakeSamplingTables()
-{
-
-  G4double AtomicNumber,AtomicWeight,KineticEnergy,
-           TotalEnergy,Maxep;
-
-  for (G4int iz=0; iz<nzdat; iz++)
-   {
-     AtomicNumber = zdat[iz];
-     AtomicWeight = adat[iz]*g/mole ;
-
-     for (G4int it=0; it<ntdat; it++)
-     {
-       KineticEnergy = tdat[it];
-       TotalEnergy = KineticEnergy + mass;
-       Maxep = KineticEnergy ;
-
-       G4double CrossSection = 0.0 ;
-
-       // calculate the differential cross section
-       // numerical integration in
-       //  log ...............
-       G4double c = log(Maxep/cutFixed) ;
-       G4double ymin = -5. ;
-       G4double ymax = 0. ;
-       G4double dy = (ymax-ymin)/NBIN ;
-
-       G4double y = ymin - 0.5*dy ;
-       G4double yy = ymin - dy ;
-       G4double x = exp(y);
-       G4double fac = exp(dy);
-       G4double dx = exp(yy)*(fac - 1.0);
-
-       for (G4int i=0 ; i<NBIN; i++)
-       {
-         y += dy ;
-         x *= fac;
-         dx*= fac;
-         G4double ep = cutFixed*exp(c*x) ;
-
-         CrossSection += ep*dx*ComputeDMicroscopicCrossSection(
-                                                 KineticEnergy,AtomicNumber,
-                                                 AtomicWeight,ep) ;
-         ya[i]=y ;
-         proba[iz][it][i] = CrossSection ;
-
-       }
-
-       proba[iz][it][NBIN] = CrossSection ;
-       ya[NBIN] = 0. ;   //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-       if(CrossSection > 0.)
-       {
-         for(G4int ib=0; ib<=NBIN; ib++)
-         {
-           proba[iz][it][ib] /= CrossSection ;
-         }
-       }
-     }
-   }
-  samplingTablesAreFilled = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 						const G4MaterialCutsCouple* couple,
 						const G4DynamicParticle* dp,
@@ -496,7 +422,7 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
   G4double tmin = min(kineticEnergy, minEnergy);
-  if(tmin < cutFixed || ignoreCut) tmin = cutFixed;
+  if(tmin < minThreshold) tmin = minThreshold;
   if(tmin >= tmax) return;
 
   // ===== the begining of a new code  ======

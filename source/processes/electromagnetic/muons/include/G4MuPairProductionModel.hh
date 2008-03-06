@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.25 2008-02-28 17:17:35 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.26 2008-03-06 11:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,10 +123,6 @@ public:
 
   inline void SetParticle(const G4ParticleDefinition*);
 
-  inline void SetIgnoreCutFlag(G4bool);
-
-  inline G4bool IgnoreCutFlag() const;
-
 protected:
 
   inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -172,7 +168,6 @@ private:
   G4ParticleDefinition*       theElectron;
   G4ParticleDefinition*       thePositron;
   G4ParticleChangeForLoss*    fParticleChange;
-  G4ParticleChangeForGamma*   gParticleChange;
 
   G4double minPairEnergy;
   G4double lowestKinEnergy;
@@ -188,8 +183,6 @@ private:
   G4double ymin;
   G4double ymax;
   G4double dy;
-
-  G4bool  ignoreCut;
 
   G4bool  samplingTablesAreFilled;
   std::vector<G4double>   partialSum;
@@ -220,20 +213,6 @@ void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     particleMass = particle->GetPDGMass();
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4MuPairProductionModel::SetIgnoreCutFlag(G4bool val)
-{
-  ignoreCut = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4bool G4MuPairProductionModel::IgnoreCutFlag() const
-{
-  return ignoreCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

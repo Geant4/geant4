@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.36 2008-02-28 17:17:35 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.37 2008-03-06 11:37:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,6 +108,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
     sqrte(sqrt(exp(1.))),
     currentZ(0),
+    fParticleChange(0),
     minPairEnergy(4.*electron_mass_c2),
     lowestKinEnergy(1.*GeV),
     nzdat(5),
@@ -117,7 +118,6 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     ymin(-5.),
     ymax(0.),
     dy((ymax-ymin)/nbiny),
-    ignoreCut(false),
     samplingTablesAreFilled(false)
 {
   SetLowEnergyLimit(minPairEnergy);
@@ -143,19 +143,12 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
     if(p) SetParticle(p);
     MakeSamplingTables();
   }
-  if(pParticleChange) {
-    if(ignoreCut) {
-      gParticleChange = 
-	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-      fParticleChange = 0;
-    } else {
+  if(!fParticleChange) {
+    if(pParticleChange) 
       fParticleChange = 
 	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-      gParticleChange = 0;
-    }
-  } else {
-    fParticleChange = new G4ParticleChangeForLoss();
-    gParticleChange = 0;
+    else 
+      fParticleChange = new G4ParticleChangeForLoss();
   }
 }
 
@@ -168,8 +161,7 @@ G4double G4MuPairProductionModel::ComputeDEDXPerVolume(
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (cutEnergy <= minPairEnergy || kineticEnergy <= lowestKinEnergy 
-      || ignoreCut)
+  if (cutEnergy <= minPairEnergy || kineticEnergy <= lowestKinEnergy)
     return dedx;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -385,7 +377,6 @@ G4double G4MuPairProductionModel::ComputeCrossSectionPerAtom(
                                                  G4double)
 {
   G4double cut  = max(minPairEnergy,cutEnergy);
-  if(ignoreCut) cut = minPairEnergy;
   G4double cross = ComputeMicroscopicCrossSection (kineticEnergy, Z, cut);
   return cross;
 }
@@ -413,7 +404,7 @@ G4double G4MuPairProductionModel::CrossSectionPerVolume(
     SetCurrentElement(Z);
     G4double tmax = min(maxEnergy,MaxSecondaryEnergy(particle, kineticEnergy));
     G4double cut  = max(minPairEnergy,cutEnergy);
-    if(ignoreCut) cut = minPairEnergy;
+
     if(cut < tmax) {
       G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cut)
                   - ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
@@ -497,7 +488,7 @@ void G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
   G4double maxEnergy     = std::min(tmax, maxPairEnergy);
   G4double minEnergy     = std::max(tmin, minPairEnergy);
-  if(ignoreCut)minEnergy = minPairEnergy;
+
   if(minEnergy >= maxEnergy) return;
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
@@ -600,10 +591,7 @@ void G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   // primary change
   kineticEnergy -= (ElectronEnergy + PositronEnergy);
-  if(fParticleChange)
-    fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  else 
-    gParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
@@ -637,7 +625,6 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
     SetCurrentElement(Z);
     G4double maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
     G4double minEnergy     = std::max(tmin, minPairEnergy);
-    if(ignoreCut)minEnergy = minPairEnergy;
 
     G4int iz;
     for(iz=1; iz<nzdat; iz++) {if(Z <= zdat[iz]) break;}
