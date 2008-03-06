@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.53 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.54 2008-03-06 18:34:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@ G4eIonisation::G4eIonisation(const G4String& name)
   SetStepFunction(0.2, 1*mm);
   SetIntegral(true);
   SetVerboseLevel(1);
+  SetProcessSubType(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

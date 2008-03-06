@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.51 2008-02-14 14:49:56 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.52 2008-03-06 18:34:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   //  SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
+  SetProcessSubType(2);
   //  SetVerboseLevel(1);
   corr = G4LossTableManager::Instance()->EmCorrections();
 }

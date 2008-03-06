@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.37 2006-09-14 10:27:19 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.38 2008-03-06 18:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,7 +79,9 @@ using namespace std;
 G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
-{}
+{
+  SetProcessSubType(7);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

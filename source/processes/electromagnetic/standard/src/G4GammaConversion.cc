@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.27 2006-09-14 10:27:19 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.28 2008-03-06 18:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
   SetMaxKinEnergy(100.0*GeV);
+  SetProcessSubType(5);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.368 2008-02-20 18:59:27 vnivanch Exp $
+$Id: History,v 1.369 2008-03-06 18:34:19 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 March 08: V.Ivant (emstand-V09-01-06)
+- G4UrbanMscModel2 is cloned from G4UrbanMscModel
+- SubType for all processes is initialized
 
 20 February 08: V.Ivant (emstand-V09-01-05)
 G4eCoulombScatteringModel - speedup run-time computations using

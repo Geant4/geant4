@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.27 2006-09-14 10:27:19 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.28 2008-03-06 18:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,7 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   SetLambdaBinning(90);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
+  SetProcessSubType(6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

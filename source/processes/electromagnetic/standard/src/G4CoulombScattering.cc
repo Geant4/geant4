@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.11 2007-11-20 18:43:25 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.12 2008-03-06 18:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   }
   SetLambdaBinning(120);
   SetSecondaryParticle(G4Electron::Electron());
+  SetProcessSubType(1);
   buildElmTableFlag = true;
 }
 

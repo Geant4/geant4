@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.16 2006-06-29 19:53:30 gunter Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.17 2008-03-06 18:34:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,9 @@ using namespace std;
 G4PolarizedComptonScattering::G4PolarizedComptonScattering(
                                                   const G4String& processName)
 : G4ComptonScattering52 (processName)
-{ }
+{ 
+  SetProcessSubType(6);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

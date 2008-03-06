@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.48 2007-05-23 08:47:34 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.49 2008-03-06 18:34:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,9 @@ using namespace std;
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name):
   G4VEnergyLossProcess(name), 
   isInitialised(false)
-{}
+{
+  SetProcessSubType(3);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

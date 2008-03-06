@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.27 2007-10-02 10:17:12 vnivanch Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.28 2008-03-06 18:34:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,7 @@ using namespace std;
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false)
 {
+  SetProcessSubType(4);
   enableAtRestDoIt = true;
 }
 
