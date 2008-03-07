@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.9 2008-03-02 13:12:52 pia Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.10 2008-03-07 23:46:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -64,7 +64,7 @@ public:
  
   virtual G4double FindValue(G4double argEnergy, G4int argComponentId=0) const;
   
-  virtual voidPrintData(void) const;
+  virtual void PrintData(void) const;
 
   virtual const G4VEMDataSet* GetComponent(G4int argComponentId) const { return components[argComponentId]; }
   virtual void AddComponent(G4VEMDataSet* argDataSet) { components.push_back(argDataSet); }
@@ -72,7 +72,7 @@ public:
 
   virtual const G4DataVector& GetEnergies(G4int argComponentId) const { return GetComponent(argComponentId)->GetEnergies(0); }
   virtual const G4DataVector& GetData(G4int argComponentId) const { return GetComponent(argComponentId)->GetData(0); }
-  virtual void etEnergiesData(G4DataVector* argEnergies, G4DataVector* argData, G4int argComponentId);
+  virtual void SetEnergiesData(G4DataVector* argEnergies, G4DataVector* argData, G4int argComponentId);
 
   virtual G4bool LoadData(const G4String& argFileName);
   virtual G4bool SaveData(const G4String& argFileName) const;

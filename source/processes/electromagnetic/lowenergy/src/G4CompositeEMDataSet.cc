@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.10 2008-03-02 13:13:37 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.11 2008-03-07 23:47:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -117,7 +117,7 @@ void G4CompositeEMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVect
   G4Exception(message.str().c_str());
 }
 
-G4boolG4CompositeEMDataSet::LoadData(const G4String& argFileName)
+G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
 {
   CleanUpComponents(); 
 
