@@ -50,17 +50,7 @@ public:
    G4ThreeVector getRotation(const G4String& name) { return reader.getRotation(name); }
    G4ThreeVector getScale(const G4String& name) { return reader.getScale(name); }
    G4GDMLMatrix getMatrix(const G4String& name) { return reader.getMatrix(name); }
-
-   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String& name) {
-   
-      G4GDMLAuxPairType aux;
-      aux.type = "abc";
-      aux.value = 1.1;
-
-      G4GDMLAuxListType auxlist;
-      auxlist.push_back(aux);
-      return auxlist;
-   }
+   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(reader.getVolume(name)); }
 
    G4VPhysicalVolume* getWorldVolume(const G4String& setupName="Default") { 
    

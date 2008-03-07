@@ -277,13 +277,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
    G4GDMLAuxListType auxList;
-   G4GDMLAuxPairType auxpair;
    
-   auxpair.type = "zoltan";
-   auxpair.value= 111.0;
-      
-   auxList.push_back(auxpair);
-
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
    G4String name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
@@ -296,7 +290,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
 
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-//      if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
+      if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
       if (tag=="materialref") materialPtr = getMaterial(GenerateName(refRead(child))); else
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
@@ -304,7 +298,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    pAssembly = 0;
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
 
-   if (!auxList.empty()) auxMap[pMotherLogical->GetName()] = auxList;
+   if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
 
    const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();   
    const size_t volumeCount = volumeList->size();
@@ -364,8 +358,8 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
    return volumePtr;
 }
 
-G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(const G4String& name) {
+G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVolume* logvol) {
 
-     if (auxMap.find(name) != auxMap.end()) return auxMap[name];
+     if (auxMap.find(logvol) != auxMap.end()) return auxMap[logvol];
      else return G4GDMLAuxListType();
 }
