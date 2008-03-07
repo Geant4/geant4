@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.29 2008-03-07 10:10:32 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.30 2008-03-07 13:00:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,6 +122,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
     // clear old data    
     G4int nn = partialSumSigma.size();
+    G4int nc = cuts.size();
     if(nn > 0) {
       for (G4int ii=0; ii<nn; ii++){
 	G4DataVector* a=partialSumSigma[ii];
@@ -132,7 +133,11 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     // fill new data
     if (numOfCouples>0) {
       for (G4int i=0; i<numOfCouples; i++) {
-        G4double cute = cuts[i];
+        G4double cute = DBL_MAX;
+
+	// protection for usage with extrapolator
+        if(i < nc) cute = cuts[i];
+
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
