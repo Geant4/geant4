@@ -99,7 +99,6 @@
 // 03 Oct   2005 V.Ivanchenko change logic of definition of high energy limit for
 //               parametrised proton model: min(user value, model limit)
 // 26 Jan   2005 S. Chauvie added PrintInfoDefinition() for antiproton
-// 30 May   2007 MGP Attempt to fix uninitialized variables.
 
 
 // -----------------------------------------------------------------------
@@ -1472,9 +1471,6 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 
     if (nVacancies && Z  > 5 && maxE < tcut && (maxE > minGammaEnergy || maxE > minElectronEnergy)) {
       for(size_t j=0; j<nVacancies; j++) {
-
-        grej = -1.;
-        tkin = 0.;
 
         // sampling follows
         do {
