@@ -1,4 +1,4 @@
-$Id: History,v 1.286 2008-03-06 13:41:39 pia Exp $
+$Id: History,v 1.287 2008-03-07 10:56:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07.03.2008   MGP, tag emlowen-V09-01-03
+             Reverted to G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
+             as in emlowen-V09-01-01
+
+07.03.2008   MGP, tag emlowen-V09-01-02
+             Operation for convenience of configuration management:
+             updated G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
+             to the head; the modifications to these two classes
+             were an attempt to address a PRS report by A. Howard,
+             but they proved ineffective and caused other problems;
+             a tag including them is made to facilitate later retrieve
 
 06.03.2008   MGP, tag emlowen-V09-01-01
              Restored readability of *DataSet* classes regards the
