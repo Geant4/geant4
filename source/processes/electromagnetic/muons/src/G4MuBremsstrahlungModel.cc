@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.26 2008-03-06 11:37:59 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.27 2008-03-07 09:58:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,6 +112,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
   highKinEnergy = HighEnergyLimit();
 
+  // partial cross section is computed for fixed energy
   G4double fixedEnergy = 0.5*highKinEnergy;
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -132,8 +133,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     // fill new data
     if (numOfCouples>0) {
       for (G4int i=0; i<numOfCouples; i++) {
-        G4double cute = DBL_MAX;
-        if(i < nc) cute = cuts[i];
+        G4double cute = cuts[i];
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
@@ -165,12 +165,12 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
   if (kineticEnergy <= lowestKinEnergy) return dedx;
 
   G4double tmax = kineticEnergy;
-  G4double cut  = min(cutEnergy,tmax);
+  G4double cut  = std::min(cutEnergy,tmax);
   if(cut < minThreshold) cut = minThreshold;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector =
-                                          material->GetAtomicNumDensityVector();
+    material->GetAtomicNumDensityVector();
 
   //  loop for elements in the material
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
@@ -337,7 +337,7 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double)
 {
-  G4double cut  = min(cutEnergy, kineticEnergy);
+  G4double cut = std::min(cutEnergy, kineticEnergy);
   if(cut < minThreshold) cut = minThreshold;
   G4double cross =
     ComputeMicroscopicCrossSection (kineticEnergy, Z, A/(g/mole), cut);
@@ -356,13 +356,13 @@ G4double G4MuBremsstrahlungModel::CrossSectionPerVolume(
   G4double cross = 0.0;
   if (cutEnergy >= maxEnergy || kineticEnergy <= lowestKinEnergy) return cross;
   
-  G4double tmax = min(maxEnergy, kineticEnergy);
-  G4double cut  = min(cutEnergy, tmax);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  G4double cut  = std::min(cutEnergy, tmax);
   if(cut < minThreshold) cut = minThreshold;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector =
-                                          material->GetAtomicNumDensityVector();
+    material->GetAtomicNumDensityVector();
 
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
 
@@ -384,16 +384,17 @@ G4double G4MuBremsstrahlungModel::CrossSectionPerVolume(
 
 G4DataVector* G4MuBremsstrahlungModel::ComputePartialSumSigma(
                                        const G4Material* material,
-                                             G4double kineticEnergy,
-                                             G4double cut)
+				       G4double kineticEnergy,
+				       G4double cut)
 
-// Build the table of cross section per element. The table is built for MATERIAL
-// This table is used by DoIt to select randomly an element in the material.
+// Build the table of cross section per element. 
+// The table is built for material 
+// This table is used to select randomly an element in the material.
 {
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = 
-                                          material->GetAtomicNumDensityVector();
+    material->GetAtomicNumDensityVector();
 
   G4DataVector* dv = new G4DataVector();
 
@@ -404,7 +405,7 @@ G4DataVector* G4MuBremsstrahlungModel::ComputePartialSumSigma(
     G4double Z = (*theElementVector)[i]->GetZ();
     G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
     cross += theAtomNumDensityVector[i] 
-             * ComputeMicroscopicCrossSection(kineticEnergy, Z, A, cut);
+      * ComputeMicroscopicCrossSection(kineticEnergy, Z, A, cut);
     dv->push_back(cross);
   }
   return dv;
@@ -412,16 +413,17 @@ G4DataVector* G4MuBremsstrahlungModel::ComputePartialSumSigma(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-						const G4MaterialCutsCouple* couple,
-						const G4DynamicParticle* dp,
-						G4double minEnergy,
-						G4double maxEnergy)
+void G4MuBremsstrahlungModel::SampleSecondaries(
+                              std::vector<G4DynamicParticle*>* vdp,
+			      const G4MaterialCutsCouple* couple,
+			      const G4DynamicParticle* dp,
+			      G4double minEnergy,
+			      G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
-  G4double tmax = min(kineticEnergy, maxEnergy);
-  G4double tmin = min(kineticEnergy, minEnergy);
+  G4double tmax = std::min(kineticEnergy, maxEnergy);
+  G4double tmin = std::min(kineticEnergy, minEnergy);
   if(tmin < minThreshold) tmin = minThreshold;
   if(tmin >= tmax) return;
 
@@ -486,7 +488,8 @@ void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   fParticleChange->SetProposedMomentumDirection(partDirection);
 
   // save secondary
-  G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,gDirection,gEnergy);
+  G4DynamicParticle* aGamma = 
+    new G4DynamicParticle(theGamma,gDirection,gEnergy);
   vdp->push_back(aGamma);
 }
 
