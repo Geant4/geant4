@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.2 2008-03-01 09:04:29 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.3 2008-03-07 18:06:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -88,6 +88,7 @@ int main(int argc,char** argv) {
   { 
     // G4UIterminal is a (dumb) terminal.
     G4UIsession * session = new G4UIterminal;    
+    UI->ApplyCommand("/control/execute default.mac");
     session->SessionStart();
     delete session;
   }

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.4 2008-03-01 09:04:29 sincerti Exp $
+$Id: README,v 1.5 2008-03-07 18:06:11 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -127,12 +127,14 @@ This macro file shows :
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/Linux-g++/Nanobeam ./macros/file.mac
+> $G4WORDIR/bin/Linux-g++/Nanobeam 
 
-file.mac can be one of the following macro file :
+The default.mac macro file is run by default.
+
+default.mac can be one of the following macro files :
 
 1) for the computation of intrinsic aberration coefficients :
-coef-square.mac : using square magnetic field model
+coef-square.mac : using square magnetic field model (=default.mac)
 coef-map.mac : using 3D map magnetic field model
 coef-enge.mac : using Enge's analytical field model
 
@@ -141,16 +143,17 @@ image-square.mac : using square magnetic field model
 image-map.mac : using 3D map magnetic field model
 image-enge.mac : using Enge's analytical field model
 
-3) for the simulatioj of grid shadow images
+3) for the simulation of grid shadow images
 grid-square.mac : using square magnetic field model
 grid-map.mac : using 3D map magnetic field model
 grid-enge.mac : using Enge's analytical field model
+
+These macros files are stored in the ./macros directory.
 
 ---->5. PHYSICS
 
 The example runs with protons with fluctuationg energies around 3 MeV.
 Low energy electromagnetic processes are activated by default. 
-
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
