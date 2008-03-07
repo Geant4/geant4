@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.27 2008-03-07 09:58:11 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.28 2008-03-07 09:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,7 +122,6 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
     // clear old data    
     G4int nn = partialSumSigma.size();
-    G4int nc = cuts.size();
     if(nn > 0) {
       for (G4int ii=0; ii<nn; ii++){
 	G4DataVector* a=partialSumSigma[ii];
