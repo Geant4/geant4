@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.77 2007-11-30 13:53:02 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.78 2008-03-07 19:18:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,12 +165,10 @@
 #include "G4UrbanMscModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4Poisson.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
-#include "G4TransportationManager.hh"
 #include "G4SafetyHelper.hh"
-
-#include "G4Poisson.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -181,15 +179,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
 				 G4double m_facgeom,G4double m_skin, 
 				 G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
 				 const G4String& nam)
-  : G4VEmModel(nam),
-    dtrl(m_dtrl),
-    lambdalimit(m_lambdalimit),
-    facrange(m_facrange),
-    facgeom(m_facgeom),
-    skin(m_skin),
-    steppingAlgorithm(m_stepAlg),
-    samplez(m_samplez),
-    isInitialized(false)
+  : G4VMscModel(m_facrange,m_dtrl,m_lambdalimit,m_facgeom,m_skin,m_samplez,m_stepAlg,nam)
 {
   masslimite  = 0.6*MeV;
   masslimitmu = 110.*MeV;
@@ -212,10 +202,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  facsafety     = 0.25;
   Zeff          = 1.;
-  particle      = 0;
-  theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
 
@@ -225,25 +212,6 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
 
 G4UrbanMscModel::~G4UrbanMscModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
-				 const G4DataVector&)
-{
-  if(isInitialized) return;
-  // set values of some data members
-  SetParticle(p);
-
-  if (pParticleChange)
-   fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  else
-   fParticleChange = new G4ParticleChangeForMSC();
-
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-  safetyHelper->InitialiseHelper();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
