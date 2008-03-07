@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.12 2008-03-03 10:41:32 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.13 2008-03-07 09:48:54 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ public:
    void defineVariable(const G4String&,G4double);
    void defineMatrix(const G4String&,G4int,std::vector<G4double>);
    void setVariable(const G4String&,G4double);
-   bool isVariable(const G4String&);
+   bool isVariable(const G4String&) const;
    G4String SolveBrackets(const G4String&);
    G4double Evaluate(const G4String&);
    G4int EvaluateInteger(const G4String&);

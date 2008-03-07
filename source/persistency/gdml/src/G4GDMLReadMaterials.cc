@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.3 2008-01-31 11:30:56 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.4 2008-03-07 09:48:54 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -35,12 +35,12 @@
 
 #include "G4GDMLReadMaterials.hh"
 
-G4double G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const atomElement) {
 
    G4double value = 0.0;
-   G4String unit("g/mole");
+   G4double unit = g/mole;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = atomElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -50,22 +50,21 @@ G4double G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const element)
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="value") value = eval.Evaluate(attValue); else
-      if (attName=="unit") unit = attValue;
+      if (attName=="unit") unit = eval.Evaluate(attValue);
    }
 
-   return value*eval.Evaluate(unit);
+   return value*unit;
 }
 
-G4int G4GDMLReadMaterials::compositeRead(const xercesc::DOMElement* const element,G4String& ref) {
+G4int G4GDMLReadMaterials::compositeRead(const xercesc::DOMElement* const compositeElement,G4String& ref) {
 
    G4int n = 0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = compositeElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -75,7 +74,6 @@ G4int G4GDMLReadMaterials::compositeRead(const xercesc::DOMElement* const elemen
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
@@ -86,12 +84,12 @@ G4int G4GDMLReadMaterials::compositeRead(const xercesc::DOMElement* const elemen
    return n;
 }
 
-G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement) {
 
    G4double value = 0.0;
-   G4String unit("g/cm3");
+   G4double unit = g/cm3;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = DElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -101,23 +99,22 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const element) {
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="value") value = eval.Evaluate(attValue); else
-      if (attName=="unit") unit = attValue;
+      if (attName=="unit") unit = eval.Evaluate(attValue);
    }
 
-   return value*eval.Evaluate(unit);
+   return value*unit;
 }
 
-G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement) {
 
    G4double value = STP_Pressure;
-   G4String unit("pascal");
+   G4double unit = pascal;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = PElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -127,23 +124,22 @@ G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const element) {
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="value") value = eval.Evaluate(attValue); else
-      if (attName=="unit") unit = attValue;
+      if (attName=="unit") unit = eval.Evaluate(attValue);
    }
 
-   return value*eval.Evaluate(unit);
+   return value*unit;
 }
 
-G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const element) {
+G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement) {
 
    G4double value = STP_Temperature;
-   G4String unit("K");
+   G4double unit = kelvin;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = TElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -153,25 +149,24 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const element) {
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="value") value = eval.Evaluate(attValue); else
-      if (attName=="unit") unit = attValue;
+      if (attName=="unit") unit = eval.Evaluate(attValue);
    }
 
-   return value*eval.Evaluate(unit);
+   return value*unit;
 }
 
-void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const elementElement) {
 
    G4String name;
    G4String formula;
    G4double a = 0.0;
    G4double Z = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = elementElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -181,38 +176,36 @@ void G4GDMLReadMaterials::elementRead(const xercesc::DOMElement* const element) 
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="name") name = attValue; else
+      if (attName=="name") name = GenerateName(attValue); else
       if (attName=="formula") formula = attValue; else
       if (attName=="Z") Z = eval.Evaluate(attValue);
    }
 
    G4int nComponents = 0;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = elementElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="atom") a = atomRead(child); else
       if (tag=="fraction") nComponents++;
    }
 
-   if (nComponents>0) mixtureRead(element,new G4Element(GenerateName(name),formula,nComponents));
-   else new G4Element(GenerateName(name),formula,Z,a);
+   if (nComponents>0) mixtureRead(elementElement,new G4Element(name,formula,nComponents));
+   else new G4Element(name,formula,Z,a);
 }
 
-G4double G4GDMLReadMaterials::fractionRead(const xercesc::DOMElement* const element,G4String& ref) {
+G4double G4GDMLReadMaterials::fractionRead(const xercesc::DOMElement* const fractionElement,G4String& ref) {
 
    G4double n = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = fractionElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -222,7 +215,6 @@ G4double G4GDMLReadMaterials::fractionRead(const xercesc::DOMElement* const elem
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
@@ -233,15 +225,14 @@ G4double G4GDMLReadMaterials::fractionRead(const xercesc::DOMElement* const elem
    return n;
 }
 
-void G4GDMLReadMaterials::isotopeRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::isotopeRead(const xercesc::DOMElement* const isotopeElement) {
 
    G4String name;
-
    G4int Z = 0;
    G4int N = 0;
    G4double a = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = isotopeElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -251,30 +242,28 @@ void G4GDMLReadMaterials::isotopeRead(const xercesc::DOMElement* const element) 
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="name") name = attValue; else
+      if (attName=="name") name = GenerateName(attValue); else
       if (attName=="Z") Z = eval.EvaluateInteger(attValue); else
       if (attName=="N") N = eval.EvaluateInteger(attValue);
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = isotopeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="atom") a = atomRead(child);
    }
 
-   new G4Isotope(GenerateName(name),Z,N,a);
+   new G4Isotope(name,Z,N,a);
 }
 
-void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const materialElement) {
 
    G4String name;
    G4double Z = 0.0;
@@ -284,7 +273,7 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
    G4double T = STP_Temperature;
    G4double P = STP_Pressure;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = materialElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -294,11 +283,10 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="name") name = attValue; else
+      if (attName=="name") name = GenerateName(attValue); else
       if (attName=="Z") Z = eval.Evaluate(attValue); else
       if (attName=="state") {
       
@@ -310,12 +298,11 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
 
    size_t nComponents = 0;
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = materialElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="atom") a = atomRead(child); else
@@ -325,42 +312,39 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const element)
       if (tag=="D") D = DRead(child); else
       if (tag=="P") P = PRead(child); else
       if (tag=="T") T = TRead(child); else
-      if (tag=="fraction") nComponents++; else
-      if (tag=="composite") nComponents++;
+      if (tag=="property") propertyRead(child); else
+      if (tag=="fraction" || tag=="composite") nComponents++;
    }
 
-   if (nComponents==0) new G4Material(GenerateName(name),Z,a,D,state,T,P);
-   else mixtureRead(element,new G4Material(GenerateName(name),D,nComponents,state,T,P));
+   if (nComponents==0) new G4Material(name,Z,a,D,state,T,P);
+   else mixtureRead(materialElement,new G4Material(name,D,nComponents,state,T,P));
 }
 
-void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Element *ele) {
+void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const mixtureElement,G4Element *element) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = mixtureElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="fraction") {
 
          G4String ref;
 	 G4double n = fractionRead(child,ref);
-
-         ele->AddIsotope(getIsotope(GenerateName(ref)),n);
+         element->AddIsotope(getIsotope(GenerateName(ref)),n);
       }
    }
 }
 
-void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G4Material *material) {
+void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const mixtureElement,G4Material *material) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = mixtureElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="fraction") {
@@ -388,7 +372,7 @@ void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const element,G
    }
 }
 
-void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement) {
 
    G4String name;
    G4String smodel;
@@ -396,7 +380,7 @@ void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const el
    G4String stype;
    G4double value = 0.0;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = opticalsurfaceElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -439,14 +423,37 @@ void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const el
    new G4OpticalSurface(name,model,finish,type,value);
 }
 
-void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const propertyElement) {
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   G4String name;
+   G4GDMLMatrix matrix;
+
+   const xercesc::DOMNamedNodeMap* const attributes = propertyElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="ref") matrix = getMatrix(attValue);
+   }
+}
+
+void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const materialsElement) {
+
+   for (xercesc::DOMNode* iter = materialsElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="element") elementRead(child); else 

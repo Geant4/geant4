@@ -56,6 +56,7 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine {
    void mixtureRead(const xercesc::DOMElement* const,G4Element*);
    void mixtureRead(const xercesc::DOMElement* const,G4Material*);
    void opticalsurfaceRead(const xercesc::DOMElement* const);
+   void propertyRead(const xercesc::DOMElement* const);
    void materialsRead(const xercesc::DOMElement* const);
 protected:
    G4Element* getElement(const G4String&,bool verbose=true) const;

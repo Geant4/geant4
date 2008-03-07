@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.14 2008-03-03 16:26:07 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.15 2008-03-07 09:48:54 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -92,11 +92,13 @@ void G4GDMLEvaluator::setVariable(const G4String& name,G4double value) {
    eval.setVariable(name.c_str(),value);
 }
 
-bool G4GDMLEvaluator::isVariable(const G4String& name) {
+bool G4GDMLEvaluator::isVariable(const G4String& name) const {
 
-   for (std::vector<G4String>::iterator iter = variableList.begin(); iter != variableList.end(); iter++) {
+   const size_t variableCount = variableList.size();
 
-      if (name == *iter) return true;
+   for (size_t i=0;i<variableCount;i++) {
+
+      if (variableList[i] == name) return true;
    }
 
    return false;
