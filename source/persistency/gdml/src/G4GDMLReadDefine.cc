@@ -60,6 +60,9 @@ G4double G4GDMLMatrix::get(size_t r,size_t c) const {
    return m[cols*r+c];
 }
 
+size_t G4GDMLMatrix::getRows() const { return rows; }
+size_t G4GDMLMatrix::getCols() const { return cols; }
+
 G4RotationMatrix G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles) {
 
    G4RotationMatrix rot;

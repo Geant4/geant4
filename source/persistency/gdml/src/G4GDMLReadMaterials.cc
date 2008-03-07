@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.4 2008-03-07 09:48:54 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.5 2008-03-07 11:11:27 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -312,12 +312,23 @@ void G4GDMLReadMaterials::materialRead(const xercesc::DOMElement* const material
       if (tag=="D") D = DRead(child); else
       if (tag=="P") P = PRead(child); else
       if (tag=="T") T = TRead(child); else
-      if (tag=="property") propertyRead(child); else
       if (tag=="fraction" || tag=="composite") nComponents++;
    }
 
-   if (nComponents==0) new G4Material(name,Z,a,D,state,T,P);
-   else mixtureRead(materialElement,new G4Material(name,D,nComponents,state,T,P));
+   G4Material* material =  0;
+
+   if (nComponents==0) material = new G4Material(name,Z,a,D,state,T,P);
+   else mixtureRead(materialElement,material = new G4Material(name,D,nComponents,state,T,P));
+
+   for (xercesc::DOMNode* iter = materialElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag=="property") propertyRead(child,material);
+   }
 }
 
 void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const mixtureElement,G4Element *element) {
@@ -423,9 +434,10 @@ void G4GDMLReadMaterials::opticalsurfaceRead(const xercesc::DOMElement* const op
    new G4OpticalSurface(name,model,finish,type,value);
 }
 
-void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const propertyElement) {
+void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const propertyElement,G4Material* material) {
 
    G4String name;
+   G4String ref;
    G4GDMLMatrix matrix;
 
    const xercesc::DOMNamedNodeMap* const attributes = propertyElement->getAttributes();
@@ -438,13 +450,22 @@ void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const property
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
       if (attName=="name") name = GenerateName(attValue); else
-      if (attName=="ref") matrix = getMatrix(attValue);
+      if (attName=="ref") matrix = getMatrix(ref=attValue);
    }
+
+   if (matrix.getCols() != 2) G4Exception("GDML Reader: ERROR! Referenced matrix '"+ref+"' should have two columns as a property table for material: "+material->GetName());
+   if (matrix.getRows() == 0) return;
+
+   G4MaterialPropertiesTable* matprop = material->GetMaterialPropertiesTable();
+   if (!matprop) material->SetMaterialPropertiesTable(matprop = new G4MaterialPropertiesTable());
+
+   G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
+   for (size_t i=0;i<matrix.getRows();i++) propvect->AddElement(matrix.get(i,0),matrix.get(i,1));
+   matprop->AddProperty(name,propvect);
 }
 
 void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const materialsElement) {

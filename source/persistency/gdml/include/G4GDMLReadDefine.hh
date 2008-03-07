@@ -52,6 +52,8 @@ public:
 
    void set(size_t r,size_t c,G4double a);
    G4double get(size_t r,size_t c) const;
+   size_t getRows() const;
+   size_t getCols() const;
 };
 
 class G4GDMLReadDefine : public G4GDMLRead {

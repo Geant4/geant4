@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2008-03-03 16:23:50 gcosmo Exp $
+$Id: History,v 1.38 2008-03-07 11:11:27 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07 March 2008 Z.Torzsok
+- Material properties added to reader
 
 20 February 2008 Z.Torzsok (gdml-V09-01-01)
 - Completed support for parameterised volumes in writer.
