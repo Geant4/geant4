@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.28 2008-03-07 09:59:26 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.29 2008-03-07 10:10:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -426,7 +426,6 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   if(tmin < minThreshold) tmin = minThreshold;
   if(tmin >= tmax) return;
 
-  // ===== the begining of a new code  ======
   // ===== sampling of energy transfer ======
 
   G4ParticleMomentum partDirection = dp->GetMomentumDirection();
@@ -458,16 +457,14 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
 
   } while(func2/func1 < ksi2);
 
-  // ===== the end of a new code =====
-
-  // create G4DynamicParticle object for the Gamma
   G4double gEnergy = epksi;
 
-  // sample angle
+  // ===== sample angle =====
+
   G4double gam  = totalEnergy/mass;
-  G4double rmax = gam*min(1.0, totalEnergy/gEnergy - 1.0);
-  rmax *= rmax;
-  G4double x = G4UniformRand()*rmax/(1.0 + rmax);
+  G4double rmax = gam*std::min(1.0, totalEnergy/gEnergy - 1.0);
+  G4double rmax2= rmax*rmax;
+  G4double x = G4UniformRand()*rmax2/(1.0 + rmax2);
 
   G4double theta = sqrt(x/(1.0 - x))/gam;
   G4double sint  = sin(theta);
