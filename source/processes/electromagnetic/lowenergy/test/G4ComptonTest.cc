@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.24 2006-06-29 19:43:51 gunter Exp $
+// $Id: G4ComptonTest.cc,v 1.25 2008-03-08 02:19:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,6 +93,9 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 #include "G4UnitsTable.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4RunManager.hh"
 
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
@@ -102,9 +105,10 @@
 int main()
 {
 
+
   // Setup
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  //  G4cout.setf( ios::scientific, ios::floatfield );
 
   // -------------------------------------------------------------------
 
@@ -121,6 +125,7 @@ int main()
   bool createFile = true;
   std::auto_ptr< AIDA::ITree > tree( tf->create( "comptonhisto.hbook", "hbook", readOnly, createFile ) );
   std::cout << "Tree store : " << tree->storeName() << std::endl;
+
 
 
   // Next create the nTuples using the factory and open it for writing
@@ -250,33 +255,65 @@ int main()
   G4double dimY = 1 * mm;
   G4double dimZ = 1 * mm;
   
-  // Geometry 
-
-  G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
-  G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,
-						      (*theMaterialTable)[materialId],
-						      "LFrame", 0, 0, 0);
-  logicalFrame->SetMaterial(material); 
-  G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
-						   "PFrame",logicalFrame,0,false,0);
-  
   // Particle definitions
 
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
   
-  gamma->SetCuts(1e-3*mm);
-  electron->SetCuts(1e-3*mm);
-  positron->SetCuts(1e-3*mm);
-  
+  // MGP commented out 8/3/2008 
+  //  gamma->SetCuts(1e-3*mm);
+  // electron->SetCuts(1e-3*mm);
+  //  positron->SetCuts(1e-3*mm);
+
+  G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
+  G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
+  if (cuts == 0) G4cout << " G4ProductionCuts* cuts = 0" << G4endl;
+  G4double cutAll = 1.*micrometer;
+  cuts->SetProductionCut(cutAll, -1); //all
+ 
+  // Geometry 
+
+  G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
+  G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,material,
+						      //(*theMaterialTable)[materialId],
+						      "LFrame", 0, 0, 0);
+  //logicalFrame->SetMaterial(material); 
+  G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
+						   "PFrame",logicalFrame,0,false,0);
+  cutsTable->UpdateCoupleTable(physicalFrame);
+  cutsTable->DumpCouples();
+  //  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
+
+
+  //RunManager
+  G4RunManager* rm = new G4RunManager();
+  rm->GeometryHasBeenModified();
+  G4VPhysicalVolume* world(physicalFrame);
+  rm->DefineWorldVolume(world);
+  G4cout << "[OK] World is defined " << G4endl;
+ 
+  cutsTable->UpdateCoupleTable(world);
+  cutsTable->DumpCouples();
+
+  G4double cutG=1*micrometer;
+  G4double cutE=1*micrometer;
+  cuts->SetProductionCut(cutG, gamma); //gammas
+  cuts->SetProductionCut(cutE, electron); //electrons
+  cuts->SetProductionCut(cutE, positron); //positrons
+  G4cout << "Cuts are defined " << G4endl;
+  cutsTable->UpdateCoupleTable(world);
+  cutsTable->DumpCouples();
+  //  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
+
+
   // Processes 
 
   G4int processType;
   G4cout 
     << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3]?" 
     << G4endl;
-  cin >> processType;
+  G4cin >> processType;
   if (processType <1 || processType >3 )
     {
       G4Exception("Wrong input");
@@ -330,8 +367,13 @@ int main()
 
   // Create a DynamicParticle  
   
-  G4double gEnergy = initEnergy*MeV;
+  G4double gEnergy = initEnergy*MeV*G4UniformRand();
+  if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
+
   G4ParticleMomentum gDirection(initX,initY,initZ);
+
+  /* 
+
   G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
 
   // Track 
@@ -342,16 +384,22 @@ int main()
 
   // Do I really need this?
   G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, position);   
-  // gTrack->SetTouchable(touche);
+  //gTrack->SetTouchable(touche);
  
+
  // Step 
 
   G4Step* step = new G4Step();  
   step->SetTrack(gTrack);
+  gTrack->SetStep(step);
+  const G4MaterialCutsCouple* theCouple(cutsTable->GetMaterialCutsCouple(material, cutsTable->GetDefaultProductionCuts()));
+  if (theCouple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
+  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
   G4StepPoint* point = new G4StepPoint();
   point->SetPosition(position);
   point->SetMaterial(material);
+  point->SetMaterialCutsCouple(couple);
   G4double safety = 10000.*cm;
   point->SetSafety(safety);
   step->SetPreStepPoint(point);
@@ -360,8 +408,12 @@ int main()
   G4ThreeVector newPosition(0.,0.,1.*mm);
   newPoint->SetPosition(newPosition);
   newPoint->SetMaterial(material);
+  newPoint->SetMaterialCutsCouple(couple);
+  newPoint->SetSafety(safety);
   step->SetPostStepPoint(newPoint);
-  
+  */
+
+
   // Check applicability
   
   if (! (photonProcess->IsApplicable(*gamma)))
@@ -369,16 +421,70 @@ int main()
       G4Exception("Not Applicable");
     }
 
-  // --------- Test the DoIt 
+  // --------- Test the DoIt -------------------------------------------------------------------
 
   G4cout << "DoIt in material " << material->GetName() << G4endl;
+  //G4ParticleMomentum gDirection(initX,initY,initZ);
+  G4Track* gTrack;
+  G4GRSVolume* touche;
+  G4Step* step;
+  G4StepPoint* point;
+  G4StepPoint* newPoint;
+
+  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
   for (G4int iter=0; iter<nIterations; iter++)
     {
+
+ G4double gEnergy = initEnergy*MeV*G4UniformRand();
+  if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
+
+  G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
+
+  // Track 
+
+  G4ThreeVector position(0.,0.,0.);
+  G4double time = 0. ;
+  gTrack = new G4Track(&dynamicPhoton,time,position);
+
+  // Do I really need this?
+  touche = new G4GRSVolume(physicalFrame, 0, position);   
+  //gTrack->SetTouchable(touche);
+  
+ // Step 
+
+  step = new G4Step();  
+  step->SetTrack(gTrack);
+  gTrack->SetStep(step);
+  //const G4MaterialCutsCouple* theCouple(cutsTable->GetMaterialCutsCouple(material, cutsTable->GetDefaultProductionCuts()));
+  if (couple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
+  //const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+
+  point = new G4StepPoint();
+  point->SetPosition(position);
+  point->SetMaterial(material);
+  point->SetMaterialCutsCouple(couple);
+  G4double safety = 10000.*cm;
+  point->SetSafety(safety);
+  step->SetPreStepPoint(point);
+
+  newPoint = new G4StepPoint();
+  G4ThreeVector newPosition(0.,0.,1.*mm);
+  newPoint->SetPosition(newPosition);
+  newPoint->SetMaterial(material);
+  newPoint->SetMaterialCutsCouple(couple);
+  newPoint->SetSafety(safety);
+  step->SetPostStepPoint(newPoint);
+
+
       step->SetStepLength(1*micrometer);
 
       gTrack->SetStep(step); 
  
+  const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
+  G4cout << "Test couple" << G4endl;
+  if (couple == 0)  G4cout << " couple  is 0 " << G4endl;
+
       G4cout  <<  "Iteration = "  
 	      <<  iter 
 	      << "  -  Step Length = " 
@@ -387,28 +493,28 @@ int main()
 	      << G4endl;
 
       G4ParticleChange* particleChange = (G4ParticleChange*) photonProcess->PostStepDoIt(*gTrack,*step);
-     
+      G4cout << "PostStepDoIt done" << G4endl;
       // Primary physical quantities 
 
       // Primary physical quantities 
 
-      G4double energyChange = particleChange->GetEnergyChange();
+      G4double energyChange = particleChange->GetEnergy();
       G4double dedx = initEnergy - energyChange ;
       G4double dedxNow = dedx / (step->GetStepLength());
       
       G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
-							   (*particleChange->GetMomentumChange()),
-							   particleChange->GetMassChange());
+							   (*particleChange->GetMomentumDirection()),
+							   particleChange->GetMass());
 
       G4double pxChange = eChange.x();
       G4double pyChange = eChange.y();
       G4double pzChange = eChange.z();
       G4double pChange = std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
 
-      G4double xChange = particleChange->GetPositionChange()->x();
-      G4double yChange = particleChange->GetPositionChange()->y();
-      G4double zChange = particleChange->GetPositionChange()->z();
-      G4double thetaChange = particleChange->GetPositionChange()->theta();
+      G4double xChange = particleChange->GetPosition()->x();
+      G4double yChange = particleChange->GetPosition()->y();
+      G4double zChange = particleChange->GetPosition()->z();
+      G4double thetaChange = particleChange->GetPosition()->theta();
 
       G4cout << "---- Primary after the step ---- " << G4endl;
  
@@ -525,6 +631,10 @@ int main()
       ntuple1->addRow();
 	          
       particleChange->Clear();
+
+      delete touche;
+      delete step;
+      delete gTrack;
       
     } 
   
@@ -538,9 +648,7 @@ int main()
   std::cout << "Closing the tree..." << std::endl;
   tree->close();
 
-  delete touche;
-  delete step;
-  delete gTrack;
+ 
 
   G4cout << "END OF TEST" << G4endl;
 }

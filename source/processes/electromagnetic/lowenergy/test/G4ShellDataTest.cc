@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellDataTest.cc,v 1.4 2007-02-20 16:53:17 mantero Exp $
+// $Id: G4ShellDataTest.cc,v 1.5 2008-03-08 02:19:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,8 @@ int main()
 {
   //  G4cout.setf( ios::scientific, ios::floatfield );
 
-  G4String file = "/fluor/binding";
+  //  G4String file = "/fluor/binding";
+  G4String file = "/doppler/shell-doppler";
 
   G4ShellData* dataSet = new G4ShellData();
   dataSet->LoadData(file);

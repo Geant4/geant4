@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2006-03-06 16:41:11 silvarod Exp $
+# $Id: GNUmakefile,v 1.18 2008-03-08 02:19:53 pia Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -18,6 +18,7 @@ all: bin
 #G4EXEC_BUILD = true
 
 G4ANALYSIS_USE = 1
+#G4ANALYSIS_USE = 0
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE
