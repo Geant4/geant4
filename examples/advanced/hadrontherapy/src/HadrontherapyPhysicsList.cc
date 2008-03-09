@@ -24,6 +24,10 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyPhysicsList.cc
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -92,9 +96,9 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
                                                       hadrInelasticProtonNeutronIsRegistered(false),
                                                       hadrAtRestMuonIsRegistered(false)
 {
-  // The secondary production threshold is set to 10. mm
-  // for all the particles in all the experimental set-up
-  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 mm
+  // A default cut is applied to all volumes
+  // Moreover, in the HadrontherapyDetectorConstruction.cc a 
+  // spevific cut can be applied to the region where energy is collected
   defaultCutValue = 0.01 * mm;
 
   // Messenger: it is possible to activate physics processes and models interactively 
@@ -114,8 +118,6 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
   G4cout << "Adding PhysicsList component " << name << G4endl;
-  
-
   // ****************
   // *** A. DECAY ***
   // ****************
@@ -777,15 +779,13 @@ void HadrontherapyPhysicsList::SetCuts()
   // Definition of a smaller threshold of production in the phantom region
   // where high accuracy is required in the energy deposit calculation
 
-  G4String regionName = "PhantomLog";
+  G4String regionName = "DetectorLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
   G4double regionCut = 0.01*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("proton"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("genericIons"));
   region -> SetProductionCuts(cuts);
 
   if (verboseLevel>0) DumpCutValuesTable();

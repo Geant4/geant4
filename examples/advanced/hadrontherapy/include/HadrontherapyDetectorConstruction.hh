@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
+// $Id: HadrontherapyDetectorConstruction.hh; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -46,11 +50,11 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class HadrontherapyPhantomROGeometry;
+class HadrontherapyDetectorROGeometry;
 class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
-class HadrontherapyPhantomSD;
+class HadrontherapyDetectorSD;
 class HadrontherapyMaterial;
 
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
@@ -69,12 +73,12 @@ private:
   // This method allows to define the beam line geometry in the
   // experimental set-up
 
- void ConstructPhantom(); 
+ void ConstructDetector(); 
  // This method allows to define the phantom geometry in the
  // experimental set-up
  
  void ConstructSensitiveDetector();
-  // The sensitive detector is associated to the phantom volume
+  // The sensitive detector is associated to the detector volume
 
 public: 
 
@@ -109,14 +113,14 @@ public:
   // This method allows to change the material 
   // of the range shifter through UI command.
 
-  G4double ComputeVoxelSize() {return phantomSizeX/numberOfVoxelsAlongX;};
+  G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
   // Returns the size of the voxel along the X axis
  
 private:
   
-  HadrontherapyPhantomSD* phantomSD; // Pointer to sensitive detector
+  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
 
-  HadrontherapyPhantomROGeometry* phantomROGeometry; // Pointer to ROGeometry 
+  HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
 
   HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
                                    // geometry component
@@ -125,16 +129,16 @@ private:
                                      // geometry component
 
   G4VPhysicalVolume* physicalTreatmentRoom;
-  G4VPhysicalVolume* patientPhysicalVolume;
-  G4LogicalVolume* phantomLogicalVolume;
-  G4VPhysicalVolume* phantomPhysicalVolume;
+  G4VPhysicalVolume* waterPhantomPhysicalVolume;
+  G4LogicalVolume* detectorLogicalVolume;
+  G4VPhysicalVolume* detectorPhysicalVolume;
   
   HadrontherapyDetectorMessenger* detectorMessenger; 
   HadrontherapyMaterial* material;
 
-  G4double phantomSizeX; 
-  G4double phantomSizeY; 
-  G4double phantomSizeZ;
+  G4double detectorSizeX; 
+  G4double detectorSizeY; 
+  G4double detectorSizeZ;
    
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;

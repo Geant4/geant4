@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhantomHit.hh; May 2005
+// $Id: HadrontherapyDetectorROGeometry.hh; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,76 +42,39 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifndef HadrontherapyPhantomHit_h
-#define HadrontherapyPhantomHit_h 1
+//The detectior is devided in voxels. 
+//
+//
+#ifndef HadrontherapyDetectorROGeometry_h
+#define HadrontherapyDetectorROGeometry_h 
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
+#include "G4VReadOutGeometry.hh"
 
-class HadrontherapyPhantomHit : public G4VHit
+class HadrontherapyDetectorROGeometry : public G4VReadOutGeometry
 {
 public:
-  HadrontherapyPhantomHit();
-  ~HadrontherapyPhantomHit();
- 
-  HadrontherapyPhantomHit(const HadrontherapyPhantomHit &right);
- 
-  const HadrontherapyPhantomHit& operator = (const HadrontherapyPhantomHit &right);
- 
-  int operator == (const HadrontherapyPhantomHit &right) const;
+  HadrontherapyDetectorROGeometry(G4String aString,
+				 G4double detectorDimX,
+				 G4double detectorDimY,
+				 G4double detectorDimZ,
+				 G4int numberOfVoxelsX,
+				 G4int numberOfVoxelsY,
+				 G4int numberOfVoxelsZ);
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
+  ~HadrontherapyDetectorROGeometry();
 
 private:
-  G4int xHitID; // Hit x voxel 
-  G4int zHitID; // Hit z voxel
-  G4int yHitID; // Hit y voxel 
-  G4double energyDeposit; // Energy deposit associated with the hit
+  G4VPhysicalVolume* Build();
 
-public:
-  // Methods to get the information - energy deposit and associated
-  // position in the phantom - of the hits stored in the hits collection  
- 
-  inline G4int GetXID() // Get x index of the voxel 
-  {return xHitID;}
+private:  
+  const G4double detectorSizeX;
+  const G4double detectorSizeY; 
+  const G4double detectorSizeZ;
 
-  inline G4int GetZID() // Get y index of the voxel   
-  {return zHitID;}
-
-  inline G4int GetYID() // Get z index of the voxel  
-  {return yHitID;}
-   
-  inline G4double GetEdep() // Get energy deposit
-  {return energyDeposit;}
- 
-  // Methods to store the information of the hit ( energy deposit, position in the phantom )
-  // in the hits collection
-
-  inline void SetEdepAndPosition(G4int xx, G4int yy, G4int zz, G4double eDep)
-  {
-    xHitID = xx;
-    yHitID = yy;
-    zHitID = zz;
-    energyDeposit = eDep;
-  }
+  const G4int numberOfVoxelsAlongX;
+  const G4int numberOfVoxelsAlongY; 
+  const G4int numberOfVoxelsAlongZ; 
+  
+  G4VPhysicalVolume *RODetectorZDivisionPhys;
 };
-
-typedef G4THitsCollection<HadrontherapyPhantomHit> HadrontherapyPhantomHitsCollection;
-extern G4Allocator<HadrontherapyPhantomHit> HadrontherapyPhantomHitAllocator;
-
-inline void* HadrontherapyPhantomHit::operator new(size_t)
-{
-  void *aHit;
-  aHit = (void *) HadrontherapyPhantomHitAllocator.MallocSingle();
-  return aHit;
-}
-
-inline void HadrontherapyPhantomHit::operator delete(void *aHit)
-{
-  HadrontherapyPhantomHitAllocator.FreeSingle((HadrontherapyPhantomHit*) aHit);
-}
 #endif
-
-

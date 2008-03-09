@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhantomSD.hh; May 2005
+// $Id: HadrontherapyDetectorSD.hh; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,21 +42,21 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifndef HadrontherapyPhantomSD_h
-#define HadrontherapyPhantomSD_h 1
+#ifndef HadrontherapyDetectorSD_h
+#define HadrontherapyDetectorSD_h 1
 
 #include "G4VSensitiveDetector.hh"
-#include "HadrontherapyPhantomHit.hh"
+#include "HadrontherapyDetectorHit.hh"
 #include "globals.hh"
 
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
-class HadrontherapyPhantomSD : public G4VSensitiveDetector
+class HadrontherapyDetectorSD : public G4VSensitiveDetector
 {
 public:
-  HadrontherapyPhantomSD(G4String name);
-  ~HadrontherapyPhantomSD();
+  HadrontherapyDetectorSD(G4String name);
+  ~HadrontherapyDetectorSD();
 
   void Initialize(G4HCofThisEvent*);
  
@@ -61,7 +65,7 @@ public:
   void EndOfEvent(G4HCofThisEvent*HCE);
  
 private:
-  HadrontherapyPhantomHitsCollection *HitsCollection;
+  HadrontherapyDetectorHitsCollection *HitsCollection;
   G4String sensitiveDetectorName;	
 };
 #endif

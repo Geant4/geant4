@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhantomHit.cc; May 2005
+// $Id: HadrontherapyDetectorHit.cc; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,20 +43,20 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#include "HadrontherapyPhantomHit.hh"
+#include "HadrontherapyDetectorHit.hh"
 
-G4Allocator<HadrontherapyPhantomHit> HadrontherapyPhantomHitAllocator;
+G4Allocator<HadrontherapyDetectorHit> HadrontherapyDetectorHitAllocator;
 
-HadrontherapyPhantomHit::HadrontherapyPhantomHit()
+HadrontherapyDetectorHit::HadrontherapyDetectorHit()
 {
  energyDeposit = 0;
 }
 
-HadrontherapyPhantomHit::~HadrontherapyPhantomHit()
+HadrontherapyDetectorHit::~HadrontherapyDetectorHit()
 {
 }
 
-HadrontherapyPhantomHit::HadrontherapyPhantomHit(const HadrontherapyPhantomHit &right)
+HadrontherapyDetectorHit::HadrontherapyDetectorHit(const HadrontherapyDetectorHit &right)
   : G4VHit()
 {
  xHitID = right.xHitID;
@@ -60,7 +65,7 @@ HadrontherapyPhantomHit::HadrontherapyPhantomHit(const HadrontherapyPhantomHit &
  energyDeposit = right.energyDeposit;
 }
 
-const HadrontherapyPhantomHit& HadrontherapyPhantomHit::operator=(const HadrontherapyPhantomHit &right)
+const HadrontherapyDetectorHit& HadrontherapyDetectorHit::operator=(const HadrontherapyDetectorHit &right)
 {
  xHitID = right.xHitID;
  zHitID = right.zHitID;
@@ -69,7 +74,7 @@ const HadrontherapyPhantomHit& HadrontherapyPhantomHit::operator=(const Hadronth
  return *this;
 }
 
-int HadrontherapyPhantomHit::operator==(const HadrontherapyPhantomHit &right) const
+int HadrontherapyDetectorHit::operator==(const HadrontherapyDetectorHit &right) const
 {
  return((xHitID==right.xHitID)&&(zHitID==right.zHitID)&&(yHitID==right.yHitID));
 }

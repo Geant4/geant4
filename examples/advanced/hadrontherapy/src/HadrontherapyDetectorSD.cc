@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhantomSD.cc; May 2005
+// $Id: HadrontherapyDetectorSD.cc; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,40 +42,40 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyAnalysisManager.hh"
-#include "HadrontherapyPhantomHit.hh"
+#include "HadrontherapyDetectorHit.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 
-HadrontherapyPhantomSD::HadrontherapyPhantomSD(G4String name):G4VSensitiveDetector(name)
+HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):G4VSensitiveDetector(name)
 { 
   G4String HCname;
-  collectionName.insert(HCname="HadrontherapyPhantomHitsCollection");
+  collectionName.insert(HCname="HadrontherapyDetectorHitsCollection");
  
   HitsCollection = NULL; 
   G4String sensitiveDetectorName = name;
 }
 
-HadrontherapyPhantomSD::~HadrontherapyPhantomSD()
+HadrontherapyDetectorSD::~HadrontherapyDetectorSD()
 { 
 }
 
-void HadrontherapyPhantomSD::Initialize(G4HCofThisEvent*)
+void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
 { 
-  HitsCollection = new HadrontherapyPhantomHitsCollection(sensitiveDetectorName,
+  HitsCollection = new HadrontherapyDetectorHitsCollection(sensitiveDetectorName,
 							  collectionName[0]);
 }
 
 
-G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
+G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
   if(!ROhist)
     return false;
  
-  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "PhantomPhys")
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "DetectorPhys")
     return false;
 
   G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
@@ -89,10 +93,10 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
 
   if(energyDeposit != 0)                       
     {  
-      // Create a hit with the information of position in the phantom and energy deposit     
-      HadrontherapyPhantomHit* phantomHit = new HadrontherapyPhantomHit();       
-      phantomHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
-      HitsCollection -> insert(phantomHit);
+      // Create a hit with the information of position is in the detector     
+      HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
+      detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+      HitsCollection -> insert(detectorHit);
     }
 
   // Energy deposit of secondary particles along X (integrated on Y and Z)
@@ -136,7 +140,7 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
   return true;
 }
 
-void HadrontherapyPhantomSD::EndOfEvent(G4HCofThisEvent* HCE)
+void HadrontherapyDetectorSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   if(HCID < 0)

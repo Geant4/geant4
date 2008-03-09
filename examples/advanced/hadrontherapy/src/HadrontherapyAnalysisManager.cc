@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyAnalisysManager.cc; February 2008
+// $Id: HadrontherapyAnalisysManager.cc; Last modified: G.A.P.Cirrone, February 2008;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -126,8 +126,8 @@ void HadrontherapyAnalysisManager::book()
   AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
 
   // Create the .hbk or the .root file
-  G4String fileName = "hadrontherapy.hbk";
-  G4String rootFileName = "hadrontherapy.root";
+  G4String fileName = "hadrontherapyOutput.hbk";
+  G4String rootFileName = "hadrontherapyOutput.root";
   
   std::string opts = "export=root";
  

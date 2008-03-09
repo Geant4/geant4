@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.cc; May 2005
+// $Id: HadrontherapyEventAction.cc;
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -47,13 +51,13 @@
 #include "G4SDManager.hh"
 #include "G4VVisManager.hh"
 #include "HadrontherapyEventAction.hh"
-#include "HadrontherapyPhantomHit.hh"
-#include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyDetectorHit.hh"
+#include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
 
 HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* matrixPointer) :
-  drawFlag("all" )
+  drawFlag("all" ),printModulo(10000)
 { 
   hitsCollectionID = -1;
   matrix = matrixPointer; 
@@ -63,11 +67,18 @@ HadrontherapyEventAction::~HadrontherapyEventAction()
 {
 }
 
-void HadrontherapyEventAction::BeginOfEventAction(const G4Event* )
+void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
 {
- G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
- if(hitsCollectionID == -1)
- 	hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyPhantomHitsCollection");
+  
+  G4int evtNb = evt->GetEventID();
+  
+  //printing survey
+  if (evtNb%printModulo == 0)
+    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
+  
+  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+  if(hitsCollectionID == -1)
+    hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
 }
 
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
@@ -76,17 +87,17 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
     return;
 
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
-  HadrontherapyPhantomHitsCollection* CHC = NULL; 
+  HadrontherapyDetectorHitsCollection* CHC = NULL; 
  
   if(HCE)
-    CHC = (HadrontherapyPhantomHitsCollection*)(HCE -> GetHC(hitsCollectionID));
+    CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
   
   if(CHC)
     {
       if(matrix)
 	{
 	  // Fill the matrix with the information: voxel and associated energy deposit 
-          // in the phantom at the end of the event
+          // in the detector at the end of the event
 
 	  G4int HitCount = CHC -> entries();
 	  for (G4int h=0; h<HitCount; h++)

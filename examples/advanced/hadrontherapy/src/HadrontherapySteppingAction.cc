@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonSteppingAction.cc; May 2005
+// $Id: HadrontherapyProtonSteppingAction.cc; 
+// Last modified: G.A.P.Cirrone March 2008;
+// 
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -57,20 +61,25 @@
 
 #include "HadrontherapyRunAction.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapySteppingAction::HadrontherapySteppingAction( HadrontherapyRunAction* run)
 {
   runAction = run;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapySteppingAction::~HadrontherapySteppingAction()
 {
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
+  G4Track* theTrack = aStep->GetTrack();
+  G4String materialName = theTrack->GetMaterial()->GetName();
+    
   // Electromagnetic and hadronic processes of primary particles in the phantom
-  
- if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
+  if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
     (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys") &&
     (aStep -> GetPostStepPoint() -> GetProcessDefinedStep() != NULL))
 	    {
@@ -96,9 +105,8 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
  // Retrieve information about the secondaries originated in the phantom
 
 #ifdef G4ANALYSIS_USE 	
-  G4SteppingManager*  steppingManager = fpSteppingManager;
-  G4Track* theTrack = aStep -> GetTrack();
-
+ G4SteppingManager*  steppingManager = fpSteppingManager;
+  
   // check if it is alive
   if(theTrack-> GetTrackStatus() == fAlive) { return; }
 
@@ -136,9 +144,10 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
             {      
 	      G4int a = (*fSecondary)[lp1]-> GetDynamicParticle() -> GetDefinition() -> GetBaryonNumber();
 	      G4int electronOccupancy = (*fSecondary)[lp1] ->  GetDynamicParticle() -> GetTotalOccupancy(); 
-	      // If a generic ion is originated in the phantom, its baryonic number, PDG charge, 
+	      
+	      // If a generic ion is originated in the detector, its baryonic number, PDG charge, 
 	      // total number of electrons in the orbitals are stored in a ntuple 
-	      analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);			
+	      analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);
 	    }
 	}
     }

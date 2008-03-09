@@ -1,12 +1,26 @@
------------------------------------------------------------
-$Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
------------------------------------------------------------
+-------------------------------------------------------------------------------
+$Id: History, 2004/02/27  G.A.P. Cirrone, 
+	                  cirrone@lns.infn.it
+			  http://geant4infn.wikispaces.com/HadrontherapyExample
+-------------------------------------------------------------------------------
+
 
      ====================================================
-                     Geant4 - Hadrontherapy
+                    Geant4 - Hadrontherapy
      ====================================================
 
                       Category History file
+
+09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-02
+	   - Added comments to the PhysicsList class;
+	   - Eliminated not used production cuts in PhysicsList;
+	   - Added NIST definition materials in Material class;
+	   - Code review of the DetectorConstruction class;
+           - Changed name of the volume where the energy deposited is collected
+             from "phantom" to "detector". "Detector" is a more appropiate 
+             name.
+	   - Changed name of the volume where the detector is inserted from 
+	     "patient" to the more appropriate "Water Phantom";
 
 03.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-01
            - Added the generation of .root file;

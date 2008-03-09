@@ -555,9 +555,9 @@ void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
  
 
  
-   // -------------------------------// 
+  // ----------------------------------------------// 
   //   Hole of the second collimator modulator box //
-  // -------------------------------//
+  // ----------------------------------------------//
 
   const G4double innerRadiusHoleSecondCollimatorModulatorBox = 0.*mm;
   const G4double outerRadiusHoleSecondCollimatorModulatorBox = 31.*mm;

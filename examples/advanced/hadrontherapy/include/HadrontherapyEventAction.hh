@@ -60,6 +60,7 @@ private:
   G4String drawFlag; //Visualisation flag
   G4int hitsCollectionID;
   HadrontherapyMatrix *matrix; 
+  G4int                     printModulo;  
 };
 
 #endif
