@@ -11,6 +11,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
+	   - Completed the update of the new beam line
+
 09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-02
 	   - Added comments to the PhysicsList class;
 	   - Eliminated not used production cuts in PhysicsList;

@@ -187,7 +187,7 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
 void HadrontherapyDetectorConstruction::ConstructDetector()
 {
   G4Colour  lightBlue   (0.0, 0.0, .75);
-  G4Material* water = material -> GetMat("water");
+  G4Material* water = material -> GetMat("Water");
 
   //----------------------
   // Detector  
