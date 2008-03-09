@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.1 2008-03-06 01:08:06 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.2 2008-03-09 12:28:40 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -142,12 +142,12 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   if(verboseLevel > 9) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Tubs(layerName[1],
 			     0.,
-			     fSize[0]/fNSegment[0],
+			     fSize[0],///fNSegment[0],
 			     fSize[1]/fNSegment[1],
-			     0., twopi*rad);
+			     0., twopi);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   if(fNSegment[1] > 1)  {
-    G4double width = fSize[1]/fNSegment[1];
+    G4double width = fSize[1]/fNSegment[1]*2.;
     if(G4ScoringManager::GetReplicaLevel()>1) {
 
       new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
@@ -178,9 +178,9 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4String elementName = tubsName +"3";
   G4VSolid * elementSolid = new G4Tubs(elementName,
 				       0.,
-				       fSize[0]/fNSegment[0],
+				       fSize[0],//fNSegment[0],
 				       fSize[1]/fNSegment[1],
-				       0., twopi*deg/fNSegment[2]);
+				       0., twopi/fNSegment[2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) {
 
@@ -234,10 +234,12 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   
 
   // vis. attributes
-  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
+  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.5,.5,.5,0.1));
   visatt->SetVisibility(true);
   layerLogical[0]->SetVisAttributes(visatt);
   layerLogical[1]->SetVisAttributes(visatt);
+  visatt = new G4VisAttributes(G4Colour(.5,.5,.5,0.01));
+  visatt->SetForceSolid(true);
   fMeshElementLogical->SetVisAttributes(visatt);
 }
 
