@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.25 2008-03-08 02:19:53 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.26 2008-03-10 15:12:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 //      Creation date: 2 May 2001
 //
 //      Modifications: 
+//      08 Mar 2008  MGP Updated to recent Geant4 interface changes
 //      28 Nov 2002  AP  update to AIDA 3 
 //      14 Sep 2001  AP  Moved histograms to Lizard 
 //      16 Sep 2001  AP  Moved ntuples to Lizard 
@@ -76,6 +77,7 @@
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
+#include "G4PenelopeCompton.hh"
 #include "G4LowEnergyPolarizedCompton.hh"
 #include "G4ComptonScattering.hh"
 #include "G4LowEnergyIonisation.hh"
@@ -126,25 +128,21 @@ int main()
   std::auto_ptr< AIDA::ITree > tree( tf->create( "comptonhisto.hbook", "hbook", readOnly, createFile ) );
   std::cout << "Tree store : " << tree->storeName() << std::endl;
 
-
-
   // Next create the nTuples using the factory and open it for writing
   // Creating a tuple factory, whose tuples will be handled by the tree
   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-  // ---- primary ntuple ------
+  // ---- Primary ntuple ------
   // If using Anaphe HBOOK implementation, there is a limitation on the length of the
   // variable names in a ntuple
   AIDA::ITuple* ntuple1 = tpf->create( "1", "Primary tuple", 
-			     "float initen, eChng, dedx, dedxNow, pxChng, pyChng, pzChng, pChng, thChng, nElec, nPos, nPhot" );
+			     "float e0, e1, dedx, dedxNow, px1, py1, pz1, p1, theta1, neminus, neplus, nphoton" );
 
-
-  // ---- secondary ntuple ------   
+  // ---- Secondary ntuple ------   
   AIDA::ITuple* ntuple2 = tpf->create( "2", "Secondary tuple", 
-			     "float px,py,pz,p,e,eKin,theta,phi,partTyp" );
+			     "float px, py, pz, p, e, ekin, theta, phi, type" );
 
-
-  // ---- secondaries histos ----
+  // ---- Secondaries histos ----
   // Creating a histogram factory, whose histograms will be handled by the tree
   std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
@@ -167,6 +165,13 @@ int main()
 
   AIDA::IHistogram1D* hPhi;
   hPhi = hf->createHistogram1D("60","Phi", 100,-pi,pi);
+
+  AIDA::IHistogram1D* hE1;
+  hE1 = hf->createHistogram1D("70","Scattered particle energy", 100,0.,10.);
+
+  AIDA::IHistogram1D* hEdiff;
+  hEdiff = hf->createHistogram1D("80","Energy difference initial-scattered particle", 100,0.,10.);
+
 
   // end NEW
   // ================================================================================
@@ -227,12 +232,11 @@ int main()
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
   // Dump the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
-      G4cout << mat << ") "
+      G4cout << mat << ". "
 	     << (*theMaterialTable)[mat]->GetName()
 	     << G4endl;
     }
@@ -247,14 +251,7 @@ int main()
 	 << material->GetName()
 	 << G4endl;
 
-  G4double initX = 0. * mm; 
-  G4double initY = 0. * mm; 
-  G4double initZ = 1. * mm;
-
-  G4double dimX = 1 * mm;
-  G4double dimY = 1 * mm;
-  G4double dimZ = 1 * mm;
-  
+ 
   // Particle definitions
 
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
@@ -265,13 +262,21 @@ int main()
   //  gamma->SetCuts(1e-3*mm);
   // electron->SetCuts(1e-3*mm);
   //  positron->SetCuts(1e-3*mm);
+ 
 
   G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
   if (cuts == 0) G4cout << " G4ProductionCuts* cuts = 0" << G4endl;
   G4double cutAll = 1.*micrometer;
   cuts->SetProductionCut(cutAll, -1); //all
- 
+  G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+  couple->SetUseFlag(true);
+
+  G4double dimX = 1 * mm;
+  G4double dimY = 1 * mm;
+  G4double dimZ = 1 * mm;
+  
+
   // Geometry 
 
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
@@ -306,15 +311,14 @@ int main()
   cutsTable->DumpCouples();
   //  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
 
-
   // Processes 
 
   G4int processType;
   G4cout 
-    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3]?" 
+    << "LowEnergy [1] or Penelope [2] or LowEnergyPolarized [3] or Standard [4]?" 
     << G4endl;
   G4cin >> processType;
-  if (processType <1 || processType >3 )
+  if (processType <1 || processType >4 )
     {
       G4Exception("Wrong input");
     }
@@ -322,7 +326,7 @@ int main()
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
 
-  if (processType == 1 || processType == 3)
+  if (processType < 4)
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
@@ -346,18 +350,22 @@ int main()
   ioniProcess->BuildPhysicsTable(*electron);
 
   // Photon process 
-  G4VDiscreteProcess* photonProcess;
+  G4VDiscreteProcess* photonProcess = 0;
   if (processType == 1)
     {
       photonProcess = new G4LowEnergyCompton;
     }
-  else if (processType == 2)
+  if (processType == 2)
     {
-      photonProcess = new G4ComptonScattering;
+      photonProcess = new G4PenelopeCompton;
     }
-  else
+  if (processType == 3)
     {
       photonProcess = new G4LowEnergyPolarizedCompton;
+    }  
+  if (processType == 4)
+    {
+      photonProcess = new G4ComptonScattering;
     }
 
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
@@ -365,11 +373,10 @@ int main()
   gProcessManager->AddProcess(photonProcess);
   photonProcess->BuildPhysicsTable(*gamma);
 
-  // Create a DynamicParticle  
-  
-  G4double gEnergy = initEnergy*MeV*G4UniformRand();
-  if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
-
+  // Primary direction 
+  G4double initX = 0. * mm; 
+  G4double initY = 0. * mm; 
+  G4double initZ = 1. * mm;
   G4ParticleMomentum gDirection(initX,initY,initZ);
 
   /* 
@@ -396,6 +403,7 @@ int main()
   if (theCouple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
   const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
+
   G4StepPoint* point = new G4StepPoint();
   point->SetPosition(position);
   point->SetMaterial(material);
@@ -416,74 +424,74 @@ int main()
 
   // Check applicability
   
-  if (! (photonProcess->IsApplicable(*gamma)))
-    {
-      G4Exception("Not Applicable");
-    }
+  if (! (photonProcess->IsApplicable(*gamma))) G4Exception("Not Applicable");
+ 
 
   // --------- Test the DoIt -------------------------------------------------------------------
 
   G4cout << "DoIt in material " << material->GetName() << G4endl;
-  //G4ParticleMomentum gDirection(initX,initY,initZ);
-  G4Track* gTrack;
-  G4GRSVolume* touche;
-  G4Step* step;
-  G4StepPoint* point;
-  G4StepPoint* newPoint;
+  
+  G4Track* gTrack = 0;
+  G4GRSVolume* touche = 0;
+  G4Step* step = 0;
+  G4StepPoint* point = 0;
+  G4StepPoint* newPoint = 0;
+  G4double gEnergy = 0.;
 
-  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+  //  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
   for (G4int iter=0; iter<nIterations; iter++)
     {
+      // Primary energy  
+      //      gEnergy = initEnergy*MeV*G4UniformRand();
+      gEnergy = initEnergy*MeV;
+      if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
+      G4cout << "---- Initial energy = " << gEnergy/MeV << " MeV" << G4endl;
+      // Dynamic particle (incident primary)
+      G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
 
- G4double gEnergy = initEnergy*MeV*G4UniformRand();
-  if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
+      // Track (incident)
+      G4ThreeVector position(0.,0.,0.);
+      G4double time = 0. ;
+      gTrack = new G4Track(&dynamicPhoton,time,position);
 
-  G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
-
-  // Track 
-
-  G4ThreeVector position(0.,0.,0.);
-  G4double time = 0. ;
-  gTrack = new G4Track(&dynamicPhoton,time,position);
-
-  // Do I really need this?
-  touche = new G4GRSVolume(physicalFrame, 0, position);   
-  //gTrack->SetTouchable(touche);
+      // Do I really need this?
+      touche = new G4GRSVolume(physicalFrame, 0, position);   
+      //gTrack->SetTouchable(touche);
   
- // Step 
+      // Step 
+      step = new G4Step();  
+      step->SetTrack(gTrack);
+      //const G4MaterialCutsCouple* theCouple(cutsTable->GetMaterialCutsCouple(material, cutsTable->GetDefaultProductionCuts()));
+      // if (couple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
+      //const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
-  step = new G4Step();  
-  step->SetTrack(gTrack);
-  gTrack->SetStep(step);
-  //const G4MaterialCutsCouple* theCouple(cutsTable->GetMaterialCutsCouple(material, cutsTable->GetDefaultProductionCuts()));
-  if (couple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
-  //const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+      // PreStep point
+      point = new G4StepPoint();
+      point->SetPosition(position);
+      point->SetMaterial(material);
+      point->SetMaterialCutsCouple(couple);
+      G4double safety = 10000.*cm;
+      point->SetSafety(safety);
+      step->SetPreStepPoint(point);
 
-  point = new G4StepPoint();
-  point->SetPosition(position);
-  point->SetMaterial(material);
-  point->SetMaterialCutsCouple(couple);
-  G4double safety = 10000.*cm;
-  point->SetSafety(safety);
-  step->SetPreStepPoint(point);
+      // PostStep point
+      newPoint = new G4StepPoint();
+      G4ThreeVector newPosition(0.,0.,1.*mm);
+      newPoint->SetPosition(newPosition);
+      newPoint->SetMaterial(material);
+      newPoint->SetMaterialCutsCouple(couple);
+      newPoint->SetSafety(safety);
+      step->SetPostStepPoint(newPoint);
 
-  newPoint = new G4StepPoint();
-  G4ThreeVector newPosition(0.,0.,1.*mm);
-  newPoint->SetPosition(newPosition);
-  newPoint->SetMaterial(material);
-  newPoint->SetMaterialCutsCouple(couple);
-  newPoint->SetSafety(safety);
-  step->SetPostStepPoint(newPoint);
-
-
+      // Step length
       step->SetStepLength(1*micrometer);
 
       gTrack->SetStep(step); 
  
-  const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
-  G4cout << "Test couple" << G4endl;
-  if (couple == 0)  G4cout << " couple  is 0 " << G4endl;
+      const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
+      //      G4cout << "Test couple" << G4endl;
+      //     if (couple == 0)  G4cout << " couple  is 0 " << G4endl;
 
       G4cout  <<  "Iteration = "  
 	      <<  iter 
@@ -493,13 +501,12 @@ int main()
 	      << G4endl;
 
       G4ParticleChange* particleChange = (G4ParticleChange*) photonProcess->PostStepDoIt(*gTrack,*step);
-      G4cout << "PostStepDoIt done" << G4endl;
-      // Primary physical quantities 
+      //      G4cout << "PostStepDoIt done" << G4endl;
 
       // Primary physical quantities 
 
       G4double energyChange = particleChange->GetEnergy();
-      G4double dedx = initEnergy - energyChange ;
+      G4double dedx = gEnergy - energyChange ;
       G4double dedxNow = dedx / (step->GetStepLength());
       
       G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
@@ -514,7 +521,7 @@ int main()
       G4double xChange = particleChange->GetPosition()->x();
       G4double yChange = particleChange->GetPosition()->y();
       G4double zChange = particleChange->GetPosition()->z();
-      G4double thetaChange = particleChange->GetPosition()->theta();
+      G4double thetaChange = particleChange->GetMomentumDirection()->theta();
 
       G4cout << "---- Primary after the step ---- " << G4endl;
  
@@ -524,7 +531,7 @@ int main()
       //	     << zChange << "   " 
       //	     << G4endl;
 
-      G4cout << "---- Energy: " 
+      G4cout << "---- Energy: " 	    
 	     << energyChange/MeV << " MeV,  " 
 	     << "(px,py,pz): ("
 	     << pxChange/MeV << ","
@@ -538,7 +545,9 @@ int main()
       
       hNSec->fill(particleChange->GetNumberOfSecondaries());
       hDeposit->fill(particleChange->GetLocalEnergyDeposit());
-      
+      hE1->fill(energyChange);
+      hEdiff->fill(dedx);
+
       G4int nElectrons = 0;
       G4int nPositrons = 0;
       G4int nPhotons = 0;
@@ -558,12 +567,13 @@ int main()
 	  G4double phi = (finalParticle->GetMomentum()).phi();
 	  G4double p = std::sqrt(px*px+py*py+pz*pz);
 
-	  if (eKin > initEnergy)
+	  if (eKin > gEnergy)
 	    {
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
 	    }
 
 	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
+          G4ParticleDefinition* def = finalParticle->GetDefinition();
 	  G4cout  << "==== Final " 
 		  <<  particleName  << " "  
 		  << "energy: " <<  e/MeV  << " MeV,  " 
@@ -579,53 +589,54 @@ int main()
 	  hTheta->fill(theta);
 	  hPhi->fill(phi);
 	  
-	  G4int partType = 0;
-	  if (particleName == "e-") 
+	  G4double particleType = -1.;
+	  if (def == electron) 
 	    {
-	      partType = 1;
+	      particleType = 1.;
 	      nElectrons++;
-	    }
-	  else if (particleName == "e+") 
+	    } 
+	  if (def == positron) 
 	    {
-	      partType = 2;
+	      particleType = 2.;
 	      nPositrons++;
 	    }
-	  else if (particleName == "gamma") 
+	    
+	  if (def == gamma) 
 	    {
-	      partType = 3;
+	      particleType = 3.;
 	      nPhotons++;
 	    }
 	
 	  // Fill the secondaries ntuple
-          ntuple2->fill( ntuple2->findColumn( "px     " ), px       );
-          ntuple2->fill( ntuple2->findColumn( "py     " ), py       );
-          ntuple2->fill( ntuple2->findColumn( "pz     " ), pz       );
-          ntuple2->fill( ntuple2->findColumn( "p      " ), p        );
-          ntuple2->fill( ntuple2->findColumn( "e      " ), e        );
-          ntuple2->fill( ntuple2->findColumn( "eKin   " ), eKin     );
-          ntuple2->fill( ntuple2->findColumn( "theta  " ), theta    );
-          ntuple2->fill( ntuple2->findColumn( "phi    " ), phi      );
-          ntuple2->fill( ntuple2->findColumn( "partTyp" ), partType );
+          ntuple2->fill( ntuple2->findColumn( "px" ), px       );
+          ntuple2->fill( ntuple2->findColumn( "py" ), py       );
+          ntuple2->fill( ntuple2->findColumn( "pz" ), pz       );
+          ntuple2->fill( ntuple2->findColumn( "p" ), p        );
+          ntuple2->fill( ntuple2->findColumn( "e" ), e        );
+          ntuple2->fill( ntuple2->findColumn( "ekin" ), eKin     );
+          ntuple2->fill( ntuple2->findColumn( "theta" ), theta    );
+          ntuple2->fill( ntuple2->findColumn( "phi" ), phi      );
+          ntuple2->fill( ntuple2->findColumn( "type" ), particleType );
 	  
           // NEW: Values of attributes are prepared; store them to the nTuple:
           ntuple2->addRow(); // check for returning true ...
 
 	  delete particleChange->GetSecondary(i);
-	}
+	} // end loop over secondaries
 
       // Fill the primaries ntuple
-      ntuple1->fill( ntuple1->findColumn( "initen"  ), initialEnergy );
-      //  ntuple1->fill( ntuple1->findColumn( "eChng"   ), energyChange );
-      //  ntuple1->fill( ntuple1->findColumn( "dedx"    ), dedx          );
-      //  ntuple1->fill( ntuple1->findColumn( "dedxNow" ), dedxNow       );
-      //  ntuple1->fill( ntuple1->findColumn( "pxChng"  ), pxChange      );
-      //   ntuple1->fill( ntuple1->findColumn( "pyChng"  ), pyChange      );
-      //   ntuple1->fill( ntuple1->findColumn( "pzChng"  ), pzChange      );
-      //   ntuple1->fill( ntuple1->findColumn( "pChng"   ), pChange       );
-      //   ntuple1->fill( ntuple1->findColumn( "thChng"  ), thetaChange   );
-      //   ntuple1->fill( ntuple1->findColumn( "nElec"   ), nElectrons    );
-      //   ntuple1->fill( ntuple1->findColumn( "nPos"    ), nPositrons    );
-      //   ntuple1->fill( ntuple1->findColumn( "nPhot"   ), nPhotons      );
+      ntuple1->fill( ntuple1->findColumn( "e0"  ), gEnergy );
+      ntuple1->fill( ntuple1->findColumn( "e1"   ), energyChange );
+      ntuple1->fill( ntuple1->findColumn( "dedx"    ), dedx          );
+      ntuple1->fill( ntuple1->findColumn( "dedxNow" ), dedxNow       );
+      ntuple1->fill( ntuple1->findColumn( "px1"  ), pxChange      );
+      ntuple1->fill( ntuple1->findColumn( "py1"  ), pyChange      );
+      ntuple1->fill( ntuple1->findColumn( "pz1"  ), pzChange      );
+      ntuple1->fill( ntuple1->findColumn( "p1"   ), pChange       );
+      ntuple1->fill( ntuple1->findColumn( "theta1"  ), thetaChange   );
+      ntuple1->fill( ntuple1->findColumn( "neminus"   ), (G4double) nElectrons    );
+      ntuple1->fill( ntuple1->findColumn( "neplus"    ), (G4double) nPositrons    );
+      ntuple1->fill( ntuple1->findColumn( "nphoton"   ), (G4double) nPhotons      );
 
       //NEW: Values of attributes are prepared; store them to the nTuple:
       ntuple1->addRow();
@@ -636,7 +647,7 @@ int main()
       delete step;
       delete gTrack;
       
-    } 
+    } // end loop over events
   
   G4cout  << "-----------------------------------------------------"  
 	  <<  G4endl;
