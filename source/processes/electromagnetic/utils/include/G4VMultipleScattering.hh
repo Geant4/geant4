@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.48 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.49 2008-03-10 10:59:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ class G4VMultipleScattering : public G4VContinuousDiscreteProcess
 public:
 
   G4VMultipleScattering(const G4String& name = "msc",
-                              G4ProcessType type = fElectromagnetic);
+			G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VMultipleScattering();
 
@@ -137,7 +137,7 @@ public:
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
-                                 G4bool ascii = false);
+			   G4bool ascii = false);
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -146,7 +146,7 @@ public:
   // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
-                                    G4bool ascii);
+			      G4bool ascii);
 
   //------------------------------------------------------------------------
   // Specific methods for msc processes
@@ -157,10 +157,10 @@ public:
   // and invokes the method GetMscContinuousStepLimit at every step.
   G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
-                                                  G4double  previousStepSize,
-                                                  G4double  currentMinimalStep,
-                                                  G4double& currentSafety,
-                                                  G4GPILSelection* selection);
+					    G4double  previousStepSize,
+					    G4double  currentMinimalStep,
+					    G4double& currentSafety,
+					    G4GPILSelection* selection);
 
   // The function overloads the corresponding function of the base
   // class.
@@ -337,9 +337,9 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 inline G4double G4VMultipleScattering::GetMscContinuousStepLimit(
                                           const G4Track& track,
-                                                G4double,
-                                                G4double currentMinimalStep,
-                                                G4double&)
+					  G4double,
+					  G4double currentMinimalStep,
+					  G4double&)
 {
   G4double x = currentMinimalStep;
   G4double e = track.GetKineticEnergy();
@@ -371,7 +371,8 @@ inline G4double G4VMultipleScattering::ContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, G4double& e)
+inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
+						 G4double& e)
 {
   G4double x;
   if(theLambdaTable) {
@@ -395,7 +396,7 @@ inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
-                                           G4double kinEnergy, size_t& idxRegion) const
+		   G4double kinEnergy, size_t& idxRegion) const
 {
   return modelManager->SelectModel(kinEnergy, idxRegion);
 }
@@ -467,13 +468,8 @@ inline  G4double G4VMultipleScattering::Skin() const
 
 inline  void G4VMultipleScattering::SetSkin(G4double val)
 {
-  if(val <= 0.99999) {
-    skin = 0.0;
-    stepLimit = fUseSafety;
-  } else {
-    skin = val;
-    stepLimit = fUseDistanceToBoundary;
-  }
+  if(val < 1.0) skin = 0.0;
+  else          skin = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -516,19 +512,14 @@ inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
 {
   stepLimit = val;
-  if(val == fMinimal) {
-    skin = 0;
-    facrange = 0.2;
-  } else if(val == fUseSafety) {
-    skin = 0;
-  }
+  if(val == fMinimal) facrange = 0.2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 {
-   buildLambdaTable = val;
+  buildLambdaTable = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
