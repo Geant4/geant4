@@ -1,4 +1,4 @@
-$Id: History,v 1.287 2008-03-07 10:56:05 pia Exp $
+$Id: History,v 1.288 2008-03-10 15:15:22 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.03.2008   MGP, tag emlowen-V09-01-05
+             Developments for Doppler broadening concerning data management
+
+10.03.2008   MGP, tag emlowen-V09-01-04
+             Fixes to *DataSet files for better readability of the code
+ 
 07.03.2008   MGP, tag emlowen-V09-01-03
              Reverted to G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
              as in emlowen-V09-01-01
