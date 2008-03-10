@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.1 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.2 2008-03-10 17:05:25 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#define GEANT4_QT_DEBUG
+//#define GEANT4_QT_DEBUG
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQtMovieDialog.hh"

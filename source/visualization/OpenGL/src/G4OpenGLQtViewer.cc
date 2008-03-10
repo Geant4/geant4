@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.12 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.13 2008-03-10 17:05:25 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#define GEANT4_QT_DEBUG
+//#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLQtViewer.hh"
 
