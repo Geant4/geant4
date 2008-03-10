@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.42 2008-03-10 19:10:12 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.43 2008-03-10 19:50:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -64,7 +64,6 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
-#include "G4RangeNoTest.hh"
 #include "G4MaterialCutsCouple.hh"
 
 
@@ -90,7 +89,7 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 
   meanFreePathTable = 0;
 
-  rangeTest = new G4RangeNoTest;
+  rangeTest = new G4RangeTest;
 
    if (verboseLevel > 0)
      {
@@ -140,13 +139,9 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   aParticleChange.Initialize(aTrack);
 
-  // G4cout << "G4LowEnergyCompton Track initialized" << G4endl;
-
   // Dynamic particle quantities
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy0 = incidentPhoton->GetKineticEnergy();
-
-  //  G4cout << photonEnergy0 << " photonEnergy0 " << G4endl;
 
   if (photonEnergy0 <= lowEnergyLimit)
     {
@@ -161,11 +156,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   // Select randomly one element in the current material
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
-  //  if (couple)  G4cout << " couple not 0 " << G4endl;
-
   G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
-
-  //  G4cout << "Z = " << Z << G4endl;
 
   G4double epsilon0 = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0 * epsilon0;
@@ -200,9 +191,6 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
       gReject = (1. - epsilon * sinT2 / (1. + epsilonSq)) * scatteringFunction;
 
     }  while(gReject < G4UniformRand()*Z);
-
-
-  //  G4cout << "oneCosT = " << oneCosT << G4endl;
 
   G4double cosTheta = 1. - oneCosT;
   G4double sinTheta = std::sqrt (sinT2);

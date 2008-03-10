@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.27 2008-03-10 19:10:12 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.28 2008-03-10 19:50:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -68,7 +68,6 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
-#include "G4RangeNoTest.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
@@ -99,7 +98,7 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
   hartreeFunction  = new std::map<G4int,G4DataVector*>;
   occupationNumber = new std::map<G4int,G4DataVector*>;
 
-  rangeTest = new G4RangeNoTest;
+  rangeTest = new G4RangeTest;
 
   ReadData(); //Read data from file
 
@@ -255,8 +254,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   const G4Material* material = couple->GetMaterial();
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
-
- 
   const G4int nmax = 64;
   G4double rn[nmax],pac[nmax];
   
@@ -457,7 +454,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.ProposeTrackStatus(fStopAndKill);
     }
 
-  //  G4cout << "Penelope scattered photon generated" << G4endl;
 
   // Kinematics of the scattered electron 
 
@@ -477,7 +473,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   G4double sinThetaE = std::sqrt(1-cosThetaE*cosThetaE);
 
-  // G4cout << "Penelope scattered electron generated" << G4endl;
+ 
  
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
@@ -490,8 +486,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   size_t nTotPhotons=0;
   G4int nPhotons=0;
 
-  // ---- MGP commented out for Doppler test -----------------------------------------
-  /*
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t indx = couple->GetIndex();
@@ -500,11 +494,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
   cute = std::min(cutForLowEnergySecondaryPhotons,cute);
-  */
-  G4double cutg = 1.* keV;
-  G4double cute = 1.* keV;
-  // ---- End of MGP commented out ----------------------------------------------------
-
+  
   std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
   G4AtomicDeexcitation deexcitationManager;
@@ -534,7 +524,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       }
     }
   G4double energyDeposit =ionEnergy; //il deposito locale e' quello che rimane
-
   G4int nbOfSecondaries=nPhotons;
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety 
