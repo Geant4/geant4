@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2008-01-29 22:38:23 allison Exp $
+$Id: History,v 1.107 2008-03-10 16:23:42 lgarnier Exp $
 
 -------------------------------------------------------------------
 
@@ -26,8 +26,11 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+5th February 2008, Laurent Garnier
+ - Implemented a function in order to IncrementPan with X,Y,Z values 
+
 29th January 2008  John Allison  (visman-V09-01-01)
-- G4VisExecutive.icc: Re-instated G4DAWNFILE (somehow got lost!!)
+ - G4VisExecutive.icc: Re-instated G4DAWNFILE (somehow got lost!!)
 
 4th January 2008  John Allison  (visman-V09-01-00)
 - Implemented extended 2D interface.

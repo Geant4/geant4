@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.26 2007-04-03 13:33:16 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.27 2008-03-10 16:23:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,7 +209,12 @@ public: // With description
   void SetLightpointDirection  (const G4Vector3D& lightpointDirection);
   void SetLightsMoveWithCamera (G4bool moves);
   void SetPan                  (G4double right, G4double up);
+  /** Increment currentTarget point by following X,Y values
+   */
   void IncrementPan            (G4double right, G4double up);
+  /** Increment currentTarget point by following X,Y,Z values
+   */
+  void IncrementPan            (G4double right, G4double up, G4double distance);
   void SetDefaultVisAttributes (const G4VisAttributes&);
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
   void SetDefaultMarker        (const G4VMarker& defaultMarker);

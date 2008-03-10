@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.29 2007-04-03 13:33:16 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.30 2008-03-10 16:23:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -232,9 +232,13 @@ void G4ViewParameters::SetPan (G4double right, G4double up) {
 }
 
 void G4ViewParameters::IncrementPan (G4double right, G4double up) {
+  IncrementPan (right,up, 0);
+}
+
+void G4ViewParameters::IncrementPan (G4double right, G4double up, G4double distance) {
   G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
   G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
-  fCurrentTargetPoint += right * unitRight + up * unitUp;
+  fCurrentTargetPoint += right * unitRight + up * unitUp + distance * fViewpointDirection;
 }
 
 void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
