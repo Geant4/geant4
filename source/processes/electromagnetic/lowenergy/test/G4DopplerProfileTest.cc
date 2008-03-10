@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellDataTest.cc,v 1.6 2008-03-10 19:52:06 pia Exp $
+// $Id: G4DopplerProfileTest.cc,v 1.1 2008-03-10 19:52:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,7 @@
 //
 //      Author:        Maria Grazia Pia
 // 
-//      Creation date: 6 August 2001
+//      Creation date: 8 March 2008
 //
 //      Modifications: 
 //
@@ -49,6 +49,8 @@
 #include <iomanip>
 
 #include "G4ShellData.hh"
+#include "G4DopplerProfile.hh"
+#include "G4VEMDataSet.hh"
 
 int main()
 {
@@ -60,7 +62,7 @@ int main()
 
   // Doppler binding data
   G4String file = "/doppler/shell-doppler";
-  G4ShellData* dataSet = new G4ShellData(1,100,true);
+  G4DopplerProfile* dataSet = new G4DopplerProfile(1,100);
 
   dataSet->LoadData(file);
   
@@ -68,14 +70,22 @@ int main()
   G4int Z;
   G4cin >> Z;
 
-  G4int n = dataSet->NumberOfShells(Z);
+  G4int n = dataSet->NumberOfProfiles(Z);
   G4cout << "Z = " << Z << " has " << n << " shells" << G4endl;
-  
+  //  for (G4int Z=1; Z<101; Z++)
+  //   {
+      const G4VEMDataSet* profiles = dataSet->Profiles(Z);
+      profiles->PrintData();
+      //  }
+
   G4cout << "Enter shell index " << G4endl;
   G4int i;
   G4cin >> i;
 
+  const G4VEMDataSet* profile = dataSet->Profile(Z,i);
+  profile->PrintData();
 
+  /*
   G4int id = dataSet->ShellId(Z,i);
   G4double e = dataSet->BindingEnergy(Z,i) / keV;
 
@@ -105,7 +115,7 @@ int main()
   G4cin >> k;
 
   if (k == 1) dataSet->PrintData();  
-
+  */
   delete dataSet;
 
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
