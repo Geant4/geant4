@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2008-03-06 18:08:43 vnivanch Exp $
+$Id: History,v 1.105 2008-03-10 15:47:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+10-03-07 mma (materials-V09-01-01)
+- G4IonisParamMat - add Birks constant
+  
 06-03-07 V.Ivanchenko (materials-V09-01-00)
 - G4NistMaterialBuilder - use correct dimension for the density for
   ConstructNewMaterial methods

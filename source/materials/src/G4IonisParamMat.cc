@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.20 2007-09-27 14:05:47 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.21 2008-03-10 15:47:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,12 +38,13 @@
 // 06-09-04, factor 2 to shell correction term (V.Ivanchenko) 
 // 10-05-05, add a missing coma in FindMeanExcitationEnergy() - Bug#746 (mma)
 // 27-09-07, add computation of parameters for ions (V.Ivanchenko)
+// 04-03-08, remove reference to G4NistManager. Add fBirks constant (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
-#include "G4NistManager.hh"
+///#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -54,6 +55,8 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
   ComputeDensityEffect();
   ComputeFluctModel();
   ComputeIonParameters();
+  
+  fBirks = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -298,7 +301,7 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
   if(value == fMeanExcitationEnergy || value <= 0.0) return;
 
-  if (G4NistManager::Instance()->GetVerbose() > 0) 
+  ///if (G4NistManager::Instance()->GetVerbose() > 0) 
     G4cout << "G4Material: Mean excitation energy is changed for "
            << fMaterial->GetName()
            << " Iold= " << fMeanExcitationEnergy/eV

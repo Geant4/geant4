@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.10 2007-09-27 14:05:47 vnivanch Exp $
+// $Id: G4IonisParamMat.hh,v 1.11 2008-03-10 15:47:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +40,7 @@
 // 09-03-01: copy constructor and assignement operator in public (mma)
 // 28-10-02: add setMeanExcitationEnergy (V.Ivanchenko)
 // 27-09-07: add computation of parameters for ions (V.Ivanchenko)
+// 04-03-08: add fBirks constant (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -93,7 +94,11 @@ public:
     G4double  GetZeffective()             const {return fZeff;};
     G4double  GetFermiEnergy()            const {return fFermiEnergy;};
     G4double  GetLFactor()                const {return fLfactor;};
-
+    
+    // parameters for Birks attenuation:
+    void      SetBirksConstant(G4double value) {fBirks = value;}; 
+    G4double  GetBirksConstant()         const {return fBirks;};
+      
 public:  // without description
 
     G4IonisParamMat(const G4IonisParamMat&);
@@ -154,6 +159,9 @@ private:
     G4double fZeff;
     G4double fFermiEnergy;
     G4double fLfactor;
+    
+    // parameter for Birks attenuation
+    G4double fBirks;
 };
 
 #endif
