@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.79 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.80 2008-03-10 15:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -219,7 +219,7 @@ G4UrbanMscModel::~G4UrbanMscModel()
 void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 				 const G4DataVector&)
 {
-  skindepth     = skin*stepmin;
+  skindepth = skin*stepmin;
   if(isInitialized) return;
 
   // set values of some data members

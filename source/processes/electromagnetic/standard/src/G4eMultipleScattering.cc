@@ -23,59 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.9 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4eMultipleScattering.cc,v 1.1 2008-03-10 15:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
-// File name:     G4hMultipleScattering
+// File name:     G4eMultipleScattering 
 //
 // Author:        Laszlo Urban
 //
-// Creation date: 24.10.2006 cloned from G4MultipleScattering
+// Creation date: 10 March 2008
 // 
-// Modified:
-// 12-02-07 skin can be changed via UI command (VI)
-// 20.03.07 Remove local parameter skin, set facgeom=0.1(V.Ivanchenko) 
 //
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4hMultipleScattering.hh"
-#include "G4UrbanMscModel.hh"
-#include "G4UrbanMscModel90.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel2.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
+G4eMultipleScattering::G4eMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
-  SetStepLimitType(fMinimal);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4hMultipleScattering::~G4hMultipleScattering()
+G4eMultipleScattering::~G4eMultipleScattering()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
+G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+  return (p == G4Electron::Electron() || p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
+void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   // Modification of parameters between runs
   if(isInitialized) {
@@ -96,10 +93,9 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildLambdaTable(false);
   }
 
-  // initialisation of parameters
-  G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel90();
-
+  // initialisation of parameters - defaults for particles other
+  // than ions can be overwritten by users
+  mscUrban = new G4UrbanMscModel2();
   mscUrban->SetStepLimitType(StepLimitType());
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscUrban->SetSkin(Skin());
@@ -108,11 +104,18 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
   AddEmModel(1,mscUrban);
   isInitialized = true;
+  /*
+  G4cout << "G4eMultipleScattering::InitialiseProcess for " 
+	 << p->GetParticleName()
+	 << " skin= " << Skin()
+	 << " SA= " << steppingAlgorithm
+	 << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::PrintInfo()
+void G4eMultipleScattering::PrintInfo()
 {
   G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
 	 << RangeFactor()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.71 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.72 2008-03-10 15:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -138,11 +138,7 @@ using namespace std;
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
-  dtrl              = 0.05;
-  lambdalimit       = 1.*mm;
-  
-  samplez           = false ; 
-  isInitialized     = false;  
+  isInitialized = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,7 +174,6 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetRangeFactor(0.2);
   }
 
   // initialisation of parameters - defaults for particles other

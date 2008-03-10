@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.1 2008-03-06 18:34:20 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.2 2008-03-10 15:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,19 +67,8 @@
 
 using namespace std;
 
-G4UrbanMscModel2::G4UrbanMscModel2(G4double m_facrange, G4double m_dtrl, 
-				   G4double m_lambdalimit, 
-				   G4double m_facgeom,G4double m_skin, 
-				   G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
-				   const G4String& nam)
-  : G4VEmModel(nam),
-    dtrl(m_dtrl),
-    lambdalimit(m_lambdalimit),
-    facrange(m_facrange),
-    facgeom(m_facgeom),
-    skin(m_skin),
-    steppingAlgorithm(m_stepAlg),
-    samplez(m_samplez),
+G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
+  : G4VMscModel(nam),
     isInitialized(false)
 {
   masslimite  = 0.6*MeV;
@@ -91,7 +80,6 @@ G4UrbanMscModel2::G4UrbanMscModel2(G4double m_facrange, G4double m_dtrl,
   currentTau    = taulim;
   tlimitminfix  = 1.e-6*mm;            
   stepmin       = tlimitminfix;
-  skindepth     = skin*stepmin;
   smallstep     = 1.e10;
   currentRange  = 0. ;
   frscaling2    = 0.25;
@@ -103,7 +91,6 @@ G4UrbanMscModel2::G4UrbanMscModel2(G4double m_facrange, G4double m_dtrl,
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  facsafety     = 0.25;
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
@@ -122,6 +109,7 @@ G4UrbanMscModel2::~G4UrbanMscModel2()
 void G4UrbanMscModel2::Initialise(const G4ParticleDefinition* p,
 				  const G4DataVector&)
 {
+  skindepth = skin*stepmin;
   if(isInitialized) return;
   // set values of some data members
   SetParticle(p);
@@ -134,6 +122,8 @@ void G4UrbanMscModel2::Initialise(const G4ParticleDefinition* p,
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
+
+  isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
