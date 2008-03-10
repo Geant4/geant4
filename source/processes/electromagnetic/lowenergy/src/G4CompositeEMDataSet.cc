@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.11 2008-03-07 23:47:26 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.12 2008-03-10 15:07:40 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -138,7 +138,7 @@ G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
 
 G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
 {
-  for (G4int z(minZ); z<maxZ; z++)
+  for (G4int z=minZ; z<maxZ; z++)
     {
       const G4VEMDataSet* component(GetComponent(z-minZ));
   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.5 2007-02-20 16:53:16 mantero Exp $
+// $Id: G4ShellData.hh,v 1.6 2008-03-10 15:06:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -54,7 +54,7 @@ class G4ShellData
 { 
 public:
 
-  G4ShellData(G4int minZ = 1, G4int maxZ = 100);
+  G4ShellData(G4int minZ = 1, G4int maxZ = 100, G4bool isOccupancy = false);
 
   ~G4ShellData();
  
@@ -62,7 +62,9 @@ public:
 
   G4int ShellId(G4int Z, G4int shellIndex) const;
 
-  const G4DataVector& ShellIdVector(G4int Z) const;
+  G4double ShellOccupationProbability(G4int Z, G4int shellIndex) const;
+
+  const std::vector<G4double>& ShellIdVector(G4int Z) const;
 
   G4double BindingEnergy(G4int Z, G4int shellIndex) const;
 
@@ -70,18 +72,26 @@ public:
 
   void PrintData() const;
 
+  // Randomly select a shell based on shell occupancy
+  G4int RandomSelectShell(G4int Z) const;
+
 private:
 
   // Hide copy constructor and assignment operator 
   G4ShellData& operator=(const G4ShellData& right);
   G4ShellData(const G4ShellData&);
 
-   G4int zMin;
+  const std::vector<G4double>& ShellVector(G4int Z) const;
+
+  G4int zMin;
   G4int zMax; 
 
-  std::map<G4int,G4DataVector*,std::less<G4int> > idMap;
+  G4bool occupancyData;
+
+  std::map<G4int,std::vector<G4double>*,std::less<G4int> > idMap;
   std::map<G4int,G4DataVector*,std::less<G4int> > bindingMap;
   std::vector<G4int> nShells;
+  std::map<G4int,std::vector<G4double>*,std::less<G4int> > occupancyPdfMap;
 
 };
  

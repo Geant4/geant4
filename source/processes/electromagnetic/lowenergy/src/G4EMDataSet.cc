@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.13 2008-03-02 11:48:00 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.14 2008-03-10 15:07:41 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -88,16 +88,16 @@ G4EMDataSet::~G4EMDataSet()
     delete data;
 }
 
-G4double G4EMDataSet::FindValue(G4double argEnergy, G4int /* argComponentId */) const
+G4double G4EMDataSet::FindValue(G4double energy, G4int /* argComponentId */) const
 {
   if (!energies) G4Exception("G4EMDataSet::FindValue - energies == 0");
   if (energies->empty()) return 0;
-  if (argEnergy <= (*energies)[0]) return (*data)[0];
+  if (energy <= (*energies)[0]) return (*data)[0];
 
   size_t i(energies->size()-1);
-  if (argEnergy >= (*energies)[i]) return (*data)[i];
+  if (energy >= (*energies)[i]) return (*data)[i];
 
-  return algorithm->Calculate(argEnergy, FindLowerBound(argEnergy), *energies, *data);
+  return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data);
 }
 
 
