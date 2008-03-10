@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.35 2008-02-20 12:26:45 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.36 2008-03-10 16:57:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -720,6 +720,45 @@ extern "C" {
     }
   }
 }
+
+GLdouble G4OpenGLViewer::getSceneNearWidth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  return 2 * fVP.GetFrontHalfHeight (pnear, radius);
+}
+
+GLdouble G4OpenGLViewer::getSceneFarWidth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar    = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  return 2 * fVP.GetFrontHalfHeight (pfar, radius);
+}
+
+
+GLdouble G4OpenGLViewer::getSceneDepth()
+{
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  return fVP.GetFarDistance  (cameraDistance, pnear, radius)- pnear;
+}
+
 
 void G4OpenGLViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
 {

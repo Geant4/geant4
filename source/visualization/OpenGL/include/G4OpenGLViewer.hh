@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.21 2007-11-10 14:50:01 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.22 2008-03-10 16:57:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,9 @@ protected:
   void spewSortedFeedback (FILE*, GLint, GLfloat*);
   void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
   void print3DcolorVertex(GLint, GLint*, GLfloat*);
+  GLdouble getSceneNearWidth();
+  GLdouble getSceneFarWidth();
+  GLdouble getSceneDepth();
   G4float                           pointSize;
   char                              print_string[50];
   G4bool                            print_colour;

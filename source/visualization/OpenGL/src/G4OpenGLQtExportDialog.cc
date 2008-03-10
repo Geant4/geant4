@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.6 2008-01-30 10:54:13 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.7 2008-03-10 16:57:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -307,10 +307,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
     hSliderLayout->addWidget(qualitySlider);
     hSliderLayout->addWidget(new QLabel(" Maximum",imageGroupBox));
     
-#if QT_VERSION >= 0x040000
-    imageGroupBox->setLayout(hSliderLayout);
-#endif
-
 #if QT_VERSION >= 0x040000
     imageGroupBox->setLayout(hSliderLayout);
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.9 2008-01-30 10:54:13 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.10 2008-03-10 16:57:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-//#define GEANT4_QT_DEBUG
+#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLStoredQtViewer.hh"
 
@@ -48,10 +48,13 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
   G4OpenGLViewer (sceneHandler),
   G4OpenGLQtViewer (sceneHandler),
-  G4OpenGLStoredViewer (sceneHandler),
-  QGLWidget(QGLFormat(QGL::SampleBuffers))             // FIXME : gerer le pb du parent !
+  G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
 {
+#if QT_VERSION < 0x040000
+  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
+#else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
+#endif
   nbPaint =0;
   hasToRepaint =false;
   if (fViewId < 0) return;  // In case error in base class instantiation.
@@ -195,6 +198,10 @@ void G4OpenGLStoredQtViewer::DrawView () {
     }
   }
 
+  if (isRecording()) {
+    savePPMToTemp();
+  }
+
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::DrawView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
 #endif
@@ -248,7 +255,6 @@ void G4OpenGLStoredQtViewer::resizeGL(
 
 void G4OpenGLStoredQtViewer::paintGL()
 {
-     
   if (!readyToPaint) {
 #ifdef GEANT4_QT_DEBUG
     printf("G4OpenGLStoredQtViewer::paintGL ============  Not ready %d\n",readyToPaint);
@@ -298,16 +304,24 @@ void G4OpenGLStoredQtViewer::paintGL()
 
 void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
 {
+#if QT_VERSION < 0x040000
+  if ((event->button() & Qt::LeftButton)
+      && !((event->state() & Qt::ShiftButton)
+           || (event->state() & Qt::ControlButton)
+           || (event->state() & Qt::AltButton)
+           || (event->state() & Qt::MetaButton))) {
+#else
   if ((event->buttons() & Qt::LeftButton)
       && !((event->modifiers() & Qt::ShiftModifier)
            || (event->modifiers() & Qt::ControlModifier)
            || (event->modifiers() & Qt::AltModifier)
            || (event->modifiers() & Qt::MetaModifier))) {
+#endif
 #ifdef GEANT4_QT_DEBUG
     printf("G4OpenGLStoredQtViewer::mousePressEvent\n");
 #endif
     setMouseTracking(true);
-    G4MousePressEvent(event->pos());
+    G4MousePressEvent(event->pos(),Qt::LeftButton);
   }
 }
 
@@ -325,7 +339,7 @@ void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *event)
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::mouseDoubleClickEvent\n");
 #endif
-  //   setMouseTracking(true);
+  setMouseTracking(true);
   //   glBufferImage = grabFrameBuffer().convertToFormat(QImage::Format_ARGB32);//_Premultiplied);  
 }
 
@@ -334,17 +348,19 @@ void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::mouseReleaseEvent\n");
 #endif
-  //   setMouseTracking(false);
+  setMouseTracking(false);
 }
 
 void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
 {
-
+  
 #if QT_VERSION < 0x040000
-  G4MouseEvent(event->x(),event->y(),event->state());
+  G4MouseMoveEvent(event->x(),event->y(),event->state());
 #else
-  G4MouseEvent(event->x(),event->y(),event->buttons());
+  G4MouseMoveEvent(event->x(),event->y(),event->buttons());
 #endif
+  if (hasPendingEvents ())
+    G4MouseMoveEvent(event->x(),event->y(),event->buttons(),true);
 }
 
 
