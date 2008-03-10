@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2008-03-07 11:11:27 ztorzsok Exp $
+$Id: History,v 1.39 2008-03-10 13:29:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-07 March 2008 Z.Torzsok
+
+7 March 2008 Z.Torzsok (gdml-V09-01-01)
 - Material properties added to reader
 
-20 February 2008 Z.Torzsok (gdml-V09-01-01)
+20 February 2008 Z.Torzsok
 - Completed support for parameterised volumes in writer.
 - Name is added to physvol in reader.
 
