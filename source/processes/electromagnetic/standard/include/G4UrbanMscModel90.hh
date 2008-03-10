@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.hh,v 1.2 2008-03-07 19:18:22 vnivanch Exp $
+// $Id: G4UrbanMscModel90.hh,v 1.3 2008-03-10 10:39:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,12 +69,11 @@ class G4UrbanMscModel90 : public G4VMscModel
 
 public:
 
-  G4UrbanMscModel90(G4double facrange, G4double dtrl, G4double lambdalimit, 
-		  G4double facgeom,G4double skin, 
-		  G4bool samplez, G4MscStepLimitType stepAlg, 
-		  const G4String& nam = "UrbanMscUni");
+  G4UrbanMscModel90(const G4String& nam = "UrbanMscUni");
 
   virtual ~G4UrbanMscModel90();
+
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 				      G4double KineticEnergy,
@@ -113,9 +112,21 @@ private:
 
   void GeomLimit(const G4Track& track);
 
+  inline G4double GetLambda(G4double kinEnergy);
+
+  inline void SetParticle(const G4ParticleDefinition*);
+
   //  hide assignment operator
   G4UrbanMscModel90 & operator=(const  G4UrbanMscModel90 &right);
   G4UrbanMscModel90(const  G4UrbanMscModel90&);
+
+  const G4ParticleDefinition* particle;
+  G4ParticleChangeForMSC*     fParticleChange;
+
+  G4SafetyHelper*             safetyHelper;
+  G4PhysicsTable*             theLambdaTable;
+  const G4MaterialCutsCouple* couple;
+  G4LossTableManager*         theManager;
 
   G4double mass;
   G4double charge;
@@ -154,10 +165,42 @@ private:
 
   G4double Zeff;
 
+  G4int    currentMaterialIndex;
+
+  G4bool   isInitialized;
   G4bool   inside;
   G4bool   insideskin;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel90::GetLambda(G4double e)
+{
+  G4double x;
+  if(theLambdaTable) {
+    G4bool b;
+    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+  } else {
+    x = CrossSection(couple,particle,e);
+  }
+  if(x > DBL_MIN) x = 1./x;
+  else            x = DBL_MAX;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel90::SetParticle(const G4ParticleDefinition* p)
+{
+  if (p != particle) {
+    particle = p;
+    mass = p->GetPDGMass();
+    charge = p->GetPDGCharge()/eplus;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

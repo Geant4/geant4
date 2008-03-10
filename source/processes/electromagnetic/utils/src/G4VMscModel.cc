@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.1 2008-03-07 19:17:53 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.2 2008-03-10 10:39:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,38 +42,28 @@
 //
 // Class Description:
 //
-// Abstract interface to msc models
+// General interface to msc models
 
 // -------------------------------------------------------------------
 //
 
 #include "G4VMscModel.hh"
-#include "G4LossTableManager.hh"
-#include "G4ParticleChangeForMSC.hh"
-#include "G4TransportationManager.hh"
-#include "G4SafetyHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VMscModel::G4VMscModel(G4double frange, G4double fdtrl, G4double flambdalimit,
-			 G4double fgeom,  G4double fskin, G4bool   fsamplez, 
-			 G4MscStepLimitType stepAlg, const G4String& nam):
+G4VMscModel::G4VMscModel(const G4String& nam):
   G4VEmModel(nam), 
-  facrange(frange),
-  facgeom(fgeom),
+  facrange(0.02),
+  facgeom(3.5),
   facsafety(0.25),
-  skin(fskin),
-  dtrl(fdtrl),
-  lambdalimit(flambdalimit),
-  steppingAlgorithm(stepAlg),
-  samplez(fsamplez),
-  latDisplasment(true),
-  isInitialized(false)
-{
-  particle      = 0;
-  theManager    = G4LossTableManager::Instance(); 
-}
+  skin(3),
+  dtrl(0.05),
+  lambdalimit(mm),
+  steppingAlgorithm(fUseSafety),
+  samplez(false),
+  latDisplasment(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -81,24 +71,3 @@ G4VMscModel::~G4VMscModel()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VMscModel::Initialise(const G4ParticleDefinition* p,
-			     const G4DataVector&)
-{
-  if(isInitialized) return;
-  // set values of some data members
-  SetParticle(p);
-
-  if (pParticleChange)
-   fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  else
-   fParticleChange = new G4ParticleChangeForMSC();
-
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-  safetyHelper->InitialiseHelper();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

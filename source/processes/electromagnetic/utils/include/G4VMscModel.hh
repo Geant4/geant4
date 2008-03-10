@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.3 2008-03-07 19:17:53 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.4 2008-03-10 10:39:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,7 +42,7 @@
 //
 // Class Description:
 //
-// Abstract interface to msc models
+// General interface to msc models
 
 // -------------------------------------------------------------------
 //
@@ -53,29 +53,15 @@
 #include "G4VEmModel.hh"
 #include "G4MscStepLimitType.hh"
 #include "globals.hh"
-#include "G4PhysicsTable.hh"
-
-class G4ParticleChangeForMSC;
-class G4SafetyHelper;
-class G4LossTableManager;
 
 class G4VMscModel : public G4VEmModel
 {
 
 public:
 
-  G4VMscModel(G4double frange, G4double fdtrl, G4double flambdalimit,
-	      G4double fgeom,  G4double fskin,
-	      G4bool   fsamplez, G4MscStepLimitType stepAlg,
-	      const G4String& nam);
+  G4VMscModel(const G4String& nam);
 
   virtual ~G4VMscModel();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-				          
-  //------------------------------------------------------------------------
-  // Methods for msc simulation which needs to be overwritten 
-  //------------------------------------------------------------------------
 
   inline void SetStepLimitType(G4MscStepLimitType);
 
@@ -95,20 +81,6 @@ private:
 
 protected:
 
-  void SetParticle(const G4ParticleDefinition* p);
-
-  G4double GetLambda(G4double kinEnergy);
-
-  const G4ParticleDefinition* particle;
-  G4ParticleChangeForMSC*     fParticleChange;
-
-  G4SafetyHelper*             safetyHelper;
-  G4PhysicsTable*             theLambdaTable;
-  G4LossTableManager*         theManager;
-
-  G4double mass;
-  G4double charge;
-
   G4double facrange;
   G4double facgeom;
   G4double facsafety;
@@ -117,13 +89,9 @@ protected:
   G4double lambdalimit;
 
   G4MscStepLimitType steppingAlgorithm;
-  const G4MaterialCutsCouple* couple;
-
-  G4int    currentMaterialIndex;
 
   G4bool   samplez;
   G4bool   latDisplasment;
-  G4bool   isInitialized;
 
 };
 
@@ -161,33 +129,6 @@ inline void G4VMscModel::SetGeomFactor(G4double val)
 inline void G4VMscModel::SetStepLimitType(G4MscStepLimitType val)
 {
   steppingAlgorithm = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4VMscModel::GetLambda(G4double e)
-{
-  G4double x;
-  if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
-  } else {
-    x = CrossSection(couple,particle,e);
-  }
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX;
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4VMscModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if (p != particle) {
-    particle = p;
-    mass = p->GetPDGMass();
-    charge = p->GetPDGCharge()/eplus;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.70 2007-10-29 08:57:19 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.71 2008-03-10 10:39:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -129,6 +129,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4UrbanMscModel.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4UrbanMscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -177,16 +178,17 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetSkin(0.0);
     SetRangeFactor(0.2);
   }
 
   // initialisation of parameters - defaults for particles other
   // than ions can be overwritten by users
-  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
-                                 GeomFactor(),Skin(),
-                                 samplez,StepLimitType());
+  mscUrban = new G4UrbanMscModel();
+  mscUrban->SetStepLimitType(StepLimitType());
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetSkin(Skin());
+  mscUrban->SetRangeFactor(RangeFactor());
+  mscUrban->SetGeomFactor(GeomFactor());
 
   AddEmModel(1,mscUrban);
   isInitialized = true;
