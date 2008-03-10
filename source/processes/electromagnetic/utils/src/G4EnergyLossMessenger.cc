@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.29 2007-06-11 14:56:51 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.30 2008-03-10 18:39:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,6 +83,8 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   eLossDirectory->SetGuidance("Commands for EM processes.");
   mscDirectory = new G4UIdirectory("/process/msc/");
   mscDirectory->SetGuidance("Commands for EM scattering processes.");
+  emDirectory = new G4UIdirectory("/process/em/");
+  emDirectory->SetGuidance("General commands for EM processes.");
 
   RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/rndmStep",this);
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
@@ -157,10 +159,16 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
-  lpmCmd->SetGuidance("Switch true/false the LPM effect calculation.");
+  lpmCmd->SetGuidance("The flag of the LPM effect calculation.");
   lpmCmd->SetParameterName("lpm",true);
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  splCmd = new G4UIcmdWithABool("/process/em/spline",this);
+  splCmd->SetGuidance("The flag of usage spline for Physics Vectors.");
+  splCmd->SetParameterName("spl",true);
+  splCmd->SetDefaultValue(false);
+  splCmd->AvailableForStates(G4State_PreInit);
 
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables.");
@@ -179,6 +187,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(1);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  ver1Cmd = new G4UIcmdWithAnInteger("/process/em/verbose",this);
+  ver1Cmd->SetGuidance("Set verbose level for EM physics.");
+  ver1Cmd->SetParameterName("verb1",true);
+  ver1Cmd->SetDefaultValue(1);
+  ver1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
   lllCmd->SetGuidance("Set linearLossLimit parameter.");
@@ -234,13 +248,16 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete StepFuncCmd;
   delete eLossDirectory;
   delete mscDirectory;
+  delete emDirectory;
   delete MinEnCmd;
   delete MaxEnCmd;
   delete IntegCmd;
   delete rangeCmd;
   delete lpmCmd;
+  delete splCmd;
   delete latCmd;
   delete verCmd;
+  delete ver1Cmd;
   delete mscCmd;
   delete dedxCmd;
   delete frCmd;
@@ -329,6 +346,11 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
 
+  if (command == splCmd) {
+    opt->SetSplineFlag(lpmCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+
   if (command == latCmd) {
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -336,6 +358,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if (command == verCmd) 
     opt->SetVerbose(verCmd->GetNewIntValue(newValue));
+
+  if (command == ver1Cmd) 
+    opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
 
   if (command == lllCmd) 
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));

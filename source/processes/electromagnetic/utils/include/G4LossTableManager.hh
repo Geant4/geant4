@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.51 2008-02-21 18:11:19 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.52 2008-03-10 18:39:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -194,6 +194,8 @@ public:
 
   void SetLPMFlag(G4bool val);
 
+  void SetSplineFlag(G4bool val);
+
   void SetLinearLossLimit(G4double val);
 
   void SetBremsstrahlungTh(G4double val);
@@ -205,6 +207,8 @@ public:
   G4bool BuildCSDARange() const;
 
   G4bool LPMFlag() const;
+
+  G4bool SplineFlag() const;
 
   G4double BremsstrahlungTh() const;
 
@@ -275,6 +279,7 @@ private:
   G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
   G4bool flagLPM;
+  G4bool splineFlag;
 
   G4double minSubRange;
   G4double maxRangeVariation;

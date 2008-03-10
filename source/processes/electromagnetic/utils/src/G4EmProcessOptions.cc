@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.22 2007-11-07 18:38:49 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.23 2008-03-10 18:39:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -479,6 +479,13 @@ void G4EmProcessOptions::SetMscGeomFactor(G4double val)
 void G4EmProcessOptions::SetLPMFlag(G4bool val)
 {
   theManager->SetLPMFlag(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetSplineFlag(G4bool val)
+{
+  theManager->SetSplineFlag(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
