@@ -40,6 +40,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ReflectionFactory.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalSkinSurface.hh"
 
 #include "G4GDMLReadParamvol.hh"
 
@@ -68,10 +69,12 @@ private:
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
    void physvolRead(const xercesc::DOMElement* const);
    void replicavolRead(const xercesc::DOMElement* const);
+   void skinsurfaceRead(const xercesc::DOMElement* const);
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
 public:
+   G4SurfaceProperty* getSurfaceProperty(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);
 };
