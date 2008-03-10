@@ -1,4 +1,4 @@
-$Id: History,v 1.288 2008-03-10 15:15:22 pia Exp $
+$Id: History,v 1.289 2008-03-10 19:07:43 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,8 @@ committal in the CVS repository !
 
 10.03.2008   MGP, tag emlowen-V09-01-04
              Fixes to *DataSet files for better readability of the code
+             Extensions to G4ShellData to deal with shell data relevant to 
+             Doppler broadening simulation
  
 07.03.2008   MGP, tag emlowen-V09-01-03
              Reverted to G4hLowEnergyIonisation.cc and G4hLowEnergyLoss.cc
