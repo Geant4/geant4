@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.15 2008-01-30 11:16:17 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.16 2008-03-10 17:03:16 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 
-//#define GEANT4_QT_DEBUG
+//define GEANT4_QT_DEBUG
 
 #ifdef G4UI_BUILD_QT_SESSION
 
@@ -546,10 +546,11 @@ void G4UIQt::TerminalHelp(
     helpLine = new QLineEdit(fHelpDialog);
 #if QT_VERSION < 0x040000
     helpLayout->add(helpLine);
+    connect( helpLine, SIGNAL( returnPressed () ), this, SLOT( lookForHelpStringCallback() ) );
 #else
     helpLayout->addWidget(helpLine);
-#endif
     connect( helpLine, SIGNAL( editingFinished () ), this, SLOT( lookForHelpStringCallback() ) );
+#endif
 
     // the help tree
 #if QT_VERSION < 0x040000
@@ -577,7 +578,7 @@ void G4UIQt::TerminalHelp(
     vLayout->addWidget(exitButton);
 #else
     vLayout->addWidget(helpWidget);
-    vLayout->add(splitter,1);
+    vLayout->addWidget(splitter,1);
     vLayout->addWidget(exitButton);
 #endif
 
@@ -1353,6 +1354,10 @@ void G4UIQt::lookForHelpStringCallback(
   if (helpLine->text() =="") {
     // clear old help tree
     fHelpTreeWidget->clear();
+#if QT_VERSION < 0x040200
+    fHelpTreeWidget->removeColumn(1);
+    fHelpTreeWidget->removeColumn(0);
+#endif
     CreateHelpTree();
     return;
   }
@@ -1366,32 +1371,57 @@ void G4UIQt::lookForHelpStringCallback(
 
   // clear old help tree
   fHelpTreeWidget->clear();
+#if QT_VERSION < 0x040200
+  fHelpTreeWidget->removeColumn(1);
+  fHelpTreeWidget->removeColumn(0);
+#endif
 
   // look for new items
 
   int tmp = 0;
+#if QT_VERSION < 0x040000
+  int multFactor = 1000; // factor special for having double keys in Qt3
+  int doubleKeyAdd = 0;  // decay for doubleKeys in Qt3
+#endif
+
   QMap<int,QString> commandResultMap;
   QMap<int,QString> commandChildResultMap;
 
   for (int a=0;a<treeSize;a++) {
-#ifdef GEANT4_QT_DEBUG
-    printf("Command %s\n",(char*)(treeTop->GetTree(a+1)->GetPathName()).data());
-#endif
     G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a+1)->GetPathName().data());
+#if QT_VERSION > 0x040000
     tmp = GetCommandList (command).count(helpLine->text(),Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(helpLine->text(),false);
+#endif
     if (tmp >0) {
+#if QT_VERSION > 0x040000
       commandResultMap.insertMulti(tmp,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()));
-#ifdef GEANT4_QT_DEBUG
-      printf("Command %s match %d times \n",(char*)(treeTop->GetTree(a+1)->GetPathName()).data(),tmp);
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert( tmp*multFactor+doubleKeyAdd,QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()) );
 #endif
     }
     // look for childs
     commandChildResultMap = LookForHelpStringInChildTree(treeTop->GetTree(a+1),helpLine->text());
     // insert new childs
     if (!commandChildResultMap.empty()) {
+#if QT_VERSION > 0x040000
       QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
       while (i != commandChildResultMap.constEnd()) {
         commandResultMap.insertMulti(i.key(),i.value());
+#else // tricky thing for Qt3...
+      QMap<int,QString>::const_iterator i = commandChildResultMap.begin();
+      while (i != commandChildResultMap.end()) {
+        doubleKeyAdd = 0;
+        while (commandResultMap.find( i.key()*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+          doubleKeyAdd ++;
+        }
+        commandResultMap.insert(i.key()*multFactor+doubleKeyAdd,i.data());
+#endif
         i++;
       }
       commandChildResultMap.clear();
@@ -1423,7 +1453,11 @@ void G4UIQt::lookForHelpStringCallback(
     return;
   }
 
+#if QT_VERSION > 0x040000
   QMap<int,QString>::const_iterator i = commandResultMap.constEnd();
+#else
+  QMap<int,QString>::const_iterator i = commandResultMap.end();
+#endif
   i--;
   // 10 maximum progress values
   float multValue = 10.0/(float)(i.key());
@@ -1437,7 +1471,11 @@ void G4UIQt::lookForHelpStringCallback(
 #endif
   bool end = false;
   while (!end) {
+#if QT_VERSION > 0x040000
     if (i == commandResultMap.constBegin()) {
+#else
+    if (i == commandResultMap.begin()) {
+#endif
       end = true;
     }
     for(int a=0;a<int(i.key()*multValue);a++) {
@@ -1445,13 +1483,12 @@ void G4UIQt::lookForHelpStringCallback(
     }
 #if QT_VERSION < 0x040000
     newItem = new QListViewItem(fHelpTreeWidget);
-    newItem->setText(0,i.value().simplifyWhiteSpace());
-    newItem->setText(1,progressStr);
+    newItem->setText(0,i.data().simplifyWhiteSpace());
 #else
     newItem = new QTreeWidgetItem(fHelpTreeWidget);
     newItem->setText(0,i.value().trimmed());
-    newItem->setText(1,progressStr);
 #endif
+    newItem->setText(1,progressStr);
     
 #if QT_VERSION >= 0x040200
     newItem->setForeground ( 1, QBrush(Qt::blue) );
@@ -1462,8 +1499,10 @@ void G4UIQt::lookForHelpStringCallback(
   // FIXME :  to be checked on Qt3
 #if QT_VERSION < 0x040000
   fHelpTreeWidget->setColumnWidthMode (1,QListView::Maximum);
+  fHelpTreeWidget->setSorting(1,false);
 #else
   fHelpTreeWidget->resizeColumnToContents (0);
+  fHelpTreeWidget->sortItems(1,Qt::DescendingOrder);
   //  fHelpTreeWidget->setColumnWidth(1,10);//resizeColumnToContents (1);
 #endif
 }
@@ -1479,24 +1518,51 @@ QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
   QMap<int,QString> commandResultMap;
   if (aCommandTree == NULL) return commandResultMap;
   
+#if QT_VERSION < 0x040000
+  int multFactor = 1000; // factor special for having double keys in Qt3
+  int doubleKeyAdd = 0;  // decay for doubleKeys in Qt3
+#endif
+
   // Get the Sub directories
   int tmp = 0;
   QMap<int,QString> commandChildResultMap;
   
   for (int a=0;a<aCommandTree->GetTreeEntry();a++) {
     const G4UIcommand* command = aCommandTree->GetGuidance();
+#if QT_VERSION > 0x040000
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(text,false);
+#endif
     if (tmp >0) {
+#if QT_VERSION > 0x040000
       commandResultMap.insertMulti(tmp,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()));
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert(tmp*multFactor+doubleKeyAdd,QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()));
+#endif
     }
     // look for childs
     commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a+1),text);
     
     if (!commandChildResultMap.empty()) {
       // insert new childs
+#if QT_VERSION > 0x040000
       QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
       while (i != commandChildResultMap.constEnd()) {
         commandResultMap.insertMulti(i.key(),i.value());
+#else // tricky thing for Qt3...
+      QMap<int,QString>::const_iterator i = commandChildResultMap.begin();
+      while (i != commandChildResultMap.end()) {
+        doubleKeyAdd = 0;
+        while (commandResultMap.find( i.key()*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+          doubleKeyAdd ++;
+        }
+        commandResultMap.insert(i.key()*multFactor+doubleKeyAdd,i.data());
+#endif
         i++;
       }
       commandChildResultMap.clear();
@@ -1506,12 +1572,21 @@ QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
   
   for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
     const G4UIcommand* command = aCommandTree->GetCommand(a+1);
-#ifdef GEANT4_QT_DEBUG
-    //    printf("%s \n",GetCommandList (command).toStdString().c_str());
-#endif
+#if QT_VERSION > 0x040000
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
+#else
+    tmp = GetCommandList (command).contains(text,false);
+#endif
     if (tmp >0) {
+#if QT_VERSION > 0x040000
       commandResultMap.insertMulti(tmp,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()));
+#else // tricky thing for Qt3...
+      doubleKeyAdd = 0;
+      while (commandResultMap.find( tmp*multFactor+doubleKeyAdd) != commandResultMap.end()) {
+        doubleKeyAdd ++;
+      }
+      commandResultMap.insert(tmp*multFactor+doubleKeyAdd,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()));
+#endif
 #ifdef GEANT4_QT_DEBUG
 #endif
     }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.11 2008-01-30 11:16:17 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.12 2008-03-10 17:03:16 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
