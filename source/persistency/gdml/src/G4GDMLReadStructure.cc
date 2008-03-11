@@ -366,7 +366,6 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
 //      if (tag=="assembly") assemblyRead(child); else
@@ -377,17 +376,13 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
    }
 }
 
-G4SurfaceProperty* G4GDMLReadStructure::getSurfaceProperty(const G4String& ref) const {
+G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const {
 
-   const G4SurfacePropertyTable* surfaceList = G4SurfaceProperty::GetSurfacePropertyTable();
-   const size_t surfaceCount = surfaceList->size();
+   G4VPhysicalVolume* physvolPtr = G4PhysicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
-   for (size_t i=0;i<surfaceCount;i++)
-      if ((*surfaceList)[i]->GetName() == ref) return (*surfaceList)[i];
-  
-   G4Exception("GDML Reader: ERROR! Referenced optical surface '"+ref+"' was not found!");
+   if (!physvolPtr) G4Exception("GDML Reader: ERROR! Referenced physvol '"+ref+"' was not found!");
 
-   return 0;
+   return physvolPtr;
 }
 
 G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
@@ -401,6 +396,6 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
 
 G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVolume* logvol) {
 
-     if (auxMap.find(logvol) != auxMap.end()) return auxMap[logvol];
-     else return G4GDMLAuxListType();
+   if (auxMap.find(logvol) != auxMap.end()) return auxMap[logvol];
+   else return G4GDMLAuxListType();
 }

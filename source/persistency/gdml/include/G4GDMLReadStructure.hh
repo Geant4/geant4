@@ -33,6 +33,7 @@
 #include "G4AssemblyVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
 #include "G4PVDivision.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
@@ -74,7 +75,7 @@ private:
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
 public:
-   G4SurfaceProperty* getSurfaceProperty(const G4String&) const;
+   G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);
 };

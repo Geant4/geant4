@@ -38,7 +38,6 @@
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
-#include "G4OpticalSurface.hh"
 #include "G4NistManager.hh"
 
 #include "G4GDMLReadDefine.hh"
@@ -55,7 +54,6 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine {
    void materialRead(const xercesc::DOMElement* const);
    void mixtureRead(const xercesc::DOMElement* const,G4Element*);
    void mixtureRead(const xercesc::DOMElement* const,G4Material*);
-   void opticalsurfaceRead(const xercesc::DOMElement* const);
    void propertyRead(const xercesc::DOMElement* const,G4Material*);
    void materialsRead(const xercesc::DOMElement* const);
 protected:

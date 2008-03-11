@@ -63,6 +63,8 @@
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
 #include "G4UnionSolid.hh"
+#include "G4OpticalSurface.hh"
+#include "G4SurfaceProperty.hh"
 
 #include "G4GDMLReadMaterials.hh"
 
@@ -99,9 +101,11 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    G4TriangularFacet* triangularRead(const xercesc::DOMElement* const);
    G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
    zplaneType zplaneRead(const xercesc::DOMElement* const);
+   void opticalsurfaceRead(const xercesc::DOMElement* const);
    void solidsRead(const xercesc::DOMElement* const);
 protected:
    G4VSolid* getSolid(const G4String&) const;
+   G4SurfaceProperty* getSurfaceProperty(const G4String&) const;
 };
 
 #endif
