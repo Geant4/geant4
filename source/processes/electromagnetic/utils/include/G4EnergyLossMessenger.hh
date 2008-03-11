@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.19 2008-03-10 18:39:45 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.20 2008-03-11 12:03:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 // 18-05-07 add /process/msc directory and commands (V.Ivanchenko)
+// 11-03-08 add /process/em directory and commands (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //

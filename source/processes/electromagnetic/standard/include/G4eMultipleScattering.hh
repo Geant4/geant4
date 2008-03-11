@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.hh,v 1.1 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4eMultipleScattering.hh,v 1.2 2008-03-11 12:03:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //
 // File name:     G4eMultipleScattering
 //
-// Author:        Laszlo Urban
+// Author:        Vladimir Ivanchenko
 //
 // Creation date: 10 March 2001
 // 

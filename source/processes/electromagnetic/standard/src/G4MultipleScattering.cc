@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.72 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.73 2008-03-11 12:03:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -120,6 +120,7 @@
 // 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
 // 12-02-07 skin can be changed via UI command, default skin=1 (VI)
 // 24-04-07 default skin=0 (temporal protection) (VI)
+// 11-03-08 use G4VMscModel interface (VI)
 //
 // -----------------------------------------------------------------------------
 //

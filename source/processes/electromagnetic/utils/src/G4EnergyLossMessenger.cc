@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.30 2008-03-10 18:39:45 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.31 2008-03-11 12:03:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 //          is needed after the command (V.Ivanchenko)
 // 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 // 18-05-07 add /process/msc directory and commands (V.Ivanchenko)
+// 11-03-08 add /process/em directory and commands (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //

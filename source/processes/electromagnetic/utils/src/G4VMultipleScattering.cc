@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.48 2008-03-10 15:09:17 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.49 2008-03-11 12:03:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 11-03-08 Set skin value does not effect step limit type (V.Ivanchenko)
 //
 // Class Description:
 //
