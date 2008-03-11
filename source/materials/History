@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2008-03-10 15:47:25 maire Exp $
+$Id: History,v 1.106 2008-03-11 13:14:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11-03-07 mma (materials-V09-01-02)
+- G4IonisParamMat - remove NistManager dependence
      
 10-03-07 mma (materials-V09-01-01)
 - G4IonisParamMat - add Birks constant
