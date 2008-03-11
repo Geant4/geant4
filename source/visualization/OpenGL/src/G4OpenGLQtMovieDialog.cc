@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.4 2008-03-11 17:23:39 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.5 2008-03-11 17:35:11 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,7 +147,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   tempFolderVGroupBoxLayout->setMargin(15);
 #else
   fTempFolderStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-  tempFolderGroupBox->setMargin(15);
+  tempFolderGroupBox->setInsideMargin(15);
 #endif
   fTempFolderStatus->setText("");
 
@@ -363,13 +363,12 @@ void G4OpenGLQtMovieDialog::selectEncoderPathAction()
 void G4OpenGLQtMovieDialog::selectTempPathAction()
 {
 #if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getOpenFileName ( ".",
-                                                    NULL,
+  QString nomFich =  QFileDialog::getExistingDirectory (NULL,
                                                     this,
                                                     "Select temporary folder",
                                                     tr("Select temporary folder ..."));
 #else
-  QString nomFich =  QFileDialog::getOpenFileName ( this,
+  QString nomFich =  QFileDialog::getExistingDirectory ( this,
                                                     "Select temporary folder",
                                                     tr("Select temporary folder ...")); 
 
