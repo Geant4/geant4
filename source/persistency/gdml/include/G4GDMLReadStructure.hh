@@ -42,6 +42,7 @@
 #include "G4ReflectionFactory.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
 
 #include "G4GDMLReadParamvol.hh"
 
@@ -66,6 +67,7 @@ private:
    void GeneratePhysvolName(G4VPhysicalVolume*);
    void assemblyRead(const xercesc::DOMElement* const);
    G4GDMLAuxPairType auxiliaryRead(const xercesc::DOMElement* const);
+   void bordersurfaceRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
    void physvolRead(const xercesc::DOMElement* const);

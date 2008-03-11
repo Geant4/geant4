@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2008-03-10 13:29:14 gcosmo Exp $
+$Id: History,v 1.40 2008-03-11 12:40:21 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 March 2008 Z.Torzsok
+- Border surface added to reader
+- Skin surface added to reader
 
 7 March 2008 Z.Torzsok (gdml-V09-01-01)
 - Material properties added to reader

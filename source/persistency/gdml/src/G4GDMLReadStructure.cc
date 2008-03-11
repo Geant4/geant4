@@ -66,6 +66,48 @@ G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* 
    return auxpair;
 }
 
+void G4GDMLReadStructure::bordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement) {
+
+   G4String name;
+   G4VPhysicalVolume* pv1 = 0;
+   G4VPhysicalVolume* pv2 = 0;
+   G4SurfaceProperty* prop = 0;
+   G4int index = 0;
+
+   const xercesc::DOMNamedNodeMap* const attributes = bordersurfaceElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="surfaceproperty") prop = getSurfaceProperty(GenerateName(attValue));
+   }
+
+   for (xercesc::DOMNode* iter = bordersurfaceElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
+
+      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+
+      if (tag != "physvolref") continue; 
+      
+      if (index==0) { pv1 = getPhysvol(GenerateName(refRead(child))); index++; } else
+      if (index==1) { pv2 = getPhysvol(GenerateName(refRead(child))); index++; } else
+      break;
+   }
+
+   new G4LogicalBorderSurface(name,pv1,pv2,prop);
+}
+
 void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divisionvolElement) {
 
    G4double unit = 1.0;
@@ -369,6 +411,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
 //      if (tag=="assembly") assemblyRead(child); else
+      if (tag=="bordersurface") bordersurfaceRead(child); else
       if (tag=="skinsurface") skinsurfaceRead(child); else
       if (tag=="volume") volumeRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
