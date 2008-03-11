@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.15 2008-03-11 16:31:09 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.16 2008-03-11 17:23:39 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-//#define GEANT4_QT_DEBUG
+#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLQtViewer.hh"
 
@@ -2000,6 +2000,9 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 
 void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
 {
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::G4keyPressEvent \n");
+#endif
   if (fHoldKeyEvent)
     return;
 
@@ -2244,7 +2247,7 @@ void G4OpenGLQtViewer::initMovieParameters() {
      fProcess = new QProcess();
      
 #if QT_VERSION < 0x040000
-     QObject ::connect(fProcess,SIGNAL(LaunchFinished ()),
+     QObject ::connect(fProcess,SIGNAL(launchFinished ()),
 		       this,SLOT(processLookForFinished()));
      fProcess->setCommunication(QProcess::DupStderr);
      fProcess->setArguments(QStringList("which mpeg_encode"));
@@ -2406,7 +2409,7 @@ QString G4OpenGLQtViewer::createTempFolder() {
 #if QT_VERSION < 0x040000
   QString sep = QChar(QDir::separator());
 #else
-  QString sep = QDir::separator();
+  QString sep = QString(QDir::separator());
 #endif
   QString path = sep+"QtMovie_"+QDateTime::currentDateTime ().toString("dd-MM-yyyy_hh-mm-ss")+sep; 
 #if QT_VERSION < 0x040000

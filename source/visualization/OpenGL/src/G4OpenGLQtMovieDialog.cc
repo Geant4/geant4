@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.3 2008-03-11 16:05:56 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.4 2008-03-11 17:23:39 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   globalVLayout->setSpacing(10);
   
   // Encoder group box
-  QGroupBox *encoderGroupBox = new QGroupBox(tr("Encoder path"));		
+  QGroupBox *encoderGroupBox = new QGroupBox(tr("Encoder path"),this);		
   QVBoxLayout *encoderVGroupBoxLayout = new QVBoxLayout(encoderGroupBox);
 
   // Encoder Path 
@@ -100,8 +100,10 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
 #if QT_VERSION > 0x040000
   fEncoderStatus->setWordWrap(true);
+  encoderVGroupBoxLayout->setMargin(15);
 #else
   fEncoderStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
+  encoderGroupBox->setInsideMargin(15);
 #endif
 
   fEncoderStatus->setText("");
@@ -127,7 +129,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
 
   // temp folder group box
-  QGroupBox *tempFolderGroupBox = new QGroupBox(tr("Temporary folder path"));		
+  QGroupBox *tempFolderGroupBox = new QGroupBox(tr("Temporary folder path"),this);
   QVBoxLayout *tempFolderVGroupBoxLayout = new QVBoxLayout(tempFolderGroupBox);
 
   // temp folder Path 
@@ -142,8 +144,10 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fTempFolderStatus = new QLabel(tempFolderGroupBox);
 #if QT_VERSION > 0x040000
   fTempFolderStatus->setWordWrap(true);
+  tempFolderVGroupBoxLayout->setMargin(15);
 #else
   fTempFolderStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
+  tempFolderGroupBox->setMargin(15);
 #endif
   fTempFolderStatus->setText("");
 
@@ -170,7 +174,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
 
   // save file group box
-  QGroupBox *saveFileGroupBox = new QGroupBox(tr("Save as"));		
+  QGroupBox *saveFileGroupBox = new QGroupBox(tr("Save as"),this);
   QVBoxLayout *saveFileVGroupBoxLayout = new QVBoxLayout(saveFileGroupBox);
 
   // save file 
@@ -185,8 +189,10 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fSaveFileStatus = new QLabel(saveFileGroupBox);
 #if QT_VERSION > 0x040000
   fSaveFileStatus->setWordWrap(true);
+  saveFileVGroupBoxLayout->setMargin(15);
 #else
   fSaveFileStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
+  saveFileGroupBox->setInsideMargin(15);
 #endif
   fSaveFileStatus->setText("");
 
@@ -216,13 +222,15 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   QLabel *infoLabel = new QLabel("  Press SPACE to Start/Pause video recording \n  Press RETURN to Stop video recording",this);
 
   // global status
-  QGroupBox *statusGroupBox = new QGroupBox(tr("Status"));
+  QGroupBox *statusGroupBox = new QGroupBox(tr("Status"),this);
   QVBoxLayout *statusVGroupBoxLayout = new QVBoxLayout(statusGroupBox);
 
   fRecordingStatus = new QLabel(statusGroupBox);
 #if QT_VERSION > 0x040000
+  statusVGroupBoxLayout->setMargin(15);
   fRecordingStatus->setWordWrap(true);
 #else
+  statusGroupBox->setInsideMargin(15);
   fRecordingStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
 #endif
   QPalette palette( fRecordingStatus->palette() );
@@ -302,13 +310,19 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fTempFolderPath->setText(fParentViewer->getTempFolderPath());
 
   // connect line edit signals
-  connect (fEncoderPath,SIGNAL(textEdited ( const QString&)),this,SLOT(enabledApplyButton()));
-  connect (fTempFolderPath,SIGNAL(textEdited ( const QString&)),this,SLOT(enabledApplyButton()));
-  connect (fSaveFileName,SIGNAL(textEdited ( const QString&)),this,SLOT(enabledApplyButton()));
+  connect (fEncoderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
+  connect (fTempFolderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
+  connect (fSaveFileName,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
 
+#if QT_VERSION >= 0x040000
   connect (fEncoderPath,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
   connect (fTempFolderPath,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
   connect (fSaveFileName,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
+#else
+  connect (fEncoderPath,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
+  connect (fTempFolderPath,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
+  connect (fSaveFileName,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
+#endif
 
   if (fParentViewer->getEncoderPath() == "") {
     setRecordingInfos("mpeg_encode is needed to encode in video format. It is available here: http://bmrc.berkeley.edu/frame/research/mpeg/");
