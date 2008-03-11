@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.14 2008-03-11 16:05:56 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.15 2008-03-11 16:31:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2739,7 +2739,6 @@ void G4OpenGLQtViewer::processEncodeFinished()
   } else {
     setRecordingStatus(FAILED);
   }
-  delete fProcess;
   setRecordingInfos(txt+removeTempFolder());
 #ifdef GEANT4_QT_DEBUG
   printf("processEncodeFinished END\n");
@@ -2774,7 +2773,6 @@ void G4OpenGLQtViewer::processLookForFinished()
   // Let's have a try
   setTempFolderPath("/tmp/");
 #endif
-  delete fProcess;
 }
 
 
