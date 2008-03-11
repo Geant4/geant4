@@ -20,7 +20,8 @@ set    phys = "opt1"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
 
 setenv PHYSLIST    standardIG
-set    phys = "optS"
+set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
 
+cp $VFEM/test41/geant4-09-01-ref-00/*S.log ./
 source ${dir}plot.csh $1 >& p.out
