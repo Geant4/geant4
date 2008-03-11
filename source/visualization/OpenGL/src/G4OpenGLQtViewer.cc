@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.13 2008-03-10 17:05:25 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.14 2008-03-11 16:05:56 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -307,7 +307,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fParameterFileName("mpeg_encode_parameter_file.par")
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
-
+  ,fProcess(NULL)
 {
 
   initMovieParameters();
@@ -323,7 +323,12 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+#if QT_VERSION < 0x040000
+  G4cout <<removeTempFolder().ascii() <<G4endl;
+#else
   G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
+#endif
+
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::~G4OpenGLQtViewer \n");
 #endif
@@ -2236,22 +2241,21 @@ void G4OpenGLQtViewer::initMovieParameters() {
   //init encoder
   
    //look for encoderPath
-     QProcess search;
-     search.setReadChannelMode(QProcess::MergedChannels);
-     search.start ("which mpeg_encode");
+     fProcess = new QProcess();
+     
+#if QT_VERSION < 0x040000
+     QObject ::connect(fProcess,SIGNAL(LaunchFinished ()),
+		       this,SLOT(processLookForFinished()));
+     fProcess->setCommunication(QProcess::DupStderr);
+     fProcess->setArguments(QStringList("which mpeg_encode"));
+     fProcess->start();
+#else
+     QObject ::connect(fProcess,SIGNAL(finished ( int)),
+		       this,SLOT(processLookForFinished()));
+     fProcess->setReadChannelMode(QProcess::MergedChannels);
+     fProcess->start ("which mpeg_encode");
+#endif
   
-     if (search.waitForFinished()) {
-       fEncoderPath = QString(QString::fromLocal8Bit(search.readAll())).trimmed();
-       // if not found, return "not found"
-       if (fEncoderPath.contains(" ")) {
-         fEncoderPath = "";
-       } else if (!fEncoderPath.contains("mpeg_encode")) {
-         fEncoderPath = "";
-       }
-     }
-     setEncoderPath(fEncoderPath);
-// init temp folder
-  setTempFolderPath(QDir::temp ().absolutePath ());
 }
 
 /** @return encoder path or "" if it does not exist
@@ -2269,22 +2273,21 @@ QString G4OpenGLQtViewer::setEncoderPath(QString path) {
   if (path == "") {
     return "File does not exist";
   }
-  // check if it is not a dir
-  QDir dir(path);
-  dir.setFilter( QDir::Dirs);
-  QStringList subDirList = dir.entryList();
 
-  if (!subDirList.isEmpty()) {
-    return "This is a directory";
-  }
-
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
   path =  QDir::cleanPath(path);
-  QFile *f = new QFile(path);
+#endif
+  QFileInfo *f = new QFileInfo(path);
   if (!f->exists()) {
     return "File does not exist";
-  }
-  if (!(f->permissions() & QFile::ExeUser)) {
+  } else if (f->isDir()) {
+    return "This is a directory";
+  } else if (!f->isExecutable()) {
     return "File exist but is not executable";
+  } else if (!f->isFile()) {
+    return "This is not a file";
   }
   fEncoderPath = path;
   return "";
@@ -2326,26 +2329,21 @@ QString G4OpenGLQtViewer::setTempFolderPath(QString path) {
   if (path == "") {
     return "Path does not exist";
   }
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
   path =  QDir::cleanPath(path);
-  QDir *d = new QDir(path);
-  if (!d->exists(path)) {
+#endif
+  QFileInfo *d = new QFileInfo(path);
+  if (!d->exists()) {
     return "Path does not exist";
+  } else if (!d->isDir()) {
+    return "This is not a directory";
+  } else if (!d->isReadable()) {
+    return path +" is read protected";
+  } else if (!d->isWritable()) {
+    return path +" is write protected";
   }
-
-  d->setFilter( QDir::Dirs | QDir::Readable | QDir::Writable );
-  QStringList subDirList = d->entryList();
-  bool found = false;
-
-  for (QStringList::ConstIterator it = subDirList.begin() ;(it != subDirList.end()) ; it++) {
-    const QString currentDir = *it;
-    
-    if (currentDir == ".") { // we found it
-      found = true;
-    }
-  }
-
-  if (!found)
-    return "Path exist, but is not write accessible";
   
   fTempFolderPath = path;
   return "";
@@ -2366,36 +2364,22 @@ QString G4OpenGLQtViewer::setSaveFileName(QString path) {
   if (path == "") {
     return "Path does not exist";
   }
-  // check if it is not a dir
-  QDir tmp(path);
-  tmp.setFilter( QDir::Dirs);
-  QStringList subDirListTmp = tmp.entryList();
 
-  if (!subDirListTmp.isEmpty()) {
-    return "This is a directory";
-  }
-
+#if QT_VERSION < 0x040000
+  path =  QDir::cleanDirPath(path);
+#else
   path =  QDir::cleanPath(path);
-  QFileInfo *fileInfo = new QFileInfo(path);
-  QDir dir = fileInfo->absoluteDir();
-  if (!dir.exists()) {
-    return "Folder does not exist";
+#endif
+  QFileInfo *d = new QFileInfo(path);
+  if (!d->exists()) {
+    return "Path does not exist";
+  } else if (!d->isFile()) {
+    return "This is not a file";
+  } else if (!d->isReadable()) {
+    return path +" is read protected";
+  } else if (!d->isWritable()) {
+    return path +" is write protected";
   }
-
-  dir.setFilter( QDir::Dirs | QDir::Writable );
-  QStringList subDirList = dir.entryList();
-  bool found = false;
-
-  for (QStringList::ConstIterator it = subDirList.begin() ;(it != subDirList.end()) ; it++) {
-    const QString currentDir = *it;
-    
-    if (currentDir == ".") { // we found it
-      found = true;
-    }
-  }
-
-  if (!found)
-    return "Path exist, but is not write accessible";
   
   fSaveFileName = path;
   return "";
@@ -2419,8 +2403,17 @@ QString G4OpenGLQtViewer::createTempFolder() {
   if (tmp != "") {
     return tmp;
   }
-  QString path = QString(QDir::separator())+"QtMovie_"+QDateTime::currentDateTime ().toString("dd-MM-yyyy_hh-mm-ss")+QString(QDir::separator()); 
+#if QT_VERSION < 0x040000
+  QString sep = QChar(QDir::separator());
+#else
+  QString sep = QDir::separator();
+#endif
+  QString path = sep+"QtMovie_"+QDateTime::currentDateTime ().toString("dd-MM-yyyy_hh-mm-ss")+sep; 
+#if QT_VERSION < 0x040000
+  QDir *d = new QDir(QDir::cleanDirPath(fTempFolderPath));
+#else
   QDir *d = new QDir(QDir::cleanPath(fTempFolderPath));
+#endif
   // check if it is already present
   if (d->exists(path)) {
     return "Folder "+path+" already exists.Please remove it first";
@@ -2441,7 +2434,11 @@ QString G4OpenGLQtViewer::removeTempFolder() {
   if (fMovieTempFolderPath == "") {
     return "";
   }
+#if QT_VERSION < 0x040000
+  QDir *d = new QDir(QDir::cleanDirPath(fMovieTempFolderPath));
+#else
   QDir *d = new QDir(QDir::cleanPath(fMovieTempFolderPath));
+#endif
   if (!d->exists()) {
     return "";  // already remove
   }
@@ -2482,7 +2479,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
 		// save the parameter file
   FILE* fp;
 #if QT_VERSION < 0x040000
-  fp = fopen (QString(fMovieTempFolderPath+fParameterFileName).ascii, "w");
+  fp = fopen (QString(fMovieTempFolderPath+fParameterFileName).ascii(), "w");
 #else
   fp = fopen (QString(fMovieTempFolderPath+fParameterFileName).toStdString().c_str(), "w");
 #endif
@@ -2682,24 +2679,30 @@ void G4OpenGLQtViewer::encodeVideo()
   if ((getEncoderPath() != "") && (getSaveFileName() != "")) {
     setRecordingStatus(ENCODING);
     fProcess = new QProcess();
-    fProcess->start (fEncoderPath, QStringList(fMovieTempFolderPath+fParameterFileName));
+    
+#if QT_VERSION < 0x040000
+    QObject ::connect(fProcess,SIGNAL(launchFinished ()),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStdOut ()),
+                      this,SLOT(processEncodeStdout()));
+    fProcess->setCommunication(QProcess::DupStderr);
+    fProcess->setArguments(QStringList(fEncoderPath));
+    fProcess->addArgument(fMovieTempFolderPath+fParameterFileName);
+    fProcess->start();
+#else
 #if QT_VERSION > 0x040100
-	QObject ::connect(fProcess,SIGNAL(finished ( int,QProcess::ExitStatus)),
-                      this,SLOT(processFinished( int)));
-	QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
-                      this,SLOT(processStdout()));
+    QObject ::connect(fProcess,SIGNAL(finished ( int,QProcess::ExitStatus)),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
+                      this,SLOT(processEncodeStdout()));
 #else
-#if QT_VERSION > 0x040000
-	QObject ::connect(fProcess,SIGNAL(finished ( int)),
-                      this,SLOT(processFinished( int)));
-	QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
-                      this,SLOT(processStdout()));
-#else
-	QObject ::connect(fProcess,SIGNAL(finished ( int)),
-                      this,SLOT(processFinished( int)));
-	QObject ::connect(fProcess,SIGNAL(readyReadStdOut ()),
-                      this,SLOT(processStdout()));
+    QObject ::connect(fProcess,SIGNAL(finished ( int)),
+                      this,SLOT(processEncodeFinished()));
+    QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
+                      this,SLOT(processEncodeStdout()));
 #endif
+    fProcess->setReadChannelMode(QProcess::MergedChannels);
+    fProcess->start (fEncoderPath, QStringList(fMovieTempFolderPath+fParameterFileName));
 #endif
   }
 #ifdef GEANT4_QT_DEBUG
@@ -2708,55 +2711,103 @@ void G4OpenGLQtViewer::encodeVideo()
 }
 
 
-void G4OpenGLQtViewer::processStdout()
+void G4OpenGLQtViewer::processEncodeStdout()
 {
 #if QT_VERSION > 0x040000
   QString tmp = fProcess->readAllStandardOutput ().data();
-#else
-  QString tmp = fProcess->readStdout ().data();
-#endif
   int start = tmp.lastIndexOf("ESTIMATED TIME");
   tmp = tmp.mid(start,tmp.indexOf("\n",start)-start);
+#else
+  QString tmp = fProcess->readStdout ().data();
+  int start = tmp.findRev("ESTIMATED TIME");
+  tmp = tmp.mid(start,tmp.find("\n",start)-start);
+#endif
   setRecordingInfos(tmp);
 }
 
 
-void G4OpenGLQtViewer::processFinished(int exitCode)
+void G4OpenGLQtViewer::processEncodeFinished()
 {
 #ifdef GEANT4_QT_DEBUG
-  printf("processFinished \n");
+  printf("processEncodeFinished \n");
 #endif
 
   QString txt = "";
-  if (!exitCode) {
+  txt = getProcessErrorMsg();
+  if (txt == "") {
     setRecordingStatus(SUCCESS);
   } else {
-	switch (fProcess->error()) {
-	  case QProcess::FailedToStart:
-        txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
-		break;
-	  case QProcess::Crashed:
-        txt = "The process crashed some time after starting successfully.\n";
-		break;
-	  case QProcess::Timedout:
-        txt = "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.\n";
-		break;
-	  case QProcess::WriteError:
-        txt = "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.\n";
-	    break;
-	  case QProcess::ReadError:
-        txt = "An error occurred when attempting to read from the process. For example, the process may not be running.\n";
-	    break;
-	  case QProcess::UnknownError:
-        txt = "An unknown error occurred. This is the default return value of error().\n";
-		break;
-    }
     setRecordingStatus(FAILED);
   }
+  delete fProcess;
   setRecordingInfos(txt+removeTempFolder());
 #ifdef GEANT4_QT_DEBUG
-  printf("processFinished END\n");
+  printf("processEncodeFinished END\n");
 #endif
+}
+
+
+void G4OpenGLQtViewer::processLookForFinished() 
+ {
+
+  QString txt = getProcessErrorMsg();
+  if (txt != "") {
+    fEncoderPath = "";
+  } else {
+#if QT_VERSION > 0x040000
+    fEncoderPath = QString(fProcess->readAllStandardOutput ().data()).trimmed();
+#else
+    fEncoderPath = QString(fProcess->readStdout ().data()).simplifyWhiteSpace();
+#endif
+    // if not found, return "not found"
+    if (fEncoderPath.contains(" ")) {
+      fEncoderPath = "";
+    } else if (!fEncoderPath.contains("mpeg_encode")) {
+      fEncoderPath = "";
+    }
+    setEncoderPath(fEncoderPath);
+  }
+  // init temp folder
+#if QT_VERSION > 0x040000
+  setTempFolderPath(QDir::temp ().absolutePath ());
+#else
+  // Let's have a try
+  setTempFolderPath("/tmp/");
+#endif
+  delete fProcess;
+}
+
+
+QString G4OpenGLQtViewer::getProcessErrorMsg()
+ {
+   QString txt = "";
+#if QT_VERSION < 0x040000
+   if (!fProcess->normalExit ()) {
+     txt = "Exist status "+ fProcess->exitStatus ();
+   }
+#else
+   switch (fProcess->error()) {
+   case QProcess::FailedToStart:
+     txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
+     break;
+   case QProcess::Crashed:
+     txt = "The process crashed some time after starting successfully.\n";
+     break;
+   case QProcess::Timedout:
+     txt = "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.\n";
+     break;
+   case QProcess::WriteError:
+     txt = "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.\n";
+     break;
+   case QProcess::ReadError:
+     txt = "An error occurred when attempting to read from the process. For example, the process may not be running.\n";
+     break;
+   case QProcess::UnknownError:
+     txt = "An unknown error occurred. This is the default return value of error().\n";
+     break;
+   }
+#endif
+   return txt;
 }
 
 /*

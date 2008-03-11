@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.8 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.9 2008-03-11 16:05:56 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,6 +133,7 @@ private:
   void stopVideo();
   void setRecordingStatus(RECORDING_STEP);
   void setRecordingInfos(QString);
+  QString getProcessErrorMsg();
 
 
 #if QT_VERSION < 0x040000
@@ -204,8 +205,9 @@ private slots :
   void toggleHaloing(bool);
   void toggleAux(bool);
   void toggleFullScreen(bool);
-  void processFinished(int);
-  void processStdout();
+  void processEncodeFinished();
+  void processLookForFinished();
+  void processEncodeStdout();
   // Only use for Qt>4.0
   //  void dialogClosed();
 };
