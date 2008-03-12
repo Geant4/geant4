@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.17 2008-03-11 17:35:11 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.18 2008-03-12 16:52:03 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1318,7 +1318,7 @@ void G4OpenGLQtViewer::savePPMToTemp() {
   bool res = false;
   
 #if QT_VERSION < 0x040000
-  res = image.save(filePath,"ppm");
+  res = image.save(filePath,"PPM");
 #else
   res = image.save(filePath,0);
 #endif
@@ -2000,9 +2000,6 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 
 void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::G4keyPressEvent \n");
-#endif
   if (fHoldKeyEvent)
     return;
 
@@ -2247,7 +2244,7 @@ void G4OpenGLQtViewer::initMovieParameters() {
      fProcess = new QProcess();
      
 #if QT_VERSION < 0x040000
-     QObject ::connect(fProcess,SIGNAL(launchFinished ()),
+     QObject ::connect(fProcess,SIGNAL(processExited ()),
 		       this,SLOT(processLookForFinished()));
      fProcess->setCommunication(QProcess::DupStderr);
      fProcess->setArguments(QStringList("which mpeg_encode"));
@@ -2367,21 +2364,21 @@ QString G4OpenGLQtViewer::setSaveFileName(QString path) {
   if (path == "") {
     return "Path does not exist";
   }
-
+  
+  QFileInfo *file = new QFileInfo(path);
 #if QT_VERSION < 0x040000
   path =  QDir::cleanDirPath(path);
+  QDir dir = file->dir();
 #else
   path =  QDir::cleanPath(path);
+  QDir dir = file->absoluteDir(path);
 #endif
-  QFileInfo *d = new QFileInfo(path);
-  if (!d->exists()) {
-    return "Path does not exist";
-  } else if (!d->isFile()) {
-    return "This is not a file";
-  } else if (!d->isReadable()) {
+  if (file->exists()) {
+    return "File already exist, please choose a new one";
+  } else if (!dir.exists()) {
+    return "Dir does not exist";
+  } else if (!dir.isReadable()) {
     return path +" is read protected";
-  } else if (!d->isWritable()) {
-    return path +" is write protected";
   }
   
   fSaveFileName = path;
@@ -2676,23 +2673,21 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
 
 void G4OpenGLQtViewer::encodeVideo()
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::encodeVideo \n");
-#endif
   if ((getEncoderPath() != "") && (getSaveFileName() != "")) {
     setRecordingStatus(ENCODING);
-    fProcess = new QProcess();
     
 #if QT_VERSION < 0x040000
-    QObject ::connect(fProcess,SIGNAL(launchFinished ()),
+    QStringList args = QStringList(fEncoderPath);
+    args.push_back(fMovieTempFolderPath+fParameterFileName);
+    fProcess = new QProcess(args);
+    QObject ::connect(fProcess,SIGNAL(processExited ()),
                       this,SLOT(processEncodeFinished()));
-    QObject ::connect(fProcess,SIGNAL(readyReadStdOut ()),
+    QObject ::connect(fProcess,SIGNAL(readyReadStdout ()),
                       this,SLOT(processEncodeStdout()));
     fProcess->setCommunication(QProcess::DupStderr);
-    fProcess->setArguments(QStringList(fEncoderPath));
-    fProcess->addArgument(fMovieTempFolderPath+fParameterFileName);
-    fProcess->start();
+    fProcess->launch("");
 #else
+    fProcess = new QProcess();
 #if QT_VERSION > 0x040100
     QObject ::connect(fProcess,SIGNAL(finished ( int,QProcess::ExitStatus)),
                       this,SLOT(processEncodeFinished()));
@@ -2708,12 +2703,10 @@ void G4OpenGLQtViewer::encodeVideo()
     fProcess->start (fEncoderPath, QStringList(fMovieTempFolderPath+fParameterFileName));
 #endif
   }
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::encodeVideo END\n");
-#endif
 }
 
 
+// FIXME : does not work on Qt3
 void G4OpenGLQtViewer::processEncodeStdout()
 {
 #if QT_VERSION > 0x040000
@@ -2731,9 +2724,6 @@ void G4OpenGLQtViewer::processEncodeStdout()
 
 void G4OpenGLQtViewer::processEncodeFinished()
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("processEncodeFinished \n");
-#endif
 
   QString txt = "";
   txt = getProcessErrorMsg();
@@ -2742,10 +2732,8 @@ void G4OpenGLQtViewer::processEncodeFinished()
   } else {
     setRecordingStatus(FAILED);
   }
+  resetRecording();
   setRecordingInfos(txt+removeTempFolder());
-#ifdef GEANT4_QT_DEBUG
-  printf("processEncodeFinished END\n");
-#endif
 }
 
 
