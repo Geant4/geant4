@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.19 2008-03-12 16:55:05 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.20 2008-03-12 17:11:38 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2731,7 +2731,6 @@ void G4OpenGLQtViewer::processEncodeFinished()
   } else {
     setRecordingStatus(FAILED);
   }
-  resetRecording();
   setRecordingInfos(txt+removeTempFolder());
 }
 
@@ -2767,33 +2766,35 @@ void G4OpenGLQtViewer::processLookForFinished()
 
 
 QString G4OpenGLQtViewer::getProcessErrorMsg()
- {
-   QString txt = "";
+{
+  QString txt = "";
 #if QT_VERSION < 0x040000
-   if (!fProcess->normalExit ()) {
-     txt = "Exist status "+ fProcess->exitStatus ();
-   }
+  if (!fProcess->normalExit ()) {
+    txt = "Exist status "+ fProcess->exitStatus ();
+  }
 #else
-   switch (fProcess->error()) {
-   case QProcess::FailedToStart:
-     txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
-     break;
-   case QProcess::Crashed:
-     txt = "The process crashed some time after starting successfully.\n";
-     break;
-   case QProcess::Timedout:
-     txt = "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.\n";
-     break;
-   case QProcess::WriteError:
-     txt = "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.\n";
-     break;
-   case QProcess::ReadError:
-     txt = "An error occurred when attempting to read from the process. For example, the process may not be running.\n";
-     break;
-   case QProcess::UnknownError:
-     txt = "An unknown error occurred. This is the default return value of error().\n";
-     break;
-   }
+  if (fProcess->exitStatus() != QProcess::NormalExit) {
+    switch (fProcess->error()) {
+    case QProcess::FailedToStart:
+      txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
+      break;
+    case QProcess::Crashed:
+      txt = "The process crashed some time after starting successfully.\n";
+      break;
+    case QProcess::Timedout:
+      txt = "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.\n";
+      break;
+    case QProcess::WriteError:
+      txt = "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.\n";
+      break;
+    case QProcess::ReadError:
+      txt = "An error occurred when attempting to read from the process. For example, the process may not be running.\n";
+      break;
+    case QProcess::UnknownError:
+      txt = "An unknown error occurred. This is the default return value of error().\n";
+      break;
+    }
+  }
 #endif
    return txt;
 }
