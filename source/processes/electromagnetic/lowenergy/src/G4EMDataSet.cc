@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.14 2008-03-10 15:07:41 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.15 2008-03-12 14:30:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,41 +40,42 @@
 #include <fstream>
 #include <sstream>
 
-G4EMDataSet::G4EMDataSet(G4int argZ, 
-			 G4VDataSetAlgorithm* argAlgorithm, 
-			 G4double argUnitEnergies, 
-			 G4double argUnitData): 
-  z(argZ),
+G4EMDataSet::G4EMDataSet(G4int Z, 
+			 G4VDataSetAlgorithm* algo, 
+			 G4double xUnit, 
+			 G4double yUnit): 
+  z(Z),
   energies(0),
   data(0),
-  algorithm(argAlgorithm),
-  unitEnergies(argUnitEnergies),
-  unitData(argUnitData)
+  algorithm(algo),
+  unitEnergies(xUnit),
+  unitData(yUnit)
 {
   if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 }
 
 G4EMDataSet::G4EMDataSet(G4int argZ, 
-			 G4DataVector* argEnergies, 
-			 G4DataVector* argData, 
-			 G4VDataSetAlgorithm* argAlgorithm, 
-			 G4double argUnitEnergies, 
-			 G4double argUnitData):
+			 G4DataVector* dataX, 
+			 G4DataVector* dataY, 
+			 G4VDataSetAlgorithm* algo, 
+			 G4double xUnit, 
+			 G4double yUnit):
   z(argZ),
-  energies(argEnergies),
-  data(argData),
-  algorithm(argAlgorithm),
-  unitEnergies(argUnitEnergies),
-  unitData(argUnitData)
+  energies(dataX),
+  data(dataY),
+  algorithm(algo),
+  unitEnergies(xUnit),
+  unitData(yUnit)
 {
-  if (algorithm==0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+  if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 
-  if ((energies==0) ^ (data==0))
+  if ((energies == 0) ^ (data == 0))
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
 
   if (energies == 0) return;
   
-  if (energies->size()!=data->size()) G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
+  if (energies->size() != data->size()) 
+    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
 }
 
 G4EMDataSet::~G4EMDataSet()
@@ -88,7 +89,7 @@ G4EMDataSet::~G4EMDataSet()
     delete data;
 }
 
-G4double G4EMDataSet::FindValue(G4double energy, G4int /* argComponentId */) const
+G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
   if (!energies) G4Exception("G4EMDataSet::FindValue - energies == 0");
   if (energies->empty()) return 0;
@@ -118,22 +119,24 @@ void G4EMDataSet::PrintData(void) const
 }
 
 
-void G4EMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVector* argData, G4int /* argComponentId */)
+void G4EMDataSet::SetEnergiesData(G4DataVector* dataX, G4DataVector* dataY, G4int /* componentId */)
 {
   if (energies) delete energies;
-  energies = argEnergies;
+  energies = dataX;
 
   if (data) delete data;
-  data = argData;
+  data = dataY;
  
-  if ((energies == 0) ^ (data==0)) G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data (zero case)");
+  if ((energies == 0) ^ (data==0)) 
+    G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data (zero case)");
 
   if (energies == 0) return;
   
-  if (energies->size() != data->size()) G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data");
+  if (energies->size() != data->size()) 
+    G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data");
 }
 
-G4bool G4EMDataSet::LoadData(const G4String& argFileName)
+G4bool G4EMDataSet::LoadData(const G4String& fileName)
 {
   // The file is organized into two columns:
   // 1st column is the energy
@@ -141,7 +144,7 @@ G4bool G4EMDataSet::LoadData(const G4String& argFileName)
   // The file terminates with the pattern: -1   -1
   //                                       -2   -2
  
-  G4String fullFileName(FullFileName(argFileName));
+  G4String fullFileName(FullFileName(fileName));
   std::ifstream in(fullFileName);
 
   if (!in.is_open())

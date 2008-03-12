@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.8 2008-03-02 11:34:00 pia Exp $
+// $Id: G4EMDataSet.hh,v 1.9 2008-03-12 14:30:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -54,29 +54,38 @@ class G4VDataSetAlgorithm;
 class G4EMDataSet : public G4VEMDataSet
 {
 public:
-  G4EMDataSet(G4int argZ, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
-  G4EMDataSet(G4int argZ, G4DataVector* argEnergies, G4DataVector* argData, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
+  G4EMDataSet(G4int argZ, 
+	      G4VDataSetAlgorithm* algo, 
+	      G4double xUnit=MeV, 
+	      G4double yUnit=barn);
+
+  G4EMDataSet(G4int argZ, 
+	      G4DataVector* xData, 
+	      G4DataVector* data, 
+	      G4VDataSetAlgorithm* algo, 
+	      G4double xUnit=MeV, 
+	      G4double yUnit=barn);
   virtual ~G4EMDataSet();
  
-  virtual G4double FindValue(G4double argEnergy, G4int argComponentId=0) const;
+  virtual G4double FindValue(G4double x, G4int componentId=0) const;
   
   virtual void PrintData(void) const;
 
-  virtual const G4VEMDataSet* GetComponent(G4int /* argComponentId */) const { return 0; }
-  virtual void AddComponent(G4VEMDataSet* /* argDataSet */) {}
+  virtual const G4VEMDataSet* GetComponent(G4int /* componentId */) const { return 0; }
+  virtual void AddComponent(G4VEMDataSet* /* dataSet */) {}
   virtual size_t NumberOfComponents(void) const { return 0; }
 
-  virtual const G4DataVector& GetEnergies(G4int /* argComponentId */) const { return *energies; }
-  virtual const G4DataVector& GetData(G4int /* argComponentId */) const { return *data; }
-  virtual void SetEnergiesData(G4DataVector* argEnergies, G4DataVector* argData, G4int argComponentId);
+  virtual const G4DataVector& GetEnergies(G4int /* componentId */) const { return *energies; }
+  virtual const G4DataVector& GetData(G4int /* componentId */) const { return *data; }
+  virtual void SetEnergiesData(G4DataVector* xData, G4DataVector* data, G4int argComponentId);
 
-  virtual G4bool LoadData(const G4String& argFileName);
-  virtual G4bool SaveData(const G4String& argFileName) const;
+  virtual G4bool LoadData(const G4String& fileName);
+  virtual G4bool SaveData(const G4String& fileName) const;
    
 private:
-  size_t FindLowerBound(G4double argEnergy) const;
+  size_t FindLowerBound(G4double energy) const;
    
-  G4String FullFileName(const G4String& argFileName) const;
+  G4String FullFileName(const G4String& fileName) const;
 
   // Hide copy constructor and assignment operator 
   G4EMDataSet();
