@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Ts42Cerenkov.cc,v 1.2 2008-02-20 09:57:35 grichine Exp $
+// $Id: Ts42Cerenkov.cc,v 1.3 2008-03-12 10:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -66,6 +66,8 @@
 #include "G4Poisson.hh"
 #include "Ts42Cerenkov.hh"
 #include "HistoManager.hh"
+#include "G4RotationMatrix.hh"
+#include "G4AffineTransform.hh"
 
 using namespace std;
 
@@ -88,23 +90,23 @@ using namespace std;
 Ts42Cerenkov::Ts42Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
 {
-        G4cout << "Ts42Cerenkov::Ts42Cerenkov constructor" << G4endl;
-        G4cout << "NOTE: this is now a G4VDiscreteProcess!" << G4endl;
-        G4cout << "Required change in UserPhysicsList: " << G4endl;
-        G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
+  G4cout << "Ts42Cerenkov::Ts42Cerenkov constructor" << G4endl;
+  G4cout << "NOTE: this is now a G4VDiscreteProcess!" << G4endl;
+  G4cout << "Required change in UserPhysicsList: " << G4endl;
+  G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
+  G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
+  G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
 
-	fTrackSecondariesFirst = false;
-	fMaxPhotons = 0;
+  fTrackSecondariesFirst = false;
+  fMaxPhotons = 0;
 
-        thePhysicsTable = NULL;
+  thePhysicsTable = NULL;
 
-	if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << G4endl;
-	}
-
-	BuildThePhysicsTable();
+  if ( verboseLevel > 0 ) 
+  {
+    G4cout << GetProcessName() << " is created " << G4endl;
+  }
+  BuildThePhysicsTable();
 }
 
 // Ts42Cerenkov::Ts42Cerenkov(const Ts42Cerenkov &right)
@@ -117,7 +119,8 @@ Ts42Cerenkov::Ts42Cerenkov(const G4String& processName, G4ProcessType type)
 
 Ts42Cerenkov::~Ts42Cerenkov() 
 {
-	if (thePhysicsTable != NULL) {
+	if (thePhysicsTable != NULL) 
+        {
 	   thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
 	}
@@ -128,11 +131,8 @@ Ts42Cerenkov::~Ts42Cerenkov()
         ////////////
 
 // PostStepDoIt
-// -------------
+// 
 //
-G4VParticleChange*
-Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
-
 // This routine is called for each tracking Step of a charged particle
 // in a radiator. A Poisson-distributed number of photons is generated
 // according to the Cerenkov formula, distributed evenly along the track
@@ -140,6 +140,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 // parameters are then transformed into the Master Reference System, and 
 // they are added to the particle change. 
 
+G4VParticleChange*
+Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
 
 	//////////////////////////////////////////////////////
@@ -178,7 +180,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
 
-        if (MeanNumberOfPhotons <= 0.0) {
+        if (MeanNumberOfPhotons <= 0.0) 
+        {
 
                 // return unchanged particle and no secondaries
 
@@ -195,7 +198,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4int NumPhotons = (G4int) G4Poisson(MeanNumberOfPhotons);
 
-	if (NumPhotons <= 0) {
+	if (NumPhotons <= 0) 
+        {
 
 		// return unchanged particle and no secondaries  
 
@@ -226,8 +230,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double maxCos = BetaInverse / nMax; 
 	G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
 
-	for (G4int i = 0; i < NumPhotons; i++) {
-
+	for (G4int i = 0; i < NumPhotons; i++) 
+        {
 		// Determine photon momentum
 
 		G4double rand;
@@ -236,7 +240,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		
 		// sample a momentum 
 
-		do {
+		do 
+                {
 			rand = G4UniformRand();	
 			sampledMomentum = Pmin + rand * dp; 
 			sampledRI = Rindex->GetProperty(sampledMomentum);
@@ -288,7 +293,40 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		// Rotate back to original coord system 
 
                 photonPolarization.rotateUz(p0);
-		
+
+                // Tilt between front and energy expansion in crystal
+
+        const G4RotationMatrix* rotM = pPostStepPoint->GetTouchable()->GetRotation();
+        G4ThreeVector transl = pPostStepPoint->GetTouchable()->GetTranslation();
+        G4AffineTransform transform = G4AffineTransform(rotM,transl);
+        transform.Invert();
+        G4ThreeVector localPhMom = transform.TransformAxis(photonMomentum);
+        // G4ThreeVector localPol = transform.TransformAxis(photonPolarization);
+
+        if ( (localPhMom.z() > 0.01 || localPhMom.z() < -0.01) &&
+             (localPhMom.z() > -0.99 || localPhMom.z() < 0.99) ) 
+	{
+          G4double ratio = aMaterialPropertiesTable->
+                                      GetConstProperty("RINDEXRATIO");
+          G4double momPerp = std::sqrt(localPhMom.x()*localPhMom.x()+localPhMom.y()*localPhMom.y() );
+          G4double tgTheta = momPerp/localPhMom.z();
+
+          tgTheta *= ratio; // crystal tilting!
+
+          cosTheta = std::sqrt(1/(1+tgTheta*tgTheta));
+	  sin2Theta = (1.0 - cosTheta)*(1.0 + cosTheta);
+
+          if(sin2Theta < 0.) sin2Theta = 0.;
+
+          sinTheta = std::sqrt(sin2Theta);
+          cosPhi = localPhMom.x()/momPerp;  
+          sinPhi = localPhMom.y()/momPerp;
+          localPhMom = G4ThreeVector( cosPhi*sinTheta, sinPhi*sinTheta, cosTheta );
+          localPhMom.unit();
+
+          transform.Invert();
+          G4ThreeVector photonMomentum = transform.TransformAxis(localPhMom);
+	}		
                 // Generate a new photon:
 
                 G4DynamicParticle* aCerenkovPhoton =

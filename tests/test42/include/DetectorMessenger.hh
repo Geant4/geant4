@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.1 2007-12-09 09:40:56 grichine Exp $
+// $Id: DetectorMessenger.hh,v 1.2 2008-03-12 10:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -72,6 +72,7 @@ private:
   G4UIcmdWithAString*        matCmd;
   G4UIcmdWithAString*        mat1Cmd;
   G4UIcmdWithADoubleAndUnit* rCmd;
+  G4UIcmdWithADoubleAndUnit* angleCmd;
   G4UIcmdWithADoubleAndUnit* lCmd;
   G4UIcmdWithADoubleAndUnit* edepCmd;
   G4UIcmdWithAnInteger*      binCmd;

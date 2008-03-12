@@ -35,6 +35,8 @@
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpWLS.hh"
 
+////////////////////////////////////////////////////////////
+
 LXeOpticalPhysics::LXeOpticalPhysics(const G4String& name)
   :  G4VPhysicsConstructor(name)
 {
@@ -45,16 +47,21 @@ LXeOpticalPhysics::~LXeOpticalPhysics()
 {
 }
 
+/////////////////////////////////////////////////////////////
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4OpticalPhoton.hh"
+
+
 
 void LXeOpticalPhysics::ConstructParticle()
 {
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
+/////////////////////////////////////////////////////
 
 #include "G4ProcessManager.hh"
 
@@ -90,23 +97,30 @@ void LXeOpticalPhysics::ConstructProcess()
   theScintProcess->SetTrackSecondariesFirst(true);
 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     pManager = particle->GetProcessManager();
-    if(theCerenkovProcess->IsApplicable(*particle)){
+
+    if(theCerenkovProcess->IsApplicable(*particle))
+    {
       pManager->AddProcess(theCerenkovProcess);
       pManager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
-    if(theScintProcess->IsApplicable(*particle)){
+    if(theScintProcess->IsApplicable(*particle))
+    {
       pManager->AddProcess(theScintProcess);
       pManager->SetProcessOrderingToLast(theScintProcess,idxAtRest);
       pManager->SetProcessOrderingToLast(theScintProcess,idxPostStep);
-    }
-  
+    }  
   }
 }
 
-void LXeOpticalPhysics::SetScintYieldFactor(G4double yf){
+/////////////////////////////////////////////////////////////////////
+
+void LXeOpticalPhysics::SetScintYieldFactor(G4double yf)
+{
   if(theScintProcess)
     theScintProcess->SetScintillationYieldFactor(yf);
 }

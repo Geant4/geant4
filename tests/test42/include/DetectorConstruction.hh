@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.3 2008-02-28 10:32:31 grichine Exp $
+// $Id: DetectorConstruction.hh,v 1.4 2008-03-12 10:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -69,6 +69,7 @@ public:
   void SetTargetMaterial(const G4String&);
 
   void SetTargetRadius(G4double val);
+  void SetRotationAngle(G4double val){fRotAngle=val;};
 
   void UpdateGeometry();
 
@@ -94,6 +95,7 @@ private:
   DetectorConstruction(const DetectorConstruction&);
 
   G4double radius;
+  G4double fRotAngle;
 
   G4String fSetUp;
 

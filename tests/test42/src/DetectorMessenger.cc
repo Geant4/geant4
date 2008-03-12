@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2007-12-09 09:41:11 grichine Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2008-03-12 10:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -76,6 +76,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   rCmd->SetRange("radius>0");
   rCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  angleCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/RotationAngle",this);
+  angleCmd->SetGuidance("Set rotation angle of the target");
+  angleCmd->SetParameterName("angle",false);
+  angleCmd->SetUnitCategory("Angle");
+  angleCmd->SetRange("angle > 0");
+  angleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   lCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
   lCmd->SetGuidance("Set length of the target");
   lCmd->SetParameterName("length",false);
@@ -122,6 +129,7 @@ DetectorMessenger::~DetectorMessenger()
   delete matCmd;
   delete mat1Cmd;
   delete rCmd;
+  delete angleCmd;
   delete lCmd;
   delete nOfAbsCmd;
   delete updateCmd;
@@ -142,6 +150,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    Detector->SetWorldMaterial(newValue);
   else if( command == rCmd ) 
     Detector->SetTargetRadius(rCmd->GetNewDoubleValue(newValue));
+  else if( command == angleCmd ) 
+    Detector->SetRotationAngle(angleCmd->GetNewDoubleValue(newValue));
   else if( command == lCmd ) 
     h->SetTargetLength(lCmd->GetNewDoubleValue(newValue));
   else if( command == nOfAbsCmd ) 

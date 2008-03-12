@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.9 2008-03-06 09:24:39 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2008-03-12 10:12:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -46,6 +46,7 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
@@ -83,7 +84,7 @@ DetectorConstruction::DetectorConstruction()
   fTst42DetMessenger = new Tst42DetectorMessenger(this);
 
   radius = 10.*cm;
-
+  fRotAngle = 0.*degree;
 
   // Prepare sensitive detectors
 
@@ -192,6 +193,7 @@ void  DetectorConstruction::DefineMaterials()
   phYield /= HistoManager::GetPointer()->GetPhotonBias();
 
   G4double birksConst = 0.;
+  G4double rindexRatio = 1.09692; // 1.2;   // 1.09692;
 
   pwoMPT->AddConstProperty("SCINTILLATIONYIELD",phYield);   // 2./MeV);
   pwoMPT->AddConstProperty("BIRKSCONSTANT",birksConst);   
@@ -199,21 +201,22 @@ void  DetectorConstruction::DefineMaterials()
   pwoMPT->AddConstProperty("FASTTIMECONSTANT", 0.1*ns);
   pwoMPT->AddConstProperty("SLOWTIMECONSTANT",0.3*ns);
   pwoMPT->AddConstProperty("YIELDRATIO",0.8);
+  pwoMPT->AddConstProperty("RINDEXRATIO",rindexRatio);
 
   targetMaterial->SetMaterialPropertiesTable(pwoMPT);
 
   // Glass (G4_GLASS_PLATE) material Property Table
   
   const G4int glassNum = 3;
-  G4double LXe_Energy[glassNum] = { 1.7712*eV , 2.25426*eV, 3.30625*eV };
+  G4double energyPhGlass[glassNum] = { 1.7712*eV , 2.25426*eV, 3.30625*eV };
 
   G4double glassRind[glassNum] = { 1.49, 1.49, 1.49 };
   G4double glassAbsLength[glassNum]={420.*cm,420.*cm,420.*cm};
 
   G4MaterialPropertiesTable* glassMPT = new G4MaterialPropertiesTable();
 
-  glassMPT->AddProperty("ABSLENGTH",LXe_Energy,glassAbsLength,glassNum);
-  glassMPT->AddProperty("RINDEX",LXe_Energy,glassRind,glassNum);
+  glassMPT->AddProperty("ABSLENGTH",energyPhGlass,glassAbsLength,glassNum);
+  glassMPT->AddProperty("RINDEX",energyPhGlass,glassRind,glassNum);
 
   cathodeMaterial->SetMaterialPropertiesTable(glassMPT);
   
@@ -357,8 +360,11 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   logicCheck    = new G4LogicalVolume( solidC, wallMaterial, "World");
 
   //  G4VPhysicalVolume* physC = 
+  G4RotationMatrix* rot = new G4RotationMatrix();
 
-  G4VPhysicalVolume* physCheck =  new G4PVPlacement(0,
+  rot->rotateX(fRotAngle);
+
+  G4VPhysicalVolume* physCheck =  new G4PVPlacement(rot,
                 G4ThreeVector(), logicCheck, "World", logicWorld, false, 0);
 
   // logicCheck->SetSensitiveDetector(checkSD);
@@ -388,9 +394,11 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
                     logicCathode,"Cathode",logicTarget,false,0);
 
 
-  G4VPhysicalVolume* physTarget; 
 
+  G4VPhysicalVolume* physTarget =  new G4PVPlacement(0,
+         G4ThreeVector( 0.0, 0.0, 0.0),logicTarget,"Target",logicCheck,false,0); 
 
+  /*
   G4double z = sliceZ - targetZ;
 
   for(G4int i = 0; i < nSlices; i++ ) 
@@ -402,6 +410,7 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
     z += 2.0*sliceZ;
   }
+  */
   G4cout << "### Target consist of " << nSlices
          << " slices of " << targetMaterial->GetName() 
          << " box   with XY(mm)= " << radius/mm
@@ -413,7 +422,8 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   const G4int num = 2;
 
-  G4double refl = 0.8, phEnergy[num] = {1.7712*eV, 3.30625*eV};
+  G4double refl = 0.85;   // 0.8; 
+  G4double phEnergy[num] = {1.7712*eV, 3.30625*eV};
 
  // Scintillator housing properties PWO-Al
 
@@ -431,12 +441,12 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
  // Photocathode surface properties PWO-glass
 
-  G4double photocath_EFF[num]  = { 1., 1. };    //Enables 'detection' of photons
-  G4double photocath_REFL[num] = { 0., 0. };
+  G4double photocathodeEff[num]  = { 1., 1. };    //Enables 'detection' of photons
+  G4double photocathodeRefl[num] = { 0., 0. };
 
   G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
-  photocath_mt->AddProperty("EFFICIENCY",phEnergy,photocath_EFF,num);
-  photocath_mt->AddProperty("REFLECTIVITY",phEnergy,photocath_REFL,num);
+  photocath_mt->AddProperty("EFFICIENCY",phEnergy,photocathodeEff,num);
+  photocath_mt->AddProperty("REFLECTIVITY",phEnergy,photocathodeRefl,num);
 
   G4OpticalSurface* photocath_opsurf=
     new G4OpticalSurface("photocath_opsurf",glisur,polished,

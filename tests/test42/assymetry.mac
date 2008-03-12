@@ -1,5 +1,5 @@
 #================================================
-#     Macro file for test42 PbWO4
+#     Macro file for test42 PbWO4 ALICE crystal
 #     10.12.2007 V.Grichine
 #================================================
 /control/verbose 2
@@ -7,16 +7,16 @@
 /tracking/verbose 0
 #
 /testhadr/TargetMat        G4_PbWO4
-/testhadr/TargetRadius     1.20126 cm
-/testhadr/TargetLength     23 cm
-/testhadr/RotationAngle     135. degree
+/testhadr/TargetRadius     1.1 cm
+/testhadr/TargetLength     18 cm
+/testhadr/RotationAngle    130. degree
 /testhadr/NumberDivZ       1
 #
 /PWOcrystal/setup          simpleCMSPWO
 #
 /testhadr/PrintModulo      10
 #
-/testhadr/photonBias       100
+/testhadr/photonBias       10
 #
 /testhadr/CutsAll          0.7 mm
 #
@@ -45,7 +45,7 @@
 #/gun/particle pi-
 #/gun/particle pi+
 #
-/gun/energy 1. GeV
+/gun/energy 10. GeV
 #/gun/energy 10. GeV
 #/gun/energy 100. GeV
 /run/beamOn 100
