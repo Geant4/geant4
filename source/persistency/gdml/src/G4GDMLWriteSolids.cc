@@ -34,9 +34,9 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
 
    G4String tag;
 
-   if (dynamic_cast<const G4IntersectionSolid* const>(boolean)) { tag = "intersection"; } else
-   if (dynamic_cast<const G4SubtractionSolid* const>(boolean)) { tag = "subtraction"; } else
-   if (dynamic_cast<const G4UnionSolid* const>(boolean)) { tag = "union"; }
+   if (dynamic_cast<const G4IntersectionSolid*>(boolean)) { tag = "intersection"; } else
+   if (dynamic_cast<const G4SubtractionSolid*>(boolean)) { tag = "subtraction"; } else
+   if (dynamic_cast<const G4UnionSolid*>(boolean)) { tag = "union"; }
    else { tag = "undefined"; }
    
    G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));

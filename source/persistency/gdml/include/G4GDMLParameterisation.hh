@@ -52,7 +52,7 @@
 
 class G4GDMLParameterisation : public G4VPVParameterisation {
 public:
-   typedef struct PARAMETER {
+   struct PARAMETER {
    
       G4RotationMatrix* pRot;
       G4ThreeVector position;
