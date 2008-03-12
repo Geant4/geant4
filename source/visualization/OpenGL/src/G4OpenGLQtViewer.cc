@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.18 2008-03-12 16:52:03 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.19 2008-03-12 16:55:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2366,12 +2366,11 @@ QString G4OpenGLQtViewer::setSaveFileName(QString path) {
   }
   
   QFileInfo *file = new QFileInfo(path);
+  QDir dir = file->dir();
 #if QT_VERSION < 0x040000
   path =  QDir::cleanDirPath(path);
-  QDir dir = file->dir();
 #else
   path =  QDir::cleanPath(path);
-  QDir dir = file->absoluteDir(path);
 #endif
   if (file->exists()) {
     return "File already exist, please choose a new one";
