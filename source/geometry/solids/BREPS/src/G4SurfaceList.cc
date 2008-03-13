@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceList.cc,v 1.7 2006-06-29 18:42:49 gunter Exp $
+// $Id: G4SurfaceList.cc,v 1.8 2008-03-13 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -137,6 +137,7 @@ void G4SurfaceList::RemovePointer()
   // Remove the current pointer from the List
   // Do not delete the object itself
   if(number_of_elements)
+  {
     if(first != index)
     {
       temp = first;
@@ -156,7 +157,8 @@ void G4SurfaceList::RemovePointer()
       first = first->GetNextNode();
       index = first;
     }
-  
+  }
+
   number_of_elements--;
 }
 

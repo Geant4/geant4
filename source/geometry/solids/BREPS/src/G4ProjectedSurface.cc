@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.11 2006-06-29 18:42:32 gunter Exp $
+// $Id: G4ProjectedSurface.cc,v 1.12 2008-03-13 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -644,7 +644,7 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
   for( register G4int a=0; a<size;a++)
   {
     if ( lower != 0)
-      for ( i = 0,  o_ptr = oslo_m; i < lower; i++, o_ptr = o_ptr->GetNextNode());
+      for ( i = 0,  o_ptr = oslo_m; i < lower; i++, o_ptr = o_ptr->GetNextNode()){;}
     else
       o_ptr = oslo_m;
     

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.14 2006-06-29 18:41:42 gunter Exp $
+// $Id: G4BSplineSurface.cc,v 1.15 2008-03-13 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -105,6 +105,7 @@ G4int G4BSplineSurface::Intersect(const G4Ray& rayref)
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
     
     if(bez_ptr->IsActive())
+    {
       if(distance > bez_ptr->GetDistance())
       {
 	// Put data from closest bezier to b-spline data struct
@@ -119,6 +120,7 @@ G4int G4BSplineSurface::Intersect(const G4Ray& rayref)
 	// Remove beziers that are not closest
 	//  bezier_list.RemoveSurface(bez_ptr);
       }
+    }
 
     bezier_list.Step();
   }
