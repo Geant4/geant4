@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.17 2007-11-30 18:05:14 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.18 2008-03-13 16:03:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -154,11 +154,13 @@ SetWorldVolume(G4String newWorldName)
 				     FatalException,
 				     tellWhatIsWrong);
       if (verboseLevel>0)
+      {
 	if (fWorldVolume) G4cout << "G4FastSimulationManagerProcess `" << GetProcessName()
 				 << "': changing world volume from '"  << fWorldVolume->GetName() 
 				 << "' to `" << newWorld << "'." << G4endl;
 	else              G4cout << "G4FastSimulationManagerProcess `" << GetProcessName()
 				 << "': setting world volume from to `"<< newWorld->GetName() << "'." << G4endl;
+      }
       fWorldVolume = newWorld;
     }
 }
