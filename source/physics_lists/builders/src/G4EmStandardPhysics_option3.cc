@@ -23,28 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.4 2008-03-13 12:11:02 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.1 2008-03-13 12:11:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics_option2
+// ClassName:   G4EmStandardPhysics_option3
 //
-// Author:      V.Ivanchenko 09.11.2005
+// Author:      V.Ivanchenko 13.03.2008
 //
 // Modified:
-// 19.12.2005 V.Ivanchenko rename 71 -> 72
-// 15.06.2006 V.Ivanchenko use this class as a constructor of fast EM physics
-// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
-// 14.11.2006 V.Ivanchenko use sub-cutoff option for all particles
-// 13.02.2007 V.Ivanchenko use default msc 
-// 15.05.2007 V.Ivanchenko rename to _option2 
-// 13.03.2008 V.Ivanchenko use G4eMultipleScattering
 //
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
@@ -57,6 +50,7 @@
 #include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4eMultipleScattering.hh"
+#include "G4MscStepLimitType.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -88,7 +82,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics_option2::G4EmStandardPhysics_option2(
+G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(
     G4int ver, const G4String& name)
   : G4VPhysicsConstructor(name), verbose(ver)
 {
@@ -97,12 +91,12 @@ G4EmStandardPhysics_option2::G4EmStandardPhysics_option2(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics_option2::~G4EmStandardPhysics_option2()
+G4EmStandardPhysics_option3::~G4EmStandardPhysics_option3()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics_option2::ConstructParticle()
+void G4EmStandardPhysics_option3::ConstructParticle()
 {
 // gamma
   G4Gamma::Gamma();
@@ -133,7 +127,7 @@ void G4EmStandardPhysics_option2::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics_option2::ConstructProcess()
+void G4EmStandardPhysics_option3::ConstructProcess()
 {
   // Add standard EM Processes
   G4VMultipleScattering* msc = 0;
@@ -211,9 +205,11 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   opt.SetSubCutoff(true);
   opt.SetMinEnergy(0.1*keV);
   opt.SetMaxEnergy(10.*TeV);
-  opt.SetDEDXBinning(220);
-  opt.SetLambdaBinning(220);
+  opt.SetDEDXBinning(440);
+  opt.SetLambdaBinning(440);
   opt.SetLinearLossLimit(1.e-6);
+  opt.SetMscStepLimitation(fUseDistanceToBoundary);
+  opt.SetMscRangeFactor(0.02);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
