@@ -57,7 +57,6 @@ void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const assembly
    }
 
    pAssembly = new G4AssemblyVolume();
-   pMotherLogical = 0;
 
    assemblyMap[name] = pAssembly;
 }
@@ -275,8 +274,8 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
    G4double width = 0.0;
    G4double offset = 0.0;
    G4int number = 0;
-   G4String volumeref;
    EAxis axis = kUndefined;
+   G4LogicalVolume* logvol = 0;
 
    const xercesc::DOMNamedNodeMap* const attributes = replicavolElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -315,12 +314,10 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="volumeref") volumeref = refRead(child);
+      if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
 
-   G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
-
-   G4PVReplica* replicaPtr = new G4PVReplica("",pLogical,pMotherLogical,axis,number,width,offset);
+   G4PVReplica* replicaPtr = new G4PVReplica("",logvol,pMotherLogical,axis,number,width,offset);
    GeneratePhysvolName(replicaPtr);
 }
 
@@ -428,7 +425,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-//      if (tag=="assembly") assemblyRead(child); else
+      if (tag=="assembly") assemblyRead(child); else
       if (tag=="bordersurface") bordersurfaceRead(child); else
       if (tag=="skinsurface") skinsurfaceRead(child); else
       if (tag=="volume") volumeRead(child); else
@@ -439,7 +436,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
 
 G4AssemblyVolume* G4GDMLReadStructure::getAssembly(const G4String& ref) {
 
-   if (assemblyMap.find(ref) == assemblyMap.end()) G4Exception("GDML Reader: ERROR! Referenced assembly volume '"+ref+"' was not found!");
+   if (assemblyMap.find(ref) == assemblyMap.end()) return 0;  // No error message is displayed!
 
    return assemblyMap[ref];
 }
