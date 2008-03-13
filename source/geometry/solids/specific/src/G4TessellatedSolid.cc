@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.17 2008-02-26 13:20:43 ivana Exp $
+// $Id: G4TessellatedSolid.cc,v 1.18 2008-03-13 11:58:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -508,8 +508,8 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
         crossingI =  ((*f)->Intersect(p,v,false,distI,distFromSurfaceI,normalI));
         if (crossingO || crossingI)
         {
-          nearParallel = crossingO && std::abs(normalO.dot(v))<dirTolerance ||
-                         crossingI && std::abs(normalI.dot(v))<dirTolerance;
+          nearParallel = (crossingO && std::abs(normalO.dot(v))<dirTolerance) ||
+                         (crossingI && std::abs(normalI.dot(v))<dirTolerance);
           if (!nearParallel)
           {
             if (crossingO && distO > 0.0 && distO < distOut) distOut = distO;
