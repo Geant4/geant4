@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh,v 1.2 2008-02-21 18:11:19 vnivanch Exp $
+// $Id: G4EmSaturation.hh,v 1.3 2008-03-13 18:47:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,6 +62,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4LossTableManager;
+class G4NistManager;
 class G4MaterialCutsCouple;
 class G4Material;
 
@@ -77,9 +78,6 @@ public:
 				   G4double length, 
 				   G4double edepTotal,
 				   G4double edepNIEL = 0.0);
-
-  // user defined Birks coefficient (mm/MeV)
-  void FillBirksCoefficient(const G4Material*, G4double);
 
   // find and Birks coefficient 
   G4double FindG4BirksCoefficient(const G4Material*);
@@ -107,21 +105,21 @@ private:
   const G4ParticleDefinition* neutron;
   const G4ParticleDefinition* proton;
   G4LossTableManager*         manager;
+  G4NistManager*              nist;
 
   // cash
   const G4Material*           curMaterial;
   G4double                    curBirks;
-  G4double                    curAtomicMass;
+  G4double                    curRatio;
 
   G4int    verbose;             
   G4int    nMaterials;
   G4int    nG4Birks;
-  G4bool   pointers;
 
   // list of materials used in run time
-  std::vector<G4double>             matData;
   std::vector<const G4Material*>    matPointers;
   std::vector<G4String>             matNames;
+  std::vector<G4double>             massFactors;
 
   // list of G4 materials 
   std::vector<G4double>             g4MatData;

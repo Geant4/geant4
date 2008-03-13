@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.4 2008-02-21 18:11:19 vnivanch Exp $
+// $Id: G4EmSaturation.cc,v 1.5 2008-03-13 18:47:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 
@@ -58,9 +59,10 @@
 G4EmSaturation::G4EmSaturation()
 {
   verbose = 1;
-  pointers = false;
+  manager = 0;
   curMaterial = 0;
   curBirks = 0.0;
+  curRatio = 1.0;
   nMaterials = 0;
   Initialise();
 }
@@ -86,18 +88,9 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
   if(bfactor > 0.0) { 
 
-    if(!pointers) {
-      pointers = true;
-      manager = G4LossTableManager::Instance();
-      gamma = G4Gamma::Gamma();
-      electron = G4Electron::Electron();
-      proton = G4Proton::Proton();
-      neutron = G4Neutron::Neutron();
-    }
-
     // atomic relaxations
     if(p == gamma) {
-      evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
+      //evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
 
       // energy loss
     } else {
@@ -117,7 +110,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       // non-ionizing energy loss
       if(nloss > 0.0) {
         G4double q = p->GetPDGCharge()/eplus;
-        G4double escaled = nloss*proton_mass_c2/curAtomicMass;
+        G4double escaled = nloss*curRatio;
         G4double s = manager->GetRange(proton,escaled,couple)/(q*q); 
 	nloss /= (1.0 + bfactor*nloss/s);
       }
@@ -131,43 +124,18 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmSaturation::FillBirksCoefficient(const G4Material* mat, G4double birks)
-{
-  G4String name = mat->GetName();
-  // is this material in the vector?
-  for(G4int i=0; i<nMaterials; i++) {
-    if(mat == matPointers[i]) {
-      if(verbose > 0) 
-	G4cout << "### G4EmSaturation::FillBirksCoefficient Birks coefficient for "
-	       << name << " BirksOld= " << matData[i] 
-	       << " is substituted by " << birks*MeV/mm << " mm/MeV" << G4endl;
-      matData[i] = birks;
-      return;
-    }
-  }
-  matPointers.push_back(mat);
-  matNames.push_back(name);
-  matData.push_back(birks);
-  nMaterials++;
-  if(verbose > 0) 
-    G4cout << "### G4EmSaturation::FillBirksCoefficient Birks coefficient for "
-	   << name << "  " << birks*MeV/mm << " mm/MeV" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4EmSaturation::FindG4BirksCoefficient(const G4Material* mat)
 {
   G4String name = mat->GetName();
   // is this material in the vector?
   
-  for(G4int i=0; i<nMaterials; i++) {
-    if(mat == matPointers[i] || name == matNames[i]) {
+  for(G4int j=0; j<nG4Birks; j++) {
+    if(name == g4MatNames[j]) {
       if(verbose > 0) 
 	G4cout << "### G4EmSaturation::FindG4BirksCoefficient for "
-	       << name << " find out " << matPointers[i]->GetName() 
-	       << " with coefficient " << matData[i] << G4endl;
-      return matData[i];
+	       << name << " is " << g4MatData[j]*MeV/mm << " mm/MeV "
+	       << G4endl;
+      return g4MatData[j];
     }
   }
   return FindBirksCoefficient(mat);
@@ -181,34 +149,72 @@ G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
 
   curMaterial = mat;
   curBirks = 0.0;
+  curRatio = 1.0;
 
   // seach in the run-time list
   for(G4int i=0; i<nMaterials; i++) {
     if(mat == matPointers[i]) {
-      curBirks = matData[i];
+      curBirks = mat->GetIonisation()->GetBirksConstant();
+      curRatio = massFactors[i];
       return curBirks;
     }
   }
 
-  // seach in the Geant4 list
+  if(!manager) {
+    manager = G4LossTableManager::Instance();
+    nist    = G4NistManager::Instance();
+    gamma   = G4Gamma::Gamma();
+    electron= G4Electron::Electron();
+    proton  = G4Proton::Proton();
+    neutron = G4Neutron::Neutron();
+  }
+
   G4String name = mat->GetName();
-  for(G4int j=0; j<nG4Birks; j++) {
-    if(name == g4MatNames[j]) {
-      curBirks = g4MatData[j];
-      matPointers.push_back(mat);
-      matNames.push_back(name);
-      matData.push_back(curBirks);
-      nMaterials++;
-      if(verbose > 0) 
-	G4cout << "### G4EmSaturation::FindBirksCoefficient Birks coefficient for "
-	       << name << "  " << curBirks*MeV/mm << " mm/MeV" << G4endl;
-      return curBirks;
+  curBirks = mat->GetIonisation()->GetBirksConstant();
+
+  // material has no Birks coeffitient defined
+  // seach in the Geant4 list
+  if(curBirks == 0.0) {
+    for(G4int j=0; j<nG4Birks; j++) {
+      if(name == g4MatNames[j]) {
+	mat->GetIonisation()->SetBirksConstant(g4MatData[j]);
+        curBirks = g4MatData[j];
+        break;
+      }
     }
   }
 
+  if(curBirks == 0.0) {
+    if(verbose > 0) 
+      G4cout << "### G4EmSaturation::FindBirksCoefficient fails "
+	" for material " << name << G4endl;
+    return curBirks;
+  }
+
+  // compute mean mass ratio
+  curRatio = 0.0;
+  G4double norm = 0.0;
+  const G4ElementVector* theElementVector = mat->GetElementVector();
+  const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
+  size_t nelm = mat->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    G4double Z = elm->GetZ();
+    G4double w = Z*Z*theAtomNumDensityVector[i];
+    curRatio += w/nist->GetAtomicMassAmu(G4int(Z));
+    norm += w;
+  }
+  curRatio *= proton_mass_c2/norm;
+
+  // store results
+  matPointers.push_back(mat);
+  matNames.push_back(name);
+  massFactors.push_back(curRatio);
+  nMaterials++;
   if(verbose > 0) 
-    G4cout << "### G4EmSaturation::FindBirksCoefficient Birks coefficient fails for "
-	   << name << G4endl;
+    G4cout << "### G4EmSaturation::FindBirksCoefficient Birks coefficient for "
+	   << name << "  " << curBirks*MeV/mm << " mm/MeV" << G4endl;
+
   return curBirks;
 }
 
@@ -219,9 +225,11 @@ void G4EmSaturation::DumpBirksCoefficients()
   if(nMaterials > 0) {
     G4cout << "### Birks coeffitients used in run time" << G4endl;
     for(G4int i=0; i<nMaterials; i++) {
+      G4double br = matPointers[i]->GetIonisation()->GetBirksConstant();
       G4cout << "   " << matNames[i] << "     " 
-	     << matData[i]*MeV/mm << " mm/MeV" << "     "
-	     << matData[i]*matPointers[i]->GetDensity()*MeV*cm2/g << " g/cm^2/MeV" 
+	     << br*MeV/mm << " mm/MeV" << "     "
+	     << br*matPointers[i]->GetDensity()*MeV*cm2/g 
+	     << " g/cm^2/MeV" 
 	     << G4endl;
     }
   }
