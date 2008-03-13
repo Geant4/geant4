@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.7 2007-11-13 17:35:06 gcosmo Exp $
+// $Id: G4String.hh,v 1.8 2008-03-13 09:35:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,8 @@
 
 #include <stdio.h>
 #include <string>
+#include <cstring>
+
 #include "G4Types.hh"
 #include <iostream>
 
