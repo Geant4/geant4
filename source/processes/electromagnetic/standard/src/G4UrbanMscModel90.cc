@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.3 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4UrbanMscModel90.cc,v 1.4 2008-03-13 17:20:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -877,14 +877,14 @@ G4double G4UrbanMscModel90::SampleCosineTheta(G4double trueStepLength,
   }
   else
   {
-      if(trueStepLength >= currentRange*dtrl)
-        if(par1*trueStepLength < 1.)
-          tau = -par2*log(1.-par1*trueStepLength) ;
-        // for the case if ioni/brems are inactivated
-        // see the corresponding condition in ComputeGeomPathLength 
-        else if(1.-KineticEnergy/currentKinEnergy > taulim)
-          tau = taubig ;
-
+    if(trueStepLength >= currentRange*dtrl) {
+      if(par1*trueStepLength < 1.)
+	tau = -par2*log(1.-par1*trueStepLength) ;
+      // for the case if ioni/brems are inactivated
+      // see the corresponding condition in ComputeGeomPathLength 
+      else if(1.-KineticEnergy/currentKinEnergy > taulim)
+	tau = taubig ;
+    }
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
     currentRadLength = couple->GetMaterial()->GetRadlen();
