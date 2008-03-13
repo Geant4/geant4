@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIterminal.cc,v 1.7 2007-06-29 02:22:20 kmura Exp $
+// $Id: pyG4UIterminal.cc,v 1.8 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UIterminal.cc
@@ -31,7 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 

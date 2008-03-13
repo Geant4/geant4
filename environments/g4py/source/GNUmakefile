@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2007-11-25 19:38:17 kmura Exp $
+# $Id: GNUmakefile,v 1.7 2008-03-13 07:32:18 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
@@ -9,7 +9,7 @@ SUBDIR1 := global interface intercoms run event tracking track
 SUBDIR1 += geometry materials particles processes digits_hits
 SUBDIR2 := visualization graphics_reps physics_lists
 SUBDIR3 := python
-SUBDIR4 := boost version
+SUBDIR4 := boost
 
 ifeq ($(Q_ENABLE_G4GDML), 1)
   SUBDIR2 += g4gdml

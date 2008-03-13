@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Material.cc,v 1.5 2006-12-01 02:10:08 kmura Exp $
+// $Id: pyG4Material.cc,v 1.6 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Material.cc
@@ -31,7 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4Material.hh"
 
 using namespace boost::python;

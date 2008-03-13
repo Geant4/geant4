@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.6 2008-02-27 09:31:55 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.7 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
@@ -31,7 +31,7 @@
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 
 #if G4VERSION_NUMBER >= 820
 

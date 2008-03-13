@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4LogicalVolume.cc,v 1.4 2006-06-29 15:32:08 gunter Exp $
+// $Id: pyG4LogicalVolume.cc,v 1.5 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4LogicalVolume.cc
@@ -31,6 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4VSolid.hh"
@@ -41,7 +42,6 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4FastSimulationManager.hh"
 #include "G4VisAttributes.hh"
-#include "pyG4Version.hh"
 
 using namespace boost::python;
 

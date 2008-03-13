@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4LossTableManager.cc,v 1.4 2007-06-07 08:59:39 kmura Exp $
+// $Id: pyG4LossTableManager.cc,v 1.5 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4LossTableManager.cc
@@ -31,7 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4LossTableManager.hh"
 
 using namespace boost::python;

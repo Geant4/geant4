@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PVPlacement.cc,v 1.5 2007-08-07 03:35:53 kmura Exp $
+// $Id: pyG4PVPlacement.cc,v 1.6 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4PVPlacement.cc
@@ -31,7 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
+#include "G4Version.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 

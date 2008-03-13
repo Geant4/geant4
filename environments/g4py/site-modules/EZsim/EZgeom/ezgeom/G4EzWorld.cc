@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EzWorld.cc,v 1.4 2006-08-25 05:13:16 kmura Exp $
+// $Id: G4EzWorld.cc,v 1.5 2008-03-13 07:32:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   G4EzWorld.cc
@@ -38,7 +38,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4RunManager.hh"
-#include "pyG4Version.hh"
 
 G4VPhysicalVolume* G4EzWorld::world= G4EzWorld::CreateWorld();
 
@@ -68,11 +67,7 @@ G4VPhysicalVolume* G4EzWorld::CreateWorld
 //////////////////////////////////////////////////////////
 {
   // default matetial is "vacuum"
-#if G4VERSION_NUMBER >= 800
   G4Material* vacuum= G4Material::GetMaterial("_Vacuum", false);
-#else
-  G4Material* vacuum= G4Material::GetMaterial("_Vacuum");
-#endif
 
   if(vacuum==0) {
     G4Element* elN= new G4Element("_N", "",  7.,  14.00674*g/mole);
