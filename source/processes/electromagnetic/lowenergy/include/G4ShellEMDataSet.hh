@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.10 2008-03-10 15:06:28 pia Exp $
+// $Id: G4ShellEMDataSet.hh,v 1.11 2008-03-13 19:55:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -78,8 +78,13 @@ public:
 
   virtual G4bool LoadData(const G4String& fileName);
   virtual G4bool SaveData(const G4String& fileName) const;
+
+  virtual void BuildPdf() { };
+
+  virtual G4double RandomSelect(G4int /*componentId = 0*/) const { return -1.; };
    
 protected:
+
   G4double GetUnitEnergies() const { return unitEnergies; }
   G4double GetUnitData() const { return unitData; }
   const G4VDataSetAlgorithm* GetAlgorithm() const { return algorithm; }
@@ -87,6 +92,7 @@ protected:
   void CleanUpComponents(void);
 
 private:
+
   G4String FullFileName(const G4String& fileName) const;
   
   // Hide copy constructor and assignment operator 

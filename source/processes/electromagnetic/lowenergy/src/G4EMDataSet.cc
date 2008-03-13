@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.15 2008-03-12 14:30:35 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.16 2008-03-13 19:55:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,6 +39,9 @@
 #include "G4VDataSetAlgorithm.hh"
 #include <fstream>
 #include <sstream>
+#include "G4Integrator.hh"
+#include "Randomize.hh"
+
 
 G4EMDataSet::G4EMDataSet(G4int Z, 
 			 G4VDataSetAlgorithm* algo, 
@@ -49,7 +52,8 @@ G4EMDataSet::G4EMDataSet(G4int Z,
   data(0),
   algorithm(algo),
   unitEnergies(xUnit),
-  unitData(yUnit)
+  unitData(yUnit),
+  pdf(0)
 {
   if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 }
@@ -65,7 +69,8 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   data(dataY),
   algorithm(algo),
   unitEnergies(xUnit),
-  unitData(yUnit)
+  unitData(yUnit),
+  pdf(0)
 {
   if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 
@@ -81,12 +86,9 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 G4EMDataSet::~G4EMDataSet()
 { 
   delete algorithm;
- 
-  if (energies)
-    delete energies;
-
-  if (data)
-    delete data;
+  if (energies) delete energies;
+  if (data) delete data;
+  if (pdf) delete pdf;
 }
 
 G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
@@ -119,7 +121,9 @@ void G4EMDataSet::PrintData(void) const
 }
 
 
-void G4EMDataSet::SetEnergiesData(G4DataVector* dataX, G4DataVector* dataY, G4int /* componentId */)
+void G4EMDataSet::SetEnergiesData(G4DataVector* dataX, 
+				  G4DataVector* dataY, 
+				  G4int /* componentId */)
 {
   if (energies) delete energies;
   energies = dataX;
@@ -181,7 +185,7 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
   return true;
 }
 
-G4bool G4EMDataSet::SaveData(const G4String& argFileName) const
+G4bool G4EMDataSet::SaveData(const G4String& name) const
 {
   // The file is organized into two columns:
   // 1st column is the energy
@@ -189,7 +193,7 @@ G4bool G4EMDataSet::SaveData(const G4String& argFileName) const
   // The file terminates with the pattern: -1   -1
   //                                       -2   -2
  
-  G4String fullFileName(FullFileName(argFileName));
+  G4String fullFileName(FullFileName(name));
   std::ofstream out(fullFileName);
 
   if (!out.is_open())
@@ -250,31 +254,99 @@ G4bool G4EMDataSet::SaveData(const G4String& argFileName) const
   return true;
 }
 
-size_t G4EMDataSet::FindLowerBound(G4double argEnergy) const
+size_t G4EMDataSet::FindLowerBound(G4double x) const
 {
-  size_t lowerBound(0);
+  size_t lowerBound = 0;
   size_t upperBound(energies->size() - 1);
   
   while (lowerBound <= upperBound) 
     {
-      size_t midBin((lowerBound + upperBound)/2);
+      size_t midBin((lowerBound + upperBound) / 2);
 
-      if (argEnergy < (*energies)[midBin]) upperBound = midBin-1;
-      else lowerBound = midBin+1;
+      if (x < (*energies)[midBin]) upperBound = midBin - 1;
+      else lowerBound = midBin + 1;
     }
   
   return upperBound;
 }
 
 
-G4String  G4EMDataSet::FullFileName(const G4String& argFileName) const
+size_t G4EMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
+{
+  size_t lowerBound = 0;;
+  size_t upperBound(values->size() - 1);
+  
+  while (lowerBound <= upperBound) 
+    {
+      size_t midBin((lowerBound + upperBound) / 2);
+
+      if (x < (*values)[midBin]) upperBound = midBin - 1;
+      else lowerBound = midBin + 1;
+    }
+  
+  return upperBound;
+}
+
+
+G4String G4EMDataSet::FullFileName(const G4String& name) const
 {
   char* path = getenv("G4LEDATA");
   if (!path)
     G4Exception("G4EMDataSet::FullFileName - G4LEDATA environment variable not set");
   
   std::ostringstream fullFileName;
-  fullFileName << path << '/' << argFileName << z << ".dat";
+  fullFileName << path << '/' << name << z << ".dat";
                       
   return G4String(fullFileName.str().c_str());
 }
+
+
+void G4EMDataSet::BuildPdf()
+{
+  G4double integral = 0.;
+  pdf = new G4DataVector;
+  G4Integrator <G4EMDataSet, G4double(G4EMDataSet::*)(G4double)> integrator;
+
+  G4int nData = data->size();
+  pdf->push_back(0.);
+
+  G4int i;
+  // Integrate the data distribution 
+  for (i=1; i<nData; i++)
+    {
+      G4double xLow = (*energies)[i-1];
+      G4double xHigh = (*energies)[i];
+      G4double sum = integrator.Legendre96(this, &G4EMDataSet::IntegrationFunction, xLow, xHigh);
+      pdf->push_back(sum);
+    }
+  // Normalize to the last bin
+  G4double tot = (*pdf)[nData-1];
+  if (tot > 0.) tot = 1. / tot;
+  for (i=1;  i<nData; i++)
+    {
+      (*pdf)[i] = (*pdf)[i] * tot;
+    }
+}
+
+
+G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
+{
+  // Random select a X value according to the cumulative probability distribution
+  // derived from the data
+  
+  G4double value = 0.;
+
+  G4double x = G4UniformRand();
+  size_t bin = FindLowerBound(x,pdf);
+  
+  
+  return value;
+}
+
+G4double G4EMDataSet::IntegrationFunction(G4double x)
+{
+  // This function is needed by G4Integrator to calculate the integral of the data distribution
+  G4double y = FindValue(x);
+  return y;
+}
+

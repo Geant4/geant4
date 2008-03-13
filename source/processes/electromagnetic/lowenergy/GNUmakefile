@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003-09-20 14:41:31 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2008-03-13 19:55:32 pia Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -13,6 +13,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/track/include \

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.9 2008-03-12 14:30:35 pia Exp $
+// $Id: G4EMDataSet.hh,v 1.10 2008-03-13 19:55:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -65,6 +65,7 @@ public:
 	      G4VDataSetAlgorithm* algo, 
 	      G4double xUnit=MeV, 
 	      G4double yUnit=barn);
+
   virtual ~G4EMDataSet();
  
   virtual G4double FindValue(G4double x, G4int componentId=0) const;
@@ -72,18 +73,28 @@ public:
   virtual void PrintData(void) const;
 
   virtual const G4VEMDataSet* GetComponent(G4int /* componentId */) const { return 0; }
+
   virtual void AddComponent(G4VEMDataSet* /* dataSet */) {}
+
   virtual size_t NumberOfComponents(void) const { return 0; }
 
   virtual const G4DataVector& GetEnergies(G4int /* componentId */) const { return *energies; }
   virtual const G4DataVector& GetData(G4int /* componentId */) const { return *data; }
-  virtual void SetEnergiesData(G4DataVector* xData, G4DataVector* data, G4int argComponentId);
+  virtual void SetEnergiesData(G4DataVector* xData, G4DataVector* data, G4int componentId);
 
   virtual G4bool LoadData(const G4String& fileName);
   virtual G4bool SaveData(const G4String& fileName) const;
+
+  virtual void BuildPdf();
+
+  virtual G4double RandomSelect(G4int componentId = 0) const;
+ 
+  virtual G4double IntegrationFunction(G4double x);
    
 private:
+
   size_t FindLowerBound(G4double energy) const;
+  size_t FindLowerBound(G4double x, G4DataVector* values) const;
    
   G4String FullFileName(const G4String& fileName) const;
 
@@ -101,5 +112,7 @@ private:
   
   G4double unitEnergies;
   G4double unitData;
+
+  G4DataVector* pdf;
 };
 #endif /* G4EMDATASET_HH */
