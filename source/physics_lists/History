@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2008-01-08 10:39:22 vnivanch Exp $
+$Id: History,v 1.50 2008-03-13 12:12:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-03-2008, V.Ivanchenko phys-lists-V09-01-01
+- Added new builder G4EmStandardPhysics_option3
 
 08-01-2008, V.Ivanchenko phys-lists-V09-01-00
 - G4EmExtraPhysics - fixed bug #993 (swap of synkrotron radiation
