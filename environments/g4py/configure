@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.8 2008-02-28 04:10:02 kmura Exp $
+#$Id: configure,v 1.9 2008-03-13 04:57:10 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -63,7 +63,7 @@ Enable/disable options: prefix with either --enable- or --disable-
 Supported Architectures:
   linux           for Linux gcc 3.x and 4.x
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
-  macosx          for MacOSX with gcc (Tiger and XCode 2.3)
+  macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 EOF
 }
