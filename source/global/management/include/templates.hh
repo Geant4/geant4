@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.10 2006-06-29 19:03:54 gunter Exp $
+// $Id: templates.hh,v 1.11 2008-03-13 09:34:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,7 @@
 #define templates_h 1
 
 #include <limits>
+#include <climits>
 
 //
 // If HIGH_PRECISION is defined to TRUE (ie. != 0) then the type "Float"
