@@ -36,17 +36,37 @@ void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
    physvol->SetName(GenerateName(stream.str()));
 }
 
-void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const) {
+void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const assemblyElement) {
+
+   G4String name;
+
+   const xercesc::DOMNamedNodeMap* const attributes = assemblyElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
+
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+
+      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
+      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+
+      if (attName=="name") name = GenerateName(attValue);
+   }
 
    pAssembly = new G4AssemblyVolume();
    pMotherLogical = 0;
+
+   assemblyMap[name] = pAssembly;
 }
 
-G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const element) {
+G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const auxiliaryElement) {
 
    G4GDMLAuxPairType auxpair;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   const xercesc::DOMNamedNodeMap* const attributes = auxiliaryElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
@@ -114,9 +134,9 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
    G4double width = 0.0;
    G4double offset = 0.0;
    G4int number = 0;
-   G4String volumeref;
    EAxis axis = kUndefined;
-
+   G4LogicalVolume* logvol = 0;
+   
    const xercesc::DOMNamedNodeMap* const attributes = divisionvolElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
@@ -154,15 +174,13 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="volumeref") volumeref = refRead(child);
+      if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
 
-   G4LogicalVolume* pLogical = getVolume(GenerateName(volumeref));
-
    G4PVDivision* divisionvolPtr = 0;
-   if (number != 0 && width == 0.0) divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,number,offset); else
-   if (number == 0 && width != 0.0) divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,width,offset); else
-   divisionvolPtr = new G4PVDivision("",pLogical,pMotherLogical,axis,number,width,offset); 
+   if (number != 0 && width == 0.0) divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,number,offset); else
+   if (number == 0 && width != 0.0) divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,width,offset); else
+   divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,number,width,offset); 
 
    GeneratePhysvolName(divisionvolPtr);
 }
@@ -417,6 +435,13 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
       G4Exception("GDML Reader: ERROR! Unknown tag in structure: "+tag);
    }
+}
+
+G4AssemblyVolume* G4GDMLReadStructure::getAssembly(const G4String& ref) {
+
+   if (assemblyMap.find(ref) == assemblyMap.end()) G4Exception("GDML Reader: ERROR! Referenced assembly volume '"+ref+"' was not found!");
+
+   return assemblyMap[ref];
 }
 
 G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const {

@@ -77,6 +77,7 @@ private:
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
 public:
+   G4AssemblyVolume* getAssembly(const G4String&);
    G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);
