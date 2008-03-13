@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.27 2008-01-29 10:45:34 allison Exp $
+// $Id: HepPolyhedron.cc,v 1.28 2008-03-13 09:11:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 #include <CLHEP/Geometry/Vector3D.h>
 
+#include <cstdlib>  // Required on some compilers for std::abs(int) ...
 #include <cmath>
 
 using namespace HepGeom;
