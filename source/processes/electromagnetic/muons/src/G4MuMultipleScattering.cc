@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.5 2008-01-09 10:19:08 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.6 2008-03-14 12:14:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -86,7 +86,6 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     if (p->GetParticleType() != "nucleus") {
       mscModel->SetStepLimitType(StepLimitType());
       mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-      //mscModel->SetThetaLimit(thetaLimit);
       mscModel->SetRangeFactor(RangeFactor());
     }
     return;
@@ -95,13 +94,13 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
-    SetRangeFactor(0.5);
   }
 
   // initialisation of parameters
-  //  G4String part_name = p->GetParticleName();
-  mscModel = new G4MuMscModel(RangeFactor(),thetaLimit);
+  mscModel = new G4MuMscModel(thetaLimit);
+  mscModel->SetStepLimitType(StepLimitType());
   mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscModel->SetRangeFactor(RangeFactor());
 
   AddEmModel(1,mscModel);
   isInitialized = true;

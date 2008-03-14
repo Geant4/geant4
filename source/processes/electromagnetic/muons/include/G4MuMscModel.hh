@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.7 2008-02-22 14:38:35 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.8 2008-03-14 12:14:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,24 +56,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4eCoulombScatteringModel.hh"
+#include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4NistManager.hh"
 
 class G4LossTableManager;
 class G4ParticleChangeForMSC;
 class G4SafetyHelper;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MuMscModel : public G4eCoulombScatteringModel
+class G4MuMscModel : public G4VMscModel
 {
 
 public:
 
-  G4MuMscModel(G4double frange = 0.5,
-	       G4double thetaMax = 0.04,
+  G4MuMscModel(G4double thetaMax = 0.04,
 	       G4double tMax = TeV*TeV, 
 	       const G4String& nam = "MuMscUni");
 
@@ -104,45 +105,45 @@ public:
 
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
-  inline void SetStepLimitType(G4MscStepLimitType);
-
-  inline void SetLateralDisplasmentFlag(G4bool val);
-
   inline G4double GetLambda(G4double kinEnergy);
 
-  inline G4double GetLambda2(G4double kinEnergy);
+  inline void SetupParticle(const G4ParticleDefinition*);
 
-  //  inline void SetThetaLimit(G4double);
-
-  inline void SetRangeFactor(G4double);
+  inline void SetupKinematic(G4double kinEnergy, G4double cut);
+  
+  inline void SetupTarget(G4double Z, G4double A);
 
 private:
-
-  void BuildTables();
-
-  G4double ComputeLambda2(G4double kinEnergy, G4double cut);
 
   G4double ComputeXSectionPerVolume(const G4Material*,
 				    const G4ParticleDefinition*,
 				    G4double kinEnergy, 
 				    G4double cut);
 
+  void ComputeMaxElectronScattering(G4double cut);
+
   inline void DefineMaterial(const G4MaterialCutsCouple*);
+
+  inline G4double FormFactorMev2(G4double Z, G4double A);
 
   //  hide assignment operator
   G4MuMscModel & operator=(const  G4MuMscModel &right);
   G4MuMscModel(const  G4MuMscModel&);
 
-  G4ParticleChangeForMSC*     fParticleChange;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
 
-  G4SafetyHelper*             safetyHelper;
-  G4PhysicsTable*             theLambdaTable;
-  G4PhysicsTable*             theLambda2Table;
-  G4LossTableManager*         theManager;
-  const G4DataVector*         currentCuts;
+  G4ParticleChangeForMSC*   fParticleChange;
 
-  G4double dtrl;
-  G4double facrange;
+  G4SafetyHelper*           safetyHelper;
+  G4PhysicsTable*           theLambdaTable;
+  G4PhysicsTable*           theLambda2Table;
+  G4LossTableManager*       theManager;
+  const G4DataVector*       currentCuts;
+
+  G4NistManager*            fNistManager;
+
   G4double numlimit;
   G4double tlimitminfix;
   G4double invsqrt12;
@@ -161,9 +162,13 @@ private:
   G4double par1;
   G4double par2;
   G4double par3;
-  G4double xsec1;
-  G4double xsec2;
+
+  G4double xsece1;
+  G4double xsece2;
+  G4double xsecn2;
   G4double zcorr;
+  G4double xsecn[40];
+  G4double xsece[40];
 
   G4int    currentMaterialIndex;
 
@@ -173,39 +178,43 @@ private:
 
   const G4MaterialCutsCouple* currentCouple;
 
-  G4MscStepLimitType steppingAlgorithm;
+  // single scattering parameters
+  G4double coeff;
+  G4double constn;
+  G4double cosThetaMin;
+  G4double cosThetaMax;
+  G4double cosTetMaxNuc;
+  G4double cosTetMaxElec;
+  G4double cosTetLimit;
+  G4double q2Limit;
+  G4double alpha2;
+  G4double a0;
 
-  G4bool   samplez;
-  G4bool   latDisplasment;
+  // projectile
+  const G4ParticleDefinition* particle;
+
+  G4double chargeSquare;
+  G4double spin;
+  G4double mass;
+  G4double tkin;
+  G4double mom2;
+  G4double invbeta2;
+
+  // target
+  G4double targetZ;
+  G4double targetA;
+  G4double screenZ;
+  G4double formfactA;
+  G4double FF[100];
+  G4int    index[100];
+
+  // flags
   G4bool   isInitialized;
-  G4bool   buildTables;
   G4bool   newrun;
   G4bool   inside;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4MuMscModel::SetLateralDisplasmentFlag(G4bool val) 
-{ 
-  latDisplasment = val;
-}
-
-inline
-void G4MuMscModel::SetRangeFactor(G4double val) 
-{ 
-  facrange = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4MuMscModel::SetStepLimitType(G4MscStepLimitType val) 
-{ 
-  steppingAlgorithm = val;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
@@ -234,19 +243,64 @@ G4double G4MuMscModel::GetLambda(G4double e)
   return x;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline
-G4double G4MuMscModel::GetLambda2(G4double e)
+inline 
+void G4MuMscModel::SetupParticle(const G4ParticleDefinition* p)
 {
-  G4double x;
-  if(theLambda2Table) {
-    G4bool b;
-    x = ((*theLambda2Table)[currentMaterialIndex])->GetValue(e, b);
-  } else {
-    x = ComputeLambda2(e, (*currentCuts)[currentMaterialIndex]);
+  // Initialise mass and charge
+  if(p != particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    tkin = 0.0;
   }
-  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4MuMscModel::SetupKinematic(G4double ekin, G4double cut)
+{
+  if(ekin != tkin || ecut != cut) {
+    tkin  = ekin;
+    mom2  = tkin*(tkin + 2.0*mass);
+    invbeta2 = 1.0 +  mass*mass/mom2;
+    ComputeMaxElectronScattering(cut);
+    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4MuMscModel::SetupTarget(G4double Z, G4double A)
+{
+  if(Z != targetZ || A != targetA) {
+    targetZ = Z;
+    targetA = A;
+    G4double x = fNistManager->GetZ13(Z);
+    screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    cosTetLimit = cosTetMaxNuc;
+    if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
+      cosTetLimit = 0.0;
+    formfactA = mom2*FormFactorMev2(Z, A);
+  } 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4double G4MuMscModel::FormFactorMev2(G4double Z, G4double A)
+{
+  // A.V. Butkevich et al., NIM A 488 (2002) 282
+  G4int iz = G4int(Z);
+  if(iz > 99) iz = 99;
+  G4double res = FF[iz];
+  if(res == 0.0) { 
+    res = constn*std::exp(0.54*fNistManager->GetLOGA(A));
+    FF[iz] = res;
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
