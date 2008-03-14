@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSetTest.cc,v 1.3 2006-06-29 19:43:59 gunter Exp $
+// $Id: G4EMDataSetTest.cc,v 1.4 2008-03-14 22:57:45 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ int main()
   //  G4cin >> fileName;
   fileName = "brem/br-cs-";
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  //  G4cout.setf( ios::scientific, ios::floatfield );
 
   G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
 
@@ -83,18 +83,24 @@ int main()
   if (type == 1)  
     {
       fileName = "brem/br-cs-";
-      dataSet = new G4EMDataSet(Z,fileName,interpolation);
+      //      dataSet = new G4EMDataSet(Z,fileName,interpolation);
+      dataSet = new G4EMDataSet(Z,interpolation);
+      dataSet->LoadData(fileName);
     }
   else if (type == 2) 
     {
       fileName = "phot/pe-ss-cs-";
-      dataSet = new G4ShellEMDataSet(Z,fileName,interpolation);
-    }
+      //  dataSet = new G4ShellEMDataSet(Z,fileName,interpolation);
+      dataSet = new G4ShellEMDataSet(Z,interpolation);
+      dataSet->LoadData(fileName);
+   }
   else
     {
       fileName = "brem/br-cs-";
-      dataSet = new G4CompositeEMDataSet(fileName,interpolation);
-    }
+      //      dataSet = new G4CompositeEMDataSet(fileName,interpolation);
+      dataSet = new G4CompositeEMDataSet(interpolation);
+      dataSet->LoadData(fileName);
+   }
 
   dataSet->PrintData();
 
@@ -126,7 +132,7 @@ int main()
 
   delete dataSet;
 
-  cout << "END OF THE MAIN PROGRAM" << G4endl;
+  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
 
