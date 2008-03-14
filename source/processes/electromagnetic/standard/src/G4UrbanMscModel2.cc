@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.2 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.3 2008-03-14 06:02:55 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,10 @@
 //
 // Modifications:
 //
+// 06-03-2008 starting point : G4UrbanMscModel2 = G4UrbanMscModel 9.1 ref 02
 //
+// 13-03-08  Bug in SampleScattering (which caused lateral asymmetry) fixed
+//           (L.Urban)
 
 // Class Description:
 //
@@ -782,8 +785,13 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
         if(std::abs(r*sth) < latcorr)
           Phi  = twopi*G4UniformRand();
         else
-          Phi = phi-std::acos(latcorr/(r*sth));
-        if(Phi < 0.) Phi += twopi;
+        {
+          G4double psi = std::acos(latcorr/(r*sth));
+          if(G4UniformRand() < 0.5)
+            Phi = phi+psi;
+          else
+            Phi = phi-psi;
+        }
 
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
