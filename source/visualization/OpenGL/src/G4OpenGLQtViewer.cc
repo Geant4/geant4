@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.21 2008-03-14 09:22:31 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.22 2008-03-14 09:42:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2770,7 +2770,7 @@ QString G4OpenGLQtViewer::getProcessErrorMsg()
     txt = "Exist status "+ fProcess->exitStatus ();
   }
 #else
-  if (fProcess->exitStatus() != QProcess::NormalExit) {
+  if (fProcess->exitCode() != 0) {
     switch (fProcess->error()) {
     case QProcess::FailedToStart:
       txt = "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.\n";
