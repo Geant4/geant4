@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.17 2006-06-29 21:08:16 gunter Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.18 2008-03-14 02:55:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -437,7 +437,8 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
   G4int idx;
   for (idx = 0; idx < 1000 ; idx ++ ) {
     G4String typeName = G4VProcess::GetProcessTypeName(G4ProcessType(idx));
-    if ( isFoundEndMark = typeName.contains("---")) break;
+    isFoundEndMark = typeName.contains("---");
+    if ( isFoundEndMark ) break;
   }
   if ( isFoundEndMark ) {
     NumberOfProcessType = idx;
