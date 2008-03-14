@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.25 2006-06-29 16:53:23 gunter Exp $
+// $Id: SteppingAction.cc,v 1.26 2008-03-14 15:40:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,8 @@
 #include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
+///#include "G4LossTableManager.hh"
+///#include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +48,7 @@ SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
                                EventAction* evt, HistoManager* hist)
 :G4UserSteppingAction(),detector(det),runAct(run),eventAct(evt),
  histoManager(hist) 
-{}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,32 +109,33 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   }   
 
 ////  example of Birk attenuation
-////  G4double destep   = aStep->GetTotalEnergyDeposit();
-////  G4double response = BirkAttenuation(aStep);
-////  G4cout << " Destep: " << destep/keV << " keV"
-////         << " response after Birk: "  << response/keV << " keV" << G4endl;
+///G4double destep   = aStep->GetTotalEnergyDeposit();
+/// option 1 : direct
+///G4double response = BirksAttenuation(aStep);
+/// option 2 : via G4EmSaturation 
+///G4double response = 
+///    G4LossTableManager::Instance()->EmSaturation()->BirksAttenuation(aStep);
+///G4cout << " Destep: " << destep/keV << " keV"
+///       << " response after Birks: " << response/keV << " keV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double SteppingAction::BirkAttenuation(const G4Step* aStep)
+G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
 {
  //Example of Birk attenuation law in organic scintillators.
  //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
  //
- const G4String myMaterial = "Scintillator";
- const G4double birk1 = 0.013*g/(MeV*cm2);
- //
- G4double destep      = aStep->GetTotalEnergyDeposit();
  G4Material* material = aStep->GetTrack()->GetMaterial();
+ G4double birk1       = material->GetIonisation()->GetBirksConstant();
+ G4double destep      = aStep->GetTotalEnergyDeposit();
+ G4double stepl       = aStep->GetStepLength();  
  G4double charge      = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
  //
  G4double response = destep;
- if ((material->GetName()==myMaterial)&&(charge!=0.))
+ if (birk1*destep*stepl*charge != 0.)
    {
-     G4double correction =
-     birk1*destep/((material->GetDensity())*(aStep->GetStepLength()));
-     response = destep/(1. + correction);
+     response = destep/(1. + birk1*destep/stepl);
    }
  return response;
 }

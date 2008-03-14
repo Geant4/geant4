@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.20 2007-03-19 20:10:38 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.21 2008-03-14 15:40:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,6 +163,8 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
   Sci->AddElement(C, natoms=9);
   Sci->AddElement(H, natoms=10);
+  
+  Sci->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
 
   G4Material* Lct =
   new G4Material("Lucite", density= 1.185*g/cm3, ncomponents=3);
