@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.16 2008-03-13 19:55:32 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.17 2008-03-14 22:58:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -41,6 +41,7 @@
 #include <sstream>
 #include "G4Integrator.hh"
 #include "Randomize.hh"
+#include "G4LinInterpolation.hh"
 
 
 G4EMDataSet::G4EMDataSet(G4int Z, 
@@ -303,7 +304,6 @@ G4String G4EMDataSet::FullFileName(const G4String& name) const
 
 void G4EMDataSet::BuildPdf()
 {
-  G4double integral = 0.;
   pdf = new G4DataVector;
   G4Integrator <G4EMDataSet, G4double(G4EMDataSet::*)(G4double)> integrator;
 
@@ -337,9 +337,25 @@ G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
   G4double value = 0.;
 
   G4double x = G4UniformRand();
+
+  // Locate the random value in the X vector based on the PDF
   size_t bin = FindLowerBound(x,pdf);
+
+  // Interpolate to calculate the X value: 
+  // linear interpolation in the first bin (to avoid problem with 0),
+  // interpolation with associated algorithm in other bins
+
+  G4LinInterpolation linearAlgo;
   
-  
+  if (bin = 0)
+    {
+      return linearAlgo.Calculate(x, bin, *pdf, *energies);
+    }
+  else
+    {
+      return algorithm->Calculate(x, bin, *pdf, *energies);
+    }
+
   return value;
 }
 
