@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.17 2008-03-14 12:14:52 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.18 2008-03-14 19:00:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,7 @@ G4MuMscModel::G4MuMscModel(G4double thetaMax,
   coeff  = twopi*p0*p0;
   constn = 6.937e-6/(MeV*MeV);
   tkin = targetZ = targetA = mom2 = DBL_MIN;
-  ecut = DBL_MAX;
+  ecut = etag = DBL_MAX;
   particle = 0;
   for(size_t j=0; j<100; j++) {
     index[j] = -1;
@@ -159,7 +159,7 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
-  SetupTarget(Z, A);
+  SetupTarget(Z, A, ekin);
 
   G4double x, y, x1, x2, x3, x4;
 
@@ -186,7 +186,7 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   G4cout << "G4MuMscModel:XS per A " << " Z= " << Z << " e(MeV)= " << kinEnergy/MeV 
 	 << " cut(MeV)= " << ecut/MeV  
   	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
-	 << " zmaxN= " << (1.0 - cosTetMaxNuc)/screenZ << G4endl;
+	 << " zmaxN= " << (1.0 - cosTetLimit)/screenZ << G4endl;
   */
 
   // scattering off nucleus
@@ -416,22 +416,25 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // define threshold angle as 2 sigma of central value
   cosThetaMin = 1.0 - 4.0*x1;
-
-  //  G4cout << "cosTmin= " << cosThetaMin << " cosTmax= " 
-  //  << cosThetaMax << G4endl;
- 
+  /*
+  G4cout << "cosTmin= " << cosThetaMin << " cosTmax= " 
+	 << cosThetaMax << G4endl;
+  */
   if(cosThetaMin < cosThetaMax) cosThetaMin = cosThetaMax;
 
   // The compute cross section for the tail distribution and 
   // correction to the width of the central part 
+
   const G4Material* mat = currentCouple->GetMaterial();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
   G4double cut = (*currentCuts)[currentMaterialIndex];
   G4double xsec = ComputeXSectionPerVolume(mat,part,e,cut);
   if(zcorr < x1) x1 -= zcorr;
-  //G4cout << part->GetParticleName() << " e= " << e << "  x1= " 
-  //	 << x1 << "  zcorr= " << zcorr << G4endl;
 
+  /*
+  G4cout << part->GetParticleName() << " e= " << e << "  x1= " 
+  	 << x1 << "  zcorr= " << zcorr << G4endl;
+  */
   do {
     z = -x1*log(G4UniformRand());
   } while (z > 1.0); 
@@ -446,7 +449,6 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double dirx = sint*cos(phi);
   G4double diry = sint*sin(phi);
-
   /*
   G4cout << "G4MuMscModel: step(mm)= " << tPathLength/mm
 	 << " e= " << e << " Epre= " << preKinEnergy
@@ -471,6 +473,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
       // uniform part
       if(qsec < xsece1) {
         zz1 -= G4UniformRand()*(1.0 - cosThetaMin);
+        // G4cout << "Uniform zz1= " << zz1 << G4endl;
 
 	// Reserford part
       } else {
@@ -486,9 +489,10 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	  for (size_t i=0; i<nelm; i++) {
             if(xsecn[i] > qsec || nelm-1 == i) {
 	      const G4Element* elm = (*theElementVector)[i];
-	      SetupTarget(elm->GetZ(), elm->GetN());
+	      SetupTarget(elm->GetZ(), elm->GetN(), e);
               formf = formfactA;
 	      costm = cosTetLimit;
+	      // G4cout << "Reserford nuc Z= " << elm->GetZ() << G4endl;
 	      break;
 	    }
 	  }
@@ -499,7 +503,8 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	  for (size_t i=0; i<nelm; i++) {
             if(xsece[i] > qsec || nelm-1 == i) {
 	      const G4Element* elm = (*theElementVector)[i];
-	      SetupTarget(elm->GetZ(), elm->GetN());
+	      SetupTarget(elm->GetZ(), elm->GetN(), e);
+	      // G4cout << "Reserford elec Z= " << elm->GetZ() << G4endl;
 	      break;
 	    }
 	  }
@@ -517,19 +522,19 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	    else if(zz1 > 2.0) zz1 = 2.0;
 	    grej = 1.0/(1.0 + formf*zz1);
 	  } while ( G4UniformRand() > grej*grej );  
-  
-	  sint = sqrt((1.0 - zz1)*(1.0 + zz1));
-	  phi  = twopi*G4UniformRand();
-
-	  G4double dirx1 = sint*cos(phi);
-	  G4double diry1 = sint*sin(phi);
-	  rx = dirx1*x; 
-	  ry = diry1*x; 
-	  G4ThreeVector newDirection1(dirx1,diry1,zz1);
-	  newDirection1.rotateUz(newDirection);
-	  newDirection = newDirection1;
 	}
-      }      
+        //G4cout << "Reserford zz1= " << zz1 << G4endl;
+      }
+      sint = sqrt((1.0 - zz1)*(1.0 + zz1));
+      phi  = twopi*G4UniformRand();
+
+      G4double dirx1 = sint*cos(phi);
+      G4double diry1 = sint*sin(phi);
+      rx = dirx1*x; 
+      ry = diry1*x; 
+      G4ThreeVector newDirection1(dirx1,diry1,zz1);
+      newDirection1.rotateUz(newDirection);
+      newDirection = newDirection1;
     }
   }
 
@@ -620,14 +625,18 @@ G4double G4MuMscModel::ComputeXSectionPerVolume(const G4Material* mat,
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ();
     G4double A = elm->GetN();
-    SetupTarget(Z, A);
+    SetupTarget(Z, A, ekin);
     G4double den = fac*theAtomNumDensityVector[i]*Z;
 
     x  = 1.0 - cosThetaMin;
     x1 = x + screenZ;
     x2 = 1.0/(x1*x1);
     x3 = 1.0 + x*formfactA;
-
+    /*
+    G4cout << "x= " << x << " den= " << den << " cosE= " << cosTetMaxElec << G4endl;
+    G4cout << "cosThtaMin= " << cosThetaMin << " cosTetLimit= " << cosTetLimit << G4endl;
+    G4cout << "cosTetMaxNuc= " << cosTetMaxNuc << " q2Limit= " << q2Limit << G4endl;
+    */
     // scattering off electrons
     if(cosTetMaxElec < cosThetaMin) {
 
@@ -646,6 +655,7 @@ G4double G4MuMscModel::ComputeXSectionPerVolume(const G4Material* mat,
     }
     den *= Z;
 
+    //G4cout << "Z= " << Z<< " cosL= " << cosTetLimit << " cosMin= " << cosThetaMin << G4endl;
     // scattering off nucleaus
     if(cosTetLimit < cosThetaMin) {
 
@@ -685,11 +695,14 @@ G4double G4MuMscModel::ComputeXSectionPerVolume(const G4Material* mat,
     }
     xsece[i] = xsece2;
     xsecn[i] = xsecn2;
+    //    G4cout << i << "  xsece2= " << xsece2 << "  xsecn2= " << xsecn2 << G4endl;
   }
   G4double xsec = xsece1 + xsece2 + xsecn2;
-  //G4cout << "xsec1= " << xsec1 << "  xsec2= " << xsec2 << " zsec= " 
-  // << zcorr*0.5*fac << G4endl;
-
+  /*
+    G4cout << "xsece1= " << xsece1 << "  xsece2= " << xsece2 
+    << "  xsecn2= " << xsecn2 
+	 << " zsec= " << zcorr*0.5*tPathLength << G4endl;
+  */
   zcorr *= 0.5*tPathLength;
 
   return xsec;

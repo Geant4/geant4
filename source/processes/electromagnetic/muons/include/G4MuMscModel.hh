@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.8 2008-03-14 12:14:52 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.9 2008-03-14 19:00:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,7 +111,7 @@ public:
 
   inline void SetupKinematic(G4double kinEnergy, G4double cut);
   
-  inline void SetupTarget(G4double Z, G4double A);
+  inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy);
 
 private:
 
@@ -199,6 +199,7 @@ private:
   G4double tkin;
   G4double mom2;
   G4double invbeta2;
+  G4double etag;
 
   // target
   G4double targetZ;
@@ -274,9 +275,10 @@ inline void G4MuMscModel::SetupKinematic(G4double ekin, G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline void G4MuMscModel::SetupTarget(G4double Z, G4double A)
+inline void G4MuMscModel::SetupTarget(G4double Z, G4double A, G4double e)
 {
-  if(Z != targetZ || A != targetA) {
+  if(Z != targetZ || A != targetA || e != etag) {
+    etag    = e; 
     targetZ = Z;
     targetA = A;
     G4double x = fNistManager->GetZ13(Z);
