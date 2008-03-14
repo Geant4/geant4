@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh,v 1.4 2008-03-14 14:05:57 maire Exp $
+// $Id: G4EmSaturation.hh,v 1.5 2008-03-14 14:27:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,8 @@
 // Class Description:
 //   Compution on saturation effect, which reduce visible energy 
 //   deposition at the step. Default implementation takes into 
-//   account Birks effect.
+//   account Birks effect. Birks coefficients for some materials
+//   from G4 database on materials are provided
 // 
 // -------------------------------------------------------------
 
@@ -55,34 +56,83 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4Step;
-class G4Material;
-class G4ParticleDefinition;
 class G4LossTableManager;
+class G4NistManager;
+class G4MaterialCutsCouple;
+class G4Material;
 
 class G4EmSaturation
 {
- public: 
-   G4EmSaturation();
-   virtual ~G4EmSaturation();
+public: 
 
-   void Initialise();
-   G4double BirksAttenuation(const G4Step*);
-   
- private:
-   G4double ComputeAeff(G4Material*);
-   
-  
- private:
-   G4ParticleDefinition* proton;
-   G4LossTableManager*   tableManager;
-   G4bool                initialised; 
+  G4EmSaturation();
+  virtual ~G4EmSaturation();
+
+  G4double VisibleEnergyDeposition(const G4ParticleDefinition*, 
+				   const G4MaterialCutsCouple*,
+				   G4double length, 
+				   G4double edepTotal,
+				   G4double edepNIEL = 0.0);
+
+  // find and Birks coefficient 
+  G4double FindG4BirksCoefficient(const G4Material*);
+
+  void SetVerbose(G4int);
+
+  // dump coeffitients used in run time
+  void DumpBirksCoefficients();
+
+  // dump G4 list
+  void DumpG4BirksCoefficients();
+
+private:
+
+  // hide assignment operator
+  G4EmSaturation & operator=(const G4EmSaturation &right);
+  G4EmSaturation(const G4EmSaturation&);
+
+  G4double FindBirksCoefficient(const G4Material*);
+
+  void Initialise();
+
+  const G4ParticleDefinition* gamma;
+  const G4ParticleDefinition* electron;
+  const G4ParticleDefinition* neutron;
+  const G4ParticleDefinition* proton;
+  G4LossTableManager*         manager;
+  G4NistManager*              nist;
+
+  // cash
+  const G4Material*           curMaterial;
+  G4double                    curBirks;
+  G4double                    curRatio;
+  G4double                    curChargeSq;
+
+  G4int    verbose;             
+  G4int    nMaterials;
+  G4int    nG4Birks;
+
+  // list of materials used in run time
+  std::vector<const G4Material*>    matPointers;
+  std::vector<G4String>             matNames;
+  std::vector<G4double>             massFactors;
+  std::vector<G4double>             effCharges;
+
+  // list of G4 materials 
+  std::vector<G4double>             g4MatData;
+  std::vector<G4String>             g4MatNames;
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+inline void G4EmSaturation::SetVerbose(G4int val)
+{
+  verbose = val;
+}
 
 #endif
 
