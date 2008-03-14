@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.20 2008-03-12 17:11:38 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.21 2008-03-14 09:22:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1471,6 +1471,9 @@ void G4OpenGLQtViewer::showMovieParametersDialog() {
   if (!fMovieParametersDialog) {
     fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,GLWindow);
     displayRecordingStatus();
+    if (getEncoderPath() == "") {
+      setRecordingInfos("mpeg_encode is needed to encode in video format. It is available here: http://bmrc.berkeley.edu/frame/research/mpeg/");
+    }
   }
   fMovieParametersDialog->show();
 }
@@ -2074,13 +2077,7 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event)
   
   if (event->key() == Qt::Key_Escape) { // escaped from full screen
 #if QT_VERSION >= 0x030200
-    if (GLWindow->isFullScreen()) {
-#if QT_VERSION < 0x040000
-      fFullScreenOn->activated();
-#else
-      fFullScreenOn->trigger();
-#endif
-    }
+      toggleFullScreen(false);
 #endif
   }
   // several case here : If return is pressed, in every case -> display the movie parameters dialog

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.5 2008-03-11 17:35:11 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.6 2008-03-14 09:22:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -324,10 +324,6 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   connect (fSaveFileName,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
 #endif
 
-  if (fParentViewer->getEncoderPath() == "") {
-    setRecordingInfos("mpeg_encode is needed to encode in video format. It is available here: http://bmrc.berkeley.edu/frame/research/mpeg/");
-  }
-  
   checkAllParameters();
 }
 
