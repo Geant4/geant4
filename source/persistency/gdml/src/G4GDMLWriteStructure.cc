@@ -32,41 +32,30 @@
 
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol) {
 
+   G4ThreeVector scl(1.0,1.0,1.0);
+   G4ThreeVector rot = getAngles(physvol->GetObjectRotationValue().inverse());
+   G4ThreeVector pos = physvol->GetObjectTranslation();
+
+   G4String volumeref = physvol->GetLogicalVolume()->GetName();
+   G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
+
+   if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {
+
+      volumeref.remove(volumeref.length()-5,5); // Remove "_refl"
+      G4Transform3D scale = refl->GetTransform3D();
+      	 
+      scl.setX(scale(0,0)); // We assume that this is a pure scaling transformation!!!
+      scl.setY(scale(1,1));
+      scl.setZ(scale(2,2));
+   }
+
    xercesc::DOMElement* physvolElement = newElement("physvol");
    volumeElement->appendChild(physvolElement);
    physvolElement->setAttributeNode(newAttribute("name",physvol->GetName()));
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    physvolElement->appendChild(volumerefElement);
-   volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
-
-   G4Transform3D transform(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
-
-   G4RotationMatrix rotation;
-   
-   rotation.setRows(G4ThreeVector(transform(0,0),transform(0,1),transform(0,2)),   // Our transformation must be a pure rotation!
-                    G4ThreeVector(transform(1,0),transform(1,1),transform(1,2)),
-		    G4ThreeVector(transform(2,0),transform(2,1),transform(2,2)));
-
-   G4ThreeVector scl(1.0,1.0,1.0);
-   G4ThreeVector rot = getAngles(rotation);
-   G4ThreeVector pos(transform(0,3),transform(1,3),transform(2,3));
-
-   // Reflection is stored as a reflected solid and propagates down to the leaves!
-
-   if (physvol->GetLogicalVolume()->GetNoDaughters()==0) { // The referenced volume is a LEAF...
-      
-      G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
-      
-      if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) { //.. and it is reflected
-
-         G4Transform3D scale = refl->GetTransform3D();
-      	 
-	 scl.setX(scale(0,0));  // We assume that this is a pure scaling transformation!!!
-	 scl.setY(scale(1,1));
-	 scl.setZ(scale(2,2));
-      }
-   }
+   volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
 
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
@@ -137,6 +126,10 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 
 void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,const G4LogicalVolume* const volumePtr) {
 
+   G4VSolid* solidPtr = volumePtr->GetSolid();
+
+   if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) return; // Reflected solid is replaced with scale transformation!
+      
    xercesc::DOMElement* volumeElement = newElement("volume");
    structureElement->appendChild(volumeElement);
 
@@ -145,13 +138,6 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,con
    xercesc::DOMElement* materialrefElement = newElement("materialref");
    materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
    volumeElement->appendChild(materialrefElement);
-
-   G4VSolid* solidPtr = volumePtr->GetSolid();
-
-   if (const G4ReflectedSolid* reflectedPtr = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {   // Resolve reflected solid
-      
-      solidPtr = reflectedPtr->GetConstituentMovedSolid();
-   }
 
    xercesc::DOMElement* solidrefElement = newElement("solidref");
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
