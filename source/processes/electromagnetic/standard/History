@@ -1,4 +1,4 @@
-$Id: History,v 1.371 2008-03-13 17:21:24 vnivanch Exp $
+$Id: History,v 1.372 2008-03-14 12:12:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 March 08: V.Ivant (emstand-V09-01-08)
+- G4UrbanMscModel2 - L.Urban fix assymetry in lateral displacement
 - G4UrbanMscModel90, G4MscModel71 - fixed warnings for gcc 4.3.0
 
 10 March 08: V.Ivant (emstand-V09-01-07)

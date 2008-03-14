@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.10 2008-02-12 09:41:20 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.11 2008-03-14 12:12:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -181,8 +181,8 @@ G4double G4IonFluctuations::Dispersion(
   else                                 fac = RelativisticFactor(material, zeff);
 
   // taking into account the cut
-  if(fac > 1.01) 
-    siga *= (1.0 + (fac - 1.)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
+  if(fac > 1.0) 
+    siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
 
   //  G4cout << "siga= " << siga << " fac= " << fac << G4endl;
 
