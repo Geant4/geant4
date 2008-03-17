@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.2 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.3 2008-03-17 13:02:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,12 +139,10 @@ private:
   G4double tausmall;
   G4double taulim;
   G4double currentTau;
-  G4double frscaling1,frscaling2;
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
 
-  G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;

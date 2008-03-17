@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.3 2008-03-14 06:02:55 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.4 2008-03-17 13:02:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,9 @@
 //
 // 13-03-08  Bug in SampleScattering (which caused lateral asymmetry) fixed
 //           (L.Urban)
+// 14-03-08  Simplification of step limitation in ComputeTruePathLengthLimit,
+//           + tlimitmin is the same for UseDistancetoBoundary and
+//           UseSafety (L.Urban)           
 
 // Class Description:
 //
@@ -85,11 +88,8 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   stepmin       = tlimitminfix;
   smallstep     = 1.e10;
   currentRange  = 0. ;
-  frscaling2    = 0.25;
-  frscaling1    = 1.-frscaling2;
   tlimit        = 1.e10*mm;
   tlimitmin     = 10.*tlimitminfix;            
-  nstepmax      = 25.;
   geombig       = 1.e50*mm;
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
@@ -443,15 +443,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 	  if(stepNumber == 1) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
-	  // facrange scaling in lambda 
-	  // not so strong step restriction above lambdalimit
-	  G4double facr = facrange;
-	  if(lambda0 > lambdalimit)
-	    facr *= frscaling1+frscaling2*lambda0/lambdalimit;
-
 	  // constraint from the physics
-	  if (currentRange > lambda0) tlimit = facr*currentRange;
-	  else                        tlimit = facr*lambda0;
+          tlimit = facrange*currentRange;
 
           if(tlimit > currentRange) tlimit = currentRange;
 
@@ -540,18 +533,16 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
 	{ 
-	  // facrange scaling in lambda 
-	  // not so strong step restriction above lambdalimit
-	  G4double facr = facrange;
-	  if(lambda0 > lambdalimit)
-	    facr *= frscaling1+frscaling2*lambda0/lambdalimit;
-
 	  // constraint from the physics
-	  if (currentRange > lambda0) tlimit = facr*currentRange;
-	  else                        tlimit = facr*lambda0;
+          tlimit = facrange*currentRange;
 
-	  //lower limit for tlimit
-	  tlimitmin = std::max(tlimitminfix,lambda0/nstepmax);
+          //lower limit for tlimit
+          //tlimitmin = 10*stepmin (see at UseDistancetoBoundary)
+          G4double rat = currentKinEnergy/MeV ;
+          rat = 1.e-3/(rat*(10.+rat)) ;
+          tlimitmin = 10.*lambda0*rat;
+          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+    
 	  if(tlimit < tlimitmin) tlimit = tlimitmin;
 	}
 
