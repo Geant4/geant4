@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DopplerProfile.hh,v 1.1 2008-03-10 19:40:39 pia Exp $
+// $Id: G4DopplerProfile.hh,v 1.2 2008-03-17 13:45:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -60,15 +60,13 @@ public:
  
   size_t NumberOfProfiles(G4int Z) const;
 
-  const G4VEMDataSet* Profiles(G4int Z);
-  const G4VEMDataSet* Profile(G4int Z, G4int ShellIndex);
+  const G4VEMDataSet* Profiles(G4int Z) const;
+  const G4VEMDataSet* Profile(G4int Z, G4int ShellIndex) const;
 
-  void LoadData(const G4String& fileName);
+   void PrintData() const;
 
-  void PrintData() const;
-
-  // Randomly select a shell based on shell occupancy
-  G4double RandomSelectMomentum(G4int Z, G4int ShellIndex) const;
+  // Random select a momentum value based on Doppler profiles
+  G4double RandomSelectMomentum(G4int Z, G4int shellIndex) const;
  
 private:
 
@@ -77,7 +75,6 @@ private:
   G4DopplerProfile(const G4DopplerProfile&);
 
   std::map<G4int,G4VEMDataSet*,std::less<G4int> > profileMap;
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> > profilePdfMap;
   std::vector<G4int> nShells;
 
   G4int zMin;
@@ -89,10 +86,6 @@ private:
 
   void LoadBiggsP(const G4String& fileName);
   void LoadProfile(const G4String& fileName, G4int Z);
-
-  std::vector<G4double> ProfilePDF(std::vector<G4double>& profileVector);
-
-  G4double IntegrateProfile(const std::vector<G4double>& profileVector);
 
 };
  

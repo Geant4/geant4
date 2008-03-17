@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.17 2008-03-14 22:58:28 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.18 2008-03-17 13:40:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -47,16 +47,19 @@
 G4EMDataSet::G4EMDataSet(G4int Z, 
 			 G4VDataSetAlgorithm* algo, 
 			 G4double xUnit, 
-			 G4double yUnit): 
+			 G4double yUnit,
+			 G4bool random): 
   z(Z),
   energies(0),
   data(0),
   algorithm(algo),
   unitEnergies(xUnit),
   unitData(yUnit),
-  pdf(0)
+  pdf(0),
+  randomSet(random)
 {
   if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+  if (randomSet) BuildPdf();
 }
 
 G4EMDataSet::G4EMDataSet(G4int argZ, 
@@ -64,14 +67,16 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 			 G4DataVector* dataY, 
 			 G4VDataSetAlgorithm* algo, 
 			 G4double xUnit, 
-			 G4double yUnit):
+			 G4double yUnit,
+			 G4bool random):
   z(argZ),
   energies(dataX),
   data(dataY),
   algorithm(algo),
   unitEnergies(xUnit),
   unitData(yUnit),
-  pdf(0)
+  pdf(0),
+  randomSet(random)
 {
   if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 
@@ -82,6 +87,8 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   
   if (energies->size() != data->size()) 
     G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
+
+  if (randomSet) BuildPdf();
 }
 
 G4EMDataSet::~G4EMDataSet()
@@ -98,7 +105,7 @@ G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
   if (energies->empty()) return 0;
   if (energy <= (*energies)[0]) return (*data)[0];
 
-  size_t i(energies->size()-1);
+  size_t i = energies->size()-1;
   if (energy >= (*energies)[i]) return (*data)[i];
 
   return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data);
@@ -110,14 +117,17 @@ void G4EMDataSet::PrintData(void) const
   if (!energies)
     {
       G4cout << "Data not available." << G4endl;
-      return;
     }
-  
-  size_t size = energies->size();
-  for (size_t i(0); i<size; i++)
+  else
     {
-      G4cout << "Point: " << ((*energies)[i]/unitEnergies)
-	     << " - Data value: " << ((*data)[i]/unitData) << G4endl; 
+      size_t size = energies->size();
+      for (size_t i(0); i<size; i++)
+	{
+	  G4cout << "Point: " << ((*energies)[i]/unitEnergies)
+		 << " - Data value: " << ((*data)[i]/unitData);
+	  if (pdf != 0) G4cout << " - PDF : " << (*pdf)[i];
+	  G4cout << G4endl; 
+	}
     }
 }
 
@@ -182,6 +192,7 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
   while (a != -2);
  
   SetEnergiesData(argEnergies, argData, 0);
+  if (randomSet) BuildPdf();
  
   return true;
 }
@@ -302,7 +313,7 @@ G4String G4EMDataSet::FullFileName(const G4String& name) const
 }
 
 
-void G4EMDataSet::BuildPdf()
+void G4EMDataSet::BuildPdf() 
 {
   pdf = new G4DataVector;
   G4Integrator <G4EMDataSet, G4double(G4EMDataSet::*)(G4double)> integrator;
@@ -310,18 +321,21 @@ void G4EMDataSet::BuildPdf()
   G4int nData = data->size();
   pdf->push_back(0.);
 
-  G4int i;
   // Integrate the data distribution 
+  G4int i;
+  G4double totalSum = 0.;
   for (i=1; i<nData; i++)
     {
       G4double xLow = (*energies)[i-1];
       G4double xHigh = (*energies)[i];
       G4double sum = integrator.Legendre96(this, &G4EMDataSet::IntegrationFunction, xLow, xHigh);
-      pdf->push_back(sum);
+      totalSum = totalSum + sum;
+      pdf->push_back(totalSum);
     }
+
   // Normalize to the last bin
-  G4double tot = (*pdf)[nData-1];
-  if (tot > 0.) tot = 1. / tot;
+  G4double tot = 0.;
+  if (totalSum > 0.) tot = 1. / totalSum;
   for (i=1;  i<nData; i++)
     {
       (*pdf)[i] = (*pdf)[i] * tot;
@@ -333,13 +347,35 @@ G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
 {
   // Random select a X value according to the cumulative probability distribution
   // derived from the data
-  
-  G4double value = 0.;
 
+  if (!pdf) G4Exception("G4EMDataSet::RandomSelect - PDF has not been created for this data set");
+
+  G4double value = 0.;
   G4double x = G4UniformRand();
 
   // Locate the random value in the X vector based on the PDF
   size_t bin = FindLowerBound(x,pdf);
+
+  // Interpolate the PDF to calculate the X value: 
+  // linear interpolation in the first bin (to avoid problem with 0),
+  // interpolation with associated data set algorithm in other bins
+
+  G4LinInterpolation linearAlgo;
+  if (bin == 0) value = linearAlgo.Calculate(x, bin, *pdf, *energies);
+  else value = algorithm->Calculate(x, bin, *pdf, *energies);
+
+  //  G4cout << x << " random bin "<< bin << " - " << value << G4endl;
+  return value;
+}
+
+G4double G4EMDataSet::IntegrationFunction(G4double x)
+{
+  // This function is needed by G4Integrator to calculate the integral of the data distribution
+
+  G4double y = 0;
+
+ // Locate the random value in the X vector based on the PDF
+  size_t bin = FindLowerBound(x);
 
   // Interpolate to calculate the X value: 
   // linear interpolation in the first bin (to avoid problem with 0),
@@ -347,22 +383,9 @@ G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
 
   G4LinInterpolation linearAlgo;
   
-  if (bin = 0)
-    {
-      return linearAlgo.Calculate(x, bin, *pdf, *energies);
-    }
-  else
-    {
-      return algorithm->Calculate(x, bin, *pdf, *energies);
-    }
-
-  return value;
-}
-
-G4double G4EMDataSet::IntegrationFunction(G4double x)
-{
-  // This function is needed by G4Integrator to calculate the integral of the data distribution
-  G4double y = FindValue(x);
+  if (bin == 0) y = linearAlgo.Calculate(x, bin, *energies, *data);
+  else y = algorithm->Calculate(x, bin, *energies, *data);
+ 
   return y;
 }
 

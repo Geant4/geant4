@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.6 2008-03-10 15:06:28 pia Exp $
+// $Id: G4ShellData.hh,v 1.7 2008-03-17 13:45:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,18 +62,20 @@ public:
 
   G4int ShellId(G4int Z, G4int shellIndex) const;
 
-  G4double ShellOccupationProbability(G4int Z, G4int shellIndex) const;
+  G4double ShellOccupancyProbability(G4int Z, G4int shellIndex) const;
 
   const std::vector<G4double>& ShellIdVector(G4int Z) const;
 
   G4double BindingEnergy(G4int Z, G4int shellIndex) const;
+
+  void SetOccupancyData() { occupancyData = true; }
 
   void LoadData(const G4String& fileName);
 
   void PrintData() const;
 
   // Randomly select a shell based on shell occupancy
-  G4int RandomSelectShell(G4int Z) const;
+  G4int SelectRandomShell(G4int Z) const;
 
 private:
 

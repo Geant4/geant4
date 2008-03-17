@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DopplerProfile.cc,v 1.1 2008-03-10 19:10:12 pia Exp $
+// $Id: G4DopplerProfile.cc,v 1.2 2008-03-17 13:40:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -74,13 +74,7 @@ G4DopplerProfile::~G4DopplerProfile()
     {
       G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
-    }
-
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos2;
-  for (pos2 = profilePdfMap.begin(); pos2 != profilePdfMap.end(); ++pos2)
-    {
-      G4VEMDataSet* dataSet = (*pos2).second;
-      delete dataSet;
+      dataSet = 0;
     }
 }
 
@@ -88,16 +82,12 @@ G4DopplerProfile::~G4DopplerProfile()
 size_t G4DopplerProfile::NumberOfProfiles(G4int Z) const
 {
   G4int n = 0;
-
-  if (Z>= zMin && Z <= zMax)
-    {
-      n = nShells[Z-1];
-    }
+  if (Z>= zMin && Z <= zMax) n = nShells[Z-1];
   return n;
 }
 
 
-const G4VEMDataSet* G4DopplerProfile::Profiles(G4int Z)
+const G4VEMDataSet* G4DopplerProfile::Profiles(G4int Z) const
 {
   std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   if (Z < zMin || Z > zMax) G4Exception("G4DopplerProfile::Profiles - Z outside boundaries");
@@ -107,7 +97,7 @@ const G4VEMDataSet* G4DopplerProfile::Profiles(G4int Z)
 }
 
 
-const G4VEMDataSet* G4DopplerProfile::Profile(G4int Z, G4int shellIndex)
+const G4VEMDataSet* G4DopplerProfile::Profile(G4int Z, G4int shellIndex) const
 {
   const G4VEMDataSet* profis = Profiles(Z);
   const G4VEMDataSet* profi = profis->GetComponent(shellIndex);
@@ -117,204 +107,18 @@ const G4VEMDataSet* G4DopplerProfile::Profile(G4int Z, G4int shellIndex)
 
 void G4DopplerProfile::PrintData() const
 {
-  /*
-  for (G4int Z = zMin; Z <= zMax; Z++)
+  for (G4int Z=zMin; Z<zMax; Z++)
     {
-      G4cout << "---- Shell data for Z = "
-	     << Z
-	     << " ---- "
-	     << G4endl;
-      G4int nSh = nShells[Z-1];
-      std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator posId;
-      posId = idMap.find(Z);
-      std::vector<G4double>* ids = (*posId).second;
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posE;
-      posE = bindingMap.find(Z);
-      G4DataVector* energies = (*posE).second;
-      for (G4int i=0; i<nSh; i++)
-	{
-	  G4int id = (G4int) (*ids)[i];
-	  G4double e = (*energies)[i] / keV;
-	  G4cout << i << ") ";
-
-	  if (occupancyData) 
-	    {
-	      G4cout << " Occupancy: ";
-	    }
-	  else 
-	    {
-	      G4cout << " Shell id: ";
-	    }
-	  G4cout << id << " - Binding energy = "
-		 << e << " keV ";
-	    if (occupancyData)
-	      {
-		std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator posOcc;
-		posOcc = occupancyPdfMap.find(Z);
-                std::vector<G4double> probs = *((*posOcc).second);
-                G4double prob = probs[i];
-		G4cout << "- Probability = " << prob;
-	      }
-	    G4cout << G4endl;
-	}
-      G4cout << "-------------------------------------------------" 
-	     << G4endl;
+      const G4VEMDataSet* profis = Profiles(Z);
+      profis->PrintData();
     }
-  */
-}
-
-
-void G4DopplerProfile::LoadData(const G4String& fileName)
-{ 
-  // Build the complete string identifying the file with the data set
-  /*
-  std::ostringstream ost;
-  
-  ost << fileName << ".dat";
-  
-  G4String name(ost.str());
-  
-  char* path = getenv("G4LEDATA");
-  if (!path)
-    { 
-      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
-    }
-  
-  G4String pathString(path);
-  G4String dirFile = pathString + name;
-  std::ifstream file(dirFile);
-  std::filebuf* lsdp = file.rdbuf();
-
-  if (! (lsdp->is_open()) )
-    {
-      G4String s1("G4DopplerProfile - data file: ");
-      G4String s2(" not found");
-      G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
-    }
-
-  G4double a = 0;
-  G4int k = 1;
-  G4int s = 0;
-  
-  G4int Z = 1;
-  G4DataVector* energies = new G4DataVector;
-  std::vector<G4double>* ids = new std::vector<G4double>;
-
-  do {
-    file >> a;
-    G4int nColumns = 2;
-    if (a == -1)
-      {
-	if (s == 0)
-	  {
-	    // End of a shell data set
-	    idMap[Z] = ids;
-            bindingMap[Z] = energies;
-            G4int n = ids->size();
-	    nShells.push_back(n);
-	    // Start of new shell data set
-	    ids = new std::vector<G4double>;
-            energies = new G4DataVector;
-            Z++;	    
-	  }      
-	s++;
-	if (s == nColumns)
-	{
-	  s = 0;
-	}
-      }
-    else if (a == -2)
-      {
-	// End of file; delete the empty vectors created when encountering the last -1 -1 row
-	delete energies;
-	delete ids;
-	//nComponents = components.size();
-      }
-    else
-      {
-	// 1st column is shell id
-	if(k%nColumns != 0)
-	  {	    
-	    ids->push_back(a);
-	    k++;
-	  }
-	else if (k%nColumns == 0)
-	  {
-	    // 2nd column is binding energy
-	    G4double e = a * MeV;
-	    energies->push_back(e);
-	    k = 1;
-	  }
-      }
-  } while (a != -2); // end of file
-  file.close();    
-
-  // For Doppler broadening: the data set contains shell occupancy and binding energy for each shell
-  // Build additional map with probability for each shell based on its occupancy
-
-  if (occupancyData)
-    {
-      // Build cumulative from raw shell occupancy
-
-      for (G4int Z=zMin; Z <= zMax; Z++)
-	{
-	  std::vector<G4double> occupancy = ShellIdVector(Z);
-
-	  std::vector<G4double>* prob = new std::vector<G4double>;
-	  G4double scale = 1. / G4double(Z);
-
-	  prob->push_back(occupancy[0] * scale);
-	  for (size_t i=1; i<occupancy.size(); i++)
-	    {
-	      prob->push_back(occupancy[i]*scale + (*prob)[i-1]);
-	    }
-	  occupancyPdfMap[Z] = prob;
-
-	  
-	}
-    }
-  */
-}
-
-
-G4double G4DopplerProfile::RandomSelectMomentum(G4int Z, G4int ShellIndex) const
-{
-  /*
-  if (Z < zMin || Z > zMax) G4Exception("G4DopplerProfile::RandomSelect - Z outside boundaries");
-
-  G4int shellIndex = 0;    
-  std::vector<G4double> prob = ShellVector(Z);
-  G4double random = G4UniformRand();
-
-  // std::vector<G4double>::const_iterator pos;
-  // pos = lower_bound(prob.begin(),prob.end(),random);
-
-  // Binary search the shell with probability less or equal random
-
-  G4int nShells = NumberOfShells(Z);
-  G4int upperBound = nShells;
-
-  while (shellIndex <= upperBound) 
-    {      G4int midShell = (shellIndex + upperBound) / 2;
-      if ( random < prob[midShell] ) 
-	upperBound = midShell - 1;
-      else 
-	shellIndex = midShell + 1;
-    }  
-  if (shellIndex >= nShells) shellIndex = nShells - 1;
-  */
-  return 0.;
 }
 
 
 void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 {
-  std::ostringstream ost;
-  
+  std::ostringstream ost;  
   ost << fileName << ".dat";
-  
   G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
@@ -342,9 +146,9 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
     {
       file >> p;
       biggsP.push_back(p);
-      G4cout << "Biggs p = " << p << G4endl;
     }
 
+  // Make sure that the number of data loaded corresponds to the number in Biggs' paper
   if (biggsP.size() != nBiggs)
     G4Exception("G4DopplerProfile::LoadBiggsP - Number of momenta read in is not 31");
 }
@@ -353,9 +157,7 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 {
   std::ostringstream ost;
-  
   ost << fileName << "-" << Z << ".dat";
-  
   G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
@@ -390,6 +192,7 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
       nShell++;
       G4DataVector* profi = new G4DataVector;
       G4DataVector* biggs = new G4DataVector;
+
       // Read in profile data for the current shell
       for (size_t i=0; i<nBiggs; i++)
 	{ 
@@ -398,15 +201,15 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
           biggs->push_back(biggsP[i]);
 	  //	  if (i == 16) G4cout << "profile = " << p << G4endl;
 	}
+
       // Create G4EMDataSet for the current shell
       G4VDataSetAlgorithm* algo = interpolation->Clone();
-      G4VEMDataSet* dataSet = new G4EMDataSet(Z, biggs, profi, algo, 1., 1.);
-      //     dataSet->PrintData();
+      G4VEMDataSet* dataSet = new G4EMDataSet(Z, biggs, profi, algo, 1., 1., true);
+     
       // Add current shell profile component to G4CompositeEMDataSet for the current Z
       dataSetForZ->AddComponent(dataSet);
     }
 
-  G4cout << Z << ") has " << nShell << " shells" << G4endl;
   // Fill in number of shells for the current Z
   nShells.push_back(nShell);
  
@@ -414,8 +217,10 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 }
 
 
-
-G4double G4DopplerProfile::IntegrateProfile(const std::vector<G4double>& profileVector)
+ G4double G4DopplerProfile::RandomSelectMomentum(G4int Z, G4int shellIndex) const
 {
-  return 0.;
+  G4double value = 0.;
+  const G4VEMDataSet* profis = Profiles(Z);
+  value = profis->RandomSelect(shellIndex);
+  return value;
 }

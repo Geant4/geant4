@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNACrossSectionDataSet.hh,v 1.5 2008-03-13 19:55:32 pia Exp $
+// $Id: G4DNACrossSectionDataSet.hh,v 1.6 2008-03-17 13:45:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
@@ -44,7 +44,7 @@
 
 // -------------------------------------------------------------------
 
-#ifndef   G4DNACROSSSECTIONDATASET_HH
+#ifndef  G4DNACROSSSECTIONDATASET_HH
 #define  G4DNACROSSSECTIONDATASET_HH 1
 
 #include "G4ShellEMDataSet.hh"
@@ -83,10 +83,7 @@ public:
   virtual G4bool LoadData(const G4String & argFileName);
   virtual G4bool SaveData(const G4String & argFileName) const;
  
-  virtual void BuildPdf() { };
-
-  virtual G4double RandomSelect(G4int componentId = 0) const { return -1.; };
-
+  virtual G4double RandomSelect(G4int /*componentId */) const { return -1.; };
 
 
   //   void CleanUpComponents();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.12 2008-03-10 15:07:40 pia Exp $
+// $Id: G4CompositeEMDataSet.cc,v 1.13 2008-03-17 13:40:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -64,10 +64,6 @@ G4CompositeEMDataSet::~G4CompositeEMDataSet()
   CleanUpComponents();
   if (algorithm) delete algorithm;
 }
-
-
-
-
 
 
 G4double G4CompositeEMDataSet::FindValue(G4double argEnergy, G4int argComponentId) const
@@ -166,3 +162,14 @@ void G4CompositeEMDataSet::CleanUpComponents(void)
     }
 }
 
+
+G4double G4CompositeEMDataSet::RandomSelect(G4int componentId) const
+{
+  G4double value = 0.;
+  if (componentId >= 0 && componentId < (G4int)components.size())
+    {
+      const G4VEMDataSet* dataSet = GetComponent(componentId);
+      value = dataSet->RandomSelect();
+    }
+  return value;
+}

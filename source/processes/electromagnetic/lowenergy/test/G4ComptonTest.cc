@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.26 2008-03-10 15:12:06 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.27 2008-03-17 13:46:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,8 @@
 //      16 Sep 2001  AP  Moved ntuples to Lizard 
 //
 // -------------------------------------------------------------------
+//
+// (MGP) The following is obsolete and should be replaced by iAIDA instructions
 //
 // from: geant4/source/processes/electromagnetic/lowenergy/test/
 //
@@ -213,9 +215,9 @@ int main()
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
 
-  G4Material* Air = new G4Material("Air"  ,  1.290*mg/cm3, 2);
-  Air->AddElement(N,0.7);
-  Air->AddElement(O,0.3);
+  G4Material* air = new G4Material("Air"  ,  1.290*mg/cm3, 2);
+  air->AddElement(N,0.7);
+  air->AddElement(O,0.3);
 
   // Interactive set-up
 
@@ -232,7 +234,8 @@ int main()
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
   // Dump the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();  
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
@@ -262,13 +265,13 @@ int main()
   //  gamma->SetCuts(1e-3*mm);
   // electron->SetCuts(1e-3*mm);
   //  positron->SetCuts(1e-3*mm);
- 
 
   G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
   if (cuts == 0) G4cout << " G4ProductionCuts* cuts = 0" << G4endl;
   G4double cutAll = 1.*micrometer;
   cuts->SetProductionCut(cutAll, -1); //all
+  // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
   G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
   couple->SetUseFlag(true);
 
@@ -276,21 +279,17 @@ int main()
   G4double dimY = 1 * mm;
   G4double dimZ = 1 * mm;
   
-
   // Geometry 
 
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
   G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,material,
-						      //(*theMaterialTable)[materialId],
 						      "LFrame", 0, 0, 0);
-  //logicalFrame->SetMaterial(material); 
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 						   "PFrame",logicalFrame,0,false,0);
+  // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
   cutsTable->UpdateCoupleTable(physicalFrame);
   cutsTable->DumpCouples();
-  //  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
-
-
+  
   //RunManager
   G4RunManager* rm = new G4RunManager();
   rm->GeometryHasBeenModified();
@@ -298,7 +297,8 @@ int main()
   rm->DefineWorldVolume(world);
   G4cout << "[OK] World is defined " << G4endl;
  
-  cutsTable->UpdateCoupleTable(world);
+  // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
+   cutsTable->UpdateCoupleTable(world);
   cutsTable->DumpCouples();
 
   G4double cutG=1*micrometer;
@@ -309,8 +309,7 @@ int main()
   G4cout << "Cuts are defined " << G4endl;
   cutsTable->UpdateCoupleTable(world);
   cutsTable->DumpCouples();
-  //  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
-
+  
   // Processes 
 
   G4int processType;
@@ -318,10 +317,7 @@ int main()
     << "LowEnergy [1] or Penelope [2] or LowEnergyPolarized [3] or Standard [4]?" 
     << G4endl;
   G4cin >> processType;
-  if (processType <1 || processType >4 )
-    {
-      G4Exception("Wrong input");
-    }
+  if (processType < 1 || processType > 4 ) G4Exception("Wrong input");
 
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
@@ -354,7 +350,8 @@ int main()
   if (processType == 1)
     {
       photonProcess = new G4LowEnergyCompton;
-    }
+      G4cout << "G4LowEnergyCompton CREATED" << G4endl;
+   }
   if (processType == 2)
     {
       photonProcess = new G4PenelopeCompton;
@@ -379,49 +376,6 @@ int main()
   G4double initZ = 1. * mm;
   G4ParticleMomentum gDirection(initX,initY,initZ);
 
-  /* 
-
-  G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
-
-  // Track 
-
-  G4ThreeVector position(0.,0.,0.);
-  G4double time = 0. ;
-  G4Track* gTrack = new G4Track(&dynamicPhoton,time,position);
-
-  // Do I really need this?
-  G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, position);   
-  //gTrack->SetTouchable(touche);
- 
-
- // Step 
-
-  G4Step* step = new G4Step();  
-  step->SetTrack(gTrack);
-  gTrack->SetStep(step);
-  const G4MaterialCutsCouple* theCouple(cutsTable->GetMaterialCutsCouple(material, cutsTable->GetDefaultProductionCuts()));
-  if (theCouple == 0) G4cout << "Couple = 0 in setting Step" <<G4endl;
-  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
-
-
-  G4StepPoint* point = new G4StepPoint();
-  point->SetPosition(position);
-  point->SetMaterial(material);
-  point->SetMaterialCutsCouple(couple);
-  G4double safety = 10000.*cm;
-  point->SetSafety(safety);
-  step->SetPreStepPoint(point);
-
-  G4StepPoint* newPoint = new G4StepPoint();
-  G4ThreeVector newPosition(0.,0.,1.*mm);
-  newPoint->SetPosition(newPosition);
-  newPoint->SetMaterial(material);
-  newPoint->SetMaterialCutsCouple(couple);
-  newPoint->SetSafety(safety);
-  step->SetPostStepPoint(newPoint);
-  */
-
-
   // Check applicability
   
   if (! (photonProcess->IsApplicable(*gamma))) G4Exception("Not Applicable");
@@ -438,15 +392,13 @@ int main()
   G4StepPoint* newPoint = 0;
   G4double gEnergy = 0.;
 
-  //  const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
-
   for (G4int iter=0; iter<nIterations; iter++)
     {
       // Primary energy  
       //      gEnergy = initEnergy*MeV*G4UniformRand();
       gEnergy = initEnergy*MeV;
-      if (gEnergy <= 0.) gEnergy = initEnergy*MeV;
       G4cout << "---- Initial energy = " << gEnergy/MeV << " MeV" << G4endl;
+
       // Dynamic particle (incident primary)
       G4DynamicParticle dynamicPhoton(G4Gamma::Gamma(),gDirection,gEnergy);
 
@@ -490,8 +442,6 @@ int main()
       gTrack->SetStep(step); 
  
       const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
-      //      G4cout << "Test couple" << G4endl;
-      //     if (couple == 0)  G4cout << " couple  is 0 " << G4endl;
 
       G4cout  <<  "Iteration = "  
 	      <<  iter 
@@ -501,7 +451,6 @@ int main()
 	      << G4endl;
 
       G4ParticleChange* particleChange = (G4ParticleChange*) photonProcess->PostStepDoIt(*gTrack,*step);
-      //      G4cout << "PostStepDoIt done" << G4endl;
 
       // Primary physical quantities 
 
@@ -522,14 +471,6 @@ int main()
       G4double yChange = particleChange->GetPosition()->y();
       G4double zChange = particleChange->GetPosition()->z();
       G4double thetaChange = particleChange->GetMomentumDirection()->theta();
-
-      G4cout << "---- Primary after the step ---- " << G4endl;
- 
-      //      G4cout << "Position (x,y,z) = " 
-      //	     << xChange << "  " 
-      //	     << yChange << "   " 
-      //	     << zChange << "   " 
-      //	     << G4endl;
 
       G4cout << "---- Energy: " 	    
 	     << energyChange/MeV << " MeV,  " 
@@ -553,7 +494,7 @@ int main()
       G4int nPhotons = 0;
 
       // Secondaries
-      
+  
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{  
 	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
@@ -652,14 +593,11 @@ int main()
   G4cout  << "-----------------------------------------------------"  
 	  <<  G4endl;
 
-
   // Committing the transaction with the tree
   std::cout << "Committing..." << std::endl;
   tree->commit();
   std::cout << "Closing the tree..." << std::endl;
   tree->close();
-
- 
 
   G4cout << "END OF TEST" << G4endl;
 }

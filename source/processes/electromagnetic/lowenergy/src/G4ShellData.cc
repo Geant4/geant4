@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.9 2008-03-10 15:07:41 pia Exp $
+// $Id: G4ShellData.cc,v 1.10 2008-03-17 13:40:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -139,7 +139,7 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
 }
 
 
-G4double G4ShellData::ShellOccupationProbability(G4int Z, G4int shellIndex) const
+G4double G4ShellData::ShellOccupancyProbability(G4int Z, G4int shellIndex) const
 {
   G4double prob = -1.;
 
@@ -352,7 +352,7 @@ void G4ShellData::LoadData(const G4String& fileName)
 }
 
 
-G4int G4ShellData::RandomSelectShell(G4int Z) const
+G4int G4ShellData::SelectRandomShell(G4int Z) const
 {
   if (Z < zMin || Z > zMax) G4Exception("G4ShellData::RandomSelect - Z outside boundaries");
 

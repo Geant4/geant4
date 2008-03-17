@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DopplerProfileTest.cc,v 1.1 2008-03-10 19:52:06 pia Exp $
+// $Id: G4DopplerProfileTest.cc,v 1.2 2008-03-17 13:46:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,19 +64,24 @@ int main()
   G4String file = "/doppler/shell-doppler";
   G4DopplerProfile* dataSet = new G4DopplerProfile(1,100);
 
-  dataSet->LoadData(file);
+  //  dataSet->LoadData(file);
+  dataSet->PrintData();
   
+  // Dump all Doppler profiles
+  for (G4int zDoppler=1; zDoppler<101; zDoppler++)
+    {
+      //    const G4VEMDataSet* profiles = dataSet->Profiles(zDoppler);
+      //     profiles->PrintData();
+    }
+
   G4cout << "Enter Z" << G4endl;
   G4int Z;
   G4cin >> Z;
 
   G4int n = dataSet->NumberOfProfiles(Z);
   G4cout << "Z = " << Z << " has " << n << " shells" << G4endl;
-  //  for (G4int Z=1; Z<101; Z++)
-  //   {
-      const G4VEMDataSet* profiles = dataSet->Profiles(Z);
-      profiles->PrintData();
-      //  }
+  const G4VEMDataSet* profiles = dataSet->Profiles(Z);
+  profiles->PrintData();
 
   G4cout << "Enter shell index " << G4endl;
   G4int i;
@@ -84,6 +89,12 @@ int main()
 
   const G4VEMDataSet* profile = dataSet->Profile(Z,i);
   profile->PrintData();
+
+  // Test random selection on single and composite profile
+  G4double rando = profile->RandomSelect();
+  rando = profiles->RandomSelect(i);
+
+  rando = dataSet->RandomSelectMomentum(Z,i);
 
   /*
   G4int id = dataSet->ShellId(Z,i);
@@ -100,6 +111,7 @@ int main()
     }
 
   // Select random shell
+
   
   for (G4int iter=0; iter<100; iter++)
     {
@@ -116,6 +128,7 @@ int main()
 
   if (k == 1) dataSet->PrintData();  
   */
+
   delete dataSet;
 
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;

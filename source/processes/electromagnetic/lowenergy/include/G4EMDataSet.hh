@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.11 2008-03-14 22:58:28 pia Exp $
+// $Id: G4EMDataSet.hh,v 1.12 2008-03-17 13:45:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,14 +57,16 @@ public:
   G4EMDataSet(G4int argZ, 
 	      G4VDataSetAlgorithm* algo, 
 	      G4double xUnit=MeV, 
-	      G4double yUnit=barn);
+	      G4double yUnit=barn,
+              G4bool random=false);
 
   G4EMDataSet(G4int argZ, 
 	      G4DataVector* xData, 
 	      G4DataVector* data, 
 	      G4VDataSetAlgorithm* algo, 
 	      G4double xUnit=MeV, 
-	      G4double yUnit=barn);
+	      G4double yUnit=barn,
+	      G4bool random=false);
 
   virtual ~G4EMDataSet();
  
@@ -85,17 +87,18 @@ public:
   virtual G4bool LoadData(const G4String& fileName);
   virtual G4bool SaveData(const G4String& fileName) const;
 
-  virtual void BuildPdf();
-
   virtual G4double RandomSelect(G4int componentId = 0) const;
     
+
 private:
 
   size_t FindLowerBound(G4double energy) const;
   size_t FindLowerBound(G4double x, G4DataVector* values) const;
 
   G4double IntegrationFunction(G4double x);
-   
+
+  virtual void BuildPdf();
+  
   G4String FullFileName(const G4String& fileName) const;
 
   // Hide copy constructor and assignment operator 
@@ -114,5 +117,6 @@ private:
   G4double unitData;
 
   G4DataVector* pdf;
+  G4bool randomSet;
 };
 #endif /* G4EMDATASET_HH */

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.11 2008-03-13 19:55:32 pia Exp $
+// $Id: G4VEMDataSet.hh,v 1.12 2008-03-17 13:45:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -43,7 +43,7 @@
 
 // -------------------------------------------------------------------
 
-#ifndef   G4VEMDATASET_HH
+#ifndef  G4VEMDATASET_HH
 #define  G4VEMDATASET_HH 1
 
 #include "globals.hh"
@@ -69,8 +69,6 @@ public:
  
   virtual G4bool LoadData(const G4String& fileName) = 0;
   virtual G4bool SaveData(const G4String& fileName) const = 0;
-
-  virtual void BuildPdf() = 0;
 
   virtual G4double RandomSelect(G4int componentId = 0) const = 0;
    
