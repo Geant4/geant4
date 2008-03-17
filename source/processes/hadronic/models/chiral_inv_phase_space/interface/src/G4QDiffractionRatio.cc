@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.7 2007-12-10 16:31:38 gunter Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.8 2008-03-17 18:31:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,7 +104,8 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
   G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom));
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  if(nDB && lastA==A && s==lastS) return lastR;   // VI do not use toler
   if(s>ms)
   {
     lastR=CalcDiff2Prod_Ratio(s,A);     // @@ Probably user ought to be notified about bigS
