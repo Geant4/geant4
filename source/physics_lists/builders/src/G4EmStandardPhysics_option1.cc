@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.3 2007-06-11 15:07:38 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.4 2008-03-17 12:05:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,6 +45,7 @@
 //
 
 #include "G4EmStandardPhysics_option1.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
@@ -154,24 +155,16 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
-      msc->SetStepLimitType(fMinimal);
-      pmanager->AddProcess(msc,                   -1, 1, 1);
-      pmanager->AddProcess(eioni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
 
     } else if (particleName == "e+") {
 
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
-      msc->SetStepLimitType(fMinimal);
-      pmanager->AddProcess(msc,                     -1, 1, 1);
-      pmanager->AddProcess(eioni,                   -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1, 4);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
@@ -211,8 +204,19 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
+    
+  // Em options
+  //  
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  
+  // Multiple Coulomb scattering
+  //
+  opt.SetMscStepLimitation(fMinimal);
+  
+  // Energy loss
+  //
+  opt.SetStepFunction(0.8, 1.0*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
