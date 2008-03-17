@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh,v 1.5 2008-03-14 14:27:23 vnivanch Exp $
+// $Id: G4EmSaturation.hh,v 1.6 2008-03-17 11:27:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
+#include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include <vector>
 
@@ -79,10 +80,12 @@ public:
 				   G4double edepTotal,
 				   G4double edepNIEL = 0.0);
 
+  inline G4double VisibleEnergyDeposition(const G4Step*); 
+
   // find and Birks coefficient 
   G4double FindG4BirksCoefficient(const G4Material*);
 
-  void SetVerbose(G4int);
+  inline void SetVerbose(G4int);
 
   // dump coeffitients used in run time
   void DumpBirksCoefficients();
@@ -132,6 +135,17 @@ private:
 inline void G4EmSaturation::SetVerbose(G4int val)
 {
   verbose = val;
+}
+
+inline G4double G4EmSaturation::VisibleEnergyDeposition(
+                const G4Step* step)
+{
+  G4Track* track = step->GetTrack();
+  return VisibleEnergyDeposition(track->GetDefinition(),
+                                 track->GetMaterialCutsCouple(),
+				 step->GetStepLength(),
+                                 step->GetTotalEnergyDeposit(),
+                                 step->GetNonIonizingEnergyDeposit());
 }
 
 #endif
