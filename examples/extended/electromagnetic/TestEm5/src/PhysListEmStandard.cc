@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.15 2007-12-19 18:34:23 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.16 2008-03-17 18:22:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,8 +124,8 @@ void PhysListEmStandard::ConstructProcess()
     
   //coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
-  emOptions.SetSkin(4.);
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+  emOptions.SetSkin(3.);
   
   //physics tables
   //

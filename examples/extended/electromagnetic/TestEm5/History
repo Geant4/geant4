@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2008-01-14 13:21:19 maire Exp $
+$Id: History,v 1.99 2008-03-17 18:22:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+17-03-08 mma (testem5-V09-01-02)
+- macro TestEm5.in : physics list emstandard_opt2
      
 14-01-08 mma (testem5-V09-01-01)
 - normalize histo 1
