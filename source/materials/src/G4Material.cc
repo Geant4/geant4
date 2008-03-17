@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.39 2008-03-06 18:08:43 vnivanch Exp $
+// $Id: G4Material.cc,v 1.40 2008-03-17 17:30:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -540,14 +540,17 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
   G4long prec = flux.precision(3);
   
   flux
-    << " Material: "      << std::setw(8) <<  material->fName
+    << " Material: "         << std::setw(8) <<  material->fName
     << " " << material->fChemicalFormula << " "
-    << "  density: "     << std::setw(6) << std::setprecision(3)  
+    << "  density: "         << std::setw(6) << std::setprecision(3)  
     << G4BestUnit(material->fDensity,"Volumic Mass") 
-    << "  RadL: "        << std::setw(7)  << std::setprecision(3)  
+    << "  RadL: "            << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->fRadlen,"Length")
-    << "  Imean: "       << std::setw(7)  << std::setprecision(3)  
+    << "  Nucl.Int.Length: " << std::setw(7)  << std::setprecision(3)  
+    << G4BestUnit(material->fNuclInterLen,"Length")    
+    << "  Imean: "           << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),"Energy");
+    
   if(material->fState == kStateGas)
     flux
       << "  temperature: " << std::setw(6) << std::setprecision(2)  
