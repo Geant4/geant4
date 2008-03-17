@@ -12,7 +12,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-17-Mar-2008 Vladimir Inanchenko          (hadr-chips-inter-V09-01-03)
+17-Mar-2008 Vladimir Ivanchenko          (hadr-chips-inter-V09-01-03)
 - Check on tolerance is replaced by check on exact equality for 
   G4QuasiFreeRatios,  G4QProtonNuclearCrossSection, 
   G4QNeutronNuclearCrossSection,G4QMuonNuclearCrossSection, 
