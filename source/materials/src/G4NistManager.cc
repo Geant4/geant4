@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.15 2007-12-11 13:32:08 gcosmo Exp $
+// $Id: G4NistManager.cc,v 1.16 2008-03-17 11:50:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -193,7 +193,7 @@ G4double G4NistManager::GetLOGA(G4double A)
   G4double x = (A - G4double(ia))/A;
   if(ia > 255) ia = 255;
   else if(ia < 0) ia = 0;
-  return LOGA[ia] + x;
+  return LOGA[ia] + x*(1.0 - 0.5*x);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
