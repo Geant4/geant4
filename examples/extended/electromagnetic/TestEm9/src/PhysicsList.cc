@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.19 2007-11-13 14:44:26 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.20 2008-03-18 14:55:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -49,6 +49,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4DecayPhysics.hh"
@@ -105,7 +106,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("emstandard");
   emPhysicsList = new PhysListEmStandard(emName);
 }
 
@@ -172,7 +173,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "standard") {
+  } else if (name == "emstandard_opt3") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+
+  } else if (name == "emstandard_local") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard();
