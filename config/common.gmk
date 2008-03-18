@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.47 2008-02-21 16:52:25 gcosmo Exp $
+# $Id: common.gmk,v 1.48 2008-03-18 15:09:51 lgarnier Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -82,7 +82,7 @@ endif
 
 ifneq ($(G4INTY_BUILD_QT),)
 src/%_moc.cc: include/%.hh
-	@echo Making moc file for $< ...
+	@echo Making moc file for  $(MOC) $(MOC_MACRO) -o $@ $< ...
 	@if [ `$(QTHOME)/bin/moc -v 2>&1 | grep "Qt 3" | wc -l ` -gt 0 ]; then \
 	$(QTMOC) -o $@ $<;\
 	else $(QTMOC) $(MOC_MACRO) -o $@ $<; \
