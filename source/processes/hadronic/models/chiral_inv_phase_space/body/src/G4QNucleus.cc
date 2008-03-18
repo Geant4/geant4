@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.92 2008-01-17 13:26:21 vnivanch Exp $
+// $Id: G4QNucleus.cc,v 1.93 2008-03-18 11:37:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -55,10 +55,12 @@ G4double G4QNucleus::mediRatio=1.;      // relative vacuum hadronization probabi
 G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8 fm)
 
 G4QNucleus::G4QNucleus(): G4QHadron(),Z(0),N(0),S(0),dZ(0),dN(0),dS(0),maxClust(0),
-  probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+			  currentNucleon(-1),rho0(0),radius(0)
+  //  probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(1) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
         <<", R="<<mediRatio<<G4endl;
@@ -66,13 +68,13 @@ G4QNucleus::G4QNucleus(): G4QHadron(),Z(0),N(0),S(0),dZ(0),dN(0),dS(0),maxClust(
 }
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000+z*1000+n),
-  Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),probVect(),theImpactParameter(),
-  theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
-
+  Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),
+  currentNucleon(-1),rho0(0),radius(0)
+  //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
-  //for(G4int i=1; i<256; i++) probVect[i] = 0.;
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
@@ -98,8 +100,9 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG),maxClust(0),probVect(),
-  theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG),maxClust(0),
+  currentNucleon(-1),rho0(0),radius(0)
+  //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
@@ -110,7 +113,8 @@ G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG),maxClust(0),probVect(),
 }
 
 G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),maxClust(0),
-  probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+  currentNucleon(-1),rho0(0),radius(0)
+  //  probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
@@ -123,12 +127,12 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),max
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),
-  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
-  
+  currentNucleon(-1),rho0(0),radius(0)
+  //  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
-  //for(G4int i=1; i<256; i++) probVect[i] = 0.;
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   Set4Momentum(p);
   SetNFragments(0);
   G4int ZNS=Z+N+S;
@@ -143,8 +147,8 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),maxClust(0),
-  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
-                                          
+  currentNucleon(-1),rho0(0),radius(0)
+  //  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
   //Tb = new std::vector<G4double>;
@@ -152,7 +156,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),max
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
   probVect[0]=mediRatio;
-  //for(G4int i=1; i<256; i++) probVect[i] = 0.;
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
   S = nucQC.GetS()-nucQC.GetAS();     // a#of LAMBDA's in the nucleus
@@ -192,15 +196,16 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),max
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p),dZ(0),dN(0),
-  dS(0),maxClust(0),probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),
-  rho0(),radius(),Tb()
+  dS(0),maxClust(0),
+  currentNucleon(-1),rho0(0),radius(0)                     
+  //probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
 {
   //Tb = new std::vector<G4double>;
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
 #endif
   probVect[0]=mediRatio;
-  //for(G4int i=1; i<256; i++) probVect[i] = 0.;
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   Set4Momentum(p);
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
@@ -346,6 +351,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
   dN=0;
   dS=0;
   probVect[0]=mediRatio;                        // init Vacuum/Medium probability
+  for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Convert HadrPDGCode to NucPDGCode
   G4int s=0;
   G4int z=0;
