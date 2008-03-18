@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2006-06-29 16:48:58 gunter Exp $
+// $Id: HistoManager.cc,v 1.3 2008-03-18 15:30:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,13 +163,16 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4"};
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7"};
   const G4String title[] = 
                 { "dummy",						//0
                   "log10(Etransfert/Emu) Ionization",			//1
                   "log10(Etransfert/Emu) Pair",				//2
                   "log10(Etransfert/Emu) Brems",			//3
-                  "log10(Etransfert/Emu) Nuclear"			//4
+                  "log10(Etransfert/Emu) Nuclear",			//4
+                  "log10(Etransfert/Emu) Ionization",			//5
+                  "log10(Etransfert/Emu) Pair",				//6
+                  "log10(Etransfert/Emu) Brems" 			//7
                  };
 
   G4String titl = title[ih];

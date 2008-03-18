@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-06-29 16:49:17 gunter Exp $
+// $Id: RunAction.cc,v 1.3 2008-03-18 15:30:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,22 +138,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //compute theoritical predictions
   //
-  totalCrossSection = 0.;
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     if (procName != "Transportation")
-       totalCrossSection += ComputeTheory(procName, NbOfEvents);
+  if(particle == "mu+" || particle == "mu-") { 
+    totalCrossSection = 0.;
+    for (size_t i=0; i< ProcCounter->size();i++) {
+      G4String procName = (*ProcCounter)[i]->GetName();
+      if (procName != "Transportation")
+	totalCrossSection += ComputeTheory(procName, NbOfEvents);
+    }
+  
+    MeanFreePath     = 1./totalCrossSection;
+    massCrossSection = totalCrossSection/density;
+  
+    G4cout << " Theory:     "
+	   <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
+	   << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
+	   << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
+	   << G4endl;
   }
-  
-  MeanFreePath     = 1./totalCrossSection;
-  massCrossSection = totalCrossSection/density;
-  
-  G4cout << " Theory:     "
-         <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
-         << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
-         << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
-         << G4endl;
-	 	 
 	 	 	               	                           
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
@@ -187,6 +188,10 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
                                                       + electron_mass_c2); }
   if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0); }
   if (process == "muNucl")      id = 4;
+  if (process == "hIoni")      {id = 5; cut =    GetEnergyCut(material,1); }
+  if (process == "hPairProd")  {id = 6; cut = 2*(GetEnergyCut(material,1) 
+                                                      + electron_mass_c2); }
+  if (process == "hBrems")     {id = 7; cut =    GetEnergyCut(material,0); }
   if (id == 0) return 0.;
   
   G4int nbOfBins = 100;
