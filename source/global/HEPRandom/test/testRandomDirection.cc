@@ -73,7 +73,7 @@ G4ThreeVector IsotropicSphereRand()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Kossov algorithm
+// M. Kossov algorithm
 
 G4ThreeVector MKRandomDirection()
 {
