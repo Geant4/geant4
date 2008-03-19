@@ -1,41 +1,57 @@
-
-
-
-
-// test for random direction unit vector algorithm
-// author: V. Grichine
-// dased on discussions and suggestions of G. cosmo
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4RandomDirectionTest.cc,v 1.1 2008-03-19 16:53:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// Test for random direction unit vector algorithm
+//
+// Author: V. Grichine
 //
 //
 // History: 
 //
-//  19.03.08 first impementation
-
-
-
-
+// 19.03.08 - First implementation
+// ----------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include <fstream>
 #include <cmath>
+#include <iomanip>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4UnitsTable.hh"
 #include "G4Timer.hh"
 
-
-#include <iomanip>
-
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////
 //
-// Random algorithm from G4OpDundaryProcess
+// Random algorithm from Geant3 RAND3
 
 G4ThreeVector IsotropicCubeRand() 
 {
@@ -68,12 +84,13 @@ G4ThreeVector IsotropicSphereRand()
   if( sinTheta2 < 0.)  sinTheta2 = 0.;
   G4double sinTheta  = std::sqrt(sinTheta2); 
   G4double phi       = twopi*G4UniformRand();
-  return G4ThreeVector(sinTheta*std::cos(phi), sinTheta*std::sin(phi), cosTheta).unit(); 
+  return G4ThreeVector(sinTheta*std::cos(phi),
+                       sinTheta*std::sin(phi), cosTheta).unit(); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// M. Kossov algorithm
+// 8 quadrants algorithm
 
 G4ThreeVector MKRandomDirection()
 {
@@ -114,21 +131,14 @@ G4ThreeVector MKRandomDirection()
 }
 
 
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////
 //
 // Test main program
 
 int main()
 {
-  G4int i, iMax = 20;  // , k, kMax;
+  G4int i, iMax = 20;
 
-  
-    
   G4Timer timer;
 
   iMax = 1000000;
@@ -139,7 +149,8 @@ int main()
     G4ThreeVector isoVectr = IsotropicCubeRand();  
   }
   timer.Stop();
-  G4cout<<"Total time of volume "<<iMax<<" calls = "<<timer.GetUserElapsed()<<" s"<<G4endl<<G4endl;
+  G4cout<<"Total time of volume "<<iMax<<" calls = "
+        <<timer.GetUserElapsed()<<" s"<<G4endl<<G4endl;
 
   timer.Start();
   for( i = 0; i < iMax; i++ )
@@ -147,7 +158,8 @@ int main()
     G4ThreeVector isoVectr = IsotropicSphereRand();  
   }
   timer.Stop();
-  G4cout<<"Total time of surface "<<iMax<<" calls = "<<timer.GetUserElapsed()<<" s"<<G4endl<<G4endl;
+  G4cout<<"Total time of surface "<<iMax<<" calls = "
+        <<timer.GetUserElapsed()<<" s"<<G4endl<<G4endl;
   
   timer.Start();
   for( i = 0; i < iMax; i++ )
@@ -155,21 +167,19 @@ int main()
     G4ThreeVector isoVectr = G4RandomDirection();  
   }
   timer.Stop();
-  G4cout<<"Total time of G4RandomDirection() "<<iMax<<" calls = "<<timer.GetUserElapsed()
+  G4cout<<"Total time of G4RandomDirection() "<<iMax
+        <<" calls = "<<timer.GetUserElapsed()
         <<" s"<<G4endl<<G4endl;
 
-  
   timer.Start();
   for( i = 0; i < iMax; i++ )
   {
     G4ThreeVector isoVectr = MKRandomDirection();  
   }
   timer.Stop();
-  G4cout<<"Total time of MKRandomDirection() "<<iMax<<" calls = "<<timer.GetUserElapsed()
+  G4cout<<"Total time of MKRandomDirection() "<<iMax
+        <<" calls = "<<timer.GetUserElapsed()
         <<" s"<<G4endl<<G4endl;
-
-  
-
 
   iMax = 1000000;
   G4int j, jMax = 100;
@@ -188,8 +198,8 @@ int main()
     // G4ThreeVector isoVectr = IsotropicSphereRand();
     G4ThreeVector isoVectr = G4RandomDirection();  
 
-    xyPlane = std::sqrt( isoVectr.x()*isoVectr.x() + isoVectr.y()*isoVectr.y() );
-
+    xyPlane = std::sqrt( isoVectr.x()*isoVectr.x()
+                       + isoVectr.y()*isoVectr.y() );
     if ( xyPlane ) 
     {
       phiNow  = std::atan2(isoVectr.y(),isoVectr.x());
@@ -224,14 +234,16 @@ int main()
     }     
   }
   G4cout << G4endl;
-  G4cout <<"cosThetaTmp"<<"\t"<<"cosThetaDistr[j]"<<"\t"<<"phi/degree"<<"\t"<<"phi[j]"<<G4endl;
+  G4cout <<"cosThetaTmp"<<"\t"<<"cosThetaDistr[j]"<<"\t"
+         <<"phi/degree"<<"\t"<<"phi[j]"<<G4endl;
   G4cout << G4endl;
 
   for( j = 0; j < jMax; j++ )
   {
     cosThetaTmp = -1. + 2.*j/jMax;
     phiTmp      = twopi*j/jMax;
-    G4cout <<cosThetaTmp<<"\t"<<cosThetaDistr[j]<<"\t"<<phiTmp/degree<<"\t"<<phi[j]<<G4endl;
+    G4cout <<cosThetaTmp<<"\t"<<cosThetaDistr[j]<<"\t"
+           <<phiTmp/degree<<"\t"<<phi[j]<<G4endl;
   }
     
   G4double mean=0., rms2=0., rms, relDelta;
@@ -252,7 +264,8 @@ int main()
 
   relDelta = rms/mean;
   G4cout << G4endl;
-  G4cout << "meanCosThetaDistr = "<<mean<<" +- "<<rms<<" with relative error = "<<relDelta <<G4endl;
+  G4cout << "meanCosThetaDistr = "<<mean<<" +- "<<rms
+         <<" with relative error = "<<relDelta <<G4endl;
 
   mean = 0;
   rms2 = 0.;
@@ -273,11 +286,8 @@ int main()
 
   relDelta = rms/mean;
   G4cout << G4endl;
-  G4cout << "meanPhiDistr = "<<mean<<" +- "<<rms<<" with relative error = "<<relDelta <<G4endl;
-
+  G4cout << "meanPhiDistr = "<<mean<<" +- "<<rms
+         <<" with relative error = "<<relDelta <<G4endl;
 
   return 1 ;
 }
-
-
-
