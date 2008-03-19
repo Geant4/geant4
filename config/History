@@ -1,4 +1,4 @@
-$Id: History,v 1.316 2008-03-18 15:09:51 lgarnier Exp $
+$Id: History,v 1.317 2008-03-19 10:24:00 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th March 2008, Laurent Garnier
+ - common.gmk : Changes for moc generation. When compiling G4UI driver
+   AFTER compiling G4UI QT driver, it does not remove the moc generated files
+   and try to compile theme again and failed. Corrected.
 
 18th March 2008, Laurent Garnier
  - common.gmk : Minor changes when compiling Qt

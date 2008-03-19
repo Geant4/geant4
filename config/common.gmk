@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.48 2008-03-18 15:09:51 lgarnier Exp $
+# $Id: common.gmk,v 1.49 2008-03-19 10:24:00 lgarnier Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -11,13 +11,22 @@ ifndef G4LIBDIR
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
-sources := $(wildcard src/*.cc)
+not_moc_inc := $(shell grep -lv "Q_OBJECT" include/*.hh )
+not_moc_files := $(patsubst include/%.hh, src/%.cc, $(not_moc_inc))
+moc_inc = $(shell grep -l "Q_OBJECT" include/*.hh )
+moc_files := $(patsubst include/%.hh, src/%_moc.cc, $(moc_inc))
+
+
+ifeq ($(G4INTY_BUILD_QT),)
+  sources := $(shell rm $(moc_files))
+  sources := $(wildcard src/*.cc)
+endif
 
 ifneq ($(G4INTY_BUILD_QT),)
-  moc_inc = $(shell grep -l "Q_OBJECT" include/*.hh )
-  moc_files := $(patsubst include/%.hh, src/%_moc.cc, $(moc_inc))
+  sources := $(wildcard src/*.cc)
   sources += $(moc_files)
 endif
+
 
 objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
@@ -82,12 +91,13 @@ endif
 
 ifneq ($(G4INTY_BUILD_QT),)
 src/%_moc.cc: include/%.hh
-	@echo Making moc file for  $(MOC) $(MOC_MACRO) -o $@ $< ...
+	@echo Making moc file for $< ...
 	@if [ `$(QTHOME)/bin/moc -v 2>&1 | grep "Qt 3" | wc -l ` -gt 0 ]; then \
 	$(QTMOC) -o $@ $<;\
 	else $(QTMOC) $(MOC_MACRO) -o $@ $<; \
 	fi;
 endif
+
 
 ###############################################################################
 #
