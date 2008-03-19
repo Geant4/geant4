@@ -28,6 +28,8 @@
 // A prototype of the low energy neutron transport model.
 //
 // 09-May-06 fix in Sample by T. Koi
+// 0301808 Fix Compilation warnings - gcc-4.3.0 by T. Koi
+//         (This fix has a real effect to the code.) 
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -353,7 +355,8 @@
         x1 = y1;
         x2 = y2;
         G4double x, y;
-        for(i=0;i<theBuff1.GetVectorLength(); i++);
+        //for(i=0;i<theBuff1.GetVectorLength(); i++);
+        for(i=0;i<theBuff1.GetVectorLength(); i++)
         {
           x = theBuff1.GetX(i); // costh binning identical
           y1 = theBuff1.GetY(i);
