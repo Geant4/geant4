@@ -63,13 +63,61 @@ G4ThreeVector IsotropicCubeRand()
 
 G4ThreeVector IsotropicSphereRand() 
 {
-  G4double cosTheta = 2*G4UniformRand()-1.;
+  G4double cosTheta  = 2*G4UniformRand()-1.;
   G4double sinTheta2 = 1. - cosTheta*cosTheta;
-  if (sinTheta2 < 0.) sinTheta2 = 0.;
-  G4double sinTheta = std::sqrt(sinTheta2); 
-  G4double phi = twopi*G4UniformRand();
+  if( sinTheta2 < 0.)  sinTheta2 = 0.;
+  G4double sinTheta  = std::sqrt(sinTheta2); 
+  G4double phi       = twopi*G4UniformRand();
   return G4ThreeVector(sinTheta*std::cos(phi), sinTheta*std::sin(phi), cosTheta).unit(); 
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Kossov algorithm
+
+G4ThreeVector MKRandomDirection()
+{
+  // Randomization in one of 8 Quadrants (x>0, y>0, z>0)
+  //
+  G4double x=G4UniformRand(), y=G4UniformRand(), z=G4UniformRand();
+  G4double r2= x*x+y*y+z*z;
+  while(r2>1.||r2<.000001)
+  {
+    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
+    r2=x*x+y*y+z*z;
+  }
+  G4double r=std::sqrt(r2), quad=G4UniformRand();
+
+  if(quad>0.5)
+  {
+    if(quad>0.75)
+    {
+      if(quad>0.875)    return G4ThreeVector(-x/r,-y/r,-z/r);
+      else              return G4ThreeVector(-x/r,-y/r, z/r);
+    }
+    else
+    {
+      if(quad>0.625)    return G4ThreeVector(-x/r, y/r,-z/r);
+      else              return G4ThreeVector(-x/r, y/r, z/r);
+    }
+  }
+  else
+  {
+    if(quad>0.25)
+    {
+      if(quad>0.375)    return G4ThreeVector( x/r,-y/r,-z/r);
+      else              return G4ThreeVector( x/r,-y/r, z/r);
+    }
+    else if(quad>0.125) return G4ThreeVector( x/r, y/r,-z/r);
+  }
+  return                       G4ThreeVector( x/r, y/r, z/r);
+}
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -82,6 +130,7 @@ int main()
   
     
   G4Timer timer;
+
   iMax = 1000000;
 
   timer.Start();
@@ -110,24 +159,34 @@ int main()
         <<" s"<<G4endl<<G4endl;
 
   
+  timer.Start();
+  for( i = 0; i < iMax; i++ )
+  {
+    G4ThreeVector isoVectr = MKRandomDirection();  
+  }
+  timer.Stop();
+  G4cout<<"Total time of MKRandomDirection() "<<iMax<<" calls = "<<timer.GetUserElapsed()
+        <<" s"<<G4endl<<G4endl;
+
+  
 
 
   iMax = 1000000;
   G4int j, jMax = 100;
-  G4int cosThetaDistr[100], phi[100];
+  G4double cosThetaDistr[100], phi[100];
 
   for( j = 0; j < jMax; j++ )
   {
-    cosThetaDistr[j] = 0;  
-    phi[j]           = 0;  
+    cosThetaDistr[j] = 0.;  
+    phi[j]           = 0.;  
   }    
   G4double xyPlane, phiNow, cosThetaNow, cosThetaTmp, phiTmp;
   
   for( i = 0; i < iMax; i++ )
   {
     // G4ThreeVector isoVectr = IsotropicCubeRand();
-    G4ThreeVector isoVectr = IsotropicSphereRand();
-    // G4ThreeVector isoVectr = G4RandomDirection();  
+    // G4ThreeVector isoVectr = IsotropicSphereRand();
+    G4ThreeVector isoVectr = G4RandomDirection();  
 
     xyPlane = std::sqrt( isoVectr.x()*isoVectr.x() + isoVectr.y()*isoVectr.y() );
 
@@ -140,16 +199,17 @@ int main()
     }
     else
     {
-      if ( isoVectr.z() >= 0. ) cosThetaNow = 1.;
+      if ( isoVectr.z() >= 0. ) cosThetaNow =  1.;
       else                      cosThetaNow = -1.;
       phiNow = twopi*G4UniformRand();      
     }
     for( j = 0; j < jMax; j++ )
     {
       cosThetaTmp = -1. + 2.*j/jMax;
+
       if( cosThetaTmp >= cosThetaNow )
       {
-        cosThetaDistr[j]++;
+        cosThetaDistr[j] += 1.;
         break;
       }
     }    
@@ -158,7 +218,7 @@ int main()
       phiTmp      = twopi*j/jMax;
       if( phiTmp >= phiNow )
       {
-        phi[j]++;
+        phi[j] += 1.;
         break;
       }
     }     
@@ -172,8 +232,48 @@ int main()
     cosThetaTmp = -1. + 2.*j/jMax;
     phiTmp      = twopi*j/jMax;
     G4cout <<cosThetaTmp<<"\t"<<cosThetaDistr[j]<<"\t"<<phiTmp/degree<<"\t"<<phi[j]<<G4endl;
-  }    
+  }
+    
+  G4double mean=0., rms2=0., rms, relDelta;
 
+  for( j = 0; j < jMax; j++ )
+  {
+    mean += cosThetaDistr[j];
+  }
+  mean /= jMax;
+
+  for( j = 0; j < jMax; j++ )
+  {
+    rms2 += (mean-cosThetaDistr[j])*(mean-cosThetaDistr[j]);
+  }
+  rms2 /= jMax-1;
+
+  rms = std::sqrt(rms2);
+
+  relDelta = rms/mean;
+  G4cout << G4endl;
+  G4cout << "meanCosThetaDistr = "<<mean<<" +- "<<rms<<" with relative error = "<<relDelta <<G4endl;
+
+  mean = 0;
+  rms2 = 0.;
+
+  for( j = 0; j < jMax; j++ )
+  {
+    mean += phi[j];
+  }
+  mean /= jMax;
+
+  for( j = 0; j < jMax; j++ )
+  {
+    rms2 += (mean-phi[j])*(mean-phi[j]);
+  }
+  rms2 /= jMax-1;
+
+  rms = std::sqrt(rms2);
+
+  relDelta = rms/mean;
+  G4cout << G4endl;
+  G4cout << "meanPhiDistr = "<<mean<<" +- "<<rms<<" with relative error = "<<relDelta <<G4endl;
 
 
   return 1 ;
