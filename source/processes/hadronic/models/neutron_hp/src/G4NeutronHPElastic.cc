@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+// 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticFS.hh"
@@ -48,7 +49,7 @@
     for (G4int i=0; i<numEle; i++)
     {
       theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
-      while(!theElastic[i].Register(theFS));
+      while(!theElastic[i].Register(theFS)) ;
     }
     delete theFS;
     SetMinEnergy(0.*eV);
