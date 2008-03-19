@@ -14,9 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
       ---------------------------------------------------------------
 
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-05)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+  (This fix has a real effect to the code.) 
+	G4NeutronHPContAngularPar.cc
+
 19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-04)
 ---------------------------------------------
-- Compilation warnings - gcc-4.3.0 fix by T. Koi
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
 	G4NeutronHPElastic.cc
 	G4NeutronHPorLElastic.cc
 	G4NeutronHPorLCapture.cc
