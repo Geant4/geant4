@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.19 2007-09-14 07:04:09 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.20 2008-03-20 02:23:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
 //      implement new version for using STL map instaed of RW PtrHashedDictionary
 //                                       28 ct., 99  H.Kurashige
+//      modified implementation of Remove 20 Mar.,08  H.Kurashige
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
@@ -162,7 +163,7 @@ class G4ParticleTable
 
  protected:
    G4ParticleDefinition* Remove(G4ParticleDefinition *particle);
-   // Remove Particle
+   // Remove and delete the particle from the table 
 
    G4PTblDictionary* GetDictionary();
 
@@ -188,7 +189,7 @@ class G4ParticleTable
  protected:  
    void RemoveAllParticles();
    // remove all particles from G4ParticleTable and 
-   // delete them if they were created dynamically  (i.e. not static objects) 
+   // delete them if they were created dynamically 
 
  private:
    G4int verboseLevel;

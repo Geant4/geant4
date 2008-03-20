@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.48 2007-11-14 02:23:03 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.49 2008-03-20 02:23:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -703,6 +703,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
     for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
       if ( particle == *idx) {
         fIonList->erase(idx);
+        break;
       }
     }
   } else {

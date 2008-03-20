@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.14 2006-06-29 19:26:16 gunter Exp $
+// $Id: G4ShortLivedTable.cc,v 1.15 2008-03-20 02:23:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,6 +88,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
     for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
       if ( particle == *idx) {
         fShortLivedList->erase(idx);
+        break;
       }
     }
   } else {
