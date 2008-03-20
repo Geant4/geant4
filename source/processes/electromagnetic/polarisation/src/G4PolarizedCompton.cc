@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.7 2007-07-10 09:35:37 schaelic Exp $
+// $Id: G4PolarizedCompton.cc,v 1.8 2008-03-20 11:58:57 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -80,6 +80,7 @@ G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
   SetLambdaBinning(90);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
+  SetProcessSubType(6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
