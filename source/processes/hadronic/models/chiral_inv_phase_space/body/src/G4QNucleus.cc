@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.93 2008-03-18 11:37:50 vnivanch Exp $
+// $Id: G4QNucleus.cc,v 1.94 2008-03-20 20:11:38 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -1465,8 +1465,10 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       //G4int    cntm= 72;                 // Important difference !!DOn't change
       //G4int    cntm= 80;                 // Important difference !!DOn'tChange"IsoNuclei"
       G4int    cntm= 90;                 // Important difference !!DOn'tChange "Lept/Hyper"
-      if( (pFlag&&pExcess>pMin || nFlag&&nExcess>nMin || lFlag&&lExcess>lMin ||
-           aFlag&&aExcess>aMin) && minE<maxE)
+      if( ( (pFlag && pExcess > pMin) || 
+            (nFlag && nExcess > nMin) || 
+            (lFlag && lExcess > lMin) ||
+            (aFlag && aExcess > aMin) ) && minE<maxE )
       {
         G4double mi=uWell+minE;          // Minimum Kinetic Energy for minimal nucleon
         G4double mm=uWell+maxE;          // Personal maximum for Kinetic Energy
@@ -1693,30 +1695,30 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           rMass=sqrt(rEn*rEn-p2);                  // Mass of Residual Nucleus
           // Find out if the ResidualNucleus is below of the SecondBaryonDecayLimit
           //@@ Calculate it depending on PDG !!!!!!!
-          G4bool nnCond=!nnFlag||nnFlag&&GSResNN+mNeut>rMass;
-          G4bool npCond=!npFlag||npFlag&&GSResNP+mProt+PBarr>rMass;
-          G4bool nlCond=!nlFlag||nlFlag&&GSResNL+mLamb>rMass;
-          G4bool naCond=!naFlag||naFlag&&GSResNA+mAlph+ABarr>rMass;
-          G4bool pnCond=!npFlag||npFlag&&GSResNP+mNeut>rMass;
-          if(barf) pnCond=!npFlag||npFlag&&GSResNP+mNeut+PBarr>rMass;
-          G4bool ppCond=!ppFlag||ppFlag&&GSResPP+mProt+PPBarr>rMass;
-          if(barf) ppCond=!ppFlag||ppFlag&&GSResPP+mProt+SPPBarr>rMass;
-          G4bool plCond=!plFlag||plFlag&&GSResPL+mLamb>rMass;
-          if(barf) plCond=!plFlag||plFlag&&GSResPL+mLamb+PBarr>rMass;
-          G4bool paCond=!paFlag||paFlag&&GSResPA+mAlph+APBarr>rMass;
-          if(barf) paCond=!paFlag||paFlag&&GSResPA+mAlph+SAPBarr>rMass;
-          G4bool lnCond=!nlFlag||nlFlag&&GSResNL+mNeut>rMass;
-          G4bool lpCond=!plFlag||plFlag&&GSResPL+mProt+PBarr>rMass;
-          G4bool llCond=!llFlag||llFlag&&GSResLL+mLamb>rMass;
-          G4bool laCond=!laFlag||laFlag&&GSResLA+mAlph+ABarr>rMass;
-          G4bool anCond=!naFlag||naFlag&&GSResNA+mNeut>rMass;
-          if(barf) anCond=!naFlag||naFlag&&GSResNA+mNeut+ABarr>rMass;
-          G4bool apCond=!paFlag||paFlag&&GSResPA+mProt+PABarr>rMass;
-          if(barf) apCond=!paFlag||paFlag&&GSResPA+mProt+SAPBarr>rMass;
-          G4bool alCond=!laFlag||laFlag&&GSResLA+mLamb>rMass;
-          if(barf) alCond=!laFlag||laFlag&&GSResLA+mLamb+ABarr>rMass;
-          G4bool aaCond=!aaFlag||aaFlag&&GSResAA+mAlph+AABarr>rMass;
-          if(barf) aaCond=!aaFlag||aaFlag&&GSResAA+mAlph+SAABarr>rMass;
+          G4bool nnCond = !nnFlag || (nnFlag && GSResNN+mNeut > rMass);
+          G4bool npCond = !npFlag || (npFlag && GSResNP+mProt+PBarr > rMass);
+          G4bool nlCond = !nlFlag || (nlFlag && GSResNL+mLamb > rMass);
+          G4bool naCond = !naFlag || (naFlag && GSResNA+mAlph+ABarr > rMass);
+          G4bool pnCond = !npFlag || (npFlag && GSResNP+mNeut > rMass);
+          if(barf) pnCond = !npFlag || (npFlag && GSResNP+mNeut+PBarr > rMass);
+          G4bool ppCond = !ppFlag || (ppFlag && GSResPP+mProt+PPBarr > rMass);
+          if(barf) ppCond = !ppFlag || (ppFlag && GSResPP+mProt+SPPBarr > rMass);
+          G4bool plCond = !plFlag || (plFlag && GSResPL+mLamb > rMass);
+          if(barf) plCond = !plFlag || (plFlag && GSResPL+mLamb+PBarr > rMass);
+          G4bool paCond = !paFlag || (paFlag && GSResPA+mAlph+APBarr > rMass);
+          if(barf) paCond = !paFlag || (paFlag && GSResPA+mAlph+SAPBarr > rMass);
+          G4bool lnCond = !nlFlag || (nlFlag && GSResNL+mNeut > rMass);
+          G4bool lpCond = !plFlag || (plFlag && GSResPL+mProt+PBarr > rMass);
+          G4bool llCond = !llFlag || (llFlag && GSResLL+mLamb > rMass);
+          G4bool laCond = !laFlag || (laFlag && GSResLA+mAlph+ABarr > rMass);
+          G4bool anCond = !naFlag || (naFlag && GSResNA+mNeut > rMass);
+          if(barf) anCond = !naFlag || (naFlag && GSResNA+mNeut+ABarr > rMass);
+          G4bool apCond = !paFlag || (paFlag && GSResPA+mProt+PABarr > rMass);
+          if(barf) apCond = !paFlag || (paFlag && GSResPA+mProt+SAPBarr > rMass);
+          G4bool alCond = !laFlag || (laFlag && GSResLA+mLamb > rMass);
+          if(barf) alCond = !laFlag || (laFlag && GSResLA+mLamb+ABarr > rMass);
+          G4bool aaCond = !aaFlag || (aaFlag && GSResAA+mAlph+AABarr > rMass);
+          if(barf) aaCond = !aaFlag || (aaFlag && GSResAA+mAlph+SAABarr > rMass);
 #ifdef pdebug
 		        G4cout<<"G4QNucl::EvaB:"<<PDG<<", E="<<tk<<", rM="<<rMass<<", ";
           if(PDG==pPDG)      G4cout<<"PN="<<GSResNP+mNeut<<"("<<pnCond<<"),PP="
@@ -4256,7 +4258,8 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
     evaHV->push_back(nH);                 // (delete equivalent)
   }
   // **>>> From here the EVA code starts (baryons/hyperons can be excited) <<<**
-  else if(thePDG>80000000&&thePDG!=90000000 || thePDG==2112 || thePDG==2212 ||thePDG==3122)
+  else if ( (thePDG > 80000000 && thePDG != 90000000) || 
+	    thePDG == 2112 || thePDG == 2212 || thePDG == 3122)
   { // @@ Improve for Sigma+, Sigma-, Ksi0 & Ksi- content in the Total Np/Nn Nuclei
     if(thePDG<80000000)                        // Switch from QHadronCode to QNuclearCode
     {
@@ -4296,9 +4299,9 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
 #endif
       return;
     }
-    else if((bA==1||!bsCond&&!dbsCond)&&totMass>GSMass+.003)//==>Fuse&DecayTech(noGamDec)
+    else if ( ( bA == 1 || (!bsCond && !dbsCond) ) && totMass > GSMass+.003 )  //==>Fuse&DecayTech(noGamDec)
 	   //else if(2>3)                                // Close "Fuse&Decay Technology" ***@@@***
-	   {
+    {
 #ifdef pdebug
 	     G4cout<<"G4QN::EvaN:SplitBar, s="<<bsCond<<",M="<<totMass<<" > GSM="<<GSMass<<G4endl;
 #endif
@@ -4633,18 +4636,25 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             <<bN<<",Z="<<bZ<<",nL="<<bS<<",totM="<<totMass<<",n="<<totMass-nResM-mNeut
             <<",p="<<totMass-pResM-mProt<<",l="<<totMass-lResM-mLamb<<G4endl;
 #endif
-      if(   thePDG==90004004 || thePDG==90002004 && totMass>mHel6+.003
-         || bA>4 && bsCond && bN>1 && bZ>1 && totMass>aResM+mAlph
-         || bA>1 && bsCond && (   bN>0&&totMass>nResM+mNeut
-                               || bZ>0&&totMass>pResM+mProt
-							  || bS>0&&totMass>lResM+mLamb)
-         ||bA>2&&(bN>0&&bZ>0&&(bsCond&&totMass>dResM+mDeut||dbsCond && totMass>dResM+mDeut)
-				               ||dbsCond && (   bN>1&&totMass>nnResM+mNeut+mNeut
-                                             || bZ>1&&totMass>ppResM+mProt+mProt
-                                             || bS>1&&totMass>llResM+mLamb+mLamb
-                                             || bN&&bS&&totMass>lnResM+mLamb+mNeut
-                                             || bZ&&bS&&totMass>lpResM+mLamb+mProt)))
-	     {
+      if ( thePDG == 90004004 || 
+
+          (thePDG == 90002004 && totMass > mHel6+.003) ||
+
+	  (bA > 4 && bsCond && bN > 1 && bZ > 1 && totMass > aResM+mAlph) ||
+
+          (bA > 1 && bsCond && ( (bN > 0 && totMass > nResM+mNeut) || 
+                                 (bZ > 0 && totMass > pResM+mProt) || 
+                                 (bS > 0 && totMass > lResM+mLamb) ) )      ||
+          (bA > 2 && 
+            ( ( bN > 0 && bZ > 0 && 
+	        (bsCond && totMass > dResM+mDeut || dbsCond && totMass > dResM+mDeut) ) ||
+
+	      ( dbsCond && ( (bN > 1 && totMass > nnResM+mNeut+mNeut) ||
+                             (bZ > 1 && totMass > ppResM+mProt+mProt) ||
+                             (bS > 1 && totMass > llResM+mLamb+mLamb) ||
+                             (bN && bS && totMass > lnResM+mLamb+mNeut) ||
+			     (bZ && bS && totMass > lpResM+mLamb+mProt) ) ) ) ) )
+      {
         G4int barPDG = 90002002;           // Just for the default case of Be8->alpha+alpha
         G4int resPDG = 90002002;
         G4int thdPDG = 0;
@@ -6451,7 +6461,9 @@ void G4QNucleus::DecayAlphaBar(G4QHadron* qH, G4QHadronVector* evaHV)
   G4int totS=qQC.GetStrangeness();              //  Total Strangeness       (L)
   G4int totC=qQC.GetCharge();                   //  Total Charge            (p)
   G4int totBN=qQC.GetBaryonNumber();            // Total Baryon Number      (A)
-  if((!totS&&!totC||totC==totBN||totS==totBN)&&totBN>1) DecayMultyBaryon(qH,evaHV);
+
+  if ( ( (!totS && !totC) || totC == totBN || totS == totBN) 
+       && totBN > 1) DecayMultyBaryon(qH,evaHV);
   else if(qPDG==92001002||qPDG==92002001||qPDG==91003001||qPDG==91001003||qPDG==93001001)
     evaHV->push_back(qH);
   else if(qPDG==92000003||qPDG==92003000||qPDG==93000002||qPDG==93002000)
