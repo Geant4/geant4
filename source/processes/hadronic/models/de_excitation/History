@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 21 March 2008 Dennis Wright (hadr-deex-V09-01-00)
+--------------------------------------------------
+- added parentheses to fix gcc-4.3 compiler warnings in
+  G4StatMFChannel::CheckFragments and ::PlaceFragments
+
  15 November 2007 Alex Howard (hadr-deex-V09-00-06)
 ---------------------------------------------------
 - Added Jose Manuel Quesada's modification to util/src/G4CoulombBarrier.cc in
