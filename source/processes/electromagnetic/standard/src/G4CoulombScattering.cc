@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.12 2008-03-06 18:34:19 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.13 2008-03-21 17:54:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,14 +107,14 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     if(mass < MeV) eth  = thEnergyElec; 
     if(eth > emin) {
       G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
+	new G4eCoulombScatteringModel(thetaMin,thetaMax,q2Max);
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(std::min(eth,emax));
       AddEmModel(1, model);
     }
     if(eth < emax) {
       G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(thetaMin,thetaMax,buildElmTableFlag,q2Max);
+	new G4CoulombScatteringModel(thetaMin,thetaMax,q2Max);
       model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
       AddEmModel(2, model);

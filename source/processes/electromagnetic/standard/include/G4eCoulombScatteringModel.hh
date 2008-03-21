@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.21 2008-02-20 18:59:27 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.22 2008-03-21 17:54:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,8 +75,8 @@ class G4eCoulombScatteringModel : public G4VEmModel
 public:
 
   G4eCoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4bool build = false, G4double tlim = TeV*TeV,
-			   const G4String& nam = "eCoulombScattering");
+			    G4double tlim = TeV*TeV,
+			    const G4String& nam = "eCoulombScattering");
  
   virtual ~G4eCoulombScatteringModel();
 
@@ -98,25 +98,17 @@ public:
 
 protected:
 
-  G4double ComputeElectronXSectionPerAtom(
-				 const G4ParticleDefinition*,
-				 G4double kinEnergy, 
-				 G4double Z,
-				 G4double A,
-				 G4double cut);
-
-  virtual G4double CalculateCrossSectionPerAtom(
-                                 const G4ParticleDefinition*, 
-				 G4double kinEnergy, 
-				 G4double Z, G4double A);
+  inline void DefineMaterial(const G4MaterialCutsCouple*);
 
   inline void SetupParticle(const G4ParticleDefinition*);
 
-  inline void SetupKinematic(G4double kinEnergy);
+  inline void SetupKinematic(G4double kinEnergy, G4double cut);
   
   inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy); 
 
 private:
+
+  void ComputeMaxElectronScattering(G4double cut);
 
   inline G4double FormFactorMev2(G4double Z, G4double A);
 
@@ -126,10 +118,9 @@ private:
 
 protected:
  
-  G4double SampleCosineTheta(const G4Material*,
-                             const G4ParticleDefinition*,
-                             G4double kinEnergy,
-                             G4double cutEnergy);
+  const G4Element* SelectRandomAtom();
+
+  G4double SampleCosineTheta();
 
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
@@ -137,6 +128,11 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
   G4NistManager*            fNistManager;
+  const G4DataVector*       currentCuts;
+
+  const G4MaterialCutsCouple* currentCouple;
+  const G4Material*           currentMaterial;
+  G4int                       currentMaterialIndex;
 
   G4double                  coeff;
   G4double                  constn;
@@ -144,10 +140,14 @@ protected:
   G4double                  cosThetaMax;
   G4double                  cosTetMaxNuc;
   G4double                  cosTetMaxElec;
+  G4double                  cosTetLimit;
   G4double                  q2Limit;
   G4double                  elecXSection;
   G4double                  nucXSection;
   G4double                  ecut;
+  G4double                  xsece[40];
+  G4double                  xsecn[40];
+  G4double                  xsect[40];
 
   // projectile
   const G4ParticleDefinition* particle;
@@ -158,6 +158,7 @@ protected:
   G4double                  tkin;
   G4double                  mom2;
   G4double                  invbeta2;
+  G4double                  etag;
 
   // target
   G4double                  targetZ;
@@ -167,8 +168,6 @@ protected:
 
 private:
 
-  G4PhysicsTable*           theCrossSectionTable; 
-
   G4double                  a0;
   G4double                  lowKEnergy;
   G4double                  highKEnergy;
@@ -176,13 +175,22 @@ private:
   G4double                  faclim;
   G4double                  FF[100];
 
-  G4int                     nbins;
-  G4int                     nmax;
   G4int                     index[100];
 
-  G4bool                    buildTable;             
   G4bool                    isInitialised;             
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline
+void G4eCoulombScatteringModel::DefineMaterial(const G4MaterialCutsCouple* cup) 
+{ 
+  if(cup != currentCouple) {
+    currentCouple = cup;
+    currentMaterial = cup->GetMaterial();
+    currentMaterialIndex = currentCouple->GetIndex(); 
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -202,13 +210,16 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin)
+inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin, 
+						      G4double cut)
 {
-  if(ekin != tkin) {
+  if(ekin != tkin || ecut != cut) {
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
-  } 
+    ComputeMaxElectronScattering(cut);
+    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -216,15 +227,15 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin)
 inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A, 
 						   G4double e)
 {
-  if(e != tkin || Z != targetZ || A != targetA) {
+  if(Z != targetZ || A != targetA || e != etag) {
+    etag    = e; 
     targetZ = Z;
     targetA = A;
-    SetupKinematic(e);
-    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
     G4double x = fNistManager->GetZ13(Z);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    cosTetLimit = cosTetMaxNuc;
     if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
-      cosTetMaxNuc = 0.0;
+      cosTetLimit = 0.0;
     formfactA = mom2*FormFactorMev2(Z, A);
   } 
 } 

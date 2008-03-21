@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.29 2007-11-09 11:45:45 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.30 2008-03-21 17:54:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,9 +64,8 @@
 using namespace std;
 
 G4CoulombScatteringModel::G4CoulombScatteringModel(
-  G4double thetaMin, G4double thetaMax, G4bool build, 
-  G4double tlim, const G4String& nam)
-  : G4eCoulombScatteringModel(thetaMin,thetaMax,build,tlim,nam)
+  G4double thetaMin, G4double thetaMax, G4double tlim, const G4String& nam)
+  : G4eCoulombScatteringModel(thetaMin,thetaMax,tlim,nam)
 {
   theMatManager    = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
@@ -91,8 +90,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
      A == targetA && cutEnergy == ecut) return nucXSection;
 
   // Lab system
-  G4double ekin = std::max(keV, kinEnergy);
-  nucXSection = ComputeElectronXSectionPerAtom(p,ekin,Z,A,cutEnergy);
+  //  G4double ekin = std::max(keV, kinEnergy);
+  //  nucXSection = ComputeElectronXSectionPerAtom(p,ekin,Z,A,cutEnergy);
 
   // CM system
   G4int iz      = G4int(Z);
@@ -170,21 +169,22 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       G4double cutEnergy, 
 			       G4double maxEnergy)
 {
-  const G4Material* aMaterial = couple->GetMaterial();
-  const G4ParticleDefinition* p = dp->GetDefinition();
   G4double kinEnergy = dp->GetKineticEnergy();
+  if(kinEnergy <= DBL_MIN) return;
+  DefineMaterial(couple);
+  SetupParticle(dp->GetDefinition());
+  G4double ekin = std::max(keV, kinEnergy);
+  SetupKinematic(ekin, cutEnergy);
 
-  // Select isotope and setup
-  SetupParticle(p);
-  const G4Element* elm = 
-    SelectRandomAtom(aMaterial,p,kinEnergy,cutEnergy,maxEnergy);
+  const G4Element* elm = SelectRandomAtom();
+
   G4double Z  = elm->GetZ();
   G4double A  = SelectIsotope(elm);
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
 
   G4double cross = 
-    ComputeCrossSectionPerAtom(p,kinEnergy,Z,A,cutEnergy,maxEnergy);
+    ComputeCrossSectionPerAtom(particle,kinEnergy,Z,A,cutEnergy,maxEnergy);
 
   G4double costm = cosTetMaxNuc;
   G4double formf = formfactA;
@@ -233,14 +233,14 @@ void G4CoulombScatteringModel::SampleSecondaries(
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
   G4double elab = gam*(eCM + bet*pzCM);
-  G4double ekin = elab - mass;
+  ekin = elab - mass;
   if(ekin < 0.0) ekin = 0.0;
   G4double plab = sqrt(ekin*(ekin + 2.0*mass));
   fParticleChange->SetProposedKineticEnergy(ekin);
 
   // recoil
   G4double erec = kinEnergy - ekin;
-  if(erec > Z*aMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
+  if(erec > Z*currentMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
     G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, erec);
