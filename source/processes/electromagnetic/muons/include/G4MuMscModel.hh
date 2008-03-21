@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.9 2008-03-14 19:00:10 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.10 2008-03-21 17:53:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,6 +105,12 @@ public:
 
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
+private:
+
+  G4double ComputeXSectionPerVolume();
+
+  void ComputeMaxElectronScattering(G4double cut);
+
   inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetupParticle(const G4ParticleDefinition*);
@@ -112,15 +118,6 @@ public:
   inline void SetupKinematic(G4double kinEnergy, G4double cut);
   
   inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy);
-
-private:
-
-  G4double ComputeXSectionPerVolume(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double kinEnergy, 
-				    G4double cut);
-
-  void ComputeMaxElectronScattering(G4double cut);
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
@@ -170,13 +167,14 @@ private:
   G4double xsecn[40];
   G4double xsece[40];
 
-  G4int    currentMaterialIndex;
-
   G4int    nbins;
   G4int    nwarnings;
   G4int    nwarnlimit;
 
+  G4int    currentMaterialIndex;
+
   const G4MaterialCutsCouple* currentCouple;
+  const G4Material* currentMaterial;
 
   // single scattering parameters
   G4double coeff;
@@ -185,7 +183,6 @@ private:
   G4double cosThetaMax;
   G4double cosTetMaxNuc;
   G4double cosTetMaxElec;
-  G4double cosTetLimit;
   G4double q2Limit;
   G4double alpha2;
   G4double a0;
@@ -223,6 +220,7 @@ void G4MuMscModel::DefineMaterial(const G4MaterialCutsCouple* cup)
 { 
   if(cup != currentCouple) {
     currentCouple = cup;
+    currentMaterial = cup->GetMaterial();
     currentMaterialIndex = currentCouple->GetIndex(); 
   }
 }
@@ -283,9 +281,6 @@ inline void G4MuMscModel::SetupTarget(G4double Z, G4double A, G4double e)
     targetA = A;
     G4double x = fNistManager->GetZ13(Z);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
-    cosTetLimit = cosTetMaxNuc;
-    if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
-      cosTetLimit = 0.0;
     formfactA = mom2*FormFactorMev2(Z, A);
   } 
 } 
