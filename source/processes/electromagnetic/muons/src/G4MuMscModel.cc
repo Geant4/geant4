@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.19 2008-03-21 17:53:28 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.20 2008-03-21 18:46:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -469,7 +469,6 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   newDirection.rotateUz(oldDirection);
   G4double rx = 0.0;
   G4double ry = 0.0;
-  G4double rz = 0.0;
 
   // sample scattering for large angle -------------
   if(xsec > DBL_MIN) {
@@ -541,7 +540,6 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	G4double zr = zPathLength*t/tPathLength;
 	rx += vx1*zr; 
 	ry += vy1*zr;
-        rz -= zr*(1.0 - zz1);
 	G4ThreeVector newDirection1(vx1,vy1,zz1);
 	newDirection1.rotateUz(newDirection);
 	newDirection = newDirection1;
@@ -555,13 +553,23 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   if (latDisplasment && safety > tlimitminfix) {
     G4double rms = sqrt(2.0*x1);
-    G4double dx  = zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    G4double dy  = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    rx += dx;
-    ry += dy;
-    rz -= (dx*dx + dy*dy)/zPathLength;
-    G4double r2 = rx*rx + ry*ry + rz*rz;
-    G4double r  = sqrt(r2);
+    rx += zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
+    ry += zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
+    G4double r2 = rx*rx + ry*ry;
+    G4double z2 = zPathLength*zPathLength;
+    G4double z3 = r2/z2;
+    G4double rz;
+    if(z3 < 0.2) rz = -zPathLength*z3*0.5*(1.0 + 0.25*z3);
+    if(z3 > 1.0) {
+      G4double f = sqrt(z3);
+      rx /= f;
+      ry /= f;
+      rz  = -zPathLength;
+    } else {
+      rz = zPathLength*(sqrt(1.0 - z3) - 1.0);
+    }
+    r2 += rz*rz;
+    G4double r   = sqrt(r2);
     /*
     G4cout << " r(mm)= " << r << " safety= " << safety
            << " trueStep(mm)= " << tPathLength
