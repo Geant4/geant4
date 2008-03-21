@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.24 2007-11-01 16:09:38 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.25 2008-03-21 21:39:46 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -981,8 +981,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.);
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
     // There is no way back from here
-    if((secnu||!nuanu||N)&&totCS*G4UniformRand()<qelCS||s<mlD2)// Quasi-Elastic interaction
-    {
+
+    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s < mlD2 ) 
+    {   // Quasi-Elastic interaction
       G4double Q2=0.;                           // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager2->GetQEL_ExchangeQ2();
       else      Q2=CSmanager->GetQEL_ExchangeQ2();
@@ -1012,8 +1013,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     else                                        // ***** Non Quasi Elastic interaction
     {
      
-      if(secnu&&projPDG==2212||!secnu&&projPDG==2112) targPDG+=1;    // Recover target PDG,
-      else if(secnu&&projPDG==2112||!secnu&&projPDG==2212) targPDG+=1000; // if not quasiEl
+      if ( (secnu && projPDG == 2212) || (!secnu && projPDG == 2112) ) {
+        targPDG+=1;    // Recover target PDG,
+      } else if ( (secnu && projPDG == 2112) || (!secnu && projPDG == 2212) ) { 
+        targPDG+=1000; // if not quasiEl
+      }
       G4double Q2=0;                            // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager->GetNQE_ExchangeQ2();
       else      Q2=CSmanager2->GetNQE_ExchangeQ2();
@@ -1171,8 +1175,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       // Take into account that at least one nucleon must be left !
       G4int A=Z+N;       // Baryon number of the nucleus
       if(Z<2||N<2||A<5) base=clProb[max--]; // Alpha cluster is impossible
-      if(Z>1&&N<2||Z<2&&N>1) base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
-      if(Z<2&&N<2||A<4) base=clProb[max--]; // Both He3 and t clusters are impossible
+      if ( (Z > 1 && N < 2) || (Z < 2 && N > 1) ) 
+        base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
+
+      if ( (Z < 2 && N < 2) || A < 4) base=clProb[max--]; // Both He3 and t clusters are impossible
+
       if(A<3)           base=clProb[max--]; // Deuteron cluster is impossible
       G4int cln=0;                          // Cluster#0 (Default for the selected nucleon)
       if(max)                               // Not only nucleons are possible
@@ -1199,7 +1206,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         G4int nln=0;
         if(cln==2) nln=1;                         // @@ only for cp1: t/He3 choice from A=4
         // mass(A)=tM. Calculate masses of A-1 (rM) and mN (mNeut or mProt bounded mass)
-        if((!cln||cln==2)&&G4UniformRand()*(A-cln)>(N-nln) || (cln==3||cln==1)&&Z>N)
+        if ( ((!cln || cln == 2) && G4UniformRand()*(A-cln) > (N-nln)) || 
+             ((cln == 3 || cln == 1) && Z > N) )
         {
           nPDG=90001000;                          // Update quasi-free nucleon PDGCode to P
           nZ=1;                                   // Change charge of the quasiFree nucleon

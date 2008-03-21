@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.18 2008-03-17 18:31:08 vnivanch Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.19 2008-03-21 21:44:39 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -603,16 +603,23 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     kf=true;
     if(G4UniformRand()>.5) kfl=false;
   }
-  if     (PDG==2212&&F || PDG==2112&&!F) ind=0; // pp/nn
-  else if(PDG==2112&&F || PDG==2212&&!F) ind=1; // np/pn
-  else if(PDG==-211&&F || PDG== 211&&!F) ind=2; // pimp/pipn
-  else if(PDG== 211&&F || PDG==-211&&!F) ind=3; // pipp/pimn
-  else if(PDG==-321 || PDG==-311 || (kf &&!kfl)) ind=4; // KmN/K0N
-		else if(PDG== 321 || PDG== 311 || (kf && kfl)) ind=5; // KpN/aK0N
-  else if(PDG> 3000 && PDG< 3335) ind=6;        // @@ for all hyperons - take Lambda
-  else if(PDG<-2000 && PDG>-3335) ind=7;        // @@ for all anti-baryons - anti-p/anti-n
-  else
-  {
+  if ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) {
+    ind=0; // pp/nn
+  } else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) {
+    ind=1; // np/pn
+  } else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) {
+    ind=2; // pimp/pipn
+  } else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) {
+    ind=3; // pipp/pimn
+  } else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) {
+    ind=4; // KmN/K0N
+  } else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) {
+    ind=5; // KpN/aK0N
+  } else if ( PDG > 3000 && PDG < 3335) {
+    ind=6;        // @@ for all hyperons - take Lambda
+  } else if ( PDG < -2000 && PDG > -3335 ) {
+    ind=7;        // @@ for all anti-baryons - anti-p/anti-n
+  } else {
     G4cout<<"*Error*G4QuasiFreeRatios::FetchElTot: PDG="<<PDG
           <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
     G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");

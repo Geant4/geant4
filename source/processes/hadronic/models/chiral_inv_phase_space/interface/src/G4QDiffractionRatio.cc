@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.8 2008-03-17 18:31:07 vnivanch Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.9 2008-03-21 21:40:08 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1052,8 +1052,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         }
       }                                    // --> End of decay                          |
 				}                                      // -> End of Iso-nuclear treatment           |
-    else if(nL>0 && nB>1 || nL<0 && nB<-1) // Hypernucleus is found                     |
-    {
+    else if( (nL > 0 && nB > 1) || (nL < 0 && nB < -1) ) 
+    {     // Hypernucleus is found                                                      |
       G4bool anti=false;                   // Default=Nucleus (true=antinucleus         |
       if(nB<0)                             // Anti-nucleus                              |
       {
@@ -1307,11 +1307,11 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
 G4double G4QDiffractionRatio::GetTargSingDiffXS(G4double pIU, G4int pPDG, G4int Z, G4int N)
 {
   G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
-  if(mom<1. || pPDG!=2212 && pPDG!=2112)
+  if ( mom < 1. || (pPDG != 2212 && pPDG != 2112) )
     G4cerr<<"G4QDiffractionRatio::GetTargSingDiffXS isn't applicable p="<<mom<<" GeV, PDG="
          <<pPDG<<G4endl;
   G4double A=Z+N;                        // A of the target
 		//return 4.5*std::pow(A,.364)*millibarn; // Result
-		return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
+  return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
 
 } // End of ProjFragment

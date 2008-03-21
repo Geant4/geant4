@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.35 2008-02-26 14:53:02 vnivanch Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.36 2008-03-21 21:42:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -569,12 +569,15 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
     //
     if(lastPAR[nLast]!=pwd) // A unique flag to avoid the repeatable definition
     {
-      if     (PDG==2112&&tgZ==1&&tgN==0 || PDG==2212&&tgZ==0&&tgN==1)
-                                for(G4int ip=0;ip<n_npel;ip++)lastPAR[ip]=np_el[ip];//np/pn
-						else if(PDG==2212&&tgZ==1&&tgN==0 || PDG==2112&&tgZ==0&&tgN==1)
-                                for(G4int ip=0;ip<n_ppel;ip++)lastPAR[ip]=pp_el[ip];//pp/nn
-      else
-      {
+      if ( (PDG == 2112 && tgZ == 1 && tgN == 0) || 
+           (PDG == 2212 && tgZ == 0 && tgN == 1) ) {
+        for (G4int ip=0; ip<n_npel; ip++) lastPAR[ip]=np_el[ip]; //np/pn
+
+      } else if ( (PDG == 2212 && tgZ == 1 && tgN == 0) || 
+                  (PDG == 2112 && tgZ == 0 && tgN == 1) ) {
+        for (G4int ip=0; ip<n_ppel; ip++) lastPAR[ip]=pp_el[ip]; //pp/nn
+
+      } else {
         G4double a=tgZ+tgN;
         G4double sa=std::sqrt(a);
         G4double ssa=std::sqrt(sa);
@@ -1153,8 +1156,9 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   G4double p2=p*p;            
   G4double p3=p2*p;
   G4double p4=p3*p;
-  if(PDG==2112 && tgZ==1 && tgN==0 || PDG==2212 && tgZ==0 && tgN==1)       // np/pn
-  {
+  if ( (PDG == 2112 && tgZ == 1 && tgN == 0) || 
+       (PDG == 2212 && tgZ == 0 && tgN == 1) ) {       // np/pn
+
     G4double ssp=std::sqrt(sp);           // sqrt(sqrt(p))=p^.25
     G4double p2s=p2*sp;
 		  G4double dl1=lp-lastPAR[3];
@@ -1175,9 +1179,10 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     // Returns the total elastic pp cross-section (to avoid spoiling lastSIG)
     return lastPAR[0]/(p2s+lastPAR[1]*p+lastPAR[2]/ssp)+lastPAR[4]/p
            +(lastPAR[5]+lastPAR[6]*dl1*dl1+lastPAR[7]/p)/(1.+lastPAR[8]/p4);
-  }
-  else if(PDG==2212 && tgZ==1 && tgN==0 || PDG==2112 && tgZ==0 && tgN==1) // pp/nn
-  {
+
+  } else if ( (PDG == 2212 && tgZ == 1 && tgN == 0) || 
+              (PDG == 2112 && tgZ == 0 && tgN == 1) ) { // pp/nn
+
     G4double p2s=p2*sp;
 		  G4double dl1=lp-lastPAR[3];
 		  G4double dl2=lp-lastPAR[8];
