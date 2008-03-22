@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.30 2008-03-20 02:23:31 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.31 2008-03-22 06:03:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -157,10 +157,26 @@ void G4ParticleTable::DeleteMessenger()
     fParticleMessenger= 0;
   }
 
-  // remove all items from G4ParticleTable
-  // temporaly comment out 
-  // RemoveAllParticles();
+}
 
+////////////////////
+void G4ParticleTable::DeleteAllParticles()
+{
+
+#ifdef G4VERBOSE
+  if (verboseLevel>1){
+    G4cout << "G4ParticleTable::DeleteAllParticles() " << G4endl;
+  }
+#endif
+
+  // delete all particles 
+  G4PTblDicIterator *piter = fIterator; 
+  piter -> reset();
+  while( (*piter)() ){
+    delete (piter->value());
+  }
+
+  RemoveAllParticles();
 }
 
 ////////////////////
@@ -181,13 +197,6 @@ void G4ParticleTable::RemoveAllParticles()
   // remomve all contents in hort Lived table 
   if (fShortLivedTable!=0) {
     fShortLivedTable->clear();
-  }
-
-  // delete all particles 
-  G4PTblDicIterator *piter = fIterator; 
-  piter -> reset();
-  while( (*piter)() ){
-    delete (piter->value());
   }
 
   // clear dictionary for encoding
@@ -280,9 +289,6 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   if (particle->IsShortLived() ){
     fShortLivedTable->Remove(particle);
   }
-
-  // delete the particle
-  delete  particle;
 
   return particle;
 }

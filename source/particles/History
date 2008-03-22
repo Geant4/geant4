@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2008-03-20 02:23:30 kurasige Exp $
+$Id: History,v 1.151 2008-03-22 06:03:40 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Mar. 21  2008      H.Kurashige (particles-V09-01-02)
+- Modify  implementaion of G4ParticleTable::Remove() and
+  G4ParticleTable::RemoveAllParticles() so that particle 
+  definition objects are deleted in these methods.
+  Users are responsible to delete particle objetcs.
+- Add G4ParticleTable::DeleteAllParticles() to 
+  remove and delete all particles in the list.
+ 
 - Mar. 20  2008      H.Kurashige (particles-V09-01-01)
 - Modify implementaion of G4ParticleTable::Remove() method
   (delete the particle as same way as RemoveAllParticles() method)
