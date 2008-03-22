@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.5 2008-02-22 22:19:22 dennis Exp $
+// $Id: G4RPGInelastic.cc,v 1.6 2008-03-22 00:03:24 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -272,15 +272,15 @@ G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
   //        ( incident is a kaon AND rand < 0.5 OR twsup )
   //
 
-  if( annihilation || (vecLen > 5) ||
-      modifiedOriginal.GetKineticEnergy()/GeV >= 1.0 &&
+  if( annihilation || vecLen > 5 ||
+      ( modifiedOriginal.GetKineticEnergy()/GeV >= 1.0 &&
 
       (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
          originalIncident->GetDefinition() == G4KaonMinus::KaonMinus() ||
          originalIncident->GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
          originalIncident->GetDefinition() == G4KaonZeroShort::KaonZeroShort()) &&
 	  rand1 < 0.5) 
-       || rand2 > twsup[vecLen]) )
+       || rand2 > twsup[vecLen]) ) )
 
     finishedGenXPt =
       fragmentation.ReactionStage(originalIncident, modifiedOriginal,
