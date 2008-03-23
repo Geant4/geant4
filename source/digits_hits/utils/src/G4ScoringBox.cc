@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.49 2008-02-07 13:34:39 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.50 2008-03-23 14:32:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,7 +105,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
-  // fisrt nested layer (replicated to x direction)
+  //-- fisrt nested layer (replicated to x direction)
   if(verboseLevel > 9) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Box(layerName[0],
 			    fSize[0]/fNSegment[0],
@@ -258,6 +258,11 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
 void G4ScoringBox::List() const {
   G4cout << "G4ScoringBox : " << fWorldName << " --- Shape: Box mesh" << G4endl;
+  G4cout << " Size (x, y, z): ("
+	 << fSize[0]/cm << ", "
+	 << fSize[1]/cm << ", "
+	 << fSize[2]/cm << ") [cm]"
+	 << G4endl;
 
   G4VScoringMesh::List();
 }

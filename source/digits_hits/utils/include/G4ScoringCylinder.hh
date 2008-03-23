@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.hh,v 1.1 2008-03-06 01:08:05 akimura Exp $
+// $Id: G4ScoringCylinder.hh,v 1.2 2008-03-23 14:32:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,6 +63,9 @@ class G4ScoringCylinder : public G4VScoringMesh
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;} // supports the r-direction only at present.
 
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
+
+  // get 3D index (r,z,phi) from sequential index
+  void GetRZPhi(G4int index, G4int q[3]) const;
 
 private:
   G4int fSegmentDirection; // =1: r, =2: phi, =3: z
