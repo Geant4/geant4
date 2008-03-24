@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.73 2008-03-24 14:00:56 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.74 2008-03-24 14:47:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 1*mm);
+  SetStepFunction(0.2, 1.0*mm);
   SetIntegral(true);
   SetVerboseLevel(1);
   SetProcessSubType(2);
@@ -163,6 +163,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   EmModel(1)->SetHighEnergyLimit(eth);
   if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
   AddEmModel(1, EmModel(1), new G4IonFluctuations());
+  //  AddEmModel(1, EmModel(1), FluctModel());
 
   if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
   EmModel(2)->SetLowEnergyLimit(eth);
