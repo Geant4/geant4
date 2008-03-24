@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.72 2008-03-06 18:34:20 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.73 2008-03-24 14:00:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,6 +89,7 @@
 #include "G4AntiProton.hh"
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
+#include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
@@ -161,7 +162,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   ethnuc = eth*50.0;
   EmModel(1)->SetHighEnergyLimit(eth);
   if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
-  AddEmModel(1, EmModel(1), FluctModel());
+  AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
   if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
   EmModel(2)->SetLowEnergyLimit(eth);
