@@ -4,13 +4,12 @@
 ########################################
 #
 #/score/verbose 10
+#
 /score/create/cylinderMesh cylinderMesh_1
 #
 /score/mesh/cylinderSize 100. 100. cm
-/score/mesh/translate/xyz 0. 0. 0. cm
+/score/mesh/translate/xyz 1. 0. 0. cm
 #                Nr Nz Nphi
-#/score/mesh/nBin 2 2 3
-#/score/mesh/nBin 10 10 12
 /score/mesh/nBin 30 30 30
 
 #
@@ -28,7 +27,7 @@
 #
 /score/list
 #
-/run/beamOn 100
+/run/beamOn 200
 #
 ########################################
 #
@@ -40,7 +39,12 @@
 #/control/loop test4a.mac iColumn 0 29 7
 #
 #/score/dumpQuantityToFile cylinderMesh_1 eDepPS eDep.txt
-/score/drawProjection cylinderMesh_1 nOfStepPSgamma
-#/score/drawProjection cylinderMesh_1 eDepPS
-
+#/score/drawProjection cylinderMesh_1 nOfStepPSgamma
+/score/drawProjection cylinderMesh_1 eDepPS
+/vis/drawVolume 
+/control/loop test6a.mac iColumn 0 29 7
+/vis/drawVolume 
+/control/loop test6b.mac iColumn 0 29 7
+/vis/drawVolume 
+/control/loop test6c.mac iColumn 0 29 7
 
