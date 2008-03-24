@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.11 2008-03-14 12:12:34 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.12 2008-03-24 13:21:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -153,10 +153,11 @@ G4double G4IonFluctuations::Dispersion(
 {
   particle       = dp->GetDefinition();
   charge         = particle->GetPDGCharge()/eplus;
+  G4double Q2    = charge*charge;
   particleMass   = particle->GetPDGMass();
   G4double q     = dp->GetCharge()/eplus;
   chargeSquare   = q*q;
-  chargeSqRatio  = chargeSquare/(charge*charge);
+  chargeSqRatio  = chargeSquare/Q2;
 
   G4double electronDensity = material->GetElectronDensity();
   kineticEnergy  = dp->GetKineticEnergy();
@@ -167,7 +168,7 @@ G4double G4IonFluctuations::Dispersion(
   //	 << " q^2= " << chargeSquare << " beta2=" << beta2<< G4endl;
 
   G4double siga = (1. - beta2*0.5)*tmax*length*electronDensity*
-    twopi_mc2_rcl2*chargeSquare/beta2;
+    twopi_mc2_rcl2*Q2/beta2;
 
   // Low velocity - additional ion charge fluctuations according to
   // Q.Yang et al., NIM B61(1991)149-155.
@@ -179,6 +180,13 @@ G4double G4IonFluctuations::Dispersion(
   // correction factors with cut dependence  
   if ( beta2 < 3.0*theBohrBeta2*zeff ) fac = CoeffitientB (material, zeff);
   else                                 fac = RelativisticFactor(material, zeff);
+
+  // heavy ion correction
+  G4double f1 = 1.065e-4*chargeSquare;
+  if(beta2 > theBohrBeta2)  f1/= beta2;
+  else                      f1/= theBohrBeta2;
+  if(f1 > 1.0) f1 = 1.0;
+  fac *= (1.0 + f1);
 
   // taking into account the cut
   if(fac > 1.0) 
@@ -386,20 +394,13 @@ G4double G4IonFluctuations::RelativisticFactor(const G4Material* material,
   G4double bF2= 2.0*eF/electron_mass_c2;
   G4double I  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double f  = 0.4*(1.0 - beta2)/((1.0 - 0.5*beta2)*zeff);
-  G4double f1 = 1.065e-4*chargeSqRatio;
-  if(beta2 > bF2) {
-    f *= log(2.0*electron_mass_c2*beta2/I)*bF2/beta2;
-    f1/= beta2;
-  } else {
-    f *= log(4.0*eF/I);
-    f1/= bF2;
-  }
-  //  G4cout << "f= " << f << " f1= " << f1 << " beta2= " << beta2 
+  if(beta2 > bF2) f *= log(2.0*electron_mass_c2*beta2/I)*bF2/beta2;
+  else            f *= log(4.0*eF/I);
+
+  //  G4cout << "f= " << f << " beta2= " << beta2 
   //	 << " bf2= " << bF2 << " q^2= " << chargeSquare << G4endl;
 
-  G4double factor = (1.0 + f)*(1.0 + f1);
-
-  return factor;
+  return 1.0 + f;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
