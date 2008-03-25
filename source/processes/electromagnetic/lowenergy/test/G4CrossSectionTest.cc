@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionTest.cc,v 1.2 2007-10-22 10:21:25 pia Exp $
+// $Id: G4CrossSectionTest.cc,v 1.3 2008-03-25 10:36:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-///
+//
 // -------------------------------------------------------------------
 //      Author:        Maria Grazia Pia
 // 
@@ -60,8 +60,12 @@
 #include "G4CrossSectionIonisationBornElectron.hh"
 #include "G4CrossSectionIonisationBorn.hh"
 
+#include "G4CrossSectionChargeTransferCH.hh"
+#include "G4CrossSectionChargeTransferExp.hh"
+
 int main()
 {
+
   //  G4cout.setf( ios::scientific, ios::floatfield );
 
   // G4CrossSectionElasticScreenedRutherford* cross = new G4CrossSectionElasticScreenedRutherford;
@@ -70,7 +74,11 @@ int main()
   // G4CrossSectionExcitationBornPartial* cross = new G4CrossSectionExcitationBornPartial;
   // G4CrossSectionIonisationBornElectron* cross = new G4CrossSectionIonisationBornElectron;
 
-  G4CrossSectionIonisationBorn* cross = new G4CrossSectionIonisationBorn;
+  // G4CrossSectionIonisationBorn* cross = new G4CrossSectionIonisationBorn;
+
+  G4CrossSectionChargeTransferCH* cross = new G4CrossSectionChargeTransferCH;
+
+  // G4CrossSectionChargeTransferExp* cross = new G4CrossSectionChargeTransferExp;
 
   // Particle definitions
   
@@ -91,9 +99,7 @@ int main()
   G4cin >> e0;
   e0 = e0 * keV;
 
-
   G4cout << "Enter energy step in keV" << G4endl;
-
 
   G4double eStep;
   G4cin >> eStep;
@@ -101,20 +107,20 @@ int main()
 
 
   // 10 energy steps between the energy limits
-  G4int nStep = 11;
+  G4int nStep = 10;
 
   for (G4int i=0; i<nStep; i++) 
     {
       G4double energy = e0 + i * eStep;
       
-      G4DynamicParticle dynamicParticle(electron,direction,energy);
-      //      G4DynamicParticle dynamicParticle(proton,direction,energy);
+      //      G4DynamicParticle dynamicParticle(electron,direction,energy);
+      G4DynamicParticle dynamicParticle(proton,direction,energy);
       //      G4DynamicParticle dynamicParticle(positron,direction,energy);
        
       //     dynamicParticle.DumpInfo(0);
      
       // Track 
-      
+
       G4ThreeVector position(0.,0.,0.);
       G4double time = 0. ;
       
@@ -124,7 +130,10 @@ int main()
       // G4double sigma = cross->CrossSection(energy,0);
       // G4double sigma = cross->CrossSection(energy,electron::GetParticleName());
 
-      G4cout << energy/keV <<" keV, cross section = " << sigma / (cm*cm) << " cm-2" << G4endl;
+      //     G4cout << energy/keV <<" keV, cross section = " << sigma / (cm*cm) << " cm2" << G4endl;
+
+      //  G4cout << energy/keV <<" " << sigma / (cm*cm) << G4endl;
+      G4cout << energy/keV <<" " << sigma / cm2 << G4endl;
 
       // G4int level = cross->RandomSelect(energy);
 
@@ -135,11 +144,5 @@ int main()
 
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
-
-
-
-
-
-
 
 
