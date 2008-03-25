@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2007-06-14 10:31:01 vnivanch Exp $
+$Id: History,v 1.21 2008-03-25 14:34:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-03-08  V.Ivant (test31-V09-01-00)
+- interface changed in G4EmCorrections
 
 14-06-07  V.Ivant (test31-V08-03-04)
 - fixed compilation problem at SLC4
