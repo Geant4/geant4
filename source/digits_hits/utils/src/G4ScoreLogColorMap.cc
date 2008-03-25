@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.1 2008-03-25 02:18:38 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.2 2008-03-25 04:06:08 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -122,13 +122,19 @@ void G4ScoreLogColorMap::DrawColorChartBar(G4int _nPoint) {
 
 }
 void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
-  G4double min = std::log10(this->GetMin());
-  G4double max = std::log10(this->GetMax());
+  G4bool lmin = true, lmax = true;
+  if(fMinVal <= 0.) lmin = false;
+  if(fMaxVal <= 0.) lmax = false;
+
+  G4double min = 0.;
+  if(lmin) min = std::log10(fMinVal);
   if(min > 0.) min = std::floor(min);
   else min = std::ceil(min);
+
+  G4double max = 0.;
+  if(lmax) max = std::log10(fMaxVal);
   if(max > 0.) max = std::floor(max);
   else max = std::ceil(max);
-  G4cout << "   HHHHHH   " << min << ", " << max << G4endl;
 
   G4double c[4];
   G4Colour black(0., 0., 0.);
