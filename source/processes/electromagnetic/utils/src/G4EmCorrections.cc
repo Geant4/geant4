@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.31 2008-03-25 12:17:23 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.32 2008-03-25 13:06:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -587,13 +587,14 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 
 G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p,
 						   const G4Material* mat,
-						   G4double e, G4double cut)
+						   G4double e, G4double cutEnergy)
   // Finite size corrections are parameterized according to
   // J.D.Jackson Phys. Rev. D59 (1998) 017301 
 {
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
   G4double numlim = 0.2;
+  G4double cut = std::min(tmax0,cutEnergy);
 
   //Leptons
   /*
@@ -653,11 +654,12 @@ G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p
 
 G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
 						 const G4Material* mat,
-						 G4double e, G4double cut)
+						 G4double e, G4double cutEnergy)
   // Finite size corrections are parameterized according to
   // J.D.Jackson Phys. Rev. D59 (1998) 017301 
 {
   SetupKinematics(p, mat, e);
+  G4double cut = std::min(tmax0,cutEnergy);
   G4double term = 0.0;
   //  G4double numlim = 0.2;
   G4double xp = 0.0;
