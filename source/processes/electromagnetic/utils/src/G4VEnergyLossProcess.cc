@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.124 2008-02-04 18:12:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.125 2008-03-25 12:29:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1116,6 +1116,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
              << ", dRoverRange= " << dRoverRange
              << ", integral: " << integral
              << ", fluct: " << lossFluctuationFlag
+	     << ", linLossLimit= " << linLossLimit
              << G4endl;
     
     if(theCSDARangeTable && isIonisation) 
