@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.30 2007-11-14 22:08:15 asaim Exp $
+// $Id: G4ScoringManager.cc,v 1.31 2008-03-25 02:18:38 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4THitsMap.hh"
 #include "G4VScoreColorMap.hh"
 #include "G4DefaultLinearColorMap.hh"
+#include "G4ScoreLogColorMap.hh"
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
 
@@ -60,6 +61,8 @@ G4ScoringManager::G4ScoringManager()
   fColorMapDict = new ColorMapDict();
   fDefaultLinearColorMap = new G4DefaultLinearColorMap("defaultLinearColorMap");
   (*fColorMapDict)[fDefaultLinearColorMap->GetName()] = fDefaultLinearColorMap;
+  G4VScoreColorMap * logColorMap = new G4ScoreLogColorMap("logColorMap");
+  (*fColorMapDict)[logColorMap->GetName()] = logColorMap;
   writer = new G4VScoreWriter();
 }
 

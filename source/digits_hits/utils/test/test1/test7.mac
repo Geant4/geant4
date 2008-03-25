@@ -1,0 +1,31 @@
+#
+/control/execute vis.mac
+#
+########################################
+#
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxSize 1. 1. 1. m
+/score/mesh/nBin 30 30 30
+#
+/score/quantity/energyDeposit eDepPS
+/score/quantity/nOfStep nOfStepPSgamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepPSeMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepPSePlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+########################################
+#
+/score/list
+#
+/run/beamOn 100
+#
+########################################
+#
+/score/drawProjection boxMesh_1 nOfStepPSgamma ! 10
+/score/drawProjection boxMesh_1 nOfStepPSgamma logColorMap 101
+#

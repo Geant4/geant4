@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.50 2008-03-23 14:32:12 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.51 2008-03-25 02:18:38 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -291,6 +291,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     std::vector<std::vector<double> > xzcell; // xzcell[X][Z]
     for(int x = 0; x < fNSegment[0]; x++) xzcell.push_back(ez);
 
+    G4double xymin = DBL_MAX, yzmin = DBL_MAX, xzmin = DBL_MAX;
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
@@ -298,12 +299,15 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       GetXYZ(itr->first, q);
 
       xycell[q[0]][q[1]] += *(itr->second);
+      if(xymin > xycell[q[0]][q[1]]) xymin = xycell[q[0]][q[1]];
       if(xymax < xycell[q[0]][q[1]]) xymax = xycell[q[0]][q[1]];
 
       yzcell[q[1]][q[2]] += *(itr->second);
+      if(yzmin > yzcell[q[1]][q[2]]) yzmin = yzcell[q[1]][q[2]];
       if(yzmax < yzcell[q[1]][q[2]]) yzmax = yzcell[q[1]][q[2]];
 
       xzcell[q[0]][q[2]] += *(itr->second);
+      if(xzmin > xzcell[q[0]][q[2]]) xzmin = xzcell[q[0]][q[2]];
       if(xzmax < xzcell[q[0]][q[2]]) xzmax = xzcell[q[0]][q[2]];
     }  
     
@@ -315,7 +319,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     G4Scale3D scale;
     if(axflg/100==1) {
       // xy plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xymin ,xymax); }
       G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
       G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
       for(int x = 0; x < fNSegment[0]; x++) {
@@ -344,7 +348,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     axflg = axflg%100;
     if(axflg/10==1) {
       // yz plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,yzmax); }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(yzmin, yzmax); }
       G4ThreeVector xhalf(fSize[0]/fNSegment[0]*0.98, 0., 0.);
       G4Box yzplate("yz", fSize[0]/fNSegment[0]*0.01, fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]);
       for(int y = 0; y < fNSegment[1]; y++) {
@@ -373,7 +377,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     axflg = axflg%10;
     if(axflg==1) {
       // xz plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xzmax); }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(xzmin,xzmax); }
       G4ThreeVector yhalf(0., fSize[1]/fNSegment[1]*0.98, 0.);
       G4Box xzplate("xz", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1]*0.01, fSize[2]/fNSegment[2]);
       for(int x = 0; x < fNSegment[0]; x++) {
