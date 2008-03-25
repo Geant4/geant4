@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.14 2008-02-13 10:00:00 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.15 2008-03-25 12:18:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
   taulim(8.4146e-3),
   isIon(false)
 {
+  fParticleChange = 0;
   if(p) SetParticle(p);
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
@@ -105,11 +106,13 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   if (particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
-  if (pParticleChange) 
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                              (pParticleChange);
-  else 
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!fParticleChange) {
+    if (pParticleChange) 
+      fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+	(pParticleChange);
+    else 
+      fParticleChange = new G4ParticleChangeForLoss();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,10 +132,16 @@ G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
     G4double energy2   = totEnergy*totEnergy;
     G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
 
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy 
+      - beta2*log(maxEnergy/cutEnergy)/tmax;
 
     // +term for spin=1/2 particle
     if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
+
+    //High order correction different for hadrons and ions
+    if(!isIon) 
+      cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
+					    kineticEnergy,cutEnergy);
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -166,6 +175,7 @@ G4double G4BetheBlochModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
+  currentMaterial   = material;
   G4double eDensity = material->GetElectronDensity();
   G4double cross = eDensity*ComputeCrossSectionPerElectron
                                          (p,kineticEnergy,cutEnergy,maxEnergy);
@@ -221,9 +231,11 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
 
-  //High order correction only for hadrons
-  if(isIon) dedx += corr->IonBarkasCorrection(p,material,kineticEnergy);
-  else      dedx += corr->HighOrderCorrections(p,material,kineticEnergy);
+  //High order correction different for hadrons and ions
+  if(isIon) 
+    dedx += corr->IonBarkasCorrection(p,material,kineticEnergy);
+  else      
+    dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
 
   return dedx;
 }
