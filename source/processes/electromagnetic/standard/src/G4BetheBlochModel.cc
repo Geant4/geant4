@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.15 2008-03-25 12:18:55 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.16 2008-03-25 18:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -268,6 +268,9 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
     f = 1.0 - beta2*deltaKinEnergy/tmax;
     if( 0.5 == spin ) f += 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
+
+    G4double x1 = 1.0 + formfact*deltaKinEnergy;
+    f /= (x1*x1);
 
     if(f > 1.0) {
         G4cout << "G4BetheBlochModel::SampleSecondary Warning! "

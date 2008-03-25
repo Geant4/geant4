@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.23 2008-03-25 12:18:55 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.24 2008-03-25 18:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,7 +175,7 @@ private:
   G4double                  faclim;
   G4double                  FF[100];
 
-  G4int                     index[100];
+  //  G4int                     index[100];
 
   G4bool                    isInitialised;             
 };
@@ -251,7 +251,7 @@ inline G4double G4eCoulombScatteringModel::FormFactorMev2(G4double Z,
   if(iz > 99) iz = 99;
   G4double res = FF[iz];
   if(res == 0.0) { 
-    res = constn*std::exp(0.54*fNistManager->GetLOGA(A));
+    res = constn*std::pow(A,0.54);
     FF[iz] = res;
   }
   return res;

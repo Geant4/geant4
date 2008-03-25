@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.125 2008-03-25 12:29:22 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.126 2008-03-25 18:34:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1408,13 +1408,13 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     if( !theInverseRangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theLambdaTable  && isIonisation) {
+  if ( theLambdaTable ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     if( !theLambdaTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
-  if ( theSubLambdaTable  && isIonisation) {
+  if ( theSubLambdaTable ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
     if( !theSubLambdaTable->StorePhysicsTable(name,ascii)) res = false;

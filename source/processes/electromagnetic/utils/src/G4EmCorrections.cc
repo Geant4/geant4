@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.32 2008-03-25 13:06:03 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.33 2008-03-25 18:34:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -596,26 +596,17 @@ G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p
   G4double numlim = 0.2;
   G4double cut = std::min(tmax0,cutEnergy);
 
-  //Leptons
+  G4double x = cut*formfact;
+
+  if(x <= numlim) term = -x*(1.0 - 0.5*x);
+  else            term = -std::log(1.0 + x);
+
+  term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
+
   /*
-  if(p->GetLeptonNumber() != 0) {
-    G4double x =  tmax/(e + mass);
-    term = x*x;
-  */
-    // Pions and Kaons
-  if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
-    G4double xpi = 0.736*GeV;
-    G4double x   = 2.0*electron_mass_c2*cut/(xpi*xpi);
-
-    if(x <= numlim) term = -x*(1.0 - 0.5*x);
-    else            term = -std::log(1.0 + x);
-
-    term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
-
-    // Protons and baryons
-  } else if(q2 < 1.5) {
-    G4double xp = 0.8426*GeV;
-    G4double x  = 2.0*electron_mass_c2*cut/(xp*xp);
+    // Protons and hyperons
+  if(p->GetPDGSpin() != 0.0 && q2 < 1.5 && p->GetBaryonNumber() != 0) {
+    G4double x  = cut*formfact;
     G4double ksi2 = 2.79285*2.79285;
     if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) + 1.0 - 0.5*x);
     else term = -x*(1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) - std::log(1.0 + x);
@@ -634,19 +625,10 @@ G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p
 		       x*(3.0 + 2.0*x)*l2*l1/(6.0*x2*lb2))/(l2*l2);
     G4double ib = x*x*(3.0 + x)/(6.0*x2*x1); 
     term += lb*((ksi2 - 1.0)*ia + nu*ksi2*ib);
+    }
+  */
     // G4cout << "Proton F= " << term << " ia= " << ia << " ib= " << ib << " lb= " << lb<< G4endl;
     
-    //ions
-  } else {
-    G4double xp = 0.8426*GeV/A13;
-    G4double x  = 2.0*electron_mass_c2*cut/(xp*xp);
-    if(x <= numlim) term = -x*(1.0 - 0.5*x);
-    else            term = -std::log(1.0 + x);
-
-    term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
-    //G4cout << "Ion F= " << term << G4endl;
-  }
-
   return term;
 }
 
@@ -661,32 +643,10 @@ G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
   SetupKinematics(p, mat, e);
   G4double cut = std::min(tmax0,cutEnergy);
   G4double term = 0.0;
-  //  G4double numlim = 0.2;
-  G4double xp = 0.0;
-
-  //Leptons
-  /*
-  if(p->GetLeptonNumber() != 0) {
-    G4double x =  tmax/(e + mass);
-    term = x*x;
-  */
-    // Pions and Kaons
-  if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
-    xp = 0.736*GeV;
-    // Protons and baryons
-  } else if(q2 < 1.5) {
-    xp = 0.8426*GeV;
-
-    //ions
-  } else {
-    xp = 0.8426*GeV/A13;
-  }
-
-  G4double x   = 2.0*electron_mass_c2/(xp*xp);
-  G4double tm  = tmax0*x;
-  G4double tc  = cut*x;
+  G4double tm  = tmax0*formfact;
+  G4double tc  = cut*formfact;
   term = -(2.0*tm*log(tmax0/cut) - (1.0 + 2.0*tm)*log((tm + 1.0)/(tc + 1.0))
-	   - x*(tmax0 - cut)/(tc + 1.0))/tmax0;
+	   - formfact*(tmax0 - cut)/(tc + 1.0))/tmax0;
 
   return term;
 }

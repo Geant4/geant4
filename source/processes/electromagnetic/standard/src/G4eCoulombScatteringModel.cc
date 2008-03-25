@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.42 2008-03-21 17:54:46 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.43 2008-03-25 18:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   particle = 0;
   currentCouple = 0;
   for(size_t j=0; j<100; j++) {
-    index[j] = -1;
+    //    index[j] = -1;
     FF[j]    = 0.0;
   } 
 }

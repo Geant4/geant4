@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.15 2008-03-25 12:17:23 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.16 2008-03-25 18:34:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -242,6 +242,7 @@ private:
   G4double  kinEnergy;
   G4double  mass;
   G4double  massFactor;
+  G4double  formfact;
   G4double  eth;
   G4double  tau;
   G4double  gamma;
@@ -323,7 +324,17 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
       q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
       charge = std::sqrt(q2);
     }
-    if(mass > 120.*MeV) tmax = std::min(tmax,51200.*electron_mass_c2/(A13*A13));
+    formfact = 0.0;
+    if(particle->GetLeptonNumber() != 0) {
+      G4double x = 0.8426*GeV;
+      if(p->GetPDGSpin() == 0.0 && mass < GeV) x = 0.736*GeV;
+      else if(mass > GeV) {
+	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
+	x /= A13;
+	tmax = std::min(tmax,51200.*electron_mass_c2/(A13*A13));
+      }
+      formfact = 2.0*electron_mass_c2/(x*x);
+    }
   }
   if(mat != material) {
     material = mat;

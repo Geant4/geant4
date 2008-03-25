@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.10 2008-03-25 12:18:55 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.11 2008-03-25 18:36:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,6 +134,7 @@ private:
   G4double spin;
   G4double chargeSquare;
   G4double ratio;
+  G4double formfact;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
@@ -164,7 +165,17 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     ratio = electron_mass_c2/mass;
-    if(mass > 120.*MeV) tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
+    formfact = 0.0;
+    if(particle->GetLeptonNumber() != 0) {
+      G4double x = 0.8426*GeV;
+      if(spin == 0.0 && mass < GeV) x = 0.736*GeV;
+      else if(mass > GeV) {
+	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
+	x *= A13;
+	tlimit = 51.2*GeV*A13*A13;
+      }
+      formfact = 2.0*electron_mass_c2/(x*x);
+    }
   }
 }
 
