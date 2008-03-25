@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.20 2008-03-21 18:46:49 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.21 2008-03-25 12:31:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -424,11 +424,12 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // Gaussian part for combined algorithm ---------
 
   // define threshold angle as 2 sigma of central value
-  cosThetaMin = 1.0 - 4.0*x1;
+  //  cosThetaMin = 1.0 - 4.0*x1;
   /*
   G4cout << "cosTmin= " << cosThetaMin << " cosTmax= " 
 	 << cosThetaMax << G4endl;
   */
+  /*
   if(cosThetaMin < cosTetMaxNuc) cosThetaMin = cosTetMaxNuc;
 
   // The compute cross section for the tail distribution and 
@@ -438,7 +439,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   if(zcorr < x1) x1 -= zcorr;
 
   if(x1 > 0.1) x1 /= (1.0 - exp(-1.0/x1));
-  
+  */
   /*
   G4cout << part->GetParticleName() << " e= " << tkin << "  x1= " 
   	 << x1 << "  zcorr= " << zcorr << G4endl;
@@ -469,6 +470,9 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   newDirection.rotateUz(oldDirection);
   G4double rx = 0.0;
   G4double ry = 0.0;
+  G4double rz = 0.0;
+
+  G4double xsec = -1.0;
 
   // sample scattering for large angle -------------
   if(xsec > DBL_MIN) {
@@ -540,6 +544,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	G4double zr = zPathLength*t/tPathLength;
 	rx += vx1*zr; 
 	ry += vy1*zr;
+	rz -= (1.0 - zz1)*zr;
 	G4ThreeVector newDirection1(vx1,vy1,zz1);
 	newDirection1.rotateUz(newDirection);
 	newDirection = newDirection1;
@@ -553,23 +558,17 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   if (latDisplasment && safety > tlimitminfix) {
     G4double rms = sqrt(2.0*x1);
-    rx += zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    ry += zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    G4double r2 = rx*rx + ry*ry;
-    G4double z2 = zPathLength*zPathLength;
-    G4double z3 = r2/z2;
-    G4double rz;
-    if(z3 < 0.2) rz = -zPathLength*z3*0.5*(1.0 + 0.25*z3);
-    if(z3 > 1.0) {
-      G4double f = sqrt(z3);
-      rx /= f;
-      ry /= f;
-      rz  = -zPathLength;
-    } else {
-      rz = zPathLength*(sqrt(1.0 - z3) - 1.0);
-    }
-    r2 += rz*rz;
-    G4double r   = sqrt(r2);
+    G4double dx = zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
+    G4double dy = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
+    rx += dx;
+    ry += dy;
+    G4double dz  = (dx*dx + dy*dy)/(zPathLength*zPathLength);
+    if(dz < 0.2)      rz -= zPathLength*dz*(1.0 + 0.25*dz);
+    else if(dz > 1.0) rz  = -zPathLength;
+    else              rz -= zPathLength*(1.0 - sqrt(1.0 - dz));
+
+    G4double r2 = rx*rx + ry*ry + rz*rz;
+    G4double r  = sqrt(r2);
     /*
     G4cout << " r(mm)= " << r << " safety= " << safety
            << " trueStep(mm)= " << tPathLength
