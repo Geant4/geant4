@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferCH.hh,v 1.2 2008-03-25 10:13:13 pia Exp $
+// $Id: G4CrossSectionChargeTransferExp.hh,v 1.1 2008-03-25 10:13:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -45,22 +45,22 @@
 
 // -------------------------------------------------------------------
 
-#ifndef G4CROSSSECTIONCHARGETRANSFERCH_HH
-#define G4CROSSSECTIONCHARGETRANSFERCH_HH 1
+#ifndef G4CROSSSECTIONCHARGETRANSFEREXP_HH
+#define G4CROSSSECTIONCHARGETRANSFEREXP_HH 1
  
 #include "globals.hh"
-#include <vector>
 #include <map>
 
 class G4Track;
+class G4VEMDataSet;
  
-class G4CrossSectionChargeTransferCH
+class G4CrossSectionChargeTransferExp
 {
 public:
   
-  G4CrossSectionChargeTransferCH();
+  G4CrossSectionChargeTransferExp();
   
-  virtual ~G4CrossSectionChargeTransferCH();
+  virtual ~G4CrossSectionChargeTransferExp();
   
   G4double CrossSection(const G4Track&);
   
@@ -71,8 +71,13 @@ private:
   G4String name;  
   G4double lowEnergyLimit;
   G4double highEnergyLimit;
+  
+  G4double unit1;
+  G4double unit2;
  
-  std::map<G4String,std::vector<G4double>,std::less<G4String> > crossMap;
+  std::map<G4String,G4VEMDataSet*,std::less<G4String> > crossMap;
+
+  G4VEMDataSet* LoadData(const G4String& dataFile);
 
 };
 

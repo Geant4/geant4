@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferCH.cc,v 1.1 2008-02-22 16:26:33 pia Exp $
+// $Id: G4CrossSectionChargeTransferCH.cc,v 1.2 2008-03-25 10:13:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,9 +68,14 @@ G4CrossSectionChargeTransferCH::G4CrossSectionChargeTransferCH()
 {
   // Default energy limits (defined for protection against anomalous behaviour only)
   name = "ChargeTransferCH";
-  lowEnergyLimit = 0.1 * keV;
+  lowEnergyLimit = 0.1 * eV;
   highEnergyLimit = 1.0 * MeV;
 
+  std::vector<G4double> coeff;
+  G4String materialName;
+
+  // CH
+  materialName = "CH";
   coeff.push_back(-1.060468);
   coeff.push_back(-5.662572);
   coeff.push_back(-4.376450);
@@ -80,7 +85,84 @@ G4CrossSectionChargeTransferCH::G4CrossSectionChargeTransferCH()
   coeff.push_back(-0.3523295);  
   coeff.push_back(-0.09956988);   
   coeff.push_back(0.01532751);
-  
+  crossMap[materialName] = coeff;
+  coeff.clear();
+
+  // CH2
+  materialName = "CH2";
+  coeff.push_back(1.118652E-01);  
+  coeff.push_back(-5.216803E+00);  
+  coeff.push_back(-3.893841E+00);  
+  coeff.push_back(-2.756865E+00);  
+  coeff.push_back(-1.192043E+00);  
+  coeff.push_back(-5.200059E-01);  
+  coeff.push_back(-1.816781E-01);   
+  coeff.push_back(1.129866E-02);  
+  coeff.push_back(-3.658702E-03);
+  crossMap[materialName] = coeff;
+  coeff.clear();
+
+  // CH3
+  coeff.push_back(6.854778E-01);  
+  coeff.push_back(-5.810741E+00);  
+  coeff.push_back(-3.622136E+00);  
+  coeff.push_back(-2.179920E+00);  
+  coeff.push_back(-7.801006E-01);  
+  coeff.push_back(-2.421371E-02);   
+  coeff.push_back(2.762333E-01);  
+  coeff.push_back(2.288237E-01);   
+  coeff.push_back(6.164797E-02);
+  crossMap[materialName] = coeff;
+  coeff.clear();
+
+  // CH4
+  materialName = "CH4";
+  coeff.push_back(0.3901564);
+  coeff.push_back(-6.426675);
+  coeff.push_back(-3.706893);
+  coeff.push_back(-1.999034);
+  coeff.push_back(-0.5625439);
+  coeff.push_back(0.2279431);
+  coeff.push_back(0.3443980);  
+  coeff.push_back(0.1566892);   
+  coeff.push_back(-0.05398410);
+  coeff.push_back(-0.1822252);  
+  coeff.push_back(-0.1593352);   
+  coeff.push_back(-0.08826322);
+  crossMap[materialName] = coeff;
+  coeff.clear();
+
+  // C2H
+  materialName = "C2H";
+  coeff.push_back(-1.986507E+00);
+  coeff.push_back(-5.720283E+00);
+  coeff.push_back(-3.535139E+00);
+  coeff.push_back(-4.230273E+00);
+  coeff.push_back(-1.254502E+00);
+  coeff.push_back(-2.056898E-01);
+  coeff.push_back(-4.595756E-01);
+  coeff.push_back(-7.842824E-02);
+  coeff.push_back(3.002537E-02);
+  coeff.push_back(-5.626713E-02);
+  coeff.push_back(6.455583E-02);
+  crossMap[materialName] = coeff;
+  coeff.clear();
+
+  // C2H2
+  materialName = "C2H2";
+  coeff.push_back(2.513870E-01);
+  coeff.push_back(-5.812705E+00);
+  coeff.push_back(-3.338185E+00);
+  coeff.push_back(-3.071630E+00);
+  coeff.push_back(-1.433263E+00);
+  coeff.push_back(-3.583544E-01);
+  coeff.push_back(-1.456216E-01);
+  coeff.push_back(-7.391778E-03);
+  coeff.push_back(1.151712E-02);
+  crossMap[materialName] = coeff;
+  coeff.clear();
+  // 
+
 }
 
 
@@ -90,35 +172,47 @@ G4CrossSectionChargeTransferCH::~G4CrossSectionChargeTransferCH()
 
 G4double G4CrossSectionChargeTransferCH::CrossSection(const G4Track& track)
 {
-  G4double crossSection = DBL_MIN;
+  G4double sigma = DBL_MIN;
  
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double e = particle->GetKineticEnergy() / keV;
-  G4double eMin = lowEnergyLimit / keV;
-  G4double eMax = highEnergyLimit / keV;
 
-  if (e >=  eMin && e <= eMax)
+  // Get the material the track is in
+  G4Material* material = track.GetMaterial();
+  G4String materialName;
+  materialName = material->GetName();
+
+  // Check whether cross section data are available for the current material
+
+  std::map<G4String,std::vector<G4double>,std::less<G4String> >::const_iterator pos;
+  pos = crossMap.find(materialName);
+  if (pos!= crossMap.end())
     {
+      std::vector<G4double> coeff = (*pos).second;
+      G4double eMin = lowEnergyLimit / keV;
+      G4double eMax = highEnergyLimit / keV;
+      G4double scaleFactor = 1.e-16 * cm2;
 
-      G4double x = (2.*std::log(e)-std::log(eMin)-std::log(eMax)) / (std::log(eMax)-std::log(eMin));
-      
-      std::vector<G4double> t;
-      t.push_back(1.);
-      t.push_back(x);
-      G4double cross = coeff[0] + coeff[1] * x;
-      
-      for (G4int i=0; i<7; i++)
+      if (e >=  eMin && e <= eMax)
 	{
-	  G4double tNext = t[i] + 2. * t[i+1];
-	  t.push_back(tNext);
-	  cross = coeff[i+2] * tNext;
+	  G4double x = (2.*std::log(e) - std::log(eMin) - std::log(eMax)) / (std::log(eMax) - std::log(eMin));
+	  
+	  std::vector<G4double> t;
+	  t.push_back(1.);
+	  t.push_back(x);
+	  G4double cross = t[0] * coeff[0] + t[1] * coeff[1];
+
+	  G4int nCoeff = coeff.size();
+	  for (G4int i=2; i<nCoeff; i++)
+	    {
+	      G4double tNext = 2. * t[i-1] - t[i-2];
+	      t.push_back(tNext);
+	      cross = cross + coeff[i] * tNext;
+	    }
+	  sigma = std::exp(cross) * scaleFactor;
 	}
-      crossSection = std::exp(cross);
-
     }      
-      
- 
 
-  return crossSection;
+  return sigma;
 }
 
