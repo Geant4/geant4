@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.4 2008-03-24 02:11:12 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.5 2008-03-25 02:22:08 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -288,6 +288,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
     for(int r = 0; r < fNSegment[0]; r++) rphicell.push_back(ephi);
 
     // search max. values
+    G4double rzmin = DBL_MAX, zphimin = DBL_MAX, rphimin = DBL_MAX;
     G4double rzmax = 0., zphimax = 0., rphimax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
@@ -295,12 +296,15 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
       GetRZPhi(itr->first, q);
 
       rzcell[q[0]][q[1]] += *(itr->second);
+      if(rzmin > rzcell[q[0]][q[1]]) rzmin = rzcell[q[0]][q[1]];
       if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
 
       zphicell[q[1]][q[2]] += *(itr->second);
+      if(zphimin > zphicell[q[1]][q[2]]) zphimin = zphicell[q[1]][q[2]];
       if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
 
       rphicell[q[0]][q[2]] += *(itr->second);
+      if(rphimin > rphicell[q[0]][q[2]]) rphimin = rphicell[q[0]][q[2]];
       if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
     }  
     
@@ -343,7 +347,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
     axflg = axflg%100;
     if(axflg/10==1) {
       // z-phi plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,zphimax); }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(zphimin, zphimax); }
 
       G4double zhalf = fSize[1]/fNSegment[1];
       for(int phi = 0; phi < fNSegment[2]; phi++) {
@@ -382,7 +386,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
     axflg = axflg%10;
     if(axflg==1) {
       // r-phi plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rphimax); }
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(rphimin, rphimax); }
 
       G4double rsize = fSize[0]/fNSegment[0];
       for(int phi = 0; phi < fNSegment[2]; phi++) {
