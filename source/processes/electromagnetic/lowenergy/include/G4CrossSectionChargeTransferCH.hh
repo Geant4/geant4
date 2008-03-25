@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferCH.hh,v 1.2 2008-03-25 10:13:13 pia Exp $
+// $Id: G4CrossSectionChargeTransferCH.hh,v 1.3 2008-03-25 16:00:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -41,6 +41,7 @@
 // Total cross section for charge transfer in hydrocarbons
 // Reference: K. Janev, J. G. Wang and T. Kato, NIFS-DATA (2001)
 //            http://www-cfadc.phy.ornl.gov/astro/ps/data/
+// http://www-pub.iaea.org/MTCD/publications/PDF/APID-VOL10.pdf 
 // Further documentation available from http://www.ge.infn.it/geant4/
 
 // -------------------------------------------------------------------

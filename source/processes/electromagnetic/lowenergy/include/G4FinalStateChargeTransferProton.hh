@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateChargeTransferProton.hh,v 1.1 2008-03-25 15:47:59 pia Exp $
+// $Id: G4FinalStateChargeTransferProton.hh,v 1.2 2008-03-25 16:00:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -37,14 +37,14 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// Reference: TNS Geant4-DNA paper
+// Final state policy class for proton charge transfer
+// Reference for policy-based design:
 // S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
 // design foundation and implementation of the first set of models,
 // IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-// Further documentation available from http://www.ge.infn.it/geant4/dna
+// Reference for implementation:
+// http://www-pub.iaea.org/MTCD/publications/PDF/APID-VOL10.pdf 
+// Further documentation available from http://www.ge.infn.it/geant4/
 
 // -------------------------------------------------------------------
 

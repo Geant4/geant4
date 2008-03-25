@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferExp.cc,v 1.1 2008-03-25 10:13:51 pia Exp $
+// $Id: G4CrossSectionChargeTransferExp.cc,v 1.2 2008-03-25 16:00:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,9 +40,9 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Total cross section for incident p charge transfer in hydrocarbons
-// Reference: K. Janev, J. G. Wang and T. Kato, NIFS-DATA (2001)
-//            http://www-cfadc.phy.ornl.gov/astro/ps/data/
+// Total cross section for incident p charge transfer from experimental data 
+// interpolation
+// Reference: http://www-cfadc.phy.ornl.gov/astro/ps/data/
 //
 // The fit formula is:
 // ln(cross section)=\sum C_i T_i(x)
