@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.29 2008-02-29 10:36:35 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.30 2008-03-25 11:53:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ G4EmCorrections::~G4EmCorrections()
 
 G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
                                                const G4Material* mat,
-					       G4double e)
+					       G4double e, G4double cut)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
@@ -109,7 +109,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  G4double FSize  = FiniteSizeCorrection (p, mat, e);
+  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, cut);
 
   G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
 
@@ -160,7 +160,7 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  G4double FSize  = FiniteSizeCorrection (p, mat, e);
+  G4double FSize  = FiniteSizeCorrection (p, mat, e, tmax0);
 
   G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + FSize + Mott;
 
@@ -585,9 +585,9 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
-                                               const G4Material* mat,
-					       G4double e)
+G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p,
+						   const G4Material* mat,
+						   G4double e, G4double cut)
   // Finite size corrections are parameterized according to
   // J.D.Jackson Phys. Rev. D59 (1998) 017301 
 {
@@ -596,21 +596,25 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
   G4double numlim = 0.2;
 
   //Leptons
+  /*
   if(p->GetLeptonNumber() != 0) {
     G4double x =  tmax/(e + mass);
     term = x*x;
-
+  */
     // Pions and Kaons
-  } else if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
+  if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
     G4double xpi = 0.736*GeV;
-    G4double x   = 2.0*electron_mass_c2*tmax0/(xpi*xpi);
+    G4double x   = 2.0*electron_mass_c2*cut/(xpi*xpi);
+
     if(x <= numlim) term = -x*(1.0 - 0.5*x);
     else            term = -std::log(1.0 + x);
+
+    term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
 
     // Protons and baryons
   } else if(q2 < 1.5) {
     G4double xp = 0.8426*GeV;
-    G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
+    G4double x  = 2.0*electron_mass_c2*cut/(xp*xp);
     G4double ksi2 = 2.79285*2.79285;
     if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) + 1.0 - 0.5*x);
     else term = -x*(1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) - std::log(1.0 + x);
@@ -634,11 +638,52 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
     //ions
   } else {
     G4double xp = 0.8426*GeV/A13;
-    G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
+    G4double x  = 2.0*electron_mass_c2*cut/(xp*xp);
     if(x <= numlim) term = -x*(1.0 - 0.5*x);
     else            term = -std::log(1.0 + x);
+
+    term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
     //G4cout << "Ion F= " << term << G4endl;
   }
+
+  return term;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
+						 const G4Material* mat,
+						 G4double e, G4double cut)
+  // Finite size corrections are parameterized according to
+  // J.D.Jackson Phys. Rev. D59 (1998) 017301 
+{
+  SetupKinematics(p, mat, e);
+  G4double term = 0.0;
+  G4double numlim = 0.2;
+
+  //Leptons
+  /*
+  if(p->GetLeptonNumber() != 0) {
+    G4double x =  tmax/(e + mass);
+    term = x*x;
+  */
+    // Pions and Kaons
+  if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
+    G4double xp = 0.736*GeV;
+    // Protons and baryons
+  } else if(q2 < 1.5) {
+    G4double xp = 0.8426*GeV;
+
+    //ions
+  } else {
+    G4double xp = 0.8426*GeV/A13;
+  }
+
+  G4double x   = 2.0*electron_mass_c2/(xp*xp);
+  G4double tm  = tmax0*x;
+  G4double tc  = cut*x;
+  term = -(2.0*tm*log(tmax0/cut) - (1.0 + 2.0*tm)*log((tm + 1.0)/(tc + 1.0))
+	   - x*(tmax0 - cut)/(tc + 1.0))/tmax0;
 
   return term;
 }

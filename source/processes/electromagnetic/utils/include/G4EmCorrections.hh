@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.13 2008-02-13 12:39:26 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.14 2008-03-25 11:53:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,11 +74,13 @@ public:
 
   G4double HighOrderCorrections(const G4ParticleDefinition* p,
                                 const G4Material* material,
-				G4double kineticEnergy);
+				G4double kineticEnergy,
+				G4double cutEnergy);
 
   G4double IonHighOrderCorrections(const G4ParticleDefinition* p,
 				   const G4Material* material,
-				   G4double kineticEnergy);
+				   G4double kineticEnergy,
+				   G4double cutEnergy);
 
   G4double IonBarkasCorrection(const G4ParticleDefinition* p,
 			       const G4Material* material,
@@ -124,9 +126,15 @@ public:
                           const G4Material* material,
 			  G4double kineticEnergy);
 
-  G4double FiniteSizeCorrection(const G4ParticleDefinition* p,
-				const G4Material* material,
-				G4double kineticEnergy);
+  G4double FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p,
+				    const G4Material* material,
+				    G4double kineticEnergy,
+				    G4double cutEnergy);
+
+  G4double FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
+				  const G4Material* material,
+				  G4double kineticEnergy,
+				  G4double cutEnergy);
 
   G4double NuclearDEDX(const G4ParticleDefinition* p,
                        const G4Material* material,
