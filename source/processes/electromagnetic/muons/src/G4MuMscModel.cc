@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.21 2008-03-25 12:31:04 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.22 2008-03-25 12:38:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -429,7 +429,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4cout << "cosTmin= " << cosThetaMin << " cosTmax= " 
 	 << cosThetaMax << G4endl;
   */
-  /*
+  
   if(cosThetaMin < cosTetMaxNuc) cosThetaMin = cosTetMaxNuc;
 
   // The compute cross section for the tail distribution and 
@@ -439,7 +439,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   if(zcorr < x1) x1 -= zcorr;
 
   if(x1 > 0.1) x1 /= (1.0 - exp(-1.0/x1));
-  */
+ 
   /*
   G4cout << part->GetParticleName() << " e= " << tkin << "  x1= " 
   	 << x1 << "  zcorr= " << zcorr << G4endl;
@@ -472,7 +472,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double ry = 0.0;
   G4double rz = 0.0;
 
-  G4double xsec = -1.0;
+  //G4double xsec = -1.0;
 
   // sample scattering for large angle -------------
   if(xsec > DBL_MIN) {

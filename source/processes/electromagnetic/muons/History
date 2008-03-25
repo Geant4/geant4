@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2008-03-21 17:53:28 vnivanch Exp $
+$Id: History,v 1.114 2008-03-25 12:39:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24 March 08:  V.Ivanchenko (emmuons-V09-01-05)
+25 March 08:  V.Ivanchenko (emmuons-V09-01-05)
 - G4MuMscModel - added shift along particle direction for displacement
+- G4MuBetheBlochModel - update computation of correction
 
 17 March 08:  V.Ivanchenko (emmuons-V09-01-04)
 - G4MuMscModel - fixed sampling
