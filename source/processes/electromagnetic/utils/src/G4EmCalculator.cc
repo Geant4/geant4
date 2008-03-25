@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.37 2007-08-16 15:55:42 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.38 2008-03-25 12:17:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -420,7 +420,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 
       if(isIon) {
         if(currentModel->HighEnergyLimit() > 100.*MeV)
-          res += corr->HighOrderCorrections(p,mat,kinEnergy);
+          res += corr->HighOrderCorrections(p,mat,kinEnergy,cut);
 	else
 	  res *= corr->EffectiveChargeCorrection(p,mat,kinEnergy);
 	if(verbose > 1)
@@ -450,7 +450,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	  G4cout << "At boundary energy(MeV)= " << eth/MeV
 		 << " DEDX(MeV/mm)= " << res1*mm/MeV
 		 << G4endl;
-        if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);
+        if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio,cut);
         //G4cout << "eth= " << eth << " escaled= " << escaled
 	//  << " res0= " << res0 << " res1= "
         //       << res1 <<  "  q2= " << chargeSquare << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.14 2008-03-25 11:53:45 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.15 2008-03-25 12:17:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,8 +79,7 @@ public:
 
   G4double IonHighOrderCorrections(const G4ParticleDefinition* p,
 				   const G4Material* material,
-				   G4double kineticEnergy,
-				   G4double cutEnergy);
+				   G4double kineticEnergy);
 
   G4double IonBarkasCorrection(const G4ParticleDefinition* p,
 			       const G4Material* material,

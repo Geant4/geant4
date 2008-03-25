@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.30 2008-03-25 11:53:45 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.31 2008-03-25 12:17:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -160,7 +160,7 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  G4double FSize  = FiniteSizeCorrection (p, mat, e, tmax0);
+  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, tmax0);
 
   G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + FSize + Mott;
 
@@ -659,7 +659,8 @@ G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
 {
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
-  G4double numlim = 0.2;
+  //  G4double numlim = 0.2;
+  G4double xp = 0.0;
 
   //Leptons
   /*
@@ -669,14 +670,14 @@ G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
   */
     // Pions and Kaons
   if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
-    G4double xp = 0.736*GeV;
+    xp = 0.736*GeV;
     // Protons and baryons
   } else if(q2 < 1.5) {
-    G4double xp = 0.8426*GeV;
+    xp = 0.8426*GeV;
 
     //ions
   } else {
-    G4double xp = 0.8426*GeV/A13;
+    xp = 0.8426*GeV/A13;
   }
 
   G4double x   = 2.0*electron_mass_c2/(xp*xp);
