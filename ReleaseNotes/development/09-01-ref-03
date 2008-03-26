@@ -113,7 +113,7 @@ persistency/gdml                                 gdml-V09-01-02
 - If there is only one setup defined, name does not matter, that setup will
   be loaded. 
 
-physics_lists                                    phys-lists-V09-01-02
+physics_lists                                    phys-lists-V09-01-03
 -------------
 - Added new builder G4EmStandardPhysics_option3 and cosmetics in
   G4EmStandardPhysics_* to handle G4EmProcessOptions.
@@ -141,10 +141,11 @@ processes/electromagnetic/lowenergy              emlowen-V09-01-07
 - Fixes to *DataSet files for better readability of the code. Restored
   readability of *DataSet* classes regards the indentation of the code.
 
-processes/electromagnetic/muons                  emmuons-V09-01-05
+processes/electromagnetic/muons                  emmuons-V09-01-06
 -------------------------------
 - Added initialization of 'SubType' for all processes.
 - G4MuMscModel:
+  o Fixed outstanding bug in sampling of scattering.
   o Fixed sampling; using G4VMscModel interface.
   o Added shift along particle direction for displacement.
 - G4MuBetheBlochModel: updated computation of correction.
