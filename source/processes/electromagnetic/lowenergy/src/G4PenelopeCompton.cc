@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.29 2008-03-26 15:30:12 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.30 2008-03-26 15:53:43 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -87,7 +87,7 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     ZForIntegration(1),
     nBins(200),
     cutForLowEnergySecondaryPhotons(250.0*eV),
-    fUseAtomicDeexcitation(true)
+    fUseAtomicDeexcitation(false)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -433,7 +433,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	}
     }
   
-
   G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
   G4double phi = twopi * G4UniformRand() ;
   G4double dirx = sinTheta * std::cos(phi);
@@ -463,7 +462,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
-  //G4double eKineticEnergy = diffEnergy - ionEnergy;
   G4double Q2 = photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
@@ -536,7 +534,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
   G4DynamicParticle* electron = 0;
-
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double xEl = sinThetaE * std::cos(phi+pi); 
@@ -550,7 +547,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   else
     {
-      
       energyDeposit += eKineticEnergy;
     }
 
@@ -558,10 +554,13 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   if (electron) aParticleChange.AddSecondary(electron);
   //This block below is executed only if there is at least one secondary photon produced by
   //AtomicDeexcitation
-  for (size_t ll=0;ll<photonVector->size();ll++)
+  if (photonVector)
     {
-      //G4DynamicParticle* aPhoton = (*photonVector)[ll];
-      if ((*photonVector)[ll]) aParticleChange.AddSecondary((*photonVector)[ll]);
+      for (size_t ll=0;ll<photonVector->size();ll++)
+	{
+	  //G4DynamicParticle* aPhoton = (*photonVector)[ll];
+	  if ((*photonVector)[ll]) aParticleChange.AddSecondary((*photonVector)[ll]);
+	}
     }
   delete photonVector;
   if (energyDeposit < 0)
