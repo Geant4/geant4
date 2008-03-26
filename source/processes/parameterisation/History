@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2008-03-13 16:03:38 gcosmo Exp $
+$Id: History,v 1.39 2008-03-26 14:54:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 March 13 2008, G. Cosmo (param-V09-01-00)
-- Cleared compilation warnings in G4GeometryManager on gcc-4.3.0 for
-  ambiguous use of parentheses in nested if-else statements.
+- Cleared compilation warnings in G4FastSimulationManagerProcess and
+  G4FastSimulationMessenger on gcc-4.3.0 for ambiguous use of
+  parentheses in nested if-else statements.
 
 November 30 2007, M. Verderi
 - Add Along methods to G4FSMP process
