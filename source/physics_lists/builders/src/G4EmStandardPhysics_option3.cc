@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.4 2008-03-25 18:02:52 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.5 2008-03-26 14:11:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -149,13 +149,17 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "e-") {
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+      pmanager->AddProcess(eIoni,                     -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
 
     } else if (particleName == "e+") {
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      G4eIonisation* epIoni = new G4eIonisation();
+      epIoni->SetStepFunction(0.2, 100*um);            
+      pmanager->AddProcess(epIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
 
@@ -163,7 +167,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "mu-"    ) {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+      G4MuIonisation* muIoni = new G4MuIonisation();
+      muIoni->SetStepFunction(0.2, 100*um);          
+      pmanager->AddProcess(muIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
 
@@ -174,7 +180,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 20*um);
-      pmanager->AddProcess(ionIoni, -1, 2, 2);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
     } else if (particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -198,7 +204,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
-      pmanager->AddProcess(hIoni,  -1, 2, 2);
+      pmanager->AddProcess(hIoni,                     -1, 2, 2);
     }
   }
     
