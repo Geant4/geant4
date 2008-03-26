@@ -19,9 +19,10 @@ set    phys = "opt1"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
 setenv PHYSLIST    standardIG
-#setenv PHYSLIST    standardSS
-set    phys = "optS"
+set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
+
+cp $VFEM/test37/geant4-V09-01-ref-00/*S.log ./
 
 $G4MY/reader_test37 Al     $1
 $G4MY/reader_test37 Mo     $1

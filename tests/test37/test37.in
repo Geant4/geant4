@@ -1,10 +1,12 @@
 /run/verbose 1
+/tracking/verbose 1
 /testem/det/setMat1 G4_Al
 /testem/det/setThick1 826.23935 um
 /testem/det/setNbOfLayers1 100 
 
+/testem/phys/addPhysics  standardIG
 #/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2
 #/testem/phys/addPhysics  livermore
