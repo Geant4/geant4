@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.12 2008-03-25 12:31:04 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.13 2008-03-26 13:33:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,7 +204,7 @@ private:
   G4double screenZ;
   G4double formfactA;
   G4double FF[100];
-  G4int    index[100];
+  //  G4int    index[100];
 
   // flags
   G4bool   isInitialized;

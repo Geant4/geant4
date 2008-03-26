@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.22 2008-03-25 12:38:37 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.23 2008-03-26 13:33:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,7 +110,7 @@ G4MuMscModel::G4MuMscModel(G4double thetaMax,
   ecut = etag = DBL_MAX;
   particle = 0;
   for(size_t j=0; j<100; j++) {
-    index[j] = -1;
+    //    index[j] = -1;
     FF[j]    = 0.0;
   } 
 }
@@ -424,7 +424,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // Gaussian part for combined algorithm ---------
 
   // define threshold angle as 2 sigma of central value
-  //  cosThetaMin = 1.0 - 4.0*x1;
+  cosThetaMin = 1.0 - 4.0*x1;
   /*
   G4cout << "cosTmin= " << cosThetaMin << " cosTmax= " 
 	 << cosThetaMax << G4endl;
@@ -440,7 +440,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   if(x1 > 0.1) x1 /= (1.0 - exp(-1.0/x1));
  
-  /*
+  /*  
   G4cout << part->GetParticleName() << " e= " << tkin << "  x1= " 
   	 << x1 << "  zcorr= " << zcorr << G4endl;
   */
@@ -458,11 +458,13 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double dirx = sint*cos(phi);
   G4double diry = sint*sin(phi);
+ 
   /*
   G4cout << "G4MuMscModel: step(mm)= " << tPathLength/mm
 	 << " e= " << e << " Epre= " << preKinEnergy
   	 << " lambdaeff= " << lambdaeff
 	 << " sint= " << sint << " cost= " << cost
+	 << " xsec= " << xsec
   	 << " x1= " << x1 << G4endl;
   */
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
@@ -486,7 +488,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	// uniform part
 	if(qsec < xsece1) {
 	  zz1 -= G4UniformRand()*(1.0 - cosThetaMin);
-	  // G4cout << "Uniform zz1= " << zz1 << G4endl;
+	  //G4cout << "Uniform zz1= " << zz1 << G4endl;
 
 	  // Reserford part
 	} else {
@@ -504,7 +506,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 		const G4Element* elm = (*theElementVector)[i];
 		SetupTarget(elm->GetZ(), elm->GetN(), tkin);
 		formf = formfactA;
-		// G4cout << "Reserford nuc Z= " << elm->GetZ() << G4endl;
+		//G4cout << "Reserford nuc Z= " << elm->GetZ() << G4endl;
 		break;
 	      }
 	    }
@@ -516,7 +518,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	      if(xsece[i] > qsec || nelm-1 == i) {
 		const G4Element* elm = (*theElementVector)[i];
 		SetupTarget(elm->GetZ(), elm->GetN(), tkin);
-		// G4cout << "Reserford elec Z= " << elm->GetZ() << G4endl;
+		//G4cout << "Reserford elec Z= " << elm->GetZ() << G4endl;
 		break;
 	      }
 	    }
@@ -526,17 +528,19 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	    G4double w1 = 1. - cosThetaMin + screenZ;
 	    G4double w2 = 1. - costm + screenZ;
 	    G4double w3 = cosThetaMin - costm;
-	    G4double grej; 
+	    G4double grej, zz; 
 	    do {
-	      zz1 = w1*w2/(w1 + G4UniformRand()*w3) - screenZ;
-	      grej = 1.0/(1.0 + formf*zz1);
+	      zz = w1*w2/(w1 + G4UniformRand()*w3) - screenZ;
+	      grej = 1.0/(1.0 + formf*zz);
 	    } while ( G4UniformRand() > grej*grej );  
-	    if(zz1 < 0.0) zz1 = 0.0;
-	    else if(zz1 > 2.0) zz1 = 2.0;
+	    if(zz < 0.0) zz = 0.0;
+	    else if(zz > 2.0) zz = 2.0;
+            zz1 = 1.0 - zz;
 	  }
 	  //G4cout << "Reserford zz1= " << zz1 << G4endl;
 	}
 	sint = sqrt((1.0 - zz1)*(1.0 + zz1));
+	//G4cout << "sint= " << sint << G4endl;
 	phi  = twopi*G4UniformRand();
 
 	G4double vx1 = sint*cos(phi);
