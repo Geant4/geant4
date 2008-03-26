@@ -1,0 +1,281 @@
+
+                       geant4-09-01-ref-03
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Introducing GDML writer, supporting almost all features as the reader;
+   extended GDML reader to support missing features.
+ o Modified implementation of Remove() and RemoveAllParticles() in
+   G4ParticleTable, so that particle definition objects are deleted.
+   Clients are responsible to delete particle objects.
+ o Added initialization of 'SubType' for all EM processes.
+ o New process G4eMultipleScattering specialized for e+,e-.
+ o Fixes in CHIPS hadronic model to address event reproducibility.
+ o New reviewed hadrontherapy advanced example.
+ o Ported code to gcc-4.3.0 compiler.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+environments                                     envs-V09-01-00
+------------
+- Fixed compilation problems.
+- Make direct usage of G4Version.hh instead of pyG4Version.hh.
+
+geometry/management                              geommng-V09-01-03
+-------------------
+- Cleared compilation warnings in G4GeometryManager on gcc-4.3.0 for
+  ambiguous use of parentheses in condition statements.
+
+geometry/navigation                              geomnav-V09-01-02
+-------------------
+- Cleared compilation warnings in G4ReplicaNavigation on gcc-4.3.0 for
+  ambiguous use of parentheses in condition statements.
+
+geometry/solids/BREPS                            breps-V09-01-01
+---------------------
+- Cleared compilation warnings on gcc-4.3.0 for ambiguous use of parentheses
+  in condition statements, if-else constructs and empty for-loops.
+
+geometry/solids/CSG                              geom-csg-V09-01-01
+-------------------
+- Cleared compilation warnings in G4Sphere on gcc-4.3.0 for
+  ambiguous use of parentheses in condition statements.
+
+geometry/solids/specific                         geom-specific-V09-01-07
+------------------------
+- Cleared compilation warnings in G4Paraboloid and G4TessellatedSolid
+  on gcc-4.3.0 for ambiguous use of parentheses in condition statements.
+
+global                                           global-V09-01-03
+------
+- Modified G4RandomDirection global function to use unit radius sphere surface
+  algorithm instead of 8-quadrants technique, giving ~30% performance boost.
+- Introduced inclusion of <cstring> and <climits> in G4String.hh and
+  templates.hh respectively for porting on gcc-4.3.0 compiler.
+- Cleared compilation warnings in G4DataInterpolation and G4JTPolynomialSolver
+  on gcc-4.3.0 for ambiguous use of parentheses in condition statements.
+
+graphics_reps                                    greps-V09-01-03
+-------------
+- Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on gcc-4.3.0.
+
+materials                                        materials-V09-01-03
+---------
+- G4Material
+  o Improved 'cerr' printout, printing the name of the material for
+    which an error is reported.
+  o Added printout of 'NuclearInteractionLength'.
+- G4IonisParamMat:
+  o Removed dependency on G4NistManager.
+  o Added Birks constant.
+- G4NistMaterialBuilder: using correct dimension for the density for
+  ConstructNewMaterial() methods.
+
+particles                                        particles-V09-01-02
+---------
+- Modified implementation of G4ParticleTable::Remove() and
+  G4ParticleTable::RemoveAllParticles() so that particle definition objects
+  are deleted in these methods. Clients are responsible to delete particle
+  objects.
+- Fixed bug in G4ParticleTable::RemoveAllParticles() method: G4Iontable
+  and G4ShortLivedTable should not be deleted in this method.
+- Added G4ParticleTable::DeleteAllParticles() to remove and delete all
+  particles in the list.
+- Fixed bug in G4Iontable::Remove() and G4ShortLivedTable::Remove().
+- Modified proton mass to be equal to 'proton_mass_c2' from CLHEP
+  (difference is 10 eV).
+- Checking if the atomic number should be less than 999 for G4IonTable.
+- Added class/method name in printouts.
+
+persistency/gdml                                 gdml-V09-01-02
+----------------
+- Introducing GDML writer: material properties; support for parameterised
+  volumes; division volumes; replica volumes; matrices; naming of physical
+  volumes; Twistedtrap, Twistedtubs, Tet, Twistedbox, Twistedtrd, Hype, Orb,
+  Para, Ellipsoid, Ellipticaltube, Polyhedra, Torus, Cone, Tube, Extruded,
+  Boolean (intersection, subtraction, union), Reflections (using scaled
+  transformation) solids; elements and composite materials.
+- Solved problem of reading multiple GDML files and writing
+  out into a single GDML file. Also optimised the process.
+  Writer implements the setup section too.
+- Additions to reader: physical-volumes name; temperature, pressure and state.
+  Added NIST support. Added border surface and skin surface.
+  Added getRotationMatrix() function to G4GDMLReadDefine.
+- Replicas are simplified and no longer restricted to replication along axes.
+- Added 'firstrotation' and 'firstposition' to boolean solid. Now the first
+  solid can be transformed too.
+- Exception handling is added to loops (identify infinite loops).
+- Quantities now can be referenced.
+- If there is only one setup defined, name does not matter, that setup will
+  be loaded. 
+
+physics_lists                                    phys-lists-V09-01-02
+-------------
+- Added new builder G4EmStandardPhysics_option3 and cosmetics in
+  G4EmStandardPhysics_* to handle G4EmProcessOptions.
+
+processes/cuts                                   procuts-V09-01-05
+--------------
+- Added G4ProductionCutsTableMessenger class.
+- Suppressed 'too big cut value' message for higher verbosity.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-01-01
+------------------------------------
+- Added new classes: G4hBremsstrahlungModel, G4hBremsstrahlung,
+  G4hPairProductionModel and G4hPairProduction.
+- Added initialization of 'SubType' for all processes.
+
+processes/electromagnetic/lowenergy              emlowen-V09-01-07
+-----------------------------------
+- New charge transfer process by incident protons (two cross-section and
+  one final state policy classes).
+- Added Doppler broadening to G4LowEnergyCompton, based on "Y.Namito, S.Ban
+  and H.Hirayama, NIM A 349, pp. 489-494, 1994".
+  Developments for Doppler broadening concerning data management.
+- Extensions to G4ShellData to deal with shell data relevant to Doppler
+  broadening simulation.
+- Fixes to *DataSet files for better readability of the code. Restored
+  readability of *DataSet* classes regards the indentation of the code.
+
+processes/electromagnetic/muons                  emmuons-V09-01-05
+-------------------------------
+- Added initialization of 'SubType' for all processes.
+- G4MuMscModel:
+  o Fixed sampling; using G4VMscModel interface.
+  o Added shift along particle direction for displacement.
+- G4MuBetheBlochModel: updated computation of correction.
+- G4MuBremsstrahlungModel, G4MuPairProductionModel: removed 'ignoreCut' flag;
+  removed obsolete methods and members, set some members protected to be used
+  by G4hBremsstrahlungModel.
+
+processes/electromagnetic/polarisation           empolar-V09-01-00
+--------------------------------------
+- Added initialization of 'SubType' for all processes.
+
+processes/electromagnetic/standard               emstand-V09-01-10
+----------------------------------
+- New process G4eMultipleScattering specialized for e+,e-.
+- Added initialization of 'SubType' for all processes.
+- G4BetheBlochModel: use 'formfactor' for sampling.
+- G4ionIonisation: use default 'linLossLimit' as of 9.1.
+- G4hIonisation: use G4IonFluctuations at low energies.
+- G4IonFluctuations: fixed computation of corrections.
+- G4BetheBlochModel: finite size correction is taken into account both for
+  delta-electron cross section and dEdx.
+- G4eCoulombScatteringModel:
+  o Reorganized and cleaned computation of cross-section.
+  o Removed unsued array.
+- G4UrbanMscModel2: cloned class from G4UrbanMscModel; fixed asymmetry in
+  lateral displacement
+- G4UrbanMscModel90, G4MscModel71: fixed compilation warnings for gcc-4.3.0.
+- G4MultipleScattering, G4hMultipleScattering, G4UrbanMscModel,
+  G4UrbanMscModel2, G4UrbanMscModel90: using G4VMscModel interface.
+
+processes/electromagnetic/utils                  emutils-V09-01-10
+-------------------------------
+- New class G4VMscModel to define general multiple-scattering parameters.
+- G4EmCorrections:
+  o Added cut dependence into finite size correction.
+  o Precomputing EM 'formfactor' for corrections.
+- G4VEnergyLossProcess:
+  o Storing bremsstrahlung cross-sections.
+  o Added printout of 'linLossLimit'.
+- G4EmSaturation:
+  o Added interface with G4Step.
+  o Added computation of the average recoil mass, using Birks coefficient
+    from G4Material.
+- G4LossTableManager: fixed logic in compute dEdx table for an inactive process.
+- G4LossTableManager, G4EmProcessOptions: added Set/Get methods fot Spline flag.
+- G4EnergyLossMessenger: added new command "/process/em/spline".
+- G4VMultipleScattering: SetSkin() method does no longer change 'StepLimitType'.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-01-03)
+  o G4QNucleus: fixed compilation warnings on Windows for uninitialised
+    values in constructors.
+  o Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+    parentheses in condition statements and empty while blocks.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-04)
+  o Fixes for improving event reproducibility: the check on tolerance is
+    replaced by check on exact equality for G4QuasiFreeRatios,
+    G4QProtonNuclearCrossSection, G4QNeutronNuclearCrossSection,
+    G4QMuonNuclearCrossSection, G4QPhotonNuclearCrossSection,
+    G4QElectronNuclearCrossSection, G4QDiffractionRatio and
+    G4QElasticCrossSection.
+  o Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+    parentheses in condition statements.
+- models/de_excitation (hadr-deex-V09-01-00)
+  o Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+    parentheses in condition statements in G4StatMFChannel.
+- models/high_energy (hadr-hep-V09-01-00)
+  o Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+    parentheses in condition statements.
+- models/management (hadr-modman-V09-01-00)
+  o Fixed compilation warning on gcc-4.3.0 in G4InelasticInteraction.
+- models/neutron_hp (hadr-hpn-V09-01-00)
+  o Fixed bug in G4NeutronHPContAngularPar detected while compiling
+    with gcc-4.3.0.
+  o Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+    parentheses in condition statements.
+
+processes/management                             procman-V09-01-02
+--------------------
+- Cleared compilation warnings on gcc-4.3.0 for ambiguous use of
+  parentheses in condition statements.
+
+processes/parameterisation                       param-V09-01-00
+--------------------------
+- Cleared compilation warnings in G4FastSimulationManagerProcess and
+  G4FastSimulationMessenger on gcc-4.3.0 for ambiguous use of parentheses
+  in nested if-else statements.
+
+examples                                         examples-V09-01-03
+--------
+- Updated reference outputs.
+- advanced/nanobeam (nanobeam-V09-01-06)
+  o Changed to use default macro file.
+  o Fix in main() in order to avoid double execution of macro files.
+  o Fix for compilation error on Windows systems.
+  o PrimaryGeneratorAction: fixed compilation warnings.
+  o Updated README file.
+- advanced/hadrontherapy (hadrontherapy-V09-01-03)
+  o Completed the update of the new beam line.
+  o Added comments to the PhysicsList class.
+  o Removed not used production cuts in PhysicsList.
+  o Added NIST definition materials in Material class.
+  o Code review of DetectorConstruction class.
+  o Changed name of the volume where the energy deposited is collected;
+    from "phantom" to "detector".
+    Changed name of the volume where the detector is inserted;
+    from "patient" to "Water Phantom".
+  o Fixed segmentation error due to wrong pointer in EMHadronIonStandard class.
+  o Added generation of histograms file.
+  o Added options for an accurate use of Standard electromagnetic models
+    in EMHadronIonStandard, EMElectronStandard, EMPositronStandard,
+    EMPhotonStandard and EMMuonStandard classes.
+    Added new macro file (physicsElectromagneticStandard.mac) for the use
+    of Hadrontherapy with the Standard Electromagnetic models;
+    In macro 'defaultMacro.mac', corrected wrong command for the activation
+    of the Standard Electromagnetic models.
+  o Updated README
+- extended/electromagnetic/TestEm3 (testem3-V09-01-01)
+  o DetectorConstruction: defined Birks constant in materials (scintillator).
+- extended/electromagnetic/TestEm5 (testem5-V09-01-02)
+  o Modified macro TestEm5.in to use physicsList 'emstandard_opt2'.
+- extended/electromagnetic/TestEm7 (testem7-V09-01-03)
+  o Modified macro TestEm7.in to use physicsList 'emstandard_opt3'.
+- extended/electromagnetic/TestEm9 (testem9-V09-01-00)
+  o Added G4EmStandardPhyiscs_option3.
+- extended/electromagnetic/TestEm17 (testem17-V09-01-00)
+  o Added pion and protons Bremsstrahlung and pair production.
+
+tests                                            tests-V09-01-03
+-----
+- Updated reference outputs and tools.
+- test31 (test31-V09-01-00)
+  o Adapted to interface change in G4EmCorrections.
