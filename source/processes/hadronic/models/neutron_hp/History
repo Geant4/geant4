@@ -14,11 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
       ---------------------------------------------------------------
 
-19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-05)
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-01-00)
 ---------------------------------------------
 - Fix compilation warnings - gcc-4.3.0 by T. Koi
   (This fix has a real effect to the code.) 
 	G4NeutronHPContAngularPar.cc
+- Also tagged "hadr-hpn-V09-00-05".
 
 19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-04)
 ---------------------------------------------
