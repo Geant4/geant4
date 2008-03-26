@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2008-03-26 14:11:21 maire Exp $
+$Id: History,v 1.55 2008-03-26 15:18:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+26-03-2008, V.Ivanchenko phys-lists-V09-01-03
 26-03-2008, mma
 - G4EmStandardPhysics_option3 : SetStepFunction() per particle type     
      
