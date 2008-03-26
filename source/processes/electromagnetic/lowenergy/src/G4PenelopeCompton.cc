@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.28 2008-03-10 19:50:35 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.29 2008-03-26 15:30:12 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -44,6 +44,7 @@
 //                            (bug report # 585)
 // 17 Mar 2004 L.Pandola      Removed unnecessary calls to std::pow(a,b)
 // 18 Mar 2004 L.Pandola      Use of std::map (code review)
+// 26 Mar 2008 L.Pandola      Add boolean flag to control atomic de-excitation
 //
 // -------------------------------------------------------------------
 
@@ -85,7 +86,8 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     energyForIntegration(0.0),
     ZForIntegration(1),
     nBins(200),
-    cutForLowEnergySecondaryPhotons(250.0*eV)
+    cutForLowEnergySecondaryPhotons(250.0*eV),
+    fUseAtomicDeexcitation(true)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -253,6 +255,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   const G4Material* material = couple->GetMaterial();
+  
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
   const G4int nmax = 64;
   G4double rn[nmax],pac[nmax];
@@ -472,63 +475,68 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       cosThetaE = 1.0;
     }
   G4double sinThetaE = std::sqrt(1-cosThetaE*cosThetaE);
+  G4int nbOfSecondaries = 0; //initialize here, then check photons created by Atomic-Deexcitation, and the final state e-
+  std::vector<G4DynamicParticle*>* photonVector=0;
 
- 
- 
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
   //G4cout << bindingEnergy/keV << " " << ionEnergy/keV << " keV" << G4endl;
   ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
-  G4double eKineticEnergy = diffEnergy - ionEnergy;
 
-  size_t nTotPhotons=0;
-  G4int nPhotons=0;
-
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
-
-  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+  G4double eKineticEnergy = diffEnergy - ionEnergy; //subtract the excitation energy. If not emitted by fluorescence,
+  //the ionization energy is deposited as local energy deposition
   
-  std::vector<G4DynamicParticle*>* photonVector=0;
-  G4DynamicParticle* aPhoton;
-  G4AtomicDeexcitation deexcitationManager;
+  if (fUseAtomicDeexcitation)
+    { 
+      G4int nPhotons=0;
+      
+      const G4ProductionCutsTable* theCoupleTable=
+	G4ProductionCutsTable::GetProductionCutsTable();
+      size_t indx = couple->GetIndex();
 
-  if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
-    {
-      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-      nTotPhotons = photonVector->size();
-      for (size_t k=0;k<nTotPhotons;k++){
-	aPhoton = (*photonVector)[k];
-	if (aPhoton)
-	  {
-	    G4double itsCut = cutg;
-	    if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
-	    G4double itsEnergy = aPhoton->GetKineticEnergy();
-	    if (itsEnergy > itsCut && itsEnergy <= ionEnergy)
+      G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
+      cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
+
+      G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
+      cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+     
+      G4DynamicParticle* aPhoton;
+      G4AtomicDeexcitation deexcitationManager;
+      
+      if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
+	{
+	  photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+	  for (size_t k=0;k<photonVector->size();k++){
+	    aPhoton = (*photonVector)[k];
+	    if (aPhoton)
 	      {
-		nPhotons++;
-		ionEnergy -= itsEnergy;
-	      }
-	    else
-	      {
-		delete aPhoton;
-		(*photonVector)[k]=0;
+		G4double itsCut = cutg;
+		if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
+		G4double itsEnergy = aPhoton->GetKineticEnergy();
+		if (itsEnergy > itsCut && itsEnergy <= ionEnergy)
+		  {
+		    nPhotons++;
+		    ionEnergy -= itsEnergy;
+		  }
+		else
+		  {
+		    delete aPhoton;
+		    (*photonVector)[k]=0;
+		  }
 	      }
 	  }
-      }
+	}
+      nbOfSecondaries=nPhotons;
     }
-  G4double energyDeposit =ionEnergy; //il deposito locale e' quello che rimane
-  G4int nbOfSecondaries=nPhotons;
+
+  G4double energyDeposit = ionEnergy; //the local energy deposit is what remains
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
   G4DynamicParticle* electron = 0;
+
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double xEl = sinThetaE * std::cos(phi+pi); 
@@ -548,10 +556,12 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   aParticleChange.SetNumberOfSecondaries(nbOfSecondaries);
   if (electron) aParticleChange.AddSecondary(electron);
-  for (size_t ll=0;ll<nTotPhotons;ll++)
+  //This block below is executed only if there is at least one secondary photon produced by
+  //AtomicDeexcitation
+  for (size_t ll=0;ll<photonVector->size();ll++)
     {
-      aPhoton = (*photonVector)[ll];
-      if (aPhoton) aParticleChange.AddSecondary(aPhoton);
+      //G4DynamicParticle* aPhoton = (*photonVector)[ll];
+      if ((*photonVector)[ll]) aParticleChange.AddSecondary((*photonVector)[ll]);
     }
   delete photonVector;
   if (energyDeposit < 0)
