@@ -141,7 +141,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-01-07
 - Fixes to *DataSet files for better readability of the code. Restored
   readability of *DataSet* classes regards the indentation of the code.
 
-processes/electromagnetic/muons                  emmuons-V09-01-06
+processes/electromagnetic/muons                  emmuons-V09-01-07
 -------------------------------
 - Added initialization of 'SubType' for all processes.
 - G4MuMscModel:
@@ -149,6 +149,8 @@ processes/electromagnetic/muons                  emmuons-V09-01-06
   o Fixed sampling; using G4VMscModel interface.
   o Added shift along particle direction for displacement.
 - G4MuBetheBlochModel: updated computation of correction.
+- G4MuPairProductionModel: fixed problem of NaN at initialisation of the
+  sampling table.
 - G4MuBremsstrahlungModel, G4MuPairProductionModel: removed 'ignoreCut' flag;
   removed obsolete methods and members, set some members protected to be used
   by G4hBremsstrahlungModel.
@@ -274,6 +276,8 @@ examples                                         examples-V09-01-03
   o Added G4EmStandardPhyiscs_option3.
 - extended/electromagnetic/TestEm17 (testem17-V09-01-00)
   o Added pion and protons Bremsstrahlung and pair production.
+- extended/field/field04 (fieldex04-V09-01-01)
+  o Fix to avoid error log about invalid rotation specification.
 
 tests                                            tests-V09-01-03
 -----
