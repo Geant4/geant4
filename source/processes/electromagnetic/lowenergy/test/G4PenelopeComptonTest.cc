@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeComptonTest.cc,v 1.9 2008-03-19 16:22:50 pandola Exp $
+// $Id: G4PenelopeComptonTest.cc,v 1.10 2008-03-27 13:44:04 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,8 +74,9 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-
-#include "G4ComptonScattering.hh"
+#include "G4StateManager.hh"
+#include "G4ApplicationState.hh"
+#include "G4ComptonScattering52.hh"
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4Electron.hh"
@@ -133,14 +134,16 @@ G4int main()
   G4cout << "Tree store : " << tree->storeName() << G4endl;
   G4cout << " Booked Hbook File " << G4endl;
  
-  AIDA::IHistogramFactory *hf = af->createHistogramFactory(*tree);
+  //AIDA::IHistogramFactory *hf = af->createHistogramFactory(*tree);
   AIDA::ITupleFactory     *tpf = af->createTupleFactory(*tree );
 
   // ---- primary ntuple ------
-  AIDA::ITuple* ntuple1 = tpf->create("1","Primary Ntuple","double eprimary,energyf,de,dedx,pxch,pych,pzch,pch,thetach");
+  AIDA::ITuple* ntuple1 = tpf->create("1",
+				      "Primary Ntuple","double eprimary,energyf,de,eloc,dedx,pxch,pych,pzch,pch,thetach");
   
   // ---- secondary ntuple ------
-  AIDA::ITuple* ntuple2 = tpf->create("2","Secondary Ntuple","double eprimary,px_ga,py_ga,pz_ga,p_ga,e_ga,theta_ga");
+  AIDA::ITuple* ntuple2 = tpf->create("2",
+				      "Secondary Ntuple","double eprimary,p_el,e_el,theta_el,costheta_el,ekin_el,ekin_rel");
 
   // ---- table ntuple ------
   AIDA::ITuple* ntuple3 = tpf->create("3","Mean Free Path Ntuple","double kinen,mfp");
@@ -161,6 +164,8 @@ G4int main()
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodine"  , "I", 53. , 126.9044*g/mole);
   G4Element*   N  = new G4Element ("Nitrogen","N",7.,14.0*g/mole);
+  G4Element* AuEl = new G4Element ("Gold","Au",79.,196.97*g/mole);
+  G4Element* AlEl = new G4Element ("Aluminum","Al",13,26.981*g/mole);
 
   G4Material* Si  = new G4Material("Silicon", 2.33*g/cm3,1);
   Si->AddElement(SiEl,1);
@@ -189,7 +194,10 @@ G4int main()
     ("Air", 1.2929*kg/m3, 2, kStateGas, 300.00*kelvin, 1.0*atmosphere);
   Air->AddElement(N,0.8);
   Air->AddElement(O,0.2);
- 
+  G4Material* Gold = new G4Material("Gold",19.3*g/cm3,1);
+  Gold->AddElement(AuEl,1);
+  G4Material* Al = new G4Material("Aluminum",2.70*g/cm3,1);
+  Al->AddElement(AlEl,1);
 
 
   // Interactive set-up
@@ -252,8 +260,11 @@ G4int main()
 
   rm->GeometryHasBeenModified();
   rm->DefineWorldVolume(physicalFrame);
+  
   G4cout << "[OK] World is defined " << G4endl;
- 
+  G4StateManager::GetStateManager()->SetNewState(G4State_Idle);
+  rm->DumpRegion("DefaultRegionForTheWorld"); //this forces the region update!
+
   // Particle definitions
   
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
@@ -262,8 +273,8 @@ G4int main()
   
   G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
-  G4double cutG=1*micrometer;
-  G4double cutE=1*micrometer;
+  G4double cutG=1*nanometer;
+  G4double cutE=1*nanometer;
   cuts->SetProductionCut(cutG, 0); //gammas
   cuts->SetProductionCut(cutE, 1); //electrons
   cuts->SetProductionCut(cutE, 2); //positrons
@@ -277,7 +288,7 @@ G4int main()
   
   logicalFrame->SetMaterialCutsCouple(theCouple);
 
-  G4cout << "La coppia: " << theCouple << G4endl;
+  //G4cout << "La coppia: " << theCouple << G4endl;
   G4cout << "Recalculation needed: " << theCouple->IsRecalcNeeded() << G4endl;
   
   cutsTable->UpdateCoupleTable(physicalFrame);
@@ -288,14 +299,14 @@ G4int main()
   // Processes 
   
   G4int processType;
-  G4cout << "LowEnergy[1] or Penelope [2] Compton?" << G4endl;
+  G4cout << "LowEnergy[1], Penelope [2] or Standard-5.2 [3] Compton?" << G4endl;
   G4cin >> processType;
-  if ( !(processType == 1 || processType == 2))
+  if ( !(processType == 1 || processType == 2 || processType == 3))
     {
       G4Exception("Wrong input");
     }
 
-  G4VDiscreteProcess* gammaProcess;
+  G4VDiscreteProcess* gammaProcess = NULL;
 
   if (processType == 1)
     {
@@ -304,8 +315,16 @@ G4int main()
     }
   else if (processType == 2)
     {
-      gammaProcess = new G4PenelopeCompton();
+      G4PenelopeCompton* thePenelopeCompton = new G4PenelopeCompton();
+      //thePenelopeCompton->SetUseAtomicDeexcitation(false);
+      gammaProcess = thePenelopeCompton;
       G4cout << "The selected model is Penelope" << G4endl;
+      //G4cout << "Fluorescence is disabled" << G4endl;
+    }
+  else if (processType == 3)
+    {
+      gammaProcess = new G4ComptonScattering52();
+      G4cout << "The selected model is Standard" << G4endl;
     }
   
   G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
@@ -324,7 +343,7 @@ G4int main()
   
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
-  gProcessManager->AddDiscreteProcess(gammaProcess);
+  gProcessManager->AddProcess(gammaProcess);
   G4ForceCondition* condition;  //l'ho fissata a zero! E' onesto??
 
   //electron
@@ -449,7 +468,6 @@ G4int main()
     }
   
   // Initialize the physics tables (in which material?)
- 
   gammaProcess->BuildPhysicsTable(*gamma);
  
   /*
@@ -521,7 +539,7 @@ G4int main()
   for (iter=0; iter<nIterations; iter++)
     {
       
-      step->SetStepLength(1*micrometer);
+      step->SetStepLength(1*nanometer);
       
       G4cout  <<  "Iteration = "  <<  iter 
 	      << "  -  Step Length = " 
@@ -531,12 +549,7 @@ G4int main()
     
       gTrack->SetStep(step); 
 
-      G4cout << "Particle change to be done " << gTrack << " " << step << " " << G4endl;
-      G4cout << gTrack->GetMaterial()->GetName() << G4endl;
-
       G4ParticleChange* particleChange = (G4ParticleChange*) gammaProcess->PostStepDoIt(*gTrack,*step);
-
-      G4cout << "Particle change done" << G4endl;
       
       // Primary physical quantities 
       
@@ -560,6 +573,8 @@ G4int main()
       G4double xChange = particleChange->GetPosition()->x();
       G4double yChange = particleChange->GetPosition()->y();
       G4double zChange = particleChange->GetPosition()->z();
+      G4double localEnergyDeposit = particleChange->GetLocalEnergyDeposit();
+
       //G4double thetaChange = particleChange->GetPositionChange()->theta();
       
       G4cout << "---- Primary after the step ---- " << G4endl;
@@ -583,6 +598,7 @@ G4int main()
        ntuple1->fill(ntuple1->findColumn("eprimary"),initEnergy/MeV);
        ntuple1->fill(ntuple1->findColumn("energyf"),energyChange/initEnergy);
        ntuple1->fill(ntuple1->findColumn("de"),dedx/MeV);
+       ntuple1->fill(ntuple1->findColumn("eloc"),localEnergyDeposit/MeV);
        ntuple1->fill(ntuple1->findColumn("dedx"),dedxNow/(MeV/cm));
        ntuple1->fill(ntuple1->findColumn("pxch"),pxChange/initEnergy);
        ntuple1->fill(ntuple1->findColumn("pych"),pyChange/initEnergy);
@@ -594,10 +610,11 @@ G4int main()
         // Secondaries physical quantities 
            
       // Secondaries 
-      G4cout << " secondaries " << 
+      G4cout << " Secondaries " << 
 	particleChange->GetNumberOfSecondaries() << G4endl;
      
-      G4double px_el,py_el,pz_el,p_el,e_el,theta_el,eKin_el;
+      G4double px_el=0,py_el=0,pz_el=0,p_el=0,e_el=0,theta_el=0,eKin_el=0;
+      G4double costheta_el = 0;
       
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{
@@ -613,9 +630,10 @@ G4int main()
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
 	  G4double theta   = (finalParticle->GetMomentum()).theta();
+	  G4double cosTheta = (finalParticle->GetMomentum()).cosTheta();
 	  G4double p   = std::sqrt(px*px+py*py+pz*pz);
 	  theta = theta/deg; //conversion in degrees
-	  if (e > initEnergy)
+	  if (eKin > initEnergy)
 	    {
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
 	    }
@@ -632,7 +650,7 @@ G4int main()
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl; 
 	  
-	  G4int partType;
+	  G4int partType=-1;
 	  if (particleName == "e-") {
 	    partType = 1;
 	    px_el=px;
@@ -641,6 +659,7 @@ G4int main()
 	    p_el=p;
 	    e_el=e;
 	    theta_el=theta;
+	    costheta_el = cosTheta;
 	    eKin_el=eKin;
 	  }
 	  else if (particleName == "gamma") partType = 2;
@@ -655,13 +674,12 @@ G4int main()
 	  // for gammas initEnergy=initP
 	  if (i==0) {
 	    ntuple2->fill(ntuple2->findColumn("eprimary"),initEnergy);
-	    ntuple2->fill(ntuple2->findColumn("px_el"),px_el/initEnergy);
-	    ntuple2->fill(ntuple2->findColumn("py_el"),py_el/initEnergy);
-	    ntuple2->fill(ntuple2->findColumn("pz_el"),pz_el/initEnergy);
 	    ntuple2->fill(ntuple2->findColumn("p_el"),p_el/initEnergy);
 	    ntuple2->fill(ntuple2->findColumn("e_el"),e_el/(initEnergy+electron_mass_c2));
 	    ntuple2->fill(ntuple2->findColumn("theta_el"),theta_el);
-	    ntuple2->fill(ntuple2->findColumn("ekin_el"),eKin_el/initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("costheta_el"),costheta_el);
+	    ntuple2->fill(ntuple2->findColumn("ekin_el"),eKin_el);
+	    ntuple2->fill(ntuple2->findColumn("ekin_rel"),eKin_el/initEnergy);
 	    ntuple2->addRow();
 	  }
 	  else //fluorescence
@@ -690,8 +708,11 @@ G4int main()
   tree->close();
   
   delete step;
-
-
+  delete tpf;
+  delete tree;
+  //delete af;
+ 
+  
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
   return 0;
 }
