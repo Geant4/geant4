@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.37 2008-03-06 11:37:59 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.38 2008-03-27 11:02:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -424,37 +424,44 @@ void G4MuPairProductionModel::MakeSamplingTables()
     G4double Z = zdat[iz];
     SetCurrentElement(Z);
 
-    for (G4int it=0; it<ntdat; it++)
-    {
+    for (G4int it=0; it<ntdat; it++) {
+
       G4double kineticEnergy = tdat[it];
       G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
-
+      // G4cout << "Z= " << currentZ << " z13= " << z13 
+      //<< " mE= " << maxPairEnergy << G4endl;
       G4double CrossSection = 0.0 ;
 
-      G4double y = ymin - 0.5*dy ;
-      G4double yy = ymin - dy ;
-      G4double x = exp(y);
-      G4double fac = exp(dy);
-      G4double dx = exp(yy)*(fac - 1.0);
+      if(maxPairEnergy > minPairEnergy) {
 
-      G4double c = log(maxPairEnergy/minPairEnergy);
+	G4double y = ymin - 0.5*dy ;
+	G4double yy = ymin - dy ;
+	G4double x = exp(y);
+	G4double fac = exp(dy);
+	G4double dx = exp(yy)*(fac - 1.0);
 
-      for (G4int i=0 ; i<nbiny; i++)
-      {
-        y += dy ;
-        if(c > 0.0) {
-	  x *= fac;
-          dx*= fac;
-          G4double ep = minPairEnergy*exp(c*x) ;
-          CrossSection += ep*dx*ComputeDMicroscopicCrossSection(
-                                      kineticEnergy, Z, ep);
-        }
-        ya[i] = y;
-        proba[iz][it][i] = CrossSection;
+	G4double c = log(maxPairEnergy/minPairEnergy);
+
+	for (G4int i=0 ; i<nbiny; i++) {
+	  y += dy ;
+	  if(c > 0.0) {
+	    x *= fac;
+	    dx*= fac;
+	    G4double ep = minPairEnergy*exp(c*x) ;
+	    CrossSection += 
+	      ep*dx*ComputeDMicroscopicCrossSection(kineticEnergy, Z, ep);
+	  }
+	  ya[i] = y;
+	  proba[iz][it][i] = CrossSection;
+	}
+       
+      } else {
+	for (G4int i=0 ; i<nbiny; i++) {
+	  proba[iz][it][i] = CrossSection;
+	}
       }
 
       ya[nbiny]=ymax;
-
       proba[iz][it][nbiny] = CrossSection;
 
     }

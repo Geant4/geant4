@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2008-03-26 13:33:30 vnivanch Exp $
+$Id: History,v 1.116 2008-03-27 11:02:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 March 08:  V.Ivanchenko (emmuons-V09-01-07)
+- G4MuPairProductionModel - fixed nan value at initialisation 
+  of the sampling table
 
 26 March 08:  V.Ivanchenko (emmuons-V09-01-06)
 - G4MuMscModel - fixed outstanding bug in sampling of scattering
