@@ -1,3 +1,5 @@
+$Id: History,v 1.6 2008-03-27 16:46:38 gcosmo Exp $
+----------------------------------------------------------------
 
            History file for geometry/solids/test/fred
 	   ------------------------------------------
@@ -9,6 +11,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 18, 2008 - I.Hrivnacova
+---------------------------
+- Added missing solids in specific: G4Ellipsoid, G4EllipticalCone,
+  G4EllipticalTube, G4ExtrudedSolid, G4Orb, G4TessellatedSolid, G4Tet,
+  G4TwistedBox, G4TwistedTrap, G4TwistedTrd, G4TwistedTubs.
+- Added private methods FredDetectorConstruction::CreateExtrudedSolidN()
+  used for testing both extruded and tessellated solids.
+- Added method FredTest3::RunDebug() which parses the log file and tracks
+  geantino for each error.
+- Corrected instantiation of G4RayTracerX driver in FredVisManager.
 
 Nov 09, 2005 - G.Cosmo
 ----------------------
