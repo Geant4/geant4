@@ -113,9 +113,9 @@ class FredMessenger : public G4UImessenger
 	GunType		SelectedGun();
 	DrawType	SelectedDrawing();
 	
-	const G4double	StartPhi() { return startPhi; }
-	const G4double	DeltaPhi() { return deltaPhi; }
-	const G4int	NumSide()  { return numSide; }
+	G4double	StartPhi() { return startPhi; }
+	G4double	DeltaPhi() { return deltaPhi; }
+	G4int		NumSide()  { return numSide; }
 	
 	void SetTestVolume( const G4VSolid *theTestVolume );
 	inline const G4VSolid *GetTestVolume() const { return testVolume; }
