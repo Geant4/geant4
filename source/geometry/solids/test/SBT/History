@@ -10,6 +10,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 18, 2008 - I.Hrivnacova
+---------------------------
+- Added missing solids in specific: G4Ellipsoid, G4EllipticalCone,
+  G4EllipticalTube, G4ExtrudedSolid, G4Orb, G4TessellatedSolid, G4Tet,
+  G4TwistedBox, G4TwistedTrap, G4TwistedTrd, G4TwistedTubs.
+- Changed logger precision from 16 digits to 20, as 16 were not sufficient
+  to reproduce the errors in debug.
+- In DrawError():
+  o draw the solid first, otherwise the command vis/viewer/set/style
+    does not affect solid drawing.
+  o draw volume only, if errorIndex=0.
+- In TestOutsidePoint(): allow a difference within the surface tolerance
+  for the distance of a point on surface.
+- In DebugXX() methods: added printing of the tested values.
+- Added method DebugSurfNorm().
+- Corrected output of time string.
+
 Nov 9, 2005 - G.Cosmo
 ---------------------
 - Implemented migration to <sstream> from deprecated <strstream>.
