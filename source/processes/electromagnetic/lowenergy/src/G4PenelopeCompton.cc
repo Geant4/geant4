@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.30 2008-03-26 15:53:43 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.31 2008-03-27 07:32:22 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -87,7 +87,7 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     ZForIntegration(1),
     nBins(200),
     cutForLowEnergySecondaryPhotons(250.0*eV),
-    fUseAtomicDeexcitation(false)
+    fUseAtomicDeexcitation(true)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
