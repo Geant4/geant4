@@ -129,7 +129,7 @@ processes/electromagnetic/highenergy             emhighenergy-V09-01-01
   G4hPairProductionModel and G4hPairProduction.
 - Added initialization of 'SubType' for all processes.
 
-processes/electromagnetic/lowenergy              emlowen-V09-01-07
+processes/electromagnetic/lowenergy              emlowen-V09-01-08
 -----------------------------------
 - New charge transfer process by incident protons (two cross-section and
   one final state policy classes).
