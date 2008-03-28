@@ -1,7 +1,7 @@
 RunManager construction starting....
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -31,6 +31,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -64,7 +66,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -72,7 +74,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -85,7 +87,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -103,16 +105,16 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -120,46 +122,46 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -167,7 +169,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -175,11 +177,11 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 ### Run 0 start.
 
@@ -1745,9 +1747,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0155     11.8     19.7         0  0.00102   0.0597    0.0597 WorldPhysical eIoni
 >>> Event 0
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.3399813584038645 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.3399813583124372 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6199660065011646 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6199660063344444 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1779,9 +1781,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0151      222      370         0  0.00115    0.377     0.377 DriftChamberPhysical eIoni
 >>> Event 1
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1999898148316487 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1999898147697957 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7599612963602655 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7599612961252235 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1822,9 +1824,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.542     24.6       41         0  0.00681     1.21      1.21 WorldPhysical eIoni
 >>> Event 2
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2199881211313345 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2199881210671151 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6599643633940039 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6599643632013452 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1838,7 +1840,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4   -0.013      427      711     1e+03  0.00711      309       829 DriftChamberPhysical hIoni
     5  -0.0122      461      768     1e+03  0.00142     66.6       896 DriftChamberPhysical hIoni
     6 -0.00838      540      900     1e+03  0.00381      154  1.05e+03 WorldPhysical CoupledTransportation
-    7 -0.00579      570      950     1e+03  0.00819     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+    7 -0.00579      570      950     1e+03   0.0082     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
     8 -0.00579      570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -1875,9 +1877,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.107      118      198         0  0.00105     0.33      0.33 DriftChamberPhysical eIoni
 >>> Event 3
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2399868460417725 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.239986845975753 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7399594419621321 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7399594417585719 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1900,9 +1902,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0258     5.39     9.01         0  0.00123   0.0765    0.0765 WorldPhysical eIoni
 >>> Event 4
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1999894232854193 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1999894232198741 (GeV)
      8 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7599598084845934 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7599598082355217 (GeV)
 number of event = 5
 ### Run 5 start.
 
@@ -1949,9 +1951,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5    -1.72     15.3     74.1         0   0.0039    0.467      11.4 WorldPhysical eIoni
 >>> Event 0
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.05999593506690591 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.05999593505172887 (GeV)
      15 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9399363160481925 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.939936315810419 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2001,9 +2003,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  0.00383     20.4       68         0  0.00106   0.0624    0.0624 WorldPhysical eIoni
 >>> Event 1
      3 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999634134284041 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999634132279083 (GeV)
      16 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9199579254426647 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9199579252120943 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2028,7 +2030,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599524007741056 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599524004940873 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2089,9 +2091,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.662     9.79     32.1         0   0.0077      1.4       1.4 WorldPhysical eIoni
 >>> Event 3
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.03999740851330164 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999740850389968 (GeV)
      15 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9399391000625886 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9399390998416424 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2145,9 +2147,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.176     8.98     29.7         0  0.00374    0.437     0.437 WorldPhysical eIoni
 >>> Event 4
      3 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.05999660695779151 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.05999660694381619 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9399468423387337 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9399468421197869 (GeV)
 number of event = 5
 ### Run 6 start.
 
@@ -2182,9 +2184,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.457    -75.4      251         0  0.00173    0.702     0.702 DriftChamberPhysical eIoni
 >>> Event 0
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.0399975637383238 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999756372744123 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599415297197712 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599415294585897 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2282,9 +2284,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     3.47    -35.1     93.8         0  0.00199    0.155     0.155 WorldPhysical eIoni
 >>> Event 1
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999791585088299 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999791584595078 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9798978766932663 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9798978764515881 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2336,9 +2338,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.304     4.09     5.19         0  0.00224    0.187     0.187 WorldPhysical eIoni
 >>> Event 2
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999862698479665 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999862697872196 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599340952702389 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599340949786545 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2389,9 +2391,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2  -0.0388    -10.2     31.2         0  0.00163    0.114      1.48 WorldPhysical eIoni
 >>> Event 3
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.03999796820012434 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999796819151202 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599512368029843 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599512365962882 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2441,9 +2443,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0546      -27     89.9         0  0.00233    0.199     0.199 WorldPhysical eIoni
 >>> Event 4
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.03999763667633896 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999763666569404 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599432802321352 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599432799766567 (GeV)
 number of event = 5
 ### Run 7 start.
 
@@ -2471,9 +2473,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4    -4.97     -360      602         0  0.00125    0.426      7.39 DriftChamberPhysical eIoni
 >>> Event 0
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.0799957184088541 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999571838267597 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8599539728951814 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8599539726137668 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2534,9 +2536,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0302    -18.4     30.7         0  0.00145   0.0973    0.0973 WorldPhysical eIoni
 >>> Event 1
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1399910617278345 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1399910616896814 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7999489241590539 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7999489239410364 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2559,9 +2561,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.021     -557      929         0  0.00132   0.0852    0.0852 WorldPhysical eIoni
 >>> Event 2
      16 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.4799773472472533 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.4799773471217492 (GeV)
      7 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5199754595178576 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.519975459381895 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2643,9 +2645,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0807    -15.4     25.6         0  0.00242    0.211     0.211 WorldPhysical eIoni
 >>> Event 3
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1999815067066985 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1999815066540881 (GeV)
      7 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.679937122802775 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6799371226238997 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2696,7 +2698,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0295   -0.217    0.387         0  0.00127   0.0799    0.0799 WorldPhysical eIoni
 >>> Event 4
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999573726959824 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999573724695747 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8399552413307814 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8399552410930536 (GeV)
 number of event = 5

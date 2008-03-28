@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,45 +9,45 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:    Mylar     density:  1.390 g/cm3   RadL:  28.743 cm   Imean:  75.075 eV 
+ Material:    Mylar     density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.337 cm   Imean:  75.075 eV 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
 
- Material: Polypropelene     density: 910.000 mg/cm3  RadL:  49.214 cm   Imean:  56.713 eV 
+ Material: Polypropelene     density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.351 cm   Imean:  56.713 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
 
- Material:       Kr     density:  3.700 mg/cm3  RadL:  30.736 m    Imean: 352.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       Kr     density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.950 m    Imean: 352.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Argon     density:  1.784 mg/cm3  RadL: 109.604 m    Imean: 187.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Argon     density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.814 m    Imean: 187.200 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       N2     density:  1.251 mg/cm3  RadL: 303.846 m    Imean:  81.900 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       N2     density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 674.714 m    Imean:  81.900 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       O2     density:  1.429 mg/cm3  RadL: 239.621 m    Imean:  95.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       O2     density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.200 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  0.000 mg/cm3  RadL: 28329272.015 km   Imean:  85.623 eV   temperature: 273.15 K  pressure:   0.00 atm
+ Material:      Air     density:  0.000 mg/cm3  RadL: 28329272.015 km   Nucl.Int.Length: 66178547.360 km   Imean:  85.623 eV   temperature: 273.15 K  pressure:   0.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.57 %  ElmAbundance  78.48 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.15 %  ElmAbundance  21.05 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material:    Xenon     density:  5.858 mg/cm3  RadL:  14.478 m    Imean: 480.600 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Xenon     density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.666 m    Imean: 480.600 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      CO2     density:  1.977 mg/cm3  RadL: 183.083 m    Imean:  90.164 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      CO2     density:  1.977 mg/cm3  RadL: 183.083 m    Nucl.Int.Length: 434.213 m    Imean:  90.164 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
- Material:  Xe20CO2     density:  5.082 mg/cm3  RadL:  17.750 m    Imean: 411.175 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2     density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.032 m    Imean: 411.175 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  92.20 %  ElmAbundance  56.91 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.13 %  ElmAbundance  14.36 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   5.67 %  ElmAbundance  28.73 %
 
- Material:  Kr20CO2     density:  3.601 mg/cm3  RadL:  34.158 m    Imean: 297.188 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Kr20CO2     density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.555 m    Imean: 297.188 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  89.00 %  ElmAbundance  58.62 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.00 %  ElmAbundance  13.79 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   8.00 %  ElmAbundance  27.59 %
@@ -66,6 +66,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -115,7 +117,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -128,7 +130,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -138,7 +140,7 @@ eBrem:   tables are built for  e+
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
@@ -147,11 +149,11 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
@@ -159,34 +161,34 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -194,11 +196,11 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
@@ -207,7 +209,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 ========= Table of registered couples ==============================
 
@@ -239,7 +241,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -272,7 +274,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -305,7 +307,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -338,7 +340,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -446,7 +448,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.06s Real=0.06s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

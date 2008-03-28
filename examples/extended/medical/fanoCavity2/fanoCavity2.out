@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,24 +9,24 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  75.000 eV 
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Water_gas     density:  1.000 mg/cm3  RadL: 360.925 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Water_gas     density:  1.000 mg/cm3  RadL: 360.925 m    Nucl.Int.Length: 754.163 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Imean:  78.000 eV 
+ Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  78.000 eV 
    --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Imean: 166.400 eV 
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Imean: 166.400 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m    Imean: 166.400 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -51,18 +51,6 @@ PhysicsList::SetCuts:CutLength : 10 km
 /testem/event/printModulo 10000
 #
 /run/beamOn 40000
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+07 (mm)]   is too big   for material  idx=0
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+07 (mm)]   is too big   for material  idx=0
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+07 (mm)]   is too big   for material  idx=0
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+07 (mm)]   is too big   for material  idx=1
-The cut in energy is set1.79769e+305GeV 
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
@@ -87,7 +75,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 10 GeV in 800 bins.
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 10 GeV in 800 bins.
 
 eIoni:   tables are built for  e+
@@ -95,7 +83,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 10 GeV in 800 bins.
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 10 GeV in 800 bins.
 
 msc:  Model variant of multiple scattering for proton
@@ -109,7 +97,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 10 GeV in 800 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
@@ -170,7 +158,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=2.1e+02s Real=2.1e+02s Sys=0.01s
+  User=13s Real=13s Sys=0.02s
 
  Process calls frequency --->  msc= 355861  eIoni= 635564  Transportation= 22917
 

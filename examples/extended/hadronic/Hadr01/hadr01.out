@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,11 +25,11 @@ PhysicsList::AddPhysicsList: <QBBC>
 
 ***** Table : Nb of materials = 2 *****
 
- Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Imean: 166.000 eV 
+ Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
    --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204311173.221 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204311173.221 pc   Nucl.Int.Length: 114319773.046 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
    --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
    --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -130,33 +130,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=16.58s Real=17.42s Sys=0.73s
+  User=0.79s Real=0.79s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         60.5   RMS(MeV) 39.2
-Average number of steps              309.2
-Average number of gamma              3.04
-Average number of e-                 5.43
-Average number of e+                 0.09
-Average number of neutrons           0.75
-Average number of protons            0.84
+Average energy deposit (MeV)         56.36   RMS(MeV) 29.87
+Average number of steps              275.4
+Average number of gamma              2.65
+Average number of e-                 4.51
+Average number of e+                 0.05
+Average number of neutrons           0.72
+Average number of protons            0.89
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.34
-Average number of pi0                0.18
+Average number of pi+ & pi-          0.25
+Average number of pi0                0.19
 Average number of kaons              0
 Average number of muons              0
 Average number of deuterons+tritons  0.04
-Average number of He3+alpha          0.08
-Average number of ions               0.65
-Average number of forward neutrons   0.14
+Average number of He3+alpha          0.03
+Average number of ions               0.44
+Average number of forward neutrons   0.2
 Average number of reflected neutrons 0.01
-Average number of leaked neutrons    0.53
-Average number of proton leak        0.36
-Average number of pion leak          0.32
+Average number of leaked neutrons    0.48
+Average number of proton leak        0.45
+Average number of pion leak          0.23
 ========================================================
 
 #

@@ -1,17 +1,12 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 ### NIST DataBase for Materials is used
-G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
-G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
-G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
-G4Material: Mean excitation energy is changed for G4_Fe Iold= 286eV; Inew= 286 eV;
-G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166eV; Inew= 553.1 eV;
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -35,7 +30,7 @@ PhysicsList::Set emstandard_opt1 EM physics
 
 ***** Table : Nb of materials = 5 *****
 
- Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
    --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
    --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
@@ -51,24 +46,24 @@ PhysicsList::Set emstandard_opt1 EM physics
    --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Imean: 166.000 eV 
+ Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
    --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Imean: 173.000 eV 
+ Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.635 cm   Imean: 173.000 eV 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
    --->  Isotope:    Si   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
    --->  Isotope:    Si   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
    --->  Isotope:    Si   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Imean: 286.000 eV 
+ Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.977 cm   Imean: 286.000 eV 
    --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
    --->  Isotope:    Fe   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
    --->  Isotope:    Fe   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
    --->  Isotope:    Fe   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
    --->  Isotope:    Fe   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_CESIUM_IODIDE     density:  4.510 g/cm3   RadL:   1.860 cm   Imean: 553.100 eV 
+ Material: G4_CESIUM_IODIDE     density:  4.510 g/cm3   RadL:   1.860 cm   Nucl.Int.Length:  39.287 cm   Imean: 553.100 eV 
    --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
    --->  Isotope:     I   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  ElmMassFraction:  48.85 %  ElmAbundance  50.00 %
    --->  Element: Cs (Cs)   Z = 55.0   N = 133.0   A = 132.91 g/mole
@@ -104,7 +99,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 eIoni:   tables are built for  e-
@@ -112,7 +107,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -125,7 +120,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -139,7 +134,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  proton
@@ -148,11 +143,11 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -162,7 +157,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -170,11 +165,11 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 muIoni:   tables are built for  mu+
@@ -182,34 +177,34 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -217,11 +212,11 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  pi-
@@ -230,7 +225,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 ========= Table of registered couples ==============================
 
@@ -298,32 +293,32 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=94.41s Real=94.44s Sys=0s
+  User=4.13s Real=4.13s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1315
-Average number of gamma      697.1
-Average number of e+         48.38
-Average number of steps      3966
-Edep 1x1 =                   0.8299 +- 0.00282  res=  3.398 %
-Edep 3x3 =                   0.9584 +- 0.001213  res=  1.265 %
-Edep 5x5 =                   0.9797 +- 0.0007927  res=  0.8091 %
+Average number of e-         1325
+Average number of gamma      699.7
+Average number of e+         48.36
+Average number of steps      3990
+Edep 1x1 =                   0.8313 +- 0.002856  res=  3.435 %
+Edep 3x3 =                   0.957 +- 0.001393  res=  1.455 %
+Edep 5x5 =                   0.9804 +- 0.0007021  res=  0.7161 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8291 +- 0.002911  res=  3.511 %
-Edep 3x3 =                   0.9576 +- 0.001329  res=  1.388 %
-Edep 5x5 =                   0.9783 +- 0.001096  res=  1.12 %
+Edep 1x1 =                   0.8305 +- 0.002963  res=  3.568 %
+Edep 3x3 =                   0.9549 +- 0.001782  res=  1.867 %
+Edep 5x5 =                   0.9766 +- 0.001549  res=  1.586 %
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8299  delEdep1x1= 0.002762 nrms= 0.9287
-Erms1x1: 0.0282  delErms1x1= -0.001543 nrms= -0.5188
-Edep3x3: 0.9584  delEdep3x3= 0.001382 nrms= 1.075
-Erms3x3: 0.01213  delErms3x3= -0.000732 nrms= -0.5692
-Edep5x5: 0.9797  delEdep5x5= 0.0004336 nrms= 0.4905
-Erms5x5: 0.007927  delErms5x5= -0.0009134 nrms= -1.033
+Edep1x1: 0.8313  delEdep1x1= 0.00422 nrms= 1.419
+Erms1x1: 0.02856  delErms1x1= -0.001181 nrms= -0.3973
+Edep3x3: 0.957  delEdep3x3= 2.626e-05 nrms= 0.02042
+Erms3x3: 0.01393  delErms3x3= 0.001069 nrms= 0.8315
+Edep5x5: 0.9804  delEdep5x5= 0.001103 nrms= 1.247
+Erms5x5: 0.007021  delErms5x5= -0.001819 nrms= -2.058
 <<<<<END>>>>>   IS ACCEPTED
 
 #

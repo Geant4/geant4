@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -76,7 +76,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -84,7 +84,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -97,7 +97,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -111,7 +111,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
@@ -120,11 +120,11 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -134,7 +134,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,11 +142,11 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
@@ -154,34 +154,34 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -189,11 +189,11 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
@@ -202,7 +202,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -269,21 +269,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.68s Real=7.73s Sys=0.01s
+  User=0.14s Real=0.15s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.3644 +- 0.136787  mm  
+    mean charged track length   in absorber=23.2235 +- 0.0925384  mm  
 
-            mean energy deposit in absorber=0.0156928 +- 0.000289693  MeV 
+            mean energy deposit in absorber=0.0156818 +- 0.000283562  MeV 
 
- mean number of steps in absorber (charged) =0.086 +- 0.0512699      
+ mean number of steps in absorber (charged) =0.094 +- 0.0535646      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.01 +- 0.00314643
+   mean number of charged secondaries = 0.008 +- 0.00281709
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.01  and e+s =0
+   mean number of e-s =0.008  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
@@ -291,24 +291,24 @@ Run Summary
 #entries=1000    #underflows=0    #overflows=5
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           9       0.009
+    1         3           8       0.008
     2         6          99       0.099
-    3         9         260        0.26
-    4        12         251       0.251
-    5        15         154       0.154
-    6        18          86       0.086
-    7        21          39       0.039
-    8        24          25       0.025
-    9        27          20        0.02
+    3         9         266       0.266
+    4        12         245       0.245
+    5        15         155       0.155
+    6        18          81       0.081
+    7        21          42       0.042
+    8        24          29       0.029
+    9        27          18       0.018
    10        30          14       0.014
    11        33           9       0.009
    12        36           8       0.008
    13        39           5       0.005
    14        42           5       0.005
-   15        45           2       0.002
+   15        45           1       0.001
    16        48           2       0.002
    17        51           1       0.001
-   18        54           4       0.004
+   18        54           5       0.005
    19        57           2       0.002
 
  Emp =           0.009   width=          0.006  MeV 
@@ -316,7 +316,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1098442791, 1818165836
+ Current couple of seeds = 520439100, 504834070
 ----------------------------------------
 #
 UserDetectorConstruction deleted.

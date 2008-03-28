@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,31 +9,31 @@
 
 ***** Table : Nb of materials = 8 *****
 
- Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Imean: 166.000 eV 
+ Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.894 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Imean: 173.000 eV 
+ Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.660 cm   Imean: 173.000 eV 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Imean: 286.000 eV 
+ Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.990 cm   Imean: 286.000 eV 
    --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Ge     density:  5.323 g/cm3   RadL:   2.301 cm   Imean: 350.000 eV 
+ Material:    G4_Ge     density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm   Imean: 350.000 eV 
    --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Imean: 727.000 eV 
+ Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm   Imean: 727.000 eV 
    --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_Pb     density: 11.350 g/cm3   RadL:   5.613 mm   Imean: 823.000 eV 
+ Material:    G4_Pb     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.095 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
    --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Imean:  75.000 eV 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.423 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
@@ -51,6 +51,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -130,7 +132,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -138,7 +140,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e-
@@ -152,7 +154,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 eBrem:   tables are built for  e+
@@ -167,7 +169,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
@@ -176,12 +178,12 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -191,7 +193,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
       CSDA range table up to 1 GeV in 70 bins.
 
 hIoni:   tables are built for  anti_proton
@@ -200,12 +202,12 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
@@ -213,36 +215,36 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -250,12 +252,12 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
@@ -264,7 +266,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       CSDA range table up to 1 GeV in 70 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
@@ -321,7 +323,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1250.17s Real=1370s Sys=7.79s
+  User=67.42s Real=94.47s Sys=2.78s
 
  ======================== run summary ======================
 
@@ -329,18 +331,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.939 MeV +- 214.508 keV
+ Total Energy deposited        = 3.939 MeV +- 212.257 keV
 
- Track length of primary track = 2.016 cm  +- 2.774 mm 
+ Track length of primary track = 2.013 cm  +- 2.749 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.314 cm  +- 4.196 mm 
+ Projected range               = 1.310 cm  +- 4.159 mm 
 
- Nb of steps of primary track  = 238.44 +- 30.73	 Step size= 84.539 um  +- 4.514 um 
+ Nb of steps of primary track  = 238.33 +- 30.55	 Step size= 84.462 um  +- 4.549 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1657344995, 1592221949
+ Current couple of seeds = 1529831220, 2131289758
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

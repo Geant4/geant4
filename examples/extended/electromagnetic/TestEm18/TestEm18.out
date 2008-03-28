@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,40 +9,40 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Imean:  75.000 eV 
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Water_vapor     density:  1.000 mg/cm3  RadL: 360.925 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Water_vapor     density:  1.000 mg/cm3  RadL: 360.925 m    Nucl.Int.Length: 754.163 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:   Carbon     density:  2.267 g/cm3   RadL:  18.833 cm   Imean:  78.000 eV 
+ Material:   Carbon     density:  2.267 g/cm3   RadL:  18.833 cm   Nucl.Int.Length:  35.356 cm   Imean:  78.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Imean: 166.400 eV 
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Imean: 173.600 eV 
+ Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm   Imean: 173.600 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Imean: 187.200 eV 
+ Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm   Imean: 187.200 eV 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Imean: 286.000 eV 
+ Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Germanium     density:  5.323 g/cm3   RadL:   2.301 cm   Imean: 332.800 eV 
+ Material: Germanium     density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm   Imean: 332.800 eV 
    --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Tungsten     density: 19.300 g/cm3   RadL:   3.504 mm   Imean: 725.200 eV 
+ Material: Tungsten     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm   Imean: 725.200 eV 
    --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Imean: 820.000 eV 
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -86,7 +86,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 1200 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 eBrem:   tables are built for  e-
@@ -100,7 +100,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 1200 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 eBrem:   tables are built for  e+
@@ -119,7 +119,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 ionIoni:   tables are built for  GenericIon
@@ -130,7 +130,7 @@ ionIoni:   tables are built for  GenericIon
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 hIoni:   tables are built for  anti_proton
@@ -139,7 +139,7 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 muIoni:   tables are built for  mu+
@@ -147,36 +147,36 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 1200 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
       Lambda tables from threshold to 100 TeV in 1200 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
       Lambda tables from threshold to 100 TeV in 1200 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
       Lambda tables from threshold to 100 TeV in 1200 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
       Lambda tables from threshold to 100 TeV in 1200 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
       Lambda tables from threshold to 100 TeV in 1200 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins.
@@ -184,7 +184,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 hIoni:   tables are built for  pi-
@@ -193,7 +193,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 100 TeV in 1200 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
@@ -248,7 +248,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=49.24s Real=49.24s Sys=0s
+  User=2.78s Real=2.78s Sys=0s
 
  ======================== run summary ======================
 

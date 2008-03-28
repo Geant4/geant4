@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,14 +12,14 @@ The materials defined are :
 
 ***** Table : Nb of materials = 3 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Imean: 820.000 eV 
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: XenonGas     density:  5.458 mg/cm3  RadL:  15.539 m    Imean: 480.600 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material: XenonGas     density:  5.458 mg/cm3  RadL:  15.539 m    Nucl.Int.Length: 325.920 m    Imean: 480.600 eV   temperature: 293.15 K  pressure:   1.00 atm
    --->  Element: XenonGas ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -43,7 +43,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -51,7 +51,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -64,7 +64,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -78,7 +78,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
@@ -87,7 +87,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -95,11 +95,11 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
@@ -107,34 +107,34 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,11 +142,11 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
@@ -155,7 +155,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 ========= Table of registered couples ==============================
 
@@ -529,7 +529,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     8  -2.22 cm   64.4 cm    -80 cm   2.03 MeV  76.7 keV  34.6 cm   1.75 m       Tracker  Transportation
     9  -6.68 mm     67 cm  -73.6 cm    1.9 MeV  46.1 keV  7.43 cm   1.82 m       Chamber       eBrem
    10  -5.14 mm   67.2 cm    -73 cm    1.9 MeV  5.44 keV  5.77 mm   1.83 m       Chamber  Transportation
-   11   26.1 cm   1.09 m   0.114 fm   1.75 MeV   150 keV  91.6 cm   2.75 m       Tracker  Transportation
+   11   26.1 cm   1.09 m       0 fm   1.75 MeV   150 keV  91.6 cm   2.75 m       Tracker  Transportation
    12     27 cm    1.1 m    1.38 cm   1.74 MeV   7.5 keV  2.09 cm   2.77 m       Chamber  Transportation
    13     85 cm   1.49 m    49.8 cm   1.59 MeV   150 keV  88.4 cm   3.65 m       Tracker       eBrem
    14   2.24 m    1.89 m    67.4 cm   1.16 MeV   277 keV  1.55 m     5.2 m       Tracker       eIoni
@@ -584,7 +584,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -6.68 mm     67 cm  -73.6 cm   85.5 keV     0 eV      0 fm      0 fm      Chamber    initStep
     1  -3.39 mm   67.2 cm  -72.6 cm   85.5 keV     0 eV   1.04 cm   1.04 cm      Chamber  Transportation
-    2   24.3 cm     82 cm      0 fm   85.5 keV     0 eV   78.1 cm   79.1 cm      Tracker  Transportation
+    2   24.3 cm     82 cm -0.114 fm   85.5 keV     0 eV   78.1 cm   79.1 cm      Tracker  Transportation
     3   27.1 cm   83.7 cm   8.29 cm      0 eV   34.6 keV  8.91 cm     88 cm      Chamber        phot
 
 *********************************************************************************************************
@@ -2228,24 +2228,24 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm  -2.91 m       1 TeV     0 eV      0 fm      0 fm        World    initStep
-    1      0 fm      0 fm  -2.45 m   1e+03 GeV   117 keV    46 cm     46 cm        World  Transportation
-    2   2.77 Ang -1.95 nm   -2.4 m   1e+03 GeV  79.1 MeV     5 cm     51 cm       Target  Transportation
-    3   8.97 um  -6.45 um   -1.6 m   1e+03 GeV   191 keV    80 cm   1.31 m       Tracker  Transportation
-    4   11.2 um   -8.1 um   -1.4 m   1e+03 GeV   205 keV    20 cm   1.51 m       Chamber  Transportation
-    5   17.7 um  -12.5 um    -80 cm  1e+03 GeV   147 keV    60 cm   2.11 m       Tracker  Transportation
-    6     18 um  -12.8 um  -76.6 cm  1e+03 GeV  74.9 keV  3.36 cm   2.14 m       Chamber      muIoni
-    7   19.9 um  -14.1 um    -60 cm  1e+03 GeV   139 keV  16.6 cm   2.31 m       Chamber  Transportation
-    8   26.3 um  -18.8 um      0 fm  1e+03 GeV   144 keV    60 cm   2.91 m       Tracker  Transportation
-    9   28.4 um  -20.2 um     20 cm  1e+03 GeV   212 keV    20 cm   3.11 m       Chamber  Transportation
-   10   34.9 um  -22.8 um     80 cm  1e+03 GeV   180 keV    60 cm   3.71 m       Tracker  Transportation
-   11     37 um  -23.7 um      1 m   1e+03 GeV   157 keV    20 cm   3.91 m       Chamber  Transportation
-   12   38.7 um    -25 um    1.2 m   1e+03 GeV  65.9 keV  19.8 cm   4.11 m       Tracker      muIoni
-   13   42.2 um  -27.8 um    1.6 m   1e+03 GeV   111 keV  40.2 cm   4.51 m       Tracker  Transportation
-   14   43.9 um  -28.9 um   1.78 m   1e+03 GeV   151 keV  18.3 cm   4.69 m       Chamber      muIoni
-   15     44 um  -29.1 um    1.8 m   1e+03 GeV  30.1 keV  1.68 cm   4.71 m       Chamber  Transportation
-   16   48.3 um  -33.8 um   2.39 m   1e+03 GeV   147 keV  59.4 cm    5.3 m       Tracker      muIoni
-   17   48.3 um  -33.8 um    2.4 m   1e+03 GeV   841 eV   5.74 mm   5.31 m       Tracker  Transportation
-   18   51.5 um  -38.2 um   2.91 m   1e+03 GeV   128 keV    51 cm   5.82 m    OutOfWorld  Transportation
+    1      0 fm      0 fm  -2.45 m   1e+03 GeV   110 keV    46 cm     46 cm        World  Transportation
+    2   2.77 Ang -1.95 nm   -2.4 m   1e+03 GeV  75.8 MeV     5 cm     51 cm       Target  Transportation
+    3   8.97 um  -6.45 um   -1.6 m   1e+03 GeV   185 keV    80 cm   1.31 m       Tracker  Transportation
+    4   11.2 um   -8.1 um   -1.4 m   1e+03 GeV   197 keV    20 cm   1.51 m       Chamber  Transportation
+    5   17.7 um  -12.5 um    -80 cm  1e+03 GeV   140 keV    60 cm   2.11 m       Tracker  Transportation
+    6     18 um  -12.8 um  -76.6 cm  1e+03 GeV  72.1 keV  3.36 cm   2.14 m       Chamber      muIoni
+    7   19.9 um  -14.1 um    -60 cm  1e+03 GeV   134 keV  16.6 cm   2.31 m       Chamber  Transportation
+    8   26.3 um  -18.8 um      0 fm  1e+03 GeV   139 keV    60 cm   2.91 m       Tracker  Transportation
+    9   28.4 um  -20.2 um     20 cm  1e+03 GeV   204 keV    20 cm   3.11 m       Chamber  Transportation
+   10   34.9 um  -22.8 um     80 cm  1e+03 GeV   175 keV    60 cm   3.71 m       Tracker  Transportation
+   11     37 um  -23.7 um      1 m   1e+03 GeV   150 keV    20 cm   3.91 m       Chamber  Transportation
+   12   38.7 um    -25 um    1.2 m   1e+03 GeV    64 keV  19.8 cm   4.11 m       Tracker      muIoni
+   13   42.2 um  -27.8 um    1.6 m   1e+03 GeV   105 keV  40.2 cm   4.51 m       Tracker  Transportation
+   14   43.9 um  -28.9 um   1.78 m   1e+03 GeV   145 keV  18.3 cm   4.69 m       Chamber      muIoni
+   15     44 um  -29.1 um    1.8 m   1e+03 GeV  29.5 keV  1.68 cm   4.71 m       Chamber  Transportation
+   16   48.3 um  -33.8 um   2.39 m   1e+03 GeV   142 keV  59.4 cm    5.3 m       Tracker      muIoni
+   17   48.3 um  -33.8 um    2.4 m   1e+03 GeV   831 eV   5.74 mm   5.31 m       Tracker  Transportation
+   18   51.5 um  -38.2 um   2.91 m   1e+03 GeV   124 keV    51 cm   5.82 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
@@ -2255,9 +2255,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0   48.3 um  -33.8 um   2.39 m    22.3 keV     0 eV      0 fm      0 fm      Tracker    initStep
     1    554 um  -1.28 mm   2.39 m    20.9 keV  1.37 keV  1.42 mm   1.42 mm      Tracker         msc
     2   1.03 mm  -2.43 mm   2.39 m      18 keV  2.87 keV  1.42 mm   2.84 mm      Tracker         msc
-    3    901 um  -3.55 mm   2.39 m    15.5 keV  2.54 keV  1.42 mm   4.27 mm      Tracker         msc
-    4    574 um  -3.98 mm   2.39 m    10.8 keV  4.65 keV  1.42 mm   5.69 mm      Tracker         msc
-    5    954 um   -4.2 mm   2.39 m    6.81 keV  4.03 keV  1.42 mm   7.11 mm      Tracker         msc
+    3    900 um  -3.55 mm   2.39 m    15.5 keV  2.54 keV  1.42 mm   4.27 mm      Tracker         msc
+    4    573 um  -3.98 mm   2.39 m    10.8 keV  4.65 keV  1.42 mm   5.69 mm      Tracker         msc
+    5    953 um   -4.2 mm   2.39 m    6.81 keV  4.03 keV  1.42 mm   7.11 mm      Tracker         msc
     6   1.41 mm  -4.13 mm   2.39 m       0 eV   6.81 keV  1.15 mm   8.26 mm      Tracker       eIoni
 
 *********************************************************************************************************
@@ -2291,12 +2291,12 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0     18 um  -12.8 um  -76.6 cm   97.7 keV     0 eV      0 fm      0 fm      Chamber    initStep
     1   4.57 mm   3.01 mm  -76.9 cm   88.9 keV  8.76 keV   8.4 mm    8.4 mm      Chamber         msc
-    2   -641 um    814 um    -77 cm   75.1 keV  13.8 keV   8.4 mm   1.68 cm      Chamber         msc
+    2   -640 um    815 um    -77 cm   75.1 keV  13.8 keV   8.4 mm   1.68 cm      Chamber         msc
     3  -1.72 mm   4.61 mm  -76.7 cm   62.6 keV  12.5 keV  7.74 mm   2.45 cm      Chamber       eIoni
-    4  -2.47 mm   7.24 mm  -76.4 cm   55.8 keV   6.8 keV   6.1 mm   3.06 cm      Chamber       eIoni
+    4  -2.47 mm   7.24 mm  -76.4 cm   55.8 keV  6.81 keV   6.1 mm   3.06 cm      Chamber       eIoni
     5    599 um   6.17 mm  -76.4 cm   47.7 keV  8.18 keV  5.33 mm    3.6 cm      Chamber       eIoni
     6    728 um   5.58 mm  -76.7 cm   44.2 keV  3.43 keV  4.43 mm   4.04 cm      Chamber       eIoni
-    7  -8.69 um   7.84 mm  -76.7 cm   35.2 keV     9 keV  4.09 mm   4.45 cm      Chamber       eIoni
+    7  -8.67 um   7.84 mm  -76.7 cm   35.2 keV     9 keV  4.09 mm   4.45 cm      Chamber       eIoni
     8  -96.2 um   9.57 mm  -76.7 cm   24.1 keV  11.1 keV  3.25 mm   4.77 cm      Chamber       eIoni
     9   -1.1 mm   9.86 mm  -76.7 cm   13.7 keV  10.3 keV  2.35 mm   5.01 cm      Chamber       eIoni
    10  -1.21 mm   9.77 mm  -76.7 cm      0 eV   13.7 keV  1.53 mm   5.16 cm      Chamber       eIoni

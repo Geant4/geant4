@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -53,7 +53,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -61,7 +61,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -74,7 +74,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -92,16 +92,16 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -109,46 +109,46 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -156,7 +156,7 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -164,11 +164,11 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 ========= Table of registered couples ==============================
@@ -196,9 +196,9 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5312 hits are stored in Tst34HitsCollection 
@@ -209,9 +209,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5313 hits are stored in Tst34HitsCollection 
@@ -222,9 +222,9 @@ Internal GetUserElapsed Time: 0.19
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5310 hits are stored in Tst34HitsCollection 
@@ -235,9 +235,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
   5314 hits are stored in Tst34HitsCollection 
@@ -248,9 +248,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
   5314 hits are stored in Tst34HitsCollection 
@@ -261,9 +261,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.17
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.17
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
   5327 hits are stored in Tst34HitsCollection 
@@ -274,9 +274,9 @@ Internal GetUserElapsed Time: 0.17
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5318 hits are stored in Tst34HitsCollection 
@@ -287,9 +287,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5327 hits are stored in Tst34HitsCollection 
@@ -300,9 +300,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
   5330 hits are stored in Tst34HitsCollection 
@@ -313,9 +313,9 @@ Internal GetUserElapsed Time: 0.18
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
   5316 hits are stored in Tst34HitsCollection 
@@ -323,7 +323,7 @@ Internal GetUserElapsed Time: 0.18
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 19.24
-Total System Elapsed Time: 0.11
-Total GetUserElapsed Time: 18.82
+Total Real Elapsed Time is: 2.88
+Total System Elapsed Time: 0.01
+Total GetUserElapsed Time: 2.88
 ******************************************

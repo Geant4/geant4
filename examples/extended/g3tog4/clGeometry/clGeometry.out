@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-00    (25-January-2008)
+ Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,6 +21,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -115,7 +117,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
@@ -123,7 +125,7 @@ eIoni:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -136,7 +138,7 @@ eIoni:   tables are built for  e+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -150,7 +152,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
@@ -159,7 +161,7 @@ hIoni:   tables are built for  proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -167,11 +169,11 @@ hIoni:   tables are built for  anti_proton
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
@@ -179,34 +181,34 @@ muIoni:   tables are built for  mu+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+      Theoretical model 
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -214,11 +216,11 @@ hIoni:   tables are built for  pi+
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
@@ -227,7 +229,7 @@ hIoni:   tables are built for  pi-
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 Region <DefaultRegionForTheWorld> -- appears in <HALL> world volume
  Root logical volume(s) : HALL 
@@ -249,14 +251,14 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   3 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total memory consumed for geometry optimisation:   5 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k HALL
-       0.00         0.00         0.00            2k TUB1
+       0.00         0.00         0.00            1k HALL
+       0.00         0.00         0.00            3k TUB1
        0.00         0.00         0.00            0k TUB2
        0.00         0.00         0.00            0k BXD1_2_ENV
        0.00         0.00         0.00            0k BXD1_3_ENV
@@ -266,13 +268,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.02          2k         1       60         60         0.00    TUB1
-      11.92          0k         2        8         18         0.01    HALL
-       6.39          0k         1        5          5         0.00    TUB2
-       5.42          0k         1        4          4         0.00    BXD1_2_ENV
-       5.42          0k         1        4          4         0.00    BXD1_3_ENV
-       5.42          0k         1        4          4         0.00    BXD1_4_ENV
-       5.42          0k         1        4          4         0.00    BXD1_5_ENV
+      60.85          3k         1       60         60         0.00    TUB1
+      11.91          0k         2        8         18         0.00    HALL
+       6.24          0k         1        5          5         0.00    TUB2
+       5.25          0k         1        4          4         0.00    BXD1_2_ENV
+       5.25          0k         1        4          4         0.00    BXD1_3_ENV
+       5.25          0k         1        4          4         0.00    BXD1_4_ENV
+       5.25          0k         1        4          4         0.00    BXD1_5_ENV
 ### Run 0 start.
 /vis~/clear/view
 /vis~/draw/current
@@ -300,7 +302,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.05s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
@@ -378,7 +380,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 
@@ -459,7 +461,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
@@ -576,7 +578,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.
