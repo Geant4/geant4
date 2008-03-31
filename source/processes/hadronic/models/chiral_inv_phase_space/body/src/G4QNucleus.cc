@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.94 2008-03-20 20:11:38 dennis Exp $
+// $Id: G4QNucleus.cc,v 1.95 2008-03-31 20:30:17 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -4636,6 +4636,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
             <<bN<<",Z="<<bZ<<",nL="<<bS<<",totM="<<totMass<<",n="<<totMass-nResM-mNeut
             <<",p="<<totMass-pResM-mProt<<",l="<<totMass-lResM-mLamb<<G4endl;
 #endif
+
       if ( thePDG == 90004004 || 
 
           (thePDG == 90002004 && totMass > mHel6+.003) ||
@@ -4647,7 +4648,7 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
                                  (bS > 0 && totMass > lResM+mLamb) ) )      ||
           (bA > 2 && 
             ( ( bN > 0 && bZ > 0 && 
-	        (bsCond && totMass > dResM+mDeut || dbsCond && totMass > dResM+mDeut) ) ||
+	        ((bsCond && totMass > dResM+mDeut) || (dbsCond && totMass > dResM+mDeut) ) ) ||
 
 	      ( dbsCond && ( (bN > 1 && totMass > nnResM+mNeut+mNeut) ||
                              (bZ > 1 && totMass > ppResM+mProt+mProt) ||

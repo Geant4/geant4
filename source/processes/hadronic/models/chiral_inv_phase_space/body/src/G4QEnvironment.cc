@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.136 2008-03-20 20:11:38 dennis Exp $
+// $Id: G4QEnvironment.cc,v 1.137 2008-03-31 20:30:00 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7711,10 +7711,10 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   G4LorentzVector reTLV=quasm->Get4Momentum();  // Prototyoe 4-Mom of the Residual Nucleus
   G4double reTM=reTLV.m();                      // Real mass of the Quasmon
   G4int envPDG=theEnvironment.GetPDG();
-  if (resB > 1 && 
-      (!resS && 
-       ((resC == resB && reTM > resC*mProt) || (!resC && reTM > resB*mNeut) ) ||
-         (resS == resB && reTM > resS*mLamb) ) ) // Immediate Split(@@Decay) MultiBaryon
+
+  if ( resB > 1 && 
+       ( (!resS && ((resC == resB && reTM > resC*mProt) || (!resC && reTM > resB*mNeut) ) ) ||
+          (resS == resB && reTM > resS*mLamb) ) ) // Immediate Split(@@Decay) MultiBaryon
   {
 #ifdef chdebug
     G4cout<<"G4QE::CGS:*MultyBar*E="<<envPDG<<",B="<<resB<<",C="<<resC<<",S"<<resS<<G4endl;

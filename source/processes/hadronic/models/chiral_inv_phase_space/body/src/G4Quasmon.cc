@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.106 2008-03-20 20:11:38 dennis Exp $
+// $Id: G4Quasmon.cc,v 1.107 2008-03-31 20:30:35 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2190,9 +2190,11 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4double aMass=0.;      // @@ get rid of the "aMass" it was necessary only for pap
     //G4double aMass=mPi0;
     //if(envPDG>MINPDG&&(sPDG<MINPDG||envPDG!=pPDG))aMass=0.;
-    if ( ( (sPDG < MINPDG && envPDG > MINPDG && envPDG != NUCPDG) || 
-           (sPDG > MINPDG && sPDG!=NUCPDG && envPDG > pPDG) ) && 
-         iniBN > 0 || iniBN > 1 || rPDG == 10 ) aMass=0.;  // No Pi0 cond.(eg in NucE)
+
+    if ( ( ( (sPDG < MINPDG && envPDG > MINPDG && envPDG != NUCPDG) || 
+             (sPDG > MINPDG && sPDG!=NUCPDG && envPDG > pPDG) ) && iniBN > 0) || 
+             iniBN > 1 || 
+             rPDG == 10 ) aMass=0.;  // No Pi0 cond.(eg in NucE)
 
 #ifdef pdebug
     G4cout <<"G4Q::HQ:Is hsfl="<<hsflag<<" or fdul="<<fdul<<" or [rM="<<rMass<<"<"<<reMass
