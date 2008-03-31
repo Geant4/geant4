@@ -24,21 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFCrossSection.cc,v 1.2 2007-04-24 10:37:10 gunter Exp $
+// $Id: G4FTFParameters.cc,v 1.1 2008-03-31 14:50:13 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4FTFCrossSection.hh"
+#include "G4FTFParameters.hh"
 
-G4FTFCrossSection::G4FTFCrossSection()
+G4FTFparameters::G4FTFparameters()
 {;}
 
 
-G4FTFCrossSection::~G4FTFCrossSection()
+G4FTFparameters::~G4FTFparameters()
 {;}
 //**********************************************************************************************
 
-G4FTFCrossSection::G4FTFCrossSection(const G4ParticleDefinition * particle, G4double s) 
+G4FTFparameters::G4FTFparameters(const G4ParticleDefinition * particle, G4double s) 
     {
     G4int PDGcode = particle->GetPDGEncoding();
     G4int absPDGcode = std::abs(PDGcode);
@@ -48,7 +48,7 @@ G4FTFCrossSection::G4FTFCrossSection(const G4ParticleDefinition * particle, G4do
     G4double LogPlab = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
 
-//G4cout<<"G4FTFCrossSection Plab "<<Plab<<G4endl;
+//G4cout<<"G4FTFparameters Plab "<<Plab<<G4endl;
 
     G4int NumberOfTargetProtons  = 1; //aNucleus.GetZ();             // ??????????????????????
     G4int NumberOfTargetNeutrons = 1; //aNucleus.GetN();
@@ -170,25 +170,30 @@ G4FTFCrossSection::G4FTFCrossSection(const G4ParticleDefinition * particle, G4do
                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
       };
 
+//      Xtotal and Xelastic in mb
+
       SetTotalCrossSection(Xtotal);
       SetElastisCrossSection(Xelastic);
       SetInelasticCrossSection(Xtotal-Xelastic);
+      SetRadiusOfHNinteractions2(Xtotal/pi/10.);
 
-//G4cout<<"G4FTFCrossSection Xt Xel "<<Xtotal<<" "<<Xelastic<<G4endl;
+//G4cout<<" Rnn "<<Xtotal/pi/10.<<" "<<Xtotal/pi/10.*fermi*fermi<<G4endl;
+//G4cout<<"G4FTFparameters Xt Xel MeV "<<Xtotal<<" "<<Xelastic<<" "<<GeV<<G4endl;
 
 //-----------------------------------------------------------------------------------  
       SetSlope( Xtotal*Xtotal/16./pi/Xelastic/0.3894 ); // Slope parameter of elastic scattering
                                                         //      (GeV/c)^(-2))
                                                         // Gaussian parametrization of
                                                         // elastic scattering amplitude assumed
+      SetAvaragePt2ofElasticScattering(1./(Xtotal*Xtotal/16./pi/Xelastic/0.3894)*GeV*GeV);
 
-//G4cout<<"G4FTFCrossSection Slope "<<GetSlope()<<G4endl;
+//G4cout<<"G4FTFparameters Slope "<<GetSlope()<<G4endl;
 
 //-----------------------------------------------------------------------------------
       SetGamma0( GetSlope()*Xtotal/10./2./pi );
 //-----------------------------------------------------------------------------------
 
-//G4cout<<"G4FTFCrossSection Out"<<G4endl;
+//G4cout<<"G4FTFparameters Out"<<G4endl;
 
     } 
 //**********************************************************************************************
