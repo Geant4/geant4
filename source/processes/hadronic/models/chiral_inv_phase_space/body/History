@@ -12,7 +12,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-04)
+-------------------------------------------------------------------
+- add more parentheses around && within || to satisfy gcc-4.3 compiler
+  files affected:
+    G4QChipolino.cc
+    G4QEnvironment.cc
+    G4QNucleus.cc
+    G4Quasmon.cc
+
 19-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-03)
+-------------------------------------------------------------------
 - add parentheses around && within || to satisfy gcc-4.3 compiler
   files affected:
     G4QChipolino.cc
