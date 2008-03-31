@@ -24,76 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.5 2008-03-31 15:34:01 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id: G4ElasticHNScattering.hh,v 1.1 2008-03-31 15:34:01 vuzhinsk Exp $
 
-#ifndef G4FTFParticipants_h
-#define G4FTFParticipants_h 1
-
+#ifndef G4ElasticHNScattering_h
+#define G4ElasticHNScattering_h 1
 // ------------------------------------------------------------
-//      GEANT 4 class header file
+//                    GEANT 4 class header file
 //
-//      ---------------- G4FTFParticipants----------------
-//             by Gunter Folger, June 1998.
-//       class finding colliding particles in FTFPartonStringModel
+//      ---------------- G4ElasticHNScattering --------------
+//                   by V. Uzhinsky, March 2008.
+//             elastic scattering used by Fritiof model
+//	           Take a projectile and a target
+//	           scatter the projectile and target
 // ------------------------------------------------------------
 
-#include "G4VParticipants.hh"
-#include "G4FTFParameters.hh"   // Uzhi 29.03.08
-#include <vector>
-#include "G4Nucleon.hh"
-#include "G4V3DNucleus.hh"
-#include "G4Fancy3DNucleus.hh"
-#include "G4ReactionProduct.hh"
-#include "G4InteractionContent.hh"
+#include "globals.hh"
+class G4VSplitableHadron;
+class G4ExcitedString;
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4ThreeVector.hh"
 
-class G4FTFParticipants : public G4VParticipants
+class G4ElasticHNScattering 
 {
 
   public:
-      G4FTFParticipants();
-      G4FTFParticipants(const G4FTFParticipants &right);
-      const G4FTFParticipants & operator=(const G4FTFParticipants &right);
-      ~G4FTFParticipants();
 
-      int operator==(const G4FTFParticipants &right) const;
-      int operator!=(const G4FTFParticipants &right) const;
+      G4ElasticHNScattering();                           // Uzhi
+      virtual ~G4ElasticHNScattering();
 
-      void GetList(const G4ReactionProduct  &thePrimary, 
-                         G4FTFParameters    *theParameters); // Uzhi 29.03.08
-
-      void StartLoop();
-      G4bool Next();
-      const G4InteractionContent & GetInteraction() const;
+      virtual G4bool ElasticScattering (G4VSplitableHadron *aPartner, 
+                                        G4VSplitableHadron * bPartner,
+                                        G4FTFParameters *theParameters) const;
       
-      std::vector<G4InteractionContent *> theInteractions;
   private:
 
-//      std::vector<G4InteractionContent *> theInteractions;
-  
-      G4int currentInteraction;
+      G4ElasticHNScattering(const G4ElasticHNScattering &right);
+      
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;  // Uzhi
+      
+      const G4ElasticHNScattering & operator=(const G4ElasticHNScattering &right);
+      int operator==(const G4ElasticHNScattering &right) const;
+      int operator!=(const G4ElasticHNScattering &right) const;
+
 
 };
-
-
-inline
-void G4FTFParticipants::StartLoop()
-{
-	currentInteraction=-1;
-}
-
-inline
-G4bool G4FTFParticipants::Next()
-{
-	return ++currentInteraction < static_cast<G4int>(theInteractions.size());
-}
-
-
-inline
-const G4InteractionContent & G4FTFParticipants::GetInteraction() const
-{
-	return *theInteractions[currentInteraction];
-}
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.5 2007-04-24 10:32:59 gunter Exp $
+// $Id: G4FTFModel.hh,v 1.6 2008-03-31 15:34:01 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -51,11 +51,13 @@
 
 class G4VSplitableHadron;
 class G4ExcitedString;
+
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
 #include "G4FTFParticipants.hh"
 
 #include "G4ExcitedStringVector.hh"
 #include "G4DiffractiveExcitation.hh"
-
+#include "G4ElasticHNScattering.hh"
 
 class G4FTFModel : public G4VPartonStringModel
 {
@@ -83,12 +85,13 @@ class G4FTFModel : public G4VPartonStringModel
        G4ExcitedStringVector * BuildStrings();
   
   private:     
-       
-       G4FTFParticipants theParticipants;
-       G4ReactionProduct theProjectile;
-       
-       G4DiffractiveExcitation * theExcitation;
 
+       G4ReactionProduct theProjectile;       
+       G4FTFParticipants theParticipants;
+
+       G4FTFParameters  *theParameters;        // Uzhi  29.03.08
+       G4DiffractiveExcitation * theExcitation;
+       G4ElasticHNScattering   * theElastic;   // Uzhi 29.03.08
 
 
 };

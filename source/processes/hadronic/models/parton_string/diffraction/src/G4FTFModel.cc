@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.7 2007-04-24 10:32:59 gunter Exp $
+// $Id: G4FTFModel.cc,v 1.8 2008-03-31 15:34:02 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,20 +37,23 @@
 // ------------------------------------------------------------
 
 #include "G4FTFModel.hh"
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
 #include "G4FTFParticipants.hh"
 #include "G4InteractionContent.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
+#include <utility>                                        // Uzhi 29.03.08
 
 // Class G4FTFModel 
 
-G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()) // Uzhi
+G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
+                         theElastic(new G4ElasticHNScattering())      // Uzhi 29.03.08
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
 
-G4FTFModel::G4FTFModel(G4double a, G4double b, G4double c):theExcitation(new G4DiffractiveExcitation())
+G4FTFModel::G4FTFModel(G4double , G4double , G4double ):theExcitation(new G4DiffractiveExcitation())
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
@@ -87,17 +90,32 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
-	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); // Uzhi N-mass number Z-charge
- 
 	theProjectile = aProjectile;  
+
+	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); // Uzhi N-mass number Z-charge
+
+// ------------------------- Uzhi 29.03.08
+// --- cms energy
+
+        G4double s = sqr( theProjectile.GetMass() ) +
+                     sqr( G4Proton::Proton()->GetPDGMass() ) +
+                     2*theProjectile.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
+/*
+    G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4endl;
+    G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
+    G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
+*/
+      theParameters = new G4FTFParameters(theProjectile.GetDefinition(),s);        // Uzhi
+// ------------------------- Uzhi 29.03.08
 }
 
 G4ExcitedStringVector * G4FTFModel::GetStrings()
 {
-	theParticipants.BuildInteractions(theProjectile);
-
+//G4cout<<"theParticipants.GetList"<<G4endl;
+	theParticipants.GetList(theProjectile,theParameters);
+//G4cout<<"ExciteParticipants()"<<G4endl;
 	if (! ExciteParticipants()) return NULL;;
-
+//G4cout<<"theStrings = BuildStrings()"<<G4endl;
 	G4ExcitedStringVector * theStrings = BuildStrings();
 
 	return theStrings;
@@ -122,10 +140,12 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	{
 	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                  //  do not allow for duplicates ...
-	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
+	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
+                                                interaction.GetProjectile()) )
 	    	primaries.push_back(interaction.GetProjectile());
 		
-	    if ( targets.end() == std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
+	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
+                                                interaction.GetTarget()) ) 
 	    	targets.push_back(interaction.GetTarget());
 	}
 	    
@@ -156,16 +176,41 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 
 G4bool G4FTFModel::ExciteParticipants()
 {
+
+/*    // Uzhi 29.03.08                     For elastic Scatt.
+G4cout<<"  In ExciteParticipants() "<<theParticipants.theInteractions.size()<<G4endl;
+G4cout<<" test Params Tot "<<theParameters->GetTotalCrossSection()<<G4endl;
+G4cout<<" test Params Ela "<<theParameters->GetElasticCrossSection()<<G4endl;
 	
+G4int counter=0;
+*/   // Uzhi 29.03.08
+
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
+//counter++;
+//G4cout<<" Inter # "<<counter<<G4endl;
 
-//G4cout << " soft colls : " << collision.GetNumberOfSoftCollisions() << G4endl; // Uzhi no match
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
 
-	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
+//   // Uzhi 29.03.08
+           G4bool Successfull;
+           if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
+           {
+//G4cout<<"Elastic"<<G4endl;
+            Successfull=theElastic->ElasticScattering(projectile, target, theParameters);
+           }
+           else
+           {
+//G4cout<<"Inelastic"<<G4endl;
+            Successfull=theExcitation->ExciteParticipants(projectile, target);
+           }
+//           if(!Successfull)
+// // Uzhi 29.03.08
+
+//	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
+           if(!Successfull)
 	   {
 //           give up, clean up
 		std::vector<G4VSplitableHadron *> primaries;
@@ -175,10 +220,12 @@ G4bool G4FTFModel::ExciteParticipants()
 		{
 		    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                 	 //  do not allow for duplicates ...
-		    if ( primaries.end() == std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
+		    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
+                                                      interaction.GetProjectile()) )
 	    		primaries.push_back(interaction.GetProjectile());
 
-		    if ( targets.end() == std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
+		    if ( targets.end()   == std::find(targets.begin(), targets.end(),
+                                                      interaction.GetTarget()) ) 
 	    		targets.push_back(interaction.GetTarget());
 		}
 		std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());

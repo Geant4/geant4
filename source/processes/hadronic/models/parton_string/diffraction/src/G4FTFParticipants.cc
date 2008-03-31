@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.7 2007-04-24 10:33:00 gunter Exp $
+// $Id: G4FTFParticipants.cc,v 1.8 2008-03-31 15:34:02 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -37,18 +37,14 @@
 //        with original FRITIOF mode. November - December 2006.
 // ------------------------------------------------------------
 
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
 #include "G4FTFParticipants.hh"
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4VSplitableHadron.hh"
-//#include "G4PomeronCrossSection.hh"                      // Uzhi
-#include "G4FTFCrossSection.hh"                            // Uzhi
 #include "Randomize.hh"
-#include <utility>
-
+#include <utility>                                        // Uzhi 29.03.08
 
 // Class G4FTFParticipants 
-
-
 
 G4FTFParticipants::G4FTFParticipants() 
 {
@@ -74,7 +70,8 @@ G4FTFParticipants::~G4FTFParticipants()
 //int G4FTFParticipants::operator!=(const G4FTFParticipants &right) const
 //{}
 
-void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
+void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
+                                      G4FTFParameters    *theParameters) // Uzhi 29.03.08
 {
     
     StartLoop();  // reset Loop over Interactions
@@ -82,27 +79,13 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
     for(unsigned int i=0; i<theInteractions.size(); i++) delete theInteractions[i];
     theInteractions.clear();
 
-// --- cms energy
-
-    G4double s = sqr( thePrimary.GetMass() ) +
-		 sqr( G4Proton::Proton()->GetPDGMass() ) +
-		 2*thePrimary.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
-
-//    G4cout << " primary Total E (GeV): " << thePrimary.GetTotalEnergy()/GeV << G4endl;
-//    G4cout << " primary Mass    (GeV): " << thePrimary.GetMass() /GeV << G4endl;
-//    G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
-
-//    G4PomeronCrossSection theCrossSection(thePrimary.GetDefinition());      // Uzhi
-      G4FTFCrossSection theCrossSection(thePrimary.GetDefinition(),s);        // Uzhi
-    
-
-    G4double deltaxy=2 * fermi; 
+    G4double deltaxy=2 * fermi;                       // Extra nuclear radius
 
     G4VSplitableHadron * primarySplitable=new G4DiffractiveSplitableHadron(thePrimary);
 
-    G4double xyradius;
-    xyradius =theNucleus->GetOuterRadius() + deltaxy;
-
+    G4double xyradius;                          
+    xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
+                                                      // radius
     G4bool nucleusNeedsShift = true;
     
     while ( theInteractions.size() == 0 )
@@ -117,9 +100,10 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	while ( (nucleon=theNucleus->GetNextNucleon()) )
 	{
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
-    		    sqr(impactY - nucleon->GetPosition().y());
-//	   if ( theCrossSection.GetInelasticProbability(s,impact2)                       // Uzhi
-	   if ( theCrossSection.GetInelasticProbability(  impact2/fermi/fermi)           // Uzhi 
+                             sqr(impactY - nucleon->GetPosition().y());
+
+//	   if ( theParameters->GetInelasticProbability(impact2/fermi/fermi) // Uzhi 29.03.08 
+	   if ( theParameters->GetProbabilityOfInteraction(impact2/fermi/fermi) // Uzhi 29.03.08 
 		> G4UniformRand() )
 	   {
 	   	if ( nucleusNeedsShift ) 
@@ -135,7 +119,8 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
 	   	}
-	   	G4InteractionContent * aInteraction = new G4InteractionContent(primarySplitable);
+	   	G4InteractionContent * aInteraction = 
+                                       new G4InteractionContent(primarySplitable);
 		aInteraction->SetTarget(targetSplitable);
 		theInteractions.push_back(aInteraction);
 	   }
@@ -151,8 +136,3 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
 
 // Implementation (private) methods
-
-
-
-
-
