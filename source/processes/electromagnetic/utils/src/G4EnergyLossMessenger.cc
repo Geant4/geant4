@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.31 2008-03-11 12:03:24 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.32 2008-03-31 09:57:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -348,7 +348,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
 
   if (command == splCmd) {
-    opt->SetSplineFlag(lpmCmd->GetNewBoolValue(newValue));
+    opt->SetSplineFlag(splCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
 
