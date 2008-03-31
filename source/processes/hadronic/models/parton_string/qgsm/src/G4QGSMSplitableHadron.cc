@@ -287,10 +287,10 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      nAttempt++;
      G4int    NumberOfUnsampledSeaQuarks = 2*nSeaPair;
      G4double beta1 = beta;
-     if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson        
+     if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson
      ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
      HPWtest = ColorX;
-     while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
+     while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin) {;} 
      Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
      for(G4int aPair = 0; aPair < nSeaPair; aPair++) 
      {
@@ -392,7 +392,7 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
 G4ThreeVector G4QGSMSplitableHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 {
   G4double R;
-  while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare);
+  while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare) {;}
   R = std::sqrt(R);
   G4double phi = twopi*G4UniformRand();
   return G4ThreeVector (R*std::cos(phi), R*std::sin(phi), 0.);    
