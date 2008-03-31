@@ -1,4 +1,4 @@
-$Id: History,v 1.374 2008-03-25 18:38:36 vnivanch Exp $
+$Id: History,v 1.375 2008-03-31 09:53:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 March 08: V.Ivant (emstand-V09-01-11)
+- G4eCoulombScatteringModel - use SelectAtomRandomly method
+- G4UrbanMscModel2 (L.Urban):
+           - Simplification of step limitation in ComputeTruePathLengthLimit,
+             + tlimitmin is the same for UseDistancetoBoundary and UseSafety           
+           - Reorganization of SampleCosineTheta + new method SimpleScattering
+             SimpleScattering is used if the relative energy loss is too big
+             or theta0 is too big (see data members rellossmax, theta0max)
+           - Tuning of the correction factor in ComputeTheta0 
+           - exponent c of the 'tail' model function is not equal to 2 any more,
+             value of c has been extracted from some e- scattering data
+           - Step limitation in ComputeTruePathLengthLimit has been
+             simplified further + some data members have been removed  
 
 25 March 08: V.Ivant (emstand-V09-01-10)
 - G4BetheBlochModel - use formfactor for sampling

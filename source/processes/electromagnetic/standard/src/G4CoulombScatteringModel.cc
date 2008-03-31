@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.30 2008-03-21 17:54:46 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.31 2008-03-31 09:53:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -176,7 +176,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
-  const G4Element* elm = SelectRandomAtom();
+  const G4Element* elm = SelectAtomRandomly();
 
   G4double Z  = elm->GetZ();
   G4double A  = SelectIsotope(elm);

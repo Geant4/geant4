@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.43 2008-03-25 18:36:34 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.44 2008-03-31 09:53:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,7 +218,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries" << G4endl;
-  SelectRandomAtom();
+  SelectAtomRandomly();
   
   G4double cost = SampleCosineTheta();
   if(std::fabs(cost) > 1.0) return;
@@ -277,7 +277,7 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4eCoulombScatteringModel::SelectRandomAtom()
+const G4Element* G4eCoulombScatteringModel::SelectAtomRandomly()
 {
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
@@ -288,8 +288,8 @@ const G4Element* G4eCoulombScatteringModel::SelectRandomAtom()
 
   G4double cross = 0.0;
 
-  G4int i;
-  for (i=0; i<nelm; i++) {
+  G4int i = 0;
+  for (; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double den = theAtomNumDensityVector[i];
     //    G4cout << "i= " << i << " den= " << den << G4endl;
@@ -300,11 +300,14 @@ const G4Element* G4eCoulombScatteringModel::SelectRandomAtom()
     xsect[i] = cross;
   }
 
-  G4double qsec = cross*G4UniformRand();
-  for (i=0; i<nelm; i++) {
-    if(qsec <= xsect[i]) break;
-  }
-  if(i >= nelm) i = nelm - 1;
+  i = 0;
+  if(nelm > 1) {
+    G4double qsec = cross*G4UniformRand();
+    for (i=0; i<nelm; i++) {
+      if(qsec <= xsect[i]) break;
+    }
+    if(i >= nelm) i = nelm - 1;
+  } 
 
   const G4Element* elm = (*theElementVector)[i];
   elecXSection = xsece[i];
