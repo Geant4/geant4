@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2008-03-18 15:30:33 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,13 +69,13 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (etrans > 0.) lgepsE = std::log10(etrans/E1);
 
   G4int id = 0;
-  if (procName == "muIoni")     id = 1; 
-  if (procName == "muPairProd") id = 2;
-  if (procName == "muBrems")    id = 3;
-  if (procName == "muNucl")     id = 4;    
-  if (procName == "hIoni")      id = 5; 
-  if (procName == "hPairProd")  id = 6;
-  if (procName == "hBrems")     id = 7;
+  if (procName == "muIoni")          id = 1; 
+  else if (procName == "muPairProd") id = 2;
+  else if (procName == "muBrems")    id = 3;
+  else if (procName == "muNucl")     id = 4;    
+  else if (procName == "hIoni")      id = 5; 
+  else if (procName == "hPairProd")  id = 6;
+  else if (procName == "hBrems")     id = 7;
   histoManager->FillHisto(id,lgepsE);		       
 }
 

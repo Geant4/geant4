@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2008-03-18 15:30:33 vnivanch Exp $
+// $Id: RunAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -183,15 +183,15 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
-  if (process == "muIoni")     {id = 1; cut =    GetEnergyCut(material,1); }
-  if (process == "muPairProd") {id = 2; cut = 2*(GetEnergyCut(material,1) 
+  if (process == "muIoni")          {id = 1; cut =    GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 2; cut = 2*(GetEnergyCut(material,1) 
                                                       + electron_mass_c2); }
-  if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0); }
-  if (process == "muNucl")      id = 4;
-  if (process == "hIoni")      {id = 5; cut =    GetEnergyCut(material,1); }
-  if (process == "hPairProd")  {id = 6; cut = 2*(GetEnergyCut(material,1) 
+  else if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0);}
+  else if (process == "muNucl")      id = 4;
+  else if (process == "hIoni")      {id = 5; cut =    GetEnergyCut(material,1);}
+  else if (process == "hPairProd")  {id = 6; cut = 2*(GetEnergyCut(material,1) 
                                                       + electron_mass_c2); }
-  if (process == "hBrems")     {id = 7; cut =    GetEnergyCut(material,0); }
+  else if (process == "hBrems")     {id = 7; cut =    GetEnergyCut(material,0);}
   if (id == 0) return 0.;
   
   G4int nbOfBins = 100;
