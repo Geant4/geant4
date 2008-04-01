@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2008-02-15 11:10:27 ztorzsok Exp $
+$Id: History,v 1.17 2008-04-01 07:28:06 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1 April 2008 Zoltan Torzsok
+- Every function name starts with capital letter so that example file is modified to follow this change
+
+19 February 2008 Zoltan Torzsok
+- Replicavol example modified in order to follow changes
 
 15 February 2008 Z. Torzsok
 - Added example files featuring replicas and division volumes

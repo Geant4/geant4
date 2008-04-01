@@ -28,13 +28,8 @@
       <volume name="lvReplica">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
-         <replicavol numb="8">
+         <replicavol axis="kXAxis" number="8" width="100" offset="0" unit="mm">
             <volumeref ref="lvCube"/>
-            <replicate_along_axis>
-               <width value="100" unit="mm"/>
-               <offset value="0" unit="mm"/>
-               <direction x="1" y="0" z="0"/>
-            </replicate_along_axis>
          </replicavol>
       </volume>
       <volume name="TOP">
