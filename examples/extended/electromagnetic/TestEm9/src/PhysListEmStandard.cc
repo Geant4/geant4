@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.8 2006-11-22 19:09:12 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.9 2008-04-01 17:06:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,8 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -100,6 +102,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
+
+    } else if (particleName == "pi+" || 
+               particleName == "pi-"    ) {
+
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4hBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4hPairProduction,  -1, 4,4);       
 
     } else if (particleName == "alpha" ||
 	       particleName == "He3" || 
