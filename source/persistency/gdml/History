@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2008-04-01 07:25:18 ztorzsok Exp $
+$Id: History,v 1.43 2008-04-02 12:22:30 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+2 April 2008 Zoltan Torzsok
+- Writing out volumes is done in a recoursive way
+  Sorint of logical volumes when reading is removed, not necessary anymore since recoursive writing solves the sorting
+
 1 April 2008 Z.Torzsok
 - Every function name starts with a capital letter now
 

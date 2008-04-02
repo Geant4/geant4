@@ -44,11 +44,19 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
 private:
+   struct volumeElementPair {
+   
+      G4LogicalVolume* key;
+      xercesc::DOMElement* value;
+   };
+
+   std::vector<volumeElementPair> volumeElementList;
+
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
-   void volumeWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
-   void structureWrite(xercesc::DOMElement*);
+   void volumeWrite(const G4LogicalVolume* const);
+   void structureWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
 };
 
 #endif

@@ -36,8 +36,11 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    G4ThreeVector rot = getAngles(physvol->GetObjectRotationValue().inverse());
    G4ThreeVector pos = physvol->GetObjectTranslation();
 
-   G4String volumeref = physvol->GetLogicalVolume()->GetName();
-   G4VSolid* solidPtr = physvol->GetLogicalVolume()->GetSolid();
+   G4LogicalVolume* logvol = physvol->GetLogicalVolume();
+   G4VSolid* solidPtr = logvol->GetSolid();
+   G4String volumeref = logvol->GetName();
+
+   volumeWrite(logvol);   
 
    if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {
 
@@ -124,14 +127,18 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
 }
 
-void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,const G4LogicalVolume* const volumePtr) {
+void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
 
    if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) return; // Reflected solid is replaced with scale transformation!
       
    xercesc::DOMElement* volumeElement = newElement("volume");
-   structureElement->appendChild(volumeElement);
+
+   volumeElementPair pair;
+   pair.key = const_cast<G4LogicalVolume*>(volumePtr);
+   pair.value = volumeElement;
+   volumeElementList.push_back(pair);
 
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
@@ -148,22 +155,21 @@ void G4GDMLWriteStructure::volumeWrite(xercesc::DOMElement* structureElement,con
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-   
+/*   
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision*>(physvol)) divisionvolWrite(volumeElement,divisionvol); else
       if (physvol->IsParameterised()) paramvolWrite(volumeElement,physvol); else
-      if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else
+      if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else*/
       physvolWrite(volumeElement,physvol);
    }
 }
 
-void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
+void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const worldvol) {
 
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
-   const G4LogicalVolumeStore* volumeList = G4LogicalVolumeStore::GetInstance();
-   const size_t volumeCount = volumeList->size();
+   volumeWrite(worldvol);
 
-   for (size_t i=0;i<volumeCount;i++)
-      volumeWrite(structureElement,(*volumeList)[i]);
+   for (int i=volumeElementList.size()-1;i>=0;i--) // Write back the volumes in reverse order!
+      structureElement->appendChild(volumeElementList[i].value);  
 }

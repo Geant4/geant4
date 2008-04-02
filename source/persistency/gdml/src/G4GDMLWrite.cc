@@ -86,7 +86,7 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvo
    defineWrite(gdml);
    materialsWrite(gdml);
    solidsWrite(gdml);
-   structureWrite(gdml);
+   structureWrite(gdml,logvol);
    setupWrite(gdml,logvol->GetName());
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
