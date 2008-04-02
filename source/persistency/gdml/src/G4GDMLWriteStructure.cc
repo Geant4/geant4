@@ -129,6 +129,16 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 
 void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
 
+   for (std::vector<volumeElementPair>::iterator i = volumeElementList.begin();i != volumeElementList.end();i++) {
+   
+      if (i->key == volumePtr) {
+      
+         volumeElementList.insert(volumeElementList.begin(),*i);
+         volumeElementList.erase(i);
+         return;
+      }
+   }
+
    G4VSolid* solidPtr = volumePtr->GetSolid();
 
    if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) return; // Reflected solid is replaced with scale transformation!
@@ -138,7 +148,7 @@ void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
    volumeElementPair pair;
    pair.key = const_cast<G4LogicalVolume*>(volumePtr);
    pair.value = volumeElement;
-   volumeElementList.push_back(pair);
+   volumeElementList.insert(volumeElementList.begin(),pair);
 
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
@@ -169,7 +179,7 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    gdmlElement->appendChild(structureElement);
 
    volumeWrite(worldvol);
-
-   for (int i=volumeElementList.size()-1;i>=0;i--) // Write back the volumes in reverse order!
-      structureElement->appendChild(volumeElementList[i].value);  
+      
+   for (std::vector<volumeElementPair>::iterator i=volumeElementList.begin();i != volumeElementList.end();i++)
+      structureElement->appendChild(i->value);
 }
