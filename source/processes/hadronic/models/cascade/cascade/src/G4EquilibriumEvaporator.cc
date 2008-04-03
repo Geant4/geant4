@@ -154,7 +154,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	} else { // normal chain
 
-	  if (EEXS > cut_off_energy) { 
+          if (EEXS > cut_off_energy) { 
 
 	    G4double E0 = getE0(A);
 	    G4double parlev = getPARLEVDEN(A, Z);
@@ -193,7 +193,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      } else if (TM1 < small) {
 		TM1 = small;
 	      };
-	      W[0] = W[0] * std::exp(TM1); 	     
+              W[0] = W[0] * std::exp(TM1);
 	      prob_sum += W[0];
 
 	    } else {
@@ -212,13 +212,14 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		} else if (TM1 < small) {
 		  TM1 = small;
 		};
-		W[i] = W[i] * std::exp(TM1); 	     
+                W[i] = W[i] * std::exp(TM1);
 		prob_sum += W[i];
 
 	      } else {
 		W[i] = 0.0;
 	      }; 
 	    };
+
 	    // fisson part
 	    W[6] = 0.0;
 
@@ -247,10 +248,10 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    // again time to decide what next
 
 	    if (verboseLevel > 2){
-	      G4cout << " wn " << W[0] << " wp " << W[1] << " wd " << W[2] << G4endl
+            G4cout << " wn = " << W[0] << " , wp = " << W[1] << " , wd = " << W[2] << G4endl
 		     << " wh3 " << W[3] << " wt " << W[4] << " whe4 " << W[5] << G4endl
 		     << " wfi " << W[6] << G4endl;
-	    }
+  	    }
 
 	    G4int icase = -1;
 
@@ -340,7 +341,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      };
 	      try_again = false;
 
-	    } else {
+            } else {
 	      G4double SL = prob_sum * inuclRndm();
 	      G4double S1 = 0.0;
 
@@ -375,7 +376,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    EPR = TM[icase] - S * A / (A - 1.0) + V[icase];
 		  }; 
 	    
-		  if (EPR > 0.0 && S > 0.0) { // real escape
+                  if (EPR > 0.0 && S > V[icase]) { // real escape
 		    S = 0.001 * S;
 
 		    if (icase < 2) { // particle escape
@@ -427,7 +428,6 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			Z = Z1[icase]; 	      
 			particle.setMomentum(part_mom);
 			output.addOutgoingParticle(particle);
-
 			for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
 			bad = false;
 		      };
@@ -492,7 +492,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		if (itry1 == itry_max || bad)  try_again = false;
 
-	      } else { // fission
+              } else { // fission
 		G4InuclNuclei nuclei(A, Z);        
 	        nuclei.setModel(6);
 		nuclei.setExitationEnergy(EEXS);
@@ -535,7 +535,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
  	     
 	  } else {
 	    try_again = false;
-	  }; 
+          }; 
 	}; 
       };
       // this time it's final nuclei
