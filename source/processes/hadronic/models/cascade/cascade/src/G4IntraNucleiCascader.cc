@@ -69,7 +69,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
   G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
-  G4double coulombBarrier = 0.001*(1.44/1.14)*tnuclei->getZ()/(1.+std::pow(tnuclei->getA(),0.333));
 
   std::vector<G4double> momentum_in = bullet->getMomentum();
 
@@ -145,6 +144,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
     while (!cascad_particles.empty() && !model.empty()) {
       iloop++;
+
       if (verboseLevel > 3) {
 	G4cout << " Number of cparticles " << cascad_particles.size() << G4endl;
 	cascad_particles.back().print();
@@ -153,7 +153,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							theElementaryParticleCollider);
       if (verboseLevel > 2) {
-	G4cout << new_cascad_particles.size() << " new particles " << G4endl;
+	G4cout << " ew particles " << new_cascad_particles.size() << G4endl;
       }
 
       // handle the result of a new step
@@ -185,19 +185,14 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	    theExitonConfiguration.incrementQP(new_cascad_particles[0].getParticle().type());
 	  };  
 
-	} else { // particle about to leave nucleus - check for Coulomb barrier
+	} else { // goes out
 
 	  if (verboseLevel > 3) {
 	    G4cout << " Goes out " << G4endl;
 	    new_cascad_particles[0].print();
 	  }
-          G4InuclElementaryParticle currentParticle = new_cascad_particles[0].getParticle();
-	  if (currentParticle.getKineticEnergy() > coulombBarrier) {
-	    output_particles.push_back(currentParticle);
-	  } else {
-	    theExitonConfiguration.incrementQP(currentParticle.type());
-          }
 
+	  output_particles.push_back(new_cascad_particles[0].getParticle());
 	}; 
 
       } else { // interaction 
