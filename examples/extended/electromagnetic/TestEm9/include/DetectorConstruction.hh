@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.5 2006-06-29 17:00:56 gunter Exp $
+// $Id: DetectorConstruction.hh,v 1.6 2008-04-03 15:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,24 +64,24 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 public:
 
   DetectorConstruction();
-  ~DetectorConstruction();
+  virtual ~DetectorConstruction();
 
 public:
 
   void SetEcalMaterial(const G4String&);
   void SetAbsMaterial(const G4String&);
-  void SetEcalLength (G4double val)   {ecalLength = val;};
-  void SetEcalWidth  (G4double val)   {ecalWidth = val;};
-  void SetVertexLength (G4double val) {vertexLength = val;};
-  void SetPadLength  (G4double val)   {padLength = val;};
-  void SetPadWidth  (G4double val)    {padWidth = val;};
-  void SetAbsLength(G4double val)     {absLength = val;};
+  void SetEcalLength(G4double val);
+  void SetEcalWidth(G4double val);
+  void SetVertexLength(G4double val);
+  void SetPadLength(G4double val);
+  void SetPadWidth(G4double val);
+  void SetAbsLength(G4double val);
 
   G4VPhysicalVolume* Construct();
 
   void UpdateGeometry();
 
-  G4double GetWorldSizeZ()            {return worldZ;}
+  G4double GetWorldSizeZ()  {return worldZ;}
 
 private:
 
@@ -105,11 +105,18 @@ private:
   G4Material* worldMaterial;
   G4Material* yorkMaterial;
 
-  G4LogicalVolume* logicC;
+  G4LogicalVolume* logicWorld;
+  G4LogicalVolume* logicECal;
+  G4LogicalVolume* logicCal;
   G4LogicalVolume* logicA1;
   G4LogicalVolume* logicA2;
   G4LogicalVolume* logicA3;
   G4LogicalVolume* logicA4;
+  G4LogicalVolume* logicYV;
+  G4LogicalVolume* logicY;
+  G4LogicalVolume* logicVV;
+  G4LogicalVolume* logicVD;
+  G4LogicalVolume* logicV;
   
   G4Region*   vertexRegion;
   G4Region*   muonRegion;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.20 2008-03-18 14:55:59 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.21 2008-04-03 15:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -89,6 +89,9 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   vertexDetectorCuts = 0;
   muonDetectorCuts   = 0;
 
+  vertexRegion       = 0;
+  muonRegion         = 0;
+
   pMessenger = new PhysicsListMessenger(this);
   stepMaxProcess = new StepMax();
 
@@ -96,7 +99,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-  mscStepLimit   = true;
   helIsRegisted  = false;
   bicIsRegisted  = false;
   gnucIsRegisted = false;
@@ -262,7 +264,6 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-
   SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
   SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
   SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
@@ -271,12 +272,14 @@ void PhysicsList::SetCuts()
 
   if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
-  region->SetProductionCuts(vertexDetectorCuts);
+  if(region != vertexRegion) region->SetProductionCuts(vertexDetectorCuts);
+  vertexRegion = region;
   G4cout << "Vertex cuts are set" << G4endl;
 
   if( !muonDetectorCuts ) SetMuonCut(cutForElectron);
   region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
-  region->SetProductionCuts(muonDetectorCuts);
+  if(region != muonRegion) region->SetProductionCuts(muonDetectorCuts);
+  muonRegion = region;
   G4cout << "Muon cuts are set" << G4endl;
 
   if (verboseLevel>0) DumpCutValuesTable();
@@ -311,7 +314,16 @@ void PhysicsList::SetCutForPositron(G4double cut)
 void PhysicsList::SetVertexCut(G4double cut)
 {
   if( !vertexDetectorCuts ) vertexDetectorCuts = new G4ProductionCuts();
+  else {
 
+    G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
+    if(region != vertexRegion) {
+      delete  vertexDetectorCuts;
+      vertexDetectorCuts = new G4ProductionCuts();
+    }
+    region->SetProductionCuts(vertexDetectorCuts);
+    vertexRegion = region;
+  }
   vertexDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
   vertexDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
   vertexDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
@@ -323,17 +335,19 @@ void PhysicsList::SetVertexCut(G4double cut)
 void PhysicsList::SetMuonCut(G4double cut)
 {
   if( !muonDetectorCuts ) muonDetectorCuts = new G4ProductionCuts();
+  else {
 
+    G4Region* region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
+    if(region != muonRegion) {
+      delete  muonDetectorCuts;
+      vertexDetectorCuts = new G4ProductionCuts();
+    }
+    region->SetProductionCuts(muonDetectorCuts);
+    muonRegion = region;
+  }
   muonDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
   muonDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
   muonDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetMscStepLimit(G4bool val)
-{
-  mscStepLimit = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

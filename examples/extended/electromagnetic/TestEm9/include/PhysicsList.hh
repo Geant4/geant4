@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2006-11-17 17:03:26 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.6 2008-04-03 15:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,6 +53,7 @@ class G4VPhysicsConstructor;
 class StepMax;
 class PhysicsListMessenger;
 class G4ProductionCuts;
+class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,7 +61,7 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+  virtual ~PhysicsList();
 
   void ConstructParticle();
 
@@ -68,7 +69,6 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
-  void SetMscStepLimit(G4bool val);
 
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
@@ -101,7 +101,9 @@ private:
   G4ProductionCuts* vertexDetectorCuts;
   G4ProductionCuts* muonDetectorCuts;
 
-  G4bool mscStepLimit;
+  G4Region*   vertexRegion;
+  G4Region*   muonRegion;
+
   G4bool helIsRegisted;
   G4bool bicIsRegisted;
   G4bool gnucIsRegisted;

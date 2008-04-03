@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2006-06-29 17:03:43 gunter Exp $
+// $Id: PhysicsListMessenger.cc,v 1.4 2008-04-03 15:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,8 +142,8 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 
-  if( command == mscCmd )
-   { pPhysicsList->SetMscStepLimit(mscCmd->GetNewBoolValue(newValue));}
+  //  if( command == mscCmd )
+  // { pPhysicsList->SetMscStepLimit(mscCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
