@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.50 2008-03-19 10:55:47 lgarnier Exp $
+# $Id: common.gmk,v 1.51 2008-04-04 10:35:20 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -11,21 +11,13 @@ ifndef G4LIBDIR
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
-moc_inc = $(shell grep -l "Q_OBJECT" include/*.hh )
-moc_files := $(patsubst include/%.hh, src/%_moc.cc, $(moc_inc))
-
-
-ifeq ($(G4INTY_BUILD_QT),)
-  # not so beautiful. In therory we should only remove theses files from sources 
-  sources := $(shell rm -f $(moc_files))
-  sources := $(wildcard src/*.cc)
-endif
+sources := $(wildcard src/*.cc)
 
 ifneq ($(G4INTY_BUILD_QT),)
-  sources := $(wildcard src/*.cc)
+  moc_inc = $(shell grep -l "Q_OBJECT" include/*.hh )
+  moc_files := $(patsubst include/%.hh, src/%_moc.cc, $(moc_inc))
   sources += $(moc_files)
 endif
-
 
 objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
@@ -96,7 +88,6 @@ src/%_moc.cc: include/%.hh
 	else $(QTMOC) $(MOC_MACRO) -o $@ $<; \
 	fi;
 endif
-
 
 ###############################################################################
 #
