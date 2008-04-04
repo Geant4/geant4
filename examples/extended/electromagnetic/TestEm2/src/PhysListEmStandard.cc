@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.6 2007-06-21 14:21:46 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.7 2008-04-04 17:26:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,8 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -86,35 +87,35 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
       	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1,4);
             
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);       
      
     } else if( particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hIonisation,        -1,2,2);
     }
   }
    
@@ -125,8 +126,15 @@ void PhysListEmStandard::ConstructProcess()
   //coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
-  emOptions.SetSkin(2.);
+  emOptions.SetSkin(3.);
   
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);    
+  emOptions.SetMaxEnergy(100*TeV);  
+  emOptions.SetDEDXBinning(1200);  
+  emOptions.SetLambdaBinning(1200);
+   
   //energy loss
   //
   emOptions.SetLinearLossLimit(1.e-6);

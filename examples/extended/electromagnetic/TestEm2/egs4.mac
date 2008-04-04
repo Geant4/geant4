@@ -1,4 +1,4 @@
-# $Id: egs4.mac,v 1.2 2008-01-10 18:13:52 maire Exp $
+# $Id: egs4.mac,v 1.3 2008-04-04 17:26:57 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -19,7 +19,7 @@
 /testem/phys/setCuts 0.7 mm
 #
 # histogram file
-/testem/histo/setFileName egs4/10jan08
+/testem/histo/setFileName egs4/9.1ref3
 /testem/histo/setFileType root
 #
 /run/initialize
