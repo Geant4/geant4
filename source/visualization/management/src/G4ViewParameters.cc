@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.30 2008-03-10 16:23:42 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.31 2008-04-04 13:48:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -512,8 +512,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   }
 
   if (IsExplode() &&
-      (fExplodeFactor != v.fExplodeFactor) ||
-      (fExplodeCentre != v.fExplodeCentre)) return true;
+      ((fExplodeFactor != v.fExplodeFactor) ||
+       (fExplodeCentre != v.fExplodeCentre))) return true;
 
   return false;
 }

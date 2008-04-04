@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.68 2007-01-11 16:41:30 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.69 2008-04-04 13:48:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -406,11 +406,11 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   char c;
   while (is.get(c) && c == ' ');
   if (c == '"') {
-    while (is.get(c) && c != '"') originalName += c;
+    while (is.get(c) && c != '"') {originalName += c;}
   }
   else {
     originalName += c;
-    while (is.get(c) && c != ' ') originalName += c;
+    while (is.get(c) && c != ' ') {originalName += c;}
   }
   originalName = originalName.strip (G4String::both, ' ');
   originalName = originalName.strip (G4String::both, '"');
@@ -428,11 +428,11 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 
   while (is.get(c) && c == ' ');
   if (c == '"') {
-    while (is.get(c) && c != '"') cloneName += c;
+    while (is.get(c) && c != '"') {cloneName += c;}
   }
   else {
     cloneName += c;
-    while (is.get(c) && c != ' ') cloneName += c;
+    while (is.get(c) && c != ' ') {cloneName += c;}
   }
   cloneName = cloneName.strip (G4String::both, ' ');
   cloneName = cloneName.strip (G4String::both, '"');
@@ -565,11 +565,11 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   char c;
   while (is.get(c) && c == ' ');
   if (c == '"') {
-    while (is.get(c) && c != '"') newName += c;
+    while (is.get(c) && c != '"') {newName += c;}
   }
   else {
     newName += c;
-    while (is.get(c) && c != ' ') newName += c;
+    while (is.get(c) && c != ' ') {newName += c;}
   }
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTOutBitStream.cc,v 1.5 2006-06-29 21:24:01 gunter Exp $
+// $Id: G4RTOutBitStream.cc,v 1.6 2008-04-04 13:52:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,7 +103,7 @@ G4OutBitStream::SetBits2Byte(u_char v, int numBits)
   }
   IncBuf();
 
-  *mBuf = v << 8 - nextBits;
+  *mBuf = v << (8 - nextBits);
   mBitPos = 7 - nextBits;
 }
 
