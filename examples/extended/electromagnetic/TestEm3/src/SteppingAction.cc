@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.26 2008-03-14 15:40:04 maire Exp $
+// $Id: SteppingAction.cc,v 1.27 2008-04-04 14:24:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +39,6 @@
 #include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
-///#include "G4LossTableManager.hh"
-///#include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -110,11 +108,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
 ////  example of Birk attenuation
 ///G4double destep   = aStep->GetTotalEnergyDeposit();
-/// option 1 : direct
 ///G4double response = BirksAttenuation(aStep);
-/// option 2 : via G4EmSaturation 
-///G4double response = 
-///    G4LossTableManager::Instance()->EmSaturation()->BirksAttenuation(aStep);
 ///G4cout << " Destep: " << destep/keV << " keV"
 ///       << " response after Birks: " << response/keV << " keV" << G4endl;
 }
