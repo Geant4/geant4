@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.17 2008-01-04 21:53:07 allison Exp $
+// $Id: MyEventAction.cc,v 1.18 2008-04-04 14:01:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -165,7 +165,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 		       G4Translate3D(500.*cm, 300.*cm, -500.*cm));
 
     // A blue rectangle in fixed position on the screen
-    G4PolyhedronBox rectangle(0.1, 0.2, 0.1);
+    G4PolyhedronBox rectangle(0.1, 0.2, 0.);
     G4VisAttributes rectangleAtts(G4Colour(0., 0., 1.));
     rectangleAtts.SetForceSolid(true);
     rectangle.SetVisAttributes(rectangleAtts);
