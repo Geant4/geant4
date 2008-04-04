@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2008-03-11 16:05:56 lgarnier Exp $
+$Id: History,v 1.112 2008-04-04 13:32:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+4th April 2008  John Allison  (opengl-V09-01-01)
+- Fixed DBL_MAX problem in 2D drawing:
+  o changed G4OPENGL_DBL_MAX to G4OPENGL_FLT_BIG.
+- Fix gcc-4.3.0 compiler warnings.
 
 11th March 2008, Laurent Garnier
  - Resolve QT3 compilation errors

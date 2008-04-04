@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.36 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.37 2008-04-04 13:32:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,8 +89,8 @@ background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false),
-fStartTime(-G4OPENGL_DBL_MAX),
-fEndTime(G4OPENGL_DBL_MAX),
+fStartTime(-DBL_MAX),
+fEndTime(DBL_MAX),
 fFadeFactor(0.),
 fDisplayHeadTime(false),
 fDisplayHeadTimeX(-0.9),

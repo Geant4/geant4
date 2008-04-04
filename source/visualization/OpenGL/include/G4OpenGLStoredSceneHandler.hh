@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.25 2008-01-04 22:07:01 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.26 2008-04-04 13:32:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ protected:
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
       fDisplayListId(id), fTransform(tr), fPickName(0),
-      fStartTime(-G4OPENGL_DBL_MAX), fEndTime(G4OPENGL_DBL_MAX) {}
+      fStartTime(-DBL_MAX), fEndTime(DBL_MAX) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;

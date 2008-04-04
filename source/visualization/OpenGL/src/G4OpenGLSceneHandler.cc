@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.53 2008-02-01 06:26:45 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.54 2008-04-04 13:32:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -735,18 +735,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   GLfloat *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::U)];
   G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
-  while (u_iterator.pick (u_knot_array_ptr++));
+  while (u_iterator.pick (u_knot_array_ptr++)){}
 
   GLfloat *v_knot_array, *v_knot_array_ptr;
   v_knot_array = v_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::V)];
   G4NURBS::KnotsIterator v_iterator (nurb, G4NURBS::V);
-  while (v_iterator.pick (v_knot_array_ptr++));
+  while (v_iterator.pick (v_knot_array_ptr++)){}
 
   GLfloat *ctrl_pnt_array, *ctrl_pnt_array_ptr;
   ctrl_pnt_array = ctrl_pnt_array_ptr =
     new GLfloat [nurb.GettotalnbrCtrlPts () * G4NURBS::NofC];
   G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
-  while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
+  while (c_p_iterator.pick (ctrl_pnt_array_ptr++)){}
 
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
