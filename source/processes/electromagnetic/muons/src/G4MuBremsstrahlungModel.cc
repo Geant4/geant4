@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.30 2008-03-07 13:00:38 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.31 2008-04-04 14:33:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,6 +82,11 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
+    sqrte(sqrt(exp(1.))),
+    bh(202.4),
+    bh1(446.),
+    btf(183.),
+    btf1(1429.),
     fParticleChange(0),
     lowestKinEnergy(1.0*GeV),
     minThreshold(1.0*keV)
@@ -186,6 +191,7 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
 
     dedx += loss*theAtomicNumDensityVector[i];
   }
+  //  G4cout << "BR e= " << kineticEnergy << "  dedx= " << dedx << G4endl;
   if(dedx < 0.) dedx = 0.;
   return dedx;
 }
@@ -266,6 +272,8 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
 
   cross *=hhh;
 
+  //G4cout << "BR e= " << tkin<< "  cross= " << cross/barn << G4endl;
+
   return cross;
 }
 
@@ -278,12 +286,6 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
                                            G4double gammaEnergy)
 //  differential cross section
 {
-  static const G4double sqrte=sqrt(exp(1.)) ;
-  static const G4double bh=202.4,bh1=446.,btf=183.,btf1=1429. ;
-  static const G4double rmass=mass/electron_mass_c2 ;
-  static const G4double cc=classic_electr_radius/rmass ;
-  static const G4double coeff= 16.*fine_structure_const*cc*cc/3. ;
-
   G4double dxsection = 0.;
 
   if( gammaEnergy > tkin) return dxsection ;

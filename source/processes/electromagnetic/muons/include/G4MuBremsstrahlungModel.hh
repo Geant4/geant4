@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.19 2008-03-06 11:37:59 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.20 2008-04-04 14:33:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,6 +143,14 @@ protected:
   const G4ParticleDefinition* particle;
   G4NistManager* nist;
   G4double mass;
+  G4double rmass;
+  G4double cc;
+  G4double coeff;
+  G4double sqrte;
+  G4double bh;
+  G4double bh1;
+  G4double btf;
+  G4double btf1;
 
 private:
 
@@ -190,6 +198,9 @@ void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
   if(!particle) {
     particle = p;
     mass = particle->GetPDGMass();
+    rmass=mass/electron_mass_c2 ;
+    cc=classic_electr_radius/rmass ;
+    coeff= 16.*fine_structure_const*cc*cc/3. ;
   }
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlungModel.cc,v 1.1 2008-03-06 11:47:11 vnivanch Exp $
+// $Id: G4hBremsstrahlungModel.cc,v 1.2 2008-04-04 14:37:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,16 +72,11 @@ G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
                                            G4double gammaEnergy)
 //  differential cross section
 {
-  static const G4double sqrte=sqrt(exp(1.)) ;
-  static const G4double bh=202.4,btf=183.;
-  static const G4double rmass=mass/electron_mass_c2 ;
-  static const G4double cc=classic_electr_radius/rmass ;
-  static const G4double coeff= 16.*fine_structure_const*cc*cc/3. ;
-
   G4double dxsection = 0.;
 
   if( gammaEnergy > tkin) return dxsection ;
-
+  //  G4cout << "G4hBremsstrahlungModel m= " << mass 
+  //	 << "  " << particle->GetParticleName() << G4endl;
   G4double E = tkin + mass ;
   G4double v = gammaEnergy/E ;
   G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
