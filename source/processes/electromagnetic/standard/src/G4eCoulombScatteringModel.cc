@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.44 2008-03-31 09:53:28 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.45 2008-04-04 08:31:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,8 +91,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   particle = 0;
   currentCouple = 0;
   for(size_t j=0; j<100; j++) {
-    //    index[j] = -1;
-    FF[j]    = 0.0;
+    FF[j] = 0.0;
   } 
 }
 
@@ -166,8 +165,8 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
      A == targetA && cutEnergy == ecut) return nucXSection;
 
   //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
-  //	 << p->GetParticleName() << " Z= " << Z << " A= " << A 
-  //	 << " e= " << kinEnergy << G4endl; 
+  // << p->GetParticleName() << " Z= " << Z << " A= " << A 
+  // << " e= " << kinEnergy << G4endl; 
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
@@ -197,7 +196,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
        2.0*log(z1*x2/(z2*x1))/d);
   }
 
-  //  G4cout << " cross(bn)= " << nucXSection/barn << G4endl; 
+  //G4cout<<" cross(bn)= "<<nucXSection/barn<<" Asc= "<<screenZ<<G4endl; 
   
   return nucXSection;
 }
@@ -217,20 +216,18 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   SetupParticle(dp->GetDefinition());
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
-  //  G4cout << "G4eCoulombScatteringModel::SampleSecondaries" << G4endl;
+  //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
+  // << kinEnergy <<G4endl;
   SelectAtomRandomly();
   
   G4double cost = SampleCosineTheta();
   if(std::fabs(cost) > 1.0) return;
 
   G4double sint= sqrt((1.0 - cost)*(1.0 + cost));
-  /*
-  if(sint > 0.1) 
-    G4cout<<"## SampleSecondaries: e(MeV)= " << kinEnergy
-	  << " sint= " << sint << "  Z= " << Z << "  screenZ= " << screenZ 
-	  << " cn= " << formf
-	  << G4endl;
-  */
+  
+  //G4cout<<"## Sampled sint= " << sint << "  Z= " << targetZ 
+  //<< "  screenZ= " << screenZ << " cn= " << formfactA << G4endl;
+  
   G4double phi  = twopi * G4UniformRand();
 
   G4ThreeVector direction = dp->GetMomentumDirection(); 
@@ -248,17 +245,18 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
 {
   G4double costm = cosTetLimit;
   G4double formf = formfactA;
-  if(G4UniformRand()*nucXSection < elecXSection) {
+
+  // scattering off e or A?
+  if(G4UniformRand()*xsecn[idxelm] < xsece[idxelm]) {
     costm = cosTetMaxElec;
     formf = 0.0;
   }
   /*
-  G4cout << "G4eCoul...SampleSecondaries: e(MeV)= " << tkin 
+  G4cout << "SampleCost: e(MeV)= " << tkin 
   	 << " ctmin= " << cosThetaMin
   	 << " ctmaxN= " << cosTetMaxNuc
   	 << " ctmax= " << costm
-  	 << " Z= " << Z << " A= " << A
-  	 << " cross= " << cross/barn << " crossE= " << elecXSection/barn
+  	 << " Z= " << targetZ << " A= " << targetA
   	 << G4endl;
   */
   if(costm >= cosThetaMin) return 2.0; 
@@ -271,6 +269,9 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
     z1 = x1*x2/(x1 + G4UniformRand()*x3) - screenZ;
     grej = 1.0/(1.0 + formf*z1);
   } while ( G4UniformRand() > grej*grej );  
+
+  //G4cout << "z= " << z1 << " cross= " << nucXSection/barn 
+  // << " crossE= " << elecXSection/barn << G4endl;
 
   return 1.0 - z1;
 }
@@ -292,27 +293,27 @@ const G4Element* G4eCoulombScatteringModel::SelectAtomRandomly()
   for (; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double den = theAtomNumDensityVector[i];
-    //    G4cout << "i= " << i << " den= " << den << G4endl;
     ComputeCrossSectionPerAtom(particle,tkin,elm->GetZ(),elm->GetN(),cut,tkin);
     xsece[i] = elecXSection*den;
     xsecn[i] = nucXSection*den;
+    // G4cout << "i= " << i << " den= " << den << " eXS= " << elecXSection 
+    //   << " nXS= " << nucXSection << G4endl;
     cross   += xsecn[i];
     xsect[i] = cross;
   }
 
-  i = 0;
+  idxelm = 0;
   if(nelm > 1) {
     G4double qsec = cross*G4UniformRand();
-    for (i=0; i<nelm; i++) {
-      if(qsec <= xsect[i]) break;
+    for (idxelm=0; idxelm<nelm; idxelm++) {
+      if(qsec <= xsect[idxelm]) break;
     }
-    if(i >= nelm) i = nelm - 1;
+    if(idxelm >= nelm) idxelm = nelm - 1;
   } 
 
-  const G4Element* elm = (*theElementVector)[i];
-  elecXSection = xsece[i];
-  nucXSection  = xsecn[i];
+  const G4Element* elm = (*theElementVector)[idxelm];
   SetupTarget(elm->GetZ(),elm->GetN(),tkin);
+
   return elm;
 }
 
