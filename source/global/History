@@ -1,4 +1,4 @@
-$Id: History,v 1.193 2008-03-19 17:14:22 gcosmo Exp $
+$Id: History,v 1.194 2008-04-04 15:20:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4PhysicsVector - introduced cubic spline
+- G4LPhysicsFreeVector - removed GetValue method
 
 Mar 19, 2008  V.Grichine (global-V09-01-03)
 - Modified G4RandomDirection global function to use unit radius sphere surface
