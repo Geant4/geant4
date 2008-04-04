@@ -1,4 +1,4 @@
-$Id: History,v 1.318 2008-04-03 17:26:13 gunter Exp $
+$Id: History,v 1.319 2008-04-04 10:35:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,17 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd April 2008  Gunter Folger (config-V09-01-02)
-- Replace gets() by safe fgets() in liblist.c 
-   (tag does not include changes by L.Garnier 18/19 March)
+3rd April 2008  Gabriele Cosmo (config-V09-01-03)
+- Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
+  changed compilation option "-mp" to more performant "-fp_model precise".
 
-19th March 2008, Laurent Garnier
- - common.gmk : Changes for moc generation. When compiling G4UI driver
-   AFTER compiling G4UI QT driver, it does not remove the moc generated files
-   and try to compile theme again and failed. Corrected.
+2nd April 2008  Gunter Folger (config-V09-01-02)
+- Replaced gets() by safer fgets() in liblist.c.
+  (this tag does not include latest changes in interactivity.gmk)
 
-18th March 2008, Laurent Garnier
- - common.gmk : Minor changes when compiling Qt
+18th March 2008  Laurent Garnier
+- interactivity.gmk: moved Qt setup before X11.
 
 21st February 2008  Gabriele Cosmo (config-V09-01-01)
 - Replaced g77 with gfortran for Linux-g++ and Linux-icc platforms.
