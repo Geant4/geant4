@@ -1,9 +1,12 @@
-$Id: History,v 1.115 2008-04-04 14:01:14 allison Exp $
+$Id: History,v 1.116 2008-04-04 14:02:04 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.115  2008/04/04 14:01:14  allison
+Changed to thickness of box for 2D drawing to zero.
+
 Revision 1.114  2008/01/04 21:54:37  allison
 vistest-V09-01-00
 
