@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.9 2007-10-02 14:42:51 maire Exp $
+// $Id: PhysicsList.cc,v 1.10 2008-04-04 13:04:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@
 PhysicsList::PhysicsList(DetectorConstruction* det)
 : G4VUserPhysicsList(), detector(det)
 {
-  defaultCutValue = 10.*km;
+  defaultCutValue = 10*km;
   singleScattering = false;
   registerBrem = false;
   pMessenger = new PhysicsListMessenger(this);
@@ -90,7 +90,8 @@ void PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 
 #include "G4eIonisation.hh"
@@ -128,9 +129,9 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
 
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else    
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4eMultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);             
@@ -142,9 +143,9 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e+") {
     
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else   
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4eMultipleScattering, -1, ++iAlong, ++iPost);
       
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);                   
@@ -158,11 +159,11 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "proton") {
     
       if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
+        pmanager->AddProcess(new G4CoulombScattering,   -1, -1,       ++iPost);
         else   
-        pmanager->AddProcess(new G4MultipleScattering, -1, ++iAlong, ++iPost);
+        pmanager->AddProcess(new G4hMultipleScattering, -1, ++iAlong, ++iPost);
 	
-      pmanager->AddProcess(new G4hIonisation,          -1, ++iAlong, ++iPost);
+      pmanager->AddProcess(new G4hIonisation,           -1, ++iAlong, ++iPost);
     }
   }
   
@@ -173,7 +174,7 @@ void PhysicsList::ConstructEM()
   //multiple scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetSkin(2.);
+  emOptions.SetSkin(3.);
   
   //physics tables
   //
