@@ -30,27 +30,21 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol) {
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& invR) {
 
-   G4ThreeVector scl(1.0,1.0,1.0);
-   G4ThreeVector rot = getAngles(physvol->GetObjectRotationValue().inverse());
-   G4ThreeVector pos = physvol->GetObjectTranslation();
+   G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
+   G4Transform3D R = volumeWrite(physvol->GetLogicalVolume());   
+   G4Transform3D T = invR*P*R;
 
-   G4LogicalVolume* logvol = physvol->GetLogicalVolume();
-   G4VSolid* solidPtr = logvol->GetSolid();
-   G4String volumeref = logvol->GetName();
+   HepGeom::Scale3D scale;
+   HepGeom::Rotate3D rotate;
+   HepGeom::Translate3D translate;
 
-   volumeWrite(logvol);   
+   T.getDecomposition(scale,rotate,translate);
 
-   if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {
-
-      volumeref.remove(volumeref.length()-5,5); // Remove "_refl"
-      G4Transform3D scale = refl->GetTransform3D();
-      	 
-      scl.setX(scale(0,0)); // We assume that this is a pure scaling transformation!!!
-      scl.setY(scale(1,1));
-      scl.setZ(scale(2,2));
-   }
+   G4ThreeVector scl(scale(0,0),scale(1,1),scale(2,2));
+   G4ThreeVector rot = getAngles(rotate.getRotation());
+   G4ThreeVector pos = T.getTranslation();
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
    volumeElement->appendChild(physvolElement);
@@ -58,7 +52,7 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    physvolElement->appendChild(volumerefElement);
-   volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
 
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
@@ -127,28 +121,34 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
 }
 
-void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
+G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
 
-   for (std::vector<volumeElementPair>::iterator i = volumeElementList.begin();i != volumeElementList.end();i++) {
+   G4Transform3D R;
+
+   const G4VSolid* solidPtr = volumePtr->GetSolid();
+   if (const G4ReflectedSolid* refl = dynamic_cast<const G4ReflectedSolid*>(solidPtr)) {
    
-      if (i->key == volumePtr) {
+      solidPtr = refl->GetConstituentMovedSolid();
+      R = refl->GetTransform3D();
+   }
+
+   for (volumePtrListType::iterator i=volumePtrList.begin();i != volumePtrList.end();i++) {
+   
+      if (*i == volumePtr) {
       
-         volumeElementList.insert(volumeElementList.begin(),*i);
-         volumeElementList.erase(i);
-         return;
+         volumePtrList.erase(i);
+         volumePtrList.insert(volumePtrList.begin(),volumePtr);
+         return R;
       }
    }
 
-   G4VSolid* solidPtr = volumePtr->GetSolid();
 
-   if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) return; // Reflected solid is replaced with scale transformation!
-      
    xercesc::DOMElement* volumeElement = newElement("volume");
 
-   volumeElementPair pair;
-   pair.key = const_cast<G4LogicalVolume*>(volumePtr);
-   pair.value = volumeElement;
-   volumeElementList.insert(volumeElementList.begin(),pair);
+   if (volumePtrMap.find(volumePtr) != volumePtrMap.end()) G4Exception("ERROR! Volume is already added to map!"); 
+
+   volumePtrList.insert(volumePtrList.begin(),volumePtr);
+   volumePtrMap[volumePtr] = volumeElement;
 
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
@@ -165,12 +165,10 @@ void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-/*   
-      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision*>(physvol)) divisionvolWrite(volumeElement,divisionvol); else
-      if (physvol->IsParameterised()) paramvolWrite(volumeElement,physvol); else
-      if (physvol->IsReplicated()) replicavolWrite(volumeElement,physvol); else*/
-      physvolWrite(volumeElement,physvol);
+      physvolWrite(volumeElement,physvol,R.inverse());
    }
+
+   return R;
 }
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const worldvol) {
@@ -179,7 +177,14 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    gdmlElement->appendChild(structureElement);
 
    volumeWrite(worldvol);
-      
-   for (std::vector<volumeElementPair>::iterator i=volumeElementList.begin();i != volumeElementList.end();i++)
-      structureElement->appendChild(i->value);
+ 
+   G4cout << G4endl;
+ 
+   for (volumePtrListType::iterator i=volumePtrList.begin();i != volumePtrList.end();i++) {
+
+      if (volumePtrMap.find(*i) == volumePtrMap.end()) G4Exception("ERROR! Volume is not added to map!"); 
+
+      G4cout << "Printed volume: " << (*i)->GetName() << G4endl;
+      structureElement->appendChild(volumePtrMap[*i]);
+   }
 }
