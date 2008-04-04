@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.49 2008-03-11 12:03:24 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.50 2008-04-04 15:21:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -315,6 +315,7 @@ G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple
   G4int nbins = 3;
   if( couple->IsUsed() ) nbins = nBins;
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+  v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;
 }
 

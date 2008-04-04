@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.126 2008-03-25 18:34:10 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.127 2008-04-04 15:21:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -537,6 +537,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       G4PhysicsVector* aVector = new G4PhysicsLogVector(emin, emax, bin);
+      aVector->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+
       modelManager->FillDEDXVector(aVector, couple, tType);
 
       // Insert vector for this material into the table
@@ -1109,6 +1111,8 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
            << "      Lambda tables from threshold to "
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nBins << " bins."
+	   << " spline " 
+	   << (G4LossTableManager::Instance())->SplineFlag()
            << G4endl;
     PrintInfo();
     if(theRangeTableForLoss && isIonisation) 
@@ -1332,6 +1336,8 @@ G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(
 	     minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
   G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nBins);
+  v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+
   return v;
 }
 

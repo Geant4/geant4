@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.8 2006-06-29 19:01:51 gunter Exp $
+// $Id: G4LPhysicsFreeVector.hh,v 1.9 2008-04-04 15:17:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 // 27-MAR-97 FWJ: first version for Alpha release
 // 20-JUN-97 FWJ: added comment re GetValue(): no longer virtual
 // 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
+// 02-APR-08 A.Bagulya: use GetValue from base class
 //
 
 #ifndef G4LPhysicsFreeVector_h
@@ -57,22 +58,17 @@
 class G4LPhysicsFreeVector : public G4PhysicsVector  
 {
 
-public: 
+public: // with description
 
    G4LPhysicsFreeVector();
 
-public: // with description
-
    G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
 
-   ~G4LPhysicsFreeVector();
+   virtual ~G4LPhysicsFreeVector();
 
    void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
      // G4PhysicsVector has PutValue() but it is inconvenient.
      // Want to simultaneously fill the bin and data vectors.
-
-   G4double GetValue(G4double theEnergy, G4bool& isOutRange);
-     // Note that theEnergy could be energy, momentum, or whatever.
 
    void SetVerboseLevel(G4int value);
 

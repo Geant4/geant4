@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.24 2007-02-16 11:59:35 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.25 2008-04-04 15:21:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableBuilder.hh"
+#include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -90,6 +91,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   for (size_t i=0; i<n_vectors; i++) {
 
     pv = new G4PhysicsLogVector(elow, ehigh, nbins);
+    pv->SetSpline((G4LossTableManager::Instance())->SplineFlag());
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
       G4double energy = pv->GetLowEdgeEnergy(j);
@@ -138,6 +140,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       }
 
       G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
+      v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
 
       G4double range  = 2.*elow/dedx1;
       //G4double range  = elow/dedx1;
@@ -201,6 +204,8 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
 
       
       G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
+      v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+
       for (size_t j=0; j<nbins; j++) {
 	G4double e  = pv->GetLowEdgeEnergy(j);
 	G4double r  = pv->GetValue(e, b);
