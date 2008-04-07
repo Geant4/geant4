@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2008-01-08 16:34:38 maire Exp $
+$Id: History,v 1.11 2008-04-07 17:19:49 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-04-08 mma (testem15-V09-01-01)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
+- HistoManager::saveAscii() : redefinition of binEdge
+     
 08-01-08 mma (testem15-V09-01-00) 
 - HistoManager : ascii[0] = flag to control creation of .ascii file
       
