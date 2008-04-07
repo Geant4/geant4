@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2008-04-02 12:24:45 ztorzsok Exp $
+$Id: History,v 1.45 2008-04-07 09:33:57 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-2 April 2008 Zoltan Torzsok
-- Writing out volumes is done in a recursive way rather than dumping G4LogicalVolumeStore content
-  Sorint of logical volumes at reading is removed since recursive writing solves the sorting
+4 April 2008 Zoltan Torzsok
+- Writing out volumes in recursive way is done.
+  Still needs to optimize. Do not recompute touched branches!
 
 1 April 2008 Z.Torzsok
 - Every function name starts with a capital letter now

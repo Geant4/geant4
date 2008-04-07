@@ -123,6 +123,8 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 
 G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const volumePtr) {
 
+   G4cout << "Walking volume: " << volumePtr->GetName() << G4endl;
+
    G4Transform3D R;
 
    const G4VSolid* solidPtr = volumePtr->GetSolid();
@@ -137,15 +139,13 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* const vol
       if (*i == volumePtr) {
       
          volumePtrList.erase(i);
-         volumePtrList.insert(volumePtrList.begin(),volumePtr);
-         return R;
+         break;
       }
    }
 
-
    xercesc::DOMElement* volumeElement = newElement("volume");
 
-   if (volumePtrMap.find(volumePtr) != volumePtrMap.end()) G4Exception("ERROR! Volume is already added to map!"); 
+//   if (volumePtrMap.find(volumePtr) != volumePtrMap.end()) G4Exception("ERROR! Volume is already added to map!"); 
 
    volumePtrList.insert(volumePtrList.begin(),volumePtr);
    volumePtrMap[volumePtr] = volumeElement;
@@ -178,13 +178,9 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
 
    volumeWrite(worldvol);
  
-   G4cout << G4endl;
- 
    for (volumePtrListType::iterator i=volumePtrList.begin();i != volumePtrList.end();i++) {
 
       if (volumePtrMap.find(*i) == volumePtrMap.end()) G4Exception("ERROR! Volume is not added to map!"); 
-
-      G4cout << "Printed volume: " << (*i)->GetName() << G4endl;
       structureElement->appendChild(volumePtrMap[*i]);
    }
 }
