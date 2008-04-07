@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.9 2007-12-19 18:34:23 maire Exp $
+# $Id: mumsc.mac,v 1.10 2008-04-07 14:36:23 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -21,7 +21,7 @@
 /gun/particle mu+
 /gun/energy 100 GeV
 #
-/testem/histo/setFileName mumsc/9.1ref00
+/testem/histo/setFileName mumsc/9.1ref03
 /testem/histo/setFileType hbook
 /testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
 /testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  

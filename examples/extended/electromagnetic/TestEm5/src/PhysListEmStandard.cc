@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.16 2008-03-17 18:22:00 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.17 2008-04-07 14:36:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
@@ -86,16 +86,16 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1,4);
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {

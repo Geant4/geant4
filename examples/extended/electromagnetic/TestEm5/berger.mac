@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.4 2008-01-14 13:21:19 maire Exp $
+# $Id: berger.mac,v 1.5 2008-04-07 14:36:23 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -27,6 +27,7 @@
 #
 /testem/histo/setFileName berger/530um
 /testem/histo/setFileType root
+/testem/histo/setFileOption export=root
 /testem/histo/setHisto 1 105  0  1.05 MeV	#energy deposit  
 #
 /testem/event/printModulo 100000
