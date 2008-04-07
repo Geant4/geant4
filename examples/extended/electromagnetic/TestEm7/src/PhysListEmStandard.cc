@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.11 2008-01-14 12:11:39 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.12 2008-04-07 15:14:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
@@ -85,16 +85,16 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1,4);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -116,14 +116,31 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1,2,2);
     }
   }
-  G4EmProcessOptions opt;
-  opt.SetStepFunction(0.2, 10*um);
-  //  opt.SetSkin(1.);
-  opt.SetMinEnergy(0.1*keV);
-  opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
-  opt.SetLinearLossLimit(1.e-6);
+  
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+    
+  //coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
+  emOptions.SetSkin(3.);
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);    
+  emOptions.SetMaxEnergy(100*TeV);  
+  emOptions.SetDEDXBinning(1200);  
+  emOptions.SetLambdaBinning(1200);
+      
+  //energy loss
+  //
+  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetStepFunction(0.2, 10*um); 
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

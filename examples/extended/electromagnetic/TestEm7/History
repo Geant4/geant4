@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2008-03-18 09:51:23 maire Exp $
+$Id: History,v 1.69 2008-04-07 15:14:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+04-04-08 mma (testem7-V09-01-04)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering.
+- complete EmOptions
      
 17-03-08 mma (testem7-V09-01-03)
 - TestEm7.in : physicsList emstandard_opt3
