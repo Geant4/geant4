@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.10 2008-04-03 15:07:55 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.11 2008-04-07 18:09:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,7 @@
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -87,12 +88,18 @@ DetectorConstruction::DetectorConstruction()
   logicCal     = 0;
   logicA1      = 0;
   DefineMaterials();
+  vertexDetectorCuts = new G4ProductionCuts();
+  muonDetectorCuts   = new G4ProductionCuts();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ 
+  delete detectorMessenger;
+  delete vertexDetectorCuts;
+  delete muonDetectorCuts;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -132,7 +139,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     delete muonRegion;
   }
   vertexRegion = new G4Region("VertexDetector");
+  vertexRegion->SetProductionCuts(vertexDetectorCuts);
+
   muonRegion   = new G4Region("MuonDetector");
+  muonRegion->SetProductionCuts(muonDetectorCuts);
 
   G4SolidStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
@@ -143,13 +153,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double biggap = 2.*cm;
   G4double york   = 10.*cm;
 
-           worldZ = 2.*vertexLength + 3.*absLength + 0.5*(ecalLength + york) + biggap*2.;
+  worldZ = 2.*vertexLength + 3.*absLength + 0.5*(ecalLength + york) + biggap*2.;
+
   G4double worldX = ecalWidth*3.0;
   G4double vertexZ= -worldZ + vertexLength*2.0 + absLength     + biggap;
   G4double absZ2  = -worldZ + vertexLength*4.0 + absLength*3.5 + biggap;
-  G4double ecalZ  = -worldZ + vertexLength*4.0 + absLength*4.0 + ecalLength*0.5 + 2.*biggap;
+  G4double ecalZ  = -worldZ + vertexLength*4.0 + absLength*4.0 + ecalLength*0.5 
+    + 2.*biggap;
   G4double yorkZ  = -worldZ + vertexLength*4.0 + absLength*5.0 + ecalLength
-                            + york*0.5 + 3.*biggap;
+    + york*0.5 + 3.*biggap;
 
   //
   // World
@@ -171,7 +183,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   logicCal = new G4LogicalVolume( solidC,calMaterial,"Ecal");
 
   G4cout << "Ecal is " << G4BestUnit(ecalLength,"Length")
-       << " of " << calMaterial->GetName() << G4endl;
+	 << " of " << calMaterial->GetName() << G4endl;
 
   // Crystals
 
@@ -202,38 +214,38 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			 "Abs2",logicA2,world,false,0);
 
   G4cout << "Absorber is " << G4BestUnit(absLength,"Length")
-       << " of " << absMaterial->GetName() << G4endl;
+	 << " of " << absMaterial->GetName() << G4endl;
 
   //York
 
   G4Box* solidYV = new G4Box("VolY",worldX,worldX,york*0.5+absLength);
   logicYV = new G4LogicalVolume( solidYV,yorkMaterial,"VolY");
   G4VPhysicalVolume* physYV = new G4PVPlacement(0,G4ThreeVector(0.,0.,yorkZ),
-                                       "VolY",logicYV,world,false,0);
+						"VolY",logicYV,world,false,0);
 
   G4Box* solidY = new G4Box("York",worldX,worldX,york*0.5);
   logicY = new G4LogicalVolume( solidY,yorkMaterial,"York");
   pv = new G4PVPlacement(0,G4ThreeVector(),
-                                       "York",logicY,physYV,false,0);
+			 "York",logicY,physYV,false,0);
 
   logicA3 = new G4LogicalVolume( solidA,absMaterial,"Abs3");
   logicA4 = new G4LogicalVolume( solidA,absMaterial,"Abs4");
 
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,-(york+absLength)*0.5),
-                                       "Abs3",logicA3,physYV,false,0);
+			 "Abs3",logicA3,physYV,false,0);
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,(york+absLength)*0.5),
-                                       "Abs4",logicA4,physYV,false,0);
+			 "Abs4",logicA4,physYV,false,0);
 
   //Vertex volume
   G4Box* solidVV = new G4Box("VolV",worldX,worldX,vertexLength*2.+absLength+gap);
   logicVV = new G4LogicalVolume( solidVV,worldMaterial,"VolV");
   G4VPhysicalVolume* physVV = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexZ),
-                                       "VolV",logicVV,world,false,0);
+						"VolV",logicVV,world,false,0);
 
   //Absorber
   logicA1 = new G4LogicalVolume( solidA,absMaterial,"Abs1");
   pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*2.-absLength*0.5),
-                                       "Abs1",logicA1,physVV,false,0);
+			 "Abs1",logicA1,physVV,false,0);
 
   //Vertex
   G4double vertWidth = ecalWidth/5.;
@@ -345,6 +357,7 @@ void DetectorConstruction::SetAbsMaterial(const G4String& mat)
 
 void DetectorConstruction::UpdateGeometry()
 {
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.6 2008-04-03 15:07:55 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.7 2008-04-07 18:09:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,6 @@ class G4VPhysicsConstructor;
 class StepMax;
 class PhysicsListMessenger;
 class G4ProductionCuts;
-class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,6 +87,8 @@ private:
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
+  G4double cutForVertexDetector;
+  G4double cutForMuonDetector;
 
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  generalPhysicsList;
@@ -100,9 +101,6 @@ private:
   PhysicsListMessenger* pMessenger;
   G4ProductionCuts* vertexDetectorCuts;
   G4ProductionCuts* muonDetectorCuts;
-
-  G4Region*   vertexRegion;
-  G4Region*   muonRegion;
 
   G4bool helIsRegisted;
   G4bool bicIsRegisted;
