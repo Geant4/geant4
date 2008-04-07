@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.11 2007-12-17 18:11:15 maire Exp $
+// $Id: HistoManager.cc,v 1.12 2008-04-07 12:47:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,7 +242,8 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-              << histo[ih]->binMean(iBin) << "\t"
+	      << 0.5*(histo[ih]->axis().binLowerEdge(iBin) +
+	              histo[ih]->axis().binUpperEdge(iBin)) << "\t"
 	      << histo[ih]->binHeight(iBin) 
 	      << G4endl;
       } 
