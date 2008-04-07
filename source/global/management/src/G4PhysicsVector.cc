@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.18 2008-04-04 15:17:54 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.19 2008-04-07 10:03:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  delete secDerivative;
+  delete [] secDerivative;
 }
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
@@ -196,13 +196,16 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
 void G4PhysicsVector::FillSecondDerivatives()
 {  
-  secDerivative = new std::vector<G4double>;
-  secDerivative->resize(numberOfBin);
+  secDerivative = new G4double [numberOfBin];
+  //  secDerivative = new std::vector<G4double>;
+  //  secDerivative->resize(numberOfBin);
 
-  std::vector<G4double> u;
-  u.resize(numberOfBin);
+  //  std::vector<G4double> u;
+  // u.resize(numberOfBin);
 
-  (*secDerivative)[0] = 0.0 ;
+  G4double* u = new G4double [numberOfBin];
+
+  secDerivative[0] = 0.0 ;
   u[0] = 0.0 ;
    
   // Decomposition loop for tridiagonal algorithm. secDerivative[i]
@@ -211,8 +214,8 @@ void G4PhysicsVector::FillSecondDerivatives()
   for(size_t i=1; i<numberOfBin-1; i++)
     {
       G4double sig = (binVector[i]-binVector[i-1])/(binVector[i+1]-binVector[i-1]) ;
-      G4double p = sig*(*secDerivative)[i-1] + 2.0 ;
-      (*secDerivative)[i] = (sig - 1.0)/p ;
+      G4double p = sig*secDerivative[i-1] + 2.0 ;
+      secDerivative[i] = (sig - 1.0)/p ;
       u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
              (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]) ;
       u[i] =(6.0*u[i]/(binVector[i+1]-binVector[i-1]) - sig*u[i-1])/p ;
@@ -221,16 +224,17 @@ void G4PhysicsVector::FillSecondDerivatives()
   G4double qn = 0.0 ;
   G4double un = 0.0 ;
 
-  (*secDerivative)[numberOfBin-1] = (un - qn*u[numberOfBin-2])/
-    (qn*(*secDerivative)[numberOfBin-2] + 1.0) ;
+  secDerivative[numberOfBin-1] = (un - qn*u[numberOfBin-2])/
+    (qn*secDerivative[numberOfBin-2] + 1.0) ;
    
   // The backsubstitution loop for the triagonal algorithm of solving
   // a linear system of equations.
    
   for(G4int k=numberOfBin-2; k>=0; k--)
    {
-     (*secDerivative)[k] = (*secDerivative)[k]*(*secDerivative)[k+1] + u[k];
+     secDerivative[k] = secDerivative[k]*secDerivative[k+1] + u[k];
    }
+  delete u;
 }
    
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)

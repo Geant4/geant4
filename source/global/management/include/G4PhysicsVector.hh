@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.15 2008-04-04 15:17:53 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.16 2008-04-07 10:03:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,7 @@
 //    09 Mar. 2001, H.Kurashige : added G4PhysicsVectorType & Store/Retrieve()
 //    02 Apr. 2008, A.Bagulya : added SplineInterpolation and SetSpline methods,
 //                              useSpline member
+//    07 Apr. 2008, V.Ivanchenko : optimize inline methods
 //
 //---------------------------------------------------------------
 
@@ -142,12 +143,6 @@ class G4PhysicsVector
 
   protected:
 
-    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
-         // Linear interpolation function
-
-    inline G4double SplineInterpolation(G4double theEnergy, size_t theLocBin);
-         // Spline interpolation function
-
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
 
@@ -168,13 +163,24 @@ class G4PhysicsVector
 
   private:
 
+  //    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
+    inline G4double LinearInterpolation();
+         // Linear interpolation function
+
+  //    inline G4double SplineInterpolation(G4double theEnergy, size_t theLocBin);
+    inline G4double SplineInterpolation();
+         // Spline interpolation function
+
+    inline void Interpolation();
+
     void FillSecondDerivatives();
       // Initialise second derivatives for spline
 
-    std::vector<G4double>*  secDerivative;
+  //   std::vector<G4double>*  secDerivative;
+    G4double*  secDerivative;
 
-    G4String comment;
-    G4bool   useSpline;
+    G4String   comment;
+    G4bool     useSpline;
 };
 
 #include "G4PhysicsVector.icc"
