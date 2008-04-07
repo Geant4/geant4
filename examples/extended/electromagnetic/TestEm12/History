@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2008-01-24 11:55:01 maire Exp $
+$Id: History,v 1.21 2008-04-07 16:46:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-04-08 mma (testem12-V09-01-02)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
+- HistoManager::saveAscii() : redefinition of binEdge
      
 24-01-08 mma (testem12-V09-01-01) 
 - update macro berger.mac : setCuts 2um (=1keV)

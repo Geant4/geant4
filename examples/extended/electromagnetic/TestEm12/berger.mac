@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.4 2008-01-24 11:55:01 maire Exp $
+# $Id: berger.mac,v 1.5 2008-04-07 16:46:04 maire Exp $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
@@ -16,12 +16,12 @@
 /run/initialize
 #
 /gun/particle e-
-/gun/energy 1 MeV
+/gun/energy 10 keV
 #
 ###/testem/histo/setFileType hbook
 /testem/histo/setFileType root
 /testem/histo/setFileOption export=root
-/testem/histo/setFileName berger/1mev
+/testem/histo/setFileName berger/10kev
 /testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
 ##/testem/histo/printHisto 8			#ascii
 #
