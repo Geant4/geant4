@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.13 2008-04-04 15:17:53 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.14 2008-04-07 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,13 @@
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
 // 27-MAR-97 FWJ: first version for Alpha release
+// --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
 
 #include "G4ios.hh"
+
+// --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
    : G4PhysicsVector(false), verboseLevel(0)
@@ -50,6 +53,8 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector()
    edgeMax = 0.0;
    numberOfBin = 0;
 }
+
+// --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
                                            G4double binmin,
@@ -73,9 +78,13 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
    }
 }  
 
+// --------------------------------------------------------------------
+
 G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 {
 }
+
+// --------------------------------------------------------------------
 
 void G4LPhysicsFreeVector::DumpValues()
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.19 2008-04-07 10:03:10 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.20 2008-04-07 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,8 @@
 #include "G4PhysicsVector.hh"
 #include <iomanip>
 
+// --------------------------------------------------------------
+
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfBin(0),
@@ -54,15 +56,21 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 {
 }
 
+// --------------------------------------------------------------
+
 G4PhysicsVector::~G4PhysicsVector() 
 {
   delete [] secDerivative;
 }
 
+// --------------------------------------------------------------
+
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
   *this=right;
 }
+
+// --------------------------------------------------------------
 
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
@@ -84,20 +92,28 @@ G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
   return *this;
 }
 
+// --------------------------------------------------------------
+
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {
   return (this == &right);
 }
+
+// --------------------------------------------------------------
 
 G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
   return (this != &right);
 }
 
+// --------------------------------------------------------------
+
 G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
 {
   return binVector[binNumber];
 }
+
+// --------------------------------------------------------------
 
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 {
@@ -129,6 +145,8 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 
   return true;
 }
+
+// --------------------------------------------------------------
 
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
@@ -179,14 +197,16 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
  
   G4double* value = new G4double[2*size];
   fIn.read((char*)(value),  2*size*(sizeof(G4double)) );
-  if (G4int(fIn.gcount()) != G4int(2*size*(sizeof(G4double))) ){
+  if (G4int(fIn.gcount()) != G4int(2*size*(sizeof(G4double))) )
+  {
     delete [] value;
     return false;
   }
 
   binVector.reserve(size);
   dataVector.reserve(size);
-  for(size_t i = 0; i < size; i++) {
+  for(size_t i = 0; i < size; i++)
+  {
     binVector.push_back(value[2*i]);
     dataVector.push_back(value[2*i+1]);
   }
@@ -194,14 +214,11 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   return true;
 }
 
+// --------------------------------------------------------------
+
 void G4PhysicsVector::FillSecondDerivatives()
 {  
   secDerivative = new G4double [numberOfBin];
-  //  secDerivative = new std::vector<G4double>;
-  //  secDerivative->resize(numberOfBin);
-
-  //  std::vector<G4double> u;
-  // u.resize(numberOfBin);
 
   G4double* u = new G4double [numberOfBin];
 
@@ -212,31 +229,34 @@ void G4PhysicsVector::FillSecondDerivatives()
   // and u[i] are used for temporary storage of the decomposed factors.
    
   for(size_t i=1; i<numberOfBin-1; i++)
-    {
-      G4double sig = (binVector[i]-binVector[i-1])/(binVector[i+1]-binVector[i-1]) ;
-      G4double p = sig*secDerivative[i-1] + 2.0 ;
-      secDerivative[i] = (sig - 1.0)/p ;
-      u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
-             (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]) ;
-      u[i] =(6.0*u[i]/(binVector[i+1]-binVector[i-1]) - sig*u[i-1])/p ;
-    }
+  {
+    G4double sig = (binVector[i]-binVector[i-1])
+                 / (binVector[i+1]-binVector[i-1]) ;
+    G4double p = sig*secDerivative[i-1] + 2.0 ;
+    secDerivative[i] = (sig - 1.0)/p ;
+    u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i])
+         - (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]) ;
+    u[i] =(6.0*u[i]/(binVector[i+1]-binVector[i-1]) - sig*u[i-1])/p ;
+  }
 
   G4double qn = 0.0 ;
   G4double un = 0.0 ;
 
-  secDerivative[numberOfBin-1] = (un - qn*u[numberOfBin-2])/
-    (qn*secDerivative[numberOfBin-2] + 1.0) ;
+  secDerivative[numberOfBin-1] = (un - qn*u[numberOfBin-2])
+                               / (qn*secDerivative[numberOfBin-2] + 1.0) ;
    
-  // The backsubstitution loop for the triagonal algorithm of solving
+  // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
    
   for(G4int k=numberOfBin-2; k>=0; k--)
-   {
-     secDerivative[k] = secDerivative[k]*secDerivative[k+1] + u[k];
-   }
+  {
+    secDerivative[k] = secDerivative[k]*secDerivative[k+1] + u[k];
+  }
   delete u;
 }
    
+// --------------------------------------------------------------
+
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning

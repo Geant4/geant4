@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.8 2008-04-04 15:17:53 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.9 2008-04-07 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,12 +41,11 @@
 // F.W. Jones, TRIUMF, 04-JUN-96
 // --------------------------------------------------------------------------
 
-// G4PhysicsVector has PutValue() but it is inconvenient.
-// Want to simultaneously fill the bin and data vectors.
-
 inline
 void G4LPhysicsFreeVector::PutValues(size_t binNumber,
                                      G4double binValue, G4double dataValue)
+  // G4PhysicsVector has PutValue() but it is inconvenient.
+  // Want to simultaneously fill the bin and data vectors.
 {
    binVector[binNumber] = binValue;
    dataVector[binNumber] = dataValue;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.16 2008-04-07 10:03:10 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.17 2008-04-07 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,12 +47,9 @@
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Now GetValue not virtual
 //    21 Sep. 1996, K.Amako : Added [] and () operators
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    18 Jan. 2001, H.Kurashige : removed ptrNextTable
-//    09 Mar. 2001, H.Kurashige : added G4PhysicsVectorType & Store/Retrieve()
-//    02 Apr. 2008, A.Bagulya : added SplineInterpolation and SetSpline methods,
-//                              useSpline member
-//    07 Apr. 2008, V.Ivanchenko : optimize inline methods
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+//    09 Mar. 2001, H.Kurashige : Added G4PhysicsVectorType & Store/Retrieve()
+//    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
 //
 //---------------------------------------------------------------
 
@@ -133,7 +130,7 @@ class G4PhysicsVector
          // Get physics vector type
   
     inline void SetSpline(G4bool);
-         // Define useSpline flag
+         // Activate/deactivate Spline interpolation.
 
     virtual G4bool Store(std::ofstream& fOut, G4bool ascii=false);
     virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
@@ -163,11 +160,8 @@ class G4PhysicsVector
 
   private:
 
-  //    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
     inline G4double LinearInterpolation();
          // Linear interpolation function
-
-  //    inline G4double SplineInterpolation(G4double theEnergy, size_t theLocBin);
     inline G4double SplineInterpolation();
          // Spline interpolation function
 
@@ -176,7 +170,6 @@ class G4PhysicsVector
     void FillSecondDerivatives();
       // Initialise second derivatives for spline
 
-  //   std::vector<G4double>*  secDerivative;
     G4double*  secDerivative;
 
     G4String   comment;

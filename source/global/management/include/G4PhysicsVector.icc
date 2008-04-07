@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.12 2008-04-07 12:39:53 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.13 2008-04-07 14:18:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,11 +48,15 @@ inline
   return dataVector[binNumber];
 }
 
+//---------------------------------------------------------------
+
 inline
  G4double G4PhysicsVector::operator()(const size_t binNumber) const
 {
   return dataVector[binNumber];
 }
+
+//---------------------------------------------------------------
 
 inline 
  size_t G4PhysicsVector::GetVectorLength() const
@@ -60,10 +64,10 @@ inline
   return numberOfBin;
 }
 
+//---------------------------------------------------------------
+
 inline
  G4double G4PhysicsVector::LinearInterpolation()
-// G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy, 
-//                                               size_t theLocBin)
 {
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -78,10 +82,10 @@ inline
          ( dataVector[lastBin+1]-dataVector[lastBin] ) * intplFactor;
 }
 
+//---------------------------------------------------------------
+
 inline
  G4double G4PhysicsVector::SplineInterpolation()
-// G4double G4PhysicsVector::SplineInterpolation(G4double lastEnergy, 
-//                                               size_t theLocBin)
 {
   // Spline interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -89,7 +93,7 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  if( !secDerivative ) FillSecondDerivatives();
+  if( !secDerivative ) { FillSecondDerivatives(); }
 
   // check bin value
   G4double delta = binVector[lastBin+1] - binVector[lastBin];
@@ -102,11 +106,13 @@ inline
   G4double y2 = dataVector[lastBin+1];
 
   G4double res = a*y1 + b*y2 + 
-	((a*a*a - a)*secDerivative[lastBin] +
-	 (b*b*b - b)*secDerivative[lastBin+1])*delta*delta/6.0  ;
+        ((a*a*a - a)*secDerivative[lastBin] +
+         (b*b*b - b)*secDerivative[lastBin+1])*delta*delta/6.0  ;
 
   return res;
 }
+
+//---------------------------------------------------------------
 
 inline
  G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
@@ -145,12 +151,16 @@ inline
   return lastValue;        
 }
 
+//---------------------------------------------------------------
+
 inline 
  void G4PhysicsVector::Interpolation()
 {
-  if(useSpline) lastValue = SplineInterpolation();
-  else          lastValue = LinearInterpolation();
+  if(useSpline) { lastValue = SplineInterpolation(); }
+  else          { lastValue = LinearInterpolation(); }
 }
+
+//---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
@@ -159,8 +169,11 @@ inline
 
   // Fill the bin which is hidden to user with theValue. This is to 
   // handle correctly when Energy=theEmax in getValue.
-  if(binNumber==numberOfBin-1) dataVector[binNumber+1] = theValue;     
+
+  if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
 }
+
+//---------------------------------------------------------------
 
 inline 
  G4bool G4PhysicsVector::IsFilledVectorExist() const
@@ -171,6 +184,7 @@ inline
   return status;
 }
 
+//---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::PutComment(const G4String& theComment)
@@ -178,17 +192,23 @@ inline
   comment = theComment;
 }
 
+//---------------------------------------------------------------
+
 inline 
  const G4String& G4PhysicsVector::GetComment() const
 {
   return comment;
 }
 
+//---------------------------------------------------------------
+
 inline 
  G4PhysicsVectorType G4PhysicsVector::GetType() const
 {
   return type;
 }
+
+//---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::SetSpline(G4bool val)
