@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.50 2008-04-08 15:52:17 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.51 2008-04-08 18:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -413,8 +413,7 @@ void G4VEmProcess::PrintInfoDefinition()
            << G4BestUnit(minKinEnergy,"Energy") 
            << " to "
            << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nLambdaBins << " bins;"
-	   << " spline " 
+           << " in " << nLambdaBins << " bins, spline: " 
 	   << (G4LossTableManager::Instance())->SplineFlag()
            << G4endl;
   }

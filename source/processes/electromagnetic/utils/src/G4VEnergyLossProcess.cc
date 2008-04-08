@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.128 2008-04-08 15:52:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.129 2008-04-08 18:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1094,11 +1094,10 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
            << "      dE/dx and range tables from "
  	   << G4BestUnit(minKinEnergy,"Energy")
            << " to " << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nBins << " bins." << G4endl
+           << " in " << nBins << " bins" << G4endl
            << "      Lambda tables from threshold to "
            << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nBins << " bins."
-	   << " spline " 
+           << " in " << nBins << " bins, spline: " 
 	   << (G4LossTableManager::Instance())->SplineFlag()
            << G4endl;
     PrintInfo();
@@ -1113,7 +1112,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
     if(theCSDARangeTable && isIonisation) {
       G4cout << "      CSDA range table up"
              << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
-             << " in " << nBinsCSDA << " bins." << G4endl;
+             << " in " << nBinsCSDA << " bins" << G4endl;
     }
     if(nSCoffRegions>0) {
       G4cout << "      Subcutoff sampling in " << nSCoffRegions 

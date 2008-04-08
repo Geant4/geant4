@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.51 2008-04-08 15:52:18 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.52 2008-04-08 18:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -229,8 +229,7 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << G4BestUnit(MinKinEnergy(),"Energy")
 	     << " to "
 	     << G4BestUnit(MaxKinEnergy(),"Energy")
-	     << " in " << nBins << " bins;"
-	     << " spline " 
+	     << " in " << nBins << " bins, spline: " 
 	     << (G4LossTableManager::Instance())->SplineFlag()
 	     << G4endl;
     }
