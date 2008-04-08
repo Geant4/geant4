@@ -73,8 +73,10 @@ GetCrossSection(G4double anEnergy, G4double atomicNumber, G4double nOfProtons)
   const G4double p5=1.64-1.8/atomicNumber-0.0005*atomicNumber;
   const G4double p6=1.+200./atomicNumber+0.02*atomicNumber;
   const G4double p7=(atomicNumber-70.)*(atomicNumber-200.)/11000.;
-      
-  G4double part1 = pi*(p1*p1)*std::log(nOfNeutrons);
+
+  G4double logN = 1.0;
+  if (nOfNeutrons > 1.5) logN = std::log(nOfNeutrons);      
+  G4double part1 = pi*(p1*p1)*logN;
   G4double part2 = 1.+ std::pow(atomicNumber, 1./3.) 
                      - p2*(1.-1./std::pow(atomicNumber, 1./3.));
 
