@@ -34,6 +34,7 @@
 #define _G4GDMLWRITESTRUCTURE_INCLUDED_
 
 #include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4PVDivision.hh"
 #include "G4PVReplica.hh"
@@ -45,16 +46,21 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
 private:
-   typedef std::vector<const G4LogicalVolume*> volumePtrListType;
-   typedef std::map<const G4LogicalVolume*,xercesc::DOMElement*> volumePtrMapType;
-   volumePtrListType volumePtrList;
-   volumePtrMapType volumePtrMap;
+   typedef std::vector<const G4LogicalVolume*> volumeListType;
+
+   struct volumeRecord {
+      volumeListType::iterator begin,end;
+      xercesc::DOMElement* volumeElement;
+   };
+
+   volumeListType volumeList;
+   std::map<const G4LogicalVolume*,volumeRecord> volumeMap;
+
+   int count,depth,maxdepth;
 
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);
-   void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
-   G4Transform3D volumeWrite(const G4LogicalVolume* const);
-   void structureWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
+   void volumeWrite(const G4LogicalVolume*);
+   void structureWrite(xercesc::DOMElement*,const G4LogicalVolume*);
 };
 
 #endif
