@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.hh,v 1.1 2007-03-30 15:25:54 gunter Exp $
+// $Id: G4QuasiElasticChannel.hh,v 1.2 2008-04-08 15:41:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,6 +44,8 @@
 #include "G4KineticTrackVector.hh"
 
 #include "G4QuasiFreeRatios.hh"
+
+#include "G4Fancy3DNucleus.hh"
 
 class G4QuasiElasticChannel
 {
@@ -65,6 +67,7 @@ class G4QuasiElasticChannel
 
    private:
    	G4QuasiFreeRatios * theQuasiElastic;
+	G4Fancy3DNucleus  the3DNucleus;
 };
 
 #endif
