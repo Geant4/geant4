@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.50 2008-04-04 15:21:16 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.51 2008-04-08 15:52:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,9 +114,10 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
-  if(1 < verboseLevel) 
+  if(1 < verboseLevel) {
     G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
 	   << G4endl;
+  }
   delete modelManager;
   if (theLambdaTable) {
     theLambdaTable->clearAndDestroy();
@@ -182,9 +183,12 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
   if (!firstParticle) {
     currentCouple = 0;
     if(part.GetParticleType() == "nucleus" && 
-       part.GetParticleSubType() == "generic") 
-         firstParticle = G4GenericIon::GenericIon();
-    else firstParticle = &part; 
+       part.GetParticleSubType() == "generic") {
+      firstParticle = G4GenericIon::GenericIon();
+    } else {
+      firstParticle = &part;
+    } 
+
     currentParticle = &part;
   }
 
@@ -225,7 +229,9 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << G4BestUnit(MinKinEnergy(),"Energy")
 	     << " to "
 	     << G4BestUnit(MaxKinEnergy(),"Energy")
-	     << " in " << nBins << " bins."
+	     << " in " << nBins << " bins;"
+	     << " spline " 
+	     << (G4LossTableManager::Instance())->SplineFlag()
 	     << G4endl;
     }
     G4cout << "      LateralDisplacementFlag=  " << latDisplasment
@@ -372,6 +378,10 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
         G4cout << "Lambda table for " << part->GetParticleName() << " is retrieved from <"
                << filename << ">"
                << G4endl;
+    }
+    if((G4LossTableManager::Instance())->SplineFlag()) {
+      size_t n = theLambdaTable->length();
+      for(size_t i=0; i<n; i++) {(* theLambdaTable)[i]->SetSpline(true);}
     }
   } else {
     if (1 < verboseLevel) {

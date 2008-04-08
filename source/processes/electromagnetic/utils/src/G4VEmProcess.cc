@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.49 2008-04-04 15:21:16 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.50 2008-04-08 15:52:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -413,18 +413,19 @@ void G4VEmProcess::PrintInfoDefinition()
            << G4BestUnit(minKinEnergy,"Energy") 
            << " to "
            << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nLambdaBins << " bins."
+           << " in " << nLambdaBins << " bins;"
+	   << " spline " 
+	   << (G4LossTableManager::Instance())->SplineFlag()
            << G4endl;
   }
 
   if(verboseLevel > 1) {
     G4cout << "Tables are built for " << particle->GetParticleName()
            << G4endl;
-
+  }
   if(verboseLevel > 2) {
     G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
     if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
-    }
   }
 }
 
@@ -506,6 +507,10 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
       G4cout << "Lambda table for " << particleName << " is Retrieved from <"
              << filename << ">"
              << G4endl;
+    }
+    if((G4LossTableManager::Instance())->SplineFlag()) {
+      size_t n = theLambdaTable->length();
+      for(size_t i=0; i<n; i++) {(* theLambdaTable)[i]->SetSpline(true);}
     }
   } else {
     if (1 < verboseLevel) {

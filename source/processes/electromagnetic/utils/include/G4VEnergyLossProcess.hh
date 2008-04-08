@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.77 2008-02-04 18:12:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.78 2008-04-08 15:52:17 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -392,6 +392,17 @@ private:
 
   // Clear tables
   void Clear();
+
+  G4bool StoreTable(const G4ParticleDefinition* p, 
+		    G4PhysicsTable*, G4bool ascii,
+		    const G4String& directory, 
+		    const G4String& tname);
+
+  G4bool RetrieveTable(const G4ParticleDefinition* p, 
+		       G4PhysicsTable*, G4bool ascii,
+		       const G4String& directory, 
+		       const G4String& tname, 
+		       G4bool mandatory);
 
   inline void InitialiseStep(const G4Track&);
 
