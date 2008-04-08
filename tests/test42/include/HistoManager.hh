@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.6 2008-03-06 09:24:39 grichine Exp $
+// $Id: HistoManager.hh,v 1.7 2008-04-08 14:37:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,6 +85,7 @@ public:
 
   void BeginOfRun();
   void EndOfRun();
+  void OpticalEndOfRun();
   void BeginOfEvent();
   void EndOfEvent();
   void Fill(G4int id, G4double x, G4double w);

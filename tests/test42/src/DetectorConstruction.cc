@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.10 2008-03-12 10:12:45 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.11 2008-04-08 14:37:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -161,12 +161,19 @@ void  DetectorConstruction::DefineMaterials()
               2.15625*eV, 2.25426*eV, 2.3616*eV,  2.47968*eV, 2.61019*eV, 
               2.75521*eV, 2.91728*eV, 3.09961*eV, 3.30625*eV              };
 
-  G4double RefractiveIndex1[nEntries] =
+  /*
+  G4double oldRefractiveIndex[nEntries] =
             { 2.17728, 2.18025, 2.18357, 2.18753, 2.19285, 
               2.19813, 2.20441, 2.21337, 2.22328, 2.23619, 
               2.25203, 2.27381, 2.30282, 2.34666            };
+  */
 
- G4double Absorption1[nEntries] =
+  G4double RefractiveIndex1[nEntries] =
+            { 2.1992, 2.20319, 2.20686, 2.21184, 2.21751, 
+              2.22415, 2.2318, 2.24179, 2.25376, 2.26873, 
+              2.28768, 2.3136, 2.34816, 2.39966            };
+
+  G4double Absorption1[nEntries] =
            { 666*cm, 666*cm, 666*cm, 666*cm, 666*cm, 
              666*cm, 605.455*cm, 512.308*cm, 444*cm, 333*cm, 
              246.667*cm, 195.882*cm, 195.882*cm, 158.571*cm         };
@@ -422,46 +429,67 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   const G4int num = 2;
 
-  G4double refl = 0.85;   // 0.8; 
+  G4double refl = 0.6; // 1.0;  // 0.8; 
   G4double phEnergy[num] = {1.7712*eV, 3.30625*eV};
 
  // Scintillator housing properties PWO-Al
 
   G4double reflectivity[num] = { refl, refl };
-  G4double efficiency[num]   = { 0.0, 0.0 };
+  // G4double efficiency[num]   = { 0.0, 0.0 };
+  G4double rindex[num]   = { 1.0, 1.0 };
+
+  G4double specularlobe[num] = {1.0, 1.0};
+  G4double specularspike[num] = {0.0, 0.0};
+  G4double backscatter[num] = {0.0, 0.0};
 
   G4MaterialPropertiesTable* pwoAlMPT = new G4MaterialPropertiesTable();
   pwoAlMPT->AddProperty("REFLECTIVITY", phEnergy, reflectivity, num);
-  pwoAlMPT->AddProperty("EFFICIENCY", phEnergy, efficiency, num);
+  // pwoAlMPT->AddProperty("EFFICIENCY", phEnergy, efficiency, num);
+  pwoAlMPT->AddProperty("RINDEX", phEnergy, rindex, num);
+
+  pwoAlMPT -> AddProperty("SPECULARLOBECONSTANT",phEnergy,specularlobe,num);
+  pwoAlMPT -> AddProperty("SPECULARSPIKECONSTANT",phEnergy,specularspike,num);
+  pwoAlMPT -> AddProperty("BACKSCATTERCONSTANT",phEnergy,backscatter,num);
 
   G4OpticalSurface* pwoAlOpSurface =
-    new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
+    new G4OpticalSurface("HousingSurface");
+
+  G4double sigmaAlpha = 0.1;
+
+  pwoAlOpSurface -> SetType(dielectric_dielectric);
+  pwoAlOpSurface -> SetModel(unified);
+  pwoAlOpSurface -> SetFinish(groundbackpainted);
+  // pwoAlOpSurface -> SetFinish(polishedbackpainted);
+
+  pwoAlOpSurface -> SetSigmaAlpha(sigmaAlpha);
+
+
   pwoAlOpSurface->SetMaterialPropertiesTable(pwoAlMPT);
-
-
- // Photocathode surface properties PWO-glass
-
-  G4double photocathodeEff[num]  = { 1., 1. };    //Enables 'detection' of photons
-  G4double photocathodeRefl[num] = { 0., 0. };
-
-  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
-  photocath_mt->AddProperty("EFFICIENCY",phEnergy,photocathodeEff,num);
-  photocath_mt->AddProperty("REFLECTIVITY",phEnergy,photocathodeRefl,num);
-
-  G4OpticalSurface* photocath_opsurf=
-    new G4OpticalSurface("photocath_opsurf",glisur,polished,
-                         dielectric_metal);
-  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
-
 
   // G4LogicalBorderSurface* pwoAl = 
  
   new G4LogicalBorderSurface("pwoAl",  physTarget, physCheck, pwoAlOpSurface);
 
+ // Photocathode surface properties PWO-glass
+  /*
+  G4double photocathodeEff[num]  = { 1., 1. };    //Enables 'detection' of photons
+  G4double photocathodeRefl[num] = { 0., 0. };
+
+  G4MaterialPropertiesTable* cathodeMPT = new G4MaterialPropertiesTable();
+  cathodeMPT->AddProperty("EFFICIENCY",phEnergy,photocathodeEff,num);
+  cathodeMPT->AddProperty("REFLECTIVITY",phEnergy,photocathodeRefl,num);
+
+
+  
+  G4OpticalSurface* pwoCathode =
+    new G4OpticalSurface("pwoCathode",glisur,polished,
+                         dielectric_metal);
+  pwoCathode->SetMaterialPropertiesTable(cathodeMPT);
+
   // G4LogicalBorderSurface* pwoCathode = 
 
-  new G4LogicalBorderSurface("pwoAl",  physTarget, physCathode, pwoAlOpSurface);
-
+  new G4LogicalBorderSurface("pwoCathode",  physTarget, physCathode, pwoCathode);
+  */
 
   // colors
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Ts42Cerenkov.cc,v 1.3 2008-03-12 10:12:45 grichine Exp $
+// $Id: Ts42Cerenkov.cc,v 1.4 2008-04-08 14:37:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -296,6 +296,7 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 // Tilt between front and energy expansion in crystal
 
+		/*
         const G4RotationMatrix* rotM = pPostStepPoint->GetTouchable()->GetRotation();
         G4ThreeVector transl = pPostStepPoint->GetTouchable()->GetTranslation();
         G4AffineTransform transform = G4AffineTransform(rotM,transl);
@@ -327,6 +328,8 @@ Ts42Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
           transform.Invert();
           G4ThreeVector photonMomentum = transform.TransformAxis(localPhMom);
 	}		
+		*/
+
                 // Generate a new photon:
 
                 G4DynamicParticle* aCerenkovPhoton =

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.8 2008-03-06 09:24:39 grichine Exp $
+// $Id: HistoManager.cc,v 1.9 2008-04-08 14:37:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -254,9 +254,6 @@ void HistoManager::EndOfRun()
   G4double xid = x*(G4double)n_deut;
   G4double xia = x*(G4double)n_alpha;
   G4double xio = x*(G4double)n_ions;
-  G4double xop = x*(G4double)n_optical;
-  G4double xce = x*(G4double)n_cerenkov;
-  G4double xsc = x*(G4double)n_scint;
 
   edepSum  *= x;
   edepSum2 *= x;
@@ -293,11 +290,52 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of leaked neutrons    " << xnbw << G4endl;
   G4cout << std::setprecision(4) << "Average number of proton leak        " << xpl << G4endl;
   G4cout << std::setprecision(4) << "Average number of pion leak          " << xal << G4endl;
+
+  G4cout<<"Total time of "<<n_evt<<" = "<<fTimer.GetUserElapsed()<<" s"<<endl<<G4endl;
+  G4cout<<"========================================================"<<G4endl;
+  G4cout<<G4endl;
+
+  OpticalEndOfRun();
+
+  // normalise histograms
+
+  for( G4int i = 0; i < nHisto; i++ ) 
+  {
+    histo->scale(i,x);
+  }
+
+  if(verbose > 1) histo->print(0);
+
+  histo->save();
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Optical photon info
+
+void HistoManager::OpticalEndOfRun()
+{
+  G4double x, y = (G4double)n_evt;
+
+  if(n_evt > 0) x = 1.0/y;
+  else          x = 0.;
+
+  G4double xop = x*(G4double)n_optical;
+  G4double xce = x*(G4double)n_cerenkov;
+  G4double xsc = x*(G4double)n_scint;
+
   G4cout << std::setprecision(4) << "Average number of optical photons    " << xop << G4endl;
   G4cout << std::setprecision(4) << "Average number of cerenkov photons    " << xce << G4endl;
   G4cout << std::setprecision(4) << "Average number of scintillation photons    " << xsc << G4endl
          << G4endl;
-
+  if (xop > 0.)
+  {
+    G4cout << "ratio of cerenkov/total = " << xce/xop << G4endl;
+  }
+  else
+  {
+    G4cout << "ratio of cerenkov/total is not defined, total = 0"<< G4endl;
+  }
   G4double mean, rms, sum1 = 0., sum2 = 0.;
   std::size_t i, iMax = fOpEventNumbers.size();
 
@@ -322,7 +360,7 @@ void HistoManager::EndOfRun()
     G4cout <<"mean op/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
   }
 
-  iMax = fOpEventNumbers.size();
+  iMax = fOpCathodeEvNumbers.size();
   sum1 = 0.; 
   sum2 = 0.;
 
@@ -348,22 +386,10 @@ void HistoManager::EndOfRun()
   }
 
 
-
-  G4cout<<"Total time of "<<n_evt<<" = "<<fTimer.GetUserElapsed()<<" s"<<endl<<G4endl;
-  G4cout<<"========================================================"<<G4endl;
-  G4cout<<G4endl;
-
-  // normalise histograms
-
-  for( G4int i = 0; i < nHisto; i++ ) 
-  {
-    histo->scale(i,x);
-  }
-
-  if(verbose > 1) histo->print(0);
-
-  histo->save();
 }
+
+
+
 
 ////////////////////////////////////////////////////////////////////////
 //
