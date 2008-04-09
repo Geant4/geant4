@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.5 2008-03-07 18:06:11 sincerti Exp $
+$Id: README,v 1.6 2008-04-09 10:28:06 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 25/01/2008
+Last modified by S. Incerti, 09/04/2008
 
 ---->1. INTRODUCTION.                                                    
                                                                        
@@ -103,7 +103,8 @@ All variables are defined with their default value.
  
  - G4ABLADATA		  points to the libraries fo ablation processes;
 
-However, the $G4LEVELGAMMADATA, $G4NEUTRONHPDATA, $G4RADIOACTIVEDATA
+However, the $G4LEDATA, $G4LEVELGAMMADATA, $G4NEUTRONHPDATA, 
+$G4RADIOACTIVEDATA
 and $G4ABLADATA
 variables do not need to be defined for this example.
 
@@ -153,7 +154,7 @@ These macros files are stored in the ./macros directory.
 ---->5. PHYSICS
 
 The example runs with protons with fluctuationg energies around 3 MeV.
-Low energy electromagnetic processes are activated by default. 
+Standard electromagnetic processes are activated by default. 
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
