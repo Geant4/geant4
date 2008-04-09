@@ -1,4 +1,4 @@
-$Id: History,v 1.376 2008-04-09 16:58:34 vnivanch Exp $
+$Id: History,v 1.377 2008-04-09 17:00:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10 April 08: V.Ivant (emstand-V09-01-12)
+9 April 08: V.Ivant (emstand-V09-01-12)
 - G4UrbanMscModel, G4UrbanMscModel90 - fixed assymetry in transverse
     displacement
+- G4eCoulombScatteringModel - fixed bug for compounds
 
 31 March 08: V.Ivant (emstand-V09-01-11)
 - G4eCoulombScatteringModel - use SelectAtomRandomly method
