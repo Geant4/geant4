@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.2 2008-01-25 20:49:24 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.3 2008-04-09 09:04:03 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PhysicsList.hh"
@@ -101,6 +101,10 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+
 #include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -110,21 +114,17 @@ void PhysicsList::ConstructProcess()
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyRayleigh.hh"
+#include "G4hMultipleScattering.hh"
+#include "G4ionIonisation.hh"
+#include "G4hIonisation.hh"
 
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-
-#include "G4hLowEnergyIonisation.hh"
 #include "G4StepLimiter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PhysicsList::ConstructEM()
 {
+
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() ){
@@ -133,78 +133,52 @@ void PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-
     if (particleName == "gamma") {
 
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);     
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
 
-      G4LowEnergyPhotoElectric * LePeprocess = new G4LowEnergyPhotoElectric();
-      LePeprocess->ActivateAuger(true);
-      LePeprocess->SetCutForLowEnSecPhotons(0.250 * keV);
-      LePeprocess->SetCutForLowEnSecElectrons(0.250 * keV);
-      
-      pmanager->AddDiscreteProcess(LePeprocess);
-      
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
-      
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
-      
-      pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
-
-      
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      
-      G4LowEnergyIonisation * LeIoprocess = new G4LowEnergyIonisation("IONI");
-      LeIoprocess->ActivateAuger(true);
-      LeIoprocess->SetCutForLowEnSecPhotons(0.1*keV);
-      LeIoprocess->SetCutForLowEnSecElectrons(0.1*keV);
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
-
-      G4LowEnergyBremsstrahlung * LeBrprocess = new G4LowEnergyBremsstrahlung();
-      pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-      
-      pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
 
     } else if (particleName == "e+") {
-      
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      
-      pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
-      
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
-      
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      
-      pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
 
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
+      
     } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {     
-	       pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
+               particleName == "mu-"    ) {
 
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);       
 
+    } else if (particleName == "alpha" ||
+               particleName == "He3" ||
+               particleName == "GenericIon") {
+      // ions with charge >= +2
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
+     
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-
-      // all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      
-      G4hLowEnergyIonisation* hLowEnergyIonisation = new G4hLowEnergyIonisation();
-      pmanager->AddProcess(hLowEnergyIonisation,-1,2,2);
-      hLowEnergyIonisation->SetElectronicStoppingPowerModel(particle,"ICRU_R49p");  
-      hLowEnergyIonisation->SetNuclearStoppingOn();
-      hLowEnergyIonisation->SetNuclearStoppingPowerModel("ICRU_R49");
-      hLowEnergyIonisation->SetFluorescence(true);
-      hLowEnergyIonisation->ActivateAugerElectronProduction(true);
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
+      //all others charged particles except geantino and short-lived
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);
 
       pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
-
+            
     }
   }
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
