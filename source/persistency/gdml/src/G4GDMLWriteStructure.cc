@@ -61,8 +61,6 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
 G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
 
-   G4cout << "Touching volume: " << volumePtr->GetName() << G4endl;
-
    G4Transform3D R;
    G4VSolid* solidPtr = volumePtr->GetSolid();
 
@@ -72,54 +70,38 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
       solidPtr = refl->GetConstituentMovedSolid();
    }
 
-   volumeListNode* iter = last;
+   for (int i=0;i<volumeStructArraySize;i++) {
    
-   while (iter != 0) {
-   
-      if (iter->volumePtr == volumePtr) { 
+      if (volumeStructArray[i].volumePtr == volumePtr) { // Volume is already in the array!
       
-         if (iter->last == last) return R;
+         if ((volumeStructArray[i].n+i) == volumeStructArraySize) return R; // It is already at the end!
 
-         iter->next->prev = iter->last->prev; // cut
-         iter->last->prev->next = iter->next;
+         for (int j=0;j<volumeStructArray[i].n;j++) { // If not, copy it to the end!
 	 
-	 iter->next = last; // paste at the end
-	 last->prev = iter;
-         iter->last->prev = 0;
-         last = iter->last;
-      
-         return R;
+	    volumeStructArray[volumeStructArraySize] = volumeStructArray[i+j];
+            volumeStructArraySize++;
+	 }
+         
+	 return R;
       }
-      
-      iter = iter->next;
    }
 
-//***************************************
-
-   volumeListNode* newNode = new volumeListNode;
-
-   if (newNode == 0) G4Exception("Not enough memory!");
-
-   newNode->volumePtr = volumePtr;
-   newNode->volumeElement = newElement("volume");
-   newNode->volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
+   xercesc::DOMElement* volumeElement = newElement("volume");
+   volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
 
    xercesc::DOMElement* materialrefElement = newElement("materialref");
-   newNode->volumeElement->appendChild(materialrefElement);
+   volumeElement->appendChild(materialrefElement);
    materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
 
    xercesc::DOMElement* solidrefElement = newElement("solidref");
-   newNode->volumeElement->appendChild(solidrefElement);
+   volumeElement->appendChild(solidrefElement);
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
 
-   newNode->next = last;
-   newNode->prev = 0;
-   
-   if (last != 0) last->prev = newNode;
-   
-   last = newNode;
-   
-//***************************************
+   int sizeBefore = volumeStructArraySize;
+
+   volumeStructArray[sizeBefore].volumePtr = volumePtr;
+   volumeStructArray[sizeBefore].volumeElement = volumeElement;
+   volumeStructArraySize++;
 
    G4Transform3D invR = R.inverse();
 
@@ -128,10 +110,10 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
-      physvolWrite(newNode->volumeElement,physvol,invR);
+      physvolWrite(volumeElement,physvol,invR);
    }
 
-   newNode->last = last;
+   volumeStructArray[sizeBefore].n = volumeStructArraySize - sizeBefore;
 
    return R;   
 }
@@ -141,22 +123,25 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
-   last = 0;
+   volumeStructArray = new volumeStruct[3000000];
+   volumeStructArraySize = 0;
+
+   if (volumeStructArray == 0) G4Exception("Not enough memory!");
 
    volumeWrite(worldvol);
 
-   G4cout << G4endl;
+   std::map<const G4LogicalVolume*,int> volumeMap;
 
-   volumeListNode* iter = last;
+   for (int i=0;i<volumeStructArraySize;i++) {
    
-   while (iter != 0) {
+      int index = volumeStructArraySize-i-1;
+
+      if (volumeMap.find(volumeStructArray[index].volumePtr) != volumeMap.end()) continue; // already printed!
    
-      G4cout << "Printing volume: " << iter->volumePtr->GetName() << G4endl;
-      
-      structureElement->appendChild(iter->volumeElement);
-      
-      volumeListNode* temp = iter;
-      iter = iter->next;
-      delete temp;
+      structureElement->appendChild(volumeStructArray[index].volumeElement);
+   
+      volumeMap[volumeStructArray[index].volumePtr] = 0;
    }
+
+   delete [] volumeStructArray;
 }
