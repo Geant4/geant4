@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.80 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.81 2008-04-09 16:58:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -890,11 +890,13 @@ void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
         // sample direction of lateral displacement
         // compute it from the lateral correlation
         G4double Phi = 0.;
-        if(std::abs(r*sth) < latcorr)
+        if(std::abs(r*sth) < latcorr) {
           Phi  = twopi*G4UniformRand();
-        else
-          Phi = phi-std::acos(latcorr/(r*sth));
-        if(Phi < 0.) Phi += twopi;
+        } else {
+          G4double psi = std::acos(latcorr/(r*sth));
+          if(G4UniformRand() < 0.5) Phi = phi+psi;
+          else                      Phi = phi-psi;
+	}
 
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
