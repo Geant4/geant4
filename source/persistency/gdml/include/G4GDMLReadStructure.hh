@@ -58,14 +58,9 @@ typedef std::map<G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
 class G4GDMLReadStructure : public G4GDMLReadParamvol {
 private:
    G4GDMLAuxMapType auxMap;
-
-   G4AssemblyVolume *pAssembly;
    G4LogicalVolume *pMotherLogical;
 
-   std::map<G4String,G4AssemblyVolume*> assemblyMap;
-
    void GeneratePhysvolName(G4VPhysicalVolume*);
-   void assemblyRead(const xercesc::DOMElement* const);
    G4GDMLAuxPairType auxiliaryRead(const xercesc::DOMElement* const);
    void bordersurfaceRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);
@@ -77,7 +72,6 @@ private:
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
 public:
-   G4AssemblyVolume* getAssembly(const G4String&);
    G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);

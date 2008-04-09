@@ -54,6 +54,8 @@ private:
       volumeListNode* next;
    };
 
+   bool print;
+
    volumeListNode* last;
 
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);

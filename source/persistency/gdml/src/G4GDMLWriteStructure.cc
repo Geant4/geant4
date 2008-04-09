@@ -31,7 +31,7 @@
 #include "G4GDMLWriteStructure.hh"
 
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& invR) {
-/*
+
    G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
    G4Transform3D R = volumeWrite(physvol->GetLogicalVolume());   
    G4Transform3D T = invR*P*R;
@@ -56,12 +56,21 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
-   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);*/
+   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
 }
 
 G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
 
+   G4cout << "Touching volume: " << volumePtr->GetName() << G4endl;
+
    G4Transform3D R;
+   G4VSolid* solidPtr = volumePtr->GetSolid();
+
+   if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
+   
+      R = refl->GetTransform3D();
+      solidPtr = refl->GetConstituentMovedSolid();
+   }
 
    volumeListNode* iter = last;
    
@@ -70,7 +79,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
       if (iter->volumePtr == volumePtr) { 
       
          if (iter->last == last) return R;
-      
+
          iter->next->prev = iter->last->prev; // cut
          iter->last->prev->next = iter->next;
 	 
@@ -88,9 +97,20 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 //***************************************
 
    volumeListNode* newNode = new volumeListNode;
+
+   if (newNode == 0) G4Exception("Not enough memory!");
+
    newNode->volumePtr = volumePtr;
    newNode->volumeElement = newElement("volume");
    newNode->volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
+
+   xercesc::DOMElement* materialrefElement = newElement("materialref");
+   newNode->volumeElement->appendChild(materialrefElement);
+   materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
+
+   xercesc::DOMElement* solidrefElement = newElement("solidref");
+   newNode->volumeElement->appendChild(solidrefElement);
+   solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
 
    newNode->next = last;
    newNode->prev = 0;
@@ -101,8 +121,6 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    
 //***************************************
 
-   G4cout << "Touching volume: " << volumePtr->GetName() << G4endl;
-
    G4Transform3D invR = R.inverse();
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
@@ -110,9 +128,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
-      const G4LogicalVolume* logvol = physvol->GetLogicalVolume();
-
-      volumeWrite(logvol);
+      physvolWrite(newNode->volumeElement,physvol,invR);
    }
 
    newNode->last = last;

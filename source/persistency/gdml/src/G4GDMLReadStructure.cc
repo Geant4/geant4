@@ -36,31 +36,6 @@ void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
    physvol->SetName(GenerateName(stream.str()));
 }
 
-void G4GDMLReadStructure::assemblyRead(const xercesc::DOMElement* const assemblyElement) {
-
-   G4String name;
-
-   const xercesc::DOMNamedNodeMap* const attributes = assemblyElement->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
-
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
-
-      if (attName=="name") name = GenerateName(attValue);
-   }
-
-   pAssembly = new G4AssemblyVolume();
-
-   assemblyMap[name] = pAssembly;
-}
-
 G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const auxiliaryElement) {
 
    G4GDMLAuxPairType auxpair;
@@ -343,7 +318,6 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
       if (tag=="solidref") solidPtr = getSolid(GenerateName(refRead(child)));
    }
 
-   pAssembly = 0;
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,GenerateName(name),0,0,0);
 
    if (!auxList.empty()) auxMap[pMotherLogical] = auxList;
@@ -416,20 +390,12 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
-      if (tag=="assembly") assemblyRead(child); else
       if (tag=="bordersurface") bordersurfaceRead(child); else
       if (tag=="skinsurface") skinsurfaceRead(child); else
       if (tag=="volume") volumeRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
       G4Exception("GDML Reader: ERROR! Unknown tag in structure: "+tag);
    }
-}
-
-G4AssemblyVolume* G4GDMLReadStructure::getAssembly(const G4String& ref) {
-
-   if (assemblyMap.find(ref) == assemblyMap.end()) return 0;  // No error message is displayed!
-
-   return assemblyMap[ref];
 }
 
 G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const {
