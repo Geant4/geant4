@@ -46,20 +46,18 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
 private:
-   typedef std::vector<const G4LogicalVolume*> volumeListType;
-
-   struct volumeRecord {
-      volumeListType::iterator begin,end;
+   struct volumeListNode {
+      const G4LogicalVolume* volumePtr;
       xercesc::DOMElement* volumeElement;
+      volumeListNode* last;
+      volumeListNode* prev;
+      volumeListNode* next;
    };
 
-   volumeListType volumeList;
-   std::map<const G4LogicalVolume*,volumeRecord> volumeMap;
-
-   int count,depth,maxdepth;
+   volumeListNode* last;
 
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);
-   void volumeWrite(const G4LogicalVolume*);
+   G4Transform3D volumeWrite(const G4LogicalVolume*);
    void structureWrite(xercesc::DOMElement*,const G4LogicalVolume*);
 };
 

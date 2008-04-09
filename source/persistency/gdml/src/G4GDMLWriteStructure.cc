@@ -59,28 +59,51 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);*/
 }
 
-void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
+G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
 
-   if (volumeMap.find(volumePtr) != volumeMap.end()) { // Volume is already walked!
-     
-      volumeRecord volrec = volumeMap[volumePtr];
-      volumeListType tempList(volrec.begin,volrec.end);
-      volumeList.erase(volrec.begin,volrec.end);
+   G4Transform3D R;
 
-      for (volumeListType::iterator i=tempList.begin();i != tempList.end();i++) {
+   volumeListNode* iter = last;
+   
+   while (iter != 0) {
+   
+      if (iter->volumePtr == volumePtr) { 
       
-         volumeList.push_back(*i);
+         if (iter->last == last) return R;
+      
+         iter->next->prev = iter->last->prev; // cut
+         iter->last->prev->next = iter->next;
+	 
+	 iter->next = last; // paste at the end
+	 last->prev = iter;
+         iter->last->prev = 0;
+         last = iter->last;
+      
+         return R;
       }
-
-      return;
+      
+      iter = iter->next;
    }
 
-   volumeRecord volrec;
-   volrec.begin = volumeList.end();
-   volrec.volumeElement = newElement("volume");
-   volrec.volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
+//***************************************
 
-   volumeList.push_back(volumePtr);
+   volumeListNode* newNode = new volumeListNode;
+   newNode->volumePtr = volumePtr;
+   newNode->volumeElement = newElement("volume");
+   newNode->volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
+
+   newNode->next = last;
+   newNode->prev = 0;
+   
+   if (last != 0) last->prev = newNode;
+   
+   last = newNode;
+   
+//***************************************
+
+   G4cout << "Touching volume: " << volumePtr->GetName() << G4endl;
+
+   G4Transform3D invR = R.inverse();
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
 
@@ -92,23 +115,32 @@ void G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
       volumeWrite(logvol);
    }
 
-   volrec.end = volumeList.end();
-   volumeMap[volumePtr] = volrec;
+   newNode->last = last;
+
+   return R;   
 }
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* worldvol) {
 
-   volumeList.reserve(G4LogicalVolumeStore::GetInstance()->size()); // IMPORTANT!!! There can be large datasets!
-
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
+   last = 0;
+
    volumeWrite(worldvol);
 
-   for (volumeListType::reverse_iterator i=volumeList.rbegin();i != volumeList.rend();i++) {
-   
-      if (volumeMap.find(*i) == volumeMap.end()) G4Exception("GDML WRITER: Error in algorhythm! Volume in list is not in the map!");
+   G4cout << G4endl;
 
-      structureElement->appendChild(volumeMap[*i].volumeElement);
+   volumeListNode* iter = last;
+   
+   while (iter != 0) {
+   
+      G4cout << "Printing volume: " << iter->volumePtr->GetName() << G4endl;
+      
+      structureElement->appendChild(iter->volumeElement);
+      
+      volumeListNode* temp = iter;
+      iter = iter->next;
+      delete temp;
    }
 }
