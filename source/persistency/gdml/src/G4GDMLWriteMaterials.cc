@@ -141,6 +141,8 @@ void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Ma
 
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
+   G4cout << "Writing materials..." << G4endl;
+
    xercesc::DOMElement* materialsElement = newElement("materials");
    element->appendChild(materialsElement);
 

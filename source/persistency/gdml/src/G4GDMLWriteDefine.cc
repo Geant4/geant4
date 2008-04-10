@@ -118,6 +118,8 @@ void G4GDMLWriteDefine::scaleWrite(xercesc::DOMElement* element,const G4ThreeVec
 
 void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
 
+   G4cout << "Writing definitions..." << G4endl;
+
    defineElement = newElement("define");
    element->appendChild(defineElement);
 }

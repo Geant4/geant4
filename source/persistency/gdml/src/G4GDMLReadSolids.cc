@@ -1256,6 +1256,8 @@ void G4GDMLReadSolids::opticalsurfaceRead(const xercesc::DOMElement* const optic
 
 void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const solidsElement) {
 
+   G4cout << "Reading solids..." << G4endl;
+
    for (xercesc::DOMNode* iter = solidsElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;

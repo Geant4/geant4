@@ -470,6 +470,8 @@ void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double&
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
 
+   G4cout << "Writing solids..." << G4endl;
+
    xercesc::DOMElement* solidsElement = newElement("solids");
    gdmlElement->appendChild(solidsElement);
 

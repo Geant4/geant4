@@ -91,6 +91,8 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
 
 void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
+   G4cout << "Reading '" << fileName << "'..." << G4endl;
+
    InLoop = 0;
    prename.clear();
 
@@ -151,4 +153,6 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
    }
 
    delete parser;
+
+   G4cout << "Reading done!" << G4endl << G4endl;
 }

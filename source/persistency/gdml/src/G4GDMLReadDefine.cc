@@ -282,6 +282,8 @@ void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element) {
 
 void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement) {
 
+   G4cout << "Reading definitions..." << G4endl;
+
    for (xercesc::DOMNode* iter = defineElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;

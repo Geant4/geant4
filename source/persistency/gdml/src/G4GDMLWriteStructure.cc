@@ -74,33 +74,27 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    
       if (volumeStructArray[i].volumePtr == volumePtr) { // Volume is already in the array!
       
-         if ((volumeStructArray[i].n+i) == volumeStructArraySize) return R; // It is already at the end!
+         if ((volumeStructArray[i].n+i) == volumeStructArraySize) return R; // Sub-array is already at the end!
 
-         for (int j=0;j<volumeStructArray[i].n;j++) { // If not, copy it to the end!
-	 
-	    volumeStructArray[volumeStructArraySize] = volumeStructArray[i+j];
-            volumeStructArraySize++;
-	 }
-         
+         memcpy(volumeStructArray+volumeStructArraySize,volumeStructArray+i,sizeof(volumeStruct)*volumeStructArray[i].n); // Copy sub-array to the end!
+         volumeStructArraySize += volumeStructArray[i].n;
 	 return R;
       }
    }
 
    xercesc::DOMElement* volumeElement = newElement("volume");
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
-
    xercesc::DOMElement* materialrefElement = newElement("materialref");
    volumeElement->appendChild(materialrefElement);
    materialrefElement->setAttributeNode(newAttribute("ref",volumePtr->GetMaterial()->GetName()));
-
    xercesc::DOMElement* solidrefElement = newElement("solidref");
    volumeElement->appendChild(solidrefElement);
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
 
    int sizeBefore = volumeStructArraySize;
 
-   volumeStructArray[sizeBefore].volumePtr = volumePtr;
-   volumeStructArray[sizeBefore].volumeElement = volumeElement;
+   volumeStructArray[volumeStructArraySize].volumePtr = volumePtr;
+   volumeStructArray[volumeStructArraySize].volumeElement = volumeElement;
    volumeStructArraySize++;
 
    G4Transform3D invR = R.inverse();
@@ -115,10 +109,12 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
    volumeStructArray[sizeBefore].n = volumeStructArraySize - sizeBefore;
 
-   return R;   
+   return R;
 }
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* worldvol) {
+
+   G4cout << "Writing structure..." << G4endl;
 
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);

@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2008-04-09 13:57:39 ztorzsok Exp $
+$Id: History,v 1.47 2008-04-10 09:25:30 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10 April 2008 Zoltan Torzsok
+- Added text output to console to infrom users (eg. "Reading 'test.gdml'...")
+
 9 April 2008 Zoltan Torzsok
-- Worked out an algorythm for sorting logical volumes in thhe writer
+- Worked out an algorythm for sorting logical volumes in the writer
 
 4 April 2008 Zoltan Torzsok
 - Writing out volumes in recursive way is done.

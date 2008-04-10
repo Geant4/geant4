@@ -383,6 +383,8 @@ void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const vo
 
 void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structureElement) {
 
+   G4cout << "Reading structure..." << G4endl;
+
    for (xercesc::DOMNode* iter = structureElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
