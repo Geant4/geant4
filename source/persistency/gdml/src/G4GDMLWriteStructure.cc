@@ -70,14 +70,14 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
       solidPtr = refl->GetConstituentMovedSolid();
    }
 
-   for (int i=0;i<volumeStructArraySize;i++) {
+   for (int i=0;i<volumeArraySize;i++) {
    
-      if (volumeStructArray[i].volumePtr == volumePtr) { // Volume is already in the array!
+      if (volumeArray[i]->volumePtr == volumePtr) { // Volume is already in the array!
       
-         if ((volumeStructArray[i].n+i) == volumeStructArraySize) return R; // Sub-array is already at the end!
+         if ((volumeArray[i]->n+i) == volumeArraySize) return R; // Sub-array is already at the end!
 
-         memcpy(volumeStructArray+volumeStructArraySize,volumeStructArray+i,sizeof(volumeStruct)*volumeStructArray[i].n); // Copy sub-array to the end!
-         volumeStructArraySize += volumeStructArray[i].n;
+         memcpy(volumeArray+volumeArraySize,volumeArray+i,sizeof(volumeStruct*)*volumeArray[i]->n); // Copy sub-array to the end!
+         volumeArraySize += volumeArray[i]->n;
 	 return R;
       }
    }
@@ -91,11 +91,12 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    volumeElement->appendChild(solidrefElement);
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
 
-   int sizeBefore = volumeStructArraySize;
+   volumeStruct* vols = new volumeStruct;
+   vols->volumePtr = volumePtr;
+   vols->volumeElement = volumeElement;
+   vols->n = volumeArraySize;
 
-   volumeStructArray[volumeStructArraySize].volumePtr = volumePtr;
-   volumeStructArray[volumeStructArraySize].volumeElement = volumeElement;
-   volumeStructArraySize++;
+   volumeArray[volumeArraySize++] = vols;
 
    G4Transform3D invR = R.inverse();
 
@@ -107,7 +108,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
       physvolWrite(volumeElement,physvol,invR);
    }
 
-   volumeStructArray[sizeBefore].n = volumeStructArraySize - sizeBefore;
+   vols->n = volumeArraySize - vols->n; // Growth of array size after walking a subtree of a node = number of descendants of that node
 
    return R;
 }
@@ -119,25 +120,20 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
-   volumeStructArray = new volumeStruct[3000000];
-   volumeStructArraySize = 0;
+   volumeArray = new volumeStruct*[3000000];
+   volumeArraySize = 0;
 
-   if (volumeStructArray == 0) G4Exception("Not enough memory!");
+   if (volumeArray == 0) G4Exception("Not enough memory for sorting volumes!");
 
    volumeWrite(worldvol);
 
-   std::map<const G4LogicalVolume*,int> volumeMap;
+   for (int i=volumeArraySize-1;i>=0;i--) { // Append all XML elements, representing volumes, in the correct (reverse) order!
+   
+      if (volumeArray[i]->volumePtr == 0) continue; // Append only once!
 
-   for (int i=0;i<volumeStructArraySize;i++) {
-   
-      int index = volumeStructArraySize-i-1;
-
-      if (volumeMap.find(volumeStructArray[index].volumePtr) != volumeMap.end()) continue; // already printed!
-   
-      structureElement->appendChild(volumeStructArray[index].volumeElement);
-   
-      volumeMap[volumeStructArray[index].volumePtr] = 0;
+      structureElement->appendChild(volumeArray[i]->volumeElement);
+      volumeArray[i]->volumePtr = 0;
    }
 
-   delete [] volumeStructArray;
+   delete [] volumeArray;
 }

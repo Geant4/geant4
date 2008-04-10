@@ -52,8 +52,8 @@ private:
       int n;
    };
 
-   volumeStruct* volumeStructArray;
-   int volumeStructArraySize;
+   volumeStruct** volumeArray;
+   int volumeArraySize;
 
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);
    G4Transform3D volumeWrite(const G4LogicalVolume*);
