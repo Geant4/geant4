@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.2 2008-01-25 20:49:24 sincerti Exp $
+// $Id: RunAction.cc,v 1.3 2008-04-10 12:02:57 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
@@ -68,7 +68,17 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
-{}
+{
+  // Cleaning result files
+  system ("rm -rf  ./results/x.txt");
+  system ("rm -rf  ./results/y.txt");
+  system ("rm -rf  ./results/theta.txt");
+  system ("rm -rf  ./results/phi.txt");
+  system ("rm -rf  ./results/image.txt");
+  system ("rm -rf  ./results/matrix.txt");
+  system ("rm -rf  ./results/profile.txt");
+  system ("rm -rf  ./results/grid.txt");
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -107,6 +117,7 @@ if (detector->GetCoef()==1)
 	);
 
       	if (ncols<0) break;
+	if (nlines>32) G4Exception("Try to read more than 32 lines in matrix file !");
 
 	m(nlines,1)=aa;
       	m(nlines,2)=ab;
@@ -142,6 +153,7 @@ if (detector->GetCoef()==1)
       	m(nlines,32)=db;
 
       	nlines++;
+	
     	}
 	fclose(fp1);
 
