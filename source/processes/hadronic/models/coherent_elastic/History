@@ -17,7 +17,8 @@ code and to keep track of all tags.
 10 Apr 2008 -  V.Ivanchenko (hadr-cohe-V09-01-02)
 ------------------------------------------------
   G4HadronElastic - added extra protection against precision lost
-                    when projectile almostly lost kinetic energy
+                    when projectile almostly lost kinetic energy;
+                    set lowestEnergyLimit=1.e-6*eV (was 0.0)
 
 29 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-01)
 ------------------------------------------------
