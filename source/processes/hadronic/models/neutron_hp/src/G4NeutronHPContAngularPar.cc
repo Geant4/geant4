@@ -128,13 +128,13 @@
       }
       // cash the mean energy in this distribution
       //080409 TKDB
-      if ( nEnergies == 0 )  
+      if ( nEnergies == 1 )  
          currentMeanEnergy = 0.0;
       else
          currentMeanEnergy = weighted/running[nEnergies-1];
       
       //080409 TKDB
-      if ( nEnergies == 0 ) it = 0; 
+      if ( nEnergies == 1 ) it = 0; 
       //for(i=1; i<nEnergies; i++)
       for(i=1; i<nEnergies; i++)
       {
@@ -221,7 +221,7 @@
       // cash the mean energy in this distribution
       //080409 TKDB
       //currentMeanEnergy = weighted/running[nEnergies-1];
-      if ( nEnergies == 0 )
+      if ( nEnergies == 1 )
          currentMeanEnergy = 0.0;
       else
         currentMeanEnergy = weighted/running[nEnergies-1];
@@ -296,13 +296,13 @@
       }
        // cash the mean energy in this distribution
       //currentMeanEnergy = weighted/running[nEnergies-1];
-      if ( nEnergies == 0 )  
+      if ( nEnergies == 1 )  
          currentMeanEnergy = 0.0;
       else
          currentMeanEnergy = weighted/running[nEnergies-1];
       
       //080409 TKDB
-      if ( nEnergies == 0 ) it = 0; 
+      if ( nEnergies == 1 ) it = 0; 
       //for(i=0; i<nEnergies; i++)
       for(i=1; i<nEnergies; i++)
       {
