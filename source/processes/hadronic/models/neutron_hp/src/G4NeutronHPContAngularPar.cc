@@ -28,8 +28,9 @@
 // A prototype of the low energy neutron transport model.
 //
 // 09-May-06 fix in Sample by T. Koi
-// 0301808 Fix Compilation warnings - gcc-4.3.0 by T. Koi
-//         (This fix has a real effect to the code.) 
+// 080318 Fix Compilation warnings - gcc-4.3.0 by T. Koi
+//        (This fix has a real effect to the code.) 
+// 080409 Fix div0 error with G4FPE by T. Koi
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -125,10 +126,17 @@
                              theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
                              theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
       }
-       // cash the mean energy in this distribution
-      currentMeanEnergy = weighted/running[nEnergies-1];
+      // cash the mean energy in this distribution
+      //080409 TKDB
+      if ( nEnergies == 0 )  
+         currentMeanEnergy = 0.0;
+      else
+         currentMeanEnergy = weighted/running[nEnergies-1];
       
-      for(i=0; i<nEnergies; i++)
+      //080409 TKDB
+      if ( nEnergies == 0 ) it = 0; 
+      //for(i=1; i<nEnergies; i++)
+      for(i=1; i<nEnergies; i++)
       {
         it = i;
         if(random<running[i]/running[nEnergies-1]) break;
@@ -210,12 +218,19 @@
                              theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
                              theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
       }
-       // cash the mean energy in this distribution
-      currentMeanEnergy = weighted/running[nEnergies-1];
+      // cash the mean energy in this distribution
+      //080409 TKDB
+      //currentMeanEnergy = weighted/running[nEnergies-1];
+      if ( nEnergies == 0 )
+         currentMeanEnergy = 0.0;
+      else
+        currentMeanEnergy = weighted/running[nEnergies-1];
       
       G4int it(0);
       G4double randkal = G4UniformRand();
-      for(i=0; i<nEnergies; i++)
+      //080409 TKDB
+      //for(i=0; i<nEnergies; i++)
+      for(i=1; i<nEnergies; i++)
       {
         it = i;
         if(randkal<running[i]/running[nEnergies-1]) break;
@@ -280,9 +295,16 @@
                              theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
       }
        // cash the mean energy in this distribution
-      currentMeanEnergy = weighted/running[nEnergies-1];
+      //currentMeanEnergy = weighted/running[nEnergies-1];
+      if ( nEnergies == 0 )  
+         currentMeanEnergy = 0.0;
+      else
+         currentMeanEnergy = weighted/running[nEnergies-1];
       
-      for(i=0; i<nEnergies; i++)
+      //080409 TKDB
+      if ( nEnergies == 0 ) it = 0; 
+      //for(i=0; i<nEnergies; i++)
+      for(i=1; i<nEnergies; i++)
       {
         it = i;
         if(random<running[i]/running[nEnergies-1]) break;
