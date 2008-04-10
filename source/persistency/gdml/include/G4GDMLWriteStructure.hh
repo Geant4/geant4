@@ -52,6 +52,7 @@ private:
       int n;
    };
 
+   static const int volumeArrayMaxSize = 3000000;
    volumeStruct** volumeArray;
    int volumeArraySize;
 

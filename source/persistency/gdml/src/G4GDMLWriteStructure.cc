@@ -76,6 +76,9 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
       
          if ((volumeArray[i]->n+i) == volumeArraySize) return R; // Sub-array is already at the end!
 
+         if ((volumeArraySize+volumeArray[i]->n) >= volumeArrayMaxSize) 
+	    G4Exception("Error at sorting volumes! Volume array size is too small!");
+
          memcpy(volumeArray+volumeArraySize,volumeArray+i,sizeof(volumeStruct*)*volumeArray[i]->n); // Copy sub-array to the end!
          volumeArraySize += volumeArray[i]->n;
 	 return R;
@@ -95,6 +98,8 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    vols->volumePtr = volumePtr;
    vols->volumeElement = volumeElement;
    vols->n = volumeArraySize;
+
+   if (volumeArraySize >= volumeArrayMaxSize) G4Exception("Error at sorting volumes! Volume array size is too small!");
 
    volumeArray[volumeArraySize++] = vols;
 
@@ -120,7 +125,7 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    xercesc::DOMElement* structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
-   volumeArray = new volumeStruct*[3000000];
+   volumeArray = new volumeStruct*[volumeArrayMaxSize];
    volumeArraySize = 0;
 
    if (volumeArray == 0) G4Exception("Not enough memory for sorting volumes!");
