@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.6 2008-04-09 10:28:06 sincerti Exp $
+$Id: README,v 1.7 2008-04-10 14:28:01 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 09/04/2008
+Last modified by S. Incerti, 10/04/2008
 
 ---->1. INTRODUCTION.                                                    
                                                                        
@@ -130,7 +130,8 @@ In interactive mode, run:
 
 > $G4WORDIR/bin/Linux-g++/Nanobeam 
 
-The default.mac macro file is run by default.
+At the Idle> prompt, enter: 
+/control/execute default.mac
 
 default.mac can be one of the following macro files :
 
