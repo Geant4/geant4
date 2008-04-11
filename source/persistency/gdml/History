@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2008-04-11 11:26:07 ztorzsok Exp $
+$Id: History,v 1.49 2008-04-11 16:07:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,21 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11 April 2008 Zoltan Torzsok
-- Referenced solid in volume is resolved in case of displacements/reflections
+11 April 2008 Zoltan Torzsok (gdml-V09-01-03)
+- Referenced solid in volume is fixed in case of displacements/reflections.
 
 10 April 2008 Zoltan Torzsok
-- Added text output to console to infrom users (eg. "Reading 'test.gdml'...")
+- Added text output to console to inform of progress during processing.
 
 9 April 2008 Zoltan Torzsok
-- Worked out an algorythm for sorting logical volumes in the writer
+- Worked out an algorithm for sorting logical volumes in the writer.
 
 4 April 2008 Zoltan Torzsok
-- Writing out volumes in recursive way is done.
-  Still needs to optimize. Do not recompute touched branches!
+- Modified writing out of volumes to happen in recursive way.
+  Still needs optimization. Does not recompute touched branches!
 
 1 April 2008 Z.Torzsok
-- Every function name starts with a capital letter now
+- Corrected function names to have all starting with capital letter.
 
 11 March 2008 Z.Torzsok (gdml-V09-01-02)
 - Added border surface to reader.
