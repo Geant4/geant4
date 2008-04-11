@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2008-04-10 09:25:30 ztorzsok Exp $
+$Id: History,v 1.48 2008-04-11 11:26:07 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 April 2008 Zoltan Torzsok
+- Referenced solid in volume is resolved in case of displacements/reflections
+
 10 April 2008 Zoltan Torzsok
 - Added text output to console to infrom users (eg. "Reading 'test.gdml'...")
 

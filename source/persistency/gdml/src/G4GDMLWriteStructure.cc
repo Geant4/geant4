@@ -64,12 +64,31 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    G4Transform3D R;
    G4VSolid* solidPtr = volumePtr->GetSolid();
 
-   if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
-   
-      R = refl->GetTransform3D();
-      solidPtr = refl->GetConstituentMovedSolid();
-   }
+   int displaced = 0;
 
+   while (true) { // Solve possible displacement/reflection of the referenced solid!
+   
+      if (displaced>4) G4Exception("ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
+   
+      if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
+   
+         R = R*refl->GetTransform3D();
+         solidPtr = refl->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(solidPtr)) {
+      
+         R = R*G4Transform3D(disp->GetObjectRotation(),disp->GetObjectTranslation());
+         solidPtr = disp->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+
+      break;
+   }
+   
    for (int i=0;i<volumeArraySize;i++) {
    
       if (volumeArray[i]->volumePtr == volumePtr) { // Volume is already in the array!
@@ -110,6 +129,11 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
+
+      if (dynamic_cast<const G4PVDivision*>(physvol)) G4Exception("Error! Volume divisions are not yet supported in writer!"); else
+      if (physvol->IsParameterised()) G4Exception("Error! Parameterised volumes are not yet supported in writer!"); else
+      if (physvol->IsReplicated()) G4Exception("Error! Replicated volumes are not yet supported in writer!");
+
       physvolWrite(volumeElement,physvol,invR);
    }
 
