@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2008-04-01 07:28:06 ztorzsok Exp $
+$Id: History,v 1.18 2008-04-11 16:16:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,21 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1 April 2008 Zoltan Torzsok
-- Every function name starts with capital letter so that example file is modified to follow this change
+April 1st, 2008  Zoltan Torzsok - exgdml-V09-01-00
+- Fixed function calls in main() to follow convention of using first
+  capital letter.
 
-19 February 2008 Zoltan Torzsok
-- Replicavol example modified in order to follow changes
+February 15th, 2008  Z. Torzsok
+- Added gdml files featuring replicas and division volumes.
 
-15 February 2008 Z. Torzsok
-- Added example files featuring replicas and division volumes
+February 12th, 2008  Z.Torzsok
+- Example files are cleaned up.
+- Added gdml file featuring matrices.
 
-12 February 2008 Z.Torzsok
-- Example files are cleaned up
-- Added example file featuring matrices
-- Removed diamond.gdml because it uses reflected solid what is marked obsolete
-
-21 January 2008, Z.Torzsok
+January 21st, 2008  Z.Torzsok
 - The GDML example is nicely polished now:
 
      load_gdml <input_gdml_file> <output_gdml file>
