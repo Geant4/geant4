@@ -1,5 +1,5 @@
 /run/verbose 1
-/tracking/verbose 0
+/tracking/verbose 1
 /testem/det/setMat1 G4_Al
 /testem/det/setThick1 826.23935 um
 /testem/det/setNbOfLayers1 100 

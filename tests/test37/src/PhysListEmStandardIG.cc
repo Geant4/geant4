@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.6 2007-11-13 11:12:17 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.7 2008-04-11 15:23:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,8 @@ PhysListEmStandardIG::~PhysListEmStandardIG()
 
 void PhysListEmStandardIG::ConstructProcess()
 {
-  G4double thetamin = 0.05;
+  //  G4double thetamin = 0.05;
+  G4double thetamin = 0.5;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -145,9 +146,10 @@ void PhysListEmStandardIG::ConstructProcess()
   opt.SetSubCutoff(true);
   opt.SetMinEnergy(0.1*keV);
   opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
+  opt.SetDEDXBinning(60);
+  opt.SetLambdaBinning(60);
   opt.SetLinearLossLimit(1.e-6);
+  opt.SetSplineFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
