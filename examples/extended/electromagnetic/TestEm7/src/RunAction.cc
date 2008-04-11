@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.22 2008-02-04 18:15:17 vnivanch Exp $
+// $Id: RunAction.cc,v 1.23 2008-04-11 12:18:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -137,6 +137,11 @@ void RunAction::cleanHisto()
 
 void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
+  if (ih > 1) {
+    G4cout << "---> warning from RunAction::FillHisto() : histo " << ih
+           << "does not exist; x= " << x << " w= " << weight << G4endl;
+    return;
+  }
 #ifdef G4ANALYSIS_USE
   if(histo[ih]) histo[ih]->fill(x, weight);
 #endif
