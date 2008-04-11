@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.23 2008-04-07 14:36:23 maire Exp $
+// $Id: HistoManager.cc,v 1.24 2008-04-11 10:59:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -248,7 +248,7 @@ void HistoManager::Scale(G4int ih, G4double fac)
 {
  if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::Scale() : histo " << ih
-           << "does not exist" << G4endl;
+           << "does not exist.  (fac = " << fac << ")" << G4endl;
     return;
   }
 #ifdef G4ANALYSIS_USE
