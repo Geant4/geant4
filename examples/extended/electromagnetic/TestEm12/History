@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2008-04-07 16:46:04 maire Exp $
+$Id: History,v 1.22 2008-04-11 11:10:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
      
 07-04-08 mma (testem12-V09-01-02)
 - PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
