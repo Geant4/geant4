@@ -28,6 +28,7 @@
 //
 //      History:
 //      17 August 2004  P. Gumplinger, T. MacPhail
+//      11 April  2008  Kamil Sedlak (PSI), Toni Shiroka (PSI)
 // ------------------------------------------------------------
 //
 #include "G4DecayWithSpin.hh"
@@ -96,7 +97,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
     const G4Field* field = NULL;
     if(fieldMgr)field = fieldMgr->GetDetectorField();
 
-    if (field && !(fieldMgr->DoesFieldChangeEnergy())) {
+    if (field) {
 
        G4double point[4];
        point[0] = (aStep.GetPostStepPoint()->GetPosition())[0];
@@ -109,7 +110,9 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
 
        G4ThreeVector B(fieldValue[0],fieldValue[1],fieldValue[2]);
 
-       parent_polarization = Spin_Precession(aStep,B,fRemainderLifeTime);
+       // Call the spin precession only for non-zero mag. field
+       if (B.mag2() > 0.) parent_polarization = 
+                                 Spin_Precession(aStep,B,fRemainderLifeTime);
 
     }
   }
