@@ -10,7 +10,7 @@ setenv PHYSLIST    emstandard
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    standard
+setenv PHYSLIST    standard_local
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
@@ -22,7 +22,7 @@ setenv PHYSLIST    standardIG
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-cp $VFEM/test37/geant4-09-01-ref-00/*S.log ./
+cp $VFEM/test37/geant4-09-01-ref-03/*S.log ./
 
 $G4MY/reader_test37 Al     $1
 $G4MY/reader_test37 Mo     $1

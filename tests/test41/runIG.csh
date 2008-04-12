@@ -11,7 +11,7 @@ setenv PHYSLIST    emstandard
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& r.out
 
-setenv PHYSLIST    standard
+setenv PHYSLIST    standard_local
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
 
@@ -23,5 +23,5 @@ setenv PHYSLIST    standardIG
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
 
-cp $VFEM/test41/geant4-09-01-ref-00/*S.log ./
+cp $VFEM/test41/geant4-09-01-ref-03/*S.log ./
 source ${dir}plot.csh $1 >& p.out

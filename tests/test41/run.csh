@@ -11,7 +11,7 @@ setenv PHYSLIST    emstandard
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res0.out
 
-setenv PHYSLIST    standard
+setenv PHYSLIST    standard_local
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
 

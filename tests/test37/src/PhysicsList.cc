@@ -102,7 +102,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "standard_local") {
 
     emName = name;
     delete emPhysicsList;
