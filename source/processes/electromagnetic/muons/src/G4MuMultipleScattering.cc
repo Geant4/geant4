@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.6 2008-03-14 12:14:52 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.7 2008-04-13 17:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -47,6 +47,7 @@
 
 #include "G4MuMultipleScattering.hh"
 #include "G4MuMscModel.hh"
+#include "G4WentzelVIModel.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +98,8 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
 
   // initialisation of parameters
-  mscModel = new G4MuMscModel(thetaLimit);
+  //  mscModel = new G4MuMscModel(thetaLimit);
+  mscModel = new G4WentzelVIModel(thetaLimit);
   mscModel->SetStepLimitType(StepLimitType());
   mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscModel->SetRangeFactor(RangeFactor());

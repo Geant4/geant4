@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.26 2008-04-04 08:31:16 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.27 2008-04-13 17:19:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,8 +138,10 @@ protected:
   G4double                  constn;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
+  G4double                  cosTetMinNuc;
   G4double                  cosTetMaxNuc;
   G4double                  cosTetMaxElec;
+  G4double                  cosTetMaxHad;
   G4double                  cosTetLimit;
   G4double                  q2Limit;
   G4double                  elecXSection;
@@ -212,12 +214,16 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin, 
 						      G4double cut)
 {
+  cosTetMinNuc = cosThetaMin;
+  cosTetMaxNuc = cosThetaMax;
+  if(cut > ekin && cosThetaMin < 1.0) {
+    cosTetMinNuc = ekin*(1.0 + cosThetaMin)/cut - 1.0;  
+  }
   if(ekin != tkin || ecut != cut) {
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     ComputeMaxElectronScattering(cut);
-    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   }
 }
 
@@ -253,6 +259,7 @@ inline G4double G4eCoulombScatteringModel::FormFactorMev2(G4double Z,
     res = constn*std::pow(A,0.54);
     FF[iz] = res;
   }
+  cosTetMaxHad = 1.0 - 0.5*q2Limit/(res*mom2);
   return res;
 }
 

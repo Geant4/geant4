@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.45 2008-04-04 08:31:16 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.46 2008-04-13 17:19:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,8 +68,8 @@ using namespace std;
 G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   G4double thetaMin, G4double thetaMax, G4double tlim, const G4String& nam)
   : G4VEmModel(nam),
-    cosThetaMin(cos(thetaMin)),
-    cosThetaMax(cos(thetaMax)),
+    cosThetaMin(1.0),
+    cosThetaMax(-1.0),
     q2Limit(tlim),
     lowKEnergy(keV),
     highKEnergy(TeV),
@@ -77,6 +77,8 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
     faclim(100.0),
     isInitialised(false)
 {
+  if(thetaMin > 0.0) cosThetaMin = cos(thetaMin);
+  if(thetaMax < pi)  cosThetaMax = cos(thetaMax);
   fNistManager = G4NistManager::Instance();
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
@@ -148,8 +150,7 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
   if(t1 > 0.0) {
     G4double mom22 = t1*(t1 + 2.0*mass);
     G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-    if(ctm > cosTetMaxNuc)  cosTetMaxElec = ctm;
-    if(cosTetMaxElec > 1.0) cosTetMaxElec = 1.0;
+    if(ctm > cosTetMaxNuc && ctm < 1.0) cosTetMaxElec = ctm;
   }
 }
 
@@ -176,23 +177,24 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   elecXSection = 0.0;
   nucXSection  = 0.0;
 
-  G4double x  = 1.0 - cosThetaMin;
+  G4double x  = 1.0 - cosTetMinNuc;
   G4double x1 = x + screenZ;
 
-  if(cosTetMaxElec < cosThetaMin) {
-    elecXSection = fac*(cosThetaMin - cosTetMaxElec)/
+  if(cosTetMaxElec < cosTetMinNuc) {
+    elecXSection = fac*(cosTetMinNuc - cosTetMaxElec)/
       (x1*(1.0 - cosTetMaxElec + screenZ));
     nucXSection  = elecXSection;
   }
 
-  if(cosTetLimit < cosThetaMin) {
+  G4double costm = std::max(cosTetLimit,cosTetMaxHad);
+  if(costm < cosTetMinNuc) {
     G4double s  = screenZ*formfactA;
-    G4double z1 = 1.0 - cosTetLimit + screenZ;
+    G4double z1 = 1.0 - costm + screenZ;
     G4double d  = (1.0 - s)/formfactA;
     G4double x2 = x1 + d;
     G4double z2 = z1 + d;
     nucXSection += fac*Z*(1.0 - 2.0*s)*
-      ((cosThetaMin - cosTetLimit)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
+      ((cosTetMinNuc - costm)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
        2.0*log(z1*x2/(z2*x1))/d);
   }
 
@@ -250,7 +252,10 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
   if(G4UniformRand()*xsecn[idxelm] < xsece[idxelm]) {
     costm = cosTetMaxElec;
     formf = 0.0;
+  } else if (cosTetLimit < cosTetMaxHad) {
+    costm = cosTetMaxHad;
   }
+
   /*
   G4cout << "SampleCost: e(MeV)= " << tkin 
   	 << " ctmin= " << cosThetaMin
@@ -259,11 +264,11 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
   	 << " Z= " << targetZ << " A= " << targetA
   	 << G4endl;
   */
-  if(costm >= cosThetaMin) return 2.0; 
+  if(costm >= cosTetMinNuc) return 2.0; 
 
-  G4double x1 = 1. - cosThetaMin + screenZ;
+  G4double x1 = 1. - cosTetMinNuc + screenZ;
   G4double x2 = 1. - costm + screenZ;
-  G4double x3 = cosThetaMin - costm;
+  G4double x3 = cosTetMinNuc - costm;
   G4double grej, z1; 
   do {
     z1 = x1*x2/(x1 + G4UniformRand()*x3) - screenZ;
