@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.33 2008-03-25 18:34:09 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.34 2008-04-13 18:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -810,6 +810,7 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
     new G4LPhysicsFreeVector(nbins,
 			     dVector.GetLowEdgeEnergy(0),
 			     dVector.GetLowEdgeEnergy(nbins-1));
+  v->SetSpline(true);
   G4bool b;
   for(size_t i=0; i<nbins; i++) {
     G4double e = dVector.GetLowEdgeEnergy(i);
@@ -830,20 +831,28 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
     materialList[idx] = m;
     curMaterial = mat;
     v = stopData[idx];
+    
     size_t nbins = v->GetVectorLength();
     const G4ParticleDefinition* p = G4Proton::Proton();
     if(verbose>1) G4cout << "G4ionIonisation::InitialiseMaterial Stooping data for "
                          << materialName[idx] << G4endl;
     G4bool b;
+
+    G4LPhysicsFreeVector* vv =
+      new G4LPhysicsFreeVector(nbins,
+			       v->GetLowEdgeEnergy(0),
+			       v->GetLowEdgeEnergy(nbins-1));
     for(size_t i=0; i<nbins; i++) {
       G4double e = v->GetLowEdgeEnergy(i);
       G4double dedx = v->GetValue(e, b);
       G4double dedx1= ionModel->ComputeDEDXPerVolume(mat, p, e, e)*
 	effCharge.EffectiveChargeSquareRatio(curParticle,mat,e/massFactor);
-      v->PutValue(i, dedx/dedx1);
+      vv->PutValue(i, dedx/dedx1);
       if(verbose>1) G4cout << "  E(meV)= " << e/MeV << "   Correction= " << dedx/dedx1
                            << "   "  << dedx << " " << dedx1 << G4endl;
     }
+    delete v;
+    stopData[idx] = vv;
   }
   return v;
 }

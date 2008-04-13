@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.7 2008-02-14 14:49:56 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.8 2008-04-13 18:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,13 +129,24 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
 
+  // estimate mean energy at the step
+  G4double e = preStepKinEnergy - eloss*0.5;
+  if(e <= 0.0) e = 0.5*preStepKinEnergy;
+
   // add corrections
   if(eloss < preStepKinEnergy) {
 
-    G4double e = preStepKinEnergy - eloss*0.5;
     // use Bethe-Bloch with corrections
-    if(e*currMassRatio > currTh)
+    if(e*currMassRatio > currTh) {
       eloss += s*corr->IonHighOrderCorrections(part,mat,e);
+
+      // Correction for data points 
+    } else {
+      //      if(stopDataActive)
+      eloss *= corr->EffectiveChargeCorrection(part,mat,e)*currCharge2
+	/effCharge->EffectiveChargeSquareRatio(part,mat,e);
+      // G4cout<<"Below th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
+    }
 
     // effective number of collisions
     G4double x = mat->GetElectronDensity()*s*atomXS;
@@ -149,8 +160,7 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
   // use nuclear stopping 
   if(NuclearStoppingFlag() && 
      preStepKinEnergy*currMassRatio < 50.*currTh*currCharge2) {
-    G4double e = preStepKinEnergy - eloss*0.5;
-    if(e <= 0.0) e = 0.5*preStepKinEnergy;
+
     G4double nloss = s*corr->NuclearDEDX(part,mat,e);
     if(eloss + nloss > preStepKinEnergy) {
       nloss *= (preStepKinEnergy/(eloss + nloss));

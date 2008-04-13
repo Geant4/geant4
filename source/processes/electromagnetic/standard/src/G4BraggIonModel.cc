@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.17 2007-07-28 13:30:53 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.18 2008-04-13 18:06:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,9 +69,10 @@ using namespace std;
 G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
                                  const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  iMolecula(0),
-  isIon(false)
+    particle(0),
+    fParticleChange(0),
+    iMolecula(0),
+    isIon(false)
 {
   if(p) SetParticle(p);
   highKinEnergy    = 2.0*MeV;
@@ -107,12 +108,14 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
   if(particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                              (pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
-
+  if(!fParticleChange) {
+    if(pParticleChange) {
+      fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+	(pParticleChange);
+    } else {
+      fParticleChange = new G4ParticleChangeForLoss();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

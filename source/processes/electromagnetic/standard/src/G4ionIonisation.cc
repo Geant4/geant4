@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.53 2008-03-24 13:21:52 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.54 2008-04-13 18:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -192,14 +192,14 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     //G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
     //	   << " eth= " << eth<< " eloss0= " << eloss << " s= " << s << G4endl;
 
-    // correction of effective charge
-    eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
-    //G4cout<<"Corrected for charge: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
-
     // High order corrections to Bethe-Bloch
     if(e*massRatio > eth) {
       eloss += s*corr->IonHighOrderCorrections(part,mat,e);
       // G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
+
+      // correction of effective charge
+      eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
+      //G4cout<<"Corrected for charge: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
       
       // Correction for data points 
     } else {
