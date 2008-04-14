@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.130 2008-03-13 09:13:40 gcosmo Exp $
+cvs log $Id: History,v 1.131 2008-04-14 08:50:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th April 2008  Tatiana Nikitina  (greps-V09-01-04)
+- Added G4Hype representation to HepPolyhedron and G4Polyhedron.
+- Coworks with tag "geom-specific-V09-01-08".
 
 13th March 2008  Gabriele Cosmo  (greps-V09-01-03)
 - Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on gcc-4.3.0.
