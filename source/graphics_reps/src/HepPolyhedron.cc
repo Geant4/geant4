@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.29 2008-04-14 07:57:16 tnikitin Exp $
+// $Id: HepPolyhedron.cc,v 1.30 2008-04-14 08:50:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1500,10 +1500,7 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronParaboloid                     Date:    28.06.07 *
- *       ::HepPolyhedronParaboloid                                     *
- * Author: Lukas Lindroos (CERN), July 2007          Revised:          *
- * Author: Tatiana Nikitin                           Revised:          *
- * Author: John Allison (bug fix and improvement)    Revised: 29.01.08 *
+ * Author: L.Lindroos, T.Nikitina (CERN), July 2007  Revised: 28.06.07 *
  *                                                                     *
  * Function: Constructor for paraboloid                                *
  *                                                                     *
@@ -1600,15 +1597,14 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
 HepPolyhedronParaboloid::~HepPolyhedronParaboloid() {}
 
 HepPolyhedronHype::HepPolyhedronHype(double r1,
-                                                 double r2,
-                                                 double sqrtan1,
-                                                 double sqrtan2,
-                                                 double halfZ) 
+                                     double r2,
+                                     double sqrtan1,
+                                     double sqrtan2,
+                                     double halfZ) 
 /***********************************************************************
  *                                                                     *
- * Name: HepPolyhedronHype                    Date:    14.04.2008      *
- *       ::HepPolyhedronHype                                           *
- * Author: Tatiana Nikitina                          Revised:          *
+ * Name: HepPolyhedronHype                           Date:    14.04.08 *
+ * Author: Tatiana Nikitina (CERN)                   Revised: 14.04.08 *
  *                                                                     *
  * Function: Constructor for Hype                                      *
  *                                                                     *
@@ -1640,14 +1636,15 @@ HepPolyhedronHype::HepPolyhedronHype(double r1,
     if ((k & 4) != 0) std::cerr << " (angles)";
     std::cerr << std::endl;
     std::cerr << " r1=" << r1 << " r2=" << r2;
-    std::cerr << " halfZ=" << halfZ << " sqrTan1=" << sqrtan1 << " sqrTan2=" <<sqrtan2
+    std::cerr << " halfZ=" << halfZ << " sqrTan1=" << sqrtan1
+              << " sqrTan2=" << sqrtan2
               << std::endl;
     return;
   }
   
   //   P R E P A R E   T W O   P O L Y L I N E S
 
- int n = GetNumberOfRotationSteps();
+  int n = GetNumberOfRotationSteps();
   double dz = 2.*halfZ / n;
   double k1 = r1*r1;
   double k2 = r2*r2;
@@ -1683,7 +1680,6 @@ HepPolyhedronHype::HepPolyhedronHype(double r1,
 
   RotateAroundZ(0, 0., wholeCircle, n, n, zz, rr, -1, -1); 
   SetReferences();
-
 }
 
 HepPolyhedronHype::~HepPolyhedronHype() {}

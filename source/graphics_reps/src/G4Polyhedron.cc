@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.22 2008-04-14 07:57:01 tnikitin Exp $
+// $Id: G4Polyhedron.cc,v 1.23 2008-04-14 08:50:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -131,12 +131,15 @@ G4PolyhedronTubs::G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz,
 
 G4PolyhedronTubs::~G4PolyhedronTubs () {}
 
-G4PolyhedronParaboloid::G4PolyhedronParaboloid (G4double r1, G4double r2, G4double dz, G4double sPhi, G4double dPhi):
+G4PolyhedronParaboloid::G4PolyhedronParaboloid (G4double r1, G4double r2,
+                                                G4double dz, G4double sPhi,
+                                                G4double dPhi):
   G4Polyhedron (HepPolyhedronParaboloid(r1, r2, dz, sPhi, dPhi)) {}
 
 G4PolyhedronParaboloid::~G4PolyhedronParaboloid () {}
 
-G4PolyhedronHype::G4PolyhedronHype (G4double r1, G4double r2, G4double tan1, G4double tan2, G4double halfZ):
+G4PolyhedronHype::G4PolyhedronHype (G4double r1, G4double r2, G4double tan1,
+                                    G4double tan2, G4double halfZ):
   G4Polyhedron (HepPolyhedronHype(r1, r2, tan1, tan2, halfZ)) {}
 
 G4PolyhedronHype::~G4PolyhedronHype () {}
@@ -148,14 +151,16 @@ G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
 
 G4PolyhedronEllipsoid::~G4PolyhedronEllipsoid () {}
 
-G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax, G4double ay,
+G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax,
+                                                        G4double ay,
                                                         G4double h, 
 					                G4double zCut1):
   G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
 
 G4PolyhedronEllipticalCone::~G4PolyhedronEllipticalCone () {}
 
-std::ostream& operator<<(std::ostream& os, const G4Polyhedron& polyhedron) {
+std::ostream& operator<<(std::ostream& os, const G4Polyhedron& polyhedron)
+{
   os << "G4Polyhedron: "
      << (const G4Visible&)polyhedron << '\n'
      << (const HepPolyhedron&)polyhedron;
