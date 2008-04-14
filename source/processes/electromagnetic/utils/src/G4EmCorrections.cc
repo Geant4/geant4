@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.34 2008-04-13 18:06:37 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.35 2008-04-14 09:43:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -801,11 +801,13 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
     if(stopData[idx]) delete stopData[idx];
   }
   size_t nbins = dVector.GetVectorLength();
+ 
   size_t n = 0;
   for(; n<nbins; n++) {
     if(dVector.GetLowEdgeEnergy(n) > eth) break;
   }
   if(n < nbins) nbins = n + 1;
+  
   G4LPhysicsFreeVector* v =
     new G4LPhysicsFreeVector(nbins,
 			     dVector.GetLowEdgeEnergy(0),
@@ -842,19 +844,23 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
       new G4LPhysicsFreeVector(nbins,
 			       v->GetLowEdgeEnergy(0),
 			       v->GetLowEdgeEnergy(nbins-1));
+    vv->SetSpline(true);
     for(size_t i=0; i<nbins; i++) {
       G4double e = v->GetLowEdgeEnergy(i);
       G4double dedx = v->GetValue(e, b);
       G4double dedx1= ionModel->ComputeDEDXPerVolume(mat, p, e, e)*
 	effCharge.EffectiveChargeSquareRatio(curParticle,mat,e/massFactor);
       vv->PutValue(i, dedx/dedx1);
-      if(verbose>1) G4cout << "  E(meV)= " << e/MeV << "   Correction= " << dedx/dedx1
-                           << "   "  << dedx << " " << dedx1 << G4endl;
+      if(verbose>1) {
+	G4cout << "  E(meV)= " << e/MeV << "   Correction= " << dedx/dedx1
+	       << "   "  << dedx << " " << dedx1 
+	       << "  massF= " << massFactor << G4endl;
+      }
     }
     delete v;
     stopData[idx] = vv;
   }
-  return v;
+  return vv;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

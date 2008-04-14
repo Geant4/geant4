@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.8 2008-04-13 18:06:37 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.9 2008-04-14 09:43:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,14 +147,6 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
 	/effCharge->EffectiveChargeSquareRatio(part,mat,e);
       // G4cout<<"Below th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
     }
-
-    // effective number of collisions
-    G4double x = mat->GetElectronDensity()*s*atomXS;
-    // equilibrium charge
-    G4double q = fParticleChange.GetProposedCharge(); 
-  
-    // sample charge change during the step
-    fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
   }
 
   // use nuclear stopping 
@@ -171,6 +163,18 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
+
+  // Compute mean effective charge on the step
+  e = preStepKinEnergy - eloss - niel;
+  if(e > 0.0) {
+    // effective number of collisions
+    G4double x = mat->GetElectronDensity()*s*atomXS;
+    // equilibrium charge
+    G4double q = effCharge->EffectiveChargeSquareRatio(part,mat,e);
+  
+    // sample charge change during the step
+    fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -180,7 +184,11 @@ G4double G4ionGasIonisation::SampleChargeAfterStep(G4double qeff, G4double xeff)
   // qeff - equilibrium charge
   // xeff - effective number of collisions
   // q    - current charge
-  G4double q = eplus*currentIonZ;
+  currentIonZ = G4int(qeff);
+  G4double q = G4double(currentIonZ);
+  if(G4UniformRand() > qeff - q) currentIonZ++;
+
+  q = eplus*currentIonZ;
   if(verboseLevel > 1) G4cout << "G4ionGasIonisation: Q1= " << currentIonZ
 			      << " Qeff= " << qeff/eplus << "  Neff= " << xeff
 			      << G4endl;

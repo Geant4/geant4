@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.54 2008-04-13 18:06:37 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.55 2008-04-14 09:43:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,6 +187,9 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   if(e <= 0.0) e = 0.5*preKinEnergy;
 
   //  G4double eloss0 = eloss;   
+  // correction for modification of effective charge during the step
+  eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
+  //G4cout<<"Corrected for charge: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
 
   if(eloss < preKinEnergy) {
     //G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
@@ -196,10 +199,6 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     if(e*massRatio > eth) {
       eloss += s*corr->IonHighOrderCorrections(part,mat,e);
       // G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
-
-      // correction of effective charge
-      eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
-      //G4cout<<"Corrected for charge: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
       
       // Correction for data points 
     } else {
@@ -225,7 +224,8 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   }
 
   // Compute mean effective charge on the step
-  if(preKinEnergy > eloss + niel) {
+  e = preKinEnergy - eloss - niel;
+  if(e > 0.0) {
 
     // propose charge after the step
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,mat,e));
