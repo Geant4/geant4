@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.16 2008-03-25 18:34:09 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.17 2008-04-14 18:35:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -255,6 +255,9 @@ private:
   G4double  charge;
   G4double  q2;
   G4double  A13;
+  G4double  eCorrMin;
+  G4double  eCorrMax;
+  G4int     nbinCorr;
 
   G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge;
