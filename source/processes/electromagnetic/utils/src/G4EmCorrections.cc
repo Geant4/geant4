@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.35 2008-04-14 09:43:24 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.36 2008-04-14 09:45:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -827,12 +827,12 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
 
 G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
 {
-  G4PhysicsVector* v = 0;
+  G4PhysicsVector* vv = 0;
   const G4Material* m = nist->FindOrBuildMaterial(materialName[idx],false);
   if(m) {
     materialList[idx] = m;
     curMaterial = mat;
-    v = stopData[idx];
+    G4PhysicsVector* v = stopData[idx];
     
     size_t nbins = v->GetVectorLength();
     const G4ParticleDefinition* p = G4Proton::Proton();
@@ -840,10 +840,9 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
                          << materialName[idx] << G4endl;
     G4bool b;
 
-    G4LPhysicsFreeVector* vv =
-      new G4LPhysicsFreeVector(nbins,
-			       v->GetLowEdgeEnergy(0),
-			       v->GetLowEdgeEnergy(nbins-1));
+    vv = new G4LPhysicsFreeVector(nbins,
+				  v->GetLowEdgeEnergy(0),
+				  v->GetLowEdgeEnergy(nbins-1));
     vv->SetSpline(true);
     for(size_t i=0; i<nbins; i++) {
       G4double e = v->GetLowEdgeEnergy(i);
