@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.26 2008-04-14 08:01:01 tnikitin Exp $
+// $Id: G4Hype.cc,v 1.27 2008-04-14 08:49:28 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1498,11 +1498,8 @@ G4VisExtent G4Hype::GetExtent() const
 //
 G4Polyhedron* G4Hype::CreatePolyhedron() const 
 {
-  // Tube for now!!!
-  //
-  // return new G4PolyhedronTube (endInnerRadius, endOuterRadius, halfLenZ);
-
-   return new G4PolyhedronHype(innerRadius, outerRadius,tanInnerStereo2,tanOuterStereo2, halfLenZ);
+   return new G4PolyhedronHype(innerRadius, outerRadius,
+                               tanInnerStereo2, tanOuterStereo2, halfLenZ);
 }
 
 
