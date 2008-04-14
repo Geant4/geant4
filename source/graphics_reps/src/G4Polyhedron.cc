@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.21 2007-07-18 14:07:24 tnikitin Exp $
+// $Id: G4Polyhedron.cc,v 1.22 2008-04-14 07:57:01 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
@@ -135,6 +135,11 @@ G4PolyhedronParaboloid::G4PolyhedronParaboloid (G4double r1, G4double r2, G4doub
   G4Polyhedron (HepPolyhedronParaboloid(r1, r2, dz, sPhi, dPhi)) {}
 
 G4PolyhedronParaboloid::~G4PolyhedronParaboloid () {}
+
+G4PolyhedronHype::G4PolyhedronHype (G4double r1, G4double r2, G4double tan1, G4double tan2, G4double halfZ):
+  G4Polyhedron (HepPolyhedronHype(r1, r2, tan1, tan2, halfZ)) {}
+
+G4PolyhedronHype::~G4PolyhedronHype () {}
 
 G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
                                               G4double cz, 
