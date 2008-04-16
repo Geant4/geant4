@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2008-04-11 18:51:16 gum Exp $
+$Id: History,v 1.31 2008-04-16 07:55:27 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Apr. 16,  08 H.Kurashige  (decay-V09-01-02)
+- fix a bug when shortlived particles has finite  pre-assigned proper time
+ 
 - Apr. 11,  08 P.Gumplinger (decay-V09-01-01)
 - modify G4DecayWithSpin::DecayIt to allow spin precession also for EM Fields;
   e.g. fields that do "DoesFieldChangeEnergy()" but only if the B-field

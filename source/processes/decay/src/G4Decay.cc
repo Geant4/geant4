@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.28 2007-12-15 12:29:16 kurasige Exp $
+// $Id: G4Decay.cc,v 1.29 2008-04-16 07:55:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -408,9 +408,20 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
     // reminder proper time
     fRemainderLifeTime = pTime - track.GetProperTime();
     if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
-  
+    
+    G4double  rvalue=0.0; 
     // use pre-assigned Decay time to determine PIL
-    return (fRemainderLifeTime/aLife)*GetMeanFreePath(track, previousStepSize, condition);
+    if (aLife>0.0) {
+      // ordinary particle
+      rvalue = (fRemainderLifeTime/aLife)*GetMeanFreePath(track, previousStepSize, condition);
+    } else {
+     // shortlived particle
+      rvalue = c_light * fRemainderLifeTime;
+     // by using normalized kinetic energy (= Ekin/mass)
+     G4double   aMass =  track.GetDynamicParticle()->GetMass();
+     rvalue *= track.GetDynamicParticle()->GetTotalMomentum()/aMass;
+    }
+    return rvalue;
   }
 }
 
