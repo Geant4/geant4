@@ -41,6 +41,7 @@
 
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
 // 070625 create clearCurrentXSData to fix memory leaking by T. Koi
+// 080417 Add IsZAApplicable method (return false) by T. Koi
 
 #include "G4NeutronHPThermalScatteringNames.hh"
 #include "G4NeutronHPVector.hh"
@@ -62,6 +63,9 @@ class G4NeutronHPThermalScatteringData : public G4VCrossSectionDataSet
       ~G4NeutronHPThermalScatteringData();
    
       G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+      G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+      { return false;}
 
       G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
       G4double GetInelasticCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
