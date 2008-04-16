@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.47 2008-04-16 10:17:03 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.48 2008-04-16 17:32:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,7 +143,7 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
     tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
       (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
-  cosTetMaxElec = cosTetMaxNuc;
+  cosTetMaxElec = 1.0;
   G4double t = std::min(cutEnergy, tmax);
   G4double mom21 = t*(t + 2.0*electron_mass_c2);
   G4double t1 = tkin - t;
@@ -162,8 +162,8 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double A,
 		G4double cutEnergy, G4double)
 {
-  if(p == particle && kinEnergy == tkin && Z == targetZ &&
-     A == targetA && cutEnergy == ecut) return nucXSection;
+  //  if(p == particle && kinEnergy == tkin && Z == targetZ &&
+  //   A == targetA && cutEnergy == ecut) return nucXSection;
 
   //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
   // << p->GetParticleName() << " Z= " << Z << " A= " << A 

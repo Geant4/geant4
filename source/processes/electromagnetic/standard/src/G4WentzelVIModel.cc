@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.2 2008-04-16 10:17:03 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.3 2008-04-16 17:32:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,8 +156,6 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 			     G4double Z, G4double A,
 			     G4double cutEnergy, G4double)
 {
-  //  if(p == particle && kinEnergy == tkin && Z == targetZ &&
-  //   cutEnergy == ecut) return xSection;
   xSection = 0.0;
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
@@ -206,8 +204,8 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
     x3 = x/screenZ;
     x4 = formfactA*x;
     if(x3 < numlimit) {
-      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 
-			      - 1.5*x1 + 3.0*x1*x1 + 2.666666*x3*x1);
+      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 - 1.5*x1);
+      // + 3.0*x1*x1 + 2.666666*x3*x1);
     } else {
       y = ((1.0 + x1)*x2*log((1. + x3)/(1. + x4)) 
 	   - x3/(1. + x3) - x4/(1. + x4))*x2*x2; 
@@ -380,16 +378,22 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double x1 = 0.5*tPathLength/lambdaeff;
 
   // define threshold angle as 2 sigma of central value
-  cosThetaMin = 1.0 - 4.0*x1;
+  cosThetaMin = 1.0 - 3.0*x1;
   /*
   G4cout <<"SampleScat: e0= "<< preKinEnergy<<" e1= "<<kinEnergy<<" x1= "<<x1
 	 << " L0= " << lambda0 << " Leff= " << lambdaeff 
 	 << G4endl;
   */
   G4double xsec = 0.0;
+  G4bool largeAng = false;
+
+  // large scattering angle case
+  if(x1 > 0.5) {
+    x1 *= 0.5;
+    largeAng = true;
 
   // recompute transport cross section
-  if(cosThetaMin > cosThetaMax) {
+  } else if(cosThetaMin > cosThetaMax) {
     // prepare kinematics
     G4double cut  = (*currentCuts)[currentMaterialIndex];
     cosThetaLimit = cosThetaMin;
@@ -440,9 +444,29 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4ThreeVector dir(0.0,0.0,1.0);
   G4bool isscat = false;
 
-  // sample scattering for large angle -------------
   if(xsec <= DBL_MIN) {
-    pos += dir*zPathLength;
+    // sample MSC scattering for large angle 
+    if(largeAng) {
+      isscat = true;
+      pos.setZ(-0.5*zPathLength);
+      do {
+	z = -x1*log(G4UniformRand());
+      } while (z > 1.0); 
+      cost = 1.0 - 2.0*z;
+      if(cost < -1.0) cost = -1.0;
+      else if(cost > 1.0) cost = 1.0;
+      sint = sqrt((1.0 - cost)*(1.0 + cost));
+      phi  = twopi*G4UniformRand();
+      G4double vx = sint*cos(phi);
+      G4double vy = sint*sin(phi);
+      dir.set(vx,vy,cost);
+      pos += newDirection*0.5*zPathLength;
+      x1 *= 2.0;
+    // sample MSC scattering for small angle 
+    } else {
+      pos += dir*zPathLength;
+    }
+    // sample Reserford scattering for large angle
   } else {
     G4double t = tPathLength;
     do{
@@ -496,10 +520,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	  sint = sqrt((1.0 - zz1)*(1.0 + zz1));
 	  //G4cout << "sint= " << sint << G4endl;
 	  phi  = twopi*G4UniformRand();
-
 	  G4double vx1 = sint*cos(phi);
 	  G4double vy1 = sint*sin(phi);
-        
 	  temp.set(vx1,vy1,zz1);
 	  temp.rotateUz(dir);
 	  dir = temp;
@@ -520,7 +542,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     G4double dy = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
     G4double dz;
     G4double d = (dx*dx + dy*dy)/(zPathLength*zPathLength);
-    if(d < 0.2)       dz = -zPathLength*d*(1.0 + 0.25*d);
+    if(d < numlimit)  dz = -zPathLength*d*(1.0 + 0.25*d);
     else if(d >= 1.0) dz = -zPathLength;
     else              dz = -zPathLength*(1.0 - sqrt(1.0 - d));
 
