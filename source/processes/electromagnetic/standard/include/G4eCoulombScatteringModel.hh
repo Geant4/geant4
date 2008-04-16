@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.27 2008-04-13 17:19:14 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.28 2008-04-16 10:17:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -214,12 +214,12 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin, 
 						      G4double cut)
 {
-  cosTetMinNuc = cosThetaMin;
-  cosTetMaxNuc = cosThetaMax;
-  if(cut > ekin && cosThetaMin < 1.0) {
-    cosTetMinNuc = ekin*(1.0 + cosThetaMin)/cut - 1.0;  
-  }
   if(ekin != tkin || ecut != cut) {
+    cosTetMinNuc = cosThetaMin;
+    cosTetMaxNuc = cosThetaMax;
+    if(cut > ekin && cosThetaMin < 1.0) {
+      cosTetMinNuc = ekin*(1.0 + cosThetaMin)/cut - 1.0;  
+    }
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;

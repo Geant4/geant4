@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.46 2008-04-13 17:19:14 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.47 2008-04-16 10:17:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,7 +150,7 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
   if(t1 > 0.0) {
     G4double mom22 = t1*(t1 + 2.0*mass);
     G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-    if(ctm > cosTetMaxNuc && ctm < 1.0) cosTetMaxElec = ctm;
+    if(ctm < 1.0) cosTetMaxElec = ctm;
   }
 }
 

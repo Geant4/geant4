@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.1 2008-04-13 17:20:06 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.2 2008-04-16 10:17:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,7 +166,6 @@ private:
   G4double xsecn2;
   G4double zcorr;
   G4double xsecn[40];
-  G4double xsece[40];
 
   G4int    nbins;
   G4int    nwarnings;
@@ -184,6 +183,7 @@ private:
   G4double cosThetaMax;
   G4double cosThetaLimit;
   G4double cosTetMaxNuc;
+  G4double cosTetMaxNuc2;
   G4double cosTetMaxElec;
   G4double cosTetMaxHad;
   G4double q2Limit;
@@ -264,9 +264,9 @@ void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
 
 inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
 {
-  cosTetMaxNuc = cosThetaLimit;
-  if(cut > ekin) cosTetMaxNuc = ekin*(1.0 + cosThetaLimit)/cut - 1.0;  
   if(ekin != tkin || ecut != cut) {
+    cosTetMaxNuc = cosThetaLimit;
+    if(cut > ekin) cosTetMaxNuc = ekin*(1.0 + cosThetaLimit)/cut - 1.0;  
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
