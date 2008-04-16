@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
       ---------------------------------------------------------------
 
+17 April 2008 Tatsumi Koi (hadr-hpn-V09-01-03)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+	G4NeutronHPFissionData.cc
+        G4NeutronHPThermalScatteringData.cc
+
 9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-02)
 ---------------------------------------------
 - Bug fixes for G4FPE_DEBUG by T. Koi
