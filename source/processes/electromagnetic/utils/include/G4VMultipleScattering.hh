@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.49 2008-03-10 10:59:45 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.50 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -216,23 +216,21 @@ public:
   inline G4VEmModel* GetModelByIndex(G4int idx = 0);
 
   //------------------------------------------------------------------------
-  // Parameters for simulation of multiple scattering
+  // Set parameters for simulation of multiple scattering
   //------------------------------------------------------------------------
 
   inline void SetLateralDisplasmentFlag(G4bool val);
      // lateral displacement to be/not to be computed
 
   inline void SetSkin(G4double val);
-     // skin parameter
 
   inline void SetRangeFactor(G4double val);
-     // FactorRange parameter
 
   inline void SetGeomFactor(G4double val);
-     // FactorRange parameter
+
+  inline void SetPolarAngleLimit(G4double val);
 
   inline void SetStepLimitType(G4MscStepLimitType val);
-     // FactorRange parameter
 
 protected:
 
@@ -269,7 +267,7 @@ protected:
   // define current material
 
   //------------------------------------------------------------------------
-  // Parameters for simulation of multiple scattering
+  // Access parameters of multiple scattering
   //------------------------------------------------------------------------
 
   inline G4double Skin() const;
@@ -277,6 +275,8 @@ protected:
   inline G4double RangeFactor() const;
 
   inline G4double GeomFactor() const;
+
+  inline G4double PolarAngleLimit() const;
 
   inline G4MscStepLimitType StepLimitType() const;
 
@@ -317,6 +317,7 @@ private:
   G4double                    skin;
   G4double                    facrange;
   G4double                    facgeom;
+  G4double                    polarAngleLimit;
 
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -498,6 +499,22 @@ inline  G4double G4VMultipleScattering::GeomFactor() const
 inline  void G4VMultipleScattering::SetGeomFactor(G4double val)
 {
   if(val > 0.0) facgeom = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  G4double G4VMultipleScattering::PolarAngleLimit() const
+{
+  return polarAngleLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  void G4VMultipleScattering::SetPolarAngleLimit(G4double val)
+{
+  if(val < 0.0)     polarAngleLimit = 0.0;
+  else if(val > pi) polarAngleLimit = pi;
+  else              polarAngleLimit = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

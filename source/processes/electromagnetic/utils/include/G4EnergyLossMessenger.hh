@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.20 2008-03-11 12:03:23 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.21 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,6 +123,7 @@ private:
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADoubleAndUnit* angCmd;
 };
 
 #endif

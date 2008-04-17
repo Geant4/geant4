@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.13 2008-03-10 18:39:45 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.14 2008-04-17 10:33:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -123,6 +123,8 @@ public:
   void SetSplineFlag(G4bool val);
 
   void SetBremsstrahlungTh(G4double val);
+
+  void SetPolarAngleLimit(G4double val);
 
 private:
 

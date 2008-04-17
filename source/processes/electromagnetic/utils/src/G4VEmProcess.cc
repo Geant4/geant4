@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.51 2008-04-08 18:13:30 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.52 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,6 +100,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   SetVerboseLevel(1);
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*GeV;
+  polarAngleLimit = 0.0;
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();

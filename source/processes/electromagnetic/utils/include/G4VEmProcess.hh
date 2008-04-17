@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.43 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.44 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,6 +187,9 @@ public:
   inline G4double MaxKinEnergy() const;
   // Max kinetic energy for tables
 
+  inline void SetPolarAngleLimit(G4double a);
+  inline G4double PolarAngleLimit() const;
+
   inline const G4PhysicsTable* LambdaTable() const;
 
   //------------------------------------------------------------------------
@@ -311,6 +314,7 @@ private:
   G4double                     minKinEnergy;
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
+  G4double                     polarAngleLimit;
 
   // cash
   const G4Material*            currentMaterial;
@@ -588,6 +592,22 @@ inline void G4VEmProcess::SetMaxKinEnergy(G4double e)
 inline G4double G4VEmProcess::MaxKinEnergy() const
 {
   return maxKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
+{
+  if(val < 0.0)     polarAngleLimit = 0.0;
+  else if(val > pi) polarAngleLimit = pi;
+  else              polarAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::PolarAngleLimit() const
+{
+  return polarAngleLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

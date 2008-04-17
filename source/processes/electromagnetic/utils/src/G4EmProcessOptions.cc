@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.23 2008-03-10 18:39:45 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.24 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -471,6 +471,25 @@ void G4EmProcessOptions::SetMscGeomFactor(G4double val)
   std::vector<G4VMultipleScattering*>::const_iterator itm;
   for(itm = u.begin(); itm != u.end(); itm++) {
     if(*itm) (*itm)->SetGeomFactor(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPolarAngleLimit(G4double val)
+{
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetPolarAngleLimit(val);
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->SetPolarAngleLimit(val);
   }
 }
 

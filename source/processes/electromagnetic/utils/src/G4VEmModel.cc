@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.8 2007-09-25 10:19:07 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.9 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
- lowLimit(0.1*keV), highLimit(100.0*TeV), fluc(0), name(nam), pParticleChange(0)
+  lowLimit(0.1*keV), highLimit(100.0*TeV), polarAngleLimit(0.0),
+  fluc(0), name(nam), pParticleChange(0) 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

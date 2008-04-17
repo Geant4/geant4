@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.48 2007-10-29 08:38:58 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.49 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@ public:
   virtual ~G4VEmModel();
 
   //------------------------------------------------------------------------
-  // Virtual methods to be implemented for the concrete model
+  // Virtual methods to be implemented for any concrete model
   //------------------------------------------------------------------------
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
@@ -180,33 +180,37 @@ public:
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
+  inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
-  G4VEmFluctuationModel* GetModelOfFluctuations();
+  inline G4VEmFluctuationModel* GetModelOfFluctuations();
 
-  G4double HighEnergyLimit();
+  inline G4double HighEnergyLimit() const;
 
-  G4double LowEnergyLimit();
+  inline G4double LowEnergyLimit() const;
 
-  void SetHighEnergyLimit(G4double);
+  inline G4double PolarAngleLimit() const;
 
-  void SetLowEnergyLimit(G4double);
+  inline void SetHighEnergyLimit(G4double);
 
-  G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
+  inline void SetLowEnergyLimit(G4double);
 
-  const G4Element* SelectRandomAtom(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double kineticEnergy,
-				    G4double cutEnergy = 0.0,
-				    G4double maxEnergy = DBL_MAX);
+  inline void SetPolarAngleLimit(G4double);
 
-  const G4String& GetName() const;
+  inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
+
+  inline const G4Element* SelectRandomAtom(const G4Material*,
+					   const G4ParticleDefinition*,
+					   G4double kineticEnergy,
+					   G4double cutEnergy = 0.0,
+					   G4double maxEnergy = DBL_MAX);
+
+  inline const G4String& GetName() const;
 
 protected:
 
-  const G4Element* GetCurrentElement() const;
+  inline const G4Element* GetCurrentElement() const;
 
-  void SetCurrentElement(const G4Element*);
+  inline void SetCurrentElement(const G4Element*);
 
 private:
 
@@ -216,6 +220,7 @@ private:
 
   G4double        lowLimit;
   G4double        highLimit;
+  G4double        polarAngleLimit;
   G4double        xsec[40];
 
   G4VEmFluctuationModel* fluc;
@@ -231,16 +236,23 @@ protected:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::HighEnergyLimit()
+inline G4double G4VEmModel::HighEnergyLimit() const
 {
   return highLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::LowEnergyLimit()
+inline G4double G4VEmModel::LowEnergyLimit() const
 {
   return lowLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::PolarAngleLimit() const
+{
+  return polarAngleLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,6 +267,13 @@ inline void G4VEmModel::SetHighEnergyLimit(G4double val)
 inline void G4VEmModel::SetLowEnergyLimit(G4double val)
 {
   lowLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetPolarAngleLimit(G4double val)
+{
+  polarAngleLimit = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -311,8 +330,8 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 					 G4double cutEnergy,
 					 G4double maxEnergy)
 {
-  return 
-    CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
+  return CrossSectionPerVolume(c->GetMaterial(),p,
+			       kinEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

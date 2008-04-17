@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.52 2008-04-08 18:13:30 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.53 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,6 +101,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 {
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
+  polarAngleLimit = 0.0;
   SetVerboseLevel(1);
 
   pParticleChange = &fParticleChange;

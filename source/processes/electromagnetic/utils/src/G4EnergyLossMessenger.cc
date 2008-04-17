@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.33 2008-04-08 15:52:17 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.34 2008-04-17 10:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -234,6 +234,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   skinCmd->SetGuidance("Set skin parameter for msc processes");
   skinCmd->SetParameterName("skin",true);
   skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  angCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/ThetaLimit",this);
+  angCmd->SetGuidance("Set the limit on the polar angle");
+  angCmd->SetParameterName("theta",true);
+  angCmd->SetUnitCategory("Angle");
+  angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -266,6 +272,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete lamCmd;
   delete labCmd;
   delete skinCmd;
+  delete angCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -388,6 +395,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     opt->SetMscGeomFactor(fgCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
+  if (command == angCmd) { 
+    opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
