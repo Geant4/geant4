@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyRandomEngines.cc,v 1.4 2006-06-29 15:33:39 gunter Exp $
+// $Id: pyRandomEngines.cc,v 1.5 2008-04-18 06:26:52 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyRandomEngines.cc
@@ -34,6 +34,7 @@
 #include "CLHEP/Random/RandomEngine.h"
 #include "CLHEP/Random/JamesRandom.h"
 #include "CLHEP/Random/Ranlux64Engine.h"
+#include "CLHEP/Random/RanluxEngine.h"
 
 using namespace boost::python;
 using namespace CLHEP;
@@ -49,6 +50,10 @@ void export_RandomEngines()
 
   class_<HepJamesRandom, bases<HepRandomEngine> >
     ("HepJamesRandom", "HepJames random engine")
+    ;
+
+  class_<RanluxEngine, bases<HepRandomEngine> >
+    ("RanluxEngine", "Ranlux random engine")
     ;
 
   class_<Ranlux64Engine, bases<HepRandomEngine> >
