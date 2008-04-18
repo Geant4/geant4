@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.9 2008-04-14 09:43:24 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.10 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,15 +138,12 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
 
     // use Bethe-Bloch with corrections
     if(e*currMassRatio > currTh) {
-      eloss += s*corr->IonHighOrderCorrections(part,mat,e);
-
-      // Correction for data points 
-    } else {
-      //      if(stopDataActive)
-      eloss *= corr->EffectiveChargeCorrection(part,mat,e)*currCharge2
-	/effCharge->EffectiveChargeSquareRatio(part,mat,e);
-      // G4cout<<"Below th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
-    }
+      eloss += s*corr->IonHighOrderCorrections(part,couple,e);
+    } 
+    // Correction for data points if(stopDataActive)
+    eloss *= corr->EffectiveChargeCorrection(part,mat,e)*currCharge2
+      /effCharge->EffectiveChargeSquareRatio(part,mat,e);
+    // G4cout<<"Below th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
   }
 
   // use nuclear stopping 

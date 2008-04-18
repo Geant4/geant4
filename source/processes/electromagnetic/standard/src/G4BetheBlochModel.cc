@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.16 2008-03-25 18:36:34 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.17 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
   isIon(false)
 {
   fParticleChange = 0;
+  A13 = 0;
   if(p) SetParticle(p);
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
@@ -86,7 +87,9 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BetheBlochModel::~G4BetheBlochModel()
-{}
+{
+  delete [] A13;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -102,9 +105,6 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
   if (!particle) SetParticle(p);
-  G4String pname = particle->GetParticleName();
-  if (particle->GetParticleType() == "nucleus" &&
-     pname != "deuteron" && pname != "triton") isIon = true;
 
   if(!fParticleChange) {
     if (pParticleChange) 
@@ -115,13 +115,52 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(particle != p) {
+    particle = p;
+    G4String pname = particle->GetParticleName();
+    if (particle->GetParticleType() == "nucleus" &&
+	pname != "deuteron" && pname != "triton") {
+      isIon = true;
+      if(!A13) {
+	A13 = new G4double [100];
+	for(G4int i=0; i<100; i++) {A13[i] = -1.0;}
+      }
+    }
+    
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    ratio = electron_mass_c2/mass;
+    formfact = 0.0;
+    if(particle->GetLeptonNumber() == 0) {
+      G4double x = 0.8426*GeV;
+      if(spin == 0.0 && mass < GeV) x = 0.736*GeV;
+      else if(isIon) {
+        G4int iz = G4int(std::abs(q));
+        if(iz > 99) iz = 99;
+        if(A13[iz] < 0.0) {
+	  A13[iz] = std::pow(proton_mass_c2/mass,0.3333333);
+	}
+	x *= A13[iz];
+	tlimit = 51.2*GeV*A13[iz]*A13[iz];
+      }
+      formfact = 2.0*electron_mass_c2/(x*x);
+    }
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
-                                                 G4double maxKinEnergy)						  
+                                                 G4double maxKinEnergy)	
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
@@ -138,10 +177,11 @@ G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
     // +term for spin=1/2 particle
     if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
 
-    //High order correction different for hadrons and ions
-    if(!isIon) 
-      cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
-					    kineticEnergy,cutEnergy);
+    // High order correction different for hadrons and ions
+    // nevetheless they are applied to reduce high energy transfers
+    //    if(!isIon) 
+    cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
+					  kineticEnergy,cutEnergy);
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -232,11 +272,11 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
 
   //High order correction different for hadrons and ions
-  if(isIon) 
+  if(isIon) {
     dedx += corr->IonBarkasCorrection(p,material,kineticEnergy);
-  else      
+  } else {      
     dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
-
+  }
   return dedx;
 }
 

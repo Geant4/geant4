@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.37 2008-04-14 18:35:16 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.38 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,28 +63,31 @@
 #include "G4LPhysicsFreeVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmCorrections::G4EmCorrections()
 {
-  Initialise();
   particle   = 0;
   curParticle= 0;
   material   = 0;
   curMaterial= 0;
   curVector  = 0;
   kinEnergy  = 0.0;
-  ionModel   = 0;
+  ionLEModel = 0;
+  ionHEModel = 0;
   nIons      = 0;
   verbose    = 1;
+  ncouples   = 0;
   massFactor = 1.0;
   eth        = 2.0*MeV;
-  nbinCorr   = 30;
-  eCorrMin   = 25.*keV;
-  eCorrMax   = 25.*MeV;
+  nbinCorr   = 25;
+  eCorrMin   = 10.*keV;
+  eCorrMax   = 1000.*MeV;
   nist = G4NistManager::Instance();
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
+  Initialise();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -164,26 +167,25 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, tmax0);
+  //  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, tmax0);
 
-  G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + FSize + Mott;
+  G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + Mott;
 
-  if(verbose > 1)
+  if(verbose > 1) {
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
-	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
+	   << " Bloch= " << Bloch << " Mott= " << Mott 
 	   << " Sum= " << sum << G4endl; 
-
+  }
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
 
-  if(verbose > 1)
-    G4cout << " Sum= " << sum << G4endl; 
+  if(verbose > 1) G4cout << " Sum= " << sum << G4endl; 
   return sum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
-						  const G4Material* mat,
+						  const G4MaterialCutsCouple* couple,
 						  G4double e)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
@@ -196,32 +198,32 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
   if(Z >= 100)   Z = 99;
   else if(Z < 1) Z = 1;
-  G4int i;
 
   // fill vector
   if(thcorr[Z].size() == 0) {
     thcorr[Z].resize(ncouples);
     G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    const G4ParticleDefinition* prot = G4Proton::Proton();
 
-    for(i=0; i<ncouples; i++) {
-      G4double x = EffectiveChargeCorrection(p,mat,ethscaled) - 1.0;
-      if(x != 0.0) x *= ionModel->ComputeDEDXPerVolume(mat, p, ethscaled, ethscaled);
+    for(size_t i=0; i<ncouples; i++) {
+      const G4Material* aMat = currmat[i];
+      G4double corr   = ComputeIonCorrections(p, aMat, ethscaled);
 
-      (thcorr[Z])[i] = ethscaled*(x - ComputeIonCorrections(p,mat,ethscaled));
+      G4double dedxt  = 
+	ionLEModel->ComputeDEDXPerVolume(aMat, prot, eth, eth)*q2;
+      G4double dedx1t = 
+	ionHEModel->ComputeDEDXPerVolume(aMat, prot, eth, eth)*q2 + corr;
+      G4cout << i << ". ethscaled= " << ethscaled << " dedx0= " << dedxt
+	     << " dedx1= " << dedx1t << " q2= " << q2 << " corr= " << corr << G4endl;
+
+      (thcorr[Z])[i]  = ethscaled*(dedxt - dedx1t);
     } 
-  }
+  } 
+  G4double rest = (thcorr[Z])[couple->GetIndex()];
 
-  G4double sum = ComputeIonCorrections(p,mat,e);
+  G4double sum = ComputeIonCorrections(p,couple->GetMaterial(),e) + rest/e;
 
-  // correction to correction
-  for(i=0; i<ncouples; i++) {
-    if(currmat[i] == mat) {
-      sum += (thcorr[Z])[i]/e; 
-      break;
-    }
-  }
-  if(verbose > 1)
-    G4cout << " Sum= " << sum << G4endl; 
+  if(verbose > -1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
   return sum;
 }
 
@@ -730,9 +732,11 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionEffectiveCharge* G4EmCorrections::GetIonEffectiveCharge(G4VEmModel* m)
+G4ionEffectiveCharge* G4EmCorrections::GetIonEffectiveCharge(G4VEmModel* m1, 
+							     G4VEmModel* m2)
 {
-  if(m) ionModel = m;
+  if(m1) ionLEModel = m1;
+  if(m2) ionHEModel = m2;
   return &effCharge;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -780,8 +784,10 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
   if(curVector) {
     G4bool b;
     factor = curVector->GetValue(ekin*massFactor,b);
+    if(verbose > 1) {
+      G4cout << "  factor= " << factor << " massfactor= " << massFactor << G4endl;
+    }
   }
-  if(verbose > 1) G4cout << "  factor= " << factor << " massfactor= " << massFactor << G4endl;
   return factor;
 }
 
@@ -789,44 +795,26 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
 
 void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
 				      const G4String& mname,
-				      G4PhysicsVector& dVector)
+				      G4PhysicsVector* dVector)
 {
-  idx = 0;
-  for(; idx<nIons; idx++) {
-    if(Z == Zion[idx] && A == Aion[idx] && mname == materialName[idx])
+  G4int i = 0;
+  for(; i<nIons; i++) {
+    if(Z == Zion[i] && A == Aion[i] && mname == materialName[i])
       break;
   }
-  if(idx == nIons) {
+  if(i == nIons) {
     Zion.push_back(Z);
     Aion.push_back(A);
     materialName.push_back(mname);
     materialList.push_back(0);
     stopData.push_back(0);
     nIons++;
-  } else {
-    if(stopData[idx]) delete stopData[idx];
+    if(verbose>1) {
+      G4cout << "AddStoppingData Z= " << Z << " A= " << A << " " << mname
+	     << "  idx= " << i << G4endl;
+    }
+    stopData[i] = dVector;
   }
-  size_t nbins = dVector.GetVectorLength();
- 
-  size_t n = 0;
-  for(; n<nbins; n++) {
-    if(dVector.GetLowEdgeEnergy(n) > eth) break;
-  }
-  if(n < nbins) nbins = n + 1;
-  
-  G4LPhysicsFreeVector* v =
-    new G4LPhysicsFreeVector(nbins,
-			     dVector.GetLowEdgeEnergy(0),
-			     dVector.GetLowEdgeEnergy(nbins-1));
-  v->SetSpline(true);
-  G4bool b;
-  for(size_t i=0; i<nbins; i++) {
-    G4double e = dVector.GetLowEdgeEnergy(i);
-    G4double dedx = dVector.GetValue(e, b);
-    v->PutValues(i, e, dedx);
-  }
-  //  G4cout << *v << G4endl;
-  stopData[idx] = v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -835,7 +823,7 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
 {
   G4PhysicsVector* vv = 0;
   const G4Material* m = nist->FindOrBuildMaterial(materialName[idx],false);
-  if(m) {
+  if(m && ionLEModel && ionHEModel) {
     materialList[idx] = m;
     curMaterial = mat;
     G4PhysicsVector* v = stopData[idx];
@@ -848,31 +836,37 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
 	     << " massFactor= " << massFactor << G4endl;
     }
     G4bool b;
+    G4int i;
 
     vv = new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr);
     vv->SetSpline(true);
-
-    G4double e, res, dedx, dedx1;
-    G4double dedxt  = v->GetValue(eth, b);
-    G4double dedx1t = ionModel->ComputeDEDXPerVolume(mat, p, eth, eth)*
-      effCharge.EffectiveChargeSquareRatio(curParticle,mat,eth/massFactor);
-    G4double rest = dedxt/dedx1t;
-
-    for(G4int i=0; i<nbinCorr; i++) {
+    G4double e, dedx, dedx1;
+    G4double eth0 = v->GetLowEdgeEnergy(0);
+    G4double escal = eth/massFactor;
+    G4double qe = effCharge.EffectiveChargeSquareRatio(curParticle,mat,escal); 
+    G4double dedxt = ionLEModel->ComputeDEDXPerVolume(mat, p, eth, eth)*qe;
+    G4double dedx1t = ionHEModel->ComputeDEDXPerVolume(mat, p, eth, eth)*qe 
+      + ComputeIonCorrections(curParticle, mat, escal);
+    G4double rest = escal*(dedxt - dedx1t);
+  
+    for(i=0; i<nbinCorr; i++) {
       e = vv->GetLowEdgeEnergy(i);
-      if(e <= eth) {
-	dedx = v->GetValue(e, b);
-        dedx1= ionModel->ComputeDEDXPerVolume(mat, p, e, e)*
-	  effCharge.EffectiveChargeSquareRatio(curParticle,mat,e/massFactor);
-        res = dedx/dedx1;
+      if(e <= eth0) {
+	dedx = v->GetValue(eth0, b)*sqrt(e/eth0);
       } else {
-        dedx  = dedxt;
-        dedx1 = dedx1t;
-        res   = 1.0 + eth*(rest - 1.0)/e;
+	dedx = v->GetValue(e, b);
       }
-      vv->PutValue(i, res);
+      escal = e/massFactor;
+      qe = effCharge.EffectiveChargeSquareRatio(curParticle,mat,escal); 
+      if(e <= eth) {
+        dedx1 = ionLEModel->ComputeDEDXPerVolume(mat, p, e, e)*qe;
+      } else {
+        dedx1 = ionHEModel->ComputeDEDXPerVolume(mat, p, e, e)*qe +
+	  ComputeIonCorrections(curParticle, mat, escal) + rest/escal;
+      }
+      vv->PutValue(i, dedx/dedx1);
       if(verbose>1) {
-	G4cout << "  E(meV)= " << e/MeV << "   Correction= " << res
+	G4cout << "  E(meV)= " << e/MeV << "   Correction= " << dedx/dedx1
 	       << "   "  << dedx << " " << dedx1 
 	       << "  massF= " << massFactor << G4endl;
       }
@@ -890,11 +884,13 @@ void G4EmCorrections::InitialiseForNewRun()
 {
   G4ProductionCutsTable* tb = G4ProductionCutsTable::GetProductionCutsTable();
   ncouples = tb->GetTableSize();
-  currmat.resize(ncouples);
-  G4int i;
-  for(i=0; i<100; i++) {thcorr[i].clear();}
-  for(i=0; i<ncouples; i++) {
-    currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
+  if(currmat.size() != ncouples) {
+    currmat.resize(ncouples);
+    size_t i;
+    for(i=0; i<100; i++) {thcorr[i].clear();}
+    for(i=0; i<ncouples; i++) {
+      currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
+    }
   }
 }
 

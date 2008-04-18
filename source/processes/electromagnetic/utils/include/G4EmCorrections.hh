@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.17 2008-04-14 18:35:16 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.18 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
+class G4MaterialCutsCouple;
 
 class G4EmCorrections
 {
@@ -72,82 +73,83 @@ public:
 
   virtual ~G4EmCorrections();
 
-  G4double HighOrderCorrections(const G4ParticleDefinition* p,
-                                const G4Material* material,
+  G4double HighOrderCorrections(const G4ParticleDefinition*,
+                                const G4Material*,
 				G4double kineticEnergy,
 				G4double cutEnergy);
 
-  G4double IonHighOrderCorrections(const G4ParticleDefinition* p,
-				   const G4Material* material,
+  G4double IonHighOrderCorrections(const G4ParticleDefinition*,
+				   const G4MaterialCutsCouple*,
 				   G4double kineticEnergy);
 
-  G4double IonBarkasCorrection(const G4ParticleDefinition* p,
-			       const G4Material* material,
+  G4double IonBarkasCorrection(const G4ParticleDefinition*,
+			       const G4Material*,
 			       G4double kineticEnergy);
 
-  G4double Bethe(const G4ParticleDefinition* p,
-                 const G4Material* material,
+  G4double Bethe(const G4ParticleDefinition*,
+                 const G4Material*,
 		 G4double kineticEnergy);
 
-  G4double SpinCorrection(const G4ParticleDefinition* p,
-                          const G4Material* material,
+  G4double SpinCorrection(const G4ParticleDefinition*,
+                          const G4Material*,
 			  G4double kineticEnergy);
 
-  G4double KShellCorrection(const G4ParticleDefinition* p,
-                            const G4Material* material,
+  G4double KShellCorrection(const G4ParticleDefinition*,
+                            const G4Material*,
 			    G4double kineticEnergy);
 
-  G4double LShellCorrection(const G4ParticleDefinition* p,
-                            const G4Material* material,
+  G4double LShellCorrection(const G4ParticleDefinition*,
+                            const G4Material*,
 			    G4double kineticEnergy);
 
-  G4double ShellCorrection(const G4ParticleDefinition* p,
-                           const G4Material* material,
+  G4double ShellCorrection(const G4ParticleDefinition*,
+                           const G4Material*,
 			   G4double kineticEnergy);
 
-  G4double ShellCorrectionSTD(const G4ParticleDefinition* p,
-                              const G4Material* material,
+  G4double ShellCorrectionSTD(const G4ParticleDefinition*,
+                              const G4Material*,
 			      G4double kineticEnergy);
 
-  G4double DensityCorrection(const G4ParticleDefinition* p,
-                             const G4Material* material,
+  G4double DensityCorrection(const G4ParticleDefinition*,
+                             const G4Material*,
 			     G4double kineticEnergy);
 
-  G4double BarkasCorrection(const G4ParticleDefinition* p,
-                            const G4Material* material,
+  G4double BarkasCorrection(const G4ParticleDefinition*,
+                            const G4Material*,
 			    G4double kineticEnergy);
 
-  G4double BlochCorrection(const G4ParticleDefinition* p,
-                           const G4Material* material,
+  G4double BlochCorrection(const G4ParticleDefinition*,
+                           const G4Material*,
 			   G4double kineticEnergy);
 
-  G4double MottCorrection(const G4ParticleDefinition* p,
-                          const G4Material* material,
+  G4double MottCorrection(const G4ParticleDefinition*,
+                          const G4Material*,
 			  G4double kineticEnergy);
 
-  G4double FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p,
-				    const G4Material* material,
+  G4double FiniteSizeCorrectionDEDX(const G4ParticleDefinition*,
+				    const G4Material*,
 				    G4double kineticEnergy,
 				    G4double cutEnergy);
 
-  G4double FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
-				  const G4Material* material,
+  G4double FiniteSizeCorrectionXS(const G4ParticleDefinition*,
+				  const G4Material*,
 				  G4double kineticEnergy,
 				  G4double cutEnergy);
 
-  G4double NuclearDEDX(const G4ParticleDefinition* p,
-                       const G4Material* material,
+  G4double NuclearDEDX(const G4ParticleDefinition*,
+                       const G4Material*,
 		       G4double kineticEnergy,
 		       G4bool fluct = true);
 
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
-		       G4PhysicsVector& dVector);
+		       G4PhysicsVector* dVector);
 
   G4double EffectiveChargeCorrection(const G4ParticleDefinition*,
 				     const G4Material*,
 				     G4double);
 
-  G4ionEffectiveCharge* GetIonEffectiveCharge(G4VEmModel* m = 0);
+  G4ionEffectiveCharge* GetIonEffectiveCharge(G4VEmModel* m1 = 0,
+					      G4VEmModel* m2 = 0);
 
   G4int GetNumberOfStoppingVectors();
 
@@ -157,10 +159,10 @@ private:
 
   void Initialise();
 
-  G4PhysicsVector* InitialiseMaterial(const G4Material* mat);
+  G4PhysicsVector* InitialiseMaterial(const G4Material*);
 
-  void SetupKinematics(const G4ParticleDefinition* p,
-		       const G4Material* material,
+  void SetupKinematics(const G4ParticleDefinition*,
+		       const G4Material*,
 		       G4double kineticEnergy);
 
   G4double KShell(G4double theta, G4double eta);
@@ -178,8 +180,8 @@ private:
   G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2,
                                             G4double m1, G4double m2);
 
-  G4double ComputeIonCorrections(const G4ParticleDefinition* p,
-				 const G4Material* material,
+  G4double ComputeIonCorrections(const G4ParticleDefinition*,
+				 const G4Material*,
 				 G4double kineticEnergy);
 
   // hide assignment operator
@@ -228,8 +230,8 @@ private:
   G4double     Z23[100];
 
   std::vector<const G4Material*> currmat;
-  G4DataVector thcorr[100];
-  G4int        ncouples;
+  std::vector<G4double>          thcorr[100];
+  size_t        ncouples;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* curParticle;
@@ -264,7 +266,8 @@ private:
 
   G4NistManager*        nist;
   const G4IonTable*     ionTable;
-  G4VEmModel*           ionModel;
+  G4VEmModel*           ionLEModel;
+  G4VEmModel*           ionHEModel;
 
   // Ion stopping data
   G4int                       nIons;

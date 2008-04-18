@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.51 2008-02-04 17:52:45 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.52 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,7 @@ public:
   virtual void PrintInfo();
 
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
-		       G4PhysicsVector& dVector);
+		       G4PhysicsVector* dVector);
 
   void ActivateStoppingData(G4bool);
 

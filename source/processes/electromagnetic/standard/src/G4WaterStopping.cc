@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.3 2008-04-13 17:19:14 vnivanch Exp $
+// $Id: G4WaterStopping.cc,v 1.4 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -55,10 +55,7 @@ G4WaterStopping::G4WaterStopping(G4EmCorrections* corr)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WaterStopping::~G4WaterStopping()
-{
-  int n = dedx.size();
-  for(int i=0; i<n; i++) {delete dedx[i];}
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -150,6 +147,6 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
   for(i=0; i<53; i++) { pv->PutValues(i,E[i],Ne[i]*1000.*MeV/cm); }
 
   if(corr) {
-    for(i=0; i<8; i++) {corr->AddStoppingData(Z[i], A[i], "G4_WATER", *(dedx[i]));}
+    for(i=0; i<8; i++) {corr->AddStoppingData(Z[i], A[i], "G4_WATER", dedx[i]);}
   }
 }

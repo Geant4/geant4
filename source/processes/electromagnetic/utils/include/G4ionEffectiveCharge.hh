@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.9 2008-02-14 14:50:43 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.hh,v 1.10 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,8 +108,11 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4Material* material,
 			         G4double kineticEnergy)
 {
-  G4double charge = EffectiveCharge(p,material,kineticEnergy)/eplus;
-  charge *= chargeCorrection;
+  G4double charge = effCharge;
+  if( kineticEnergy != lastKinEnergy || material != lastMat || p != lastPart) {
+    charge = EffectiveCharge(p,material,kineticEnergy);
+  }
+  charge *= chargeCorrection/eplus;
 
   return charge*charge;
 }

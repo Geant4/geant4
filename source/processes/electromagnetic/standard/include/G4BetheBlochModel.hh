@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.11 2008-03-25 18:36:34 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.12 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,6 +138,7 @@ private:
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
+  G4double* A13;
   G4bool   isIon;
 };
 
@@ -152,31 +153,6 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return std::min(tmax,tlimit);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    ratio = electron_mass_c2/mass;
-    formfact = 0.0;
-    if(particle->GetLeptonNumber() != 0) {
-      G4double x = 0.8426*GeV;
-      if(spin == 0.0 && mass < GeV) x = 0.736*GeV;
-      else if(mass > GeV) {
-	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
-	x *= A13;
-	tlimit = 51.2*GeV*A13*A13;
-      }
-      formfact = 2.0*electron_mass_c2/(x*x);
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

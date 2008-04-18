@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.8 2008-04-16 17:32:39 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.9 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -88,6 +88,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
       mscModel->SetStepLimitType(StepLimitType());
       mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
       mscModel->SetRangeFactor(RangeFactor());
+      mscModel->SetPolarAngleLimit(PolarAngleLimit());
     }
     return;
   }
@@ -103,6 +104,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   mscModel->SetStepLimitType(StepLimitType());
   mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscModel->SetRangeFactor(RangeFactor());
+  mscModel->SetPolarAngleLimit(PolarAngleLimit());
 
   AddEmModel(1,mscModel);
   isInitialized = true;

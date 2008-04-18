@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.13 2008-03-21 17:54:46 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.14 2008-04-18 18:42:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,14 +107,14 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     if(mass < MeV) eth  = thEnergyElec; 
     if(eth > emin) {
       G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(thetaMin,thetaMax,q2Max);
+	new G4eCoulombScatteringModel(PolarAngleLimit(),pi,q2Max);
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(std::min(eth,emax));
       AddEmModel(1, model);
     }
     if(eth < emax) {
       G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(thetaMin,thetaMax,q2Max);
+	new G4CoulombScatteringModel(PolarAngleLimit(),pi,q2Max);
       model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
       AddEmModel(2, model);
@@ -127,13 +127,13 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 void G4CoulombScattering::PrintInfo()
 {
   G4cout << " Scattering of " << aParticle->GetParticleName()
-	 << " with   " << thetaMin/degree
-	 << " < Theta(degree) < " << thetaMax/degree
+	 << " with   " << PolarAngleLimit()/degree
+	 << " < Theta(degree) < 180" 
 	 << "; Eth(MeV)= ";
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 
-  if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
+  if(q2Max < DBL_MAX) G4cout << "; q2Max(MeV^2)= " << q2Max;
   G4cout << G4endl;
 }
 

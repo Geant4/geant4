@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.18 2008-02-14 14:50:44 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.19 2008-04-18 18:42:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   G4double Zi     = charge/eplus;
 
   chargeCorrection = 1.0;
+  effCharge = charge;
 
   // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
