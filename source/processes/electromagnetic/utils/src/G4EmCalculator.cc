@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.38 2008-03-25 12:17:23 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.39 2008-04-19 16:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -125,6 +125,15 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
   const G4MaterialCutsCouple* couple = FindCouple(mat, region);
   if(couple && UpdateParticle(p, kinEnergy) ) {
     res = manager->GetDEDX(p, kinEnergy, couple);
+    if(isIon) {
+      G4double escaled = kinEnergy*massRatio;
+      G4double eth = 2.0*MeV;
+      if(escaled > eth) {
+	res += corr->ComputeIonCorrections(p,mat,kinEnergy) 
+	  - corr->ComputeIonCorrections(baseParticle,mat,eth)*eth/escaled;
+      } 
+    }
+
     if(verbose>0) {
       G4cout << "G4EmCalculator::GetDEDX: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
@@ -419,10 +428,12 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	       << G4endl;
 
       if(isIon) {
-        if(currentModel->HighEnergyLimit() > 100.*MeV)
-          res += corr->HighOrderCorrections(p,mat,kinEnergy,cut);
-	else
-	  res *= corr->EffectiveChargeCorrection(p,mat,kinEnergy);
+        if(currentModel->HighEnergyLimit() > 100.*MeV) {
+          G4double eth = 2.0*MeV;
+          res += corr->ComputeIonCorrections(p,mat,kinEnergy) 
+	    - corr->ComputeIonCorrections(baseParticle,mat,eth)*eth/escaled;
+	} 
+	
 	if(verbose > 1)
 	  G4cout << "After Corrections: DEDX(MeV/mm)= " << res*mm/MeV
 		 << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
@@ -737,7 +748,8 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
       // << " in " << currentMaterial->GetName()
       //       << "  e= " << kinEnergy << G4endl;
       chargeSquare =
-        ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
+        ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy)
+	* corr->EffectiveChargeCorrection(p,currentMaterial,kinEnergy);
       //G4cout << "q2= " << chargeSquare << G4endl;
     } else {
       isIon = false;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.38 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.39 2008-04-19 16:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,27 +203,18 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   if(thcorr[Z].size() == 0) {
     thcorr[Z].resize(ncouples);
     G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
-    const G4ParticleDefinition* prot = G4Proton::Proton();
 
     for(size_t i=0; i<ncouples; i++) {
-      const G4Material* aMat = currmat[i];
-      G4double corr   = ComputeIonCorrections(p, aMat, ethscaled);
-
-      G4double dedxt  = 
-	ionLEModel->ComputeDEDXPerVolume(aMat, prot, eth, eth)*q2;
-      G4double dedx1t = 
-	ionHEModel->ComputeDEDXPerVolume(aMat, prot, eth, eth)*q2 + corr;
-      G4cout << i << ". ethscaled= " << ethscaled << " dedx0= " << dedxt
-	     << " dedx1= " << dedx1t << " q2= " << q2 << " corr= " << corr << G4endl;
-
-      (thcorr[Z])[i]  = ethscaled*(dedxt - dedx1t);
+      (thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p, currmat[i], ethscaled);
+      //G4cout << i << ". ethscaled= " << ethscaled 
+      //<< " corr= " << (thcorr[Z])[i]/ethscaled << G4endl;
     } 
   } 
   G4double rest = (thcorr[Z])[couple->GetIndex()];
 
-  G4double sum = ComputeIonCorrections(p,couple->GetMaterial(),e) + rest/e;
+  G4double sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
-  if(verbose > -1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
+  if(verbose > 1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
   return sum;
 }
 

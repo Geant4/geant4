@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.52 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.53 2008-04-19 16:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -171,11 +171,14 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
 
 inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
 {
+  curMaterial  = track.GetMaterial();
+  curParticle  = track.GetDefinition();
   preKinEnergy = track.GetKineticEnergy();
-  massRatio    = baseMass/track.GetDynamicParticle()->GetMass();
-  charge2      = effCharge->EffectiveChargeSquareRatio(track.GetDefinition(),
-						       track.GetMaterial(),
-						       preKinEnergy);
+  massRatio    = baseMass/curParticle->GetPDGMass();
+  charge2 = 
+    effCharge->EffectiveChargeSquareRatio(curParticle,curMaterial,preKinEnergy)
+    *corr->EffectiveChargeCorrection(curParticle,curMaterial,preKinEnergy);
+
   SetDynamicMassCharge(massRatio, charge2);
 }
 

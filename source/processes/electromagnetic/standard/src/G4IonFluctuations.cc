@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.12 2008-03-24 13:21:52 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.13 2008-04-19 16:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -163,7 +163,7 @@ G4double G4IonFluctuations::Dispersion(
   kineticEnergy  = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
   beta2 = kineticEnergy*(kineticEnergy + 2.*particleMass)/(etot*etot);
-  //  G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
+  //G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
   //	 << " tmax= " << tmax << " l= " << length 
   //	 << " q^2= " << chargeSquare << " beta2=" << beta2<< G4endl;
 
@@ -192,7 +192,7 @@ G4double G4IonFluctuations::Dispersion(
   if(fac > 1.0) 
     siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
 
-  //  G4cout << "siga= " << siga << " fac= " << fac << G4endl;
+  //G4cout << "siga= " << siga << " fac= " << fac << G4endl;
 
   return siga;
 }

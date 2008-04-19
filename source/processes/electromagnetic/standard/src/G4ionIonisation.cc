@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.56 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.57 2008-04-19 16:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -188,25 +188,24 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   G4double e = preKinEnergy - eloss*0.5;
   if(e <= 0.0) e = 0.5*preKinEnergy;
 
-  G4double eloss0 = eloss;   
-  // correction for modification of effective charge during the step
-  eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
-  G4cout<<"Corrected for mean energy: eloss= "<<eloss<<" f= "<<eloss/eloss0
-	<< " q2= " << charge2 << " charge2new= " 
-	<<effCharge->EffectiveChargeSquareRatio(part,mat,e) <<G4endl;
-
   if(eloss < preKinEnergy) {
+
+    //  G4double eloss0 = eloss;   
     //G4cout << "e= " << preKinEnergy << " ratio= " << massRatio 
     //	   << " eth= " << eth<< " eloss0= " << eloss << " s= " << s << G4endl;
 
     // High order corrections to Bethe-Bloch
     if(e*massRatio > eth) {
       eloss += s*corr->IonHighOrderCorrections(part,couple,e);
-      G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
-    }      
-    // Correction for data points 
-    eloss *= corr->EffectiveChargeCorrection(part,mat,e);
-    G4cout<<"Eff charge: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
+      //G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
+
+      // correction for modification of effective charge during the step
+    } else {      
+      eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
+      //G4cout<<"Corrected for mean energy: eloss= "<<eloss<<" f= "<<eloss/eloss0
+      //    << " q2= " << charge2 << " charge2new= " 
+      //    <<effCharge->EffectiveChargeSquareRatio(part,mat,e) <<G4endl;
+    }
   }
 
   // Compute nuclear stopping
