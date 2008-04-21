@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007-10-31 18:05:44 ahoward Exp $
+$Id: History,v 1.17 2008-04-21 08:32:36 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 21st, 2008 Alex Howard (procbiasing-V09-01-00)
+- Tag of the HEAD which includes scoring for backwards compatibility
 
 October 31st, 2007 Alex Howard (procbiasing-V09-00-00)
 - Fixed G4ProcessPlacer.cc to put biasing process second for AlongStep
