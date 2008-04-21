@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.9 2008-03-10 15:08:51 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.10 2008-04-21 06:05:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   // Modification of parameters between runs
   if(isInitialized) {
-    if (p->GetParticleType() != "nucleus") {
+    if (p->GetParticleType() != "nucleus" && p->GetPDGMass() < GeV) {
       mscUrban->SetStepLimitType(StepLimitType());
       mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
       mscUrban->SetSkin(Skin());
@@ -90,7 +90,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
 
   // defaults for ions, which cannot be overwritten
-  if (p->GetParticleType() == "nucleus") {
+  if (p->GetParticleType() == "nucleus" || p->GetPDGMass() > GeV) {
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
