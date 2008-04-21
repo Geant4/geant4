@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2008-04-07 14:19:12 gcosmo Exp $
+$Id: History,v 1.197 2008-04-21 06:57:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 21, 2008  V.Ivantchenko (global-V09-01-05)
+- Corrected deletion of temporary in G4PhysicsVector::FillSecondDerivatives().
 
 Apr 07, 2008  A.Bagulya, V.Ivantchenko (global-V09-01-04)
 - G4PhysicsVector:
