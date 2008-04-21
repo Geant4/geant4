@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.14 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.15 2008-04-21 07:17:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(DBL_MAX),
     isInitialised(false)
 {
-  G4VEmProcess::SetBuildTableFlag(true);
+  SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
   SetIntegral(true);
   SetMinKinEnergy(keV);
@@ -75,7 +75,6 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetLambdaBinning(120);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(1);
-  buildElmTableFlag = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,7 +91,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     aParticle = p;
     G4double mass = p->GetPDGMass();
     if (mass > GeV || p->GetParticleType() == "nucleus") {
-      buildElmTableFlag = false;
+      SetBuildTableFlag(false);
       verboseLevel = 0;
     } else {
       G4String name = p->GetParticleName();
