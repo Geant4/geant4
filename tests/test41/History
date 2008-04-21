@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-04-08  V.Ivanchenko (test41-V09-01-00)
+- use spline and polarAngleLimit
+
 09-10-07  V.Ivanchenko (test41-V09-00-04)
 - in standard and standardIG use subcutoff and linlosslimit=10^-6 
 - include standardIG option into run.csh

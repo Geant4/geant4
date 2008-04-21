@@ -22,7 +22,7 @@ set    phys = "opt1"
 
 setenv PHYSLIST    standardIG
 set    phys = "optG"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >>& r.out
+source ${dir}run_single.csh ${phys} ${work} ${dir} >>& resG.out
 
 ln -s $VFEM/test41/geant4-09-01-ref-03/*S.* ./
 ln -s $VFEM/test41/geant4-09-01-ref-03/*0.* ./
