@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.cc,v 1.12 2008-04-07 15:14:20 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.13 2008-04-21 13:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,8 +129,9 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);    
   emOptions.SetMaxEnergy(100*TeV);  
-  emOptions.SetDEDXBinning(1200);  
-  emOptions.SetLambdaBinning(1200);
+  emOptions.SetDEDXBinning(120);  
+  emOptions.SetLambdaBinning(120);
+  emOptions.SetSplineFlag(true);
       
   //energy loss
   //

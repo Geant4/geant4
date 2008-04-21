@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.30 2008-04-07 15:14:21 maire Exp $
+// $Id: PhysicsList.cc,v 1.31 2008-04-21 13:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +77,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new PhysListEmStandard(emName = "standard");
-
+  emPhysicsList = new PhysListEmStandard(emName = "emstandard_local");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,7 +86,7 @@ PhysicsList::~PhysicsList()
 {
   delete pMessenger;
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,8 +159,9 @@ void PhysicsList::ConstructProcess()
   emPhysicsList->ConstructProcess();
   
   // hadronic physics lists
-  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
-  
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
   // decay process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -197,7 +197,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "emstandard_local") {
 
     emName = name;
     delete emPhysicsList;

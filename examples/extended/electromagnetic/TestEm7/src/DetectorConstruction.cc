@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.9 2008-02-04 10:25:31 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2008-04-21 13:13:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +44,11 @@
 #include "G4SolidStore.hh"
 
 #include "G4NistManager.hh"
-
 #include "G4UnitsTable.hh"
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4RunManager.hh" 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -241,6 +244,7 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetSizeX(G4double value)
 {
   absorSizeX = value; worldSizeX = 1.2*absorSizeX;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -249,6 +253,7 @@ void DetectorConstruction::SetSizeYZ(G4double value)
 {
   absorSizeYZ = value; 
   worldSizeYZ = 1.2*absorSizeYZ;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,13 +263,16 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (pttoMaterial) absorMaterial = pttoMaterial;
+  if (pttoMaterial) {
+    absorMaterial = pttoMaterial;
+    if(lAbsor) {
+      lAbsor->SetMaterial(absorMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -291,6 +299,7 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 void DetectorConstruction::SetTallySize(G4ThreeVector value)
 {
   tallySize = value;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -300,7 +309,13 @@ void DetectorConstruction::SetTallyMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (pttoMaterial) tallyMaterial = pttoMaterial;
+  if (pttoMaterial) {
+    tallyMaterial = pttoMaterial;
+    if(lTally) {
+      lTally->SetMaterial(tallyMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -311,15 +326,15 @@ void DetectorConstruction::SetTallyPosition(G4ThreeVector value)
     tallyPosition[tallyNumber] = value; 
     tallyNumber++;
   }
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh" 
  
 void DetectorConstruction::UpdateGeometry()
 {
-G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
