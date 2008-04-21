@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.9 2008-04-21 07:17:31 vnivanch Exp $
+// $Id: G4CoulombScattering.hh,v 1.10 2008-04-21 10:13:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,6 +69,9 @@ public:
   void SetThetaMax(G4double);
 
   void SetQ2Max(G4double);
+
+  // obsolete method to be removed
+  void SetBuildTableFlag(G4bool);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -122,6 +125,11 @@ inline void G4CoulombScattering::SetQ2Max(G4double val)
 {
   q2Max = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4CoulombScattering::SetBuildTableFlag(G4bool)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
