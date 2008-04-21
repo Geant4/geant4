@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2008-04-04 14:33:32 vnivanch Exp $
+$Id: History,v 1.118 2008-04-21 06:17:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 April 08:  V.Ivanchenko (emmuons-V09-01-09)
+G4MuMultipleScattering - use G4WentzelVIModel model
+                         build table for particles with mass < GeV
 
 04 April 08:  V.Ivanchenko (emmuons-V09-01-08)
 - G4MuBremsstrahlungModel - instead of static const use members of a class,
