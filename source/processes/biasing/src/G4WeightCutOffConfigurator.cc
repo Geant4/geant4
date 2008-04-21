@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.2 2007-06-01 09:16:34 ahoward Exp $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.3 2008-04-21 09:10:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,14 +43,16 @@ G4WeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
                                  G4double wlimit,
                                  G4double isource,
                                  G4VIStore *istore,
-                           const G4VGCellFinder &aGCellfinder, G4bool para)
+			         G4bool para)
+  //                           const G4VGCellFinder &aGCellfinder, G4bool para)
   : fWorld(worldvolume),
     fPlacer(particlename),
     fPlaced(false),
     paraflag(para)
 {
   fWeightCutOffProcess =
-    new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"WeightCutOffProcess",paraflag);
+    new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,"WeightCutOffProcess",paraflag);
+//     new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"WeightCutOffProcess",paraflag);
   if (!fWeightCutOffProcess)
   {
     G4Exception("G4WeightCutOffConfigurator::G4WeightCutOffConfigurator()",

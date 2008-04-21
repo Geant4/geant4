@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.9 2007-06-01 10:00:10 ahoward Exp $
+// $Id: G4GeometrySampler.cc,v 1.10 2008-04-21 09:10:28 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,22 +38,22 @@
 
 #include "G4VIStore.hh"
 #include "G4WeightWindowStore.hh"
-#include "G4VScorer.hh"
+//#include "G4VScorer.hh"
 
 #include "G4VPhysicalVolume.hh"
-#include "G4ScoreConfigurator.hh"
+//#include "G4ScoreConfigurator.hh"
 #include "G4ImportanceConfigurator.hh"
 #include "G4WeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
-#include "G4GCellFinder.hh"
+//#include "G4GCellFinder.hh"
 
  G4GeometrySampler::
  G4GeometrySampler(G4VPhysicalVolume *parallelworld, const G4String &particlename)
   : fParticleName(particlename),
     fWorld(parallelworld),
     fImportanceConfigurator(0),
-    fScoreConfigurator(0),
-    fGCellFinder(0),
+    //    fScoreConfigurator(0),
+    //    fGCellFinder(0),
     fWeightCutOffConfigurator(0),
     fIStore(0),
     fWeightWindowConfigurator(0),
@@ -80,21 +80,21 @@ void G4GeometrySampler::ClearSampling()
     delete fWeightWindowConfigurator;
     fWeightWindowConfigurator = 0;
   }
-  if (fScoreConfigurator)
-  {
-    delete fScoreConfigurator;
-    fScoreConfigurator = 0;
-  }
+//   if (fScoreConfigurator)
+//   {
+//     delete fScoreConfigurator;
+//     fScoreConfigurator = 0;
+//   }
   if (fWeightCutOffConfigurator)
   {
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
   }
-  if (fGCellFinder)
-  {
-    delete fGCellFinder;
-    fGCellFinder = 0;
-  }
+//   if (fGCellFinder)
+//   {
+//     delete fGCellFinder;
+//     fGCellFinder = 0;
+//   }
   fIStore = 0;
   fConfigurators.clear();
   fIsConfigured = false;
@@ -113,25 +113,25 @@ G4bool G4GeometrySampler::IsConfigured() const
   return isconf;
 }
 
-void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
-{
-  G4cout << " preparing scoring configurator " << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
-  G4cout << " configured scoring " << G4endl;
-  if (!fScoreConfigurator)
-  {
-    G4Exception("G4GeometrySampler::PrepareScoring()",
-                "FatalError", FatalException,
-                "Failed allocation of G4ScoreConfigurator !");
-  }
-}
+// void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
+// {
+//   G4cout << " preparing scoring configurator " << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
+//   G4cout << " configured scoring " << G4endl;
+//   if (!fScoreConfigurator)
+//   {
+//     G4Exception("G4GeometrySampler::PrepareScoring()",
+//                 "FatalError", FatalException,
+//                 "Failed allocation of G4ScoreConfigurator !");
+//   }
+// }
 
 void
 G4GeometrySampler::PrepareImportanceSampling(G4VIStore *istore,
@@ -161,13 +161,13 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
 {
   //  fGCellFinder = new G4GCellFinder(fWorld);
   G4cout << " preparing weight roulette" << G4endl;
-  fGCellFinder = new G4GCellFinder();
-  if (!fGCellFinder)
-  {
-    G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
-                "FatalError", FatalException,
-                "Failed allocation of G4GCellFinder !");
-  }
+  //  fGCellFinder = new G4GCellFinder();
+//   if (!fGCellFinder)
+//   {
+//     G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
+//                 "FatalError", FatalException,
+//                 "Failed allocation of G4GCellFinder !");
+//   }
   
   fWeightCutOffConfigurator = 
     new G4WeightCutOffConfigurator(fWorld, fParticleName,
@@ -175,7 +175,8 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
                                    wlimit,
                                    isource,
                                    fIStore,
-                                   *fGCellFinder, paraflag);
+				   paraflag);
+				   //*fGCellFinder, paraflag);
   if (!fWeightCutOffConfigurator)
   {
     G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
@@ -208,12 +209,12 @@ void G4GeometrySampler::Configure()
   {
     fIsConfigured = true;
 
-    if (fScoreConfigurator)
-    {
-      G4cout << " score configurator push_back " << G4endl;
-      fConfigurators.push_back(fScoreConfigurator);
-      G4cout << " pushed " << G4endl;
-    }
+//     if (fScoreConfigurator)
+//     {
+//       G4cout << " score configurator push_back " << G4endl;
+//       fConfigurators.push_back(fScoreConfigurator);
+//       G4cout << " pushed " << G4endl;
+//     }
     if (fImportanceConfigurator)
     {
       G4cout << " importance configurator push_back " << G4endl;

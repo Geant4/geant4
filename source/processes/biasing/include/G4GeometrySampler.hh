@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.hh,v 1.10 2007-06-01 10:00:10 ahoward Exp $
+// $Id: G4GeometrySampler.hh,v 1.11 2008-04-21 09:10:28 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,9 +47,9 @@
 
 class G4ImportanceConfigurator;
 class G4WeightWindowConfigurator;
-class G4ScoreConfigurator;
+//class G4ScoreConfigurator;
 class G4WeightCutOffConfigurator;
-class G4VGCellFinder;
+//class G4VGCellFinder;
 
 class G4GeometrySampler : public G4VSampler
 {
@@ -59,7 +59,7 @@ public:  // with description
   explicit G4GeometrySampler(G4VPhysicalVolume *worldvolume, const G4String &particlename);
   virtual ~G4GeometrySampler();
 
-  virtual void PrepareScoring(G4VScorer *Scorer);
+  //  virtual void PrepareScoring(G4VScorer *Scorer);
   virtual void PrepareImportanceSampling(G4VIStore *istore,
                                          const G4VImportanceAlgorithm 
                                          *ialg);
@@ -90,8 +90,8 @@ private:
   G4String fParticleName;
   G4VPhysicalVolume* fWorld;
   G4ImportanceConfigurator *fImportanceConfigurator;
-  G4ScoreConfigurator *fScoreConfigurator;
-  G4VGCellFinder *fGCellFinder;
+  //  G4ScoreConfigurator *fScoreConfigurator;
+  //  G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
   G4WeightWindowConfigurator *fWeightWindowConfigurator;

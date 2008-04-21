@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
+// $Id: G4WeightCutOffProcess.hh,v 1.3 2008-04-21 09:10:28 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@
 #include "G4VTrackTerminator.hh"
 #include "G4GeometryCell.hh"
 
-class G4VGCellFinder;
+//class G4VGCellFinder;
 class G4VIStore;
 
 class G4Step;
@@ -66,7 +66,7 @@ public:  // with description
                         G4double wlimit,
                         G4double isource,
                         G4VIStore *istore,
-                        const G4VGCellFinder &aGCellFinder,
+			//                        const G4VGCellFinder &aGCellFinder,
                         const G4String &aName = "WeightCutOffProcess", G4bool para = false);
     // create a G4ParticleChange
 
@@ -133,7 +133,7 @@ private:
   G4double fWeightLimit;
   G4double fSourceImportance;
   G4VIStore *fIStore;
-  const G4VGCellFinder &fGCellFinder;
+  //  const G4VGCellFinder &fGCellFinder;
 
 
   G4TransportationManager* fTransportationManager;
