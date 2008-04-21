@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.40 2008-04-21 05:41:08 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.41 2008-04-21 06:00:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -751,8 +751,7 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
       // << " in " << currentMaterial->GetName()
       //       << "  e= " << kinEnergy << G4endl;
       chargeSquare =
-        ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy)
-	* corr->EffectiveChargeCorrection(p,currentMaterial,kinEnergy);
+        ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
       //G4cout << "q2= " << chargeSquare << G4endl;
     } else {
       isIon = false;
@@ -769,10 +768,12 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
   }
   if(isIon) {
     chargeSquare =
-     ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
-    if(currentProcess)
+     ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy)
+      * corr->EffectiveChargeCorrection(p,currentMaterial,kinEnergy);
+    if(currentProcess) {
       currentProcess->SetDynamicMassCharge(massRatio,chargeSquare);
-    // G4cout << "massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
+      // G4cout << "massR= " << massRatio << "   q2= " << chargeSquare << G4endl;
+    }
   }
   return true;
 }
