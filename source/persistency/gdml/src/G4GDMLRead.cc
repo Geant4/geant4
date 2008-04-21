@@ -154,5 +154,5 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
 
    delete parser;
 
-   G4cout << "Reading done!" << G4endl << G4endl;
+   G4cout << "Reading '" << fileName << "' done!" << G4endl << G4endl;
 }
