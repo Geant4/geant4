@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2008-04-11 16:07:15 gcosmo Exp $
+$Id: History,v 1.50 2008-04-21 08:46:35 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< History
+21 April 2008 Zoltan Torzsok
+- Divisionvol, replicavol and paramvol are resolved now
+
+11 April 2008 Zoltan Torzsok
+- Referenced solid in volume is resolved in case of displacements/reflections
+=======
 11 April 2008 Zoltan Torzsok (gdml-V09-01-03)
 - Referenced solid in volume is fixed in case of displacements/reflections.
+>>>>>>> 1.49
 
 10 April 2008 Zoltan Torzsok
 - Added text output to console to inform of progress during processing.

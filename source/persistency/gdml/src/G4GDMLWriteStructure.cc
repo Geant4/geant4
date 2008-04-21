@@ -194,17 +194,17 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Volume divisions can not be directly reflected!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! divisionvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
       if (physvol->IsParameterised()) { 
        
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Parameterised volumes can not be directly reflected!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! paramvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          paramvolWrite(volumeElement,physvol);
       } else
       if (physvol->IsReplicated()) { 
 
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Volume replications can not be directly reflected!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! replicavol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          replicavolWrite(volumeElement,physvol); 
       } else
       physvolWrite(volumeElement,physvol,invR,daughterR);
