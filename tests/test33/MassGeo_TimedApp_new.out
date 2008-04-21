@@ -1,0 +1,2249 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-01-ref-03    (25-January-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Creating Mass Geometry 
+Checking overlaps for volume cell_01I1- ... OK! 
+Checking overlaps for volume cell_01I1+ ... OK! 
+Checking overlaps for volume cell_01 ... OK! 
+Checking overlaps for volume cell_02I1- ... OK! 
+Checking overlaps for volume cell_02I1+ ... OK! 
+Checking overlaps for volume cell_02 ... OK! 
+Checking overlaps for volume cell_03I1- ... OK! 
+Checking overlaps for volume cell_03I1+ ... OK! 
+Checking overlaps for volume cell_03 ... OK! 
+Checking overlaps for volume cell_04I1- ... OK! 
+Checking overlaps for volume cell_04I1+ ... OK! 
+Checking overlaps for volume cell_04 ... OK! 
+Checking overlaps for volume cell_05I1- ... OK! 
+Checking overlaps for volume cell_05I1+ ... OK! 
+Checking overlaps for volume cell_05 ... OK! 
+Checking overlaps for volume cell_06I1- ... OK! 
+Checking overlaps for volume cell_06I1+ ... OK! 
+Checking overlaps for volume cell_06 ... OK! 
+Checking overlaps for volume cell_07I1- ... OK! 
+Checking overlaps for volume cell_07I1+ ... OK! 
+Checking overlaps for volume cell_07 ... OK! 
+Checking overlaps for volume cell_08I1- ... OK! 
+Checking overlaps for volume cell_08I1+ ... OK! 
+Checking overlaps for volume cell_08 ... OK! 
+Checking overlaps for volume cell_09I1- ... OK! 
+Checking overlaps for volume cell_09I1+ ... OK! 
+Checking overlaps for volume cell_09 ... OK! 
+Checking overlaps for volume cell_10I1- ... OK! 
+Checking overlaps for volume cell_10I1+ ... OK! 
+Checking overlaps for volume cell_10 ... OK! 
+Checking overlaps for volume cell_11I1- ... OK! 
+Checking overlaps for volume cell_11I1+ ... OK! 
+Checking overlaps for volume cell_11 ... OK! 
+Checking overlaps for volume cell_12I1- ... OK! 
+Checking overlaps for volume cell_12I1+ ... OK! 
+Checking overlaps for volume cell_12 ... OK! 
+Checking overlaps for volume cell_13I1- ... OK! 
+Checking overlaps for volume cell_13I1+ ... OK! 
+Checking overlaps for volume cell_13 ... OK! 
+Checking overlaps for volume cell_14I1- ... OK! 
+Checking overlaps for volume cell_14I1+ ... OK! 
+Checking overlaps for volume cell_14 ... OK! 
+Checking overlaps for volume cell_15I1- ... OK! 
+Checking overlaps for volume cell_15I1+ ... OK! 
+Checking overlaps for volume cell_15 ... OK! 
+Checking overlaps for volume cell_16I1- ... OK! 
+Checking overlaps for volume cell_16I1+ ... OK! 
+Checking overlaps for volume cell_16 ... OK! 
+Checking overlaps for volume cell_17I1- ... OK! 
+Checking overlaps for volume cell_17I1+ ... OK! 
+Checking overlaps for volume cell_17 ... OK! 
+Checking overlaps for volume cell_18I1- ... OK! 
+Checking overlaps for volume cell_18I1+ ... OK! 
+Checking overlaps for volume cell_18 ... OK! 
+Checking overlaps for volume cell_19 ... OK! 
+Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
+ adding importance to: cell_01
+ adding importance to: cell_02
+ adding importance to: cell_03
+ adding importance to: cell_04
+ adding importance to: cell_05
+ adding importance to: cell_06
+ adding importance to: cell_07
+ adding importance to: cell_08
+ adding importance to: cell_09
+ adding importance to: cell_10
+ adding importance to: cell_11
+ adding importance to: cell_12
+ adding importance to: cell_13
+ adding importance to: cell_14
+ adding importance to: cell_15
+ adding importance to: cell_16
+ adding importance to: cell_17
+ adding importance to: cell_18
+ adding importance to: cell_19
+ preparing importance sampling 
+ creating istore 
+ creating importance configurator 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: Tst33WeightChangeProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ preparing weight roulette
+ entering configure 
+ importance configurator push_back 
+ pushed 
+ vsampler configurator loop 
+ looping 1
+ sampler configurator 
+ entering importance configure, paraflag 0
+ creating importance process, paraflag is: 0
+ importance process paraflag is: 0
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ configure preconf 
+ NEW weight window configure 
+ entering new weight window configure 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: WeightCutOffProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+ configured 
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 0 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1005 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1005, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 426 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |           41 |            0 |            0 |    6.2531468 |    6.9796476 |   0.73145266 |    11860.014 |    8675.0392 |    260.65808 |    60548.716 |    1629.9332 |
+      cell_01 |         1174 |          326 |    268.66757 |    8.2455272 |    9.1303389 |   0.83988559 |    29134.571 |    24469.706 |    645.52359 |    223416.71 |    5322.6824 |
+      cell_02 |         1161 |          486 |    174.45706 |    7.8459692 |    8.7078433 |   0.35818464 |    39177.725 |    14032.859 |    378.86271 |    122195.94 |    2972.5452 |
+      cell_03 |         1214 |          544 |     87.01983 |  0.027289348 |    8.3314067 |   0.16053191 |    42844.295 |    6877.8764 |    51941.693 |    57302.386 |    1417.4549 |
+      cell_04 |         1300 |          623 |    44.770434 |    6.0586321 |    7.7675012 |   0.07292492 |    52290.371 |    3813.2711 |    124.55298 |    29619.588 |    754.62066 |
+      cell_05 |         1363 |          698 |    22.521221 |    6.0685715 |    7.4583417 |  0.032177326 |    57853.416 |    1861.5682 |    59.475994 |    13884.212 |    360.93433 |
+      cell_06 |         1396 |          736 |    11.129409 |  0.061020209 |    7.4208127 |  0.015560488 |    60025.472 |    934.02565 |    2967.9849 |    6931.2294 |    181.10706 |
+      cell_07 |         1424 |          879 |    6.4044435 |  0.089436952 |    7.2194178 | 0.0074615018 |    70064.167 |    522.78391 |    1116.9375 |    3774.1954 |     99.89549 |
+      cell_08 |         1354 |          987 |    3.5975561 |    4.8138798 |     6.722552 | 0.0037087509 |    70127.977 |     260.0872 |    9.8373139 |    1748.4497 |    47.355647 |
+      cell_09 |         1428 |         1139 |    2.0108556 |    3.8246274 |    6.3158892 | 0.0018040822 |    82730.419 |    149.25248 |    6.8228326 |    942.66211 |    26.094792 |
+      cell_10 |         1365 |         1292 |    1.1446027 |  0.074903025 |    5.9904319 |0.00087928055 |    86936.993 |    76.442007 |    173.07942 |    457.92063 |    12.964172 |
+      cell_11 |         1280 |         1338 |   0.57320094 |    3.8529571 |    5.7400818 |0.00043813814 |    88694.044 |    38.860243 |    1.6764035 |    223.06097 |    6.4591107 |
+      cell_12 |         1281 |         1367 |    0.3069603 |    3.8223355 |     5.368837 |0.00022247432 |    89985.539 |    20.019472 |   0.84151776 |    107.48128 |    3.2165632 |
+      cell_13 |         1352 |         1579 |   0.16930736 |  0.060910776 |    5.0716839 |0.00010866856 |    100432.69 |    10.913876 |    27.888628 |     55.35173 |    1.6987179 |
+      cell_14 |         1429 |         1595 |  0.086208958 |   0.13861177 |    5.1505988 |5.3881925e-05 |    105005.03 |    5.6578732 |    6.4196435 |    29.141435 |   0.88983816 |
+      cell_15 |         1444 |         1658 |  0.043855793 |   0.28581044 |    4.9661449 |2.6591116e-05 |    108534.31 |    2.8860484 |    1.5626819 |    14.332534 |    0.4466308 |
+      cell_16 |         1337 |         1776 |  0.023815994 |   0.12480282 |     4.704509 |1.3419291e-05 |    114623.16 |    1.5381615 |    1.8487149 |    7.2362947 |   0.23072483 |
+      cell_17 |         1318 |         1980 |  0.012911731 |   0.17797903 |    4.3869596 |6.5146807e-06 |    124324.95 |   0.80993736 |   0.65795997 |    3.5531625 |   0.11710308 |
+      cell_18 |         1256 |         1784 | 0.0058498713 |    3.1592322 |    4.3431292 |3.2846528e-06 |    107602.43 |   0.35343662 |  0.016032084 |    1.5350209 |  0.050649078 |
+      cell_19 |          529 |            0 |            0 |    3.1613286 |    4.4172385 |3.3229841e-06 |    111365.01 |   0.37006415 |    0.0168851 |    1.6346616 |   0.05337935 |
+=============================================
+=============================================================
+ Number of event processed : 426 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          473 |          259 |    188.20921 |     8.190889 |    8.8150069 |   0.83173944 |    11105.139 |     9236.582 |    230.56279 |    81420.534 |    1888.5142 |
+      cell_02 |          611 |          445 |    171.47053 |    8.0631296 |    7.5328186 |   0.38334077 |    17406.487 |    6672.6161 |    144.54232 |    50263.607 |    1165.4635 |
+      cell_03 |          639 |          526 |    89.747911 |    6.9702036 |    7.3385522 |    0.1650965 |    19603.923 |    3236.5389 |     77.72177 |     23751.51 |    541.73656 |
+      cell_04 |          695 |          466 |    48.450194 |    6.1608383 |    6.2028513 |  0.090959818 |    20999.007 |    1910.0659 |    44.930378 |    11847.854 |    276.80879 |
+      cell_05 |          706 |          531 |    22.361477 |    6.7033165 |    6.0902764 |  0.039816994 |    21986.587 |    875.43979 |    18.742037 |    5331.6703 |     125.6338 |
+      cell_06 |          733 |          599 |    9.8985321 |    6.2223541 |    6.4506993 |  0.018199086 |    24416.686 |    444.36138 |    10.622003 |    2866.4416 |    66.093862 |
+      cell_07 |          727 |          518 |    13.356574 |   0.15850646 |    2.9575095 |  0.019977809 |    22597.411 |    451.44676 |     192.3369 |    1335.1581 |    30.486641 |
+      cell_08 |          661 |          555 |    2.6287417 |    5.7745286 |    6.1520679 | 0.0041922228 |    20875.076 |     87.51297 |    2.3087452 |    538.38573 |    13.331915 |
+      cell_09 |          714 |          604 |    1.4002447 |    4.1141248 |    5.9898595 | 0.0019743501 |    22451.662 |    44.327442 |    1.6280589 |    265.51515 |    6.6980376 |
+      cell_10 |          646 |          537 |   0.51056567 |    4.1925642 |    6.1281844 |0.00093205869 |    20928.783 |    19.506855 |    0.7181142 |     119.5416 |    3.0107399 |
+      cell_11 |          571 |          440 |   0.18609333 |    4.8175522 |    6.0096044 |0.00047682975 |     18569.94 |    8.8547001 |   0.27029665 |    53.213245 |    1.3021683 |
+      cell_12 |          562 |          468 |   0.11468844 |    4.0593742 |    5.7313952 |0.00026677276 |    17387.523 |    4.6385175 |   0.14935508 |    26.585177 |   0.60628815 |
+      cell_13 |          583 |          454 |   0.25314358 |   0.27745212 |    1.8184696 |0.00051430871 |    17432.482 |    8.9656771 |     1.040542 |    16.303811 |   0.28870059 |
+      cell_14 |          608 |          466 |  0.088449561 |    4.2302271 |    3.3175322 |8.9320782e-05 |    18394.098 |    1.6429752 |  0.035379718 |    5.4506232 |   0.14966424 |
+      cell_15 |          616 |          503 |  0.013689886 |    4.1442083 |    4.7921065 |  2.75952e-05 |    20478.129 |   0.56509808 |  0.018406045 |    2.7080102 |  0.076278487 |
+      cell_16 |          542 |          409 |  0.031400154 |    3.3794217 |    2.0605225 |3.3634368e-05 |    17017.712 |   0.57238001 | 0.0094449839 |    1.1794019 |  0.031918583 |
+      cell_17 |          511 |          357 |  0.015316072 |    3.1107227 |    2.4321607 |1.3506425e-05 |    15535.126 |   0.20982401 |  0.004593488 |   0.51032571 |  0.014289068 |
+      cell_18 |          502 |          462 | 0.0037868714 |    2.7398826 |    3.1603365 |4.3713307e-06 |    15456.983 |  0.067567586 | 0.0024644592 |    0.2135363 | 0.0067523289 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 426 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          411 |          326 |    222.67565 |    8.1432188 |    7.9350297 |   0.73748627 |    11004.758 |    8115.8579 |    179.59945 |    64399.573 |    1462.5176 |
+      cell_02 |          471 |          382 |    113.13562 |    7.7992356 |    7.7744473 |   0.32115693 |    13118.525 |    4213.1053 |    95.013508 |    32754.565 |    741.03274 |
+      cell_03 |          490 |          411 |    73.205981 |  0.014307854 |    6.9114084 |   0.16362184 |    14776.851 |    2417.8156 |     26872.97 |    16710.511 |    384.49451 |
+      cell_04 |          517 |          436 |    38.951752 |     5.749128 |    6.2667748 |  0.076527513 |    17092.443 |    1308.0422 |    33.354624 |    8197.2057 |    191.76001 |
+      cell_05 |          547 |          576 |    21.949014 |    5.9991081 |    5.9455867 |  0.035967724 |    18671.262 |    671.56281 |    15.606022 |    3992.8349 |    93.622215 |
+      cell_06 |          509 |          369 |    16.632534 |  0.058921146 |     4.705375 |  0.025759024 |    15292.733 |    393.92587 |    706.63674 |    1853.5689 |    41.635846 |
+      cell_07 |          521 |          448 |    4.5213744 |    6.2183018 |    4.6101731 |  0.011338782 |    16188.079 |    183.55309 |    3.3348562 |    846.21153 |    20.737142 |
+      cell_08 |          484 |          405 |    1.5940182 |    3.9687366 |    5.5882763 |  0.004014408 |     15355.72 |    61.644125 |    2.1046012 |     344.4844 |    8.3526081 |
+      cell_09 |          503 |          513 |    1.9752653 |    4.6431019 |      5.68429 | 0.0018789791 |    15984.055 |    30.033706 |   0.91565955 |    170.72029 |    4.2515006 |
+      cell_10 |          434 |          400 |   0.36398097 |    4.1255508 |    6.2591408 |0.00089647686 |    13676.109 |    12.260315 |   0.45452924 |    76.739038 |    1.8751834 |
+      cell_11 |          418 |          312 |   0.14671364 |       4.6481 |    5.7305237 |0.00050344167 |    12994.955 |    6.5422017 |   0.19192075 |    37.490242 |   0.89206684 |
+      cell_12 |          411 |          335 |  0.075119577 |    4.3591699 |    5.7845727 |0.00027256188 |     12253.85 |    3.3399324 |  0.093689071 |    19.320082 |   0.40840658 |
+      cell_13 |          451 |          398 |   0.36350252 |   0.01743285 |    1.8495025 |0.00031220628 |    14658.379 |    4.5764379 |    12.858383 |    8.4641336 |   0.22415827 |
+      cell_14 |          445 |          423 |  0.025275118 |    4.1461054 |    4.9158382 |5.5319392e-05 |    14367.508 |   0.79480179 |  0.026791046 |     3.907117 |    0.1110785 |
+      cell_15 |          445 |          395 |  0.012890424 |     3.960941 |    4.4924417 |2.9809088e-05 |    14635.319 |   0.43626553 |  0.013873787 |    1.9598974 |  0.054953252 |
+      cell_16 |          385 |          320 | 0.0046538776 |    3.4090572 |    3.9882497 |1.6113383e-05 |    11955.065 |   0.19263655 | 0.0061814815 |   0.76828267 |  0.021073024 |
+      cell_17 |          375 |          288 | 0.0038906771 |    3.1610209 |    3.9618529 |7.7572772e-06 |    11470.737 |  0.088981683 | 0.0033738936 |   0.35253234 |  0.010664948 |
+      cell_18 |          330 |          254 |0.00099715678 |    3.1540755 |    4.0119378 |3.5368185e-06 |    9542.1019 |  0.033748683 | 0.0013749491 |   0.13539761 | 0.0043366932 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ImportanceProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: Tst33WeightChangeProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+Tst33AppStarter::CheckCreateScorer: scorer already exists!
+ adding importance to: cell_01
+ adding importance to: cell_02
+ adding importance to: cell_03
+ adding importance to: cell_04
+ adding importance to: cell_05
+ adding importance to: cell_06
+ adding importance to: cell_07
+ adding importance to: cell_08
+ adding importance to: cell_09
+ adding importance to: cell_10
+ adding importance to: cell_11
+ adding importance to: cell_12
+ adding importance to: cell_13
+ adding importance to: cell_14
+ adding importance to: cell_15
+ adding importance to: cell_16
+ adding importance to: cell_17
+ adding importance to: cell_18
+ adding importance to: cell_19
+ preparing importance sampling 
+ creating istore 
+ creating importance configurator 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: Tst33WeightChangeProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ preparing weight roulette
+ entering configure 
+ importance configurator push_back 
+ pushed 
+ vsampler configurator loop 
+ looping 1
+ sampler configurator 
+ entering importance configure, paraflag 0
+ creating importance process, paraflag is: 0
+ importance process paraflag is: 0
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ configure preconf 
+ NEW weight window configure 
+ entering new weight window configure 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: WeightCutOffProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+ configured 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 1 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 2389 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |          150 |            0 |            0 |    6.3477071 |    7.7181355 |            1 |    44751.812 |    44751.812 |    1400.2926 |    345400.55 |    8888.6473 |
+      cell_01 |         5543 |         1471 |         1471 |    2.3777646 |    9.3596092 |            1 |    130857.78 |    130857.78 |    12170.368 |    1224777.7 |     28938.27 |
+      cell_02 |         4029 |         1513 |        756.5 |    8.1507603 |    8.9867167 |          0.5 |    134567.17 |    67283.585 |    1782.9816 |    604658.52 |    14532.656 |
+      cell_03 |         3653 |         1420 |          355 |   0.13972002 |    8.6979583 |         0.25 |    134011.21 |    33502.802 |    50810.264 |    291405.98 |    7099.2109 |
+      cell_04 |         3029 |         1340 |        167.5 |    7.8073695 |    8.5728513 |        0.125 |    112190.75 |    14023.844 |    377.87516 |    120224.33 |     2950.211 |
+      cell_05 |         2593 |         1293 |      80.8125 |   0.14551166 |    8.0967089 |       0.0625 |    107959.48 |    6747.4674 |    9415.2873 |     54632.28 |    1370.0341 |
+      cell_06 |         2051 |         1102 |      34.4375 |    6.3071587 |    7.9088336 |      0.03125 |    91671.364 |    2864.7301 |    90.994081 |    22656.674 |    573.91411 |
+      cell_07 |         1539 |          883 |    13.796875 |    6.6004919 |    7.6837047 |     0.015625 |    76444.273 |    1194.4418 |    35.750955 |    9177.7378 |    235.97389 |
+      cell_08 |         1240 |          791 |    6.1796875 |    6.3702745 |    7.3134861 |    0.0078125 |    65212.029 |    509.46897 |     15.37954 |    3725.9943 |    97.971895 |
+      cell_09 |          932 |          642 |    2.5078125 |    6.3471326 |    7.2339332 |   0.00390625 |    52300.467 |     204.2987 |    6.1679699 |    1477.8832 |    39.148922 |
+      cell_10 |          783 |          624 |      1.21875 |    5.7851078 |    7.0293484 |  0.001953125 |    49329.464 |     96.34661 |    3.1335068 |    677.25389 |    18.127675 |
+      cell_11 |          653 |          598 |   0.58398438 |  0.022394277 |    6.7712494 | 0.0009765625 |    44463.251 |    43.421144 |    356.80804 |    294.01539 |     7.990458 |
+      cell_12 |          530 |          528 |    0.2578125 |   0.07681978 |    6.2404388 |0.00048828125 |    35181.997 |     17.17871 |    39.105292 |    107.20269 |    3.0040599 |
+      cell_13 |          408 |          401 |  0.097900391 |     4.237087 |    6.1396944 |0.00024414062 |    28928.083 |    7.0625203 |   0.28860513 |    43.361716 |     1.222845 |
+      cell_14 |          345 |          382 |  0.046630859 |    3.8098699 |     5.895687 |0.00012207031 |    26913.071 |     3.285287 |   0.14543019 |    19.369024 |   0.55407009 |
+      cell_15 |          287 |          284 |  0.017333984 |  0.096993616 |    5.9919921 |6.1035156e-05 |    21522.045 |    1.3136014 |    2.3383595 |    7.8710891 |   0.22680594 |
+      cell_16 |          280 |          340 |  0.010375977 |  0.038999753 |    5.5930166 |3.0517578e-05 |    23664.541 |   0.72218447 |    3.0624835 |    4.0391897 |    0.1194361 |
+      cell_17 |          251 |          348 | 0.0053100586 |    4.5640542 |    5.5188607 |1.5258789e-05 |    25000.859 |   0.38148283 |  0.013800908 |    2.1053506 |  0.062988093 |
+      cell_18 |          175 |          281 | 0.0021438599 |    4.1724628 |    5.5728633 |7.6293945e-06 |    19230.612 |   0.14671792 | 0.0057934672 |   0.81763893 |  0.024173027 |
+      cell_19 |           91 |            0 |            0 |     3.836061 |    5.4634221 |7.6293945e-06 |    18562.832 |   0.14162317 | 0.0060000581 |   0.77374716 |  0.023016589 |
+=============================================
+=============================================================
+ Number of event processed : 2389 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         2254 |         1176 |    1069.0938 |    8.7744716 |    9.0335048 |   0.97107894 |    53497.831 |    51950.617 |    1232.7992 |    469296.14 |    10817.162 |
+      cell_02 |         2189 |         1502 |    734.84375 |    7.8388741 |    7.9734769 |    0.5051076 |    60931.529 |    30776.978 |    719.31604 |    245399.53 |    5638.6279 |
+      cell_03 |         2042 |         1501 |    445.67334 |     7.878615 |    7.5821168 |   0.26703939 |     59556.43 |    15903.913 |    349.10357 |    120585.33 |    2750.4526 |
+      cell_04 |         1729 |         1332 |     221.2561 |    7.5682831 |    6.2875044 |   0.15150732 |    51390.133 |    7785.9814 |    147.62724 |    48954.392 |    1117.2848 |
+      cell_05 |         1430 |          920 |    76.925781 |    7.0256293 |    6.8083657 |  0.072666838 |     42639.06 |    3098.4457 |    69.603641 |    21095.351 |    489.00938 |
+      cell_06 |         1156 |          857 |    41.546875 |  0.043937087 |    5.6873852 |  0.041856563 |    34431.855 |    1441.1991 |    4197.4728 |    8196.6545 |    184.42473 |
+      cell_07 |          841 |          552 |    15.041016 |     6.590715 |    5.8670819 |  0.021617042 |    25273.931 |    546.34763 |    10.592354 |    3205.4663 |    69.811188 |
+      cell_08 |          696 |          614 |    8.8339844 |    6.2392511 |    4.7481838 |  0.013470315 |    20883.897 |    281.31268 |    4.3773779 |    1335.7243 |     27.31156 |
+      cell_09 |          488 |          366 |    3.9199219 |    5.6956299 |    3.8491149 | 0.0089560248 |    13716.377 |    122.84421 |    1.5923136 |     472.8415 |    9.0692289 |
+      cell_10 |          410 |          304 |    1.0527344 |    5.1192576 |    2.9243313 | 0.0076873499 |    12061.586 |    92.721633 |   0.83170554 |    271.14878 |    4.2577149 |
+      cell_11 |          338 |          234 |   0.50585938 |    5.0374152 |    3.4474697 | 0.0031729829 |    10845.961 |    34.414049 |   0.36001444 |    118.64139 |    1.8135422 |
+      cell_12 |          268 |          216 |   0.57537842 |    3.7163313 |    2.1350132 | 0.0035094817 |    8369.9677 |    29.374249 |   0.20535137 |     62.71441 |   0.76315371 |
+      cell_13 |          190 |          127 |  0.058563232 |    4.9915772 |    4.2267371 |0.00038795937 |    5577.2856 |    2.1637602 |  0.041992529 |    9.1456456 |   0.20960895 |
+      cell_14 |          156 |          102 |  0.024841309 |    4.1324691 |    3.2429756 |0.00023479708 |    5196.3593 |      1.22009 |  0.022673922 |    3.9567221 |  0.093699284 |
+      cell_15 |          145 |          131 |  0.028457642 |  0.093323941 |    2.9832604 |0.00015556062 |    3733.6858 |   0.58081448 |   0.37396998 |    1.7327208 |  0.034900353 |
+      cell_16 |          111 |          112 | 0.0091247559 |    4.3653197 |    3.2349982 |6.0099848e-05 |    3129.7712 |   0.18809877 | 0.0033730111 |   0.60849919 |  0.014724272 |
+      cell_17 |          103 |           74 | 0.0012054443 |    4.0639938 |    3.1899838 |3.3894226e-05 |    3176.4023 |    0.1076617 |  0.001851372 |   0.34343907 | 0.0075239643 |
+      cell_18 |           65 |           24 |0.00022888184 |    3.7248934 |    3.0914075 |3.0264251e-05 |    1843.1354 |   0.05578111 |0.00068138805 |   0.17244214 | 0.0025380979 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 2389 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         1670 |         1128 |      929.375 |    8.0804631 |    8.5183649 |   0.94401391 |    44243.825 |    41766.786 |    1012.8562 |    355784.73 |     8184.347 |
+      cell_02 |         1589 |         1306 |     655.5625 |    8.2881703 |    7.8376574 |   0.49076153 |     44021.92 |    21604.265 |    467.95213 |    169326.83 |    3878.4669 |
+      cell_03 |         1432 |         1186 |    319.95312 |    7.4502736 |    7.0999541 |   0.26125063 |    42596.867 |    11128.458 |    244.45503 |    79011.542 |    1821.2568 |
+      cell_04 |         1178 |          932 |    193.39062 |    7.3553053 |    6.4248381 |   0.14532718 |    35192.317 |    5114.4001 |     102.4627 |    32859.193 |    753.64445 |
+      cell_05 |          988 |          833 |      97.1875 |    6.4779881 |    5.3835837 |  0.082853798 |    30052.943 |    2490.0004 |    47.177129 |    13405.126 |    305.61288 |
+      cell_06 |          770 |          677 |    38.707031 |     5.629894 |    5.5944224 |   0.04044232 |    23031.917 |    931.46417 |    20.268577 |     5211.004 |    114.10994 |
+      cell_07 |          576 |          491 |    8.3535156 |  0.031907688 |    5.8314631 |  0.019800492 |    17567.054 |     347.8363 |     1359.978 |    2028.3945 |    43.393755 |
+      cell_08 |          468 |          474 |    7.6289062 |    6.1629979 |    4.8809386 |  0.012667009 |    14269.037 |    180.74601 |    2.7993746 |    882.21017 |     17.25254 |
+      cell_09 |          330 |          236 |    6.9707031 |    5.6657282 |     3.724046 |  0.010138127 |    9243.5567 |    93.712351 |    1.0992282 |    348.98911 |    6.2279281 |
+      cell_10 |          282 |          303 |    3.4404297 |    5.0467284 |    3.5489275 |  0.005987708 |    9623.8064 |    57.624543 |   0.60999703 |    204.50533 |    3.0784893 |
+      cell_11 |          231 |          260 |    3.5619507 |    4.5290674 |    2.7506218 | 0.0049376743 |    7094.8442 |     35.03203 |   0.26222476 |    96.359865 |    1.1876336 |
+      cell_12 |          173 |          127 |   0.22143555 |    4.5368498 |     3.672338 |0.00096526809 |    4901.0072 |    4.7307859 |  0.086792858 |    17.373045 |   0.39376616 |
+      cell_13 |          132 |          116 |   0.42797852 |     2.631074 |    0.8553498 | 0.0020147519 |    3907.5819 |    7.8728083 |  0.052584056 |     6.734005 |   0.13835254 |
+      cell_14 |          109 |           76 |  0.010131836 |    3.4433886 |    4.6813319 |0.00017095297 |    2901.0652 |   0.49594572 |  0.014789961 |    2.3216865 |  0.050927584 |
+      cell_15 |           86 |           77 |  0.031890869 |    4.1513196 |     2.453543 |0.00022967975 |    2387.9399 |   0.54846143 | 0.0057811009 |    1.3456737 |  0.023999198 |
+      cell_16 |           82 |           66 | 0.0019226074 |    4.0723077 |    3.8253986 |5.0213369e-05 |    2261.0002 |   0.11353244 | 0.0026129869 |   0.43430683 |  0.010640887 |
+      cell_17 |           58 |           48 |0.00073242188 |    3.9610825 |    3.4825866 | 4.146447e-05 |    1604.8311 |  0.066543473 | 0.0010097648 |   0.23174341 | 0.0039997616 |
+      cell_18 |           44 |           35 |0.00026702881 |    2.7103201 |    2.7135482 | 4.160606e-05 |    1222.9859 |  0.050883623 |  0.000598726 |   0.13807517 | 0.0016227391 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ImportanceProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: Tst33WeightChangeProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+Tst33AppStarter::CheckCreateScorer: scorer already exists!
+ adding importance to: cell_01
+ adding importance to: cell_02
+ adding importance to: cell_03
+ adding importance to: cell_04
+ adding importance to: cell_05
+ adding importance to: cell_06
+ adding importance to: cell_07
+ adding importance to: cell_08
+ adding importance to: cell_09
+ adding importance to: cell_10
+ adding importance to: cell_11
+ adding importance to: cell_12
+ adding importance to: cell_13
+ adding importance to: cell_14
+ adding importance to: cell_15
+ adding importance to: cell_16
+ adding importance to: cell_17
+ adding importance to: cell_18
+ adding importance to: cell_19
+ preparing importance sampling 
+ creating istore 
+ creating importance configurator 
+ entering configure 
+ importance configurator push_back 
+ pushed 
+ vsampler configurator loop 
+ looping 1
+ sampler configurator 
+ entering importance configure, paraflag 0
+ creating importance process, paraflag is: 0
+ importance process paraflag is: 0
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+ configure preconf 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 2 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1029 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1029, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 173 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |           17 |            0 |            0 |    7.1333625 |    7.8341695 |            1 |    5374.6032 |    5374.6032 |    151.13309 |    42105.553 |    1078.0872 |
+      cell_01 |          479 |          113 |          113 |    7.6842255 |    9.0897413 |            1 |    10764.856 |    10764.856 |    302.13883 |    97849.758 |    2321.7029 |
+      cell_02 |          592 |          257 |        128.5 |    5.5084663 |    8.6597051 |          0.5 |     19374.28 |    9687.1398 |    369.83932 |    83887.774 |    2037.2474 |
+      cell_03 |          700 |          313 |        78.25 |     6.186361 |    8.2273413 |         0.25 |     26463.55 |    6615.8875 |    218.63804 |    54431.164 |    1352.5738 |
+      cell_04 |          797 |          449 |       56.125 |    6.1322796 |    7.4363056 |        0.125 |    34899.504 |     4362.438 |    136.89565 |    32440.422 |    839.48239 |
+      cell_05 |          825 |          487 |      30.4375 |    5.5879476 |    7.1525417 |       0.0625 |    36858.646 |    2303.6654 |    77.446171 |    16477.063 |    432.76514 |
+      cell_06 |          859 |          487 |     15.21875 |    0.1868362 |    6.6635112 |      0.03125 |    39414.144 |     1231.692 |    1193.1895 |    8207.3933 |    222.93099 |
+      cell_07 |         1049 |          680 |       10.625 |    4.3538178 |    6.1670888 |     0.015625 |    51801.009 |    809.39077 |     31.91137 |    4991.5847 |    138.93629 |
+      cell_08 |         1183 |          878 |     6.859375 |    4.1892744 |    6.0094842 |    0.0078125 |    61307.903 |    478.96799 |     19.29971 |    2878.3506 |    80.851782 |
+      cell_09 |         1225 |         1090 |    4.2578125 |    3.9044009 |    5.7454728 |   0.00390625 |    69053.482 |    269.74016 |    11.369334 |    1549.7848 |    44.390437 |
+      cell_10 |         1298 |         1167 |    2.2792969 |    3.7226473 |    5.5017826 |  0.001953125 |    77302.223 |     150.9809 |    6.5175034 |    830.66411 |    24.262366 |
+      cell_11 |         1427 |         1473 |    1.4384766 |  0.038751527 |    5.2192439 | 0.0009765625 |    89646.741 |    87.545645 |    350.65849 |    456.92208 |    13.588552 |
+      cell_12 |         1525 |         1757 |   0.85791016 |    3.5875075 |    5.1034542 |0.00048828125 |    106536.51 |    52.019779 |    2.2419419 |    265.48056 |    8.0429836 |
+      cell_13 |         1582 |         2124 |   0.51855469 |     1.162848 |    4.6442417 |0.00024414062 |    122150.05 |     29.82179 |    3.7626481 |     138.4996 |    4.3753878 |
+      cell_14 |         1668 |         2350 |   0.28686523 |   0.14604091 |    4.2277426 |0.00012207031 |    130704.75 |    15.955169 |    15.198221 |    67.454349 |    2.2195619 |
+      cell_15 |         1827 |         2705 |    0.1651001 |  0.082091941 |    4.0624568 |6.1035156e-05 |    144897.78 |    8.8438587 |    14.656482 |    35.927794 |     1.203179 |
+      cell_16 |         2003 |         3125 |  0.095367432 |  0.082407704 |    3.8994662 |3.0517578e-05 |     168498.3 |      5.14216 |    8.2916404 |    20.051679 |   0.68329505 |
+      cell_17 |         2119 |         3370 |  0.051422119 |   0.11523371 |    3.6996667 |1.5258789e-05 |    180841.15 |    2.7594169 |    3.0889153 |    10.208923 |   0.35594718 |
+      cell_18 |         2042 |         3397 |  0.025917053 |   0.13117319 |    3.5359021 |7.6293945e-06 |    176560.27 |    1.3470479 |    1.2931658 |    4.7630296 |   0.16962868 |
+      cell_19 |          854 |            0 |            0 |    2.1670142 |    3.5193537 |7.6293945e-06 |    178045.54 |    1.3583797 |   0.07853569 |    4.7806186 |   0.17018796 |
+=============================================
+=============================================================
+ Number of event processed : 173 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          188 |          146 |        130.5 |    7.9497068 |    8.4689341 |   0.94326312 |    4442.1652 |    4190.1306 |    101.45521 |    35485.939 |    806.53914 |
+      cell_02 |          307 |          275 |    125.89844 |    7.7084274 |    7.4499598 |   0.48102827 |    8940.7829 |    4300.7693 |    98.026213 |    32040.558 |    755.62794 |
+      cell_03 |          366 |          249 |    61.140625 |     7.462366 |    7.4556777 |   0.24763614 |    10621.768 |    2630.3337 |    61.988074 |     19610.92 |    462.57769 |
+      cell_04 |          401 |          335 |    47.023438 |    6.3628879 |    6.9898283 |   0.12691983 |    13301.728 |     1688.253 |    45.663525 |    11800.599 |    290.55189 |
+      cell_05 |          430 |          338 |     23.71875 |     6.141442 |    6.4611859 |  0.066962516 |    13773.759 |    922.32558 |    24.252566 |     5959.317 |    148.94573 |
+      cell_06 |          419 |          443 |    24.570312 |    5.3987952 |    5.7816348 |  0.033624953 |    13827.014 |    464.93271 |    12.558375 |    2688.0711 |    67.800093 |
+      cell_07 |          502 |          524 |    9.2133789 |    4.3148847 |    5.5524582 |  0.016808446 |    15776.576 |    265.17973 |    8.7903778 |    1472.3994 |    37.929467 |
+      cell_08 |          572 |          456 |    4.1601562 |    4.4110622 |    5.6080387 | 0.0088681873 |    17617.046 |    156.23126 |    4.8708431 |    876.15096 |    21.485592 |
+      cell_09 |          585 |          465 |    2.6972656 |    4.4103059 |    4.9231127 | 0.0049966835 |    18454.478 |    92.211188 |    2.5101986 |    453.96607 |    11.070744 |
+      cell_10 |          592 |          453 |    1.6005859 |    4.1025656 |    4.8439456 | 0.0022846335 |    18079.508 |     41.30505 |    1.3274906 |    200.07942 |    5.4461171 |
+      cell_11 |          647 |          575 |   0.56762695 |    0.0250294 |     5.028975 | 0.0010249377 |    20233.155 |    20.737723 |    114.97024 |    104.28949 |    2.8776362 |
+      cell_12 |          668 |          614 |   0.35070801 |     3.298365 |    4.6919652 |0.00052351597 |    21636.918 |    11.327272 |   0.44303354 |    53.147167 |    1.4612863 |
+      cell_13 |          666 |          548 |   0.17410278 |    3.1444944 |    4.0839491 |0.00029138862 |    21739.471 |    6.3346344 |   0.22847172 |    25.870324 |   0.71842803 |
+      cell_14 |          661 |          563 |    0.1020813 |  0.036972709 |    3.6490079 |0.00013870709 |     19794.45 |    2.7456305 |    8.1919998 |    10.018827 |   0.30288042 |
+      cell_15 |          740 |          712 |   0.08026123 |    2.2380908 |    3.0065092 |7.8243974e-05 |     24340.06 |     1.904463 |  0.080823424 |    5.7257856 |   0.18089016 |
+      cell_16 |          810 |          753 |  0.026664734 |  0.048495725 |    3.6916669 | 3.209148e-05 |    26322.695 |   0.84473425 |    2.0535848 |    3.1184775 |  0.099590086 |
+      cell_17 |          825 |          692 |  0.012741089 |    2.3065566 |    3.3975962 |1.7044862e-05 |    25314.129 |   0.43147584 |  0.020359633 |    1.4659807 |  0.046960646 |
+      cell_18 |          817 |          769 | 0.0097198486 |    2.4242799 |    3.1541246 |9.3055406e-06 |    26219.503 |   0.24398664 |   0.01011119 |   0.76956428 |  0.024512354 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 173 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          170 |          117 |    69.382812 |    8.2555673 |    7.8155438 |   0.85539216 |    4355.0844 |     3725.305 |    80.960641 |    29115.285 |    668.37602 |
+      cell_02 |          268 |          255 |    104.78125 |    4.1819066 |    7.3304788 |   0.44689788 |    8320.4165 |    3718.3765 |    153.33276 |     27257.48 |    641.22328 |
+      cell_03 |          297 |          249 |      54.5625 |    7.2428853 |    7.2270009 |   0.23906805 |    9536.8249 |    2279.9501 |     53.84765 |    16477.201 |    390.01235 |
+      cell_04 |          313 |          248 |    34.757812 |    6.5591494 |    6.9139313 |   0.12591197 |    9869.3727 |    1242.6722 |    32.245293 |    8591.7501 |     211.5017 |
+      cell_05 |          306 |          273 |    17.546875 |  0.019642145 |    6.2253988 |  0.063572254 |    10207.014 |    648.88288 |     5239.405 |    4039.5547 |    102.91315 |
+      cell_06 |          329 |          271 |    8.7734375 |    4.7831226 |    5.9256096 |  0.031764442 |    10250.692 |    325.60752 |     10.01702 |    1929.4231 |    47.912632 |
+      cell_07 |          416 |          399 |    6.1235352 |    4.6238937 |    5.6849123 |    0.0160041 |    14443.526 |    231.15564 |    7.2332681 |    1314.0996 |    33.445863 |
+      cell_08 |          431 |          446 |    4.3017578 |    4.5376207 |    5.4445462 | 0.0088202127 |     14235.73 |    125.56216 |    3.7152252 |    683.62901 |    16.858283 |
+      cell_09 |          434 |          359 |    1.4042969 |    4.4499646 |    5.5050249 | 0.0039169751 |    13392.296 |     52.45729 |    1.7542654 |    288.77869 |    7.8064191 |
+      cell_10 |          444 |          392 |   0.72924805 |    3.4520762 |    5.2556496 | 0.0019540147 |    14358.153 |    28.056043 |    1.1722817 |    147.45273 |    4.0468058 |
+      cell_11 |          477 |          481 |    0.6640625 |  0.007226678 |    4.5587947 |    0.0010236 |    14660.103 |    15.006082 |    263.01532 |    68.409648 |     1.900727 |
+      cell_12 |          506 |          541 |   0.35498047 |    3.0441914 |    4.1773664 |0.00053719428 |    16253.765 |    8.7314298 |   0.32767303 |    36.474381 |   0.99749942 |
+      cell_13 |          474 |          427 |    0.1340332 |    2.5121587 |    3.6066602 |0.00030154541 |    14314.455 |    4.3164582 |   0.17676224 |    15.567998 |   0.44405481 |
+      cell_14 |          517 |          491 |  0.086791992 |    1.4589879 |    3.4353566 |0.00014398148 |    15326.574 |    2.2067428 |   0.15444259 |    7.5809484 |   0.22532986 |
+      cell_15 |          524 |          436 |  0.064880371 |    2.4917683 |    2.8200902 |8.8683153e-05 |    16127.069 |    1.4301993 |  0.049703366 |     4.033291 |   0.12384927 |
+      cell_16 |          583 |          529 |  0.016593933 |   0.26540782 |    3.3349383 |3.2560233e-05 |    18060.025 |   0.58803862 |   0.23823464 |    1.9610725 |  0.063229338 |
+      cell_17 |          603 |          574 |  0.011367798 |    2.2602169 |    3.6148829 |1.5985253e-05 |    18918.397 |   0.30241536 |  0.015692156 |    1.0931961 |  0.035467676 |
+      cell_18 |          554 |          428 | 0.0042419434 |    2.2698406 |    3.4119442 |8.6051034e-06 |    16076.501 |   0.13833996 | 0.0066571863 |   0.47200821 |  0.015110752 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ImportanceProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+Tst33AppStarter::CheckCreateScorer: scorer already exists!
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: Tst33WeightChangeProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ preparing weight roulette
+ entering configure 
+ vsampler configurator loop 
+ NEW weight window configure 
+ entering new weight window configure 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: WeightCutOffProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+ configured 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 3 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 6268 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |          606 |            0 |            0 |    6.1894816 |     7.442733 |   0.75801418 |    176917.85 |    134106.24 |    4207.9558 |    998116.92 |    26045.065 |
+      cell_01 |        17217 |         4595 |    3914.9659 |    0.5254512 |    9.2327297 |   0.85691185 |    424459.77 |    363724.61 |    151648.22 |      3358171 |     79683.74 |
+      cell_02 |        10292 |         3286 |    2341.1688 |   0.34470958 |    8.8165577 |   0.72364732 |    289073.21 |    209187.06 |    129347.26 |    1844309.7 |    44587.239 |
+      cell_03 |         5622 |         2016 |    1241.5733 |   0.25020397 |    8.4857869 |   0.62898088 |    165482.03 |    104085.03 |    86464.304 |    883243.43 |    21633.712 |
+      cell_04 |         2966 |         1141 |    634.51256 |   0.14296597 |    8.0234082 |   0.57312967 |    93138.258 |    53380.299 |    74815.323 |    428291.93 |    10696.045 |
+      cell_05 |         1500 |          585 |    310.30177 |   0.32856345 |     7.675481 |   0.53493082 |    46722.962 |    24993.553 |    14820.977 |    191837.54 |    4869.6315 |
+      cell_06 |          759 |          349 |    183.90748 |    6.2033582 |    7.6488628 |   0.53484603 |    26457.157 |    14150.505 |    448.00613 |    108235.27 |    2779.1425 |
+      cell_07 |          379 |          204 |     99.36139 |     6.127185 |    7.5451494 |   0.49409909 |    12732.832 |    6291.2806 |    199.76315 |    47468.652 |    1223.9858 |
+      cell_08 |          194 |           82 |    39.243562 |    5.6161405 |    7.0176731 |   0.47574888 |    6801.0392 |    3235.5868 |    107.16787 |     22706.29 |     601.8698 |
+      cell_09 |          108 |           58 |    25.791058 |    4.5787017 |    6.1092132 |   0.48056908 |    3986.7745 |    1915.9205 |    71.857108 |    11704.767 |    329.01226 |
+      cell_10 |           59 |           30 |    14.472194 |    3.6311826 |    5.8433502 |   0.45294359 |     2019.129 |    914.55155 |    41.281752 |     5344.045 |    149.90158 |
+      cell_11 |           33 |           17 |    7.3528895 |     3.389552 |     5.240287 |   0.39214212 |    1248.2065 |    489.47434 |    22.131481 |     2564.986 |    75.015807 |
+      cell_12 |           26 |           16 |     7.328919 |    4.1368497 |    5.3545392 |   0.44127159 |    840.59103 |    370.92894 |    14.326217 |    1986.1536 |    59.265408 |
+      cell_13 |           19 |           17 |    8.1908344 |    5.3464952 |    6.6003976 |   0.48523033 |    1040.5471 |      504.905 |    17.018988 |    3332.5738 |    90.991939 |
+      cell_14 |            7 |            3 |    1.3772488 |    3.1547115 |    4.5943635 |   0.44229735 |    254.06764 |    112.37345 |    5.1237941 |    516.28446 |    16.164092 |
+      cell_15 |            7 |           17 |    7.2724878 |    2.5500772 |    3.1201715 |   0.46010512 |    607.14577 |    279.35088 |    13.478316 |    871.62265 |    34.370745 |
+      cell_16 |            6 |           18 |    7.5269854 |    2.4872095 |    3.1509909 |   0.45336073 |    696.51035 |    315.77044 |    15.579689 |    994.98979 |     38.74995 |
+      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 6268 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         6678 |         3433 |    3003.7828 |    8.6264155 |    8.8231001 |   0.88614298 |    163219.49 |    144635.81 |    3399.2588 |    1276136.2 |    29323.419 |
+      cell_02 |         4339 |         3357 |    2556.6673 |    1.5391386 |    7.8468508 |   0.75156669 |    127019.18 |    95463.386 |    11227.742 |    749086.95 |    17281.052 |
+      cell_03 |         2505 |         2299 |    1642.9232 |    7.0885125 |    7.1236229 |   0.67254127 |    73655.206 |    49536.166 |    1147.4388 |    352876.96 |    8133.6341 |
+      cell_04 |         1391 |         1261 |    780.78694 |  0.062084691 |    6.6609186 |   0.60436471 |    42714.993 |    25815.434 |    64186.543 |    171954.51 |    3985.0017 |
+      cell_05 |          703 |          586 |    339.80799 |    4.9506686 |    6.5077618 |   0.56599673 |    21378.427 |     12100.12 |    358.97819 |    78744.698 |    1777.1821 |
+      cell_06 |          390 |          381 |    218.98464 |      5.78482 |    5.7854223 |   0.56082086 |    11874.135 |    6659.2627 |    146.67592 |    38526.647 |    848.49379 |
+      cell_07 |          225 |          207 |    122.07459 |    6.1801445 |    5.1579707 |   0.54640687 |    7060.1445 |    3857.7115 |    71.569598 |    19897.963 |    442.31046 |
+      cell_08 |          104 |           78 |    38.473994 |    6.1096893 |    5.4003445 |   0.51809085 |    3505.9182 |    1816.3841 |    35.658947 |       9809.1 |    217.86509 |
+      cell_09 |           62 |           65 |    41.413827 |    4.2319404 |    4.2088796 |   0.55315492 |    1885.5263 |    1042.9882 |    21.386117 |    4389.8115 |    90.504771 |
+      cell_10 |           35 |           31 |    16.390841 |    3.7512336 |     4.004548 |   0.49628347 |    940.96619 |    466.98597 |    10.699788 |    1870.0677 |    40.137404 |
+      cell_11 |           20 |           24 |    21.206665 |    5.4595645 |    2.0459024 |   0.68705645 |    550.29688 |    378.08502 |    2.8659537 |    773.52507 |    15.646859 |
+      cell_12 |           10 |            2 |            1 |    5.9002521 |    5.8321792 |   0.48686442 |    245.20163 |    119.37995 |    2.8019097 |    696.24526 |    16.531974 |
+      cell_13 |            9 |            2 |            1 |    6.5628739 |    6.1987055 |   0.52807474 |    220.59727 |    116.49185 |    2.5548173 |    722.09865 |    16.766944 |
+      cell_14 |            4 |            0 |            0 |    6.3695719 |    5.5736788 |   0.59972248 |    98.894502 |    59.309255 |   0.93540895 |    330.57074 |    5.9581546 |
+      cell_15 |            3 |            2 |   0.98313341 |    4.4060842 |    4.1508434 |    0.6328817 |    73.991445 |    46.827831 |   0.61902056 |      194.375 |    2.7274567 |
+      cell_16 |            4 |            2 |            1 |    4.3480151 |    4.2661831 |   0.54367054 |    225.17089 |    122.41878 |    3.2554081 |    522.26093 |    14.154564 |
+      cell_17 |            2 |            0 |            0 |    3.8607286 |    3.8607286 |   0.71713123 |    45.235384 |    32.439706 |   0.10820721 |     125.2409 |   0.41775869 |
+      cell_18 |            2 |            0 |            0 |    3.9548887 |    3.9548887 |   0.73535801 |    41.853411 |    30.777241 |   0.10266183 |    121.72056 |   0.40601609 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 6268 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         5519 |         3727 |    3037.9781 |    5.5125606 |    8.2756758 |   0.81568045 |    151139.87 |    123281.84 |       4266.1 |    1020240.5 |    23517.135 |
+      cell_02 |         3305 |         2453 |    1738.9985 |    7.4799329 |    7.5641528 |   0.70699689 |    96841.894 |    68466.918 |     1593.248 |    517894.23 |    11917.388 |
+      cell_03 |         1908 |         1774 |    1154.9026 |  0.086144642 |    6.7965171 |   0.63430014 |     55933.76 |    35478.792 |    64421.089 |    241132.22 |    5549.5316 |
+      cell_04 |         1022 |         1044 |    666.86945 |    5.2539252 |    6.4083874 |   0.59872781 |    31970.944 |    19141.893 |    532.46563 |    122668.67 |    2797.5346 |
+      cell_05 |          514 |          468 |    272.83725 |    5.5529344 |    6.4918946 |   0.56462659 |    15623.929 |    8821.6855 |    233.00841 |    57269.452 |    1293.8804 |
+      cell_06 |          283 |          386 |    200.18131 |    6.0387782 |    6.0403348 |    0.5345153 |    9281.5011 |    4961.1043 |    106.80267 |    29966.731 |    644.95761 |
+      cell_07 |          141 |          130 |    60.852238 |    5.1680364 |    4.9253542 |   0.51686065 |    4503.1162 |    2327.4836 |    52.410618 |    11463.681 |    270.85998 |
+      cell_08 |           87 |           83 |    39.859024 |    4.6100601 |    4.4757302 |   0.52627228 |    2919.5339 |    1536.4698 |    35.024395 |    6876.8241 |    161.46457 |
+      cell_09 |           48 |           31 |    14.889087 |    4.4137112 |    4.7691804 |   0.52643155 |    1358.7802 |    715.30478 |    18.520804 |    3411.4175 |    81.745483 |
+      cell_10 |           26 |           27 |    17.607058 |    3.8021538 |    3.4757074 |   0.54977046 |    631.00637 |    346.90866 |    6.6385164 |     1205.753 |    25.240661 |
+      cell_11 |           12 |            3 |          2.5 |    6.7596396 |    6.2537653 |   0.46917683 |    263.84487 |     123.7899 |    2.6096345 |    774.15298 |    17.640189 |
+      cell_12 |           10 |            4 |            2 |    6.2425062 |     6.030033 |   0.50758118 |    233.75276 |     118.6485 |     2.692577 |    715.45438 |    16.808429 |
+      cell_13 |            8 |            3 |          1.5 |     6.299591 |     5.900752 |   0.53253262 |    183.24247 |    97.582594 |    2.0558434 |    575.81068 |    12.950972 |
+      cell_14 |            3 |            0 |            0 |    4.6834879 |    4.4086775 |   0.64344903 |    68.749187 |    44.236598 |   0.56941849 |     195.0249 |    2.6668646 |
+      cell_15 |            3 |            0 |            0 |    4.4161533 |     4.182191 |   0.61860625 |    82.907385 |    51.287027 |   0.77452231 |    214.49214 |    3.4204093 |
+      cell_16 |            2 |            0 |            0 |    3.8607286 |    3.8607286 |   0.71713123 |    45.235384 |    32.439706 |   0.10820721 |     125.2409 |   0.41775869 |
+      cell_17 |            2 |            0 |            0 |    3.7988655 |    3.7988655 |   0.71877043 |    44.909025 |    32.279279 |   0.10767208 |    122.62464 |   0.40903177 |
+      cell_18 |            2 |            0 |            0 |    3.2541865 |    3.2541865 |   0.67912306 |    54.402304 |    36.945859 |   0.12323812 |    120.22872 |   0.40103983 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: Tst33WeightChangeProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+Tst33AppStarter::CheckCreateScorer: scorer already exists!
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: Tst33WeightChangeProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+ preparing weight roulette
+ entering configure 
+ vsampler configurator loop 
+ NEW weight window configure 
+ entering new weight window configure 
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  Modifying Process Order for ProcessName: WeightCutOffProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The final PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+================================================
+ configured 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 4 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 9769 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |          580 |            0 |            0 |    6.2287467 |    7.4659521 |            1 |    175918.12 |    175918.12 |    5492.7514 |    1313396.3 |    34212.957 |
+      cell_01 |        22618 |         5501 |         5501 |   0.96046054 |    9.3850006 |            1 |    523469.64 |    523469.64 |    120728.33 |    4912762.9 |     115954.8 |
+      cell_02 |        10490 |         3122 |         3122 |   0.50285197 |    8.9567947 |            1 |    278381.58 |    278381.58 |    119249.27 |    2493406.6 |    59964.733 |
+      cell_03 |         4469 |         1440 |         1440 |    1.5490206 |    8.5965912 |            1 |    123388.64 |    123388.64 |    16729.075 |    1060721.7 |    25913.682 |
+      cell_04 |         1831 |          613 |          613 |   0.10396543 |    8.3252425 |            1 |    54466.896 |    54466.896 |    108112.46 |    453450.12 |    11239.958 |
+      cell_05 |          735 |          226 |          226 |    7.8426589 |    8.6163993 |            1 |    21957.343 |    21957.343 |    590.89571 |    189193.23 |    4634.1935 |
+      cell_06 |          305 |          119 |          119 |    6.8413534 |    8.0997549 |            1 |    10363.281 |    10363.281 |    307.63182 |    83940.034 |     2104.618 |
+      cell_07 |          134 |           44 |           44 |    7.5306553 |    8.1570085 |            1 |     4303.017 |     4303.017 |    116.95693 |    35099.746 |    880.76236 |
+      cell_08 |           68 |           29 |           29 |    6.1270743 |    7.1518304 |            1 |    2609.8723 |    2609.8723 |    80.256634 |    18665.364 |    491.73836 |
+      cell_09 |           29 |            3 |            3 |    7.7718231 |    8.3509978 |            1 |    769.19163 |    769.19163 |     20.52695 |    6423.5177 |    159.53183 |
+      cell_10 |           13 |            1 |            1 |    9.4343702 |    9.4558606 |            1 |      314.354 |      314.354 |    7.4594015 |    2972.4876 |    70.374755 |
+      cell_11 |            4 |            1 |            1 |    9.8918614 |    9.8919771 |            1 |    76.777497 |    76.777497 |    1.7788218 |    759.48124 |    17.595859 |
+      cell_12 |            2 |            1 |            1 |    9.8675162 |    9.8675162 |            1 |    45.848101 |    45.848101 |    1.0635191 |    452.40688 |    10.494292 |
+      cell_13 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_14 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_15 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_16 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 9769 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         9028 |         4522 |         4522 |   0.32906568 |    8.9283756 |            1 |    218333.54 |    218333.54 |    136139.05 |    1949363.8 |     44798.69 |
+      cell_02 |         4611 |         3170 |         3170 |   0.90997753 |    7.9928184 |            1 |    124861.36 |    124861.36 |     25295.24 |     997994.2 |      23018.1 |
+      cell_03 |         2150 |         1853 |         1853 |    7.1647123 |      7.02236 |            1 |    64547.242 |    64547.242 |    1445.3917 |    453273.97 |    10355.815 |
+      cell_04 |          913 |          855 |          855 |    7.2995413 |    6.7032389 |            1 |    28203.664 |    28203.664 |    589.63111 |     189055.9 |    4304.0366 |
+      cell_05 |          423 |          372 |          372 |     7.893207 |    6.6368398 |            1 |    12195.135 |    12195.135 |    224.89384 |    80937.157 |    1775.1337 |
+      cell_06 |          173 |          199 |          199 |    6.3270389 |    5.6244925 |            1 |    6105.6626 |    6105.6626 |    121.58242 |    34341.253 |    769.25671 |
+      cell_07 |           78 |           54 |           54 |    7.0183583 |    5.7487328 |            1 |    2311.5125 |    2311.5125 |    41.529841 |    13288.268 |     291.4713 |
+      cell_08 |           47 |           58 |           58 |    7.0791099 |    4.6981966 |            1 |    1213.5858 |    1213.5858 |    15.841471 |    5701.6647 |    112.14352 |
+      cell_09 |           21 |           24 |           24 |    7.6570807 |    5.5726645 |            1 |    511.63002 |    511.63002 |    7.2945221 |    2851.1424 |    55.854745 |
+      cell_10 |           12 |           11 |           11 |    8.4631251 |     6.157773 |            1 |    342.91965 |    342.91965 |    5.2550438 |    2111.6213 |    44.474093 |
+      cell_11 |            5 |            6 |            6 |    7.5945778 |     3.323515 |            1 |    133.44506 |    133.44506 |    1.2617503 |    443.50665 |    9.5824607 |
+      cell_12 |            2 |            2 |            2 |    8.6382166 |    5.0007579 |            1 |    40.986001 |    40.986001 |   0.54144394 |    204.96107 |      4.67711 |
+      cell_13 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_14 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_15 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_16 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 9769 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         6659 |         3819 |         3819 |    8.4426712 |    8.4256696 |            1 |    171486.24 |    171486.24 |    3926.1893 |    1444886.4 |    33147.525 |
+      cell_02 |         3210 |         2598 |         2598 |   0.32886764 |    7.5997701 |            1 |    93058.973 |    93058.973 |    49304.452 |     707226.8 |    16214.638 |
+      cell_03 |         1421 |         1285 |         1285 |    7.5988061 |    7.0684642 |            1 |    42530.375 |    42530.375 |    895.65031 |    300624.44 |     6805.873 |
+      cell_04 |          631 |          636 |          636 |    7.6869282 |    6.5560456 |            1 |    19397.619 |    19397.619 |    363.25242 |    127171.67 |    2792.2953 |
+      cell_05 |          268 |          279 |          279 |    7.4485134 |    6.0665769 |            1 |    8618.1429 |    8618.1429 |    154.35377 |    52282.627 |    1149.7061 |
+      cell_06 |          127 |          140 |          140 |    5.9374668 |    5.4223887 |            1 |    3895.5189 |    3895.5189 |    80.687517 |    21123.018 |    479.07945 |
+      cell_07 |           59 |           33 |           33 |    7.5755799 |    5.3257208 |            1 |    1564.7122 |    1564.7122 |    23.829659 |    8333.2203 |    180.52348 |
+      cell_08 |           27 |           44 |           44 |    5.7123198 |    4.5417572 |            1 |    854.73791 |    854.73791 |    14.710467 |    3882.0121 |    84.030889 |
+      cell_09 |           17 |           54 |           54 |    6.6856755 |    3.6089354 |            1 |    603.71388 |    603.71388 |    6.6966566 |    2178.7644 |    44.771673 |
+      cell_10 |           10 |            6 |            6 |    6.9282827 |    2.7203419 |            1 |    252.25713 |    252.25713 |    2.1332394 |    686.22563 |    14.779685 |
+      cell_11 |            2 |            2 |            2 |    8.5639416 |    4.8392945 |            1 |    42.460028 |    42.460028 |   0.54634063 |    205.47658 |    4.6788293 |
+      cell_12 |            3 |            9 |            9 |    7.8064159 |    3.5285468 |            1 |    58.215467 |    58.215467 |   0.59933405 |      205.416 |    4.6786508 |
+      cell_13 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_14 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_15 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_16 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+   WeightCutOffProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: Tst33WeightChangeProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Tst33WeightChangeProcess
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+   Tst33WeightChangeProcess
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+Tst33AppStarter::CheckCreateScorer: scorer already exists!
+ entering configure 
+ vsampler configurator loop 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 5 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 5903 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |          673 |            0 |            0 |    5.0342265 |     7.140775 |            1 |     194247.5 |     194247.5 |     7291.839 |    1387077.7 |    36708.769 |
+      cell_01 |        16864 |         4666 |         4666 |    3.8614393 |    9.0027556 |            1 |    418940.64 |    418940.64 |    23387.471 |    3771620.2 |      90309.3 |
+      cell_02 |        10795 |         3597 |         3597 |    0.9015267 |    8.4889741 |            1 |    309809.91 |    309809.91 |    71396.168 |    2629968.3 |    64365.552 |
+      cell_03 |         6358 |         2387 |         2387 |   0.18758921 |     8.097121 |            1 |    196154.72 |    196154.72 |    211512.53 |    1588288.5 |    39677.469 |
+      cell_04 |         3637 |         1527 |         1527 |   0.39747291 |    7.7674141 |            1 |    119239.73 |    119239.73 |    59300.124 |    926184.38 |    23570.193 |
+      cell_05 |         2072 |          914 |          914 |    5.9047228 |    7.5192982 |            1 |    70067.545 |    70067.545 |    2299.5594 |    526858.76 |    13578.261 |
+      cell_06 |         1124 |          568 |          568 |    5.1511744 |    6.9595971 |            1 |    39857.763 |    39857.763 |    1425.9579 |    277393.97 |    7345.3579 |
+      cell_07 |          607 |          295 |          295 |    5.9077627 |    7.1152249 |            1 |    20889.411 |    20889.411 |     666.5451 |    148632.86 |    3937.7903 |
+      cell_08 |          324 |          188 |          188 |  0.019170297 |    6.3942759 |            1 |    12816.101 |    12816.101 |    116890.73 |    81949.684 |      2240.83 |
+      cell_09 |          183 |          146 |          146 |     2.327064 |    5.2806791 |            1 |    8317.6678 |    8317.6678 |    553.68415 |    43922.935 |    1288.4585 |
+      cell_10 |          114 |           80 |           80 |    3.1662156 |    5.8148218 |            1 |     5469.341 |     5469.341 |    285.37282 |    31803.243 |    903.55187 |
+      cell_11 |           59 |           57 |           57 |    2.8371931 |    4.7632721 |            1 |    3296.0796 |    3296.0796 |    170.59401 |    15700.124 |    484.00816 |
+      cell_12 |           29 |           21 |           21 |    2.8549312 |    3.9225037 |            1 |    1019.7536 |    1019.7536 |    47.336678 |    3999.9871 |    135.14296 |
+      cell_13 |           13 |            7 |            7 |    2.6824562 |    3.8931553 |            1 |    576.69645 |    576.69645 |    28.074569 |    2245.1688 |    75.308802 |
+      cell_14 |           13 |            8 |            8 |    2.1802233 |    3.8925783 |            1 |    433.62115 |    433.62115 |    24.779027 |    1687.9043 |    54.023812 |
+      cell_15 |            7 |            2 |            2 |    3.2032338 |    5.0299157 |            1 |    225.37718 |    225.37718 |    10.488726 |    1133.6282 |     33.59784 |
+      cell_16 |            6 |            1 |            1 |    6.8204293 |     7.167729 |            1 |    148.24431 |    148.24431 |     4.180046 |     1062.575 |    28.509708 |
+      cell_17 |            6 |           11 |           11 |    7.0905403 |    7.1874983 |            1 |    918.17077 |    918.17077 |    25.159078 |    6599.3508 |    178.39146 |
+      cell_18 |            4 |            7 |            7 |    6.3686348 |    6.4282832 |            1 |     499.0327 |     499.0327 |    14.405053 |    3207.9235 |    91.740521 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 5903 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         6486 |         3570 |         3570 |     6.542492 |    8.5668162 |            1 |    159566.06 |    159566.06 |     4829.193 |    1366973.1 |    31594.957 |
+      cell_02 |         4425 |         3201 |         3201 |   0.26977715 |    7.7290456 |            1 |    126416.24 |    126416.24 |    84680.947 |    977076.89 |    22844.985 |
+      cell_03 |         2766 |         2502 |         2502 |  0.092638241 |    7.0890726 |            1 |    84885.281 |    84885.281 |    152422.18 |    601757.92 |    14120.123 |
+      cell_04 |         1591 |         1197 |         1197 |    6.3352432 |    7.0074827 |            1 |    49106.395 |    49106.395 |    1286.9694 |    344112.21 |    8153.2639 |
+      cell_05 |          937 |          918 |          918 |    6.1687409 |    6.4268013 |            1 |     29614.99 |     29614.99 |    724.61994 |    190329.65 |    4469.9927 |
+      cell_06 |          533 |          524 |          524 |    5.8766792 |    5.9042634 |            1 |     16857.33 |     16857.33 |    410.28853 |    99530.113 |    2411.1341 |
+      cell_07 |          292 |          320 |          320 |    5.5981165 |    5.7067787 |            1 |    8923.3463 |    8923.3463 |    222.67659 |    50923.563 |    1246.5695 |
+      cell_08 |          155 |          139 |          139 |    5.6665125 |    5.9946822 |            1 |    4657.0328 |    4657.0328 |    119.87227 |    27917.431 |    679.25771 |
+      cell_09 |           76 |           80 |           80 |    4.1838857 |    5.7309949 |            1 |    2296.3399 |    2296.3399 |    75.659749 |    13160.312 |    316.55174 |
+      cell_10 |           48 |           56 |           56 |    4.2069609 |    5.6075356 |            1 |    1679.5373 |    1679.5373 |    58.634555 |    9418.0652 |    246.67328 |
+      cell_11 |           24 |            8 |            8 |    5.6072343 |    6.1592666 |            1 |    735.33533 |    735.33533 |     19.24486 |    4529.1264 |    107.91044 |
+      cell_12 |           17 |           32 |           32 |    2.8069354 |    3.2785204 |            1 |    594.91978 |    594.91978 |    18.006229 |    1950.4566 |     50.54232 |
+      cell_13 |           10 |           23 |           23 |    3.7319009 |    2.2056858 |            1 |    319.15559 |    319.15559 |    5.0657076 |    703.95694 |    18.904718 |
+      cell_14 |            6 |            2 |            2 |    4.4618807 |    4.7748063 |            1 |    117.96295 |    117.96295 |    3.3233492 |    563.25024 |    14.828388 |
+      cell_15 |            3 |            2 |            2 |    3.4344655 |    5.2506889 |            1 |    71.418149 |    71.418149 |    3.1920014 |    374.99448 |    10.962819 |
+      cell_16 |            2 |            0 |            0 |    6.8108432 |    7.1604533 |            1 |    49.425239 |    49.425239 |    1.3947547 |    353.90711 |    9.4994552 |
+      cell_17 |            2 |            2 |            2 |    7.7567834 |    7.9948135 |            1 |    103.42069 |    103.42069 |    2.7247919 |    826.82911 |     21.13562 |
+      cell_18 |            1 |            0 |            0 |     4.967592 |     4.967592 |            1 |    25.137233 |    25.137233 |   0.81863291 |    124.87151 |    4.0666343 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 5903 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |         5428 |         3449 |         3449 |   0.10276041 |    8.1621063 |            1 |    147604.95 |    147604.95 |    273823.56 |    1204767.3 |    28138.221 |
+      cell_02 |         3568 |         2965 |         2965 |    6.8516425 |    7.4041391 |            1 |    105183.09 |    105183.09 |    2656.0053 |    778790.24 |    18197.999 |
+      cell_03 |         2087 |         1660 |         1660 |   0.13930778 |    7.1076154 |            1 |     62647.33 |     62647.33 |     74789.79 |    445273.13 |    10418.799 |
+      cell_04 |         1211 |         1142 |         1142 |    6.3618484 |    6.6368027 |            1 |    37652.189 |    37652.189 |    929.60028 |    249890.15 |     5913.976 |
+      cell_05 |          697 |          615 |          615 |    5.7464873 |    6.4214102 |            1 |     21939.69 |     21939.69 |    579.13702 |    140883.75 |    3328.0035 |
+      cell_06 |          392 |          373 |          373 |    6.1866454 |    6.1144294 |            1 |    12129.555 |    12129.555 |    288.99191 |    74165.305 |    1787.8904 |
+      cell_07 |          205 |          252 |          252 |    5.7036013 |    5.7240979 |            1 |    6371.4343 |    6371.4343 |    154.51833 |    36470.713 |    881.31093 |
+      cell_08 |           95 |           72 |           72 | 0.0051342811 |    6.0259556 |            1 |    2820.4169 |    2820.4169 |    80951.935 |    16995.707 |    415.62999 |
+      cell_09 |           56 |           44 |           44 |    4.4219788 |    5.7744684 |            1 |    1940.4269 |    1940.4269 |    65.180337 |    11204.934 |    288.22607 |
+      cell_10 |           29 |           28 |           28 |     5.307847 |    6.2605087 |            1 |    819.83639 |    819.83639 |    22.855539 |    5132.5928 |     121.3137 |
+      cell_11 |           20 |           25 |           25 |     4.176066 |    4.9454611 |            1 |    585.29234 |    585.29234 |    16.640472 |    2894.5405 |    69.491708 |
+      cell_12 |           14 |           17 |           17 |    4.0443523 |    2.3786301 |            1 |    433.93338 |    433.93338 |    4.8237721 |     1032.167 |    19.509034 |
+      cell_13 |            7 |            3 |            3 |    6.6248222 |     3.388209 |            1 |    170.27182 |    170.27182 |    2.0584256 |    576.91652 |    13.636704 |
+      cell_14 |            6 |           19 |           19 |    1.2446285 |    1.8533229 |            1 |       500.95 |       500.95 |    32.235173 |    928.42213 |    40.120816 |
+      cell_15 |            2 |            0 |            0 |     6.943341 |    7.2600009 |            1 |    49.282371 |    49.282371 |    1.3755693 |    357.79006 |     9.551047 |
+      cell_16 |            2 |            0 |            0 |    6.8108432 |    7.1604533 |            1 |    49.425239 |    49.425239 |    1.3947547 |    353.90711 |    9.4994552 |
+      cell_17 |            1 |            0 |            0 |     4.967592 |     4.967592 |            1 |    25.137233 |    25.137233 |   0.81863291 |    124.87151 |    4.0666343 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+ adding importance to: cell_01
+ adding importance to: cell_02
+ adding importance to: cell_03
+ adding importance to: cell_04
+ adding importance to: cell_05
+ adding importance to: cell_06
+ adding importance to: cell_07
+ adding importance to: cell_08
+ adding importance to: cell_09
+ adding importance to: cell_10
+ adding importance to: cell_11
+ adding importance to: cell_12
+ adding importance to: cell_13
+ adding importance to: cell_14
+ adding importance to: cell_15
+ adding importance to: cell_16
+ adding importance to: cell_17
+ adding importance to: cell_18
+ adding importance to: cell_19
+ preparing importance sampling 
+ creating istore 
+ creating importance configurator 
+ entering configure 
+ importance configurator push_back 
+ pushed 
+ vsampler configurator loop 
+ looping 1
+ sampler configurator 
+ entering importance configure, paraflag 0
+ creating importance process, paraflag is: 0
+ importance process paraflag is: 0
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
+ configure preconf 
+++ PhantomSD/Collisions id 0
+++ PhantomSD/CollWeight id 1
+++ PhantomSD/TrackEnter id 2
+++ PhantomSD/SL id 3
+++ PhantomSD/SLW id 4
+++ PhantomSD/SLWE id 5
+++ PhantomSD/SLW_V id 6
+++ PhantomSD/SLWE_V id 7
+++ PhantomSDMinus/Collisions id 9
+++ PhantomSDMinus/CollWeight id 12
+++ PhantomSDMinus/TrackEnter id 15
+++ PhantomSDMinus/SL id 18
+++ PhantomSDMinus/SLW id 21
+++ PhantomSDMinus/SLWE id 24
+++ PhantomSDMinus/SLW_V id 27
+++ PhantomSDMinus/SLWE_V id 30
+++ PhantomSDPlus/Collisions id 10
+++ PhantomSDPlus/CollWeight id 13
+++ PhantomSDPlus/TrackEnter id 16
+++ PhantomSDPlus/SL id 19
+++ PhantomSDPlus/SLW id 22
+++ PhantomSDPlus/SLWE id 25
+++ PhantomSDPlus/SLW_V id 28
+++ PhantomSDPlus/SLWE_V id 31
+### Run 6 start.
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1007 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1007, n= 0
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 180 for hit collection: PhantomSD
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |           18 |            0 |            0 |      4.91457 |    6.4295772 |            1 |    4924.1561 |    4924.1561 |    176.07832 |    31660.242 |    865.34921 |
+      cell_01 |          491 |          131 |          131 |    8.6619435 |    9.3237641 |            1 |    11428.056 |    11428.056 |     291.4121 |     106552.5 |    2524.1951 |
+      cell_02 |          525 |          186 |           93 |  0.049814102 |    8.4588591 |          0.5 |    18003.456 |    9001.7282 |    37556.424 |     76144.35 |    1870.8395 |
+      cell_03 |          637 |          290 |         72.5 |    7.3795937 |    8.4590093 |         0.25 |    23400.031 |    5850.0078 |     165.3839 |     49485.27 |     1220.466 |
+      cell_04 |          705 |          368 |           46 |   0.11596546 |    7.8543861 |        0.125 |    28624.819 |    3578.1024 |    6123.3578 |    28103.797 |    710.09798 |
+      cell_05 |          754 |          358 |       22.375 |    0.3133268 |    7.6063651 |       0.0625 |    29019.563 |    1813.7227 |    1127.8154 |    13795.837 |     353.3748 |
+      cell_06 |          848 |          517 |     16.15625 |     4.493662 |    6.8547145 |      0.03125 |    38519.438 |    1203.7324 |    48.705695 |    8251.2423 |    218.86693 |
+      cell_07 |          968 |          672 |         10.5 |     3.206368 |    6.7400737 |     0.015625 |    44202.261 |    690.66032 |    38.619727 |    4655.1015 |    123.82906 |
+      cell_08 |         1041 |          783 |    6.1171875 |   0.52419717 |    6.2416192 |    0.0078125 |    51750.641 |    404.30188 |    132.77283 |    2523.4984 |     69.59914 |
+      cell_09 |         1115 |          913 |    3.5664062 |    3.4486085 |    5.9171883 |   0.00390625 |    62979.527 |    246.01378 |    11.919368 |    1455.7098 |    41.105235 |
+      cell_10 |         1213 |         1076 |    2.1015625 |   0.16707224 |    5.6651673 |  0.001953125 |     70723.33 |     138.1315 |    133.50903 |    782.53808 |    22.305653 |
+      cell_11 |         1307 |         1275 |    1.2451172 |   0.41771295 |    5.5135207 | 0.0009765625 |    83454.877 |    81.498903 |    31.156842 |    449.34589 |    13.014616 |
+      cell_12 |         1492 |         1575 |   0.76904297 |    2.8289382 |    5.4551889 |0.00048828125 |    96555.362 |    47.146173 |    2.6468179 |    257.19128 |    7.4876843 |
+      cell_13 |         1659 |         1732 |   0.42285156 |  0.071969133 |    5.2204953 |0.00024414062 |    107723.86 |    26.299769 |     56.73271 |    137.29782 |     4.083004 |
+      cell_14 |         1795 |         2063 |   0.25183105 |    2.4844453 |    4.9346128 |0.00012207031 |     125194.3 |    15.282507 |   0.91971257 |    75.413255 |    2.2849756 |
+      cell_15 |         2054 |         2744 |   0.16748047 |   0.26470031 |    4.7566283 |6.1035156e-05 |    159434.56 |    9.7311136 |    5.4032887 |     46.28729 |    1.4302522 |
+      cell_16 |         2245 |         2910 |  0.088806152 |    2.2680873 |    4.5585945 |3.0517578e-05 |    170231.42 |    5.1950507 |   0.32889568 |     23.68213 |    0.7459641 |
+      cell_17 |         2385 |         3483 |  0.053146362 |   0.12503032 |     4.270425 |1.5258789e-05 |    192285.36 |    2.9340418 |    3.2344392 |    12.529605 |   0.40440296 |
+      cell_18 |         2374 |         3530 |  0.026931763 |   0.25611338 |    4.3136755 |7.6293945e-06 |    200622.75 |    1.5306301 |   0.82816839 |    6.6026415 |   0.21210501 |
+      cell_19 |         1044 |            0 |            0 |    1.5066935 |    4.4132218 |7.6293945e-06 |     220505.3 |    1.6823219 |   0.15572992 |    7.4244599 |   0.23463725 |
+=============================================
+=============================================================
+ Number of event processed : 180 for hit collection: PhantomSDMinus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          198 |          116 |    90.859375 |    8.7962329 |    8.7768077 |   0.93292927 |    5312.2708 |    4955.9729 |    113.19454 |    43497.621 |    995.68556 |
+      cell_02 |          271 |          238 |    108.21875 |    7.4204647 |    7.5408205 |   0.48930923 |    8044.7022 |     3936.347 |    94.021146 |    29683.287 |     697.6806 |
+      cell_03 |          335 |          301 |      70.3125 |    8.1877131 |    7.4451672 |   0.24399855 |    9618.2795 |    2346.8462 |    49.913844 |    17472.663 |    408.68023 |
+      cell_04 |          376 |          278 |      38.8125 |    7.4325907 |    6.5315786 |   0.13986134 |    12325.568 |    1723.8705 |    35.754625 |    11259.596 |    265.74949 |
+      cell_05 |          371 |          275 |     17.65625 |  0.033840459 |    7.0019019 |  0.066277413 |    10835.129 |    718.12433 |    3538.2835 |    5028.2361 |    119.73714 |
+      cell_06 |          433 |          345 |    15.144531 |    4.2775186 |    5.7795276 |  0.037850193 |    13517.018 |    511.62173 |    16.655729 |    2956.9319 |    71.245191 |
+      cell_07 |          466 |          319 |    7.4765625 |    4.3781938 |    5.8832701 |  0.018961011 |    13061.736 |    247.66371 |    7.9957977 |    1457.0725 |    35.007151 |
+      cell_08 |          523 |          446 |    3.6992188 |    3.9899133 |    6.3413017 | 0.0081088718 |    15397.117 |    124.85325 |    4.8944292 |    791.73211 |    19.528348 |
+      cell_09 |          561 |          529 |    2.9043579 |     3.822225 |    5.3315719 | 0.0044369854 |    17339.616 |    76.935622 |     2.652229 |     410.1878 |    10.137416 |
+      cell_10 |          579 |          473 |    1.2165527 |  0.061701028 |    4.8317558 |  0.002389194 |    18659.373 |    44.580863 |    89.061805 |    215.40384 |    5.4952049 |
+      cell_11 |          579 |          449 |   0.52319336 |    2.8927119 |    5.9234091 | 0.0010550577 |    17229.855 |    18.178492 |   0.95263642 |    107.67864 |    2.7557028 |
+      cell_12 |          639 |          492 |   0.24707031 |    2.5091796 |    5.7236504 |0.00051058209 |    18521.493 |    9.4567426 |   0.56099503 |    54.127088 |    1.4076373 |
+      cell_13 |          736 |          601 |   0.16784668 |  0.080437257 |    5.1327001 |0.00027713826 |    22687.505 |    6.2875756 |     10.44903 |     32.27224 |   0.84049127 |
+      cell_14 |          733 |          541 |  0.081420898 |    2.3113623 |    5.0379145 |0.00013502408 |    21622.634 |    2.9195761 |   0.17106684 |    14.708575 |   0.39539745 |
+      cell_15 |          845 |          705 |  0.066299438 |    2.3125725 |    4.4649609 |7.2361684e-05 |    26821.425 |    1.9408435 |   0.10135258 |    8.6657901 |   0.23438519 |
+      cell_16 |          930 |          709 |  0.027023315 |    1.6167961 |    4.5823344 |3.4320404e-05 |    27557.084 |   0.94577027 |  0.072699224 |    4.3338357 |   0.11753982 |
+      cell_17 |          955 |          693 |  0.013061523 |    3.6080178 |      4.46887 |1.8220766e-05 |    28186.913 |   0.51358714 |  0.017312273 |    2.2951542 |  0.062462988 |
+      cell_18 |          949 |          774 | 0.0063705444 |    3.6696406 |    5.1896359 |8.1033327e-06 |    29615.214 |   0.23998193 | 0.0093124903 |    1.2454188 |  0.034173492 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=============================================================
+ Number of event processed : 180 for hit collection: PhantomSDPlus
+=============================================================
+       Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
+      cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |          160 |          102 |      93.0625 |    8.2344336 |    8.3596513 |   0.93877072 |    4201.5605 |     3944.302 |    92.300543 |    32972.989 |     760.0427 |
+      cell_02 |          222 |          165 |     65.40625 |    8.2653078 |    7.5056889 |   0.45919264 |    6274.7756 |    2881.3308 |    60.265915 |    21626.373 |    498.11633 |
+      cell_03 |          270 |          300 |     76.03125 |    6.0881895 |    6.7161554 |   0.24917115 |    9145.0346 |    2278.6788 |    57.419987 |    15303.961 |    349.58376 |
+      cell_04 |          274 |          190 |      23.6875 |  0.064087794 |    7.0023242 |   0.12344194 |     8249.162 |    1018.2925 |    2674.5321 |    7130.4144 |    171.40486 |
+      cell_05 |          316 |          337 |    20.242188 |    5.2399737 |    6.3117408 |  0.065360593 |    10152.215 |    663.55482 |    18.778829 |     4188.186 |    98.400569 |
+      cell_06 |          320 |          226 |    8.9804688 |    4.6476452 |    5.5219489 |  0.039421265 |    9775.5287 |    385.36371 |    10.870083 |    2127.9587 |    50.520291 |
+      cell_07 |          378 |          296 |    7.8339844 |    4.0266066 |    5.9087643 |  0.017242613 |    11651.017 |    200.89398 |    6.9588196 |    1187.0352 |    28.020429 |
+      cell_08 |          397 |          376 |    2.9298096 |    4.1624866 |    6.0552344 | 0.0079319347 |    12983.494 |    102.98422 |    3.6861408 |    623.59362 |    15.343512 |
+      cell_09 |          408 |          328 |    1.3071899 |    3.2989966 |    5.3116575 | 0.0042938251 |     13247.45 |    56.882232 |    2.3470832 |    302.13893 |    7.7430196 |
+      cell_10 |          406 |          411 |    1.1143799 |    2.8239124 |    5.4347237 | 0.0020529823 |    12564.515 |    25.794726 |    1.2859179 |    140.18721 |    3.6313195 |
+      cell_11 |          463 |          379 |    0.5715332 |    2.7516475 |    5.1031517 | 0.0010920183 |    14998.912 |    16.379087 |   0.78394777 |    83.584964 |    2.1571479 |
+      cell_12 |          519 |          443 |   0.24023438 |    2.5486878 |    5.3977162 |0.00050645128 |    15003.632 |    7.5986086 |   0.42006309 |    41.015133 |    1.0706097 |
+      cell_13 |          540 |          460 |    0.1385498 |    2.6144521 |    5.1384621 |0.00025608056 |     16387.38 |    4.1964895 |   0.21963457 |    21.563502 |   0.57422407 |
+      cell_14 |          570 |          463 |  0.053405762 |  0.086755263 |    5.0559561 |0.00012726674 |    17606.968 |    2.2407813 |    3.5972371 |    11.329292 |   0.31207925 |
+      cell_15 |          678 |          665 |  0.062072754 |    2.2278985 |    4.4965126 |6.8085334e-05 |    20138.094 |    1.3711089 |  0.073306851 |    6.1652082 |   0.16332022 |
+      cell_16 |          702 |          607 |  0.022064209 |    1.9843041 |    4.5706086 |3.3975824e-05 |    21242.584 |    0.7217343 |   0.04489291 |     3.298765 |  0.089081182 |
+      cell_17 |          699 |          548 | 0.0086135864 |    3.6618375 |    4.8880307 |1.5775599e-05 |    21696.759 |   0.34227937 |   0.01283909 |    1.6730721 |   0.04701466 |
+      cell_18 |          677 |          498 | 0.0040130615 |     3.657022 |    5.2036073 |8.0071001e-06 |    20172.103 |   0.16152005 | 0.0063478673 |   0.84048691 |   0.02321429 |
+      cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ImportanceProcess, will be removed!
+  The initial AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+  The initial PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   ImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ImportanceProcess
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   Transportation
+DoIt Vector: 
+   Transportation
+  The final PostStep Vectors: 
+GPIL Vector: 
+   Decay
+   HadronCapture
+   HadronFission
+   inelastic
+   HadronElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   HadronElastic
+   inelastic
+   HadronFission
+   HadronCapture
+   Decay
+================================================
