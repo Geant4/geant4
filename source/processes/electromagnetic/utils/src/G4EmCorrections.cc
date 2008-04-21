@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.39 2008-04-19 16:56:25 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.40 2008-04-21 05:41:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 08.05.2007 V.Ivanchenko Use G4IonTable for ion mass instead of NistTable to avoid
 //                         division by zero
 // 29.02.2008 V.Ivanchenko use expantions for log and power function
+// 21.04.2008 Updated computations for ions (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -323,7 +324,8 @@ G4double G4EmCorrections::KShell(G4double tet, G4double eta)
     if(eta < Eta[0])  y =  Eta[0];
     G4int ieta = Index(y, Eta, nEtaK);
     corr = Value2(x, y, TheK[itet], TheK[itet+1], Eta[ieta], Eta[ieta+1],
-                  CK[itet][ieta], CK[itet+1][ieta], CK[itet][ieta+1], CK[itet+1][ieta+1]);
+                  CK[itet][ieta], CK[itet+1][ieta], 
+		  CK[itet][ieta+1], CK[itet+1][ieta+1]);
     //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheK[itet]
     //<<" "<< TheK[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
     //       <<" CK= " << CK[itet][ieta]<<" "<< CK[itet+1][ieta]
@@ -536,7 +538,8 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
     else if(W >= engBarkas[46]) val =  corBarkas[46]*engBarkas[46]/W;
     else {
       G4int iw = Index(W, engBarkas, 47);
-      val = Value(W, engBarkas[iw], engBarkas[iw+1], corBarkas[iw], corBarkas[iw+1]);
+      val = Value(W, engBarkas[iw], engBarkas[iw+1], 
+		  corBarkas[iw], corBarkas[iw+1]);
     }
     //    G4cout << "i= " << i << " b= " << b << " W= " << W 
     // << " Z= " << Z << " X= " << X << " val= " << val<< G4endl;
@@ -746,7 +749,8 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
   G4double factor = 1.0;
   if(p->GetPDGCharge() <= 2.5*eplus) return factor;
   if(verbose > 1) {
-    G4cout << "EffectiveChargeCorrection: " << p->GetParticleName() << " in " << mat->GetName()
+    G4cout << "EffectiveChargeCorrection: " << p->GetParticleName() 
+	   << " in " << mat->GetName()
            << " ekin(MeV)= " << ekin/MeV << G4endl;
   }
   if(p != curParticle || mat != curMaterial) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.19 2008-04-19 16:56:25 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.20 2008-04-21 05:41:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -325,7 +325,7 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     tmax0 = tmax;
     A13   = nist->GetZ13(mass/proton_mass_c2); 
     charge  = p->GetPDGCharge()/eplus;
-    if(charge < 1.5)  q2 = charge*charge;
+    if(charge < 1.5)  {q2 = charge*charge;}
     else {
       q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
       charge = std::sqrt(q2);
@@ -333,7 +333,7 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     formfact = 0.0;
     if(particle->GetLeptonNumber() != 0) {
       G4double x = 0.8426*GeV;
-      if(p->GetPDGSpin() == 0.0 && mass < GeV) x = 0.736*GeV;
+      if(p->GetPDGSpin() == 0.0 && mass < GeV) {x = 0.736*GeV;}
       else if(mass > GeV) {
 	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
 	x /= A13;
