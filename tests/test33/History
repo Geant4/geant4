@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2007-06-25 11:44:41 ahoward Exp $
+$Id: History,v 1.37 2008-04-21 09:00:03 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 21st, 2008 A.Howard - test33-V09-01-00
+  - Fixed implementation of parallel geometry (previously it was over-laid with
+    the mass world, hence not parallel at all, just grossly over-lapping).
+  - Increased importance sampling geometry to be coincident with world volume -
+    this removes the warning from the process as the weight doesn't change
+  - Removed scaling factors (see Dec 15th, 2005 below)
+  - Added MassGeo_TimedApp_new.out and ParallelGeo_TimedApp_new.out for output
+    comparison purposes
+  - CoupledTransportation can be forced to be used with the MassGeometry:
+    MassGeo_TimedApp_coupled.mac (and output is MassGeo_TimedApp_coupled.out)
+  - co-working with procbiasing-V09-01-01
 
 Jun 25th, 2007 A.Howard - test33-V08-03-02
   - Added missing sstream header in Tst33SlobedConcreteShield.cc

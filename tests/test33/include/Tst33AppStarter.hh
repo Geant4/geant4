@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.11 2007-06-22 12:47:15 ahoward Exp $
+// $Id: Tst33AppStarter.hh,v 1.12 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -83,6 +83,9 @@ public:
   void Run(G4int nevents);
   void AddWeightChanger();
 
+  inline void ForcingCoupled(G4bool vl=true)
+   { forceCoupled = vl; }
+
 private:
   Tst33AppStarter(const Tst33AppStarter &);
   Tst33AppStarter &operator=(const Tst33AppStarter &);
@@ -121,6 +124,11 @@ private:
   G4VWeightWindowAlgorithm *fWWAlg;
 
   Tst33PhysicsList * physlist;
+
+  G4bool parallel_geometry;
+
+  G4bool forceCoupled;
+
 };
 
 #endif

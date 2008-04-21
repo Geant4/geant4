@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.11 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33AppStarter.cc,v 1.12 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -94,7 +94,9 @@ Tst33AppStarter::Tst33AppStarter()
   fTime(0),
   fChangeWeightPlacer(0),
   fWeightChangeProcess(0),
-  fWWAlg(0)
+  fWWAlg(0),
+  parallel_geometry(false),
+  forceCoupled(false)
 {
   if (!fDetectorConstruction) {
     NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
@@ -136,13 +138,16 @@ void Tst33AppStarter::CreateMassGeometry() {
       NewFailed("CreateMassGeometry", "Tst33SlobedConcreteShield");
     }
 
-    fDetectorConstruction->SetWorldVolume(&fMassGeometry->
-					  GetWorldVolume());
-    fSampleGeometry = fMassGeometry;
-    //    G4GeometrySampler fSampler(&fMassGeometry->GetWorldVolume(),"neutron");
-    fSampler = new G4GeometrySampler(&fMassGeometry->GetWorldVolume(),"neutron");
+    fMassGeometry->Construct();
     
+    fDetectorConstruction->SetWorldVolume(&fMassGeometry->
+					  GetWorldVolumeAddress());
   }
+
+  parallel_geometry = false;
+
+  if(forceCoupled) physlist->UseCoupledTransportation(true);
+
 }
 
 void Tst33AppStarter::CreateParallelGeometry() {
@@ -154,29 +159,38 @@ void Tst33AppStarter::CreateParallelGeometry() {
     if (!fMassGeometry) {
       NewFailed("CreateParallelGeometry", "Tst33ConcreteShield");
     }    
+    
+    fMassGeometry->Construct();
+    
     fDetectorConstruction->SetWorldVolume(&fMassGeometry->
-					  GetWorldVolume());
+					  GetWorldVolumeAddress());
     G4String parallelName("ParallelBiasingWorld"); //ASO
     fParallelGeometry = new Tst33ParallelGeometry(parallelName,
-						  &fMassGeometry->GetWorldVolume());
+						  &fMassGeometry->GetWorldVolumeAddress());
     if (!fParallelGeometry) {
       NewFailed("CreateParallelGeometry", "Tst33ParallelGeometry");
     }
+
+    //    fParallelGeometry->Construct();
+
     fDetectorConstruction->RegisterParallelWorld(fParallelGeometry);
     //    fDetectorConstruction->RegisterParallelWorld(fParallelGeometry->GetParallelWorld());
-    fSampleGeometry = fParallelGeometry;
-//     G4GeometrySampler fSampler(&fParallelGeometry->GetWorldVolume(),
-// 			       "neutron");
-//    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
-//			       "neutron");
-    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
-				     "neutron");
+//     fSampleGeometry = fParallelGeometry;
+// //     G4GeometrySampler fSampler(&fParallelGeometry->GetWorldVolume(),
+// // 			       "neutron");
+// //    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
+// //			       "neutron");
+//     fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolumeAddress(),
+// 				     "neutron");
 
-    fSampler->SetParallel(true);
+//     fSampler->SetParallel(true);
 
     physlist->AddParallelWorldName(parallelName);
 
   }
+
+  parallel_geometry = true;
+
 }
 
 G4bool Tst33AppStarter::IsGeo_n_App(){
@@ -355,6 +369,23 @@ void Tst33AppStarter::CreateVisApplication(){
     fEventAction = fApp->CreateEventAction();
     fRunManager.SetUserAction(fEventAction);    
     fRunManager.Initialize();
+
+    if(parallel_geometry) {
+      fSampleGeometry = fParallelGeometry;
+      //     G4GeometrySampler fSampler(&fParallelGeometry->GetWorldVolume(),
+      // 			       "neutron");
+      //    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
+      //			       "neutron");
+      fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolumeAddress(),
+				       "neutron");
+      
+      fSampler->SetParallel(true);
+    } else {
+      fSampleGeometry = fMassGeometry;
+      //    G4GeometrySampler fSampler(&fMassGeometry->GetWorldVolume(),"neutron");
+      fSampler = new G4GeometrySampler(&fMassGeometry->GetWorldVolumeAddress(),"neutron");    
+    }    
+
     G4UImanager::GetUIpointer()->ApplyCommand("/control/execute vis.mac");
   }
 }
@@ -369,6 +400,22 @@ void Tst33AppStarter::CreateTimedApplication(G4int time) {
     fEventAction = fApp->CreateEventAction();
     fRunManager.SetUserAction(fEventAction);    
     fRunManager.Initialize();
+
+    if(parallel_geometry) {
+      fSampleGeometry = fParallelGeometry;
+      //     G4GeometrySampler fSampler(&fParallelGeometry->GetWorldVolume(),
+      // 			       "neutron");
+      //    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
+      //			       "neutron");
+      fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolumeAddress(),
+				       "neutron");
+      
+      fSampler->SetParallel(true);
+    } else {
+      fSampleGeometry = fMassGeometry;
+      //    G4GeometrySampler fSampler(&fMassGeometry->GetWorldVolume(),"neutron");
+      fSampler = new G4GeometrySampler(&fMassGeometry->GetWorldVolumeAddress(),"neutron");    
+    }    
   }
 }
 

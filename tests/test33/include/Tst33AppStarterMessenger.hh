@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.hh,v 1.8 2006-06-29 21:59:31 gunter Exp $
+// $Id: Tst33AppStarterMessenger.hh,v 1.9 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -60,6 +60,7 @@ private:
   Tst33AppStarterMessenger(const Tst33AppStarterMessenger &);
   Tst33AppStarterMessenger &operator=(const Tst33AppStarterMessenger &);
   Tst33AppStarter &fAppStarter;
+  G4UIcommand *fUseCoupledCmd;
   G4UIcommand *fMassGeoCmd;
   G4UIcommand *fParallelGeoCmd;
   G4UIcommand *fScoringCmd;

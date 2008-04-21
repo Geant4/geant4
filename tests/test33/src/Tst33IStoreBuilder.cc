@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.14 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.15 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
 
   Tst33CellScorerStore tst33store;
 
-  const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
+  const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4IStore *istore=0;
   istore = new G4IStore(pworld);
   if (!istore) {

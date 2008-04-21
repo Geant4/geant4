@@ -1,4 +1,5 @@
 # test mass geometry with timed application
+/Tst33/UseCoupledTransportation
 /Tst33/MassGeometry
 /Tst33/Timed 1000
 

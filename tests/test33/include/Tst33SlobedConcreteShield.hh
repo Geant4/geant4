@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33SlobedConcreteShield.hh,v 1.8 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,18 +59,21 @@ public:
   Tst33SlobedConcreteShield();
   virtual ~Tst33SlobedConcreteShield();
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  virtual G4VPhysicalVolume &GetWorldVolumeAddress() const;
+  virtual G4VPhysicalVolume *GetWorldVolume();
 
   virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
 
   void SetSensitive();  //ASO
+
+  void Construct();
 
   G4String GetCellName(G4int i);
     
 private:
   Tst33SlobedConcreteShield(const Tst33SlobedConcreteShield &);
 
-  void Construct();
+  //xtest  void Construct();
 
   Tst33SlobedConcreteShield &operator=(const Tst33SlobedConcreteShield &);
 

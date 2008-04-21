@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScorerBuilder.cc,v 1.8 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33ScorerBuilder.cc,v 1.9 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -81,7 +81,7 @@ CreateScorer(Tst33VGeometry *samplegeo,
   SDman->AddNewDetector( MFDetPlus );                 // Register SD to SDManager
   SDman->AddNewDetector( MFDetMinus );                 // Register SD to SDManager
 
-  G4GeometryCell gWorldCell(samplegeo->GetWorldVolume(), -1);
+  G4GeometryCell gWorldCell(samplegeo->GetWorldVolumeAddress(), -1);
   
   G4CellScorerStore *cs_store = new G4CellScorerStore();
   if (!cs_store) {

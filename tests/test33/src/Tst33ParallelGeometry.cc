@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.14 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.15 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -70,7 +70,8 @@ void Tst33ParallelGeometry::Construct(){
 
   //GetWorld methods create a clone of the mass world to the parallel world (!)
   // via the transportation manager
-  //x  ghostWorld = GetWorld();
+  //x  
+  ghostWorld = GetWorld();
   //  G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
   //  fLogicalVolumeVector.push_back(worldLogical); //ASO
   G4LogicalVolume* worldCylinder_log = ghostWorld->GetLogicalVolume();
@@ -85,20 +86,18 @@ void Tst33ParallelGeometry::Construct(){
 
   // parallel world solid larger than in the mass geometry
 
-  G4double scaling = 2.0;
-
   // don't create parallel world as it's now synonymous with physical world
   /*
   G4double innerRadiusCylinder = 0*cm;
   G4double outerRadiusCylinder = scaling*110*cm;
-  G4double hightCylinder       = scaling*110*cm;
+  G4double halfheightCylinder       = scaling*110*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs(worldVolumeName,
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     hightCylinder,
+                                     halfheightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -125,22 +124,22 @@ void Tst33ParallelGeometry::Construct(){
   // creating 18 slobs of 10 cm thicknes
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = scaling*100*cm;
-  G4double hightShield       = scaling*5*cm;
+  G4double outerRadiusShield = 101*cm;
+  G4double halfheightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               halfheightShield,
                                startAngleShield,
                                spanningAngleShield);
 
   G4Tubs *aShieldI1 = new G4Tubs("aShieldI1",
 				 innerRadiusShield,
-				 scaling*50*cm,
-				 scaling*1*cm,
+				 50*cm,
+				 1*cm,
 				 startAngleShield,
 				 spanningAngleShield);
 
@@ -163,7 +162,7 @@ void Tst33ParallelGeometry::Construct(){
 
   G4String name;
   G4int i = 1;
-  G4double startz = -(scaling*85*cm); 
+  G4double startz = -85*cm; 
   for (i=1; i<=18; ++i) {
    
     name = fPVolumeStore.GetCellName(i);
@@ -174,27 +173,27 @@ void Tst33ParallelGeometry::Construct(){
     
     G4VPhysicalVolume *pvolIMinus = 
       new G4PVPlacement(0, 
-			G4ThreeVector(0, 0, -0.5*hightShield),
+			G4ThreeVector(0, 0, -0.5*halfheightShield),
 			aShield_logI1, 
 			name + "I1-", 
 			aShield_log, 
 			false, 
-			i); //ASO
+			i, true); //ASO
     //			0);
     
     G4VPhysicalVolume *pvolIPlus = 
       new G4PVPlacement(0, 
-			G4ThreeVector(0, 0, +0.5*hightShield),
+			G4ThreeVector(0, 0, +0.5*halfheightShield),
 			aShield_logI2, 
 			name + "I1+", 
 			aShield_log, 
 			false, 
-			i); //ASO
+			i, true); //ASO
     //			0);
     
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
-    G4double pos_z = startz + (i-1) * (2*hightShield);
+    G4double pos_z = startz + (i-1) * (2*halfheightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
 			G4ThreeVector(pos_x, pos_y, pos_z),
@@ -202,7 +201,7 @@ void Tst33ParallelGeometry::Construct(){
 			name, 
 			worldCylinder_log, 
 			false, 
-			i); //ASO
+			i, true); //ASO
     //			0);
     G4GeometryCell cell(*pvol, 0);
     fPVolumeStore.AddPVolume(cell);
@@ -217,16 +216,16 @@ void Tst33ParallelGeometry::Construct(){
   // last slob
   innerRadiusShield = 0*cm;
   //bug  outerRadiusShield = scaling*110*cm;
-  outerRadiusShield = scaling*101*cm;
-  //bug  hightShield       = scaling*10*cm;
-  hightShield       = scaling*5*cm;
+  outerRadiusShield = 101*cm;
+  //bug  halfheightShield       = scaling*10*cm;
+  halfheightShield       = 7.5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
 			     innerRadiusShield,
 			     outerRadiusShield,
-			     hightShield,
+			     halfheightShield,
 			     startAngleShield,
 			     spanningAngleShield);
   
@@ -239,7 +238,8 @@ void Tst33ParallelGeometry::Construct(){
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
-  G4double pos_z = scaling*100*cm;
+  //  G4double pos_z = 100*cm;
+  G4double pos_z = 97.5*cm;
   G4VPhysicalVolume *pvol = 
     new G4PVPlacement(0, 
 		      G4ThreeVector(pos_x, pos_y, pos_z),
@@ -247,7 +247,7 @@ void Tst33ParallelGeometry::Construct(){
 		      name, 
 		      worldCylinder_log, 
 		      false, 
-		      19); //ASO???
+		      19, true); //ASO???
   //		      0);
   G4GeometryCell cell(*pvol, 0);
   fPVolumeStore.AddPVolume(cell);
@@ -258,9 +258,14 @@ void Tst33ParallelGeometry::Construct(){
 
 }
 
-G4VPhysicalVolume &Tst33ParallelGeometry::GetWorldVolume() const{
+G4VPhysicalVolume &Tst33ParallelGeometry::GetWorldVolumeAddress() const{
   //  return *fWorldVolume;
   return *ghostWorld;
+}
+
+G4VPhysicalVolume *Tst33ParallelGeometry::GetWorldVolume() {
+  //  return *fWorldVolume;
+  return ghostWorld;
 }
 
 

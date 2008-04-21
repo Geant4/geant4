@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.11 2006-06-29 22:00:23 gunter Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.12 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -47,6 +47,7 @@ Tst33AppStarterMessenger::
 Tst33AppStarterMessenger(Tst33AppStarter &appstarter)
   : G4UImessenger(), fAppStarter(appstarter)
 {
+  fUseCoupledCmd = new G4UIcommand("/Tst33/UseCoupledTransportation", this);
   fMassGeoCmd = new G4UIcommand("/Tst33/MassGeometry", this);
   fParallelGeoCmd = new G4UIcommand("/Tst33/ParallelGeometry",this);
   fScoringCmd = new G4UIcommand("/Tst33/Scoring",this);
@@ -63,6 +64,8 @@ Tst33AppStarterMessenger(Tst33AppStarter &appstarter)
 }
 
 Tst33AppStarterMessenger::~Tst33AppStarterMessenger(){
+
+  delete fUseCoupledCmd;
   delete fMassGeoCmd;
   delete fParallelGeoCmd;
   delete fScoringCmd;
@@ -82,6 +85,9 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
 					 G4String szValue) {
   if (pCmd==fWeightChangerCmd) {
     fAppStarter.AddWeightChanger();
+  }
+  if (pCmd==fUseCoupledCmd) {
+    fAppStarter.ForcingCoupled(true);
   }
   if (pCmd==fMassGeoCmd) {
     fAppStarter.CreateMassGeometry();

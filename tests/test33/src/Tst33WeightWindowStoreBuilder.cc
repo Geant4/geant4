@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.6 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.7 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ Tst33WeightWindowStoreBuilder::~Tst33WeightWindowStoreBuilder()
 G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst33VGeometry *samplegeo) {
   // create an importance store and fill it with the importance
   // per cell values
-  const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
+  const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4cout << " weight window store name: " << pworld.GetName() << G4endl;
   G4WeightWindowStore *wwstore=0;
   wwstore = new G4WeightWindowStore(pworld);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33ParallelGeometry.hh,v 1.8 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,16 +59,19 @@ public:
   Tst33ParallelGeometry(G4String worldName, G4VPhysicalVolume* ghostworld);
   virtual ~Tst33ParallelGeometry();
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  virtual G4VPhysicalVolume &GetWorldVolumeAddress() const;
+  virtual G4VPhysicalVolume *GetWorldVolume();
 
   virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
 
    void SetSensitive();
 
+   void Construct();
+
 private:
   Tst33ParallelGeometry(const Tst33ParallelGeometry &);
 
-  void Construct();
+   //xtest  void Construct();
 
   Tst33ParallelGeometry &operator=(const Tst33ParallelGeometry &);
 

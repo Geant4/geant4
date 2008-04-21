@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.cc,v 1.12 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33ConcreteShield.cc,v 1.13 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,7 @@ Tst33ConcreteShield::Tst33ConcreteShield()
   fConcrete(0),
   fGalactic(0)
 {
-  Construct();
+  //  Construct();
 }
 Tst33ConcreteShield::~Tst33ConcreteShield(){}
 
@@ -60,17 +60,16 @@ void Tst33ConcreteShield::Construct(){
 
   // world solid
 
-  G4double scaling = 2.0;
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = scaling*101*cm; // for scoring!
-  G4double hightCylinder       = scaling*105*cm;
+  G4double outerRadiusCylinder = 101*cm; // for scoring!
+  G4double halfheightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     hightCylinder,
+                                     halfheightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -83,7 +82,7 @@ void Tst33ConcreteShield::Construct(){
   G4String name = worldname;
   fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		  name, 0, false, 0);
+		  name, 0, false, 0, true);
   if (!fWorldVolume) {
     G4Exception("Tst33ConcreteShield::Construct(): new failed to create G4PVPlacement");
   }
@@ -95,15 +94,15 @@ void Tst33ConcreteShield::Construct(){
   // creating 1 slobs of 180 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = scaling*100*cm;
-  G4double hightShield       = scaling*90*cm;
+  G4double outerRadiusShield = 101*cm;
+  G4double halfheightShield       = 90*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               halfheightShield,
                                startAngleShield,
                                spanningAngleShield);
   
@@ -127,15 +126,20 @@ void Tst33ConcreteShield::Construct(){
 		      name, 
 		      worldCylinder_log, 
 		      false, 
-		      0);
+		      0, true);
   G4GeometryCell cell(*pvol, 0);
   fPVolumeStore.AddPVolume(cell);
   
 }
 
-G4VPhysicalVolume &Tst33ConcreteShield::GetWorldVolume() const{
+G4VPhysicalVolume &Tst33ConcreteShield::GetWorldVolumeAddress() const{
   return *fWorldVolume;
 }
+
+G4VPhysicalVolume *Tst33ConcreteShield::GetWorldVolume() {
+  return fWorldVolume;
+}
+
 
 G4GeometryCell Tst33ConcreteShield::
 GetGeometryCell(G4int , const G4String &) const {

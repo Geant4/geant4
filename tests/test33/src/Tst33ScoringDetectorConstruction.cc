@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScoringDetectorConstruction.cc,v 1.1 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33ScoringDetectorConstruction.cc,v 1.2 2008-04-21 09:00:03 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
 
   G4double innerRadiusCylinder = 0*cm;
   G4double outerRadiusCylinder = 101*cm;
-  G4double hightCylinder       = 16*cm;
+  G4double halfheightCylinder       = 16*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
@@ -67,7 +67,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
   G4Tubs *score_worldCylinder = new G4Tubs("score_worldCylinder",
 				     innerRadiusCylinder,
 				     outerRadiusCylinder,
-				     hightCylinder,
+				     halfheightCylinder,
 				     startAngleCylinder,
 				     spanningAngleCylinder);
 
@@ -92,14 +92,14 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 101*cm;
-  G4double MhightShield       = 7.5002*cm;
+  G4double MhalfheightShield       = 7.5002*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *tube_M = new G4Tubs("tube_M",
 			      innerRadiusShield,
 			      outerRadiusShield,
-			      MhightShield,
+			      MhalfheightShield,
 			      startAngleShield,
 			      spanningAngleShield);
   
@@ -109,7 +109,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
   name = "scorecell: M1";
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
-  G4double pos_z = -1*MhightShield;
+  G4double pos_z = -1*MhalfheightShield;
   
 //  G4VPhysicalVolume *pM1 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
@@ -120,7 +120,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
 
   innerRadiusShield = 0*cm;
   outerRadiusShield = 101*cm;
-  G4double DhightShield       = 2*cm;
+  G4double DhalfheightShield       = 2*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
   
@@ -128,7 +128,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
   G4Tubs *tube_D = new G4Tubs("tube_D",
 			      innerRadiusShield,
 			      outerRadiusShield,
-			      DhightShield,
+			      DhalfheightShield,
 			      startAngleShield,
 			      spanningAngleShield);
   
@@ -149,7 +149,7 @@ G4VPhysicalVolume* Tst33ScoringDetectorConstruction::Construct()
   name = "scorecell: M2";
   pos_x = 0*cm;
   pos_y = 0*cm;
-  pos_z = MhightShield;
+  pos_z = MhalfheightShield;
 //  G4VPhysicalVolume *pM2 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
 		      M2_log, name, score_worldCylinder_log, false, 0);
