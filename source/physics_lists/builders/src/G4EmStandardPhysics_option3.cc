@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.6 2008-04-21 09:57:12 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.7 2008-04-21 15:29:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -237,7 +237,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   
   // Energy loss
   //
-  opt.SetLinearLossLimit(1.e-6);
+  opt.SetLinearLossLimit(1.e-5);
   
   // Ionization
   //
