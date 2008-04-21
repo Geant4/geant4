@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.20 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.21 2008-04-21 06:27:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -252,7 +252,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   {
     secDerivative[k] = secDerivative[k]*secDerivative[k+1] + u[k];
   }
-  delete u;
+  delete [] u;
 }
    
 // --------------------------------------------------------------
