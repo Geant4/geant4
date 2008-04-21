@@ -56,7 +56,9 @@ private:
    volumeStruct** volumeArray;
    int volumeArraySize;
 
-   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);
+   void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
+   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4Transform3D&);
+   void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    G4Transform3D volumeWrite(const G4LogicalVolume*);
    void structureWrite(xercesc::DOMElement*,const G4LogicalVolume*);
 };

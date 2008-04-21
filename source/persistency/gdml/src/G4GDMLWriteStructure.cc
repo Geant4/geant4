@@ -30,10 +30,40 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& invR) {
+void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,const G4PVDivision* const divisionvol) {
+
+   EAxis axis = kUndefined;
+   G4int number = 0;
+   G4double width = 0.0;
+   G4double offset = 0.0;
+   G4bool consuming = false;
+
+   divisionvol->GetReplicationData(axis,number,width,offset,consuming);
+
+   G4String unitString("mm");
+   G4String axisString("kUndefined");
+   if (axis==kXAxis) axisString = "kXAxis"; else
+   if (axis==kYAxis) axisString = "kYAxis"; else
+   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
+   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+
+   xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
+   volumeElement->appendChild(divisionvolElement);
+   divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
+   divisionvolElement->setAttributeNode(newAttribute("number",number));
+   divisionvolElement->setAttributeNode(newAttribute("width",width));
+   divisionvolElement->setAttributeNode(newAttribute("offset",offset));
+   divisionvolElement->setAttributeNode(newAttribute("unit",unitString));
+
+   xercesc::DOMElement* volumerefElement = newElement("volumeref");
+   divisionvolElement->appendChild(volumerefElement);
+   volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
+}
+
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& invR,const G4Transform3D& R) {
 
    G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
-   G4Transform3D R = volumeWrite(physvol->GetLogicalVolume());   
    G4Transform3D T = invR*P*R;
 
    HepGeom::Scale3D scale;
@@ -57,6 +87,37 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
    if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
    if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
+}
+
+void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
+
+   EAxis axis = kUndefined;
+   G4int number = 0;
+   G4double width = 0.0;
+   G4double offset = 0.0;
+   G4bool consuming = false;
+
+   replicavol->GetReplicationData(axis,number,width,offset,consuming);
+
+   G4String unitString("mm");
+   G4String axisString("kUndefined");
+   if (axis==kXAxis) axisString = "kXAxis"; else
+   if (axis==kYAxis) axisString = "kYAxis"; else
+   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
+   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+
+   xercesc::DOMElement* replicavolElement = newElement("replicavol");
+   volumeElement->appendChild(replicavolElement);
+   replicavolElement->setAttributeNode(newAttribute("axis",axisString));
+   replicavolElement->setAttributeNode(newAttribute("number",number));
+   replicavolElement->setAttributeNode(newAttribute("width",width));
+   replicavolElement->setAttributeNode(newAttribute("offset",offset));
+   replicavolElement->setAttributeNode(newAttribute("unit",unitString));
+
+   xercesc::DOMElement* volumerefElement = newElement("volumeref");
+   replicavolElement->appendChild(volumerefElement);
+   volumerefElement->setAttributeNode(newAttribute("ref",replicavol->GetLogicalVolume()->GetName()));
 }
 
 G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
@@ -129,12 +190,24 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    for (G4int i=0;i<daughterCount;i++) {
    
       const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
+      const G4Transform3D daughterR = volumeWrite(physvol->GetLogicalVolume());
 
-      if (dynamic_cast<const G4PVDivision*>(physvol)) G4Exception("Error! Volume divisions are not yet supported in writer!"); else
-      if (physvol->IsParameterised()) G4Exception("Error! Parameterised volumes are not yet supported in writer!"); else
-      if (physvol->IsReplicated()) G4Exception("Error! Replicated volumes are not yet supported in writer!");
+      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
+      
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Volume divisions can not be directly reflected!");
+         divisionvolWrite(volumeElement,divisionvol); 
+      } else 
+      if (physvol->IsParameterised()) { 
+       
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Parameterised volumes can not be directly reflected!");
+         paramvolWrite(volumeElement,physvol);
+      } else
+      if (physvol->IsReplicated()) { 
 
-      physvolWrite(volumeElement,physvol,invR);
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! Volume replications can not be directly reflected!");
+         replicavolWrite(volumeElement,physvol); 
+      } else
+      physvolWrite(volumeElement,physvol,invR,daughterR);
    }
 
    vols->n = volumeArraySize - vols->n; // Growth of array size after walking a subtree of a node = number of descendants of that node
