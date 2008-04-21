@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.5 2008-03-26 14:11:21 maire Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.6 2008-04-21 09:57:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author:      V.Ivanchenko 13.03.2008
 //
 // Modified:
+// 21.04.2008 V.Ivanchenko add long-lived D and B mesons; use spline
 //
 //----------------------------------------------------------------------------
 //
@@ -182,10 +183,17 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
-    } else if (particleName == "anti_omega-" ||
+    } else if (particleName == "B+" ||
+	       particleName == "B-" ||
+	       particleName == "D+" ||
+	       particleName == "D-" ||
+	       particleName == "Ds+" ||
+	       particleName == "Ds-" ||
+               particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
                particleName == "kaon+" ||
@@ -199,6 +207,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "tau+" ||
                particleName == "tau-" ||
                particleName == "triton" ||
+               particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
@@ -222,8 +231,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   //
   opt.SetMinEnergy(100*eV);
   opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(440);
-  opt.SetLambdaBinning(440);
+  opt.SetDEDXBinning(110);
+  opt.SetLambdaBinning(110);
+  opt.SetSplineFlag(true);
   
   // Energy loss
   //

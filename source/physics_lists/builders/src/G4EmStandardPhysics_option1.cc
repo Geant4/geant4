@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.5 2008-03-18 13:54:15 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.6 2008-04-21 09:57:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
 // 13.02.2007 V.Ivanchenko set skin=0.0
 // 15.05.2007 V.Ivanchenko rename to _option1
+// 21.04.2008 V.Ivanchenko add long-lived D and B mesons
 //
 //----------------------------------------------------------------------------
 //
@@ -188,10 +189,17 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
-    } else if (particleName == "anti_omega-" ||
+    } else if (particleName == "B+" ||
+	       particleName == "B-" ||
+	       particleName == "D+" ||
+	       particleName == "D-" ||
+	       particleName == "Ds+" ||
+	       particleName == "Ds-" ||
+               particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
                particleName == "kaon+" ||
@@ -205,6 +213,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
                particleName == "tau+" ||
                particleName == "tau-" ||
                particleName == "triton" ||
+               particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
