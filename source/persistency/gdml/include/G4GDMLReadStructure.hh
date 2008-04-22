@@ -43,6 +43,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
+#include "G4PVDivisionFactory.hh"
 
 #include "G4GDMLReadParamvol.hh"
 

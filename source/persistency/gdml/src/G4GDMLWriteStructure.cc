@@ -50,6 +50,7 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 
    xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
    volumeElement->appendChild(divisionvolElement);
+   divisionvolElement->setAttributeNode(newAttribute("name",divisionvol->GetName()));
    divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
    divisionvolElement->setAttributeNode(newAttribute("number",number));
    divisionvolElement->setAttributeNode(newAttribute("width",width));
@@ -109,6 +110,7 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
 
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
    volumeElement->appendChild(replicavolElement);
+   replicavolElement->setAttributeNode(newAttribute("name",replicavol->GetName()));
    replicavolElement->setAttributeNode(newAttribute("axis",axisString));
    replicavolElement->setAttributeNode(newAttribute("number",number));
    replicavolElement->setAttributeNode(newAttribute("width",width));

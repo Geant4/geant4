@@ -104,6 +104,7 @@ void G4GDMLReadStructure::bordersurfaceRead(const xercesc::DOMElement* const bor
 
 void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divisionvolElement) {
 
+   G4String name;
    G4double unit = 1.0;
    G4double width = 0.0;
    G4double offset = 0.0;
@@ -124,6 +125,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attName=="name") name = GenerateName(attValue); else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
       if (attName=="width") width = eval.Evaluate(attValue); else
       if (attName=="offset") offset = eval.Evaluate(attValue); else
@@ -151,12 +153,18 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
 
-   G4PVDivision* divisionvolPtr = 0;
-   if (number != 0 && width == 0.0) divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,number,offset); else
-   if (number == 0 && width != 0.0) divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,width,offset); else
-   divisionvolPtr = new G4PVDivision("",logvol,pMotherLogical,axis,number,width,offset); 
+   G4PVDivisionFactory::GetInstance();
+   G4PhysicalVolumesPair pair;
+   
+   if (number != 0 && width == 0.0) pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,number,offset); else
+   if (number == 0 && width != 0.0) pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,width,offset); else
+   pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,number,width,offset); 
 
-   GeneratePhysvolName(divisionvolPtr);
+   if (name.empty()) {
+
+      if (pair.first != 0) GeneratePhysvolName(pair.first);
+      if (pair.second != 0) GeneratePhysvolName(pair.second);
+   }
 }
 
 G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement) {
@@ -245,6 +253,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
 
 void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replicavolElement) {
 
+   G4String name;
    G4double unit = 1.0;
    G4double width = 0.0;
    G4double offset = 0.0;
@@ -265,6 +274,7 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
+      if (attName=="name") name = GenerateName(attValue); else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
       if (attName=="width") width = eval.Evaluate(attValue); else
       if (attName=="offset") offset = eval.Evaluate(attValue); else
@@ -292,8 +302,13 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
 
-   G4PVReplica* replicaPtr = new G4PVReplica("",logvol,pMotherLogical,axis,number,width,offset);
-   GeneratePhysvolName(replicaPtr);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Replicate(name,logvol,pMotherLogical,axis,number,width,offset);
+
+   if (name.empty()) {
+   
+      if (pair.first != 0) GeneratePhysvolName(pair.first);
+      if (pair.second != 0) GeneratePhysvolName(pair.second);
+   }
 }
 
 void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElement) {
