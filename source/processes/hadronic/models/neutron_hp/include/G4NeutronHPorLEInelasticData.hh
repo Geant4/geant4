@@ -29,6 +29,8 @@
 //          If NeutronHP data do not available for an element, then Low Energy 
 //          Parameterization models handle the interactions of the element.
 //
+// 080422 Add IsZAApplicable method (return false) by T. Koi
+//
 
 #ifndef G4NeutronHPorLEInelasticData_h
 #define G4NeutronHPorLEInelasticData_h 1
@@ -62,6 +64,9 @@ class G4NeutronHPorLEInelasticData : public G4VCrossSectionDataSet
    ~G4NeutronHPorLEInelasticData();
    
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+   G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+   { return false; }
 
    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 

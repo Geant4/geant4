@@ -32,6 +32,8 @@
 // Class Description - End
 
 // 15-Nov-06 First Implementation is done by T. Koi (SLAC/SCCS)
+// 080422 Add IsZAApplicable method (return false) by T. Koi
+//
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
@@ -52,6 +54,9 @@ class G4NeutronHPJENDLHEData : public G4VCrossSectionDataSet
    ~G4NeutronHPJENDLHEData();
    
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+   G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+   { return false; }
 
    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
