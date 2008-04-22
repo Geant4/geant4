@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.7 2008-04-21 15:29:09 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.8 2008-04-22 18:28:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -187,6 +187,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 	       particleName == "D-" ||
 	       particleName == "Ds+" ||
 	       particleName == "Ds-" ||
+               particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
                particleName == "anti_sigma+" ||
@@ -196,6 +197,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
                particleName == "deuteron" ||
                particleName == "kaon+" ||
                particleName == "kaon-" ||
+               particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "pi+" ||
                particleName == "pi-" ||
