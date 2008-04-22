@@ -155,6 +155,8 @@ C
 C *****************   Definition des COMMON *****************************
 cjcd
       common /inout/ in, io, itty, iscrt                                
+      common /debug/idebug
+      common/rseed/iseed1,iseed2
 cjcd
   
 C Dialogue with INCL for nucleus density and parameters.
@@ -267,6 +269,7 @@ C generateurs secondaires:
      s 21033,17563,27563,33657,43657,56375,66375,77365,87365,
      s 12345,22345,32345,42345,52345,62345,72345,82345,34567,47059/
 
+      idebug=0
 
 C FILE des donnees ecrites en dur pour WORSHOP-DEBUG
 	OPEN(5,file='cu42.in',status='old')
@@ -524,20 +527,20 @@ C  ALREM,BEREM,GAREM=DIRECTION COSINES OF THE REMNANT
 c************************************************************************
 C cascade imposee pour test p+Pb->p(5deg)+Pb(E*=200MeV)
 C************************************************************************
-C$$$		NOPART=1
-C$$$		KIND(1)=1
-C$$$		EP(1)=799.835
-C$$$		ALPHA(1)=0.08716
-C$$$		BETA2(1)=0.
-C$$$		GAM(1)=0.99619
-C$$$		IZREM=82
-C$$$		IAREM=208
-C$$$		ESREM=200.
-C$$$		ERECREM=0.18870
-C$$$		ALREM=-0.47101
-C$$$		BEREM=0.
-C$$$		GAREM=0.88213
-C$$$		BIMPACT=2.
+C		NOPART=1
+C		KIND(1)=1
+C		EP(1)=799.835
+C		ALPHA(1)=0.08716
+C		BETA2(1)=0.
+C		GAM(1)=0.99619
+C		IZREM=82
+C		IAREM=208
+C		ESREM=200.
+C		ERECREM=0.18870
+C		ALREM=-0.47101
+C		BEREM=0.
+C		GAREM=0.88213
+C		BIMPACT=2.
 
 C	WRITE(6,*) 'cascade, NOPART, Z,A,E*,T remnant:', 
 C     s              NOPART,IZREM,IAREM,ESREM,ERECREM
@@ -803,11 +806,53 @@ C *************************  FIN EVPORATION GEM ***************
       ELSE	  
 C *************************  EVAPORATION KHS *********	  
 
+         idebug = 0
+         itest = 1
+      if(idebug.eq.1) then
+         zprf =   81.
+         aprf =   201.
+C         ee =   86.5877686
+C         ee =   1000.0
+         ee =   300.0
+         jprf =   32.
+         zf =   0.
+         af =   0.
+         mtota =   0.
+         pleva =   0.
+         pxeva =   0.
+         pyeva =   0.
+         ff =  -1
+         inttype =  0
+         inum =  2
+      endif
+      if(itest.eq.1) then
+         write(6,*)'PK::: EVAPORA event ',inum
+         write(6,*)'PK:::    zprf = ',zprf
+         write(6,*)'PK:::    aprf = ',aprf
+         write(6,*)'PK:::      ee = ',ee
+         write(6,*)'PK:::      eeDiff = ',ee - 86.5877686
+         write(6,*)'PK:::    jprf = ',jprf
+         write(6,*)'PK:::      zf = ',zf
+         write(6,*)'PK:::      af = ',af
+         write(6,*)'PK:::   mtota = ',mtota
+         write(6,*)'PK:::   pleva = ',pleva
+         write(6,*)'PK:::   pxeva = ',pxeva
+         write(6,*)'PK:::   pyeva = ',pyeva
+         write(6,*)'PK:::      ff = ',ff
+         write(6,*)'PK::: inttype = ',inttype
+         write(6,*)'PK:::    inum = ',inum
+      endif
+
       IF(ESREM.GE.1.E-3) THEN	       
-                                                
+
+         idebug=1
+C         write(6,*)'PK::: ABLA called on line 812, entering debug mode'
+      iseed1=666
+      iseed2=777
       CALL EVAPORA(ZPRF,APRF,EE,JPRF,ZF,AF,MTOTA,PLEVA,PXEVA,           
      &             PYEVA,FF,INTTYPE,INUM)
-       
+      write(6,*)'PK::: out of ABLA. Leaving debug mode.'
+       idebug=0
       ELSE
          FF=0
 	 ZF=ZPRF
@@ -831,6 +876,7 @@ C ---------------------  Here, a FISSION occures --------------------------
 C                                                                       
 C FEE: (EE) energy of fissioning nucleus ABOVE the fission barrier.          
 C                                                                       
+         write(6,*)'fission...'
              nfis = nfis +1
              FEE = EE                                                                                                    
 	KFIS=1		!Drapeau de fission copie dans le NTUPLE
@@ -887,7 +933,7 @@ C evaporation from the fragments.
 C                                   
 
 C Distribution of the fission fragments:
-                                                                       
+
          CALL FISSION_DISTRI(SNGL(AF),SNGL(ZF),SNGL(EE),AFF1,           
      &        ZFF1,EFF1,AFF2,ZFF2,EFF2)
 C verif des A et Z decimaux:
@@ -987,6 +1033,22 @@ c test de verif:
 C ---------------------- PF1 will evaporate 
          EPF1_IN=DBLE(EFF1)
 	 EPF1_OUT=EPF1_IN
+C PKBegin
+         write(6,*)'debug'
+      write(6,*)'zprf = ',zprf
+      write(6,*)'aprf = ',aprf
+      write(6,*)'ee = ',ee
+      write(6,*)'jprf = ',jprf
+      write(6,*)'zf = ',zf
+      write(6,*)'af = ',af
+      write(6,*)'mtota = ',mtota
+      write(6,*)'pleva = ',pleva
+      write(6,*)'pxeva = ',pxeva
+      write(6,*)'pyeva = ',pyeva
+      write(6,*)'ff = ',ff
+      write(6,*)'inttype = ',inttype
+      write(6,*)'inum = ',inum
+C PKEnd
          CALL EVAPORA(DBLE(ZFF1),DBLE(AFF1),EPF1_OUT,0.D0,            
      &   ZF1,AF1,MALPHA1,FFPLEVA1,FFPXEVA1,FFPYEVA1,FF1,FTYPE1,INUM)
      

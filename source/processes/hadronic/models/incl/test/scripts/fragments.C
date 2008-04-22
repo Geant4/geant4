@@ -28,6 +28,7 @@ void fragments()
   gROOT->Reset();
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   residus();
+  // Neutron kinetic energy. Phys.Rev. article p21
 }
 
 void residus() {

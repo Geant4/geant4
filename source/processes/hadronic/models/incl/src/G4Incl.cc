@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.15 2008-02-27 17:40:08 miheikki Exp $ 
+// $Id: G4Incl.cc,v 1.16 2008-04-22 21:39:50 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -34,6 +34,8 @@
 #include <iostream>
 #include <assert.h>
 #include "Randomize.hh"
+#include "G4InclRandomNumbers.hh"
+#include "G4Ranecu.hh"
 
 G4Incl::G4Incl()
 {
@@ -46,12 +48,15 @@ G4Incl::G4Incl()
   derivMhoFunction = 3;
   derivGausFunction = 4;
   densFunction = 5;
+
+  //  randomGenerator = new G4InclGeant4Random();
+  randomGenerator = new G4Ranecu();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
 {
   verboseLevel = 0;
-  
+
   // Set functions to be used for integration routine.  
   wsaxFunction = 0;
   derivWsaxFunction = 1;
@@ -65,6 +70,9 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
   dton = aDton;
   saxw = aSaxw;
   ws = aWs;
+
+  randomGenerator = new G4Ranecu();
+  //  randomGenerator = new G4InclGeant4Random();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
@@ -86,6 +94,8 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G
   mat = aMat;
   varntp = aVarntp;
 
+  //  randomGenerator = new G4InclGeant4Random();
+  randomGenerator = new G4Ranecu();
   light_gaus_nuc = new G4LightGausNuc();
   light_nuc = new G4LightNuc();
   spl2 = new G4Spl2();
@@ -117,6 +127,7 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G
 
 G4Incl::~G4Incl()
 {
+  delete randomGenerator;
   delete light_gaus_nuc;
   delete light_nuc;
   delete spl2;
@@ -327,6 +338,7 @@ void G4Incl::processEventIncl()
 
   G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
 
+  varntp->clear();
   if(calincl->f[6] == 3.0) { // pi+ 
     mprojo = 139.56995;
     ap = 0.0;
@@ -662,6 +674,8 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 
   G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
 
+  varntp->clear();
+
   // pi+
   if(calincl->f[6] == 3.0) { 
     mprojo = 139.56995;
@@ -764,7 +778,20 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 
   // Call the actual INCL routine:
   pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem);
-
+//   nopart=1;
+//   kind[0]=1;
+//   ep[0]=799.835;
+//   alpha[0]=0.08716;
+//   beta[0]=0.;
+//   gam[0]=0.99619;
+//   izrem=82;
+//   iarem=208;
+//   esrem=200.;
+//   erecrem=0.18870;
+//   alrem=-0.47101;
+//   berem=0.;
+//   garem=0.88213;
+//   bimpac=2.;
   forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
   G4double aprf = double(iarem);    // mass number of the prefragment
   G4double jprf = 0.0;                // angular momentum of the prefragment
@@ -835,7 +862,7 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
 	}
       }
-
+      
       if(kind[j] == 3) { 
 	varntp->avv[j] = -1;
 	varntp->zvv[j] = 1;
@@ -937,14 +964,17 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     // calcul de la masse (impulsion) du remnant coherente avec la conservation d'energie:
     pcorem = std::sqrt(erecrem*(erecrem + 2.0 * 938.2796 * iarem));   // cugnon
     mcorem = 938.2796 * iarem;                               // cugnon
-                
+    varntp->pcorem = pcorem;
+    varntp->mcorem = mcorem;
     // Note: Il faut negliger l'energie d'excitation (ESREM) pour que le bilan 
     // d'impulsion soit correct a la sortie de la cascade.....et prendre la
     // masse MCOREM comme ci-dessus (fausse de ~1GeV par rapport aux tables...)        
     pxrem = pcorem * alrem;
     pyrem = pcorem * berem;
     pzrem = pcorem * garem;
-        
+    varntp->pxrem = pxrem;
+    varntp->pyrem = pyrem;
+    varntp->pzrem = pzrem;
     pxbil = pxbil + pxrem;
     pybil = pybil + pyrem;
     pzbil = pzbil + pzrem;
@@ -962,20 +992,28 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     varntp->iafis = 0;
 
     // on recopie le remnant dans le ntuple
-    //  varntp->ntrack = varntp->ntrack + 1;
+    // varntp->ntrack = varntp->ntrack + 1;
     varntp->massini = iarem;
     varntp->mzini = izrem;
     varntp->exini = esrem;
 
+    if(verboseLevel > 2) {
+      G4cout << __FILE__ << ":" << __LINE__ << "Dump varntp after cascade: " << G4endl;
+      varntp->dump();
+    }
     // Evaporation/fission:
     evaporationResult->ntrack = 0;
     abla->breakItUp(varntp->massini, varntp->mzini, mcorem, varntp->exini, varntp->jremn,
 		    erecrem, pxrem, pyrem, pzrem, eventnumber);
 
+    if(verboseLevel > 2) {
+      G4cout << __FILE__ << ":" << __LINE__ << "Dump evaporationResult after evaporation: " << G4endl;
+      evaporationResult->dump();
+    }
     //    assert(evaporationResult->ntrack > 0);
-    for(G4int evaporatedParticle = 1; evaporatedParticle < evaporationResult->ntrack; evaporatedParticle++) {
+    for(G4int evaporatedParticle = 0; evaporatedParticle < evaporationResult->ntrack; evaporatedParticle++) {
       if(evaporationResult->avv[evaporatedParticle] == 0 && evaporationResult->zvv[evaporatedParticle] == 0) { //Fix: Skip "empty" particles with A = 0 and Z = 0
-	continue;
+	// continue;
       }
       varntp->kfis = evaporationResult->kfis;
       varntp->itypcasc[varntp->ntrack] = evaporationResult->itypcasc[evaporatedParticle];
@@ -1007,6 +1045,10 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
   else if(nopart == -1) {
     varntp->ntrack = -1;
     evaporationResult->ntrack = -1;
+  }
+  if(verboseLevel > 2) {
+    G4cout << __FILE__ << ":" << __LINE__ << "Dump varntp after combining: " << G4endl;
+    varntp->dump();
   }
 }
 
@@ -7455,7 +7497,8 @@ void G4Incl::standardRandom(G4double *rndm, G4long *seed)
 {
   (*seed) = (*seed); // Avoid warning during compilation.
   // Use Geant4 G4UniformRand
-  (*rndm) = G4UniformRand();
+  //  (*rndm) = G4UniformRand();
+  (*rndm) = randomGenerator->getRandom();
 }
 
 void G4Incl::gaussianRandom(G4double *rndm)

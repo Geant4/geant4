@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.8 2008-02-27 17:40:08 miheikki Exp $ 
+// $Id: G4Abla.hh,v 1.9 2008-04-22 21:39:50 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,8 +32,12 @@
 
 #include "globals.hh"
 
+#include "G4InclRandomNumbers.hh"
 #include "G4AblaDataDefs.hh"
 #include "G4InclDataDefs.hh"
+
+#ifndef G4Abla_hh
+#define G4Abla_hh 1
 
 /**
  *  Class containing ABLA de-excitation code.
@@ -71,7 +75,16 @@ public:
   /**
    * Set verbosity level.
    */
-  void setVerboseLevel(G4int level);
+  void setVerboseLevel(G4int level) {
+    verboseLevel = level;
+  }
+
+  /**
+   * Get the internal output data structure pointer.
+   */
+  G4Volant* getVolant() {
+    return volant;
+  }
 
   /**
    * Main interface to the de-excitation code.
@@ -317,11 +330,10 @@ private:
   G4int verboseLevel;
   G4int ilast;
 
+  G4InclRandomInterface *randomGenerator;
   G4Pace *pace;
   G4Hazard *hazard;
   G4Ald *ald;
-  G4Ablamain *ablamain;
-  G4Emdpar *emdpar;
   G4Eenuc *eenuc;
   G4Ec2sub *ec2sub;
   G4Ecld *ecld; 
@@ -331,3 +343,5 @@ private:
   G4Volant *volant;
   G4VarNtp *varntp;  
 };
+
+#endif

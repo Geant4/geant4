@@ -7,11 +7,28 @@ endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
+G4INCLUDES = -I$(G4INSTALL)/include
+G4LIBDIRUNIT = -L$(G4INSTALL)/lib/$(G4SYSTEM)
+G4LIBSUNIT = -lG4hadronic_incl_cascade
+G4LIBSUNIT += -lG4hadronic_inclabla_utils
+G4LIBSUNIT += -lG4globman
+
 demo: clean-build build
 	./run.sh run0 # Make a short run to be used for demo.
 	cp tmp/run0.root tmp/run1.root
 	cp tmp/run0.root tmp/run2.root
 	root -l scripts/tests.C
+
+abladebug: abladebugf abladebugc
+	diff -u tmp/abladebugffilt.out tmp/abladebugcfilt.out
+
+abladebugf: clean-build evap
+	./runref.sh abla 208 82 1 1000 2 tmp/abladebugf
+	grep PK::: tmp/abladebugf.out > tmp/abladebugffilt.out
+
+abladebugc: abla
+	./abla 208 82 100 10 1 > tmp/abladebugc.out
+	grep PK::: tmp/abladebugc.out > tmp/abladebugcfilt.out
 
 build: incl abla build-reference
 	mkdir -p tmp
@@ -36,6 +53,7 @@ LDFLAGS  += $(shell root-config --libs)
 # gfortran compiler distributed with GCC-4.0 does NOT work. Version
 # 4.1 is not tested.
 FC = g77
+#FC = gfortran -ff2c
 
 # CERNLIB is needed. This variable defines its installation directory
 # (the directory containing subdirectories bin/ include/ lib/
@@ -52,7 +70,8 @@ CERNLIBDIR = /usr
 
 # FORTRAN INCL/ABLA object files:
 INCLABLAOBJS = orig/FISSION_DISTRI.o orig/abla_v3p.o \
-orig/incl4.2.o orig/init_incl42.o
+orig/incl4.2.o orig/init_incl42.o orig/utils.o \
+orig/abla_init.o
 
 # CERNLIB libraries:
 KERNLIB = $(CERNLIBDIR)/lib/libkernlib.a
@@ -61,6 +80,13 @@ STATICLIBSCERN = $(PACKLIB) $(KERNLIB)
 
 # For FORTRAN-C++ interface:
 # FORTRANCPPLIBS=-lg2c
+
+unit-clean :
+	rm -f unit unit.o
+
+unit : unit.cc $(INCLABLAOBJS)
+	$(CXX) -c unit.cc $(G4INCLUDES)
+	$(CXX) -o unit unit.o $(INCLABLAOBJS) -lg2c -lgfortran $(STATICLIBSCERN) $(G4LIBDIRUNIT) $(G4LIBSUNIT) -lCLHEP
 
 build-reference : cugnon noevap
 
@@ -74,10 +100,16 @@ noevap : $(INCLABLAOBJS)
 	$(FC) -c -o orig/cugnon42_noevapfis.o orig/cugnon42_noevapfis.f
 	$(FC) -o cugnon42_noevapfis orig/cugnon42_noevapfis.o $(INCLABLAOBJS) $(STATICLIBSCERN)
 
+# evap : ABLA only.
+evap : $(INCLABLAOBJS)
+	$(FC) -c -o orig/evap.o orig/evap.f
+	$(FC) -o evap orig/evap.o $(INCLABLAOBJS) $(STATICLIBSCERN)
+
 .PHONY: clean-reference
 clean-reference:
 	rm -f cugnon42_khs_gem
 	rm -f cugnon42_noevapfis
+	rm -f evap
 	rm -f orig/*.o
 	rm -f *.o
 

@@ -973,29 +973,45 @@ C=======================================================================
 C***      SI K=<-1 ON INITIALISE                                        
 C***      SI K=-1 C'EST REPRODUCTIBLE                                   
 C***      SI K<>-1 CE N'EST PAS REPRODUCTIBLE
-
-       SAVE                           
-                                                                        
+       SAVE
+	common/debug/idebug
           IF (K.LE.-1) THEN                                             
              IF(K.EQ.-1)THEN                                            
                               IX=0                                      
                         ELSE                                            
                               X=0.                                      
-                              Y=SECNDS(X)                               
+                              Y=SECNDS(X)       
                               IX=Y*100+43543000                         
                               IF(MOD(IX,2).EQ.0)IX=IX+1                 
              END IF                                                     
-             X=RANF(IX)                                                  
+	     if(idebug.eq.1) then
+		X=ranecu(ix)
+	     else
+		X=RANF(IX)                                                  
+	     endif
              DO I=1,110                                                 
-                P(I)=RANF(IX)                                            
-             END DO                                                     
-             A=RANF(IX)                                                  
+		if(idebug.eq.1) then
+		   P(I)=ranecu(ix)
+		else
+		   P(I)=RANF(IX)                                                  
+		endif
+             END DO                                                   
+	     if(idebug.eq.1) then
+		A=ranecu(ix)
+	     else
+		A=RANF(IX)                                                  
+	     endif
              K=0                                                        
           END IF                                                        
           I=NINT(100*A)+1                                               
           HAZ=P(I)                                                      
-          A=RANF(IX)                                                     
-          P(I)=A                                                        
+ 
+	  if(idebug.eq.1) then
+	     A=ranecu(ix)
+	  else
+	     A=RANF(IX)                                                     
+	  endif
+          P(I)=A
           RETURN                                                        
         END                                                             
                                                                         

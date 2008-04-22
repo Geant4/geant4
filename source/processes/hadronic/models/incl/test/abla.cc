@@ -17,6 +17,7 @@
 #include "TNtuple.h"
 #include "TTree.h"
 #include "TFile.h"
+#include "TMath.h"
 
 #endif // USEROOT
 
@@ -107,7 +108,16 @@ int main(int argc, char *argv[])
   TNtuple *data = new TNtuple("data", "ABLA output", "Avv:Zvv:Enerj:Plab:Tetlab:Philab");
   abla->initEvapora();
 
+  double momX, momY, momZ;
+  double momXsum, momYsum, momZsum;
+
   for(G4int event = 1; event <= numberOfEvents; event++) {
+    momX = 0.0;
+    momY = 0.0;
+    momZ = 0.0;
+    momXsum = 0.0;
+    momYsum = 0.0;
+    momZsum = 0.0;
     abla->breakItUp(nucleusA, nucleusZ, mass, excitationE, angularMom,
 		    recoilE, nucMomX, nucMomY, nucMomZ, event);
     // *     13   * I*4  *[0,250]      * VARNTP  * NTRACK		Number of particles
@@ -119,9 +129,19 @@ int main(int argc, char *argv[])
     // *     18   * R*4  *             * VARNTP  * PLAB(NTRACK)		momentum
     // *     19   * R*4  *             * VARNTP  * TETLAB(NTRACK)		Theta (deg)
     // *     20   * R*4  *             * VARNTP  * PHILAB(NTRACK)		Phi   (deg)
-
     if(varntp->ntrack > 0) {
-      for(G4int particleI = 1; particleI <= varntp->ntrack; particleI++) {
+      for(G4int particleI = 0; particleI < varntp->ntrack; particleI++) {
+ 	momX = varntp->plab[particleI]*TMath::Sin(varntp->tetlab[particleI]*TMath::Pi()/180.0)*TMath::Cos(varntp->philab[particleI]*TMath::Pi()/180.0);
+ 	momY = varntp->plab[particleI]*TMath::Sin(varntp->tetlab[particleI]*TMath::Pi()/180.0)*TMath::Sin(varntp->philab[particleI]*TMath::Pi()/180.0);
+ 	momZ = varntp->plab[particleI]*TMath::Cos(varntp->tetlab[particleI]*TMath::Pi()/180.0);
+// 	momX = varntp->plab[particleI]*TMath::Sin(varntp->philab[particleI]*TMath::Pi()/180.0)*TMath::Cos(varntp->tetlab[particleI]*TMath::Pi()/180.0);
+// 	momY = varntp->plab[particleI]*TMath::Sin(varntp->philab[particleI]*TMath::Pi()/180.0)*TMath::Sin(varntp->tetlab[particleI]*TMath::Pi()/180.0);
+// 	momZ = varntp->plab[particleI]*TMath::Cos(varntp->philab[particleI]*TMath::Pi()/180.0);
+	  momXsum += momX;
+	  momYsum += momY;
+	  momZsum += momZ;
+
+	  G4cout <<"A = " << varntp->avv[particleI] << " Z = " << varntp->zvv[particleI] << " mom = (" << momX << ", " << momY << ", " << momZ <<")" << G4endl;
 	out << event << " " << varntp->avv[particleI] << " " 
 	    << varntp->zvv[particleI] << " " << varntp->enerj[particleI] << " "
 	    << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " 
@@ -134,6 +154,9 @@ int main(int argc, char *argv[])
 	Philab = varntp->philab[particleI];
 	data->Fill(Avv, Zvv, Enerj, Plab, Tetlab, Philab);
       }
+      G4cout <<"-------------------------------------------------" << G4endl;
+      G4cout <<" mom = (" << momXsum << ", " << momYsum << ", " << momZsum << ")" << G4endl;
+      G4cout <<"Total momentum: " << varntp->getMomentumSum() << G4endl;
       varntp->ntrack = 0;
     }
     else {

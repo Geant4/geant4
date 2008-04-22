@@ -35,7 +35,7 @@
 #include "TCanvas.h"
 //#endif
 
-void dd() 
+void run15() 
 {
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   gROOT->SetStyle("clearRetro");
@@ -164,12 +164,12 @@ void plotTheorTheta(TTree* ref,Char_t* titre,TCanvas* c1,Double_t emin,Double_t 
 }
 
 void nCrossSection(){
-  TFile* fref = new TFile("tmp/run1.root");
-  TFile* ffref = new TFile("tmp/run1ref.root");
+  TFile* fref = new TFile("tmp/run15.root");
+  TFile* ffref = new TFile("tmp/run15ref.root");
 
-  Char_t* titre="p(1.2 GeV) + 208Pb (INCL4+ABLA)";
+  Char_t* titre="d(1.2 GeV) + 208Pb (INCL4+ABLA)";
 	
-  Char_t* psFileName="n_cross_section.ps";
+  Char_t* psFileName="n_cross_section_run15.ps";
 
   Char_t* racine="./data/proton/pb/"; // Path to experimental files
 
@@ -205,7 +205,7 @@ void nCrossSection(){
   Double_t emin  = 1.;
   Double_t emax  = 1500.;
   Int_t    logE  = 1; // log E scale True=1, False=0
-  Double_t fnorm = 3792.89/(100000.0*2.0*pi);
+  Double_t fnorm = 5381.24/(100000.0*2.0*pi);
 
   cout << "Normalisation factor: " << fnorm << endl;
 	
@@ -282,27 +282,27 @@ void nCrossSection(){
   Float_t fnorexp=1.;
   //  plotExpTheta("p1200pb20_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_025",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_040",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_040",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_055",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_055",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_070",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_070",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_085",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_085",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_100",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_100",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_115",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_115",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_130",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_130",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_145",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_145",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_160",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_160",racine,fnorexp);
 
 
   // Legende
@@ -372,9 +372,9 @@ void nCrossSection(){
   fnorexp=1.;
   //  plotExpTheta("p1200pb20_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_025",racine,fnorexp);
 
   //	legend->Draw("same");
   pt->Draw();

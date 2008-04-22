@@ -51,16 +51,19 @@ if [ $# -ne 7 ]; then
 	exit 127
 fi
 
-
 # Main:
 cascade_evaporation_program="./cugnon42_khs_gem"
-cascade_only_program="./incl42_noevapfis"
+cascade_only_program="./cugnon42_noevapfis"
+evaporation_only_program="./evap"
 
 if [ $1 == "cascade" ]; then
     program=$cascade_only_program
 fi
 if [ $1 == "full" ]; then
     program=$cascade_evaporation_program
+fi
+if [ $1 == "abla" ]; then
+    program=$evaporation_only_program
 fi
 
 massnumber=$2

@@ -10,6 +10,7 @@
 
 #include "G4Incl.hh"
 
+//#define DEBUG 1
 #ifdef USEROOT // Use ROOT for data analysis
 
 #include "TROOT.h"
@@ -40,6 +41,11 @@ int main(int argc, char *argv[])
   int doinit = 1;
   int type = fullrun;
   bool usingRoot = false;
+
+  // Run type: full or cascade only
+  if(strcmp("cascade", argv[1]) == 0) {
+    type = inclrun;
+  }
 
   // For ASCII output file
   ofstream out;
@@ -91,7 +97,7 @@ int main(int argc, char *argv[])
   TFile *dataFile = NULL;
 
   //  strcpy(rootfilename, argv[6]);
-  TString rootfilename(argv[6]);
+  TString rootfilename(argv[7]);
 //  cout <<"filename: " << rootfilename << endl;
   if(rootfilename.Contains(".root") == 1) {
     dataFile = new TFile(rootfilename, "RECREATE");
@@ -109,6 +115,7 @@ int main(int argc, char *argv[])
 
   Int_t Massini, Mzini; 
   Double_t Exini;
+  Double_t Pcorem, Mcorem, Pxrem, Pyrem, Pzrem;
   Int_t Mulncasc, Mulnevap,Mulntot;
 
   Double_t Bimpact;
@@ -116,6 +123,7 @@ int main(int argc, char *argv[])
   Double_t Estfis;
   Int_t Izfis, Iafis;
   Int_t Ntrack;
+  Int_t baryonNumber;
   Int_t Itypcasc[maxpart], Avv[maxpart], Zvv[maxpart];
   Double_t Enerj[maxpart], Plab[maxpart], Tetlab[maxpart], Philab[maxpart];
   Double_t momX[maxpart], momY[maxpart], momZ[maxpart];
@@ -128,6 +136,11 @@ int main(int argc, char *argv[])
   h101->Branch("Massini", &Massini, "Massini/I");
   h101->Branch("Mzini", &Mzini, "Mzini/I"); 
   h101->Branch("Exini", &Exini, "Exini/D");
+  h101->Branch("Pcorem", &Pcorem, "Pcorem/D");
+  h101->Branch("Mcorem", &Mcorem, "Mcorem/D");
+  h101->Branch("Pxrem", &Pxrem, "Pxrem/D");
+  h101->Branch("Pyrem", &Pyrem, "Pyrem/D");
+  h101->Branch("Pzrem", &Pzrem, "Pzrem/D");
   h101->Branch("Mulncasc", &Mulncasc, "Mulncasc/I");
   h101->Branch("Mulnevap", &Mulnevap, "Mulnevap/I");
   h101->Branch("Mulntot", &Mulntot, "Mulntot/I");
@@ -139,6 +152,7 @@ int main(int argc, char *argv[])
   h101->Branch("Izfis", &Izfis, "Izfis/I");
   h101->Branch("Iafis", &Iafis, "Iafis/I");
 
+  h101->Branch("baryonNumber", &baryonNumber, "baryonNumber/I");
   h101->Branch("Ntrack", &Ntrack, "Ntrack/I");
   h101->Branch("Itypcasc", Itypcasc, "Itypcasc[Ntrack]/I");
   h101->Branch("Avv", Avv, "Avv[Ntrack]/I"); 
@@ -159,13 +173,13 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(argc < 7) {
+  if(argc < 8) {
     cout <<"Usage: inclStandAlone targetA targetZ bulletType bulletEnergy events outputfile" << endl;
     return -1;
   }
 
   if(!usingRoot) {
-    strcpy (filename, argv[6]);
+    strcpy (filename, argv[7]);
     // Open the output file:
     out.open(filename);
   }
@@ -185,18 +199,18 @@ int main(int argc, char *argv[])
   // Target nucleus:
   // Mass number:
   //FINPUT(1)
-  calincl->f[0] = atof(argv[1]);
+  calincl->f[0] = atof(argv[2]);
   // Charge number:
   // FINPUT(2)
-  calincl->f[1] = atof(argv[2]);
+  calincl->f[1] = atof(argv[3]);
 
   // Bullet:
   // Bullet type (1.00 = proton):
   // FINPUT(7)
-  calincl->f[6] = atof(argv[3]);
+  calincl->f[6] = atof(argv[4]);
   // Bullet energy:
   // FINPUT(3)
-  calincl->f[2] = atof(argv[4]);
+  calincl->f[2] = atof(argv[5]);
 
   // Run settings:
   // Time scaling:
@@ -247,21 +261,21 @@ int main(int argc, char *argv[])
 
   // Events:
   //  int totalevents = 100000;
-  int totalevents = atoi(argv[5]);
+  int totalevents = atoi(argv[6]);
   //  debugval_.allevents = totalevents;
 
   int particleI = 0;
   
   // End of input parameters
 
-  cout << "Outpufile: " << argv[6] << endl;
+  cout << "Outpufile: " << argv[7] << endl;
   cout << "Bullet: " << endl;
   cout << "Type: " << calincl->f[6] << endl;
   cout << "energy: " << calincl->f[2] << " mev " << endl;
   cout << "target: " << endl;
   cout << "a: " << calincl->f[0] << endl;
   cout << "z: " << calincl->f[1] << endl;
-  cout << "events: " << argv[5] << endl;
+  cout << "events: " << argv[6] << endl;
   cout << endl;
 
   cout << "Running..." << endl;
@@ -320,7 +334,17 @@ int main(int argc, char *argv[])
 
     if(varntp->ntrack > 0) {
       //      std::cout <<"Filling event number: " << n << std::endl;
+      double momXsum = 0.0, momYsum = 0.0, momZsum = 0.0;
       for(particleI = 0; particleI < varntp->ntrack; particleI++) {
+#ifdef DEBUG
+	  momX[particleI] = varntp->plab[particleI]*TMath::Sin(varntp->tetlab[particleI]*TMath::Pi()/180.0)*TMath::Cos(varntp->philab[particleI]*TMath::Pi()/180.0);
+	  momY[particleI] = varntp->plab[particleI]*TMath::Sin(varntp->tetlab[particleI]*TMath::Pi()/180.0)*TMath::Sin(varntp->philab[particleI]*TMath::Pi()/180.0);
+	  momZ[particleI] = varntp->plab[particleI]*TMath::Cos(varntp->tetlab[particleI]*TMath::Pi()/180.0);
+	  momXsum += momX[particleI];
+	  momYsum += momY[particleI];
+	  momZsum += momZ[particleI];
+	  G4cout <<"A = " << varntp->avv[particleI] << " Z = " << varntp->zvv[particleI] << " mom = (" << momX[particleI] << ", " << momY[particleI] << ", " << momZ[particleI] <<")" << G4endl;
+#endif
 	if(!usingRoot) {
 	  out << n << " " << calincl->f[6]  << " " << calincl->f[2] << " ";
 	  out << varntp->massini << " " << varntp->mzini << " ";
@@ -340,6 +364,11 @@ int main(int argc, char *argv[])
 	  Massini = int(varntp->massini);
 	  Mzini = int(varntp->mzini);
 	  Exini = varntp->exini;
+	  Pcorem = varntp->pcorem;
+	  Mcorem = varntp->mcorem;
+	  Pxrem = varntp->pxrem;
+	  Pyrem = varntp->pyrem;
+	  Pzrem = varntp->pzrem;
 	  Mulncasc = varntp->mulncasc;
 	  Mulnevap = varntp->mulnevap;
 	  Mulntot = varntp->mulntot;
@@ -349,6 +378,7 @@ int main(int argc, char *argv[])
 	  Estfis = varntp->estfis;
 	  Izfis = varntp->izfis; 
 	  Iafis = varntp->iafis; 
+	  baryonNumber = varntp->getTotalBaryonNumber();
 	  Ntrack = varntp->ntrack;
 	  Itypcasc[particleI] = varntp->itypcasc[particleI];
 	  Avv[particleI] = varntp->avv[particleI];
@@ -365,6 +395,11 @@ int main(int argc, char *argv[])
 	}
 #endif // USEROOT
       }
+#ifdef DEBUG
+      G4cout <<"-------------------------------------------------" << G4endl;
+      G4cout <<" mom = (" << momXsum << ", " << momYsum << ", " << momZsum << ")" << G4endl;
+      G4cout <<"Total momentum: " << varntp->getMomentumSum() << G4endl;
+#endif
 #ifdef USEROOT 
       if(usingRoot) {
 	//	std::cout <<"Filling..." << std::endl;
@@ -388,7 +423,7 @@ int main(int argc, char *argv[])
     out.close();
   }
 
-  sprintf(summaryFilename, "%s.runSummary", (char*)argv[6]);
+  sprintf(summaryFilename, "%s.runSummary", (char*)argv[7]);
 
   ofstream summaryFile;
   summaryFile.open(summaryFilename);
@@ -402,7 +437,7 @@ int main(int argc, char *argv[])
   summaryFile << "Target: " << endl;
   summaryFile << "\t A: " << calincl->f[0] << endl;
   summaryFile << "\t Z: " << calincl->f[1] << endl;
-  summaryFile << "Events: " << argv[5] << endl;
+  summaryFile << "Events: " << argv[6] << endl;
   summaryFile << endl;
   if(!usingRoot) {
     summaryFile << "Calculation output in ASCII file: " << filename << endl;

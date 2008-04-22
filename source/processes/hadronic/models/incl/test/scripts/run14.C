@@ -35,7 +35,7 @@
 #include "TCanvas.h"
 //#endif
 
-void dd() 
+void run14() 
 {
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   gROOT->SetStyle("clearRetro");
@@ -164,14 +164,14 @@ void plotTheorTheta(TTree* ref,Char_t* titre,TCanvas* c1,Double_t emin,Double_t 
 }
 
 void nCrossSection(){
-  TFile* fref = new TFile("tmp/run1.root");
-  TFile* ffref = new TFile("tmp/run1ref.root");
+  TFile* fref = new TFile("tmp/run14.root");
+  TFile* ffref = new TFile("tmp/run14ref.root");
 
-  Char_t* titre="p(1.2 GeV) + 208Pb (INCL4+ABLA)";
+  Char_t* titre="p(0.73 GeV) + 208Pb (INCL4+ABLA)";
 	
-  Char_t* psFileName="n_cross_section.ps";
+  Char_t* psFileName="n_cross_section_run14.ps";
 
-  Char_t* racine="./data/proton/pb/"; // Path to experimental files
+  Char_t* racine="./data/proton/"; // Path to experimental files
 
   // Read the ROOT tree to different variables so that we can handle
   // them easily.
@@ -205,11 +205,11 @@ void nCrossSection(){
   Double_t emin  = 1.;
   Double_t emax  = 1500.;
   Int_t    logE  = 1; // log E scale True=1, False=0
-  Double_t fnorm = 3792.89/(100000.0*2.0*pi);
+  Double_t fnorm = 3792.89/(500000.0*2.0*pi);
 
   cout << "Normalisation factor: " << fnorm << endl;
 	
-  TCut neutron = "(Avv==1)&&(Zvv==0)";
+  TCut neutron = "(Avv==-1)&&(Zvv==1)";
 
   TCut thet0 = "Tetlab<2.5";
   Double_t fnor0=fnorm/(1.-cos(2.5*pi/180.));
@@ -248,32 +248,32 @@ void nCrossSection(){
   first=0;
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet10,fnor10,fnora,"10^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first, kBlack);
+  //  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first);
+  //  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet40,fnor40,fnora,"40^{o}",first);
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet40,fnor40,fnora,"40^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet55,fnor55,fnora,"55^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet55,fnor55,fnora,"55^{o}",first, kBlack);
+  //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet55,fnor55,fnora,"55^{o}",first);
+  //plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet55,fnor55,fnora,"55^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet70,fnor70,fnora,"70^{o}",first);
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet70,fnor70,fnora,"70^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet85,fnor85,fnora,"85^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet85,fnor85,fnora,"85^{o}",first, kBlack);
+  //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet85,fnor85,fnora,"85^{o}",first);
+  //plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet85,fnor85,fnora,"85^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet100,fnor100,fnora,"100^{o}",first);
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet100,fnor100,fnora,"100^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet115,fnor115,fnora,"115^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet115,fnor115,fnora,"115^{o}",first, kBlack);
+  //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet115,fnor115,fnora,"115^{o}",first);
+  //plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet115,fnor115,fnora,"115^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet130,fnor130,fnora,"130^{o}",first);
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet130,fnor130,fnora,"130^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet145,fnor145,fnora,"145^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet145,fnor145,fnora,"145^{o}",first, kBlack);
+  //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet145,fnor145,fnora,"145^{o}",first);
+  //plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet145,fnor145,fnora,"145^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet160,fnor160,fnora,"160^{o}",first);
   plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet160,fnor160,fnora,"160^{o}",first, kBlack);
@@ -282,27 +282,27 @@ void nCrossSection(){
   Float_t fnorexp=1.;
   //  plotExpTheta("p1200pb20_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  //  plotExpTheta("p1200pb20_025",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_040",racine,fnorexp);
+  // plotExpTheta("p1200pb20_040",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_055",racine,fnorexp);
+  // plotExpTheta("p1200pb20_055",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_070",racine,fnorexp);
+  // plotExpTheta("p1200pb20_070",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_085",racine,fnorexp);
+  // plotExpTheta("p1200pb20_085",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_100",racine,fnorexp);
+  // plotExpTheta("p1200pb20_100",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_115",racine,fnorexp);
+  // plotExpTheta("p1200pb20_115",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_130",racine,fnorexp);
+  // plotExpTheta("p1200pb20_130",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_145",racine,fnorexp);
+  // plotExpTheta("p1200pb20_145",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_160",racine,fnorexp);
+  // plotExpTheta("p1200pb20_160",racine,fnorexp);
 
 
   // Legende
@@ -370,11 +370,11 @@ void nCrossSection(){
 
   // Experimental points:
   fnorexp=1.;
-  //  plotExpTheta("p1200pb20_000",racine,fnorexp);
+  //  // plotExpTheta("p1200pb20_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  // plotExpTheta("p1200pb20_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  // plotExpTheta("p1200pb20_025",racine,fnorexp);
 
   //	legend->Draw("same");
   pt->Draw();

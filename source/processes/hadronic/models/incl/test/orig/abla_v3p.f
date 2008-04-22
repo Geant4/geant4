@@ -577,6 +577,7 @@ C  /    (actuellement PTEVA n'est pas correct; mauvaise norme...)
 C  /____________________________________________________________________
 C                                                                       
       SAVE                                                              
+      common/debug/idebug
       COMMON /ABLAMAIN/ AP,ZP,AT,ZT,EAP,BETA,BMAXNUC,CRTOT,CRNUC,R_0,   
      +                  R_P,R_T,IMAX,IRNDM,PI,BFPRO,SNPRO,SPPRO,SHELL   
       REAL*8 AP,ZP,AT,ZT,EAP,BETA,BMAXNUC,CRTOT,CRNUC,R_0,R_P,R_T,PI,   
@@ -653,6 +654,9 @@ C     RNDN              NORMALIZATION OF RECOIL MOMENTUM FOR EACH STEP
 C-----------------------------------------------------------------------
 C                                                                       
       SAVE                                                              
+      itest = 0
+      idebug = 0
+
       ZF = ZPRF                                                         
       AF = APRF
       PLEVA = 0.D0                                                      
@@ -663,7 +667,6 @@ C
       SORTIE = 0                                                        
       FF = 0          
 
-      itest = 0
 c       if (ZF.eq.92) itest = 1 
       if (itest.eq.1) write(6,*) '***************************'
                                                   
@@ -745,14 +748,18 @@ C HERE THE NORMAL EVAPORATION CASCADE STARTS
 C                                                                             
 C RANDOM NUMBER FOR THE EVAPORATION                                     
 C                                                                       
-      X = DBLE(RNDM(IRNDM))*PTOTL                                       
+      if(idebug.eq.1) then
+         X = DBLE(ranecu(irndm))*PTOTL
+      else
+         X = DBLE(RNDM(IRNDM))*PTOTL                                       
+      endif
 C                                                                       
       IF (X.LT.PROBA) THEN                                              
 
 C                                                                       
 C ALPHA EVAPORATION                                                     
 C                                                                       
-        if (itest.eq.1) write(6,*) '< alpha evaporation >'
+        if (itest.eq.1) write(6,*) 'PK::: < alpha evaporation >'
         AMOINS = 4.D0                                                   
         ZMOINS = 2.D0                                                   
         EPSILN = SBA+ECA
@@ -768,7 +775,7 @@ C Volant:
 C                                                                       
 C PROTON EVAPORATION                                                    
 C                                                                       
-          if (itest.eq.1) write(6,*) '< proton evaporation >'
+          if (itest.eq.1) write(6,*) 'PK::: < proton evaporation >'
           AMOINS = 1.D0                                                 
           ZMOINS = 1.D0                                                 
           EPSILN = SBP+ECP                                              
@@ -784,11 +791,12 @@ C Volant:
 C                                                                       
 C NEUTRON EVAPORATION                                                   
 C                                                                       
-          if (itest.eq.1) write(6,*) '< neutron evaporation >'
+          if (itest.eq.1) write(6,*) 'PK::: < neutron evaporation >'
           AMOINS = 1.D0                                                 
           ZMOINS = 0.D0                                                 
           EPSILN = SN+ECN           
           PC = DSQRT((1.D0+(ECN)/9.3956D2)**2-1.D0) * 9.3956D2          
+          if(itest.eq.1) write(6,*) 'PK::: pc =',pc
           MALPHA = 0.D0                                                  
 C Volant:
 	iv = iv + 1
@@ -804,7 +812,7 @@ C IN CASE OF FISSION-EVENTS THE FRAGMENT NUCLEUS IS THE MOTHER NUCLEUS
 C BEFORE FISSION OCCURS WITH EXCITATION ENERGY ABOVE THE FIS.- BARRIER. 
 C FISSION FRAGMENT MASS DISTRIBUTION IS CALULATED IN SUBROUTINE FISDIS  
 C                                                                       
-          if (itest.eq.1) write(6,*) '< fission >'
+          if (itest.eq.1) write(6,*) 'PK::: < fission >'
           AMOINS = 0.D0                                                 
           ZMOINS = 0.D0                                                 
           EPSILN = EF                                                   
@@ -829,9 +837,15 @@ C      END IF
 C                                                                       
 
       if (itest.EQ.1) then
+         if(idebug.eq.1) then
+        write(6,*)'PK::: SN,SBP,SBA,EF',SN,SBP,SBA,EF
+        write(6,*)'PK::: PROBN,PROBP,PROBA,PROBF,PTOTL'
+     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL
+         else
         write(6,*)'SN,SBP,SBA,EF',SN,SBP,SBA,EF
         write(6,*)'PROBN,PROBP,PROBA,PROBF,PTOTL'
-     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL 
+     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL
+        endif
       endif
 
 C CALCULATION OF THE DAUGHTER NUCLEUS                                   
@@ -853,7 +867,11 @@ C      RNDN = DSQRT(RNDX**2+RNDY**2+RNDZ**2)
 C----> (ancien)      PTEVA = PTEVA + PC * RNDX/RNDN
 
 	IF(FF.EQ.0) THEN
-           CALL RIBM(RND,IY(9))
+           if(idebug.eq.1) then
+              RND = ranecu(IY(9))
+           else
+              CALL RIBM(RND,IY(9))
+           endif
            CTET1 = 2.*RND-1.
            CALL RIBM(RND,IY(5))
            PHI1 = RND*2.*3.141592654
@@ -987,7 +1005,6 @@ C ial generateur pour le cascade (et les IY pour eviter les correlations)
 C
 C     Switch to calculate Maxwellian distribution of kinetic energies (1=Max)                                                  
       imaxwell = 1                           
-                   
 C
 C LIMITING OF EXCITATION ENERGY WHERE FISSION OCCURS                    
 C !!! THIS IS NOT THE DYNAMICAL HINDRANCE (SEE END OF ROUTINE) !!!      
@@ -1209,6 +1226,8 @@ C
        CALL DENSNIV(A-1.0,ZPRF,EE,SN,DENSN,BSHELL,                      
      &		    1.D0,1.D0,TEMP,OPTSHP,OPTCOL,DEFBET)                        
        NT = TEMP                                                        
+       idebug=0
+       if(idebug.eq.1) write(6,*)'PK::: nt =',nt
        if (imaxwell.eq.1) then
 c*** Valentina - random kinetic energy in a Maxwelliam distribution
 C Modif Juin/2002 A.B. C.V. for light targets; limit on the energy
@@ -1735,8 +1754,10 @@ C
          QR   = 1.D0                                                    
       END IF                                                            
       DENS = DENS * QR                                                  
+C      write(6,*)'PK::: dens =',dens
 C                                                                       
 C     WRITE(6,*)'AFP, IZ, ECOR, ECOR1',AFP,IZ,ECOR,ECOR1                
+C      WRITE(6,*)'PK::: AFP, IZ, ECOR, ECOR1',AFP,IZ,ECOR,ECOR1
 C                                                                       
       RETURN                                                            
       END                                                               
@@ -2786,5 +2807,4 @@ C===============================================================================
         RETURN 
         END
 C=======================================================================
-                                                                        
 

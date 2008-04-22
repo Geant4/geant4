@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.10 2008-02-27 17:40:08 miheikki Exp $
+$Id: History,v 1.11 2008-04-22 21:39:50 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,43 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+22 April 2008 - Pekka Kaitaniemi
+-----------------------------------
+- INCL/ABLA changes:
+  o Fix compilation warnings caused by G4InclDataDefs.hh.
+  o Fix: Partial fix to the Alpha evaporation energies.
+  o Fix: Neutron energies.
+  o Fix: Moved remnant direction calculation block and added safeguards.
+  o ABLA bugfix: switched the transformation matrix indices.
+  o Added function that will calculate the total three momentum of the output.
+  o Added remnant kinematic variables to the output data structure.
+  o Add #ifdef to G4Abla.hh to make sure it is defined only once.
+  o Add safeguards to ABLA output handling.
+  o Started encapsulating the INCL/ABLA output data structures (class
+  G4VarNtp). Data will be in private variables, public methods
+  provided for controlled data access. First step:
+  G4VarNtp::addParticle() method.
+  o Initialize INCL output data structures.
+  o Improved INCL/ABLA debug messages.
+  o Added safeguards, error checks and data dumping features to
+  essential INCL/ABLA data structures (classes G4VarNtp, G4Volant).
+  o ABLA debug output improvements.
+  o Added RANECU random number generator.
+  o Removed unused data structures from ABLA code.
+  o Added an abstract interface for random number services and use it everywhere 
+  in the INCL and ABLA codes.
+- Changes to the test suite:
+  o Added new test run configs.
+  o Add unit test program. Tests methods G4Abla::direct() and
+  G4Abla::densniv().
+  o Added debug output generator to the data structures.
+  o ABLA debug output improvements.
+  o Added standalone FORTRAN ABLA test.
+  o Make test suite able to run INCL only for all tests.
+- Documentation updates:
+  o Updated example double-differential plot.
+  o Documentation will be updated for June'08 release.
 
 27 February 2008 - Pekka Kaitaniemi
 -----------------------------------

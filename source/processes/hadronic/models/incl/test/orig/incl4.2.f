@@ -3818,11 +3818,16 @@ C
 CCC   IBM STANDARD RANDOM NUMBER
 C
       SUBROUTINE RIBM(RNDM,IAL)
+      common/debug/idebug
+      if(idebug.eq.1) then
+         rndm = ranecu(ial)
+      else
       ial=ial*65539
       if(ial)1187,1188,1188
 1187  ial=ial+2147483647+1
 1188  al=ial
       rndm=al*0.4656613E-9
+      endif
       return
       end
 c-------------------------------------------------------------------------------

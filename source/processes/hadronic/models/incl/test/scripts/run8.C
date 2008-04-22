@@ -35,7 +35,7 @@
 #include "TCanvas.h"
 //#endif
 
-void dd() 
+void run8() 
 {
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   gROOT->SetStyle("clearRetro");
@@ -51,10 +51,10 @@ void plotExpTheta(Char_t* file_name, Char_t* racine, Float_t fnor)
   // Experimental points
   Char_t toto[256];
   Int_t e;
-  Float_t e_n[100];
-  Float_t sig[100];
-  Float_t dsig[100];
-  Float_t de_n[100];
+  Float_t e_n[200];
+  Float_t sig[200];
+  Float_t dsig[200];
+  Float_t de_n[200];
   Int_t c,iexp=0;
 
   //Concatenation Racine+File_Name
@@ -71,7 +71,7 @@ void plotExpTheta(Char_t* file_name, Char_t* racine, Float_t fnor)
     dsig[iexp]=fnor*dsig[iexp];
     //	cout<<e_n[iexp]<<"  "<<sig[iexp]<<"  "<<dsig[iexp]<<endl;
     iexp=iexp+1;
-    if(iexp>100) cout<<"More experimental values than the dimension"<<endl;
+    if(iexp>200) cout<<"More experimental values than the dimension"<<endl;
   }
   while(1);
 
@@ -134,10 +134,10 @@ void plotTheorTheta(TTree* ref,Char_t* titre,TCanvas* c1,Double_t emin,Double_t 
   hist0->SetMinimum(1.e-13);
   hist0->SetMaximum(1.e+3);
   // Legend (angle):
-  Float_t y1=200.0 + 40.0;
-  Float_t y2=400.0 + 40.0;
-  y1=y1*fnora;
-  y2=y2*fnora;	
+  Float_t y1=200.0 + 80.0;
+  Float_t y2=400.0 + 80.0;
+  y1=y1*fnora*0.1;
+  y2=y2*fnora*0.1;	
   TPaveLabel* p1 = new TPaveLabel(1.5,y1,2.5,y2,angle);
   p1->SetBorderSize(0);
   p1->SetFillColor(0);
@@ -164,14 +164,14 @@ void plotTheorTheta(TTree* ref,Char_t* titre,TCanvas* c1,Double_t emin,Double_t 
 }
 
 void nCrossSection(){
-  TFile* fref = new TFile("tmp/run1.root");
-  TFile* ffref = new TFile("tmp/run1ref.root");
+  TFile* fref = new TFile("tmp/run8.root");
+  TFile* ffref = new TFile("tmp/run8ref.root");
 
-  Char_t* titre="p(1.2 GeV) + 208Pb (INCL4+ABLA)";
+  Char_t* titre="p(800 MeV) + 56Fe (INCL4+ABLA)";
 	
-  Char_t* psFileName="n_cross_section.ps";
+  Char_t* psFileName="n_cross_section_run8.ps";
 
-  Char_t* racine="./data/proton/pb/"; // Path to experimental files
+  Char_t* racine="./data/proton/"; // Path to experimental files
 
   // Read the ROOT tree to different variables so that we can handle
   // them easily.
@@ -203,9 +203,9 @@ void nCrossSection(){
   // Prepare the cuts and normalisation factors
   Double_t const pi=3.141592654;
   Double_t emin  = 1.;
-  Double_t emax  = 1500.;
+  Double_t emax  = 2000.;
   Int_t    logE  = 1; // log E scale True=1, False=0
-  Double_t fnorm = 3792.89/(100000.0*2.0*pi);
+  Double_t fnorm = 2153.16/(100000.0*2.0*pi);
 
   cout << "Normalisation factor: " << fnorm << endl;
 	
@@ -239,7 +239,7 @@ void nCrossSection(){
   // Plot theoretical cross sections:
   TH1F* hist0;
   Int_t first=1;
-  Double_t fnora=1.;
+  Double_t fnora=1.0;
   //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet0,fnor0,fnora,"0 Deg",first);
   //first=0;
   first=1;
@@ -280,29 +280,29 @@ void nCrossSection(){
 
   // Experimental points:
   Float_t fnorexp=1.;
-  //  plotExpTheta("p1200pb20_000",racine,fnorexp);
+  //  plotExpTheta("p800fe30_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  plotExpTheta("p800fe30_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  plotExpTheta("p800fe30_025",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_040",racine,fnorexp);
+  plotExpTheta("p800fe30_040",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_055",racine,fnorexp);
+  plotExpTheta("p800fe30_055",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_070",racine,fnorexp);
+  //  plotExpTheta("p800fe30_070",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_085",racine,fnorexp);
+  plotExpTheta("p800fe30_085",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_100",racine,fnorexp);
+  plotExpTheta("p800fe30_100",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_115",racine,fnorexp);
+  plotExpTheta("p800fe30_115",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_130",racine,fnorexp);
+  plotExpTheta("p800fe30_130",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_145",racine,fnorexp);
+  plotExpTheta("p800fe30_145",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_160",racine,fnorexp);
+  plotExpTheta("p800fe30_160",racine,fnorexp);
 
 
   // Legende
@@ -353,28 +353,26 @@ void nCrossSection(){
 
   // Prepare the cuts and normalisation factors
   emin=0.;
-  emax=1300.;
+  emax=2000.;
   logE=0; // log E scale True=1, False=0
 
   // Plot theoretical cross sections:
   first=1;
   fnora=1.;
-  //  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet0,fnor0,fnora,"0 Deg",first);
-  fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet10,fnor10,fnora,"10^{o}",first);
+  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet0,fnor0,fnora,"0 Deg",first);
   first=0;
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet10,fnor10,fnora,"10^{o}",first, kBlack);
   fnora=fnora/10.;
-  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first);
-  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet25,fnor25,fnora,"25^{o}",first, kBlack);
+  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet10,fnor10,fnora,"10 Deg",first);
+  fnora=fnora/10.;
+  plotTheorTheta(ref,titre,c2,emin,emax,logE,neutron,thet25,fnor25,fnora,"25 Deg",first);
 
   // Experimental points:
   fnorexp=1.;
-  //  plotExpTheta("p1200pb20_000",racine,fnorexp);
+  plotExpTheta("p800fe30_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_010",racine,fnorexp);
+  plotExpTheta("p800fe30_010",racine,fnorexp);
   fnorexp = fnorexp/10.;
-  plotExpTheta("p1200pb20_025",racine,fnorexp);
+  plotExpTheta("p800fe30_025",racine,fnorexp);
 
   //	legend->Draw("same");
   pt->Draw();
@@ -395,13 +393,13 @@ void nCrossSection(){
   c3->Range(0,0,1,1);
   TPad *c3_1 = new TPad("c3_1", "E*",0.,0.5,1.0,1.0);
 
-  c3_1->SetLogy();
+  //  c3_1->SetLogy();
   c3_1->SetTicks();
   c3_1->SetGrid();
   c3_1->Draw();
   c3_1->cd();
   emin=0.;
-  emax=1200.;
+  emax=800.;
   Int_t nbx=100;
  
   TH1F* hista=new TH1F("hista","",nbx,emin,emax);
@@ -438,8 +436,8 @@ void nCrossSection(){
   c3_2_1->SetGrid();
   c3_2_1->cd();
 
-  Double_t amax=210.5;
-  Double_t amin=159.5;
+  Double_t amax=20.5;
+  Double_t amin=70.5;
   nbx=51;
   TH1F* hist1=new TH1F("hist1","",nbx,amin,amax);
   hist1->SetFillStyle(0);
@@ -456,8 +454,8 @@ void nCrossSection(){
   hist1->GetYaxis()->SetTitleOffset(1.3);
   hist1->SetLineColor(kRed);
   ref->Draw("Massini >> hist1");
-  hist1->DrawCopy();
-  hist1->Delete();
+  //  hist1->DrawCopy();
+  //  hist1->Delete();
 
   c3_2->cd();
   c3_2_2->SetLogy();
@@ -465,9 +463,9 @@ void nCrossSection(){
   c3_2_2->SetGrid();
   c3_2_2->cd();
 
-  Double_t zmax=90.5;
-  Double_t zmin=59.5;
-  nbx=31;
+  Double_t zmax=20.5;
+  Double_t zmin=70.5;
+  nbx=51;
   TH1F* hist2=new TH1F("hist2","",nbx,zmin,zmax);
   hist2->SetFillStyle(0);
   hist2->SetStats(kTRUE);
@@ -483,8 +481,8 @@ void nCrossSection(){
   hist2->GetYaxis()->SetTitleOffset(1.3);
   hist2->SetLineColor(kRed);
   ref->Draw("Mzini >> hist2");
-  hist2->DrawCopy();
-  hist2->Delete();
+  //  hist2->DrawCopy();
+  //  hist2->Delete();
 
   //   dt->Draw();
   c3->Print(psFileName_fin,"Portrait");
