@@ -131,7 +131,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
    while (true) { // Solve possible displacement/reflection of the referenced solid!
    
-      if (displaced>4) G4Exception("ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
+      if (displaced>4) G4Exception("GDML Writer: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
    
       if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
    
@@ -159,7 +159,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
          if ((volumeArray[i]->n+i) == volumeArraySize) return R; // Sub-array is already at the end!
 
          if ((volumeArraySize+volumeArray[i]->n) >= volumeArrayMaxSize) 
-	    G4Exception("Error at sorting volumes! Volume array size is too small!");
+	    G4Exception("GDML Writer: Error at sorting volumes! Volume array size is too small!");
 
          memcpy(volumeArray+volumeArraySize,volumeArray+i,sizeof(volumeStruct*)*volumeArray[i]->n); // Copy sub-array to the end!
          volumeArraySize += volumeArray[i]->n;
@@ -181,7 +181,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    vols->volumeElement = volumeElement;
    vols->n = volumeArraySize;
 
-   if (volumeArraySize >= volumeArrayMaxSize) G4Exception("Error at sorting volumes! Volume array size is too small!");
+   if (volumeArraySize >= volumeArrayMaxSize) G4Exception("GDML Writer: Error at sorting volumes! Volume array size is too small!");
 
    volumeArray[volumeArraySize++] = vols;
 
@@ -196,17 +196,17 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! divisionvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("GDML Writer: Error! divisionvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
       if (physvol->IsParameterised()) { 
        
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! paramvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("GDML Writer: Error! paramvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          paramvolWrite(volumeElement,physvol);
       } else
       if (physvol->IsReplicated()) { 
 
-         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("Error! replicavol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+         if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("GDML Writer: Error! replicavol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          replicavolWrite(volumeElement,physvol); 
       } else
       physvolWrite(volumeElement,physvol,invR,daughterR);
@@ -227,7 +227,7 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
    volumeArray = new volumeStruct*[volumeArrayMaxSize];
    volumeArraySize = 0;
 
-   if (volumeArray == 0) G4Exception("Not enough memory for sorting volumes!");
+   if (volumeArray == 0) G4Exception("GDML Writer: Not enough memory for sorting volumes!");
 
    volumeWrite(worldvol);
 
