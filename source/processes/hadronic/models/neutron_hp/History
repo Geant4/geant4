@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
       ---------------------------------------------------------------
 
+22 April 2008 Tatsumi Koi (hadr-hpn-V09-01-04)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPorLElasticData.cc
+	G4NeutronHPorLEInelasticData.cc
+	G4NeutronHPorLCaptureData.cc
+	G4NeutronHPorLFissionData.cc
+	G4NeutronHPJENDLHEData.cc
+
 17 April 2008 Tatsumi Koi (hadr-hpn-V09-01-03)
 ---------------------------------------------
 - Add IsZAApplicable(,,) {return false;} by T. Koi
