@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2008-04-23 16:35:49 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      QMtest History file
+                      ---------------------
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+
+
+23-Apr-08 G.Folger                   (testtools-QMtest-V09-01-02)
+  - Correct typo for test12-build
+  
+  
