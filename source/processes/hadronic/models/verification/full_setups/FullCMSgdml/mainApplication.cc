@@ -52,7 +52,7 @@ int main(int argc,char** argv) {
 
   runManager->SetUserInitialization( new MyDetectorConstruction ); 
 
-  QGSP *thePL = new QGSP; //***LOOKHERE*** SELECT PHYSICS LIST.
+  LHEP *thePL = new LHEP; //***LOOKHERE*** SELECT PHYSICS LIST.
 
   //thePL->SetDefaultCutValue( 0.020 *mm ); // 20 microns 
   runManager->SetUserInitialization( thePL ); 

@@ -69,6 +69,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
 
   G4cout << G4endl 
          << " WORLD VOLUME = " 
+         << fWorld->GetName() << "\t"
          << fWorld->GetLogicalVolume()->GetSolid()->GetName() << G4endl
 	 << " \t x-axis : " << minX/m << " , " << maxX/m << " metres" << G4endl
 	 << " \t y-axis : " << minY/m << " , " << maxY/m << " metres" << G4endl

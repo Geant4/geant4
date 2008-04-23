@@ -4,6 +4,9 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class MyRunAction;
+class MySteppingAction;
+
 
 class MyEventAction: public G4UserEventAction {
 
@@ -14,6 +17,14 @@ public:
 
   virtual void BeginOfEventAction( const G4Event* evt );    
   virtual void EndOfEventAction( const G4Event* evt );    
+
+private:
+
+  void instanciateRunAction();
+  void instanciateSteppingAction();
+
+  MyRunAction* theRunAction;
+  MySteppingAction* theSteppingAction;
 
 };
 

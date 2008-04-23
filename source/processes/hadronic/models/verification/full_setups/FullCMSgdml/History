@@ -2,6 +2,10 @@
                  History file
                  ------------
 
+23-Apr-2008 - A.Ribon (fullCMSgdml-V09-01-00)
+- Added total energy deposit in the whole experimental hall.
+
+
 28-Nov-2007 - A.Ribon (fullCMSgdml-V09-00-00)
 - Migrated to the new GDML embedded in Geant4 (9.1).
 

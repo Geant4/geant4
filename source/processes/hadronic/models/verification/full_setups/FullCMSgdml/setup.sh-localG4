@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #-----------------------------------------------------------------
-# Last update: 28-Nov-2007
+# Last update: 12-Feb-2008
 #-----------------------------------------------------------------
 #
 # ==============================
@@ -10,7 +10,8 @@
 #
 export G4LIB_BUILD_GDML=1
 export G4LIB_USE_GDML=1
-export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
+###export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_gcc346
+export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/2.8.0/slc4_amd64_gcc34
 export LD_LIBRARY_PATH=$XERCESCROOT/lib:$LD_LIBRARY_PATH
 #
 # ===========================================
@@ -22,18 +23,32 @@ export G4SYSTEM=Linux-g++
 export G4INSTALL=/users/ribon/geant4
 export G4LIB=$G4INSTALL/lib
 #
-export G4DEV=/afs/cern.ch/sw/geant4/dev
+export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
+export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
+export G4LEDATA=$G4INSTALL/data/G4EMLOW
+export NeutronHPCrossSections=$G4INSTALL/data/G4NDL
+export G4NEUTRONHPDATA=$G4INSTALL/data/G4NDL
 #
-export G4LEVELGAMMADATA=$G4DEV/data/PhotonEvaporation
-export G4RADIOACTIVEDATA=$G4DEV/data/RadiativeDecay
-export G4LEDATA=$G4DEV/data/G4EMLOW
-export NeutronHPCrossSections=$G4DEV/data/G4NDL
-#
-###export CLHEP_BASE_DIR=$G4DEV/CLHEP/2.0.3.1/slc4_gcc346
-export CLHEP_BASE_DIR=$G4DEV/CLHEP/2.0.3.2/slc4_gcc346
+#--- CLHEP ---
+#----------------------------------------------------------------------------
+# ****LOOKHERE*** CLHEP  1.8.0.0  for G4 5.2.p02
+#                        1.8.1.0  for G4 6.2.p01, 7.0.p01
+#                        1.9.2.3  for G4 7.1p01a, 8.0.p01, 8.1.p02a
+#                        2.0.3.1 or 1.9.3.1  for G4 8.2.p01, 8.3.p01, 9.0.p01
+#                        2.0.3.2  for G4 9.1
+#----------------------------------------------------------------------------
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.0.0/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.1.0/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.2.3/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.3.1/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.1/dirMyInstall
+export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.2/dirMyInstall
 export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
 export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP
+#
+export G4UI_USE_TCSH=1
+export G4VIS_NONE=1
 #
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/$G4SYSTEM
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CLHEP_LIB_DIR

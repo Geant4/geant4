@@ -8,4 +8,6 @@
 #
 /mydet/setField 4.0 tesla
 #
-/run/beamOn 10 
+/run/beamOn 100 
+###/run/beamOn 5000 
+#
