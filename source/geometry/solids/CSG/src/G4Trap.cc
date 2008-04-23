@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.44 2008-04-23 09:46:35 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.45 2008-04-23 09:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -142,11 +142,11 @@ G4Trap::G4Trap( const G4String& pName,
       && pt[4].z() > 0 
       && pt[4].z() == pt[5].z() && pt[4].z() == pt[6].z()
       && pt[4].z() == pt[7].z()
-      && fabs( pt[0].z() + pt[4].z() ) < kCarTolerance
+      && std::fabs( pt[0].z() + pt[4].z() ) < kCarTolerance
       && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
       && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
-      && fabs( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) < kCarTolerance 
-      && fabs( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
+      && std::fabs( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) < kCarTolerance 
+      && std::fabs( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
            pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) < kCarTolerance )
   {
     G4bool good;
