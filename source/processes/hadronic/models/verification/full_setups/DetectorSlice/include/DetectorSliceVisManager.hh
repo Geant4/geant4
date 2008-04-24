@@ -1,18 +1,22 @@
-#ifndef DetectorSliceVisManager_h
-#define DetectorSliceVisManager_h 1
+#ifdef G4VIS_USE
 
-#include "G4VisManager.hh"
+ #ifndef DetectorSliceVisManager_h
+ #define DetectorSliceVisManager_h 1
 
-class DetectorSliceVisManager: public G4VisManager {
+ #include "G4VisManager.hh"
 
-public:
+ class DetectorSliceVisManager: public G4VisManager {
 
-  DetectorSliceVisManager();
+ public:
 
-private:
+   DetectorSliceVisManager();
 
-  void RegisterGraphicsSystems ();
+ private:
 
-};
+   void RegisterGraphicsSystems ();
+
+ };
+
+ #endif
 
 #endif
