@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferExp.cc,v 1.3 2008-03-28 08:47:41 gcosmo Exp $
+// $Id: G4CrossSectionChargeTransferExp.cc,v 1.4 2008-04-24 15:14:22 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -169,7 +169,7 @@ G4VEMDataSet* G4CrossSectionChargeTransferExp::LoadData(const G4String& fileName
 {
   std::ostringstream ost;
   ost << fileName << ".dat";
-  G4String name(ost.str());
+  G4String nameF(ost.str());
 
   char* path = getenv("G4LEDATA");
   if (!path)
@@ -179,7 +179,7 @@ G4VEMDataSet* G4CrossSectionChargeTransferExp::LoadData(const G4String& fileName
     }
   
   G4String pathString(path);
-  G4String dirFile = pathString + name;
+  G4String dirFile = pathString + nameF;
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
 
