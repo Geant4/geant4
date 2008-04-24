@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.27 2008-03-17 13:46:19 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.28 2008-04-24 14:14:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 //      28 Nov 2002  AP  update to AIDA 3 
 //      14 Sep 2001  AP  Moved histograms to Lizard 
 //      16 Sep 2001  AP  Moved ntuples to Lizard 
+//      24 Apr 2008  MGP Upgrate to treat couples correctly from Luciano Pandola's PenelopeComptonTest
 //
 // -------------------------------------------------------------------
 //
@@ -100,6 +101,9 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4RunManager.hh"
+#include "G4RegionStore.hh"
+#include "G4StateManager.hh"
+#include "G4ApplicationState.hh"
 
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
@@ -108,6 +112,9 @@
 
 int main()
 {
+  // G4String fileName;
+  //  G4cout << "Enter histogram file name" << G4endl;
+  // G4cin >> fileName;
 
 
   // Setup
@@ -134,6 +141,7 @@ int main()
   // Creating a tuple factory, whose tuples will be handled by the tree
   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
+ 
   // ---- Primary ntuple ------
   // If using Anaphe HBOOK implementation, there is a limitation on the length of the
   // variable names in a ntuple
@@ -180,7 +188,6 @@ int main()
 
   // ==================== end of Histogram and NTuple handling
 
-
   //--------- Materials definition ---------
 
   G4Material* Be = new G4Material("Beryllium",    4.,  9.01*g/mole, 1.848*g/cm3);
@@ -219,6 +226,7 @@ int main()
   air->AddElement(N,0.7);
   air->AddElement(O,0.3);
 
+
   // Interactive set-up
 
   G4cout << "How many interactions? " << G4endl;
@@ -232,6 +240,8 @@ int main()
   initEnergy = initEnergy * MeV;
   G4double initialEnergy = initEnergy;
   if (initEnergy  <= 0.) G4Exception("Wrong input");
+
+
 
   // Dump the material table
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();  
@@ -253,63 +263,75 @@ int main()
   G4cout << "The selected material is: "
 	 << material->GetName()
 	 << G4endl;
-
- 
-  // Particle definitions
-
-  G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
-  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition* positron = G4Positron::PositronDefinition();
-  
-  // MGP commented out 8/3/2008 
-  //  gamma->SetCuts(1e-3*mm);
-  // electron->SetCuts(1e-3*mm);
-  //  positron->SetCuts(1e-3*mm);
-
-  G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
-  G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
-  if (cuts == 0) G4cout << " G4ProductionCuts* cuts = 0" << G4endl;
-  G4double cutAll = 1.*micrometer;
-  cuts->SetProductionCut(cutAll, -1); //all
-  // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
-  G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
-  couple->SetUseFlag(true);
+  // Geometry 
 
   G4double dimX = 1 * mm;
   G4double dimY = 1 * mm;
   G4double dimZ = 1 * mm;
   
-  // Geometry 
-
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
   G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,material,
 						      "LFrame", 0, 0, 0);
+  logicalFrame->SetMaterial(material); 
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 						   "PFrame",logicalFrame,0,false,0);
-  // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
-  cutsTable->UpdateCoupleTable(physicalFrame);
-  cutsTable->DumpCouples();
-  
-  //RunManager
+
+  // RunManager 
   G4RunManager* rm = new G4RunManager();
+
   rm->GeometryHasBeenModified();
-  G4VPhysicalVolume* world(physicalFrame);
-  rm->DefineWorldVolume(world);
+  rm->DefineWorldVolume(physicalFrame);
+    
   G4cout << "[OK] World is defined " << G4endl;
- 
+  G4StateManager::GetStateManager()->SetNewState(G4State_Idle);
+  rm->DumpRegion("DefaultRegionForTheWorld"); //this forces the region update!
+
+  // Particle definitions
+
+  G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
+  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* positron = G4Positron::PositronDefinition();
+
+  G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
+  G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
+  if (cuts == 0) G4cout << " G4ProductionCuts* cuts = 0" << G4endl;
+
+  G4double cutG = 1*micrometer;
+  G4double cutE = 1*micrometer;
+  cuts->SetProductionCut(cutG, gamma);    // photons
+  cuts->SetProductionCut(cutE, electron); // electrons
+  cuts->SetProductionCut(cutE, positron); // positrons
+  cuts->SetProductionCut(cutG, 0); //gammas
+  cuts->SetProductionCut(cutE, 1); //electrons
+  cuts->SetProductionCut(cutE, 2); //positrons
+  //G4double cutAll = 1.*micrometer;
+  //cuts->SetProductionCut(cutAll, -1); //all
+
+  G4cout << "Cuts are defined " << G4endl;
+  
   // MGP 8/3/2008 - There is something wrong with the Couple, to be investigated 
-   cutsTable->UpdateCoupleTable(world);
+  G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+  
+  logicalFrame->SetMaterialCutsCouple(couple);
+
+  G4cout << "Recalculation needed: " << couple->IsRecalcNeeded() << G4endl;
+  
+  cutsTable->UpdateCoupleTable(physicalFrame);
+  cutsTable->PhysicsTableUpdated();
   cutsTable->DumpCouples();
 
-  G4double cutG=1*micrometer;
-  G4double cutE=1*micrometer;
-  cuts->SetProductionCut(cutG, gamma); //gammas
-  cuts->SetProductionCut(cutE, electron); //electrons
-  cuts->SetProductionCut(cutE, positron); //positrons
-  G4cout << "Cuts are defined " << G4endl;
-  cutsTable->UpdateCoupleTable(world);
-  cutsTable->DumpCouples();
+  //couple->SetUseFlag(true);
+  //cutsTable->UpdateCoupleTable(world);
+  //cutsTable->DumpCouples();
   
+  //RunManager
+  //G4RunManager* rm = new G4RunManager();
+  //rm->GeometryHasBeenModified();
+  //G4VPhysicalVolume* world(physicalFrame);
+  //rm->DefineWorldVolume(world);
+  //G4cout << "[OK] World is defined " << G4endl;
+
+
   // Processes 
 
   G4int processType;
@@ -327,20 +349,23 @@ int main()
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
     }
-    else
-      {
-	bremProcess = new G4eBremsstrahlung;
-	ioniProcess = new G4eIonisation;
-      }
-
+  else
+    {
+      bremProcess = new G4eBremsstrahlung;
+      ioniProcess = new G4eIonisation;
+    }
+ 
+ 
   G4ProcessManager* eProcessManager = new G4ProcessManager(electron);
   electron->SetProcessManager(eProcessManager);
   eProcessManager->AddProcess(bremProcess);
+  eProcessManager->AddProcess(ioniProcess);
     
   G4ProcessManager* positronProcessManager = new G4ProcessManager(positron);
   positron->SetProcessManager(positronProcessManager);
-  positronProcessManager->AddProcess(bremProcess);
-  
+  positronProcessManager->AddProcess(new G4eBremsstrahlung);
+  positronProcessManager->AddProcess( new G4eIonisation());
+ 
   // Initialize the physics tables 
   bremProcess->BuildPhysicsTable(*electron);
   ioniProcess->BuildPhysicsTable(*electron);
@@ -380,10 +405,14 @@ int main()
   
   if (! (photonProcess->IsApplicable(*gamma))) G4Exception("Not Applicable");
  
+  // Initialize the physics tables (in which material?)
+  photonProcess->BuildPhysicsTable(*gamma);
+ 
 
   // --------- Test the DoIt -------------------------------------------------------------------
 
   G4cout << "DoIt in material " << material->GetName() << G4endl;
+
   
   G4Track* gTrack = 0;
   G4GRSVolume* touche = 0;
@@ -391,7 +420,7 @@ int main()
   G4StepPoint* point = 0;
   G4StepPoint* newPoint = 0;
   G4double gEnergy = 0.;
-
+  
   for (G4int iter=0; iter<nIterations; iter++)
     {
       // Primary energy  
@@ -437,11 +466,11 @@ int main()
       step->SetPostStepPoint(newPoint);
 
       // Step length
-      step->SetStepLength(1*micrometer);
+      step->SetStepLength(1.*micrometer);
 
       gTrack->SetStep(step); 
- 
-      const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
+
+      //      const G4MaterialCutsCouple* couple = gTrack->GetMaterialCutsCouple();
 
       G4cout  <<  "Iteration = "  
 	      <<  iter 
@@ -451,7 +480,7 @@ int main()
 	      << G4endl;
 
       G4ParticleChange* particleChange = (G4ParticleChange*) photonProcess->PostStepDoIt(*gTrack,*step);
-
+ 
       // Primary physical quantities 
 
       G4double energyChange = particleChange->GetEnergy();
@@ -461,7 +490,6 @@ int main()
       G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
 							   (*particleChange->GetMomentumDirection()),
 							   particleChange->GetMass());
-
       G4double pxChange = eChange.x();
       G4double pyChange = eChange.y();
       G4double pzChange = eChange.z();
@@ -481,7 +509,7 @@ int main()
 	     << G4endl;
 
       G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
-      
+  
       // Primary
       
       hNSec->fill(particleChange->GetNumberOfSecondaries());
@@ -492,6 +520,8 @@ int main()
       G4int nElectrons = 0;
       G4int nPositrons = 0;
       G4int nPhotons = 0;
+    
+
 
       // Secondaries
   
@@ -513,6 +543,7 @@ int main()
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
 	    }
 
+
 	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
           G4ParticleDefinition* def = finalParticle->GetDefinition();
 	  G4cout  << "==== Final " 
@@ -524,12 +555,12 @@ int main()
 		  <<  py/MeV  << ","
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
-	  
+	      
 	  hEKin->fill(eKin);
 	  hP->fill(p);
 	  hTheta->fill(theta);
 	  hPhi->fill(phi);
-	  
+	     	  
 	  G4double particleType = -1.;
 	  if (def == electron) 
 	    {
@@ -547,7 +578,7 @@ int main()
 	      particleType = 3.;
 	      nPhotons++;
 	    }
-	
+	  
 	  // Fill the secondaries ntuple
           ntuple2->fill( ntuple2->findColumn( "px" ), px       );
           ntuple2->fill( ntuple2->findColumn( "py" ), py       );
@@ -561,11 +592,12 @@ int main()
 	  
           // NEW: Values of attributes are prepared; store them to the nTuple:
           ntuple2->addRow(); // check for returning true ...
-
+	  
 	  delete particleChange->GetSecondary(i);
 	} // end loop over secondaries
 
-      // Fill the primaries ntuple
+     // Fill the primaries ntuple
+      
       ntuple1->fill( ntuple1->findColumn( "e0"  ), gEnergy );
       ntuple1->fill( ntuple1->findColumn( "e1"   ), energyChange );
       ntuple1->fill( ntuple1->findColumn( "dedx"    ), dedx          );
@@ -587,17 +619,19 @@ int main()
       delete touche;
       delete step;
       delete gTrack;
-      
+     
+       
     } // end loop over events
   
-  G4cout  << "-----------------------------------------------------"  
-	  <<  G4endl;
+  G4cout  << "-----------------------------------------------------"  << G4endl;
 
   // Committing the transaction with the tree
-  std::cout << "Committing..." << std::endl;
+  G4cout << "Committing..." << G4endl;
   tree->commit();
-  std::cout << "Closing the tree..." << std::endl;
+  G4cout << "Closing the tree..." << G4endl;
   tree->close();
 
   G4cout << "END OF TEST" << G4endl;
+
+	  
 }
