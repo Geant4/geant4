@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrCrossSection.cc,v 1.1 2008-04-22 16:59:07 habdelou Exp $
+//$Id: G4ecpssrCrossSection.cc,v 1.2 2008-04-24 14:39:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -71,7 +71,7 @@ G4double G4ecpssrCrossSection::ExpIntFunction(G4int n,G4double x)
   G4double fact;
   G4double h;
   G4double psi;
-  G4double ans;
+  G4double ans = 0;
   const G4double euler= 0.5772156649;
   const G4int maxit= 100;
   const G4double fpmin = 1.0e-30;
