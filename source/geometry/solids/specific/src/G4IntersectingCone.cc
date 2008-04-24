@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.8 2006-06-29 18:48:38 gunter Exp $
+// $Id: G4IntersectingCone.cc,v 1.9 2008-04-24 16:43:48 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,6 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
     B = (z[1]-z[0])/(r[1]-r[0]);      // disk like
     A = 0.5*( z[1]+z[0] - B*(r[1]+r[0]) );
   }
-
   //
   // Calculate extent
   //
@@ -220,7 +219,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
   
   G4double radical = b*b - 4*a*c;
-  
+ 
   if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
   
   if (radical < 1E-6*std::fabs(b))
@@ -229,10 +228,10 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     // The radical is roughly zero: check for special, very rare, cases
     //
     if (std::fabs(a) > 1/kInfinity)
-    {
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
       {
-        *s1 = -0.5*b/a;
+      if(B==0.)return 0;
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
+	{  *s1 = -0.5*b/a;
         return 1;
       }
       return 0;
@@ -304,7 +303,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
   
-  //
+  
   // Special case which might not be so rare: B = 0 (precisely)
   //
   if (B==0)
@@ -322,7 +321,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
   
   G4double radical = b*b - 4*a*c;
-  
+ 
   if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
   
   if (radical < 1E-6*std::fabs(b))
