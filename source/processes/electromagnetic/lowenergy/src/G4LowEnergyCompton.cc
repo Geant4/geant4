@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.44 2008-03-17 13:40:53 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.45 2008-04-24 14:13:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -214,7 +214,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4int maxDopplerIterations = 1000;
   G4double bindingE = 0.;
   G4double photonEoriginal = epsilon * photonEnergy0;
-  G4double photonE = 0.;
+  G4double photonE = -1.;
   G4int iteration = 0;
   G4double eMax = photonEnergy0;
   do
@@ -223,6 +223,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
       // Select shell based on shell occupancy
       G4int shell = shellData.SelectRandomShell(Z);
       bindingE = shellData.BindingEnergy(Z,shell);
+      
       eMax = photonEnergy0 - bindingE;
      
       // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
@@ -246,7 +247,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 	{
 	  photonE = -1.;
 	}
-    } while ( iteration <= maxDopplerIterations && photonE > 0. && photonE < eMax*G4UniformRand());
+   } while ( iteration <= maxDopplerIterations && 
+	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
  
   // End of recalculation of photon energy with Doppler broadening
   // Revert to original if maximum number of iterations threshold has been reached
@@ -263,6 +265,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.ProposeMomentumDirection(photonDirection1);
  
   G4double photonEnergy1 = photonE;
+  G4cout << "--> PHOTONENERGY1 = " << photonE/keV << G4endl;
 
   if (photonEnergy1 > 0.)
     {
