@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.1 2007-08-30 23:34:19 gum Exp $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.2 2008-04-24 12:33:08 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,10 +98,12 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    dydx[4] = cof1*(cof2*Field[4] + (y[5]*Field[0] - y[3]*Field[2])) ; 
  
    dydx[5] = cof1*(cof2*Field[5] + (y[3]*Field[1] - y[4]*Field[0])) ;  
+   
+   dydx[6] = dydx[8] = 0.;//not used
 
    // Lab Time of flight
    dydx[7] = inverse_velocity;
-
+   
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
 
    G4ThreeVector u(y[3], y[4], y[5]);
