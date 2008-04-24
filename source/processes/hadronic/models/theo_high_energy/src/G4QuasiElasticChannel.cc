@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.3 2008-04-08 15:41:26 gunter Exp $
+// $Id: G4QuasiElasticChannel.cc,v 1.4 2008-04-24 13:26:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,7 +75,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	
 	
 	G4int A=G4lrint(theNucleus.GetN());
-	G4int Z=G4lrint(theNucleus.GetZ());
+//	G4int Z=G4lrint(theNucleus.GetZ());
 //   build Nucleus and choose random nucleon to scatter with
 	the3DNucleus.Init(theNucleus.GetN(),theNucleus.GetZ());
 	const std::vector<G4Nucleon *> nucleons=the3DNucleus.GetNucleons();
@@ -90,8 +90,9 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	G4ParticleDefinition * pDef= nucleons[index]->GetDefinition();
 	
 #ifdef debug_scatter
-	G4cout << " neutron - proton? A, Z, an, pdg" <<" "<< A <<" "<<Z 
-			<< " "<<an <<" " << pDef->GetParticleName()<< G4endl;
+	G4cout << " neutron - proton? A, Z, an, pdg" <<" "
+	       << A <<" "<<G4lrint(theNucleus.GetZ())
+	       << " "<<an <<" " << pDef->GetParticleName()<< G4endl;
 #endif
 //	G4LorentzVector pNucleon(G4ThreeVector(0,0,0),pDef->GetPDGMass());
 	G4LorentzVector pNucleon=nucleons[index]->Get4Momentum();
