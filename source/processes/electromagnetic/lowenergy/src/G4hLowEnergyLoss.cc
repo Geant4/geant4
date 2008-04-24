@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.25 2008-03-07 11:11:39 pia Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.26 2008-04-24 15:30:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -795,7 +795,17 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
         Rim = 0. ;
       else
       {
-        Tim = Ti/RTable ;
+	// ---- MGP ---- Modified to avoid a floating point exception
+	// The correction is just a temporary patch, the whole class should be redesigned 
+	// Original: Tim = Ti/RTable  results in 0./0. 
+	if (RTable != 0.)
+	  {
+	    Tim = Ti/RTable ;
+	  }
+	else
+	  {
+	    Tim = 0.;
+	  }
         Rim = rangeVector->GetValue(Tim,isOut);
       }
       if ( i==(TotBin-1))

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.1 2007-10-12 23:11:41 pia Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.2 2008-04-24 15:30:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -197,9 +197,12 @@ G4double G4FinalStateElasticBrennerZaider::RandomizeCosTheta(G4double k)
   do
     {
       cosTheta = 2. * G4UniformRand() - 1.;
-      leftDenominator = (1 + 2.*gamma - cosTheta);
-      rightDenominator = (1 + 2.*delta + cosTheta);
-      fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
+      leftDenominator = (1. + 2.*gamma - cosTheta);
+      rightDenominator = (1. + 2.*delta + cosTheta);
+      if ( (leftDenominator * rightDenominator) != 0. )
+	{
+	  fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
+	}
     }
   while (fCosTheta < G4UniformRand());
 
