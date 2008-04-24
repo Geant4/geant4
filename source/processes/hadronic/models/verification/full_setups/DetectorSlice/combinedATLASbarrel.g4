@@ -4,7 +4,7 @@
 #                        (total Pb+LAr : 27.6 X0).
 #
 # ATLAS hadronic barrel: sampling Fe-Sci.
-#                        25 layers: 6 cm (Cu) - 4 mm (Sci).
+#                        25 layers: 6 cm (Fe) - 4 mm (Sci).
 #                        (the scintillator tiles are indeed
 #                         parallel to the beam direction;
 #                         so we cannot simulate it with our
@@ -54,4 +54,3 @@
 #
 /run/beamOn 100
 #
-

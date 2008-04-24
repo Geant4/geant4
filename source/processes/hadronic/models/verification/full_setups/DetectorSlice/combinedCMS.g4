@@ -43,6 +43,5 @@
 #
 /mydet/update
 #
-/run/beamOn 5000
+/run/beamOn 100
 #
-
