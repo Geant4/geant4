@@ -1,0 +1,141 @@
+
+                 Geant4 9.1 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                            9 May 2008
+
+List of fixes included in this public patch since the public release 9.1.p01:
+
+  o Configuration:
+    -------------
+    + Fixed in liblist.c use of gets() by adopting safer fgets().
+    + Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
+      changed compilation option "-mp" to more performant "-fp_model precise".
+    + Linux-g++.gmk: Replaced g77 with gfortran compiler.
+
+  o Environments:
+    ------------
+    + Fixed compilation problems.
+    + Make direct usage of tags in G4Version header.
+
+  o Geometry:
+    --------
+    + Cleared compilation warnings detected on gcc-4.3.0.
+    + magneticfield:
+      o Fixed 'unused' non-initialized values of dydx in classes
+        G4EqMagElectricField and G4EqEMFieldWithSpin.
+    + management:
+      o Added missing protected copy-contructor and assignment operator
+        for G4VSolid.
+      o Added Shrink() and Reserve() methods to G4SmartVoxelNode to be used
+        for debugging studies.
+    + solids/CSG:
+      o G4Cons: added protection against NaN in GetPointOnSurface() in the
+        case the check is run for Rmax1==Rmax2.
+      o G4Trap: corrections for arithmetic operations in 8-point constructor.
+        Addressing problem report #934.
+    + solids/specific:
+      o G4ExtrudedSolid: bug fix in MakeFacets() to fill 'fTriangles' also
+        in case of polygon with 3 or 4 vertices, as they are needed for
+        Inside(p). Fix in Inside(p) for correctly handling the case of
+        points located on the edges of triangles which are not the outline
+        edges of the polygon.
+      o G4TessellatedSolid: fixed bug in copy-constructor and internal method
+        CopyObjects() for cloning of facets. Fix in DistanceToOut(p,v,..) to
+        compute normal only if specified by flag in input.
+      o G4Polyhedra: fixed problem of out-of-bound access to vectors in
+        method GetPointOnSurface().
+      o G4Hype: refined polyhedron representation for correct visualization
+        of the shape.
+
+  o Global:
+    ------
+    + Introduced inclusion of <cstring> and <climits> in G4String.hh and
+      templates.hh respectively for porting on gcc-4.3.0 compiler.
+    + Cleared compilation warnings detected on gcc-4.3.0
+    + Removed useless specification of units in implementation of
+      G4GeometryTolerance::SetSurfaceTolerance().
+    + Changed date for patch-02 to release 9.1.
+
+  o Graphics Representations:
+    ------------------------
+    + Added G4Hype representation to HepPolyhedron and G4Polyhedron.
+    + Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on
+      gcc-4.3.0 compiler.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Standard:
+    + Utils:
+      o G4EmCorrections: set finite size correction to zero (provides flat
+        distribution of vertex detector response for high energy hadrons).
+      o G4ionEffectiveCharge: minor change of numerical constants to provide
+        continuous change of charge versus energy.
+
+  o Hadronic Processes:
+    ------------------
+    + Cleared most compilation warnings detected on gcc-4.3.0.
+    + models/chiral_inv_phase_space:
+      o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
+        When run together with elastic, the parameters to sample T were not
+        updated, this fix is to always update these.
+      o Check on tolerance is replaced by check on exact equality for fixing
+        event reproducibility.
+    + models/coherent_elastic:
+      o G4HadronElastic: added extra protection against precision lost
+        when projectile almost lost kinetic energy; set 'lowestEnergyLimit'
+        to be 1.e-6*eV (was 0.0).
+        Added extra protection: if sampled t out of the physics range then
+        no scattering.
+      o G4UHadronElasticProcess: call to G4QElasticCrossSection with option
+        "false", so parameters for sampling of scattering are precalculated.
+    + models/neutron_hp:
+      o Fix against cases of division by zero.
+      o Fixed erroneous condition in G4NeutronHPContAngularPar.
+    + models/theo_high_energy:
+      o Added missing Fermi momentum to quasi elastic scattering. 
+
+  o Generic Processes:
+    -----------------
+    + Decay:
+      o Added protection to properly handle shortlived particles with finite
+        pre-assigned proper time.
+    + Parameterisation:
+      o Cleared compilation warnings detected on gcc-4.3.0.
+
+  o Run:
+    ---
+    + Added G4Transportation to shortlived particles in G4VUserPhysicsList
+      in order to fix problem of non-assigned process for shortlived particle
+      decay detected in CMS.
+
+  o Transportation:
+    --------------
+    + 
+
+  o Examples:
+    --------
+    + advanced/underground_physics:
+      o Fixed mis-sized arrays 'ring_phys_gas' and 'ring_phys_liq';
+        both were less than the utilized size.
+    + extended/field/field04:
+      o Fix to avoid error for invalid rotation specification
+        in F04DetectorConstruction::stringToRotationMatrix().
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.1
+  o  Technical notes distributed for release 9.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.1 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.
