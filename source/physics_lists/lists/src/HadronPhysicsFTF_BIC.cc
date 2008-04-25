@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.cc,v 1.1 2007-11-16 16:52:55 gunter Exp $
+// $Id: HadronPhysicsFTF_BIC.cc,v 1.2 2008-04-25 14:53:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,10 +87,10 @@ HadronPhysicsFTF_BIC::~HadronPhysicsFTF_BIC()
    delete theFTFBinaryNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
+   delete theNeutrons;
    delete theFTFBinaryPro;
-   delete theLEPPro;
-   delete thePro;
    delete theBinaryPro;
+   delete thePro;
    delete theFTFBinaryPiK;
    delete theBICPiK;
    delete theLEPPiK;
