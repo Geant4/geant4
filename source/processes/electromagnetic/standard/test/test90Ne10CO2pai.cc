@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.1 2008-04-14 14:53:39 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.2 2008-04-25 16:09:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,79 @@
 
 // #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
+
+// Peter:
+// From the AliRoot code in $ALICE_ROOT/TPC/AliTPCv2.cxx:
+//  const Float_t kprim = 14.35; // number of primary collisions per 1 cm
+//  const Float_t kpoti = 20.77e-9; // first ionization potential for Ne/CO2
+//  const Float_t kwIon = 35.97e-9; // energy for the ion-electron pair creation
+//
+// kprim is the number of primary collisions per cm for a MIP!
+// kpoti = I.
+// kwIon = W.
+
+G4double FitALICE(G4double bg)
+{
+  //
+  // Bethe-Bloch energy loss formula from ALICE TPC TRD
+  //
+  const G4double kp1 = 0.76176e-1;
+  const G4double kp2 = 10.632;
+  const G4double kp3 = 0.13279e-4;
+  const G4double kp4 = 1.8631;
+  const G4double kp5 = 1.9479;
+  const G4double dn1 = 14.35;
+
+  G4double dbg  = (G4double) bg;
+
+  G4double beta = dbg/std::sqrt(1.+dbg*dbg);
+
+  G4double aa   = std::pow(beta,kp4);
+  G4double bb   = std::pow(1./dbg,kp5);
+
+
+  bb  = std::log(kp3 + bb);
+
+  G4double result = ( kp2 - aa - bb)*kp1/aa;
+
+  result *= dn1;
+
+  return result;
+}
+
+
+G4double FitBichsel(G4double bg)
+{
+  //
+  // Bethe-Bloch energy loss formula from ALICE TPC TRD
+  //
+  const G4double kp1 = 0.686e-1;
+  const G4double kp2 = 11.714;
+  const G4double kp3 = 0.218e-4;
+  const G4double kp4 = 1.997;
+  const G4double kp5 = 2.133;
+  const G4double dn1 = 13.32;
+
+  G4double dbg  = (G4double) bg;
+
+  G4double beta = dbg/std::sqrt(1.+dbg*dbg);
+
+  G4double aa   = std::pow(beta,kp4);
+  G4double bb   = std::pow(1./dbg,kp5);
+
+
+  bb=std::log(kp3 + bb);
+
+  G4double result = ( kp2 - aa - bb)*kp1/aa;
+
+  result *= dn1;
+
+  return result;
+  
+}
+
+
+
 
 int main()
 {
@@ -82,6 +155,9 @@ int main()
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon",symbol="C", ez=6., a);
 
+  a = 14.01*g/mole;
+  G4Element* elN = new G4Element(name="Nitrogen", symbol="N", ez=7., a);
+
   a = 16.00*g/mole;
   G4Element* elO = new G4Element(name="Oxygen",symbol="O", ez=8., a);
 
@@ -106,15 +182,46 @@ int main()
 
   density = 1.0077*mg/cm3 ;      
   G4Material* Ne10CO2 = new G4Material(name="Ne10CO2"  , density, 
-
-                                                             ncomponents=2);
+                          ncomponents=2);
   Ne10CO2->AddMaterial( Ne,           fractionmass = 0.8038 ) ;
   Ne10CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.1962 ) ;
+
+  density *= 273./293.;
+
+  G4Material* Ne10CO2T293 = new G4Material(name="Ne10CO2T293"  , density, 
+                           ncomponents=2);
+  Ne10CO2T293->AddMaterial( Ne,              fractionmass = 0.8038 ) ;
+  Ne10CO2T293->AddMaterial( CarbonDioxide,   fractionmass = 0.1962 ) ;
+
+
+  density = 1.25053*mg/cm3 ;       // STP
+  G4Material* Nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
+  Nitrogen->AddElement(elN, 2);
+
+  // 85.7% Ne + 9.5% CO2 +4.8% N2, STP
+
+  density = 1.0353*mg/cm3 ;      
+  G4Material* Ne857CO295N2 = new G4Material(name="Ne857CO295N2"  , density, 
+                             ncomponents=3);
+  Ne857CO295N2->AddMaterial( Ne,            fractionmass = 0.76065 ) ;
+  Ne857CO295N2->AddMaterial( CarbonDioxide, fractionmass = 0.18140 ) ;
+  Ne857CO295N2->AddMaterial( Nitrogen,      fractionmass = 0.05795 ) ;
+
+  density *= 273./292.;
+  density *= 0.966/1.01325;
+
+  G4cout<<"density of Ne857CO295N2T292 = "<<density*cm3/mg<<"  mg/cm3"<<G4endl;
+
+  G4Material* Ne857CO295N2T292 = new G4Material(name="Ne857CO295N2T292"  , density, 
+                             ncomponents=3);
+  Ne857CO295N2T292->AddMaterial( Ne,            fractionmass = 0.76065 ) ;
+  Ne857CO295N2T292->AddMaterial( CarbonDioxide, fractionmass = 0.18140 ) ;
+  Ne857CO295N2T292->AddMaterial( Nitrogen,      fractionmass = 0.05795 ) ;
 
 
   G4int i, j, jMax, k, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
   G4double maxEnergyTransfer, kineticEnergy ;
-  G4double tau, gamma, bg2, beta2, rateMass, Tmax, Tmin, Tkin ;
+  G4double tau, gamma, bg2, bg, beta2, rateMass, Tmax, Tmin, Tkin ;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
@@ -128,7 +235,14 @@ int main()
     G4cout <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
     // outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   }
-  G4String testName = "Ne10CO2";
+
+
+
+  // G4String testName = "Ne10CO2";
+  // G4String testName = "Ne10CO2T293";
+  G4String testName = "Ne857CO295N2T292";
+
+
   // G4cout<<"Enter material name for test : "<<std::flush ;
   //  G4cin>>testName ;
 
@@ -229,23 +343,26 @@ int main()
      */
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 10.0*keV ;  // 110*MeV ; // for proton
+     kineticEnergy = 10.0*keV; // 3.*GeV;    // 10.0*keV ;  // 110*MeV ; // for proton
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
-     jMax = 70;
+     jMax = 70; // 70;
+
      outFile<<jMax<<G4endl;
 
      for(j = 0; j < jMax; j++)
      {
-       tau      = kineticEnergy/proton_mass_c2 ;
-       gamma    = tau +1.0 ;
-       bg2      = tau*(tau + 2.0) ;
-       beta2    = bg2/(gamma*gamma) ;
-       rateMass = electron_mass_c2/proton_mass_c2 ;
+       tau      = kineticEnergy/proton_mass_c2;
+       gamma    = tau +1.0;
+       bg2      = tau*(tau + 2.0);
+       bg = std::sqrt(bg2);
+       beta2    = bg2/(gamma*gamma);
+       // G4cout<<"bg2 = "<<bg2<<";  b2 = "<<beta2<<G4endl<<G4endl;
+       rateMass = electron_mass_c2/proton_mass_c2;
 
        Tmax     = 2.0*electron_mass_c2*bg2
-                   /(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
+                   /(1.0+2.0*gamma*rateMass+rateMass*rateMass);
 
 
        Tkin = maxEnergyTransfer ;
@@ -259,25 +376,34 @@ int main()
           Tkin = Tmin + 0.5*eV ;
        }
        G4PAIxSection testPAIproton(k,Tkin,bg2) ;
+
        G4cout  
          //      << kineticEnergy/keV<<"\t\t"
-               << gamma << "\t\t"
+         //      << gamma << "\t\t"
+               << bg << "\t\t"
 	 //    << Tkin/keV<<"\t\t"     
-               << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
-               << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
-               << testPAIproton.GetIntegralCerenkov(1)*cm +
-               testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
-               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << G4endl;
+         //       << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
+         //       << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
+         //       << testPAIproton.GetIntegralCerenkov(1)*cm +
+         //       testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
+	       << FitALICE(bg) << "\t"
+	       << FitBichsel(bg) << "\t"
+               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" 
+          << G4endl;
       
        outFile 
          //      << kineticEnergy/keV<<"\t"
-               << gamma << "\t"
+	 //       << gamma << "\t"
+               << bg << "\t\t"
          //      << Tkin/keV<<"\t"
-               << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
-               << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
-               << testPAIproton.GetIntegralCerenkov(1)*cm +
-               testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
-               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t" << G4endl;
+         //      << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
+         //      << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
+         //      << testPAIproton.GetIntegralCerenkov(1)*cm +
+         //      testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
+	       << FitALICE(bg) << "\t"
+	       << FitBichsel(bg) << "\t"
+               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t" 
+               << G4endl;
 
        //   outFile<<testPAIproton.GetLorentzFactor(j)<<"\t"
        //          <<maxEnergyTransfer/keV<<"\t\t"
