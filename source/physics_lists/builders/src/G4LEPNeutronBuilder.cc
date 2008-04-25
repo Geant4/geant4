@@ -42,21 +42,20 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4LEPNeutronBuilder::
-G4LEPNeutronBuilder() 
-{
+G4LEPNeutronBuilder::G4LEPNeutronBuilder() : theLENeutronModel(0),
+					     theNeutronFissionModel(0),
+					     theNeutronCaptureModel(0) {
   theMin = 0;
   theIMin = theMin;
   theMax = 20*TeV;
   theIMax = 55*GeV;
 }
 
-G4LEPNeutronBuilder::
-~G4LEPNeutronBuilder() 
+G4LEPNeutronBuilder::~G4LEPNeutronBuilder() 
 {
-  delete theNeutronFissionModel;
-  delete theNeutronCaptureModel;
-  delete theLENeutronModel;
+  if (theNeutronFissionModel) delete theNeutronFissionModel;
+  if (theNeutronCaptureModel) delete theNeutronCaptureModel;
+  if (theLENeutronModel)      delete theLENeutronModel;
 }
 
 void G4LEPNeutronBuilder::
