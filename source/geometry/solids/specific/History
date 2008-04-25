@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2008-04-25 08:37:56 gcosmo Exp $
+$Id: History,v 1.139 2008-04-25 09:09:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 25-Apr-2008, T.Nikitina (geom-specific-V09-01-09)
 - Added protection against NaN in G4IntersectingCone::LineHitsCone1() in
   case of configuration where a conic section becomes a tube.
+- G4EllipticalCone: removed some debug printouts.
 
 14-Apr-2008, T.Nikitina (geom-specific-V09-01-08)
 - G4Hype: refined polyhedron representation for correct visualization of
