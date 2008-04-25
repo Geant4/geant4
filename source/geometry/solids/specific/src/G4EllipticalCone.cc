@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.15 2007-08-21 12:58:36 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.16 2008-04-25 08:45:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -706,10 +706,6 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   distMin = kInfinity;
   surface = kNoSurf;
 
-  #ifdef G4SPECSDEBUG    
-  G4cout << "DToOut: vz < 0" << G4endl ;
-  #endif
-
   if (v.z() < 0.0)
   {
     lambda = (-p.z() - zTopCut)/v.z();
@@ -725,10 +721,6 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
     distMin = std::fabs(lambda);
     surface = kPlaneSurf;
   }
-
-  #ifdef G4SPECSDEBUG    
-  G4cout << "DToOut: vz > 0" << G4endl ;
-  #endif
 
   if (v.z() > 0.0)
   {
