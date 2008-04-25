@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ReferencePhysList.cc,v 1.1 2008-04-21 09:28:06 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.1 2008-04-25 14:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4ReferencePhysList
+// ClassName:  G4PhysListFactory
 //
 // Author: 21 April 2008 V. Ivanchenko
 //
@@ -37,7 +37,7 @@
 //----------------------------------------------------------------------------
 //
 
-#include "G4ReferencePhysList.hh"
+#include "G4PhysListFactory.hh"
 #include "FTFC.hh"
 #include "FTFP.hh"
 #include "FTFP_BERT.hh"
@@ -71,15 +71,15 @@
 #include "QGSP_QEL.hh"
 #include "QGS_BIC.hh"
 
-G4ReferencePhysList::G4ReferencePhysList() 
+G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
 }
 
-G4ReferencePhysList::~G4ReferencePhysList()
+G4PhysListFactory::~G4PhysListFactory()
 {}
 
-G4VModularPhysicsList* G4ReferencePhysList::ReferencePhysList()
+G4VModularPhysicsList* G4PhysListFactory::ReferencePhysList()
 {
   // instantiate PhysList by environment variable "PHYSLIST"
   G4String name = "";
@@ -88,17 +88,17 @@ G4VModularPhysicsList* G4ReferencePhysList::ReferencePhysList()
     name = G4String(path);
   } else {
     name = defName;
-    G4cout << "### G4ReferencePhysList WARNING: "
+    G4cout << "### G4PhysListFactory WARNING: "
 	   << " environment variable PHYSLIST is not defined"
 	   << G4endl
 	   << "    Default Physics Lists " << name 
 	   << " is instantiated" 
 	   << G4endl;
   }
-  return GetReferencePhysList(name);
+  return GetPhysListFactory(name);
 }
 
-G4VModularPhysicsList* G4ReferencePhysList::GetReferencePhysList(
+G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
         const G4String& name)
 {
   G4VModularPhysicsList* p = 0;
@@ -134,7 +134,7 @@ G4VModularPhysicsList* G4ReferencePhysList::GetReferencePhysList(
   else if(name == "QGSP_QEL") {p = new QGSP_QEL();}
   else if(name == "QGS_BIC") {p = new QGS_BIC();}
   else {
-    G4cout << "### G4ReferencePhysList WARNING: "
+    G4cout << "### G4PhysListFactory WARNING: "
 	   << "PhysicsList " << name << " is not known"
 	   << G4endl
 	   << "    Default Physics Lists " << defName

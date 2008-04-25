@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ReferencePhysList.hh,v 1.1 2008-04-21 09:28:06 vnivanch Exp $
+// $Id: G4PhysListFactory.hh,v 1.1 2008-04-25 14:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4ReferencePhysList
+// ClassName:  G4PhysListFactory
 //
 // Author: 21 April 2008 V. Ivanchenko
 //
@@ -36,19 +36,19 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4ReferencePhysList_h
-#define G4ReferencePhysList_h 1
+#ifndef G4PhysListFactory_h
+#define G4PhysListFactory_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4ReferencePhysList
+class G4PhysListFactory
 {
 public:
 
-  G4ReferencePhysList();
+  G4PhysListFactory();
 
-  ~G4ReferencePhysList();
+  ~G4PhysListFactory();
 
   G4VModularPhysicsList* GetReferencePhysList(const G4String&);
   // instantiate PhysList by name
