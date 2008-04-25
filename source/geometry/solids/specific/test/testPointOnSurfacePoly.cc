@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPointOnSurfacePoly.cc,v 1.2 2007-07-12 14:11:19 tnikitin Exp $
+// $Id: testPointOnSurfacePoly.cc,v 1.3 2008-04-25 08:50:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,14 +107,14 @@ G4bool checkPolycone(G4int N)
   time.Start();
    
   for(i=0; i<N; i++)
-    { G4cout <<"I="<<i<<" stil to check = "<<N-i<<G4endl;
+  { 
     point = t1.GetPointOnSurface();
     surf  = t1.Inside(point);
-    //  G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;
-    if(surf != kSurface){ n++; what = false;
-
-     G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;
-        }  
+    if(surf != kSurface)
+    {
+      n++; what = false;
+      G4cout <<" x "<<point.x()<<" y "<<point.y()<<" z "<<point.z()<<G4endl;
+    }  
   }
   
   time.Stop();
