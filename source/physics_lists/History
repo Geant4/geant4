@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2008-04-21 09:56:45 vnivanch Exp $
+$Id: History,v 1.57 2008-04-25 14:33:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21-04-2008, V.Ivanchenko phys-lists-V09-01-04
+25-04-2008, V.Ivanchenko phys-lists-V09-01-04
 - Added D and B mesons to all EM bulders G4EmStandardPhysics*
 - QBBC - fixed compillation warning
 - G4EmStandardPhysics_option2,3 - use spline for Physics Tables
-- G4ReferencePhysList - new helper class
+- G4PhysListFactory - new helper class for building PhysList
 
 26-03-2008, V.Ivanchenko phys-lists-V09-01-03
 26-03-2008, mma

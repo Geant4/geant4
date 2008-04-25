@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.1 2008-04-25 14:24:18 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.2 2008-04-25 14:32:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ G4VModularPhysicsList* G4PhysListFactory::ReferencePhysList()
 	   << " is instantiated" 
 	   << G4endl;
   }
-  return GetPhysListFactory(name);
+  return GetReferencePhysList(name);
 }
 
 G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
