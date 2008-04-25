@@ -66,9 +66,24 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on
       gcc-4.3.0 compiler.
 
+  o Particles:
+    ---------
+    + G4ParticleTable: fixed implementation of methods Remove() and
+      RemoveAllParticles() so that particle definition objects are properly
+      deleted when invoking these methods between runs. It's user's
+      responsibility to delete dynamically instantiated particle objects.
+      Added method DeleteAllParticles() to remove and delete all particles
+      in the list. Addressing problem report #1007.
+    + Fixed bugs in G4Iontable::Remove() and G4ShortLivedTable::Remove().
+
   o Electromagnetic Processes:
     -------------------------
     + Standard:
+      o G4UrbanMscModel90, G4UrbanMscModel: fixed asymmetry of lateral
+        displacement.
+      o G4ionIonisation: adopt 'linLossLimit' 0.15 as it was originally in 9.1.
+      o G4IonFluctuations: fixed discontinuity of width of the energy loss for
+        small velocities in very long alpha events.
     + Utils:
       o G4EmCorrections: set finite size correction to zero (provides flat
         distribution of vertex detector response for high energy hadrons).
@@ -103,6 +118,10 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + Decay:
       o Added protection to properly handle shortlived particles with finite
         pre-assigned proper time.
+    + Management:
+      o Fixed bug related to invoking ResetNumberOfInteractionLengthLeft()
+        at the zero length step
+      o Allow zero mean free path for PostStepDoIt().
     + Parameterisation:
       o Cleared compilation warnings detected on gcc-4.3.0.
 
