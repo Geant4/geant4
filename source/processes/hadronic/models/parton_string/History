@@ -52,3 +52,12 @@ code and to keep track of all tags.
    (tag had-hadronization-V07-01-00)
 
 - D. Wright created History file for parton_string directory
+
+31 March 2008 V. Uzhinsky (hadr-string-diff-V09-01-00)
+--------------------------------------------------------
+
+- Elastic hadron intra-nuclear nucleon scattering was inserted in
+  FTF model. This allows to simulate quasi-elastic and multi-particles
+  production together.
+- Small re-orangement of FTF model was done. G4FTFCrossSection modules
+  were re-named into G4FTFParameters and moved to /diffraction

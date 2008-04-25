@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh,v 1.5 2007-12-20 15:38:06 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.hh,v 1.6 2008-04-25 14:20:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -79,8 +79,14 @@ private:
                                   G4double Px, G4double Py);      
 	    
 private:
+// ------ For estimation of a minimal string mass ---------------
+   G4double Mass_of_light_quark;
+   G4double Mass_of_heavy_quark;
+   G4double Mass_of_string_junction;
+// ------ An estimated minimal string mass ----------------------
    G4double MinimalStringMass;
    G4double MinimalStringMass2;
+// ------ Minimal invariant mass used at a string fragmentation -
    G4double WminLUND;		    
 };
 

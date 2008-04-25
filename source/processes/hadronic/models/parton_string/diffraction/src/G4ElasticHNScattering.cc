@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.1 2008-03-31 15:34:02 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.2 2008-04-25 14:20:14 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -48,7 +48,7 @@
 #include "G4FTFParameters.hh"                            // Uzhi 29.03.08
 //#include "G4ios.hh"
 
-G4ElasticHNScattering::G4ElasticHNScattering()                         // Uzhi
+G4ElasticHNScattering::G4ElasticHNScattering()          
 {
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.9 2007-12-20 15:38:07 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.10 2008-04-25 14:20:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    SigmaQT = 0.5 * GeV;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
-   DiquarkSuppress  = 0.1;
+   DiquarkSuppress  = 0.07;
    DiquarkBreakProb = 0.1;
    
    //... pspin_meson is probability to create vector meson 

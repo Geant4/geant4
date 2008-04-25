@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.8 2008-03-31 15:34:02 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.9 2008-04-25 14:20:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,27 +88,31 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 	return this!=&right;
 }
 
+// ------------------------------------------------------------
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
 
-	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); // Uzhi N-mass number Z-charge
+	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); 
+// Uzhi N-mass number Z-charge ------------------------- Uzhi 29.03.08
 
-// ------------------------- Uzhi 29.03.08
 // --- cms energy
 
         G4double s = sqr( theProjectile.GetMass() ) +
                      sqr( G4Proton::Proton()->GetPDGMass() ) +
                      2*theProjectile.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
 /*
-    G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4endl;
-    G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
-    G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
+G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4endl;
+G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
+G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 */
-      theParameters = new G4FTFParameters(theProjectile.GetDefinition(),s);        // Uzhi
-// ------------------------- Uzhi 29.03.08
+      theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
+                                          aNucleus.GetN(),aNucleus.GetZ(),
+                                          s);// ------------------------- Uzhi 19.04.08
+//theParameters->SetProbabilityOfElasticScatt(0.); // To turn off elastic scattering
 }
 
+// ------------------------------------------------------------
 G4ExcitedStringVector * G4FTFModel::GetStrings()
 {
 //G4cout<<"theParticipants.GetList"<<G4endl;
@@ -117,15 +121,16 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 	if (! ExciteParticipants()) return NULL;;
 //G4cout<<"theStrings = BuildStrings()"<<G4endl;
 	G4ExcitedStringVector * theStrings = BuildStrings();
-
+//G4cout<<"Return to theStrings"<<G4endl;
 	return theStrings;
 }
 
+// ------------------------------------------------------------
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){delete aH;} };
 
+// ------------------------------------------------------------
 G4ExcitedStringVector * G4FTFModel::BuildStrings()
 {	
-
 // Loop over all collisions; find all primaries, and all target ( targets may 
 //  be duplicate in the List ( to unique G4VSplitableHadrons)
 
@@ -174,6 +179,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	return strings;
 }
 
+// ------------------------------------------------------------
 G4bool G4FTFModel::ExciteParticipants()
 {
 
@@ -188,9 +194,10 @@ G4int counter=0;
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
-//counter++;
-//G4cout<<" Inter # "<<counter<<G4endl;
-
+/*
+counter++;
+G4cout<<" Inter # "<<counter<<G4endl;
+*/
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
 
@@ -204,7 +211,7 @@ G4int counter=0;
            else
            {
 //G4cout<<"Inelastic"<<G4endl;
-            Successfull=theExcitation->ExciteParticipants(projectile, target);
+            Successfull=theExcitation->ExciteParticipants(projectile, target, theParameters);
            }
 //           if(!Successfull)
 // // Uzhi 29.03.08
@@ -239,3 +246,4 @@ G4int counter=0;
 	}
 	return true;
 }
+// ------------------------------------------------------------

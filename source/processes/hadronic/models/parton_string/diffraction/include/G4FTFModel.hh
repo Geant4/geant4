@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.6 2008-03-31 15:34:01 vuzhinsk Exp $
+// $Id: G4FTFModel.hh,v 1.7 2008-04-25 14:20:13 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -96,6 +96,7 @@ class G4FTFModel : public G4VPartonStringModel
 
 };
 
+// ------------------------------------------------------------
 inline 
 G4V3DNucleus * G4FTFModel::GetWoundedNucleus() const
 {
