@@ -60,7 +60,6 @@ class G4FTFBinaryNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
