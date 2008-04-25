@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.9 2008-04-24 16:43:48 tnikitin Exp $
+// $Id: G4IntersectingCone.cc,v 1.10 2008-04-25 08:37:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -220,7 +220,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
  
-  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
+  if (radical < -1E-6*std::fabs(b))  { return 0; }    // No solution
   
   if (radical < 1E-6*std::fabs(b))
   {
@@ -229,10 +229,11 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     //
     if (std::fabs(a) > 1/kInfinity)
       {
-      if(B==0.)return 0;
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
-	{  *s1 = -0.5*b/a;
-        return 1;
+      if(B==0.) { return 0; }
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
+      {
+         *s1 = -0.5*b/a;
+         return 1;
       }
       return 0;
     }
@@ -248,7 +249,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     sa = q/a;
     sb = c/q;
     if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
     return 2;
   }
   else if (a < -1/kInfinity)
@@ -266,7 +267,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   else
   {
     *s1 = -c/b;
-    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
     return 1;
   }
 }
@@ -308,7 +309,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   //
   if (B==0)
   {
-    if (std::fabs(tz) < 1/kInfinity) return 0;
+    if (std::fabs(tz) < 1/kInfinity)  { return 0; }
     
     *s1 = (A-z0)/tz;
     return 1;
@@ -322,7 +323,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
  
-  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
+  if (radical < -1E-6*std::fabs(b)) { return 0; }   // No solution
   
   if (radical < 1E-6*std::fabs(b))
   {
@@ -331,7 +332,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
     //
     if (std::fabs(a) > 1/kInfinity)
     {
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
       {
         *s1 = -0.5*b/a;
         return 1;
@@ -350,7 +351,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
     sa = q/a;
     sb = c/q;
     if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
     return 2;
   }
   else if (a > 1/kInfinity)
@@ -368,7 +369,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   else
   {
     *s1 = -c/b;
-    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
     return 1;
   }
 }
