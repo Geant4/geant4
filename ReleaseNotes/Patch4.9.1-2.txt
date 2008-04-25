@@ -45,6 +45,9 @@ List of fixes included in this public patch since the public release 9.1.p01:
         compute normal only if specified by flag in input.
       o G4Polyhedra: fixed problem of out-of-bound access to vectors in
         method GetPointOnSurface().
+      o Added protection against NaN in G4IntersectingCone::LineHitsCone1()
+        in case of configurations where a conic section becomes a tube.
+      o G4EllipticalCone: removed some debug printouts.
       o G4Hype: refined polyhedron representation for correct visualization
         of the shape.
 
