@@ -85,6 +85,10 @@ public:
 
 private:
 
+
+   G4VCrossSectionDataSet* whichDataSetInCharge(const G4DynamicParticle*, 
+                            const G4Element*);
+
    enum { NDataSetMax = 100 };
    G4VCrossSectionDataSet* DataSetList[NDataSetMax];
    G4int NDataSetList;

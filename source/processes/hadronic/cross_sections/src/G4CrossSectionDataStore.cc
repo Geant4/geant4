@@ -53,6 +53,28 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
   return DBL_MIN;
 }
 
+G4VCrossSectionDataSet*
+G4CrossSectionDataStore::whichDataSetInCharge(const G4DynamicParticle* aParticle,
+                                              const G4Element* anElement)
+{
+  if (NDataSetList == 0) 
+  {
+    throw G4HadronicException(__FILE__, __LINE__, 
+     "G4CrossSectionDataStore: no data sets registered");
+    return 0;
+  }
+  for (G4int i = NDataSetList-1; i >= 0; i--) {
+    if (DataSetList[i]->IsApplicable(aParticle, anElement) )
+    {
+      return DataSetList[i];
+    }
+  }
+  throw G4HadronicException(__FILE__, __LINE__, 
+                      "G4CrossSectionDataStore: no applicable data set found "
+                      "for particle/element");
+  return 0;
+}
+
 
 G4double
 G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
@@ -139,13 +161,22 @@ G4CrossSectionDataStore::SelectRandomIsotope(const G4DynamicParticle* particle,
     G4int nIsoPerElement = anElement->GetNumberOfIsotopes();
     std::vector<G4double> isoholder;
     std::vector<G4double> aholder;
-    G4double iso_xs;
+    G4double iso_xs = DBL_MIN;
 
     if (nIsoPerElement) { // user-defined isotope abundances
       G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
       G4double* abundVector = anElement->GetRelativeAbundanceVector();
+      G4VCrossSectionDataSet* inCharge = whichDataSetInCharge(particle, anElement);
+      G4bool elementXS = false;
       for (G4int j = 0; j < nIsoPerElement; j++) {
-        iso_xs = GetCrossSection(particle, (*isoVector)[j], aTemp);
+        if (inCharge->IsZAApplicable(particle, (*isoVector)[j]->GetZ(), 
+                                               (*isoVector)[j]->GetN() ) ) {
+          iso_xs = inCharge->GetIsoCrossSection(particle, (*isoVector)[j], aTemp);
+        } else if (elementXS == false) {
+          iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
+          elementXS = true;
+        }
+
         isoholder.push_back(abundVector[j]*iso_xs);
         aholder.push_back(G4double((*isoVector)[j]->GetN()));
       }
@@ -156,10 +187,19 @@ G4CrossSectionDataStore::SelectRandomIsotope(const G4DynamicParticle* particle,
       G4int index = theDefaultIsotopes.GetFirstIsotope(ZZ);
       G4double AA;
       G4double abundance;
+
+      G4VCrossSectionDataSet* inCharge = whichDataSetInCharge(particle, anElement);
+      G4bool elementXS = false;
+
       for (G4int j = 0; j < nIsoPerElement; j++) {
         AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index+j));
         aholder.push_back(AA);
-        iso_xs = GetCrossSection(particle, G4double(ZZ), AA, aTemp);
+        if (inCharge->IsZAApplicable(particle, G4double(ZZ), AA) ) {
+          iso_xs = inCharge->GetIsoZACrossSection(particle, G4double(ZZ), AA, aTemp);
+        } else if (elementXS == false) {
+          iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
+          elementXS = true;
+        }
         abundance = theDefaultIsotopes.GetAbundance(index+j)/100.0;
         isoholder.push_back(abundance*iso_xs);
       }
