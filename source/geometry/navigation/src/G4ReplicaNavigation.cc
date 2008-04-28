@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.18 2008-03-13 10:36:22 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.19 2008-04-28 15:39:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1043,7 +1043,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
   motherSolid = pNRMother->GetLogicalVolume()->GetSolid();
   goodPoint = history.GetTransform(mdepth).TransformPoint(globalPoint);
   insideCode = motherSolid->Inside(goodPoint);
-  if ( ((insideCode==kOutside)||(insideCode==kSurface))&&exiting )
+  if ( (insideCode==kOutside)||((insideCode==kSurface)&&exiting) )
   {
     // Outside mother -> back up to mother level
     // Locate.. in Navigator will back up one more level
@@ -1065,7 +1065,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
       insideCode = Inside(history.GetVolume(depth),
                           history.GetReplicaNo(depth),
                           repPoint);
-      if ( ((insideCode==kOutside)||(insideCode==kSurface))&&exiting )
+      if ( (insideCode==kOutside)||((insideCode==kSurface)&&exiting) )
       {
         localPoint = goodPoint;
         history.BackLevel(cdepth-depth);
@@ -1084,7 +1084,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
     // of *previous* level - location code in navigator will back up one
     // level [And also manage blocking]
     //
-    if ( ((insideCode==kOutside)||(insideCode==kSurface))&&exiting )
+    if ( (insideCode==kOutside)||((insideCode==kSurface)&&exiting) )
     {
       localPoint = goodPoint;
     }
