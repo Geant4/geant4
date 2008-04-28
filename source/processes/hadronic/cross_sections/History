@@ -16,14 +16,15 @@ code and to keep track of all tags.
 
 28 April 2008 Dennis Wright (hadr-cross-V09-01-02)
 --------------------------------------------------
-- add capability to use element-based cross sections if no isotope-based
-  ones are available.  This is required to get the HP neutron code to 
-  work within the cross section framework introduced in version 9.0.
+- T. Koi added capability to use element-based cross section data 
+  sets if no isotope-based ones are available.  This is required to 
+  get the HP neutron code to work within the cross section framework 
+  introduced in version 9.0.
   Files affected: G4CrossSectionDataStore.hh, .cc.  Added method 
   whichDataSetInCharge().
 
-- G4NeutronInelasticCrossSection.cc : fix bug which returned zero
-  cross section for 3He
+- DHW: G4NeutronInelasticCrossSection.cc : fix bug which returned 
+  zero cross section for 3He
 
 - G4TripathiLightCrossSection::IsApplicable(): bug fix from T. Koi:
   changed theTarget->GetA() to theTarget->GetN()
