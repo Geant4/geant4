@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.18 2008-04-04 05:54:26 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.19 2008-04-28 09:23:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,51 +83,79 @@ public:
   static G4NistManager* Instance();
   ~G4NistManager();
 
-  // Elements
+  // Get G4Element by index
   //
   inline G4Element* GetElement(size_t index);
   
   // Find or build G4Element by atomic number
+  //
   inline G4Element* FindOrBuildElement(G4int Z, G4bool isotopes=true);
   
   // Find or build G4Element by symbol
+  //
   inline G4Element* FindOrBuildElement(const G4String& symb, 
 				       G4bool isotopes=true);
 
-  inline size_t   GetNumberOfElements() const;
-  inline G4int    GetZ(const G4String& symb) const;
+  // Get number of elements
+  //
+  inline size_t GetNumberOfElements() const;
 
-  // Mass in amu
+  // Get atomic number by element symbol
+  //
+  inline G4int GetZ(const G4String& symb) const;
+
+  // Get the mass of the element in amu for the natuaral isotope composition
+  // with electron shell 
+  //
   inline G4double GetAtomicMassAmu(G4int Z) const;
 
-  // Mass in Geant4 units
+  // Get mass of the isotope in Geant4 units without electron shell
+  //
   inline G4double GetIsotopeMass(G4int Z, G4int N) const;
+
+  // Get mass of the isotope in Geant4 units with electron shell
+  //
   inline G4double GetAtomicMass(G4int Z, G4int N) const;
 
-  // Number of isotopes
-  inline G4int    GetNistFirstIsotopeN(G4int Z) const;
-  inline G4int    GetNumberOfNistIsotopes(G4int Z) const;
+  // Get N for the first natural isotope
+  //
+  inline G4int GetNistFirstIsotopeN(G4int Z) const;
 
+  // Get number of natural isotopes
+  //
+  inline G4int GetNumberOfNistIsotopes(G4int Z) const;
+
+  // Get natural isotope abandance
+  //
   inline G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
+  // Print element by Z
+  //
   inline void PrintElement(G4int Z);  
 
+  // Print element from internal DB by symbol, if "all" - print all elements
+  //
   void PrintElement(const G4String&);    
+
+  // Print G4Element by name, if "all" - print all G4Elements
+  //
   void PrintG4Element(const G4String&);  
 
+  // Access to the vector of Geant4 predefined element names 
+  //
   inline const std::vector<G4String>& GetNistElementNames() const;
 
-  // Materials
+  // Get G4Material by index 
   //
   inline G4Material* GetMaterial(size_t index);
   
-  // Find or build a G4Material by name, from the dataBase
+  // Find or build a G4Material by name, from the Geant4 dataBase
   //
   inline G4Material* FindOrBuildMaterial(const G4String& name, 
 					 G4bool isotopes=true,
 					 G4bool warning=false);
   
-  // construct a G4Material from scratch by atome count
+  // Construct a G4Material from scratch by atome count
   // 
   inline G4Material* ConstructNewMaterial(
 			          const G4String& name,
@@ -139,7 +167,7 @@ public:
 				  G4double  temp     = STP_Temperature,  
 				  G4double  pressure = STP_Pressure); 
 				      
-  // construct a G4Material from scratch by fraction mass
+  // Construct a G4Material from scratch by fraction mass
   // 
   inline G4Material* ConstructNewMaterial(
 				  const G4String& name,
@@ -151,7 +179,7 @@ public:
 				  G4double  temp     = STP_Temperature,  
 				  G4double  pressure = STP_Pressure); 
 
-  // construct a gas G4Material from scratch by atome count
+  // Construct a gas G4Material from scratch by atome count
   // 
   inline G4Material* ConstructNewGasMaterial(const G4String& name,
 					     const G4String& nameNist,
@@ -159,20 +187,36 @@ public:
 					     G4double pres, 
 					     G4bool isotopes=true);
 
+  // Get number of G4Materials
+  //
   inline size_t GetNumberOfMaterials();
   
   inline G4int GetVerbose();
 
   void SetVerbose(G4int);
 
+  // Print G4Material by name
+  //
   void PrintG4Material(const G4String&);
 
+  // Print predefined Geant4 materials:
+  // "simple" - only pure materials in basic state (Z = 1, ..., 98)
+  // "compound" - NIST compounds
+  // "hep" - HEP materials and compounds
+  // "all" - all
+  //
   inline void ListMaterials(const G4String&);
 
+  // Access to the list of names of Geant4 predefined materials
+  //
   inline const std::vector<G4String>& GetNistMaterialNames() const;
 
+  // Fast computation of Z^1/3
+  //
   inline G4double GetZ13(G4double Z);
 
+  // Fast computation of log(A)
+  //
   inline G4double GetLOGA(G4double A);
 
 private:

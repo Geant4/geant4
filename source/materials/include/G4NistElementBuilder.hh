@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.13 2007-07-26 18:52:12 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.14 2008-04-28 09:23:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -67,20 +67,33 @@ class G4Element;
 class G4NistElementBuilder
 {
 public:
+
   G4NistElementBuilder(G4int vb);
   ~G4NistElementBuilder();
 
-  G4int    GetZ           (const G4String& symb);
-  G4double GetA           (G4int Z);
+  // Get atomic number by element symbol
+  G4int GetZ(const G4String& symb);
+
+  // Get the mass of the element in amu for the natuaral isotope composition
+  // with electron shell 
+  G4double GetA (G4int Z);
+
+  // Get the mass of the isotope in amu (without electron shell)
   G4double GetIsotopeMass (G4int Z, G4int N);
+
+  // Get the atomic mass of the isotope in amu (with electron shell)
   G4double GetAtomicMass  (G4int Z, G4int N);
 
+  // Get natural isotope abandance
   G4double GetIsotopeAbundance (G4int Z, G4int N);
 
-  G4int    GetNistFirstIsotopeN(G4int Z);
-  G4int    GetNumberOfNistIsotopes(G4int Z);
+  // Get N for the first natural isotope
+  G4int GetNistFirstIsotopeN(G4int Z);
 
-  G4int    GetMaxNumElements(); 
+  // Get number of natural isotopes
+  G4int GetNumberOfNistIsotopes(G4int Z);
+
+  G4int GetMaxNumElements(); 
 
   void SetVerbose   (G4int);
   void PrintElement (G4int Z);
@@ -92,13 +105,14 @@ public:
   G4Element* FindOrBuildElement (const G4String& symb,
 				 G4bool buildIsotopes = true);
 
-  // Return reference to vector of element names 
+  // Access to the vector of Geant4 predefined element names 
   const std::vector<G4String>& GetElementNames() const;
 
 private:
 
   void Initialise();
 
+  // Add G4Element parameters to internal vectors
   void AddElement(const G4String& symbol, G4int Z, G4int nc, const G4int& N,
                   const G4double& A, const G4double& sA, const G4double& W);
 
