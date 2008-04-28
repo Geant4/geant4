@@ -30,6 +30,8 @@
 // 070523 add neglecting doppler broadening on the fly. T. Koi
 // 070613 fix memory leaking by T. Koi
 // 071002 enable cross section dump by T. Koi
+// 080428 change checking point of "neglecting doppler broadening" flag 
+//        from GetCrossSection to BuildPhysicsTable by T. Koi
 //
 #include "G4NeutronHPElasticData.hh"
 #include "G4Neutron.hh"
@@ -48,6 +50,7 @@ G4NeutronHPElasticData::G4NeutronHPElasticData()
 {
 // TKDB
    theCrossSections = 0;
+   onFlightDB = true;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
@@ -64,6 +67,10 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
+
+//080428
+   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) onFlightDB = false;
+
   size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB
    if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
@@ -145,7 +152,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double eKinetic = aP->GetKineticEnergy();
 
   // T. K. 
-  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
+//  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
+//080428
+  if ( !onFlightDB )
   {
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 

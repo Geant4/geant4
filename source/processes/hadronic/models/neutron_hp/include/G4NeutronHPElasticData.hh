@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.10 2008-04-16 23:39:55 tkoi Exp $
+// $Id: G4NeutronHPElasticData.hh,v 1.11 2008-04-28 19:07:53 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
+// 080428 Add bool onFlightDB by T. Koi
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1
@@ -69,6 +70,8 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
    private:
    
    G4PhysicsTable * theCrossSections;
+      G4bool onFlightDB;
+   
 };
 
 #endif
