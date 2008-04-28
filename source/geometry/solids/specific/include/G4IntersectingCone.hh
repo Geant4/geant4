@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.hh,v 1.10 2008-04-28 08:43:50 tnikitin Exp $
+// $Id: G4IntersectingCone.hh,v 1.11 2008-04-28 08:59:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ class G4IntersectingCone
                        //  type 1: r = A + B*z
                        //  type 2: z = A + B*r
 
-    G4double half_kCarTolerance;//half of Surface Thickness
+    G4double half_kCarTolerance;  // half of Surface Thickness
 
     G4int LineHitsCone1( const G4ThreeVector &p, const G4ThreeVector &v,
                                G4double *s1, G4double *s2 );

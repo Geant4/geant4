@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.11 2008-04-28 08:44:11 tnikitin Exp $
+// $Id: G4IntersectingCone.cc,v 1.12 2008-04-28 08:59:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 
 #include "G4IntersectingCone.hh"
 #include "G4GeometryTolerance.hh"
+
 //
 // Constructor
 //
@@ -48,7 +49,8 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
 { 
 
 
-   half_kCarTolerance =0.5* G4GeometryTolerance::GetInstance()->GetSurfaceTolerance(); 
+  half_kCarTolerance = 0.5 * G4GeometryTolerance::GetInstance()
+                             ->GetSurfaceTolerance(); 
   //
   // What type of cone are we?
   //
