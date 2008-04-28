@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.30 2008-04-14 08:50:23 gcosmo Exp $
+// $Id: HepPolyhedron.cc,v 1.31 2008-04-28 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2226,7 +2226,7 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(double ax,
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, 0., twopi, 2, 2, zz, rr, -1, 1); 
+  RotateAroundZ(0, 0., twopi, 2, 2, zz, rr, -1, -1); 
   SetReferences();
 
   delete [] zz;

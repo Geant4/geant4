@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.131 2008-04-14 08:50:35 gcosmo Exp $
+cvs log $Id: History,v 1.132 2008-04-28 16:06:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th April 2008  John Allison  (greps-V09-01-05)
+- HepPolyhedronEllipticalCone: correct visibility of auxiliary edges.
 
 14th April 2008  Tatiana Nikitina  (greps-V09-01-04)
 - Added G4Hype representation to HepPolyhedron and G4Polyhedron.
