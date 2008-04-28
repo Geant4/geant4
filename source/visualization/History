@@ -1,4 +1,4 @@
-$Id: History,v 1.421 2008-04-04 14:28:32 allison Exp $
+$Id: History,v 1.422 2008-04-28 16:22:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+28th April 2008  John Allison  (vis-V09-01-04)
+- visman-V09-01-03: Cosmetic improvements.
+- opengl-V09-01-02: Tidied.
 
 4th April 2008  John Allison  (vis-V09-01-03, needs greps-V09-01-03)
 - Back on HEAD.  Contains vis-V09-01-00.
