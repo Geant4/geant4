@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.18 2008-03-06 18:08:43 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.19 2008-04-28 08:51:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -211,7 +211,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 	   << G4endl;
     return 0;
   } 
+
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
+
   for (G4int i=0; i<nm; i++) {
     G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
     AddElementByAtomCount(Z, nbAtoms[i]);
@@ -239,7 +243,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 	   << G4endl;
     return 0;
   } 
+
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
+
   for (G4int i=0; i<nm; i++) {
     G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
     AddElementByWeightFraction(Z, w[i]);
@@ -417,6 +425,9 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 					G4int ncomp, G4State state, 
 					G4double temp, G4double pres)
 {
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential in eV
+
   if (nCurrent != 0) {
     G4cout << "WARNING: G4NistMaterialBuilder::AddMaterial problem: previous "
 	   << "mixture " << nMaterials << " " << names[nMaterials] 
