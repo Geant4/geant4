@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.26 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.27 2008-04-28 16:19:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,8 +86,7 @@ protected:
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.
   struct PO {
-    PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr), fPickName(0) {}
+    PO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
@@ -96,9 +95,7 @@ protected:
   
   // TO = Transparent Object.
   struct TO {
-    TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr), fPickName(0),
-      fStartTime(-DBL_MAX), fEndTime(DBL_MAX) {}
+    TO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;

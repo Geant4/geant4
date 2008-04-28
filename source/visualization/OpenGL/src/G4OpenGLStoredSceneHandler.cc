@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.37 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.38 2008-04-28 16:19:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,27 @@
 #include "G4Polyhedron.hh"
 #include "G4AttHolder.hh"
 
-G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
-					  const G4String& name):
+G4OpenGLStoredSceneHandler::PO::PO
+(G4int id,
+ const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO
+(G4int id,
+ const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0),
+  fStartTime(-DBL_MAX),
+  fEndTime(DBL_MAX)
+{}
+
+G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
+(G4VGraphicsSystem& system,
+ const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
