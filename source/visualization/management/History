@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2008-04-04 13:48:53 allison Exp $
+$Id: History,v 1.109 2008-04-28 16:15:01 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th April 2008  John Allison  (visman-V09-01-03)
+- G4VisCommandsScene.cc: Improve warning message.
+- G4ViewParameters.hh: Improve commenting for Software Ref. Man.
 
 4th April 2008  John Allison  (visman-V09-01-02)
  - Fixed gcc-4.3.0 compiler warnings.
