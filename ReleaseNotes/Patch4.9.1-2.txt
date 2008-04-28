@@ -66,6 +66,13 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + Added inclusion of <cstdlib> in HepPolyhedron.cc for porting on
       gcc-4.3.0 compiler.
 
+  o Materials:
+    ---------
+    + G4NistMaterialBuilder: using correct dimension for the density in
+      ConstructNewMaterial() methods.
+    + G4Material: improved printout in error conditions by specifying the
+      name of the material affected.
+
   o Particles:
     ---------
     + G4ParticleTable: fixed implementation of methods Remove() and
