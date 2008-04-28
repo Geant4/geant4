@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2008-04-25 09:09:09 gcosmo Exp $
+$Id: History,v 1.140 2008-04-28 09:00:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-Apr-2008, T.Nikitina (geom-specific-V09-01-10)
+- Added kCarTolerance in definition of "low" and "high" cone limits in R
+  and in Z in order to protect against numerical errors. This fixes cases of
+  DistanceToIn(p,v) returning 'kInfinity' when p+t*v cross intersection
+  between two cones.
 
 25-Apr-2008, T.Nikitina (geom-specific-V09-01-09)
 - Added protection against NaN in G4IntersectingCone::LineHitsCone1() in
