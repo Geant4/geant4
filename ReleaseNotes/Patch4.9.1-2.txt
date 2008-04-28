@@ -45,8 +45,12 @@ List of fixes included in this public patch since the public release 9.1.p01:
         compute normal only if specified by flag in input.
       o G4Polyhedra: fixed problem of out-of-bound access to vectors in
         method GetPointOnSurface().
-      o Added protection against NaN in G4IntersectingCone::LineHitsCone1()
+      o G4IntersectingVone: added protection against NaN in LineHitsCone1()
         in case of configurations where a conic section becomes a tube.
+        Added kCarTolerance in definition of "low" and "high" cone limits
+        in R and in Z in order to protect against numerical errors; this
+        fixes cases of DistanceToIn(p,v) returning 'kInfinity' when p+t*v
+        cross intersection between two cones.
       o G4EllipticalCone: removed some debug printouts.
       o G4Hype: refined polyhedron representation for correct visualization
         of the shape.
@@ -82,6 +86,11 @@ List of fixes included in this public patch since the public release 9.1.p01:
       Added method DeleteAllParticles() to remove and delete all particles
       in the list. Addressing problem report #1007.
     + Fixed bugs in G4Iontable::Remove() and G4ShortLivedTable::Remove().
+
+  o Physics Lists:
+    -------------
+    + Fixed deletion using uninitialized pointers in FTF-BIC, for classes
+      HadronPhysicsFTF_BIC, G4FTFBinaryNeutronBuilder and G4LEPNeutronBuilder.
 
   o Electromagnetic Processes:
     -------------------------
