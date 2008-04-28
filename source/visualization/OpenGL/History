@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2008-04-04 13:32:22 allison Exp $
+$Id: History,v 1.113 2008-04-28 16:20:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+28th April 2008  John Allison  (opengl-V09-01-02)
+- G4OpenGLStoredSceneHandler: Tidied constructors of nested classes.
 
 4th April 2008  John Allison  (opengl-V09-01-01)
 - Fixed DBL_MAX problem in 2D drawing:
