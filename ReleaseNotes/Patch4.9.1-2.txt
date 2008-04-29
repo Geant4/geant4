@@ -109,6 +109,16 @@ List of fixes included in this public patch since the public release 9.1.p01:
   o Hadronic Processes:
     ------------------
     + Cleared most compilation warnings detected on gcc-4.3.0.
+    + cross_sections:
+      o G4NeutronInelasticCrossSection: fixed bug which used to return zero
+        cross section for 3He.
+      o G4TripathiLightCrossSection: fixed bug in method IsApplicable() to
+        use GetN() instead of GetA() for target.
+      o Added capability to use element-based cross section data
+        sets if no isotope-based ones are available. This is required to
+        get the HP neutron code to work within the cross section framework
+        introduced in version 9.0. Added internal method to class
+        G4CrossSectionDataStore.
     + models/chiral_inv_phase_space:
       o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
         When run together with elastic, the parameters to sample T were not
@@ -126,6 +136,7 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + models/neutron_hp:
       o Fix against cases of division by zero.
       o Fixed erroneous condition in G4NeutronHPContAngularPar.
+      o Added IsZAApplicable(..) methods to data classes.
     + models/theo_high_energy:
       o Added missing Fermi momentum to quasi elastic scattering. 
 
