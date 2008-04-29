@@ -136,7 +136,9 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + models/neutron_hp:
       o Fix against cases of division by zero.
       o Fixed erroneous condition in G4NeutronHPContAngularPar.
-      o Added IsZAApplicable(..) methods to data classes.
+      o To increase perfomance, checking point of "neglecting doppler
+        broadening" flag is changed from GetCrossSection() method to
+        BuildPhysicsTable().
     + models/theo_high_energy:
       o Added missing Fermi momentum to quasi elastic scattering. 
 
