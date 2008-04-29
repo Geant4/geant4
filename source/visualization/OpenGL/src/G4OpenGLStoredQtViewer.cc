@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.13 2008-03-11 16:31:09 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.14 2008-04-29 16:58:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,14 +92,6 @@ void G4OpenGLStoredQtViewer::Initialise() {
   printf("readyToPaint = true \n");
 #endif
   readyToPaint = true;
-  
-  // First Draw
-  SetView();
-#ifdef GEANT4_QT_DEBUG
-  printf("    ClearView\n");
-#endif
-  ClearView (); //ok, put the background correct
-  FinishView();
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {

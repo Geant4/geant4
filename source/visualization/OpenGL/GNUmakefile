@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2008-01-15 11:05:08 lgarnier Exp $
+# $Id: GNUmakefile,v 1.8 2008-04-29 16:58:04 lgarnier Exp $
 
 name := G4OpenGL
 
@@ -33,4 +33,5 @@ CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 
+include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

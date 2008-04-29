@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.22 2008-03-14 09:42:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.23 2008-04-29 16:58:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,10 +52,10 @@
 #include "G4Qt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
-#include <qapplication.h>
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qprocess.h>
+#include <qapplication.h>
 
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
@@ -310,10 +310,13 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fProcess(NULL)
 {
 
+  // launch Qt if not
+  G4Qt* interactorManager = G4Qt::getInstance ();
+
   initMovieParameters();
 
 #ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::G4OpenGLQtViewer \n");
+  printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
 
@@ -2097,7 +2100,7 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event)
 #if QT_VERSION < 0x040000
   if (event->state() == Qt::NoButton) {
 #else
-  if (event->modifiers() == Qt::NoModifier) {
+  if ((event->modifiers() == Qt::NoModifier) || (event->modifiers() == Qt::KeypadModifier )) {
 #endif
     if (event->key() == Qt::Key_Down) { // go down
       moveScene(0,1,0,false);
