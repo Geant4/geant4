@@ -29,6 +29,9 @@ List of fixes included in this public patch since the public release 9.1.p01:
         for G4VSolid.
       o Added Shrink() and Reserve() methods to G4SmartVoxelNode to be used
         for debugging studies.
+    + navigation:
+      o G4PathFinder: commented out warning and exception in ComputeStep()
+        for steps smaller than minimum threshold.
     + solids/CSG:
       o G4Cons: added protection against NaN in GetPointOnSurface() in the
         case the check is run for Rmax1==Rmax2.
@@ -119,6 +122,10 @@ List of fixes included in this public patch since the public release 9.1.p01:
         get the HP neutron code to work within the cross section framework
         introduced in version 9.0. Added internal method to class
         G4CrossSectionDataStore.
+    + models/cascade:
+      o Added Coulomb barrier in G4EquilibriumEvaporator.
+      o Changed pp, nn total cross section parameterization in
+        G4CascadSpecialFunctions to more closely reflect the PDG values.
     + models/chiral_inv_phase_space:
       o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
         When run together with elastic, the parameters to sample T were not
