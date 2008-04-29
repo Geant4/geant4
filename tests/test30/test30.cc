@@ -470,25 +470,33 @@ int main(int argc, char** argv)
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
 
+    // linear histograms
     G4double mass = part->GetPDGMass();
     G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
 
-    G4double binlog = std::log10(ebinlog);
-    G4int binlog10 = G4int(1.0/binlog);
-    if( binlog10 <= 0) binlog10 = 1;
-    binlog = 1.0/G4double(binlog10);
-    G4int nbinlog = (G4int)(std::log10(10.0*emax/MeV));
-    G4double logmax = G4double(nbinlog);
-    nbinlog++;
-    nbinlog *= binlog10;
-    G4cout << "### Log10 scale from -1 to " << logmax 
-	   << " in " << nbinlog << " bins" << G4endl; 
-
     G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
     G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
     G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
+
+    // logarithmic histograms
+    G4double logmax = 2.0;
+    G4double logmin = -2.0;
+    G4int nbinlog   = 80;
+    if(emax > 100.*MeV) {
+      logmax  = 3.0;
+      logmin  = -1.0;
+      nbinlog = 80;
+    }
+    if(emax > 1000.*MeV) {
+      logmax  = 4.0;
+      logmin  = -1.0;
+      nbinlog = 100;
+    }
+    G4double binlog = (logmax - logmin)/G4double(nbinlog);
+    G4cout << "### Log10 scale from " << logmin << " to " << logmax 
+	   << " in " << nbinlog << " bins" << G4endl; 
 
     if(nameGen == "LElastic" || 
        nameGen == "BertiniElastic" ||
@@ -556,7 +564,7 @@ int main(int argc, char** argv)
 
       // neutron double differencial histograms are active by request
       for(i=nangl; i<13; i++) {histo.activate(27+i, false);}
-
+ 
       histo.add1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
       histo.add1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
       histo.add1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
@@ -573,13 +581,13 @@ int main(int argc, char** argv)
 	histo.activate(40+i, false);
 	histo.activate(45+i, false);
       }
-      histo.add1D("51","E(MeV) neutrons",nbinlog,-1.,logmax);
-      histo.add1D("52","ds/dE for neutrons at theta = 0",nbinlog,-1.,logmax);
-      histo.add1D("53","ds/dE for neutrons at theta = 1",nbinlog,-1.,logmax);
-      histo.add1D("54","ds/dE for neutrons at theta = 2",nbinlog,-1.,logmax);
-      histo.add1D("55","ds/dE for neutrons at theta = 3",nbinlog,-1.,logmax);
-      histo.add1D("56","ds/dE for neutrons at theta = 4",nbinlog,-1.,logmax);
-      histo.add1D("57","ds/dE for neutrons at theta = 5",nbinlog,-1.,logmax);
+      histo.add1D("51","E(MeV) neutrons",nbinlog,logmin,logmax);
+      histo.add1D("52","ds/dE for neutrons at theta = 0",nbinlog,logmin,logmax);
+      histo.add1D("53","ds/dE for neutrons at theta = 1",nbinlog,logmin,logmax);
+      histo.add1D("54","ds/dE for neutrons at theta = 2",nbinlog,logmin,logmax);
+      histo.add1D("55","ds/dE for neutrons at theta = 3",nbinlog,logmin,logmax);
+      histo.add1D("56","ds/dE for neutrons at theta = 4",nbinlog,logmin,logmax);
+      histo.add1D("57","ds/dE for neutrons at theta = 5",nbinlog,logmin,logmax);
 
       // neutron double differencial histograms are active by request
       for(i=nangl; i<6; i++) {histo.activate(51+i, false);}
@@ -960,18 +968,20 @@ int main(int argc, char** argv)
 	    histo.fill(1,2.0, 1.0);
 	    histo.fill(22,e/MeV, factor);
             G4double ee = std::log10(e/MeV);
-            G4int    nbb= (G4int)((ee + 1.0)/binlog);
-            G4double e1 = binlog*nbb;
-            G4double e2 = e1 + binlog;
-            e1 = std::pow(10., e1);
-            e2 = std::pow(10., e2) - e1;
-            G4double f  = factor*bine/e2;
-	    histo.fill(50,ee, f);
-	    if(e >= elim) histo.fill(25,cost, factora);
+	    G4double e2 = ee;
+            G4bool islog= false;
+            if(ee >= logmin && ee <= logmax) { 
+	      islog = true;
+	      G4int nbb = G4int(((ee - logmin)/binlog));
+              G4double e1 = logmin + binlog*nbb;
+	      e2 = std::pow(10.,e1 + binlog) - std::pow(10.,e1);
+	      histo.fill(50, ee, factor*bine/e2);
+	    } 
+	    if(e >= elim) histo.fill(25, cost, factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 histo.fill(27+kk,e/MeV, cng[kk]);
-                if(kk < 6) histo.fill(51+kk,ee, cng[kk]*bind/e2);
+                if(islog && kk < 6) histo.fill(51+kk,ee,cng[kk]*bind/e2);
                 break;
 	      }
 	    }
