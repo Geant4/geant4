@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.69 2008-04-04 13:48:53 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.70 2008-04-30 10:07:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -404,7 +404,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   // Need to handle the possibility that the names contain embedded
   // blanks within quotation marks...
   char c;
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {originalName += c;}
   }
@@ -426,7 +426,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   originalName = originalViewer->GetName();  // Ensures long name.
 
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {cloneName += c;}
   }
@@ -563,7 +563,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   // Now need to handle the possibility that the second string
   // contains embedded blanks within quotation marks...
   char c;
-  while (is.get(c) && c == ' ');
+  while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {newName += c;}
   }
