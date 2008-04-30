@@ -167,10 +167,6 @@ List of fixes included in this public patch since the public release 9.1.p01:
       in order to fix problem of non-assigned process for shortlived particle
       decay detected in CMS.
 
-  o Transportation:
-    --------------
-    + 
-
   o Examples:
     --------
     + advanced/underground_physics:
