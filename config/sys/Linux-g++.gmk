@@ -64,9 +64,14 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
-  ifndef QTLIBS
+  ifndef QTGLLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
     QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
+    QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
+  endif
+  ifndef QTLIBS
+    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
+    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtSql -lQtXml
     QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
   ifndef XAWFLAGS

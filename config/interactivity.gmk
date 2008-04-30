@@ -32,6 +32,12 @@ ifdef LOAD_QT
   INTYLIBS += $(QTLIBS)
 endif
 
+########################### Open GL Qt ###############################
+# Should be before X11.
+ifdef LOAD_GLQT
+  INTYLIBS += $(GLQTLIBS)
+endif
+
 ########################### OpenGL ###############################
 
 ifdef INC_GL

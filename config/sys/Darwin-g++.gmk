@@ -79,8 +79,15 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
     QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
-    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
+    QT4LIBS    += -framework QtSql -framework QtXml
+    QTLIBS     := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
+  endif
+
+  ifndef GLQTLIBS
+    QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
+    QT4LIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
+    QT4LIBS    += -D GLQTLIBS -framework QtOpenGL -framework QtSql -framework QtXml -D ENDOF_GLQTLIBS
+    GLQTLIBS     := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
 
   define build-granular-shared-lib
