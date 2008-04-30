@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 Apr 2008 Dennis Wright (hadr-casc-V09-csbug)
+-----------------------------------------------
+- fix cross section bug in G4CascadSpecialFunctions that returned
+  low or zero total cross sections for pi-p, pi+n, np, and pi0 
+  interactions
+
 29 Apr 2008 Dennis Wright (hadr-casc-V09-01-01)
 -----------------------------------------------
 - bring tag hadr-casc-V09-01-coula to HEAD, make official tag
