@@ -1,0 +1,283 @@
+
+                       geant4-09-01-ref-04
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o New multiple-scattering model G4WentzelVIModel used in new muon
+   physics processes. Several fixes and tunings to G4UrbanMscModel2 variant.
+ o Added Coulomb barrier to Bertini cascade hadronic model.
+ o Added missing Fermi momentum to quasi elastic scattering.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 9.1.p02
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-03           (*)
+------
+- Replaced gets() by safer fgets() in liblist.c.
+- Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
+  changed compilation option "-mp" to more performant "-fp_model precise".
+- interactivity.gmk: moved Qt setup before X11.
+
+geometry/magneticfield                           field-V09-01-01            (*)
+----------------------
+- Fixed 'unused' non-initialized values of dydx in G4EqMagElectricField
+  and G4EqEMFieldWithSpin constructors.
+
+geometry/navigation                              geomnav-V09-01-04          (*)
+-------------------
+- Corrected condition for wrong evaluation order in G4ReplicaNavigation
+  introduced by mistake in the previous tag.
+- G4PathFinder: commented out warning and exception in ComputeStep()
+  for step smaller than minimum threshold.
+
+geometry/solids/CSG                              geom-csg-V09-01-02         (*)
+-------------------
+- G4Trap: corrections for arithmetic operations in 8-point constructor.
+  Addressing problem report #934.
+
+geometry/solids/specific                         geom-specific-V09-01-10    (*)
+------------------------
+- G4IntersectingCone: added kCarTolerance in definition of "low" and "high"
+  cone limits in R and in Z in order to protect against numerical errors.
+  This fixes cases of DistanceToIn(p,v) returning 'kInfinity' when p+t*v
+  crosses intersection between two cones.
+  Added protection against NaN in LineHitsCone1() in case of configuration
+  where a conic section becomes a tube.
+- G4Hype: refined polyhedron representation for correct visualization.
+- G4EllipticalCone: removed some debug printouts.
+
+global                                           global-V09-01-06
+------
+- G4LPhysicsFreeVector: corrected use of GetValue() to adopt implementation
+  available from the base class.
+- G4PhysicsVector: introduced cubic spline interpolation, optionally
+  selectable. Optimised implementation of GetValue() method.
+- Changed date for release 9.1.p02 in G4Version.hh.                         (*)
+
+graphics_reps                                    greps-V09-01-05
+-------------
+- Added G4Hype representation to HepPolyhedron and G4Polyhedron.            (*)
+- HepPolyhedronEllipticalCone: correct visibility of auxiliary edges.
+
+materials                                        materials-V09-01-04
+---------
+- Improved comments to code in G4NistManager, G4NistMaterialBuilder and
+  G4NistElementBuilder classes.
+
+persistency/gdml                                 gdml-V09-01-03
+----------------
+- Modified writing out of volumes to happen in recursive way.
+- Improved algorithm for sorting logical volumes in the writer.
+- Fixed referenced solid in volume in case of displacements/reflections.
+- Added text output to console to inform of progress during processing.
+- Corrected some function names to have all starting with capital letter.
+
+physics_lists                                    phys-lists-V09-01-05
+-------------
+- New helper class G4PhysListFactory for building Physics Lists.
+- Added D and B mesons to all EM bulders G4EmStandardPhysics*.
+- G4EmStandardPhysics_option2,3: using spline interpolation for Physics Tables.
+- QBBC: fixed compilation warnings.
+
+processes/biasing                                procbiasing-V09-01-02
+-----------------
+- Archived class G4CellFinder and associated dependency in classes
+  G4WeigthCutOffProcess and G4WeightCutOffConfigurator; was a hang-up from
+  previous implementation which was erroneously left.
+  This fixes use of 'WeightCutOff' now corerctly working in a mass geometry.
+
+processes/decay                                  decay-V09-01-02
+---------------
+- G4DecayWithSpin: modified DecayIt() to allow spin precession also for
+  EM fields.
+- G4Decay: added protection to properly handle shortlived particles with    (*)
+  finite pre-assigned proper time.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-01-02
+------------------------------------
+- Removed static const in G4hBremsstrahlungModel.
+
+processes/electromagnetic/lowenergy              emlowen-V09-01-10
+-----------------------------------
+- Fix in Doppler broadening, G4LowEnergyCompton.
+  Attempt to fix floating point exceptions.
+
+processes/electromagnetic/muons                  emmuons-V09-01-09
+-------------------------------
+- G4MuMultipleScattering: using G4WentzelVIModel model and build table for
+  particles with mass less than 1 GeV.
+- G4MuBremsstrahlungModel: instead of static const use members of a class,
+  this allows to reuse the model for different particle types.
+
+processes/electromagnetic/standard               emstand-V09-01-13
+----------------------------------
+- Introducing new model of multiple scattering: G4WentzelVIModel.
+- G4WaterStopping: using spline interpolation.
+- G4hMultipleScattering: do not build tables for particles with mass greater
+  than 1 GeV.
+- G4ionIonisation, G4ionGasIonisation: updated usage of high order corrections.
+- G4CoulombScattering, G4eCoulombScatteringModel: use new parameter
+  'polarAngleLimit', use SelectAtomRandomly() method and fixed bug for
+  compounds.
+- G4UrbanMscModel, G4UrbanMscModel90: fixed assymetry in transverse         (*)
+  displacement.
+- G4UrbanMscModel2:
+  o Simplification of step limitation in ComputeTruePathLengthLimit().
+  o Reorganization of SampleCosineTheta() and new method SimpleScattering()
+    used if the relative energy loss or theta0 is too big.
+  o Tuned correction factor in ComputeTheta0().
+  o Exponent 'c' of the "tail" model function is not equal to 2 any more,
+    value of 'c' has been extracted from some e- scattering data.
+  o Step limitation in ComputeTruePathLengthLimit() has been simplified
+    further and some data members removed.
+
+processes/electromagnetic/utils                  emutils-V09-01-12
+-------------------------------
+- G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4EnergyLossMessenger
+  G4EmProcessOptions: introduced 'polarAngleLimit' parameter and Get/Set
+  methods for single and multiple scattering models.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+  G4LossTableBuilder: introduced spline interpolation.
+- G4ionEffectiveCharge: fixed initialisation at first event.
+- G4EmCorrections: review and fix computation of high order corrections
+  for ions.
+- G4EmCalculator: updated computations for ions.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-01-02)                                     (*)
+  o G4NeutronInelasticCrossSection: fixed bug which used to return zero
+    cross section for 3He.
+  o G4TripathiLightCrossSection: fixed bug in method IsApplicable() to
+    use GetN() instead of GetA() for target.
+  o Added capability to use element-based cross section data
+    sets if no isotope-based ones are available. This is required to
+    get the HP neutron code to work within the cross section framework
+    introduced in version 9.0. Added internal method to class
+    G4CrossSectionDataStore.
+  o G4GlauberGribovCrossSection, G4HadronNucleonXsc: put parethesis
+    around && in || in order to fix gcc-4.3.0 compiler warnings.
+- models/cascade (hadr-casc-V09-01-01)                                      (*)
+  o Added Coulomb barrier in G4EquilibriumEvaporator.
+  o Changed pp, nn total cross section parameterization in
+    G4CascadSpecialFunctions to more closely reflect the PDG values.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-01-04)            (*)
+  o Fixed compilation warnings on gcc-4.3.0.
+- models/coherent_elastic (hadr-cohe-V09-01-02)                             (*)
+  o G4HadronElastic: added extra protection against precision lost
+    when projectile almost lost kinetic energy; set 'lowestEnergyLimit'
+    to be 1.e-6*eV (was 0.0).
+- models/neutron_hp (hadr-hpn-V09-01-05)                                    (*)
+  o Fix against cases of division by zero.
+  o To increase performance, checking point of "neglecting doppler
+    broadening" flag is changed from GetCrossSection() method to
+    BuildPhysicsTable().
+- model/parton_string/gqsm (hadr-qgsm-V09-01-00)                            (*)
+  o Fixed compilation warnings on gcc-4.3.0 in G4QGSMSplittableHadron.
+- models/rpg (hadr-rpg-V09-01-01)
+  o G4RPGInelastic: removed Rotate() method, fixed K0 ID problem.
+  o G4RPGFragmentation: fixed energy non-conservation problem.
+  o G4RPGReaction: added GenerateNBodyEventT() method, fixed energy
+    non-conservation problem in method AddBlackTrackParticles().
+  o G4RPGProtonInelastic, G4RPGNeutronInelastic, G4RPGPiPlusInelastic,
+    G4RPGPiMinusInelastic: removed quasi-elastic flag, removed MeV units.
+  o Fixed compilation warnings on gcc-4.3.0.
+- models/theo_high_energy (had-theo-HE-V09-01-01)                           (*)
+  o Added missing Fermi momentum to quasi elastic scattering.
+- models/util (hadr-mod-util-V09-01-00)                                     (*)
+  o Fixed compilation warnings on gcc-4.3.0 in G4Fragment.
+- stopping (hadr-stopping-V09-01-00)                                        (*)
+  o Fixed compilation warnings on gcc-4.3.0 in G4NeutronCaptureAtRest.
+
+run                                              run-V09-01-00              (*)
+---
+- Added G4Transportation process to short-lived particles in
+  G4VUserPhysicsList in order to fix the problem found for infinitesimal
+  but non-zero decay length, detected by CMS.
+
+visualization                                    vis-V09-01-05
+-------------
+- management:
+  o Fixed gcc-4.3.0 compiler warnings.
+  o Cosmetic improvements.
+- OpenGL:
+  o Fixed gcc-4.3.0 compiler warnings.
+  o Fixed DBL_MAX problem in 2D drawing.
+  o A lot of Qt development.
+- OpenInventor:
+  o Fixed most gcc-4.3.0 compiler warnings.
+- Raytracer:
+  o Fixed gcc-4.3.0 compiler warnings.
+
+examples                                         examples-V09-01-04
+--------
+- Updated reference outputs.
+- advanced/underground_physics (DMX-V09-01-00)                              (*)
+  o Fixed mis-sized arrays 'ring_phys_gas' and 'ring_phys_liq';
+    both were less than the utilized size.
+- extended/electromagnetic/TestEm1 (testem1-V09-01-01)
+  o PhysListEmStandard: added G4eMultipleScattering; completed EmOptions.
+- extended/electromagnetic/TestEm2 (testem2-V09-01-02)
+  o PhysicsList: added emstandard_opt2.
+  o PhysListEmStandard: use eMultipleScattering and hMultipleScattering.
+- extended/electromagnetic/TestEm3 (testem3-V09-01-03)
+  o PhysicsList: added emstandard_opt3.
+  o PhysListEmStandard: added G4eMultipleScattering; completed EmOptions.
+  o SteppingAction: suppressed reference to G4EmSaturation.
+  o HistoManager: redefined 'binEdge' in saveAscii().
+- extended/electromagnetic/TestEm4 (testem4-V09-01-00)
+  o PhysicsList: replaced G4MultipleScattering by G4eMultipleScattering.
+- extended/electromagnetic/TestEm5 (testem5-V09-01-03)
+  o PhysicsList: added emstandard_opt3.
+  o PhysListEmStandard: replaced G4MultipleScattering by G4eMultipleScattering.
+  o HistoManager: redefined 'binEdge' in saveAscii().
+- extended/electromagnetic/TestEm7 (testem7-V09-01-05)
+  o Added spline interpolation to physics tables.
+  o DetectorConstruction: more flexibility to change parameters between runs.
+  o RunAction: suppressed warning in FillHisto().
+- extended/electromagnetic/TestEm9 (testem9-V09-01-02)
+  o PhysListEmStandard: replaced G4MultipleScattering by G4eMultipleScattering;
+    completed EmOptions.
+  o Fixed problem of geometry/cut modification between runs.
+- extended/electromagnetic/TestEm11 (testem11-V09-01-01)
+- extended/electromagnetic/TestEm12 (testem12-V09-01-02)
+- extended/electromagnetic/TestEm15 (testem15-V09-01-01)
+  o PhysListEmStandard: replace G4MultipleScattering by G4eMultipleScattering.
+  o HistoManager: redefined 'binEdge' in saveAscii().
+- extended/electromagnetic/TestEm17 (testem17-V09-01-01)
+  o Reduced number of string comparisons (save of 10% in CPU time).
+- extended/electromagnetic/TestEm18 (testem18-V09-01-01)
+  o HistoManager: redefined 'binEdge' in saveAscii().
+- extended/gdml (exgdml-V09-01-01)
+  o Fixed function calls in main() to follow convention of using first
+    capital letter.
+  o Added gdml files featuring replicas, division volumes and matrices.
+  o General polishing and new convention for running:
+     load_gdml <input_gdml_file> <output_gdml file>
+    Input file is mandatory, output file is optional.
+  o Displays usage instructions and complains in case of unnecessary arguments.
+- extended/medical/fanoCavity (fano-V09-01-00)
+- extended/medical/fanoCavity2 (fano2-V09-01-00)
+  o PhysicsList: replaced G4MultipleScattering by G4eMultipleScattering
+    allowing to use alternative G4MscUrbanModel2.
+- novice/N03 (exampleN03-V09-01-01)
+  o PhysicsList: replaced G4MultipleScattering by G4eMultipleScattering
+  o Updated README.
+
+tests                                            tests-V09-01-04
+-----
+- Updated reference outputs and tools.
+- test33 (test33-V09-01-00)
+  o Fixed implementation of parallel geometry.
+  o Increased importance sampling geometry to be coincident with world volume;
+    this removes the warning from the process as the weight doesn't change.
+  o Removed scaling factors.
+  o CoupledTransportation can be forced to be used with the MassGeometry
+    using MassGeo_TimedApp_coupled.mac.
+- test37 (test37-V09-01-00)
+- test41 (test41-V09-01-00)
+  o Use spline interpolation and 'polarAngleLimit'.
