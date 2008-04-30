@@ -101,8 +101,9 @@ List of fixes included in this public patch since the public release 9.1.p01:
       o G4UrbanMscModel90, G4UrbanMscModel: fixed asymmetry of lateral
         displacement.
       o G4ionIonisation: adopt 'linLossLimit' 0.15 as it was originally in 9.1.
-      o G4IonFluctuations: fixed discontinuity of width of the energy loss for
-        small velocities in very long alpha events.
+      o G4IonFluctuations: fixed discontinuity of width correction factor 
+        for small velocities and added a protection to its value 
+        (factor>1), which fixes very long alpha events.
     + Utils:
       o G4EmCorrections: set finite size correction to zero (provides flat
         distribution of vertex detector response for high energy hadrons).
@@ -143,7 +144,7 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + models/neutron_hp:
       o Fix against cases of division by zero.
       o Fixed erroneous condition in G4NeutronHPContAngularPar.
-      o To increase perfomance, checking point of "neglecting doppler
+      o To increase performance, checking point of "neglecting doppler
         broadening" flag is changed from GetCrossSection() method to
         BuildPhysicsTable().
     + models/theo_high_energy:
