@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2008-03-10 17:03:16 lgarnier Exp $
+$Id: History,v 1.96 2008-04-30 10:01:41 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th April, Laurent Garnier
+ - Include moc config in GNUmakefile
+
 10th March, Laurent Garnier
  - Improvments for layout in Qt driver for Qt3
 

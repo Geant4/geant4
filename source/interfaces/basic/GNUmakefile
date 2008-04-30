@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2008-01-15 11:04:26 lgarnier Exp $
+# $Id: GNUmakefile,v 1.6 2008-04-30 10:00:14 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/basic library.  John Allison, 6/7/98.
 
@@ -19,5 +19,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 
+include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk
 
