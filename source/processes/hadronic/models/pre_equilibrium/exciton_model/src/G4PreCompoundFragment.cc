@@ -25,6 +25,8 @@
 //
 //
 // by V. Lara
+//
+//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed (NOW implicitely included through cross sections). Changes in integration limits.
  
 #include "G4PreCompoundFragment.hh"
 
@@ -37,9 +39,8 @@ G4PreCompoundFragment(const G4PreCompoundFragment &right) :
 G4PreCompoundFragment::
 G4PreCompoundFragment(const G4double anA,
 		      const G4double aZ, 
-		      G4VCoulombBarrier* aCoulombBarrier,
 		      const G4String & aName):
-  G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName)
+  G4VPreCompoundFragment(anA,aZ,aName)
 {}
 
 
@@ -70,22 +71,18 @@ G4int G4PreCompoundFragment::operator!=(const G4PreCompoundFragment & right) con
 G4double G4PreCompoundFragment::
 CalcEmissionProbability(const G4Fragment & aFragment)
 {
-  if (GetEnergyThreshold() <= 0.0) 
+if (GetMaximalKineticEnergy() <= 0.0) 
     {
       theEmissionProbability = 0.0;
       return 0.0;
   }    
-  // Coulomb barrier is the lower limit 
-  // of integration over kinetic energy
-  G4double LowerLimit = theCoulombBarrier;
-  
-  // Excitation energy of nucleus after fragment emission is the upper limit
-  // of integration over kinetic energy
+
+  G4double LowerLimit = 0.;
+// Excitation energy of nucleus after fragment emission is the upper limit of integration over kinetic energy
   G4double UpperLimit = this->GetMaximalKineticEnergy();
   
   theEmissionProbability = 
     IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
-  
   return theEmissionProbability;
 }
 
@@ -129,7 +126,6 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
       Total += w[i]*ProbabilityDistributionFunction(KineticE, aFragment);
     }
   Total  *= (Up-Low)/2.0;
-
   return Total;
 }
 
@@ -139,19 +135,13 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
 G4double G4PreCompoundFragment::
 GetKineticEnergy(const G4Fragment & aFragment) 
 {
-  G4double V = this->GetCoulombBarrier();
-  G4double Tmax =  this->GetMaximalKineticEnergy() - V;
-  
+  G4double Tmax =  this->GetMaximalKineticEnergy() ;  
   G4double T(0.0);
   G4double NormalizedProbability(1.0);
   do 
     {
-      T = V + G4UniformRand()*Tmax;
-      NormalizedProbability = this->ProbabilityDistributionFunction(T,aFragment)/
-	this->GetEmissionProbability();
-      
-    } 
-  while (G4UniformRand() > NormalizedProbability);
-  
+      T = G4UniformRand()*Tmax;
+      NormalizedProbability = this->ProbabilityDistributionFunction(T,aFragment)/this->GetEmissionProbability();      
+    }   while (G4UniformRand() > NormalizedProbability);  
   return T;
 }

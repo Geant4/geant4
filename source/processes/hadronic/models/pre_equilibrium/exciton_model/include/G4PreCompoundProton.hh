@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.hh,v 1.7 2007-10-01 10:42:00 ahoward Exp $
+// $Id: G4PreCompoundProton.hh,v 1.8 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//
+//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed Coulomb barrier, GetAlpha and GetBeta methods
 
 #ifndef G4PreCompoundProton_h
 #define G4PreCompoundProton_h 1
@@ -38,14 +40,11 @@
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
 
-#include "G4ProtonCoulombBarrier.hh"
-
-
 class G4PreCompoundProton : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundProton():G4PreCompoundNucleon(1,1,&theProtonCoulombBarrier,"Proton") {}
+  G4PreCompoundProton():G4PreCompoundNucleon(1,1,"Proton") {}
 
   // copy constructor
   G4PreCompoundProton(const G4PreCompoundProton &right): G4PreCompoundNucleon(right) {}
@@ -81,44 +80,19 @@ public:
   
 private:
 
-// added Rj method according to literature and JMQ - formula from Jose Quesada
+//JMQ (Sep. 07) combinatorial factor Rj
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
   {
-    G4double rj = 1.0;
-    if(NumberParticles != 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
+    G4double rj = 0.0;
+    if(NumberParticles > 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
     return rj;
   }
 
-
-  virtual G4double GetAlpha()
-  {
-    G4double aZ = static_cast<G4double>(GetRestZ());
-    G4double C = 0.0;
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-      }
-    return 1.0 + C;
-  }
-
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
   
   virtual G4bool IsItPossible(const G4Fragment& aFragment)
   {
     return (aFragment.GetNumberOfCharged() >= 1);
   }
-  
-  
-private:
-  
-  G4ProtonCoulombBarrier theProtonCoulombBarrier;
   
 };
 

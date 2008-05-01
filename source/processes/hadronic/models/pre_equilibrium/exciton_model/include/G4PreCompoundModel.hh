@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.3 2006-06-29 20:58:26 gunter Exp $
+// $Id: G4PreCompoundModel.hh,v 1.4 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -49,6 +49,12 @@
 #include "G4Fragment.hh"
 #include "Randomize.hh"
 
+
+#include "G4DynamicParticle.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 
 //#define debug
 //#define verbose
@@ -92,6 +98,8 @@ private:
 
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
 				  G4ReactionProductVector * theResult) const;
+
+private:
 
 #ifdef debug				  
   void CheckConservation(const G4Fragment & theInitialState,

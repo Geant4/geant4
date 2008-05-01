@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundDeuteron.hh,v 1.7 2007-10-01 10:41:59 ahoward Exp $
+// $Id: G4PreCompoundDeuteron.hh,v 1.8 2008-05-01 22:06:13 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//
+//
+//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed Coulomb barrier , GetAlpha and GetBeta methods
 
 #ifndef G4PreCompoundDeuteron_h
 #define G4PreCompoundDeuteron_h 1
@@ -36,14 +39,13 @@
 #include "G4ReactionProduct.hh"
 #include "G4Deuteron.hh"
 
-#include "G4DeuteronCoulombBarrier.hh"
 
 
 class G4PreCompoundDeuteron : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundDeuteron():G4PreCompoundIon(2,1,&theDeuteronCoulombBarrier,"Deuteron") {}
+  G4PreCompoundDeuteron():G4PreCompoundIon(2,1,"Deuteron") {}
 
   // copy constructor
   G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right): G4PreCompoundIon(right) {}
@@ -79,38 +81,19 @@ public:
   
 private:
 
-// added Rj method according to literature and JMQ - formula from Jose Quesada
+ //JMQ (Sep. 07) combinatorial factor Rj
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
   {
-    G4double rj = 1.0;
+    G4double rj = 0.0;
     G4double denominator = NumberParticles*(NumberParticles-1);
-    if(denominator != 0) rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator); //JMQ re-corrected 23/8/07
-    //    return static_cast<G4double>(NumberCharged*(NumberCharged-1))/static_cast<G4double>(NumberParticles*(NumberParticles-1));
+    if(NumberCharged >= 1 && (NumberParticles-NumberCharged) >= 1) rj = 2.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator); //JMQ re-recorrected 03/10/07
+ 
 
     return rj;
   }
 
 
 
-  virtual G4double GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-      }
-    return 1.0 + C/2.0;
-  }
-    
-  virtual G4double GetBeta()
-  {
-    return -GetCoulombBarrier();
-  }
 
   virtual G4double FactorialFactor(const G4double N, const G4double P)
   {
@@ -121,9 +104,6 @@ private:
   {
     return 16.0/A;
   }    
-private:
-  
-  G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
 
 };
 

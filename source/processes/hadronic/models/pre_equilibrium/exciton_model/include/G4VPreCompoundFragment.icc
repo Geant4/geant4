@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.4 2006-08-20 01:07:40 dennis Exp $
+// $Id: G4VPreCompoundFragment.icc,v 1.5 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
-
+//
+//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  (NOW implicitely included through cross sections)
+// because of inheritance (just in case..) by HETC classes. They are not activeted by default.
 
 inline G4double G4VPreCompoundFragment::GetA() const 
 { 

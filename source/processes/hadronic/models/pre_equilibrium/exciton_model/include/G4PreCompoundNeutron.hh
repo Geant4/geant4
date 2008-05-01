@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.7 2007-10-01 10:42:00 ahoward Exp $
+// $Id: G4PreCompoundNeutron.hh,v 1.8 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//
+//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed Coulomb barrier , GetAlpha and GetBeta methods
 
 
 #ifndef G4PreCompoundNeutron_h
@@ -39,14 +41,13 @@
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
 
-#include "G4NeutronCoulombBarrier.hh"
 
 
 class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulomBarrier,"Neutron") {}
+  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,"Neutron") {}
 
   // copy constructor
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4PreCompoundNucleon(right) {}
@@ -81,35 +82,19 @@ public:
   
 private:
 
-// added Rj method according to literature and JMQ - formula from Jose Quesada
+//JMQ (Sep. 07) combinatorial factor Rj
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
   {
-    G4double rj = 1.0;
-    if(NumberParticles != 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
+    G4double rj = 0.0;
+    if(NumberParticles > 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
     return rj;
   }
-
-
-  virtual G4double GetAlpha()
-  {
-    return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
-  }
-  
-  virtual G4double GetBeta() 
-  {
-    return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
-  }
-  
+ 
   virtual G4bool IsItPossible(const G4Fragment& aFragment)
   {
     return ((aFragment.GetNumberOfParticles()-aFragment.GetNumberOfCharged()) >= 1);  
   }
   
-
-private:
-  
-  G4NeutronCoulombBarrier theNeutronCoulomBarrier;
-
 };
 
 #endif

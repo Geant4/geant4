@@ -162,19 +162,34 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // Update nucleus parameters:
   // --------------------------
+//JMQ 23-04-08-MANANA-1 lo comento (se me habia olvidado)
+//JMQ el 13-04-08 vuelvo a la carga .... 
+//JMQ:21-01-08-MANANA-1 test por el problema de hadronic exception (mas cargadas que particulas)
+//G4cout <<"Particulas inicial="<<aFragment.GetNumberOfParticles()<<G4endl;
+//G4cout <<"Cargadas   inicial="<<aFragment.GetNumberOfCharged()<<G4endl;
+//G4cout <<"Emision de Preequilibrio: "<<G4endl;
+//G4cout<<" A del nucleo padre= "<<aFragment.GetA()<<"Aeject="<<theFragment->GetA()<<"  Zeject="<<theFragment->GetZ()<<G4endl;
+//G4cout <<"Z  a emitir="<<theFragment->GetZ()<<G4endl;
+///////////
+
   // Number of excitons
   aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
 				 static_cast<G4int>(theFragment->GetA()));
   // Number of charges
   aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
 			       static_cast<G4int>(theFragment->GetZ()));
+//JMQ:21-01-08-MANANA-1
+//G4cout << "¿¿¿SALE???"<<G4endl;
     
   // Atomic number
   aFragment.SetA(theFragment->GetRestA());
     
   // Charge
   aFragment.SetZ(theFragment->GetRestZ());
-    
+
+//JMQ 23-04-08-MANANA-1 lo comento
+//JMQ 13-04-08
+// G4cout<<" Arest= "<<aFragment.GetA()<< " Zrest= "<<aFragment.GetZ() <<G4endl;   
     
   // Perform Lorentz boosts
   RestMomentum.boost(aFragment.GetMomentum().boostVector());

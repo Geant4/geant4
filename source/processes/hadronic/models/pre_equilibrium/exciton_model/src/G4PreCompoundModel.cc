@@ -24,15 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.11 2007-10-11 14:19:36 ahoward Exp $
+// $Id: G4PreCompoundModel.cc,v 1.12 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//
+//J. M. Quesada (Apr.08). Several changes. Soft cut-off switched off.
 
 #include "G4PreCompoundModel.hh"
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundTransitions.hh"
 #include "G4GNASHTransitions.hh"
+#include "G4ParticleDefinition.hh"
 
 
 #ifdef PRECOMPOUND_TEST
@@ -191,40 +194,46 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     // Initialize fragment according with the nucleus parameters
     aEmission.Initialize(aFragment);
 
-    // Equilibrium exciton number
-    //    G4EvaporationLevelDensityParameter theLDP;
-    //    G4double g = (6.0/pi2)*aFragment.GetA()*
-    //      theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),
-    //				   aFragment.GetExcitationEnergy());
+ 
     
     G4double g = (6.0/pi2)*aFragment.GetA()*
       G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-    G4int EquilibriumExcitonNumber = static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())
-                                                        + 0.5);
-    
-    // Loop for transitions, it is performed while there are preequilibrium transitions.
+
+
+
+
+    G4int EquilibriumExcitonNumber = static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())+ 0.5);
+
+// J. M. Quesada (Jan. 08)  equilibrium hole number could be used as preeq.- evap. delimiter (IAEA report)
+//    G4int EquilibriumHoleNumber = static_cast<G4int>(0.2*std::sqrt(g*aFragment.GetExcitationEnergy())+ 0.5);
+
+// Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
     do 
       {
         G4bool go_ahead = false;
-        G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
-        if (test < EquilibriumExcitonNumber)
+// soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
+//       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
+     G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
+
+        if (test < EquilibriumExcitonNumber) 
+//        if (test < EquilibriumHoleNumber)
           {
-            test /= static_cast<G4double>(EquilibriumExcitonNumber);
+            test /= static_cast<G4double>(EquilibriumExcitonNumber); 
+//           test /= static_cast<G4double>(EquilibriumHoleNumber);
             test -= 1.0;
             test = test*test;
             test /= 0.32;
             test = 1.0 - std::exp(-test);
             go_ahead = (G4UniformRand() < test);
+//
+//J. M. Quesada (Apr. 08): soft-cutoff switched off
+            go_ahead=true;
           }
+
       
         if (go_ahead &&  aFragment.GetA() > 4)
-	  {
-	    //  	if (aFragment.GetNumberOfParticles() < 1) {
-	    //  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
-	    //  	  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()+1);       
-	    //  	}
-				
+	  {				
 	    G4double TotalEmissionProbability = aEmission.GetTotalProbability(aFragment);
       	
 	    // Check if number of excitons is greater than 0
@@ -252,8 +261,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	    if (G4UniformRand() > TotalEmissionProbability/TotalProbability) 
 	      {
 		// It will be transition to state with a new number of excitons
-		ThereIsTransition = true;
-		
+		ThereIsTransition = true;		
 		// Perform the transition
 		aFragment = aTransition->PerformTransition(aFragment);
 	      } 
@@ -261,8 +269,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	      {
 		// It will be fragment emission
 		ThereIsTransition = false;
-
-		// Perform the emission and Add emitted fragment to Result
 		Result->push_back(aEmission.PerformEmission(aFragment));
 	      }
 	  } 
@@ -352,3 +358,5 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
 }
 
 #endif
+
+

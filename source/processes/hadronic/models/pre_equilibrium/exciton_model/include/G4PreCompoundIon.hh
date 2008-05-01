@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 // by V. Lara
+//
+//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed.(NOW implicitely included through cross sections). Fixed bugs . New cross sections and combinatorial factor.
+
 
 #ifndef G4PreCompoundIon_h
 #define G4PreCompoundIon_h 1
@@ -45,9 +48,8 @@ public:
   // constructor  
   G4PreCompoundIon(const G4double anA, 
 		   const G4double aZ, 
-		   G4VCoulombBarrier* aCoulombBarrier,
 		   const G4String & aName): 
-    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
+    G4PreCompoundFragment(anA,aZ,aName) {}
     
   virtual ~G4PreCompoundIon() {}
     
@@ -71,7 +73,7 @@ public:
     
   virtual G4double ProbabilityDistributionFunction(const G4double eKin,
 						   const G4Fragment& aFragment);
-
+  virtual G4double CrossSection(const G4double ekin) ;
 protected:
   G4bool IsItPossible(const G4Fragment& aFragment) 
   {
@@ -80,12 +82,11 @@ protected:
     return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
   }
   
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
+
   virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
-    
+
 };
 
 #endif

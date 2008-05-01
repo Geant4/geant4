@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.5 2007-08-23 16:29:01 ahoward Exp $
+// $Id: G4VPreCompoundIon.hh,v 1.6 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//
+//J.M. Quesada (Apr. 2008) DUMMY abstract base class for ions. Coulomb barrier not needed anymore.
+// it is not ihherited by anything. GetAlpha & GetBeta virtual methods removed.
 
 #ifndef G4VPreCompoundIon_h
 #define G4VPreCompoundIon_h 1
@@ -81,9 +84,7 @@ protected:
     return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
   }
 
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
+
   virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
   virtual G4double CoalescenceFactor(const G4double A) = 0; 
     

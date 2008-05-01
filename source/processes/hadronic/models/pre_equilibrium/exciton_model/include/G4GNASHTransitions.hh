@@ -51,6 +51,19 @@ public:
   
   virtual G4Fragment PerformTransition(const G4Fragment & aFragment);
 
+//JMQ 03/01/08
+ public:
+// inline G4double GetTransitionProb1() const
+G4double GetTransitionProb1() 
+{return 0;}
+// inline G4double GetTransitionProb2() const
+G4double GetTransitionProb2() 
+{return 0;}
+// inline G4double GetTransitionProb3() const
+G4double GetTransitionProb3() 
+{return 0;}
+//
+
 
 };
 

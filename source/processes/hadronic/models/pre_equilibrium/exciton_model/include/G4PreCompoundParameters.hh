@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.hh,v 1.3 2006-06-29 20:58:32 gunter Exp $
+// $Id: G4PreCompoundParameters.hh,v 1.4 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
-
+//
+//J. M. Quesada (Apr. 2008) Level density set to A/10 at preequilibrium
 
 #ifndef G4PreCompoundParameters_h
 #define G4PreCompoundParameters_h 1
@@ -41,7 +42,9 @@ private:
     static G4PreCompoundParameters thePreCompoundParameters;
 
     // default constructor
-    G4PreCompoundParameters() : theLevelDensity(0.125/MeV),
+//    G4PreCompoundParameters() : theLevelDensity(0.125/MeV),
+//JMQ level density parameter  set to  A/10 at preequilibrium
+    G4PreCompoundParameters() : theLevelDensity(0.10/MeV),
       r0(1.5*fermi),Transitions_r0(0.6*fermi),FermiEnergy(35.0*MeV) 
 	{}
 

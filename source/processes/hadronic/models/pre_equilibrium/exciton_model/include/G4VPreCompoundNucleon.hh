@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.4 2007-07-23 09:56:40 ahoward Exp $
+// $Id: G4VPreCompoundNucleon.hh,v 1.5 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
+//J.M. Quesada (Apr. 2008) DUMMY abstract base class for nucleons. Coulomb barrier not needed anymore.
+// it is not ihherited by anything. GetAlpha & GetBeta virtual methods removed.
 
 #ifndef G4VPreCompoundNucleon_h
 #define G4VPreCompoundNucleon_h 1
@@ -76,10 +78,6 @@ public:
     
 protected:
 
-// added Rj method according to literature and JMQ
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
   virtual G4bool IsItPossible(const G4Fragment&) = 0; 
     
     

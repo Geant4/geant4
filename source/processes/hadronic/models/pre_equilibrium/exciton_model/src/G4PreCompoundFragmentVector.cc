@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.5 2006-06-29 20:59:21 gunter Exp $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.6 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -85,6 +85,7 @@ ChooseFragment(void)
   G4double accumulation = 0.0;
   for (i = theChannels->begin(); i != theChannels->end(); ++i) {
     accumulation += (*i)->GetEmissionProbability();
+
     running.push_back(accumulation);
   }
 	
@@ -125,7 +126,7 @@ ChooseFragment(void)
 	{
 	  (*i)->IncrementStage();
 	}
-    } 
+    }
 
   return theChannels->operator[](ChosenChannel);
 }

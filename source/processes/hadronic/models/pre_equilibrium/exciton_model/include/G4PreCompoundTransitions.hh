@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.hh,v 1.3 2006-06-29 20:58:36 gunter Exp $
+// $Id: G4PreCompoundTransitions.hh,v 1.4 2008-05-01 22:06:14 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -49,6 +49,7 @@
 #include "Randomize.hh"
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
+
 {
 public:
 
