@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.hh,v 1.3 2006-06-29 20:09:53 gunter Exp $
+
+//
+// $Id: G4EvaporationChannel.hh,v 1.4 2008-05-01 21:51:05 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+//JMQ & MAC 7/12/07 : new MonteCarlo sampling  of the kinetic energy
+//J. M.Quesada (Apr. 208). Rebuit class. Mayor changes. Unused items have been removed (unused constructors..). New methods.
 
 #ifndef G4EvaporationChannel_h
 #define G4EvaporationChannel_h 1
@@ -39,7 +42,7 @@
 #include "G4VEmissionProbability.hh"
 #include "G4EvaporationProbability.hh"
 #include "G4VLevelDensityParameter.hh"
-#include "G4VCoulombBarrier.hh"
+
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
@@ -50,18 +53,11 @@
 class G4EvaporationChannel : public G4VEvaporationChannel
 {
 public:
-  // Available constructors
-  G4EvaporationChannel(const G4int theA, const G4int theZ,
-		       G4VEmissionProbability * aEmissionStrategy,
-		       G4VCoulombBarrier * aCoulombBarrier);
+  // constructor
+
 
   G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
-		       G4VEmissionProbability * aEmissionStrategy,
-		       G4VCoulombBarrier * aCoulombBarrier);
-
-  G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String * aName,
-		       G4VEmissionProbability * aEmissionStrategy,
-		       G4VCoulombBarrier * aCoulombBarrier);
+		       G4VEmissionProbability * aEmissionStrategy);
 
 public:
   // destructor
@@ -70,8 +66,7 @@ public:
   void SetEmissionStrategy(G4VEmissionProbability * aEmissionStrategy)
   {theEvaporationProbabilityPtr = aEmissionStrategy;}
   
-  void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-  {theCoulombBarrierPtr = aCoulombBarrier;} 
+
   
 protected:
   // default constructor
@@ -92,21 +87,6 @@ public:
   void Initialize(const G4Fragment & fragment);
 
   G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
-  
-//   inline void SetEmissionStrategy(G4VEmissionProbability * aStrategy)
-//     {
-//       if (MyOwnEvaporationProbability) delete theEvaporationProbabilityPtr;
-//       theEvaporationProbabilityPtr = aStrategy;
-//       MyOwnEvaporationProbability = false;
-//     }
-
-
-  inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
-  {
-    if (MyOwnLevelDensity) delete theLevelDensityPtr;
-    theLevelDensityPtr = aLevelDensity;
-    MyOwnLevelDensity = false;
-  }
   
 public:
 
@@ -129,7 +109,7 @@ private:
   G4double CalcMaximalKineticEnergy(const G4double U);
 
   // Samples fragment kinetic energy.
-  G4double CalcKineticEnergy(void);
+    G4double  GetKineticEnergy(const G4Fragment & aFragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(const G4double Magnitude  = 1.0);
@@ -148,17 +128,10 @@ private:
   G4int Z;
 
 
-  // For evaporation probability calcualtion
+  // For evaporation probability calcualation
   G4VEmissionProbability * theEvaporationProbabilityPtr;
-
-  // For Level Density calculation
-  G4bool MyOwnLevelDensity;
-  G4VLevelDensityParameter * theLevelDensityPtr;
   
-  // For Coulomb Barrier calculation
-  G4VCoulombBarrier * theCoulombBarrierPtr;
-  G4double CoulombBarrier;
-
+ 
   //---------------------------------------------------
 
   // These values depend on the nucleus that is being evaporated.
@@ -170,12 +143,6 @@ private:
 
   // Residual Charge
   G4int ZResidual;
-
-//   // Binding Energy
-//   G4double BindingEnergy;
-
-// 	// Level Density Parameter
-// 	G4double LevelDensityParameter;
 	
   // Emission Probability
   G4double EmissionProbability;

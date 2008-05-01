@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationProbability.hh,v 1.7 2007-10-01 13:21:23 ahoward Exp $
+// $Id: G4AlphaEvaporationProbability.hh,v 1.8 2008-05-01 21:51:05 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-
+// J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins, theCoulombBarrier)
 
 
 #ifndef G4AlphaEvaporationProbability_h
@@ -54,31 +54,7 @@ private:
   const G4AlphaEvaporationProbability & operator=(const G4AlphaEvaporationProbability &right);
   G4bool operator==(const G4AlphaEvaporationProbability &right) const;
   G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
-  
 
-private:
-
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
-	
-  virtual G4double CalcBetaParam(const G4Fragment & ) const 
-  { return 0.0; }
-
-  virtual G4double CalcRjParam(const G4Fragment & fragment) const 
-  { G4int NumberCharged = fragment.GetNumberOfCharged(); G4int NumberParticles = fragment.GetNumberOfParticles();
-    G4double rj = 1.0;
-    G4double denominator = (NumberParticles*(NumberParticles-1)*(NumberParticles-2)*(NumberParticles-3));
-    if(denominator != 0) rj = 6.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))/static_cast<G4double>(denominator);
-    return rj; } // taken from PreCompound correction - justified? AH 24/8/07
-
-	
-  G4double CCoeficient(const G4double ) const;
-
-  // Excitation energy levels 
-  std::vector<G4double> ExcitEnergies;
-  // Spin of excitation energy levels 
-  std::vector<G4int> ExcitSpins;
 };
-
 
 #endif

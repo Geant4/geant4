@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EvaporationProbability.hh,v 1.5 2007-08-24 07:29:23 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
-
-
+// JMQ & MAC 07/12/2007: New inverse cross sections
+//
+//J.M. Quesada (Dec 2007-Apr 2008). Rebuilt class. Mayor changes: new inverse cross sections and 
+//numerical integration . No Coulomb barrier is needed anymore (implicitely included in inverse cross sections)
 
 #ifndef G4EvaporationProbability_h
 #define G4EvaporationProbability_h 1
@@ -46,17 +44,19 @@ class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
   // Only available constructor
-  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma) : 
+  G4EvaporationProbability(const G4int anA, const G4int aZ, const G4double aGamma):
     theA(anA),
     theZ(aZ),
-    Gamma(aGamma) 
+    Gamma(aGamma)
   {
     theEvapLDPptr = new G4EvaporationLevelDensityParameter;
+    
   }
 
   ~G4EvaporationProbability() 
   {
     if (theEvapLDPptr != 0) delete theEvapLDPptr;
+
   }
 
 
@@ -64,14 +64,6 @@ public:
   G4double GetZ(void) const { return theZ; }
 	
   G4double GetA(void) const { return theA;} 
-
-protected:
-
-  void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
-  {ExcitationEnergies = anExcitationEnergiesPtr;}
-
-  void SetExcitationSpinsPtr(std::vector<G4int> * anExcitationSpinsPtr)
-  {ExcitationSpins = anExcitationSpinsPtr;}
 
   
   // Default constructor
@@ -85,16 +77,20 @@ private:
   G4bool operator!=(const G4EvaporationProbability &right) const;
   
 public:
+
   G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
 
-private:
+//JMQ: new methods (04/12/07)
 
-  G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy);
-  virtual G4double CCoeficient(const G4double ) const {return 0.0;};
+  G4double ProbabilityDistributionFunction(const G4double K, const G4Fragment & aFragment);
 
-  virtual G4double CalcAlphaParam(const G4Fragment & ) const {return 1.0;}
-  virtual G4double CalcBetaParam(const G4Fragment & ) const {return 1.0;}
-  virtual G4double CalcRjParam(const G4Fragment & ) const {return 1.0;}
+  G4double CalculateProbability(const G4double MaximalKineticEnergy,const G4Fragment & fragment );
+
+  G4double IntegrateEmissionProbability(const G4double & Low, const G4double & Up, const G4Fragment & aFragment);
+
+  G4double CrossSection(const G4double K, const  G4Fragment & fragment );
+
+
 
   // Data Members
 
@@ -103,17 +99,12 @@ private:
   G4int theA;
   G4int theZ;
 
-  // Gamma is A_f(2S_f+1) factor, where A_f is fragment atomic 
-  // number and S_f is fragment spin
+//JMQ: (2s+1) mass number of ejectile
   G4double Gamma;
 
-  // Discrete Excitation Energies 
-  std::vector<G4double> * ExcitationEnergies;
-
-  //
-  std::vector<G4int> * ExcitationSpins;
-
 };
+
+
 
 
 #endif

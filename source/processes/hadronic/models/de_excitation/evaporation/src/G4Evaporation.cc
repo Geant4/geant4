@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.7 2007-02-14 13:37:49 ahoward Exp $
+// $Id: G4Evaporation.cc,v 1.8 2008-05-01 21:51:06 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -104,11 +104,20 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // Number of channels
     G4int TotNumberOfChannels = theChannels->size();  
-	
 
+//JMQ  23-04-08-MANANA-1 comento los witings	
+//JMQ 13-04-08-MANANA-1 para ver que hace el loop
+//G4cout<<"Inicio bucle----->Anucleus= "<<theNucleus.GetA()<<"Znucleus= "<<theNucleus.GetZ()<<G4endl;
+//G4int contador=0;
+//
     // Starts loop over evaporated particles
     for (;;) 
-      {
+ 
+//JMQ  23-04-08-MANANA-1 comento los witings     {
+//JMQ 13-04-08-MANANA-1 para ver que hace el loop
+//contador +=1;
+//G4cout<<contador<<" pasada"<<G4endl;
+   {    
 	// loop over evaporation channels
 	std::vector<G4VEvaporationChannel*>::iterator i;
 	for (i=theChannels->begin(); i != theChannels->end(); i++) 
@@ -128,6 +137,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	    // Will be no evaporation more
 	    // write information about residual nucleus
 	    theResult->push_back(new G4Fragment(theResidualNucleus));
+//JMQ 23-04-08 lo comento
+//17-04-08-TARDE lo añado para que me escriba lo que hay al final de la evaporacion
+//		  for (G4FragmentVector::iterator ij = theResult->begin();
+//		       ij != theResult->end(); ++ij) G4cout<<"A= "<<(*ij)->GetA()<<G4endl; 
+//
 	    break; 
 	  } 
 	else 
@@ -215,9 +229,33 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 #ifdef PRECOMPOUND_TEST
 		  theResidualNucleus.SetCreatorModel(G4String("ResidualNucleus"));
 #endif
+//aqui no me funciona: me da 0 secundarias
+//JMQ el 13/04/08 para sacar el espectro primario de secundarias
+//          return theResult;
+//
+
+
 		}
 	      }
 	  }
+//segundo intento: creo que esto debe dejar solo la primera pasada por el bucle del for (;;)
+//JMQ el 13/04/08 para sacar el eespectro primario de secundarias
+//          G4int tamano=theResult->size();
+//          G4double AA1=theResult->front()->GetA();
+//          G4double AA2=theResult->back()->GetA();
+//          G4cout<<"numero de primarias-secundarias en evaporacion = "<<tamano<<G4endl;
+//          G4cout<<"AA1= "<<AA1<<"  AA2= "<<AA2<<G4endl;
+
+// en circunstancias "normales"  todo termina al volver al principio del bucle "for(;;)" y comprobar
+// que la Probabilidad Total <=0. Alli se añade al residual al final antes de salir: hago lo mismo
+//           theResult->push_back(new G4Fragment(theResidualNucleus));
+//	    break; 
+//          return theResult;
+//
+//		  for (G4FragmentVector::iterator ij = theResult->begin();
+//		       ij != theResult->end(); ++ij) G4cout<<"A= "<<(*ij)->GetA()<<G4endl; 
+
+//
       }
     
 #ifdef debug
@@ -226,6 +264,9 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     CheckConservation(theNucleus,theResult);
     G4cout << "==================================================\n";
 #endif
+//JMQ 13-04-08-MANANA-1 para ver
+//		  for (G4FragmentVector::iterator ij = theResult->begin();
+//		       ij != theResult->end(); ++i) G4cout<<"A= "<<(*ij)->GetA()<<G4endl; 
     return theResult;
 }
 

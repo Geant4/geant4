@@ -23,71 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronEvaporationProbability.cc,v 1.6 2007-10-01 13:13:20 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
+//J. M. Quesada (Apr. 2008) unused items have been removed  (ExcitEnergies, ExcitSpins)
 
 
 #include "G4NeutronEvaporationProbability.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
-    G4EvaporationProbability(1,0,2) // A,Z,Gamma
+   G4EvaporationProbability(1,0,2) // A,Z,Gamma
 {
-    std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
-    std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
-    ExcitEnergies.reserve(NumExcitedStatesEnergy);
-    ExcitSpins.reserve(NumExcitedStatesSpin);
-    ExcitEnergies.insert(ExcitEnergies.begin(),NumExcitedStatesEnergy,0.0);
-    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0);
-
-	
-    ExcitEnergies[ 9] = 3.56*MeV;
-    ExcitEnergies[10] = 0.48*MeV;
-    ExcitEnergies[11] = 0.98*MeV;
-    ExcitEnergies[12] = 0.43*MeV;
-    ExcitEnergies[15] = 3.37*MeV;
-    ExcitEnergies[17] = 0.72*MeV;
-    ExcitEnergies[18] = 2.13*MeV;
-    ExcitEnergies[19] = 0.95*MeV;
-    ExcitEnergies[20] = 2.00*MeV;
-    ExcitEnergies[21] = 4.44*MeV;
-    ExcitEnergies[22] = 3.09*MeV;
-    ExcitEnergies[23] = 6.09*MeV;
-    ExcitEnergies[25] = 2.31*MeV;
-    ExcitEnergies[26] = 5.28*MeV;
-    ExcitEnergies[27] = 0.12*MeV;
-    ExcitEnergies[28] = 5.22*MeV;
-    ExcitEnergies[29] = 6.10*MeV;
-    ExcitEnergies[30] = 0.87*MeV;
-    ExcitEnergies[31] = 1.98*MeV;
-
-
-    ExcitSpins[ 9] = 1;
-    ExcitSpins[10] = 2;
-    ExcitSpins[11] = 3;
-    ExcitSpins[12] = 2;
-    ExcitSpins[15] = 5;
-    ExcitSpins[17] = 3;
-    ExcitSpins[18] = 2;
-    ExcitSpins[19] = 5;
-    ExcitSpins[20] = 2;
-    ExcitSpins[21] = 5;
-    ExcitSpins[22] = 2;
-    ExcitSpins[23] = 3;
-    ExcitSpins[25] = 1;
-    ExcitSpins[26] = 8;
-    ExcitSpins[27] = 1;
-    ExcitSpins[28] = 8;
-    ExcitSpins[29] = 8;
-    ExcitSpins[30] = 2;
-    ExcitSpins[31] = 5;
-
-    SetExcitationEnergiesPtr(&ExcitEnergies);
-    SetExcitationSpinsPtr(&ExcitSpins);
+  
 }
 
 

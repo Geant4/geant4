@@ -24,69 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.5 2006-06-29 20:10:27 gunter Exp $
+//JMQ & MAC 7/12/07 : new MonteCarlo sampling  of the kinetic energy
+//
+// $Id: G4EvaporationChannel.cc,v 1.6 2008-05-01 21:51:06 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
+//J.M. Quesada (Apr.2008). Rebuilt class. Mayor changes. Unused items have been removed (constructors..). New methods
 
 #include "G4EvaporationChannel.hh"
 #include "G4PairingCorrection.hh"
 
 
-G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ,
-					   G4VEmissionProbability * aEmissionStrategy,
-					   G4VCoulombBarrier * aCoulombBarrier):
-    A(theA),
-    Z(theZ),
-    theEvaporationProbabilityPtr(aEmissionStrategy),
-    theCoulombBarrierPtr(aCoulombBarrier),
-    EmissionProbability(0.0),
-    MaximalKineticEnergy(-1000.0)
-{ 
-    theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-    MyOwnLevelDensity = true;
-}
 
 G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
-					   G4VEmissionProbability * aEmissionStrategy,
-					   G4VCoulombBarrier * aCoulombBarrier):
+					   G4VEmissionProbability * aEmissionStrategy):
     G4VEvaporationChannel(aName),
     A(theA),
     Z(theZ),
     theEvaporationProbabilityPtr(aEmissionStrategy),
-    theCoulombBarrierPtr(aCoulombBarrier),
     EmissionProbability(0.0),
     MaximalKineticEnergy(-1000.0)
 { 
-    theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-    MyOwnLevelDensity = true;
+    
 }
-
-G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String * aName,
-					   G4VEmissionProbability * aEmissionStrategy,
-					   G4VCoulombBarrier * aCoulombBarrier):
-    G4VEvaporationChannel(aName),
-    A(theA),
-    Z(theZ),
-    theEvaporationProbabilityPtr(aEmissionStrategy),
-    theCoulombBarrierPtr(aCoulombBarrier),
-    EmissionProbability(0.0),
-    MaximalKineticEnergy(-1000.0)
-{ 
-    theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-    MyOwnLevelDensity = true;
-}
-
 
 G4EvaporationChannel::~G4EvaporationChannel()
 {
-    if (MyOwnLevelDensity) delete theLevelDensityPtr;
+  
 }
-
-
-
 
 G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & ) : G4VEvaporationChannel()
 {
@@ -125,45 +93,39 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     G4double ExEnergy = fragment.GetExcitationEnergy() - 
       G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
 
+
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||
 	(AResidual == ZResidual && AResidual > 1) || ExEnergy <= 0.0) {
-	// 		LevelDensityParameter = 0.0;
-	CoulombBarrier = 0.0;
-	// 		BindingEnergy = 0.0;
 	MaximalKineticEnergy = -1000.0*MeV;
 	EmissionProbability = 0.0;
     } else {
-	// // Get Level Density
-	// LevelDensityParameter = theLevelDensityPtr->LevelDensityParameter(anA,aZ,ExEnergy);
-
-	// Coulomb Barrier calculation
-	CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(AResidual,ZResidual,ExEnergy);
-	
-	// // Binding Enegy (for separate fragment from nucleus)
-	// BindingEnergy = CalcBindingEnergy(anA,aZ);
-
 	// Maximal Kinetic Energy
 	MaximalKineticEnergy = CalcMaximalKineticEnergy(G4ParticleTable::GetParticleTable()->
-							GetIonTable()->GetNucleusMass(aZ,anA)+ExEnergy);
-		
+							GetIonTable()->GetNucleusMass(aZ,anA)+ExEnergy);		
 	// Emission probability
 	if (MaximalKineticEnergy <= 0.0) EmissionProbability = 0.0;
 	else { 
 	    // Total emission probability for this channel
-	    EmissionProbability = theEvaporationProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
-
+	    EmissionProbability = theEvaporationProbabilityPtr->EmissionProbability(fragment, MaximalKineticEnergy);
 	}
     }
-	
+
+//JMQ & MAC (14/12/07): protection against non-physical situation
+if(EmissionProbability>0 && MaximalKineticEnergy<0)
+{
+	std::ostringstream errOs;
+  	errOs << "Non-physical situation: EmissionProbability >0 & Tmax <0" <<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+}
     return;
 }
 
-
 G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 {
+// JMQ: 7/12/07  new MonteCarlo sampling method of kinetic energy
+      G4double EvaporatedKineticEnergy=GetKineticEnergy(theNucleus);
 
-    G4double EvaporatedKineticEnergy = CalcKineticEnergy();
     G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
     G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
 
@@ -190,6 +152,7 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     ResidualMomentum.boost(theNucleus.GetMomentum().boostVector());
 	
     G4Fragment * ResidualFragment = new G4Fragment( AResidual, ZResidual, ResidualMomentum );
+
 #ifdef PRECOMPOUND_TEST
     ResidualFragment->SetCreatorModel(G4String("ResidualNucleus"));
 #endif
@@ -221,71 +184,53 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 
 
 
-// G4double G4EvaporationChannel::CalcBindingEnergy(const G4int anA, const G4int aZ)
-// // Calculate Binding Energy for separate fragment from nucleus
-// {
-// 	// Mass Excess for residual nucleus
-// 	G4double ResNucMassExcess = G4NucleiProperties::GetNuclearMass(AResidual,ZResidual);
-// 	// Mass Excess for fragment
-// 	G4double FragmentMassExcess = G4NucleiProperties::GetNuclearMass(A,Z);
-// 	// Mass Excess for Compound Nucleus
-// 	G4double NucleusMassExcess = G4NucleiProperties::GetNuclearMass(anA,aZ);
-// 
-// 	return ResNucMassExcess + FragmentMassExcess - NucleusMassExcess;
-// }
-
-
 G4double G4EvaporationChannel::CalcMaximalKineticEnergy(const G4double NucleusTotalE)
     // Calculate maximal kinetic energy that can be carried by fragment.
 {
     G4double ResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass( ZResidual, AResidual );
     G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass( Z, A );
 	
-    G4double T = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - ResidualMass*ResidualMass)/
-	(2.0*NucleusTotalE) -
-	EvaporatedMass - CoulombBarrier;
-	
-    return T;
+    G4double Tmax = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - 		
+	ResidualMass*ResidualMass)/(2.0*NucleusTotalE) - EvaporatedMass;
+
+    return Tmax;
 }
 
 
 
-
-G4double G4EvaporationChannel::CalcKineticEnergy(void)
-    // Samples fragment kinetic energy.
-    // It uses Dostrovsky's approximation for the inverse reaction cross
-    // in the probability for fragment emisson
+G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
+//JMQ & MAC : 7/12/07 new method for MC sampling. Substitutes old CalcKineticEnergy
 {
-    if (MaximalKineticEnergy < 0.0) 
-	throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::CalcKineticEnergy: maximal kinetic energy is less than 0");
+ G4double Tmax=MaximalKineticEnergy;
+  G4double T(0.0);
+  G4double NormalizedProbability(1.0);
+  G4double Gamma;
+  if (A==1) {Gamma=2;}
+  else if (A==2 && Z==1) {Gamma=1;}
+  else if (A==3 ) {Gamma=2;}
+  else if (A==4 && Z==2){Gamma=1;}
+  else {
+ 	std::ostringstream errOs;
+      errOs << "ejected particle out of range"  << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+    }
 
-    G4double Rb = 4.0*theLevelDensityPtr->LevelDensityParameter(AResidual+A,ZResidual+Z,MaximalKineticEnergy)*
-	MaximalKineticEnergy;
-    G4double RbSqrt = std::sqrt(Rb);
-    G4double PEX1 = 0.0;
-    if (RbSqrt < 160.0) PEX1 = std::exp(-RbSqrt);
-    G4double Rk = 0.0;
-    G4double FRk = 0.0;
-    do {
-	G4double RandNumber = G4UniformRand();
-	Rk = 1.0 + (1./RbSqrt)*std::log(RandNumber + (1.0-RandNumber)*PEX1);
-	G4double Q1 = 1.0;
-	G4double Q2 = 1.0;
-	if (Z == 0) { // for emitted neutron
-	    G4double Beta = (2.12/std::pow(G4double(AResidual),2./3.) - 0.05)*MeV/
-		(0.76 + 2.2/std::pow(G4double(AResidual),1./3.));
-	    Q1 = 1.0 + Beta/(MaximalKineticEnergy);
-	    Q2 = Q1*std::sqrt(Q1);
-	} 
-    
-	FRk = (3.0*std::sqrt(3.0)/2.0)/Q2 * Rk * (Q1 - Rk*Rk);
-    
-    } while (FRk < G4UniformRand());
+// JMQ & MAC. new pointer to object is created in order to access the distribution function.
 
-    G4double result =  MaximalKineticEnergy * (1.0-Rk*Rk) + CoulombBarrier;
+G4EvaporationProbability * G4EPtemp=new G4EvaporationProbability(A,Z,Gamma);
+  do
+     {  
 
-    return result;
-} 
+      T=G4UniformRand()*Tmax;
+       NormalizedProbability=G4EPtemp->ProbabilityDistributionFunction(T,aFragment)
+/
+        this ->GetEmissionProbability();
+}
+   while (G4UniformRand() > NormalizedProbability);
+   delete G4EPtemp;
+   return T;
+}
+
  
 
 G4ThreeVector G4EvaporationChannel::IsotropicVector(const G4double Magnitude)
@@ -302,4 +247,9 @@ G4ThreeVector G4EvaporationChannel::IsotropicVector(const G4double Magnitude)
 }
 
 
+
+   
+
+
+  
 

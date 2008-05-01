@@ -24,19 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationChannel.hh,v 1.3 2006-06-29 20:10:11 gunter Exp $
+// $Id: G4TritonEvaporationChannel.hh,v 1.4 2008-05-01 21:51:06 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-
+// J. M. Quesada (Apr. 2008) unused items have been removed ( theCoulombBarrier)
 
 #ifndef G4TritonEvaporationChannel_h
 #define G4TritonEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-#include "G4TritonCoulombBarrier.hh"
+
 #include "G4TritonEvaporationProbability.hh"
 
 class G4TritonEvaporationChannel : public G4EvaporationChannel
@@ -44,7 +44,7 @@ class G4TritonEvaporationChannel : public G4EvaporationChannel
 public:
   // only available constructor
   G4TritonEvaporationChannel() : G4EvaporationChannel(3,1,"triton",
-						      &theEvaporationProbability,&theCoulombBarrier) {};
+						      &theEvaporationProbability) {};
 
   // destructor
   ~G4TritonEvaporationChannel() {};
@@ -60,7 +60,6 @@ public:
 
 private:
 
-  G4TritonCoulombBarrier theCoulombBarrier;
 	
   G4TritonEvaporationProbability theEvaporationProbability;
 
