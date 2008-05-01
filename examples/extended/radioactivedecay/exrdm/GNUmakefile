@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2006-12-21 17:52:39 flei Exp $
+# $Id: GNUmakefile,v 1.5 2008-05-01 14:16:25 flei Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -15,12 +15,7 @@ ifdef G4ANALYSIS_USE_ROOT
 CPPFLAGS += -DG4ANALYSIS_USE_ROOT 
 CPPFLAGS += -D_REENTRANT -I$(ROOTSYS)/include
 
-EXTRALIBS += -L$(ROOTSYS)/lib \
--lCore -lCint \
--lHist -lGraf -lGraf3d -lGpad \
--lTree -lRint -lPostscript \
--lMatrix -lPhysics \
--lm -ldl -lpthread -rdynamic
+EXTRALIBS += $(shell $(ROOTSYS)/bin/root-config --libs)
 
 endif
 

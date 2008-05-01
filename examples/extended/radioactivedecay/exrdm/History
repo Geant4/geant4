@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2007-11-15 16:10:09 vnivanch Exp $
+$Id: History,v 1.18 2008-05-01 14:16:25 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01 May 2008, Fan Lei (exrdm-V09-01-00)
+--------------------------------------------------
+- Removed "," from the Ntuple header definition
+- All energy depositions are collected, apart from that of the primary track.  
+
 
 November 15th, 2007 V.Ivanchenko (exrdm-V09-00-02)
 --------------------------------------------------

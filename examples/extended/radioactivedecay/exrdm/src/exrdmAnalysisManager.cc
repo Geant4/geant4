@@ -93,9 +93,9 @@ void exrdmAnalysisManager::bookHisto()
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "100", "Emitted Particles","float PID, Energy, Time, Weight" );
-  histo->addTuple( "200", "RadioIsotopes","float PID, Time, Weight" );
-  histo->addTuple( "300", "Energy Depositions","float Energy, Time, Weight" );
+  histo->addTuple( "100", "Emitted Particles","float PID Energy Time Weight" );
+  histo->addTuple( "200", "RadioIsotopes","float PID Time Weight" );
+  histo->addTuple( "300", "Energy Depositions","float Energy Time Weight" );
 
 }
 
