@@ -63,11 +63,10 @@
 #include "G4ContinuumGammaDeexcitation.hh"
 #include "G4DiscreteGammaDeexcitation.hh"
 #include "G4E1Probability.hh"
-#include "G4AtomicDeexcitation.hh"
 
 G4PhotonEvaporation::G4PhotonEvaporation()
   :_verbose(0),_myOwnProbAlgorithm (true),
-   _eOccupancy(0), _vShellNumber(-1),_gammaE(0.),_applyARM(false)
+   _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;
   _discrDeexcitation = new G4DiscreteGammaDeexcitation;
@@ -198,7 +197,8 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
   _eOccupancy = _discrDeexcitation->GetEO();
   _vShellNumber = _discrDeexcitation->GetVacantSN();
-  // _eOccupancy.DumpInfo() ;
+
+  // not sure if the following line is needed!
   _discrDeexcitation->SetVaccantSN(-1);
 
   G4int nDiscr = 0;
@@ -213,38 +213,6 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
       products->push_back(*i);
     }
 
-  // now to see if apply Atomic relaxation model or not
-  // only when there is a vacant orbital electron
-  
-  if (_applyARM && _vShellNumber != -1) 
-    {
-      G4int aZ = static_cast<G4int>(_discrDeexcitation->GetNucleus().GetZ());
-      G4int eShell = _vShellNumber+1;
-      if ( eShell > 0 ) {
-	G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
-	// no auger electron for now
-	atomDeex->ActivateAugerElectronProduction(0);
-	std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
-	G4DynamicParticle* aParticle;	
-	if (_verbose > 0)
-	  G4cout << " = BreakItUp = " << armProducts->size()
-		 << " particles from G4AtomicDeexcitation " << G4endl;
-	for (size_t i = 0;  i < armProducts->size(); i++)
-	  {
-	    aParticle = (*armProducts)[i] ;
-	    G4LorentzVector lParticle = aParticle->Get4Momentum();
-	    G4Fragment* aFragment = new
-	      G4Fragment(lParticle,aParticle->GetDefinition());
-	    aFragment->SetCreationTime(aParticle->GetProperTime());
-	    products->push_back(aFragment);
-	  }
-
-        for (size_t i = 0;  i < armProducts->size(); i++)
-           delete (*armProducts)[i];
-	delete armProducts;
-	delete atomDeex;
-      }
-    }
   // Add deexcited nucleus to products
   G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
   products->push_back(finalNucleus);
@@ -255,8 +223,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
     G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
 
 #ifdef debug
-  if ( armProducts->size() == 0)
-    CheckConservation(nucleus,products);
+  CheckConservation(nucleus,products);
 #endif
   contProducts->clear();
   discrProducts->clear();
@@ -264,7 +231,6 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   delete discrProducts;
   return products;
 }
-
 
 G4double G4PhotonEvaporation::GetEmissionProbability() const
 {
