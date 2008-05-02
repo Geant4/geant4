@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.24 2008-05-02 13:07:43 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.25 2008-05-02 19:23:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -574,14 +574,16 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   //  G4double cossqrth = 1.-sinSqrTh;
   //  G4double sinsqrphi = sinPhi*sinPhi;
   G4double normalisation = std::sqrt(1. - cosSqrPhi*sinSqrTh);
-  
+ 
 
   // Determination of Theta 
   
-  G4double thetaProbability;
+  // ---- MGP ---- Commented out the following 3 lines to avoid compilation 
+  // warnings (unused variables)
+  // G4double thetaProbability;
   G4double theta;
-  G4double a, b;
-  G4double cosTheta;
+  // G4double a, b;
+  // G4double cosTheta;
 
   /*
 

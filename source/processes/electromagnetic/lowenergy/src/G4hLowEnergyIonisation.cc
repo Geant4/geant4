@@ -1500,8 +1500,8 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
               e = aSecondary->GetKineticEnergy();
               type = aSecondary->GetDefinition();
               if ( etot + e <= eLoss &&
-                   (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
-                   (type == G4Electron::Electron() && e > minElectronEnergy)) {
+                   ( (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
+                   (type == G4Electron::Electron() && e > minElectronEnergy) ) ) {
 
                      etot += e;
                      partVector->push_back(aSecondary);

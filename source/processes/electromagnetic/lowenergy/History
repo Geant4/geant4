@@ -1,4 +1,4 @@
-$Id: History,v 1.293 2008-04-22 17:12:08 habdelou Exp $
+$Id: History,v 1.294 2008-05-02 19:23:38 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+02.05.2008   MGP, tag emlowen-V09-01-11
+             Added Doppler broadening in G4LowEnergyComptonPolarized 
+             (Francesco Longo), same model as in G4LowEnergyCompton
+             Added PIXE cross section, L shells, for protons in 
+             G4OrlicLCrossSection (Haifa Ben Abdelwahed)
+             Corrected compilation warnings as in message by
+             G. Cosmo on 29/4/2008
+
+24.04.2008   MGP, tag emlowen-V09-01-10
+             Fix in Doppler broadening of G4LowEnergyCompton
+             Attempts to fix floating point exceptions in 
+             G4FinalStateElasticBrennerZaider and G4hLowEnergyLoss
 
 22.04.2008   H.Ben Abdelouahed, tag emlowen-V09-01-09
              ECPSSR model implementation for K-Shell-Cross-Section

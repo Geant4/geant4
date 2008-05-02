@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLCrossSection.cc,v 1.1 2008-04-29 18:10:47 habdelou Exp $
+//$Id: G4OrlicLCrossSection.cc,v 1.2 2008-05-02 19:23:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -53,7 +53,8 @@ G4OrlicLCrossSection::G4OrlicLCrossSection()
 G4OrlicLCrossSection::~G4OrlicLCrossSection()
 { }
 
-//this L-CrossSection calculation method is done according to I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230	
+//this L-CrossSection calculation method is done according to 
+//I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230	
  
 
 //*****************************************************************************************************************************************
@@ -78,8 +79,17 @@ G4double G4OrlicLCrossSection::CalculateL1CrossSection(G4int zTarget, G4double e
 
   G4double x = log(normalizedEnergy);
 
-  G4double a0,a1,a2,a3,a4,a5,a6,a7,a8,a9;
-  
+  G4double a0 = 0.;
+  G4double a1 = 0.;
+  G4double a2 = 0.;
+  G4double a3 = 0.;
+  G4double a4 = 0.;
+  G4double a5 = 0.;
+  G4double a6 = 0.;  
+  G4double a7 = 0.;  
+  G4double a8 = 0.; 
+  G4double a9 = 0.;
+
                                        
    if ( zTarget>=14 && zTarget<=40)  
     {
@@ -226,7 +236,12 @@ G4double G4OrlicLCrossSection::CalculateL2CrossSection(G4int zTarget, G4double e
 
   G4double x = log(normalizedEnergy);
 
-  G4double a0,a1,a2,a3,a4,a5;
+  G4double a0 = 0.;
+  G4double a1 = 0.;
+  G4double a2 = 0.;
+  G4double a3 = 0.;
+  G4double a4 = 0.;
+  G4double a5 = 0.;
  
       if ( zTarget>=41 &&  zTarget<=50 ) 
 	{ 
@@ -340,7 +355,12 @@ G4double G4OrlicLCrossSection::CalculateL3CrossSection(G4int zTarget, G4double e
 
   G4double x = log(normalizedEnergy);
 
-  G4double a0,a1,a2,a3,a4;
+
+  G4double a0 = 0.;
+  G4double a1 = 0.;
+  G4double a2 = 0.;
+  G4double a3 = 0.;
+  G4double a4 = 0.;
  
       if ( zTarget>=41 &&  zTarget<=50 ) 
 	{ 

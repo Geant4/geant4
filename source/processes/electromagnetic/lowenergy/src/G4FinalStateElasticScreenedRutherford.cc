@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.2 2007-10-12 23:10:33 pia Exp $
+// $Id: G4FinalStateElasticScreenedRutherford.cc,v 1.3 2008-05-02 19:23:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -78,7 +78,7 @@ G4FinalStateElasticScreenedRutherford::~G4FinalStateElasticScreenedRutherford()
 }
  
 
-const G4FinalStateProduct& G4FinalStateElasticScreenedRutherford::GenerateFinalState(const G4Track& track, const G4Step& step)
+const G4FinalStateProduct& G4FinalStateElasticScreenedRutherford::GenerateFinalState(const G4Track& track, const G4Step& )
 {
   // Clear previous secondaries, energy deposit and particle kill status
   product.Clear();
