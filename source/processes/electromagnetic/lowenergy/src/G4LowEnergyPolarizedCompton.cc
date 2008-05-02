@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.23 2008-05-02 13:04:52 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.24 2008-05-02 13:07:43 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -605,7 +605,7 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   */
 
 
-  // Dan Xu method
+  // Dan Xu method (IEEE TNS, 52, 1160 (2005))
 
   rand1 = G4UniformRand();
   rand2 = G4UniformRand();
