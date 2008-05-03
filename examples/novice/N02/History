@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2007-10-17 08:53:51 gcosmo Exp $
+$Id: History,v 1.56 2008-05-03 19:12:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+03-05-08 mma (exampleN02-V09-01-00)
+- PhysicsList : replace G4MultipleScattering by G4eMultipleScattering
      
 17-10-07 G.Cosmo (exampleN02-V09-00-02)
 - Explicitely delete allocated parameterisation and step-limit objects
