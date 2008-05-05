@@ -125,8 +125,10 @@ List of fixes included in this public patch since the public release 9.1.p01:
         G4CrossSectionDataStore.
     + models/cascade:
       o Added Coulomb barrier in G4EquilibriumEvaporator.
-      o Changed pp, nn total cross section parameterization in
-        G4CascadSpecialFunctions to more closely reflect the PDG values.
+      o Changed pp, nn total cross section parameterization in class
+        G4CascadSpecialFunctions to more closely reflect the PDG values;
+        fixed cross section bug responsible for returning low or zero total
+        cross sections for pi-p, pi+n, np, and pi0 interactions.
     + models/chiral_inv_phase_space:
       o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
         When run together with elastic, the parameters to sample T were not
