@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.16 2008-03-10 17:03:16 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.17 2008-05-05 13:24:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -1354,7 +1354,7 @@ void G4UIQt::lookForHelpStringCallback(
   if (helpLine->text() =="") {
     // clear old help tree
     fHelpTreeWidget->clear();
-#if QT_VERSION < 0x040200
+#if QT_VERSION < 0x040000
     fHelpTreeWidget->removeColumn(1);
     fHelpTreeWidget->removeColumn(0);
 #endif
@@ -1371,7 +1371,7 @@ void G4UIQt::lookForHelpStringCallback(
 
   // clear old help tree
   fHelpTreeWidget->clear();
-#if QT_VERSION < 0x040200
+#if QT_VERSION < 0x040000
   fHelpTreeWidget->removeColumn(1);
   fHelpTreeWidget->removeColumn(0);
 #endif
