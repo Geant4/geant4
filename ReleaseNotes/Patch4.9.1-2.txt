@@ -148,7 +148,9 @@ List of fixes included in this public patch since the public release 9.1.p01:
         broadening" flag is changed from GetCrossSection() method to
         BuildPhysicsTable().
     + models/theo_high_energy:
-      o Added missing Fermi momentum to quasi elastic scattering. 
+      o Added missing Fermi momentum to quasi elastic scattering.
+    + stopping:
+      o G4MuMinusCaptureCascade: fixed case of NaN value in bound muon decay.
 
   o Generic Processes:
     -----------------
@@ -173,6 +175,8 @@ List of fixes included in this public patch since the public release 9.1.p01:
     + advanced/underground_physics:
       o Fixed mis-sized arrays 'ring_phys_gas' and 'ring_phys_liq';
         both were less than the utilized size.
+    + extended/field/field02:
+      o Fixed setup to correctly handle electric field.
     + extended/field/field04:
       o Fix to avoid error for invalid rotation specification
         in F04DetectorConstruction::stringToRotationMatrix().
