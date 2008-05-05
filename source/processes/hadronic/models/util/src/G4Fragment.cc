@@ -205,20 +205,19 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
 	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
   G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
   if( U < 0.0 ) {
-    if (U > -10.0 * eV || 0==G4lrint(theA) ) U = 0.0;
-
-  } else {
-    if (errCount < 10) {
-      G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
-	     << U << " for A = "<< theA << " and Z= " << theZ << G4endl
-	     << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
-      errCount++;
-      if (errCount == 10 ) 
-        G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
-	       << " further warnings on negative excitation will be supressed" << G4endl;
-    }
-     
-    U=0.0;
+     if( U > -10.0 * eV || 0==G4lrint(theA)){
+	U = 0.0;
+     } else {
+	if ( errCount < 10 ) {
+	    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
+	       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl
+	       << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
+	    errCount++;
+	    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
+				<< " further warnings on negative excitation will be supressed" << G4endl;
+	}
+	U=0.0;
+     }
   }
   return U;
 }
