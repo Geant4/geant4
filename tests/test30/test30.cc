@@ -145,6 +145,7 @@ int main(int argc, char** argv)
   G4int     nanglpr  = 0;
   G4int     nanglpi  = 0;
   G4int     modu     = 10000;
+  G4int     targetA  = 0;
   G4String hFile     = "hbook.paw";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
@@ -355,6 +356,8 @@ int main(int argc, char** argv)
         (*fin) >> kBound;
       } else if(line == "#material") {
         (*fin) >> nameMat;
+      } else if(line == "#targetA") {
+        (*fin) >> targetA;
       } else if(line == "#Shen") {
         Shen = true;
       } else if(line == "#generator") {
@@ -419,6 +422,7 @@ int main(int argc, char** argv)
 
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
+    if(targetA > 0) A = targetA;
 
     // -------- Projectile
 
@@ -450,6 +454,7 @@ int main(int argc, char** argv)
       theDeExcitation->SetEvaporation(evp);
     }
     G4double amass = phys->GetNucleusMass();
+    phys->SetA(A);
 
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName()
@@ -464,6 +469,7 @@ int main(int argc, char** argv)
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
+	   << " Z= " << Z << " A= " << A
 	   << "  Amax= " << maxn << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
@@ -918,9 +924,9 @@ int main(int argc, char** argv)
 
           if(pd) {
             G4double N = pd->GetBaryonNumber();
-            G4double Z = pd->GetPDGCharge()/eplus;
+            G4double Z1= pd->GetPDGCharge()/eplus;
             G4double Z0= bestZ[(G4int)N];
-            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) 
+            if(std::fabs(Z0 - Z1) < 0.1 || Z0 == 0.0) 
 	      histo.fill(26, N, factorb);
 	  }
 

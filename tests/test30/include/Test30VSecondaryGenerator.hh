@@ -71,6 +71,8 @@ public:
 
   G4double GetMass() {return mass;};
 
+  void SetA(G4int A) {targetN = A;};
+
 protected:
 
   G4String generatorName;
@@ -86,6 +88,7 @@ private:
   G4Nucleus targetNucleus;
   G4double mass;
   G4HadFinalState* result;
+  G4int targetN;
 
 };
 

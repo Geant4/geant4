@@ -55,12 +55,19 @@ class Test30Physics
 public:
 
   Test30Physics();
+
   ~Test30Physics();
 
   G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);
+
   G4double GetNucleusMass() {return theProcess->GetMass();};
+
   G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
+
   G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
+
+  void SetA(G4int A) {if(theProcess) theProcess->SetA(A);};
+
 //    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
 //    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
 
