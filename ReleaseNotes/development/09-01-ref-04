@@ -192,7 +192,8 @@ processes/hadronic
   o Added missing Fermi momentum to quasi elastic scattering.
 - models/util (hadr-mod-util-V09-01-00)                                     (*)
   o Fixed compilation warnings on gcc-4.3.0 in G4Fragment.
-- stopping (hadr-stopping-V09-01-00)                                        (*)
+- stopping (hadr-stopping-V09-01-01)                                        (*)
+  o G4MuMinusCaptureCascade: fixed case of NaN value in bound muon decay.
   o Fixed compilation warnings on gcc-4.3.0 in G4NeutronCaptureAtRest.
 
 run                                              run-V09-01-00              (*)
@@ -254,6 +255,8 @@ examples                                         examples-V09-01-04
   o Reduced number of string comparisons (save of 10% in CPU time).
 - extended/electromagnetic/TestEm18 (testem18-V09-01-01)
   o HistoManager: redefined 'binEdge' in saveAscii().
+- extended/field/field02 (exfield02-V09-01-00)                              (*)
+  o Fixed setup to correctly handle electric field.
 - extended/gdml (exgdml-V09-01-01)
   o Fixed function calls in main() to follow convention of using first
     capital letter.
