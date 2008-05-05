@@ -76,12 +76,14 @@ persistency/gdml                                 gdml-V09-01-03
 - Added text output to console to inform of progress during processing.
 - Corrected some function names to have all starting with capital letter.
 
-physics_lists                                    phys-lists-V09-01-05
+physics_lists                                    phys-lists-V09-01-06
 -------------
 - New helper class G4PhysListFactory for building Physics Lists.
 - Added D and B mesons to all EM bulders G4EmStandardPhysics*.
 - G4EmStandardPhysics_option2,3: using spline interpolation for Physics Tables.
 - QBBC: fixed compilation warnings.
+- Fixed deletion using uninitialized pointers in FTF-BIC, for classes       (*)
+  HadronPhysicsFTF_BIC, G4FTFBinaryNeutronBuilder and G4LEPNeutronBuilder.
 
 processes/biasing                                procbiasing-V09-01-02
 -----------------
