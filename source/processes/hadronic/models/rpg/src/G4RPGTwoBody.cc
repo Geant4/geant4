@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.3 2008-01-09 22:20:24 dennis Exp $
+// $Id: G4RPGTwoBody.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -228,9 +228,9 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     edta = targetNucleus.GetDTABlackTrackEnergy();  // was enp3 in fortran code
     const G4double pnCutOff = 0.0001;       // GeV
     const G4double dtaCutOff = 0.0001;      // GeV
-    const G4double kineticMinimum = 0.0001;
-    const G4double kineticFactor = -0.010;
-    G4double sprob = 0.0; // sprob = probability of self-absorption in heavy molecules
+    //    const G4double kineticMinimum = 0.0001;
+    //    const G4double kineticFactor = -0.010;
+    //    G4double sprob = 0.0; // sprob = probability of self-absorption in heavy molecules
     if( epnb >= pnCutOff )
     {
       npnb = G4Poisson( epnb/0.02 );
@@ -246,8 +246,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
 
     if (npnb == 0 && ndta == 0) npnb = 1;
 
-    AddBlackTrackParticles(epnb, npnb, edta, ndta, sprob, kineticMinimum, 
-                           kineticFactor, modifiedOriginal, 
+    AddBlackTrackParticles(epnb, npnb, edta, ndta, modifiedOriginal, 
                            PinNucleus, NinNucleus, targetNucleus,
                            vec, vecLen);
   }

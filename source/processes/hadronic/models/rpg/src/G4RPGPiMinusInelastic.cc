@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiMinusInelastic.cc,v 1.3 2008-02-22 22:30:30 dennis Exp $
+// $Id: G4RPGPiMinusInelastic.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -97,7 +97,7 @@ G4RPGPiMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   const G4double cutOff = 0.1;
   if( currentParticle.GetKineticEnergy() > cutOff )
     InitialCollision(vec, vecLen, currentParticle, targetParticle,
-                     incidentHasChanged, targetHasChanged, quasiElastic);
+                     incidentHasChanged, targetHasChanged);
     
   CalculateMomenta(vec, vecLen,
                    originalIncident, originalTarget, modifiedOriginal,
@@ -125,8 +125,7 @@ G4RPGPiMinusInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec
                                   G4ReactionProduct& currentParticle,
                                   G4ReactionProduct& targetParticle,
                                   G4bool& incidentHasChanged,
-                                  G4bool& targetHasChanged,
-                                  G4bool& quasiElastic)
+                                  G4bool& targetHasChanged)
 {
   G4double KE = currentParticle.GetKineticEnergy()/GeV;
  

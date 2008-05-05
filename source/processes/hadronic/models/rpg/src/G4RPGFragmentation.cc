@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.4 2008-02-22 22:02:50 dennis Exp $
+// $Id: G4RPGFragmentation.cc,v 1.5 2008-05-05 21:21:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -1026,12 +1026,12 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
     const G4double pnCutOff = 0.001;
     const G4double dtaCutOff = 0.001;
-    const G4double kineticMinimum = 1.e-6;
-    const G4double kineticFactor = -0.010;
-    G4double sprob = 0.0;  // sprob = probability of self-absorption in 
+    //    const G4double kineticMinimum = 1.e-6;
+    //    const G4double kineticFactor = -0.010;
+    //    G4double sprob = 0.0;  // sprob = probability of self-absorption in 
                            // heavy molecules
     const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
-    if (ekIncident >= 5.0) sprob = std::min(1.0, 0.6*std::log(ekIncident-4.0));
+    //    if (ekIncident >= 5.0) sprob = std::min(1.0, 0.6*std::log(ekIncident-4.0));
     if (epnb > pnCutOff)
     {
       npnb = G4Poisson((1.5+1.25*numberofFinalStateNucleons)*epnb/(epnb+edta));
@@ -1046,8 +1046,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     }
     if (npnb == 0 && ndta == 0) npnb = 1;
 
-    AddBlackTrackParticles(epnb, npnb, edta, ndta, sprob, kineticMinimum, 
-                           kineticFactor, modifiedOriginal,
+    AddBlackTrackParticles(epnb, npnb, edta, ndta, modifiedOriginal,
                            PinNucleus, NinNucleus, targetNucleus,
                            vec, vecLen);
   }

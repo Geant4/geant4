@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc,v 1.3 2008-02-22 22:24:46 dennis Exp $
+// $Id: G4RPGReaction.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,9 +57,6 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
                        const G4int npnb,
                        const G4double edta,            // GeV
                        const G4int ndta,
-                       const G4double sprob,
-                       const G4double kineticMinimum,  // GeV
-                       const G4double kineticFactor,   // GeV
                        const G4ReactionProduct& modifiedOriginal,
                        G4int PinNucleus,
                        G4int NinNucleus,
@@ -92,13 +89,12 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
   G4double pp;
   G4double kinetic = 0;
   G4double kinCreated = 0;
-  G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * std::exp(-(atomicWeight-1.0)/120.0);
+  //  G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * std::exp(-(atomicWeight-1.0)/120.0);
   G4double remainingE = 0;
 
   // First add protons and neutrons to final state
-
   if (npnb > 0) {
-    G4double backwardKinetic = 0.0;
+    //    G4double backwardKinetic = 0.0;
     G4int local_npnb = npnb;
     // DHW: does not conserve energy  for (i = 0; i < npnb; ++i) if (G4UniformRand() < sprob) local_npnb--;
     local_npnb = std::min(PinNucleus + NinNucleus , local_npnb);

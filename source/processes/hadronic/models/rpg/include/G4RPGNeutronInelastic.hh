@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.hh,v 1.2 2008-01-04 23:51:09 dennis Exp $
+// $Id: G4RPGNeutronInelastic.hh,v 1.3 2008-05-05 21:21:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -62,8 +62,7 @@
      G4ReactionProduct& currentParticle,
      G4ReactionProduct& targetParticle,
      G4bool& incidentHasChanged,
-     G4bool& targetHasChanged,
-     G4bool& quasiElastic);
+     G4bool& targetHasChanged);
     
    void SlowNeutron(
      const G4HadProjectile* originalIncident,

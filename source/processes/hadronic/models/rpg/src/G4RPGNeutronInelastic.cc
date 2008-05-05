@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.cc,v 1.3 2008-02-22 22:26:58 dennis Exp $
+// $Id: G4RPGNeutronInelastic.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -105,7 +105,7 @@ G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   vec.Initialize( 0 );
     
   InitialCollision(vec, vecLen, currentParticle, targetParticle,
-                   incidentHasChanged, targetHasChanged, quasiElastic);
+                   incidentHasChanged, targetHasChanged);
     
   CalculateMomenta(vec, vecLen,
                    originalIncident, originalTarget, modifiedOriginal,
@@ -250,8 +250,7 @@ G4RPGNeutronInelastic::InitialCollision(G4FastVector<G4ReactionProduct,256>& vec
                                    G4ReactionProduct& currentParticle,
                                    G4ReactionProduct& targetParticle,
                                    G4bool& incidentHasChanged,
-                                   G4bool& targetHasChanged,
-                                   G4bool& quasiElastic)
+                                   G4bool& targetHasChanged)
 {
   G4double KE = currentParticle.GetKineticEnergy()/GeV;
  

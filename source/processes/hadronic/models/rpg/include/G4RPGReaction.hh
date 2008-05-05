@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.hh,v 1.2 2008-02-22 22:23:49 dennis Exp $
+// $Id: G4RPGReaction.hh,v 1.3 2008-05-05 21:21:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -71,9 +71,6 @@ public:  // with description
                               const G4int /*npnb*/,
                               const G4double /*edta*/,
                               const G4int /*ndta*/,
-                              const G4double /*sprob*/,
-                              const G4double /*kineticMinimum*/,
-                              const G4double /*kineticFactor*/,
                               const G4ReactionProduct& /*modifiedOriginal*/,
                               G4int /*PinNucleus*/,
                               G4int /*NinNucleus*/,
