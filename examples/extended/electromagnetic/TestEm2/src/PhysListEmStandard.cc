@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2008-04-04 17:26:57 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2008-05-05 17:08:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,12 +132,13 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);    
   emOptions.SetMaxEnergy(100*TeV);  
-  emOptions.SetDEDXBinning(1200);  
-  emOptions.SetLambdaBinning(1200);
+  emOptions.SetDEDXBinning(110);  
+  emOptions.SetLambdaBinning(110);
+  emOptions.SetSplineFlag(true);  
    
   //energy loss
   //
-  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetLinearLossLimit(1.e-5);
   emOptions.SetStepFunction(0.2, 100*um); 
    
   //ionization
