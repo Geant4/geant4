@@ -52,7 +52,8 @@ private:
       int n;
    };
 
-   static const int volumeArrayMaxSize = 3000000;
+   static const int volumeArrayMaxSize = 4000000; // Constant for maximum size of array used for sorting volumes
+   static const int maxDisplacements = 8; // Constant for limiting the number displacements/reflections applied to a single solid
    volumeStruct** volumeArray;
    int volumeArraySize;
 

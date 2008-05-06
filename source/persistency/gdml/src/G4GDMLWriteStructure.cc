@@ -131,7 +131,7 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
    while (true) { // Solve possible displacement/reflection of the referenced solid!
    
-      if (displaced>4) G4Exception("GDML Writer: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
+      if (displaced>maxDisplacements) G4Exception("GDML Writer: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
    
       if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
    
