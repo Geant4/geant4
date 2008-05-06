@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2008-05-06 12:14:09 ztorzsok Exp $
+$Id: History,v 1.52 2008-05-06 13:26:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,14 +18,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
-6 May 2008 ZOltan Torzsok
-- Added a constant limiting the maximum number of reflections/displacements of a single solid
+6 May 2008 ZOltan Torzsok (gdml-V09-01-04)
+- Added a constant limiting the maximum number of reflections/displacements of a single solid.
 
 21 April 2008 Zoltan Torzsok
-- Divisionvol, replicavol and paramvol are resolved now
+- Divisionvol, replicavol and paramvol are resolved now.
 
-11 April 2008 Zoltan Torzsok
-- Referenced solid in volume is resolved in case of displacements/reflections
+11 April 2008 Zoltan Torzsok (gdml-V09-01-03)
+- Referenced solid in volume is resolved in case of displacements/reflections.
 
 10 April 2008 Zoltan Torzsok
 - Added text output to console to inform of progress during processing.
