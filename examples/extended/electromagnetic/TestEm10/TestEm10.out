@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -49,28 +49,28 @@ phot:  Total cross sections from Sandia parametrisation.
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
@@ -127,27 +127,27 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.17 s
+total time for build X-ray TR energy loss tables = 0.16 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
 
 Lorentz Factor	XTR photon number
 
@@ -202,76 +202,76 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.17 s
+total time for build X-ray TR energy loss tables = 0.16 s
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
@@ -314,23 +314,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.61s Real=1.61s Sys=0s
+  User=1.57s Real=3.1s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=44.6771 +- 0.62508  mm  
+    mean charged track length   in absorber=43.942 +- 0.565197  mm  
 
-            mean energy deposit in absorber=0.0528231 +- 0.00091982  MeV 
+            mean energy deposit in absorber=0.0525422 +- 0.000881868  MeV 
 
- mean number of steps in absorber (charged) =9.142 +- 0.274127      
- mean number of steps in absorber (neutral) =2.824 +- 0.05174      
+ mean number of steps in absorber (charged) =9.129 +- 0.269225      
+ mean number of steps in absorber (neutral) =2.837 +- 0.0537069      
 
-   mean number of charged secondaries = 3.607 +- 0.079728
+   mean number of charged secondaries = 3.658 +- 0.0775696
 
-   mean number of neutral secondaries = 0.044 +- 0.00678705
+   mean number of neutral secondaries = 0.036 +- 0.00622125
 
-   mean number of e-s =3.607  and e+s =0
+   mean number of e-s =3.658  and e+s =0
 
-(number) transmission coeff=0.523  reflection coeff=0.021
+(number) transmission coeff=0.513  reflection coeff=0.022
 
  energy deposit distribution 
 #entries=1000    #underflows=0    #overflows=57
@@ -342,71 +342,71 @@ Run Summary
     4   6.15385           0           0
     5   7.69231           0           0
     6   9.23077           0           0
-    7   10.7692           1       0.001
+    7   10.7692           0           0
     8   12.3077           0           0
-    9   13.8462           3       0.003
-   10   15.3846          14       0.014
-   11   16.9231          14       0.014
-   12   18.4615          17       0.017
-   13        20          19       0.019
-   14   21.5385          21       0.021
-   15   23.0769          18       0.018
-   16   24.6154          21       0.021
-   17   26.1538          27       0.027
-   18   27.6923          25       0.025
-   19   29.2308          31       0.031
-   20   30.7692          32       0.032
-   21   32.3077          21       0.021
-   22   33.8462          23       0.023
-   23   35.3846          28       0.028
-   24   36.9231          27       0.027
-   25   38.4615          33       0.033
-   26        40          36       0.036
-   27   41.5385          36       0.036
-   28   43.0769          17       0.017
-   29   44.6154          28       0.028
-   30   46.1538          27       0.027
-   31   47.6923          24       0.024
-   32   49.2308          19       0.019
-   33   50.7692          31       0.031
-   34   52.3077          27       0.027
-   35   53.8462          18       0.018
-   36   55.3846          25       0.025
-   37   56.9231          18       0.018
-   38   58.4615          15       0.015
-   39        60          19       0.019
-   40   61.5385          16       0.016
-   41   63.0769          20        0.02
-   42   64.6154          14       0.014
-   43   66.1538          10        0.01
+    9   13.8462           5       0.005
+   10   15.3846           9       0.009
+   11   16.9231           8       0.008
+   12   18.4615          13       0.013
+   13        20          17       0.017
+   14   21.5385          17       0.017
+   15   23.0769          21       0.021
+   16   24.6154          31       0.031
+   17   26.1538          22       0.022
+   18   27.6923          24       0.024
+   19   29.2308          24       0.024
+   20   30.7692          31       0.031
+   21   32.3077          26       0.026
+   22   33.8462          26       0.026
+   23   35.3846          37       0.037
+   24   36.9231          37       0.037
+   25   38.4615          35       0.035
+   26        40          32       0.032
+   27   41.5385          26       0.026
+   28   43.0769          29       0.029
+   29   44.6154          29       0.029
+   30   46.1538          32       0.032
+   31   47.6923          31       0.031
+   32   49.2308          23       0.023
+   33   50.7692          25       0.025
+   34   52.3077          17       0.017
+   35   53.8462          17       0.017
+   36   55.3846          11       0.011
+   37   56.9231          22       0.022
+   38   58.4615          19       0.019
+   39        60          14       0.014
+   40   61.5385          22       0.022
+   41   63.0769          18       0.018
+   42   64.6154          16       0.016
+   43   66.1538          13       0.013
    44   67.6923          13       0.013
-   45   69.2308          10        0.01
-   46   70.7692          16       0.016
-   47   72.3077           9       0.009
-   48   73.8462          13       0.013
+   45   69.2308          20        0.02
+   46   70.7692          17       0.017
+   47   72.3077          13       0.013
+   48   73.8462           7       0.007
    49   75.3846          12       0.012
-   50   76.9231           8       0.008
-   51   78.4615          11       0.011
-   52        80           8       0.008
-   53   81.5385           5       0.005
-   54   83.0769           7       0.007
-   55   84.6154          14       0.014
-   56   86.1538           5       0.005
-   57   87.6923           3       0.003
-   58   89.2308          10        0.01
-   59   90.7692           7       0.007
-   60   92.3077           2       0.002
+   50   76.9231           9       0.009
+   51   78.4615           8       0.008
+   52        80           5       0.005
+   53   81.5385           2       0.002
+   54   83.0769          10        0.01
+   55   84.6154          10        0.01
+   56   86.1538           2       0.002
+   57   87.6923           4       0.004
+   58   89.2308           2       0.002
+   59   90.7692           8       0.008
+   60   92.3077           5       0.005
    61   93.8462           5       0.005
-   62   95.3846           1       0.001
+   62   95.3846           4       0.004
    63   96.9231           3       0.003
-   64   98.4615           6       0.006
+   64   98.4615           5       0.005
 
- Emp =            0.04   width=      0.0430769  MeV 
+ Emp =       0.0353846   width=      0.0461538  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2119996793, 1157094207
+ Current couple of seeds = 1468174231, 450679924
 ----------------------------------------
 
 ========= Table of registered couples ==============================

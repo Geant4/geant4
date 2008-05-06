@@ -1,12 +1,11 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-### NIST DataBase for Materials is used
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -27,56 +26,10 @@ PhysicsList::Set emstandard_opt1 EM physics
 #/process/eLoss/preciseRange true
 #/process/eLoss/integral true
 /run/initialize
-
-***** Table : Nb of materials = 5 *****
-
- Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
-   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
-   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
-   --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
-
- Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
-   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.635 cm   Imean: 173.000 eV 
-   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
-   --->  Isotope:    Si   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-   --->  Isotope:    Si   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-   --->  Isotope:    Si   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.977 cm   Imean: 286.000 eV 
-   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
-   --->  Isotope:    Fe   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-   --->  Isotope:    Fe   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-   --->  Isotope:    Fe   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope:    Fe   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material: G4_CESIUM_IODIDE     density:  4.510 g/cm3   RadL:   1.860 cm   Nucl.Int.Length:  39.287 cm   Imean: 553.100 eV 
-   --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
-   --->  Isotope:     I   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  ElmMassFraction:  48.85 %  ElmAbundance  50.00 %
-   --->  Element: Cs (Cs)   Z = 55.0   N = 133.0   A = 132.91 g/mole
-   --->  Isotope:    Cs   Z = 55   N = 133   A = 132.91 g/mole   abundance: 100.00 %  ElmMassFraction:  51.15 %  ElmAbundance  50.00 %
-
-
 Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
 Vertex is 3 cm  of 3 layers of Si of 100 um  npads= 601
 ### New geometry is constructed
-PhysicsList: world cuts are set cutG= 0.3 mm    cutE= 0.3 mm 
-Vertex cuts are set
-Muon cuts are set
 #
 #/testem/histo/fileName e_pr.root
 #/testem/histo/fileType root
@@ -90,56 +43,56 @@ phot:  Total cross sections from Sandia parametrisation.
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
@@ -150,8 +103,8 @@ msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
@@ -160,68 +113,68 @@ ionIoni:   tables are built for  GenericIon
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
@@ -293,32 +246,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.13s Real=4.13s Sys=0s
+  User=4.12s Real=8.33s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1325
-Average number of gamma      699.7
-Average number of e+         48.36
-Average number of steps      3990
-Edep 1x1 =                   0.8313 +- 0.002856  res=  3.435 %
-Edep 3x3 =                   0.957 +- 0.001393  res=  1.455 %
-Edep 5x5 =                   0.9804 +- 0.0007021  res=  0.7161 %
+Average number of e-         1320
+Average number of gamma      701.3
+Average number of e+         48.12
+Average number of steps      3980
+Edep 1x1 =                   0.8336 +- 0.002518  res=  3.021 %
+Edep 3x3 =                   0.9601 +- 0.001163  res=  1.212 %
+Edep 5x5 =                   0.9807 +- 0.0007853  res=  0.8007 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8305 +- 0.002963  res=  3.568 %
-Edep 3x3 =                   0.9549 +- 0.001782  res=  1.867 %
-Edep 5x5 =                   0.9766 +- 0.001549  res=  1.586 %
+Edep 1x1 =                   0.8327 +- 0.002681  res=  3.219 %
+Edep 3x3 =                   0.9596 +- 0.001241  res=  1.293 %
+Edep 5x5 =                   0.9807 +- 0.0007853  res=  0.8007 %
+Ebeam(GeV)                   1
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8313  delEdep1x1= 0.00422 nrms= 1.419
-Erms1x1: 0.02856  delErms1x1= -0.001181 nrms= -0.3973
-Edep3x3: 0.957  delEdep3x3= 2.626e-05 nrms= 0.02042
-Erms3x3: 0.01393  delErms3x3= 0.001069 nrms= 0.8315
-Edep5x5: 0.9804  delEdep5x5= 0.001103 nrms= 1.247
-Erms5x5: 0.007021  delErms5x5= -0.001819 nrms= -2.058
+Edep1x1: 0.8336  delEdep1x1= 0.006515 nrms= 2.191
+Erms1x1: 0.02518  delErms1x1= -0.00456 nrms= -1.533
+Edep3x3: 0.9601  delEdep3x3= 0.003087 nrms= 2.401
+Erms3x3: 0.01163  delErms3x3= -0.001226 nrms= -0.9531
+Edep5x5: 0.9807  delEdep5x5= 0.001428 nrms= 1.615
+Erms5x5: 0.007853  delErms5x5= -0.0009872 nrms= -1.117
 <<<<<END>>>>>   IS ACCEPTED
 
 #

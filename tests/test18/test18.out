@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,48 +54,48 @@ Registered filter factories:
 /run/beamOn 1
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
@@ -106,8 +106,8 @@ msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
@@ -116,68 +116,68 @@ ionIoni:   tables are built for  GenericIon
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.05, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.05, integral: 1, fluct: 1, linLossLimit= 0.05
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
@@ -265,19 +265,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
-         991           1       583.3     e-
-    1.01e+03           1       583.3     anti_nu_e
-      0.0199           1       583.3     Na24[472.2]
-         472           1       583.4     gamma
-           0           1       583.4     Na24[0.0]
-         846           1       888.1     e-
-         545           1       888.1     anti_nu_e
-    2.75e+03           1       888.1     gamma
-    1.37e+03           1       888.1     gamma
-      0.0224           1       888.1     Mg24[0.0]
+         400           1       520.7     e-
+     1.6e+03           1       520.7     anti_nu_e
+       0.116           1       520.7     Na24[472.2]
+         472           1       520.7     gamma
+           0           1       520.7     Na24[0.0]
+         703           1        2507     e-
+         688           1        2507     anti_nu_e
+    2.75e+03           1        2507     gamma
+    1.37e+03           1        2507     gamma
+      0.0573           1        2507     Mg24[0.0]
 
 #
 #
@@ -319,23 +319,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     F24[0.0]
-     6.1e+03           1      0.1939     e-
-    6.62e+03           1      0.1939     anti_nu_e
-    1.98e+03           1      0.1939     gamma
-       0.597           1      0.1939     Ne24[0.0]
-    1.64e+03           1       62.22     e-
-         357           1       62.22     anti_nu_e
-       0.118           1       62.22     Na24[472.2]
-         472           1       62.22     gamma
-           0           1       62.22     Na24[0.0]
-         308           1   8.189e+04     e-
-    1.08e+03           1   8.189e+04     anti_nu_e
-    2.75e+03           1   8.189e+04     gamma
-    1.37e+03           1   8.189e+04     gamma
-       0.031           1   8.189e+04     Mg24[0.0]
+    6.81e+03           1       1.113     e-
+    5.91e+03           1       1.113     anti_nu_e
+    1.98e+03           1       1.113     gamma
+        2.14           1       1.113     Ne24[0.0]
+     1.3e+03           1       25.56     e-
+         703           1       25.56     anti_nu_e
+       0.132           1       25.56     Na24[472.2]
+         472           1       25.58     gamma
+           0           1       25.58     Na24[0.0]
+         976           1    1.31e+05     e-
+         414           1    1.31e+05     anti_nu_e
+    2.75e+03           1    1.31e+05     gamma
+    1.37e+03           1    1.31e+05     gamma
+      0.0391           1    1.31e+05     Mg24[0.0]
 
 #
 #
@@ -377,17 +377,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
-    1.78e+03           1       3.537     e+
-         511           1       3.537     gamma
-         511           1       3.537     gamma
-    1.56e+03           1       3.537     nu_e
-    5.39e+03           1       3.537     gamma
-    2.75e+03           1       3.537     gamma
-    1.37e+03           1       3.537     gamma
-       0.121           1       3.537     Mg24[0.0]
+    1.32e+03           1       10.19     e+
+         511           1       10.19     gamma
+         511           1       10.19     gamma
+    2.02e+03           1       10.19     nu_e
+    1.08e+03           1       10.19     gamma
+    7.07e+03           1       10.19     gamma
+    1.37e+03           1       10.19     gamma
+        0.29           1       10.19     Mg24[0.0]
 
 #
 #
@@ -432,13 +432,13 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Na24[472.0]
-         472           1      0.0445     gamma
-           0           1      0.0445     Na24[0.0]
-         517           1   1.097e+04     e-
-         873           1   1.097e+04     anti_nu_e
-    2.75e+03           1   1.097e+04     gamma
-    1.37e+03           1   1.097e+04     gamma
-      0.0487           1   1.097e+04     Mg24[0.0]
+         472           1     0.08183     gamma
+           0           1     0.08183     Na24[0.0]
+         544           1   1.174e+04     e-
+         847           1   1.174e+04     anti_nu_e
+    2.75e+03           1   1.174e+04     gamma
+    1.37e+03           1   1.174e+04     gamma
+      0.0151           1   1.174e+04     Mg24[0.0]
 
 #
 #
@@ -480,19 +480,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
-    4.04e+03           1      0.6455     e+
-    2.18e+03           1      0.6455     gamma
-         896           1      0.6455     gamma
-    2.54e+03           1      0.6455     nu_e
-       0.139           1      0.6455     V46[0.0]
-    3.48e+03           1      0.9319     e+
-         511           1      0.9319     gamma
-         511           1      0.9319     gamma
-    2.54e+03           1      0.9319     nu_e
-       0.347           1      0.9319     Ti46[0.0]
+    3.25e+03           1      0.1148     e+
+         511           1      0.1148     gamma
+         511           1      0.1148     gamma
+    3.33e+03           1      0.1148     nu_e
+       0.363           1      0.1148     V46[0.0]
+    5.02e+03           1      0.1717     e+
+         511           1      0.1717     gamma
+         511           1      0.1717     gamma
+    1.01e+03           1      0.1717     nu_e
+       0.334           1      0.1717     Ti46[0.0]
 
 #
 #
@@ -534,11 +534,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1    0.001163     alpha
-         140           1    0.001163     Pb211[0.0]
+    7.39e+03           1   0.0006398     alpha
+         140           1   0.0006398     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

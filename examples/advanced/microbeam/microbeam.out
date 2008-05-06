@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -130,7 +130,7 @@ Thank you for using G4BinaryCascade.
 MicrobeamPhysicsList::SetCuts:CutLength : 10 nm 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 G4AugerData for Element no. 6 are loaded
@@ -157,24 +157,24 @@ LowEnBrem:  Total cross sections from EEDL database.
       The process must work with G4LowEnergyIonisation.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
@@ -207,7 +207,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
@@ -320,21 +320,21 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   is non-zero.
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.3455373
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.050190907
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.50468576
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.099219859
 
 -> Event # 3 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.39283574
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0068009035
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32792509
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.079423942
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.46888444
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.11936118
 
 -> Event # 5 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.53186136
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.071247309
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -346,17 +346,15 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 9 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.62957692
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.032387506
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.34369996
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.039793767
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.3457849
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.082705311
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 4
 
 Graphics systems deleted.
 Visualization Manager deleting...

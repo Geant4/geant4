@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -53,21 +53,21 @@ PhysicsList::SetCuts:CutLength : 1 um
 /run/beamOn 1
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
 
 ========= Table of registered couples ==============================
 
@@ -84,8 +84,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=33.32s Real=33.34s Sys=0.01s
-Time elapsed in 1 events ---- User=33.32s Real=33.34s Sys=0.01s
+  User=32.98s Real=64.24s Sys=0s
+Time elapsed in 1 events ---- User=32.98s Real=64.25s Sys=0s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -104,8 +104,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=290.92s Real=291s Sys=0s
-Time elapsed in 9 events ---- User=290.92s Real=291s Sys=0s
+  User=289.94s Real=580.77s Sys=0.12s
+Time elapsed in 9 events ---- User=289.94s Real=580.77s Sys=0.12s
 #
 /gun/particle proton
 #------------------
@@ -952,8 +952,8 @@ Point: 9.18254e+07 - Data value: 0.206763
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.62s Real=6.62s Sys=0.01s
-Time elapsed in 1 events ---- User=6.62s Real=6.62s Sys=0.01s
+  User=6.63s Real=13.45s Sys=0.02s
+Time elapsed in 1 events ---- User=6.63s Real=13.45s Sys=0.02s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -972,8 +972,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.82s Real=3.81s Sys=0s
-Time elapsed in 1 events ---- User=3.82s Real=3.81s Sys=0s
+  User=3.78s Real=7.6s Sys=0s
+Time elapsed in 1 events ---- User=3.78s Real=7.6s Sys=0s
 #
 /gun/particle alpha
 #------------------
@@ -996,8 +996,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.74s Real=23.77s Sys=0s
-Time elapsed in 1 events ---- User=23.74s Real=23.77s Sys=0s
+  User=23.74s Real=47.49s Sys=0.01s
+Time elapsed in 1 events ---- User=23.74s Real=47.49s Sys=0.02s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -1016,8 +1016,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.21s Real=23.23s Sys=0s
-Time elapsed in 1 events ---- User=23.21s Real=23.23s Sys=0s
+  User=23.25s Real=46.57s Sys=0.02s
+Time elapsed in 1 events ---- User=23.25s Real=46.57s Sys=0.02s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 5179 calls

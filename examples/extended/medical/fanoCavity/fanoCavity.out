@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -57,7 +57,7 @@ PhysicsList::SetCuts:CutLength : 10 km
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according myKlein-Nishina model
       tables are built for  gamma
-      Lambda tables from 100 eV  to 10 GeV in 800 bins.
+      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
@@ -65,42 +65,42 @@ phot:  Total cross sections from Sandia parametrisation.
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1.022 MeV to 10 GeV in 800 bins.
+      Lambda tables from 1.022 MeV to 10 GeV in 800 bins, spline: 0
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 10 GeV in 800 bins.
-      LateralDisplacementFlag=  1   Skin= 2
+      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
-      Lambda tables from threshold to 10 GeV in 800 bins.
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
+      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 10 GeV in 800 bins.
+      CSDA range table up to 10 GeV in 800 bins
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
-      Lambda tables from threshold to 10 GeV in 800 bins.
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
+      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 10 GeV in 800 bins.
+      CSDA range table up to 10 GeV in 800 bins
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 10 GeV in 800 bins.
-      LateralDisplacementFlag=  1   Skin= 2
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins.
-      Lambda tables from threshold to 10 GeV in 800 bins.
+      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
+      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 10 GeV in 800 bins.
+      CSDA range table up to 10 GeV in 800 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
  Root logical volume(s) : Chamber 
@@ -139,15 +139,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70377   Tkin= 587.674 keV (0.000 %)   NbOfelec in cav= 4706   Dose/EnFluence= 27.808 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70231   Tkin= 586.945 keV (0.000 %)   NbOfelec in cav= 4913   Dose/EnFluence= 28.170 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140843   Tkin= 588.018 keV (0.059 %)   NbOfelec in cav= 9478   Dose/EnFluence= 29.067 cm2/g (4.526 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141074   Tkin= 587.310 keV (0.062 %)   NbOfelec in cav= 9866   Dose/EnFluence= 29.007 cm2/g (2.970 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 210899   Tkin= 587.747 keV (-0.046 %)   NbOfelec in cav= 14266   Dose/EnFluence= 29.580 cm2/g (1.764 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211492   Tkin= 587.793 keV (0.082 %)   NbOfelec in cav= 14541   Dose/EnFluence= 28.126 cm2/g (-3.036 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=45.19s Real=45.19s Sys=0.01s
+  User=56.75s Real=88.72s Sys=0s
 
  ======================== run summary ======================
 
@@ -157,32 +157,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281392  Transportation= 77840  msc= 1338697  eIoni= 1868423
+ Process calls frequency --->  compt= 281775  Transportation= 77840  msc= 2447509  eIoni= 1728518
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 587.7124 keV +- 0.1031 %  (--> range in wall material = 2.2085 mm )
- Mass_energy_transfer coef: 29.8309 cm2/g
+ Mean energy of secondary e- = 587.6262 keV +- 0.1032 %  (--> range in wall material = 2.2081 mm )
+ Mass_energy_transfer coef: 29.8265 cm2/g
 
- StoppingPower in wall   = 1.9727 MeV*cm2/g
-               in cavity = 1.9727 MeV*cm2/g
+ StoppingPower in wall   = 1.9728 MeV*cm2/g
+               in cavity = 1.9728 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19202	 Energy = 9.6622 GeV
-      Exit  --> nbParticles = 19209	 Energy = 9.6676 GeV
+      Enter --> nbParticles = 19328	 Energy = 9.8295 GeV
+      Exit  --> nbParticles = 19335	 Energy = 9.8308 GeV
 
- Total edep in cavity = 13.3059 MeV +- 2.7263 %	 Total charged trackLength = 53.4346 m     (mean value = 2.7828 mm )
- Total dose in cavity = 21.1771 MeV/mg
- Dose/EnergyFluence   = 29.9384 cm2/g
+ Total edep in cavity = 12.6796 MeV +- 2.1145 %	 Total charged trackLength = 53.0949 m     (mean value = 2.7470 mm )
+ Total dose in cavity = 20.1802 MeV/mg
+ Dose/EnergyFluence   = 28.5290 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.00360 +- 0.02840
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.95650 +- 0.02121
 
- StepSize of ch. tracks in wall   = 147.1601 um  +- 130.7912 um 	 (nbSteps/track = 11.3215)
- StepSize of ch. tracks in cavity = 583.3986 um  +- 645.6047 um 	 (nbSteps/track = 4.7699)
+ StepSize of ch. tracks in wall   = 113.6040 um  +- 120.6816 um 	 (nbSteps/track = 14.6895)
+ StepSize of ch. tracks in cavity = 495.8481 um  +- 756.6031 um 	 (nbSteps/track = 5.5401)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2000128992, 244730984
+ Current couple of seeds = 685469068, 2073286176
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-02    (25-January-2008)
+ Geant4 version Name: global-V09-01-06    (9-May-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -144,11 +144,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.61s Real=34.21s Sys=2.34s
+  User=8.96s Real=34.81s Sys=3.44s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 469687	muPairProd : 63239	muBrems : 737
+ Number of process calls --->	muIoni : 469690	muPairProd : 63236	muBrems : 737
 
  Simulation: total CrossSection = 0.53366 /cm	 MeanFreePath = 1.8738 cm 	 massicCrossSection = 0.06781 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
@@ -208,17 +208,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.58s Real=33.53s Sys=2.37s
+  User=8.91s Real=34.54s Sys=3.35s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 440543	hPairProd : 58902	hBrems : 331
+ Number of process calls --->	hIoni : 440693	hPairProd : 58859	hBrems : 344
 
- Simulation: total CrossSection = 0.49978 /cm	 MeanFreePath = 2.0009 cm 	 massicCrossSection = 0.063504 cm2/g
+ Simulation: total CrossSection = 0.4999 /cm	 MeanFreePath = 2.0004 cm 	 massicCrossSection = 0.063519 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 934989521, 1932564910
+ Current couple of seeds = 565387423, 1396711370
 ----------------------------------------
 #
 /gun/particle proton
@@ -245,7 +245,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 934989521, 1932564910
+ Current couple of seeds = 565387423, 1396711370
 ----------------------------------------
 Start Run processing.
 
@@ -271,17 +271,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.84s Real=33.21s Sys=2.4s
+  User=8.05s Real=33.79s Sys=3.44s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 440153	hPairProd : 33948	hBrems : 362
+ Number of process calls --->	hIoni : 439922	hPairProd : 33595	hBrems : 17
 
- Simulation: total CrossSection = 0.47446 /cm	 MeanFreePath = 2.1076 cm 	 massicCrossSection = 0.060288 cm2/g
+ Simulation: total CrossSection = 0.47353 /cm	 MeanFreePath = 2.1118 cm 	 massicCrossSection = 0.06017 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 721085007, 703176192
+ Current couple of seeds = 1744285417, 1057241958
 ----------------------------------------
 #
 Graphics systems deleted.
