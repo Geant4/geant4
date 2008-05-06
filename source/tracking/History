@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2007-10-09 03:51:06 tsasaki Exp $
+$Id: History,v 1.122 2008-05-06 12:52:48 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 May 2008  T.Sasaki (tracking-V09-01-00)
+- G4SteppingManager.cc: fTouchableHandle was not properly updated 
 
 08 Oct 2007 T.Sasaki (tracking-V09-00-01)
 - G4SteppingManager.hh: use kCarTolerance in CalculateSafety() instead of zero
