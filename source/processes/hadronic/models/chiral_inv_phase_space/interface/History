@@ -12,7 +12,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20-Mar-2008 Dennis Wright                (hadr-chips-inter-V09-01-04)
+ 6-May-2008 Dennis Wright              (hadr-chips-inter-V09-01-05)
+-------------------------------------------------------------------
+- replace max-- with --max at lines 1191, 1195, 1197 of G4Collison.cc
+  This fixes gcc-4.3 compiler warning of exceeded array bounds.
+
+20-Mar-2008 Dennis Wright              (hadr-chips-inter-V09-01-04)
+-------------------------------------------------------------------
 - Add parentheses around && within || to fix gcc-4.3 warnings.
   Files affected:
     G4QCollision.cc
