@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.36 2006-11-30 10:37:57 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.37 2008-05-06 17:17:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 // 15-02-06: g/cm2 ("Mass/Surface")
 //           MeV*cm2/g ..etc.. ("Energy*Surface/Mass")
 // 18-08-06: remove symbol mum (mma)
+// 06-05-08: V/m ("Electric field")  (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -295,6 +296,9 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("kilovolt","kV","Electric potential",kilovolt);
  new G4UnitDefinition("megavolt","MV","Electric potential",megavolt);
  
+ //Electric field
+ new G4UnitDefinition(  "volt/m","V/m","Electric field",volt/m);
+   
  //Magnetic flux
  new G4UnitDefinition("weber","Wb","Magnetic flux",weber);
  
