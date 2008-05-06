@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2006-10-20 16:47:47 maire Exp $
+$Id: History,v 1.31 2008-05-06 11:41:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-05-08 mma (testem6-V09-01-00)
+- README : update Aida informations
      
 20-10-06 mma (testem6-V08-01-00) 
 - GNUmakefile : LOADLIBS
