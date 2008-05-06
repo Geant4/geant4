@@ -192,7 +192,7 @@ processes/hadronic
   o Fixed compilation warnings on gcc-4.3.0.
 - models/theo_high_energy (had-theo-HE-V09-01-01)                           (*)
   o Added missing Fermi momentum to quasi elastic scattering.
-- models/util (hadr-mod-util-V09-01-00)                                     (*)
+- models/util (hadr-mod-util-V09-01-01)                                     (*)
   o Fixed compilation warnings on gcc-4.3.0 in G4Fragment.
 - stopping (hadr-stopping-V09-01-01)                                        (*)
   o G4MuMinusCaptureCascade: fixed case of NaN value in bound muon decay.
