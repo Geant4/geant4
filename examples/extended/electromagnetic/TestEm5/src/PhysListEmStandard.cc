@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.17 2008-04-07 14:36:23 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.18 2008-05-06 11:32:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,9 +86,9 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
+      pmanager->AddProcess(new G4eMultipleScattering, -1,1,1);
+      pmanager->AddProcess(new G4eIonisation,         -1,2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1,3,3);
 	    
     } else if (particleName == "e+") {
       //positron
@@ -100,14 +100,14 @@ void PhysListEmStandard::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4,4);
+      pmanager->AddProcess(new G4hMultipleScattering, -1,1,1);
+      pmanager->AddProcess(new G4MuIonisation,        -1,2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,3,3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1,4,4);
              
     } else if (particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1,1,1);
+      pmanager->AddProcess(new G4ionIonisation,       -1,2,2);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
@@ -131,12 +131,13 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);    
   emOptions.SetMaxEnergy(100*TeV);  
-  emOptions.SetDEDXBinning(1200);  
-  emOptions.SetLambdaBinning(1200);  
+  emOptions.SetDEDXBinning(120);  
+  emOptions.SetLambdaBinning(120);
+  emOptions.SetSplineFlag(true);    
   
   //energy loss
   //
-  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetLinearLossLimit(1.e-5);
   emOptions.SetStepFunction(0.2, 100*um); 
    
   //ionization
