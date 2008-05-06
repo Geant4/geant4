@@ -21,14 +21,14 @@ global/HEPGeometry           Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/HEPNumerics           Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
-interfaces                   yoshidah@naruto-u.ac.jp         Hajime Yoshida
-"/basic                      yoshidah@naruto-u.ac.jp	     Hajime Yoshida
+interfaces                   Koichi.Murakami@kek.jp          Koichi Murakami
+"/basic                      Koichi.Murakami@kek.jp          Koichi Murakami
 "/GAG                        yoshidah@naruto-u.ac.jp	     Hajime Yoshida
 "/common                     barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-persistency                  Witold.Pokorski@cern.ch         Witold Pokorski
+persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
@@ -96,7 +96,7 @@ visualization/RayTracer      asai@slac.stanford.edu          Makoto Asai
 visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
-environments                 yoshidah@naruto-u.ac.jp         Hajime Yoshida
+environments                 Koichi.Murakami@kek.jp          Koichi Murakami
   g4py                       Koichi.Murakami@kek.jp          Koichi Murakami
   MOMO                       yoshidah@naruto-u.ac.jp         Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
@@ -107,13 +107,13 @@ examples/novice/N04          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N05          Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06          gum@triumf.ca                   Peter Gumplinger
 examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
-examples/advanced            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   air_shower                 bernardo@lip.pt                 Bernardo Tome
   brachytherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
-  hadrontherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+  hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
   human_phantom              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
@@ -155,7 +155,7 @@ examples/extended
   geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   hadronic/Hadr01            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   medical:
-    DICOM                    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+    DICOM                    Pedro.Arce@ciemat.es            Pedro Arce
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
     fanoCavity2              Michel.Maire@lapp.in2p3.fr      Michel Maire
     GammaTherapy             Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -176,7 +176,7 @@ examples/extended
     perspective              John.Allison@man.ac.uk          John Allison
     standalone               John.Allison@man.ac.uk          John Allison
     userVisAction            John.Allison@man.ac.uk          John Allison
-tests                        Ian.Mclaren@cern.ch             Ian McLaren
+tests                        Gunter.Folger@cern.ch           Gunter Folger
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
@@ -184,7 +184,7 @@ tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test04                 (not currently used - see tests/GNUmakefile)
       test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test06                 (not currently used - see tests/GNUmakefile)
-      test07                 Ian.Mclaren@cern.ch             Ian McLaren
+      test07                 Gunter.Folger@cern.ch           Gunter Folger
       test08                 (not currently used - see tests/GNUmakefile)
       test09                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test10                 gum@triumf.ca                   Peter Gumplinger
@@ -211,7 +211,7 @@ tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 asai@slac.stanford.edu          Makoto Asai
       test33                 Alexander.Howard@cern.ch        Alexander Howard
-      test34                 Joanna.Weng@cern.ch             Joanna Weng
+      test34                 Marc.Verderi@in2p3.fr           Marc Verderi
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test36                 Vladimir.Grichine@cern.ch       Vladimir Grichine
       test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
