@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 080505 Fixed and chnaged sampling method of impact parameter by T. Koi 
+//
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
 
@@ -107,7 +109,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
      //G4double xs_0 = shenXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double xs_0 = genspaXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
-     G4double bmax_0 = std::sqrt( xs_0 )/pi*2;
+     G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 
      //delete proj_dp; 
@@ -147,7 +149,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
 // impact parameter 
       G4double bmax = 1.05*(bmax_0/fermi);  // 10% for Peripheral reactions
-      G4double b = bmax * G4UniformRand();
+      G4double b = bmax * std::sqrt ( G4UniformRand() );
 //071112
       //G4double b = 0;
       //G4double b = bmax;
