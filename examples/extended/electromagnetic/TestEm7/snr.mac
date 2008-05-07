@@ -1,4 +1,4 @@
-# $Id: snr.mac,v 1.1 2007-12-19 19:21:41 vnivanch Exp $
+# $Id: snr.mac,v 1.2 2008-05-07 08:07:45 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -18,8 +18,12 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standardNR	# use screened nuclear recoil  
-###/testem/phys/addPhysics  binary	# hadronic physics
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt2
+#/testem/phys/addPhysics  emstandard_opt3  
+#/testem/phys/addPhysics  standardNR	  
+/testem/phys/addPhysics  standardIG  
+###/testem/phys/addPhysics  binary
 #
 /run/initialize
 #
@@ -39,8 +43,3 @@
 /gun/energy 3.5 GeV
 /run/beamOn 1000
 #
-/testem/det/setMat G4_Cu
-/testem/det/update
-/gun/particle kaon+
-/gun/energy 100 MeV
-/run/beamOn 1000
