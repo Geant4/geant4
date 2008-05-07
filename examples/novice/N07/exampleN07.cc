@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.10 2007-05-04 01:49:28 asaim Exp $
+// $Id: exampleN07.cc,v 1.11 2008-05-07 10:13:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,8 +100,9 @@ int main(int argc,char** argv)
 #else
    session = new G4UIterminal();
 #endif    
-      
-   UI->ApplyCommand("/control/execute vis.mac");    
+#ifdef G4VIS_USE
+   UI->ApplyCommand("/control/execute vis.mac");     
+#endif
    session->SessionStart();
 
    delete session;
