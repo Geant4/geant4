@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2008-03-18 15:30:33 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.4 2008-05-07 13:57:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,10 +99,12 @@ void PhysListEmStandard::ConstructProcess()
 
   //extend binning of PhysicsTables
   //
-  G4LossTableManager::Instance()->SetMaxEnergy(1000.0*PeV);
-  G4LossTableManager::Instance()->SetDEDXBinning(220);
-  G4LossTableManager::Instance()->SetLambdaBinning(220);
-  G4LossTableManager::Instance()->SetVerbose(0);
+  G4LossTableManager::Instance()->SetMinEnergy(100*eV);  
+  G4LossTableManager::Instance()->SetMaxEnergy(1000*PeV);
+  G4LossTableManager::Instance()->SetDEDXBinning(160);
+  G4LossTableManager::Instance()->SetLambdaBinning(160);
+  G4LossTableManager::Instance()->SetSplineFlag(true);  
+  G4LossTableManager::Instance()->SetVerbose(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
