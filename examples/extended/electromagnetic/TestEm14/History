@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2008-01-08 16:15:42 maire Exp $
+$Id: History,v 1.14 2008-05-07 12:49:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-05-08 mma (testem14-V09-01-01)
+- README : update Aida informations     
+     
 08-01-08 mma (testem14-V09-01-00) 
 - HistoManager : ascii[0] = flag to control creation of .ascii file 
     
