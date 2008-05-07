@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.10 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.11 2008-05-07 08:06:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,6 +116,8 @@ void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
   currCharge2= currentIonZ*currentIonZ;
   SetDynamicMassCharge(currMassRatio, q*q);
   preStepKinEnergy = track.GetKineticEnergy();
+  //G4cout << "Q^2= " <<  currCharge2 << " q= " << q << " ratio= " 
+  //	 << currMassRatio << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,6 +130,8 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
 {
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
+  //G4cout<<"G4ionGasIonisation: eloss= "<<eloss
+  //	<<" epre(MeV)= "<<preStepKinEnergy<<G4endl;
 
   // estimate mean energy at the step
   G4double e = preStepKinEnergy - eloss*0.5;
@@ -139,11 +143,13 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
     // use Bethe-Bloch with corrections
     if(e*currMassRatio > currTh) {
       eloss += s*corr->IonHighOrderCorrections(part,couple,e);
-    } 
-    // Correction for data points if(stopDataActive)
-    eloss *= corr->EffectiveChargeCorrection(part,mat,e)*currCharge2
-      /effCharge->EffectiveChargeSquareRatio(part,mat,e);
-    // G4cout<<"Below th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
+      /*
+    } else {
+      // Correction for data points if(stopDataActive)
+      eloss *= corr->EffectiveChargeCorrection(part,mat,e)	
+	/effCharge->EffectiveChargeSquareRatio(part,mat,e);
+      */
+    }
   }
 
   // use nuclear stopping 
@@ -160,6 +166,7 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
     //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
     fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
+  //  G4cout<<"eloss= "<<eloss<<" niel= " <<niel<<" s= "<<s<<G4endl;
 
   // Compute mean effective charge on the step
   e = preStepKinEnergy - eloss - niel;
@@ -167,7 +174,7 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
     // effective number of collisions
     G4double x = mat->GetElectronDensity()*s*atomXS;
     // equilibrium charge
-    G4double q = effCharge->EffectiveChargeSquareRatio(part,mat,e);
+    G4double q = effCharge->EffectiveCharge(part,mat,e)/eplus;
   
     // sample charge change during the step
     fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
@@ -181,9 +188,12 @@ G4double G4ionGasIonisation::SampleChargeAfterStep(G4double qeff, G4double xeff)
   // qeff - equilibrium charge
   // xeff - effective number of collisions
   // q    - current charge
-  currentIonZ = G4int(qeff);
   G4double q = G4double(currentIonZ);
-  if(G4UniformRand() > qeff - q) currentIonZ++;
+  if(qeff > q) {
+    if(G4UniformRand() < qeff - q) currentIonZ++;
+  } else {
+    if(G4UniformRand() < q - qeff) currentIonZ--;
+  }
 
   q = eplus*currentIonZ;
   if(verboseLevel > 1) G4cout << "G4ionGasIonisation: Q1= " << currentIonZ
