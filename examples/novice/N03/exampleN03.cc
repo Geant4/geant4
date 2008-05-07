@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.34 2008-01-17 17:31:31 maire Exp $
+// $Id: exampleN03.cc,v 1.35 2008-05-07 09:56:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,8 +33,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "Randomize.hh"
 
@@ -50,18 +48,19 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE_XM
+#if defined(G4UI_USE_TCSH)
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#elif defined(G4UI_USE_XM)
 #include "G4UIXm.hh"
-#endif
-
-#ifdef G4UI_USE_WIN32
+#elif defined(G4UI_USE_WIN32)
 #include "G4UIWin32.hh"
-#endif
-
-#ifdef G4UI_USE_QT
+#elif defined(G4UI_USE_QT)
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
 #include <qapplication.h>
+#else
+#include "G4UIterminal.hh"
 #endif
 
 
@@ -143,8 +142,9 @@ int main(int argc,char** argv)
 #else
       session = new G4UIterminal();
 #endif
-
-      UI->ApplyCommand("/control/execute vis.mac");
+#ifdef G4VIS_USE
+      UI->ApplyCommand("/control/execute vis.mac");     
+#endif
       session->SessionStart();
       delete session;
     }
