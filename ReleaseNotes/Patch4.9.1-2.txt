@@ -133,6 +133,7 @@ List of fixes included in this public patch since the public release 9.1.p01:
       o Modified G4QElasticCrossSection to fix problem with quasi-elastic.
         When run together with elastic, the parameters to sample T were not
         updated, this fix is to always update these.
+      o Fixed case of exceeded boundary bounds in G4QCollision.
       o Check on tolerance is replaced by check on exact equality for fixing
         event reproducibility.
     + models/coherent_elastic:
