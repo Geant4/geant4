@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2008-04-11 11:17:11 maire Exp $
+$Id: History,v 1.7 2008-05-07 15:11:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-05-08 mma (fano2-V09-01-01)
+- README : update Aida informations     
      
  11-04-08 mma
 - HistoManager::Scale() : suppress warning
