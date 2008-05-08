@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2008-05-06 13:26:41 gcosmo Exp $
+$Id: History,v 1.53 2008-05-08 08:37:18 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 May 2008 Zoltan Torzsok
+- Added early version of the user manual, both in PDF and MS Word format
 
-6 May 2008 ZOltan Torzsok (gdml-V09-01-04)
-- Added a constant limiting the maximum number of reflections/displacements of a single solid.
+6 May 2008 Zoltan Torzsok
+- Added a constant limiting the maximum number of reflections/displacements of a single solid
 
 21 April 2008 Zoltan Torzsok
 - Divisionvol, replicavol and paramvol are resolved now.
