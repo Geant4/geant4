@@ -26,7 +26,11 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
+<<<<<<< G4DeuteronEvaporationProbability.hh
+// J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins) 
+=======
 // J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins, theCoulombBarrier) 
+>>>>>>> 1.8
 
 
 #ifndef G4DeuteronEvaporationProbability_h
@@ -34,7 +38,7 @@
 
 
 #include "G4EvaporationProbability.hh"
-
+#include "G4DeuteronCoulombBarrier.hh"
 
 class G4DeuteronEvaporationProbability : public G4EvaporationProbability
 {
@@ -50,6 +54,13 @@ private:
   const G4DeuteronEvaporationProbability & operator=(const G4DeuteronEvaporationProbability &right);
   G4bool operator==(const G4DeuteronEvaporationProbability &right) const;
   G4bool operator!=(const G4DeuteronEvaporationProbability &right) const;
+<<<<<<< G4DeuteronEvaporationProbability.hh
 
+private:
+
+  G4DeuteronCoulombBarrier theCoulombBarrier;
+=======
+
+>>>>>>> 1.8
 };
 #endif

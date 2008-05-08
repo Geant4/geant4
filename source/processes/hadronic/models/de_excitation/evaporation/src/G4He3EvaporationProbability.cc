@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< G4He3EvaporationProbability.cc
+//
+// $Id: G4He3EvaporationProbability.cc,v 1.8 2008-05-08 09:59:37 quesada Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+=======
+>>>>>>> 1.7
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
@@ -31,8 +38,15 @@
 #include "G4He3EvaporationProbability.hh"
 
 G4He3EvaporationProbability::G4He3EvaporationProbability() :
+<<<<<<< G4He3EvaporationProbability.cc
+   G4EvaporationProbability(3,2,2,&theCoulombBarrier) // A,Z,Gamma (JMQ fixed )
+{
+
+}
+=======
     G4EvaporationProbability(3,2,2) // A,Z,Gamma
 {}
+>>>>>>> 1.7
 
 G4He3EvaporationProbability::G4He3EvaporationProbability(const G4He3EvaporationProbability &) : G4EvaporationProbability()
 {

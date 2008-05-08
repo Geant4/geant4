@@ -26,7 +26,7 @@
 //
 
 //
-// $Id: G4EvaporationChannel.hh,v 1.4 2008-05-01 21:51:05 quesada Exp $
+// $Id: G4EvaporationChannel.hh,v 1.5 2008-05-08 09:59:37 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -42,7 +42,7 @@
 #include "G4VEmissionProbability.hh"
 #include "G4EvaporationProbability.hh"
 #include "G4VLevelDensityParameter.hh"
-
+#include "G4VCoulombBarrier.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
@@ -57,14 +57,17 @@ public:
 
 
   G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
-		       G4VEmissionProbability * aEmissionStrategy);
-
+		       G4VEmissionProbability * aEmissionStrategy,
+	               G4VCoulombBarrier * aCoulombBarrier);
 public:
   // destructor
   ~G4EvaporationChannel();
   
   void SetEmissionStrategy(G4VEmissionProbability * aEmissionStrategy)
   {theEvaporationProbabilityPtr = aEmissionStrategy;}
+
+  void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
+  {theCoulombBarrierPtr = aCoulombBarrier;} 
   
 
   
@@ -130,6 +133,11 @@ private:
 
   // For evaporation probability calcualation
   G4VEmissionProbability * theEvaporationProbabilityPtr;
+
+
+  // For Coulomb Barrier calculation
+  G4VCoulombBarrier * theCoulombBarrierPtr;
+  G4double CoulombBarrier;
   
  
   //---------------------------------------------------

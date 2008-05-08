@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.5 2006-06-29 20:28:25 gunter Exp $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.6 2008-05-08 09:59:37 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -40,7 +40,9 @@
 // Table 3. alpha, beta and gamma for Cameron Shell corrections
 // whithout collective effects. f-factor = 2.31.
 
+//JMQ 17-04-08 these are not used at present in G4Evaporation 
 const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter = 0.125*(1./MeV);
+//const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter= 0.0769231*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::alpha = 0.072*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::beta = 0.257*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::gamma = 0.059*(1./MeV);
@@ -74,20 +76,26 @@ G4bool G4EvaporationLevelDensityParameter::operator!=(const G4EvaporationLevelDe
 
 G4double G4EvaporationLevelDensityParameter::LevelDensityParameter(const G4int A,const G4int Z,
 								   const G4double U) const 
+//JMQ (Apr .08) this is the method used in G4Evaporation 
 {
-    G4int N = A - Z;
+
+//JMQ 25/04/08  a=A/10 according to original Gudima's prescription
+ G4double a=static_cast<G4double>(A)/10.;
+    return a;
+//
+
+//    G4int N = A - Z;
 
     // Asymptotic Level Density Parameter
-    G4double AsymptoticLDP = (alpha*static_cast<G4double>(A) + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
+//    G4double AsymptoticLDP = (alpha*static_cast<G4double>(A) + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
 	
     // Shape of the LDP U dependence
-    G4double exponent = -gamma*U;
-    G4double f = 1.;
-    if (exponent > -300.) f -= std::exp(exponent);
+//    G4double exponent = -gamma*U;
+//    G4double f = 1.;
+//    if (exponent > -300.) f -= std::exp(exponent);
 	
     // Level Density Parameter
-    G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);
-	
-    return a;
+//    G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);
+//    return a;
 }
 

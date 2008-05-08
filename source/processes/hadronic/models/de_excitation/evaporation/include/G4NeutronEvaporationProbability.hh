@@ -26,7 +26,11 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
+<<<<<<< G4NeutronEvaporationProbability.hh
+//J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, ExcitEnergies, ExcitSpins)
+=======
 //J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, ExcitEnergies, ExcitSpins, theCoulombBarrier)
+>>>>>>> 1.9
 
 
 #ifndef G4NeutronEvaporationProbability_h
@@ -34,7 +38,7 @@
 
 
 #include "G4EvaporationProbability.hh"
-
+#include "G4NeutronCoulombBarrier.hh"
 
 class G4NeutronEvaporationProbability : public G4EvaporationProbability
 {
@@ -50,7 +54,14 @@ private:
   const G4NeutronEvaporationProbability & operator=(const G4NeutronEvaporationProbability &right);
   G4bool operator==(const G4NeutronEvaporationProbability &right) const;
   G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
+<<<<<<< G4NeutronEvaporationProbability.hh
+
+private:
+
+ G4NeutronCoulombBarrier theCoulombBarrier;  
+=======
   
+>>>>>>> 1.9
 };
 
 

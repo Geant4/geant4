@@ -24,9 +24,15 @@
 // ********************************************************************
 //
 //
+<<<<<<< G4EvaporationChannel.cc
 //JMQ & MAC 7/12/07 : new MonteCarlo sampling  of the kinetic energy
 //
-// $Id: G4EvaporationChannel.cc,v 1.6 2008-05-01 21:51:06 quesada Exp $
+// $Id: G4EvaporationChannel.cc,v 1.7 2008-05-08 09:59:37 quesada Exp $
+=======
+//JMQ & MAC 7/12/07 : new MonteCarlo sampling  of the kinetic energy
+//
+// $Id: G4EvaporationChannel.cc,v 1.7 2008-05-08 09:59:37 quesada Exp $
+>>>>>>> 1.6
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -40,7 +46,12 @@
 
 
 G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
+<<<<<<< G4EvaporationChannel.cc
+					   G4VEmissionProbability * aEmissionStrategy,
+                                           G4VCoulombBarrier * aCoulombBarrier):
+=======
 					   G4VEmissionProbability * aEmissionStrategy):
+>>>>>>> 1.6
     G4VEvaporationChannel(aName),
     A(theA),
     Z(theZ),
@@ -100,6 +111,11 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 	MaximalKineticEnergy = -1000.0*MeV;
 	EmissionProbability = 0.0;
     } else {
+<<<<<<< G4EvaporationChannel.cc
+	// Coulomb Barrier calculation
+	CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(AResidual,ZResidual,ExEnergy);
+=======
+>>>>>>> 1.6
 	// Maximal Kinetic Energy
 	MaximalKineticEnergy = CalcMaximalKineticEnergy(G4ParticleTable::GetParticleTable()->
 							GetIonTable()->GetNucleusMass(aZ,anA)+ExEnergy);		
@@ -198,6 +214,27 @@ G4double G4EvaporationChannel::CalcMaximalKineticEnergy(const G4double NucleusTo
 
 
 
+<<<<<<< G4EvaporationChannel.cc
+G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
+//JMQ & MAC : 7/12/07 new method for MC sampling. Substitutes old CalcKineticEnergy
+{
+ G4double V=CoulombBarrier;
+ G4double Tmax=MaximalKineticEnergy;
+  G4double T(0.0);
+  G4double NormalizedProbability(1.0);
+  G4double Gamma;
+  if (A==1) {Gamma=2;}
+  else if (A==2 && Z==1) {Gamma=1;}
+  else if (A==3 ) {Gamma=2;}
+  else if (A==4 && Z==2){Gamma=1;}
+  else {
+ 	std::ostringstream errOs;
+      errOs << "ejected particle out of range"  << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+    }
+
+// JMQ & MAC. new pointer to object is created in order to access the distribution function.
+=======
 G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
 //JMQ & MAC : 7/12/07 new method for MC sampling. Substitutes old CalcKineticEnergy
 {
@@ -214,9 +251,27 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
       errOs << "ejected particle out of range"  << G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     }
+>>>>>>> 1.6
 
+<<<<<<< G4EvaporationChannel.cc
+G4EvaporationProbability * G4EPtemp=new G4EvaporationProbability(A,Z,Gamma,theCoulombBarrierPtr);
+=======
 // JMQ & MAC. new pointer to object is created in order to access the distribution function.
+>>>>>>> 1.6
 
+<<<<<<< G4EvaporationChannel.cc
+  do
+     {  
+      T=V+G4UniformRand()*(Tmax-V);
+       NormalizedProbability=G4EPtemp->ProbabilityDistributionFunction(T,aFragment)/
+(this->GetEmissionProbability());
+
+}
+   while (G4UniformRand() > NormalizedProbability);
+   delete G4EPtemp;
+   return T;
+}
+=======
 G4EvaporationProbability * G4EPtemp=new G4EvaporationProbability(A,Z,Gamma);
   do
      {  
@@ -230,6 +285,7 @@ G4EvaporationProbability * G4EPtemp=new G4EvaporationProbability(A,Z,Gamma);
    delete G4EPtemp;
    return T;
 }
+>>>>>>> 1.6
 
  
 

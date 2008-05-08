@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationChannel.hh,v 1.4 2008-05-01 21:51:06 quesada Exp $
+// $Id: G4TritonEvaporationChannel.hh,v 1.5 2008-05-08 09:59:37 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
+<<<<<<< G4TritonEvaporationChannel.hh
+// J. M. Quesada (Apr. 2008) unused items have been removed 
+=======
 // J. M. Quesada (Apr. 2008) unused items have been removed ( theCoulombBarrier)
+>>>>>>> 1.4
 
 #ifndef G4TritonEvaporationChannel_h
 #define G4TritonEvaporationChannel_h 1
