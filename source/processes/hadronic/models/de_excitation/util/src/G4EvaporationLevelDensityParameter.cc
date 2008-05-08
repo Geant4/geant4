@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.6 2008-05-08 09:59:37 quesada Exp $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.7 2008-05-08 13:59:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -74,8 +74,8 @@ G4bool G4EvaporationLevelDensityParameter::operator!=(const G4EvaporationLevelDe
     return true;
 }
 
-G4double G4EvaporationLevelDensityParameter::LevelDensityParameter(const G4int A,const G4int Z,
-								   const G4double U) const 
+G4double G4EvaporationLevelDensityParameter::LevelDensityParameter(const G4int A,const G4int,
+								   const G4double) const 
 //JMQ (Apr .08) this is the method used in G4Evaporation 
 {
 

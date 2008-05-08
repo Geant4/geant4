@@ -26,11 +26,7 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-<<<<<<< G4ProtonEvaporationProbability.hh
 // J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins) 
-=======
-// J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins, theCoulombBarrier) 
->>>>>>> 1.8
 
 
 
@@ -55,13 +51,10 @@ private:
   const G4ProtonEvaporationProbability & operator=(const G4ProtonEvaporationProbability &right);
   G4bool operator==(const G4ProtonEvaporationProbability &right) const;
   G4bool operator!=(const G4ProtonEvaporationProbability &right) const;
-<<<<<<< G4ProtonEvaporationProbability.hh
 
 private:
 
    G4ProtonCoulombBarrier  theCoulombBarrier;
-=======
->>>>>>> 1.8
 
 };
 #endif
