@@ -86,6 +86,8 @@ G4cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;}
 //OPT=1 Chatterjee's paramaterization for all ejectiles
 //OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons
 //OPT=3 Kalbach's parameterization for all ejectiles
+//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons
+//
 
 G4double G4PreCompoundNucleon::CrossSection(const  G4double K)
 {
@@ -95,8 +97,8 @@ G4double G4PreCompoundNucleon::CrossSection(const  G4double K)
       G4int theZ=static_cast<G4int>(GetZ());
       G4double fragmentA=GetA()+GetRestA();
 
-// Default: Chatterjee's parameterization
-      G4int OPT=3;
+// Default: Chatterjee's + Wellish's parameterizations
+      G4int OPT=2;
 
 // Loop on XS options starts:
 if ( OPT==1 ||OPT==2) { 
@@ -229,7 +231,7 @@ if (xine_th <= 0.0 && eekin > 10.){
         throw G4HadronicException(__FILE__, __LINE__, errOs.str());}
 }
 
-else if (OPT ==3) {
+else if (OPT ==3 || OPT==4) {
 //PRECO inverse cross sections are chosen
 
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
@@ -296,7 +298,7 @@ c=0.;
 
 } // end if of PRECO neutrons
 
-    else if (theA==1 && theZ ==1) {  
+    else if (theA==1 && theZ ==1 && OPT==3) {  
 // PRECO xs for protons is choosen   
 
 //     ** p from  becchetti and greenlees (but modified with sub-barrier
@@ -341,6 +343,36 @@ c=0.;
 
 }  // end of  protons
 
+ else if (theA==1 && theZ ==1 && OPT==4) { //Wellisch's  parameterization for protons is chosen
+ G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.);
+    eekin=K;
+        rnpro=ResidualZ;
+        rnneu=ResidualA-ResidualZ;
+	a=rnneu+rnpro;
+	ekin=eekin/1000;
+        r0=1.36*std::pow(static_cast<G4double>(10),static_cast<G4double>(-15));
+	fac=pi*std::pow(r0,2);
+	b0=2.247-0.915*(1.-std::pow(a,-0.33333));
+	fac1=b0*(1.-std::pow(a,-0.333333));
+	fac2=1.;
+	if(rnneu > 1.5) fac2=std::log(rnneu);
+	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+std::pow(a,0.3333)-fac1);
+       xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*a);	
+       ff1=0.70-0.0020*a ;
+       ff2=1.00+1/a;
+       ff3=0.8+18/a-0.002*a;
+       fac=1.-(1./(1.+std::exp(-8.*ff1*(std::log10(ekin)+1.37*ff2))));
+       xine_th=xine_th*(1.+ff3*fac);
+       	ff1=1.-1/a-0.001*a;
+	ff2=1.17-2.7/a-0.0014*a;
+	fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
+	fac=1./(1.+std::exp(fac));
+	xine_th=xine_th*fac;
+        if (xine_th < 0.) {xine_th=0.0;}        
+        return xine_th;
+}
+
+
    else {
         std::ostringstream errOs;
          G4cout<<"Bad ejectile in Kalbach parameterizations"<<G4endl;
@@ -384,6 +416,8 @@ loop1:
 
 //loop2:
  return sig;}
+
+ 
 else 
 {
 std::ostringstream errOs;

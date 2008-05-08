@@ -81,6 +81,7 @@ ProbabilityDistributionFunction(const G4double eKin,
 //OPT=1 Chatterjee's paramaterization for all ejectiles
 //OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons
 //OPT=3 Kalbach's parameterization for all ejectiles
+//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons
 
 G4double G4PreCompoundIon::CrossSection(const G4double K)
 {
@@ -90,8 +91,8 @@ G4double G4PreCompoundIon::CrossSection(const G4double K)
       G4int theZ=static_cast<G4int>(GetZ());
       G4double fragmentA=GetA()+GetRestA();
 
-// Default: Chatterjee's parameterization
-      G4int OPT=3;
+// Default: Chatterjee's & Wellish's parameterizations
+      G4int OPT=2;
 
 // Loop on XS options starts:
 if ( OPT==1 ||OPT==2) {
@@ -181,7 +182,7 @@ else  {
    if (xs <0.0) {xs=0.0;}
    return xs;
 }
-else if (OPT==3) {
+else if (OPT==3 || OPT==4) {
 //PRECO inverse cross sections are chosen
 
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,p, p0, p1, p2, signor,sig;

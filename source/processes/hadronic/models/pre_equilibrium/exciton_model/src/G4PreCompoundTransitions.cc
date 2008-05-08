@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.14 2008-05-01 22:06:14 quesada Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.15 2008-05-08 10:42:22 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -82,7 +82,8 @@ CalculateProbability(const G4Fragment & aFragment)
 // OPT=2 Transitions are calculated according to Machner's formulae
 //
 // default OPT=2
-        G4int OPT=2;
+//        G4int OPT=2;
+        G4int OPT=1;
 
      if (OPT==1){
 
@@ -146,6 +147,8 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
 
   G4bool NeverGoBack(false);
+//JMQ 07/05/08 checking the stallment in test30_07-05-08-TARDE-4
+//  G4bool NeverGoBack(true);
 
   //JMQ/AH  bug fixed: if (U-Fph < 0.0) NeverGoBack = true;
   if (GE-Fph < 0.0) NeverGoBack = true;
@@ -171,7 +174,9 @@ CalculateProbability(const G4Fragment & aFragment)
       TransitionProb3 = TransitionProb1* ((N+1.0)/N) * ProbFactor  * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
       if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
     }
-  
+//  G4cout<<"U = "<<U<<G4endl;
+//  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
+//  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
   return TransitionProb1 + TransitionProb2 + TransitionProb3;}
 
 else if (OPT==2) {
@@ -193,8 +198,19 @@ std::pow(GE,2.)*(1.4*std::pow(10.,21.)*U - 2./(N-1)*6.*std::pow(10.,18.)*std::po
 
       TransitionProb3=0.;
 
+//  G4cout<<"U = "<<U<<G4endl;
+//  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
+//  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
   return TransitionProb1 + TransitionProb2 + TransitionProb3;
     }
+
+else {
+std::ostringstream errOs;
+      errOs << "BAD TRANSITION PROBABILITIES  OPTION !!"  <<G4endl;
+     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+return 0.;
+}
+
 }
 
 
