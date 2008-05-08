@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2008-04-21 13:13:29 vnivanch Exp $
+$Id: History,v 1.72 2008-05-08 11:29:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-04-08 V.Ivant (testem7-V09-01-06)
+- G4ScreenedNuclearRecoil - added NIEL computation using 
+  G4LinhardPartition class; 
+- c2_function updated
+- G4LinhardPartition - new class to compute NIEL
 
 21-04-08 V.Ivant (testem7-V09-01-05)
 - Add spline to physics tables
