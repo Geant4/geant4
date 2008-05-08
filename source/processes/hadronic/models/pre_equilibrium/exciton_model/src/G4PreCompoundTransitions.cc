@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.15 2008-05-08 10:42:22 quesada Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.16 2008-05-08 11:25:07 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -82,8 +82,8 @@ CalculateProbability(const G4Fragment & aFragment)
 // OPT=2 Transitions are calculated according to Machner's formulae
 //
 // default OPT=2
-//        G4int OPT=2;
-        G4int OPT=1;
+        G4int OPT=2;
+
 
      if (OPT==1){
 
