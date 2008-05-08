@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2008-05-08 11:29:43 vnivanch Exp $
+$Id: History,v 1.73 2008-05-08 22:16:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+09-05-08 mma
+- README: update Aida information
 
 21-04-08 V.Ivant (testem7-V09-01-06)
 - G4ScreenedNuclearRecoil - added NIEL computation using 
