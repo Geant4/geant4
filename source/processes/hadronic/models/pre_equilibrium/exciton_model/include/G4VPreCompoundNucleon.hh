@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.5 2008-05-01 22:06:14 quesada Exp $
+// $Id: G4VPreCompoundNucleon.hh,v 1.6 2008-05-08 10:32:44 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
