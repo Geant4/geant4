@@ -13,6 +13,24 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+ 08 May 2008 J. M. Quesada (hadr-deex-V09-01-03) 
+---------------------------------------------------
+
+ Coulomb barrier has been added again. Standard parameterization is used for it. It acts as an additional component of inverse reaction cross sections, making it cero when emission energy drops below it. Physical reason:  reaction cross sections come from fitting to exp. data at energies normally well above the barrier. The strong competition betwen the different channels makes it very sensible to subtle differences in emission probabilities at low emission energies, when little excitation energy is available.   
+
+ 01 May 2008 J. M. Quesada (hadr-deex-V09-01-02) 
+---------------------------------------------------
+- First trial with cvs. 
+New inverse cross sections:
+        OPT=1 Chetterjee's parameterization to reaction cross sections from optical potential global fittings.
+        OPT=2 as OPT=1 but for protons the Wellisch's parameterization for protons is used  (DEFAULT)
+        OPT=3 Kalbach's modifications of Chatterjee's parameterization of cross sections
+        OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons is used
+
+Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed.  
+
+
  01 May 2008 Fan Lei (hadr-deex-V09-01-01) 
 ---------------------------------------------------
 - photon_evaporation
