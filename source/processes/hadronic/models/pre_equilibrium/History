@@ -13,6 +13,40 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+8-May 2008 J. M.Quesada     hadr-pre-V09-01-02
+-----------------------------------------------
+
+Protection against non physical situation has been set:  Equilibrium exciton number Neq
+(when reached, equilibrium regime starts) should correspond to equal transition probabilities 
+"back" and "forth". Nevertheless,  for heavy target (Neq is big even for low incident energies)
+after first emission this condition (equal trans. prob.) is reached far before reaching corresponding Neq
+of the residual. Unless this "jump" to equilibrium is forced in this case, preequilibrium will be 
+spuriously prolonged (as a side effect, with huge CPU consumption).  
+G4PreCompoundModel and G4PreCompoundTransitions classes have been modified.
+
+
+1-May 2008 J. M.Quesada     hadr-pre-V09-01-01
+-----------------------------------------------
+- First trial with cvs. 00 skipped by mistake. 
+New inverse cross sections:
+        OPT=1 Chetterjee's parameterization to reaction cross sections from optical potential global fittings.
+        OPT=2 as OPT=1 but for protons the Wellisch's parameterization for protons is used  (DEFAULT)
+        OPT=3 Kalbach's modifications of Chatterjee's parameterization of cross sections
+        OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons is used
+
+Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed. In all particle header files: 
+G4PreCompoundNucleon.hh ,G4PreCompoundNeutron.hh,G4PreCompoundProton.hh, G4PreCompoundIon.hh, G4PreCompoundDeuteron.hh, G4PreCompoundTriton.hh ,G4PreCompoundHe3.hh , G4PreCompoundAlpha.hh
+
+
+Soft cutoff transition from equilibrium to equilibrium has been suppressed (unphysical and not necessary anymore).In G4PreCompoundModel. 
+
+New transition probabilities :
+        OPT=1  Gudima's formulae
+        OPT=2  Machner parameterization of matrix elements for transitions (DEFAULT)
+  
+Level density is set to A/10 (Gudima's prescription). 
+
+Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.cc and  emission probability formula in G4PreCompoundIon.cc ) .  
 
 25-October 2007 A.Howard     hadr-pre-V09-00-04
 -----------------------------------------------
