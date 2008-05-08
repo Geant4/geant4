@@ -24,17 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationProbability.hh,v 1.9 2008-05-08 09:59:37 quesada Exp $
+// $Id: G4AlphaEvaporationProbability.hh,v 1.10 2008-05-08 10:10:16 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-<<<<<<< G4AlphaEvaporationProbability.hh
 // J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins)
-=======
-// J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins, theCoulombBarrier)
->>>>>>> 1.8
 
 
 #ifndef G4AlphaEvaporationProbability_h
@@ -58,18 +54,12 @@ private:
   const G4AlphaEvaporationProbability & operator=(const G4AlphaEvaporationProbability &right);
   G4bool operator==(const G4AlphaEvaporationProbability &right) const;
   G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
-<<<<<<< G4AlphaEvaporationProbability.hh
 
 private:
-=======
->>>>>>> 1.8
 
-<<<<<<< G4AlphaEvaporationProbability.hh
   G4AlphaCoulombBarrier theCoulombBarrier;	
 
 
-=======
->>>>>>> 1.8
 };
 
 #endif

@@ -24,22 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationChannel.hh,v 1.5 2008-05-08 09:59:37 quesada Exp $
+// $Id: G4NeutronEvaporationChannel.hh,v 1.6 2008-05-08 10:08:46 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-<<<<<<< G4NeutronEvaporationChannel.hh
 // J. M. Quesada (Apr. 2008) unused items have been removed 
-=======
-// J. M. Quesada (Apr. 2008) unused items have been removed ( theCoulombBarrier)
->>>>>>> 1.4
 
 #ifndef G4NeutronEvaporationChannel_h
 #define G4NeutronEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
+#include "G4NeutronCoulombBarrier.hh"
 #include "G4NeutronEvaporationProbability.hh"
 
 class G4NeutronEvaporationChannel : public G4EvaporationChannel
@@ -47,7 +44,7 @@ class G4NeutronEvaporationChannel : public G4EvaporationChannel
 public:
   // only available constructor
   G4NeutronEvaporationChannel() : G4EvaporationChannel(1,0,"neutron",
-						       &theEvaporationProbability) {};
+						       &theEvaporationProbability,&theCoulombBarrier) {};
 
   // destructor
   ~G4NeutronEvaporationChannel() {};
@@ -63,10 +60,7 @@ public:
 
 private:
 
-<<<<<<< G4NeutronEvaporationChannel.hh
  G4NeutronCoulombBarrier theCoulombBarrier;
-=======
->>>>>>> 1.4
 	
   G4NeutronEvaporationProbability theEvaporationProbability;
 

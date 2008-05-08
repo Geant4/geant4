@@ -24,23 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3EvaporationChannel.hh,v 1.5 2008-05-08 09:59:37 quesada Exp $
+// $Id: G4He3EvaporationChannel.hh,v 1.6 2008-05-08 10:09:53 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-<<<<<<< G4He3EvaporationChannel.hh
 // J. M. Quesada (Apr. 2008) unused items have been removed 
-=======
-// J. M. Quesada (Apr. 2008) unused items have been removed ( theCoulombBarrier)
->>>>>>> 1.4
 
 #ifndef G4He3EvaporationChannel_h
 #define G4He3EvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-
+#include "G4He3CoulombBarrier.hh"
 #include "G4He3EvaporationProbability.hh"
 
 class G4He3EvaporationChannel : public G4EvaporationChannel
@@ -48,7 +44,7 @@ class G4He3EvaporationChannel : public G4EvaporationChannel
 public:
   // only available constructor
   G4He3EvaporationChannel() : G4EvaporationChannel(3,2,"He3",
-						   &theEvaporationProbability) {};
+						   &theEvaporationProbability,&theCoulombBarrier) {};
 
   // destructor
   ~G4He3EvaporationChannel() {};
@@ -64,11 +60,7 @@ public:
 
 private:
 
-<<<<<<< G4He3EvaporationChannel.hh
     G4He3CoulombBarrier theCoulombBarrier;
-=======
-  
->>>>>>> 1.4
 	
   G4He3EvaporationProbability theEvaporationProbability;
 

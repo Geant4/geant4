@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4NeutronEvaporationProbability.hh,v 1.11 2008-05-08 10:09:01 quesada Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-<<<<<<< G4NeutronEvaporationProbability.hh
 //J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, ExcitEnergies, ExcitSpins)
-=======
-//J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, ExcitEnergies, ExcitSpins, theCoulombBarrier)
->>>>>>> 1.9
 
 
 #ifndef G4NeutronEvaporationProbability_h
@@ -54,14 +54,10 @@ private:
   const G4NeutronEvaporationProbability & operator=(const G4NeutronEvaporationProbability &right);
   G4bool operator==(const G4NeutronEvaporationProbability &right) const;
   G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
-<<<<<<< G4NeutronEvaporationProbability.hh
 
 private:
 
  G4NeutronCoulombBarrier theCoulombBarrier;  
-=======
-  
->>>>>>> 1.9
 };
 
 
