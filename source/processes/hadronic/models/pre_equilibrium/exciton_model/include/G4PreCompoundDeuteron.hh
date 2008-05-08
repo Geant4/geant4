@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundDeuteron.hh,v 1.8 2008-05-01 22:06:13 quesada Exp $
+// $Id: G4PreCompoundDeuteron.hh,v 1.9 2008-05-08 10:33:53 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

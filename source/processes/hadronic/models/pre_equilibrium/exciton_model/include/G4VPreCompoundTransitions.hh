@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//J. M. Quesada (May 08). New virtual classes have been added 
 #ifndef G4VPreCompoundTransitions_hh
 #define G4VPreCompoundTransitions_hh 1
 
@@ -37,7 +38,10 @@ public:
 
   virtual G4double CalculateProbability(const G4Fragment& aFragment) = 0;
   virtual G4Fragment PerformTransition(const G4Fragment&  aFragment) = 0;
-
+//J. M. Quesada (May.08) New virtual classes
+  virtual G4double GetTransitionProb1()=0;
+  virtual G4double GetTransitionProb2()=0;
+  virtual G4double GetTransitionProb3()=0;
 };
 
 #endif

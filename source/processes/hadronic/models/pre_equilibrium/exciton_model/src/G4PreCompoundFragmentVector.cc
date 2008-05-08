@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.6 2008-05-01 22:06:14 quesada Exp $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.7 2008-05-08 10:36:03 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium

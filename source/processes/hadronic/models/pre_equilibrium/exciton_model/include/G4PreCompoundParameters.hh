@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.hh,v 1.4 2008-05-01 22:06:14 quesada Exp $
+// $Id: G4PreCompoundParameters.hh,v 1.5 2008-05-08 10:34:25 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
 //J. M. Quesada (Apr. 2008) Level density set to A/10 at preequilibrium
+
 
 #ifndef G4PreCompoundParameters_h
 #define G4PreCompoundParameters_h 1
