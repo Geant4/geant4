@@ -1,4 +1,4 @@
-# $Id: snr.mac,v 1.2 2008-05-07 08:07:45 vnivanch Exp $
+# $Id: snr.mac,v 1.3 2008-05-08 11:20:50 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -21,8 +21,8 @@
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt2
 #/testem/phys/addPhysics  emstandard_opt3  
-#/testem/phys/addPhysics  standardNR	  
-/testem/phys/addPhysics  standardIG  
+/testem/phys/addPhysics  standardNR	  
+#/testem/phys/addPhysics  standardIG  
 ###/testem/phys/addPhysics  binary
 #
 /run/initialize
