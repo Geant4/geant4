@@ -1,4 +1,4 @@
-$Id: History,v 1.379 2008-05-07 08:06:16 vnivanch Exp $
+$Id: History,v 1.380 2008-05-08 11:32:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
--  G4ionGasIonisation - fixed bug in update of the dynamic charge of 
+08 May 08: V.Ivant (emstand-V09-01-14)
+- G4ionGasIonisation - fixed bug in update of the dynamic charge of 
                         an ion
 
 21 April 08: V.Ivant (emstand-V09-01-13)
