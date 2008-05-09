@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.10 2008-04-21 06:05:27 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.11 2008-05-09 08:23:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -58,6 +58,7 @@ G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
+  isIon         = false;
   SetStepLimitType(fMinimal);
 }
 
@@ -94,6 +95,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
+    if(p->GetParticleType() == "nucleus") isIon = true;
   }
 
   // initialisation of parameters
@@ -118,6 +120,31 @@ void G4hMultipleScattering::PrintInfo()
 	 << RangeFactor()
 	 << "  Step limit type " << StepLimitType()
 	 << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4hMultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double,
+                             G4double currentMinimalStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  valueGPILSelectionMSC = NotCandidateForSelection;
+
+  G4double escaled = track.GetKineticEnergy();
+  if(isIon) escaled *= track.GetDynamicParticle()->GetMass()/proton_mass_c2;
+
+  G4double steplength = GetMscContinuousStepLimit(track,
+						  escaled,
+						  currentMinimalStep,
+						  currentSafety);
+  // G4cout << "StepLimit= " << steplength << G4endl;
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

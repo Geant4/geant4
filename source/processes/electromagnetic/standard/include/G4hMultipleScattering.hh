@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.hh,v 1.5 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4hMultipleScattering.hh,v 1.6 2008-05-09 08:23:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -85,6 +85,16 @@ public:    // with description
   // 'soften' step limitation above lambdalimit
   void SetLambdalimit(G4double value) { lambdalimit = value;};
 
+  // The function overloads the corresponding function of the base
+  // class.It limits the step near to boundaries only
+  // and invokes the method GetMscContinuousStepLimit at every step.
+  G4double AlongStepGetPhysicalInteractionLength(
+                                            const G4Track&,
+					    G4double  previousStepSize,
+					    G4double  currentMinimalStep,
+					    G4double& currentSafety,
+					    G4GPILSelection* selection);
+
 protected:
 
   // This function initialise models
@@ -99,6 +109,7 @@ private:        // data members
 
   G4bool   samplez;
   G4bool   isInitialized;
+  G4bool   isIon;
 
 };
 
