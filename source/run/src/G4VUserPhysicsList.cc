@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.63 2008-04-16 08:22:48 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.64 2008-05-09 13:00:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,10 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
     theMessenger = 0;
   }
   RemoveProcessManager();
+
+  // invoke DeleteAllParticle
+  theParticleTable->DeleteAllParticles();
+
 }
 
 ////////////////////////////////////////////////////////
