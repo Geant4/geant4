@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2008-05-08 22:16:07 maire Exp $
+$Id: README,v 1.19 2008-05-09 08:56:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,29 +35,35 @@ $Id: README,v 1.18 2008-05-08 22:16:07 maire Exp $
  	
  2- PHYSICS LIST
 
-    The following EM physics lists are available in this example:	 
-    - "standard"     standard EM physics (default)
-    - "livermore"    low-energy EM physics using Livermore data
-    - "penelope"     low-energy EM physics implementing Penelope models
-    - "standardSS"   standard EM physics with single Coulomb scattering 
-                     instead of multiple scattering; G4ionIonisation is 
-                     substituted by G4ionGasIonisation for GenericIons
-    - "standardNR"   standard EM physics with single Coulomb scattering 
-                     process G4ScreenedNuclearRecoil instead of the 
-                     multiple scattering; the new process was developed 
-                     by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
-                     University and published in NIM B 277 (2005) 420.
-                     In later Geant4 releases the process will be a part
-                     of Geant4 source, currently it is released together
-                     with its mathematical tool c2_functions in current 
-                     example
-    
-    Alternatively, the user may use predefined Geant4 builders:
-    - "emstandard"        G4EmStandardPhysics builder
-    - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
-    - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
-    See geant4/source/physics_lists/History for details        
+    The wide list of EM physics builders are available with this example:	 
 
+ - "emstandard_local" standard EM physics of this example (default)
+ - "emstandard"       default EM builder in physics_list library 
+ - "emstandard_opt1"  option1 in physics_list library (simplified msc, 
+                      the most fast simulation, precision is limited)
+ - "emstandard_opt2"  option2 in physics_list library (subcutoff, 
+                      use spline, step function per particle type)
+ - "emstandard_opt3"  option3 in physics_list library (advanced msc, 
+                      use spline, step function per particle type)
+
+ - "livermore"        low-energy EM physics using Livermore data
+ - "penelope"         low-energy EM physics implementing Penelope models
+ - "standardSS"       standard EM physics with single Coulomb scattering 
+                      instead of multiple scattering; 
+ - "standardIG"       standard EM physics with G4WentzelVIModel instead of
+                      instead of standard multiple scattering; G4ionIonisation is 
+                      substituted by G4ionGasIonisation for GenericIons
+ - "standardNR"       standard EM physics with single Coulomb scattering 
+                      process G4ScreenedNuclearRecoil instead of the 
+                      multiple scattering for ions with energy less than 
+                      100 MeV/nucleon; the new process was developed 
+                      by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
+                      University and published in NIM B 277 (2005) 420.
+                      In later Geant4 releases the process will be a part
+                      of Geant4 source, currently it is released together
+                      with its mathematical tool c2_functions in current 
+                      example
+    
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons
     - "HElastic"
@@ -137,19 +143,18 @@ $Id: README,v 1.18 2008-05-08 22:16:07 maire Exp $
      The energy deposited in the test-volumes (tallies) defined in
      DetectorConstruction are printed at EndOfRun, both in MeV and gray.
  
+  8- USING HISTOGRAMS
 
- 8- USING HISTOGRAMS
+     By default the histograms are not activated. To activate histograms
+     the environment variable G4ANALYSIS_USE should be defined. For instance
+     uncomment the flag G4ANALYSIS_USE in GNUmakefile.
 
-  By default the histograms are not activated. To activate histograms
-  the environment variable G4ANALYSIS_USE should be defined. For instance
-  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-  It is possible to choose the format of the histogram file (hbook, root, XML):
-  comment/uncomment 1 line in  RunAction::bookHisto().
+     It is possible to choose the format of the histogram file (hbook, root, XML):
+     comment/uncomment 1 line in  RunAction::bookHisto().
   
-  Before compilation of the example it is optimal to clean up old files:
+     Before compilation of the example it is optimal to clean up old files:
   	gmake histclean
   	gmake 
 
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
+     To use histograms, at least one of the AIDA implementations should be 
+     available. See InstallAida.txt
