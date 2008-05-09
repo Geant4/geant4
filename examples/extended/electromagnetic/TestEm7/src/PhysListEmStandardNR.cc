@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardNR.cc,v 1.2 2008-05-09 07:55:57 vnivanch Exp $
+// $Id: PhysListEmStandardNR.cc,v 1.3 2008-05-09 08:30:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,24 +114,30 @@ void PhysListEmStandardNR::ConstructProcess()
     } else if (particleName == "alpha" || particleName == "He3") {
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4DummyModel* dm = new G4DummyModel();
-      dm->SetLowEnergyLimit(energyLimit);
+      dm->SetLowEnergyLimit(0.0);
+      dm->SetHighEnergyLimit(energyLimit);
       msc->AddEmModel(0, dm);
       pmanager->AddProcess(msc, -1, 1,1);
+
       G4ionIonisation* ion = new G4ionIonisation();
       ion->ActivateNuclearStopping(false);
       pmanager->AddProcess(ion, -1, 2, 2);
+
       pmanager->AddDiscreteProcess(nucr);      
 
     } else if (particleName == "GenericIon" ) { 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4DummyModel* dm = new G4DummyModel();
-      dm->SetLowEnergyLimit(energyLimit);
+      dm->SetLowEnergyLimit(0.0);
+      dm->SetHighEnergyLimit(energyLimit);
       msc->AddEmModel(0, dm);
       pmanager->AddProcess(msc, -1, 1,1);
+
       G4ionIonisation* ion = new G4ionIonisation();
       ion->ActivateNuclearStopping(false);
       ion->SetStepFunction(0.1, um);
       pmanager->AddProcess(ion, -1, 2, 2);
+
       pmanager->AddDiscreteProcess(nucr);      
 
     } else if (particleName == "proton" ||
@@ -139,14 +145,17 @@ void PhysListEmStandardNR::ConstructProcess()
                particleName == "triton") { 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4DummyModel* dm = new G4DummyModel();
-      dm->SetLowEnergyLimit(energyLimit);
+      dm->SetLowEnergyLimit(0.0);
+      dm->SetHighEnergyLimit(energyLimit);
       msc->AddEmModel(0, dm);
       pmanager->AddProcess(msc, -1, 1,1);
+
       G4hIonisation* hion = new G4hIonisation();
       hion->SetFluctModel(new G4IonFluctuations());
       hion->SetStepFunction(0.1, 10.*um);
       hion->ActivateNuclearStopping(false);
       pmanager->AddProcess(hion, -1, 2, 2);
+
       pmanager->AddDiscreteProcess(nucr);      
      
     } else if ((!particle->IsShortLived()) &&
