@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.50 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.51 2008-05-09 08:19:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,7 +155,7 @@ public:
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
   // and invokes the method GetMscContinuousStepLimit at every step.
-  G4double AlongStepGetPhysicalInteractionLength(
+  virtual G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
 					    G4double  previousStepSize,
 					    G4double  currentMinimalStep,
@@ -249,11 +249,12 @@ protected:
 				  G4double currentMinimalStep,
 				  G4double& currentSafety);
 
-  inline G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
+  inline G4double GetLambda(const G4ParticleDefinition* p, 
+			    G4double& kineticEnergy);
 
   // This method is used for tracking, it returns step limit
   inline G4double GetMscContinuousStepLimit(const G4Track& track,
-					    G4double previousStepSize,
+					    G4double scaledKinEnergy,
 					    G4double currentMinimalStep,
 					    G4double& currentSafety);
 
@@ -326,7 +327,8 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
+inline 
+void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
@@ -338,15 +340,14 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 inline G4double G4VMultipleScattering::GetMscContinuousStepLimit(
                                           const G4Track& track,
-					  G4double,
+					  G4double scaledKinEnergy,
 					  G4double currentMinimalStep,
 					  G4double&)
 {
   G4double x = currentMinimalStep;
-  G4double e = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
-  currentModel = SelectModel(e);
-  if(x > 0.0 && e > 0.0) {
+  currentModel = SelectModel(scaledKinEnergy);
+  if(x > 0.0 && scaledKinEnergy > 0.0) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
     if (tPathLength < x) valueGPILSelectionMSC = CandidateForSelection;
@@ -367,13 +368,14 @@ inline G4double G4VMultipleScattering::ContinuousStepLimit(
                                        G4double& currentSafety)
 {
   return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
-                                      currentSafety);
+				   currentSafety);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
-						 G4double& e)
+inline 
+G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
+					  G4double& e)
 {
   G4double x;
   if(theLambdaTable) {

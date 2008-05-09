@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.53 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.54 2008-05-09 08:19:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,8 +85,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType type):
-                 G4VContinuousDiscreteProcess(name, type),
+G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
+					     G4ProcessType type):
+  G4VContinuousDiscreteProcess(name, type),
   theLambdaTable(0),
   firstParticle(0),
   currentParticle(0),
@@ -133,7 +134,6 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
-    //    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << num
@@ -150,7 +150,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
       if (theLambdaTable->GetFlag(i)) {
         // create physics vector and fill it
-        const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+        const G4MaterialCutsCouple* couple = 
+	  theCoupleTable->GetMaterialCutsCouple(i);
         G4PhysicsVector* aVector = PhysicsVector(couple);
         modelManager->FillLambdaVector(aVector, couple, false);
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
@@ -164,7 +165,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
     }
   }
   if(verboseLevel>0 && ( num == "e-" || num == "mu+" ||  
-                         num == "proton" || num == "pi-" || num == "GenericIon")) {
+                         num == "proton" || num == "pi-" || 
+			 num == "GenericIon")) {
     PrintInfoDefinition();
     if(2 < verboseLevel && theLambdaTable) G4cout << *theLambdaTable << G4endl;
   }
@@ -194,7 +196,6 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
   }
 
   if(1 < verboseLevel) {
-    //    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -222,7 +223,8 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 void G4VMultipleScattering::PrintInfoDefinition()
 {
   if (0 < verboseLevel) {
-    G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering "
+    G4cout << G4endl << GetProcessName() 
+	   << ":  Model variant of multiple scattering "
 	   << "for " << firstParticle->GetParticleName()
 	   << G4endl;
     if (theLambdaTable) {
@@ -248,15 +250,17 @@ void G4VMultipleScattering::PrintInfoDefinition()
 
 G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
-                             G4double previousStepSize,
+                             G4double,
                              G4double currentMinimalStep,
                              G4double& currentSafety,
                              G4GPILSelection* selection)
 {
   // get Step limit proposed by the process
   valueGPILSelectionMSC = NotCandidateForSelection;
-  G4double steplength = GetMscContinuousStepLimit(track,previousStepSize,
-                                              currentMinimalStep,currentSafety);
+  G4double steplength = GetMscContinuousStepLimit(track,
+						  track.GetKineticEnergy(),
+						  currentMinimalStep,
+						  currentSafety);
   // G4cout << "StepLimit= " << steplength << G4endl;
   // set return value for G4GPILSelection
   *selection = valueGPILSelectionMSC;
