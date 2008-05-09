@@ -1,0 +1,14 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+			    Test44
+                            ------
+                     Author A.Bagulya
+             
+The test is based on HADR01 example.
+The purpose of this test is to validate Bragg peak distribution.
+The results of simulation ASCII file is created. The macro
+files for proton, He4 and C12 are prepared. Different electromagnetic Physics
+Lists are available.
