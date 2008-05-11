@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.41 2008-04-21 06:00:11 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.42 2008-05-11 19:06:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -127,11 +127,11 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
   if(couple && UpdateParticle(p, kinEnergy) ) {
     res = manager->GetDEDX(p, kinEnergy, couple);
     if(isIon) {
-      G4double escaled = kinEnergy*massRatio;
-      G4double eth = 2.0*MeV;
-      if(escaled > eth) {
-	res += corr->ComputeIonCorrections(p,mat,kinEnergy) 
-	  - corr->ComputeIonCorrections(baseParticle,mat,eth)*eth/escaled;
+      G4double eth = 2.0*MeV/massRatio;
+      if(kinEnergy > eth) {
+        G4double x1 = corr->ComputeIonCorrections(p,mat,kinEnergy);
+        G4double x2 = corr->ComputeIonCorrections(p,mat,eth);
+	res += x1 - x2*eth/kinEnergy;
       } 
     }
 
@@ -456,8 +456,12 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
         res *= (1.0 + (res0/res1 - 1.0)*eth/escaled);
 
         if(isIon) {
-          res += corr->ComputeIonCorrections(p,mat,kinEnergy) 
-	    - corr->ComputeIonCorrections(baseParticle,mat,eth)*eth/escaled;
+	  G4double ethscaled = eth/massRatio;
+	  if(kinEnergy > ethscaled) {
+	    G4double x1 = corr->ComputeIonCorrections(p,mat,kinEnergy);
+	    G4double x2 = corr->ComputeIonCorrections(p,mat,ethscaled);
+	    res += x1 - x2*ethscaled/kinEnergy;
+	  } 
 	
 	  if(verbose > 1) {
 	    G4cout << "After Corrections: DEDX(MeV/mm)= " << res*mm/MeV
