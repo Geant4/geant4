@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.10 2007-08-13 10:33:03 gcosmo Exp $
+// $Id: G4PolyconeSide.hh,v 1.11 2008-05-14 15:36:39 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,10 @@ class G4PolyconeSide : public G4VCSGface
                                 G4SolidExtentList &extentList       );
 
     G4VCSGface *Clone() { return new G4PolyconeSide( *this ); }
+
+  G4double SurfaceArea();
+  G4ThreeVector GetPointOnFace();
+
   
   public:  // without description
 
@@ -150,6 +154,7 @@ class G4PolyconeSide : public G4VCSGface
   private:
 
     G4double kCarTolerance; // Geometrical surface thickness
+  G4double fSurfaceArea; //Used for surface calculation 
 };
 
 #endif

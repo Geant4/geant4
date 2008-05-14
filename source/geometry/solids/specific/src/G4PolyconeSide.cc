@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.17 2007-08-13 10:33:04 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.18 2008-05-14 15:39:58 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
+#include "Randomize.hh"
 //
 // Constructor
 //
@@ -63,6 +64,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   : ncorners(0), corners(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  fSurfaceArea=0;
 
   //
   // Record values
@@ -1042,4 +1044,37 @@ void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
   //
   x = 0.5*( x1+s1*tx1 + x2+s2*tx2 );
   y = 0.5*( y1+s1*ty1 + y2+s2*ty2 );
+}
+
+//
+// Calculate Suface Area for GetPointOnSurface
+//
+G4double G4PolyconeSide::SurfaceArea() 
+{ 
+  if(fSurfaceArea==0){
+     fSurfaceArea = (r[0]+r[1])* std::sqrt(sqr(r[0]-r[1])+sqr(z[0]-z[1]));
+     fSurfaceArea *= 0.5*(deltaPhi);
+  }  
+   return fSurfaceArea;
+}
+//
+// GetPointOnFace
+//
+G4ThreeVector G4PolyconeSide::GetPointOnFace()
+{
+  G4double x,y,zz;
+  G4double rr,phi,dz,dr;
+  dr=r[1]-r[0];dz=z[1]-z[0];
+  phi=startPhi+deltaPhi*G4UniformRand();
+  rr=r[0]+dr*G4UniformRand();
+ 
+    x=rr*std::cos(phi);
+    y=rr*std::sin(phi);
+    // PolyconeSide has a Ring Form
+    if (dz==0.){zz=z[0];}
+    else{  if(dr==0.){//PolyconeSide has a Tub Form
+                zz=z[0]+dz*G4UniformRand();}
+           else{zz=z[0]+(rr-r[0])*dz/dr;}
+     }
+  return G4ThreeVector(x,y,zz);
 }

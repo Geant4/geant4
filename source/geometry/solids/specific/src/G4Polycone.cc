@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.39 2007-10-02 09:50:46 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.40 2008-05-14 15:39:39 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -780,7 +780,7 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
 // GetPointOnSurface
 //
 G4ThreeVector G4Polycone::GetPointOnSurface() const
-{ 
+{ if(!genericPcon){
   G4double Area=0,totArea=0,Achose1=0,Achose2=0,phi,cosphi,sinphi,rRand;
   G4int i=0;
   G4int numPlanes = original_parameters->Num_z_planes;
@@ -859,9 +859,21 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
   
   return G4ThreeVector(rRand*cosphi,rRand*sinphi,
                        original_parameters->Z_values[numPlanes-1]);  
+
+}else{//genericPcon
+
+  return GetPointOnSurfaceGeneric();  
+  }
 }
+//
+// GetPointOnSurfaceGeneric
+//
+G4ThreeVector G4Polycone::GetPointOnSurfaceGeneric() const
+{
 
-
+   return G4VCSGfaceted::GetPointOnSurface();
+ 
+}
 //
 // CreatePolyhedron
 //

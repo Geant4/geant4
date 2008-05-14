@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGface.hh,v 1.7 2006-06-29 18:48:08 gunter Exp $
+// $Id: G4VCSGface.hh,v 1.8 2008-05-14 15:37:55 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -299,6 +299,12 @@ class G4VCSGface
                                 G4SolidExtentList &extentList       ) = 0;
 
   virtual G4VCSGface* Clone() = 0;
+
+
+  virtual G4double SurfaceArea( ) = 0;
+  virtual G4ThreeVector GetPointOnFace() =0;
+
+
 };
 
 #endif

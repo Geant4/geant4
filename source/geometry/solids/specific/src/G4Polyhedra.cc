@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.38 2008-02-21 17:03:23 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.39 2008-05-14 15:40:21 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -672,7 +672,7 @@ G4ThreeVector G4Polyhedra::GetPointOnTriangle(G4ThreeVector p1,
 // GetPointOnSurface
 //
 G4ThreeVector G4Polyhedra::GetPointOnSurface() const
-{
+{ if(!genericPgon){
   G4int j, numPlanes = original_parameters->Num_z_planes, Flag=0;
   G4double chose, totArea=0., Achose1, Achose2,
            rad1, rad2, sinphi1, sinphi2, cosphi1, cosphi2; 
@@ -877,8 +877,22 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,
                      original_parameters->Z_values[j+1]);
   return GetPointOnPlane(p0,p1,p2,p3);
-}
 
+ }else{//genericPgon
+
+  return GetPointOnSurfaceGeneric(); 
+ }
+
+}
+//
+// GetPointOnSurfaceGeneric
+//
+G4ThreeVector G4Polyhedra::GetPointOnSurfaceGeneric() const
+{
+
+   return G4VCSGfaceted::GetPointOnSurface();
+ 
+}
 
 //
 // CreatePolyhedron

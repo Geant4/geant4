@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.9 2007-05-11 13:54:28 gcosmo Exp $
+// $Id: G4PolyhedraSide.hh,v 1.10 2008-05-14 15:37:12 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,7 +103,19 @@ class G4PolyhedraSide : public G4VCSGface
                                 G4SolidExtentList &extentList );
 
     G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
+    //Methods used for GetPointOnSurface()
+    G4double SurfaceTriangle(G4ThreeVector p1,
+                                        G4ThreeVector p2,
+                                        G4ThreeVector p3,
+			                G4ThreeVector *p4);
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                        G4ThreeVector p2, G4ThreeVector p3,
+				        G4double *Area);
+    G4double SurfaceArea();
+    G4ThreeVector GetPointOnFace(); 
   
+
+
   public:  // without description
 
     G4PolyhedraSide(__void__&);
@@ -183,6 +195,7 @@ class G4PolyhedraSide : public G4VCSGface
   private:
 
     G4double kCarTolerance;  // Geometrical surface thickness
+    G4double fSurfaceArea;   // Surface Area 
 };
 
 #endif

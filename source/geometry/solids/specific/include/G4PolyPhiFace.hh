@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.hh,v 1.10 2007-05-11 13:54:28 gcosmo Exp $
+// $Id: G4PolyPhiFace.hh,v 1.11 2008-05-14 15:33:29 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@
 #define G4PolyPhiFace_hh
 
 #include "G4VCSGface.hh"
-
+#include "G4TwoVector.hh"
 class G4ReduciblePolygon;
 
 struct G4PolyPhiFaceVertex
@@ -66,6 +66,10 @@ struct G4PolyPhiFaceVertex
   G4double rNorm, 
            zNorm;        // r/z normal
   G4ThreeVector norm3D;  // 3D normal
+ //For Triangulation Algorithm need to add ear,prev,next
+  G4bool ear;
+  G4PolyPhiFaceVertex *next,*prev;
+
 };
 
 struct G4PolyPhiFaceEdge
@@ -121,6 +125,10 @@ class G4PolyPhiFace : public G4VCSGface
     inline G4VCSGface *Clone();
       // Allocates on the heap a clone of this face.
 
+ G4double SurfaceArea() ;
+  G4double SurfaceTriangle(G4ThreeVector p1,G4ThreeVector p2,G4ThreeVector p3, G4ThreeVector* p4);
+  G4ThreeVector GetPointOnFace();
+
   public:  // without description
 
     G4PolyPhiFace(__void__&);
@@ -154,6 +162,65 @@ class G4PolyPhiFace : public G4VCSGface
       // or exactly passes through the z position of a vertex point in face.
 
     void CopyStuff( const G4PolyPhiFace &source );
+  //
+  // Functions used for Triangulation in Case of generic Polygone
+  // This triangulation is used for GetPointOnFace()
+
+ //
+// Calculation of 2*Area of Triangle with Sign
+G4double Area2(G4TwoVector a,G4TwoVector b,G4TwoVector c);
+
+//
+// Boolean functions for sign of Surface
+//
+G4bool Left(G4TwoVector a,G4TwoVector b,G4TwoVector c);
+G4bool LeftOn(G4TwoVector a,G4TwoVector b,G4TwoVector c);
+G4bool Collinear(G4TwoVector a,G4TwoVector b,G4TwoVector c);
+//
+// Boolean function for finding "Proper" Intersection
+// That means Intersection of two lines segments (a,b) and (c,d)
+// 
+G4bool IntersectProp( G4TwoVector a,G4TwoVector b,
+		      G4TwoVector c,G4TwoVector d);
+//
+// Boolean function for determining if Point c is between a and b
+// For the tree points(a,b,c) on the same line
+//
+G4bool Between(G4TwoVector a,G4TwoVector b,G4TwoVector c);
+//
+// Boolean function for finding Intersection "Proper" or not
+// Between two line segments (a,b) and (c,d)
+G4bool Intersect( G4TwoVector a,G4TwoVector b,
+		  G4TwoVector c,G4TwoVector d);
+//
+// Boolean Diagonalie help to determine 
+// if diagonal s of segment (a,b) is convex or reflex
+//
+  G4bool Diagonalie(G4PolyPhiFaceVertex *a,G4PolyPhiFaceVertex *b);
+//Boolean function that determine if b is Inside Cone (a0,a,a1) a=center of Cone
+//
+  G4bool InCone(G4PolyPhiFaceVertex *a,G4PolyPhiFaceVertex *b);
+	    
+//
+// Boolean function that find if Diagonal is possible inside Polycone or PolyHedra
+//
+  G4bool Diagonal(G4PolyPhiFaceVertex *a,G4PolyPhiFaceVertex *b);
+
+// Initialisation for Triangulisation by ear tips
+// For details see "Computational Geometry in C" by Joseph O'Rourke
+//
+void EarInit();
+
+//
+// Triangulisation by ear tips for Polycone or Polyhedra
+// For details see "Computational Geometry in C" by Joseph O'Rourke
+// !!!! The copy of Polycone is made and this copy is reordered in order to 
+// !!!! have a list of triangles. This list is used for GetPointOnFace().
+//
+  void Triangulate();
+
+
+
 
   protected:
 
@@ -163,11 +230,15 @@ class G4PolyPhiFace : public G4VCSGface
     G4ThreeVector    normal;        // Normal unit vector
     G4ThreeVector    radial;        // Unit vector along radial direction
     G4ThreeVector    surface;       // Point on surface
+    G4ThreeVector    surface_point;   // Another point on surface used for GetPointOnFace() 
     G4double   rMin, rMax, // Extent in r
                zMin, zMax; // Extent in z
     G4bool      allBehind; // True if the polycone/polyhedra
                            // is behind the place of this face
-    G4double   kCarTolerance;       // Surface thickness
+    G4double   kCarTolerance;// Surface thickness
+    G4double   fSurfaceArea; // Surface Area of PolyPhiFace 
+    G4PolyPhiFaceVertex *triangles; // Auxilary pointer to 'corners' used for triangulation 
+                                    // Copy structure,Change the structure of 'corners'(ear removal)
 };
 
 #include "G4PolyPhiFace.icc"

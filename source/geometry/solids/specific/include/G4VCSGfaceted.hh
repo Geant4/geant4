@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.13 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4VCSGfaceted.hh,v 1.14 2008-05-14 15:38:02 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,9 @@ class G4VCSGfaceted : public G4VSolid
     G4double GetAreaAccuracy() const;
     void SetAreaStatistics(G4int st);
     void SetAreaAccuracy(G4double ep);
+
+    G4ThreeVector GetPointOnSurface() const;
+    //return PointOnSurface
 
     virtual G4double GetCubicVolume();
       // Returns an estimation of the geometrical cubic volume of the
