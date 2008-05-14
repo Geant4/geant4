@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.12 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.13 2008-05-14 18:53:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,6 +132,7 @@ private:
   G4double mass;
   G4double tlimit;
   G4double spin;
+  G4double magMoment2;
   G4double chargeSquare;
   G4double ratio;
   G4double formfact;

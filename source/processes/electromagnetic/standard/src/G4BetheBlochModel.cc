@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.17 2008-04-18 18:42:16 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.18 2008-05-14 18:53:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,6 +136,9 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     ratio = electron_mass_c2/mass;
+    G4double magmom = particle->GetPDGMagneticMoment()
+      *mass/(0.5*eplus*hbar_Planck*c_squared);
+    magMoment2 = magmom*magmom - 1.0;
     formfact = 0.0;
     if(particle->GetLeptonNumber() == 0) {
       G4double x = 0.8426*GeV;
@@ -147,9 +150,10 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 	  A13[iz] = std::pow(proton_mass_c2/mass,0.3333333);
 	}
 	x *= A13[iz];
-	tlimit = 51.2*GeV*A13[iz]*A13[iz];
+	//	tlimit = 51.2*GeV*A13[iz]*A13[iz];
       }
       formfact = 2.0*electron_mass_c2/(x*x);
+      tlimit   = 2.0/formfact;
     }
   }
 }
@@ -180,8 +184,8 @@ G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
     // High order correction different for hadrons and ions
     // nevetheless they are applied to reduce high energy transfers
     //    if(!isIon) 
-    cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
-					  kineticEnergy,cutEnergy);
+    //cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
+    //					  kineticEnergy,cutEnergy);
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -298,28 +302,36 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double etot2         = totEnergy*totEnergy;
   G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
 
-  G4double deltaKinEnergy, f;
+  G4double deltaKinEnergy, f; 
+  G4double f1 = 0.0;
+  G4double fmax = 1.0 + 0.5*maxKinEnergy*maxKinEnergy/etot2; 
 
-  // sampling follows ...
+  // sampling without nuclear size effect
   do {
     G4double q = G4UniformRand();
     deltaKinEnergy = minKinEnergy*maxKinEnergy
                     /(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
 
     f = 1.0 - beta2*deltaKinEnergy/tmax;
-    if( 0.5 == spin ) f += 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
-
-    G4double x1 = 1.0 + formfact*deltaKinEnergy;
-    f /= (x1*x1);
-
-    if(f > 1.0) {
-        G4cout << "G4BetheBlochModel::SampleSecondary Warning! "
-               << "Majorant 1.0 < "
-               << f << " for Edelta= " << deltaKinEnergy
-               << G4endl;
+    if( 0.5 == spin ) {
+      f1 = 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
+      f += f1;
     }
 
-  } while( G4UniformRand() > f );
+  } while( fmax*G4UniformRand() > f);
+
+  // projectile formfactor - do not produce delta-electrons
+  G4double x = formfact*deltaKinEnergy;
+  if(x > 1.e-6) {
+
+    G4double x1 = 1.0 + x;
+    G4double g  = 1.0/(x1*x1);
+    if( 0.5 == spin ) {
+      G4double x2 = electron_mass_c2*deltaKinEnergy/(mass*mass);
+      g *= (1.0 + magMoment2*(0.5*x2/(1.0 + x2) + f1)/f);
+    }
+    if(G4UniformRand() > g) return;
+  }
 
   G4double totMomentum = totEnergy*sqrt(beta2);
   G4double deltaMomentum =
