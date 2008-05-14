@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 1.11 2008-05-02 12:48:44 lgarnier Exp $
+# $Id: G4UI_USE.gmk,v 1.12 2008-05-14 09:48:19 gbarrand Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
@@ -78,6 +78,27 @@ ifdef G4UI_USE_WIN32
   G4UI_USE  = 1
   G4INTY_USE_WIN32 = 1
   CPPFLAGS    += -DG4UI_USE_WIN32
+endif
+
+ifdef G4UI_USE_OSC
+  CPPFLAGS += -DG4UI_USE_OSC
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    # need a syntax that both g++ and CL.exe understand :
+    G4OSC_TMP_1 := $(shell echo "`osc-config --g4lab_incs`")
+    CPPFLAGS += $(patsubst /I%,-I"%",$(G4OSC_TMP_1))
+  else
+    CPPFLAGS += `osc-config --g4lab_incs`
+  endif
+  INTYLIBS += `osc-config --g4lab_libs`
+  INTYLIBS += `osc-config --iv_libs`
+  #    
+  ifndef G4ANALYSIS_AIDA_CONFIG_CFLAGS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      # need a syntax that both g++ and CL.exe understand :
+      G4OSC_TMP_2 := $(shell echo "`aida-config --include`")
+      G4ANALYSIS_AIDA_CONFIG_CFLAGS := $(patsubst /I%,-I"%",$(G4OSC_TMP_2))
+    endif
+  endif
 endif
 
 ########################### interfaces/XVT - not currently implemented #####
