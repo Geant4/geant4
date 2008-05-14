@@ -692,6 +692,7 @@ private:
 ///
 /// \note Overuse of this class will generate massive bloat.  Use c2_ptr and c2_const_ptr if you don't _really_ need specific pointer types.
 /// \see  \ref memory_management "Use of c2_ptr for memory management"
+/*
 template <typename float_type, template <typename> class c2_class > class c2_typed_ptr : public c2_const_ptr<float_type> {
 public:
 	/// \brief construct the container with no function
@@ -732,7 +733,7 @@ private:
 	/// \brief hidden downcasting version of operator=. Use an explicit dynamic_cast<c2_class<float_type>&>(f) if you need to try this.
 	void operator =(const c2_function<float_type> &f) { }
 };
-
+*/
 /// \brief a container into which any other c2_function can be dropped, to allow expressions
 /// with replacable components.  
 /// \ingroup containers
