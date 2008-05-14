@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.40 2008-04-21 05:41:08 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.41 2008-05-14 18:57:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,9 +117,10 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, cut);
+  //  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, cut);
 
-  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
+  //  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
+  G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
   if(verbose > 1)
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas

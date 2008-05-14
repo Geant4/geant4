@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.20 2008-04-21 05:41:08 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.21 2008-05-14 18:57:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -337,9 +337,9 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
       else if(mass > GeV) {
 	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
 	x /= A13;
-	tmax = std::min(tmax,51200.*electron_mass_c2/(A13*A13));
       }
       formfact = 2.0*electron_mass_c2/(x*x);
+      tmax = std::min(tmax,2.0/formfact);
     }
   }
   if(mat != material) {
