@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.cc,v 1.7 2008-05-05 08:57:15 tnikitin Exp $
+// $Id: F02FieldMessenger.cc,v 1.8 2008-05-14 15:27:13 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,11 +60,12 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* pEMfield)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  ElFieldCmd = new G4UIcmdWithADouble("/field/setFieldZ",this);  
+  ElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
   ElFieldCmd->SetGuidance("Define uniform Electric field.");
   ElFieldCmd->SetGuidance("Electric field will be in Z direction.");
-  ElFieldCmd->SetGuidance("Value of Electric field has to be given in Volt/mm");
-  ElFieldCmd->SetParameterName("Ez",false);
+  ElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
+  ElFieldCmd->SetParameterName("Ez",false,false);
+  ElFieldCmd->SetDefaultUnit("volt/m");
   ElFieldCmd->AvailableForStates(G4State_Idle); 
  
   MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  

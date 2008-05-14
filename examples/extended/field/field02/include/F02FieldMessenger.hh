@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.hh,v 1.5 2008-05-05 08:56:54 tnikitin Exp $
+// $Id: F02FieldMessenger.hh,v 1.6 2008-05-14 15:27:01 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ class F02FieldMessenger: public G4UImessenger
     G4UIdirectory*             F02detDir;
 
     G4UIcmdWithAnInteger*      StepperCmd;
-    G4UIcmdWithADouble*        ElFieldCmd;
+    G4UIcmdWithADoubleAndUnit* ElFieldCmd;
     G4UIcmdWithADoubleAndUnit* MinStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 

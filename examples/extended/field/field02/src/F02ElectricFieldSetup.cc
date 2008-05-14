@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectricFieldSetup.cc,v 1.3 2008-05-05 08:57:53 tnikitin Exp $
+// $Id: F02ElectricFieldSetup.cc,v 1.4 2008-05-14 15:27:29 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -195,7 +195,7 @@ void F02ElectricFieldSetup::SetStepper()
 
 void F02ElectricFieldSetup::SetFieldValue(G4double fieldValue)
 {
-  G4ThreeVector fieldVector( 0.0, 0.0, fieldValue*volt/mm );  
+  G4ThreeVector fieldVector( 0.0, 0.0, fieldValue );  
 
   SetFieldValue( fieldVector );
 }
