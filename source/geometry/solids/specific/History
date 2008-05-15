@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2008-04-28 09:00:03 gcosmo Exp $
+$Id: History,v 1.141 2008-05-15 11:45:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-May-2008, T.Nikitina (geom-specific-V09-01-11)
+- Enhanced GetPointOnSurface() for generic G4Polycone and G4Polyhedra
+  constructs; the method uses new triangulation algorithm for G4PolyPhiFace.
 
 28-Apr-2008, T.Nikitina (geom-specific-V09-01-10)
 - Added kCarTolerance in definition of "low" and "high" cone limits in R
