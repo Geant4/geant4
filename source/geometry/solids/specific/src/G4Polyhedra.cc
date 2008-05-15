@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.41 2008-05-15 12:58:13 tnikitin Exp $
+// $Id: G4Polyhedra.cc,v 1.42 2008-05-15 13:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -883,14 +883,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   {
     return GetPointOnSurfaceGeneric(); 
   }
-}
-
-//
-// GetPointOnSurfaceGeneric
-//
-G4ThreeVector G4Polyhedra::GetPointOnSurfaceGeneric() const
-{
-  return G4VCSGfaceted::GetPointOnSurfaceGeneric();
 }
 
 //

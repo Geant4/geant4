@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.16 2008-05-15 12:57:34 tnikitin Exp $
+// $Id: G4VCSGfaceted.hh,v 1.17 2008-05-15 13:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,10 +107,6 @@ class G4VCSGfaceted : public G4VSolid
     virtual G4double GetSurfaceArea();
       // Returns an estimation of the geometrical surface area of the
       // solid. Caches the computed value once computed the first time.
-    
-    G4ThreeVector GetPointOnSurfaceGeneric()const;
-     // Returns a random point located on the surface of the solid 
-     // in case of Generic Polycone or Generic Polyhedra
 
   public:  // without description
 
@@ -129,6 +125,10 @@ class G4VCSGfaceted : public G4VSolid
 
     virtual G4double DistanceTo( const G4ThreeVector &p,
                                  const G4bool outgoing ) const;
+
+    G4ThreeVector GetPointOnSurfaceGeneric()const;
+      // Returns a random point located on the surface of the solid 
+      // in case of generic Polycone or generic Polyhedra.
 
     void CopyStuff( const G4VCSGfaceted &source );
     void DeleteStuff();

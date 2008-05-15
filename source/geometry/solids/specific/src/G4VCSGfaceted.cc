@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.23 2008-05-15 12:57:48 tnikitin Exp $
+// $Id: G4VCSGfaceted.cc,v 1.24 2008-05-15 13:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -560,7 +560,7 @@ G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 
 
 //
-// GetPointOnSurface proportional to Areas of faces
+// GetPointOnSurfaceGeneric proportional to Areas of faces
 // in case of GenericPolycone or GenericPolyhedra
 //
 G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
