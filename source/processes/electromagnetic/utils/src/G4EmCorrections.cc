@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.41 2008-05-14 18:57:41 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.42 2008-05-15 10:43:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,7 +102,7 @@ G4EmCorrections::~G4EmCorrections()
 
 G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
                                                const G4Material* mat,
-					       G4double e, G4double cut)
+					       G4double e, G4double)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
@@ -124,7 +124,8 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 
   if(verbose > 1)
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
-	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
+	   << " Bloch= " << Bloch << " Mott= " << Mott 
+      //<< " Fsize= " << FSize
 	   << " Sum= " << sum << G4endl; 
 
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
