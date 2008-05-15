@@ -13,6 +13,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+15-May 2008 J. M.Quesada     hadr-pre-V09-01-03
+-----------------------------------------------
+   The retrieval of transition probabilities in G4PreCompoundModel.cc ( for protection
+against unphysically crossing the landa_+=landa_- condition) was misplaced.  Now it has been
+placed inside the preequilibrium transitions loop. 
+
+
 8-May 2008 J. M.Quesada     hadr-pre-V09-01-02
 -----------------------------------------------
 
