@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.13 2008-05-08 10:42:09 quesada Exp $
+// $Id: G4PreCompoundModel.cc,v 1.14 2008-05-15 16:08:22 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -192,7 +192,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 
 
   // Main loop. It is performed until equilibrium deexcitation.
+//G4int fragment=0;
+
   for (;;) {
+
+//fragment++;
+//G4cout<<"-------------------------------------------------------------------"<<G4endl;
+//G4cout<<"Fragment number .. "<<fragment<<G4endl;
+
     // Initialize fragment according with the nucleus parameters
     aEmission.Initialize(aFragment);
 
@@ -221,6 +228,34 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 //        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
 //       G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
         
+
+//G4int transition=0;
+    do 
+      {
+//transition++;
+//G4cout<<"transition number .."<<transition<<G4endl;
+//G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
+        G4bool go_ahead = false;
+// soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
+//       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
+     G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
+
+//J. M. Quesada (Apr. 08): soft-cutoff switched off
+        if (test < EquilibriumExcitonNumber) go_ahead=true;
+
+//if (test < EquilibriumExcitonNumber)
+//        if (test < EquilibriumHoleNumber)
+//          {
+//            test /= static_cast<G4double>(EquilibriumExcitonNumber); 
+//           test /= static_cast<G4double>(EquilibriumHoleNumber);
+//            test -= 1.0;
+//            test = test*test;
+//            test /= 0.32;
+//            test = 1.0 - std::exp(-test);
+//            go_ahead = (G4UniformRand() < test);
+//
+//          }
+
 //JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! (O values would be returned otherwise)
         G4double TotalTransitionProbability = aTransition->CalculateProbability(aFragment);
         G4double P1=aTransition->GetTransitionProb1();
@@ -229,28 +264,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 //       G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
 
 
-
-    do 
-      {
-        G4bool go_ahead = false;
-// soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
-//       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
-     G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
-
-        if (test < EquilibriumExcitonNumber) 
-//        if (test < EquilibriumHoleNumber)
-          {
-            test /= static_cast<G4double>(EquilibriumExcitonNumber); 
-//           test /= static_cast<G4double>(EquilibriumHoleNumber);
-            test -= 1.0;
-            test = test*test;
-            test /= 0.32;
-            test = 1.0 - std::exp(-test);
-            go_ahead = (G4UniformRand() < test);
-//
-//J. M. Quesada (Apr. 08): soft-cutoff switched off
-            go_ahead=true;
-          }
 //J.M. Quesada (May. 08). Physical criterium (landas)  PREVAILS over approximation (critical exciton number)
         if(P1<=(P2+P3)) go_ahead=false;
       
