@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.14 2008-02-28 10:31:59 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.15 2008-05-15 11:48:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -333,7 +333,7 @@ G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
   G4TwoVector t2 = pb - po;
   
   G4double result
-    = (atan2(t1.y(), t1.x()) - atan2(t2.y(), t2.x()));
+    = (std::atan2(t1.y(), t1.x()) - std::atan2(t2.y(), t2.x()));
 
   if ( result < 0 ) result += 2*pi;
 
