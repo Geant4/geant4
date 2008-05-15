@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: NucleusTest.cc,v 1.2 2004-04-16 14:57:49 gunter Exp $
+// $Id: NucleusTest.cc,v 1.3 2008-05-15 14:05:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -71,9 +71,10 @@ int main()
 	   {
 	       G4double massnumber=
 	          theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(Z)+iso);
-              for ( G4int repeat=0; repeat< 100; ++repeat )
+              for ( G4int repeat=0; repeat< 1; ++repeat )
 	      {
 	           nucleus.Init(massnumber,(G4double) Z);
+		   nucleus.SortNucleonsInZ();
 	      }
 	      G4cout << "Charge" << nucleus.GetCharge() << G4endl;
 	      G4cout << "Mass number" << nucleus.GetMassNumber() << G4endl;

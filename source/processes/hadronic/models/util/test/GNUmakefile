@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2004-05-12 09:38:33 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2008-05-15 14:05:36 gunter Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -19,13 +19,10 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # ---- For CLHEP histograms
 
-EXTRALIBDIR := -L/cern/pro/lib
-EXTRALIBS := -lpacklib $(FCLIBS) 
-  ifeq ($(G4SYSTEM),SUN-CC)
-    EXTRALIBS := -lpacklib -lw -lgen -lsocket -lnsl -lintl $(FCLIBS) 
-  endif
-LDFLAGS += $(EXTRALIBDIR)
-LOADLIBS += $(EXTRALIBS)
+#EXTRALIBDIR := -L/cern/pro/lib
+#EXTRALIBS := -lpacklib $(FCLIBS) 
+#LDFLAGS += $(EXTRALIBDIR)
+#LOADLIBS += $(EXTRALIBS)
 
 include $(G4INSTALL)/config/binmake.gmk
     

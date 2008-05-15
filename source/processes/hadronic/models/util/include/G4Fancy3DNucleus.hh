@@ -84,6 +84,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void CenterNucleons();
       void DoTranslation(const G4ThreeVector & theShift);
       const G4VNuclearDensity * GetNuclearDensity() const;
+      void SortNucleonsInZ();
       
   private:
   

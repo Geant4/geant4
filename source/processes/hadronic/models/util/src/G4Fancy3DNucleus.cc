@@ -42,6 +42,11 @@
 #include <algorithm>
 #include "G4HadronicException.hh"
 
+   bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon* nuc1, const G4Nucleon* nuc2)
+{
+	return nuc1->GetPosition().z() < nuc2->GetPosition().z();
+}    
+
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
 {
@@ -129,6 +134,29 @@ const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 	}
 	return theRWNucleons;
 }
+
+void G4Fancy3DNucleus::SortNucleonsInZ()
+{
+        G4Nucleon * sortedNucleons = new G4Nucleon[myA];
+	
+	GetNucleons();   // make sure theRWNucleons is initialised
+
+	if (theRWNucleons.size() < 2 ) return; 
+	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+
+// now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
+//  so we need to copy to new, and then swap. 
+	for ( unsigned int i=0; i<theRWNucleons.size(); i++ )
+	{
+	   sortedNucleons[i]= *(theRWNucleons[i]);
+	}
+	theRWNucleons.clear();   // about to delete array elements these point to....
+	delete [] theNucleons;
+	theNucleons=sortedNucleons;
+
+	return;
+}
+
 
 G4double G4Fancy3DNucleus::BindingEnergy()
 {
