@@ -14,10 +14,17 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+15 May 2008 - Dennis Wright (hadr-hep-V09-01-01)
+------------------------------------------------
+ G4HEInelastic::TuningOfHighEnergyCascade: remove abnormally high pt 
+ secondaries due to incident strange particles by prohibiting the 
+ assignment of leading particle to anything that goes backward in the 
+ CM frame.   
+ 
 17 Mar 2008 - Dennis Wright (hadr-hep-V09-01-00)
 ------------------------------------------------
  Add braces around single-statement if/else blocks to fix warning from 
-  gcc-4.3 compiler.  Nearly all files affected.
+ gcc-4.3 compiler.  Nearly all files affected.
 
 19 Nov 2007 - Dennis Wright (hadr-hep-V09-00-01)
 ------------------------------------------------
