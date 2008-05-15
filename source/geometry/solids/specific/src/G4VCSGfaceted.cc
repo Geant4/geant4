@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.21 2008-05-14 15:40:49 tnikitin Exp $
+// $Id: G4VCSGfaceted.cc,v 1.22 2008-05-15 11:41:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -557,40 +557,51 @@ G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
   return fpPolyhedron;
 }
 
+/*
 //
 // GetPointOnSurface proportional to Areas of faces
 // in case of GenericPolycone or GenericPolyhedra
 //
 G4ThreeVector G4VCSGfaceted::GetPointOnSurface( ) const
-{// preparing variables
+{
+  // Preparing variables
+  //
   G4ThreeVector answer=G4ThreeVector(0.,0.,0.);
   G4VCSGface **face = faces;
   G4double area = 0;
   G4int i;
   std::vector<G4double> areas; 
 
-  //First step = Calculate Surface Areas
-  do {
+  // First step: calculate surface areas
+  //
+  do
+  {
     G4double result = (*face)->SurfaceArea( );
     areas.push_back(result);
     area=area+result;
   } while( ++face < faces + numFace );
 
- //Second Step = Choose Randomly One Surface
-   G4VCSGface **face1 = faces;
-   G4double chose = area*G4UniformRand();
-   G4double Achose1,Achose2;
-   Achose1=0;Achose2=0.; 
-   i=0;
-    do {Achose2+=areas[i];
-       if(chose>=Achose1 && chose<Achose2){
-          G4ThreeVector point;
-          point= (*face1)->GetPointOnFace( );
-          return point;
-      }
-      i++;Achose1=Achose2;
+  // Second Step: choose randomly one surface
+  //
+  G4VCSGface **face1 = faces;
+  G4double chose = area*G4UniformRand();
+  G4double Achose1, Achose2;
+  Achose1=0; Achose2=0.; 
+  i=0;
 
-   } while( ++face1 < faces + numFace );
+  do
+  {
+    Achose2+=areas[i];
+    if(chose>=Achose1 && chose<Achose2)
+    {
+      G4ThreeVector point;
+      point= (*face1)->GetPointOnFace();
+      return point;
+    }
+    i++;
+    Achose1=Achose2;
+  } while( ++face1 < faces + numFace );
 
   return answer;
 }
+*/

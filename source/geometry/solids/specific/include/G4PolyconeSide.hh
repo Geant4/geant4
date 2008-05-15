@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.11 2008-05-14 15:36:39 tnikitin Exp $
+// $Id: G4PolyconeSide.hh,v 1.12 2008-05-15 11:41:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,9 +101,8 @@ class G4PolyconeSide : public G4VCSGface
 
     G4VCSGface *Clone() { return new G4PolyconeSide( *this ); }
 
-  G4double SurfaceArea();
-  G4ThreeVector GetPointOnFace();
-
+    G4double SurfaceArea();
+    G4ThreeVector GetPointOnFace();
   
   public:  // without description
 
@@ -133,8 +132,7 @@ class G4PolyconeSide : public G4VCSGface
     G4double rNormEdge[2],
              zNormEdge[2];  // Normal to edges
 
-    //(WP) 
-    int ncorners;
+    G4int ncorners;
     G4ThreeVector *corners; // The coordinates of the corners (if phiIsOpen)
 
     G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
@@ -154,7 +152,7 @@ class G4PolyconeSide : public G4VCSGface
   private:
 
     G4double kCarTolerance; // Geometrical surface thickness
-  G4double fSurfaceArea; //Used for surface calculation 
+    G4double fSurfaceArea;  // Used for surface calculation 
 };
 
 #endif

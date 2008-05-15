@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.10 2008-05-14 15:37:12 tnikitin Exp $
+// $Id: G4PolyhedraSide.hh,v 1.11 2008-05-15 11:41:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ struct G4PolyhedraSideRZ
 class G4PolyhedraSide : public G4VCSGface
 {
 
-  public:
+  public:  // with description
 
     G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                      const G4PolyhedraSideRZ *tail,
@@ -103,18 +103,20 @@ class G4PolyhedraSide : public G4VCSGface
                                 G4SolidExtentList &extentList );
 
     G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
-    //Methods used for GetPointOnSurface()
-    G4double SurfaceTriangle(G4ThreeVector p1,
-                                        G4ThreeVector p2,
-                                        G4ThreeVector p3,
-			                G4ThreeVector *p4);
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                                        G4ThreeVector p2, G4ThreeVector p3,
-				        G4double *Area);
-    G4double SurfaceArea();
-    G4ThreeVector GetPointOnFace(); 
-  
 
+  public:  // without description
+
+    // Methods used for GetPointOnSurface()
+
+    G4double SurfaceTriangle( G4ThreeVector p1,
+                              G4ThreeVector p2,
+                              G4ThreeVector p3,
+                              G4ThreeVector *p4 );
+    G4ThreeVector GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
+                                   G4ThreeVector p2, G4ThreeVector p3,
+                                   G4double *Area );
+    G4double SurfaceArea();
+    G4ThreeVector GetPointOnFace();  
 
   public:  // without description
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.18 2008-05-14 15:37:34 tnikitin Exp $
+// $Id: G4Polyhedra.hh,v 1.19 2008-05-15 11:41:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,6 +181,7 @@ class G4Polyhedra : public G4VCSGfaceted
                                    G4ThreeVector p2) const;
   G4ThreeVector GetPointOnSurfaceCorners() const;
   G4ThreeVector GetPointOnSurfaceGeneric() const;
+
  protected:  // without description
 
   G4int   numSide;      // Number of sides

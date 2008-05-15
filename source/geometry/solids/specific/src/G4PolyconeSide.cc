@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.18 2008-05-14 15:39:58 tnikitin Exp $
+// $Id: G4PolyconeSide.cc,v 1.19 2008-05-15 11:41:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 #include "G4GeometryTolerance.hh"
 
 #include "Randomize.hh"
+
 //
 // Constructor
 //
@@ -64,7 +65,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   : ncorners(0), corners(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fSurfaceArea=0;
+  fSurfaceArea = 0.0;
 
   //
   // Record values
@@ -212,6 +213,7 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   allBehind  = source.allBehind;
 
   kCarTolerance = source.kCarTolerance;
+  fSurfaceArea = source.fSurfaceArea;
   
   cone    = new G4IntersectingCone( *source.cone );
   
@@ -1047,16 +1049,18 @@ void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
 }
 
 //
-// Calculate Suface Area for GetPointOnSurface
+// Calculate surface area for GetPointOnSurface()
 //
 G4double G4PolyconeSide::SurfaceArea() 
 { 
-  if(fSurfaceArea==0){
-     fSurfaceArea = (r[0]+r[1])* std::sqrt(sqr(r[0]-r[1])+sqr(z[0]-z[1]));
-     fSurfaceArea *= 0.5*(deltaPhi);
+  if(fSurfaceArea==0)
+  {
+    fSurfaceArea = (r[0]+r[1])* std::sqrt(sqr(r[0]-r[1])+sqr(z[0]-z[1]));
+    fSurfaceArea *= 0.5*(deltaPhi);
   }  
-   return fSurfaceArea;
+  return fSurfaceArea;
 }
+
 //
 // GetPointOnFace
 //
@@ -1068,13 +1072,26 @@ G4ThreeVector G4PolyconeSide::GetPointOnFace()
   phi=startPhi+deltaPhi*G4UniformRand();
   rr=r[0]+dr*G4UniformRand();
  
-    x=rr*std::cos(phi);
-    y=rr*std::sin(phi);
-    // PolyconeSide has a Ring Form
-    if (dz==0.){zz=z[0];}
-    else{  if(dr==0.){//PolyconeSide has a Tub Form
-                zz=z[0]+dz*G4UniformRand();}
-           else{zz=z[0]+(rr-r[0])*dz/dr;}
-     }
+  x=rr*std::cos(phi);
+  y=rr*std::sin(phi);
+
+  // PolyconeSide has a Ring Form
+  //
+  if (dz==0.)
+  {
+    zz=z[0];
+  }
+  else
+  {
+    if(dr==0.)  // PolyconeSide has a Tube Form
+    {
+      zz = z[0]+dz*G4UniformRand();
+    }
+    else
+    {
+      zz = z[0]+(rr-r[0])*dz/dr;
+    }
+  }
+
   return G4ThreeVector(x,y,zz);
 }

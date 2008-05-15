@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.14 2008-05-14 15:40:29 tnikitin Exp $
+// $Id: G4PolyhedraSide.cc,v 1.15 2008-05-15 11:41:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 //
 // G4PolyhedraSide.cc
 //
-// Implemenation of the face representing one segmented side of a Polyhedra
+// Implementation of the face representing one segmented side of a Polyhedra
 //
 // --------------------------------------------------------------------
 
@@ -46,6 +46,7 @@
 #include "G4GeometryTolerance.hh"
 
 #include "Randomize.hh"
+
 //
 // Constructor
 //
@@ -359,7 +360,8 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
   edgeNorm  = source.edgeNorm;
 
   kCarTolerance = source.kCarTolerance;
-  
+  fSurfaceArea = source.fSurfaceArea;
+
   cone = new G4IntersectingCone( *source.cone );
 
   //
@@ -1140,14 +1142,16 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
   }
   return std::sqrt( distFaceNorm*distFaceNorm + distOut2 );
 }
+
+
 //
-// Calculation of Surface Area of Triangle 
-// In the same time Random Point in Triangle is given
+// Calculation of surface area of a triangle. 
+// At the same time a random point in the triangle is given
 //
-G4double G4PolyhedraSide::SurfaceTriangle(G4ThreeVector p1,
-                                        G4ThreeVector p2,
-                                        G4ThreeVector p3,
-                                        G4ThreeVector *p4)
+G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
+                                           G4ThreeVector p2,
+                                           G4ThreeVector p3,
+                                           G4ThreeVector *p4 )
 {
   G4ThreeVector v, w;
   
@@ -1159,14 +1163,17 @@ G4double G4PolyhedraSide::SurfaceTriangle(G4ThreeVector p1,
   *p4=p2 + lambda1*w + lambda2*v;
   return 0.5*(v.cross(w)).mag();
 }
+
+
 //
 // GetPointOnPlane
 //
-// Auxiliary method for get point on surface
+// Auxiliary method for GetPointOnSurface()
 //
-G4ThreeVector G4PolyhedraSide::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                                           G4ThreeVector p2, G4ThreeVector p3,
-                                           G4double *Area) 
+G4ThreeVector
+G4PolyhedraSide::GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3,
+                                  G4double *Area )
 {
   G4double chose,aOne,aTwo;
   G4ThreeVector point1,point2;
@@ -1183,63 +1190,87 @@ G4ThreeVector G4PolyhedraSide::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p
 }
 
 
+//
+// SurfaceArea()
+//
 G4double G4PolyhedraSide::SurfaceArea()
-{ if(fSurfaceArea==0.){ 
-   //define the variables
-     G4double area,areas;
-     G4ThreeVector point1;
-     G4ThreeVector v1,v2,v3,v4; 
-     G4PolyhedraSideVec *vec = vecs;
-     areas=0.;
-   //do a loop on all SideEdge
-   do{ //define 4points for a Plane or Triangle
-          G4ThreeVector v1=vec->edges[0]->corner[0];
-          G4ThreeVector v2=vec->edges[0]->corner[1];
-          G4ThreeVector v3=vec->edges[1]->corner[1];
-          G4ThreeVector v4=vec->edges[1]->corner[0];
-          point1=GetPointOnPlane(v1,v2,v3,v4,&area);
-          areas+=area;
-          
+{
+  if( fSurfaceArea==0. )
+  { 
+    // Define the variables
+    //
+    G4double area,areas;
+    G4ThreeVector point1;
+    G4ThreeVector v1,v2,v3,v4; 
+    G4PolyhedraSideVec *vec = vecs;
+    areas=0.;
+
+    // Do a loop on all SideEdge
+    //
+    do
+    {
+      // Define 4points for a Plane or Triangle
+      //
+      G4ThreeVector v1=vec->edges[0]->corner[0];
+      G4ThreeVector v2=vec->edges[0]->corner[1];
+      G4ThreeVector v3=vec->edges[1]->corner[1];
+      G4ThreeVector v4=vec->edges[1]->corner[0];
+      point1=GetPointOnPlane(v1,v2,v3,v4,&area);
+      areas+=area;
     } while( ++vec < vecs + numSide);
-   //
-   fSurfaceArea=areas;
+
+    fSurfaceArea=areas;
   }
-    return fSurfaceArea;
+  return fSurfaceArea;
 }
 
+
+//
+// GetPointOnFace()
+//
 G4ThreeVector G4PolyhedraSide::GetPointOnFace()
 {
-   //define the variables
-     std::vector<G4double>areas;
-     std::vector<G4ThreeVector>points;
-     G4double area=0;
-     G4double result1;
-     G4ThreeVector point1;
-     G4ThreeVector v1,v2,v3,v4; 
-     G4PolyhedraSideVec *vec = vecs;
-     //do a loop on all SideEdge
-   do{ //define 4points for a Plane or Triangle
-          G4ThreeVector v1=vec->edges[0]->corner[0];
-          G4ThreeVector v2=vec->edges[0]->corner[1];
-          G4ThreeVector v3=vec->edges[1]->corner[1];
-          G4ThreeVector v4=vec->edges[1]->corner[0];
-          point1=GetPointOnPlane(v1,v2,v3,v4,&result1);
-          points.push_back(point1);
-          areas.push_back(result1);
-          area+=result1;
-    } while( ++vec< vecs + numSide);
-   //Choose Randomly One of Surfaces and point on it
-    G4double chose = area*G4UniformRand();
-     G4double Achose1,Achose2;
-     Achose1=0;Achose2=0.; 
-     G4int i=0;
-    do 
-    { Achose2+=areas[i];
-      if(chose>=Achose1 && chose<Achose2){
-         point1=points[i] ; break;     
-         }
-      i++;Achose1=Achose2;
-     } while(i<numSide  );
+  // Define the variables
+  //
+  std::vector<G4double>areas;
+  std::vector<G4ThreeVector>points;
+  G4double area=0;
+  G4double result1;
+  G4ThreeVector point1;
+  G4ThreeVector v1,v2,v3,v4; 
+  G4PolyhedraSideVec *vec = vecs;
+
+  // Do a loop on all SideEdge
+  //
+  do
+  {
+    // Define 4points for a Plane or Triangle
+    //
+    G4ThreeVector v1=vec->edges[0]->corner[0];
+    G4ThreeVector v2=vec->edges[0]->corner[1];
+    G4ThreeVector v3=vec->edges[1]->corner[1];
+    G4ThreeVector v4=vec->edges[1]->corner[0];
+    point1=GetPointOnPlane(v1,v2,v3,v4,&result1);
+    points.push_back(point1);
+    areas.push_back(result1);
+    area+=result1;
+  } while( ++vec < vecs+numSide );
+
+  // Choose randomly one of the surfaces and point on it
+  //
+  G4double chose = area*G4UniformRand();
+  G4double Achose1,Achose2;
+  Achose1=0;Achose2=0.; 
+  G4int i=0;
+  do 
+  {
+    Achose2+=areas[i];
+    if(chose>=Achose1 && chose<Achose2)
+    {
+      point1=points[i] ; break;     
+    }
+    i++; Achose1=Achose2;
+  } while( i<numSide );
  
   return point1;
 }
