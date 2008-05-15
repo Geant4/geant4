@@ -1,0 +1,30 @@
+*************************************************
+ This is a test for the visualisation and testing
+ of Points On the Surface of the solid
+
+ Author: Tatiana Nikitina
+*************************************************
+
+This test was created for testing GetPointOnSurface()
+Test runs as a normal Geant4 example.
+
+ To build the application, first setup your environmental variables,
+ do not forget to setup the visualisation part.
+
+ and then do :                  make
+ 
+ and to run it :
+                                $G4BIN/$G4SYSTEM/SurfaceVisTest
+                          
+ SurfaceVisTest will do 2 tests on each run:
+ - check point test for 1000 points 
+   (test if the points given by GetPointOnSurface() are realy on the Surface using Inside())  
+ - visualisation test of 1000 points generated on Surface of Generic Polyhedra.
+   (draw points given by GetPointsOnSurface())
+
+Via command line user can choose :
+ the solis : /mydet/SelectDetector nameOfSolid   
+ the number of Points generated on the Surface : /rndm/numPoints N
+
+Examples are given in vis.mac or in run1.mac
+

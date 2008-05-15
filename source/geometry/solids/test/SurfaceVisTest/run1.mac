@@ -1,0 +1,51 @@
+###################################################
+# Visualization of detector geometry and events  
+###################################################
+
+# create empty scene
+/vis/scene/create
+
+# Create a scene handler for a specific graphics system
+/vis/open OGLIX
+
+# draw scene
+/vis/viewer/zoom 9
+#/vis/viewer/set/viewpointThetaPhi 45 45 deg
+/vis/viewer/set/viewpointThetaPhi 90 -25 deg
+#/vis/viewer/flush
+/vis/drawVolume
+
+#if you want to see trajectories and hits points
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+
+# (if you prefer not refreshing each event, uncomment next line)
+# /vis/scene/endOfEventAction accumulate
+
+#hard coded position and direction for gun
+#/gun/position 400 0 -0.1 mm
+#/gun/direction  0 0 1
+
+#if you want make a run with particle
+
+#/run/beamOn 1
+
+#if you want to change the detector
+
+/mydet/SelectDetector Polycone
+#Other examples for Polycone/Polyhedra
+#Most of the Geant4 solids are supported
+#/mydet/SelectDetector PolyconeGen
+#/mydet/SelectDetector PolyconeGenComplex
+#/mydet/SelectDetector Polyhedra
+#/mydet/SelectDetector PolyhedraGen
+#/mydet/SelectDetector PolyhedraGenComplex
+/rndm/numPoints 100
+
+#to draw Points on the Surface
+
+/run/beamOn 1
+
+
