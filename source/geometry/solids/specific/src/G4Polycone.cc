@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.41 2008-05-15 11:41:59 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.42 2008-05-15 12:58:02 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -874,7 +874,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
 //
 G4ThreeVector G4Polycone::GetPointOnSurfaceGeneric() const
 {
-  return G4VCSGfaceted::GetPointOnSurface();
+  return G4VCSGfaceted::GetPointOnSurfaceGeneric();
 }
 
 //

@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.22 2008-05-15 11:41:59 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.23 2008-05-15 12:57:48 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -247,10 +247,11 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
                faceDistFromSurface;
     G4ThreeVector   faceNormal;
     G4bool    faceAllBehind;
+    G4cout<<"G4VCSGfaceted Dist To In"<<G4endl;
     if ((*face)->Intersect( p, v, false, kCarTolerance/2,
                 faceDistance, faceDistFromSurface,
                 faceNormal, faceAllBehind ) )
-    {
+      {  G4cout<<"G4VCSGfaceted Dist To In Intersect facedist="<< faceDistance<<" distSurf="<<distFromSurface<<G4endl;
       //
       // Intersecting face
       //
@@ -557,12 +558,12 @@ G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
   return fpPolyhedron;
 }
 
-/*
+
 //
 // GetPointOnSurface proportional to Areas of faces
 // in case of GenericPolycone or GenericPolyhedra
 //
-G4ThreeVector G4VCSGfaceted::GetPointOnSurface( ) const
+G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
 {
   // Preparing variables
   //
@@ -604,4 +605,4 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurface( ) const
 
   return answer;
 }
-*/
+
