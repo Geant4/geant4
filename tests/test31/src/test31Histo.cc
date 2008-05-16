@@ -52,6 +52,7 @@
 #include "G4BetheBlochModel.hh"
 #include "G4EnergyLossForExtrapolator.hh"
 #include "G4NucleiProperties.hh"
+#include "G4WaterStopping.hh"
 #include <iomanip>
 #include <fstream>
 
@@ -77,6 +78,7 @@ test31Histo::test31Histo()
   nHisto  = 0;
   maxEnergy = 0.0;
   nTuple  = false;
+  tables  = true;
   histo   = Histo::GetInstance();
   //  ema = new EmAnalysis();
   histoID.resize(7);
@@ -177,7 +179,10 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of pi+pi-       " << xpi << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
-  if(1 < verbose) TableControl();
+  if(tables) {
+    TableControl();
+    tables = false;
+  }
   //  MuonTest();
   //  ElectronTest();
   if(0 < nHisto) {
@@ -368,18 +373,24 @@ void test31Histo::TableControl()
   // G4double step = (xmax - xmin)/(G4double)nbin;
   // G4double x    = xmin;
 
-  const G4int ne = 31;
-  G4double e0[ne]={0.001, 0.002, 0.03, 0.05, 0.1, 0.2, 0.3, 
-		   0.5,   1.0,   2.0,  3.0,  5.0, 10., 
-		   15.0, 20.0,   30.,  50.,  100., 200., 300., 
-		   500., 1000., 2000., 3000., 5000., 10000.,
-                  30000., 100000., 300000., 1000000., 10000000.,};
+  const G4int ne = 37;
+  G4double e0[ne]={0.025, 0.03, 0.04, 0.05, 0.1, 0.2, 0.3, 
+		   0.5,   1.0,   1.1,  1.2,  1.3, 1.4, 1.5, 
+		   1.6,   1.7,   1.8,  1.9,  2.0, 2.1, 2.2,
+                   2.3,   2.4,   2.5,  3.0,  5.0, 10., 15.0, 
+                   20.0,   30.,  50.,  100., 200., 300., 400., 
+		   500., 1000.}; // 2000., 3000., 5000., 10000., 20000.};
+  //                  30000., 100000., 300000., 1000000., 10000000.,};
   const G4int np = 8;
   G4String namep[np] = {"e-","mu+","pi-","proton","alpha", "C12[0.0]", 
 			"Ar40[0.0]", "Pb208[0.0]"};
 
-  for(G4int ii=0; ii<np; ii++) {
+  G4int ii1 = 5;
+  G4int ii2 = 6;
 
+  G4WaterStopping wst;
+
+  for(G4int ii=ii1; ii<ii2; ii++) {
     mat_name  = "G4_WATER";
     mat = mman->FindOrBuildMaterial(mat_name);
     fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
@@ -395,6 +406,10 @@ void test31Histo::TableControl()
     G4cout << "   Material            " << mat_name << G4endl;
     G4cout << "================================================================" << G4endl;
 
+      G4cout << "  N   E(MeV/N)  Esc(MeV) dEdx_T/NIST "
+	     << "dEdx_C/NIST  dEdx_G/NIST  dedx(MeV*cm^2/mg)" 
+	     << std::setprecision(6) << G4endl;
+
     for(G4int ij=0; ij<ne; ij++) {
     
       G4double e = e0[ij];
@@ -402,15 +417,20 @@ void test31Histo::TableControl()
       if(ii >= 5) e1 *= part->GetPDGMass()/amu_c2;
       G4double dedx0 = cal.ComputeTotalDEDX(e1,part,mat,e1);
       G4double dedx  = cal.ComputeElectronicDEDX(e1,part,mat,e1);
-      G4cout << ij << ".   e(MeV)= " << e/MeV 
-	     << "  ei= " << e1/MeV
-	     << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
-	     << ";  Total  dedx(MeV*cm^2/mg)= " << dedx0*fact
-	     << G4endl;
-      // G4cout << G4endl;    
+      G4double dedx1 = cal.GetDEDX(e1,part,mat);
+      G4double dedx2 = wst.GetElectronicDEDX(6, e);
+      G4cout << std::setw(3) << ij << "." 
+             << std::setw(10) << e/MeV 
+	     << std::setw(10) << e1/MeV
+	     << std::setw(11) << dedx0/dedx2
+	     << std::setw(11) << dedx/dedx2
+	     << std::setw(11) << dedx1/dedx2
+	     << std::setw(11) << dedx2*fact
+	     << G4endl; 
     }
   
-    G4bool icorr = true;
+    //    G4bool icorr = true;
+    G4bool icorr = false;
     if(icorr) {
       G4cout << "================================================================" << G4endl;
       G4cout << "             Ionisation Corrections" << G4endl;

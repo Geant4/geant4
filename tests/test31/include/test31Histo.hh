@@ -163,6 +163,7 @@ private:
   G4int n_charged_back;
   G4int n_gam_back;
   G4bool nTuple;
+  G4bool tables;
 
   G4int n_mumu;
   G4int n_pipi;

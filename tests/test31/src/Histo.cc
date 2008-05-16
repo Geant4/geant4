@@ -63,7 +63,7 @@ Histo* Histo::GetInstance()
 Histo::Histo()
 {
   m_verbose    = 0;
-  m_histName   = "histo.hbook";
+  m_histName   = "histo";
   m_histType   = "hbook";
   m_Histo      = 0;
   m_Clouds     = 0;
@@ -126,12 +126,15 @@ void Histo::book()
 
   // Creating a tree mapped to a new file.
   G4String comp = "uncompress";
-  if(m_histType == "xml" || m_histType == "XML") comp = "compress";
-  m_tree = tf->create(m_histName,m_histType,false,true,comp);
+  if(m_histType == "xml") comp = "compress";
+
+  G4String nam = m_histName + "." + m_histType;
+
+  m_tree = tf->create(nam,m_histType,false,true,comp);
   if(m_tree) 
     G4cout << "Tree store  : " << m_tree->storeName() << G4endl;
   else
-    G4cout << "ERROR: Tree store " << m_histName  << " is not created!" << G4endl;
+    G4cout << "ERROR: Tree store " << nam  << " is not created!" << G4endl;
   delete tf;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
@@ -386,8 +389,8 @@ void Histo::setFileName(const G4String& nam)
 
 void Histo::setFileType(const G4String& nam) 
 {
-  if(nam == "hbook" || nam == "root" || nam == "xml" || nam == "XML")
-    m_histType = nam;
+  if(nam == "hbook" || nam == "root") m_histType = nam;
+  else m_histType = "aida";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

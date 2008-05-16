@@ -11,7 +11,7 @@
 /testem/phys/setCuts         1 mm
 #/testem/phys/stepMax        0.1 mm
 /testem/phys/addPhysics      emstandard_opt2
-/test31/AbsorberMaterial     G4_Si
+/test31/AbsorberMaterial     G4_WATER
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
@@ -24,18 +24,20 @@
 #/testem/histo/fileName            t_e_st.paw
 /gun/particle ion
 /gun/ion 6 12 6
+/run/beamOn 1
+/test31/AbsorberMaterial     G4_Si
 /gun/particle e-
 /run/beamOn 100
 #
-#/testem/histo/fileName            t_mu_st.paw
+#/testem/histo/fileName      t_mu_st.paw
 /gun/particle mu-
 /run/beamOn 1000
 #
-#/testem/histo/fileName            t_pi_st.paw
+#/testem/histo/fileName      t_pi_st.paw
 /gun/particle pi+
 /run/beamOn 1000
 #
-#/testem/histo/fileName            t_p_st.paw
+#/testem/histo/fileName      t_p_st.paw
 /gun/particle proton
 /run/beamOn 1000
 #
