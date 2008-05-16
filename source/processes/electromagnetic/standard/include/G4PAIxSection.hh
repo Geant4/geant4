@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.12 2006-06-29 19:50:44 gunter Exp $
+// $Id: G4PAIxSection.hh,v 1.13 2008-05-16 15:12:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,14 +126,19 @@ public:
           G4double PAIdNdxPlasmon( G4int intervalNumber,
 	                           G4double betaGammaSq    ) ;
 
+          G4double PAIdNdxResonance( G4int intervalNumber,
+	                           G4double betaGammaSq    ) ;
+
 	  void     IntegralPAIxSection() ;
 	  void     IntegralCerenkov() ;
 	  void     IntegralPlasmon() ;
+	  void     IntegralResonance() ;
 
           G4double SumOverInterval(G4int intervalNumber) ;
           G4double SumOverIntervaldEdx(G4int intervalNumber) ;
           G4double SumOverInterCerenkov(G4int intervalNumber) ;
           G4double SumOverInterPlasmon(G4int intervalNumber) ;
+          G4double SumOverInterResonance(G4int intervalNumber) ;
 
           G4double SumOverBorder( G4int intervalNumber,
 	                          G4double energy          ) ;
@@ -143,10 +148,13 @@ public:
 	                                G4double energy          ) ;
           G4double SumOverBordPlasmon( G4int intervalNumber,
 	                               G4double energy          ) ;
+          G4double SumOverBordResonance( G4int intervalNumber,
+	                               G4double energy          ) ;
 
           G4double GetStepEnergyLoss( G4double step ) ;
           G4double GetStepCerenkovLoss( G4double step ) ;
           G4double GetStepPlasmonLoss( G4double step ) ;
+          G4double GetStepResonanceLoss( G4double step ) ;
 	 
 	  // Inline access functions
 
@@ -161,16 +169,18 @@ public:
           G4double GetDifPAIxSection(G4int i){ return fDifPAIxSection[i] ; } 
           G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i] ; } 
           G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i] ; } 
+          G4double GetPAIdNdxResonance(G4int i){ return fdNdxResonance[i] ; } 
 	  
 	  G4double GetMeanEnergyLoss() const {return fIntegralPAIxSection[0] ; }
 	  G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0] ; }
 	  G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0] ; }
+	  G4double GetMeanResonanceLoss() const {return fIntegralResonance[0] ; }
 
 	  G4double GetNormalizationCof() const { return fNormalizationCof ; }
           
 	  inline G4double GetPAItable(G4int i,G4int j) const ;
 
-          inline G4double    GetLorentzFactor(G4int i) const ;
+          inline G4double GetLorentzFactor(G4int i) const ;
 	  	  
 	  inline G4double GetSplineEnergy(G4int i) const ;
 	  
@@ -178,6 +188,7 @@ public:
 	  inline G4double GetIntegralPAIdEdx(G4int i) const ;
 	  inline G4double GetIntegralCerenkov(G4int i) const ;
 	  inline G4double GetIntegralPlasmon(G4int i) const ;
+	  inline G4double GetIntegralResonance(G4int i) const ;
 
 protected :
 
@@ -234,11 +245,13 @@ G4double          fIntegralTerm[500] ;   // Integral term in PAI cross section
 G4double        fDifPAIxSection[500] ;   // Differential PAI cross section
 G4double          fdNdxCerenkov[500] ;   // dNdx of Cerenkov collisions
 G4double          fdNdxPlasmon[500] ;   // dNdx of Plasmon collisions
+G4double          fdNdxResonance[500] ;   // dNdx of resonance collisions
 
 G4double   fIntegralPAIxSection[500] ;   // Integral PAI cross section  ?
 G4double   fIntegralPAIdEdx[500] ;   // Integral PAI dEdx  ?
 G4double   fIntegralCerenkov[500] ;   // Integral Cerenkov N>omega  ?
 G4double   fIntegralPlasmon[500] ;   // Integral Plasmon N>omega  ?
+G4double   fIntegralResonance[500] ;   // Integral resonance N>omega  ?
 
 G4double fPAItable[500][112] ; // Output array
 
@@ -301,6 +314,15 @@ inline G4double G4PAIxSection::GetIntegralPlasmon(G4int i) const
     G4Exception("Invalid argument in G4PAIxSection::GetIntegralPlasmon");
    }
    return fIntegralPlasmon[i] ;
+}
+
+inline G4double G4PAIxSection::GetIntegralResonance(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetIntegralResonance");
+   }
+   return fIntegralResonance[i] ;
 }
 
 #endif   
