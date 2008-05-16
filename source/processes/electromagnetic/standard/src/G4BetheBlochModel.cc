@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.18 2008-05-14 18:53:49 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.19 2008-05-16 15:27:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -320,15 +320,24 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
   } while( fmax*G4UniformRand() > f);
 
-  // projectile formfactor - do not produce delta-electrons
+  // projectile formfactor - suppresion of high energy
+  // delta-electron production at high energy
+  
   G4double x = formfact*deltaKinEnergy;
   if(x > 1.e-6) {
 
     G4double x1 = 1.0 + x;
     G4double g  = 1.0/(x1*x1);
     if( 0.5 == spin ) {
-      G4double x2 = electron_mass_c2*deltaKinEnergy/(mass*mass);
-      g *= (1.0 + magMoment2*(0.5*x2/(1.0 + x2) + f1)/f);
+      G4double x2 = 0.5*electron_mass_c2*deltaKinEnergy/(mass*mass);
+      g *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
+    }
+    if(g > 1.0) {
+      G4cout << "### G4BetheBlochModel WARNING: g= " << g
+	     << dp->GetDefinition()->GetParticleName()
+	     << " Ekin(MeV)= " <<  kineticEnergy
+	     << " delEkin(MeV)= " << deltaKinEnergy
+	     << G4endl;
     }
     if(G4UniformRand() > g) return;
   }
