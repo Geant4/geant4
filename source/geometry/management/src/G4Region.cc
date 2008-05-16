@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.23 2007-04-26 21:20:53 asaim Exp $
+// $Id: G4Region.cc,v 1.24 2008-05-16 13:46:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,7 +139,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     //
     G4VPVParameterisation* pParam = daughterPVol->GetParameterisation();
 
-    if (pParam->IsNested())
+    if (pParam->GetMaterialScanner())
     {
       size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
       for (register size_t mat=0; mat<matNo; mat++)
