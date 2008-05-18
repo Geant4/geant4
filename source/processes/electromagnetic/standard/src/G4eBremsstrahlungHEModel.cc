@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungHighEnergyModel.cc,v 1.1 2008-05-13 16:20:48 schaelic Exp $
+// $Id: G4eBremsstrahlungHEModel.cc,v 1.1 2008-05-18 16:07:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4eBremsstrahlungHighEnergyModel
+// File name:     G4eBremsstrahlungHEModel
 //
 // Author:        Andreas Schaelicke 
 //                extention of standard G4eBremsstrahlungModel
@@ -57,7 +57,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4eBremsstrahlungHighEnergyModel.hh"
+#include "G4eBremsstrahlungHEModel.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -76,13 +76,14 @@
 
 using namespace std;
 
-G4eBremsstrahlungHighEnergyModel::G4eBremsstrahlungHighEnergyModel(const G4ParticleDefinition* p,
+G4eBremsstrahlungHEModel::G4eBremsstrahlungHEModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
     isElectron(true),
     probsup(1.0),
-    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
+    //    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
+    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
     theLPMflag(true),
     isInitialised(false)
@@ -98,7 +99,7 @@ G4eBremsstrahlungHighEnergyModel::G4eBremsstrahlungHighEnergyModel(const G4Parti
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungHighEnergyModel::~G4eBremsstrahlungHighEnergyModel()
+G4eBremsstrahlungHEModel::~G4eBremsstrahlungHEModel()
 {
   size_t n = partialSumSigma.size();
   if(n > 0) {
@@ -110,7 +111,7 @@ G4eBremsstrahlungHighEnergyModel::~G4eBremsstrahlungHighEnergyModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungHighEnergyModel::SetParticle(const G4ParticleDefinition* p)
+void G4eBremsstrahlungHEModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   if(p == G4Electron::Electron()) isElectron = true;
@@ -119,7 +120,7 @@ void G4eBremsstrahlungHighEnergyModel::SetParticle(const G4ParticleDefinition* p
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::MinEnergyCut(const G4ParticleDefinition*,
+G4double G4eBremsstrahlungHEModel::MinEnergyCut(const G4ParticleDefinition*,
                                               const G4MaterialCutsCouple*)
 {
   return minThreshold;
@@ -127,7 +128,7 @@ G4double G4eBremsstrahlungHighEnergyModel::MinEnergyCut(const G4ParticleDefiniti
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungHighEnergyModel::Initialise(const G4ParticleDefinition* p,
+void G4eBremsstrahlungHEModel::Initialise(const G4ParticleDefinition* p,
                                         const G4DataVector& cuts)
 {
   // *** update flags from losstablemanager *** 
@@ -177,7 +178,7 @@ void G4eBremsstrahlungHighEnergyModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::ComputeDEDXPerVolume(
+G4double G4eBremsstrahlungHEModel::ComputeDEDXPerVolume(
 					     const G4Material* material,
                                              const G4ParticleDefinition* p,
                                                    G4double kineticEnergy,
@@ -289,7 +290,7 @@ G4double G4eBremsstrahlungHighEnergyModel::ComputeDEDXPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::ComputeBremLoss(G4double Z, G4double T,
+G4double G4eBremsstrahlungHEModel::ComputeBremLoss(G4double Z, G4double T,
                                                  G4double Cut)
 
 // compute loss due to soft brems
@@ -391,7 +392,7 @@ G4double G4eBremsstrahlungHighEnergyModel::ComputeBremLoss(G4double Z, G4double 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::PositronCorrFactorLoss(G4double Z,
+G4double G4eBremsstrahlungHEModel::PositronCorrFactorLoss(G4double Z,
                                  G4double kineticEnergy, G4double cut)
 
 //calculates the correction factor for the energy loss due to bremsstrahlung for positrons
@@ -417,7 +418,7 @@ G4double G4eBremsstrahlungHighEnergyModel::PositronCorrFactorLoss(G4double Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::CrossSectionPerVolume(
+G4double G4eBremsstrahlungHEModel::CrossSectionPerVolume(
 					      const G4Material* material,
                                               const G4ParticleDefinition* p,
                                                     G4double kineticEnergy,
@@ -495,7 +496,7 @@ G4double G4eBremsstrahlungHighEnergyModel::CrossSectionPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungHighEnergyModel::ComputeCrossSectionPerAtom(
+G4double G4eBremsstrahlungHEModel::ComputeCrossSectionPerAtom(
                                               const G4ParticleDefinition*,
 				                    G4double kineticEnergy, 
                                                     G4double Z,   G4double,
@@ -602,7 +603,7 @@ G4double G4eBremsstrahlungHighEnergyModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4double G4eBremsstrahlungHighEnergyModel::PositronCorrFactorSigma( G4double Z,
+G4double G4eBremsstrahlungHEModel::PositronCorrFactorSigma( G4double Z,
                                  G4double kineticEnergy, G4double cut)
 
 //Calculates the correction factor for the total cross section of the positron
@@ -625,7 +626,7 @@ G4double G4eBremsstrahlungHighEnergyModel::PositronCorrFactorSigma( G4double Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DataVector* G4eBremsstrahlungHighEnergyModel::ComputePartialSumSigma(
+G4DataVector* G4eBremsstrahlungHEModel::ComputePartialSumSigma(
               const G4Material* material,
                     G4double kineticEnergy,
                     G4double cut)
@@ -654,7 +655,7 @@ G4DataVector* G4eBremsstrahlungHighEnergyModel::ComputePartialSumSigma(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungHighEnergyModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
+void G4eBremsstrahlungHEModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
 					       const G4MaterialCutsCouple* couple,
 					       const G4DynamicParticle* dp,
 					       G4double tmin,
@@ -796,7 +797,7 @@ void G4eBremsstrahlungHighEnergyModel::SampleSecondaries(std::vector<G4DynamicPa
         greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);
 	/*
 	if ( greject > grejmax ) {
-            G4cout << "### G4eBremsstrahlungHighEnergyModel Warning: Majoranta exceeded! "
+            G4cout << "### G4eBremsstrahlungHEModel Warning: Majoranta exceeded! "
                    << greject << " > " << grejmax
                    << " x= " << x 
 		   << " e= " << kineticEnergy
@@ -814,7 +815,7 @@ void G4eBremsstrahlungHighEnergyModel::SampleSecondaries(std::vector<G4DynamicPa
         greject = migdal*(1. + x* (ah + bh*x));
 	/*
 	if ( greject > grejmax ) {
-	  G4cout << "### G4eBremsstrahlungHighEnergyModel Warning: Majoranta exceeded! " 
+	  G4cout << "### G4eBremsstrahlungHEModel Warning: Majoranta exceeded! " 
                  << greject << " > " << grejmax 
                  << " x= " << x 
 		 << " e= " << kineticEnergy
@@ -825,7 +826,7 @@ void G4eBremsstrahlungHighEnergyModel::SampleSecondaries(std::vector<G4DynamicPa
     }
     /*
     if(x > 0.999) {
-      G4cout << "### G4eBremsstrahlungHighEnergyModel Warning: e= " << kineticEnergy
+      G4cout << "### G4eBremsstrahlungHEModel Warning: e= " << kineticEnergy
 	     << " tlow= " << tlow
 	     << " x= " << x
 	     << " greject= " << greject 
@@ -899,7 +900,7 @@ void G4eBremsstrahlungHighEnergyModel::SampleSecondaries(std::vector<G4DynamicPa
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4Element* G4eBremsstrahlungHighEnergyModel::SelectRandomAtom(
+const G4Element* G4eBremsstrahlungHEModel::SelectRandomAtom(
            const G4MaterialCutsCouple* couple) 
 {
   // select randomly 1 element within the material
@@ -919,7 +920,7 @@ const G4Element* G4eBremsstrahlungHighEnergyModel::SelectRandomAtom(
       if (rval <= (*dv)[i]) elm = (*theElementVector)[i];
     }
     if(!elm) {
-      G4cout << "G4eBremsstrahlungHighEnergyModel::SelectRandomAtom: Warning -"
+      G4cout << "G4eBremsstrahlungHEModel::SelectRandomAtom: Warning -"
 	     << " no elements found in "
 	     << material->GetName()
 	     << G4endl;
@@ -934,7 +935,7 @@ const G4Element* G4eBremsstrahlungHighEnergyModel::SelectRandomAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4double G4eBremsstrahlungHighEnergyModel::SupressionFunction(const G4Material* material,
+G4double G4eBremsstrahlungHEModel::SupressionFunction(const G4Material* material,
                                  G4double kineticEnergy, G4double gammaEnergy)
 {
 

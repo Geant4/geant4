@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungHighEnergyModel.hh,v 1.1 2008-05-13 16:20:48 schaelic Exp $
+// $Id: G4eBremsstrahlungHEModel.hh,v 1.1 2008-05-18 16:07:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eBremsstrahlungHighEnergyModel
+// File name:     G4eBremsstrahlungHEModel
 //                extention of standard G4eBremsstrahlungModel
 //
 // Author:        Andreas Schaelicke 
@@ -49,23 +49,23 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eBremsstrahlungHighEnergyModel_h
-#define G4eBremsstrahlungHighEnergyModel_h 1
+#ifndef G4eBremsstrahlungHEModel_h
+#define G4eBremsstrahlungHEModel_h 1
 
 #include "G4VEmModel.hh"
 
 class G4Element;
 class G4ParticleChangeForLoss;
 
-class G4eBremsstrahlungHighEnergyModel : public G4VEmModel
+class G4eBremsstrahlungHEModel : public G4VEmModel
 {
 
 public:
 
-  G4eBremsstrahlungHighEnergyModel(const G4ParticleDefinition* p = 0, 
-			 const G4String& nam = "StandBrem");
+  G4eBremsstrahlungHEModel(const G4ParticleDefinition* p = 0, 
+			   const G4String& nam = "StandBrem");
 
-  virtual ~G4eBremsstrahlungHighEnergyModel();
+  virtual ~G4eBremsstrahlungHEModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -129,8 +129,8 @@ private:
   inline G4double ScreenFunction2(G4double ScreenVariable);
 
   // hide assignment operator
-  G4eBremsstrahlungHighEnergyModel & operator=(const  G4eBremsstrahlungHighEnergyModel &right);
-  G4eBremsstrahlungHighEnergyModel(const  G4eBremsstrahlungHighEnergyModel&);
+  G4eBremsstrahlungHEModel & operator=(const  G4eBremsstrahlungHEModel &right);
+  G4eBremsstrahlungHEModel(const  G4eBremsstrahlungHEModel&);
 
 protected:
 
@@ -158,7 +158,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlungHighEnergyModel::ScreenFunction1(G4double ScreenVariable)
+inline G4double G4eBremsstrahlungHEModel::ScreenFunction1(G4double ScreenVariable)
 
 // compute the value of the screening function 3*PHI1 - PHI2
 
@@ -176,7 +176,7 @@ inline G4double G4eBremsstrahlungHighEnergyModel::ScreenFunction1(G4double Scree
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline
-G4double G4eBremsstrahlungHighEnergyModel::ScreenFunction2(G4double ScreenVariable)
+G4double G4eBremsstrahlungHEModel::ScreenFunction2(G4double ScreenVariable)
 
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
 
@@ -194,7 +194,7 @@ G4double G4eBremsstrahlungHighEnergyModel::ScreenFunction2(G4double ScreenVariab
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4double G4eBremsstrahlungHighEnergyModel::MaxSecondaryEnergy(
+G4double G4eBremsstrahlungHEModel::MaxSecondaryEnergy(
                                  const G4ParticleDefinition*,
     				       G4double kineticEnergy)
 {
@@ -204,16 +204,16 @@ G4double G4eBremsstrahlungHighEnergyModel::MaxSecondaryEnergy(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-void G4eBremsstrahlungHighEnergyModel::SetLPMflag(G4bool val) 
+void G4eBremsstrahlungHEModel::SetLPMflag(G4bool val) 
 {
-  G4cout<<"G4eBremsstrahlungHighEnergyModel::SetLPMflag("<<val<<")\n";
+  G4cout<<"G4eBremsstrahlungHEModel::SetLPMflag("<<val<<")\n";
   theLPMflag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4bool G4eBremsstrahlungHighEnergyModel::LPMflag() const 
+G4bool G4eBremsstrahlungHEModel::LPMflag() const 
 {
   return theLPMflag;
 }
@@ -221,7 +221,7 @@ G4bool G4eBremsstrahlungHighEnergyModel::LPMflag() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-void G4eBremsstrahlungHighEnergyModel::SetEnergyThreshold(G4double val) 
+void G4eBremsstrahlungHEModel::SetEnergyThreshold(G4double val) 
 {
   highEnergyTh = val;
 }
@@ -229,7 +229,7 @@ void G4eBremsstrahlungHighEnergyModel::SetEnergyThreshold(G4double val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4double G4eBremsstrahlungHighEnergyModel::EnergyThreshold() const 
+G4double G4eBremsstrahlungHEModel::EnergyThreshold() const 
 {
   return highEnergyTh;
 }
