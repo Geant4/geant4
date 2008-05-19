@@ -11,7 +11,7 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-19.05.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
+19.05.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-04
            - Added in the beam line the MOPI detector. MOPI is a microstrip
              detector that, in the real case, is able to check during
              the treatment, the beam simmetry of the therapy beam.

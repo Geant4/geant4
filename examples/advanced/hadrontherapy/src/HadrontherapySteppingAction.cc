@@ -75,9 +75,7 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  G4Track* theTrack = aStep->GetTrack();
-  G4String materialName = theTrack->GetMaterial()->GetName();
-    
+  
   // Electromagnetic and hadronic processes of primary particles in the phantom
   if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
     (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys") &&
@@ -108,7 +106,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
  G4SteppingManager*  steppingManager = fpSteppingManager;
   
   // check if it is alive
-  if(theTrack-> GetTrackStatus() == fAlive) { return; }
+  //if(theTrack-> GetTrackStatus() == fAlive) { return; }
 
   // Retrieve the secondary particles
   G4TrackVector* fSecondary = steppingManager -> GetfSecondary();

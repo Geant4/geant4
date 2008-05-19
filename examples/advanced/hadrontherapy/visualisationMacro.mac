@@ -32,10 +32,10 @@
 
 # SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics Decay
-/physics/addPhysics EM-Photon-EPDL
-/physics/addPhysics EM-Electron-EEDL
+/physics/addPhysics EM-Photon-Standard
+/physics/addPhysics EM-Electron-Standard
 /physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-HadronIon-LowE
+/physics/addPhysics EM-HadronIon-Standard
 /physics/addPhysics EM-Muon-Standard
 /physics/addPhysics HadronicEl-HadronIon-LElastic
 /physics/addPhysics HadronicInel-ProtonNeutron-LEP
@@ -46,21 +46,21 @@
 /run/initialize
 
 # SET OF THE VISUALISATION CHARACTERISTICS
-/vis/scene/create
-/vis/open OGLIX
-/vis/viewer/flush
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
 
-/vis/viewer/set/viewpointThetaPhi 30 130 deg
+/vis/viewer/set/viewpointThetaPhi 0 180 deg
 /vis/viewer/zoom 1
-/vis/viewer/pan -10  40 cm
+/vis/viewer/pan 10  80 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+#/vis/specify RODetectorLog 1
 /vis/viewer/update
 
 # SETTING FOR THE RANGE SHIFTER 
-/beamLine/RangeShifter/thickness 0.001 mm
-/beamLine/RangeShifter/RSMat Air
+#/beamLine/RangeShifter/thickness 0.01 mm
+#/beamLine/RangeShifter/RSMat Air
 #/tracking/verbose 1
 /vis/viewer/flush
-/run/beamOn 1000
-
+/run/beamOn 10000

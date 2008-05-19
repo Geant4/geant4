@@ -22,8 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: HadrontherapyPrimarygeneratorAction.cc;
+// Last modified: G.A.P.Cirrone, May 2008;
 //
-// $Id: HadrontherapyPositronPrimaryGeneratorAction.cc; May 2005
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -74,9 +76,9 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   particleGun -> SetParticleDefinition(particle); 
 
   // Define the energy of primary particles:
-  // gaussian distribution with mean energy = 64.55 *MeV
+  // gaussian distribution with mean energy = 64.00 *MeV
   // and sigma = 300.0 *keV
-  G4double defaultMeanKineticEnergy = 63.50 *MeV;
+  G4double defaultMeanKineticEnergy = 64.00 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
   G4double defaultsigmaEnergy = 300.0 *keV;
@@ -84,7 +86,8 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
-  G4double defaultX0 = -3248.59 *mm;  
+  
+  G4double defaultX0 = -2700.0 *mm;
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 *mm;  
