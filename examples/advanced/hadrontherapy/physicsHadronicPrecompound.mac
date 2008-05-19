@@ -57,7 +57,7 @@
 ###  A) EM PHYSICS AND DECAY
 
 /physics/addPhysics Decay
-/physics/addPhysics EM-Photon-EPDL
+/physics/addPhysics EM-Photon-Standard
 /physics/addPhysics EM-Electron-EEDL
 /physics/addPhysics EM-Positron-Standard
 /physics/addPhysics EM-HadronIon-LowE

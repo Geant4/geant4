@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorConstruction.hh; 
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
+// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -78,7 +74,7 @@ private:
  // experimental set-up
  
  void ConstructSensitiveDetector();
-  // The sensitive detector is associated to the detector volume
+  // The sensitive detector is associated to the phantom volume
 
 public: 
 
@@ -129,7 +125,7 @@ private:
                                      // geometry component
 
   G4VPhysicalVolume* physicalTreatmentRoom;
-  G4VPhysicalVolume* waterPhantomPhysicalVolume;
+  G4VPhysicalVolume* patientPhysicalVolume;
   G4LogicalVolume* detectorLogicalVolume;
   G4VPhysicalVolume* detectorPhysicalVolume;
   

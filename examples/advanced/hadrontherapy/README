@@ -8,6 +8,9 @@
                            ----------------------
 
 
+Last revsion: G.A.P.Cirrone, May 2008;
+
+
                                    AUTHORS 
 
 G.A.P. CIRRONE(a *), G.CUTTONE(a), F. DI ROSA(a), F.ROMANO, G.RUSSO(a)
@@ -23,8 +26,8 @@ A. LECHNER (c)
 c. CERN, Switzerland
 
 More informations on the Hadrontherapy example can be found in the 
-Hadrontherapy Documentation available at http://www.ge.infn.it/geant4/examples/
-or in the web pages of the Italia Geant4 Group in Catania (I) http://geant4lns.wikispaces.com
+Hadrontherapy Documentation available at http://geant4infn.wikispaces.com/HadrontherapyExample.
+
 
 
 Alternatevely send an e-mail to cirrone@lns.infn.it.
@@ -88,6 +91,9 @@ for a radiotherapeutic treatment.
 ** The MONITOR CHAMBERS: very thin ionisation chamber that permit the 
    dose monitoring during the patient irradiation;
 
+** The MOPI detector: microstrips, air free detector utilised for the check of the beam symmetry
+   during the treatment
+
 ** The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to 
    confine the proton irradiation field in order to irradiate just the tumour mass
    in the trasverse direction;
@@ -95,7 +101,7 @@ for a radiotherapeutic treatment.
 The user has the possibility to vary, via messenger, almost all the geometrical 
 characteristics of the beam line elements (i.e. their position along the beam line, 
 their thickness, etc.). More details on the available user messengers can be 
-found in the Hadronterapy Documentation (http://www.ge.infn.it/geant4/examples/).
+found in the Hadronterapy Documentation (http://geant4infn.wikispaces.com/HadrontherapyExample).
 
 At the end of the beam line, a typical water phantom is reproduced.
 A user-defined region of the phantom is divided (via the ROGeomtry class) in 
@@ -136,6 +142,8 @@ necessary for the run of Hadrontherapy.
 
  - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
                           hadronic processes;
+
+ - G4ABLADATA             points to the library of the INCL/ABLA hadronic model;
  
  - G4LEDATA               points to the low energy electromagnetic libraries
 
@@ -154,10 +162,10 @@ The defaultMacro.mac is executed
 The primary particle beam parameter are:
 Radiation:                proton beam;
 Energy distribution:      gaussian;
-Mean energy:              63.4 MeV;
+Mean energy:              64.0 MeV;
 Energy spread:            300 keV;
 Beam spot size:           1 mm;
-Beam angular spread:      0.057 deg;
+Beam angular spread:      0.0 deg;
 
 The modulator wheel can be rotated via the messenger:
 

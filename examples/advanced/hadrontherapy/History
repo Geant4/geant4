@@ -11,6 +11,22 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+19.05.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
+           - Added in the beam line the MOPI detector. MOPI is a microstrip
+             detector that, in the real case, is able to check during
+             the treatment, the beam simmetry of the therapy beam.
+             Its physical structure is here exactly simulated so that 
+             the its contribute to the energy loss can be take into account;
+             A detailed description if the detector can be found in 
+             NIM A 572 (2007) 1094-1101 and its references.
+	   - Corrected the position of the Phantom and Detector;
+           - Added variables to the HadrontherapyBeamLine.cc file;
+           - Added comments to the HadrontherapyBeamLine.cc file
+             to improve the clearness.
+           - Updated the README file.
+           - Changed the default dimensions of histogram bins 
+             (from 200 um to 100 um).
+
 09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
 	   - Completed the update of the new beam line
 
@@ -62,8 +78,8 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 	 - Improved the modulator geometry and fixed a bug on its rotation; 
 
 07.05.2007 G.A.P. Cirrone (hadrontherapy-V08-02-02)
-	 - Geometry upgrade(hadrontherapyBeamLine class) according to the experimental CATANA 
-	    proton therapy beam line; 
+	 - Geometry upgrade(hadrontherapyBeamLine class) according 
+           to the experimental CATANA proton therapy beam line; 
 
 23.04.2007 S. Guatelli (hadrontherapy-V08-02-01)
          - Compilation error corrected - human error of Susanna Guatelli.

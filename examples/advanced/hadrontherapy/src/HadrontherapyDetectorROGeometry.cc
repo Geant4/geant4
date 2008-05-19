@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyDetectorROGeometry.cc; 
-// Last modified: G.A.P.Cirrone March 2008;
+// Last modified: G.A.P.Cirrone April 2008;
 // 
 // See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
 //
@@ -52,6 +52,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorROGeometry::HadrontherapyDetectorROGeometry(G4String aString,
 							       G4double detectorDimX,
 							       G4double detectorDimY,
@@ -69,10 +70,12 @@ HadrontherapyDetectorROGeometry::HadrontherapyDetectorROGeometry(G4String aStrin
 {
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorROGeometry::~HadrontherapyDetectorROGeometry()
 {
 }
 
+/////////////////////////////////////////////////////////////////////////////
 G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
 {
   // A dummy material is used to fill the volumes of the readout geometry.
@@ -94,10 +97,10 @@ G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
 			     worldSizeX,
 			     worldSizeY,
 			     worldSizeZ);
-
+  
   G4LogicalVolume* ROWorldLog = new G4LogicalVolume(ROWorld, dummyMat, 
 						    "ROWorldLog", 0,0,0);
-
+  
   G4VPhysicalVolume* ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(), 
 						     "ROWorldPhys", 
 						     ROWorldLog, 
@@ -115,17 +118,17 @@ G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
 						      0,0,0);
   
   G4VPhysicalVolume *RODetectorPhys = new G4PVPlacement(0,
-							G4ThreeVector(-180.0 *mm,
+							G4ThreeVector(20.0 *mm,
 								      0.0 *mm, 
 								      0.0 *mm),
-						       "DetectorPhys",
+							"DetectorPhys",
 							RODetectorLog,
 							ROWorldPhys,
 							false,0);
   
-
-    // Division along X axis: the detector is devided in slices along the X axis
-
+  
+  // Division along X axis: the detector is devided in slices along the X axis
+  
   G4double halfXVoxelSizeX = halfDetectorSizeX/numberOfVoxelsAlongX;
   G4double halfXVoxelSizeY = halfDetectorSizeY;
   G4double halfXVoxelSizeZ = halfDetectorSizeZ;

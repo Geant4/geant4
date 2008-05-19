@@ -101,6 +101,7 @@ void HadrontherapyMaterial::DefineMaterials()
   nistMaterialManager -> FindOrBuildMaterial("G4_AIR"  , isotopes);
   nistMaterialManager -> FindOrBuildMaterial("G4_WATER", isotopes);
   nistMaterialManager -> FindOrBuildMaterial("G4_PMMA", isotopes);
+  nistMaterialManager -> FindOrBuildMaterial("G4_MYLAR", isotopes);
   /////////////////////////////////////////////////////////////////////////////
 
   // Elements 
