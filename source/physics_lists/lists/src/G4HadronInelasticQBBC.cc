@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.7 2007-11-26 19:31:16 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.8 2008-05-19 10:21:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -70,7 +70,6 @@
 #include "G4NeutronHPFission.hh"
 #include "G4NeutronHPCapture.hh"
 
-#include "G4HadronProcessStore.hh"
 #include "G4UInelasticCrossSection.hh"
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
@@ -79,7 +78,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
     chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
   if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
-  store = G4HadronProcessStore::Instance();
+  //  store = G4HadronProcessStore::Instance();
   theHPXSecI = 0;
   theHPXSecC = 0;
   theHPXSecF = 0;
@@ -312,7 +311,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	       << " added for " << pname << G4endl;
     }
   }
-  store->Dump(verbose);
+  //store->Dump(verbose);
 }
 
 void G4HadronInelasticQBBC::Register(G4ParticleDefinition* p, 
@@ -321,7 +320,7 @@ void G4HadronInelasticQBBC::Register(G4ParticleDefinition* p,
 				     const G4String& m)
 {
   hp->RegisterMe(hi);
-  store->Register(hp,p,hi,m);
+  //store->Register(hp,p,hi,m);
   if(verbose > 1)
     G4cout << "### QBBC: Register new model " << m 
 	   << " for " << p->GetParticleName() << " and " << hp->GetProcessName()

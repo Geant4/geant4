@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2008-04-30 16:17:52 gunter Exp $
+$Id: History,v 1.60 2008-05-19 10:21:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-05-2008, V.Ivanchenko phys-lists-V09-01-07
+- removed obsolete class G4HadronProcessStore (similar is available
+  in processes/hadronic/management)
 
 30-4-2008, G.Folger      phys-lists-V09-01-06
 - Fix delete using uninitialized pointers in FTF-BIC, in

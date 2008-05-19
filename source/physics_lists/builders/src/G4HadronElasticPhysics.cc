@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.7 2007-03-06 17:52:06 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.8 2008-05-19 10:21:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -61,7 +61,6 @@
 #include "G4IonConstructor.hh"
 #include "G4Neutron.hh"
 
-#include "G4HadronProcessStore.hh"
 #include "G4VQCrossSection.hh"
 #include "G4UElasticCrossSection.hh"
 
@@ -102,12 +101,10 @@ void G4HadronElasticPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  G4HadronProcessStore* store = G4HadronProcessStore::Instance();
-
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "### HadronElasticPhysics Construct Processes with the model <" 
 	   << mname << ">" << G4endl;
-
+  }
   G4HadronicProcess* hel = 0;
   G4VQCrossSection* man = 0; 
 
@@ -160,7 +157,6 @@ void G4HadronElasticPhysics::ConstructProcess()
 	hel = new G4HadronElasticProcess("hElastic");
       }
       hel->RegisterMe(model);
-      store->Register(hel,particle,model,mname);
       pmanager->AddDiscreteProcess(hel);
 
       // neutron case
@@ -185,12 +181,10 @@ void G4HadronElasticPhysics::ConstructProcess()
 	neutronModel->SetMinEnergy(19.5*MeV);
 	neutronHPModel = new G4NeutronHPElastic();
 	hel->RegisterMe(neutronHPModel);
-	store->Register(hel,particle,neutronHPModel,"HP");
 	hel->AddDataSet(new G4NeutronHPElasticData());
       }
 
       hel->RegisterMe(neutronModel);
-      store->Register(hel,particle,neutronModel,mname);
       pmanager->AddDiscreteProcess(hel);
 
       if(verbose > 1)
