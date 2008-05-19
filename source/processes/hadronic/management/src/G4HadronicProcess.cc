@@ -31,7 +31,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
-// #include "G4EffectiveCharge.hh"
+
 #include "G4HadProjectile.hh"
 #include "G4ElementVector.hh"
 #include "G4Track.hh"
@@ -71,6 +71,8 @@ EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
 
 void G4HadronicProcess::
 DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
+
+//////////////////////////////////////////////////////////////////
 
 G4HadronicProcess::G4HadronicProcess( const G4String &processName,
                                       G4ProcessType   aType ) :
@@ -115,6 +117,9 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   try
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
+
+    // this should not be checked at each step! (VI)
+    /*
     if( !IsApplicable(*aParticle->GetDefinition()))
     {
       G4cout << "Unrecoverable error: "<<G4endl;
@@ -133,6 +138,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       " was called for "+
       aParticle->GetDefinition()->GetParticleName()).c_str() );
     }
+    */
     G4Material *aMaterial = aTrack.GetMaterial();
     ModelingState = 1;
     
@@ -153,6 +159,14 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     return DBL_MAX;
 }
 
+G4double G4HadronicProcess::
+GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
+			   const G4Element *anElement, 
+			   G4double aTemp )
+{
+  return
+    theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
+}
 
 G4Element* G4HadronicProcess::ChooseAandZ(
 const G4DynamicParticle *aParticle, const G4Material *aMaterial )
@@ -174,7 +188,6 @@ const G4DynamicParticle *aParticle, const G4Material *aMaterial )
   return chosen;
 }
 
-
 struct G4Nancheck{ bool operator()(G4double aV){return (!(aV<1))&&(!(aV>-1));}};
 
 G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
@@ -187,9 +200,9 @@ const G4Track &aTrack, const G4Step &)
   if(G4HadronicProcess_debug_flag) 
          std::cout << "@@@@ hadronic process start "<< std::endl;
   // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
-  #ifndef G4HadSignalHandler_off
+#ifndef G4HadSignalHandler_off
   G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
-  #endif
+#endif
 
   if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) 
   {
@@ -207,8 +220,9 @@ const G4Track &aTrack, const G4Step &)
   G4double originalEnergy = aParticle->GetKineticEnergy();
   G4double kineticEnergy = originalEnergy;
 
+  // It is not needed with standard NaN check
   // More debugging
-
+  
   G4Nancheck go_wild;
   if(go_wild(originalEnergy) ||
     go_wild(aParticle->Get4Momentum().x()) ||
@@ -222,7 +236,7 @@ const G4Track &aTrack, const G4Step &)
     theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
-
+  
   // Get kinetic energy per nucleon for ions
 
   if(aParticle->GetDefinition()->GetBaryonNumber() > 1.5)
@@ -329,30 +343,6 @@ const G4Track &aTrack, const G4Step &)
   }
 
   result->SetTrafoToLab(thePro.GetTrafoToLab());
-
-  /*
-  // Loop over charged ion secondaries
-
-  for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)
-  {
-    G4DynamicParticle* aSecTrack = result->GetSecondary(i)->GetParticle();
-    if(aSecTrack->GetDefinition()->GetPDGCharge()>1.5)
-    {
-      G4EffectiveCharge aCalculator;
-      G4double charge = 
-           aCalculator.GetCharge(aMaterial, aSecTrack->GetKineticEnergy(),
-                                 aSecTrack->GetDefinition()->GetPDGMass(),
-                                 aSecTrack->GetDefinition()->GetPDGCharge());
-      if(getenv("GHADChargeDebug")) 
-      {
-        std::cout << "Recoil fractional charge is "
-        << charge/aSecTrack->GetDefinition()->GetPDGCharge()<<" "
-        << charge <<" "<<aSecTrack->GetDefinition()->GetPDGCharge()<<std::endl;
-      }
-      aSecTrack->SetCharge(charge);
-    }
-  }
-  */
 
   if(getenv("HadronicDoitLogging") )
   {
@@ -694,5 +684,33 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 
   aR->Clear();
   return;
+}
+
+G4IsoParticleChange* G4HadronicProcess::GetIsotopeProductionInfo() 
+{ 
+  G4IsoParticleChange * anIsoResult = theIsoResult;
+  if(theIsoResult) theOldIsoResult = theIsoResult;
+  theIsoResult = 0;
+  return anIsoResult;
+}
+
+void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale) 
+{
+  xBiasOn = true;
+  aScaleFactor = aScale;
+  G4String it = GetProcessName(); 
+  if( (it != "PhotonInelastic") && 
+      (it != "ElectroNuclear") && 
+      (it != "PositronNuclear") )
+    {
+      G4Exception("G4HadronicProcess", "007", FatalException,
+		  "Cross-section biasing available only for gamma and electro nuclear reactions.");
+    }
+  if(aScale<100)
+    {
+      G4Exception("G4HadronicProcess", "001", JustWarning,
+		  "Cross-section bias readjusted to be above safe limit. New value is 100");
+      aScaleFactor = 100.;
+    }
 }
 /* end of file */
