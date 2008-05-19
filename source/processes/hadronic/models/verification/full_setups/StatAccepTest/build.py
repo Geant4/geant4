@@ -68,11 +68,15 @@ if ( PHYSICS != "LHEP"          and
      PHYSICS != "QGSP_BERT_HP"  and
      PHYSICS != "QGSP_BIC_HP"   and
      PHYSICS != "QGSC"          and
+     PHYSICS != "QGSC_BERT"     and
      PHYSICS != "QGSP_EMV"      and
      PHYSICS != "FTFP"          and 
      PHYSICS != "FTFC"          and
      PHYSICS != "FTFP_BERT"     and 
-     PHYSICS != "FTFP_BIC"     
+     PHYSICS != "FTFP_BIC"      and
+     PHYSICS != "QGS_BIC"       and
+     PHYSICS != "FTF_BIC"
+     
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit( 1 )        
@@ -219,7 +223,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec07 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirJun08 \n" )   #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -251,7 +255,7 @@ isLocalGeant4 = 0
 parentDir = os.getcwd() + "/.."
 #print ' parentDir = ', parentDir
 for iFile in os.listdir( parentDir ) :
-    if ( iFile.find( Release ) > -1 ) :
+    if ( iFile == Release  ) :
         isLocalGeant4 = 1
         #print ' FOUND ', Release
         break
@@ -332,6 +336,8 @@ mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"QGSP_EMV.hh\" \n" )
 mainProgram.write( "#include \"FTFP.hh\" \n" )
 mainProgram.write( "#include \"FTFC.hh\" \n" )
+###mainProgram.write( "#include \"QGS_BIC.hh\" \n" )
+###mainProgram.write( "#include \"FTF_BIC.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
