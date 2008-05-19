@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.4 2008-04-25 14:20:13 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.5 2008-05-19 12:56:36 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -544,8 +544,36 @@ else     {
           }
 */
 //
+           G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
+// It is assumed that nucleon z-coordinates are ordered on increasing -----------
+
+           G4double betta_z=projectile->Get4Momentum().pz()/projectile->Get4Momentum().e();
+
+           G4double ZcoordinateOfPreviousCollision=projectile->GetPosition().z();
+           if(projectile->GetSoftCollisionCount()==0) {
+              projectile->SetTimeOfCreation(0.);
+              target->SetTimeOfCreation(0.);
+              ZcoordinateOfPreviousCollision=ZcoordinateOfCurrentInteraction;
+           }
+           
+           G4ThreeVector thePosition(projectile->GetPosition().x(),
+                                     projectile->GetPosition().y(),
+                                     ZcoordinateOfCurrentInteraction);
+           projectile->SetPosition(thePosition);
+
+           G4double TimeOfPreviousCollision=projectile->GetTimeOfCreation();
+           G4double TimeOfCurrentCollision=TimeOfPreviousCollision+ 
+                    (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
+
+           projectile->SetTimeOfCreation(TimeOfCurrentCollision);
+           target->SetTimeOfCreation(TimeOfCurrentCollision);
+
 	   projectile->Set4Momentum(Pprojectile);
 	   target->Set4Momentum(Ptarget);
+
+           projectile->IncrementCollisionCount(1);
+           target->IncrementCollisionCount(1);
+
 //
 //G4cout<<"Out of Excitation --------------------"<<G4endl;
 //G4int Uzhiinp; G4cin>>Uzhiinp;    // Vova
@@ -579,7 +607,11 @@ G4ExcitedString * G4DiffractiveExcitation::
 	} else {
 		string= new G4ExcitedString(start,end, -1);
 	}
+// Uzhi
+//G4cout<<"G4ExcitedString * G4DiffractiveExcitation::String"<<G4endl;
+//G4cout<<hadron->GetTimeOfCreation()<<" "<<hadron->GetPosition()/fermi<<G4endl;
 
+	string->SetTimeOfCreation(hadron->GetTimeOfCreation());
 	string->SetPosition(hadron->GetPosition());
 
 // momenta of string ends

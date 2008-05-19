@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.2 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.3 2008-05-19 12:56:36 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -204,11 +204,37 @@ G4bool G4ElasticHNScattering::
 
 //G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;     
 	   		   
-	   target->Set4Momentum(Ptarget);
-
 //G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl; 
 
+           G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
+// It is assumed that nucleon z-coordinates are ordered on increasing -----------
+
+           G4double betta_z=projectile->Get4Momentum().pz()/projectile->Get4Momentum().e();
+
+           G4double ZcoordinateOfPreviousCollision=projectile->GetPosition().z();
+           if(projectile->GetSoftCollisionCount()==0) {
+              projectile->SetTimeOfCreation(0.);
+              target->SetTimeOfCreation(0.);
+              ZcoordinateOfPreviousCollision=ZcoordinateOfCurrentInteraction;
+           }
+           
+           G4ThreeVector thePosition(projectile->GetPosition().x(),
+                                     projectile->GetPosition().y(),
+                                     ZcoordinateOfCurrentInteraction);
+           projectile->SetPosition(thePosition);
+
+           G4double TimeOfPreviousCollision=projectile->GetTimeOfCreation();
+           G4double TimeOfCurrentCollision=TimeOfPreviousCollision+ 
+                    (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
+
+           projectile->SetTimeOfCreation(TimeOfCurrentCollision);
+           target->SetTimeOfCreation(TimeOfCurrentCollision);
+
 	   projectile->Set4Momentum(Pprojectile);
+	   target->Set4Momentum(Ptarget);
+
+           projectile->IncrementCollisionCount(1);
+           target->IncrementCollisionCount(1);
 
 	   return true;
 }

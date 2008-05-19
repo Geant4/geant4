@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.9 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.10 2008-05-19 12:56:36 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,7 +92,7 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
-
+//G4cout<<"G4FTFModel::Init "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
 	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); 
 // Uzhi N-mass number Z-charge ------------------------- Uzhi 29.03.08
 
@@ -109,7 +109,7 @@ G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
       theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
                                           aNucleus.GetN(),aNucleus.GetZ(),
                                           s);// ------------------------- Uzhi 19.04.08
-//theParameters->SetProbabilityOfElasticScatt(0.); // To turn off elastic scattering
+//theParameters->SetProbabilityOfElasticScatt(1.); // To turn on/off (1/0) elastic scattering
 }
 
 // ------------------------------------------------------------
@@ -129,60 +129,8 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){delete aH;} };
 
 // ------------------------------------------------------------
-G4ExcitedStringVector * G4FTFModel::BuildStrings()
-{	
-// Loop over all collisions; find all primaries, and all target ( targets may 
-//  be duplicate in the List ( to unique G4VSplitableHadrons)
-
-	G4ExcitedStringVector * strings;
-	strings = new G4ExcitedStringVector();
-	
-	std::vector<G4VSplitableHadron *> primaries;
-	std::vector<G4VSplitableHadron *> targets;
-	
-	theParticipants.StartLoop();    // restart a loop 
-	while ( theParticipants.Next() ) 
-	{
-	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
-                 //  do not allow for duplicates ...
-	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
-                                                interaction.GetProjectile()) )
-	    	primaries.push_back(interaction.GetProjectile());
-		
-	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
-                                                interaction.GetTarget()) ) 
-	    	targets.push_back(interaction.GetTarget());
-	}
-	    
-	
-//	G4cout << "BuildStrings prim/targ " << primaries.entries() << " , " <<
-//					     targets.entries() << G4endl;
-
-
-	unsigned int ahadron;
-	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
-	{
-	    G4bool isProjectile=true;
-	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
-	}
-	for ( ahadron=0; ahadron < targets.size() ; ahadron++)
-	{
-	    G4bool isProjectile=false;
-	    strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
-	}
-
-	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
-	primaries.clear();
-	std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
-	targets.clear();
-	
-	return strings;
-}
-
-// ------------------------------------------------------------
 G4bool G4FTFModel::ExciteParticipants()
 {
-
 /*    // Uzhi 29.03.08                     For elastic Scatt.
 G4cout<<"  In ExciteParticipants() "<<theParticipants.theInteractions.size()<<G4endl;
 G4cout<<" test Params Tot "<<theParameters->GetTotalCrossSection()<<G4endl;
@@ -190,6 +138,8 @@ G4cout<<" test Params Ela "<<theParameters->GetElasticCrossSection()<<G4endl;
 	
 G4int counter=0;
 */   // Uzhi 29.03.08
+
+
 
 	while (theParticipants.Next())
 	{	   
@@ -241,9 +191,63 @@ G4cout<<" Inter # "<<counter<<G4endl;
 		targets.clear();
 
 	   	return false;
-	   }
-
-	}
+	   }  // End of the loop Uzhi
+        }
 	return true;
+}
+// ------------------------------------------------------------
+G4ExcitedStringVector * G4FTFModel::BuildStrings()
+{	
+// Loop over all collisions; find all primaries, and all target ( targets may 
+//  be duplicate in the List ( to unique G4VSplitableHadrons)
+
+	G4ExcitedStringVector * strings;
+	strings = new G4ExcitedStringVector();
+	
+	std::vector<G4VSplitableHadron *> primaries;
+	std::vector<G4VSplitableHadron *> targets;
+	
+	theParticipants.StartLoop();    // restart a loop 
+	while ( theParticipants.Next() ) 
+	{
+	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
+                 //  do not allow for duplicates ...
+	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
+                                                interaction.GetProjectile()) )
+	    	primaries.push_back(interaction.GetProjectile());
+		
+	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
+                                                interaction.GetTarget()) ) 
+	    	targets.push_back(interaction.GetTarget());
+	}
+	    
+	
+//	G4cout << "BuildStrings prim/targ " << primaries.size() << " , " <<
+//					       targets.size() << G4endl;
+
+	unsigned int ahadron;
+// Only for hA-interactions Uzhi -------------------------------------
+	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
+	{
+//G4ThreeVector aPosition=primaries[ahadron]->GetPosition();
+//G4cout<<"Proj Build "<<aPosition<<" "<<primaries[ahadron]->GetTimeOfCreation()<<G4endl;
+	    G4bool isProjectile=true;
+	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
+	}
+
+	for ( ahadron=0; ahadron < targets.size() ; ahadron++)
+	{
+//G4ThreeVector aPosition=targets[ahadron]->GetPosition();
+//G4cout<<"Targ Build "<<aPosition<<" "<<targets[ahadron]->GetTimeOfCreation()<<G4endl;
+	    G4bool isProjectile=false;
+	    strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
+	}
+
+	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
+	primaries.clear();
+	std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
+	targets.clear();
+	
+	return strings;
 }
 // ------------------------------------------------------------
