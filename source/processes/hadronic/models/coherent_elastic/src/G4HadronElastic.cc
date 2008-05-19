@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.58 2008-04-10 14:57:23 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.59 2008-05-19 09:59:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,11 +99,24 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   theAlpha    = G4Alpha::Alpha();
   thePionPlus = G4PionPlus::PionPlus();
   thePionMinus= G4PionMinus::PionMinus();
+
+  nnans = 0;
+  npos  = 0;
+  nneg  = 0;
+  neneg = 0;
 }
 
 G4HadronElastic::~G4HadronElastic()
 {
   delete hElastic;
+  if( (nnans + npos + nneg + neneg) > 0 ) {
+    G4cout << "### G4HadronElastic destructor Warnings: ";
+    if(nnans > 0) G4cout << "###          N(nans)    = " << nnans;
+    if(npos > 0)  G4cout << "###          N(cost > 1)= " << npos;
+    if(nneg > 0)  G4cout << "###          N(cost <-1)= " << nneg;
+    if(neneg > 0) G4cout << "###          N(E < 0)=    " << neneg;
+    G4cout << "###" << G4endl;
+  }
 }
 
 G4VQCrossSection* G4HadronElastic::GetCS()
@@ -147,12 +160,12 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4int A = static_cast<G4int>(aTarget+0.5);
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
-  if (verboseLevel>1) 
+  if (verboseLevel>1) {
     G4cout << "G4HadronElastic for " << theParticle->GetParticleName()
 	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
 	   << " A= " << A << " N= " << N 
 	   << G4endl;
-
+  }
   G4ParticleDefinition * theDef = 0;
 
   if(Z == 1 && A == 1)       theDef = theProton;
@@ -179,16 +192,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ElasticGenerator gtype = fLElastic;
 
   // Q-elastic for p,n scattering on H and He
-  if (theParticle == theProton || theParticle == theNeutron)
+  if (theParticle == theProton || theParticle == theNeutron) {
     //     && Z <= 2 && ekin >= lowEnergyLimitQ)  
     gtype = fQElastic;
 
-  else {
+  } else {
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
     // HE-elastic for energetic projectile mesons
     else if(ekin >= lowEnergyLimitHE && theParticle->GetBaryonNumber() == 0) 
-      gtype = fHElastic;
+      { gtype = fHElastic; }
   }
 
   //
@@ -233,31 +246,37 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	     << G4endl; 
     }
     t = 0.0;
+    nnans++;
   }
 
   if(gtype == fSWave) t = G4UniformRand()*tmax;
 
-  if(verboseLevel>1)
+  if(verboseLevel>1) {
     G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax 
 	   << " ptot= " << ptot << G4endl;
-
+  }
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
   G4double sint;
 
-  if( cost >= 1.0 || cost < -1 ) 
-  {
+  // problem in sampling
+  if(cost >= 1.0) {
     cost = 1.0;
     sint = 0.0;
-  }
-  else  
-  {
+    npos++;
+  } else if(cost < -1 ) {
+    cost = 1.0;
+    sint = 0.0;
+    nneg++;
+
+    // normal situation
+  } else  {
     sint = std::sqrt((1.0-cost)*(1.0+cost));
   }    
-  if (verboseLevel>1) 
+  if (verboseLevel>1) {
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
-
+  }
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   v1 *= ptot;
   G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
@@ -272,7 +291,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   <<G4endl;
   }
   if(eFinal <= lowestEnergyLimit) {
-    if(eFinal < 0.0) {
+    if(eFinal < 0.0 && verboseLevel > 0) {
+      neneg++;
       G4cout << "G4HadronElastic WARNING ekin= " << eFinal
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
