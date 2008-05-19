@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.9 2007-01-30 10:23:26 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.10 2008-05-19 10:00:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,7 +134,8 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 	     << theParticle->GetParticleName()
 	     << G4endl;
   }
-  store->BuildPhysicsTable(aParticleType);
+  G4HadronicProcess::BuildPhysicsTable(aParticleType);
+  //  store->BuildPhysicsTable(aParticleType);
 }
 
 G4double G4ChargeExchangeProcess::GetMeanFreePath(const G4Track& track,

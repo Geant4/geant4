@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.36 2008-01-29 10:05:28 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.37 2008-05-19 10:00:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -88,9 +88,10 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     // defined lowest threshold for the projectile
     if(theParticle->GetPDGCharge() != 0.0) lowestEnergy = eV;
      
-    if(verboseLevel>1 || 
-       (verboseLevel==1 && theParticle == theNeutron)) {
-      G4cout << G4endl;
+    //    if(verboseLevel>1 || 
+    //   (verboseLevel==1 && theParticle == theNeutron)) {
+    if(verboseLevel>1 && theParticle == theNeutron) {
+    //      G4cout << G4endl;
       G4cout << "G4UHadronElasticProcess for " 
 	     << theParticle->GetParticleName()
              << " PDGcode= " << pPDG
@@ -99,7 +100,8 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 	     << G4endl;
     } 
   }
-  store->BuildPhysicsTable(aParticleType);
+  G4HadronicProcess::BuildPhysicsTable(aParticleType);
+  //store->BuildPhysicsTable(aParticleType);
 }
 
 G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track, 
