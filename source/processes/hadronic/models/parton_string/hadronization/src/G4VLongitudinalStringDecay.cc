@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.10 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.11 2008-05-19 13:00:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -168,14 +168,18 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 	if ( hadrons.second ==0 )
 	{
 // Substitute string by light hadron, Note that Energy is not conserved here!
-		 
+
+/*		 
 #ifdef DEBUG_LightFragmentationTest
-	       G4cout << "VlongSF Warning replacing string by single hadron " 
-		      << hadrons.first->GetParticleName() 
+	       G4cout << "VlongSF Warning replacing string by single hadron " <<G4endl;
+	       G4cout << hadrons.first->GetParticleName() 
 		      << "string .. " << string->Get4Momentum() << " " 
 		      << string->Get4Momentum().m() << G4endl;
 #endif		      
-
+G4cout << "VlongSF Warning replacing string by single hadron " <<G4endl;
+G4cout << hadrons.first->GetParticleName() << " string .. " <<G4endl;
+G4cout << string->Get4Momentum() << " " << string->Get4Momentum().m() << G4endl;
+*/
 	       G4ThreeVector   Mom3 = string->Get4Momentum().vect();
 	       G4LorentzVector Mom(Mom3, 
 	       			   std::sqrt(Mom3.mag2() + 
@@ -194,6 +198,8 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 		      << "string .. " << string->Get4Momentum() << " " 
 		      << string->Get4Momentum().m() << G4endl;
 #endif		      
+
+// Uzhi Formation time in the case???
 
 	       G4LorentzVector  Mom1, Mom2;
 	       Sample4Momentum(&Mom1, hadrons.first->GetPDGMass(), 

@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.9 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.10 2008-05-19 13:00:53 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4LundStringFragmentation.cc,v 1.9 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.10 2008-05-19 13:00:53 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -172,11 +172,31 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
         
         SetMassCut(160.*MeV); // For LightFragmentationTest it is required
                               // that no one pi-meson can be produced
-
+/*
+G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
+G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<
+theString.GetTimeOfCreation()/fermi<<G4endl;
+G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag()<<G4endl;
+*/
 	G4KineticTrackVector * LeftVector=LightFragmentationTest(&theString);
 	if ( LeftVector != 0 ) {
 //G4cout<<"Return single hadron insted of string"<<G4endl; 
-                                return LeftVector;}
+// Uzhi insert 6.05.08 start
+          if(LeftVector->size() == 1){
+ // One hadron is saved in the interaction
+            LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
+            LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+            
+//G4cout<<"Single hadron "<<LeftVector->operator[](0)->GetPosition()<<" "<<LeftVector->operator[](0)->GetFormationTime()<<G4endl;
+          } else {    // 2 hadrons created from qq-qqbar are stored
+            LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
+            LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+            LeftVector->operator[](1)->SetFormationTime(theString.GetTimeOfCreation());
+            LeftVector->operator[](1)->SetPosition(theString.GetPosition());
+          }
+// Uzhi insert 6.05.08 end
+          return LeftVector;
+        }
 
 //--------------------- The string can fragment -------------------------------	
 //--------------- At least two particles can be produced ----------------------
@@ -259,20 +279,40 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 
 	G4LorentzRotation toObserverFrame(toCms.inverse());
 
+//        LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
+//        LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+
+        G4double      TimeOftheStringCreation=theString.GetTimeOfCreation();
+        G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
+/*
+        if(theString.GetPosition().y() > 100.*fermi){    
+// It is a projectile-like string -------------------------------------
+          G4double Zmin=theString.GetPosition().y()-1000.*fermi;
+          G4double Zmax=theString.GetPosition().z();
+          TimeOftheStringCreation=
+          (Zmax-Zmin)*theString.Get4Momentum().e()/theString.Get4Momentum().z();
+
+          G4ThreeVector aPosition(0.,0.,Zmax);
+          PositionOftheStringCreation=aPosition;
+        }
+*/
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);
 	   G4LorentzVector Momentum = Hadron->Get4Momentum();
 	   Momentum = toObserverFrame*Momentum;
 	   Hadron->Set4Momentum(Momentum);
+
 	   G4LorentzVector Coordinate(Hadron->GetPosition(), Hadron->GetFormationTime());
 	   Momentum = toObserverFrame*Coordinate;
-	   Hadron->SetFormationTime(Momentum.e());
+	   Hadron->SetFormationTime(TimeOftheStringCreation+Momentum.e());
 	   G4ThreeVector aPosition(Momentum.vect());
-	   Hadron->SetPosition(theString.GetPosition()+aPosition);
-	}
+//	   Hadron->SetPosition(theString.GetPosition()+aPosition);
+	   Hadron->SetPosition(PositionOftheStringCreation+aPosition);
+//G4cout<<"Hadron "<<C1<<" "<<Hadron->GetPosition()/fermi<<" "<<Hadron->GetFormationTime()/fermi<<G4endl;
+	};
 
-//G4cout<<"Out FragmentString"<<G4endl<<G4endl<<G4endl;
+//G4cout<<"Out FragmentString"<<G4endl;
 	return LeftVector;
 		
 }
