@@ -52,6 +52,8 @@
 
 #include "G4HadSignalHandler.hh"
 
+#include "G4HadronicProcessStore.hh"
+
 #include <typeinfo>
 
 namespace G4HadronicProcess_local
@@ -82,6 +84,7 @@ G4VDiscreteProcess( processName, aType)
   isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();
   theCrossSectionDataStore = new G4CrossSectionDataStore();
+  G4HadronicProcessStore::Instance()->Register(this);
   aScaleFactor = 1;
   xBiasOn = false;
   if(getenv("SwitchLeadBiasOn")) theBias.push_back(new G4HadLeadBias());
@@ -89,6 +92,7 @@ G4VDiscreteProcess( processName, aType)
 
 G4HadronicProcess::~G4HadronicProcess()
 { 
+  G4HadronicProcessStore::Instance()->DeRegister(this);
   delete theTotalResult;
 
   std::for_each(theProductionModels.begin(),
@@ -108,6 +112,19 @@ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
     G4Exception("G4HadronicProcess", "007", FatalException,
     "Could not register G4HadronicInteraction");
   }
+  G4HadronicProcessStore::Instance()->RegisterInteraction(this, a);  
+}
+
+
+void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
+{
+  G4HadronicProcessStore::Instance()->RegisterParticle(this, &p);
+}
+
+void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
+{
+  theCrossSectionDataStore->BuildPhysicsTable(p);
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
 G4double G4HadronicProcess::

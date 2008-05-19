@@ -80,6 +80,12 @@ public:
 				      const G4Element *anElement, 
 				      G4double aTemp );
 
+  // initialisation of physics tables and G4HadronicProcessStore
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  // build physics tables and print out the configuration of the process
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+
 protected:    
 
   // get inverse cross section per volume
