@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.20 2008-04-03 17:26:36 gunter Exp $ */
+/* $Id: liblist.c,v 1.21 2008-05-20 13:33:34 gunter Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -207,8 +207,9 @@ int main (int argc, char** argv) {
 	   " Internal ERROR: BUFSIZE too small to read library name map file\n");
 	 exit(1);
       }
+	       /* discarded trailing \n, as gets() was doing */
       if ( buffer[strlen(buffer)-1] == '\n') 
-        {   buffer[strlen(buffer)-1]='\0'; }  // when gets() was used, this discarded trailing \n
+        {   buffer[strlen(buffer)-1]='\0'; }  
 
       ptr=strtok(buffer,":\n");
 
@@ -267,8 +268,9 @@ int main (int argc, char** argv) {
 	       " Internal ERROR: BUFSIZE too small to read directory name\n");
 	     exit(1);
 	  }
+	       /* discarded trailing \n, as gets() was doing */
           if ( buffer[strlen(buffer)-1] == '\n') 
-             {   buffer[strlen(buffer)-1]='\0'; }  // when gets() was used, this discarded trailing \n
+             {   buffer[strlen(buffer)-1]='\0'; }  
 
           ptr=strtok(buffer,"/");
           if(!ptr)
