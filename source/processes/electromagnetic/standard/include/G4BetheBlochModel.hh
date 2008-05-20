@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.13 2008-05-14 18:53:49 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.14 2008-05-20 16:55:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,8 @@
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
+class G4NistManager;
+
 
 class G4BetheBlochModel : public G4VEmModel
 {
@@ -128,6 +130,7 @@ private:
   G4ParticleDefinition*       theElectron;
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;
+  G4NistManager*              nist;
 
   G4double mass;
   G4double tlimit;
@@ -139,7 +142,6 @@ private:
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
-  G4double* A13;
   G4bool   isIon;
 };
 
