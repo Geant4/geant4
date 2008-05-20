@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.42 2008-05-15 10:43:07 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.43 2008-05-20 16:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 //                         division by zero
 // 29.02.2008 V.Ivanchenko use expantions for log and power function
 // 21.04.2008 Updated computations for ions (V.Ivanchenko)
+// 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -117,15 +118,12 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  //  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, cut);
 
-  //  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
   G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
   if(verbose > 1)
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
 	   << " Bloch= " << Bloch << " Mott= " << Mott 
-      //<< " Fsize= " << FSize
 	   << " Sum= " << sum << G4endl; 
 
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
@@ -170,7 +168,6 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  //  G4double FSize  = FiniteSizeCorrectionDEDX (p, mat, e, tmax0);
 
   G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + Mott;
 
@@ -583,74 +580,6 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
   SetupKinematics(p, mat, e);
   G4double mterm = pi*fine_structure_const*beta*charge;
   return mterm;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmCorrections::FiniteSizeCorrectionDEDX(const G4ParticleDefinition* p,
-						   const G4Material* mat,
-						   G4double e, G4double cutEnergy)
-  // Finite size corrections are parameterized according to
-  // J.D.Jackson Phys. Rev. D59 (1998) 017301 
-{
-  SetupKinematics(p, mat, e);
-  G4double term = 0.0;
-  G4double numlim = 0.2;
-  G4double cut = std::min(tmax0,cutEnergy);
-
-  G4double x = cut*formfact;
-
-  if(x <= numlim) term = -x*(1.0 - 0.5*x);
-  else            term = -std::log(1.0 + x);
-
-  term -= x*(tmax0 - cut)/(tmax0*(1.0 + x));
-
-  /*
-    // Protons and hyperons
-  if(p->GetPDGSpin() != 0.0 && q2 < 1.5 && p->GetBaryonNumber() != 0) {
-    G4double x  = cut*formfact;
-    G4double ksi2 = 2.79285*2.79285;
-    if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) + 1.0 - 0.5*x);
-    else term = -x*(1.0 + 5.0*x/6.0)/((1. + x)*(1. + x)) - std::log(1.0 + x);
-    G4double b  = xp*0.5/mass;
-    G4double c  = xp*mass/(electron_mass_c2*(mass + e));
-    G4double lb = b*b;
-    G4double lb2= lb*lb;
-    G4double nu = 0.5*c*c;
-    G4double x1 = 1.0 + x;
-    G4double x2 = x1*x1;
-    G4double l1 = 1.0 - lb;
-    G4double l2 = l1*l1;
-    G4double lx = 1.0 + lb*x;
-    G4double ia = lb2*(lx*std::log(lx/x1)/x + l1 -
-		       0.5*x*l2/(lb*x1) + 
-		       x*(3.0 + 2.0*x)*l2*l1/(6.0*x2*lb2))/(l2*l2);
-    G4double ib = x*x*(3.0 + x)/(6.0*x2*x1); 
-    term += lb*((ksi2 - 1.0)*ia + nu*ksi2*ib);
-    }
-  */
-    // G4cout << "Proton F= " << term << " ia= " << ia << " ib= " << ib << " lb= " << lb<< G4endl;
-    
-  return term;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4EmCorrections::FiniteSizeCorrectionXS(const G4ParticleDefinition* p,
-						 const G4Material* mat,
-						 G4double e, G4double cutEnergy)
-  // Finite size corrections are parameterized according to
-  // J.D.Jackson Phys. Rev. D59 (1998) 017301 
-{
-  SetupKinematics(p, mat, e);
-  G4double cut = std::min(tmax0,cutEnergy);
-  G4double term = 0.0;
-  G4double tm  = tmax0*formfact;
-  G4double tc  = cut*formfact;
-  term = -(2.0*tm*log(tmax0/cut) - (1.0 + 2.0*tm)*log((tm + 1.0)/(tc + 1.0))
-	   - formfact*(tmax0 - cut)/(tc + 1.0))/tmax0;
-
-  return term;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

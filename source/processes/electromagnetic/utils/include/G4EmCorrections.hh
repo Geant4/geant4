@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.21 2008-05-14 18:57:41 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.22 2008-05-20 16:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Modifications:
 // 28.04.2006 General cleanup, add finite size corrections (V.Ivanchenko)
 // 13.05.2006 Add corrections for ion stopping (V.Ivanhcenko)
+// 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -129,16 +130,6 @@ public:
   G4double MottCorrection(const G4ParticleDefinition*,
                           const G4Material*,
 			  G4double kineticEnergy);
-
-  G4double FiniteSizeCorrectionDEDX(const G4ParticleDefinition*,
-				    const G4Material*,
-				    G4double kineticEnergy,
-				    G4double cutEnergy);
-
-  G4double FiniteSizeCorrectionXS(const G4ParticleDefinition*,
-				  const G4Material*,
-				  G4double kineticEnergy,
-				  G4double cutEnergy);
 
   G4double NuclearDEDX(const G4ParticleDefinition*,
                        const G4Material*,
@@ -253,10 +244,8 @@ private:
   G4double  beta;
   G4double  ba2;
   G4double  tmax;
-  G4double  tmax0;
   G4double  charge;
   G4double  q2;
-  G4double  A13;
   G4double  eCorrMin;
   G4double  eCorrMax;
   G4int     nbinCorr;
@@ -322,24 +311,11 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     ba2   = beta2/alpha2;
     G4double ratio = electron_mass_c2/mass;
     tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
-    tmax0 = tmax;
-    A13   = nist->GetZ13(mass/proton_mass_c2); 
     charge  = p->GetPDGCharge()/eplus;
     if(charge < 1.5)  {q2 = charge*charge;}
     else {
       q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
       charge = std::sqrt(q2);
-    }
-    formfact = 0.0;
-    if(particle->GetLeptonNumber() != 0) {
-      G4double x = 0.8426*GeV;
-      if(p->GetPDGSpin() == 0.0 && mass < GeV) {x = 0.736*GeV;}
-      else if(mass > GeV) {
-	G4double A13 = std::pow(proton_mass_c2/mass,0.3333333);
-	x /= A13;
-      }
-      formfact = 2.0*electron_mass_c2/(x*x);
-      tmax = std::min(tmax,2.0/formfact);
     }
   }
   if(mat != material) {
