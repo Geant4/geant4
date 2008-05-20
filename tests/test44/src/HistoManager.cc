@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2008-05-09 10:13:55 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.2 2008-05-20 10:19:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -190,7 +190,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     primaryKineticEnergy = e;
     primaryDef = pd;
     G4ThreeVector dir = track->GetMomentumDirection();
-     }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
