@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.14 2007-06-14 17:17:30 tkoi Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.15 2008-05-20 21:24:28 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -33,6 +33,8 @@
 //
 // Bug fixes and workarounds in the destructor, F.W.Jones 06-Jul-1999
 // 070612 Fix memory leaking by T. Koi
+//
+// 080520 Delete unnecessary dependencies by T. Koi
  
 #ifndef G4NeutronHPChannel_h
 #define G4NeutronHPChannel_h 1
@@ -41,10 +43,10 @@
 #include "G4NeutronHPVector.hh"
 #include "G4Material.hh"
 #include "G4HadProjectile.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+//#include "G4NeutronInelasticProcess.hh"
+//#include "G4HadronFissionProcess.hh"
+//#include "G4HadronElasticProcess.hh"
+//#include "G4HadronCaptureProcess.hh"
 #include "G4StableIsotopes.hh"
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPFinalState.hh"
