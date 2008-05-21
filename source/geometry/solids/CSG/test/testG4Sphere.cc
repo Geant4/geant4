@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.22 2007-05-18 10:24:32 gcosmo Exp $
+// $Id: testG4Sphere.cc,v 1.23 2008-05-21 07:12:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -498,6 +498,14 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     inside = sb830.Inside(pb830+Dist*vb830);
     G4cout<<"sb830.Inside(pb830+Dist*vb830) = "<<OutputInside(inside)<<G4endl ;
 
+    Dist=sn11.DistanceToOut(G4ThreeVector(0.,0.,20.),vmz,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"sn11.DistanceToOut(G4ThreeVector(0.,0.,20.),vmz... = "<<Dist<<G4endl;
+
+    Dist=sn11.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"sn11.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz... = "<<Dist<<G4endl;
+
+    Dist=sn11.DistanceToOut(G4ThreeVector(10.,0.,0.),vmz,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"sn11.DistanceToOut(G4ThreeVector(10.,0.,0.),vmz... = "<<Dist<<G4endl;
 
      
 // Checking G4Sphere::DistanceToIn(P)
