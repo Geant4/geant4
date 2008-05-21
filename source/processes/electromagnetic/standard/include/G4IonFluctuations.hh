@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.3 2007-09-27 13:53:11 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.4 2008-05-21 09:01:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,8 @@
 
 #include "G4VEmFluctuationModel.hh"
 
+class G4Element;
+
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
 
@@ -78,9 +80,8 @@ public:
 
 private:
 
-  G4double CoeffitientA(G4double&);
-  G4double CoeffitientB(const G4Material*, G4double&);
-  G4double RelativisticFactor(const G4Material*, G4double&);
+  G4double Factor(const G4Material*, G4double);
+  G4double RelativisticFactor(const G4Element*, G4double);
 
   // hide assignment operator
   G4IonFluctuations & operator=(const  G4IonFluctuations &right);
