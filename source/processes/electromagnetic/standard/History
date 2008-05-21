@@ -1,4 +1,4 @@
-$Id: History,v 1.382 2008-05-13 16:31:21 schaelic Exp $
+$Id: History,v 1.383 2008-05-21 08:39:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 May 08: V.Ivant (emstand-V09-01-15)
+- G4BetheBlochModel - added projectile formfactor in computation of max
+                      energy transfer and in sampling of the energy of e- 
+
 13 May 08: A.Schaelicke
-- G4eBremsstrahlungHighEnergyModel
-  new extension of the standard bremsstrahlung model using a more sophisticated 
-  LPM approach
+- G4eBremsstrahlungHEModel - new model, which is an extension of the standard 
+                             bremsstrahlung model using a more sophisticated 
+                             LPM approach
 
 09 May 08: V.Ivant (emstand-V09-01-14)
 - G4hMultipleScattering - added method AlongStepGetPhysicalInteractionLength
