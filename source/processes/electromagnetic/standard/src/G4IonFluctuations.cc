@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.15 2008-05-21 09:28:14 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.16 2008-05-21 10:33:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -350,13 +350,22 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   {0.01273, 0.03458, 0.3951,  3.812}
   } ;
 
+  G4double g2 = 1.0;
+
   // protons (hadrons)
   if(1.5 > charge) {
     if( kStateGas != material->GetState() ) i = 1 ;
 
   // ions
   } else {
-    factor = charge * pow(charge/Z, 0.3333) ;
+    if(2.5 > charge) g2 = chargeSqRatio;
+    else {
+      G4double x = 0.92*sqrt(beta2/theBohrBeta2)*pow(Z,-0.66666667);
+      if(x < 0.2) g2 = x*(1.0 - 0.5*x);
+      else        g2 = 1.0 - exp(-x);
+    }
+
+    factor = charge * pow(charge/Z, 0.33333333);
 
     if( kStateGas == material->GetState() ) {
       energy /= (charge * sqrt(charge)) ;
@@ -384,7 +393,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
 
   //  G4cout << "s1= " << s1 << " s2= " << s2 << " q^2= " << chargeSqRatio << G4endl;
 
-  return s1*chargeSqRatio + s2;
+  return s1*g2 + s2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
