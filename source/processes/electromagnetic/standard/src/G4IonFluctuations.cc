@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.14 2008-05-21 09:01:13 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.15 2008-05-21 09:28:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -209,7 +209,7 @@ G4double G4IonFluctuations::Dispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::Factor(const G4Material* material, G4double zeff)
+G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
 {
   // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
@@ -325,9 +325,9 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double zeff)
  {-0.4227, -0.3217,  1.6360, -0.6438}
   } ;
 
-  G4int iz = (G4int)zeff - 2 ;
-  if( 0 > iz ) iz = 0 ;
-  if(95 < iz ) iz = 95 ;
+  G4int iz = G4int(Z) - 1;
+  if( 0 > iz )      iz = 0;
+  else if(95 < iz ) iz = 95;
 
   G4double s1 = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
 	            + a[iz][2]*pow(energy,a[iz][3]);
@@ -356,7 +356,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double zeff)
 
   // ions
   } else {
-    factor = charge * pow(charge/zeff, 0.3333) ;
+    factor = charge * pow(charge/Z, 0.3333) ;
 
     if( kStateGas == material->GetState() ) {
       energy /= (charge * sqrt(charge)) ;
@@ -368,7 +368,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double zeff)
       }
 
     } else {
-      energy /= (charge * sqrt(charge*zeff)) ;
+      energy /= (charge * sqrt(charge*Z)) ;
       i = 4 ;
     }
   }
