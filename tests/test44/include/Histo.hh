@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.1 2008-05-09 10:13:55 vnivanch Exp $
+// $Id: Histo.hh,v 1.2 2008-05-21 17:36:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -44,28 +44,27 @@
 
 #include "globals.hh"
 #include <vector>
-#include "G4DynamicParticle.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4DataVector.hh"
-#include "G4Track.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class HistoMessenger;
-
 namespace AIDA {
   class ITree;
-  //  class ITuple;
+  class ITuple;
   class IHistogram1D;
   class IAnalysisFactory;
 }
+
+class TFile;
+class TH1D;
+class TApplication;
 
 class Histo
 {
 
 public:
-  Histo(G4int ver);
+
+  Histo();
 
   ~Histo();
 
@@ -75,11 +74,8 @@ public:
   void save();
   // Save histogramms to file
 
-  void reset();
-  // Reset histogramms 
-
   void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
-                                               G4double x2=1., G4double u=1.);
+	     G4double x2=1., G4double u=1.);
   // In this method histogramms are predefined
 
   void setHisto1D(G4int, G4int, G4double, G4double, G4double);
@@ -90,37 +86,65 @@ public:
 
   void scale(G4int, G4double);
 
-  void setFileName(const G4String& nam) {histName = nam;};
+  void activate(G4int, G4bool);
 
-  void setFileOption(const G4String& nam) {option = nam;};
+  void addTuple(const G4String&, const G4String&, const G4String&);
+  // In this method nTuple is booked
 
-  void setFileType(const G4String& nam);
+  void fillTuple(const G4String&, G4double);
+  // Fill nTuple parameter
+
+  void addRow();
+  // Save tuple event 
+
+  void setFileName(const G4String&);
+
+  void setFileType(const G4String&);
+
+  void setFileOption(const G4String&);
 
   void print(G4int i);
 
-  void setVerbose(G4int val) {verbose = val;};
+  void setVerbose(G4int);
 
 private:
-
+ 
   G4String histName;
   G4String histType;
+  G4String tupleName;
+  G4String tupleId;
+  G4String tupleList;
   G4String option;
   G4int    nHisto;
   G4int    verbose;
   G4int    defaultAct;
-  G4String asciiFileName;
 
   std::vector<AIDA::IHistogram1D*> histo;
   AIDA::IAnalysisFactory* af;  
+  AIDA::ITuple*   ntup;
   AIDA::ITree*    tree;
-  HistoMessenger* messenger;
-  std::vector<G4int>     active;
+
+  TFile*                 m_ROOT_file;
+  TApplication*          m_root;
+  std::vector<TH1D*>     m_ROOT_histo;  
+
+  std::vector<G4bool>    active;
   std::vector<G4int>     bins;
   std::vector<G4double>  xmin;
   std::vector<G4double>  xmax;
   std::vector<G4double>  unit;
   std::vector<G4String>  ids;
-  std::vector<G4String>  tittles;
+  std::vector<G4String>  titles;
 };
+
+inline void Histo::setVerbose(G4int val)
+{
+  verbose = val;
+}
+
+inline void Histo::setFileOption(const G4String& nam) 
+{
+  option = nam;
+}
 
 #endif

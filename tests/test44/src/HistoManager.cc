@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2008-05-20 10:19:34 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2008-05-21 17:36:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "Histo.hh"
+#include "G4Track.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,7 +81,7 @@ HistoManager::HistoManager()
   beamFlag  = true;
   material  = 0;
   elm       = 0;
-  histo     = new Histo(verbose);
+  histo     = new Histo();
   neutron   = G4Neutron::Neutron();
 }
 
@@ -110,12 +111,14 @@ void HistoManager::BeginOfRun()
   edepSum     = 0.0;
   edepSum2    = 0.0;
 
+  histo->setVerbose(verbose);
   bookHisto();
   histo->book();
 
-  if(verbose > 0) 
+  if(verbose > 0) {
     G4cout << "HistoManager: Histograms are booked and run has been started"
            <<G4endl<<"  BeginOfRun (After histo->book)"<< G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
