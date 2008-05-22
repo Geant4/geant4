@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- *	\version c2_function.cc,v 1.166 2008/04/29 12:53:28 marcus Exp
+ *	\version c2_function.cc,v 1.169 2008/05/22 12:45:19 marcus Exp
  */
 
 #include <iostream>
@@ -21,7 +21,7 @@
 #include <sstream>
 
 template <typename float_type> const std::string c2_function<float_type>::cvs_file_vers() const 
-{ return "c2_function.cc,v 1.166 2008/04/29 12:53:28 marcus Exp"; }
+{ return "c2_function.cc,v 1.169 2008/05/22 12:45:19 marcus Exp"; }
 
 // find a pre-bracketed root of a c2_function, which is a MUCH easier job than general root finding
 // since the derivatives are known exactly, and smoothness is guaranteed.
@@ -198,8 +198,8 @@ template <typename float_type> float_type c2_function<float_type>::integrate_ste
 		}
 		back.done=true;
 		
-		struct c2_fblock<float_type> &f0=rb_stack[back.f0index].f1, &f2=rb_stack[back.f2index].f1; 
-		struct c2_fblock<float_type> &f1=back.f1; // will hold new middle values
+		c2_fblock<float_type> &f0=rb_stack[back.f0index].f1, &f2=rb_stack[back.f2index].f1; 
+		c2_fblock<float_type> &f1=back.f1; // will hold new middle values
 		size_t f1index=rb_stack.size()-1; // our current offset
 		float_type abs_tol=back.abs_tol;
 		
@@ -490,7 +490,7 @@ template <typename float_type> float_type c2_function<float_type>::partial_integ
 {
 	int np=xgrid.size();
 	
-	struct c2_fblock<float_type> f0, f2;
+	c2_fblock<float_type> f0, f2;
 	struct c2_integrate_recur rb;
 	rb.rel_tol=rel_tol;
 	rb.extrapolate=extrapolate;
@@ -631,7 +631,7 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 	return *this;
 }
 
-
+/*
 //  The constructor
 template <typename float_type> interpolating_function_p<float_type> & interpolating_function_p<float_type>::load_pairs(
 								std::vector<std::pair<float_type, float_type> > &data, 
@@ -663,6 +663,78 @@ template <typename float_type> interpolating_function_p<float_type> & interpolat
 	return *this;
 }
 
+template <typename float_type> interpolating_function_p<float_type> & 
+	interpolating_function_p<float_type>::load_random_generator_function(
+	const std::vector<float_type> &bincenters, const c2_function<float_type> &binheights)
+	throw(c2_exception)
+{	
+	c2_ptr<float_type> keepme(*this);
+
+	std::vector<float_type> integral;
+	c2_const_ptr<float_type> keepit(binheights); // manage function... not really needed here, but always safe.
+	// integrate from first to last bin in original order, leaving results in integral
+	// ask for relative error of 1e-6 on each bin, with absolute error set to 0 (since we don't know the data scale).
+	float_type sum=binheights.partial_integrals(bincenters, &integral, 0.0, 1e-6); 
+	// the integral vector now has partial integrals... it must be accumulated by summing
+	integral.insert(integral.begin(), 0.0); // integral from start to start is 0
+	float_type scale=1.0/sum;
+	for(size_t i=1; i<integral.size(); i++) integral[i]=integral[i]*scale + integral[i-1];
+	integral.back()=1.0; // force exact value on boundary
+	
+	this->load(integral, bincenters, 
+					   false, 1.0/(scale*binheights(bincenters.front() )), 
+					   false, 1.0/(scale*binheights(bincenters.back() ))
+					   ); // use integral as x axis in inverse function
+	keepme.release_for_return();
+	return *this;
+}
+
+template <typename float_type> interpolating_function_p<float_type> & 
+	interpolating_function_p<float_type>::load_random_generator_bins(
+	const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
+	throw(c2_exception)
+{	
+	c2_ptr<float_type> keepme(*this);
+
+	size_t np=binheights.size();
+	std::vector<float_type> integral(np+1), bin_edges(np+1);
+	
+	// compute the integral based on estimates of the bin edges from the given bin centers...
+	// except for bin 0 & final bin, the edge of a bin is halfway between then center of the 
+	// bin and the center of the previous/next bin.
+	// This gives width[n] = (center[n+1]+center[n])/2 - (center[n]+center[n-1])/2 = (center[n+1]-center[n-1])/2
+	// for the edges, assume a bin of width (center[1]-center[0]) or (center[np-1]-center[np-2])
+	// be careful that absolute values are used in case data are reversed.
+
+	if(bins.size() == binheights.size()+1) {
+		bin_edges=bins; // edges array was passed in
+	} else if (bins.size() == binheights.size()) {
+		bin_edges.front()=bins[0] - (bins[1]-bins[0])*0.5; // edge bin
+		for(size_t i=1; i<np; i++) {
+			bin_edges[i]=(bins[i]+bins[i-1])*0.5;
+		}
+		bin_edges.back()=bins[np-1] + (bins[np-1]-bins[np-2])*0.5; // edge bin
+	} else {
+		throw c2_exception("inconsistent bin vectors passed to load_random_generator_bins");
+	}
+	
+	float_type running_sum=0.0;
+	for(size_t i=0; i<np; i++) {
+		integral[i]=running_sum;
+		if(!binheights[i]) throw c2_exception("empty bin passed to load_random_generator_bins");
+		running_sum+=binheights[i]*std::abs(bin_edges[i+1]-bin_edges[i]);
+	}
+	float_type scale=1.0/running_sum;
+	for(size_t i=0; i<np; i++) integral[i]*=scale;
+	integral.back()=1.0; // force exactly correct value on boundary
+	this->load(integral, bin_edges, 
+		  false, 1.0/(scale*binheights.front()), 
+		  false, 1.0/(scale*binheights.back())
+		  ); // use integral as x axis in inverse function
+	keepme.release_for_return();
+	return *this;
+}
+*/
 
 //  The spline table generator
 template <typename float_type> void interpolating_function_p<float_type>::spline(
@@ -1141,7 +1213,7 @@ template <typename float_type> c2_connector_function_p<float_type>::c2_connector
 	: c2_function<float_type>()
 {
 	c2_const_ptr<float_type> left(f0), right(f2); // make sure if these are unowned, they get deleted
-	struct c2_fblock<float_type> fb0, fb2;
+	c2_fblock<float_type> fb0, fb2;
 	fb0.x=x0;
 	f0.fill_fblock(fb0);
 	fb2.x=x2;
@@ -1155,15 +1227,15 @@ template <typename float_type> c2_connector_function_p<float_type>::c2_connector
 	bool auto_center, float_type y1)
 	: c2_function<float_type>()
 {
-	struct c2_fblock<float_type> fb0, fb2;
+	c2_fblock<float_type> fb0, fb2;
 	fb0.x=x0; fb0.y=y0; fb0.yp=yp0; fb0.ypp=ypp0;
 	fb2.x=x2; fb2.y=y2; fb2.yp=yp2; fb2.ypp=ypp2;	
 	init(fb0, fb2, auto_center, y1);
 }
 
 template <typename float_type> c2_connector_function_p<float_type>::c2_connector_function_p(
-	const struct c2_fblock<float_type> &fb0,
-	const struct c2_fblock<float_type> &fb2,
+	const c2_fblock<float_type> &fb0,
+	const c2_fblock<float_type> &fb2,
 	bool auto_center, float_type y1)
 	: c2_function<float_type>()
 {
@@ -1171,8 +1243,8 @@ template <typename float_type> c2_connector_function_p<float_type>::c2_connector
 }
 
 template <typename float_type> void c2_connector_function_p<float_type>::init(
-	const struct c2_fblock<float_type> &fb0,
-	const struct c2_fblock<float_type> &fb2,
+	const c2_fblock<float_type> &fb0,
+	const c2_fblock<float_type> &fb2,
 	bool auto_center, float_type y1)
 {
 	float_type dx=(fb2.x-fb0.x)/2.0;
@@ -1265,8 +1337,8 @@ template <typename float_type> void c2_function<float_type>::sample_step(c2_samp
 		}
 		back.done=true;
 
-		struct c2_fblock<float_type> &f0=rb_stack[back.f0index].f1, &f2=rb_stack[back.f2index].f1; 
-		struct c2_fblock<float_type> &f1=back.f1; // will hold new middle values
+		c2_fblock<float_type> &f0=rb_stack[back.f0index].f1, &f2=rb_stack[back.f2index].f1; 
+		c2_fblock<float_type> &f1=back.f1; // will hold new middle values
 		size_t f1index=rb_stack.size()-1; // our current offset
 
 		// std::cout << "processing: " << rb_stack.size() << " " << 
@@ -1378,8 +1450,8 @@ template <typename float_type>  c2_piecewise_function_p<float_type> *
 		float_type abs_tol, float_type rel_tol,
 		int derivs, std::vector<float_type> *xvals, std::vector<float_type> *yvals) const throw(c2_exception)
 {
-	struct c2_fblock<float_type> f0, f2;
-	struct c2_sample_recur rb;
+	c2_fblock<float_type> f0, f2;
+	c2_sample_recur rb;
 	std::vector< recur_item > rb_stack;
 	rb_stack.reserve(20); // enough for most operations
 	rb.rb_stack=&rb_stack;
@@ -1441,21 +1513,7 @@ template <typename float_type, typename Final>
 	const std::vector<float_type> &bincenters, const c2_function<float_type> &binheights)
 	throw(c2_exception)
 {	
-	std::vector<float_type> integral;
-	c2_const_ptr<float_type> keepit(binheights); // manage function... not really needed here, but always safe.
-	// integrate from first to last bin in original order, leaving results in integral
-	// ask for relative error of 1e-6 on each bin, with absolute error set to 0 (since we don't know the data scale).
-	float_type sum=binheights.partial_integrals(bincenters, &integral, 0.0, 1e-6); 
-	// the integral vector now has partial integrals... it must be accumulated by summing
-	integral.insert(integral.begin(), 0.0); // integral from start to start is 0
-	float_type scale=1.0/sum;
-	for(size_t i=1; i<integral.size(); i++) integral[i]=integral[i]*scale + integral[i-1];
-	integral.back()=1.0; // force exact value on boundary
-	
-	return (new Final()) ->load(integral, bincenters, 
-					   false, 1.0/(scale*binheights(bincenters.front() )), 
-					   false, 1.0/(scale*binheights(bincenters.back() ))
-					   ); // use integral as x axis in inverse function
+	return (new Final())->load_random_generator_function(bincenters, binheights);
 }
 
 template <typename float_type, typename Final> 
@@ -1463,39 +1521,5 @@ template <typename float_type, typename Final>
 	const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
 	throw(c2_exception)
 {	
-	size_t np=binheights.size();
-	std::vector<float_type> integral(np+1), bin_edges(np+1);
-	
-	// compute the integral based on estimates of the bin edges from the given bin centers...
-	// except for bin 0 & final bin, the edge of a bin is halfway between then center of the 
-	// bin and the center of the previous/next bin.
-	// This gives width[n] = (center[n+1]+center[n])/2 - (center[n]+center[n-1])/2 = (center[n+1]-center[n-1])/2
-	// for the edges, assume a bin of width (center[1]-center[0]) or (center[np-1]-center[np-2])
-	// be careful that absolute values are used in case data are reversed.
-
-	if(bins.size() == binheights.size()+1) {
-		bin_edges=bins; // edges array was passed in
-	} else if (bins.size() == binheights.size()) {
-		bin_edges.front()=bins[0] - (bins[1]-bins[0])*0.5; // edge bin
-		for(size_t i=1; i<np; i++) {
-			bin_edges[i]=(bins[i]+bins[i-1])*0.5;
-		}
-		bin_edges.back()=bins[np-1] + (bins[np-1]-bins[np-2])*0.5; // edge bin
-	} else {
-		throw c2_exception("inconsistent bin vectors passed to inverse_integrated_density");
-	}
-	
-	float_type running_sum=0.0;
-	for(size_t i=0; i<np; i++) {
-		integral[i]=running_sum;
-		if(!binheights[i]) throw c2_exception("empty bin passed to inverse_integrated_density_bins");
-		running_sum+=binheights[i]*std::abs(bin_edges[i+1]-bin_edges[i]);
-	}
-	float_type scale=1.0/running_sum;
-	for(size_t i=0; i<np; i++) integral[i]*=scale;
-	integral.back()=1.0; // force exactly correct value on boundary
-	return (new Final())->load(integral, bin_edges, 
-		  false, 1.0/(scale*binheights.front()), 
-		  false, 1.0/(scale*binheights.back())
-		  ); // use integral as x axis in inverse function
+	return (new Final())->load_random_generator_bins(bins, binheights);
 }

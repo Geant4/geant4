@@ -6,7 +6,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_function.hh,v 1.235 2008/04/29 12:50:13 marcus Exp
+ * 	\version c2_function.hh,v 1.238 2008/05/22 12:45:19 marcus Exp
  *  \see \ref c2_factory "Factory Functions" for information on constructing things in here  
  */
 
@@ -69,8 +69,9 @@ template <typename float_type> class c2_ptr;
 /// \brief structure used to hold evaluated function data at a point.  
 ///
 /// Contains all the information for the function at one point. 
-template <typename float_type> struct c2_fblock 
+template <typename float_type> class c2_fblock 
 {	
+public:
 	/// \brief the abscissa
 	float_type x;
 	/// \brief the value of the function at \a x
@@ -110,7 +111,7 @@ public:
     /// \brief get versioning information for the header file
     /// \return the CVS Id string
 	const std::string cvs_header_vers() const { return 
-		"c2_function.hh,v 1.235 2008/04/29 12:50:13 marcus Exp";
+		"c2_function.hh,v 1.238 2008/05/22 12:45:19 marcus Exp";
 	}
 	
     /// \brief get versioning information for the source file
@@ -446,7 +447,7 @@ private:
 	/// the \a abs_tol is scaled by a factor of two at each division.  
 	/// Everything else is just passed down.
 	struct c2_integrate_recur { 
-		struct c2_fblock<float_type> *f0, *f1;
+		c2_fblock<float_type> *f0, *f1;
 		float_type abs_tol, rel_tol, eps_scale, extrap_coef, extrap2, dx_tolerance, abs_tol_min;
 		std::vector< recur_item > *rb_stack;
 		int  derivs;
@@ -456,7 +457,7 @@ private:
 	/// \brief structure used to pass information recursively in sampler.
 	///
 	struct c2_sample_recur { 
-		struct c2_fblock<float_type> *f0, *f1;
+		c2_fblock<float_type> *f0, *f1;
 		float_type abs_tol, rel_tol, dx_tolerance, abs_tol_min;
 		int derivs;
 		c2_piecewise_function_p<float_type> *out;
@@ -468,7 +469,7 @@ private:
 	/// \brief structure used to hold root bracketing information
 	///
 	struct c2_root_info {
-		struct c2_fblock<float_type> lower, upper;
+		c2_fblock<float_type> lower, upper;
 		bool inited;
 	};
 	
@@ -648,6 +649,7 @@ protected:
 /// \ingroup containers
 ///
 /// \see  c2_const_ptr and \ref memory_management "Use of c2_ptr for memory management"
+
 template <typename float_type> class c2_ptr : public c2_const_ptr<float_type >
 {
 public:
@@ -1411,6 +1413,42 @@ public:
 			  bool upperSlopeNatural, float_type upperSlope
 			  ) throw(c2_exception);
 	
+
+	/// \brief initialize from a grid of points and a c2_function (un-normalized) to an 
+	/// interpolator which, when evaluated with a uniform random variate on [0,1] returns random numbers
+	/// distributed as the input function.
+	/// \see  \ref random_subsec "Arbitrary random generation"
+	/// inverse_integrated_density starts with a probability density  std::vector, generates the integral, 
+	/// and generates an interpolating_function_p  of the inverse function which, when evaluated using a uniform random on [0,1] returns values
+	/// with a density distribution equal to the input distribution
+	/// If the data are passed in reverse order (large X first), the integral is carried out from the big end.
+	/// \param bincenters the positions at which to sample the function \a binheights
+	/// \param binheights a function which describes the density of the random number distribution to be produced.
+	/// \return an initialized interpolator, which 
+	/// if evaluated randomly with a uniform variate on [0,1] produces numbers
+	/// distributed according to \a binheights
+	interpolating_function_p<float_type> & load_random_generator_function(
+		const std::vector<float_type> &bincenters, const c2_function<float_type> &binheights)
+		throw(c2_exception);
+
+	/// \brief initialize from a grid of points and an std::vector of probability densities (un-normalized) to an
+	/// interpolator which, when evaluated with a uniform random variate on [0,1] returns random numbers
+	/// distributed as the input histogram.
+	/// \see  \ref random_subsec "Arbitrary random generation"
+	/// inverse_integrated_density starts with a probability density  std::vector, generates the integral, 
+	/// and generates an interpolating_function_p  of the inverse function which, when evaluated using a uniform random on [0,1] returns values
+	/// with a density distribution equal to the input distribution
+	/// If the data are passed in reverse order (large X first), the integral is carried out from the big end.
+	/// \param bins if \a bins .size()==\a binheights .size(), the centers of the bins.  \n
+	/// if \a bins .size()==\a binheights .size()+1, the edges of the bins
+	/// \param binheights a vector which describes the density of the random number distribution to be produced.
+	/// Note density... the numbers in the bins are not counts, but counts/unit bin width.
+	/// \return an initialized interpolator, which 
+	/// if evaluated randomly with a uniform variate on [0,1] produces numbers
+	/// distributed according to \a binheights
+	interpolating_function_p<float_type> & load_random_generator_bins(
+		const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
+		throw(c2_exception);
 	
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception);
 	
@@ -1995,8 +2033,8 @@ public:
 	/// \param y1 the value to match at the midpoint, if \a auto_center is false
 	/// \return a c2_function with domain (\a fb0.x,\a fb2.x) which smoothly connects \a fb0 and \a fb2
 	c2_connector_function_p(
-		const struct c2_fblock<float_type> &fb0, 
-		const struct c2_fblock<float_type> &fb2, 
+		const c2_fblock<float_type> &fb0, 
+		const c2_fblock<float_type> &fb2, 
 		bool auto_center, float_type y1);
 
 	/// \brief destructor
@@ -2005,8 +2043,8 @@ public:
 protected:
 	/// \brief fill container numerically
 	void init(
-		const struct c2_fblock<float_type> &fb0, 
-		const struct c2_fblock<float_type> &fb2, 
+		const c2_fblock<float_type> &fb0, 
+		const c2_fblock<float_type> &fb2, 
 		bool auto_center, float_type y1);
 
 	float_type fhinv, fy1, fa, fb, fc, fd, fe, ff;

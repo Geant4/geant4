@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2008-05-14 16:05:31 vnivanch Exp $
+$Id: History,v 1.75 2008-05-22 16:31:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-05-08 V.Ivant (testem7-V09-01-08)
+- c2_function fixed compillation problem at SUN
 
 14-05-08 V.Ivant (testem7-V09-01-07)
 - README: updated Phys List description

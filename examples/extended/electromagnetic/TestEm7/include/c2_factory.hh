@@ -5,7 +5,7 @@
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
  *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_factory.hh,v 1.12 2008/02/25 23:12:05 marcus Exp
+ * 	\version c2_factory.hh,v 1.13 2008/05/22 12:45:19 marcus Exp
  */
 
 #ifndef __has_c2_factory_hh
@@ -122,6 +122,7 @@ static c2_power_law_p<float_type> &power_law(float_type scale, float_type power)
 static c2_inverse_function_p<float_type> &inverse_function(const c2_function<float_type> &source) 
 	{ return *new c2_inverse_function_p<float_type>(source); }
 
+#if 0
 /// \brief handle template for inverse_integrated_density_bins<float_type, Final<float_type> >(bincenters, binheights)
 template <template <typename f_t> class Final > 
 	static interpolating_function_p<float_type> & inverse_integrated_density_bins(
@@ -140,6 +141,8 @@ template <template <typename f_t> class Final >
 		return ::inverse_integrated_density_function<float_type, Final<float_type> >
 			(bincenters, binheights);
 	}
+#endif
+
 };
 
 #endif
