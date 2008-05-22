@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008-05-09 10:13:55 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-05-22 09:17:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(histo->DefaultBeamPosition()) {
-    G4double zVertex = -(5.0*mm + histo->Length());
+    G4double zVertex = -0.5*histo->Length();
     particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
   }
   particleGun->GeneratePrimaryVertex(anEvent);

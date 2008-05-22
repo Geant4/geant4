@@ -1,0 +1,30 @@
+#================================================
+#     Macro file for test44
+#     21.03.2008 A.Bagulya
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/random/setSavingFlag true
+/random/resetEngineFrom currentEvent.rndm
+#
+/testhadr/TargetMat        G4_WATER
+#/testhadr/TargetRadius     10 cm
+#/testhadr/TargetLength     30 cm
+#/testhadr/NumberDivZ       300
+/testhadr/NumberDivZ       3000
+/testhadr/PrintModulo      1000
+#
+/testhadr/CutsAll          0.01 mm
+/testhadr/Physics          PHYSLIST
+/testhadr/Physics          emstandard_opt2
+#
+/run/initialize
+#
+/gun/particle ion
+/gun/ion  6 12 6
+/gun/energy 1200. MeV
+/run/beamOn 10000
+#
+

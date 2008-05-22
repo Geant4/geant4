@@ -29,8 +29,8 @@ int main(int argc, char** argv)
   string te[nidx] = {"110", "144.3", "100"};
   string teu[nidx] = {"MeV", "MeV/u", "MeV/u"};
   string fname2[nidx] = {"H-110MeV-endep-EXP-norm-max.txt",
-			      "4He-144.3MeV-endep-EXP-M03-norm-max.txt",
-			      "12C100MeVen-dep-EXP-norm-max.txt"}; 
+			 "4He-144.3MeV-endep-EXP-M03-norm-max.txt",
+			 "12C100MeVen-dep-EXP-norm-max.txt"}; 
 
   string fname = argv[1];
   int idx = 0;
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
   double x_max = x_exp[nn-1]*1.01;
   string hist_title = tp[idx] + " " + te[idx] + " " + teu[idx] + " " + "in Water, Geant4  " + refer;
 
-  cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << G4endl;
+  cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << endl;
 
   TH1  *h = new TH2F("h", hist_title.c_str(),100,0,x_max,11,0,1.1);
   h->SetLineStyle(2);
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
     cout << "maxJ= " << maxJ << " maxX= " << maxX << " maxY= " << maxY << endl;
     norm = maxY;
     hh[j]->Scale(1./norm);
-    hh[j]->Draw("histosame");
+    hh[j]->Draw("HISTO SAME");
   
     entry=leg->AddEntry(hh[j], legend[j].c_str(), "l");
     entry->SetLineColor(j+2);
@@ -160,8 +160,10 @@ int main(int argc, char** argv)
   }
   leg->Draw();
 
-  c1->Modified();
-  c1->cd();
+  c1->Update();
+
+  //  c1->Modified();
+  //  c1->cd();
 
   delete [] x_exp;
   delete [] y_exp;

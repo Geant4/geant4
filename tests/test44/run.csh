@@ -9,7 +9,7 @@ set    dir  = "$G4INSTALL/tests/test44/"
 
 ln -f ${dir}/Exp_Data/*.txt ./
 
-setenv PHYSLIST    QBBC
+setenv PHYSLIST  QBBC
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 

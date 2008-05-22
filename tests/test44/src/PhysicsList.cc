@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2008-05-21 17:36:17 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2008-05-22 09:17:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics.hh"
@@ -155,6 +156,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt3") {
+
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
 
   } else if (name == "FTFC") {
 

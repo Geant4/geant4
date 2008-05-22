@@ -7,9 +7,9 @@
 /tracking/verbose 0
 #
 /testhadr/TargetMat        G4_Al 
-/testhadr/TargetRadius     1  cm
-/testhadr/TargetLength     10 cm
-/testhadr/NumberDivZ       100
+/testhadr/TargetRadius     5  cm
+/testhadr/TargetLength     4  cm
+/testhadr/NumberDivZ       40
 /testhadr/PrintModulo      10
 #
 /testhadr/CutsAll          1 mm
@@ -18,6 +18,6 @@
 /run/initialize
 #
 /gun/particle proton
-/gun/energy 3. GeV
+/gun/energy 100. MeV
 /run/beamOn 100
 #

@@ -37,6 +37,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Histo.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include <fstream>
+#include <iomanip>
 
 #ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"
@@ -325,9 +329,8 @@ void Histo::print(G4int i)
   if(verbose > 1) {
     G4cout << "### Histogram  " << i << "  ###" << G4endl;
   }
-#ifdef G4ANALYSIS_USE
   if(i >= 0 && i < nHisto) {
-    asciiFileName="Bragg.out";
+    G4String asciiFileName = "Bragg.out";
     std::ofstream asciiFile(asciiFileName, std::ios::app);
     if(asciiFile.is_open()) {
       asciiFile << " z(mm)      ||       J(MeV/mm/event)" << G4endl;
@@ -338,13 +341,21 @@ void Histo::print(G4int i)
 
     G4double step = (xmax[i] - xmin[i])/G4double(bins[i]);
     G4double x    =  xmin[i] - step*0.5;
-    G4double y, maxX = 0, maxY = 0;
+    G4double y = 0.0;
+    G4double maxX = 0.0;
+    G4double maxY = 0.0;
     G4int    maxJ = 0;
 
-      // Write to file
+    // Write to file
     for(G4int j = 0; j < bins[i]; j++) {
       x += step;
-      y  = histo[i]->binHeight(j);
+
+#ifdef G4ANALYSIS_USE
+      if(histo[i]) {y  = histo[i]->binHeight(j);}
+#endif
+#ifdef G4ANALYSIS_USE_ROOT  
+      if(m_ROOT_histo[i]) {y = m_ROOT_histo[i]->GetBinContent(j+1);}
+#endif
       if(maxY < y) {maxY = y; maxX = x; maxJ = j;}
 
         asciiFile << std::setiosflags(std::ios::fixed)
@@ -359,27 +370,26 @@ void Histo::print(G4int i)
                   << std::setw(10);
 	asciiFile << y
                   << G4endl;
-      }
-        asciiFile << std::setiosflags(std::ios::fixed)
-                  << std::setprecision(5)
-                  << std::setiosflags(std::ios::right)
-                  << std::setw(10);
-        asciiFile << maxJ;
-        asciiFile << "           ";
-        asciiFile << std::setiosflags(std::ios::fixed)
-                  << std::setprecision(5)
-                  << std::setiosflags(std::ios::right)
-                  << std::setw(10);
-	asciiFile << maxX;
-        asciiFile << "           ";
-        asciiFile << std::setiosflags(std::ios::fixed)
-                  << std::setprecision(5)
-                  << std::setiosflags(std::ios::right)
-                  << std::setw(10);
-	asciiFile << maxY
-		  << G4endl;
+    }
+    asciiFile << std::setiosflags(std::ios::fixed)
+	      << std::setprecision(5)
+	      << std::setiosflags(std::ios::right)
+	      << std::setw(10);
+    asciiFile << maxJ;
+    asciiFile << "           ";
+    asciiFile << std::setiosflags(std::ios::fixed)
+	      << std::setprecision(5)
+	      << std::setiosflags(std::ios::right)
+	      << std::setw(10);
+    asciiFile << maxX;
+    asciiFile << "           ";
+    asciiFile << std::setiosflags(std::ios::fixed)
+	      << std::setprecision(5)
+	      << std::setiosflags(std::ios::right)
+	      << std::setw(10);
+    asciiFile << maxY
+	      << G4endl;
   }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

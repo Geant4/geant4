@@ -1,0 +1,25 @@
+#================================================
+#     Macro file for test44
+#     20.03.2008 A.Bagulya
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_WATER
+#/testhadr/TargetRadius     10 cm
+#/testhadr/TargetLength     30 cm
+#/testhadr/NumberDivZ       300
+/testhadr/NumberDivZ       3000
+/testhadr/PrintModulo      1000
+#
+/testhadr/CutsAll          0.01 mm
+/testhadr/Physics          PHYSLIST
+/testhadr/Physics          emstandard_opt2
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 110. MeV
+/run/beamOn 10000
+#
