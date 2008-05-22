@@ -1,4 +1,4 @@
-$Id: History,v 1.295 2008-05-06 10:07:21 habdelou Exp $
+$Id: History,v 1.296 2008-05-22 08:18:03 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.05.2008   F.Lei, tag emlowen-V09-01-14
+	     Load the the complete Auger dataset on initialization	
+
+06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-13
+             ....
 
 06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-12
              Semi-Empirical model implementation for L-SubShells-Cross-Section
