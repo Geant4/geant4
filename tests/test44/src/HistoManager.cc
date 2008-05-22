@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2008-05-21 17:36:17 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.4 2008-05-22 15:54:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -158,7 +158,6 @@ void HistoManager::EndOfRun()
     histo->scale(i,x);
   }
 
-  //  if(verbose > 1) histo->print(0);
   histo->print(0);
 //  histo->save();
 }

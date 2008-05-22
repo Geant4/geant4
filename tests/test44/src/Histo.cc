@@ -43,13 +43,13 @@
 #include <iomanip>
 
 #ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
+  #include "AIDA/AIDA.h"
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
-#include "TROOT.h"
-#include "TFile.h"
-#include "TH1D.h"
+  #include "TROOT.h"
+  #include "TFile.h"
+  #include "TH1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,7 +59,7 @@ Histo::Histo()
 {
   verbose    = 0;
   histName   = "test44";
-  histType   = "root";
+  histType   = "xml";
   option     = "--noErrors uncompress";
   nHisto     = 0;
   defaultAct = true;
@@ -73,9 +73,8 @@ Histo::Histo()
   tree = 0;
   af   = 0; 
 #endif
-  //
+  
 #ifdef G4ANALYSIS_USE_ROOT
-  //  m_root = new TApplication("App", ((int *)0), ((char **)0));
   histType   = "root";
 #endif
 }
@@ -103,8 +102,8 @@ void Histo::book()
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory();
 
-  // Creating a tree mapped to a new hbook file.
-  tree = tf->create(nam,histType,false,true,"--noErrors uncompress");
+  // Creating a tree mapped to a new file.
+  tree = tf->create(nam,histType,false,true,option);
   delete tf;
   if(tree) {
     G4cout << "Tree store  : <" << tree->storeName() << ">" << G4endl;
@@ -117,8 +116,9 @@ void Histo::book()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
-    if(active[i]) 
+    if(active[i]) {
       histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
+    }
   }
   delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree
@@ -133,11 +133,11 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE_ROOT
   m_ROOT_file = 
     new TFile(nam,"RECREATE","ROOT file with trees and histograms");
-  if(m_ROOT_file)
+  if(m_ROOT_file) {
     G4cout << "[Histo::book] File created: " << nam << G4endl;
-  else
+  } else {
     G4Exception("[Histo::book] ERROR: file " + nam + " has not been created!");
-
+  }
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
@@ -222,7 +222,7 @@ void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
 
 void Histo::fill(G4int i, G4double x, G4double w)
 {
-  if(verbose > 1) {
+  if(verbose > 0) {
     G4cout << "fill histogram: #" << i << " at x= " << x 
            << "  weight= " << w
            << G4endl;   
@@ -232,9 +232,11 @@ void Histo::fill(G4int i, G4double x, G4double w)
 #ifdef G4ANALYSIS_USE  
       if(histo[i]) histo[i]->fill((x/unit[i]), w);
 #endif
-      //
+      
 #ifdef G4ANALYSIS_USE_ROOT
-      if(m_ROOT_histo[i]) m_ROOT_histo[i]->Fill(x/unit[i], w);
+      if(m_ROOT_histo[i]) {
+	m_ROOT_histo[i]->Fill(x/unit[i], w);
+      }
 #endif
     }
   } else {
@@ -255,7 +257,7 @@ void Histo::scale(G4int i, G4double x)
 #ifdef G4ANALYSIS_USE  
       if(histo[i]) histo[i]->scale(x);
 #endif
-      //
+      
 #ifdef G4ANALYSIS_USE_ROOT  
       if(m_ROOT_histo[i]) m_ROOT_histo[i]->Scale(x);
 #endif
@@ -326,12 +328,13 @@ void Histo::setFileType(const G4String& nam)
 
 void Histo::print(G4int i)
 {
-  if(verbose > 1) {
+  if(verbose > 0) {
     G4cout << "### Histogram  " << i << "  ###" << G4endl;
   }
   if(i >= 0 && i < nHisto) {
     G4String asciiFileName = "Bragg.out";
-    std::ofstream asciiFile(asciiFileName, std::ios::app);
+    std::ofstream asciiFile(asciiFileName);
+    //   std::ofstream asciiFile(asciiFileName, std::ios::app);
     if(asciiFile.is_open()) {
       asciiFile << " z(mm)      ||       J(MeV/mm/event)" << G4endl;
     } else {
@@ -351,10 +354,12 @@ void Histo::print(G4int i)
       x += step;
 
 #ifdef G4ANALYSIS_USE
-      if(histo[i]) {y  = histo[i]->binHeight(j);}
+      if(histo[i]) {y = histo[i]->binHeight(j);}
 #endif
 #ifdef G4ANALYSIS_USE_ROOT  
-      if(m_ROOT_histo[i]) {y = m_ROOT_histo[i]->GetBinContent(j+1);}
+      if(m_ROOT_histo[i]) {
+	y = m_ROOT_histo[i]->GetBinContent(j+1);
+      }
 #endif
       if(maxY < y) {maxY = y; maxX = x; maxJ = j;}
 

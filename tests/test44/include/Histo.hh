@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.2 2008-05-21 17:36:17 vnivanch Exp $
+// $Id: Histo.hh,v 1.3 2008-05-22 15:54:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -57,7 +57,6 @@ namespace AIDA {
 
 class TFile;
 class TH1D;
-class TApplication;
 
 class Histo
 {
@@ -125,7 +124,6 @@ private:
   AIDA::ITree*    tree;
 
   TFile*                 m_ROOT_file;
-  TApplication*          m_root;
   std::vector<TH1D*>     m_ROOT_histo;  
 
   std::vector<G4bool>    active;
