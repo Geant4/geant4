@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.24 2008-05-15 13:45:15 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.25 2008-05-22 10:22:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,7 +106,7 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
 //
 const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
-  if (&source == this) return *this;
+  if (&source == this) { return *this; }
   
   DeleteStuff();
   CopyStuff( source );
@@ -123,13 +123,14 @@ const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
 {
   numFace = source.numFace;
-  if (numFace == 0) return;    // odd, but permissable?
+  if (numFace == 0) { return; }    // odd, but permissable?
   
   faces = new G4VCSGface*[numFace];
   
   G4VCSGface **face = faces,
        **sourceFace = source.faces;
-  do {
+  do
+  {
     *face = (*sourceFace)->Clone();
   } while( ++sourceFace, ++face < faces+numFace );
   fCubicVolume = source.fCubicVolume;
@@ -147,7 +148,8 @@ void G4VCSGfaceted::DeleteStuff()
   if (numFace)
   {
     G4VCSGface **face = faces;
-    do {
+    do
+    {
       delete *face;
     } while( ++face < faces + numFace );
 
@@ -171,7 +173,8 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
   // Loop over all faces, checking min/max extent as we go.
   //
   G4VCSGface **face = faces;
-  do {
+  do
+  {
     (*face)->CalculateExtent( axis, voxelLimit, transform, extentList );
   } while( ++face < faces + numFace );
   
@@ -195,10 +198,11 @@ EInside G4VCSGfaceted::Inside( const G4ThreeVector &p ) const
   EInside answer=kOutside;
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do {
+  do
+  {
     G4double distance;
     EInside result = (*face)->Inside( p, kCarTolerance/2, &distance );
-    if (result == kSurface) return kSurface;
+    if (result == kSurface) { return kSurface; }
     if (distance < best)
     {
       best = distance;
@@ -218,7 +222,8 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector answer;
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do {
+  do
+  {
     G4double distance;
     G4ThreeVector normal = (*face)->Normal( p, &distance );
     if (distance < best)
@@ -242,16 +247,16 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
   G4double distFromSurface = kInfinity;
   G4VCSGface *bestFace=0;
   G4VCSGface **face = faces;
-  do {
+  do
+  {
     G4double   faceDistance,
                faceDistFromSurface;
     G4ThreeVector   faceNormal;
     G4bool    faceAllBehind;
-    G4cout<<"G4VCSGfaceted Dist To In"<<G4endl;
     if ((*face)->Intersect( p, v, false, kCarTolerance/2,
                 faceDistance, faceDistFromSurface,
                 faceNormal, faceAllBehind ) )
-      {  G4cout<<"G4VCSGfaceted Dist To In Intersect facedist="<< faceDistance<<" distSurf="<<distFromSurface<<G4endl;
+    {
       //
       // Intersecting face
       //
@@ -260,14 +265,14 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
         distance = faceDistance;
         distFromSurface = faceDistFromSurface;
         bestFace = *face;
-        if (distFromSurface <= 0) return 0;
+        if (distFromSurface <= 0) { return 0; }
       }
     }
   } while( ++face < faces + numFace );
   
   if (distance < kInfinity && distFromSurface<kCarTolerance/2)
   {
-    if (bestFace->Distance(p,false) < kCarTolerance/2) distance = 0;
+    if (bestFace->Distance(p,false) < kCarTolerance/2)  { distance = 0; }
   }
 
   return distance;
@@ -299,7 +304,8 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   G4VCSGface *bestFace=0;
   
   G4VCSGface **face = faces;
-  do {
+  do
+  {
     G4double  faceDistance,
               faceDistFromSurface;
     G4ThreeVector  faceNormal;
@@ -311,14 +317,14 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
       //
       // Intersecting face
       //
-      if ( (distance < kInfinity) || (!faceAllBehind) ) allBehind = false;
+      if ( (distance < kInfinity) || (!faceAllBehind) )  { allBehind = false; }
       if (faceDistance < distance)
       {
         distance = faceDistance;
         distFromSurface = faceDistFromSurface;
         normal = faceNormal;
         bestFace = *face;
-        if (distFromSurface <= 0) break;
+        if (distFromSurface <= 0)  { break; }
       }
     }
   } while( ++face < faces + numFace );
@@ -326,10 +332,12 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   if (distance < kInfinity)
   {
     if (distFromSurface <= 0)
+    {
       distance = 0;
+    }
     else if (distFromSurface<kCarTolerance/2)
     {
-      if (bestFace->Distance(p,true) < kCarTolerance/2) distance = 0;
+      if (bestFace->Distance(p,true) < kCarTolerance/2)  { distance = 0; }
     }
 
     if (calcNorm)
@@ -340,8 +348,8 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   }
   else
   { 
-    if (Inside(p) == kSurface) distance = 0;
-    if (calcNorm) *validNorm = false;
+    if (Inside(p) == kSurface)  { distance = 0; }
+    if (calcNorm)  { *validNorm = false; }
   }
 
   return distance;
@@ -367,9 +375,10 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p,
 {
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do {
+  do
+  {
     G4double distance = (*face)->Distance( p, outgoing );
-    if (distance < best) best = distance;
+    if (distance < best)  { best = distance; }
   } while( ++face < faces + numFace );
 
   return (best < 0.5*kCarTolerance) ? 0 : best;
@@ -402,20 +411,22 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
      {-kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity};
 
   G4VCSGface **face = faces;
-  do {    
+  do
+  {    
     const G4ThreeVector **axis = axes+5 ;
     G4double *answer = answers+5;
-    do {
+    do
+    {
       G4double testFace = (*face)->Extent( **axis );
-      if (testFace > *answer) *answer = testFace;
+      if (testFace > *answer)  { *answer = testFace; }
     }
     while( --axis, --answer >= answers );
     
   } while( ++face < faces + numFace );
   
     return G4VisExtent( -answers[0], answers[1], 
-          -answers[2], answers[3],
-          -answers[4], answers[5]  );
+                        -answers[2], answers[3],
+                        -answers[4], answers[5]  );
 }
 
 
@@ -526,8 +537,8 @@ void G4VCSGfaceted::SetAreaAccuracy(G4double ep)
 //
 G4double G4VCSGfaceted::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-  else   fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); 
+  if(fCubicVolume != 0.) {;}
+  else   { fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); }
   return fCubicVolume;
 }
 
@@ -537,8 +548,8 @@ G4double G4VCSGfaceted::GetCubicVolume()
 //
 G4double G4VCSGfaceted::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) ;
-  else   fSurfaceArea = EstimateCubicVolume(fStatistics,fAreaAccuracy); 
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = EstimateCubicVolume(fStatistics,fAreaAccuracy); }
   return fSurfaceArea;
 }
 
@@ -551,10 +562,10 @@ G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
   if (!fpPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-    }
+  {
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }
 
@@ -605,4 +616,3 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
 
   return answer;
 }
-
