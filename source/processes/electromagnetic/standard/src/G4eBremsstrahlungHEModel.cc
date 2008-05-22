@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungHEModel.cc,v 1.1 2008-05-18 16:07:07 vnivanch Exp $
+// $Id: G4eBremsstrahlungHEModel.cc,v 1.2 2008-05-22 11:04:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -945,7 +945,7 @@ G4double G4eBremsstrahlungHEModel::SupressionFunction(const G4Material* material
   G4double Elpm = LPMconstant*(material->GetRadlen()) ;
 
   // WARNING tested for single element materials only!
-  G4double Z = material->GetZ(); 
+  G4double Z = material->GetElectronDensity()/material->GetTotNbOfAtomsPerVolume();
 
   G4double supr = 1.0;
 
