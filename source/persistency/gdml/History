@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2008-05-08 08:37:18 ztorzsok Exp $
+$Id: History,v 1.54 2008-05-23 12:13:35 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 may 2008 Zoltan Torzsok
+- Precision is now considered in writer in case of scale,rotation and position in physvol.
+  DBL_EPSILON is used to filter unnecessary scale/rotation/position.
 
 7 May 2008 Zoltan Torzsok
 - Added early version of the user manual, both in PDF and MS Word format

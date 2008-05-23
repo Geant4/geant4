@@ -85,9 +85,9 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    physvolElement->appendChild(volumerefElement);
    volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
 
-   if (scl.x() != 1.0 || scl.y() != 1.0 || scl.z() != 1.0) scaleWrite(physvolElement,scl);
-   if (rot.x() != 0.0 || rot.y() != 0.0 || rot.z() != 0.0) rotationWrite(physvolElement,rot);
-   if (pos.x() != 0.0 || pos.y() != 0.0 || pos.z() != 0.0) positionWrite(physvolElement,pos);
+   if (fabs(scl.x()-1.0) > DBL_EPSILON || fabs(scl.y()-1.0) > DBL_EPSILON || fabs(scl.z()-1.0) > DBL_EPSILON) scaleWrite(physvolElement,scl);
+   if (fabs(rot.x()-0.0) > DBL_EPSILON || fabs(rot.y()-0.0) > DBL_EPSILON || fabs(rot.z()-0.0) > DBL_EPSILON) rotationWrite(physvolElement,rot);
+   if (fabs(pos.x()-0.0) > DBL_EPSILON || fabs(pos.y()-0.0) > DBL_EPSILON || fabs(pos.z()-0.0) > DBL_EPSILON) positionWrite(physvolElement,pos);
 }
 
 void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
