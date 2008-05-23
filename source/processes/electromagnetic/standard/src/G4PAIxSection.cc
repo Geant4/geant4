@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.22 2008-05-16 15:12:40 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.23 2008-05-23 09:59:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
 {
   fDensity       = matCC->GetMaterial()->GetDensity();
   G4int matIndex = matCC->GetMaterial()->GetIndex();
+  fMaterialIndex = matIndex;   
   fSandia        = new G4SandiaTable(matIndex);
 
   G4int i, j; 
@@ -122,6 +123,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j;   
 
+      fMaterialIndex   = materialIndex;   
       fDensity                = (*theMaterialTable)[materialIndex]->GetDensity();
       fElectronDensity        = (*theMaterialTable)[materialIndex]->
                              GetElectronDensity();
@@ -230,8 +232,9 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                               G4int intNumber                   )
 {
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-   G4int i, j;   
-   
+   G4int i, j; 
+  
+      fMaterialIndex   = materialIndex;      
       fDensity                = (*theMaterialTable)[materialIndex]->GetDensity();
       fElectronDensity        = (*theMaterialTable)[materialIndex]->
                              GetElectronDensity();
@@ -341,7 +344,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    G4int i, j, numberOfElements;   
-   
+
+   fMaterialIndex   = materialIndex;   
    fDensity         = (*theMaterialTable)[materialIndex]->GetDensity();
    fElectronDensity = (*theMaterialTable)[materialIndex]->GetElectronDensity();
    numberOfElements = (*theMaterialTable)[materialIndex]->GetNumberOfElements();
@@ -353,6 +357,9 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          thisMaterialZ[i] = (G4int)(*theMaterialTable)[materialIndex]->
                                       GetElement(i)->GetZ();
    }
+   // fSandia = new G4SandiaTable(materialIndex);
+   fSandia = (*theMaterialTable)[materialIndex]->
+     GetSandiaTable();
    G4SandiaTable     thisMaterialSandiaTable(materialIndex);
    fIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
                            (thisMaterialZ,numberOfElements);   
@@ -369,7 +376,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       fA3             = new G4double[fIntervalNumber+2];
       fA4             = new G4double[fIntervalNumber+2];
 
-      for(i=1;i<=fIntervalNumber;i++)
+      for( i = 1; i <= fIntervalNumber; i++ )
       {
   if((thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0) >= maxEnergyTransfer) ||
           i > fIntervalNumber)
@@ -401,7 +408,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       }
       // Now checking, if two borders are too close together
 
-      for(i=1;i<fIntervalNumber;i++)
+      for( i = 1; i < fIntervalNumber; i++ )
       {
         if(fEnergyInterval[i+1]-fEnergyInterval[i] >
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
@@ -410,7 +417,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 	}
         else
 	{
-          for(j=i;j<fIntervalNumber;j++)
+          for( j = i; j < fIntervalNumber; j++ )
 	  {
             fEnergyInterval[j] = fEnergyInterval[j+1];
                         fA1[j] = fA1[j+1];
@@ -570,7 +577,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
   j = 1;
 
-  for(i=2;i<=fSplineNumber;i++)
+  for( i = 2; i <= fSplineNumber; i++ )
   {
     if(fSplineEnergy[i]<fEnergyInterval[j+1])
     {
@@ -597,9 +604,9 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 	  // Calculation of PAI differrential cross-section (1/(keV*cm))
 	  // in the energy points near borders of energy intervals
 
-   for(G4int k=1;k<=fIntervalNumber-1;k++)
+   for(G4int k = 1; k <= fIntervalNumber-1; k++ )
    {
-      for(j=1;j<=2;j++)
+      for( j = 1; j <= 2; j++ )
       {
          i = (k-1)*2 + j;
          fImPartDielectricConst[i] = fNormalizationCof*
@@ -745,6 +752,78 @@ G4double G4PAIxSection::ImPartDielectricConst( G4int    k ,
 
 }  // end of ImPartDielectricConst 
 
+/////////////////////////////////////////////////////////////////
+//
+// Returns lambda of photon with energy1 in current material 
+
+G4double G4PAIxSection::GetPhotonRange( G4double energy1 )
+{
+  G4int i;
+  G4double energy2, energy3, energy4, result, lambda;
+
+  energy2 = energy1*energy1;
+  energy3 = energy2*energy1;
+  energy4 = energy3*energy1;
+
+  // G4double* SandiaCof = fSandia->GetSandiaCofForMaterialPAI(energy1);
+  // result = SandiaCof[0]/energy1+SandiaCof[1]/energy2+SandiaCof[2]/energy3+SandiaCof[3]/energy4;
+  // result *= fDensity;
+
+  for( i = 1; i <= fIntervalNumber; i++ )
+  {
+     if( energy1 < fEnergyInterval[i]) break;
+  }
+  i--;
+  if(i == 0) i = 1;
+
+  result = fA1[i]/energy1+fA2[i]/energy2+fA3[i]/energy3+fA4[i]/energy4;  
+
+  if( result > DBL_MIN ) lambda = 1./result;
+  else                   lambda = DBL_MAX;
+   
+  return lambda;
+}  
+
+/////////////////////////////////////////////////////////////////
+//
+// Return lambda of electron with energy1 in current material
+// parametrisation from NIM A554(2005)474-493 
+
+G4double G4PAIxSection::GetElectronRange( G4double energy )
+{
+  G4double range;
+  /*
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+
+  G4double Z = (*theMaterialTable)[fMaterialIndex]->GetIonisation()->GetZeffective();
+  G4double A = (*theMaterialTable)[fMaterialIndex]->GetA();
+
+  energy /= keV; // energy in keV in parametrised formula
+
+  if (energy < 10.)
+  {
+    range = 3.872e-3*A/Z;
+    range *= pow(energy,1.492);
+  }
+  else
+  {
+    range = 6.97e-3*pow(energy,1.6);
+  }
+  */
+  // Blum&Rolandi Particle Detection with Drift Chambers, p. 7
+
+  G4double cofA = 5.37e-4*g/cm2/keV;
+  G4double cofB = 0.9815;
+  G4double cofC = 3.123e-3/keV;
+  // energy /= keV;
+
+  range = cofA*energy*( 1 - cofB/(1 + cofC*energy) ); 
+
+  // range *= g/cm2;
+  range /= fDensity;
+
+  return range;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1572,18 +1651,14 @@ G4double G4PAIxSection::SumOverBordResonance( G4int      i ,
 
 /////////////////////////////////////////////////////////////////////////
 //
-//
+// Returns random PAI-total energy loss over step
 
 G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
 {  
-  G4int iTransfer ;
   G4long numOfCollisions;
-  G4double loss = 0.0;
-  G4double meanNumber, position;
+  G4double meanNumber, loss = 0.0;
 
   // G4cout<<" G4PAIxSection::GetStepEnergyLoss "<<G4endl;
-
-
 
   meanNumber = fIntegralPAIxSection[1]*step;
   numOfCollisions = G4Poisson(meanNumber);
@@ -1592,14 +1667,8 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
 
   while(numOfCollisions)
   {
-    position = fIntegralPAIxSection[1]*G4UniformRand();
-
-    for( iTransfer=1; iTransfer<=fSplineNumber; iTransfer++ )
-    {
-        if( position >= fIntegralPAIxSection[iTransfer] ) break;
-    }
-    loss += fSplineEnergy[iTransfer] ;
-    numOfCollisions--;
+   loss += GetEnergyTransfer();
+   numOfCollisions--;
   }
   // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<G4endl; 
 
@@ -1608,18 +1677,41 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Returns random PAI-total energy transfer in one collision
+
+G4double G4PAIxSection::GetEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = fIntegralPAIxSection[1]*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= fIntegralPAIxSection[iTransfer] ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
+
+/////////////////////////////////////////////////////////////////////////
 //
+// Returns random Cerenkov energy loss over step
 
 G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
 {  
-  G4int iTransfer ;
   G4long numOfCollisions;
-  G4double loss = 0.0;
-  G4double meanNumber, position;
+  G4double meanNumber, loss = 0.0;
 
-  // G4cout<<" G4PAIxSection::GetStepCreLosnkovs "<<G4endl;
-
-
+  // G4cout<<" G4PAIxSection::GetStepCerenkovLoss "<<G4endl;
 
   meanNumber = fIntegralCerenkov[1]*step;
   numOfCollisions = G4Poisson(meanNumber);
@@ -1628,13 +1720,7 @@ G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
 
   while(numOfCollisions)
   {
-    position = fIntegralCerenkov[1]*G4UniformRand();
-
-    for( iTransfer=1; iTransfer<=fSplineNumber; iTransfer++ )
-    {
-        if( position >= fIntegralCerenkov[iTransfer] ) break;
-    }
-    loss += fSplineEnergy[iTransfer] ;
+    loss += GetCerenkovEnergyTransfer();
     numOfCollisions--;
   }
   // G4cout<<"PAI Cerenkov loss = "<<loss/keV<<" keV"<<G4endl; 
@@ -1644,18 +1730,41 @@ G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Returns Cerenkov energy transfer in one collision
+
+G4double G4PAIxSection::GetCerenkovEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = fIntegralCerenkov[1]*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= fIntegralCerenkov[iTransfer] ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
+
+/////////////////////////////////////////////////////////////////////////
 //
+// Returns random plasmon energy loss over step
 
 G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
 {  
-  G4int iTransfer ;
   G4long numOfCollisions;
-  G4double loss = 0.0;
-  G4double meanNumber, position;
+  G4double  meanNumber, loss = 0.0;
 
-  // G4cout<<" G4PAIxSection::GetStepCreLosnkovs "<<G4endl;
-
-
+  // G4cout<<" G4PAIxSection::GetStepPlasmonLoss "<<G4endl;
 
   meanNumber = fIntegralPlasmon[1]*step;
   numOfCollisions = G4Poisson(meanNumber);
@@ -1664,13 +1773,7 @@ G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
 
   while(numOfCollisions)
   {
-    position = fIntegralPlasmon[1]*G4UniformRand();
-
-    for( iTransfer=1; iTransfer<=fSplineNumber; iTransfer++ )
-    {
-        if( position >= fIntegralPlasmon[iTransfer] ) break;
-    }
-    loss += fSplineEnergy[iTransfer] ;
+    loss += GetPlasmonEnergyTransfer();
     numOfCollisions--;
   }
   // G4cout<<"PAI Plasmon loss = "<<loss/keV<<" keV"<<G4endl; 
@@ -1680,18 +1783,41 @@ G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Returns plasmon energy transfer in one collision
+
+G4double G4PAIxSection::GetPlasmonEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = fIntegralPlasmon[1]*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= fIntegralPlasmon[iTransfer] ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
+
+/////////////////////////////////////////////////////////////////////////
 //
+// Returns random resonance energy loss over step
 
 G4double G4PAIxSection::GetStepResonanceLoss( G4double step )
 {  
-  G4int iTransfer ;
   G4long numOfCollisions;
-  G4double loss = 0.0;
-  G4double meanNumber, position;
+  G4double meanNumber, loss = 0.0;
 
   // G4cout<<" G4PAIxSection::GetStepCreLosnkovs "<<G4endl;
-
-
 
   meanNumber = fIntegralResonance[1]*step;
   numOfCollisions = G4Poisson(meanNumber);
@@ -1700,13 +1826,7 @@ G4double G4PAIxSection::GetStepResonanceLoss( G4double step )
 
   while(numOfCollisions)
   {
-    position = fIntegralResonance[1]*G4UniformRand();
-
-    for( iTransfer=1; iTransfer<=fSplineNumber; iTransfer++ )
-    {
-        if( position >= fIntegralResonance[iTransfer] ) break;
-    }
-    loss += fSplineEnergy[iTransfer] ;
+    loss += GetResonanceEnergyTransfer();
     numOfCollisions--;
   }
   // G4cout<<"PAI resonance loss = "<<loss/keV<<" keV"<<G4endl; 
@@ -1714,6 +1834,61 @@ G4double G4PAIxSection::GetStepResonanceLoss( G4double step )
   return loss;
 }
 
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Returns resonance energy transfer in one collision
+
+G4double G4PAIxSection::GetResonanceEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = fIntegralResonance[1]*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= fIntegralResonance[iTransfer] ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Returns Rutherford energy transfer in one collision
+
+G4double G4PAIxSection::GetRutherfordEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = (fIntegralPlasmon[1]-fIntegralResonance[1])*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= (fIntegralPlasmon[iTransfer]-fIntegralResonance[iTransfer]) ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
