@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeuteronEvaporationProbability.cc,v 1.9 2008-05-08 13:59:00 vnivanch Exp $
+//
+// $Id: G4DeuteronEvaporationProbability.cc,v 1.10 2008-05-24 16:34:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,13 +37,13 @@
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)
-{}
-
-
+{    	}
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &) : G4EvaporationProbability()
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronEvaporationProbability::copy_constructor meant to not be accessable");
 }
+
+
 
 
 const G4DeuteronEvaporationProbability & G4DeuteronEvaporationProbability::

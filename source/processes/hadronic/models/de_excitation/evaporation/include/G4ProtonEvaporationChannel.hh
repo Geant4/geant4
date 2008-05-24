@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonEvaporationChannel.hh,v 1.6 2008-05-08 13:59:00 vnivanch Exp $
+// $Id: G4ProtonEvaporationChannel.hh,v 1.7 2008-05-24 16:34:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,12 +32,11 @@
 //
 // J. M. Quesada (Apr. 2008) unused items have been removed 
 
-
 #ifndef G4ProtonEvaporationChannel_h
 #define G4ProtonEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-
+#include "G4ProtonCoulombBarrier.hh"
 #include "G4ProtonEvaporationProbability.hh"
 
 class G4ProtonEvaporationChannel : public G4EvaporationChannel
@@ -62,7 +61,7 @@ public:
 
 private:
 
-  G4ProtonCoulombBarrier  theCoulombBarrier;
+   G4ProtonCoulombBarrier  theCoulombBarrier;
  
   G4ProtonEvaporationProbability  theEvaporationProbability;
 	

@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4ProtonEvaporationProbability.hh,v 1.11 2008-05-24 16:34:33 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //

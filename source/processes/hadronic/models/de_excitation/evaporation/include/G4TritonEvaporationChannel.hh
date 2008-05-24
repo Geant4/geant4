@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationChannel.hh,v 1.6 2008-05-08 10:09:32 quesada Exp $
+// $Id: G4TritonEvaporationChannel.hh,v 1.7 2008-05-24 16:34:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

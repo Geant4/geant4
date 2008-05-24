@@ -23,13 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4EvaporationProbability.cc,v 1.11 2008-05-24 16:34:33 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 // JMQ & MAC 07/12/2007: New inverse cross sections
 //
 //J.M. Quesada (Dec 2007-Apr 2008). Rebuilt class. Mayor changes: new inverse cross sections and 
-//numerical integration . No Coulomb barrier is needed anymore (implicitely included in inverse cross sections)
+//numerical integration
 
 #include <iostream>
 using namespace std;
@@ -70,21 +74,25 @@ G4double G4EvaporationProbability::EmissionProbability(const G4Fragment & fragme
     G4double EmissionProbability = 0.0;
     G4double MaximalKineticEnergy = anEnergy;
 
-
-
-
     if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
 	EmissionProbability = CalculateProbability(MaximalKineticEnergy,fragment);
+
     }
     return EmissionProbability;
 }
 
 
 //////////////////////////////////////////////////////////////////////////////
-//JMQ December 2007. New method based on numerical integration of emission probabilities 
+//JMQ: rebuilt method
 
 G4double G4EvaporationProbability::CalculateProbability(const G4double anEnergy,const G4Fragment & fragment)
 {
+
+    G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
+    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
+
+    G4double U = fragment.GetExcitationEnergy();
+    G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
 
     G4double MaximalKineticEnergy = anEnergy;
     G4double theEmissionProbability;
@@ -94,12 +102,11 @@ G4double G4EvaporationProbability::CalculateProbability(const G4double anEnergy,
       theEmissionProbability = 0.0;
       return 0.0;
   }  
-// JMQ (November 2007):  
-// Previously: Coulomb barrier was  the lower limit of integration over kinetic energy. 
-//  G4double LowerLimit = CoulombBarrier;
+// JMQ:  
 // Now: integration is numericaly performed & cross section is set to 0. when negative =>
+// JMQ May.08 LowerLimit is set again to Coulomb Barrier
+  G4double LowerLimit = CoulombBarrier;
 
-  G4double LowerLimit = 0.;
   
 
 // JMQ: The MaximalKinetic energy just is over the barrier. Asimptotic value is needed.
@@ -116,10 +123,11 @@ G4double G4EvaporationProbability::CalculateProbability(const G4double anEnergy,
 }
 
 /////////////////////////////////////////////////////////////////////
-//JMQ dec 2007 . Gauss-Legendre numerical integration
+
 G4double G4EvaporationProbability::
 IntegrateEmissionProbability(const G4double & Low, const G4double & Up, const G4Fragment & fragment)
 {
+
   static const G4int N = 10;
   // 10-Points Gauss-Legendre abcisas and weights
   static const G4double w[N] = {
@@ -167,18 +175,26 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up, const G4
 
 ///////////////////////////////////////////////////////////////////////
 //JMQ Dec. 2008 new method
+
 G4double G4EvaporationProbability::ProbabilityDistributionFunction(const G4double K, const G4Fragment & fragment)
-{
+{ 
+
     G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
     G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
+  
+    G4double U = fragment.GetExcitationEnergy();
+   
+ G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
+
 
    G4double delta01 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ));
 
    G4double delta00 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
 
 //
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
 
-    G4double U = fragment.GetExcitationEnergy();
+//    G4double U = fragment.GetExcitationEnergy();
 
    G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
 
@@ -186,22 +202,28 @@ G4double G4EvaporationProbability::ProbabilityDistributionFunction(const G4doubl
     G4NucleiProperties::GetMassExcess(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ)) -
      G4NucleiProperties::GetMassExcess(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
 
-   G4double ap = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ),U - theSeparationEnergy - delta01);
+   G4double ap = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ),U - theSeparationEnergy - delta0);
 
-   G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()),U - delta00);
-
-
-
+   G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()),U - delta0);
 
 G4double Prob;
 
 
+
 G4double E1=U-theSeparationEnergy-delta01-K;
+
 if (E1<0.) return 0.;
 
 G4double E0=U-delta00;
 
+//JMQ: 04-05-08 cross sections are set to 0 below Coulomb Barrier
+
+if(K<CoulombBarrier) {return 0.;}
+
+
+
 //JMQ: 04-02-08 without 1/hbar_Panck remains as a width
+
 Prob=std::pow(10.,-25.)*Gamma*NuclearMass/(std::pow(pi*hbar_Planck,2.)*std::exp(2*std::sqrt(a*E0)))*K*CrossSection(K,fragment)*std::exp(2*std::sqrt(ap*E1));
 
 return Prob;
@@ -214,19 +236,21 @@ return Prob;
 //OPT=1 Chatterjee's paramaterization for all ejectiles
 //OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons
 //OPT=3 Kalbach's parameterization for all ejectiles
+//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons
 // 
 G4double G4EvaporationProbability::CrossSection(const G4double K,const  G4Fragment & fragment )
 {
+
     G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
     G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
     G4int theA=static_cast<G4int>(GetA());
     G4int theZ=static_cast<G4int>(GetZ());
 
-// Default: Chatterjee's parameterization
-      G4int OPT=3;
+// Default: Chatterjee's & Wellish'sparameterization
+      G4int OPT=2;
 
 // Loop on XS options starts:
-if ( OPT==1 ||OPT==2) {
+if ( OPT==1 ||OPT==2) { 
 
 G4double Kc=K;
 
@@ -412,8 +436,7 @@ else  {
    if (xs <0.0) {xs=0.0;}
    return xs;}
 }
-else if (OPT ==3) {
-//PRECO inverse cross sections are chosen
+else if (OPT ==3 || OPT==4) {
 
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
 G4double p, p0, p1, p2;
@@ -481,7 +504,7 @@ c=0.;
 } // end if of PRECO neutrons
 
     else {
-     if (theA==1 && theZ ==1) {  
+     if (theA==1 && theZ ==1 && OPT==3) {  
 // PRECO Protons are choosen
 
 
@@ -499,7 +522,36 @@ c=0.;
      nu1 = -182.4;
       nu2 = -1.872;
 
-         } //end protons 
+         } //end protons with PRECO's param.
+
+ else if (theA==1 && theZ ==1 && OPT==4) { //Wellisch's  parameterization for protons is chosen
+ G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.);
+    eekin=K;
+        rnpro=ResidualZ;
+        rnneu=ResidualA-ResidualZ;
+	a=rnneu+rnpro;
+	ekin=eekin/1000;
+        r0=1.36*std::pow(static_cast<G4double>(10),static_cast<G4double>(-15));
+	fac=pi*std::pow(r0,2);
+	b0=2.247-0.915*(1.-std::pow(a,-0.33333));
+	fac1=b0*(1.-std::pow(a,-0.333333));
+	fac2=1.;
+	if(rnneu > 1.5) fac2=std::log(rnneu);
+	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+std::pow(a,0.3333)-fac1);
+       xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*a);	
+       ff1=0.70-0.0020*a ;
+       ff2=1.00+1/a;
+       ff3=0.8+18/a-0.002*a;
+       fac=1.-(1./(1.+std::exp(-8.*ff1*(std::log10(ekin)+1.37*ff2))));
+       xine_th=xine_th*(1.+ff3*fac);
+       	ff1=1.-1/a-0.001*a;
+	ff2=1.17-2.7/a-0.0014*a;
+	fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
+	fac=1./(1.+std::exp(fac));
+	xine_th=xine_th*fac;
+        if (xine_th < 0.) {xine_th=0.0;}        
+        return xine_th;
+}
  
  else if (theA==2 && theZ==1) { //start deuterons
 

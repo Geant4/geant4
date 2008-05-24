@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronEvaporationProbability.cc,v 1.9 2008-05-08 13:59:00 vnivanch Exp $
+//
+// $Id: G4NeutronEvaporationProbability.cc,v 1.10 2008-05-24 16:34:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
