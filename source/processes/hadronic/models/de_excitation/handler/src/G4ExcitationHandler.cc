@@ -26,19 +26,18 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
-//
-// Modif (25 Abr 2007) by M. A. Cortes Giraldo:
-//      -Max Z,A for Fermi Break-Up turns to 9,17 by default
-//      -Bug fixed on BreakItUp()
 // Modif (30 June 1998) by V. Lara:
 //      -Modified the Transform method for use G4ParticleTable and 
 //       therefore G4IonTable. It makes possible to convert all kind 
 //       of fragments (G4Fragment) produced in deexcitation to 
 //       G4DynamicParticle
 //      -It uses default algorithms for:
-//              Evaporation: G4Evaporation
-//              MultiFragmentation: G4StatMF 
-//              Fermi Breakup model: G4FermiBreakUp
+//              Evaporation: G4StatEvaporation
+//              MultiFragmentation: G4DummyMF (a dummy one)
+//              Fermi Breakup model: G4StatFermiBreakUp
+//
+// 25/5/08: Proposed by M. A> Cortes Giraldo:
+//      -Max Z,A for Fermi Break-Up turns to 9,17 by default
 
 
 #include "G4ExcitationHandler.hh"
@@ -48,7 +47,7 @@
 
 
 G4ExcitationHandler::G4ExcitationHandler():
-  // Fermi BreakUp is on and MultiFrag is off by default
+  //  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true)
@@ -96,198 +95,245 @@ G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &) const
   return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 28/01/08 13:30  Proposed by MAC /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
+G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theInitialState) const
 {
 
-  G4FragmentVector * theResult = 0;         // to be returned (will be created dynamically later)
-
-  // Variables to describe the initial state
+  G4FragmentVector * theResult = 0; 
   G4double exEnergy = theInitialState.GetExcitationEnergy();
-  G4int A = static_cast<G4int>(theInitialState.GetA()+0.5);  // +0.5 to avoid bad truncation
-  G4int Z = static_cast<G4int>(theInitialState.GetZ()+0.5);
+  //  G4cout << " first exEnergy in MeV: " << exEnergy/MeV << G4endl;
+  G4double A = theInitialState.GetA();
+  G4int Z = static_cast<G4int>(theInitialState.GetZ());
+  G4FragmentVector* theTempResult = 0; 
+  G4Fragment theExcitedNucleus;
 
-  // Variables existing until end of method
-  G4Fragment theExcitedNucleus;  // object to be passed in BreakItUp methods
+  // Test applicability
+  if (A > 4) 
+    {
+      // Initial State De-Excitation 
+      if(A<GetMaxA()&&Z<GetMaxZ()) 
+        //     && exEnergy>G4NucleiPropertiesTable::GetBindingEnergy(Z,A)) {
+        {
+          theResult = theFermiModel->BreakItUp(theInitialState);
+        }
+      else   if (exEnergy>GetMinE()*A) 
+        {
+          theResult = theMultiFragmentation->BreakItUp(theInitialState);
+        }
+      else 
+        {
+          theResult = theEvaporation->BreakItUp(theInitialState);
+        }
+    
 
-  // In case A <= 4 the fragment will not perform particle emission
-  if (A <= 4)
+
+
+      // De-Excitation loop
+      // ------------------
+      // Check if there are excited fragments
+      std::list<G4Fragment*> theResultList;
+      G4FragmentVector::iterator j;
+      std::list<G4Fragment*>::iterator i;
+      for (j = theResult->begin(); j != theResult->end();j++) 
+        {
+          theResultList.push_back(*j);
+        }
+      theResult->clear();
+      for (i = theResultList.begin(); i != theResultList.end(); i++) 
+        {
+          exEnergy = (*i)->GetExcitationEnergy();
+	  //	  G4cout << " exEnergy in MeV: " << exEnergy/MeV << G4endl;
+          if (exEnergy > 0.0) 
+            {
+              A = (*i)->GetA();
+              Z = static_cast<G4int>((*i)->GetZ());
+              theExcitedNucleus = *(*i);
+              // try to de-excite this fragment
+              if( A < GetMaxA() && Z < GetMaxZ() )
+                // && exEnergy>G4NucleiPropertiesTable::GetBindingEnergy(Z,A)) 
+                {
+                  // Fermi Breakup not now called for for exotic fragments for good reasons...
+                  // theTempResult = theFermiModel->BreakItUp(theExcitedNucleus);
+                  //if (theTempResult->size() == 1)
+                  //  {
+                  //    std::for_each(theTempResult->begin(),theTempResult->end(), G4Delete());
+                  //    delete theTempResult;
+                  //  }
+                  theTempResult = theEvaporation->BreakItUp(theExcitedNucleus);
+                } 
+              else 
+                {
+                  // Evaporation
+                  theTempResult = theEvaporation->BreakItUp(theExcitedNucleus);
+                }
+              // The Nucleus has been fragmented?
+              if (theTempResult->size() > 1) 
+                // If so :
+                {
+                  // Remove excited fragment from the result 
+                  //	delete theResult->removeAt(i--);
+                  delete (*i);
+                  i = theResultList.erase(i);
+                  // and add theTempResult elements to theResult
+                  for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
+                       ri != theTempResult->rend(); ++ri)
+                    {
+                      theResultList.push_back(*ri);
+                    }
+                  delete theTempResult;
+                } 
+              else 
+                // If not :
+                {
+                  // it doesn't matter, we Follow with the next fragment but
+                  // I have to clean up
+                  std::for_each(theTempResult->begin(),theTempResult->end(), G4Delete());
+                  delete theTempResult;
+                }
+            }
+        }
+      for (i = theResultList.begin(); i != theResultList.end(); i++)
+        {
+          theResult->push_back(*i);
+        }
+      theResultList.clear();
+    }
+  else   // if A > 4
     {
       theResult = new G4FragmentVector();
-      theResult->push_back( new G4Fragment(theInitialState) );
+      theResult->push_back(new G4Fragment(theInitialState));
     }
-  else  // If A > 4 we can apply this algorithm
-    {
-      // Initial State De-excitation
-      if ( A < GetMaxA() && Z < GetMaxZ() )  // if satisfied we apply Fermi Break-Up
-	{
-	  theResult = theFermiModel->BreakItUp(theInitialState);
-	}
-      else if (exEnergy > GetMinE()*A)   // if satisfied we apply MF instead of Evaporation
-	{
-	  theResult = theMultiFragmentation->BreakItUp(theInitialState);
-	}
-      else   // Evaporation model (there is competition between Evaporation, Fission, PhotonEvaporation!)
-	{
-	  theResult = theEvaporation->BreakItUp(theInitialState);
-	}
-
-      // De-excitation loop
-      // ------------------
-
-      G4FragmentVector * theTempResult = 0; // pointer which receives temporal results
-      for (G4FragmentVector::iterator i = theResult->begin(); i != theResult->end(); i++)
-	{
-	  exEnergy = (*i)->GetExcitationEnergy();
-	  if (exEnergy > 0.0)
-	    {
-	      // These commented lines are to be used if we make conditions about them
-	      // A = static_cast<G4int>((*i)->GetA()+0.5);
-	      // Z = static_cast<G4int>((*i)->GetZ()+0.5);
-	      theExcitedNucleus = *(*i); // G4Fragment type needed to pass object in BreakItUp method
-
-	      // only valid if using evaporation model for the fragments is enough
-	      theTempResult = theEvaporation->BreakItUp(theExcitedNucleus);
-
-	      if (theTempResult->size() > 1)
-		// if so, some deexcitation has been made
-		{
-		  // first we add final state to theResult vector
-		  for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin(); 
-		       ri != theTempResult->rend(); ++ri)
-		    // reverse is applied in order to have residual nucleus in first position
-		    {
-		      theResult->push_back(*ri);
-		    }
-		  // now we remove initial state
-		  delete (*i);     // in the dynamic memory
-		  i = theResult->erase(i); // and now erase the pointer in the vector
-		  i--;    // if we don't do this, the following object will be skipped
-		  
-		  delete theTempResult;
-		}
-	      else   // if not, simply I have to clean up the temporal vector
-		{
-		  for (G4FragmentVector::iterator j = theTempResult->begin(); 
-		       j != theTempResult->end(); j++)
-		    {delete (*j);}
-		  delete theTempResult;
-		}
-	    } // end if (exEnergy > 0) block
-	  // increment iterator if exEnergy <= 0
-
-	} // END OF LOOP
-
-    } // if/else A<=4 block
 
   // Now we try to deexcite by means of PhotonEvaporation those fragments
   // which are excited.
-
-  G4FragmentVector* theTempResult = 0;
-
-  // Photon-Evaporation loop
-  // ----------------------
-  for (G4FragmentVector::iterator j = theResult->begin(); j != theResult->end(); j++)
+  
+  theTempResult = 0;
+  std::list<G4Fragment*> theFinalResultList;
+  //AHtest  std::list<G4Fragment*> theFinalPhotonResultList;
+  std::list<G4Fragment*> theResultList;
+  std::list<G4Fragment*>::iterator j;
+  G4FragmentVector::iterator i;
+  for (i = theResult->begin(); i != theResult->end();i++) 
     {
-      A = static_cast<G4int>((*j)->GetA()+0.5);
-      exEnergy = (*j)->GetExcitationEnergy();
-      if ( A > 1 && exEnergy > 0.1*eV ) // if so, photon-evaporation is applied
-	{
-	  theExcitedNucleus = *(*j);
-	  theTempResult = thePhotonEvaporation->BreakItUp(theExcitedNucleus);
+      theResultList.push_back(*i);
+      //      G4cout << " Before loop list energy in MeV: " << ((*i)->GetExcitationEnergy())/MeV << G4endl;
+    }
+  theResult->clear();
 
-	  // if Gamma Evaporation has succeed then
-	  if (theTempResult->size() > 1)
-	    {
-	      // first we add final state to theResult vector
-	      for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin(); 
+  for (j = theResultList.begin(); j != theResultList.end(); j++) {
+    //    G4cout << " Test loop list: " << (*j)->GetExcitationEnergy() << " size: " << theResultList.size() << G4endl;
+  }
+
+  //  for (j = theResultList.begin(); j != theResultList.end(); j++) 
+  j = theResultList.begin();  //AH
+  while (j != theResultList.end()) //AH
+    {
+      if ((*j)->GetA() > 1 && (*j)->GetExcitationEnergy() > 0.1*eV) 
+        {
+          theExcitedNucleus = *(*j);
+          theTempResult = thePhotonEvaporation->BreakItUp(theExcitedNucleus);
+          // If Gamma Evaporation has succeed then
+          if (theTempResult->size() > 1) 
+            {
+              // Remove excited fragment from the result 
+	      //	      delete (*j);
+	      //              theResultList.erase(j--);
+	      //	      theResultList.erase(j); don't delete as there's no push back...
+              // and add theTempResult elements to theResult
+	      for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
 		   ri != theTempResult->rend(); ++ri)
-		// reversed is applied in order to have residual nucleus in first position
-		{
-
+                {
 #ifdef PRECOMPOUND_TEST
-		  if ((*ri)->GetA() == 0)
-		    (*ri)->SetCreatorModel(G4String("G4PhotonEvaporation"));
-		  else
-		    (*ri)->SetCreatorModel(G4String("ResidualNucleus"));
+                  if ((*ri)->GetA() == 0)
+                    (*ri)->SetCreatorModel(G4String("G4PhotonEvaporation"));
+                  else
+                    (*ri)->SetCreatorModel(G4String("ResidualNucleus"));
 #endif
-
-		  theResult->push_back(*ri);
-		}
-	     
-	      // now we remove initial state
-	      delete (*j);     // in dynamic memory
-	      j = theResult->erase(j); // and now erase the pointer in the vector
-	      j--;    // if we don't do this, the following object will be skipped
-	      delete theTempResult;
-	    }
-	  else         // if not succeed, we deexcited manually with one gamma
-	    {
-	      for (G4FragmentVector::iterator i = theTempResult->begin(); i != theTempResult->end(); i++)
-		{
-		  delete (*i);
-		}
-	      delete theTempResult;
-
+		  theResultList.push_back(*ri);
+		  //AHtest		  theFinalPhotonResultList.push_back(*ri);
+		  //		  theFinalResultList.push_back(*ri); don't add to final result as they'll go through the loop
+                }
+              delete theTempResult;
+            }
+          // In other case, just clean theTempResult and continue
+          else 
+            {
+              std::for_each(theTempResult->begin(), theTempResult->end(), DeleteFragment());
+              delete theTempResult;
 #ifdef debugphoton
               G4cout << "G4ExcitationHandler: Gamma Evaporation could not deexcite the nucleus: \n"
                      << "-----------------------------------------------------------------------\n"
                      << theExcitedNucleus << '\n'
                      << "-----------------------------------------------------------------------\n";
 #endif
-
-	      // Let's create a G4Fragment pointer representing the gamma emmited
-	      G4double GammaEnergy = (*j)->GetExcitationEnergy();
-	      G4double cosTheta = 1. - 2. * G4UniformRand();
-	      G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
+              G4double GammaEnergy = (*j)->GetExcitationEnergy();
+              G4double cosTheta = 1. - 2. * G4UniformRand();
+              G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
               G4double phi = twopi * G4UniformRand();
               G4ThreeVector GammaP(GammaEnergy * sinTheta * std::cos(phi),
                                    GammaEnergy * sinTheta * std::sin(phi),
                                    GammaEnergy * cosTheta );
               G4LorentzVector Gamma4P(GammaP,GammaEnergy);
               G4Fragment * theHandlerPhoton = new G4Fragment(Gamma4P,G4Gamma::GammaDefinition());
-
-	      // And now we update momentum and energy for the nucleus
+              
+              
+              
               G4double Mass = (*j)->GetGroundStateMass();
               G4ThreeVector ResidualP((*j)->GetMomentum().vect() - GammaP);
               G4double ResidualE = std::sqrt(ResidualP*ResidualP + Mass*Mass);
               G4LorentzVector Residual4P(ResidualP,ResidualE);
-              (*j)->SetMomentum(Residual4P); // Now this fragment has been deexcited
-
+              (*j)->SetMomentum(Residual4P);
+              
+              
+	
 #ifdef PRECOMPOUND_TEST
-	      theHandlerPhoton->SetCreatorModel("G4ExcitationHandler");
+              theHandlerPhoton->SetCreatorModel("G4ExcitationHandler");
 #endif
-
-	      // Finally, we add the gamma to the list
-	      theResult->push_back(theHandlerPhoton); 
-
+//	      theFinalPhotonResultList.push_back( theHandlerPhoton );
+//	      G4cout << " adding photon fragment " << G4endl;
+	      theResultList.push_back( theHandlerPhoton );
+	      //	      theFinalResultList.push_back( theHandlerPhoton );
+	      theFinalResultList.push_back(*j);
 #ifdef debugphoton
               G4cout << "Emmited photon:\n"
-                     << theResult->back() << '\n'
+                     << theResultList.back() << '\n'
                      << "Residual nucleus after photon emission:\n"
                      << *(*j) << '\n'
                      << "-----------------------------------------------------------------------\n";
 #endif
-
-	    }
+	      //test	      j++; // AH only increment if not erased:
+            }	
+        } else {
+	  //test	  j++; // AH increment iterator if a proton or excitation energy small
+	  theFinalResultList.push_back(*j);
 	}
-      // increment iterator if a proton, gamma or excitation energy small
-      // so we don't have to do anything 
+//      G4cout << " Inside loop list: " << (*j)->GetExcitationEnergy() << " size: " << theFinalResultList.size() << G4endl;
+      j++;
+    }
+  //  for (j = theResultList.begin(); j != theResultList.end(); j++)
+  for (j = theFinalResultList.begin(); j != theFinalResultList.end(); j++)
+    {
+      theResult->push_back(*j);
+    }
 
-    } // end of photon-evaporation loop
+//AHtest   for (j = theFinalPhotonResultList.begin(); j != theFinalPhotonResultList.end(); j++)
+//AHtest     {
+//AHtest       theResult->push_back(*j);
+//AHtest       number_results++;
+//AHtest     }
 
+
+  theResultList.clear();
+  theFinalResultList.clear();
+  //AHtest  theFinalPhotonResultList.clear();
+  
+  
 #ifdef debug
   CheckConservation(theInitialState,theResult);
 #endif
-
-  // Change G4FragmentVector* by G4ReactionProductVector*
+  // Change G4FragmentVector by G4DynamicParticle
   return Transform(theResult);
 }
-
-
 
 G4ReactionProductVector * 
 G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
