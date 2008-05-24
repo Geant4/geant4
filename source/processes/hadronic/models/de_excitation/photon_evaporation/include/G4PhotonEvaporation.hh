@@ -47,13 +47,16 @@
 //            void SetMaxHalfLife(G4double) ;
 //            void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 //            G4ElectronOccupancy GetEOccupancy () ;
+//            void SetARM (G4bool val) {_applyARM = val;} ;
 //            G4int GetVacantShellNumber () { return _vShellNumber;};
 //
 //        and the following priivate menbers
 //
 //            G4ElectronOccupancy _eOccupancy;
 //            G4int _vShellNumber;
-// 
+//
+//            G4bool _applyARM;
+//
 // -------------------------------------------------------------------
 
 #ifndef G4PHOTONEVAPORATION_HH
@@ -98,6 +101,7 @@ public:
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
+    void SetARM (G4bool val) {_applyARM = val;} ;
 
     G4ElectronOccupancy GetEOccupancy () { return _eOccupancy;} ;
    
@@ -117,6 +121,7 @@ private:
 
     G4Fragment _nucleus;
     G4double _gammaE;
+    G4bool _applyARM;
 
     G4PhotonEvaporation(const G4PhotonEvaporation & right);
 
