@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 24 May 2008 A.Howard (hadr-deex-V09-01-07) 
+---------------------------------------------------
+
+As hadr-deex-V09-01-06 but with photon_evaporation updated to new interface.
+Should now be stable (co-works with low energy tag emlowen-V09-01-14, I guess) - 
+see hadr-deex-V09-01-01.
+
  24 May 2008 A.Howard (hadr-deex-V09-01-06) 
 ---------------------------------------------------
 
