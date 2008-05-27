@@ -12,8 +12,8 @@ mkdir -p $REFERENCE
 cd $REFERENCE
 rm -f *.TXT
 
-set    work = "$G4BIN/$G4SYSTEM/test44"
-set    dir  = "$G4INSTALL/tests/test44/"
+set    work = "$G4BIN/$G4SYSTEM/test45"
+set    dir  = "$G4INSTALL/tests/test45/"
 
 ln -f ${dir}/Exp_Data/*.txt
 
