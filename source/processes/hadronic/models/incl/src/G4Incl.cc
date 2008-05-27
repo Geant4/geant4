@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.16 2008-04-22 21:39:50 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.17 2008-05-27 17:31:16 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -71,8 +71,8 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
   saxw = aSaxw;
   ws = aWs;
 
-  randomGenerator = new G4Ranecu();
-  //  randomGenerator = new G4InclGeant4Random();
+  //randomGenerator = new G4Ranecu();
+  randomGenerator = new G4InclGeant4Random();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)

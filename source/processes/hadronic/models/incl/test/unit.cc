@@ -5,6 +5,9 @@
 #include "G4Types.hh"
 #include "G4Incl.hh"
 #include "G4Abla.hh"
+#include "G4AblaFission.hh"
+#include "G4InclRandomNumbers.hh"
+#include "G4Ranecu.hh"
 
 // FORTRAN bindings
 extern "C" {
@@ -71,9 +74,12 @@ public:
       hazard_.iy[i] = hazard->igraine[i];
     }
     //  G4Incl *incl = new G4Incl(hazard, calincl, ws, mat, varntp);
-    abla = new G4Abla(hazard, volant, varntp);
-    abla->setVerboseLevel(4);
-    abla->initEvapora();
+    //abla = new G4Abla(hazard, volant, varntp);
+    //abla->setVerboseLevel(0);
+    //abla->initEvapora();
+    rndm = new G4Ranecu();
+    fission = new G4AblaFission(hazard, rndm);
+    fission->about();
   }
   
   void testDensniv() {
@@ -187,32 +193,77 @@ public:
   }
 
   void testFissionDistri() {
-    float a = 208, z = 82, e = 10.0, a1 = 0, z1 = 0, e1 = 0, a2 = 0, z2 = 0, e2 = 0;
+    //    float a = 208, z = 82, e = 200.0, a1 = 0, z1 = 0, e1 = 0, a2 = 0, z2 = 0, e2 = 0;
+    float a = 238, z = 92, e = 100.0, a1 = 0, z1 = 0, e1 = 0, a2 = 0, z2 = 0, e2 = 0;
     float A, Z, E, A1, Z1, E1, A2, Z2, E2;
     G4double cA, cZ, cE, cA1, cZ1, cE1, cV1, cA2, cZ2, cE2, cV2;
     A = a; cA = a;
     Z = z; cZ = z;
     E = e; cE = e;
-    for(int i = 0; i < 20; i++) {
+    G4cout <<"A = " << a << " Z = " << z << " E = " << e << G4endl;
+    //    G4cout.setw(8);
+
+    G4cout << "i" << setw(4) 
+	   <<  "A1" << setw(5) 
+	   << "cA1" << setw(8)
+	   << "Z1" << setw(5)
+	   << "cZ1" << setw(12) 
+	   << "E1" << setw(12)
+	   << "cE1" << setw(10)
+	   << "A2" << setw(5)
+	   << "cA2" << setw(8)
+	   << "Z2" << setw(5)
+	   << "cZ2" << setw(8)
+	   << "E2" << setw(8)
+	   << "cE2" << setw(4)
+	   << "dA1" << setw(4)
+	   << "dZ1" << setw(8)
+	   << "dE1" << setw(4)
+	   << "dA2" << setw(4)
+	   << "dZ2" << setw(8)
+	   << "dE2" << G4endl;
+
+    for(int i = 0; i < 3; i++) {
       fission_distri__(&A, &Z, &E, &A1, &Z1, &E1, &A2, &Z2, &E2);
-      abla->fissionDistri(cA, cZ, cE, cA1, cZ1, cV1, cE1, cA2, cZ2, cE2, cV2);
-      cE += 100.0;
-      E = cE;
-      G4cout <<"A = " << A << " Z = " << Z << " E = " << E << G4endl;
-      G4cout <<"A1 = " << A1 << " Z1 = " << Z1 << " E1 = " << E1 << G4endl;
-      G4cout <<"A2 = " << A2 << " Z2 = " << Z2 << " E2 = " << E2 << G4endl;
-      G4cout <<"========================================" << G4endl;
-      G4cout <<"cA1 = " << cA1 << " cZ1 = " << cZ1 << " cE1 = " << cE1 << " cV1 = " << cV1 << G4endl;
-      G4cout <<"cA2 = " << cA2 << " cZ2 = " << cZ2 << " cE2 = " << cE2 << " cV2 = " << cV2 << G4endl;
-      G4cout << G4endl;
+      fission->fissionDistri(cA, cZ, cE, cA1, cZ1, cV1, cE1, cA2, cZ2, cE2, cV2);
+      G4cout << i << setw(4) 
+	     <<  A1 << setw(5) 
+	     << cA1 << setw(8)
+	     << Z1 << setw(5)
+	     << cZ1 << setw(12) 
+	     << E1 << setw(12)
+	     << cE1 << setw(10)
+	     << A2 << setw(5)
+	     << cA2 << setw(8)
+	     << Z2 << setw(5)
+	     << cZ2 << setw(8)
+	     << E2 << setw(8)
+	     << cE2 << setw(4)
+	     << (A1 - cA1) << setw(4)
+	     << (Z1 - cZ1) << setw(8)
+	     << (E1 - cE1) << setw(4)
+	     << (A2 - cA2) << setw(4)
+	     << (Z2 - cZ2) << setw(8)
+	     << (E2 - cE2)
+	     << G4endl;
+      
+//       G4cout <<"A = " << A << " Z = " << Z << " E = " << E << G4endl;
+//       G4cout <<"A1 = " << A1 << " Z1 = " << Z1 << " E1 = " << E1 << G4endl;
+//       G4cout <<"A2 = " << A2 << " Z2 = " << Z2 << " E2 = " << E2 << G4endl;
+//       G4cout <<"========================================" << G4endl;
+//       G4cout <<"cA1 = " << cA1 << " cZ1 = " << cZ1 << " cE1 = " << cE1 << " cV1 = " << cV1 << G4endl;
+//       G4cout <<"cA2 = " << cA2 << " cZ2 = " << cZ2 << " cE2 = " << cE2 << " cV2 = " << cV2 << G4endl;
+//       G4cout << G4endl;
     }
   }
 
 private:
   G4Abla *abla;
+  G4AblaFission *fission;
   G4Hazard *hazard;
   G4VarNtp *varntp;
   G4Volant *volant;
+  G4Ranecu *rndm;
 };
 
 int main(int *argc, char **argv[])
@@ -220,7 +271,7 @@ int main(int *argc, char **argv[])
   UnitTester *tester = new UnitTester();
   tester->init();
   //  tester-> testDensniv();
-  //  tester-> testFissionDistri();
-  tester-> testDirect();
+  tester-> testFissionDistri();
+  //tester-> testDirect();
   return 0;
 }

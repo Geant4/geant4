@@ -23,46 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ranecu.cc,v 1.2 2008-05-27 17:31:16 kaitanie Exp $
+// $Id: G4AblaFissionBase.hh,v 1.1 2008-05-27 17:31:16 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
 // Alain Boudard, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
 
-#include "G4Ranecu.hh"
+#ifndef G4AblaFissionBase_hh
+#define G4AblaFissionBase_hh 1
 
-G4Ranecu::G4Ranecu()
-{
-  iseed1 = 666;
-  iseed2 = 777;
-}
+#include "globals.hh"
 
-G4Ranecu::~G4Ranecu()
-{
+/*
+ * Abstract interface to fission models.
+ */
 
-}
+class G4AblaFissionBase {
 
-G4double G4Ranecu::getRandom()
-{
-  // This is an adapted version of subroutine ranecu:
-  // A. Padal, J. Sempau Computer Physics Cummunications 175 (2006) 440-450
+public:
+  G4AblaFissionBase() {}
+  ~G4AblaFissionBase() {}
 
-  //    implicit double precision (a-h,o-z), integer*4 (i-n)
-  //    common/rseed/iseed1,iseed2
-  G4double uscale=1.0/2.147483563e9;
+  virtual void doFission(G4double &A, G4double &Z, G4double &E,
+			 G4double &A1, G4double &Z1, G4double &E1, G4double &K1,
+			 G4double &A2, G4double &Z2, G4double &E2, G4double &K2) = 0;
 
-  G4long i1=iseed1/53668;
-  iseed1=40014*(iseed1-i1*53668)-i1*12211;
+  void about() {
+    G4cout << aboutModel << G4endl;
+  }
 
-  if(iseed1 < 0) iseed1 = iseed1 + 2147483563;
+  void setAboutString(G4String about) {
+    aboutModel = about;
+  }
 
-  G4long i2=iseed2/52774;
-  iseed2=40692*(iseed2-i2*52774)-i2*3791;
-  if(iseed2 < 0) iseed2=iseed2+2147483399;
+private:
+  G4String aboutModel;
+};
 
-  G4long iz=iseed1-iseed2;
-  if(iz < 1) iz=iz+2147483562;
-  
-  return iz*uscale;
-}
+#endif

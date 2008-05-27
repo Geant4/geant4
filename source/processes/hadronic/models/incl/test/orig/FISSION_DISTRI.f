@@ -1041,6 +1041,8 @@ C*** TIRAGE ALEATOIRE DANS UNE GAUSSIENNE DE LARGEUR SIG ET MOYENNE XMOY
         RETURN                                                          
         END                                                             
                                                                         
-                                                                        
-                 
-
+	subroutine p(a,b)
+	real*4 a, b
+	write(6,*) a,b
+	return
+	end

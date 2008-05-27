@@ -292,21 +292,21 @@ C      STATUS=IO
 C                                                                       
 C------------ CONTROL OUTPUT TO LOG-FILE                                
 C                                                                       
-      WRITE(6,*) 'IFIS',IFIS                                            
-      WRITE(6,*) 'OPTSHP',OPTSHP                                          
-      WRITE(6,*) 'OPTEMD',OPTEMD                                          
-      WRITE(6,*) 'OPTCHA',OPTCHA                                         
-      WRITE(6,*) 'AKAP',AKAP                                           
-      WRITE(6,*) 'BET',BET                                            
-      WRITE(6,*) 'HOMEGA',HOMEGA                                         
-      WRITE(6,*) 'KOEFF',KOEFF                                          
-      WRITE(6,*) 'OPTCOL',OPTCOL                                         
-      WRITE(6,*) 'OPTLES',OPTLES                                         
-      WRITE(6,*) 'EEFAC',EEFAC                                          
-      WRITE(6,*) 'OPTAFAN',OPTAFAN                                        
-      WRITE(6,*) 'AV',AV                                             
-      WRITE(6,*) 'AS',AS                                             
-      WRITE(6,*) 'AK',AK                                             
+C$$$      WRITE(6,*) 'IFIS',IFIS                                            
+C$$$      WRITE(6,*) 'OPTSHP',OPTSHP                                          
+C$$$      WRITE(6,*) 'OPTEMD',OPTEMD                                          
+C$$$      WRITE(6,*) 'OPTCHA',OPTCHA                                         
+C$$$      WRITE(6,*) 'AKAP',AKAP                                           
+C$$$      WRITE(6,*) 'BET',BET                                            
+C$$$      WRITE(6,*) 'HOMEGA',HOMEGA                                         
+C$$$      WRITE(6,*) 'KOEFF',KOEFF                                          
+C$$$      WRITE(6,*) 'OPTCOL',OPTCOL                                         
+C$$$      WRITE(6,*) 'OPTLES',OPTLES                                         
+C$$$      WRITE(6,*) 'EEFAC',EEFAC                                          
+C$$$      WRITE(6,*) 'OPTAFAN',OPTAFAN                                        
+C$$$      WRITE(6,*) 'AV',AV                                             
+C$$$      WRITE(6,*) 'AS',AS                                             
+C$$$      WRITE(6,*) 'AK',AK                                             
 C      WRITE(6,*) TUPLE(2:30),TUPLE(33:80)                               
 C      WRITE(6,*) FINA1(2:30),FINA1(33:100)                              
 C      WRITE(6,*) FINA1(2:30),FINA2(33:100)                              

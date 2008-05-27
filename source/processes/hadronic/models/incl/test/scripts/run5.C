@@ -60,7 +60,12 @@ void run5()
   fort->Draw("Exini", "", "same");
   c1->SaveAs("test5.ps");
 
-  cpp->Draw("Exini:Avv");
-  fort->Draw("Exini:Avv", "", "same");
+  c1->SetLogy(0);
+  cpp->Draw("Enerj", "Avv == 4 && Zvv == 2");
+  fort->Draw("Exini", "Avv == 4 && Zvv == 2", "same");
+  c1->SaveAs("test5.ps");
+
+  cpp->Draw("Exini:Massini");
+  fort->Draw("Exini:Massini", "", "same");
   c1->SaveAs("test5.ps)");
 }

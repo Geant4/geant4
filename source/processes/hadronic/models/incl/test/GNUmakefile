@@ -88,6 +88,13 @@ unit : unit.cc $(INCLABLAOBJS)
 	$(CXX) -c unit.cc $(G4INCLUDES)
 	$(CXX) -o unit unit.o $(INCLABLAOBJS) -lg2c -lgfortran $(STATICLIBSCERN) $(G4LIBDIRUNIT) $(G4LIBSUNIT) -lCLHEP
 
+evapdata-clean :
+	rm -f evapdata evapdata.o
+
+evapdata : evapdata.cc $(INCLABLAOBJS)
+	$(CXX) -c evapdata.cc $(G4INCLUDES)
+	$(CXX) -o evapdata evapdata.o $(INCLABLAOBJS) -lg2c -lgfortran $(STATICLIBSCERN) $(G4LIBDIRUNIT) $(G4LIBSUNIT) -lCLHEP
+
 build-reference : cugnon noevap
 
 # cugnon : The original example provided with INCL4 and ABLA code.

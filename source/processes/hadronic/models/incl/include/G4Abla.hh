@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.9 2008-04-22 21:39:50 kaitanie Exp $ 
+// $Id: G4Abla.hh,v 1.10 2008-05-27 17:31:16 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,6 +35,7 @@
 #include "G4InclRandomNumbers.hh"
 #include "G4AblaDataDefs.hh"
 #include "G4InclDataDefs.hh"
+#include "G4AblaFissionBase.hh"
 
 #ifndef G4Abla_hh
 #define G4Abla_hh 1
@@ -140,12 +141,12 @@ public:
   /**
    *
    */
-  //  G4double spdef(G4int a, G4int z, G4int optxfis);
+  G4double spdef(G4int a, G4int z, G4int optxfis);
 
   /**
    * Calculation of fissility parameter
    */
-  //  G4double fissility(int a,int z, int optxfis);
+  G4double fissility(int a,int z, int optxfis);
 
   /**
    * Main evaporation routine.
@@ -237,6 +238,12 @@ public:
   void barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *segs, G4double *selmax);
 
   /**
+   * Random numbers.
+   */
+  G4double haz(G4int k);
+  void standardRandom(G4double *rndm, G4long *seed);
+
+  /**
    * TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
    */ 
   G4double expohaz(G4int k, G4double T);
@@ -265,38 +272,6 @@ public:
    *
    */
   void guet(G4double *x_par, G4double *z_par, G4double *find_par);
-
-  // Fission
-public:
-  /**
-   *
-   */
-  G4double spdef(G4int a, G4int z, G4int optxfis);
-
-  /**
-   *
-   */
-  G4double fissility(G4int a, G4int z, G4int optxfis);
-
-//   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
-// 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
-// 	       G4double *pleva_par, G4double *pxeva_par);
-//  G4double bfms67(G4double zms, G4double ams);
-  //  void lpoly(G4double x, G4int n, G4double pl[]);
-  //  G4double expohaz(G4int k, G4double T);
-  //  G4double fd(G4double E);
-  //  G4double f(G4double E);
-  //  G4double fmaxhaz(G4double k, G4double T);
-  void even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out);
-  G4double umass(G4double z,G4double n,G4double beta);
-  G4double ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double n2,G4double beta2,G4double d);
-  void fissionDistri(G4double &a,G4double &z,G4double &e,
-		     G4double &a1,G4double &z1,G4double &e1,G4double &v1,
-		     G4double &a2,G4double &z2,G4double &e2,G4double &v2);
-  void standardRandom(G4double *rndm, G4long *seed);
-  G4double haz(G4int k);
-  G4double gausshaz(int k, double xmoy, double sig);
-
     
 public:
   // Coordinate system transformations:
@@ -325,11 +300,15 @@ public:
   G4int idnint(G4double value);
   G4double utilabs(G4double a);
   G4double dmin1(G4double a, G4double b, G4double c);
+  G4Ec2sub* getFrldmTable() {
+    return ec2sub;
+  }
 
 private:
   G4int verboseLevel;
   G4int ilast;
 
+  G4AblaFissionBase *fissionModel;
   G4InclRandomInterface *randomGenerator;
   G4Pace *pace;
   G4Hazard *hazard;
