@@ -1,0 +1,22 @@
+// general file for all (2;2) cases  Plot.C, PlotLog.C
+
+{ 
+gROOT->ProcessLine(".x  ../utils/StyleBase.C");
+gStyle->SetLabelOffset(0.005, "x");
+gStyle->SetLabelOffset(0.005, "y");
+gStyle->SetLabelSize(.05, "x");
+gStyle->SetLabelSize(.05, "y");
+gStyle->SetTitleOffset(.95, "x");
+gStyle->SetTitleOffset(.95, "y");
+gStyle->SetTitleSize(.06, "x");
+gStyle->SetTitleSize(.06, "y");
+gStyle->SetPadBottomMargin(.15);          
+gStyle->SetPadTopMargin(.05);
+gStyle->SetPadLeftMargin(.15);
+gStyle->SetPadRightMargin(.03);
+
+gStyle->SetMarkerStyle(21); 
+gStyle->SetMarkerColor(1); 
+gStyle->SetMarkerSize(.6);
+TCanvas c1("c1"," ",0.5, 5, 800, 600);
+}
