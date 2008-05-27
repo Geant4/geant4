@@ -62,10 +62,7 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
 }
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& invR,const G4Transform3D& R) {
-
-   G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
-   G4Transform3D T = invR*P*R;
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T) {
 
    HepGeom::Scale3D scale;
    HepGeom::Rotate3D rotate;
@@ -122,12 +119,13 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    volumerefElement->setAttributeNode(newAttribute("ref",replicavol->GetLogicalVolume()->GetName()));
 }
 
-G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr) {
+G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* volumePtr) {
+
+   if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed!
 
    G4Transform3D R;
-   G4VSolid* solidPtr = volumePtr->GetSolid();
-
    int displaced = 0;
+   G4VSolid* solidPtr = volumePtr->GetSolid();
 
    while (true) { // Solve possible displacement/reflection of the referenced solid!
    
@@ -151,21 +149,6 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
       break;
    }
-   
-   for (int i=0;i<volumeArraySize;i++) {
-   
-      if (volumeArray[i]->volumePtr == volumePtr) { // Volume is already in the array!
-      
-         if ((volumeArray[i]->n+i) == volumeArraySize) return R; // Sub-array is already at the end!
-
-         if ((volumeArraySize+volumeArray[i]->n) >= volumeArrayMaxSize) 
-	    G4Exception("GDML Writer: Error at sorting volumes! Volume array size is too small!");
-
-         memcpy(volumeArray+volumeArraySize,volumeArray+i,sizeof(volumeStruct*)*volumeArray[i]->n); // Copy sub-array to the end!
-         volumeArraySize += volumeArray[i]->n;
-	 return R;
-      }
-   }
 
    xercesc::DOMElement* volumeElement = newElement("volume");
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
@@ -176,23 +159,14 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
    volumeElement->appendChild(solidrefElement);
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
 
-   volumeStruct* vols = new volumeStruct;
-   vols->volumePtr = volumePtr;
-   vols->volumeElement = volumeElement;
-   vols->n = volumeArraySize;
-
-   if (volumeArraySize >= volumeArrayMaxSize) G4Exception("GDML Writer: Error at sorting volumes! Volume array size is too small!");
-
-   volumeArray[volumeArraySize++] = vols;
-
    G4Transform3D invR = R.inverse();
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
 
-   for (G4int i=0;i<daughterCount;i++) {
+   for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
    
       const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
-      const G4Transform3D daughterR = volumeWrite(physvol->GetLogicalVolume());
+      const G4Transform3D daughterR = TraverseVolumeTree(physvol->GetLogicalVolume());
 
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
@@ -208,11 +182,15 @@ G4Transform3D G4GDMLWriteStructure::volumeWrite(const G4LogicalVolume* volumePtr
 
          if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("GDML Writer: Error! replicavol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
          replicavolWrite(volumeElement,physvol); 
-      } else
-      physvolWrite(volumeElement,physvol,invR,daughterR);
+      } else {
+   
+         G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
+         physvolWrite(volumeElement,physvol,invR*P*daughterR);
+      }
    }
 
-   vols->n = volumeArraySize - vols->n; // Growth of array size after walking a subtree of a node = number of descendants of that node
+   structureElement->appendChild(volumeElement); // Append the volume AFTER traversing the children so that the order of volumes will be correct!
+   volumeMap[volumePtr] = R;
 
    return R;
 }
@@ -221,23 +199,8 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const
 
    G4cout << "Writing structure..." << G4endl;
 
-   xercesc::DOMElement* structureElement = newElement("structure");
+   structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 
-   volumeArray = new volumeStruct*[volumeArrayMaxSize];
-   volumeArraySize = 0;
-
-   if (volumeArray == 0) G4Exception("GDML Writer: Not enough memory for sorting volumes!");
-
-   volumeWrite(worldvol);
-
-   for (int i=volumeArraySize-1;i>=0;i--) { // Append all XML elements, representing volumes, in the correct (reverse) order!
-   
-      if (volumeArray[i]->volumePtr == 0) continue; // Append only once!
-
-      structureElement->appendChild(volumeArray[i]->volumeElement);
-      volumeArray[i]->volumePtr = 0;
-   }
-
-   delete [] volumeArray;
+   TraverseVolumeTree(worldvol);
 }

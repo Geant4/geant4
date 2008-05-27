@@ -46,21 +46,15 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
 private:
-   struct volumeStruct {
-      const G4LogicalVolume* volumePtr;
-      xercesc::DOMElement* volumeElement;
-      int n;
-   };
+   std::map<const G4LogicalVolume*,G4Transform3D> volumeMap;
+   xercesc::DOMElement* structureElement;
 
-   static const int volumeArrayMaxSize = 4000000; // Constant for maximum size of array used for sorting volumes
    static const int maxDisplacements = 8; // Constant for limiting the number displacements/reflections applied to a single solid
-   volumeStruct** volumeArray;
-   int volumeArraySize;
 
    void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
-   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4Transform3D&);
+   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&);
    void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   G4Transform3D volumeWrite(const G4LogicalVolume*);
+   G4Transform3D TraverseVolumeTree(const G4LogicalVolume*);
    void structureWrite(xercesc::DOMElement*,const G4LogicalVolume*);
 };
 
