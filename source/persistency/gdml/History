@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2008-05-27 11:12:14 ztorzsok Exp $
+$Id: History,v 1.56 2008-05-27 12:20:00 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 27 may 2008 Zoltan Torzsok
 - Writing of structure is optimized/simplified now.
+- Only the referenced solids are written out, not the whole solid store
 
 23 may 2008 Zoltan Torzsok
 - Precision is now considered in writer in case of scale,rotation and position in physvol.

@@ -41,6 +41,7 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    
    G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));
    G4VSolid* secondPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(1));
+   
    G4ThreeVector firstpos,firstrot;
    G4ThreeVector pos,rot;
    bool IsFirstDisplaced = false;
@@ -60,11 +61,12 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
       secondPtr = disp->GetConstituentMovedSolid();
    }
 
+   solidsAdd(firstPtr);   // At first add the referenced solids!
+   solidsAdd(secondPtr);
+
    xercesc::DOMElement* booleanElement = newElement(tag);
    solidsElement->appendChild(booleanElement);
-
    booleanElement->setAttributeNode(newAttribute("name",boolean->GetName()));
-
    xercesc::DOMElement* firstElement = newElement("first");
    xercesc::DOMElement* secondElement = newElement("second");
    booleanElement->appendChild(firstElement);
@@ -472,41 +474,38 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
 
    G4cout << "Writing solids..." << G4endl;
 
-   xercesc::DOMElement* solidsElement = newElement("solids");
+   solidsElement = newElement("solids");
    gdmlElement->appendChild(solidsElement);
+}
 
-   const G4SolidStore* solidList = G4SolidStore::GetInstance();
-   const size_t solidCount = solidList->size();
+void G4GDMLWriteSolids::solidsAdd(const G4VSolid* solidPtr) {
 
-   for (size_t i=0;i<solidCount;i++) {
-   
-      const G4VSolid* solidPtr = (*solidList)[i];
+   for (size_t i=0;i<solidList.size();i++)   // Check if solid is already in the list!
+      if (solidList[i] == solidPtr) return;
 
-      if (dynamic_cast<const G4DisplacedSolid*>(solidPtr)) continue; // Transformed solid is handled elsewhere (see G4GDMLWriteStructure::physvolWrite)
-      if (dynamic_cast<const G4ReflectedSolid*>(solidPtr)) continue; // Reflected solid is a transformed solid as well...
-      
-      if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
-      if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
-      if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
-      if (const G4Ellipsoid* ellipsoidPtr = dynamic_cast<const G4Ellipsoid*>(solidPtr)) { ellipsoidWrite(solidsElement,ellipsoidPtr); } else
-      if (const G4EllipticalTube* eltubePtr = dynamic_cast<const G4EllipticalTube*>(solidPtr)) { eltubeWrite(solidsElement,eltubePtr); } else
-      if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
-      if (const G4Hype* hypePtr = dynamic_cast<const G4Hype*>(solidPtr)) { hypeWrite(solidsElement,hypePtr); } else
-      if (const G4Orb* orbPtr = dynamic_cast<const G4Orb*>(solidPtr)) { orbWrite(solidsElement,orbPtr); } else
-      if (const G4Para* paraPtr = dynamic_cast<const G4Para*>(solidPtr)) { paraWrite(solidsElement,paraPtr); } else
-      if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
-      if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
-      if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
-      if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
-      if (const G4Tet* tetPtr = dynamic_cast<const G4Tet*>(solidPtr)) { tetWrite(solidsElement,tetPtr); } else
-      if (const G4Torus* torusPtr = dynamic_cast<const G4Torus*>(solidPtr)) { torusWrite(solidsElement,torusPtr); } else
-      if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
-      if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
-      if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); } else
-      if (const G4TwistedBox* twistedboxPtr = dynamic_cast<const G4TwistedBox*>(solidPtr)) { twistedboxWrite(solidsElement,twistedboxPtr); } else
-      if (const G4TwistedTrap* twistedtrapPtr = dynamic_cast<const G4TwistedTrap*>(solidPtr)) { twistedtrapWrite(solidsElement,twistedtrapPtr); } else
-      if (const G4TwistedTrd* twistedtrdPtr = dynamic_cast<const G4TwistedTrd*>(solidPtr)) { twistedtrdWrite(solidsElement,twistedtrdPtr); } else
-      if (const G4TwistedTubs* twistedtubsPtr = dynamic_cast<const G4TwistedTubs*>(solidPtr)) { twistedtubsWrite(solidsElement,twistedtubsPtr); } else
-      G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
-   }
+   solidList.push_back(solidPtr);
+
+   if (const G4BooleanSolid* booleanPtr = dynamic_cast<const G4BooleanSolid*>(solidPtr)) { booleanWrite(solidsElement,booleanPtr); } else
+   if (const G4Box* boxPtr = dynamic_cast<const G4Box*>(solidPtr)) { boxWrite(solidsElement,boxPtr); } else
+   if (const G4Cons* conePtr = dynamic_cast<const G4Cons*>(solidPtr)) { coneWrite(solidsElement,conePtr); } else
+   if (const G4Ellipsoid* ellipsoidPtr = dynamic_cast<const G4Ellipsoid*>(solidPtr)) { ellipsoidWrite(solidsElement,ellipsoidPtr); } else
+   if (const G4EllipticalTube* eltubePtr = dynamic_cast<const G4EllipticalTube*>(solidPtr)) { eltubeWrite(solidsElement,eltubePtr); } else
+   if (const G4ExtrudedSolid* xtruPtr = dynamic_cast<const G4ExtrudedSolid*>(solidPtr)) { xtruWrite(solidsElement,xtruPtr); } else
+   if (const G4Hype* hypePtr = dynamic_cast<const G4Hype*>(solidPtr)) { hypeWrite(solidsElement,hypePtr); } else
+   if (const G4Orb* orbPtr = dynamic_cast<const G4Orb*>(solidPtr)) { orbWrite(solidsElement,orbPtr); } else
+   if (const G4Para* paraPtr = dynamic_cast<const G4Para*>(solidPtr)) { paraWrite(solidsElement,paraPtr); } else
+   if (const G4Polycone* polyconePtr = dynamic_cast<const G4Polycone*>(solidPtr)) { polyconeWrite(solidsElement,polyconePtr); } else
+   if (const G4Polyhedra* polyhedraPtr = dynamic_cast<const G4Polyhedra*>(solidPtr)) { polyhedraWrite(solidsElement,polyhedraPtr); } else
+   if (const G4Sphere* spherePtr = dynamic_cast<const G4Sphere*>(solidPtr)) { sphereWrite(solidsElement,spherePtr); } else
+   if (const G4TessellatedSolid* tessellatedPtr = dynamic_cast<const G4TessellatedSolid*>(solidPtr)) { tessellatedWrite(solidsElement,tessellatedPtr); } else
+   if (const G4Tet* tetPtr = dynamic_cast<const G4Tet*>(solidPtr)) { tetWrite(solidsElement,tetPtr); } else
+   if (const G4Torus* torusPtr = dynamic_cast<const G4Torus*>(solidPtr)) { torusWrite(solidsElement,torusPtr); } else
+   if (const G4Trap* trapPtr = dynamic_cast<const G4Trap*>(solidPtr)) { trapWrite(solidsElement,trapPtr); } else
+   if (const G4Trd* trdPtr = dynamic_cast<const G4Trd*>(solidPtr)) { trdWrite(solidsElement,trdPtr); } else
+   if (const G4Tubs* tubePtr = dynamic_cast<const G4Tubs*>(solidPtr)) { tubeWrite(solidsElement,tubePtr); } else
+   if (const G4TwistedBox* twistedboxPtr = dynamic_cast<const G4TwistedBox*>(solidPtr)) { twistedboxWrite(solidsElement,twistedboxPtr); } else
+   if (const G4TwistedTrap* twistedtrapPtr = dynamic_cast<const G4TwistedTrap*>(solidPtr)) { twistedtrapWrite(solidsElement,twistedtrapPtr); } else
+   if (const G4TwistedTrd* twistedtrdPtr = dynamic_cast<const G4TwistedTrd*>(solidPtr)) { twistedtrdWrite(solidsElement,twistedtrdPtr); } else
+   if (const G4TwistedTubs* twistedtubsPtr = dynamic_cast<const G4TwistedTubs*>(solidPtr)) { twistedtubsWrite(solidsElement,twistedtubsPtr); } else
+   G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
 }

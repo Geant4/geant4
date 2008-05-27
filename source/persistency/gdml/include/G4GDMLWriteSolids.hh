@@ -60,12 +60,13 @@
 #include "G4TwistedTubs.hh"
 #include "G4UnionSolid.hh"
 
-#include "G4SolidStore.hh"
-
 #include "G4GDMLWriteMaterials.hh"
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
 private:
+   std::vector<const G4VSolid*> solidList;
+   xercesc::DOMElement* solidsElement;
+
    void booleanWrite(xercesc::DOMElement*,const G4BooleanSolid* const);
    void boxWrite(xercesc::DOMElement*,const G4Box* const);
    void coneWrite(xercesc::DOMElement*,const G4Cons* const);
@@ -90,6 +91,8 @@ private:
    void twistedtubsWrite(xercesc::DOMElement*,const G4TwistedTubs* const);
    void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
    void solidsWrite(xercesc::DOMElement*);
+protected:
+   void solidsAdd(const G4VSolid*);
 };
 
 #endif

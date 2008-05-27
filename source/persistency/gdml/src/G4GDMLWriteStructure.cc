@@ -192,6 +192,8 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* vo
    structureElement->appendChild(volumeElement); // Append the volume AFTER traversing the children so that the order of volumes will be correct!
    volumeMap[volumePtr] = R;
 
+   G4GDMLWriteSolids::solidsAdd(solidPtr); // Only the involved solids are added to 'solids' section...
+
    return R;
 }
 
