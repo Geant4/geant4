@@ -123,7 +123,7 @@ int main(int argc, char** argv)
   string hhh[3] = {"h0", "h1", "h2"};
   TLegendEntry *entry;
 
-  for (int j = 0; j < 2; j++) {
+  for (int j = 0; j < 3; j++) {
     in.open(finName[j].c_str());
     if( !in.is_open()) {
       cout << "Input file<" << finName[j] << "> does not exist! Exit" << endl;

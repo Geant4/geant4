@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2008-05-22 15:54:51 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.5 2008-05-27 17:13:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void HistoManager::EndOfRun()
   G4cout                         << "Number of events                     " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " << edepSum/MeV 
 	 << "   RMS(MeV) " << edepSum2/MeV << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps of primary   " << xs << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -199,10 +199,11 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 
 void HistoManager::AddTargetStep(const G4Step* step)
 {
-  n_step++;
   G4double edep = step->GetTotalEnergyDeposit();
+  const G4Track* track = step->GetTrack();
+  if(track->GetTrackID() == 1) n_step++;
+
   if(edep >= DBL_MIN) { 
-    const G4Track* track = step->GetTrack();
     currentDef = track->GetDefinition(); 
     currentKinEnergy = track->GetKineticEnergy();
 
