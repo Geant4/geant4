@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.129 2008-04-08 18:13:30 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.130 2008-05-27 18:12:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -779,7 +779,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double x = 
       GetScaledRangeForScaledEnergy(preStepScaledEnergy) - length/reduceFactor;
     eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
-    /*
+    /* 
     if(-1 < verboseLevel) 
       G4cout << "Long STEP: rPre(mm)= " 
              << GetScaledRangeForScaledEnergy(preStepScaledEnergy)/mm
@@ -792,7 +792,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     */
   }
 
-  /*
+  /*  
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -847,6 +847,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	SampleSubCutSecondaries(scTracks, step, 
 				currentModel,currentMaterialIndex, 
 				esecdep);
+	// add bremsstrahlung sampling
 	/*
 	if(nProcesses > 0) {
 	  for(G4int i=0; i<nProcesses; i++) {
@@ -888,7 +889,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
       eloss = fluc->SampleFluctuations(currentMaterial,dynParticle,
 				       tmax,length,eloss);
-      /*                      
+      /*                            
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
              << " fluc= " << (eloss-eloss0)/MeV
@@ -913,7 +914,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  /*
+  /*  
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
