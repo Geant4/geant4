@@ -51,7 +51,7 @@ G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {
    return G4ThreeVector(x,y,z)/CLHEP::degree;
 }
 
-void G4GDMLWriteDefine::addPosition(const G4String& name,const G4ThreeVector& P) {
+void G4GDMLWriteDefine::AddPosition(const G4String& name,const G4ThreeVector& P) {
 
    xercesc::DOMElement* positionElement = newElement("position");
    positionElement->setAttributeNode(newAttribute("name",name));

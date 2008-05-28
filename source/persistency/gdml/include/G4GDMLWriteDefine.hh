@@ -44,7 +44,7 @@ private:
    void defineWrite(xercesc::DOMElement*);
 protected:
    G4ThreeVector getAngles(const G4RotationMatrix&);
-   void addPosition(const G4String&,const G4ThreeVector&);
+   void AddPosition(const G4String&,const G4ThreeVector&);
    void positionWrite(xercesc::DOMElement*,const G4ThreeVector&);
    void rotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
    void firstpositionWrite(xercesc::DOMElement*,const G4ThreeVector&);

@@ -308,7 +308,7 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
 
          facetElement->setAttributeNode(newAttribute(name,ref));
 
-         addPosition(ref,facet->GetVertex(j)); // Add position to define section!
+         AddPosition(ref,facet->GetVertex(j)); // Add position to define section!
 
          NumVertex++;
       }
@@ -328,10 +328,10 @@ void G4GDMLWriteSolids::tetWrite(xercesc::DOMElement* solidsElement,const G4Tet*
    tetElement->setAttributeNode(newAttribute("vertex3",tetName+"_vertex3"));
    tetElement->setAttributeNode(newAttribute("vertex4",tetName+"_vertex4"));
 
-   addPosition(tetName+"_vertex1",vertexList[0]);
-   addPosition(tetName+"_vertex2",vertexList[1]);
-   addPosition(tetName+"_vertex3",vertexList[2]);
-   addPosition(tetName+"_vertex4",vertexList[3]);
+   AddPosition(tetName+"_vertex1",vertexList[0]);
+   AddPosition(tetName+"_vertex2",vertexList[1]);
+   AddPosition(tetName+"_vertex3",vertexList[2]);
+   AddPosition(tetName+"_vertex4",vertexList[3]);
 }
 
 void G4GDMLWriteSolids::torusWrite(xercesc::DOMElement* solidsElement,const G4Torus* const torus) {

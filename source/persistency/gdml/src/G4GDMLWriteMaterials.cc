@@ -75,15 +75,37 @@ void G4GDMLWriteMaterials::isotopeWrite(const G4Isotope* const isotopePtr) {
    xercesc::DOMElement* isotopeElement = newElement("isotope");
    materialsElement->appendChild(isotopeElement);
    isotopeElement->setAttributeNode(newAttribute("name",isotopePtr->GetName()));
+   isotopeElement->setAttributeNode(newAttribute("N",isotopePtr->GetN()));
+   isotopeElement->setAttributeNode(newAttribute("Z",isotopePtr->GetZ()));
+   atomWrite(isotopeElement,isotopePtr->GetA());
 }
 
 void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
 
    xercesc::DOMElement* elementElement = newElement("element");
-   materialsElement->appendChild(elementElement);
    elementElement->setAttributeNode(newAttribute("name",elementPtr->GetName()));
-   elementElement->setAttributeNode(newAttribute("Z",elementPtr->GetZ()));
-   atomWrite(elementElement,elementPtr->GetA());
+
+   const size_t NumberOfIsotopes = elementPtr->GetNumberOfIsotopes();
+
+   if (NumberOfIsotopes>0) {
+
+      const G4double* RelativeAbundanceVector = elementPtr->GetRelativeAbundanceVector();
+                   
+      for (size_t i=0;i<NumberOfIsotopes;i++) {
+
+         xercesc::DOMElement* fractionElement = newElement("fraction");
+         elementElement->appendChild(fractionElement);
+         fractionElement->setAttributeNode(newAttribute("n",RelativeAbundanceVector[i]));
+         fractionElement->setAttributeNode(newAttribute("ref",elementPtr->GetIsotope(i)->GetName()));
+         AddIsotope(elementPtr->GetIsotope(i));
+      }
+   } else {
+
+      elementElement->setAttributeNode(newAttribute("Z",elementPtr->GetZ()));
+      atomWrite(elementElement,elementPtr->GetA());
+   }
+
+   materialsElement->appendChild(elementElement); // Append the element after all the possible components are appended!
 }
 
 void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
@@ -111,7 +133,6 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
       
          xercesc::DOMElement* fractionElement = newElement("fraction");
          materialElement->appendChild(fractionElement);
-
          fractionElement->setAttributeNode(newAttribute("n",MassFractionVector[i]));
          fractionElement->setAttributeNode(newAttribute("ref",materialPtr->GetElement(i)->GetName()));
          AddElement(materialPtr->GetElement(i));
