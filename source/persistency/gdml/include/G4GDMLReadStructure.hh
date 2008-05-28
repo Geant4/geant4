@@ -76,6 +76,7 @@ public:
    G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);
+   G4VPhysicalVolume* GetWorldVolume(const G4String&);
 };
 
 #endif

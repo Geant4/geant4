@@ -438,3 +438,13 @@ G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVo
    if (auxMap.find(logvol) != auxMap.end()) return auxMap[logvol];
    else return G4GDMLAuxListType();
 }
+
+G4VPhysicalVolume* G4GDMLReadStructure::GetWorldVolume(const G4String& setupName) { 
+   
+   G4LogicalVolume* volume = getVolume(getSetup(setupName));
+   volume->SetVisAttributes(G4VisAttributes::Invisible);
+   G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
+   GeneratePhysvolName(pvWorld);
+   return pvWorld;
+}
+

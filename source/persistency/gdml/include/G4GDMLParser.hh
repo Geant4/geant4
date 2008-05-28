@@ -50,14 +50,8 @@ public:
    G4ThreeVector GetRotation(const G4String& name) { return reader.getRotation(name); }
    G4ThreeVector GetScale(const G4String& name) { return reader.getScale(name); }
    G4GDMLMatrix GetMatrix(const G4String& name) { return reader.getMatrix(name); }
+   G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(reader.getVolume(name)); }
-
-   G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { 
-   
-      G4LogicalVolume* volume = reader.getVolume(reader.getSetup(setupName));
-      volume->SetVisAttributes(G4VisAttributes::Invisible);
-      return new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
-   }
 };
 
 #endif
