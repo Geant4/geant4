@@ -70,49 +70,33 @@ void G4GDMLWriteMaterials::TWrite(xercesc::DOMElement* element,G4double T) {
    element->appendChild(TElement);
 }
 
-void G4GDMLWriteMaterials::isotopeWrite(xercesc::DOMElement* element,const G4Isotope* const isotopePtr) {
+void G4GDMLWriteMaterials::isotopeWrite(const G4Isotope* const isotopePtr) {
 
    xercesc::DOMElement* isotopeElement = newElement("isotope");
-   element->appendChild(isotopeElement);
-
+   materialsElement->appendChild(isotopeElement);
    isotopeElement->setAttributeNode(newAttribute("name",isotopePtr->GetName()));
 }
 
-void G4GDMLWriteMaterials::elementWrite(xercesc::DOMElement* element,const G4Element* const elementPtr) {
-
-   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
-   const size_t materialCount = materialList->size();
-
-   // If the element is registered both as a material and an element, we dump it only once as a material!
-
-   for (size_t i=0;i<materialCount;i++)
-      if ((*materialList)[i]->GetName() == elementPtr->GetName()) return;
+void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
 
    xercesc::DOMElement* elementElement = newElement("element");
-   element->appendChild(elementElement);
-
+   materialsElement->appendChild(elementElement);
    elementElement->setAttributeNode(newAttribute("name",elementPtr->GetName()));
-
    elementElement->setAttributeNode(newAttribute("Z",elementPtr->GetZ()));
    atomWrite(elementElement,elementPtr->GetA());
 }
 
-void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Material* const materialPtr) {
-
-   xercesc::DOMElement* materialElement = newElement("material");
-   element->appendChild(materialElement);
-
-   G4State state = materialPtr->GetState();
+void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
    G4String state_str("undefined");
-   
+   G4State state = materialPtr->GetState();
    if (state==kStateSolid) { state_str = "solid"; } else
    if (state==kStateLiquid) { state_str = "liquid"; } else
    if (state==kStateGas) { state_str = "gas"; }
 
+   xercesc::DOMElement* materialElement = newElement("material");
    materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
    materialElement->setAttributeNode(newAttribute("state",state_str));
-
    DWrite(materialElement,materialPtr->GetDensity());
    PWrite(materialElement,materialPtr->GetPressure());
    TWrite(materialElement,materialPtr->GetTemperature());
@@ -130,37 +114,52 @@ void G4GDMLWriteMaterials::materialWrite(xercesc::DOMElement* element,const G4Ma
 
          fractionElement->setAttributeNode(newAttribute("n",MassFractionVector[i]));
          fractionElement->setAttributeNode(newAttribute("ref",materialPtr->GetElement(i)->GetName()));
+         AddElement(materialPtr->GetElement(i));
       }
- 
    } else {
    
       materialElement->setAttributeNode(newAttribute("Z",materialPtr->GetZ()));
       atomWrite(materialElement,materialPtr->GetA());
    }
+
+   materialsElement->appendChild(materialElement); // Append the material after all the possible components are appended!
 }
 
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
    G4cout << "Writing materials..." << G4endl;
 
-   xercesc::DOMElement* materialsElement = newElement("materials");
+   materialsElement = newElement("materials");
    element->appendChild(materialsElement);
 
-   const G4IsotopeTable* isotopeList = G4Isotope::GetIsotopeTable();
-   const size_t isotopeCount = isotopeList->size();
+   isotopeList.clear();
+   elementList.clear();
+   materialList.clear();
+}
 
-   for (size_t i=0;i<isotopeCount;i++)
-      isotopeWrite(materialsElement,(*isotopeList)[i]);
+void G4GDMLWriteMaterials::AddIsotope(const G4Isotope* const isotopePtr) {
 
-   const G4ElementTable* elementList = G4Element::GetElementTable();
-   const size_t elementCount = elementList->size();
+   for (size_t i=0;i<isotopeList.size();i++)   // Check if isotope is already in the list!
+      if (isotopeList[i] == isotopePtr) return;
 
-   for (size_t i=0;i<elementCount;i++)
-      elementWrite(materialsElement,(*elementList)[i]);
-   
-   const G4MaterialTable* materialList = G4Material::GetMaterialTable();
-   const size_t materialCount = materialList->size();
+   isotopeList.push_back(isotopePtr);
+   isotopeWrite(isotopePtr);
+}
 
-   for (size_t i=0;i<materialCount;i++)
-      materialWrite(materialsElement,(*materialList)[i]);
+void G4GDMLWriteMaterials::AddElement(const G4Element* const elementPtr) {
+
+   for (size_t i=0;i<elementList.size();i++)   // Check if element is already in the list!
+      if (elementList[i] == elementPtr) return;
+
+   elementList.push_back(elementPtr);
+   elementWrite(elementPtr);
+}
+
+void G4GDMLWriteMaterials::AddMaterial(const G4Material* const materialPtr) {
+
+   for (size_t i=0;i<materialList.size();i++)   // Check if material is already in the list!
+      if (materialList[i] == materialPtr) return;
+
+   materialList.push_back(materialPtr);
+   materialWrite(materialPtr);
 }

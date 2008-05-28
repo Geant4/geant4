@@ -92,7 +92,7 @@ private:
    void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
    void solidsWrite(xercesc::DOMElement*);
 protected:
-   void solidsAdd(const G4VSolid*);
+   void AddSolid(const G4VSolid* const);
 };
 
 #endif

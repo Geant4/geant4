@@ -61,8 +61,8 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
       secondPtr = disp->GetConstituentMovedSolid();
    }
 
-   solidsAdd(firstPtr);   // At first add the referenced solids!
-   solidsAdd(secondPtr);
+   AddSolid(firstPtr);   // At first add the referenced solids!
+   AddSolid(secondPtr);
 
    xercesc::DOMElement* booleanElement = newElement(tag);
    solidsElement->appendChild(booleanElement);
@@ -476,9 +476,11 @@ void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
 
    solidsElement = newElement("solids");
    gdmlElement->appendChild(solidsElement);
+
+   solidList.clear();
 }
 
-void G4GDMLWriteSolids::solidsAdd(const G4VSolid* solidPtr) {
+void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr) {
 
    for (size_t i=0;i<solidList.size();i++)   // Check if solid is already in the list!
       if (solidList[i] == solidPtr) return;

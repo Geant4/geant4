@@ -41,14 +41,23 @@
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine {
 private:
+   std::vector<const G4Isotope*> isotopeList;
+   std::vector<const G4Element*> elementList;
+   std::vector<const G4Material*> materialList;
+   xercesc::DOMElement* materialsElement;
+   
    void atomWrite(xercesc::DOMElement*,G4double);
    void DWrite(xercesc::DOMElement*,G4double);
    void PWrite(xercesc::DOMElement*,G4double);
    void TWrite(xercesc::DOMElement*,G4double);
-   void isotopeWrite(xercesc::DOMElement*,const G4Isotope* const);
-   void elementWrite(xercesc::DOMElement*,const G4Element* const);
-   void materialWrite(xercesc::DOMElement*,const G4Material* const);
+   void isotopeWrite(const G4Isotope* const);
+   void elementWrite(const G4Element* const);
+   void materialWrite(const G4Material* const);
    void materialsWrite(xercesc::DOMElement*);
+protected:
+   void AddIsotope(const G4Isotope* const);
+   void AddElement(const G4Element* const);
+   void AddMaterial(const G4Material* const);
 };
 
 #endif
