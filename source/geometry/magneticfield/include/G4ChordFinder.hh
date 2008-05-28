@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.17 2006-06-29 18:21:02 gunter Exp $
+// $Id: G4ChordFinder.hh,v 1.18 2008-05-28 09:18:10 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,11 +71,22 @@ class G4ChordFinder
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
-
+     
+      G4FieldTrack ApproxCurvePointS(const  G4FieldTrack&  curveAPointVelocity,
+                                      const  G4FieldTrack&  curveBPointVelocity,
+                                      const  G4ThreeVector& currentEPoint,
+                                      const  G4ThreeVector& currentFPoint,
+                                      const  G4ThreeVector& PointG,
+                                             G4bool first,G4double      epsStep);
+ 
       G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
                                      const  G4FieldTrack&  curveBPointVelocity,
                                      const  G4ThreeVector& currentEPoint,
                                             G4double      epsStep);
+
+      inline G4double InvParabolic( const G4double xa, const G4double ya,
+				    const G4double xb, const G4double yb,
+			     const G4double xc, const G4double yc );
 
       inline G4double  GetDeltaChord() const;
       inline void      SetDeltaChord(G4double newval);

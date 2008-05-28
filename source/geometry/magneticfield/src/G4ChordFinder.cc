@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.47 2006-06-29 18:23:32 gunter Exp $
+// $Id: G4ChordFinder.cc,v 1.48 2008-05-28 09:19:08 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,22 +184,25 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   G4double dyErr;
   G4FieldTrack yEnd( yCurrent);
   G4double  startCurveLen= yCurrent.GetCurveLength();
-
   G4double nextStep;
   //            *************
   stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep, &nextStep
                               , latestSafetyOrigin, latestSafetyRadius
                              );
   //            *************
+  //  G4cout<<"Exit Find Next Chord Err= "<<dyErr<<" eps=  "<<epsStep<<"stepPos=  "<<stepPossible<<G4endl;
   G4bool good_advance;
+
   if ( dyErr < epsStep * stepPossible )
-  {
+ 
+      {   //G4cout<<"err comparison = "<<dyErr<<" eps=  "<<epsStep<<G4endl;
      // Accept this accuracy.
      yCurrent = yEnd;
      good_advance = true; 
   }
   else
-  {
+  {  
+    // G4cout<<"Entering Accurate Advance"<<G4endl;
      // Advance more accurately to "end of chord"
      //                           ***************
      good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep, nextStep);
@@ -211,8 +214,8 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   }
 
 #ifdef G4DEBUG_FIELD
-  G4cout << "Exiting FindNextChord Limited with:" << G4endl
-         << "   yCurrent: " << yCurrent<< G4endl; 
+  //G4cout << "Exiting FindNextChord Limited with:" << G4endl
+  //       << "   yCurrent: " << yCurrent<< G4endl; 
 #endif
 
   return stepPossible;
@@ -234,6 +237,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 					)
   // Returns Length of Step taken
 {
+  //G4cout<<"Inter Find Next Chord with step="<<stepMax<<G4endl;  
   // G4int       stepRKnumber=0;
   G4FieldTrack yCurrent=  yStart;  
   G4double    stepTrial, stepForAccuracy;
@@ -247,7 +251,9 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   G4double  dChordStep, lastStepLength; //  stepOfLastGoodChord;
 
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;
-
+  //for (G4int i=0;i<G4FieldTrack::ncompSVEC;i++){
+  //  dydx[i]=0.;
+  //}
   G4int     noTrials=0;
   const G4double safetyFactor= fFirstFraction; //  0.975 or 0.99 ? was 0.999
 
@@ -259,15 +265,22 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   { 
      G4double stepForChord;  
      yCurrent = yStart;    // Always start from initial point
-
+    
      //            ************
      fIntgrDriver->QuickAdvance( yCurrent, dydx, stepTrial, 
 				 dChordStep, dyErrPos);
      //            ************
 
-     // We check whether the criterion is met here.
-     validEndPoint = AcceptableMissDist(dChordStep); 
-                      //  && (dyErrPos < eps) ;
+     // G4cout<<"AfterQuickAdv step="<<stepTrial<<"  dC="<<dChordStep<<" yErr="<<dyErrPos<<G4endl;
+     
+      //  We check whether the criterion is met here.
+     validEndPoint = AcceptableMissDist(dChordStep);
+     // if(validEndPoint){G4cout<<"validEndPoint"<<fDeltaChord<<G4endl;} 
+     // else{G4cout<<"No__validEndPoint"<<G4endl;}
+
+
+     //&& (dyErrPos < eps) ;
+     //   validEndPoint = AcceptableMissDist(dChordStep) && (dyErrPos < epsStep) ;
 
      lastStepLength = stepTrial; 
 
@@ -321,7 +334,8 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
     G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
            << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
 #endif
-
+  //G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
+  //         << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
   yEnd=  yCurrent;  
   return stepTrial; 
 }
@@ -418,13 +432,87 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   return stepTrial;
 }
 
-//
-//  Given a starting curve point A (CurveA_PointVelocity),  a later 
-//  curve point B (CurveB_PointVelocity) and a point E which is (generally)
-//  not on the curve, find and return a point F which is on the curve and 
-//  which is close to E. While advancing towards F utilise eps_step 
+//  ApproxCurvePointS is 2nd implementation of ApproxCurvePoint.
+//  Use Brent Algorithm(or InvParabolic) when it possible.
+//  Given a starting curve point A (CurveA_PointVelocity),  
+//  curve point B (CurveB_PointVelocity), a point E which is (generally)
+//  not on the curve  and  a point F which is on the curve(first approximation)
+//  From this information find new point S on the curve closer to point E. 
+//  While advancing towards S utilise eps_step 
 //  as a measure of the relative accuracy of each Step.
-  
+G4FieldTrack
+G4ChordFinder::ApproxCurvePointS( const G4FieldTrack& CurveA_PointVelocity, 
+                                  const G4FieldTrack& CurveB_PointVelocity, 
+                                  const G4ThreeVector& CurrentE_Point,
+                                  const G4ThreeVector& CurrentF_Point,
+                                  const G4ThreeVector& PointG,
+                                       G4bool first, G4double eps_step)
+{
+
+ 
+  G4FieldTrack EndPoint( CurveA_PointVelocity);
+  G4ThreeVector Point_A=CurveA_PointVelocity.GetPosition();
+  G4ThreeVector Point_B=CurveB_PointVelocity.GetPosition();
+  G4double xa,xb,xc,ya,yb,yc;
+ 
+//InverseParabolic
+//AF Intersects (First Part of Curve) 
+  if(first){
+      xa=0.;
+      ya=(PointG-Point_A).mag();
+      xb=(Point_A-CurrentF_Point).mag();
+      yb=-(PointG-CurrentF_Point).mag();
+      xc=(Point_A-Point_B).mag();
+      yc=-(CurrentE_Point-Point_B).mag();
+  }    
+  else{
+     xa=0.;
+     ya=(Point_A-PointG).mag();
+     xb=(Point_B-Point_A).mag();
+     yb=-(PointG-Point_B).mag();
+     xc=-(Point_A-CurrentF_Point).mag();
+     yc=-(Point_A-CurrentE_Point).mag();
+    
+  }
+  const G4double tolerance= 1.e-12;
+  if(ya<=tolerance||std::abs(yc)<=tolerance){
+    ; //What to do for the moment return the same point as in begin
+     //Then PropagatorInField will take care
+   }
+   else{
+         
+      G4double test_step  =InvParabolic(xa,ya,xb,yb,xc,yc);
+      G4double curve=std::abs(EndPoint.GetCurveLength()-CurveB_PointVelocity.GetCurveLength());
+      G4double dist= (EndPoint.GetPosition()-Point_B).mag();
+      if(test_step<=0) { test_step=0.1*xb;}
+      if(test_step>=xb){ test_step=0.5*xb;}
+       
+
+      if(curve*(1.+eps_step)<dist){
+	test_step=0.5*dist;
+       }
+
+       G4bool goodAdvance;
+       goodAdvance= 
+             fIntgrDriver->AccurateAdvance(EndPoint,test_step, eps_step);
+            //            ***************
+      
+       #ifdef G4DEBUG_FIELD
+        G4cout<<"G4ChordFinder:: test-step ShF="<<test_step<<"  EndPoint="<<EndPoint<<G4endl;
+      //    Test Track
+       G4FieldTrack TestTrack( CurveA_PointVelocity);
+       TestTrack = ApproxCurvePointV( CurveA_PointVelocity, 
+                                                  CurveB_PointVelocity, 
+                                                  CurrentE_Point,
+                                                  eps_step );
+       G4cout.precision(14);
+       G4cout<<"G4ChordFinder:: BrentApprox="<<EndPoint<<G4endl;
+       G4cout<<"G4ChordFinder::LinearApprox="<<TestTrack<<G4endl; 
+       #endif
+  }
+return EndPoint;
+}  
+
 G4FieldTrack
 G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity, 
                                   const G4FieldTrack& CurveB_PointVelocity, 
@@ -434,8 +522,13 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   // 1st implementation:
   //    if r=|AE|/|AB|, and s=true path lenght (AB)
   //    return the point that is r*s along the curve!
+  /////////////////////////////
+  //
+  //2st implementation : Inverse Parabolic Extrapolation by D.C.Williams
+  //
+  //    Uses InvParabolic (xa,ya,xb,yb,xc,yc)
 
-  G4FieldTrack    Current_PointVelocity= CurveA_PointVelocity; 
+  G4FieldTrack    Current_PointVelocity = CurveA_PointVelocity; 
 
   G4ThreeVector  CurveA_Point= CurveA_PointVelocity.GetPosition();
   G4ThreeVector  CurveB_Point= CurveB_PointVelocity.GetPosition();
@@ -519,7 +612,9 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
 
   // If there was a memory of the step_length actually require at the start 
   // of the integration Step, this could be re-used ...
-
+   G4cout.precision(14);
+      
+   //     G4cout<<"G4ChordFinder::LinearApprox="<<Current_PointVelocity<<G4endl; 
   return Current_PointVelocity;
 }
 
