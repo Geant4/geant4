@@ -4,7 +4,7 @@
 #================================================
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 0
+/tracking/verbose 1
 #
 /testhadr/TargetMat        G4_Al 
 /testhadr/TargetRadius     5  cm
