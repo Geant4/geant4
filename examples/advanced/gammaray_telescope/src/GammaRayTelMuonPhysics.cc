@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.cc,v 1.4 2006-06-29 15:56:50 gunter Exp $
+// $Id: GammaRayTelMuonPhysics.cc,v 1.5 2008-05-28 19:11:18 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
+
+
+#include "G4ParticleTypes.hh"
 
 
 GammaRayTelMuonPhysics::GammaRayTelMuonPhysics(const G4String& name)
