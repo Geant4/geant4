@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.13 2007-06-08 09:49:34 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.14 2008-05-28 09:11:59 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -128,6 +128,10 @@ class G4PropagatorInField
 
    inline void      SetLargestAcceptableStep( G4double newBigDist );
    inline G4double  GetLargestAcceptableStep();
+  
+     // Use alternative Locator(based on Brent Method,second order Intersection)
+  inline void      SetBrentMethod(G4bool newLocator);
+  inline G4bool    GetBrentMethod();
 
  public:  // with description
 
@@ -265,13 +269,19 @@ class G4PropagatorInField
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
 
+  G4int maxNumberOfStepsForIntersection;
+  G4int maxNumberOfCallsToReIntegration;
+  G4int maxNumberOfCallsToReIntegration_depth;
+    //  Counters for Statistics about Location and ReIntegrations
 private:
 
    static const G4int max_depth=4;
    G4FieldTrack* ptrInterMedFT[max_depth+1];
      // Used to store intermediate values of tracks in case of
      // too slow progress
-
+private:
+   G4bool fUseBrentLocator;
+   
 private:
 
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;

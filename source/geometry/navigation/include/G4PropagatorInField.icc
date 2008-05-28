@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.10 2006-11-13 17:34:08 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.11 2008-05-28 09:12:05 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,7 +145,6 @@ G4int G4PropagatorInField::GetVerboseLevel() const
 {
   return fVerboseLevel;
 }
-
 inline
 G4int G4PropagatorInField::Verbose() const     // Obsolete
 {
@@ -267,3 +266,14 @@ G4Navigator* G4PropagatorInField::GetNavigatorForPropagating()
 {
   return fNavigator;
 } 
+
+inline
+void G4PropagatorInField::SetBrentMethod(G4bool newLocator)
+{
+  fUseBrentLocator=newLocator;
+}
+inline
+G4bool G4PropagatorInField::GetBrentMethod()
+{
+  return fUseBrentLocator;
+}
