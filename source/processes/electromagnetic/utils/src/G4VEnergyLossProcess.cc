@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.130 2008-05-27 18:12:48 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.131 2008-05-28 17:58:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -647,7 +647,7 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     //	  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
     //	  <<" safety= " << safety<< " limit= " << x <<G4endl;
   }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
+  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
   //  <<" stepLimit= "<<x<<G4endl;
   return x;
 }
@@ -687,6 +687,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if(preStepLambda > DBL_MIN) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
+      //G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength Reset" << G4endl;
       ResetNumberOfInteractionLengthLeft();
     } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
@@ -741,7 +742,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4double esecdep = 0.0;
  
-  /*
+  /*  
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -779,7 +780,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double x = 
       GetScaledRangeForScaledEnergy(preStepScaledEnergy) - length/reduceFactor;
     eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
-    /* 
+   
+    /*
     if(-1 < verboseLevel) 
       G4cout << "Long STEP: rPre(mm)= " 
              << GetScaledRangeForScaledEnergy(preStepScaledEnergy)/mm
@@ -788,11 +790,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << " eloss(MeV)= " << eloss/MeV
              << " eloss0(MeV)= "
              << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
+	     << " lim(MeV)= " << preStepKinEnergy*linLossLimit/MeV
              << G4endl;
     */
   }
 
-  /*  
+  /*   
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -817,7 +820,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       G4double preSafety  = prePoint->GetSafety();
       G4double postSafety = preSafety - length; 
       G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-
+      //G4cout << "z1= " << prePoint->GetPosition().z() 
+      //<< " z2= " << postPoint->GetPosition().z()
+      //	     << " s1= " << preSafety << " s2= " << postSafety<<G4endl;
       // recompute safety
       if(prePoint->GetStepStatus() != fGeomBoundary &&
 	 postPoint->GetStepStatus() != fGeomBoundary) {
@@ -828,7 +833,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	if(postSafety < rcut) {
 	  postSafety = safetyHelper->ComputeSafety(postPoint->GetPosition());
 	}
-	/*	
+	/*
 	  if(-1 < verboseLevel) 
 	  G4cout << "Subcutoff: presafety(mm)= " << preSafety/mm
 	         << " postsafety(mm)= " << postSafety/mm
@@ -837,7 +842,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	*/
 	currentMinSafety = std::min(preSafety,postSafety); 
       }
-
+  
       // Decide to start subcut sampling
       if(currentMinSafety < rcut) {
 
@@ -923,7 +928,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
-  */
+  */  
 
   return &fParticleChange;
 }
@@ -944,14 +949,14 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 
   const G4Track* track = step.GetTrack();
   const G4DynamicParticle* dp = track->GetDynamicParticle();
+  G4double e = dp->GetKineticEnergy()*massRatio;
   G4bool b;
-  G4double cross = 
-    chargeSqRatio*(((*theSubLambdaTable)[idx])->GetValue(dp->GetKineticEnergy(),b));
+  G4double cross = chargeSqRatio*(((*theSubLambdaTable)[idx])->GetValue(e,b));
   G4double length = step.GetStepLength();
 
   // negligible probability to get any interaction
   if(length*cross < perMillion) return;
-  /*    
+  /*      
   if(-1 < verboseLevel) 
     G4cout << "<<< Subcutoff for " << GetProcessName()
 	   << " cross(1/mm)= " << cross*mm << ">>>"
@@ -962,10 +967,12 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 
   // Sample subcutoff secondaries
   G4StepPoint* preStepPoint = step.GetPreStepPoint();
+  G4StepPoint* postStepPoint = step.GetPostStepPoint();
   G4ThreeVector prepoint = preStepPoint->GetPosition();
-  G4ThreeVector dr = step.GetPostStepPoint()->GetPosition() - prepoint;
+  G4ThreeVector dr = postStepPoint->GetPosition() - prepoint;
   G4double pretime = preStepPoint->GetGlobalTime();
-  //  G4double dt = length/preStepPoint->GetVelocity();
+  G4double dt = postStepPoint->GetGlobalTime() - pretime;
+  //G4double dt = length/preStepPoint->GetVelocity();
   G4double fragment = 0.0;
 
   do {
@@ -997,17 +1004,17 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 	}
       }
       if(addSec) {
-	//	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
-	G4Track* t = new G4Track((*it), pretime, r);
+	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
+	//G4Track* t = new G4Track((*it), pretime, r);
 	t->SetTouchableHandle(track->GetTouchableHandle());
 	tracks.push_back(t);
 
-	/*
-	  if(-1 < verboseLevel) 
-	  G4cout << "New track " << p->GetDefinition()->GetParticleName()
-	  << " e(keV)= " << p->GetKineticEnergy()/keV
-	  << " fragment= " << fragment
-	  << G4endl;
+	/*	
+	if(-1 < verboseLevel) 
+	  G4cout << "New track " << t->GetDefinition()->GetParticleName()
+		 << " e(keV)= " << t->GetKineticEnergy()/keV
+		 << " fragment= " << fragment
+		 << G4endl;
 	*/
       }
     }
