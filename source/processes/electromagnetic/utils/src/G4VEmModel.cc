@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.10 2008-05-29 13:38:05 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.11 2008-05-29 16:03:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,7 +72,7 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 					         G4double emin,
                                                  G4double emax)
 {
-  SetupForMaterial(material, p);
+  SetupForMaterial(p, material);
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
