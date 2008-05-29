@@ -19,12 +19,13 @@
 #
 /run/initialize
 #/process/eLoss/binsDEDX 480
+#/process/eLoss/fluct false
 #/process/eLoss/subsec false
-#/process/em/spline  true
+#/process/em/spline  false
 #/process/eLoss/linLossLimit 0.001
 #
 /gun/particle alpha
 /gun/energy 577.2 MeV
-/run/beamOn 1000
+/run/beamOn 1
 #
 

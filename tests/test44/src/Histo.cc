@@ -366,32 +366,32 @@ void Histo::print(G4int i)
         asciiFile << std::setiosflags(std::ios::fixed)
                   << std::setprecision(5)
                   << std::setiosflags(std::ios::right)
-                  << std::setw(10);
+                  << std::setw(8);
         asciiFile << x;
-        asciiFile << "           ";
+        asciiFile << " ";
         asciiFile << std::setiosflags(std::ios::fixed)
                   << std::setprecision(5)
                   << std::setiosflags(std::ios::right)
-                  << std::setw(10);
+                  << std::setw(8);
 	asciiFile << y
                   << G4endl;
     }
     asciiFile << std::setiosflags(std::ios::fixed)
 	      << std::setprecision(5)
 	      << std::setiosflags(std::ios::right)
-	      << std::setw(10);
+	      << std::setw(8);
     asciiFile << maxJ;
-    asciiFile << "           ";
+    asciiFile << " ";
     asciiFile << std::setiosflags(std::ios::fixed)
 	      << std::setprecision(5)
 	      << std::setiosflags(std::ios::right)
-	      << std::setw(10);
+	      << std::setw(8);
     asciiFile << maxX;
-    asciiFile << "           ";
+    asciiFile << " ";
     asciiFile << std::setiosflags(std::ios::fixed)
 	      << std::setprecision(5)
 	      << std::setiosflags(std::ios::right)
-	      << std::setw(10);
+	      << std::setw(8);
     asciiFile << maxY
 	      << G4endl;
   }
