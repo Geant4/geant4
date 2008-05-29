@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2008-05-28 11:09:33 ztorzsok Exp $
+$Id: History,v 1.59 2008-05-29 12:41:15 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 may 2008 Zoltan Torzsok
+- Modular files can be written now
 
 28 may 2008 Zoltan Torzsok
 - Only the referenced materials/elements/isotopes are written out, not the whole material/element/isotope store!

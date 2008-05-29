@@ -44,11 +44,10 @@
 #include "G4Transform3D.hh"
 
 class G4GDMLWrite {
+private:
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 protected:
-   static std::map<const G4VPhysicalVolume*,G4String> moduleMap;
-
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
    xercesc::DOMElement* newElement(const G4String&);
@@ -60,6 +59,8 @@ protected:
    virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const)=0;
    virtual void setupWrite(xercesc::DOMElement*,const G4String&)=0;
 public:
+   typedef std::map<const G4VPhysicalVolume*,G4String> ModuleMapType;
+
    G4Transform3D Write(const G4String&,const G4LogicalVolume* const);
    void SetModule(const G4VPhysicalVolume* const,const G4String&);
    G4String GetModule(const G4VPhysicalVolume* const);

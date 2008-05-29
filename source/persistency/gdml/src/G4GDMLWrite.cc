@@ -31,6 +31,12 @@
 #include <sstream>
 #include "G4GDMLWrite.hh"
 
+G4GDMLWrite::ModuleMapType& moduleMap() {
+
+   static G4GDMLWrite::ModuleMapType instance;
+   return instance;
+}
+
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
 
    xercesc::XMLString::transcode(name,tempStr,99);
@@ -116,12 +122,11 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
 
 void G4GDMLWrite::SetModule(const G4VPhysicalVolume* const physvol,const G4String& name) {
 
-//   moduleMap[physvol] = name;
+   moduleMap()[physvol] = name;
 }
 
 G4String G4GDMLWrite::GetModule(const G4VPhysicalVolume* const physvol) {
 
-   G4String name("");
-
-   return name;
+   if (moduleMap().find(physvol) != moduleMap().end()) return moduleMap()[physvol];
+   return G4String("");
 }
