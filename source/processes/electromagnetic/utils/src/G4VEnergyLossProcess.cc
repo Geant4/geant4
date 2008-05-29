@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.132 2008-05-29 16:01:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.133 2008-05-29 16:34:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -441,12 +441,16 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << G4endl;
   }
 
-  if(!tablesAreBuilt && &part == particle) {
-    G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
-  }
-  if(0 < verboseLevel && (&part == particle) && !baseParticle) {
-    PrintInfoDefinition();
-    safetyHelper->InitialiseHelper();
+  if(&part == particle) {
+    if(!tablesAreBuilt) {
+      G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
+    }
+    if(!baseParticle) {
+      if(0 < verboseLevel) PrintInfoDefinition();
+    
+      // needs to be done only once
+      safetyHelper->InitialiseHelper();
+    }
   }
 
   if(1 < verboseLevel) {
