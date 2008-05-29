@@ -41,11 +41,15 @@
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 
 #include "G4LogicalVolume.hh"
+#include "G4Transform3D.hh"
 
 class G4GDMLWrite {
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 protected:
+   typedef std::map<const G4VPhysicalVolume*,G4String> ModuleMapType;
+   static ModuleMapType moduleMap;
+
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
    xercesc::DOMElement* newElement(const G4String&);
@@ -53,10 +57,11 @@ protected:
    virtual void defineWrite(xercesc::DOMElement*)=0;
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
-   virtual void structureWrite(xercesc::DOMElement*,const G4LogicalVolume*)=0;
+   virtual void structureWrite(xercesc::DOMElement*)=0;
+   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const)=0;
    virtual void setupWrite(xercesc::DOMElement*,const G4String&)=0;
 public:
-   void Write(const G4String&,const G4LogicalVolume* const);
+   G4Transform3D Write(const G4String&,const G4LogicalVolume* const);
 };
 
 #endif

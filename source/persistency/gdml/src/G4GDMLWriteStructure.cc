@@ -119,9 +119,17 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    volumerefElement->setAttributeNode(newAttribute("ref",replicavol->GetLogicalVolume()->GetName()));
 }
 
-G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* volumePtr) {
+void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
 
-   if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed!
+   G4cout << "Writing structure..." << G4endl;
+
+   structureElement = newElement("structure");
+   gdmlElement->appendChild(structureElement);
+}
+
+G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr) {
+
+   if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
 
    G4Transform3D R;
    int displaced = 0;
@@ -165,8 +173,9 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* vo
 
    for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
    
-      const G4VPhysicalVolume* physvol = volumePtr->GetDaughter(i);
-      const G4Transform3D daughterR = TraverseVolumeTree(physvol->GetLogicalVolume());
+      const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
+      const G4LogicalVolume* const logvol = physvol->GetLogicalVolume();
+      const G4Transform3D daughterR = TraverseVolumeTree(logvol);
 
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
@@ -196,14 +205,4 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* vo
    G4GDMLWriteSolids::AddSolid(solidPtr);
 
    return R;
-}
-
-void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* worldvol) {
-
-   G4cout << "Writing structure..." << G4endl;
-
-   structureElement = newElement("structure");
-   gdmlElement->appendChild(structureElement);
-
-   TraverseVolumeTree(worldvol);
 }

@@ -35,10 +35,8 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String&
 
    xercesc::XMLString::transcode(name,tempStr,99);
    xercesc::DOMAttr* att = doc->createAttribute(tempStr);
-
    xercesc::XMLString::transcode(value,tempStr,99);
    att->setValue(tempStr);
-
    return att;
 }
 
@@ -46,33 +44,26 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4double&
 
    xercesc::XMLString::transcode(name,tempStr,99);
    xercesc::DOMAttr* att = doc->createAttribute(tempStr);
-
    std::ostringstream ostream;
    ostream << value;
-
    G4String str = ostream.str();
-
    xercesc::XMLString::transcode(str,tempStr,99);
    att->setValue(tempStr);
-
    return att;
 }
 
 xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 
    xercesc::XMLString::transcode(name,tempStr,99);
-
    return doc->createElement(tempStr);
 }
 
-void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
+G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
 
    G4cout << "Writing '" << fname << "'..." << G4endl;
 
-   xercesc::DOMImplementation* impl;
-
    xercesc::XMLString::transcode("LS", tempStr, 99);
-   impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
+   xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
    xercesc::DOMWriter* writer = ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
 
    xercesc::XMLString::transcode("Range", tempStr, 99);
@@ -88,8 +79,10 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvo
    defineWrite(gdml);
    materialsWrite(gdml);
    solidsWrite(gdml);
-   structureWrite(gdml,logvol);
+   structureWrite(gdml);
    setupWrite(gdml,logvol->GetName());
+
+   G4Transform3D R = TraverseVolumeTree(logvol);
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
@@ -100,21 +93,23 @@ void G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvo
       char* message = xercesc::XMLString::transcode(toCatch.getMessage());
       G4cout << "Exception message is: \n" << message << "\n" << G4endl;
       xercesc::XMLString::release(&message);
-      return;
+      return G4Transform3D::Identity;
    } catch (const xercesc::DOMException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.msg);
       G4cout << "Exception message is: \n" << message << "\n" << G4endl;
       xercesc::XMLString::release(&message);
-      return;
+      return G4Transform3D::Identity;
    } catch (...) {
       
       G4cout << "Unexpected Exception \n" << G4endl;
-      return;
+      return G4Transform3D::Identity;
    }        
 
    delete myFormTarget;
    writer->release();
 
    G4cout << "Writing done!" << G4endl << G4endl;
+
+   return R;
 }
