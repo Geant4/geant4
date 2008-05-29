@@ -47,8 +47,7 @@ class G4GDMLWrite {
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 protected:
-   typedef std::map<const G4VPhysicalVolume*,G4String> ModuleMapType;
-   static ModuleMapType moduleMap;
+   static std::map<const G4VPhysicalVolume*,G4String> moduleMap;
 
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
@@ -62,6 +61,8 @@ protected:
    virtual void setupWrite(xercesc::DOMElement*,const G4String&)=0;
 public:
    G4Transform3D Write(const G4String&,const G4LogicalVolume* const);
+   void SetModule(const G4VPhysicalVolume* const,const G4String&);
+   G4String GetModule(const G4VPhysicalVolume* const);
 };
 
 #endif

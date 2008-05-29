@@ -62,7 +62,7 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    volumerefElement->setAttributeNode(newAttribute("ref",divisionvol->GetLogicalVolume()->GetName()));
 }
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T) {
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T,const G4String& ModuleName) {
 
    HepGeom::Scale3D scale;
    HepGeom::Rotate3D rotate;
@@ -78,9 +78,18 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    volumeElement->appendChild(physvolElement);
    physvolElement->setAttributeNode(newAttribute("name",physvol->GetName()));
 
-   xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   physvolElement->appendChild(volumerefElement);
-   volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
+   if (ModuleName.empty()) {
+
+      xercesc::DOMElement* volumerefElement = newElement("volumeref");
+      volumerefElement->setAttributeNode(newAttribute("ref",physvol->GetLogicalVolume()->GetName()));
+      physvolElement->appendChild(volumerefElement);
+   } else {
+
+      xercesc::DOMElement* fileElement = newElement("file");
+      fileElement->setAttributeNode(newAttribute("name",ModuleName));
+      fileElement->setAttributeNode(newAttribute("volname",physvol->GetLogicalVolume()->GetName()));
+      physvolElement->appendChild(fileElement);
+   }
 
    if (fabs(scl.x()-1.0) > DBL_EPSILON || fabs(scl.y()-1.0) > DBL_EPSILON || fabs(scl.z()-1.0) > DBL_EPSILON) scaleWrite(physvolElement,scl);
    if (fabs(rot.x()-0.0) > DBL_EPSILON || fabs(rot.y()-0.0) > DBL_EPSILON || fabs(rot.z()-0.0) > DBL_EPSILON) rotationWrite(physvolElement,rot);
@@ -174,9 +183,18 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-      const G4LogicalVolume* const logvol = physvol->GetLogicalVolume();
-      const G4Transform3D daughterR = TraverseVolumeTree(logvol);
+      G4String ModuleName = G4GDMLWrite::GetModule(physvol); 
+      G4Transform3D daughterR;
+      
+      if (ModuleName.empty()) { // Check if the subtree starting with this volume is requested to be a spearate module or not!
+      
+         daughterR = TraverseVolumeTree(physvol->GetLogicalVolume());
+      } else {
 
+         G4GDMLWriteStructure writer;
+         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume());
+      }
+      
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
          if (!G4Transform3D::Identity.isNear(invR*daughterR)) G4Exception("GDML Writer: Error! divisionvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
@@ -194,7 +212,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       } else {
    
          G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
-         physvolWrite(volumeElement,physvol,invR*P*daughterR);
+         physvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
    }
 
