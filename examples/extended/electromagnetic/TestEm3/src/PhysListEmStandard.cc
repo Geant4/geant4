@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.17 2008-05-15 10:39:03 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.18 2008-05-29 16:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,8 +43,6 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-
-#include "G4eBremsstrahlungHighEnergyModel.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -87,27 +85,15 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHighEnergyModel();
-      lpm->SetLowEnergyLimit(100.*MeV);
-      lpm->SetHighEnergyLimit(100.*TeV);
-      brem->AddEmModel(0,lpm);
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      //      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
-      pmanager->AddProcess(brem,   -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
       
     } else if (particleName == "e+") {
       //positron
-      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHighEnergyModel();
-      lpm->SetLowEnergyLimit(100.*MeV);
-      lpm->SetHighEnergyLimit(100.*TeV);
-      brem->AddEmModel(0,lpm);
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      //pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
-      pmanager->AddProcess(brem,   -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
       
     } else if( particleName == "mu+" || 
@@ -132,7 +118,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
-  /*
+
   // Em options
   //
   G4EmProcessOptions emOptions;
@@ -158,7 +144,6 @@ void PhysListEmStandard::ConstructProcess()
   //ionization
   //
   emOptions.SetSubCutoff(true);
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

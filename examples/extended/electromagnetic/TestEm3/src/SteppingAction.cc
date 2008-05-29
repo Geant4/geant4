@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.27 2008-04-04 14:24:51 maire Exp $
+// $Id: SteppingAction.cc,v 1.28 2008-05-29 16:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,12 +80,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // collect step length of charged particles
   G4double stepl = 0.;
   if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
-    
+  
+  //  G4cout << "Nabs= " << absorNum << "   edep(keV)= " << edep << G4endl;
+  
   // sum up per event
   eventAct->SumEnergy(absorNum,edep,stepl);
   
   //longitudinal profile of edep per absorber
-  if (edep>0.) histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
+  if (edep>0.) histoManager->FillHisto(MaxAbsor+absorNum, 
+				       G4double(layerNum+1), edep);
   
   //energy flow
   //

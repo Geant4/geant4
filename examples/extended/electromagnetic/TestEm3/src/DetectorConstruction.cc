@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.21 2008-03-14 15:40:04 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.22 2008-05-29 16:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,6 +104,7 @@ void DetectorConstruction::DefineMaterials()
 
   G4Element* H  = manager->FindOrBuildElement(1);
   G4Element* C  = manager->FindOrBuildElement(6);
+  G4Element* N  = manager->FindOrBuildElement(7);
   G4Element* O  = manager->FindOrBuildElement(8);
   G4Element* Si = manager->FindOrBuildElement(14);
   G4Element* Ge = manager->FindOrBuildElement(32);
@@ -200,13 +201,20 @@ void DetectorConstruction::DefineMaterials()
   BGO->AddElement(Ge, natoms= 3);
   BGO->AddElement(Bi, natoms= 4);
 
+  //SiNx
+  density= 3.1 *g/cm3;
+  G4Material* SiNx= new G4Material("SiNx", density, ncomponents=3);
+  SiNx-> AddElement(Si, 300);
+  SiNx-> AddElement(N, 310);
+  SiNx-> AddElement(H, 6);
+
   //
   // define gaseous materials using G4 NIST database 
   //
   G4double fractionmass;
   
   G4Material* Air = manager->FindOrBuildMaterial("G4_AIR");
-  manager->ConstructNewGasMaterial("Air20","G4_AIR",293.*kelvin, 1.*atmosphere);
+  manager->ConstructNewGasMaterial("Air20","G4_AIR",293.*kelvin,1.*atmosphere);
 
   G4Material* lAr = manager->FindOrBuildMaterial("G4_lAr");
   G4Material* lArEm3 = new G4Material("liquidArgon", density= 1.390*g/cm3, ncomponents=1);
