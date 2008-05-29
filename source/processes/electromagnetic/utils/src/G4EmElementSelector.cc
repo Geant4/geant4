@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.10 2008-05-29 13:38:05 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.1 2008-05-29 13:38:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,73 +31,96 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4VEmModel
+// File name:     G4EmElementSelector
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 25.07.2005
+// Creation date: 29.05.2008
 //
 // Modifications:
-// 25.10.2005 Set default highLimit=100.TeV (V.Ivanchenko)
-// 06.02.2006 add method ComputeMeanFreePath() (mma)
-//
 //
 // Class Description:
 //
-// Abstract interface to energy loss models
+// Generic helper class for the random selection of an element
 
 // -------------------------------------------------------------------
 //
 
-#include "G4VEmModel.hh"
+#include "G4EmElementSelector.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VEmModel::G4VEmModel(const G4String& nam):
-  lowLimit(0.1*keV), highLimit(100.0*TeV), polarAngleLimit(0.0),
-  fluc(0), name(nam), pParticleChange(0) 
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VEmModel::~G4VEmModel()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					         G4double ekin,
-					         G4double emin,
-                                                 G4double emax)
+G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod, 
+  const G4Material* mat, G4int bins, G4double emin, G4double emax):
+  model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
+  lowEnergy(emin), highEnergy(emax)
 {
-  SetupForMaterial(material, p);
-  G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
-  size_t nelm = material->GetNumberOfElements();
-  for (size_t i=0; i<nelm; i++) {
-    const G4Element* elm = (*theElementVector)[i];
-    cross += theAtomNumDensityVector[i]*
-      ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax);
-    xsec[i] = cross;
+  nElements = material->GetNumberOfElements();
+  theElementVector = material->GetElementVector();
+  lastElement = (*theElementVector)[0];
+  if(nElements > 1) {
+    xSections.resize(nElements);
+    for(G4int i=0; i<nElements; i++) {
+      G4PhysicsLogVector* v = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
+      v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+      xSections.push_back(v);
+    }
   }
-  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
-					       G4double ekin,
-					 const G4Material* material,     
-					       G4double emin,
-                                               G4double emax)
+G4EmElementSelector::~G4EmElementSelector()
 {
-  G4double mfp = DBL_MAX;
-  G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
-  if (cross > DBL_MIN) mfp = 1./cross;
-  return mfp;
+  if(nElements > 1) {
+    for(G4int i=0; i<nElements; i++) {
+      delete xSections[i];
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmElementSelector::Initialise(const G4ParticleDefinition* part, 
+				     G4double cut)
+{
+  if(1 == nElements || cut == cutEnergy) return;
+
+  cutEnergy = cut;
+  model->SetupForMaterial(part, material);
+  G4double cross;
+  const G4Element* elm;
+
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+
+  for(G4int j=0; j<nbins; j++) {
+    G4double e = (xSections[0])->GetLowEdgeEnergy(j);
+    cross = 0.0;
+    for (G4int i=0; i<nElements; i++) {
+      elm = (*theElementVector)[i];
+      cross += theAtomNumDensityVector[i]*      
+	model->ComputeCrossSectionPerAtom(part, e, elm->GetZ(), elm->GetN(),
+					  cutEnergy, e);
+      xSections[i]->PutValue(j, cross);
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmElementSelector::Dump(const G4ParticleDefinition* part)
+{
+  G4cout << "======== G4EmElementSelector for the " << model->GetName();
+  if(part) G4cout << " and " << part->GetParticleName();
+  G4cout << " for " << material->GetName() << " ========" << G4endl;
+  if(nElements > 1) {
+    for(G4int i=0; i<nElements; i++) {
+      G4cout << "      " << (*theElementVector)[i]->GetName() << " : " << G4endl;
+      G4cout << &(xSections[i]) << G4endl;
+    }
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.49 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.50 2008-05-29 13:38:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,6 +175,9 @@ public:
   virtual G4double ComputeTrueStepLength(G4double geomPathLength);
 
   virtual void DefineForRegion(const G4Region*);
+
+  virtual void SetupForMaterial(const G4ParticleDefinition*,
+				const G4Material*);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -441,6 +444,12 @@ inline G4double G4VEmModel::ComputeTrueStepLength(G4double geomPathLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VEmModel::DefineForRegion(const G4Region*) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
+					 const G4Material*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
