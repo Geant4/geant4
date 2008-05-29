@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.131 2008-05-28 17:58:48 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.132 2008-05-29 16:01:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1536,7 +1536,8 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
             G4VEnergyLossProcess* p)
 {
   G4bool add = true;
-  if(nProcesses > 0) {
+  if(p->GetProcessName() != "eBrem") add = false;
+  if(add && nProcesses > 0) {
     for(G4int i=0; i<nProcesses; i++) {
       if(p == scProcesses[i]) {
         add = false;
@@ -1547,10 +1548,11 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
   if(add) {
     scProcesses.push_back(p);
     nProcesses++;
-    if (0 < verboseLevel) 
+    if (1 < verboseLevel) { 
       G4cout << "### The process " << p->GetProcessName() 
 	     << " is added to the list of collaborative processes of "
 	     << GetProcessName() << G4endl; 
+    }
   }
 }
 
