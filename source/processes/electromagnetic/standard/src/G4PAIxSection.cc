@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.23 2008-05-23 09:59:21 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.24 2008-05-30 16:04:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -314,6 +314,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       for(i = 1; i <= fSplineNumber; i++)
       {
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]  = PAIdNdxResonance(i,betaGammaSq);
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
@@ -322,6 +323,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 	 //    <<"; dNdxPAI = "<<fDifPAIxSection[i]<<G4endl;
       }
       IntegralCerenkov();
+      IntegralMM();
       IntegralPlasmon();
       IntegralResonance();
       IntegralPAIxSection();
@@ -463,11 +465,13 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       {
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]  = PAIdNdxResonance(i,betaGammaSq);
       }
       IntegralPAIxSection();
       IntegralCerenkov();
+      IntegralMM();
       IntegralPlasmon();
       IntegralResonance();
       
@@ -513,6 +517,7 @@ void G4PAIxSection::InitPAI()
 
    IntegralPAIxSection();
    IntegralCerenkov();
+   IntegralMM();
    IntegralPlasmon();
    IntegralResonance();
 
@@ -536,11 +541,13 @@ void G4PAIxSection::InitPAI()
       {
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]  = PAIdNdxResonance(i,betaGammaSq);
       }
       IntegralPAIxSection();
       IntegralCerenkov();
+      IntegralMM();
       IntegralPlasmon();
       IntegralResonance();
       
@@ -617,6 +624,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+         fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]    = PAIdNdxResonance(i,betaGammaSq);
       }
@@ -656,6 +664,7 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
 	 fDifPAIxSection[j] = fDifPAIxSection[j-1];
          fdNdxCerenkov[j]   = fdNdxCerenkov[j-1];
+         fdNdxMM[j]   = fdNdxMM[j-1];
          fdNdxPlasmon[j]    = fdNdxPlasmon[j-1];
          fdNdxResonance[j]  = fdNdxResonance[j-1];
       }
@@ -687,6 +696,7 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
       fDifPAIxSection[i+1] = DifPAIxSection(i+1,betaGammaSq);
       fdNdxCerenkov[i+1]   = PAIdNdxCerenkov(i+1,betaGammaSq);
+      fdNdxMM[i+1]   = PAIdNdxMM(i+1,betaGammaSq);
       fdNdxPlasmon[i+1]    = PAIdNdxPlasmon(i+1,betaGammaSq);
       fdNdxResonance[i+1]  = PAIdNdxResonance(i+1,betaGammaSq);
 
@@ -1001,6 +1011,55 @@ G4double G4PAIxSection::PAIdNdxCerenkov( G4int    i ,
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Calculation od dN/dx of collisions of MM with creation of Cerenkov pseudo-photons
+
+G4double G4PAIxSection::PAIdNdxMM( G4int    i ,
+                                         G4double betaGammaSq  )
+{        
+   G4double logarithm, x3, x5, argument, dNdxC; 
+   G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr;
+
+   cofBetaBohr = 4.0;
+   betaBohr2   = fine_structure_const*fine_structure_const;
+   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+
+   be2 = betaGammaSq/(1 + betaGammaSq);
+   be4 = be2*be2;
+
+   if( betaGammaSq < 0.01 ) logarithm = log(1.0+betaGammaSq); // 0.0;
+   else
+   {
+     logarithm  = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
+	                (1/betaGammaSq - fRePartDielectricConst[i]) + 
+	                fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
+     logarithm += log(1+1.0/betaGammaSq);
+   }
+
+   if( fImPartDielectricConst[i] == 0.0 || betaGammaSq < 0.01 )
+   {
+     argument = 0.0;
+   }
+   else
+   {
+     x3 = -fRePartDielectricConst[i] + 1.0/betaGammaSq;
+     x5 = be2*( 1.0 + fRePartDielectricConst[i] ) - 1.0;
+     if( x3 == 0.0 ) argument = 0.5*pi;
+     else            argument = atan2(fImPartDielectricConst[i],x3);
+     argument *= x5 ;
+   }   
+   dNdxC = ( logarithm*fImPartDielectricConst[i]*be2 + argument )/hbarc;
+  
+   if(dNdxC < 1.0e-8) dNdxC = 1.0e-8;
+
+   dNdxC *= fine_structure_const/be2/pi;
+
+   dNdxC *= (1-exp(-be4/betaBohr4));
+   return dNdxC;
+
+} // end of PAIdNdxMM 
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Calculation od dN/dx of collisions with creation of longitudinal EM
 // excitations (plasmons, delta-electrons)
 
@@ -1139,6 +1198,37 @@ void G4PAIxSection::IntegralCerenkov()
    }
 
 }   // end of IntegralCerenkov 
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculation of the PAI MM-Cerenkov integral cross-section
+// fIntegralMM[1] = specific MM-Cerenkov ionisation, 1/cm
+// and fIntegralMM[0] = mean MM-Cerenkov loss per cm  in keV/cm
+
+void G4PAIxSection::IntegralMM()
+{
+  G4int i, k;
+   fIntegralMM[fSplineNumber] = 0;
+   fIntegralMM[0] = 0;
+   k = fIntervalNumber -1;
+
+   for( i = fSplineNumber-1; i >= 1; i-- )
+   {
+      if(fSplineEnergy[i] >= fEnergyInterval[k])
+      {
+        fIntegralMM[i] = fIntegralMM[i+1] + SumOverInterMM(i);
+	// G4cout<<"int: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
+      }
+      else
+      {
+        fIntegralMM[i] = fIntegralMM[i+1] + 
+	                           SumOverBordMM(i+1,fEnergyInterval[k]);
+	k--;
+	// G4cout<<"bord: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
+      }
+   }
+
+}   // end of IntegralMM 
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1293,6 +1383,39 @@ G4double G4PAIxSection::SumOverInterCerenkov( G4int i )
    return result;
 
 } //  end of SumOverInterCerenkov
+
+//////////////////////////////////////////////////////////////////////
+//
+// Calculation the PAI MM-Cerenkov integral cross-section inside
+// of interval of continuous values of photo-ionisation Cerenkov
+// cross-section. Parameter  'i' is the number of interval.
+
+G4double G4PAIxSection::SumOverInterMM( G4int i )
+{         
+   G4double x0,x1,y0,yy1,a,b,c,result;
+
+   x0  = fSplineEnergy[i];
+   x1  = fSplineEnergy[i+1];
+   y0  = fdNdxMM[i];
+   yy1 = fdNdxMM[i+1];
+   // G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
+   //   <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
+
+   c = x1/x0;
+   a = log10(yy1/y0)/log10(c);
+   b = y0/pow(x0,a);
+
+   a += 1.0;
+   if(a == 0) result = b*log(c);
+   else       result = y0*(x1*pow(c,a-1) - x0)/a;   
+   a += 1.0;
+
+   if( a == 0 ) fIntegralMM[0] += b*log(x1/x0);
+   else         fIntegralMM[0] += y0*(x1*x1*pow(c,a-2) - x0*x0)/a;
+   //  G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;   
+   return result;
+
+} //  end of SumOverInterMM
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -1545,6 +1668,70 @@ G4double G4PAIxSection::SumOverBordCerenkov( G4int      i ,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Integration of MM-Cerenkov cross-section for the case of
+// passing across border between intervals
+
+G4double G4PAIxSection::SumOverBordMM( G4int      i , 
+                                             G4double en0    )
+{               
+   G4double x0,x1,y0,yy1,a,b,e0,c,d,result;
+
+   e0 = en0;
+   x0 = fSplineEnergy[i];
+   x1 = fSplineEnergy[i+1];
+   y0 = fdNdxMM[i];
+   yy1 = fdNdxMM[i+1];
+
+   //  G4cout<<G4endl;
+   //  G4cout<<"SumBordC, i = "<<i<<"; en0 = "<<en0<<"; x0 ="<<x0<<"; x1 = "<<x1
+   //     <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
+   c = x1/x0;
+   d = e0/x0;
+   a = log10(yy1/y0)/log10(c);
+   // b0 = log10(y0) - a*log10(x0);
+   b = y0/pow(x0,a); // pow(10.,b0);   
+   
+   a += 1.0;
+   if( a == 0 ) result = b*log(x0/e0);
+   else         result = y0*(x0 - e0*pow(d,a-1))/a;   
+   a += 1.0;
+
+   if( a == 0 ) fIntegralMM[0] += b*log(x0/e0);
+   else         fIntegralMM[0] += y0*(x0*x0 - e0*e0*pow(d,a-2))/a;
+
+// G4cout<<"a = "<<a<<"; b0 = "<<b0<<"; b = "<<b<<"; result = "<<result<<G4endl;
+   
+   x0  = fSplineEnergy[i - 1];
+   x1  = fSplineEnergy[i - 2];
+   y0  = fdNdxMM[i - 1];
+   yy1 = fdNdxMM[i - 2];
+
+   // G4cout<<"x0 ="<<x0<<"; x1 = "<<x1
+   //    <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
+
+   c = x1/x0;
+   d = e0/x0;
+   a  = log10(yy1/y0)/log10(x1/x0);
+   // b0 = log10(y0) - a*log10(x0);
+   b  =  y0/pow(x0,a);  // pow(10.,b0);
+
+   a += 1.0;
+   if( a == 0 ) result += b*log(e0/x0);
+   else         result += y0*(e0*pow(d,a-1) - x0 )/a;
+   a += 1.0;
+
+   if( a == 0 )   fIntegralMM[0] += b*log(e0/x0);
+   else           fIntegralMM[0] += y0*(e0*e0*pow(d,a-2) - x0*x0)/a;
+
+   // G4cout<<"a = "<<a<<"; b0 = "<<b0<<"; b = "
+   // <<b<<"; result = "<<result<<G4endl;    
+
+   return result;
+
+} 
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Integration of Plasmon cross-section for the case of
 // passing across border between intervals
 
@@ -1730,6 +1917,32 @@ G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Returns random MM-Cerenkov energy loss over step
+
+G4double G4PAIxSection::GetStepMMLoss( G4double step )
+{  
+  G4long numOfCollisions;
+  G4double meanNumber, loss = 0.0;
+
+  // G4cout<<" G4PAIxSection::GetStepMMLoss "<<G4endl;
+
+  meanNumber = fIntegralMM[1]*step;
+  numOfCollisions = G4Poisson(meanNumber);
+
+  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl;
+
+  while(numOfCollisions)
+  {
+    loss += GetMMEnergyTransfer();
+    numOfCollisions--;
+  }
+  // G4cout<<"PAI MM-Cerenkov loss = "<<loss/keV<<" keV"<<G4endl; 
+
+  return loss;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
 // Returns Cerenkov energy transfer in one collision
 
 G4double G4PAIxSection::GetCerenkovEnergyTransfer()
@@ -1743,6 +1956,33 @@ G4double G4PAIxSection::GetCerenkovEnergyTransfer()
   for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
   {
         if( position >= fIntegralCerenkov[iTransfer] ) break;
+  }
+  if(iTransfer > fSplineNumber) iTransfer--;
+ 
+  energyTransfer = fSplineEnergy[iTransfer];
+
+  if(iTransfer > 1)
+  {
+    energyTransfer -= (fSplineEnergy[iTransfer]-fSplineEnergy[iTransfer-1])*G4UniformRand();
+  }
+  return energyTransfer;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Returns MM-Cerenkov energy transfer in one collision
+
+G4double G4PAIxSection::GetMMEnergyTransfer()
+{  
+  G4int iTransfer ;
+
+  G4double energyTransfer, position;
+
+  position = fIntegralMM[1]*G4UniformRand();
+
+  for( iTransfer = 1; iTransfer <= fSplineNumber; iTransfer++ )
+  {
+        if( position >= fIntegralMM[iTransfer] ) break;
   }
   if(iTransfer > fSplineNumber) iTransfer--;
  

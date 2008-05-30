@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.4 2008-05-30 14:40:38 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.5 2008-05-30 16:04:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -260,9 +260,9 @@ int main()
 
 
   // G4String testName = "N2";
-  // G4String testName = "Ne10CO2";
+  G4String testName = "Ne10CO2";
   // G4String testName = "Ne10CO2T293";
-  G4String testName = "Ne857CO295N2T292";
+  // G4String testName = "Ne857CO295N2T292";
 
 
   // G4cout<<"Enter material name for test : "<<std::flush;
@@ -347,11 +347,12 @@ int main()
    
      G4cout 
        //     <<"Tkin, keV"<<"\t"
-            << "gamma"<<"\t\t"
+            << "bg"<<"\t\t"
        //   <<"Max E transfer, kev"<<"\t"
             << "<dN/dxC>, 1/cm"<<"\t"
+            << "<dN/dxMM>, 1/cm"<<"\t"
             << "<dN/dxP>, 1/cm"<<"\t"
-            << "<dN/dxC+dN/dxP>"<<"\t"
+       //    << "<dN/dxC+dN/dxP>"<<"\t"
             <<"<dN/dx>, 1/cm"<<G4endl<<G4endl;
    
      /*
@@ -370,13 +371,13 @@ int main()
 
 
 
-     kineticEnergy = 100.*GeV;    // 10.0*keV;  // 110*MeV; // for proton
+     kineticEnergy = 10.0*keV; // 100.*GeV;    // 10.0*keV;  // 110*MeV; // for proton
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
-     jMax = 1; // 70;
+     jMax = 70; // 70;
 
-     // outFile<<jMax<<G4endl;
+     outFile<<jMax<<G4endl;
 
      for( j = 0; j < jMax; j++ )
      {
@@ -385,7 +386,7 @@ int main()
        bg2      = tau*(tau + 2.0);
        bg = std::sqrt(bg2);
        beta2    = bg2/(gamma*gamma);
-       G4cout<<"bg = "<<bg<<";  b2 = "<<beta2<<G4endl<<G4endl;
+       // G4cout<<"bg = "<<bg<<";  b2 = "<<beta2<<G4endl<<G4endl;
        rateMass = electron_mass_c2/proton_mass_c2;
 
        Tmax     = 2.0*electron_mass_c2*bg2
@@ -409,23 +410,25 @@ int main()
                << bg << "\t\t"
 	 //    << Tkin/keV<<"\t\t"     
                << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
+               << testPAIproton.GetIntegralMM(1)*cm << "\t"
                << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
                << testPAIproton.GetIntegralResonance(1)*cm << "\t"
-                << testPAIproton.GetIntegralCerenkov(1)*cm +
-                testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
+	 // << testPAIproton.GetIntegralCerenkov(1)*cm +
+	 //      testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
 	 //      << FitALICE(bg) << "\t"
 	 //      << FitBichsel(bg) << "\t"
                << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" 
           << G4endl;
 
 
-       /*	        
+       	        
        outFile 
          //      << kineticEnergy/keV<<"\t"
 	 //       << gamma << "\t"
                << bg << "\t\t"
          //      << Tkin/keV<<"\t"
                << testPAIproton.GetIntegralCerenkov(1)*cm << "\t"
+               << testPAIproton.GetIntegralMM(1)*cm << "\t"
               << testPAIproton.GetIntegralPlasmon(1)*cm << "\t"
                << testPAIproton.GetIntegralResonance(1)*cm << "\t"
          //      << testPAIproton.GetIntegralCerenkov(1)*cm +
@@ -441,7 +444,7 @@ int main()
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl;
 
              
-
+       /*
        outFile<<testPAIproton.GetSplineSize()-1<<G4endl;
 
        for( i = 1; i < testPAIproton.GetSplineSize(); i++)
@@ -449,6 +452,7 @@ int main()
        outFile 
                << testPAIproton.GetSplineEnergy(i)/keV       << "\t"
                << testPAIproton.GetIntegralCerenkov(i)*cm    << "\t"
+               << testPAIproton.GetIntegralMM(i)*cm    << "\t"
                << testPAIproton.GetIntegralPlasmon(i)*cm     << "\t"
                << testPAIproton.GetIntegralResonance(i)*cm   << "\t"
                << testPAIproton.GetIntegralPAIxSection(i)*cm << "\t" 
@@ -458,7 +462,7 @@ int main()
        */
 
        
-
+       /*
        G4double position, transfer, lambda, range, r2cer=0., r2res=0., r2ruth=0., r2tot=0.;
        G4int nCer = 0, nRes = 0, nRuth = 0, nTot = 0;
        G4double rBin[100], rDistr[100], rTemp, rTemp2, sumDistr = 0., rSum = 0;
@@ -474,7 +478,7 @@ int main()
        }
        for( i = 0; i < 10000; i++)
        {
-	 /*
+	 
          position = testPAIproton.GetIntegralPAIxSection(1)*G4UniformRand();
 
 	 if( position < testPAIproton.GetIntegralCerenkov(1) )
@@ -521,7 +525,7 @@ int main()
              break;
 	   }
 	 }
-	 */
+	 
 
          transfer = testPAIproton.GetEnergyTransfer();          
 	 ionMean  = GetIonisation(transfer);
@@ -544,7 +548,7 @@ int main()
 	   }
 	 }
        }
-       /*
+       
        if(nCer >0)  r2cer  /= nCer;
        if(nRes >0)  r2res  /= nRes;
        if(nRuth >0) r2ruth /= nRuth;
@@ -555,7 +559,7 @@ int main()
        G4cout<<"rCer = "<<std::sqrt(r2cer)<<" mm; rRes = "<<std::sqrt(r2res)<<" mm"<<G4endl;
        G4cout<<"rRuth = "<<std::sqrt(r2ruth)<<" mm; rTot = "<<std::sqrt(r2tot)<<" mm"<<G4endl;
        G4cout<<"rSum = "<<rSum<<" mm; "<<G4endl;
-       */
+       
                     ionSum  /= nTot; 
        G4cout<<"ionSum = "<<ionSum<<" electrons"<<G4endl;
 
@@ -568,7 +572,7 @@ int main()
          sumDistr += rDistr[j];
        }
        G4cout<<"sumDistr = "<<sumDistr<<G4endl;
-
+       */
        
 
 

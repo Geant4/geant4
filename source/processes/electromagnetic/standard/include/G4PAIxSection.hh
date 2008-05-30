@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.14 2008-05-23 09:59:21 grichine Exp $
+// $Id: G4PAIxSection.hh,v 1.15 2008-05-30 16:04:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,8 @@ public:
 
           G4double PAIdNdxCerenkov( G4int intervalNumber,
 	                           G4double betaGammaSq    );
+          G4double PAIdNdxMM( G4int intervalNumber,
+	                           G4double betaGammaSq    );
 
           G4double PAIdNdxPlasmon( G4int intervalNumber,
 	                           G4double betaGammaSq    );
@@ -134,12 +136,14 @@ public:
 
 	  void     IntegralPAIxSection();
 	  void     IntegralCerenkov();
+	  void     IntegralMM();
 	  void     IntegralPlasmon();
 	  void     IntegralResonance();
 
           G4double SumOverInterval(G4int intervalNumber);
           G4double SumOverIntervaldEdx(G4int intervalNumber);
           G4double SumOverInterCerenkov(G4int intervalNumber);
+          G4double SumOverInterMM(G4int intervalNumber);
           G4double SumOverInterPlasmon(G4int intervalNumber);
           G4double SumOverInterResonance(G4int intervalNumber);
 
@@ -149,6 +153,8 @@ public:
 	                          G4double energy          );
           G4double SumOverBordCerenkov( G4int intervalNumber,
 	                                G4double energy          );
+          G4double SumOverBordMM( G4int intervalNumber,
+	                                G4double energy          );
           G4double SumOverBordPlasmon( G4int intervalNumber,
 	                               G4double energy          );
           G4double SumOverBordResonance( G4int intervalNumber,
@@ -156,11 +162,13 @@ public:
 
           G4double GetStepEnergyLoss( G4double step );
           G4double GetStepCerenkovLoss( G4double step );
+          G4double GetStepMMLoss( G4double step );
           G4double GetStepPlasmonLoss( G4double step );
           G4double GetStepResonanceLoss( G4double step );
 	 
           G4double GetEnergyTransfer();
           G4double GetCerenkovEnergyTransfer();
+          G4double GetMMEnergyTransfer();
           G4double GetPlasmonEnergyTransfer();
           G4double GetResonanceEnergyTransfer();
           G4double GetRutherfordEnergyTransfer();
@@ -176,12 +184,14 @@ public:
           G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i]; } 
 
           G4double GetDifPAIxSection(G4int i){ return fDifPAIxSection[i]; } 
-          G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i]; } 
+          G4double GetPAIdNdxCerenkov(G4int i){ return fdNdxCerenkov[i]; } 
+          G4double GetPAIdNdxMM(G4int i){ return fdNdxMM[i]; } 
           G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i]; } 
           G4double GetPAIdNdxResonance(G4int i){ return fdNdxResonance[i]; } 
 	  
 	  G4double GetMeanEnergyLoss() const {return fIntegralPAIxSection[0]; }
 	  G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0]; }
+	  G4double GetMeanMMLoss() const {return fIntegralMM[0]; }
 	  G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0]; }
 	  G4double GetMeanResonanceLoss() const {return fIntegralResonance[0]; }
 
@@ -196,6 +206,7 @@ public:
 	  inline G4double GetIntegralPAIxSection(G4int i) const;
 	  inline G4double GetIntegralPAIdEdx(G4int i) const;
 	  inline G4double GetIntegralCerenkov(G4int i) const;
+	  inline G4double GetIntegralMM(G4int i) const;
 	  inline G4double GetIntegralPlasmon(G4int i) const;
 	  inline G4double GetIntegralResonance(G4int i) const;
 
@@ -254,12 +265,14 @@ G4double fImPartDielectricConst[500];   // Imaginary part of dielectric const
 G4double          fIntegralTerm[500];   // Integral term in PAI cross section
 G4double        fDifPAIxSection[500];   // Differential PAI cross section
 G4double          fdNdxCerenkov[500];   // dNdx of Cerenkov collisions
+G4double          fdNdxMM[500];   // dNdx of MM-Cerenkov collisions
 G4double          fdNdxPlasmon[500];   // dNdx of Plasmon collisions
 G4double          fdNdxResonance[500];   // dNdx of resonance collisions
 
 G4double   fIntegralPAIxSection[500];   // Integral PAI cross section  ?
 G4double   fIntegralPAIdEdx[500];   // Integral PAI dEdx  ?
 G4double   fIntegralCerenkov[500];   // Integral Cerenkov N>omega  ?
+G4double   fIntegralMM[500];   // Integral MM-Cerenkov N>omega  ?
 G4double   fIntegralPlasmon[500];   // Integral Plasmon N>omega  ?
 G4double   fIntegralResonance[500];   // Integral resonance N>omega  ?
 
@@ -315,6 +328,15 @@ inline G4double G4PAIxSection::GetIntegralCerenkov(G4int i) const
     G4Exception("Invalid argument in G4PAIxSection::GetIntegralCerenkov");
    }
    return fIntegralCerenkov[i];
+}
+
+inline G4double G4PAIxSection::GetIntegralMM(G4int i) const 
+{
+   if(i < 1 || i > fSplineNumber)
+   {
+    G4Exception("Invalid argument in G4PAIxSection::GetIntegralMM");
+   }
+   return fIntegralMM[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralPlasmon(G4int i) const 
