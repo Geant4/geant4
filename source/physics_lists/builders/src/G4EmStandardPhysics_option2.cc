@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.8 2008-04-22 18:28:38 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.9 2008-05-30 11:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 15.05.2007 V.Ivanchenko rename to _option2 
 // 13.03.2008 V.Ivanchenko use G4eMultipleScattering
 // 21.04.2008 V.Ivanchenko add long-lived D and B mesons; use spline
+// 28.05.2008 V.Ivanchenko linLossLimit=0.01; added hBrem and hPairProd processes
 //
 //----------------------------------------------------------------------------
 //
@@ -66,6 +67,8 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -181,6 +184,15 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
+    } else if (particleName == "pi+" ||
+               particleName == "pi-" ||
+               particleName == "proton" ) {
+
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
+
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
 	       particleName == "D+" ||
@@ -195,13 +207,10 @@ void G4EmStandardPhysics_option2::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-               particleName == "kaon+" ||
+	       particleName == "kaon+" ||
                particleName == "kaon-" ||
-               particleName == "lambda_c+" ||
+	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
-               particleName == "pi+" ||
-               particleName == "pi-" ||
-               particleName == "proton" ||
                particleName == "sigma+" ||
                particleName == "sigma-" ||
                particleName == "tau+" ||
@@ -223,14 +232,14 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   // Physics tables
   //
   opt.SetMinEnergy(100*eV);
-  opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(110);
-  opt.SetLambdaBinning(110);
+  opt.SetMaxEnergy(100*TeV);
+  opt.SetDEDXBinning(120);
+  opt.SetLambdaBinning(120);
   opt.SetSplineFlag(true);
   
   // Energy loss
   //
-  opt.SetLinearLossLimit(1.e-5);
+  opt.SetLinearLossLimit(0.01);
   
   // Ionization
   //

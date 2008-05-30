@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2008-05-19 10:21:34 vnivanch Exp $
+$Id: History,v 1.61 2008-05-30 11:01:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-05-2008, V.Ivanchenko phys-lists-V09-01-08
+- GNUmakefile - added electromagnetic/highenergy 
+- G4EmStandardPhysics_option3 : define linLossLimit per particle type
+- G4EmStandardPhysics_option2 : define linLossLimit 0.01,
+                added hadron induced bremsstrahlung and pair production 
 
 19-05-2008, V.Ivanchenko phys-lists-V09-01-07
 - removed obsolete class G4HadronProcessStore (similar is available

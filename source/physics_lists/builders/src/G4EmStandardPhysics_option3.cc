@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.8 2008-04-22 18:28:38 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.9 2008-05-30 11:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 21.04.2008 V.Ivanchenko add long-lived D and B mesons; use spline
+// 28.05.2008 V.Ivanchenko linLossLimit=0.01 for ions 0.001 for others
 //
 //----------------------------------------------------------------------------
 //
@@ -151,6 +152,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
@@ -160,6 +162,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4eIonisation* epIoni = new G4eIonisation();
       epIoni->SetStepFunction(0.2, 100*um);            
+      epIoni->SetLinearLossLimit(1.e-3);
       pmanager->AddProcess(epIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
@@ -170,6 +173,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 100*um);          
+      muIoni->SetLinearLossLimit(1.e-3);
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
@@ -181,6 +185,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 20*um);
+      ionIoni->SetLinearLossLimit(1.e-2);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
     } else if (particleName == "B+" ||
@@ -215,6 +220,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetLinearLossLimit(1.e-2);
       pmanager->AddProcess(hIoni,                     -1, 2, 2);
     }
   }
@@ -233,14 +239,10 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   //
   opt.SetMinEnergy(100*eV);
   opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(110);
-  opt.SetLambdaBinning(110);
+  opt.SetDEDXBinning(220);
+  opt.SetLambdaBinning(220);
   opt.SetSplineFlag(true);
-  
-  // Energy loss
-  //
-  opt.SetLinearLossLimit(1.e-5);
-  
+    
   // Ionization
   //
   opt.SetSubCutoff(true);    
