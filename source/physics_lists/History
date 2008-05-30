@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2008-05-30 11:01:37 vnivanch Exp $
+$Id: History,v 1.62 2008-05-30 11:33:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29-05-2008, V.Ivanchenko phys-lists-V09-01-08
+30-05-2008, V.Ivanchenko phys-lists-V09-01-08
 - GNUmakefile - added electromagnetic/highenergy 
 - G4EmStandardPhysics_option3 : define linLossLimit per particle type
 - G4EmStandardPhysics_option2 : define linLossLimit 0.01,
