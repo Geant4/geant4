@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.3 2008-05-23 09:59:21 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.4 2008-05-30 14:40:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@
 #include "G4ios.hh"
 #include <fstream>
 #include <cmath>
+
+
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -123,6 +125,25 @@ G4double FitBichsel(G4double bg)
   
 }
 
+////////////////////////////////////////////////////////////
+
+
+G4double GetIonisation(G4double transfer)
+{
+  G4double W  = 34.75*eV;
+  G4double I1 = 13.62*eV; // first ionisation potential in mixture
+  I1 *= 0.9;
+
+  G4double       result = W;
+
+  // result /= 1.-I1/transfer;
+
+  return transfer/result;
+
+}
+
+
+/////////////////////////////////////////////////
 
 
 
@@ -238,9 +259,10 @@ int main()
 
 
 
-  G4String testName = "Ne10CO2";
+  // G4String testName = "N2";
+  // G4String testName = "Ne10CO2";
   // G4String testName = "Ne10CO2T293";
-  //  G4String testName = "Ne857CO295N2T292";
+  G4String testName = "Ne857CO295N2T292";
 
 
   // G4cout<<"Enter material name for test : "<<std::flush;
@@ -395,7 +417,9 @@ int main()
 	 //      << FitBichsel(bg) << "\t"
                << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" 
           << G4endl;
-	  /*      
+
+
+       /*	        
        outFile 
          //      << kineticEnergy/keV<<"\t"
 	 //       << gamma << "\t"
@@ -415,7 +439,9 @@ int main()
        //          <<maxEnergyTransfer/keV<<"\t\t"
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl;
-       
+
+             
+
        outFile<<testPAIproton.GetSplineSize()-1<<G4endl;
 
        for( i = 1; i < testPAIproton.GetSplineSize(); i++)
@@ -428,22 +454,27 @@ int main()
                << testPAIproton.GetIntegralPAIxSection(i)*cm << "\t" 
                << G4endl;
        }
+       
        */
 
-
-
+       
 
        G4double position, transfer, lambda, range, r2cer=0., r2res=0., r2ruth=0., r2tot=0.;
        G4int nCer = 0, nRes = 0, nRuth = 0, nTot = 0;
        G4double rBin[100], rDistr[100], rTemp, rTemp2, sumDistr = 0., rSum = 0;
+       G4double ionBin[100], ionDistr[100], ionMean, ionRand, F = 0.19, ionSum=0., ionSigma;
+
 
        for( i = 0; i < 100; i++)
        {
+         ionBin[i] = i*1.;
+         ionDistr[i] = 0.;
          rBin[i] = i/200.;
          rDistr[i] = 0.;
        }
        for( i = 0; i < 10000; i++)
        {
+	 /*
          position = testPAIproton.GetIntegralPAIxSection(1)*G4UniformRand();
 
 	 if( position < testPAIproton.GetIntegralCerenkov(1) )
@@ -489,8 +520,31 @@ int main()
              rDistr[j] += 1.;
              break;
 	   }
-	 }	  
+	 }
+	 */
+
+         transfer = testPAIproton.GetEnergyTransfer();          
+	 ionMean  = GetIonisation(transfer);
+         ionSigma = std::sqrt(F*ionMean);
+
+         // ionRand  = G4RandGauss::shoot(ionMean, ionSigma);
+         ionRand  = ionMean;
+
+         if( ionRand < 0.) ionRand =0.;	
+
+         ionSum += ionRand; 
+         nTot++;
+ 
+	 for( j = 0; j < 100; j++ )
+	 {
+           if( ionRand <= ionBin[j] )
+	   {
+             ionDistr[j] += 1.;
+             break;
+	   }
+	 }
        }
+       /*
        if(nCer >0)  r2cer  /= nCer;
        if(nRes >0)  r2res  /= nRes;
        if(nRuth >0) r2ruth /= nRuth;
@@ -501,15 +555,23 @@ int main()
        G4cout<<"rCer = "<<std::sqrt(r2cer)<<" mm; rRes = "<<std::sqrt(r2res)<<" mm"<<G4endl;
        G4cout<<"rRuth = "<<std::sqrt(r2ruth)<<" mm; rTot = "<<std::sqrt(r2tot)<<" mm"<<G4endl;
        G4cout<<"rSum = "<<rSum<<" mm; "<<G4endl;
+       */
+                    ionSum  /= nTot; 
+       G4cout<<"ionSum = "<<ionSum<<" electrons"<<G4endl;
 
        outFile<<100<<G4endl;
 
        for( j = 0; j < 100; j++ )
        {
-         outFile<<rBin[j]<<"\t"<<rDistr[j]<<G4endl;
+         // outFile<<rBin[j]<<"\t"<<rDistr[j]<<G4endl;
+         outFile<<ionBin[j]<<"\t"<<ionDistr[j]<<G4endl;
          sumDistr += rDistr[j];
        }
        G4cout<<"sumDistr = "<<sumDistr<<G4endl;
+
+       
+
+
        kineticEnergy *= 1.41;        // was 1.4; 1.5;
      }
 
