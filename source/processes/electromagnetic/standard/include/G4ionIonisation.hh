@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.53 2008-04-19 16:56:25 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.54 2008-06-01 19:32:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@
 #include "G4ionEffectiveCharge.hh"
 #include "G4VEmModel.hh"
 #include "G4EmCorrections.hh"
+#include "G4IonFluctuations.hh"
 
 class G4Material;
 class G4PhysicsVector;
@@ -122,6 +123,7 @@ protected:
   // protected pointers 
   G4ionEffectiveCharge*       effCharge;
   G4EmCorrections*            corr;
+  G4IonFluctuations*          ionFluctuations; 
 
 private:
 
@@ -180,6 +182,7 @@ inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
     *corr->EffectiveChargeCorrection(curParticle,curMaterial,preKinEnergy);
 
   SetDynamicMassCharge(massRatio, charge2);
+  ionFluctuations->SetParticleAndCharge(curParticle, charge2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
