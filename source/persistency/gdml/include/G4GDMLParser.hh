@@ -50,6 +50,7 @@ public:
    G4ThreeVector GetRotation(const G4String& name) { return reader.getRotation(name); }
    G4ThreeVector GetScale(const G4String& name) { return reader.getScale(name); }
    G4GDMLMatrix GetMatrix(const G4String& name) { return reader.getMatrix(name); }
+   G4LogicalVolume* GetVolume(const G4String& name) { return reader.getVolume(name); }
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(reader.getVolume(name)); }
    void Modularize(const G4VPhysicalVolume* const physvol,const G4String& name) { writer.SetModule(physvol,name); }
