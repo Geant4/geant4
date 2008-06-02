@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.7 2008-04-10 14:28:01 sincerti Exp $
+$Id: README,v 1.8 2008-06-02 10:00:40 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -49,13 +49,13 @@ online database (http://www.slac.stanford.edu/spires/) :
 - A DETAILED RAY-TRACING SIMULATION OF THE HIGH RESOLUTION MICROBEAM AT THE
 AIFIRA FACILITY
 F. Andersson, Ph. Barberet, S. Incerti, Ph. Moretto (CENBG, Gradignan) . Dec 2007.
-In press in Nucl.Instrum.Meth.B (2008)
+In press in Nucl.Instrum.Meth.B266:1653-1658, 2008
 
 - MONTE CARLO SIMULATION OF THE CENBG MICROBEAM AND NANOBEAM LINES WITH THE
 GEANT4 TOOLKIT
 By S. Incerti, Q. Zhang, F. Andersson, Ph. Moretto, G.W. Grime, 
 M.J. Merchant, D.T. Nguyen, C. Habchi, T. Pouthier and H. Seznec
-In press in Nucl.Instrum.Meth.B, 2007
+In press in Nucl.Instrum.Meth.B260:20-27, 2007
 
 - GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
 By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec. May 2006. 5pp.
@@ -103,7 +103,10 @@ All variables are defined with their default value.
  
  - G4ABLADATA		  points to the libraries fo ablation processes;
 
-However, the $G4LEDATA, $G4LEVELGAMMADATA, $G4NEUTRONHPDATA, 
+However, the 
+$G4LEDATA, 
+$G4LEVELGAMMADATA, 
+$G4NEUTRONHPDATA, 
 $G4RADIOACTIVEDATA
 and $G4ABLADATA
 variables do not need to be defined for this example.
@@ -126,14 +129,13 @@ This macro file shows :
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
 
-In interactive mode, run:
+The code can be run with :
 
-> $G4WORDIR/bin/Linux-g++/Nanobeam 
+> $G4WORDIR/bin/$G4SYSTEM/Nanobeam 
 
-At the Idle> prompt, enter: 
-/control/execute default.mac
+The macro file default.mac is read by default.
 
-default.mac can be one of the following macro files :
+It can be one of the following macro files :
 
 1) for the computation of intrinsic aberration coefficients :
 coef-square.mac : using square magnetic field model (=default.mac)
