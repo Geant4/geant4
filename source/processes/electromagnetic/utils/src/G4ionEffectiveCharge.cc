@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.19 2008-04-18 18:42:17 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.20 2008-06-02 18:04:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);
-  minCharge        = 0.1;
+  minCharge        = 1.0;
   lastPart         = 0;
   lastMat          = 0;
   lastKinEnergy    = 0.0;
@@ -138,17 +138,19 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Heavy ion case
   } else {
     
-    G4double y    = nist->GetZ13(z);
-    G4double z23  = y*y;
+    G4double y;
+    //    = nist->GetZ13(z);
+    //G4double z23  = y*y;
     G4double zi13 = nist->GetZ13(Zi);
     G4double zi23 = zi13*zi13;
-    G4double e = std::max(reducedEnergy,energyBohr/z23);
+    //    G4double e = std::max(reducedEnergy,energyBohr/z23);
+    //G4double e = reducedEnergy;
 
     // v1 is ion velocity in vF unit
     G4double eF   = material->GetIonisation()->GetFermiEnergy();
-    G4double v1sq = e/eF;
-    G4double vFsq = eF/energyBohr;
-    G4double vF   = std::sqrt(vFsq);
+    G4double v1sq = reducedEnergy/eF;
+    //G4double vFsq = eF/energyBohr;
+    G4double vF   = std::sqrt(eF/energyBohr);
 
     // Faster than Fermi velocity
     if ( v1sq > 1.0 ) {
@@ -159,16 +161,18 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
       y = 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
     }
 
-    G4double y3 = std::pow(y, 0.3) ;
+    //    G4double y3 = std::pow(y, 0.3) ;
     //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
-    q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
+    //q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
 
-    //    q = 1.0 - std::exp(-0.95*std::sqrt(reducedEnergy/energyBohr)/zi23);
+    y *= (0.75 + 0.52/Zi);
+    //y /= 1.2;
+    if( y < 0.2 ) q = y*(1.0 - 0.5*y);
+    else          q = 1.0 - std::exp(-y);
 
     G4double qmin = minCharge/Zi;
-
     if(q < qmin) q = qmin;
-    
+    /*    
     G4double tq = 7.6 - std::log(reducedEnergy/keV);
     G4double tq2= tq*tq;
     G4double sq = ( 0.18 + 0.0015 * z ) / (Zi*Zi);
@@ -192,6 +196,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     else              xx *= std::log(1.0 + lambda2); 
 
     chargeCorrection = sq * (1.0 + xx);
+    */
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 

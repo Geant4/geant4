@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.58 2008-06-01 19:32:02 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.59 2008-06-02 18:05:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -185,11 +185,12 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 {
   const G4ParticleDefinition* part = dp->GetDefinition();
   const G4Material* mat = couple->GetMaterial();
-
+  
   // Compute nuclear stopping
   if(nuclearStopping && preKinEnergy*massRatio < 50.*eth*charge2) {
 
-    G4double nloss = s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
+    G4double nloss = 
+      s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5,false);
 
     // too big energy loss
     if(eloss + nloss > preKinEnergy) {
@@ -208,7 +209,7 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 
   if(preKinEnergy > eloss) {
 
-    G4double e = preKinEnergy - eloss*0.5;
+    //G4double e = preKinEnergy - eloss*0.5;
     
     //G4double eloss0 = eloss;   
     //G4cout << "e= " << e << " ratio= " << massRatio 
@@ -216,12 +217,12 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 
     // High order corrections to Bethe-Bloch
     if(preKinEnergy*massRatio > eth) {
-      eloss += s*corr->IonHighOrderCorrections(part,couple,e);
+      eloss += s*corr->IonHighOrderCorrections(part,couple,preKinEnergy);
       //G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
 
       // correction for modification of effective charge during the step
     } else {      
-      eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
+      //eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
       // propose charge after the step
       fParticleChange.SetProposedCharge(eplus*sqrt(charge2));
       //G4cout<<"Corrected for mean energy: eloss= "<<eloss<<" f= "<<eloss/eloss0

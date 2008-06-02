@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.18 2008-06-01 19:32:02 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.19 2008-06-02 18:05:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -183,8 +183,9 @@ G4double G4IonFluctuations::Dispersion(
   for(G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i]; 
     G4double Z = elm->GetZ();  
-    if ( beta2 < 3.0*theBohrBeta2*Z ) f = Factor(material, Z);
-    else                              f = RelativisticFactor(elm, Z);
+    f = Factor(material, Z);
+    //if ( beta2 < 3.0*theBohrBeta2*Z ) f = Factor(material, Z);
+    //else                              f = RelativisticFactor(elm, Z);
     //G4cout << "Z= " << Z << " f= " << f << G4endl;
     fac += theAtomNumDensityVector[i]*f;
   }
@@ -194,14 +195,14 @@ G4double G4IonFluctuations::Dispersion(
   G4double f1 = 1.065e-4*chargeSquare;
   if(beta2 > theBohrBeta2)  f1/= beta2;
   else                      f1/= theBohrBeta2;
-  if(f1 > 1.0) f1 = 1.0;
+  if(f1 > 2.5) f1 = 2.5;
   fac *= (1.0 + f1);
 
   // taking into account the cut
   if(fac > 1.0) {
     siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
   }
-  //G4cout << "siga= " << siga << " fac= " << fac << "  f1= " << f1 << G4endl;
+  //G4cout << "siga(keV)= " << sqrt(siga)/keV << " fac= " << fac << "  f1= " << f1 << G4endl;
 
   return siga;
 }
@@ -328,10 +329,13 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   if( 0 > iz )      iz = 0;
   else if(95 < iz ) iz = 95;
 
-  G4double s1 = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
+  G4double ss = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
 	            + a[iz][2]*pow(energy,a[iz][3]);
-  if(s1 > DBL_MIN) s1 = 1.0/s1;
-  else             s1 = 0.0;
+  
+  // protection for the validity range
+  G4double s1 = 1.0;
+  if(ss < 1.0 && ss > 0.1) s1 = 1.0/ss;
+  else if(ss < 0.1)        s1 = 10.;
 
   G4int i = 0 ;
   G4double factor = 1.0 ;
@@ -382,7 +386,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
 
   G4double s2 = factor * x * b[i][0] / (y*y + x*x);
 
-  //G4cout << "s1= " << s1 << " s2= " << s2 << " q^2= " << chargeSqRatio << G4endl;
+  //G4cout << "s1= " << s1 << " s2= " << s2 << " q^2= " << effChargeSquare << G4endl;
 
   return s1 + s2*chargeSquare/effChargeSquare;
 }
