@@ -73,8 +73,6 @@
 
 #include "G4IonPhysics.hh"
 
-#include "G4HadronProcessStore.hh"
-
 #include "G4LossTableManager.hh"
 
 #include "G4ProcessManager.hh"
@@ -248,8 +246,6 @@ void F04PhysicsList::ConstructProcess()
     }
 
     AddStepMax();
-
-    if (fDump) G4HadronProcessStore::Instance()->Dump(1);
 }
 
 void F04PhysicsList::RemoveFromEMPhysicsList(const G4String& name)

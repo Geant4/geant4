@@ -1,4 +1,4 @@
-// $Id: History,v 1.6 2008-03-26 19:25:48 gum Exp $
+// $Id: History,v 1.7 2008-06-02 15:53:17 vnivanch Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 2th, 2008 Vladimir Ivanchenko - fieldex04-V09-01-02
+- removed obsolete G4HadronProcessStore from PhysicsList
 
 Mar 26th, 2008 Gunter Folger - fieldex04-V09-01-01
 - final fix to avoid error log - Invalid rotation specification
