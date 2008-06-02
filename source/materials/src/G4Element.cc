@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.27 2008-06-02 16:50:14 vnivanch Exp $
+// $Id: G4Element.cc,v 1.28 2008-06-02 17:12:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,12 +74,6 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     G4Exception (" ERROR from G4Element::G4Element !"
 		 " It is not allowed to create an Element with Z < 1" );
   }
-  if (aeff/(g/mole)<zeff) {
-    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff 
-	   << " A= " << aeff/(g/mole) << G4endl; 
-    G4Exception (" ERROR from G4Element::G4Element !"
-		 " Attempt to create an Element with N < Z !!!" );
-  }
   if ((zeff-G4int(zeff)) > perMillion) {
     G4cout << "G4Element Warning:  " << name << " Z= " << zeff 
 	   << " A= " << aeff/(g/mole) << G4endl; 
@@ -93,6 +87,15 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
   fZeff   = zeff;
   fNeff   = aeff/(g/mole);
   fAeff   = aeff;
+
+  if(fNeff < 1.0) fNeff = 1.0;
+
+  if (fNeff < zeff) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff 
+	   << " A= " << aeff/(g/mole) << G4endl; 
+    G4Exception (" ERROR from G4Element::G4Element !"
+		 " Attempt to create an Element with N < Z !!!" );
+  }
    
   fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
   fAtomicShells     = new G4double[fNbOfAtomicShells];
