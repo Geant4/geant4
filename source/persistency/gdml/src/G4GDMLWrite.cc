@@ -31,9 +31,9 @@
 #include <sstream>
 #include "G4GDMLWrite.hh"
 
-G4GDMLWrite::ModuleMapType& moduleMap() {
+G4GDMLWrite::ModuleMapType& G4GDMLWrite::moduleMap() {
 
-   static G4GDMLWrite::ModuleMapType instance;
+   static ModuleMapType instance;
    return instance;
 }
 
