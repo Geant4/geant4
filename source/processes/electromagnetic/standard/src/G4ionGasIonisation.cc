@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.12 2008-06-01 19:32:02 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.13 2008-06-02 18:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,7 +138,8 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
   if(NuclearStoppingFlag() && 
      preStepKinEnergy*currMassRatio < 50.*currTh*currCharge2) {
 
-    G4double nloss = s*corr->NuclearDEDX(part,mat,preStepKinEnergy-0.5*eloss);
+    G4double nloss = 
+      s*corr->NuclearDEDX(part,mat,preStepKinEnergy-0.5*eloss,false);
     if(eloss + nloss > preStepKinEnergy) {
       nloss *= (preStepKinEnergy/(eloss + nloss));
       eloss = preStepKinEnergy;

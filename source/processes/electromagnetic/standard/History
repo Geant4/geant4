@@ -1,4 +1,4 @@
-$Id: History,v 1.384 2008-05-21 09:02:08 vnivanch Exp $
+$Id: History,v 1.385 2008-06-02 18:11:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2 June 08: V.Ivant (emstand-V09-01-16)
+- G4IonFluctuation - added method SetParticleAndCharge 
+- G4ionIonisation, G4ionGasIonisation - added pointer to G4IonFluctuations
+             and use of method SetParticleAndCharge; compute nuclear
+             stopping before adding corrections
 
 20 May 08: V.Ivant (emstand-V09-01-15)
 - G4IonFluctuations - summed fluctuation of components of a mixture instead
