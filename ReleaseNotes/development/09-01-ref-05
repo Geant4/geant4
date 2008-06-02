@@ -1,0 +1,219 @@
+
+                       geant4-09-01-ref-05
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Completed support for divisions, replicas and parameterised volumes
+   in the GDML plugin.
+ o New EM model G4eBremsstrahlungHEModel, an extension of the standard
+   Bremsstrahlung model but using a more sophisticated LPM approach.
+ o Added Doppler broadening and PIXE cross section for low-energy processes.
+ o Fixed abnormally high pt secondaries due to incident strange particles
+   in high-energy hadronic model.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 9.1.p02
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-04
+------
+- liblist.c: removed C++ style comments.
+
+geometry/management                              geommng-V09-01-04
+-------------------
+- G4Region: changed condition inside ScanVolumeTree() to check for the
+  existence of a valid material-scanner pointer to apply the material scan
+  instead of using the flag for nested structures.
+- G4GeometryManager: do not apply optimisation on the current volume if it
+  has been defined as a regular structure.
+- Addresses problem report #990.
+
+geometry/solids/specific                         geom-specific-V09-01-12
+------------------------
+- Enhanced GetPointOnSurface() for generic G4Polycone and G4Polyhedra
+  constructs; the method uses new triangulation algorithm for G4PolyPhiFace.
+- G4ExtrudedSolid: added missing 'std' namespace to standard mathematical
+  function calls.
+
+global                                           global-V09-01-07
+------
+- G4UnitsTable: added units for electric-field, V/m.
+
+persistency/gdml                                 gdml-V09-01-04
+----------------
+- Completed support for divisions, replicas and parameterised volumes.
+- Added a constant limiting the maximum number of reflections/displacements
+  of a single solid.
+
+physics_lists                                    phys-lists-V09-01-08
+-------------
+- G4EmStandardPhysics_option3 : define linLossLimit per particle type.
+- G4EmStandardPhysics_option2 : define linLossLimit to be 0.01; added
+  hadron induced bremsstrahlung and pair production.
+- Removed obsolete class G4HadronProcessStore.
+
+processes/electromagnetic/lowenergy              emlowen-V09-01-12
+-----------------------------------
+- Added PIXE cross section, L-shells, for protons in G4OrlicLCrossSection.
+  Added semi-Empirical model implementation for L-SubShells-Cross-Section
+  with protons projectiles.
+- Added Doppler broadening in G4LowEnergyComptonPolarized, same model as
+  in G4LowEnergyCompton.
+
+processes/electromagnetic/standard               emstand-V09-01-13
+----------------------------------
+- G4eBremsstrahlungHEModel: new model, which is an extension of the standard
+  bremsstrahlung model using a more sophisticated LPM approach.
+- G4BetheBlochModel: added projectile form-factor in computation of max
+  energy transfer and in sampling of the energy of e-.
+- G4hMultipleScattering: added method AlongStepGetPhysicalInteractionLength()
+  in which scaled energy normalized to one nucleon is used for ions.
+- G4IonFluctuations: sum fluctuation of components of a mixture instead
+  of computation for average Z.
+- G4ionGasIonisation: fixed bug in update of the dynamic charge of an ion.
+
+processes/electromagnetic/utils                  emutils-V09-01-16
+-------------------------------
+- New class G4EmElementSelector, a helper class to sample random G4Element
+  in a compound material.
+- G4LossableBuilder: using more precise algorithm to compute range when
+  spline is used
+- G4VMultipleScattering: made AlongStepGetPhysicalInteractionLength()
+  method virtual allowing to overwrite it by a derived class needed for
+  ion simulation.
+- G4VEnergyLossProcess: fixed problem of subcutoff option for ions (wrong ion
+  ranges).
+- G4EmCalculator: fixed bug in computation for ions.
+- G4VEmModel: added virtual method SetupForMaterial().
+- G4EmCorrections: computation of the finite size correction is moved to
+  the Bethe-Bloch model.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-01-01)
+  o G4HadronicProcessStore: new singleton class to keep pointers to all
+    hadronic processes.
+  o G4HadronicProcess: added methods PreparePhysicsTable() and
+    BuildPhysicsTable(); added registration in G4HadronicProcessStore. Cleaned
+    up header file (added comments and moved methods to implementation).
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-05)      (*)
+  o Fixed case of exceeded boundary bounds in G4QCollision.
+- models/coherent_elastic (hadr-cohe-V09-01-03)
+  o G4HadronElastic: added counts of abnornal sampling results and printing
+    out values in the destructor.
+  o G4UHadronElasticProcess and G4ChargeExchangeProcess: added call to
+    BuildPhysicsTable() of the base class G4HadronicProcess.
+- models/de_excitation (hadr-deex-V09-01-01)
+  o G4PhotonEvaporation: atomic relaxation model is no longer applied following
+    internal electron conversion. Instead the vacant shell index is passed to
+    radioactive decay model, where the ARM is applied.
+- models/high_energy (hadr-hep-V09-01-01)
+  o G4HEInelastic::TuningOfHighEnergyCascade(): removed abnormally high pt
+    secondaries due to incident strange particles by prohibiting the assignment
+    of leading particle to anything that goes backward in the CM frame.
+- models/neutron_hp (hadr-hpn-V09-01-06)
+  o Removed unnecessary dependencies in G4NeutronHPChannel and
+    G4NeutronHPElementData.
+- models/qmd (hadr-qmd-V09-01-01)
+  o Fixed and changed sampling method of impact parameter in G4QMDReaction.
+- models/radioactive_decay (radioactive_decay-V09-01-00)
+  o G4NuclearDecayChannel: ARM is no longer applied in photon-evaporation for
+    IT mode and is now applied at the end of DecayIt(); now using the correct
+    shell index in appling ARM and switching on Auger electron production.
+    Checking the residual kinetic energy after ARM and adding it to the atom.
+- models/rpg (hadr-rpg-V09-01-02)
+  o Fixed remaining compilation warnings for gcc-4.3.0.
+
+run                                              run-V09-01-01
+---
+- Invoke G4Particle::DeleteAllParticles() in the destructor of
+  G4VUserPhysicsList to clear leaks induced by particles created in
+  the user application.
+
+tracking                                         run-V09-01-01
+--------
+- G4SteppingManager: 'fTouchableHandle' was not properly updated.
+  Addressing problem report #1009.
+
+examples                                         examples-V09-01-05
+--------
+- Updated reference outputs.
+- advanced/hadrontheraphy (hadrontheraphy-V09-01-04)                              (*)
+  o Added in the beam line the MOPI detector. MOPI is a microstrip detector
+    that, in the real case, is able to check during the treatment the beam
+    simmetry of the theraphy beam. Its physical structure is here exactly
+    simulated so that its contribution to the energy loss can be taken into
+    account. A detailed description if the detector can be found in
+    NIM A 572 (2007) 1094-1101 and its references.
+  o Corrected the position of the Phantom and Detector.
+  o Changed the default dimensions of histogram bins (from 200 um to 100 um).
+  o Updated the README file.
+- extended/electromagnetic/TestEm1 (testem1-V09-01-02)
+- extended/electromagnetic/TestEm2 (testem2-V09-01-03)
+  o PhysListEmStandard: added spline option for physics tables.
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm3 (testem3-V09-01-05)
+  o Added PhysListEmStandardLPM, physics-list with high energy bremsstrahlung
+    model. Improved printout
+  o PhysListEmStandard: added spline option for physics tables
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm4 (testem4-V09-01-01)
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm5 (testem5-V09-01-04)
+  o PhysListEmStandard: added spline option for physics tables.
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm6 (testem6-V09-01-00)
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm7 (testem7-V09-01-08)
+  o G4ScreenedNuclearRecoil: added NIEL computation using G4LinhardPartition,
+    new class to compute NIEL.
+  o Updated c2_function and fixed compilation problems on SUN.
+  o README: updated physics-lists description. Updated AIDA informations.
+- extended/electromagnetic/TestEm9 (testem9-V09-01-03)
+  o PhysListEmStandard: added spline option for physics tables.
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm10 (testem10-V09-01-00)
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm11 (testem11-V09-01-02)
+- extended/electromagnetic/TestEm12 (testem12-V09-01-03)
+  o Suppressed warning in HistoManager::Scale().
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm14 (testem14-V09-01-01)
+- extended/electromagnetic/TestEm15 (testem15-V09-01-02)
+- extended/electromagnetic/TestEm16 (testem16-V09-01-00)
+  o README: updated AIDA informations.
+- extended/electromagnetic/TestEm17 (testem17-V09-01-02)
+- extended/electromagnetic/TestEm18 (testem18-V09-01-03)
+  o PhysListEmStandard: added spline option for physics tables.
+  o README: updated AIDA informations.
+- extended/field/field02 (exfield02-V09-01-01)
+  o Added handling of units for electric field in messenger.
+- extended/hadronic/Hadr01 (exhadr01-V09-01-00)
+  o Removed usage of obsolete G4HadronProcessStore.
+- extended/medical/fanoCavity (fano-V09-01-01)
+- extended/medical/fanoCavity2 (fano2-V09-01-01)
+  o Suppressed warning in HistoManager::Scale().
+  o README: updated AIDA informations.
+- novice/N02 (exampleN02-V09-01-01)
+  o PhysicsList: replaced G4MultipleScattering with G4eMultipleScattering.
+  o Protected inline execution of command "/control/execute vis.mac"
+    with G4VIS_USE flag.
+- novice/N03 (exampleN03-V09-01-02)
+- novice/N04 (exampleN04-V09-01-00)
+- novice/N06 (exampleN06-V09-01-00)
+- novice/N07 (exampleN07-V09-01-00)
+  o Protected inline execution of command "/control/execute vis.mac"
+    with G4VIS_USE flag.
+
+tests                                            tests-V09-01-05
+-----
+- Updated reference outputs and tools.
+- test30 (test30-V09-01-00)
+  o Added an option to define target isotope explicitly.
+- test31 (test31-V09-01-01)
+  o Added control on C12 dedx computation with G4EmCalculator.
+- test44 (test44-V09-01-00)
+  o New test for validation of Bragg peak distribution.
