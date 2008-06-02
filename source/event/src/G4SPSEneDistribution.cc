@@ -1152,8 +1152,10 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
 
       // Set Emin and Emax
       Emin = ebins[0];
-      Emax = ebins[maxcount-1];
-
+      if (maxcount > 1)
+	Emax = ebins[maxcount-1];
+      else
+	Emax = ebins[0];
       // Put energy bins into new histogram - UDefEnergyH.
       for(count=0;count<maxcount;count++)
 	{

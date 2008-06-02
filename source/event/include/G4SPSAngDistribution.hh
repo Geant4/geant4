@@ -184,6 +184,12 @@ public:
   //
   // Set the verbosity level.
   void SetVerbosity(G4int a) {verbosityLevel = a; } ;
+  // some get methods
+  G4String GetDistType() { return AngDistType;};
+  G4double GetMinTheta() { return MinTheta; };
+  G4double GetMaxTheta() { return MaxTheta; };
+  G4double GetMinPhi() { return MinPhi; };
+  G4double GetMaxPhi() { return MaxPhi; };
   //
   G4ParticleMomentum GenerateOne();
   
