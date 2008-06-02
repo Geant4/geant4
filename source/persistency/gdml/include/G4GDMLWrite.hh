@@ -33,6 +33,7 @@
 #ifndef _G4GDMLWRITE_INCLUDED_
 #define _G4GDMLWRITE_INCLUDED_
 
+#include <sys/stat.h>
 #include <iostream>
 
 #include <xercesc/dom/DOM.hpp>
@@ -49,6 +50,7 @@ class G4GDMLWrite {
    XMLCh tempStr[100];
 
    ModuleMapType& moduleMap();
+   bool FileExists(const G4String&) const;
 protected:
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);

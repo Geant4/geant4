@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2008-05-29 12:41:15 ztorzsok Exp $
+$Id: History,v 1.60 2008-06-02 10:42:52 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 june 2008 Zoltan Torzsok
+- Writer checks if the file to be created does already exist
 
 29 may 2008 Zoltan Torzsok
 - Modular files can be written now

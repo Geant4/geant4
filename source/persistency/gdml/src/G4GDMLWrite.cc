@@ -37,6 +37,14 @@ G4GDMLWrite::ModuleMapType& G4GDMLWrite::moduleMap() {
    return instance;
 }
 
+bool G4GDMLWrite::FileExists(const G4String& fname) const {
+
+  struct stat stFileInfo;
+  int intStat = stat(fname.c_str(),&stFileInfo);
+
+  return (intStat == 0) ? true : false; 
+}
+
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
 
    xercesc::XMLString::transcode(name,tempStr,99);
@@ -67,6 +75,8 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
 
    G4cout << "Writing '" << fname << "'..." << G4endl;
+
+   if (FileExists(fname)) G4Exception("GDML Writer: ERROR! File '"+fname+"' already exists!");
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
    xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
