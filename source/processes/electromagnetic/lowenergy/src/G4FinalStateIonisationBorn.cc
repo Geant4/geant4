@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.10 2008-05-02 19:23:38 pia Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.11 2008-06-02 10:20:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Sebastien Incerti (incerti@cenbg.in2p3.fr)
@@ -148,7 +148,6 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 	{ 
 	  // G4cout<<"ERROR OPENING DATA FILE IN PROTON BORN IONIZATION !!! "<<G4endl;
 	  G4Exception("G4FinalStateIonisationBorn::ERROR OPENING proton DATA FILE");
-	  while(1); // ---- MGP ---- What is this?
 	}
       
       pTdummyVec.push_back(0.);
