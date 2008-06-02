@@ -1,4 +1,4 @@
-$Id: History,v 1.297 2008-06-02 11:12:23 flei Exp $
+$Id: History,v 1.298 2008-06-02 13:27:58 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.06.2008   S. Incerti, tag emlowen-V09-01-16
+             produced a new tag including :
+             - F.Lei's correction on 01.06.2008
+             - remove of while(1) statement in G4FinalStateIonisationBorn.cc, l. 151
 
 01.06.2008   F.Lei, tag emlowen-V09-01-15
 	     Correction to the corrupted G4Augerdata.cc, and this tag is on top
