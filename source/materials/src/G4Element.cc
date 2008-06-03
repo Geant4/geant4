@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.29 2008-06-03 13:54:31 vnivanch Exp $
+// $Id: G4Element.cc,v 1.30 2008-06-03 13:55:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,9 +228,9 @@ void G4Element::ComputeDerivedQuantities()
       
   // check if elements with same Z already exist
   fIndexZ = 0; 
-  for (size_t J=0 ; J<fIndexInTable ; J++)
+  for (size_t J=0 ; J<fIndexInTable ; J++) {
     if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
-
+  }
   //nb of materials which use this element
   fCountUse = 0;
 
