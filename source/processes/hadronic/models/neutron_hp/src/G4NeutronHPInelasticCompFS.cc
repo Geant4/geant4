@@ -29,6 +29,7 @@
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 070606 bug fix and migrate to enable to Partial cases by T. Koi 
+// 080603 bug fix for Hadron Hyper News #932 by T. Koi 
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -246,7 +247,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4int iLevel=it-1;
 //  TK debug 070530  (without photon has it = 0)
     //if(50==it) 
-    if( 0 == it ) 
+    if( 0 == it || 50 == it ) 
     {
       iLevel=-1;
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
