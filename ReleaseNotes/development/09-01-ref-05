@@ -22,6 +22,11 @@ config                                           config-V09-01-04
 ------
 - liblist.c: removed C++ style comments.
 
+event                                            event-V09-01-00
+-----
+- Fixed problem of out of bounds array access in G4SPSEneDistribution.
+  Added accessors to G4SPSAngDistribution, addressing problem report #1013.
+
 geometry/management                              geommng-V09-01-04
 -------------------
 - G4Region: changed condition inside ScanVolumeTree() to check for the
@@ -42,6 +47,11 @@ global                                           global-V09-01-07
 ------
 - G4UnitsTable: added units for electric-field, V/m.
 
+materials                                        materials-V09-01-05
+---------
+- G4Element: added more safe check of consistence between Z and A in the
+  constructor. Improved printout of errors and warnings.
+
 persistency/gdml                                 gdml-V09-01-04
 ----------------
 - Completed support for divisions, replicas and parameterised volumes.
@@ -55,13 +65,15 @@ physics_lists                                    phys-lists-V09-01-08
   hadron induced bremsstrahlung and pair production.
 - Removed obsolete class G4HadronProcessStore.
 
-processes/electromagnetic/lowenergy              emlowen-V09-01-12
+processes/electromagnetic/lowenergy              emlowen-V09-01-16
 -----------------------------------
 - Added PIXE cross section, L-shells, for protons in G4OrlicLCrossSection.
   Added semi-Empirical model implementation for L-SubShells-Cross-Section
   with protons projectiles.
 - Added Doppler broadening in G4LowEnergyComptonPolarized, same model as
   in G4LowEnergyCompton.
+- Allow for loading the complete Auger dataset on initialization.
+- Fixed gcc-4.3.0 compilation warning in G4FinalStateIonisationBorn.
 
 processes/electromagnetic/standard               emstand-V09-01-13
 ----------------------------------
@@ -117,6 +129,8 @@ processes/hadronic
 - models/neutron_hp (hadr-hpn-V09-01-06)
   o Removed unnecessary dependencies in G4NeutronHPChannel and
     G4NeutronHPElementData.
+- models/parton_string/diffraction (hadr-string-diff-V09-01-02)
+  o Fixed compilation warnings for unused variables in G4FTFModel.
 - models/qmd (hadr-qmd-V09-01-01)
   o Fixed and changed sampling method of impact parameter in G4QMDReaction.
 - models/radioactive_decay (radioactive_decay-V09-01-00)
@@ -151,6 +165,8 @@ examples                                         examples-V09-01-05
   o Corrected the position of the Phantom and Detector.
   o Changed the default dimensions of histogram bins (from 200 um to 100 um).
   o Updated the README file.
+- advanced/nanobeam (nanobeam-V09-01-10)
+  o Updated default macro reading.
 - extended/electromagnetic/TestEm1 (testem1-V09-01-02)
 - extended/electromagnetic/TestEm2 (testem2-V09-01-03)
   o PhysListEmStandard: added spline option for physics tables.
@@ -189,8 +205,10 @@ examples                                         examples-V09-01-05
 - extended/electromagnetic/TestEm18 (testem18-V09-01-03)
   o PhysListEmStandard: added spline option for physics tables.
   o README: updated AIDA informations.
-- extended/field/field02 (exfield02-V09-01-01)
+- extended/field/field02 (fieldex02-V09-01-01)
   o Added handling of units for electric field in messenger.
+- extended/field/field04 (fieldex04-V09-01-02)
+  o Fixed compilation problem due to use of obsolete G4HadronProcessStore.
 - extended/hadronic/Hadr01 (exhadr01-V09-01-00)
   o Removed usage of obsolete G4HadronProcessStore.
 - extended/medical/fanoCavity (fano-V09-01-01)
