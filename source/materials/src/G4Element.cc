@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.28 2008-06-02 17:12:58 vnivanch Exp $
+// $Id: G4Element.cc,v 1.29 2008-06-03 13:54:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,16 +92,16 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
   if (fNeff < zeff) {
     G4cout << "G4Element ERROR:  " << name << " Z= " << zeff 
-	   << " A= " << aeff/(g/mole) << G4endl; 
+	   << " A= " << fNeff << G4endl; 
     G4Exception (" ERROR from G4Element::G4Element !"
 		 " Attempt to create an Element with N < Z !!!" );
   }
    
   fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
   fAtomicShells     = new G4double[fNbOfAtomicShells];
-  for (G4int i=0;i<fNbOfAtomicShells;i++)
+  for (G4int i=0;i<fNbOfAtomicShells;i++) {
     fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
-           
+  }
   ComputeDerivedQuantities();
 }
 
