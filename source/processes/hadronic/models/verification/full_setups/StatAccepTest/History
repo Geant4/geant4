@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+03-Jun-2008 - A.Ribon (statAccepTest-V09-01-01)
+- Added possibility to link against 2 different
+  versions of CLHEP (i.e. 2.0.3.2 and 2.0.3.3).
+  Ready for the June 2008 release (G4 9.2.beta).
+
+
 20-Dec-2007 - A.Ribon (statAccepTest-V09-01-00)
 - Added the printing of a random number at the
   end of each event, to monitor reproducibility.

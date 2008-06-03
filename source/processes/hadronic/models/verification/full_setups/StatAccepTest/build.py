@@ -289,7 +289,11 @@ setupFile.write( "echo NeutronHPCrossSections=$NeutronHPCrossSections \n")
 setupFile.write( "echo G4NEUTRONHPDATA=$G4NEUTRONHPDATA \n")
 setupFile.write( "echo ---------------------- \n")
 #
-setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
+if ( REFERENCE.find( "9.2") >= 0 ) :
+    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP-2.0.3.3 \n" )
+else :
+    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
+#
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
 setupFile.write( "export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib \n" )
 setupFile.write( "export CLHEP_LIB=CLHEP \n" )
