@@ -1,4 +1,4 @@
-$Id: History,v 1.298 2008-06-02 13:27:58 sincerti Exp $
+$Id: History,v 1.299 2008-06-03 07:34:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 02.06.2008   S. Incerti, tag emlowen-V09-01-16
-             produced a new tag including :
-             - F.Lei's correction on 01.06.2008
-             - remove of while(1) statement in G4FinalStateIonisationBorn.cc, l. 151
+             Removed while(1) statement in G4FinalStateIonisationBorn.cc
+             fixing compilation warning.
+             Restored headers for G4PaulKCrossSection, G4OrlicLCrossSection
+             and G4ecpssrCrossSection which were lost.
 
 01.06.2008   F.Lei, tag emlowen-V09-01-15
 	     Correction to the corrupted G4Augerdata.cc, and this tag is on top
@@ -29,13 +30,9 @@ committal in the CVS repository !
 22.05.2008   F.Lei, tag emlowen-V09-01-14
 	     Load the the complete Auger dataset on initialization	
 
-06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-13
-             ....
-
-06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-12
+06.05.2008   H.Ben Abdelouahed, tag emlowen-V09-01-12, emlowen-V09-01-13
              Semi-Empirical model implementation for L-SubShells-Cross-Section
              with protons projectiles
-
 
 02.05.2008   MGP, tag emlowen-V09-01-11
              Added Doppler broadening in G4LowEnergyComptonPolarized 
