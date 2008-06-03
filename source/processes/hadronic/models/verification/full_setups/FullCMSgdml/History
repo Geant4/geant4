@@ -2,6 +2,10 @@
                  History file
                  ------------
 
+03-Jun-2008 - A.Ribon (fullCMSgdml-V09-01-01)
+- Added files to enable running on the Grid.
+
+
 23-Apr-2008 - A.Ribon (fullCMSgdml-V09-01-00)
 - Added total energy deposit in the whole experimental hall.
 
