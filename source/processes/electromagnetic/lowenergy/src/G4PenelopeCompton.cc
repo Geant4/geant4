@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.32 2008-03-27 08:55:03 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.33 2008-06-03 15:44:25 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -47,6 +47,11 @@
 // 26 Mar 2008 L.Pandola      Add boolean flag to control atomic de-excitation
 // 27 Mar 2008 L.Pandola      Re-named some variables to improve readability, 
 //                            and check for strict energy conservation
+// 03 Jun 2008 L.Pandola      Added further protection against non-conservation 
+//                            of energy: it may happen because ionization energy
+//                            from de-excitation manager and from Penelope internal 
+//                            database do not match (difference is <10 eV, but may 
+//                            give a e- with negative kinetic energy). 
 //
 // -------------------------------------------------------------------
 
@@ -482,15 +487,25 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
-  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+  G4double ionEnergyInPenelopeDatabase = ionEnergy;
+  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase); //protection against energy non-conservation 
 
   G4double eKineticEnergy = diffEnergy - ionEnergy; //subtract the excitation energy. If not emitted by fluorescence,
   //the ionization energy is deposited as local energy deposition
-
-  //the local energy deposit is what remains: part of this may be spent for fluorescence.
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.; //testing purposes only
 
+  if (eKineticEnergy < 0) 
+    {
+      //It means that there was some problem/mismatch between the two databases. Try to make it work
+      //In this case available Energy (diffEnergy) < ionEnergy
+      //Full residual energy is deposited locally
+      localEnergyDeposit = diffEnergy;
+      eKineticEnergy = 0.0;
+    }
+
+  //the local energy deposit is what remains: part of this may be spent for fluorescence.
+ 
   if (fUseAtomicDeexcitation)
     { 
       G4int nPhotons=0;
@@ -500,10 +515,10 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       size_t indx = couple->GetIndex();
 
       G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
+      cutg = std::max(cutForLowEnergySecondaryPhotons,cutg);
 
       G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-      cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+      cute = std::max(cutForLowEnergySecondaryPhotons,cute);
      
       G4DynamicParticle* aPhoton;
       G4AtomicDeexcitation deexcitationManager;
@@ -539,7 +554,8 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
   G4DynamicParticle* electron = 0;
-  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
+  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety) && 
+      eKineticEnergy>cutForLowEnergySecondaryPhotons)
     {
       G4double xEl = sinThetaE * std::cos(phi+pi); 
       G4double yEl = sinThetaE * std::sin(phi+pi);
