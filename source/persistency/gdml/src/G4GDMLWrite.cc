@@ -125,7 +125,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    delete myFormTarget;
    writer->release();
 
-   G4cout << "Writing done!" << G4endl << G4endl;
+   G4cout << "Writing '" << fname << "' done!" << G4endl;
 
    return R;
 }

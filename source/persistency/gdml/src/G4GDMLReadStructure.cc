@@ -443,7 +443,7 @@ G4VPhysicalVolume* G4GDMLReadStructure::GetWorldVolume(const G4String& setupName
    
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
-   G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(),volume,"",0,0,0);
+   G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(),volume,setupName,0,0,0);
    GeneratePhysvolName(pvWorld);
    return pvWorld;
 }
