@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-07)
+---------------------------------------------
+- Bug fixes for Hadron Hyper News #932 by T. Koi
+	G4NeutronHPInelasticCompFS.cc
+
 20 May 2008 Tatsumi Koi (hadr-hpn-V09-01-06)
 ---------------------------------------------
 - Delete unnecessary dependencies by T. Koi
