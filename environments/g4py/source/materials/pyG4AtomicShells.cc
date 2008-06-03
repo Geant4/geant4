@@ -23,34 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4materials.cc,v 1.6 2008-06-03 06:27:20 kmura Exp $
+// $Id: pyG4AtomicShells.cc,v 1.1 2008-06-03 06:27:20 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4materials.cc [Geant4Py module]
+//   pyG4AtomicShells.cc
 //
-//                                         2005 Q
+//                                         2008 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4AtomicShells.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4Material();
-void export_G4MaterialTable();
-void export_G4Element();
-void export_G4ElementTable();
-void export_G4NistManager();
-void export_G4AtomicShells();
-
-BOOST_PYTHON_MODULE(G4materials)
+void export_G4AtomicShells()
 {
-  export_G4Material();
-  export_G4MaterialTable();
-  export_G4Element();
-  export_G4ElementTable();
-  export_G4NistManager();
-  export_G4AtomicShells();
-}
+  class_<G4AtomicShells, boost::noncopyable>
+    ("G4AtomicShells", "Atomic subshell binding energy table")
 
+    .def("GetNumberOfShells",    &G4AtomicShells::GetNumberOfShells)
+    .staticmethod("GetNumberOfShells")
+
+    .def("GetNumberOfElectrons", &G4AtomicShells::GetNumberOfElectrons)
+    .staticmethod("GetNumberOfElectrons")
+
+    .def("GetBindingEnergy", &G4AtomicShells::GetBindingEnergy)
+    .staticmethod("GetBindingEnergy")
+
+    .def("GetTotalBindingEnergy", &G4AtomicShells::GetTotalBindingEnergy)
+    ;
+}
