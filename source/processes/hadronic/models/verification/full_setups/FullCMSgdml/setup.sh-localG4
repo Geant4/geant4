@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #-----------------------------------------------------------------
-# Last update: 12-Feb-2008
+# Last update: 02-Jun-2008
 #-----------------------------------------------------------------
 #
 # ==============================
@@ -36,13 +36,15 @@ export G4NEUTRONHPDATA=$G4INSTALL/data/G4NDL
 #                        1.9.2.3  for G4 7.1p01a, 8.0.p01, 8.1.p02a
 #                        2.0.3.1 or 1.9.3.1  for G4 8.2.p01, 8.3.p01, 9.0.p01
 #                        2.0.3.2  for G4 9.1
+#                        2.0.3.3  for G4 9.2
 #----------------------------------------------------------------------------
 ###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.0.0/dirMyInstall
 ###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.1.0/dirMyInstall
 ###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.2.3/dirMyInstall
 ###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.3.1/dirMyInstall
 ###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.1/dirMyInstall
-export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.2/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.2/dirMyInstall
+export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.3/dirMyInstall
 export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
 export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP

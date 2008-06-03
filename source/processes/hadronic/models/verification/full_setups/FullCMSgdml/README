@@ -50,4 +50,21 @@
  To run the application:     $  $G4BIN/$G4SYSTEM/mainApplication run.g4
 
 
+ ===================================================================
+
+ Addition to run on the Grid (03-Jun-2008)
+ The following files have been added in order to run on the Grid:
+  
+   o  mainScript.py  : the only one that should be edited and run
+                       by the user.
+  
+   o  simuDriver.sh  : bash script called by  mainScript.py
+
+   o  build.py       : Python script called by  simuDriver.sh
+
+ The choices available are:  -  the Geant4 version to use
+                             -  the Geant4 Physics List
+	                     -  the number of events to run
+	                     -  the magnetic field value
+
 
