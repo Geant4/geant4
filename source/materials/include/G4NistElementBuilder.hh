@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.14 2008-04-28 09:23:32 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.15 2008-06-04 18:57:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -112,11 +112,14 @@ private:
 
   void Initialise();
 
-  // Add G4Element parameters to internal vectors
-  void AddElement(const G4String& symbol, G4int Z, G4int nc, const G4int& N,
-                  const G4double& A, const G4double& sA, const G4double& W);
+  // Add element parameters to internal G4 database: 
+  // Z - atomic number, N - number of nucleons, A - atomic mass (amu),
+  // sigmaA - accuracy of mass in last digits, W - natural abandances (percent) 
+  void AddElement(const G4String& symbol, G4int Z, G4int NumberOfIsotopes,
+                  const G4int& N, const G4double& A, const G4double& sigmaA, 
+		  const G4double& W);
 
-  // Build a G4Element from dataBase
+  // Build a G4Element from the G4 dataBase
   G4Element* BuildElement(G4int Z, G4bool buildIsotopes);
 
 private:
