@@ -1,4 +1,4 @@
-$Id: README,v 1.20 2007-11-28 13:25:11 gcosmo Exp $
+$Id: README,v 1.21 2008-06-04 07:24:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -59,9 +59,12 @@ test34 ## Shower parameterisation with 'gflash'.
 test35 ## Internal test exercising HARP physics
 test36 ## EM XTR processes
 test37 ## Sandia data, electron beam in semi-infinite media
+test38 ## Cross-section scaling test of gamma and electron nuclear reactions
+       ## using CHIPS decay for final state production.
 test39 ## CHIPS elastic & lA scattering at process level
 test40 ## Benchmark test for e.m. shower development from single primary
 test41 ## MUSCAT experiment for multiple-scattering validation
+test44 ## Bragg peak distribution validation (based on example Hadr01)
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
        ## 2) gamma attenuation coefficient;

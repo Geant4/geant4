@@ -33,7 +33,7 @@ processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/electromagnetic            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-"/"/lowenergy                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+"/"/lowenergy                incerti@cenbg.in2p3.fr          Sebastien Incerti
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                   dwright@slac.stanford.edu       Dennis Wright
 "/"/cross_sections           dwright@slac.stanford.edu       Dennis Wright
@@ -118,6 +118,7 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
+  nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
   radiation_monitor          MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   radioprotection            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
@@ -191,13 +192,13 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test11                 tkoi@slac.stanford.edu          Tatsumi Koi
       test12                 Gunter.Folger@cern.ch           Gunter Folger
       test13                 Gunter.Folger@cern.ch           Gunter Folger
-      test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+      test14                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test15                 Aatos.Heikkinen@cern.ch         Aatos Heikkinen
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
       test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
-      test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+      test20                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test21                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test22                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test23                 Mikhail.Kossov@cern.ch          Mikhail Kossov
@@ -215,10 +216,12 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test36                 Vladimir.Grichine@cern.ch       Vladimir Grichine
       test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
+      test38                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test41                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test50                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+      test44                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test52                 Anton.Lechner@cern.ch	     Anton Lechner
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
