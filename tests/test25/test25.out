@@ -147,6 +147,58 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
+                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
+                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+============================================================================================
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -220,7 +272,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.24s Sys=0s
+  User=0.05s Real=0.07s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.09s Real=0.09s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -243,7 +318,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.1s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -266,30 +341,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.18s Real=0.38s Sys=0.01s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.33s Real=0.73s Sys=0s
+  User=0.11s Real=0.12s Sys=0.01s
 SimpleBox is now made of Cu
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -313,7 +365,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -336,7 +388,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -359,7 +411,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.06s Real=0.15s Sys=0.01s
+  User=0.11s Real=0.11s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -382,7 +434,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.11s Real=0.22s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -405,7 +457,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.18s Real=0.38s Sys=0.01s
+  User=0.13s Real=0.13s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -428,7 +480,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.27s Sys=0s
+  User=0.29s Real=0.31s Sys=0s
 SimpleBox is now made of U
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
@@ -646,7 +698,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.36s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -674,7 +726,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.34s Real=0.83s Sys=0.01s
+  User=0.15s Real=0.15s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -702,7 +754,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.98s Sys=0.01s
+  User=0.48s Real=0.54s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -730,7 +782,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.15s Real=2.45s Sys=0.01s
+  User=0.7s Real=0.75s Sys=0.01s
 SimpleBox is now made of U
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -759,7 +811,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -787,7 +839,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.21s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -815,7 +867,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.62s Sys=0s
+  User=0.18s Real=0.19s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -843,7 +895,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.69s Sys=0s
+  User=0.47s Real=0.48s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -871,7 +923,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.39s Real=0.9s Sys=0.01s
+  User=0.02s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -899,7 +951,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 SimpleBox is now made of Si
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
@@ -1100,6 +1152,72 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.03s Real=0.03s Sys=0.01s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.03s Real=0.03s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1165,73 +1283,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.3s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.06s Real=0.17s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.09s Real=0.19s Sys=0s
+  User=0.07s Real=0.06s Sys=0s
 SimpleBox is now made of Si
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -1298,7 +1350,40 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.04s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1364,7 +1449,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.18s Sys=0s
+  User=0.08s Real=0.07s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1397,40 +1482,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.19s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.1s Real=0.11s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 SimpleBox is now made of H
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;

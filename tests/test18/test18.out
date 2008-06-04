@@ -182,6 +182,54 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.05, integral: 1, fluct: 1, linLossLimit= 0.05
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                  G4HEKaonPlusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                 G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                   G4HENeutronInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                  G4HEPionPlusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                 G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                    G4HEProtonInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+============================================================================================
 
 ========= Table of registered couples ==============================
 
@@ -216,7 +264,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          259           1   5.913e+04     e-
@@ -265,7 +313,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
          400           1       520.7     e-
@@ -534,7 +582,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
     7.39e+03           1   0.0006398     alpha

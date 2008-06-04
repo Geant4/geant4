@@ -74,127 +74,127 @@ phot:  Total cross sections from Sandia parametrisation.
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 100 eV  to 100 TeV in 1200 bins, spline: 0
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 TeV in 1200 bins, spline: 0
+      Lambda tables from 1.022 MeV to 100 TeV in 120 bins, spline: 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Theoretical model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Theoretical model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Theoretical model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Theoretical model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 1200 bins
-      Lambda tables from threshold to 100 TeV in 1200 bins, spline: 0
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      CSDA range table up to 100 TeV in 1200 bins
+      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 100 TeV in 120 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
  Root logical volume(s) : Water 
@@ -248,7 +248,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.77s Real=5.57s Sys=0s
+  User=2.65s Real=2.65s Sys=0s
 
  ======================== run summary ======================
 
@@ -256,19 +256,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5836  stepSize= 6.3178 mm 
+ trackLength= 1.0004 cm 	 nb of steps= 1.5859  stepSize= 6.3083 mm 
 
- d-rays  : eLoss/primary= 247.88 keV	  nb of d-rays= 0.2368  <Tkin>= 1.0468 MeV  Tmin= 347.15 keV  Tmax= 4.9503 MeV
+ d-rays  : eLoss/primary= 247.44 keV	  nb of d-rays= 0.23652  <Tkin>= 1.0462 MeV  Tmin= 347.15 keV  Tmax= 4.9503 MeV
 
- brems   : eLoss/primary= 177.14 keV	  nb of gammas= 0.3051  <Tkin>= 580.59 keV  Tmin= 2.9021 keV  Tmax= 9.6977 MeV
+ brems   : eLoss/primary= 175.54 keV	  nb of gammas= 0.30655  <Tkin>= 572.63 keV  Tmin= 2.9019 keV  Tmax= 9.6085 MeV
 
- deposit : eLoss/primary= 1.7336 MeV	 <dEcut > table= 1.7348 MeV   ---> simul/reference= 0.99932
+ deposit : eLoss/primary= 1.7337 MeV	 <dEcut > table= 1.7347 MeV   ---> simul/reference= 0.99938
 
- total   : eLoss/primary= 2.1586 MeV	 <dEfull> table= 2.1627 MeV   ---> simul/reference= 0.9981
+ total   : eLoss/primary= 2.1566 MeV	 <dEfull> table= 2.1635 MeV   ---> simul/reference= 0.99685
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 539777958, 476209442
+ Current couple of seeds = 936759371, 1208954975
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

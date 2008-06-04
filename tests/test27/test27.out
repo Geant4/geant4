@@ -161,6 +161,56 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 10.1
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+           inelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 10.1
+                                        TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
+============================================================================================
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -188,7 +238,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.2s Real=1.6s Sys=0.01s
+  User=1.3s Real=1.4s Sys=0.02s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -531,7 +581,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.59s Real=1.19s Sys=0s
+  User=0.52s Real=0.52s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -573,7 +623,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.32s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -655,7 +705,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # .....end deuteron.............
 #
@@ -698,7 +748,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.34s Sys=0.01s
+  User=0.42s Real=0.45s Sys=0.01s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -780,7 +830,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.44s Sys=0s
+  User=0.24s Real=0.25s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -862,7 +912,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -903,7 +953,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # .....end alpha............
 #
@@ -947,7 +997,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.06s Real=3.17s Sys=0.02s
+  User=1.48s Real=1.61s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -989,7 +1039,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1031,7 +1081,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.64s Real=1.09s Sys=0s
+  User=0.63s Real=0.69s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1211,7 +1261,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.37s Real=0.89s Sys=0.01s
+  User=0.33s Real=0.36s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1259,7 +1309,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.04s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1353,7 +1403,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.17s Sys=0s
+  User=0.08s Real=0.14s Sys=0.01s
 #
 # .....end C(12,6)++............
 #
@@ -1541,7 +1591,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

@@ -133,15 +133,99 @@ msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-G4AugerData for Element no. 6 are loaded
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 15 are loaded
-G4AugerData for Element no. 18 are loaded
-G4AugerData for Element no. 29 are loaded
-G4AugerData for Element no. 30 are loaded
-G4AugerData for Element no. 78 are loaded
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
 AugerTransitionTable complete
 
 IONI:  Total cross sections from EEDL database.
@@ -193,6 +277,9 @@ hLowEIoni:    Knock-on electron cross sections .
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+============================================================================================
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.

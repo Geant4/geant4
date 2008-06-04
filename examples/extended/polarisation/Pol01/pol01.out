@@ -129,39 +129,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.37s Real=0.68s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.31895 0.372716 0.175206 0.886266 0.566168 0.986262 0.566568 0.699464 0.73572 0.689258 0.0769183 0.269062 0.197673 0.500616 0.353296 0.913058 0.0037632 0.565236 0.37271 0.257328 0.428063 0.615996 0.075102 0.785646 
- i_lag = 10, j_lag = 20
- carry = 0, count24 = 10
+ float_seed_table[] = 0.989583 0.0309946 0.774429 0.910391 0.364898 0.680912 0.326078 0.957552 0.793021 0.747697 0.710269 0.567659 0.562443 0.0118321 0.577267 0.484755 0.302855 0.967152 0.115161 0.0196143 0.637677 0.194995 0.234409 0.257444 
+ i_lag = 15, j_lag = 1
+ carry = 0, count24 = 15
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31110
-	pol-compt = 265
-	msc = 3712
-	pol-eBrem = 348
-	pol-eIoni = 648
-	pol-phot = 173
-	pol-conv = 218
-	pol-annihil = 55
+	Transportation = 31180
+	pol-compt = 260
+	msc = 4134
+	pol-eBrem = 386
+	pol-eIoni = 680
+	pol-phot = 193
+	pol-conv = 235
+	pol-annihil = 72
  Gamma: 
-Mean Number per Event :1.0065
-Mean Energy :9.602 MeV +- 1.8556 MeV
-Mean Polarization :-0.96579 +- 0.17975
+Mean Number per Event :1.0098
+Mean Energy :9.5663 MeV +- 1.9364 MeV
+Mean Polarization :-0.96205 +- 0.18824
  Electron: 
-Mean Number per Event :0.0325
-Mean Energy :5.2091 MeV +- 2.4374 MeV
-Mean Polarization :-0.72697 +- 0.29206
+Mean Number per Event :0.0326
+Mean Energy :5.115 MeV +- 2.4133 MeV
+Mean Polarization :-0.72594 +- 0.29041
  Positron: 
-Mean Number per Event :0.0165
-Mean Energy :4.1604 MeV +- 2.0332 MeV
-Mean Polarization :-0.59232 +- 0.31393
+Mean Number per Event :0.0166
+Mean Energy :4.165 MeV +- 2.0936 MeV
+Mean Polarization :-0.59115 +- 0.32159
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

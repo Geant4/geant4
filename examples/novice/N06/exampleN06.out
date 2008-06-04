@@ -221,18 +221,18 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     1   88.9 um  -2.93 um   13.1 um    474 keV     0 eV      0 fm   90.8 um         Tank    initStep
-CAImin = 4.8936995e-07
-ge = 6.572938e-07
+CAImin = 5.3645055e-07
+ge = 6.102132e-07
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 14
-    2    978 um    444 um    613 um    142 keV   332 keV  1.43 mm   1.52 mm         Tank       eIoni
+    2    977 um    443 um    612 um    141 keV   333 keV  1.43 mm   1.52 mm         Tank       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    865 um    387 um    537 um   3.28 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    864 um    387 um    536 um   3.28 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.6303942,0.34864695,0.69357657)
  Old Polarization:       (-0.67767292,-0.18862876,0.71075918)
@@ -247,7 +247,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    869 um    389 um    539 um   3.87 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    868 um    388 um    538 um   3.87 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (-0.17585529,-0.18863074,0.9661746)
  Old Polarization:       (0.80126551,0.54274243,0.25180198)
@@ -262,7 +262,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    172 um   38.9 um   69.3 um   3.57 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    172 um   38.8 um   69.2 um   3.57 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.90271143,-0.11755081,0.41387665)
  Old Polarization:       (0.23099931,0.94396627,-0.23572655)
@@ -277,7 +277,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    253 um   79.5 um    124 um   2.72 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    253 um   79.4 um    124 um   2.72 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.74646212,-0.29642975,0.59575474)
  Old Polarization:       (-0.51747118,-0.82145935,0.23964164)
@@ -292,7 +292,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    539 um    223 um    317 um   2.49 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    539 um    223 um    316 um   2.49 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.9981537,-0.01975462,0.057436466)
  Old Polarization:       (-0.012082803,0.86215126,0.50650687)
@@ -317,7 +317,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    775 um    342 um    476 um   2.14 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    774 um    341 um    475 um   2.14 eV      0 eV      0 fm      0 fm         Tank    initStep
 
 ** Photon absorbed! **
     1   4.53 m    2.71 m   -2.48 m    2.14 eV      0 eV   5.84 m    5.84 m          Tank  OpAbsorption
@@ -327,7 +327,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    203 um   54.5 um   90.3 um    2.8 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    203 um   54.5 um   90.2 um    2.8 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (-0.1588511,-0.9579736,0.23885751)
  Old Polarization:       (-0.81933797,0.26289479,0.50948171)
@@ -342,7 +342,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    218 um   61.9 um    100 um   3.53 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    218 um   61.8 um    100 um   3.53 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.50447042,0.00067522807,0.86342871)
  Old Polarization:       (0.6589886,0.64583422,-0.38552846)
@@ -357,7 +357,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    753 um    331 um    461 um   4.07 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    752 um    330 um    460 um   4.07 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.77026224,-0.47805804,-0.422086)
  Old Polarization:       (-0.40131844,-0.87773639,0.26176773)
@@ -391,7 +391,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    346 um    126 um    187 um      4 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    346 um    126 um    186 um      4 eV      0 eV      0 fm      0 fm         Tank    initStep
 
 ** Photon absorbed! **
     1   2.09 m    -1.4 m    1.84 m       4 eV      0 eV   3.12 m    3.12 m          Tank  OpAbsorption
@@ -401,7 +401,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    910 um    409 um    567 um   4.12 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    909 um    409 um    566 um   4.12 eV      0 eV      0 fm      0 fm         Tank    initStep
 
 ** Photon absorbed! **
     1   76.7 cm   1.31 m   -41.1 cm   4.12 eV      0 eV   1.57 m    1.57 m          Tank  OpAbsorption
@@ -411,7 +411,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    721 um    315 um    440 um   3.51 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    721 um    314 um    439 um   3.51 eV      0 eV      0 fm      0 fm         Tank    initStep
 Scattering Photon!
 Old Momentum Direction: (-0.34543229,-0.93038011,-0.12275743)
 Old Polarization: (-0.779526,0.21163819,0.58953244)
@@ -442,7 +442,7 @@ Momentum Change: (0.032059792,-0.48418945,0.87437563)
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    816 um    362 um    504 um    2.4 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    815 um    362 um    503 um    2.4 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (-0.15260421,0.53011203,0.83408225)
  Old Polarization:       (0.49036643,-0.69213482,0.52961321)
@@ -457,18 +457,18 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    2    978 um    444 um    613 um    142 keV     0 eV      0 fm   1.52 mm         Tank    initStep
+    2    977 um    443 um    612 um    141 keV     0 eV      0 fm   1.52 mm         Tank    initStep
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 7
-    3   1.05 mm    418 um    721 um      0 eV    142 keV   246 um   1.77 mm         Tank       eIoni
-    4   1.05 mm    418 um    721 um      0 eV      0 eV      0 fm   1.77 mm         Tank  Scintillation
+    3   1.05 mm    417 um    719 um      0 eV    141 keV   243 um   1.76 mm         Tank       eIoni
+    4   1.05 mm    417 um    719 um      0 eV      0 eV      0 fm   1.76 mm         Tank  Scintillation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 26,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.05 mm    418 um    721 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.05 mm    417 um    719 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1      5 m    2.03 m   -3.11 m     511 keV     0 eV   6.23 m    6.23 m          Tank  Transportation
     2     10 m    4.06 m   -6.22 m     511 keV     0 eV   6.23 m    12.5 m    OutOfWorld  Transportation
 
@@ -477,7 +477,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.05 mm    418 um    721 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.05 mm    417 um    719 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1     -5 m   -2.03 m    3.11 m     511 keV     0 eV   6.23 m    6.23 m          Tank  Transportation
     2    -10 m   -4.06 m    6.22 m     511 keV     0 eV   6.23 m    12.5 m    OutOfWorld  Transportation
 
@@ -486,7 +486,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    997 um    437 um    641 um   2.25 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    996 um    437 um    639 um   2.25 eV      0 eV      0 fm      0 fm         Tank    initStep
 
 ** Photon absorbed! **
     1    3.1 m    44.3 cm   50.6 cm   2.25 eV      0 eV   3.17 m    3.17 m          Tank  OpAbsorption
@@ -496,7 +496,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.03 mm    425 um    691 um   3.45 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.03 mm    425 um    690 um   3.45 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (-0.16535023,0.063770528,0.98417103)
  Old Polarization:       (0.79905883,0.59357357,0.09578829)
@@ -511,7 +511,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    987 um    441 um    626 um   2.27 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    986 um    440 um    625 um   2.27 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.0024451213,0.96595538,-0.25869715)
  Old Polarization:       (-0.27210793,0.24957904,0.92933717)
@@ -526,7 +526,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    979 um    444 um    614 um   3.32 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    978 um    443 um    613 um   3.32 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.85724809,-0.15523997,-0.49094427)
  Old Polarization:       (0.3443073,0.88177321,0.32237943)
@@ -541,7 +541,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    980 um    443 um    615 um   2.47 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    978 um    443 um    614 um   2.47 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (-0.26732741,0.80877941,-0.52384341)
  Old Polarization:       (-0.73196618,-0.52400108,-0.43548637)
@@ -556,7 +556,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.02 mm    430 um    668 um   3.58 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.01 mm    430 um    667 um   3.58 eV      0 eV      0 fm      0 fm         Tank    initStep
 
 ** Photon absorbed! **
     1   1.48 m    2.37 m   -1.69 m    3.58 eV      0 eV   3.26 m    3.26 m          Tank  OpAbsorption
@@ -566,7 +566,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    988 um    441 um    627 um    3.6 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    986 um    440 um    626 um    3.6 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  Old Momentum Direction: (0.59922863,0.41821659,-0.68265653)
  Old Polarization:       (-0.51192962,-0.45541814,-0.72836967)
@@ -576,7 +576,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1   4.39 m    3.06 m      -5 m     3.6 eV      0 eV   7.33 m    7.33 m          Tank  Transportation
     2     10 m    6.98 m   -5.84 m     3.6 eV      0 eV   6.89 m    14.2 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 23
-number of event = 1 User=0.01s Real=0.01s Sys=0.01s
+number of event = 1 User=0.01s Real=0.01s Sys=0s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -732,16 +732,16 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     1   88.9 um  -2.34 um  -13.3 um    487 keV     0 eV      0 fm   90.8 um         Tank    initStep
-    2    998 um   -537 um    557 um    131 keV   356 keV  1.46 mm   1.55 mm         Tank       eIoni
-    3   1.09 mm   -559 um    624 um      0 eV    131 keV   215 um   1.77 mm         Tank       eIoni
-    4   1.09 mm   -559 um    624 um      0 eV      0 eV      0 fm   1.77 mm         Tank     annihil
+    2    997 um   -537 um    555 um    131 keV   356 keV  1.46 mm   1.55 mm         Tank       eIoni
+    3   1.09 mm   -559 um    622 um      0 eV    131 keV   213 um   1.76 mm         Tank       eIoni
+    4   1.09 mm   -559 um    622 um      0 eV      0 eV      0 fm   1.76 mm         Tank     annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.09 mm   -559 um    624 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.09 mm   -559 um    622 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1   4.39 m    2.68 m      -5 m     511 keV     0 eV   7.17 m    7.17 m          Tank  Transportation
     2   8.77 m    5.36 m     -10 m     511 keV     0 eV   7.17 m    14.3 m    OutOfWorld  Transportation
 
@@ -750,7 +750,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.09 mm   -559 um    624 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.09 mm   -559 um    622 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1  -4.38 m   -2.68 m       5 m     511 keV     0 eV   7.17 m    7.17 m          Tank  Transportation
     2  -8.77 m   -5.36 m      10 m     511 keV     0 eV   7.17 m    14.3 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 2

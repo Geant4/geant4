@@ -148,17 +148,99 @@ msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-G4AugerData for Element no. 6 are loaded
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 18 are loaded
-G4AugerData for Element no. 26 are loaded
-G4AugerData for Element no. 29 are loaded
-G4AugerData for Element no. 54 are loaded
-G4AugerData for Element no. 79 are loaded
-G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
 AugerTransitionTable complete
 
 hLowEIoni:    Knock-on electron cross sections . 
@@ -271,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.61s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -314,7 +396,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.65s Sys=0s
+  User=0.35s Real=0.34s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -355,7 +437,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.75s Real=1.55s Sys=0.01s
+  User=0.77s Real=0.77s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -397,7 +479,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.2s Real=2.4s Sys=0s
+  User=1.17s Real=1.18s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -441,20 +523,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.48s Real=4.98s Sys=0s
+  User=2.51s Real=2.51s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.16361 +- 0.0178973  microns 
-    CSDA  Range  in absorber = 9.04133 +- 0.0182846  microns 
+    Track Length in absorber = 9.20791 +- 0.0168858  microns 
+    CSDA  Range  in absorber = 9.07515 +- 0.0166069  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.104612 +- 0.0178973 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.172326 +- 0.0182846 microns 
+    Track Length (G4 - ICRU49) = 0.148908 +- 0.0168858 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.206152 +- 0.0166069 microns 
 
-Average Number electrons per event = 521
-Average Number photons per event   = 2.74
+Average Number electrons per event = 520.06
+Average Number photons per event   = 2.8
 
 G4 kernel has come to Quit state.

@@ -114,11 +114,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=13.66s Real=274.61s Sys=32.11s
+  User=8.9s Real=259.18s Sys=25.16s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1206525771, 895033908
+ Current couple of seeds = 1051060218, 444951910
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

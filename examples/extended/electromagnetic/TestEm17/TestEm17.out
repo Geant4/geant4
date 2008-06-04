@@ -92,6 +92,94 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /run/beamOn 10000
 
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hBrems:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+hPairProd:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hBrems:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+hPairProd:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hBrems:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
+hPairProd:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Theoretical model 
+
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
@@ -144,18 +232,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.96s Real=34.81s Sys=3.44s
+  User=8.4s Real=34.36s Sys=2.76s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 469690	muPairProd : 63236	muBrems : 737
+ Number of process calls --->	muIoni : 468668	muPairProd : 63195	muBrems : 624
 
- Simulation: total CrossSection = 0.53366 /cm	 MeanFreePath = 1.8738 cm 	 massicCrossSection = 0.06781 cm2/g
+ Simulation: total CrossSection = 0.53249 /cm	 MeanFreePath = 1.878 cm 	 massicCrossSection = 0.06766 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 509978148, 1989539365
+ Current couple of seeds = 95456558, 192154074
 ----------------------------------------
 #
 /gun/particle pi+
@@ -182,7 +270,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 509978148, 1989539365
+ Current couple of seeds = 95456558, 192154074
 ----------------------------------------
 Start Run processing.
 
@@ -208,17 +296,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.91s Real=34.54s Sys=3.35s
+  User=8.75s Real=34.83s Sys=2.47s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 440693	hPairProd : 58859	hBrems : 344
+ Number of process calls --->	hPairProd : 59195	hIoni : 439548	hBrems : 379
 
- Simulation: total CrossSection = 0.4999 /cm	 MeanFreePath = 2.0004 cm 	 massicCrossSection = 0.063519 cm2/g
+ Simulation: total CrossSection = 0.49912 /cm	 MeanFreePath = 2.0035 cm 	 massicCrossSection = 0.063421 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 565387423, 1396711370
+ Current couple of seeds = 903961565, 1372897514
 ----------------------------------------
 #
 /gun/particle proton
@@ -245,7 +333,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 565387423, 1396711370
+ Current couple of seeds = 903961565, 1372897514
 ----------------------------------------
 Start Run processing.
 
@@ -271,17 +359,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.05s Real=33.79s Sys=3.44s
+  User=8.08s Real=34.44s Sys=2.77s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 439922	hPairProd : 33595	hBrems : 17
+ Number of process calls --->	hIoni : 438914	hPairProd : 33850	hBrems : 3
 
- Simulation: total CrossSection = 0.47353 /cm	 MeanFreePath = 2.1118 cm 	 massicCrossSection = 0.06017 cm2/g
+ Simulation: total CrossSection = 0.47277 /cm	 MeanFreePath = 2.1152 cm 	 massicCrossSection = 0.060072 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1744285417, 1057241958
+ Current couple of seeds = 208584515, 1402938451
 ----------------------------------------
 #
 Graphics systems deleted.

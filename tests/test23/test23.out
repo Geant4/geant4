@@ -156,6 +156,54 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+ AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   KaonPlusInelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                  G4HEKaonPlusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                 G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+    NeutronInelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                   G4HENeutronInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   PionPlusInelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                  G4HEPionPlusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  PionMinusInelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                 G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     ProtonInelastic  Models:       G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                    G4HEProtonInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+============================================================================================
 Test23 event # 100
 Test23 event # 200
 Test23 event # 300
@@ -166,5 +214,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=1482(0.34672709), e-=7979(3.0999162), e+=9(4.6854778), p=170(4.0915666), n=1171(3.5423612), d=14(1.8619238), t=6(0.78127697), He3=0(0), alph=104(2.5241485), nu=1000(49.272084), anu=666(31.688281), others=13929*0.11166731
+Test23_Result: gam=1500(0.30189741), e-=7937(3.0556173), e+=6(4.5720367), p=163(4.279867), n=1203(3.5348971), d=21(1.4962142), t=3(1.7476373), He3=0(0), alph=107(2.3439662), nu=1000(49.792802), anu=656(32.096273), others=14061*0.1107723
 Test23 is done

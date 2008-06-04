@@ -77,18 +77,99 @@ msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
       Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-G4AugerData for Element no. 6 are loaded
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 12 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 22 are loaded
-G4AugerData for Element no. 23 are loaded
-G4AugerData for Element no. 26 are loaded
-G4AugerData for Element no. 42 are loaded
-G4AugerData for Element no. 78 are loaded
-G4AugerData for Element no. 79 are loaded
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
+AugerTransitionTable complete
 AugerTransitionTable complete
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -219,6 +300,60 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+ AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   KaonPlusInelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+    NeutronInelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
+                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 6.1
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   PionPlusInelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 1.5
+                                  G4LEPionPlusInelastic: Emin(GeV)=   1.4  Emax(GeV)= 6.1
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  PionMinusInelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 1.5
+                                 G4LEPionMinusInelastic: Emin(GeV)=   1.4  Emax(GeV)= 6.1
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     ProtonInelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
+                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 6.1
+                                        TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
+============================================================================================
 
 ========= Table of registered couples ==============================
 
@@ -343,7 +478,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

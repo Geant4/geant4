@@ -94,7 +94,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.10224 keV	 e-  85.4196 keV
 
- Max_energy _transferable : 10 MeV (4.90255 cm )
+ Max_energy _transferable : 10 MeV (4.90376 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
@@ -108,8 +108,8 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   restricted dE/dx         : 	      1.61567 MeV/cm	       21.339 eV/cm 	      1.61569 MeV/cm
       (MeV/g/cm2)          : 	      1.61567 MeV*cm2/g	       21.339  eV*cm2/g	      1.61569 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05632 cm  ( 6.05632 g/cm2 )
-  range from full dE/dx    : 	 4.90255 cm  ( 4.90255 g/cm2 )
+  range from restrict dE/dx: 	 6.05552 cm  ( 6.05552 g/cm2 )
+  range from full dE/dx    : 	 4.90376 cm  ( 4.90376 g/cm2 )
  
   transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  

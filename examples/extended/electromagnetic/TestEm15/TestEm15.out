@@ -305,27 +305,27 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.23s Real=0.44s Sys=0s
+  User=0.23s Real=0.24s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	550.42 um  +- 3.2985 Ang
- geomPathLength :	548.61 um  +- 1.6526 Ang
- lateralDisplac :	33.221 um  +- 16822 fm 
- Psi            :	60.481 mrad +- 3.2669e-05 mrad  (3.4653 deg +- 1.8718e-06 deg)
+ truePathLength :	550.25 um  +- 2.7738 Ang
+ geomPathLength :	548.44 um  +- 2.1034 Ang
+ lateralDisplac :	33.206 um  +- 12241 fm 
+ Psi            :	60.472 mrad +- 1.5444e-05 mrad  (3.4648 deg +- 8.8489e-07 deg)
 
- Theta_plane    :	80.445 mrad  (4.6092 deg)
- phi correlation:	0.041102 +- 0.055001  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	80.433 mrad  (4.6084 deg)
+ phi correlation:	0.041096 +- 0.054993  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.346 cm 
- range from restrict dE/dx:	2.7521 cm 
- ---> effective facRange  :	0.006595
+ range from restrict dE/dx:	2.7513 cm 
+ ---> effective facRange  :	0.006593
 
- compute theta0 from Highland :	73.25 mrad  (4.1969 deg)
+ compute theta0 from Highland :	73.237 mrad  (4.1962 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -371,27 +371,27 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.24s Real=0.44s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.8633 um  +- 1708 fm 
- geomPathLength :	2.8374 um  +- 904.56 fm 
- lateralDisplac :	285.36 nm  +- 140.99 fm 
- Psi            :	100.23 mrad +- 1.4124e-05 mrad  (5.743 deg +- 8.0926e-07 deg)
+ truePathLength :	2.8483 um  +- 1695 fm 
+ geomPathLength :	2.8228 um  +- 1099 fm 
+ lateralDisplac :	283.14 nm  +- 219.31 fm 
+ Psi            :	99.973 mrad +- 6.8438e-06 mrad  (5.7281 deg +- 3.9212e-07 deg)
 
- Theta_plane    :	159.15 mrad  (9.1189 deg)
- phi correlation:	0.065079 +- 0.089718  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	158.76 mrad  (9.0964 deg)
+ phi correlation:	0.064888 +- 0.089495  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	157.63 um 
- range from restrict dE/dx:	143.16 um 
- ---> effective facRange  :	0.018165
+ range from restrict dE/dx:	142.42 um 
+ ---> effective facRange  :	0.01807
 
- compute theta0 from Highland :	115.5 mrad  (6.6178 deg)
+ compute theta0 from Highland :	115.16 mrad  (6.5982 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

@@ -84,8 +84,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=32.98s Real=64.24s Sys=0s
-Time elapsed in 1 events ---- User=32.98s Real=64.25s Sys=0s
+  User=34.21s Real=34.33s Sys=0.04s
+Time elapsed in 1 events ---- User=34.21s Real=34.33s Sys=0.04s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -104,8 +104,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=289.94s Real=580.77s Sys=0.12s
-Time elapsed in 9 events ---- User=289.94s Real=580.77s Sys=0.12s
+  User=300.35s Real=300.67s Sys=0.12s
+Time elapsed in 9 events ---- User=300.35s Real=300.67s Sys=0.12s
 #
 /gun/particle proton
 #------------------
@@ -952,8 +952,8 @@ Point: 9.18254e+07 - Data value: 0.206763
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.63s Real=13.45s Sys=0.02s
-Time elapsed in 1 events ---- User=6.63s Real=13.45s Sys=0.02s
+  User=6.87s Real=6.9s Sys=0.01s
+Time elapsed in 1 events ---- User=6.87s Real=6.9s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -972,8 +972,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.78s Real=7.6s Sys=0s
-Time elapsed in 1 events ---- User=3.78s Real=7.6s Sys=0s
+  User=3.94s Real=3.94s Sys=0s
+Time elapsed in 1 events ---- User=3.94s Real=3.94s Sys=0s
 #
 /gun/particle alpha
 #------------------
@@ -996,8 +996,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.74s Real=47.49s Sys=0.01s
-Time elapsed in 1 events ---- User=23.74s Real=47.49s Sys=0.02s
+  User=24.13s Real=24.18s Sys=0.02s
+Time elapsed in 1 events ---- User=24.13s Real=24.18s Sys=0.02s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -1016,8 +1016,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.25s Real=46.57s Sys=0.02s
-Time elapsed in 1 events ---- User=23.25s Real=46.57s Sys=0.02s
+  User=23.59s Real=23.63s Sys=0.02s
+Time elapsed in 1 events ---- User=23.59s Real=23.63s Sys=0.02s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 5179 calls
