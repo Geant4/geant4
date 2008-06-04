@@ -49,6 +49,7 @@ G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
 {
 // TKDB
+   onFlightDB = true;
    theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }

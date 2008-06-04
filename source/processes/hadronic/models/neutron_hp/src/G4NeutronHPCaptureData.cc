@@ -50,6 +50,7 @@ G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 {
 // TKDB
    theCrossSections = 0;
+   onFlightDB = true;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
