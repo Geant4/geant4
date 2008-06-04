@@ -13,8 +13,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-05-May-2007 Tatsumi Koi (hadr-qmd-V09-01-01)
-- Fixed and chnaged sampling method of impact parameter
+03-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-02)
+- Fix memory leaks by T. Koi 
+	src/G4QMDReaction.cc  
+	src/G4QMDCollision.cc  
+
+05-May-2008 Tatsumi Koi (hadr-qmd-V09-01-01)
+- Fixed and changed sampling method of impact parameter
 	src/G4QMDReaction.cc  
 
 26-Nov-2007 Tatsumi Koi (hadr-qmd-V09-00-05)
