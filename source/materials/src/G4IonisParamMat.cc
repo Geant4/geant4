@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.23 2008-06-03 14:30:10 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.24 2008-06-04 08:27:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,17 +80,28 @@ void G4IonisParamMat::ComputeMeanParameters()
   fMeanExcitationEnergy = 0.;
   fLogMeanExcEnergy = 0.;
 
+  size_t nElements = fMaterial->GetNumberOfElements();
+  const G4ElementVector* elmVector = fMaterial->GetElementVector();
+  const G4double* nAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
 
-  for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++) {
-    fLogMeanExcEnergy += 
-             (fMaterial->GetVecNbOfAtomsPerVolume())[i]
-            *((*(fMaterial->GetElementVector()))[i]->GetZ())
-            *std::log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
-             ->GetMeanExcitationEnergy());
+  const G4String ch = fMaterial->GetChemicalFormula();
+
+  if(ch != "") fMeanExcitationEnergy = FindMeanExcitationEnergy(ch);
+
+  // Chemical formula defines mean excitation energy
+  if(fMeanExcitationEnergy > 0.0) {
+    fLogMeanExcEnergy = std::log(fMeanExcitationEnergy);
+
+    // Compute average 
+  } else {
+    for (size_t i=0; i < nElements; i++) {
+      const G4Element* elm = (*elmVector)[i];
+      fLogMeanExcEnergy += nAtomsPerVolume[i]*elm->GetZ()
+	*std::log(elm->GetIonisation()->GetMeanExcitationEnergy());
+    }
+    fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
+    fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
   }
-
-  fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
-  fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
 
   fShellCorrectionVector = new G4double[3]; //[3]
 
@@ -98,10 +109,9 @@ void G4IonisParamMat::ComputeMeanParameters()
   {
     fShellCorrectionVector[j] = 0.;
 
-    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++) {
-      fShellCorrectionVector[j] += (fMaterial->GetVecNbOfAtomsPerVolume())[k] 
-              *((*(fMaterial->GetElementVector()))[k]->GetIonisation()
-                                              ->GetShellCorrectionVector()[j]);
+    for (size_t k=0; k<nElements; k++) {
+      fShellCorrectionVector[j] += nAtomsPerVolume[k]
+	*(((*elmVector)[k])->GetIonisation()->GetShellCorrectionVector())[j];
     }
     fShellCorrectionVector[j] *= 2.0/fMaterial->GetTotNbOfElectPerVolume();
   } 
@@ -202,10 +212,10 @@ void G4IonisParamMat::ComputeFluctModel()
 
   // need an 'effective Z' ?????
   G4double Zeff = 0.;
-  for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) 
+  for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) {
      Zeff += (fMaterial->GetFractionVector())[i]
              *((*(fMaterial->GetElementVector()))[i]->GetZ());
-
+  }
   if (Zeff > 2.) fF2fluct = 2./Zeff ;
     else         fF2fluct = 0.;
 
@@ -236,8 +246,8 @@ void G4IonisParamMat::ComputeIonParameters()
   if( 1 == NumberOfElements ) {
     const G4Element* element = (*theElementVector)[0];
     z = element->GetZ();
-    vF= element->GetFermiVelocity();
-    lF= element->GetLFactor();
+    vF= element->GetIonisation()->GetFermiVelocity();
+    lF= element->GetIonisation()->GetLFactor();
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
@@ -246,8 +256,8 @@ void G4IonisParamMat::ComputeIonParameters()
         const G4double weight = theAtomicNumDensityVector[iel] ;
         norm += weight ;
         z    += element->GetZ() * weight ;
-        vF   += element->GetFermiVelocity() * weight ;
-        lF   += element->GetLFactor() * weight ;
+        vF   += element->GetIonisation()->GetFermiVelocity() * weight ;
+        lF   += element->GetIonisation()->GetLFactor() * weight ;
       }
     z  /= norm ;
     vF /= norm ;

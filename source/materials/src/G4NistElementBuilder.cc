@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.16 2007-07-28 15:58:03 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.17 2008-06-04 08:27:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,8 @@
 
 #include "G4NistElementBuilder.hh"
 #include "G4Element.hh"
+#include <sstream>
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -139,7 +141,9 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
     G4Isotope* ist;
     for (G4int i=0; i<nc; i++) {
        if (relAbundance[idx + i] > 0.0) {
-         ist = new G4Isotope(elmSymbol[Z],Z, n0 + i,
+	 std::ostringstream os; 
+	 os << elmSymbol[Z] << n0 + i;
+         ist = new G4Isotope(os.str(),Z, n0 + i,
 	                     massIsotopes[idx + i]*gram/mole);
 	 iso.push_back(ist);
        }

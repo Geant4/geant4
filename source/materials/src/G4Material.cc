@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.40 2008-03-17 17:30:13 maire Exp $
+// $Id: G4Material.cc,v 1.41 2008-06-04 08:27:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,11 +194,12 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
      fAtomsVector       [fNumberOfElements] = nAtoms;
      fNumberOfComponents = ++fNumberOfElements;
      element->increaseCountUse();
-  }
-  else
-     G4Exception
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of elements.");
-
+  }
   // filled.
   if ( G4int(fNumberOfElements) == maxNbComponents ) {     
      // compute proportion by mass
@@ -241,11 +242,13 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 	element->increaseCountUse();
       }
       fNumberOfComponents++;  
-  }
-  else
-     G4Exception
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  }    
+
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
 
@@ -302,11 +305,13 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
         }
        } 
       fNumberOfComponents++;  
-  }
-  else
-     G4Exception
-    ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  } else {
+    G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= " 
+	   <<  fNumberOfElements << G4endl;
+    G4Exception
+      ("ERROR!!! - Attempt to add more than the declared number of components.");
+  }    
+
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
      size_t i=0;
