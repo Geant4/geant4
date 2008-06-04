@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-08)
+---------------------------------------------
+- Bug fixe for codition jump by uninitialised value by T. Koi
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
 03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-07)
 ---------------------------------------------
 - Bug fixes for Hadron Hyper News #932 by T. Koi
@@ -29,12 +35,12 @@ code and to keep track of all tags.
 ---------------------------------------------
 - Change checking point of "neglecting doppler broadening" flag 
   from GetCrossSection to BuildPhysicsTable by T. Koi
-	G4NeutronHPorLElasticData.hh
-	G4NeutronHPorLEInelasticData.hh
-	G4NeutronHPorLCaptureData.hh
-	G4NeutronHPorLElasticData.cc
-	G4NeutronHPorLEInelasticData.cc
-	G4NeutronHPorLCaptureData.cc
+	G4NeutronHPElasticData.hh
+	G4NeutronHPInelasticData.hh
+	G4NeutronHPCaptureData.hh
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
 
 22 April 2008 Tatsumi Koi (hadr-hpn-V09-01-04)
 ---------------------------------------------
