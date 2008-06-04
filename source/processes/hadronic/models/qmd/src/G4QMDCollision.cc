@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 080602 Fix memory leaks by T. Koi 
+//
 #include "G4QMDCollision.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Scatterer.hh"
@@ -111,7 +113,7 @@ G4bool isThisEnergyOK = false;
                    et += (*it)->Get4Momentum().e()/GeV;
                    if ( id > 1 )
                    {
- //                     std::cout << "NAGISA id >2; id= " << id  << std::endl; 
+ //                     std::cout << "G4QMDCollision id >2; id= " << id  << std::endl; 
                    }
                 }
                 id++; 
@@ -489,7 +491,7 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
          }
          else
          {
-            //std::cout << "NAGISA pion absrorption " << secs->front()->GetDefinition()->GetParticleName() << std::endl;
+            //std::cout << "G4QMDCollision pion absrorption " << secs->front()->GetDefinition()->GetParticleName() << std::endl;
             //secs->front()->Decay();
             theSystem->GetParticipant( i )->SetDefinition( secs->front()->GetDefinition() );
             p4ix_new = secs->front()->Get4Momentum()/GeV;
@@ -505,7 +507,7 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
 
          } 
 
-         if ( secs->size() > 2 ) std::cout << "NAGISA secs size > 2;  " << secs->size() << std::endl;
+         if ( secs->size() > 2 ) std::cout << "G4QMDCollision secs size > 2;  " << secs->size() << std::endl;
 
          // deleteing KineticTrack
          for ( G4KineticTrackVector::iterator it 
@@ -513,6 +515,7 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
          {  
             delete *it;
          }
+         delete secs;
       }
 //071031
 
