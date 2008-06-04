@@ -155,7 +155,7 @@ tracking                                         run-V09-01-01
 examples                                         examples-V09-01-05
 --------
 - Updated reference outputs.
-- advanced/hadrontheraphy (hadrontheraphy-V09-01-04)                              (*)
+- advanced/hadrontheraphy (hadrontheraphy-V09-01-04)
   o Added in the beam line the MOPI detector. MOPI is a microstrip detector
     that, in the real case, is able to check during the treatment the beam
     simmetry of the theraphy beam. Its physical structure is here exactly
