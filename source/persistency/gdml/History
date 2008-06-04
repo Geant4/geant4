@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2008-06-02 11:58:13 ztorzsok Exp $
+$Id: History,v 1.62 2008-06-04 14:09:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,29 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02 june 2008 Zoltan Torzsok
-- Writer checks if the file to be created does already exist
-- GetVolume function added
+2 June 2008 Zoltan Torzsok (gdml-V09-01-05)
+- Writer checks if the file to be created does already exist.
+- Added GetVolume() function.
 
-29 may 2008 Zoltan Torzsok
-- Modular files can be written now
+29 May 2008 Zoltan Torzsok
+- Added support for writing modular files.
 
-28 may 2008 Zoltan Torzsok
-- Only the referenced materials/elements/isotopes are written out, not the whole material/element/isotope store!
-- World physical volume has name now
+28 May 2008 Zoltan Torzsok
+- Only the referenced materials/elements/isotopes are written out, not the
+  whole material/element/isotope store.
+- Assigned the name to world physical volume.
 
-27 may 2008 Zoltan Torzsok
-- Writing of structure is optimized/simplified now: no array required for sorting!
-- Only the referenced solids are written out, not the whole solid store
+27 May 2008 Zoltan Torzsok
+- Optimized/simplified writing of structure: no array required for sorting.
+- Only the referenced solids are written out, not the whole solid store.
 
-23 may 2008 Zoltan Torzsok
-- Precision is now considered in writer in case of scale,rotation and position in physvol.
-  DBL_EPSILON is used to filter unnecessary scale/rotation/position.
+23 May 2008 Zoltan Torzsok
+- Writer: precision is now considered in case of scale, rotation and position
+  of the physical-volume. DBL_EPSILON is used to filter precision for avoiding
+  unnecessary scaling, rotation or positioning.
 
-7 May 2008 Zoltan Torzsok
-- Added early version of the user manual, both in PDF and MS Word format
-
-6 May 2008 Zoltan Torzsok
+6 May 2008 Zoltan Torzsok (gdml-V09-01-04)
 - Added a constant limiting the maximum number of reflections/displacements of a single solid
 
 21 April 2008 Zoltan Torzsok
