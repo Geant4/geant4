@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2008-06-04 08:27:29 vnivanch Exp $
+$Id: History,v 1.114 2008-06-05 09:20:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 04-06-08 V.Ivanchenko (materials-V09-01-06)
-- G4NistElementBuilder - provide unique name for each isotope of an element
+- G4NistElementBuilder - provided unique name for each isotope of an element
+                         (P.Gumplinger)
 - G4IonisParamElm - added Fermi velocity and L-factor (both used for 
                     parameterizations of the effective charge and 
                     stragling of ions);
