@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2008 Peter Gumplinger (op-V09-01-01)
+              G4OpRayleigh, G4OpWLS = trivial name changes: 
+              momentum->energy, momenta->energies
+
 5th June 2008 Peter Gumplinger (op-V09-01-00)
               G4OpBoundaryProcess: Removed G4Swap methods - replaced by
               G4SwapPtr. Removed G4IsotropicRand method - replaced by
