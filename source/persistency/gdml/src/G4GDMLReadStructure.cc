@@ -442,8 +442,8 @@ G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVo
 G4VPhysicalVolume* G4GDMLReadStructure::GetWorldVolume(const G4String& setupName) { 
    
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
-   volume->SetVisAttributes(G4VisAttributes::Invisible);
-   G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(),volume,setupName,0,0,0);
+//   volume->SetVisAttributes(G4VisAttributes::Invisible);
+   G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);
    GeneratePhysvolName(pvWorld);
    return pvWorld;
 }

@@ -132,7 +132,13 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
 
 void G4GDMLWrite::SetModule(const G4VPhysicalVolume* const physvol,const G4String& name) {
 
-   moduleMap()[physvol] = name;
+   if (name.empty()) {
+   
+      moduleMap()[physvol] = physvol->GetLogicalVolume()->GetName() + ".gdml";
+   } else {
+      
+      moduleMap()[physvol] = name;
+   }
 }
 
 G4String G4GDMLWrite::GetModule(const G4VPhysicalVolume* const physvol) {

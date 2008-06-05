@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2008-06-04 14:09:20 gcosmo Exp $
+$Id: History,v 1.63 2008-06-05 07:50:28 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 june 2008 Zoltan Torzsok
+- Module name is optional now. If no name is specified, the logical volume name will be the filename.
+
+02 june 2008 Zoltan Torzsok
+- Writer checks if the file to be created does already exist
+- GetVolume function added
+=======
 2 June 2008 Zoltan Torzsok (gdml-V09-01-05)
 - Writer checks if the file to be created does already exist.
 - Added GetVolume() function.
