@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.23 2007-10-15 20:05:23 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.24 2008-06-05 23:46:14 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -214,8 +214,8 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	
 	////////////////////////////////////////////////////////////////
 
-	G4double Pmin = Rindex->GetMinPhotonMomentum();
-	G4double Pmax = Rindex->GetMaxPhotonMomentum();
+	G4double Pmin = Rindex->GetMinPhotonEnergy();
+	G4double Pmax = Rindex->GetMaxPhotonEnergy();
 	G4double dp = Pmax - Pmin;
 
 	G4double nMax = Rindex->GetMaxProperty();
@@ -227,18 +227,18 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	for (G4int i = 0; i < NumPhotons; i++) {
 
-		// Determine photon momentum
+		// Determine photon energy
 
 		G4double rand;
-		G4double sampledMomentum, sampledRI; 
+		G4double sampledEnergy, sampledRI; 
 		G4double cosTheta, sin2Theta;
 		
-		// sample a momentum 
+		// sample an energy
 
 		do {
 			rand = G4UniformRand();	
-			sampledMomentum = Pmin + rand * dp; 
-			sampledRI = Rindex->GetProperty(sampledMomentum);
+			sampledEnergy = Pmin + rand * dp; 
+			sampledRI = Rindex->GetProperty(sampledEnergy);
 			cosTheta = BetaInverse / sampledRI;  
 
 			sin2Theta = (1.0 - cosTheta)*(1.0 + cosTheta);
@@ -255,7 +255,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4double sinPhi = sin(phi);
 		G4double cosPhi = cos(phi);
 
-		// calculate x,y, and z components of photon momentum 
+		// calculate x,y, and z components of photon energy
 		// (in coord system with primary particle direction 
 		//  aligned with the z axis)
 
@@ -298,7 +298,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 				      photonPolarization.y(),
 				      photonPolarization.z());
 
-		aCerenkovPhoton->SetKineticEnergy(sampledMomentum);
+		aCerenkovPhoton->SetKineticEnergy(sampledEnergy);
 
                 // Generate new G4Track object:
 
@@ -371,7 +371,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 		   if (theRefractionIndexVector) {
 		
 		      // Retrieve the first refraction index in vector
-		      // of (photon momentum, refraction index) pairs 
+		      // of (photon energy, refraction index) pairs 
 
 		      theRefractionIndexVector->ResetIterator();
 		      ++(*theRefractionIndexVector);	// advance to 1st entry 
@@ -381,11 +381,11 @@ void G4Cerenkov::BuildThePhysicsTable()
 
 		      if (currentRI > 1.0) {
 
-			 // Create first (photon momentum, Cerenkov Integral)
+			 // Create first (photon energy, Cerenkov Integral)
 			 // pair  
 
 			 G4double currentPM = theRefractionIndexVector->
-			 			 GetPhotonMomentum();
+			 			 GetPhotonEnergy();
 			 G4double currentCAI = 0.0;
 
 			 aPhysicsOrderedFreeVector->
@@ -397,7 +397,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 			 G4double prevCAI = currentCAI;
                 	 G4double prevRI  = currentRI;
 
-			 // loop over all (photon momentum, refraction index)
+			 // loop over all (photon energy, refraction index)
 			 // pairs stored for this material  
 
 			 while(++(*theRefractionIndexVector))
@@ -406,7 +406,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 						GetProperty();
 
 				currentPM = theRefractionIndexVector->
-						GetPhotonMomentum();
+						GetPhotonEnergy();
 
 				currentCAI = 0.5*(1.0/(prevRI*prevRI) +
 					          1.0/(currentRI*currentRI));
@@ -511,9 +511,9 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
 
         if(!(CerenkovAngleIntegrals->IsFilledVectorExist()))return 0.0;
 
-	// Min and Max photon momenta  
-	G4double Pmin = Rindex->GetMinPhotonMomentum();
-	G4double Pmax = Rindex->GetMaxPhotonMomentum();
+	// Min and Max photon energies 
+	G4double Pmin = Rindex->GetMinPhotonEnergy();
+	G4double Pmax = Rindex->GetMaxPhotonEnergy();
 
 	// Min and Max Refraction Indices 
 	G4double nMin = Rindex->GetMinProperty();	
@@ -540,12 +540,12 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
 
 	// If n(Pmin) < 1/Beta, and n(Pmax) >= 1/Beta, then
 	// we need to find a P such that the value of n(P) == 1/Beta.
-	// Interpolation is performed by the GetPhotonMomentum() and
+	// Interpolation is performed by the GetPhotonEnergy() and
 	// GetProperty() methods of the G4MaterialPropertiesTable and
 	// the GetValue() method of G4PhysicsVector.  
 
 	else {
-		Pmin = Rindex->GetPhotonMomentum(BetaInverse);
+		Pmin = Rindex->GetPhotonEnergy(BetaInverse);
 		dp = Pmax - Pmin;
 
 		// need boolean for current implementation of G4PhysicsVector

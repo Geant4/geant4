@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.27 2008-02-05 22:05:45 gum Exp $
+// $Id: G4Scintillation.cc,v 1.28 2008-06-05 23:45:54 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -300,14 +300,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		
 	    for (G4int i = 0; i < Num; i++) {
 
-		// Determine photon momentum
+		// Determine photon energy
 
                 G4double CIIvalue = G4UniformRand()*CIImax;
-		G4double sampledMomentum = 
+		G4double sampledEnergy = 
                               ScintillationIntegral->GetEnergy(CIIvalue);
 
 		if (verboseLevel>1) {
-                   G4cout << "sampledMomentum = " << sampledMomentum << G4endl;
+                   G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
 		   G4cout << "CIIvalue =        " << CIIvalue << G4endl;
 		}
 
@@ -356,7 +356,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 				      photonPolarization.y(),
 				      photonPolarization.z());
 
-		aScintillationPhoton->SetKineticEnergy(sampledMomentum);
+		aScintillationPhoton->SetKineticEnergy(sampledEnergy);
 
                 // Generate new G4Track object:
 
@@ -443,7 +443,7 @@ void G4Scintillation::BuildThePhysicsTable()
 		   if (theFastLightVector) {
 		
 		      // Retrieve the first intensity point in vector
-		      // of (photon momentum, intensity) pairs 
+		      // of (photon energy, intensity) pairs 
 
 		      theFastLightVector->ResetIterator();
 		      ++(*theFastLightVector);	// advance to 1st entry 
@@ -453,11 +453,11 @@ void G4Scintillation::BuildThePhysicsTable()
 
 		      if (currentIN >= 0.0) {
 
-			 // Create first (photon momentum, Scintillation 
+			 // Create first (photon energy, Scintillation 
                          // Integral pair  
 
 			 G4double currentPM = theFastLightVector->
-			 			 GetPhotonMomentum();
+			 			 GetPhotonEnergy();
 
 			 G4double currentCII = 0.0;
 
@@ -470,13 +470,13 @@ void G4Scintillation::BuildThePhysicsTable()
 			 G4double prevCII = currentCII;
                 	 G4double prevIN  = currentIN;
 
-			 // loop over all (photon momentum, intensity)
+			 // loop over all (photon energy, intensity)
 			 // pairs stored for this material  
 
 			 while(++(*theFastLightVector))
 			 {
 				currentPM = theFastLightVector->
-						GetPhotonMomentum();
+						GetPhotonEnergy();
 
 				currentIN=theFastLightVector->	
 						GetProperty();
@@ -503,7 +503,7 @@ void G4Scintillation::BuildThePhysicsTable()
                    if (theSlowLightVector) {
 
                       // Retrieve the first intensity point in vector
-                      // of (photon momentum, intensity) pairs
+                      // of (photon energy, intensity) pairs
 
                       theSlowLightVector->ResetIterator();
                       ++(*theSlowLightVector);  // advance to 1st entry
@@ -513,11 +513,11 @@ void G4Scintillation::BuildThePhysicsTable()
 
                       if (currentIN >= 0.0) {
 
-                         // Create first (photon momentum, Scintillation
+                         // Create first (photon energy, Scintillation
                          // Integral pair
 
                          G4double currentPM = theSlowLightVector->
-                                                 GetPhotonMomentum();
+                                                 GetPhotonEnergy();
 
                          G4double currentCII = 0.0;
 
@@ -530,13 +530,13 @@ void G4Scintillation::BuildThePhysicsTable()
                          G4double prevCII = currentCII;
                          G4double prevIN  = currentIN;
 
-                         // loop over all (photon momentum, intensity)
+                         // loop over all (photon energy, intensity)
                          // pairs stored for this material
 
                          while(++(*theSlowLightVector))
                          {
                                 currentPM = theSlowLightVector->
-                                                GetPhotonMomentum();
+                                                GetPhotonEnergy();
 
                                 currentIN=theSlowLightVector->
                                                 GetProperty();
