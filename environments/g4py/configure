@@ -1,5 +1,5 @@
 #! /bin/bash -
-#$Id: configure,v 1.10 2008-06-04 05:16:50 kmura Exp $
+#$Id: configure,v 1.11 2008-06-05 07:49:39 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -36,7 +36,7 @@ Fine tuning of the library path:
   --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
 
-  --with-python-incdir=DIR  Python header dir [/usr/include/python],
+  --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
   --with-python-libdir=DIR  Python library dir [/usr/lib]
 
@@ -86,7 +86,7 @@ clhep_incdir=${CLHEP_INCLUDE_DIR:-/zzz}
 clhep_libdir=${CLHEP_LIB_DIR:-/zzz}
 clhep_lib=${CLHEP_LIB:-CLHEP}
 
-python_incdir=/usr/include/python
+python_incdir=/zzz
 boost_incdir=/usr/include
 boost_python_lib=boost_python
 
@@ -257,6 +257,16 @@ echo "lib${clhep_lib}.${shlib}"
 
 # ---
 echo -n "Checking for Python include dir (pyconfig.h) ... "
+# check version
+set python python2.5 python2.4 python2.3
+for incdir in $*
+do
+  if [ -d /usr/include/$incdir ]; then
+    python_incdir=/usr/include/$incdir
+    break
+  fi
+done
+
 if [ ! -f "$python_incdir"/pyconfig.h ]; then
   echo "no"
   echo -n "### $python_incdir (python-incdir) is invalid. "
