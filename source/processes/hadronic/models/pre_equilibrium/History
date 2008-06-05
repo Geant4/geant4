@@ -13,6 +13,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+05 June 2008 J. M. Quesada (hadr-pre-V09-01-04)
+---------------------------------------------------
+
+ Bug fixed in OPT=1 (Chatterjee) charged particle cross sections.
+Unphysical values at very low emission energies have been corrected (set
+to 0).
+OPT=1 by default ( OPT=2 in previous tag)
+
+
 15-May 2008 J. M.Quesada     hadr-pre-V09-01-03
 -----------------------------------------------
    The retrieval of transition probabilities in G4PreCompoundModel.cc ( for protection
