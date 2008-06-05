@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.11 2008-05-24 16:34:33 ahoward Exp $
+// $Id: G4EvaporationProbability.cc,v 1.12 2008-06-05 16:46:29 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -216,9 +216,10 @@ if (E1<0.) return 0.;
 
 G4double E0=U-delta00;
 
+//JMQ commented for test30_04-06-08 OPT=3
 //JMQ: 04-05-08 cross sections are set to 0 below Coulomb Barrier
 
-if(K<CoulombBarrier) {return 0.;}
+//if(K<CoulombBarrier) {return 0.;}
 
 
 
@@ -246,8 +247,11 @@ G4double G4EvaporationProbability::CrossSection(const G4double K,const  G4Fragme
     G4int theA=static_cast<G4int>(GetA());
     G4int theZ=static_cast<G4int>(GetZ());
 
-// Default: Chatterjee's & Wellish'sparameterization
-      G4int OPT=2;
+
+// OPT=2 //Default: Chatterjee's + Wellish's parameterizations
+//JMQ 03-06-08 change to OPT=3 for n-Bi @ 63 MeV test
+//JMQ 04-06-08 change to OPT=1 for test
+      G4int OPT=1;
 
 // Loop on XS options starts:
 if ( OPT==1 ||OPT==2) { 
@@ -312,6 +316,16 @@ G4double p, p0, p1, p2,Ec,delta,q,r,ji;
    ji=std::max(Kc,Ec);
    if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
    else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+
+  //JMQ 05-06-08 bug fixed unphysical of xs values removed
+   G4double Eo,epsilon1,epsilon2;
+   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
+   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
+   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+   else    Eo=std::min(epsilon1,epsilon2);
+   if (Kc<Eo) xs=0.;
+ //
+
    if (xs <0.0) {xs=0.0;}
 if (xs <= 0.0 && Kc > 2*Ec){
        std::ostringstream errOs;
@@ -433,6 +447,17 @@ else  {
    ji=std::max(Kc,Ec);
    if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
    else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+
+
+  //JMQ 05-06-08 bug fixed unphysical of xs values removed
+   G4double Eo,epsilon1,epsilon2;
+   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
+   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
+   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+   else    Eo=std::min(epsilon1,epsilon2);
+   if (Kc<Eo) xs=0.;
+ //
+
    if (xs <0.0) {xs=0.0;}
    return xs;}
 }

@@ -64,6 +64,10 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double E1 = std::max(0.0,U - eKin - GetBindingEnergy() - A1);
   if (E1 == 0.0) return 0.0;
 
+//JMQ commented for test30_04-06-08 OPT=3
+//JMQ 02-06-08 Coulomb cutoff in xs is included here
+//  if (eKin<theCoulombBarrier) return 0.0;
+
 //JMQ (Dec.07) new cross sections added & combinatorial factor
  G4double Probability =std::pow(10.,-25.)* 1.0/pi2*2.0/(hbarc*hbarc*hbarc) * GetReducedMass()
 * GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  * eKin*CrossSection(eKin) * P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 * g1/(g0*g0);
@@ -97,8 +101,10 @@ G4double G4PreCompoundNucleon::CrossSection(const  G4double K)
       G4int theZ=static_cast<G4int>(GetZ());
       G4double fragmentA=GetA()+GetRestA();
 
-// Default: Chatterjee's + Wellish's parameterizations
-      G4int OPT=2;
+// OPT=2 //Default: Chatterjee's + Wellish's parameterizations
+//JMQ 03-06-08 change to OPT=3 for n-Bi @ 63 MeV test
+//JMQ 04-06-08 change to OPT=1 for test
+      G4int OPT=1;
 
 // Loop on XS options starts:
 if ( OPT==1 ||OPT==2) { 
@@ -167,6 +173,14 @@ G4double p, p0, p1, p2,Ec,delta,q,r,ji;
    if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
    else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
 
+  //JMQ 05-06-08 bug fixed unphysical of xs values removed
+   G4double Eo,epsilon1,epsilon2;
+   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
+   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
+   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+   else    Eo=std::min(epsilon1,epsilon2);
+   if (Kc<Eo) xs=0.;
+ //
 
    if (xs <0.0) {xs=0.0;}
 
