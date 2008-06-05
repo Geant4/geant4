@@ -429,6 +429,12 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	  DielectricMetal();
 
+          // Uncomment the following lines if you wish to have 
+          //         Transmission instead of Absorption
+          // if (theStatus == Absorption) {
+          //    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+          // }
+
 	}
 	else if (type == dielectric_dielectric) {
 
@@ -578,7 +584,11 @@ void G4OpBoundaryProcess::DielectricMetal()
 
            if( !G4BooleanRand(theReflectivity) && n == 1 ) {
 
+             // Comment out DoAbsorption if you wish to have
+             //       Transmission instead of Absorption
+
              DoAbsorption();
+             theStatus = Absorption;
              break;
 
            }
@@ -656,8 +666,8 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      Swap = !Swap;
 	      Through = false;
 	      theGlobalNormal = -theGlobalNormal;
-	      G4Swap(Material1,Material2);
-	      G4Swap(&Rindex1,&Rindex2);
+	      G4SwapPtr(Material1,Material2);
+	      G4SwapPtr(&Rindex1,&Rindex2);
 	   }
 
 	   if ( theFinish == ground || theFinish == groundbackpainted ) {
@@ -863,8 +873,8 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	        }
 	        else {
 		   Swap = !Swap;
-		   G4Swap(Material1,Material2);
-		   G4Swap(&Rindex1,&Rindex2);
+		   G4SwapPtr(Material1,Material2);
+		   G4SwapPtr(&Rindex1,&Rindex2);
 	        }
 		if ( theFinish == groundbackpainted )
 					theStatus = LambertianReflection;
