@@ -34,22 +34,24 @@
 #define _G4GDMLWRITEDEFINE_INCLUDED_
 
 #include "G4GDMLWrite.hh"
-
 #include <sstream>
 
 class G4GDMLWriteDefine : public G4GDMLWrite {
 private:
    xercesc::DOMElement* defineElement;
-
    void defineWrite(xercesc::DOMElement*);
 protected:
+   static const G4double kRelativePrecision;
+   static const G4double kAngularPrecision;
+   static const G4double kLinearPrecision;
+  
    G4ThreeVector getAngles(const G4RotationMatrix&);
-   void AddPosition(const G4String&,const G4ThreeVector&);
-   void positionWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void rotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void firstpositionWrite(xercesc::DOMElement*,const G4ThreeVector&);
+   void scaleWrite(xercesc::DOMElement*,const G4String&,const G4ThreeVector&);
+   void rotationWrite(xercesc::DOMElement*,const G4String&,const G4ThreeVector&);
+   void positionWrite(xercesc::DOMElement*,const G4String&,const G4ThreeVector&);
    void firstrotationWrite(xercesc::DOMElement*,const G4ThreeVector&);
-   void scaleWrite(xercesc::DOMElement*,const G4ThreeVector&);
+   void firstpositionWrite(xercesc::DOMElement*,const G4ThreeVector&);
+   void AddPosition(const G4String&,const G4ThreeVector&);
 };
 
 #endif

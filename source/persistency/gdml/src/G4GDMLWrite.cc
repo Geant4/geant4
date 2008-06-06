@@ -59,6 +59,7 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4double&
    xercesc::XMLString::transcode(name,tempStr,99);
    xercesc::DOMAttr* att = doc->createAttribute(tempStr);
    std::ostringstream ostream;
+   ostream.precision(12); // Set the precision to 1e-12!
    ostream << value;
    G4String str = ostream.str();
    xercesc::XMLString::transcode(str,tempStr,99);
@@ -75,7 +76,7 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
 
    G4cout << "Writing '" << fname << "'..." << G4endl;
-
+   
    if (FileExists(fname)) G4Exception("GDML Writer: ERROR! File '"+fname+"' already exists!");
 
    xercesc::XMLString::transcode("LS", tempStr, 99);

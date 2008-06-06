@@ -45,6 +45,7 @@
 #include "G4Transform3D.hh"
 
 class G4GDMLWrite {
+private:
    typedef std::map<const G4VPhysicalVolume*,G4String> ModuleMapType;
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];

@@ -112,16 +112,18 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
    G4String state_str("undefined");
    G4State state = materialPtr->GetState();
-   if (state==kStateSolid) { state_str = "solid"; } else
-   if (state==kStateLiquid) { state_str = "liquid"; } else
-   if (state==kStateGas) { state_str = "gas"; }
+   if (state==kStateSolid) state_str = "solid"; else
+   if (state==kStateLiquid) state_str = "liquid"; else
+   if (state==kStateGas) state_str = "gas";
 
    xercesc::DOMElement* materialElement = newElement("material");
    materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
    materialElement->setAttributeNode(newAttribute("state",state_str));
+
+   if (fabs(materialPtr->GetTemperature()-STP_Temperature) > kRelativePrecision) TWrite(materialElement,materialPtr->GetTemperature());
+   if (fabs(materialPtr->GetPressure()-STP_Pressure) > kRelativePrecision) PWrite(materialElement,materialPtr->GetPressure());
+
    DWrite(materialElement,materialPtr->GetDensity());
-   PWrite(materialElement,materialPtr->GetPressure());
-   TWrite(materialElement,materialPtr->GetTemperature());
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
 

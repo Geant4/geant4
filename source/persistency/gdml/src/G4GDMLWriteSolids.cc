@@ -74,8 +74,8 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    firstElement->setAttributeNode(newAttribute("ref",firstPtr->GetName()));
    secondElement->setAttributeNode(newAttribute("ref",secondPtr->GetName()));
 
-   positionWrite(booleanElement,pos);
-   rotationWrite(booleanElement,rot);
+   positionWrite(booleanElement,"",pos);
+   rotationWrite(booleanElement,"",rot);
 
    if (IsFirstDisplaced) {
    

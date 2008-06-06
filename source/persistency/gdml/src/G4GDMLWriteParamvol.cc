@@ -187,8 +187,8 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
    
    xercesc::DOMElement* parametersElement = newElement("parameters");
    paramvolElement->appendChild(parametersElement);
-   rotationWrite(parametersElement,getAngles(paramvol->GetObjectRotationValue()));
-   positionWrite(parametersElement,paramvol->GetObjectTranslation());
+   rotationWrite(parametersElement,"",getAngles(paramvol->GetObjectRotationValue()));
+   positionWrite(parametersElement,"",paramvol->GetObjectTranslation());
 
    G4VSolid* solid = paramvol->GetLogicalVolume()->GetSolid();
 
