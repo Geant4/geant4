@@ -33,6 +33,8 @@
 // 
 //      Creation date: 29 March 2007
 // -----------------------------------------------------------------------------
+//
+// 080602 Fix memory leaks by T. Koi 
 
 #ifndef G4QMDSystem_hh
 #define G4QMDSystem_hh
@@ -50,7 +52,7 @@ class G4QMDSystem
 
       void SubtractSystem ( G4QMDSystem* );
 
-      void DeleteParticipant( G4int i ) { participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ); };
+      void DeleteParticipant( G4int i ) { delete participants[ i ] ; participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ); };
 
       G4int GetTotalNumberOfParticipant() { return participants.size(); };
 

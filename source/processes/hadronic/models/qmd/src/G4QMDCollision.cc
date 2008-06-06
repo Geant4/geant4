@@ -122,6 +122,8 @@ G4bool isThisEnergyOK = false;
             }
             theMeanField->SetSystem ( theSystem );
             i0 = id-1; // 0 enter to i
+
+            delete secs;
          }
 
 //       EnergyCheck  
