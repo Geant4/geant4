@@ -30,8 +30,8 @@
 
 #include "G4GDMLWriteDefine.hh"
 
-const G4double G4GDMLWriteDefine::kRelativePrecision = 1.0e-18;
-const G4double G4GDMLWriteDefine::kAngularPrecision = 1.0e-3*degree;
+const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
+const G4double G4GDMLWriteDefine::kAngularPrecision = 1.0e-6*degree;
 const G4double G4GDMLWriteDefine::kLinearPrecision = 1.0e-15*meter;
 
 G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {

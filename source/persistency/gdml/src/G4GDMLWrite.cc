@@ -59,7 +59,7 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4double&
    xercesc::XMLString::transcode(name,tempStr,99);
    xercesc::DOMAttr* att = doc->createAttribute(tempStr);
    std::ostringstream ostream;
-   ostream.precision(12); // Set the precision to 1e-12!
+   ostream.precision(18); // Set the precision to 1e-18!
    ostream << value;
    G4String str = ostream.str();
    xercesc::XMLString::transcode(str,tempStr,99);

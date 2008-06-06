@@ -140,7 +140,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
    if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
 
-   G4Transform3D R;
+   G4Transform3D R,invR;
    int displaced = 0;
    G4VSolid* solidPtr = volumePtr->GetSolid();
 
@@ -167,6 +167,8 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       break;
    }
 
+   if (displaced>0) invR = R.inverse(); // Only compute the inverse when necessary!
+
    xercesc::DOMElement* volumeElement = newElement("volume");
    volumeElement->setAttributeNode(newAttribute("name",volumePtr->GetName()));
    xercesc::DOMElement* materialrefElement = newElement("materialref");
@@ -175,8 +177,6 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    xercesc::DOMElement* solidrefElement = newElement("solidref");
    volumeElement->appendChild(solidrefElement);
    solidrefElement->setAttributeNode(newAttribute("ref",solidPtr->GetName()));
-
-   G4Transform3D invR = R.inverse();
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
 
@@ -217,7 +217,11 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
          replicavolWrite(volumeElement,physvol); 
       } else {
    
-         G4Transform3D P(physvol->GetObjectRotationValue().inverse(),physvol->GetObjectTranslation());
+         G4RotationMatrix rot;
+
+         if (physvol->GetFrameRotation() != 0) rot = *(physvol->GetFrameRotation());
+   
+         G4Transform3D P(rot,physvol->GetObjectTranslation());
          physvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
    }
