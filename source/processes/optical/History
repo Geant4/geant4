@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-6th June 2008 Peter Gumplinger (op-V09-01-01)
+6th June 2008 Peter Gumplinger (op-V09-01-02)
               G4OpRayleigh, G4OpWLS = trivial name changes: 
               momentum->energy, momenta->energies
 
