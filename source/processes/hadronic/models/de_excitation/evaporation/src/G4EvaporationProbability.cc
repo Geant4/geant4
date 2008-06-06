@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.12 2008-06-05 16:46:29 quesada Exp $
+// $Id: G4EvaporationProbability.cc,v 1.13 2008-06-06 17:16:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -184,7 +184,7 @@ G4double G4EvaporationProbability::ProbabilityDistributionFunction(const G4doubl
   
     G4double U = fragment.GetExcitationEnergy();
    
- G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
+    // G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
 
 
    G4double delta01 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ));
