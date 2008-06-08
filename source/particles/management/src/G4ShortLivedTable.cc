@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.15 2008-03-20 02:23:31 kurasige Exp $
+// $Id: G4ShortLivedTable.cc,v 1.16 2008-06-08 12:55:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
     }
   } else {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
       G4cout << " is not short lived" << G4endl; 
     }

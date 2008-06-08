@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.32 2008-06-08 12:43:19 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.33 2008-06-08 12:55:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -379,9 +379,9 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
       if ( counter == index ) return piter->value();
       counter++;
     }
-  }
+  } 
 #ifdef G4VERBOSE
-  if (verboseLevel>0){
+  if (verboseLevel>1){
     G4cout << " G4ParticleTable::GetParticle";
     G4cout << " invalid index (=" << index << ")" << G4endl;
   }
@@ -392,7 +392,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
 {
-   CheckReadiness();
+  CheckReadiness();
   G4String key = GetKey(particle);
   return FindParticle(key);
 }
@@ -404,13 +404,13 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     // check aPDGEncoding is valid
     if (aPDGEncoding == 0){ 
 #ifdef G4VERBOSE
-      if (verboseLevel>0){
+      if (verboseLevel>1){
         G4cout << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << G4endl;
       }
 #endif
       return 0;
     }
-
+    
     G4PTblEncodingDictionary *pedic =  fEncodingDictionary;
     G4ParticleDefinition* particle =0;  
 
@@ -420,7 +420,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     }
 
 #ifdef G4VERBOSE
-    if ((particle == 0) && (verboseLevel>0) ){
+    if ((particle == 0) && (verboseLevel>1) ){
       G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
     }
 #endif

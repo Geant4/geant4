@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.50 2008-06-08 12:43:19 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.51 2008-06-08 12:55:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -685,13 +685,6 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
     fIonList->push_back(particle);
-  } else {
-    //#ifdef G4VERBOSE
-    //if (GetVerboseLevel()>1) {
-    //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
-    //  G4cout << " is not ions" << G4endl; 
-    //}
-    //#endif
   }
 }
 
@@ -708,13 +701,13 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
     }
   } else {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
       G4cout << " is not ions" << G4endl; 
     }
 #endif
   }
-
+  
 }
 
 
