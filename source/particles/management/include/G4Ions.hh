@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh,v 1.14 2007-03-11 07:17:35 kurasige Exp $
+// $Id: G4Ions.hh,v 1.15 2008-06-08 12:43:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ class G4Ions : public G4ParticleDefinition
    );
 
  public:
-   virtual    			~G4Ions(){};
+   virtual    			~G4Ions();
    G4Ions*    			IonsDefinition();
    G4Ions*    			Ions();
 

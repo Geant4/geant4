@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.31 2008-03-22 06:03:40 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.32 2008-06-08 12:43:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -58,7 +58,7 @@
 
 ////////////////////
 G4ParticleTable::G4ParticleTable()
-     :verboseLevel(0),fParticleMessenger(0),
+     :verboseLevel(1),fParticleMessenger(0),
       noName(" "),
       readyToUse(false)
 {
@@ -173,6 +173,12 @@ void G4ParticleTable::DeleteAllParticles()
   G4PTblDicIterator *piter = fIterator; 
   piter -> reset();
   while( (*piter)() ){
+#ifdef G4VERBOSE
+    if (verboseLevel>2){
+      G4cout << "Delete " << (piter->value())->GetParticleName() 
+	     << " " << (piter->value()) << G4endl;
+    }
+#endif
     delete (piter->value());
   }
 
@@ -259,6 +265,16 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 	fShortLivedTable->Insert(particle);
       }
 
+      // set Verbose Level same as ParticleTable
+      particle->SetVerboseLevel(verboseLevel);
+
+#ifdef G4VERBOSE
+      if (verboseLevel>3){
+        G4cout << "The particle "<< particle->GetParticleName() 
+	       << " is inserted in the ParticleTable " << G4endl;
+      }
+#endif
+
       return particle;
     }
   }
@@ -289,6 +305,13 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   if (particle->IsShortLived() ){
     fShortLivedTable->Remove(particle);
   }
+
+#ifdef G4VERBOSE
+  if (verboseLevel>3){
+    G4cout << "The particle "<< particle->GetParticleName()
+           << " is removed from the ParticleTable " << G4endl;
+  }
+#endif
 
   return particle;
 }
@@ -444,6 +467,7 @@ void G4ParticleTable::CheckReadiness()
               "PartMan0000",FatalException,msg);
   }
 }
+
 
 
 

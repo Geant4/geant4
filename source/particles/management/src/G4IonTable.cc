@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.49 2008-03-20 02:23:31 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.50 2008-06-08 12:43:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,8 +80,8 @@ G4IonTable::~G4IonTable()
       delete fIsotopeTable;
     }
     fIsotopeTableList->clear();
+    delete fIsotopeTableList;
   }
-  delete fIsotopeTableList;
   fIsotopeTableList =0;
 
 
