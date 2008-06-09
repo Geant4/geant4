@@ -45,11 +45,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   ifndef QTLIBS
     QT3LIBS   := -L$(QTHOME)/lib -lqt-mt
-    QT4LIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtSql4.lib QtXml4.lib
-    QTLIBS    := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo $(QT4LIBS) || echo $(QT3LIBS))
-  endif
-  ifndef QTGLLIBS
-    QT3LIBS   := -L$(QTHOME)/lib -lqt-mt
     QT4LIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib QtSql4.lib QtXml4.lib
     QTLIBS    := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif

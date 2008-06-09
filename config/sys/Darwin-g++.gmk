@@ -2,6 +2,7 @@
 # ------ MacOS-X ------
 #                                 MacOS 10.3 gcc-3.3
 #                                 MacOS 10.4 gcc-4.0
+#                                 MacOS 10.5 gcc-4.0
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -62,7 +63,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-# Uncomment the following lines for building on MacOSX 10.5 "Leopard"
+# It may be required to uncomment the following lines for building on MacOSX 10.5 "Leopard"
 #    OGLLIBS   += -dylib_file \
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:\
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
@@ -78,16 +79,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
-    QT4LIBS    := -F$(QTHOME)/lib -framework QtCore -framework QtGui
-    QT4LIBS    += -framework QtSql -framework QtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
-  endif
-
-  ifndef GLQTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
     QT4LIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
-    QT4LIBS    += -D GLQTLIBS -framework QtOpenGL -framework QtSql -framework QtXml -D ENDOF_GLQTLIBS
-    GLQTLIBS     := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
+    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
+    GLQTLIBS   := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
 
   define build-granular-shared-lib
