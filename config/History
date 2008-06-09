@@ -1,4 +1,4 @@
-$Id: History,v 1.322 2008-05-20 13:35:15 gunter Exp $
+$Id: History,v 1.323 2008-06-09 09:13:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,24 +16,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th June 2008  Gabriele Cosmo (config-V09-01-05)
+- Integrated improvements to Qt setup and AIDA.
+  Restored Qt libs setup to include GL as default.
+- Modified G4DEBUG compiler options for Linux-g++.gmk to combine -O and -g.
+
 20th May 2008  Gunter Folger  (config-V09-01-04)
-- liblist.c: remove C++ style comments.
-- all other files as config-V09-01-03 
+- liblist.c: removed C++ style comments.
+- Not including changes made after "config-V09-01-03 ".
 
 13th May 2008  Guy Barrand
-- G4UI_USE.gmk : add material (protected with G4UI_USE_OSC)
-  to use osc_vis binary kits built with the Geant4 drivers.
-  It permits someone to use the G4Lab::UIOnX G4 session by using
-  the Geant4 make system. (The G4Lab::UIOnX permits to have
-  visualization and AIDA plotting within the same GUI).
-- analysis.gmk : add a default using aida-config
-  for G4ANALYSIS_AIDA_CONFIG_CFLAGS and G4ANALYSIS_AIDA_CONFIG_LIBS.
+- G4UI_USE.gmk: added material (protected with G4UI_USE_OSC) to use osc_vis
+  binary kits built with the Geant4 drivers. It allows to use the G4Lab::UIOnX
+  G4 session in Geant4 (G4Lab::UIOnX allows for visualization and AIDA plotting
+  within the same GUI).
+- analysis.gmk: added default setup aida-config for flags
+  G4ANALYSIS_AIDA_CONFIG_CFLAGS and G4ANALYSIS_AIDA_CONFIG_LIBS.
 
 30th April 2008  Laurent Garnier
-- common.gmk : Better Qt moc files integration
-- moc.gmk : Add a file for Qt moc files configuration
-- G4UI_USE, G4VIS_USE, interactivity, sys/*: Separation of QT with OpenGL 
-  or without
+- common.gmk: simplified Qt moc files integration.
+- moc.gmk: new configuration file for Qt moc files setup.
+- G4UI_USE, G4VIS_USE, interactivity, sys/*: separation of Qt with or
+  without OpenGL.
 
 3rd April 2008  Gabriele Cosmo (config-V09-01-03)
 - Linux-icc.gmk: updated setup to make use of icc-10.1 and ifort-10.1;
