@@ -20,9 +20,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   := -O2
   else
     ifdef G4DEBUG
-      CXXFLAGS  += -g
-      FCFLAGS   := -g
-      CCFLAGS   := -g
+      CXXFLAGS  += -O -g
+      FCFLAGS   := -O -g
+      CCFLAGS   := -O -g
     endif
   endif
   ifdef G4PROFILE
@@ -64,14 +64,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
-  ifndef QTGLLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
-    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
-  endif
   ifndef QTLIBS
     QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
-    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtSql -lQtXml
+    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
     QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
   endif
   ifndef XAWFLAGS
