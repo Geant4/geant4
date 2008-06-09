@@ -5512,10 +5512,13 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       totalMass += mass[i];
       sm[i] = totalMass;
     }
+
     if( totalMass >= totalEnergy ) {
-      G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
-      G4cerr << "    total mass (" << totalMass << ") >= total energy ("
-           << totalEnergy << ")" << G4endl;
+      if (verboseLevel > 1) {
+        G4cout << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
+        G4cout << "    total mass (" << totalMass << ") >= total energy ("
+               << totalEnergy << ")" << G4endl;
+      }
       delete [] mass;
       delete [] energy;
       for( i=0; i<3; ++i )delete [] pcm[i];
@@ -5523,6 +5526,7 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       delete [] sm;
       return -1.0;
     }
+
     G4double kineticEnergy = totalEnergy - totalMass;
     G4double* emm = new G4double [vecLen];
     emm[0] = mass[0];
