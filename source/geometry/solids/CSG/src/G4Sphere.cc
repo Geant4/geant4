@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.58 2008-03-13 11:05:16 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.59 2008-06-09 09:49:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2128,6 +2128,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     //
     // => s^2(1-vz^2(1+tan^2(t))+2s(pdotv2d-pzvztan^2(t))+(rho2-pz^2tan^2(t))=0
     //
+  
+    /* ////////////////////////////////////////////////////////
+
     tanSTheta=std::tan(fSTheta);
     tanSTheta2=tanSTheta*tanSTheta;
     tanETheta=std::tan(fSTheta+fDTheta);
@@ -2287,16 +2290,152 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = kInfinity ;  // wrong cone
             }
-            if (s < stheta)
-            {
-              stheta = s ;
-              sidetheta = kETheta ;
-            }
+          }
+          if (s < stheta)
+          {
+            stheta = s ;
+            sidetheta = kETheta ;
           }
         }
       }
     }  
-  }
+    */  ////////////////////////////////////////////////////////////
+
+    if(fSTheta) // intersection with first cons
+    {
+      tanSTheta = std::tan(fSTheta);
+
+      if( std::fabs(tanSTheta) > 5./kAngTolerance ) // kons is plane z=0
+      {
+        if( v.z() ) 
+	{
+          s = -p.z()/v.z();
+
+          if ( s >= 0. )
+	  {
+            stheta    = s;
+            sidetheta = kSTheta;
+	  }
+	}
+      }
+      else // kons is not plane 
+      {
+        tanSTheta2  = tanSTheta*tanSTheta;
+        t1          = 1-v.z()*v.z()*(1+tanSTheta2);
+        t2          = pDotV2d-p.z()*v.z()*tanSTheta2;
+        dist2STheta = rho2-p.z()*p.z()*tanSTheta2;      // t3
+
+        if( std::fabs(t1) < 0.5*kAngTolerance ) // 1st order equation, v parallel to kons
+	{
+          s = -0.5*dist2STheta/t2;
+
+          if ( s >= 0. )
+	  {
+            stheta    = s;
+            sidetheta = kSTheta;
+	  }
+        }
+        else   // First root of fSTheta cone, second if first root -ve
+	{
+          b  = t2/t1;
+          c  = dist2STheta/t1;
+          d2 = b*b - c ;
+
+          if ( d2 >= 0. )
+          {
+            d = std::sqrt(d2) ;
+            s = -b - d ;         // First root
+
+            if ( s < 0. ) s = -b + d ;    // Second root
+            
+            if (s >= 0.)  // flexRadMaxTolerance*0.5 )  
+            {
+              zi = p.z() + s*v.z(); // check against double cone solution
+
+              if      ( fSTheta < pi*0.5 && zi < 0. )  s = kInfinity; // wrong cone
+            
+              else if ( fSTheta > pi*0.5 && zi > 0. )  s = kInfinity; // wrong cone
+            
+	      else
+	      {
+                stheta = s;
+                sidetheta = kSTheta;
+	      }
+	    }
+	  }
+	}
+      }
+    }
+    if (fSTheta + fDTheta < pi) // intersection with second cons
+    {
+      tanETheta = std::tan(fSTheta+fDTheta);
+
+      if( std::fabs(tanETheta) > 5./kAngTolerance ) // kons is plane z=0
+      {
+        if( v.z() ) 
+	{
+          s = -p.z()/v.z();
+
+          if (s >= 0. && s < stheta)
+	  {
+            stheta    = s;
+            sidetheta = kETheta;
+	  }
+	}
+      }
+      else // kons is not plane 
+      {
+        tanETheta2  = tanETheta*tanETheta;
+        t1          = 1-v.z()*v.z()*(1+tanETheta2);
+        t2          = pDotV2d-p.z()*v.z()*tanETheta2;
+        dist2ETheta = rho2-p.z()*p.z()*tanETheta2;      // t3
+
+        if( std::fabs(t1) < 0.5*kAngTolerance ) // 1st order equation, v parallel to kons
+	{
+          s = -0.5*dist2ETheta/t2;
+
+          if (s >= 0. && s < stheta )
+	  {
+            stheta    = s;
+            sidetheta = kETheta;
+	  }
+        }
+        else   // First root of fSTheta cone, second if first root -ve
+	{
+          b  = t2/t1;
+          c  = dist2ETheta/t1;
+          d2 = b*b - c ;
+
+          if ( d2 >= 0. )
+          {
+            d = std::sqrt(d2) ;
+            s = -b - d ;         // First root
+
+            if ( s < 0 ) s = -b + d ;    // Second root
+            
+            if ( s >= 0.  && s < stheta )  // flexRadMaxTolerance*0.5 )  
+            {
+              zi = p.z() + s*v.z(); // check against double cone solution
+
+              if      ( fSTheta+fDTheta < pi*0.5 && zi < 0. ) s = kInfinity;  // wrong cone
+            
+              else if ( fSTheta+fDTheta > pi*0.5 && zi > 0. ) s = kInfinity;  // wrong cone
+            
+     	      else
+	      {
+                stheta    = s;
+                sidetheta = kETheta;
+	      }
+	    }
+	  }
+	}
+      }
+
+    }
+
+
+
+  } // end theta intersections
 
   // Phi Intersection
     
