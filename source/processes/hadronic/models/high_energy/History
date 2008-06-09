@@ -14,6 +14,11 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+9 June 2008 - Dennis Wright (hadr-hep-V09-01-02)
+------------------------------------------------
+ G4HEInelastic::NBodyPhaseSpace: remove error message "total mass > total energy"
+ and replace with message only when verbosity is > 1
+
 15 May 2008 - Dennis Wright (hadr-hep-V09-01-01)
 ------------------------------------------------
  G4HEInelastic::TuningOfHighEnergyCascade: remove abnormally high pt 
