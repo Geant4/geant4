@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.5 2008-05-05 21:21:54 dennis Exp $
+// $Id: G4RPGFragmentation.cc,v 1.6 2008-06-09 18:13:16 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -1030,7 +1030,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     //    const G4double kineticFactor = -0.010;
     //    G4double sprob = 0.0;  // sprob = probability of self-absorption in 
                            // heavy molecules
-    const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
+    //  Not currently used (DHW 9 June 2008)  const G4double ekIncident = originalIncident->GetKineticEnergy()/GeV;
     //    if (ekIncident >= 5.0) sprob = std::min(1.0, 0.6*std::log(ekIncident-4.0));
     if (epnb > pnCutOff)
     {
