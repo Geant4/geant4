@@ -1,4 +1,4 @@
-$Id: History,v 1.386 2008-06-09 10:19:47 vnivanch Exp $
+$Id: History,v 1.387 2008-06-09 15:01:20 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+?? June 08: V.Ivant (emstand-V09-01-??)
+- G4PAIxSection - new functions for resonance and Rutherford collisions
+                  
 
 9 June 08: V.Ivant (emstand-V09-01-17)
 - G4IonFluctuations - fixed index 
