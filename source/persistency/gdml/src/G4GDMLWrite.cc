@@ -42,7 +42,18 @@ bool G4GDMLWrite::FileExists(const G4String& fname) const {
   struct stat stFileInfo;
   int intStat = stat(fname.c_str(),&stFileInfo);
 
-  return (intStat == 0) ? true : false; 
+  return (intStat == 0); 
+}
+
+G4String G4GDMLWrite::GenerateName(const G4String& name,const void* const ptr) {
+
+   std::stringstream stream;
+   
+   stream << name;
+   
+   if (true) stream << "_"<< ptr;
+
+   return G4String(stream.str());
 }
 
 xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4String& value) {
@@ -97,7 +108,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    materialsWrite(gdml);
    solidsWrite(gdml);
    structureWrite(gdml);
-   setupWrite(gdml,logvol->GetName());
+   setupWrite(gdml,logvol);
 
    G4Transform3D R = TraverseVolumeTree(logvol);
 

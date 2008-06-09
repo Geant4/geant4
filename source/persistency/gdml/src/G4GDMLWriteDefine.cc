@@ -52,7 +52,7 @@ G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {
       z = 0.0;
    }
 
-   return G4ThreeVector(x,y,z)/CLHEP::degree;
+   return G4ThreeVector(x,y,z);
 }
 
 void G4GDMLWriteDefine::scaleWrite(xercesc::DOMElement* element,const G4String& name,const G4ThreeVector& scl) {
@@ -84,9 +84,9 @@ void G4GDMLWriteDefine::rotationWrite(xercesc::DOMElement* element,const G4Strin
    G4double y = (fabs(rot.y()) < kAngularPrecision) ? 0.0 : rot.y();
    G4double z = (fabs(rot.z()) < kAngularPrecision) ? 0.0 : rot.z();
 
-   rotationElement->setAttributeNode(newAttribute("x",x));
-   rotationElement->setAttributeNode(newAttribute("y",y));
-   rotationElement->setAttributeNode(newAttribute("z",z));
+   rotationElement->setAttributeNode(newAttribute("x",x/degree));
+   rotationElement->setAttributeNode(newAttribute("y",y/degree));
+   rotationElement->setAttributeNode(newAttribute("z",z/degree));
    rotationElement->setAttributeNode(newAttribute("unit","deg"));
 }
 
@@ -102,9 +102,9 @@ void G4GDMLWriteDefine::positionWrite(xercesc::DOMElement* element,const G4Strin
    G4double y = (fabs(pos.y()) < kLinearPrecision) ? 0.0 : pos.y();
    G4double z = (fabs(pos.z()) < kLinearPrecision) ? 0.0 : pos.z();
 
-   positionElement->setAttributeNode(newAttribute("x",x));
-   positionElement->setAttributeNode(newAttribute("y",y));
-   positionElement->setAttributeNode(newAttribute("z",z));
+   positionElement->setAttributeNode(newAttribute("x",x/mm));
+   positionElement->setAttributeNode(newAttribute("y",y/mm));
+   positionElement->setAttributeNode(newAttribute("z",z/mm));
    positionElement->setAttributeNode(newAttribute("unit","mm"));
 }
 
@@ -113,9 +113,13 @@ void G4GDMLWriteDefine::firstrotationWrite(xercesc::DOMElement* element,const G4
    xercesc::DOMElement* rotationElement = newElement("firstrotation");
    element->appendChild(rotationElement);
 
-   rotationElement->setAttributeNode(newAttribute("x",rot.x()));
-   rotationElement->setAttributeNode(newAttribute("y",rot.y()));
-   rotationElement->setAttributeNode(newAttribute("z",rot.z()));
+   G4double x = (fabs(rot.x()) < kAngularPrecision) ? 0.0 : rot.x();
+   G4double y = (fabs(rot.y()) < kAngularPrecision) ? 0.0 : rot.y();
+   G4double z = (fabs(rot.z()) < kAngularPrecision) ? 0.0 : rot.z();
+
+   rotationElement->setAttributeNode(newAttribute("x",x/degree));
+   rotationElement->setAttributeNode(newAttribute("y",y/degree));
+   rotationElement->setAttributeNode(newAttribute("z",z/degree));
    rotationElement->setAttributeNode(newAttribute("unit","deg"));
 }
 
@@ -124,9 +128,13 @@ void G4GDMLWriteDefine::firstpositionWrite(xercesc::DOMElement* element,const G4
    xercesc::DOMElement* positionElement = newElement("firstposition");
    element->appendChild(positionElement);
 
-   positionElement->setAttributeNode(newAttribute("x",pos.x()));
-   positionElement->setAttributeNode(newAttribute("y",pos.y()));
-   positionElement->setAttributeNode(newAttribute("z",pos.z()));
+   G4double x = (fabs(pos.x()) < kLinearPrecision) ? 0.0 : pos.x();
+   G4double y = (fabs(pos.y()) < kLinearPrecision) ? 0.0 : pos.y();
+   G4double z = (fabs(pos.z()) < kLinearPrecision) ? 0.0 : pos.z();
+
+   positionElement->setAttributeNode(newAttribute("x",x/mm));
+   positionElement->setAttributeNode(newAttribute("y",y/mm));
+   positionElement->setAttributeNode(newAttribute("z",z/mm));
    positionElement->setAttributeNode(newAttribute("unit","mm"));
 }
 

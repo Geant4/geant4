@@ -57,12 +57,13 @@ protected:
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
    xercesc::DOMElement* newElement(const G4String&);
 
+   G4String GenerateName(const G4String&,const void* const);
    virtual void defineWrite(xercesc::DOMElement*)=0;
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
    virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const)=0;
-   virtual void setupWrite(xercesc::DOMElement*,const G4String&)=0;
+   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
 public:
    G4Transform3D Write(const G4String&,const G4LogicalVolume* const);
    void SetModule(const G4VPhysicalVolume* const,const G4String&);

@@ -116,8 +116,10 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
    if (state==kStateLiquid) state_str = "liquid"; else
    if (state==kStateGas) state_str = "gas";
 
+   G4String name = GenerateName(materialPtr->GetName(),materialPtr);
+
    xercesc::DOMElement* materialElement = newElement("material");
-   materialElement->setAttributeNode(newAttribute("name",materialPtr->GetName()));
+   materialElement->setAttributeNode(newAttribute("name",name));
    materialElement->setAttributeNode(newAttribute("state",state_str));
 
    if (fabs(materialPtr->GetTemperature()-STP_Temperature) > kRelativePrecision) TWrite(materialElement,materialPtr->GetTemperature());

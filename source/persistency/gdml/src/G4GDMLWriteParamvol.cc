@@ -250,9 +250,11 @@ void G4GDMLWriteParamvol::paramvolWrite(xercesc::DOMElement* volumeElement,const
    xercesc::DOMElement* paramvolElement = newElement("paramvol");
    volumeElement->appendChild(paramvolElement);
 
+   G4String volumeref = GenerateName(paramvol->GetLogicalVolume()->GetName(),paramvol->GetLogicalVolume());
+
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    paramvolElement->appendChild(volumerefElement);
-   volumerefElement->setAttributeNode(newAttribute("ref",paramvol->GetLogicalVolume()->GetName()));
+   volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
 
    const G4int parameterCount = paramvol->GetMultiplicity();
 

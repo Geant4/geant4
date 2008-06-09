@@ -32,7 +32,7 @@
 void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
 
    std::stringstream stream;
-   stream << physvol->GetLogicalVolume()->GetName() << "_" << physvol;
+   stream << physvol->GetLogicalVolume()->GetName() << "_"<< physvol;
    physvol->SetName(GenerateName(stream.str()));
 }
 

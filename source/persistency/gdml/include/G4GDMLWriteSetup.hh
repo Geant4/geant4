@@ -37,7 +37,7 @@
 
 class G4GDMLWriteSetup : public G4GDMLWriteSolids {
 private:
-   void setupWrite(xercesc::DOMElement*,const G4String&);
+   void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
 };
 
 #endif
