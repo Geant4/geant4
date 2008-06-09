@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.19 2008-06-02 18:05:29 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.20 2008-06-09 10:11:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -325,7 +325,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
  {-0.4227, -0.3217,  1.6360, -0.6438}
   } ;
 
-  G4int iz = G4int(Z) - 1;
+  G4int iz = G4int(Z) - 2;
   if( 0 > iz )      iz = 0;
   else if(95 < iz ) iz = 95;
 
