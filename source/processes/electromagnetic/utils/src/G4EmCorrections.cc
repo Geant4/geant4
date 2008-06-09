@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.43 2008-05-20 16:50:15 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.44 2008-06-09 11:19:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 #include "G4IonTable.hh"
 #include "G4VEmModel.hh"
 #include "G4Proton.hh"
+#include "G4GenericIon.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ProductionCutsTable.hh"
@@ -691,7 +692,6 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     G4int Z = p->GetAtomicNumber();
     G4int A = p->GetAtomicMass();
     if(verbose > 1) G4cout << "Zion= " << Z << " Aion= " << A << G4endl;
-    //    massFactor = proton_mass_c2/ionTable->GetIonMass(Z,A);
     massFactor = proton_mass_c2/p->GetPDGMass();
     idx = 0;
     for(; idx<nIons; idx++) {
@@ -706,6 +706,21 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
 	}
       }
     }
+    /*
+    if(!curVector) {
+      for(idx=0; idx<nIons; idx++) {
+	if(Z == Zion[idx]) {
+	  curMaterial = materialList[idx];
+	  if(curMaterial) {
+	    curVector = stopData[idx];
+	  } else {
+	    massFactor *= p->GetPDGMass()/ionTable->GetIonMass(Z, Aion[idx]);
+	    curVector = InitialiseMaterial(0);
+	  }
+	}
+      }
+    }
+    */
   }
   if(curVector) {
     G4bool b;
@@ -745,16 +760,16 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
+G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material*)
 {
   G4PhysicsVector* vv = 0;
-  const G4Material* m = nist->FindOrBuildMaterial(materialName[idx],false);
-  if(m && ionLEModel && ionHEModel) {
-    materialList[idx] = m;
+  const G4Material* mat = nist->FindOrBuildMaterial(materialName[idx],false);
+  if(mat && ionLEModel && ionHEModel) {
+    materialList[idx] = mat;
     curMaterial = mat;
     G4PhysicsVector* v = stopData[idx];
     
-    const G4ParticleDefinition* p = G4Proton::Proton();
+    const G4ParticleDefinition* p = G4GenericIon::GenericIon();
     if(verbose>1) {
       G4cout << "G4ionIonisation::InitialiseMaterial Stooping data for "
 	     << materialName[idx] << " for " 
@@ -774,13 +789,16 @@ G4PhysicsVector* G4EmCorrections::InitialiseMaterial(const G4Material* mat)
     G4double dedx1t = ionHEModel->ComputeDEDXPerVolume(mat, p, eth, eth)*qe 
       + ComputeIonCorrections(curParticle, mat, escal);
     G4double rest = escal*(dedxt - dedx1t);
+
+    G4double efact = proton_mass_c2/amu_c2;
   
     for(i=0; i<nbinCorr; i++) {
       e = vv->GetLowEdgeEnergy(i);
-      if(e <= eth0) {
-	dedx = v->GetValue(eth0, b)*sqrt(e/eth0);
+      G4double e1 = e*efact;
+      if(e1 <= eth0) {
+	dedx = v->GetValue(eth0, b)*sqrt(e1/eth0);
       } else {
-	dedx = v->GetValue(e, b);
+	dedx = v->GetValue(e1, b);
       }
       escal = e/massFactor;
       qe = effCharge.EffectiveChargeSquareRatio(curParticle,mat,escal); 
