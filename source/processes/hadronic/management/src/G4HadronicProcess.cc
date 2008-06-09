@@ -221,19 +221,23 @@ const G4Track &aTrack, const G4Step &)
   G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
 #endif
 
-  if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) 
-  {
-    G4cerr << "G4HadronicProcess: track in unusable state - "
-    <<aTrack.GetTrackStatus()<<G4endl;
-    G4cerr << "G4HadronicProcess: returning unchanged track "<<G4endl;
-    G4Exception("G4HadronicProcess", "001", JustWarning, "bailing out");
+  if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) {
+    if (aTrack.GetTrackStatus() == fStopAndKill ||
+        aTrack.GetTrackStatus() == fKillTrackAndSecondaries ||
+        aTrack.GetTrackStatus() == fPostponeToNextEvent) {
+      G4cerr << "G4HadronicProcess: track in unusable state - "
+             << aTrack.GetTrackStatus() << G4endl;
+      G4cerr << "G4HadronicProcess: returning unchanged track " << G4endl;
+      G4Exception("G4HadronicProcess", "001", JustWarning, "bailing out");
+    }
+    // No warning for fStopButAlive which is a legal status here
     theTotalResult->Clear();
     theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
 
-  const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-  G4Material *aMaterial = aTrack.GetMaterial();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4Material* aMaterial = aTrack.GetMaterial();
   G4double originalEnergy = aParticle->GetKineticEnergy();
   G4double kineticEnergy = originalEnergy;
 
