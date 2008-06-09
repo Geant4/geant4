@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.59 2008-06-02 18:05:29 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.60 2008-06-09 10:10:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,7 +117,12 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     if(theBaseParticle) baseMass = theBaseParticle->GetPDGMass();
     else                baseMass = theParticle->GetPDGMass();
 
-    if (!EmModel(1)) SetEmModel(new G4BraggIonModel(),1);
+    G4VEmModel* bragg;
+    if(part == G4GenericIon::GenericIon()) bragg = new G4BraggModel();
+    else  bragg = new G4BraggIonModel();
+
+    if (!EmModel(1)) SetEmModel(bragg, 1);
+    else {delete bragg;}
     EmModel(1)->SetLowEnergyLimit(100*eV);
     eth = 2.0*MeV;  
     EmModel(1)->SetHighEnergyLimit(eth);
