@@ -72,18 +72,22 @@ void G4GDMLWriteMaterials::TWrite(xercesc::DOMElement* element,G4double T) {
 
 void G4GDMLWriteMaterials::isotopeWrite(const G4Isotope* const isotopePtr) {
 
+   G4String name = GenerateName(isotopePtr->GetName(),isotopePtr);
+
    xercesc::DOMElement* isotopeElement = newElement("isotope");
-   materialsElement->appendChild(isotopeElement);
-   isotopeElement->setAttributeNode(newAttribute("name",isotopePtr->GetName()));
+   isotopeElement->setAttributeNode(newAttribute("name",name));
    isotopeElement->setAttributeNode(newAttribute("N",isotopePtr->GetN()));
    isotopeElement->setAttributeNode(newAttribute("Z",isotopePtr->GetZ()));
+   materialsElement->appendChild(isotopeElement);
    atomWrite(isotopeElement,isotopePtr->GetA());
 }
 
 void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
 
+   G4String name = GenerateName(elementPtr->GetName(),elementPtr);
+
    xercesc::DOMElement* elementElement = newElement("element");
-   elementElement->setAttributeNode(newAttribute("name",elementPtr->GetName()));
+   elementElement->setAttributeNode(newAttribute("name",name));
 
    const size_t NumberOfIsotopes = elementPtr->GetNumberOfIsotopes();
 
@@ -93,10 +97,12 @@ void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
                    
       for (size_t i=0;i<NumberOfIsotopes;i++) {
 
+         G4String fractionref = GenerateName(elementPtr->GetIsotope(i)->GetName(),elementPtr->GetIsotope(i));
+
          xercesc::DOMElement* fractionElement = newElement("fraction");
-         elementElement->appendChild(fractionElement);
          fractionElement->setAttributeNode(newAttribute("n",RelativeAbundanceVector[i]));
-         fractionElement->setAttributeNode(newAttribute("ref",elementPtr->GetIsotope(i)->GetName()));
+         fractionElement->setAttributeNode(newAttribute("ref",fractionref));
+         elementElement->appendChild(fractionElement);
          AddIsotope(elementPtr->GetIsotope(i));
       }
    } else {
@@ -135,10 +141,12 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
       for (size_t i=0;i<NumberOfElements;i++) {
       
+         G4String fractionref = GenerateName(materialPtr->GetElement(i)->GetName(),materialPtr->GetElement(i));
+      
          xercesc::DOMElement* fractionElement = newElement("fraction");
-         materialElement->appendChild(fractionElement);
          fractionElement->setAttributeNode(newAttribute("n",MassFractionVector[i]));
-         fractionElement->setAttributeNode(newAttribute("ref",materialPtr->GetElement(i)->GetName()));
+         fractionElement->setAttributeNode(newAttribute("ref",fractionref));
+         materialElement->appendChild(fractionElement);
          AddElement(materialPtr->GetElement(i));
       }
    } else {

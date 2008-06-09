@@ -48,20 +48,22 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
+   G4String name = GenerateName(divisionvol->GetName(),divisionvol);
+
    xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
-   volumeElement->appendChild(divisionvolElement);
-   divisionvolElement->setAttributeNode(newAttribute("name",divisionvol->GetName()));
+   divisionvolElement->setAttributeNode(newAttribute("name",name));
    divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
    divisionvolElement->setAttributeNode(newAttribute("number",number));
    divisionvolElement->setAttributeNode(newAttribute("width",width));
    divisionvolElement->setAttributeNode(newAttribute("offset",offset));
    divisionvolElement->setAttributeNode(newAttribute("unit",unitString));
+   volumeElement->appendChild(divisionvolElement);
 
    G4String volumeref = GenerateName(divisionvol->GetLogicalVolume()->GetName(),divisionvol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   divisionvolElement->appendChild(volumerefElement);
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   divisionvolElement->appendChild(volumerefElement);
 }
 
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T,const G4String& ModuleName) {
@@ -76,9 +78,11 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    G4ThreeVector rot = getAngles(rotate.getRotation());
    G4ThreeVector pos = T.getTranslation();
 
+   G4String name = GenerateName(physvol->GetName(),physvol);
+
    xercesc::DOMElement* physvolElement = newElement("physvol");
+   physvolElement->setAttributeNode(newAttribute("name",name));
    volumeElement->appendChild(physvolElement);
-   physvolElement->setAttributeNode(newAttribute("name",physvol->GetName()));
 
    G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
    
@@ -118,20 +122,22 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
+   G4String name = GenerateName(replicavol->GetName(),replicavol);
+
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
-   volumeElement->appendChild(replicavolElement);
-   replicavolElement->setAttributeNode(newAttribute("name",replicavol->GetName()));
+   replicavolElement->setAttributeNode(newAttribute("name",name));
    replicavolElement->setAttributeNode(newAttribute("axis",axisString));
    replicavolElement->setAttributeNode(newAttribute("number",number));
    replicavolElement->setAttributeNode(newAttribute("width",width));
    replicavolElement->setAttributeNode(newAttribute("offset",offset));
    replicavolElement->setAttributeNode(newAttribute("unit",unitString));
+   volumeElement->appendChild(replicavolElement);
 
    G4String volumeref = GenerateName(replicavol->GetLogicalVolume()->GetName(),replicavol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   replicavolElement->appendChild(volumerefElement);
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   replicavolElement->appendChild(volumerefElement);
 }
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {

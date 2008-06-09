@@ -50,6 +50,8 @@ private:
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 
+   static bool addPointerToName;
+
    ModuleMapType& moduleMap();
    bool FileExists(const G4String&) const;
 protected:
@@ -58,6 +60,7 @@ protected:
    xercesc::DOMElement* newElement(const G4String&);
 
    G4String GenerateName(const G4String&,const void* const);
+
    virtual void defineWrite(xercesc::DOMElement*)=0;
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
@@ -68,6 +71,7 @@ public:
    G4Transform3D Write(const G4String&,const G4LogicalVolume* const);
    void SetModule(const G4VPhysicalVolume* const,const G4String&);
    G4String GetModule(const G4VPhysicalVolume* const);
+   static void SetAddPointerToName(bool);
 };
 
 #endif

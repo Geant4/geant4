@@ -29,9 +29,21 @@
 
 #include "G4GDMLRead.hh"
 
-G4String G4GDMLRead::GenerateName(const G4String& name) {
+bool G4GDMLRead::addPointerToName = true;
 
-   return prename + ((InLoop>0) ? eval.SolveBrackets(name) : name);
+G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
+
+   G4String nameOut(nameIn);
+
+   if (!addPointerToName) { // Remove pointer from name!
+   
+      size_t i = nameOut.find_first_of("0x");
+      if (i<nameOut.size()) nameOut.resize(i);
+   }
+
+   if (InLoop>0) nameOut = eval.SolveBrackets(nameOut);
+
+   return (prename + nameOut);
 }
 
 void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {

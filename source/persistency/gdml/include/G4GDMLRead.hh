@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.6 2008-02-12 14:54:31 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.7 2008-06-09 12:45:52 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -52,8 +52,10 @@
 #include "G4GDMLEvaluator.hh"
 
 class G4GDMLRead {
+private:
    G4String prename;
    G4int InLoop;
+   static bool addPointerToName;
 protected:
    G4GDMLEvaluator eval;
 
@@ -69,7 +71,6 @@ public:
    virtual void structureRead(const xercesc::DOMElement* const)=0;
    virtual G4LogicalVolume* getVolume(const G4String&) const=0;
    virtual G4String getSetup(const G4String&)=0;
-
    void Read(const G4String&,bool);
 };
 

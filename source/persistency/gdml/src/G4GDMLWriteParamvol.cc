@@ -32,25 +32,28 @@
 
 void G4GDMLWriteParamvol::box_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Box* const box) {
 
+   G4String name = GenerateName(box->GetName(),box);
+
    xercesc::DOMElement* box_dimensionsElement = newElement("box_dimensions");
-   parametersElement->appendChild(box_dimensionsElement);
-   box_dimensionsElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()));
-   box_dimensionsElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()));
-   box_dimensionsElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()));
+   box_dimensionsElement->setAttributeNode(newAttribute("name",name));
+   box_dimensionsElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()/mm));
+   box_dimensionsElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()/mm));
+   box_dimensionsElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()/mm));
    box_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(box_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::trd_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Trd* const trd) {
 
    xercesc::DOMElement* trd_dimensionsElement = newElement("trd_dimensions");
-   parametersElement->appendChild(trd_dimensionsElement);
    trd_dimensionsElement->setAttributeNode(newAttribute("name",trd->GetName()));
-   trd_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()));
-   trd_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()));
-   trd_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()));
-   trd_dimensionsElement->setAttributeNode(newAttribute("y2",2.0*trd->GetYHalfLength2()));
-   trd_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trd->GetZHalfLength()));
+   trd_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()/mm));
+   trd_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()/mm));
+   trd_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()/mm));
+   trd_dimensionsElement->setAttributeNode(newAttribute("y2",2.0*trd->GetYHalfLength2()/mm));
+   trd_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trd->GetZHalfLength()/mm));
    trd_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(trd_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::trap_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Trap* const trap) {
@@ -62,89 +65,89 @@ void G4GDMLWriteParamvol::trap_dimensionsWrite(xercesc::DOMElement* parametersEl
    G4double alpha2 = atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trap_dimensionsElement = newElement("trap");
-   parametersElement->appendChild(trap_dimensionsElement);
    trap_dimensionsElement->setAttributeNode(newAttribute("name",trap->GetName()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trap->GetZHalfLength()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("theta",theta/CLHEP::degree));
-   trap_dimensionsElement->setAttributeNode(newAttribute("phi",phi/CLHEP::degree));
-   trap_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trap->GetYHalfLength1()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trap->GetXHalfLength1()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trap->GetXHalfLength2()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("alpha1",alpha1/CLHEP::degree));
-   trap_dimensionsElement->setAttributeNode(newAttribute("y2",2.0*trap->GetYHalfLength2()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("x3",2.0*trap->GetXHalfLength3()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("x4",2.0*trap->GetXHalfLength4()));
-   trap_dimensionsElement->setAttributeNode(newAttribute("alpha2",alpha2/CLHEP::degree));
-   trap_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   trap_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trap->GetZHalfLength()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("theta",theta/degree));
+   trap_dimensionsElement->setAttributeNode(newAttribute("phi",phi/degree));
+   trap_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trap->GetYHalfLength1()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trap->GetXHalfLength1()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trap->GetXHalfLength2()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("alpha1",alpha1/degree));
+   trap_dimensionsElement->setAttributeNode(newAttribute("y2",2.0*trap->GetYHalfLength2()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("x3",2.0*trap->GetXHalfLength3()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("x4",2.0*trap->GetXHalfLength4()/mm));
+   trap_dimensionsElement->setAttributeNode(newAttribute("alpha2",alpha2/degree));
+   trap_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    trap_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(trap_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::tube_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Tubs* const tube) {
 
    xercesc::DOMElement* tube_dimensionsElement = newElement("tube");
-   parametersElement->appendChild(tube_dimensionsElement);
    tube_dimensionsElement->setAttributeNode(newAttribute("name",tube->GetName()));
-   tube_dimensionsElement->setAttributeNode(newAttribute("rmin",tube->GetInnerRadius()));
-   tube_dimensionsElement->setAttributeNode(newAttribute("rmax",tube->GetOuterRadius()));
-   tube_dimensionsElement->setAttributeNode(newAttribute("z",2.0*tube->GetZHalfLength()));
-   tube_dimensionsElement->setAttributeNode(newAttribute("startphi",tube->GetStartPhiAngle()/CLHEP::degree));
-   tube_dimensionsElement->setAttributeNode(newAttribute("deltaphi",tube->GetDeltaPhiAngle()/CLHEP::degree));
-   tube_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   tube_dimensionsElement->setAttributeNode(newAttribute("rmin",tube->GetInnerRadius()/mm));
+   tube_dimensionsElement->setAttributeNode(newAttribute("rmax",tube->GetOuterRadius()/mm));
+   tube_dimensionsElement->setAttributeNode(newAttribute("z",2.0*tube->GetZHalfLength()/mm));
+   tube_dimensionsElement->setAttributeNode(newAttribute("startphi",tube->GetStartPhiAngle()/degree));
+   tube_dimensionsElement->setAttributeNode(newAttribute("deltaphi",tube->GetDeltaPhiAngle()/degree));
+   tube_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    tube_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(tube_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::cone_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Cons* const cone) {
 
    xercesc::DOMElement* cone_dimensionsElement = newElement("cone_dimensions");
-   parametersElement->appendChild(cone_dimensionsElement);
    cone_dimensionsElement->setAttributeNode(newAttribute("name",cone->GetName()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("rmin1",cone->GetInnerRadiusMinusZ()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("rmax1",cone->GetOuterRadiusMinusZ()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("rmin2",cone->GetInnerRadiusPlusZ()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("rmax2",cone->GetOuterRadiusPlusZ()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("z",2.0*cone->GetZHalfLength()));
-   cone_dimensionsElement->setAttributeNode(newAttribute("startphi",cone->GetStartPhiAngle()/CLHEP::degree));
-   cone_dimensionsElement->setAttributeNode(newAttribute("deltaphi",cone->GetDeltaPhiAngle()/CLHEP::degree));
-   cone_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmin1",cone->GetInnerRadiusMinusZ()/mm));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmax1",cone->GetOuterRadiusMinusZ()/mm));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmin2",cone->GetInnerRadiusPlusZ()/mm));
+   cone_dimensionsElement->setAttributeNode(newAttribute("rmax2",cone->GetOuterRadiusPlusZ()/mm));
+   cone_dimensionsElement->setAttributeNode(newAttribute("z",2.0*cone->GetZHalfLength()/mm));
+   cone_dimensionsElement->setAttributeNode(newAttribute("startphi",cone->GetStartPhiAngle()/degree));
+   cone_dimensionsElement->setAttributeNode(newAttribute("deltaphi",cone->GetDeltaPhiAngle()/degree));
+   cone_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    cone_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(cone_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::sphere_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Sphere* const sphere) {
 
    xercesc::DOMElement* sphere_dimensionsElement = newElement("sphere_dimensions");
-   parametersElement->appendChild(sphere_dimensionsElement);
    sphere_dimensionsElement->setAttributeNode(newAttribute("name",sphere->GetName()));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("rmin",sphere->GetInsideRadius()));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("rmax",sphere->GetOuterRadius()));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("startphi",sphere->GetStartPhiAngle()/CLHEP::degree));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("deltaphi",sphere->GetDeltaPhiAngle()/CLHEP::degree));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("starttheta",sphere->GetStartThetaAngle()/CLHEP::degree));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("deltatheta",sphere->GetDeltaThetaAngle()/CLHEP::degree));
-   sphere_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("rmin",sphere->GetInsideRadius()/mm));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("rmax",sphere->GetOuterRadius()/mm));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("startphi",sphere->GetStartPhiAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("deltaphi",sphere->GetDeltaPhiAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("starttheta",sphere->GetStartThetaAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("deltatheta",sphere->GetDeltaThetaAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    sphere_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(sphere_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::orb_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Orb* const orb) {
 
    xercesc::DOMElement* orb_dimensionsElement = newElement("orb_dimensions");
-   parametersElement->appendChild(orb_dimensionsElement);
    orb_dimensionsElement->setAttributeNode(newAttribute("name",orb->GetName()));
-   orb_dimensionsElement->setAttributeNode(newAttribute("r",orb->GetRadius()));
+   orb_dimensionsElement->setAttributeNode(newAttribute("r",orb->GetRadius()/mm));
    orb_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(orb_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::torus_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Torus* const torus) {
 
    xercesc::DOMElement* torus_dimensionsElement = newElement("torus_dimensions");
-   parametersElement->appendChild(torus_dimensionsElement);
    torus_dimensionsElement->setAttributeNode(newAttribute("name",torus->GetName()));
-   torus_dimensionsElement->setAttributeNode(newAttribute("rmin",torus->GetRmin()));
-   torus_dimensionsElement->setAttributeNode(newAttribute("rmax",torus->GetRmax()));
-   torus_dimensionsElement->setAttributeNode(newAttribute("rtor",torus->GetRtor()));
-   torus_dimensionsElement->setAttributeNode(newAttribute("startphi",torus->GetSPhi()/CLHEP::degree));
-   torus_dimensionsElement->setAttributeNode(newAttribute("deltaphi",torus->GetDPhi()/CLHEP::degree));
-   torus_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   torus_dimensionsElement->setAttributeNode(newAttribute("rmin",torus->GetRmin()/mm));
+   torus_dimensionsElement->setAttributeNode(newAttribute("rmax",torus->GetRmax()/mm));
+   torus_dimensionsElement->setAttributeNode(newAttribute("rtor",torus->GetRtor()/mm));
+   torus_dimensionsElement->setAttributeNode(newAttribute("startphi",torus->GetSPhi()/degree));
+   torus_dimensionsElement->setAttributeNode(newAttribute("deltaphi",torus->GetDPhi()/degree));
+   torus_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    torus_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(torus_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::para_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Para* const para) {
@@ -155,30 +158,30 @@ void G4GDMLWriteParamvol::para_dimensionsWrite(xercesc::DOMElement* parametersEl
    G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
 
    xercesc::DOMElement* para_dimensionsElement = newElement("para_dimensions");
-   parametersElement->appendChild(para_dimensionsElement);
    para_dimensionsElement->setAttributeNode(newAttribute("name",para->GetName()));
-   para_dimensionsElement->setAttributeNode(newAttribute("x",2.0*para->GetXHalfLength()));
-   para_dimensionsElement->setAttributeNode(newAttribute("y",2.0*para->GetYHalfLength()));
-   para_dimensionsElement->setAttributeNode(newAttribute("z",2.0*para->GetZHalfLength()));
-   para_dimensionsElement->setAttributeNode(newAttribute("alpha",alpha/CLHEP::degree));
-   para_dimensionsElement->setAttributeNode(newAttribute("theta",theta/CLHEP::degree));
-   para_dimensionsElement->setAttributeNode(newAttribute("phi",phi/CLHEP::degree));
-   para_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   para_dimensionsElement->setAttributeNode(newAttribute("x",2.0*para->GetXHalfLength()/mm));
+   para_dimensionsElement->setAttributeNode(newAttribute("y",2.0*para->GetYHalfLength()/mm));
+   para_dimensionsElement->setAttributeNode(newAttribute("z",2.0*para->GetZHalfLength()/mm));
+   para_dimensionsElement->setAttributeNode(newAttribute("alpha",alpha/degree));
+   para_dimensionsElement->setAttributeNode(newAttribute("theta",theta/degree));
+   para_dimensionsElement->setAttributeNode(newAttribute("phi",phi/degree));
+   para_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    para_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(para_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::hype_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Hype* const hype) {
 
    xercesc::DOMElement* hype_dimensionsElement = newElement("hype_dimensions");
-   parametersElement->appendChild(hype_dimensionsElement);
    hype_dimensionsElement->setAttributeNode(newAttribute("name",hype->GetName()));
-   hype_dimensionsElement->setAttributeNode(newAttribute("rmin",hype->GetInnerRadius()));
-   hype_dimensionsElement->setAttributeNode(newAttribute("rmax",hype->GetOuterRadius()));
-   hype_dimensionsElement->setAttributeNode(newAttribute("inst",hype->GetInnerStereo()/CLHEP::degree));
-   hype_dimensionsElement->setAttributeNode(newAttribute("outst",hype->GetOuterStereo()/CLHEP::degree));
-   hype_dimensionsElement->setAttributeNode(newAttribute("z",2.0*hype->GetZHalfLength()));
-   hype_dimensionsElement->setAttributeNode(newAttribute("aunit","degree"));
+   hype_dimensionsElement->setAttributeNode(newAttribute("rmin",hype->GetInnerRadius()/mm));
+   hype_dimensionsElement->setAttributeNode(newAttribute("rmax",hype->GetOuterRadius()/mm));
+   hype_dimensionsElement->setAttributeNode(newAttribute("inst",hype->GetInnerStereo()/degree));
+   hype_dimensionsElement->setAttributeNode(newAttribute("outst",hype->GetOuterStereo()/degree));
+   hype_dimensionsElement->setAttributeNode(newAttribute("z",2.0*hype->GetZHalfLength()/mm));
+   hype_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
    hype_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
+   parametersElement->appendChild(hype_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,const G4VPhysicalVolume* const paramvol,const G4int& index) {
@@ -186,9 +189,9 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
    paramvol->GetParameterisation()->ComputeTransformation(index,const_cast<G4VPhysicalVolume*>(paramvol));
    
    xercesc::DOMElement* parametersElement = newElement("parameters");
-   paramvolElement->appendChild(parametersElement);
    rotationWrite(parametersElement,"",getAngles(paramvol->GetObjectRotationValue()));
    positionWrite(parametersElement,"",paramvol->GetObjectTranslation());
+   paramvolElement->appendChild(parametersElement);
 
    G4VSolid* solid = paramvol->GetLogicalVolume()->GetSolid();
 
@@ -253,8 +256,8 @@ void G4GDMLWriteParamvol::paramvolWrite(xercesc::DOMElement* volumeElement,const
    G4String volumeref = GenerateName(paramvol->GetLogicalVolume()->GetName(),paramvol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   paramvolElement->appendChild(volumerefElement);
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   paramvolElement->appendChild(volumerefElement);
 
    const G4int parameterCount = paramvol->GetMultiplicity();
 

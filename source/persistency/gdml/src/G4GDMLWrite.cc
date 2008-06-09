@@ -31,6 +31,8 @@
 #include <sstream>
 #include "G4GDMLWrite.hh"
 
+bool G4GDMLWrite::addPointerToName = true;
+
 G4GDMLWrite::ModuleMapType& G4GDMLWrite::moduleMap() {
 
    static ModuleMapType instance;
@@ -47,11 +49,9 @@ bool G4GDMLWrite::FileExists(const G4String& fname) const {
 
 G4String G4GDMLWrite::GenerateName(const G4String& name,const void* const ptr) {
 
-   std::stringstream stream;
-   
-   stream << name;
-   
-   if (true) stream << "_"<< ptr;
+   std::stringstream stream; stream << name;
+
+   if (addPointerToName) stream << ptr;
 
    return G4String(stream.str());
 }
@@ -157,4 +157,9 @@ G4String G4GDMLWrite::GetModule(const G4VPhysicalVolume* const physvol) {
 
    if (moduleMap().find(physvol) != moduleMap().end()) return moduleMap()[physvol];
    return G4String("");
+}
+
+void G4GDMLWrite::SetAddPointerToName(bool set) {
+
+   addPointerToName = set;
 }
