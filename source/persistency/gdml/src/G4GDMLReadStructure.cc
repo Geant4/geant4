@@ -242,7 +242,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0,false);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
 
    if (name.empty()) {
 

@@ -78,7 +78,7 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    G4ThreeVector rot = getAngles(rotate.getRotation());
    G4ThreeVector pos = T.getTranslation();
 
-   G4String name = physvol->GetName();
+   G4String name = GenerateName(physvol->GetName(),physvol);
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
    physvolElement->setAttributeNode(newAttribute("name",name));
