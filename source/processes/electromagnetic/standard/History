@@ -1,4 +1,4 @@
-$Id: History,v 1.385 2008-06-02 18:11:34 vnivanch Exp $
+$Id: History,v 1.386 2008-06-09 10:19:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9 June 08: V.Ivant (emstand-V09-01-17)
+- G4IonFluctuations - fixed index 
+- G4ionIonisation - use G4BraggModel for low-energy ions heavier than He
+
 2 June 08: V.Ivant (emstand-V09-01-16)
-- G4IonFluctuation - added method SetParticleAndCharge 
+- G4IonFluctuations - added method SetParticleAndCharge 
 - G4ionIonisation, G4ionGasIonisation - added pointer to G4IonFluctuations
              and use of method SetParticleAndCharge; compute nuclear
              stopping before adding corrections
