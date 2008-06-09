@@ -29,17 +29,9 @@
 
 #include "G4GDMLRead.hh"
 
-bool G4GDMLRead::addPointerToName = true;
-
 G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
 
    G4String nameOut(nameIn);
-
-   if (!addPointerToName) { // Remove pointer from name!
-   
-      size_t i = nameOut.find_first_of("0x");
-      if (i<nameOut.size()) nameOut.resize(i);
-   }
 
    if (InLoop>0) nameOut = eval.SolveBrackets(nameOut);
 

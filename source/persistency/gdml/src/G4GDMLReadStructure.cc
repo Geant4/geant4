@@ -32,7 +32,7 @@
 void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
 
    std::stringstream stream;
-   stream << physvol->GetLogicalVolume()->GetName() << "_"<< physvol;
+   stream << physvol->GetLogicalVolume()->GetName() << physvol;
    physvol->SetName(GenerateName(stream.str()));
 }
 
@@ -125,7 +125,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="name") name = attValue; else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
       if (attName=="width") width = eval.Evaluate(attValue); else
       if (attName=="offset") offset = eval.Evaluate(attValue); else
@@ -242,7 +242,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,GenerateName(name),logvol,pMotherLogical,false,0,false);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0,false);
 
    if (name.empty()) {
 
@@ -274,7 +274,7 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       const G4String attName = xercesc::XMLString::transcode(attribute->getName());
       const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attName=="name") name = GenerateName(attValue); else
+      if (attName=="name") name = attValue; else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
       if (attName=="width") width = eval.Evaluate(attValue); else
       if (attName=="offset") offset = eval.Evaluate(attValue); else
@@ -442,7 +442,7 @@ G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVo
 G4VPhysicalVolume* G4GDMLReadStructure::GetWorldVolume(const G4String& setupName) { 
    
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
-//   volume->SetVisAttributes(G4VisAttributes::Invisible);
+   volume->SetVisAttributes(G4VisAttributes::Invisible);
    G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);
    GeneratePhysvolName(pvWorld);
    return pvWorld;
