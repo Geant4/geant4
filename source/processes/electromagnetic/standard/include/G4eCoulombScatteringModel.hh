@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.28 2008-04-16 10:17:03 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.29 2008-06-10 10:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,12 @@ public:
 
 protected:
 
+  void SelectAtomRandomly();
+
+  G4double SelectIsotope();
+
+  G4double SampleCosineTheta();
+
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
   inline void SetupParticle(const G4ParticleDefinition*);
@@ -118,20 +124,18 @@ private:
 
 protected:
  
-  const G4Element* SelectAtomRandomly();
-
-  G4double SampleCosineTheta();
-
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
 
+  G4ParticleTable*          theParticleTable; 
   G4ParticleChangeForGamma* fParticleChange;
   G4NistManager*            fNistManager;
   const G4DataVector*       currentCuts;
 
   const G4MaterialCutsCouple* currentCouple;
   const G4Material*           currentMaterial;
+  const G4Element*            currentElement;
   G4int                       currentMaterialIndex;
 
   G4double                  coeff;

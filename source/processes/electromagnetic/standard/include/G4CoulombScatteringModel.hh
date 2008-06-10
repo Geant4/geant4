@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.12 2008-03-21 17:54:46 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.hh,v 1.13 2008-06-10 10:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,9 +63,6 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "globals.hh"
 
-class G4ParticleTable;
-class G4NistManager;
-
 class G4CoulombScatteringModel : public G4eCoulombScatteringModel
 {
 
@@ -93,14 +90,10 @@ public:
 
 private:
 
-  G4double SelectIsotope(const G4Element*);
-
   // hide assignment operator
   G4CoulombScatteringModel & operator=(const G4CoulombScatteringModel &right);
   G4CoulombScatteringModel(const  G4CoulombScatteringModel&);
 
-  G4ParticleTable*            theParticleTable; 
-  const G4NistManager*        theMatManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

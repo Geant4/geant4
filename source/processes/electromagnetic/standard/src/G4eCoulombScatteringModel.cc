@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.48 2008-04-16 17:32:29 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.49 2008-06-10 10:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,9 +81,12 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   if(thetaMin > 0.0) cosThetaMin = cos(thetaMin);
   if(thetaMax < pi)  cosThetaMax = cos(thetaMax);
   fNistManager = G4NistManager::Instance();
+  theParticleTable = G4ParticleTable::GetParticleTable();
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
+  currentMaterial = 0; 
+  currentElement  = 0;
   a0 = alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
@@ -206,7 +210,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eCoulombScatteringModel::SampleSecondaries(
-                std::vector<G4DynamicParticle*>*,
+                std::vector<G4DynamicParticle*>* fvect,
 		const G4MaterialCutsCouple* couple,
 		const G4DynamicParticle* dp,
 		G4double cutEnergy,
@@ -223,9 +227,10 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   SelectAtomRandomly();
   
   G4double cost = SampleCosineTheta();
-  if(std::fabs(cost) > 1.0) return;
+  G4double z1   = 1.0 - cost;
+  if(z1 < 0.0) return;
 
-  G4double sint= sqrt((1.0 - cost)*(1.0 + cost));
+  G4double sint = sqrt(z1*(1.0 + cost));
   
   //G4cout<<"## Sampled sint= " << sint << "  Z= " << targetZ 
   //<< "  screenZ= " << screenZ << " cn= " << formfactA << G4endl;
@@ -237,6 +242,24 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   newDirection.rotateUz(direction);   
 
   fParticleChange->ProposeMomentumDirection(newDirection);   
+
+  // recoil sampling assuming a small recoil
+  // and first order correction to primary 4-momentum
+
+  G4double Trec = z1*mom2/(amu_c2*targetA);
+  if(Trec > targetZ*currentMaterial->GetIonisation()->GetMeanExcitationEnergy())
+    {
+      G4double A  = SelectIsotope();
+      G4int iz    = G4int(targetZ);
+      G4int ia    = G4int(A + 0.5);
+      G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+      G4ThreeVector dir = (direction - newDirection).unit();
+      Trec = z1*mom2/ion->GetPDGMass();
+      G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, Trec);
+      fvect->push_back(newdp);
+
+      fParticleChange->SetProposedKineticEnergy(kinEnergy - Trec);
+    }
  
   return;
 }
@@ -283,7 +306,7 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4eCoulombScatteringModel::SelectAtomRandomly()
+void G4eCoulombScatteringModel::SelectAtomRandomly()
 {
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
@@ -316,10 +339,33 @@ const G4Element* G4eCoulombScatteringModel::SelectAtomRandomly()
     if(idxelm >= nelm) idxelm = nelm - 1;
   } 
 
-  const G4Element* elm = (*theElementVector)[idxelm];
-  SetupTarget(elm->GetZ(),elm->GetN(),tkin);
+  currentElement = (*theElementVector)[idxelm];
+  SetupTarget(currentElement->GetZ(),currentElement->GetN(),tkin);
+}
 
-  return elm;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eCoulombScatteringModel::SelectIsotope()
+{
+  G4double N = currentElement->GetN(); 
+  G4int ni   = currentElement->GetNumberOfIsotopes();
+  if(ni > 0) {
+    G4double* ab = currentElement->GetRelativeAbundanceVector();
+    G4double x = G4UniformRand();
+    G4int idx;
+    for(idx=0; idx<ni; idx++) { 
+      x -= ab[idx];
+      if (x <= 0.0) break;
+    }
+    if(idx >= ni) {
+      G4cout << "G4CoulombScatteringModel::SelectIsotope WARNING: "
+	     << "abandance vector for"
+	     << currentElement->GetName() << " is not normalised to unit" << G4endl;
+    } else {
+      N = G4double(currentElement->GetIsotope(idx)->GetN());
+    }
+  }
+  return N;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

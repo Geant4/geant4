@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.31 2008-03-31 09:53:28 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.32 2008-06-10 10:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,6 @@
 #include "G4CoulombScatteringModel.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4NistManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Proton.hh"
@@ -66,10 +65,7 @@ using namespace std;
 G4CoulombScatteringModel::G4CoulombScatteringModel(
   G4double thetaMin, G4double thetaMax, G4double tlim, const G4String& nam)
   : G4eCoulombScatteringModel(thetaMin,thetaMax,tlim,nam)
-{
-  theMatManager    = G4NistManager::Instance();
-  theParticleTable = G4ParticleTable::GetParticleTable();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -95,7 +91,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   // CM system
   G4int iz      = G4int(Z);
-  G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
+  G4double m1   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
   G4double etot = tkin + mass;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/(etot + m1);
@@ -137,31 +133,6 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4CoulombScatteringModel::SelectIsotope(const G4Element* elm)
-{
-  G4double N = elm->GetN(); 
-  G4int ni   = elm->GetNumberOfIsotopes();
-  if(ni > 0) {
-    G4double* ab = elm->GetRelativeAbundanceVector();
-    G4double x = G4UniformRand();
-    G4int idx;
-    for(idx=0; idx<ni; idx++) { 
-      x -= ab[idx];
-      if (x <= 0.0) break;
-    }
-    if(idx >= ni) {
-      G4cout << "G4CoulombScatteringModel::SelectIsotope WARNING: "
-	     << "abandance vector for"
-	     << elm->GetName() << " is not normalised to unit" << G4endl;
-    } else {
-      N = G4double(elm->GetIsotope(idx)->GetN());
-    }
-  }
-  return N;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4CoulombScatteringModel::SampleSecondaries(
 			       std::vector<G4DynamicParticle*>* fvect,
 			       const G4MaterialCutsCouple* couple,
@@ -176,10 +147,10 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
-  const G4Element* elm = SelectAtomRandomly();
+  SelectAtomRandomly();
 
-  G4double Z  = elm->GetZ();
-  G4double A  = SelectIsotope(elm);
+  G4double Z  = currentElement->GetZ();
+  G4double A  = SelectIsotope();
   G4int iz    = G4int(Z);
   G4int ia    = G4int(A + 0.5);
 
