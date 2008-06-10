@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.74 2008-03-24 14:47:40 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.75 2008-06-10 17:11:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,6 +95,8 @@
 #include "G4UnitsTable.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4KaonPlus.hh"
+#include "G4KaonMinus.hh"
 #include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -136,19 +138,30 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
   // standard base particles
   if(part == bpart || pname == "proton" ||
-     pname == "anti_proton" || pname == "pi+" || pname == "pi-" ) 
-    theBaseParticle = 0;
-
+     pname == "anti_proton" || 
+     pname == "pi+" || pname == "pi-" || 
+     pname == "kaon+" || pname == "kaon-") 
+    { 
+      theBaseParticle = 0;
+    }
   // select base particle 
   else if(bpart == 0) {
 
-    if(pname == "kaon+")      theBaseParticle = G4PionPlus::PionPlus();
-    else if(pname == "kaon-") theBaseParticle = G4PionMinus::PionMinus();
-    else if(part->GetPDGCharge() > 0.0) theBaseParticle = G4Proton::Proton();
-    else theBaseParticle = G4AntiProton::AntiProton();
+    if(part->GetPDGSpin() == 0.0)
+      if(part->GetPDGCharge() > 0.0 && ) {
+	theBaseParticle = G4KaonPlus::KaonPlus();
+      } else {
+	theBaseParticle = G4KaonMinus::KaonMinus();
+      }
+    else if(part->GetPDGCharge() > 0.0) {
+      theBaseParticle = G4Proton::Proton();
+    } else {
+      theBaseParticle = G4AntiProton::AntiProton();
+    }
 
-  } else theBaseParticle = bpart;
-
+  } else { 
+    theBaseParticle = bpart;
+  }
   SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
