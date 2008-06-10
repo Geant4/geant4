@@ -42,8 +42,12 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* p
 
    G4String nameOut = nameIn;
 
-   if (nameOut.empty()) 
+   if (nameOut.empty()) {
       nameOut = physvol->GetLogicalVolume()->GetName() + "_in_" + physvol->GetMotherLogical()->GetName();
+   } else {
+   
+     nameOut = prename + nameOut;
+   }
    
    physvol->SetName(eval.SolveBrackets(nameOut));
 }
