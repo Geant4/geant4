@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.9 2008-06-10 09:12:45 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.10 2008-06-10 10:48:14 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -59,6 +59,7 @@ protected:
    G4GDMLEvaluator eval;
 
    G4String GenerateName(const G4String&);
+   void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
    void loopRead(const xercesc::DOMElement* const,void(G4GDMLRead::*)(const xercesc::DOMElement* const));
 public:
    virtual void defineRead(const xercesc::DOMElement* const)=0;

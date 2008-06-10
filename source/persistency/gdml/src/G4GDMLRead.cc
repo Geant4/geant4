@@ -38,6 +38,16 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
    return (prename + nameOut);
 }
 
+void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* physvol) {
+
+   G4String nameOut = nameIn;
+
+   if (nameOut.empty()) 
+      nameOut = physvol->GetLogicalVolume()->GetName() + "_in_" + physvol->GetMotherLogical()->GetName();
+   
+   physvol->SetName(eval.SolveBrackets(nameOut));
+}
+
 void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
 
    G4String var;

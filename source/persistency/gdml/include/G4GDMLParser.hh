@@ -55,6 +55,7 @@ public:
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(reader.getVolume(name)); }
    void AddModule(const G4VPhysicalVolume* const physvol) { writer.AddModule(physvol); }
    void AddModule(G4int depth) { writer.AddModule(depth); }
+   void SetAddPointerToName(bool set) { writer.SetAddPointerToName(set); }
 };
 
 #endif

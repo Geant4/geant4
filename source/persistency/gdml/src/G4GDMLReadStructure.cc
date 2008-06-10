@@ -29,13 +29,6 @@
 
 #include "G4GDMLReadStructure.hh"
 
-void G4GDMLReadStructure::GeneratePhysvolName(G4VPhysicalVolume* physvol) {
-
-   std::stringstream stream;
-   stream << physvol->GetLogicalVolume()->GetName() << physvol;
-   physvol->SetName(GenerateName(stream.str()));
-}
-
 G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* const auxiliaryElement) {
 
    G4GDMLAuxPairType auxpair;
@@ -156,15 +149,12 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
    G4PVDivisionFactory::GetInstance();
    G4PhysicalVolumesPair pair;
    
-   if (number != 0 && width == 0.0) pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,number,offset); else
-   if (number == 0 && width != 0.0) pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,width,offset); else
-   pair = G4ReflectionFactory::Instance()->Divide(name,logvol,pMotherLogical,axis,number,width,offset); 
+   if (number != 0 && width == 0.0) pair = G4ReflectionFactory::Instance()->Divide("",logvol,pMotherLogical,axis,number,offset); else
+   if (number == 0 && width != 0.0) pair = G4ReflectionFactory::Instance()->Divide("",logvol,pMotherLogical,axis,width,offset); else
+   pair = G4ReflectionFactory::Instance()->Divide("",logvol,pMotherLogical,axis,number,width,offset); 
 
-   if (name.empty()) {
-
-      if (pair.first != 0) GeneratePhysvolName(pair.first);
-      if (pair.second != 0) GeneratePhysvolName(pair.second);
-   }
+   if (pair.first != 0) GeneratePhysvolName(name,pair.first);
+   if (pair.second != 0) GeneratePhysvolName(name,pair.second);
 }
 
 G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement) {
@@ -242,13 +232,10 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,name,logvol,pMotherLogical,false,0,false);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Place(transform,"",logvol,pMotherLogical,false,0,false);
 
-   if (name.empty()) {
-
-      if (pair.first != 0) GeneratePhysvolName(pair.first);
-      if (pair.second != 0) GeneratePhysvolName(pair.second);
-   }
+   if (pair.first != 0) GeneratePhysvolName(name,pair.first);
+   if (pair.second != 0) GeneratePhysvolName(name,pair.second);
 }
 
 void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replicavolElement) {
@@ -302,13 +289,10 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
 
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Replicate(name,logvol,pMotherLogical,axis,number,width,offset);
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()->Replicate("",logvol,pMotherLogical,axis,number,width,offset);
 
-   if (name.empty()) {
-   
-      if (pair.first != 0) GeneratePhysvolName(pair.first);
-      if (pair.second != 0) GeneratePhysvolName(pair.second);
-   }
+   if (pair.first != 0) GeneratePhysvolName(name,pair.first);
+   if (pair.second != 0) GeneratePhysvolName(name,pair.second);
 }
 
 void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElement) {
@@ -444,7 +428,6 @@ G4VPhysicalVolume* G4GDMLReadStructure::GetWorldVolume(const G4String& setupName
    G4LogicalVolume* volume = getVolume(getSetup(setupName));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
    G4VPhysicalVolume* pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);
-   GeneratePhysvolName(pvWorld);
    return pvWorld;
 }
 

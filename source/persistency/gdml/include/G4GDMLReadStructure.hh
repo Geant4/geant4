@@ -61,7 +61,6 @@ private:
    G4GDMLAuxMapType auxMap;
    G4LogicalVolume *pMotherLogical;
 
-   void GeneratePhysvolName(G4VPhysicalVolume*);
    G4GDMLAuxPairType auxiliaryRead(const xercesc::DOMElement* const);
    void bordersurfaceRead(const xercesc::DOMElement* const);
    void divisionvolRead(const xercesc::DOMElement* const);

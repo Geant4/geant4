@@ -48,10 +48,8 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
-   G4String name = GenerateName(divisionvol->GetName(),divisionvol);
-
    xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
-   divisionvolElement->setAttributeNode(newAttribute("name",name));
+   divisionvolElement->setAttributeNode(newAttribute("name",divisionvol->GetName())); // We keep the original name for every physical volume!
    divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
    divisionvolElement->setAttributeNode(newAttribute("number",number));
    divisionvolElement->setAttributeNode(newAttribute("width",width));
@@ -78,10 +76,8 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    G4ThreeVector rot = getAngles(rotate.getRotation());
    G4ThreeVector pos = T.getTranslation();
 
-   G4String name = GenerateName(physvol->GetName(),physvol);
-
    xercesc::DOMElement* physvolElement = newElement("physvol");
-   physvolElement->setAttributeNode(newAttribute("name",name));
+   physvolElement->setAttributeNode(newAttribute("name",physvol->GetName())); // We keep the original name for every physical volume!
    volumeElement->appendChild(physvolElement);
 
    G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
@@ -122,10 +118,8 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
-   G4String name = GenerateName(replicavol->GetName(),replicavol);
-
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
-   replicavolElement->setAttributeNode(newAttribute("name",name));
+   replicavolElement->setAttributeNode(newAttribute("name",replicavol->GetName())); // We keep the original name for every physical volume!
    replicavolElement->setAttributeNode(newAttribute("axis",axisString));
    replicavolElement->setAttributeNode(newAttribute("number",number));
    replicavolElement->setAttributeNode(newAttribute("width",width));
