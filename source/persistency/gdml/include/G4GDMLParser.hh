@@ -41,7 +41,11 @@ public:
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
    void Read(const G4String& fname) { reader.Read(fname); }
-   void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol); }
+   void Write(const G4String& fname,const G4LogicalVolume* const logvol) {
+   
+      writer.Write(fname,logvol); 
+      // Clear modules!!!
+   }
 
    G4double GetConstant(const G4String& name) { return reader.getConstant(name); }
    G4double GetVariable(const G4String& name) { return reader.getVariable(name); }
@@ -52,7 +56,7 @@ public:
    G4GDMLMatrix GetMatrix(const G4String& name) { return reader.getMatrix(name); }
    G4LogicalVolume* GetVolume(const G4String& name) { return reader.getVolume(name); }
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
-   G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4String& name) { return reader.getVolumeAuxiliaryInformation(reader.getVolume(name)); }
+   G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) { return reader.getVolumeAuxiliaryInformation(logvol); }
    void AddModule(const G4VPhysicalVolume* const physvol) { writer.AddModule(physvol); }
    void AddModule(G4int depth) { writer.AddModule(depth); }
    void SetAddPointerToName(bool set) { writer.SetAddPointerToName(set); }
