@@ -417,7 +417,7 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
    return volumePtr;
 }
 
-G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(G4LogicalVolume* logvol) {
+G4GDMLAuxListType G4GDMLReadStructure::getVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) {
 
    if (auxMap.find(logvol) != auxMap.end()) return auxMap[logvol];
    else return G4GDMLAuxListType();

@@ -54,7 +54,7 @@ struct G4GDMLAuxPairType {
 };
 
 typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
-typedef std::map<G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
+typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
 
 class G4GDMLReadStructure : public G4GDMLReadParamvol {
 private:
@@ -74,7 +74,7 @@ private:
 public:
    G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
-   G4GDMLAuxListType getVolumeAuxiliaryInformation(G4LogicalVolume*);
+   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
 };
 
