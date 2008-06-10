@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.59 2008-06-09 09:49:58 grichine Exp $
+// $Id: G4Sphere.cc,v 1.60 2008-06-10 13:57:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2307,15 +2307,21 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
       if( std::fabs(tanSTheta) > 5./kAngTolerance ) // kons is plane z=0
       {
-        if( v.z() ) 
+        if( v.z() > 0. ) 
 	{
           s = -p.z()/v.z();
 
-          if ( s >= 0. )
+          if ( std::fabs(s) <= flexRadMaxTolerance*0.5 )
 	  {
-            stheta    = s;
-            sidetheta = kSTheta;
-	  }
+            if(calcNorm)
+            {
+              *validNorm = true;
+              *n = G4ThreeVector(0.,0.,1.);
+	    }
+            return snxt = 0 ;
+          }	  
+          stheta    = s;
+          sidetheta = kSTheta;
 	}
       }
       else // kons is not plane 
@@ -2370,13 +2376,22 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     {
       tanETheta = std::tan(fSTheta+fDTheta);
 
-      if( std::fabs(tanETheta) > 5./kAngTolerance ) // kons is plane z=0
+      if( std::fabs(tanETheta) > 5./kAngTolerance )  // kons is plane z=0
       {
-        if( v.z() ) 
+        if( v.z() < 0.) 
 	{
           s = -p.z()/v.z();
 
-          if (s >= 0. && s < stheta)
+          if ( std::fabs(s) <= flexRadMaxTolerance*0.5 )
+	  {
+            if(calcNorm)
+            {
+              *validNorm = true;
+              *n = G4ThreeVector(0.,0.,-1.);
+	    }
+            return snxt = 0;
+	  }
+          if (s < stheta)
 	  {
             stheta    = s;
             sidetheta = kETheta;
