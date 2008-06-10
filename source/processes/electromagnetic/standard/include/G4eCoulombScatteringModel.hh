@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.30 2008-06-10 10:26:43 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.31 2008-06-10 17:12:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,8 @@ public:
 				 G4double maxEnergy);
 
 protected:
+
+  G4double CrossSectionPerAtom();
 
   void SelectAtomRandomly();
 

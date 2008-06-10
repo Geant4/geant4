@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.50 2008-06-10 10:26:43 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.51 2008-06-10 17:12:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,6 +178,15 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   SetupKinematic(ekin, cutEnergy);
   SetupTarget(Z, A, ekin);
 
+  return CrossSectionPerAtom();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
+{
+  // This method needs initialisation before be called
+
   G4double fac = coeff*Z*chargeSquare*invbeta2/mom2; 
   elecXSection = 0.0;
   nucXSection  = 0.0;
@@ -226,6 +235,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   // << kinEnergy <<G4endl;
   SelectAtomRandomly();
+
+  SetupTarget(currentElement->GetZ(),currentElement->GetN(),tkin);
   
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
@@ -341,7 +352,6 @@ void G4eCoulombScatteringModel::SelectAtomRandomly()
   } 
 
   currentElement = (*theElementVector)[idxelm];
-  SetupTarget(currentElement->GetZ(),currentElement->GetN(),tkin);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
