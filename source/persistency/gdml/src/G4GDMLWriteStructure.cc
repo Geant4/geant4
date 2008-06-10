@@ -148,7 +148,7 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
    gdmlElement->appendChild(structureElement);
 }
 
-G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr) {
+G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,G4int depth) {
 
    if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
 
@@ -203,18 +203,17 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-      G4String ModuleName = G4GDMLWrite::GetModule(physvol); 
+      G4String ModuleName = Modularize(physvol,depth);
       G4Transform3D daughterR;
       
-      if (ModuleName.empty()) { // Check if the subtree starting with this volume is requested to be a spearate module or not!
-      
-         daughterR = TraverseVolumeTree(physvol->GetLogicalVolume());
-      } else {
+      if (ModuleName.empty()) {
 
+         daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
+      } else {
          G4GDMLWriteStructure writer;
-         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume());
+         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),depth+1);
       }
-      
+
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 

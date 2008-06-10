@@ -28,31 +28,33 @@
 //
 // --------------------------------------------------------------------
 
-#include <sstream>
 #include "G4GDMLWrite.hh"
 
 bool G4GDMLWrite::addPointerToName = true;
-
-G4GDMLWrite::ModuleMapType& G4GDMLWrite::moduleMap() {
-
-   static ModuleMapType instance;
-   return instance;
-}
 
 bool G4GDMLWrite::FileExists(const G4String& fname) const {
 
   struct stat stFileInfo;
   int intStat = stat(fname.c_str(),&stFileInfo);
-
   return (intStat == 0); 
+}
+
+G4GDMLWrite::VolumeListType& G4GDMLWrite::volumeList() {
+
+   static VolumeListType instance;
+   return instance;
+}
+
+G4GDMLWrite::DepthListType& G4GDMLWrite::depthList() {
+
+   static DepthListType instance;
+   return instance;
 }
 
 G4String G4GDMLWrite::GenerateName(const G4String& name,const void* const ptr) {
 
    std::stringstream stream; stream << name;
-
-   if (addPointerToName) stream << ptr;
-
+   if (addPointerToName) stream << ptr; 
    return G4String(stream.str());
 }
 
@@ -84,7 +86,7 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
    return doc->createElement(tempStr);
 }
 
-G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol) {
+G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,G4int depth) {
 
    G4cout << "Writing '" << fname << "'..." << G4endl;
    
@@ -110,7 +112,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    structureWrite(gdml);
    setupWrite(gdml,logvol);
 
-   G4Transform3D R = TraverseVolumeTree(logvol);
+   G4Transform3D R = TraverseVolumeTree(logvol,depth);
 
    xercesc::XMLFormatTarget *myFormTarget = new xercesc::LocalFileFormatTarget(fname.c_str());
 
@@ -142,21 +144,31 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    return R;
 }
 
-void G4GDMLWrite::SetModule(const G4VPhysicalVolume* const physvol,const G4String& name) {
+void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol) {
 
-   if (name.empty()) {
-   
-      moduleMap()[physvol] = physvol->GetLogicalVolume()->GetName() + ".gdml";
-   } else {
-      
-      moduleMap()[physvol] = name;
-   }
+   volumeList().push_back(physvol);
 }
 
-G4String G4GDMLWrite::GetModule(const G4VPhysicalVolume* const physvol) {
+void G4GDMLWrite::AddModule(G4int depth) {
 
-   if (moduleMap().find(physvol) != moduleMap().end()) return moduleMap()[physvol];
-   return G4String("");
+   depthList().push_back(depth);
+}
+
+G4String G4GDMLWrite::Modularize(const G4VPhysicalVolume* const physvol,G4int depth) {
+
+   for (size_t i=0;i<volumeList().size();i++) { // Modularize via physvol?
+
+      if (volumeList()[i] == physvol)
+         return G4String(GenerateName(physvol->GetName(),physvol)+".gdml");
+   }
+
+   for (size_t i=0;i<depthList().size();i++) { // Modularize via depth?
+
+      if (depthList()[i] == depth)
+         return G4String(GenerateName(physvol->GetName(),physvol)+".gdml");
+   }
+
+   return G4String(""); // No modularization!
 }
 
 void G4GDMLWrite::SetAddPointerToName(bool set) {

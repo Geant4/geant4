@@ -55,7 +55,7 @@ private:
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4String&);
    void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void structureWrite(xercesc::DOMElement*);
-   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const);
+   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int);
 };
 
 #endif

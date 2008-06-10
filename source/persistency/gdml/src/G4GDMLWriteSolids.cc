@@ -331,7 +331,7 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
          std::stringstream ref_stream;
 
          name_stream << "vertex" << (j+1);
-	 ref_stream << "vertex" << NumVertex << "_" << name;
+	 ref_stream << name << "_vertex" << NumVertex;
 
          G4String name = name_stream.str();
          G4String ref = ref_stream.str();
@@ -353,16 +353,16 @@ void G4GDMLWriteSolids::tetWrite(xercesc::DOMElement* solidsElement,const G4Tet*
 
    xercesc::DOMElement* tetElement = newElement("tet");
    tetElement->setAttributeNode(newAttribute("name",name));
-   tetElement->setAttributeNode(newAttribute("vertex1","vertex1_"+name));
-   tetElement->setAttributeNode(newAttribute("vertex2","vertex2_"+name));
-   tetElement->setAttributeNode(newAttribute("vertex3","vertex3_"+name));
-   tetElement->setAttributeNode(newAttribute("vertex4","vertex4_"+name));
+   tetElement->setAttributeNode(newAttribute("vertex1",name+"_vertex1"));
+   tetElement->setAttributeNode(newAttribute("vertex2",name+"_vertex2"));
+   tetElement->setAttributeNode(newAttribute("vertex3",name+"_vertex3"));
+   tetElement->setAttributeNode(newAttribute("vertex4",name+"_vertex4"));
    solidsElement->appendChild(tetElement);
 
-   AddPosition("vertex1_"+name,vertexList[0]);
-   AddPosition("vertex2_"+name,vertexList[1]);
-   AddPosition("vertex3_"+name,vertexList[2]);
-   AddPosition("vertex4_"+name,vertexList[3]);
+   AddPosition(name+"_vertex1",vertexList[0]);
+   AddPosition(name+"_vertex2",vertexList[1]);
+   AddPosition(name+"_vertex3",vertexList[2]);
+   AddPosition(name+"_vertex4",vertexList[3]);
 }
 
 void G4GDMLWriteSolids::torusWrite(xercesc::DOMElement* solidsElement,const G4Torus* const torus) {
