@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.29 2008-06-10 10:24:15 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.30 2008-06-10 10:26:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 19.08.06 V.Ivanchenko add inline function ScreeningParameter and
 //                       make some members protected
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
+// 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
 //
 // Class Description:
 //
