@@ -35,7 +35,7 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
 
    if (InLoop>0) nameOut = eval.SolveBrackets(nameOut);
 
-   return G4String(ModuleName + "_" + nameOut);
+   return G4String(ModuleName + nameOut);
 }
 
 void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* physvol) {
@@ -46,7 +46,7 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* p
       nameOut = physvol->GetLogicalVolume()->GetName() + "_in_" + physvol->GetMotherLogical()->GetName();
    } else {
    
-     nameOut = ModuleName + "_" + nameOut;
+     nameOut = ModuleName + nameOut;
    }
    
    physvol->SetName(eval.SolveBrackets(nameOut));
@@ -120,6 +120,7 @@ void G4GDMLRead::Read(const G4String& fileName,bool IsModule) {
    
       ModuleName = fileName;
       ModuleName.remove(ModuleName.length()-5,5); // remove ".gdml"
+      ModuleName += "_";
    }
 
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
