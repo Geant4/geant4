@@ -1,5 +1,5 @@
-#! /bin/bash -
-#$Id: configure,v 1.11 2008-06-05 07:49:39 kmura Exp $
+#! /bin/sh -
+#$Id: configure,v 1.12 2008-06-11 05:21:20 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -188,12 +188,12 @@ done
 
 # check variables
 arch=32
-if [ $system == linuxx8664gcc ]; then
+if [ $system = linuxx8664gcc ]; then
   arch=64
 fi
 
 shlib=so
-if [ $system == macosx ]; then
+if [ $system = macosx ]; then
 shlib=dylib
 fi
 
@@ -277,7 +277,7 @@ echo "$python_incdir"
 
 echo -n "Checking for Python lib dir ... "
 if [ ! $python_libdir ]; then
-  if [ $arch == 64 ]; then
+  if [ $arch = 64 ]; then
     python_libdir=/usr/lib64
   else
     python_libdir=/usr/lib
@@ -303,7 +303,7 @@ echo "$boost_incdir"
 
 echo -n "Checking for Boost lib dir ... "
 if [ ! $boost_libdir ]; then
-  if [ $arch == 64 ]; then
+  if [ $arch = 64 ]; then
     boost_libdir=/usr/lib64
   else
     boost_libdir=/usr/lib
@@ -329,7 +329,7 @@ echo "lib${boost_python_lib}.${shlib}"
 # ---
 echo -n "Checking for OpenGL support ..."
 if [ -f "$g4_libdir"/libG4OpenGL.${shlib} ]; then
-  if [ $enable_openglx == 0 ]; then
+  if [ $enable_openglx = 0 ]; then
     echo "disabled"
   else
     echo "yes"
@@ -344,7 +344,7 @@ echo -n "Checking for physics list support ..."
 if [ -f "$g4_incdir"/QGSP.hh ]; then
   enable_physicslist=1
 fi
-if [ $enable_physicslist == 0 ]; then
+if [ $enable_physicslist = 0 ]; then
   echo "no"
 else
   echo "yes"
@@ -362,13 +362,13 @@ fi
 
 # ---
 echo -n "Checking for GDML support ..."
-if [ $enable_gdml == 0 ]; then
+if [ $enable_gdml = 0 ]; then
   echo "no"
 else
   echo "yes"
 fi
 
-if [ $enable_gdml == 1 ]; then
+if [ $enable_gdml = 1 ]; then
   echo -n "Checking for GDML include dir ..."
   if [ -d "$gdml_incdir"/G4Binding ]; then
     echo "yes"
@@ -391,7 +391,7 @@ if [ $enable_gdml == 1 ]; then
 fi
 
 # ---
-if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
+if [ $enable_g4gdml = 1 -o $enable_gdml = 1 ]; then
   echo -n "Checking for Xerces-C include dir ..."
   if [ -d "$xercesc_incdir/xercesc" ]; then
     echo "yes"
@@ -404,7 +404,7 @@ if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
 
   echo -n "Checking for Xerces-C lib dir ..."
   if [ ! $xercesc_libdir ]; then
-    if [ $arch == 64 ]; then
+    if [ $arch = 64 ]; then
       xercesc_libdir=/usr/lib64
     else
       xercesc_libdir=/usr/lib
@@ -467,14 +467,14 @@ Q_ENABLE_G4GDML       := $enable_g4gdml
 Q_ENABLE_GDML         := $enable_gdml
 EOF
 
-if [ $enable_gdml == 1 ]; then
+if [ $enable_gdml = 1 ]; then
 cat >> $make_config <<EOF
 Q_GDML_INCDIR         := $gdml_incdir
 Q_GDML_LIBDIR         := $gdml_libdir
 EOF
 fi
 
-if [ $enable_g4gdml == 1 -o $enable_gdml == 1 ]; then
+if [ $enable_g4gdml = 1 -o $enable_gdml = 1 ]; then
 cat >> $make_config <<EOF
 Q_XERCESC_INCDIR      := $xercesc_incdir
 Q_XERCESC_LIBDIR      := $xercesc_libdir
