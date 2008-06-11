@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2008-06-11 14:36:42 vnivanch Exp $
+# $Id: GNUmakefile,v 1.4 2008-06-11 17:17:54 schaelic Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -23,4 +23,3 @@ plots:	plotResults.class
 plotResults.class: plotResults.java
 	@echo compiling $<
 	javac $<
-endif
