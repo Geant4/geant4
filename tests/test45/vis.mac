@@ -19,7 +19,7 @@
 #/vis/open DAWNFILE
 #
 # Draw scene
-/vis/viewer/set/viewpointThetaPhi 90 0 deg
+/vis/viewer/set/viewpointThetaPhi -90 0 deg
 /vis/viewer/zoom 1.0
 /vis/viewer/flush
 #
@@ -28,15 +28,15 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-#/testhadr/DrawTracks      charged
-/testhadr/TargetMat        G4_Al 
-/testhadr/TargetRadius     1  cm
-/testhadr/TargetLength     10 cm
-/testhadr/NumberDivZ       100
-/testhadr/DrawTracks       all
-/testhadr/CutsAll          1 mm
-/testhadr/Physics          QBBC
+/testhadr/TargetMat        G4_C 
+/testhadr/TargetWidth      2  cm
+/testhadr/TargetLength     15 mm
 #
 /run/initialize
 #
-
+/testhadr/DrawTracks       all
+#
+/gun/particle proton
+/gun/energy 50. MeV
+/run/beamOn 1000
+#

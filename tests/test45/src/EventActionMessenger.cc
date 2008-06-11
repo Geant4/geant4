@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2008-05-27 15:15:29 antoni Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2008-06-11 14:09:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -49,14 +49,14 @@
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 :eventAction(EvAct)
 { 
-/*  drawCmd = new G4UIcmdWithAString("/testhadr/DrawTracks", this);
+  drawCmd = new G4UIcmdWithAString("/testhadr/DrawTracks", this);
   drawCmd->SetGuidance("Draw the tracks in the event");
   drawCmd->SetGuidance("  Choice : neutral, charged, all");
   drawCmd->SetParameterName("choice",true);
   drawCmd->SetDefaultValue("all");
   drawCmd->SetCandidates("none charged all");
   drawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  */
+  
   printCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
   printCmd->SetGuidance("Print events modulo n");
   printCmd->SetParameterName("EventNb",false);
@@ -75,7 +75,7 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-//  delete drawCmd;
+  delete drawCmd;
   delete printCmd;   
   delete dCmd;
 }
@@ -85,8 +85,8 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-//  if(command == drawCmd)
-//    {eventAction->SetDrawFlag(newValue);}
+  if(command == drawCmd)
+    {eventAction->SetDrawFlag(newValue);}
     
   if(command == printCmd)
     {eventAction->SetPrintModulo(printCmd->GetNewIntValue(newValue));}           
