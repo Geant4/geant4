@@ -1,7 +1,5 @@
-// general file for all (2;2) cases  Plot.C, PlotLog.C
-
 { 
-gROOT->ProcessLine(".x  ../utils/StyleBase.C");
+gROOT->ProcessLine(".x   $TEST45/utils/StyleBase.C");
 gStyle->SetLabelOffset(0.005, "x");
 gStyle->SetLabelOffset(0.005, "y");
 gStyle->SetLabelSize(.05, "x");
