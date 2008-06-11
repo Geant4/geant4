@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.75 2008-06-10 17:11:44 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.76 2008-06-11 08:51:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,7 +148,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   else if(bpart == 0) {
 
     if(part->GetPDGSpin() == 0.0)
-      if(part->GetPDGCharge() > 0.0 && ) {
+      if(part->GetPDGCharge() > 0.0 ) {
 	theBaseParticle = G4KaonPlus::KaonPlus();
       } else {
 	theBaseParticle = G4KaonMinus::KaonMinus();
@@ -158,12 +158,13 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     } else {
       theBaseParticle = G4AntiProton::AntiProton();
     }
-
+    // base particle defined by interface
   } else { 
     theBaseParticle = bpart;
   }
   SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
+
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
   massratio = 1.0;
@@ -174,6 +175,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   eth = 2.0*MeV*mass/proton_mass_c2;
   ethnuc = eth*50.0;
   EmModel(1)->SetHighEnergyLimit(eth);
+
   if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
   AddEmModel(1, EmModel(1), new G4IonFluctuations());
   //  AddEmModel(1, EmModel(1), FluctModel());

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.34 2008-06-10 17:12:06 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.35 2008-06-11 08:51:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,7 +123,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       const G4MaterialCutsCouple* couple,
 			       const G4DynamicParticle* dp,
 			       G4double cutEnergy, 
-			       G4double maxEnergy)
+			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
   if(kinEnergy <= DBL_MIN) return;
@@ -132,6 +132,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
+  // Choose nucleus
   SelectAtomRandomly();
   G4double A  = SelectIsotope();
   G4double Z  = currentElement->GetZ();
@@ -140,59 +141,40 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4int ia    = G4int(A + 0.5);
   G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
 
-  // save lab system kinematics
-  G4double xtkin = tkin;
-  G4double xmom2 = mom2;
-  G4double xinvb = invbeta2;
-
   // CM system
   G4double etot = tkin + mass;
   G4double ptot = sqrt(mom2);
 
   G4double momCM= ptot*m2/sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
-
   mom2 = momCM*momCM;
-  G4dpuble m1  = mass*m2/(mass + m2);
-  G4double m12 = m1*m1;
-  tkin = sqrt(mom2 + m12);
-  invbeta2 = 1.0 +  m12/mom2;
+  G4double m12 = mass*mass;
+  G4double eCM = sqrt(mom2 + m12);
 
-  SetupTarget(Z, A, tkin);
+  // a correction for heavy projectile
+  G4double fm = m2/(mass + m2);
+  invbeta2 = 1.0 +  m12*fm*fm/mom2;
 
-
-
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
-
-  G4double m12  = mass*mass;
-  G4double momCM= ptot*m2/sqrt(m12 + m2*m2 + 2.0*etot*m2);
-
-  mom2 = momCM*momCM;
-  G4double eCM = sqrt(mom2 + m12); 
-  tkin =  eCM - mass;
-  invbeta2 = 1.0 +  m12/mom2;
-
-  SetupTarget(Z,A,tkin);
+  // sample scattering angle in CM system
+  SetupTarget(Z, A, eCM - mass);
 
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
   if(z1 < 0.0) return;
 
   G4double sint = sqrt(z1*(1.0 + cost));
+  G4double phi  = twopi * G4UniformRand();
 
-  // kinematics in CM system
+  // kinematics in the Lab system
   G4double bet  = ptot/(etot + m2);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-
-  G4double phi = twopi * G4UniformRand();
-
-  // projectile after scattering
   G4double pzCM = momCM*cost;
+
   G4ThreeVector v1(momCM*cos(phi)*sint,momCM*sin(phi)*sint,gam*(pzCM + bet*eCM));
   G4ThreeVector dir = dp->GetMomentumDirection(); 
   G4ThreeVector newDirection = v1.unit();
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
+
   G4double elab = gam*(eCM + bet*pzCM);
   ekin = elab - mass;
   if(ekin < 0.0) ekin = 0.0;
