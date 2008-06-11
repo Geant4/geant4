@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2008-05-29 16:59:27 vnivanch Exp $
+$Id: History,v 1.116 2008-06-11 22:12:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-06-08 mma (testem3-V09-01-06)
+- Remove AIDA from GNUmakefile 
 
 28-05-08 V.Ivant (testem3-V09-01-05)
 - Added PhysListEmStandardLPM - PhysLists with high energy 
