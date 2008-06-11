@@ -426,8 +426,6 @@ int main(int argc, char** argv)
 
     // -------- Projectile
 
-    if ( ionParticle ) energy*=ionA;
-
     G4ParticleDefinition* part(0);
     if (!ionParticle) {
       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
@@ -905,7 +903,7 @@ int main(int argc, char** argv)
 	}
 	de += e;
         if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && 
-	   warn < 50) {
+	   warn < 50 && verbose>1) {
           warn++;
           G4cout << "Warning! evt# " << iter 
                  << "  " << i << "-th sec  "

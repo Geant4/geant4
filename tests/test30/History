@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-01-01  11 June 2008 V.Ivanchenko
+- Do not multiply ion energy by ion mass
+- remove AIDA from GNUmakefile
+
 test30-V09-01-00  7 May 2008 V.Ivanchenko
 - Added an option to define target isotope explicitly
 
