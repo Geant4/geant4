@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.hh,v 1.2 2007-11-09 16:30:56 pia Exp $
+// $Id: G4FinalStateIonisationRudd.hh,v 1.3 2008-06-11 12:22:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -94,8 +94,8 @@ private:
   void RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
 					 G4double incomingParticleEnergy, 
 					 G4double outgoingParticleEnergy, 
-					 G4double cosTheta, 
-					 G4double phi);
+					 G4double & cosTheta, 
+					 G4double & phi);
    
   G4double  DifferentialCrossSection(G4ParticleDefinition* particleDefinition, 
 				   G4double k, 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.5 2007-11-26 17:27:09 pia Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.6 2008-06-11 12:22:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Sebastien Incerti (incerti@cenbg.in2p3.fr)
@@ -252,8 +252,8 @@ G4double G4FinalStateIonisationRudd::RandomizeEjectedElectronEnergy(G4ParticleDe
 void G4FinalStateIonisationRudd::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
 								   G4double k, 
 								   G4double secKinetic, 
-								   G4double cosTheta, 
-								   G4double phi )
+								   G4double & cosTheta, 
+								   G4double & phi )
 {
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();

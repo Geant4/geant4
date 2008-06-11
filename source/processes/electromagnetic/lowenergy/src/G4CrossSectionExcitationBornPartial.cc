@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationBornPartial.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// $Id: G4CrossSectionExcitationBornPartial.cc,v 1.2 2008-06-11 12:22:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -86,9 +86,7 @@ G4int G4CrossSectionExcitationBornPartial::RandomSelect(G4double k)
       // ---- MGP ---- 
       table = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,(1e-22/3.343)*m*m );
       table->LoadData("dna/sigma_excitation_p_born");
-      
-      // ---- MGP ---- Temporary
-      table->PrintData();
+      //table->PrintData();
     }
 
   G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
