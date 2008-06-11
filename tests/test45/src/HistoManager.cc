@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2008-05-27 15:15:29 antoni Exp $
+// $Id: HistoManager.cc,v 1.2 2008-06-11 13:44:04 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ void HistoManager::bookHisto()
 {
   histo->add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       51,emin1,emax1,1.0);
-  histo->add1D("h2"," low-energy neutron yield at 15 degree in the target",
+  histo->add1D("2"," low-energy neutron yield at 15 degree in the target",
 	       51,emin1,emax1,1.0);
   histo->add1D("3"," low-energy neutron yield at 30 degree in the target",
 	       51,emin1,emax1,1.0);
@@ -165,9 +165,10 @@ void HistoManager::EndOfRun()
   G4cout<<G4endl;
 
   // normalise histograms
+  G4double fac = 1.0e-6*coulomb*MeV*x/twopi; //### factor= 99336659
+  //G4double fac = 1.0e+13*MeV*x/twopi;
 
-  //  G4double fac = 1.0e+6/coulomb;
-  G4double fac = 1.0e+13*MeV*x/twopi;
+  G4cout << "### factor= " << fac << G4endl;
 
   for(G4int i=0; i<6; i++) {
     G4double a1 = angle[i] - dangle; 
@@ -263,3 +264,8 @@ G4int HistoManager::IndexTheta(G4double theta)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+  //G4double fac = 1./1.602176487e-07; //### factor= 6241509.6
+  //G4double fac = 1./1.602176487e-13; //### factor= 6.2415096e+12
+  //G4double fac = (1.0e-6)*coulomb; //### factor= 6.2415064e+15
+  //G4double fac = 1.0e+6/coulomb; //### factor= 1.6021773e-13
+  //G4double fac = 1.0e+13*MeV*x/twopi; //### factor= 1.5915494e+08
