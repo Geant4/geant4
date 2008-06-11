@@ -3,12 +3,11 @@
      =========================================================
 
 
-			    Test44
+			    Test45
                             ------
-                     Author A.Bagulya
+                     Author A.Ivantchenko
              
-The test is based on HADR01 example.
-The purpose of this test is to validate Bragg peak distribution.
-The results of simulation ASCII file is created. The macro
-files for proton, He4 and C12 are prepared. Different electromagnetic Physics
-Lists are available.
+The test is based on test44. The purpose of this test is to validate 
+thick target data for low-energy proton and ion beams stopped in 
+different tragets.
+
