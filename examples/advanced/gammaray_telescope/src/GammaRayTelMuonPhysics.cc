@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.cc,v 1.5 2008-05-28 19:11:18 flongo Exp $
+<<<<<<< GammaRayTelMuonPhysics.cc
+// $Id: GammaRayTelMuonPhysics.cc,v 1.6 2008-06-11 20:21:56 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: GammaRayTelMuonPhysics.cc,v 1.6 2008-06-11 20:21:56 cirrone Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.5
 //
 // 
 
@@ -33,6 +38,9 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4MuonPlus.hh"
+#include "G4TauPlus.hh"
+#include "G4TauMinus.hh"
 #include <iomanip>   
 
 
