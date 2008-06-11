@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2008-05-07 12:11:22 maire Exp $
+$Id: History,v 1.23 2008-06-11 22:37:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+12-06-08 mma (testem11-V09-01-03)
+- Remove AIDA from GNUmakefile
+      
 07-05-08 mma (testem11-V09-01-02)
 - README : update Aida informations
      
