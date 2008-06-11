@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2008-06-11 13:24:31 vnivanch Exp $
+$Id: History,v 1.4 2008-06-11 13:24:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 11-06-08  V.Ivant (test44-V09-01-01)
 - remove AIDA from GNUmakefile
+- fixed histograms
      
 22-05-08 V.Ivant (test44-V09-01-00)
 - first release

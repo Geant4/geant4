@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2008-05-27 17:13:11 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.6 2008-06-11 13:24:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -146,10 +146,13 @@ void HistoManager::EndOfRun()
 				 << primaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(MeV)                     " 
 				 << primaryKineticEnergy/MeV <<G4endl;
-  G4cout                         << "Number of events                     " << n_evt <<G4endl;
-  G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " << edepSum/MeV 
+  G4cout                         << "Number of events                     " 
+				 << n_evt <<G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " 
+	 << edepSum/MeV 
 	 << "   RMS(MeV) " << edepSum2/MeV << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps of primary   " << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps of primary   " 
+	 << xs << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
