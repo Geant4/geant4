@@ -180,8 +180,7 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
    }
 
    G4GDMLReadStructure structure; // We create a new structure with a new evaluator
-   
-   structure.Read(name,true); // true: it is an external file
+   structure.Read(name,true);
 
    if (volname.empty()) return structure.getVolume(structure.getSetup("Default"));
    else return structure.getVolume(structure.GenerateName(volname));
@@ -226,7 +225,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
       if (tag=="positionref") position = getPosition(GenerateName(refRead(child))); else
       if (tag=="rotationref") rotation = getRotation(GenerateName(refRead(child))); else
       if (tag=="scaleref") scale = getScale(GenerateName(refRead(child))); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in physvol: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in physvol: "+tag);
    }
 
    G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
@@ -355,7 +354,7 @@ void G4GDMLReadStructure::skinsurfaceRead(const xercesc::DOMElement* const skins
       const G4String tag = xercesc::XMLString::transcode(child->getTagName());
 
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child))); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in skinsurface: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in skinsurface: "+tag);
    }
 
    new G4LogicalSkinSurface(name,logvol,prop);
@@ -376,13 +375,13 @@ void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const vo
       if (tag=="replicavol") replicavolRead(child); else
       if (tag=="divisionvol") divisionvolRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::volume_contentRead); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in volume: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in volume: "+tag);
    }
 }
 
 void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structureElement) {
 
-   G4cout << "Reading structure..." << G4endl;
+   G4cout << "G4GDML: Reading structure..." << G4endl;
 
    for (xercesc::DOMNode* iter = structureElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -395,7 +394,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       if (tag=="skinsurface") skinsurfaceRead(child); else
       if (tag=="volume") volumeRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::structureRead); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in structure: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in structure: "+tag);
    }
 }
 
@@ -403,7 +402,7 @@ G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const {
 
    G4VPhysicalVolume* physvolPtr = G4PhysicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
-   if (!physvolPtr) G4Exception("GDML Reader: ERROR! Referenced physvol '"+ref+"' was not found!");
+   if (!physvolPtr) G4Exception("G4GDML: ERROR! Referenced physvol '"+ref+"' was not found!");
 
    return physvolPtr;
 }
@@ -412,7 +411,7 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
 
    G4LogicalVolume *volumePtr = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
-   if (!volumePtr) G4Exception("GDML Reader: ERROR! Referenced volume '"+ref+"' was not found!");
+   if (!volumePtr) G4Exception("G4GDML: ERROR! Referenced volume '"+ref+"' was not found!");
 
    return volumePtr;
 }

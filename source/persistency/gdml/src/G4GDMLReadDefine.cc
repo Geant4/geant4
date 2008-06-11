@@ -282,7 +282,7 @@ void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element) {
 
 void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement) {
 
-   G4cout << "Reading definitions..." << G4endl;
+   G4cout << "G4GDML: Reading definitions..." << G4endl;
 
    for (xercesc::DOMNode* iter = defineElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -298,7 +298,7 @@ void G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement
       if (tag=="scale") scaleRead(child); else
       if (tag=="variable") variableRead(child); else
       if (tag=="quantity") quantityRead(child); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in define: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in define: "+tag);
    }
 }
 
@@ -363,35 +363,35 @@ G4double G4GDMLReadDefine::getVariable(const G4String& ref) {
 
 G4double G4GDMLReadDefine::getQuantity(const G4String& ref) {
 
-   if (quantityMap.find(ref) == quantityMap.end()) G4Exception("GDML Reader: ERROR! Quantity '"+ref+"' was not found!");
+   if (quantityMap.find(ref) == quantityMap.end()) G4Exception("G4GDML: ERROR! Quantity '"+ref+"' was not found!");
 
    return quantityMap[ref];
 }
 
 G4ThreeVector G4GDMLReadDefine::getPosition(const G4String& ref) {
 
-   if (positionMap.find(ref) == positionMap.end()) G4Exception("GDML Reader: ERROR! Position '"+ref+"' was not found!");
+   if (positionMap.find(ref) == positionMap.end()) G4Exception("G4GDML: ERROR! Position '"+ref+"' was not found!");
 
    return positionMap[ref];
 }
 
 G4ThreeVector G4GDMLReadDefine::getRotation(const G4String& ref) {
 
-   if (rotationMap.find(ref) == rotationMap.end()) G4Exception("GDML Reader: ERROR! Rotation '"+ref+"' was not found!");
+   if (rotationMap.find(ref) == rotationMap.end()) G4Exception("G4GDML: ERROR! Rotation '"+ref+"' was not found!");
 
    return rotationMap[ref];
 }
 
 G4ThreeVector G4GDMLReadDefine::getScale(const G4String& ref) {
 
-   if (scaleMap.find(ref) == scaleMap.end()) G4Exception("GDML Reader: ERROR! Scale '"+ref+"' was not found!");
+   if (scaleMap.find(ref) == scaleMap.end()) G4Exception("G4GDML: ERROR! Scale '"+ref+"' was not found!");
 
    return scaleMap[ref];
 }
 
 G4GDMLMatrix G4GDMLReadDefine::getMatrix(const G4String& ref) {
 
-   if (matrixMap.find(ref) == matrixMap.end()) G4Exception("GDML Reader: ERROR! Matrix '"+ref+"' was not found!");
+   if (matrixMap.find(ref) == matrixMap.end()) G4Exception("G4GDML: ERROR! Matrix '"+ref+"' was not found!");
 
    return matrixMap[ref];
 }

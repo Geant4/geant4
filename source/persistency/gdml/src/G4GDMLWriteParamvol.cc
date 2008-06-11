@@ -245,7 +245,7 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
       paramvol->GetParameterisation()->ComputeDimensions(*hype,index,const_cast<G4VPhysicalVolume*>(paramvol));
       hype_dimensionsWrite(parametersElement,hype);
    } else
-   G4Exception("GDML Writer: ERROR! Solid '"+solid->GetName()+"' can not be used in parameterised volume!");
+   G4Exception("G4GDML: ERROR! Solid '"+solid->GetName()+"' can not be used in parameterised volume!");
 }
 
 void G4GDMLWriteParamvol::paramvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const paramvol) {

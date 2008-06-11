@@ -112,12 +112,12 @@ void G4GDMLParameterisation::ComputeDimensions(G4Hype& hype,const G4int index,co
 
 void G4GDMLParameterisation::ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const {
 
-   G4Exception("GDML Writer: ERROR! Polycone can not be used in parameterised volume!");
+   G4Exception("G4GDML: ERROR! Polycone can not be used in parameterised volume!");
 }
 
 void G4GDMLParameterisation::ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {
 
-   G4Exception("GDML Writer: ERROR! Polyhedra can not be used in parameterised volume!");
+   G4Exception("G4GDML: ERROR! Polyhedra can not be used in parameterised volume!");
 }
 
 

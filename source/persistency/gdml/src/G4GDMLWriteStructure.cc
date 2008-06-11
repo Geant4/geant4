@@ -136,7 +136,7 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
 
 void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
 
-   G4cout << "Writing structure..." << G4endl;
+   G4cout << "G4GDML: Writing structure..." << G4endl;
 
    structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
@@ -152,7 +152,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
    while (true) { // Solve possible displacement/reflection of the referenced solid!
    
-      if (displaced>maxDisplacements) G4Exception("GDML Writer: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
+      if (displaced>maxDisplacements) G4Exception("G4GDML: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
    
       if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
    
@@ -211,21 +211,21 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
       
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
-	    G4Exception("GDML Writer: Error! divisionvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+	    G4Exception("G4GDML: ERROR! divisionvol in '"+name+"' can not be related to reflected solid!");
 
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
       if (physvol->IsParameterised()) { 
        
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
-	    G4Exception("GDML Writer: Error! paramvol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+	    G4Exception("G4GDML: ERROR! paramvol in '"+name+"' can not be related to reflected solid!");
 
          paramvolWrite(volumeElement,physvol);
       } else
       if (physvol->IsReplicated()) { 
 
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
-	    G4Exception("GDML Writer: Error! replicavol in '"+volumePtr->GetName()+"' can not be related to reflected solid!");
+	    G4Exception("G4GDML: ERROR! replicavol in '"+name+"' can not be related to reflected solid!");
 
          replicavolWrite(volumeElement,physvol); 
       } else {

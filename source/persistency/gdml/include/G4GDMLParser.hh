@@ -40,10 +40,10 @@ public:
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& fname) { reader.Read(fname); }
+   void Read(const G4String& fname) { reader.Read(fname,false); }
    void Write(const G4String& fname,const G4LogicalVolume* const logvol) {
    
-      writer.Write(fname,logvol); 
+      writer.Write(fname,logvol,0); 
       // Clear modules!!!
    }
 
@@ -57,7 +57,7 @@ public:
    G4LogicalVolume* GetVolume(const G4String& name) { return reader.getVolume(name); }
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) { return reader.getVolumeAuxiliaryInformation(logvol); }
-   void AddModule(const G4VPhysicalVolume* const physvol) { writer.AddModule(physvol); }
+   void AddModule(const G4VPhysicalVolume* const physvol,const G4String& name) { writer.AddModule(physvol,name); }
    void AddModule(G4int depth) { writer.AddModule(depth); }
    void SetAddPointerToName(bool set) { writer.SetAddPointerToName(set); }
 };

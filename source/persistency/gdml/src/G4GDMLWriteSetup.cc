@@ -33,8 +33,6 @@
 void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const logvol) {
 
    xercesc::DOMElement* setupElement = newElement("setup");
-   gdmlElement->appendChild(setupElement);
-   
    setupElement->setAttributeNode(newAttribute("version","1.0"));
    setupElement->setAttributeNode(newAttribute("name","Default"));
 
@@ -43,4 +41,5 @@ void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4Logic
    xercesc::DOMElement* worldElement = newElement("world");
    worldElement->setAttributeNode(newAttribute("ref",worldref));
    setupElement->appendChild(worldElement);
+   gdmlElement->appendChild(setupElement);
 }

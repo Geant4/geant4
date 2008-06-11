@@ -68,7 +68,7 @@ void G4GDMLReadSolids::booleanRead(const xercesc::DOMElement* const booleanEleme
       if (tag=="rotation") vectorRead(child,rotation); else
       if (tag=="firstposition") vectorRead(child,firstposition); else
       if (tag=="firstrotation") vectorRead(child,firstrotation); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in boolean solid: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in boolean solid: "+tag);
    }
 
    G4VSolid* firstSolid = getSolid(GenerateName(first));
@@ -1256,7 +1256,7 @@ void G4GDMLReadSolids::opticalsurfaceRead(const xercesc::DOMElement* const optic
 
 void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const solidsElement) {
 
-   G4cout << "Reading solids..." << G4endl;
+   G4cout << "G4GDML: Reading solids..." << G4endl;
 
    for (xercesc::DOMNode* iter = solidsElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -1292,7 +1292,7 @@ void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="union") booleanRead(child,UNION); else
       if (tag=="opticalsurface") opticalsurfaceRead(child); else
       if (tag=="loop") loopRead(child,&G4GDMLRead::solidsRead); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in solids: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in solids: "+tag);
    }
 }
 
@@ -1300,7 +1300,7 @@ G4VSolid* G4GDMLReadSolids::getSolid(const G4String& ref) const {
 
    G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
-   if (!solidPtr) G4Exception("GDML Reader: ERROR! Referenced solid '"+ref+"' was not found!");
+   if (!solidPtr) G4Exception("G4GDML: ERROR! Referenced solid '"+ref+"' was not found!");
 
    return solidPtr;
 }
@@ -1313,7 +1313,7 @@ G4SurfaceProperty* G4GDMLReadSolids::getSurfaceProperty(const G4String& ref) con
    for (size_t i=0;i<surfaceCount;i++)
       if ((*surfaceList)[i]->GetName() == ref) return (*surfaceList)[i];
   
-   G4Exception("GDML Reader: ERROR! Referenced optical surface '"+ref+"' was not found!");
+   G4Exception("G4GDML: ERROR! Referenced optical surface '"+ref+"' was not found!");
 
    return 0;
 }

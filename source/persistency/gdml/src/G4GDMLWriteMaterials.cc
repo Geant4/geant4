@@ -160,7 +160,7 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {
 
-   G4cout << "Writing materials..." << G4endl;
+   G4cout << "G4GDML: Writing materials..." << G4endl;
 
    materialsElement = newElement("materials");
    element->appendChild(materialsElement);

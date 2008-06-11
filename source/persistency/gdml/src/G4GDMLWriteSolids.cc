@@ -320,7 +320,7 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
       
       if (NumVertexPerFacet==3) { FacetTag="triangular"; } else
       if (NumVertexPerFacet==4) { FacetTag="quadrangular"; } else
-      G4Exception("GDML WRITER: Facet should contain 3 or 4 vertices!");
+      G4Exception("G4GDML: ERROR! Facet should contain 3 or 4 vertices!");
 
       xercesc::DOMElement* facetElement = newElement(FacetTag);
       tessellatedElement->appendChild(facetElement);
@@ -521,7 +521,7 @@ void G4GDMLWriteSolids::zplaneWrite(xercesc::DOMElement* element,const G4double&
 
 void G4GDMLWriteSolids::solidsWrite(xercesc::DOMElement* gdmlElement) {
 
-   G4cout << "Writing solids..." << G4endl;
+   G4cout << "G4GDML: Writing solids..." << G4endl;
 
    solidsElement = newElement("solids");
    gdmlElement->appendChild(solidsElement);

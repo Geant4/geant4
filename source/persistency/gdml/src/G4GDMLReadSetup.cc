@@ -33,7 +33,7 @@ G4String G4GDMLReadSetup::getSetup(const G4String& ref) {
 
    if (setupMap.size() == 1) return setupMap.begin()->second;   // If there is only one setup defined, no matter how it is named
 
-   if (setupMap.find(ref) == setupMap.end()) G4Exception("GDML Reader: ERROR! Referenced setup '"+ref+"' was not found!");
+   if (setupMap.find(ref) == setupMap.end()) G4Exception("G4GDML: ERROR! Referenced setup '"+ref+"' was not found!");
 
    return setupMap[ref];
 }

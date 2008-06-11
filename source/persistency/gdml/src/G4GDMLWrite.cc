@@ -39,15 +39,15 @@ bool G4GDMLWrite::FileExists(const G4String& fname) const {
   return (intStat == 0); 
 }
 
-G4GDMLWrite::VolumeListType& G4GDMLWrite::volumeList() {
+G4GDMLWrite::VolumeMapType& G4GDMLWrite::volumeMap() {
 
-   static VolumeListType instance;
+   static VolumeMapType instance;
    return instance;
 }
 
-G4GDMLWrite::DepthListType& G4GDMLWrite::depthList() {
+G4GDMLWrite::DepthMapType& G4GDMLWrite::depthMap() {
 
-   static DepthListType instance;
+   static DepthMapType instance;
    return instance;
 }
 
@@ -72,7 +72,7 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,const G4double&
    xercesc::XMLString::transcode(name,tempStr,99);
    xercesc::DOMAttr* att = doc->createAttribute(tempStr);
    std::ostringstream ostream;
-   ostream.precision(18); // Set the precision to 1e-18!
+   ostream.precision(18);
    ostream << value;
    G4String str = ostream.str();
    xercesc::XMLString::transcode(str,tempStr,99);
@@ -88,7 +88,8 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
 
 G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,G4int depth) {
 
-   G4cout << "Writing '" << fname << "'..." << G4endl;
+   if (depth==0) G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl;
+   else G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl;
    
    if (FileExists(fname)) G4Exception("GDML Writer: ERROR! File '"+fname+"' already exists!");
 
@@ -121,51 +122,58 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    } catch (const xercesc::XMLException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.getMessage());
-      G4cout << "Exception message is: \n" << message << "\n" << G4endl;
+      G4cout << "G4GDML: Exception message is: \n" << message << "\n" << G4endl;
       xercesc::XMLString::release(&message);
       return G4Transform3D::Identity;
    } catch (const xercesc::DOMException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.msg);
-      G4cout << "Exception message is: \n" << message << "\n" << G4endl;
+      G4cout << "G4GDML: Exception message is: \n" << message << "\n" << G4endl;
       xercesc::XMLString::release(&message);
       return G4Transform3D::Identity;
    } catch (...) {
       
-      G4cout << "Unexpected Exception \n" << G4endl;
+      G4cout << "G4GDML: Unexpected Exception \n" << G4endl;
       return G4Transform3D::Identity;
    }        
 
    delete myFormTarget;
    writer->release();
 
-   G4cout << "Writing '" << fname << "' done!" << G4endl;
+   if (depth==0) G4cout << "G4GDML: Writing '" << fname << "' done!" << G4endl;
+   else G4cout << "G4GDML: Writing module '" << fname << "' done!" << G4endl;
 
    return R;
 }
 
-void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol) {
+void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol,const G4String& fname) {
 
-   volumeList().push_back(physvol);
+   G4cout << "G4GDML: Adding module '" << fname << "'..." << G4endl;
+
+   if (volumeMap().find(physvol) != volumeMap().end()) G4Exception("G4GDML: ERROR! Module name '"+fname+"' already defined!");
+
+   volumeMap()[physvol] = fname;
 }
 
 void G4GDMLWrite::AddModule(G4int depth) {
 
-   depthList().push_back(depth);
+   G4cout << "G4GDML: Adding module(s) at depth " << depth << "..." << G4endl;
+
+   depthMap()[depth] = 0;
 }
 
 G4String G4GDMLWrite::Modularize(const G4VPhysicalVolume* const physvol,G4int depth) {
 
-   for (size_t i=0;i<volumeList().size();i++) { // Modularize via physvol?
+   if (volumeMap().find(physvol) != volumeMap().end()) return volumeMap()[physvol]; // Modularize via physvol
 
-      if (volumeList()[i] == physvol)
-         return G4String(GenerateName(physvol->GetName(),physvol)+".gdml");
-   }
+   if (depthMap().find(depth) != depthMap().end()) { // Modularize via depth
+   
+      std::stringstream stream;
+      stream << "depth" << depth << "_module" << depthMap()[depth] << ".gdml";
 
-   for (size_t i=0;i<depthList().size();i++) { // Modularize via depth?
+      depthMap()[depth]++; // There can be more modules at this depth!
 
-      if (depthList()[i] == depth)
-         return G4String(GenerateName(physvol->GetName(),physvol)+".gdml");
+      return G4String(stream.str());
    }
 
    return G4String(""); // No modularization!

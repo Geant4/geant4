@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.8 2008-04-10 09:25:30 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.9 2008-06-11 09:36:13 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLMaterials Implementation
@@ -369,7 +369,7 @@ void G4GDMLReadMaterials::mixtureRead(const xercesc::DOMElement *const mixtureEl
          if (materialPtr != 0) material->AddMaterial(materialPtr,n); else
 	 if (elementPtr != 0) material->AddElement(elementPtr,n);
 
-         if ((materialPtr == 0) && (elementPtr == 0)) G4Exception("GDML Reader: ERROR! Referenced material/element '"+GenerateName(ref)+"' was not found!");   
+         if ((materialPtr == 0) && (elementPtr == 0)) G4Exception("G4GDML: ERROR! Referenced material/element '"+GenerateName(ref)+"' was not found!");   
       } 
       else if (tag=="composite") {
       
@@ -406,7 +406,7 @@ void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const property
       if (attName=="ref") matrix = getMatrix(ref=attValue);
    }
 
-   if (matrix.getCols() != 2) G4Exception("GDML Reader: ERROR! Referenced matrix '"+ref+"' should have two columns as a property table for material: "+material->GetName());
+   if (matrix.getCols() != 2) G4Exception("G4GDML: ERROR! Referenced matrix '"+ref+"' should have two columns as a property table for material: "+material->GetName());
    if (matrix.getRows() == 0) return;
 
    G4MaterialPropertiesTable* matprop = material->GetMaterialPropertiesTable();
@@ -419,7 +419,7 @@ void G4GDMLReadMaterials::propertyRead(const xercesc::DOMElement* const property
 
 void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const materialsElement) {
 
-   G4cout << "Reading materials..." << G4endl;
+   G4cout << "G4GDML: Reading materials..." << G4endl;
 
    for (xercesc::DOMNode* iter = materialsElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -431,7 +431,7 @@ void G4GDMLReadMaterials::materialsRead(const xercesc::DOMElement* const materia
       if (tag=="element") elementRead(child); else 
       if (tag=="isotope") isotopeRead(child); else 
       if (tag=="material") materialRead(child); else 
-      G4Exception("GDML Reader: ERROR! Unknown tag in materials: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in materials: "+tag);
    }
 }
 
@@ -441,7 +441,7 @@ G4Element* G4GDMLReadMaterials::getElement(const G4String& ref,bool verbose) con
 
    if (!elementPtr) elementPtr = G4NistManager::Instance()->FindOrBuildElement(ref);
 
-   if (verbose && !elementPtr) G4Exception("GDML Reader: ERROR! Referenced element '"+ref+"' was not found!"); 
+   if (verbose && !elementPtr) G4Exception("G4GDML: ERROR! Referenced element '"+ref+"' was not found!"); 
 
    return elementPtr;
 }
@@ -450,7 +450,7 @@ G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref,bool verbose) con
 
    G4Isotope* isotopePtr = G4Isotope::GetIsotope(ref,false);
 
-   if (verbose && !isotopePtr) G4Exception("GDML Reader: ERROR! Referenced isotope '"+ref+"' was not found!"); 
+   if (verbose && !isotopePtr) G4Exception("G4GDML: ERROR! Referenced isotope '"+ref+"' was not found!"); 
 
    return isotopePtr;
 }
@@ -461,7 +461,7 @@ G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref,bool verbose) c
 
    if (!materialPtr) materialPtr = G4NistManager::Instance()->FindOrBuildMaterial(ref);
 
-   if (verbose && !materialPtr) G4Exception("GDML Reader: ERROR! Referenced material '"+ref+"' was not found!"); 
+   if (verbose && !materialPtr) G4Exception("G4GDML: ERROR! Referenced material '"+ref+"' was not found!"); 
 
    return materialPtr;
 }

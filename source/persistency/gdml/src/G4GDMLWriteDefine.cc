@@ -140,7 +140,7 @@ void G4GDMLWriteDefine::firstpositionWrite(xercesc::DOMElement* element,const G4
 
 void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
 
-   G4cout << "Writing definitions..." << G4endl;
+   G4cout << "G4GDML: Writing definitions..." << G4endl;
 
    defineElement = newElement("define");
    element->appendChild(defineElement);

@@ -378,7 +378,8 @@ void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element
       if (tag=="orb_dimensions") cone_dimensionsRead(child,parameter); else
       if (tag=="torus_dimensions") cone_dimensionsRead(child,parameter); else
       if (tag=="para_dimensions") cone_dimensionsRead(child,parameter); else
-      if (tag=="hype_dimensions") hype_dimensionsRead(child,parameter);
+      if (tag=="hype_dimensions") hype_dimensionsRead(child,parameter); else
+      G4Exception("G4GDML: ERROR! Unknown tag in parameters: "+tag);
    }
 
    parameter.pRot = new G4RotationMatrix();
@@ -428,7 +429,7 @@ void G4GDMLReadParamvol::paramvolRead(const xercesc::DOMElement* const element,G
 
    G4LogicalVolume* logvol = getVolume(GenerateName(volumeref));
 
-   if (parameterisation->getSize()==0) G4Exception("GDML Reader: ERROR! No parameters are defined in parameterised volume!");
+   if (parameterisation->getSize()==0) G4Exception("G4GDML: ERROR! No parameters are defined in parameterised volume!");
 
    new G4PVParameterised("",logvol,mother,kUndefined,parameterisation->getSize(),parameterisation);
 }

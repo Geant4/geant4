@@ -79,9 +79,9 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
       if (attribute_name=="step") step = attribute_value;
    }
 
-   if (var.empty()) G4Exception("GDML Reader: ERROR! No variable is determined for loop!");
+   if (var.empty()) G4Exception("G4GDML: ERROR! No variable is determined for loop!");
 
-   if (!eval.isVariable(var)) G4Exception("GDML Reader: ERROR! Variable is not defined in loop!");
+   if (!eval.isVariable(var)) G4Exception("G4GDML: ERROR! Variable is not defined in loop!");
 
    G4int _var = eval.EvaluateInteger(var);
    G4int _from = eval.EvaluateInteger(from);
@@ -90,9 +90,9 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    
    if (!from.empty()) _var = _from;
 
-   if (_from == _to) G4Exception("GDML Reader: ERROR! Empty loop!");
-   if (_from < _to && _step <= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
-   if (_from > _to && _step >= 0) G4Exception("GDML Reader: ERROR! Infinite loop!");
+   if (_from == _to) G4Exception("G4GDML: ERROR! Empty loop!");
+   if (_from < _to && _step <= 0) G4Exception("G4GDML: ERROR! Infinite loop!");
+   if (_from > _to && _step >= 0) G4Exception("G4GDML: ERROR! Infinite loop!");
    
    InLoop++;
    
@@ -107,14 +107,15 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    InLoop--;
 }
 
-void G4GDMLRead::Read(const G4String& fileName,bool external) {
+void G4GDMLRead::Read(const G4String& fileName,bool IsModule) {
 
-   G4cout << "Reading '" << fileName << "'..." << G4endl;
+   if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
+   else G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
 
    InLoop = 0;
    prename.clear();
 
-   if (external) { 
+   if (IsModule) { 
    
       prename = fileName;
       prename.remove(prename.length()-5,5); // remove ".gdml"
@@ -136,23 +137,23 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
    catch (const xercesc::XMLException &e) {
    
       char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "XML: " << message << G4endl;
+      G4cout << "G4GDML: " << message << G4endl;
       xercesc::XMLString::release(&message);
    }
    catch (const xercesc::DOMException &e) {
    
       char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "DOM: " << message << G4endl;
+      G4cout << "G4GDML: " << message << G4endl;
       xercesc::XMLString::release(&message);
    }
 
    xercesc::DOMDocument* doc = parser->getDocument();
 
-   if (!doc) G4Exception("GDML Reader: ERROR! Unable to open document: "+fileName);
+   if (!doc) G4Exception("G4GDML: ERROR! Unable to open document: "+fileName);
 
    xercesc::DOMElement* element = doc->getDocumentElement();
 
-   if (!element) G4Exception("GDML Reader: ERROR! Empty document!");
+   if (!element) G4Exception("G4GDML: ERROR! Empty document!");
 
    for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
 
@@ -167,10 +168,11 @@ void G4GDMLRead::Read(const G4String& fileName,bool external) {
       if (tag=="solids") solidsRead(child); else
       if (tag=="setup") setupRead(child); else
       if (tag=="structure") structureRead(child); else
-      G4Exception("GDML Reader: ERROR! Unknown tag in gdml: "+tag);
+      G4Exception("G4GDML: ERROR! Unknown tag in gdml: "+tag);
    }
 
    delete parser;
 
-   G4cout << "Reading '" << fileName << "' done!" << G4endl << G4endl;
+   if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
+   else G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
 }
