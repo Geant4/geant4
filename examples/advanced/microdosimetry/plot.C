@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.1 2008-06-04 12:58:23 sincerti Exp $
+// $Id: plot.C,v 1.2 2008-06-11 11:56:16 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -59,15 +59,15 @@ c1.cd(1);
 
 c1.cd(2);
   ntuple->SetMarkerColor(1);
-  ntuple->Draw("x*1000:y*1000:z/1000","");
+  ntuple->Draw("x:y:z/1000","");
   ntuple->SetMarkerColor(2);
-  ntuple->Draw("x*1000:y*1000:z/1000","process==13||process==14||process==15","same");
+  ntuple->Draw("x:y:z/1000","process==13||process==14||process==15","same");
   ntuple->SetMarkerColor(3);
-  ntuple->Draw("x*1000:y*1000:z/1000","process==11||process==12","same");
+  ntuple->Draw("x:y:z/1000","process==11||process==12","same");
   ntuple->SetMarkerColor(4);
-  ntuple->Draw("x*1000:y*1000:z/1000","process==16||process==17","same");
+  ntuple->Draw("x:y:z/1000","process==16||process==17","same");
   ntuple->SetMarkerColor(5);
-  ntuple->Draw("x*1000:y*1000:z/1000","process==18||process==19","same");
+  ntuple->Draw("x:y:z/1000","process==18||process==19","same");
 
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);
@@ -79,7 +79,7 @@ c1.cd(2);
   htemp->GetYaxis()->SetTitleOffset(1.6);
   htemp->GetZaxis()->SetTitleOffset(1.6);
   htemp->GetXaxis()->SetTitle("z (micrometer)");
-  htemp->GetYaxis()->SetTitle("x (picometer)");
-  htemp->GetZaxis()->SetTitle("y (picometer)");
+  htemp->GetYaxis()->SetTitle("x (nanometer)");
+  htemp->GetZaxis()->SetTitle("y (nanometer)");
   htemp->SetTitle("Track Structure in liquid water");
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.1 2008-06-04 12:57:55 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.2 2008-06-11 11:56:16 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -159,41 +159,33 @@ void PhysicsList::ConstructProcess()
 
 // Processes definition
 
-char name1[]="ElasticScreenedRutherford";
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford,name1> 
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> 
   ElasticScreenedRutherford;
 
-char name1bis[]="ElasticBrennerZaider";
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider,name1bis> 
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> 
   ElasticBrennerZaider;
 
-char name2[]="ExcitationEmfietzoglou";
-typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou,name2> 
+typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> 
   ExcitationEmfietzoglou;
   
-char name3[]="ExcitationBorn";
-typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn,name3> 
+typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn> 
   ExcitationBorn;
   
-char name4[]="IonisationBorn";
-typedef G4DNAProcess<G4CrossSectionIonisationBorn,G4FinalStateIonisationBorn,name4> 
+typedef G4DNAProcess<G4CrossSectionIonisationBorn,G4FinalStateIonisationBorn> 
   IonisationBorn;
   
-char name5[]="IonisationRudd";
-typedef G4DNAProcess<G4CrossSectionIonisationRudd,G4FinalStateIonisationRudd,name5> 
+typedef G4DNAProcess<G4CrossSectionIonisationRudd,G4FinalStateIonisationRudd> 
   IonisationRudd;
   
-char name6[]="ExcitationMillerGreen";
-typedef G4DNAProcess<G4CrossSectionExcitationMillerGreen,G4FinalStateExcitationMillerGreen,name6> 
+typedef G4DNAProcess<G4CrossSectionExcitationMillerGreen,G4FinalStateExcitationMillerGreen> 
   ExcitationMillerGreen;
   
-char name7[]="ChargeDecrease";
-typedef G4DNAProcess<G4CrossSectionChargeDecrease,G4FinalStateChargeDecrease,name7> 
+typedef G4DNAProcess<G4CrossSectionChargeDecrease,G4FinalStateChargeDecrease> 
   ChargeDecrease;
   
-char name8[]="ChargeIncrease";
-typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease,name8> 
+typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease> 
   ChargeIncrease;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -211,37 +203,37 @@ void PhysicsList::ConstructEM()
 // DNA processes per particle type
 
    if (particleName == "e-") {
-       pmanager->AddDiscreteProcess(new ExcitationEmfietzoglou);
-       pmanager->AddDiscreteProcess(new ElasticScreenedRutherford);
-       pmanager->AddDiscreteProcess(new ElasticBrennerZaider);
-       pmanager->AddDiscreteProcess(new IonisationBorn);
+       pmanager->AddDiscreteProcess(new ExcitationEmfietzoglou("ExcitationEmfietzoglou"));
+       pmanager->AddDiscreteProcess(new ElasticScreenedRutherford("ElasticScreenedRutherford"));
+       pmanager->AddDiscreteProcess(new ElasticBrennerZaider("ElasticBrennerZaider"));
+       pmanager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
 
     } else if ( particleName == "proton" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen);
-       pmanager->AddDiscreteProcess(new ExcitationBorn);
-       pmanager->AddDiscreteProcess(new IonisationRudd);
-       pmanager->AddDiscreteProcess(new IonisationBorn);
-       pmanager->AddDiscreteProcess(new ChargeDecrease);
+       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
+       pmanager->AddDiscreteProcess(new ExcitationBorn("ExcitationBorn"));
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
+       pmanager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
+       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
 
     } else if ( particleName == "hydrogen" ) {
-       pmanager->AddDiscreteProcess(new IonisationRudd);
-       pmanager->AddDiscreteProcess(new ChargeIncrease);
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
+       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
 
     } else if ( particleName == "alpha" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen);
-       pmanager->AddDiscreteProcess(new IonisationRudd);
-       pmanager->AddDiscreteProcess(new ChargeDecrease);
+       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationBorn"));
+       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
     
     } else if ( particleName == "alpha+" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen);
-       pmanager->AddDiscreteProcess(new IonisationRudd);
-       pmanager->AddDiscreteProcess(new ChargeDecrease);
-       pmanager->AddDiscreteProcess(new ChargeIncrease);
+       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
+       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
+       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
     
     } else if ( particleName == "helium" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen);
-       pmanager->AddDiscreteProcess(new IonisationRudd);
-       pmanager->AddDiscreteProcess(new ChargeIncrease);
+       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
+       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
     }
   } // Loop on particles
 }

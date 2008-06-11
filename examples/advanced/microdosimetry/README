@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.4 2008-06-04 12:58:23 sincerti Exp $
+$Id: README,v 1.5 2008-06-11 11:56:16 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -85,13 +85,18 @@ To get visualization, make sure to uncomment the /vis/... lines in the macro.
 ---->4. PHYSICS
 
 This example shows how to use the Geant4 DNA processes AND how to affect them a
-name, feature not available yet in the Geant4 release !
+name.
 
 Look at the PhyscisList.cc file.
 
-If you want to use this naming feature in your application, please copy the
-G4DNAProcess.hh and G4DNAProcess.icc files from the include directory of the
-microdosimetry example into your application project include directory.
+Note that the G4CrossSectionElasticScreenedRutherford.cc is put in the src
+directory with an increased (10 eV instead of 7 eV) lower limit of the model energy range to
+avoid an energy region where electrons do not lose any energy and may undergo
+elastic scattering without limit.
+
+Same remark for the G4CrossSectionExcitationEmfietzoglou.cc file whre the lower
+limit has been set to 10 eV instead of 7.4 eV.
+
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 

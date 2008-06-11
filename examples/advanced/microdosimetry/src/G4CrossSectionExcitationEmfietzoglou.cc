@@ -23,59 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: G4DNAProcess.hh,v 1.1 2008-06-04 12:58:24 sincerti Exp $
+//
+// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.1 2008-06-11 11:56:16 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// Reference: TNS Geant4-DNA paper
+// Reference for implementation model: NIM. 155, pp. 145-156, 1978
+
+// History:
+// -----------
+// Date         Name              Modification
+// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
+//
 // -------------------------------------------------------------------
 
-#ifndef G4DNAPROCESS_HH
-#define G4DNAPROCESS_HH 1
+// Class description:
+// Geant4-DNA Cross total cross section for electron elastic scattering in water
+// Reference: TNS Geant4-DNA paper
+// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
+// design foundation and implementation of the first set of models,
+// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
+// Further documentation available from http://www.ge.infn.it/geant4/dna
 
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
+// -------------------------------------------------------------------
+
+
+#include "G4CrossSectionExcitationEmfietzoglou.hh"
 #include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4VParticleChange.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ThreeVector.hh"
-#include "G4FinalStateProduct.hh"
-#include "G4String.hh"
-#include <vector> 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-template < class TCrossSection, class TFinalState, char const* name>
-class G4DNAProcess : public G4VDiscreteProcess
+G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
 {
-public:
 
-  G4DNAProcess(const G4String& processName = name): G4VDiscreteProcess(processName) { ; }
-  
-  ~G4DNAProcess() { ; }
+  name = "CrossSectionExcitationEmfietzoglou";
+  lowEnergyLimit = 10*eV; // 7.4 * eV;
+  highEnergyLimit = 10. * MeV;
+}
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) { return true; } 
-  
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&) { ; }
+
+G4CrossSectionExcitationEmfietzoglou::~G4CrossSectionExcitationEmfietzoglou()
+{ }
  
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
- 
-  G4double DumpMeanFreePath(const G4Track& aTrack, 
-			    G4double previousStepSize, 
-			    G4ForceCondition* condition) 
-  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
 
-protected:
-  
-  virtual G4double GetMeanFreePath(const G4Track& track, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
-private:
+G4double G4CrossSectionExcitationEmfietzoglou::CrossSection(const G4Track& track)
+{
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
+  G4double k = particle->GetKineticEnergy();
 
-  G4DNAProcess& operator=(const G4DNAProcess& right);
-  G4DNAProcess(const G4DNAProcess& );
+  // Cross section = 0 outside the energy validity limits set in the constructor
+  // ---- MGP ---- Better handling of these limits to be set in a following design iteration 
 
-  TCrossSection crossSection;
-  TFinalState finalState;
-};
-#include "G4DNAProcess.icc"
-#endif
+  G4double sigma = 0.;
+
+  if (k > lowEnergyLimit && k < highEnergyLimit) sigma = partialCrossSection.Sum(k);
+
+  return sigma;
+}
+
