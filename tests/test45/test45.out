@@ -1,0 +1,306 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-01-ref-04    (9-May-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
+    Default Physics Lists QGSP_BERT is instantiated
+
+<<< Geant4 Physics List engine packaging library: PACK 5.4
+<<< Geant4 Physics List simulation engine: QGSP_BERT 3.3
+
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat G4_C
+/testhadr/TargetWidth 2 cm
+/testhadr/TargetLength 15 mm
+/testhadr/PrintModulo 100000
+#
+#/testhadr/CutsAll 2 mm
+#
+/run/initialize
+### Target is box made of G4_C with Width(mm)= 20  total Length(mm)= 15  ###
+
+***** Table : Nb of materials = 3 *****
+
+ Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+   --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_Galactic     density:  0.000 kg/m3   RadL: 204311276.564 pc   Nucl.Int.Length: 114319864.124 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     G4_C     density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.077 cm   Imean:  81.000 eV 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+### Adding Neutron tracking cut for neutron
+###  cut value is 10 microseconds
+#
+/gun/particle proton
+/gun/energy 50. MeV
+/run/beamOn 100000
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+
+      Stopping Power data for 8 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+                     Hadronic Processes for <anti_neutron>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+
+                     Hadronic Processes for <anti_proton>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+ AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+
+                     Hadronic Processes for <kaon+>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                  G4LEKaonPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+
+                     Hadronic Processes for <kaon->
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                 G4LEKaonMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+
+                     Hadronic Processes for <lambda>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+
+                     Hadronic Processes for <neutron>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+    NeutronInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                   G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
+       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
+
+                     Hadronic Processes for <pi+>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+   PionPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                  G4LEPionPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+
+                     Hadronic Processes for <pi->
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+  PionMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                 G4LEPionMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+
+                     Hadronic Processes for <proton>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+     ProtonInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+                                    G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+============================================================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_C
+ Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
+ Energy thresholds :  gamma 2.77888 keV    e- 402.4 keV    e+ 392.614 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 start
+### Histo books 12 histograms in <test45.root>
+[Histo::book] File created: test45.root
+Start Run processing.
+EventAction: Event # 0 started
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=18.2s Real=18.22s Sys=0.01s
+RunAction: End of run actions are started
+HistoManager: End of run actions are started
+========================================================
+Beam particle                        proton
+Beam Energy(MeV)                     50
+Number of events                     100000
+========================================================
+
+### factor= 9933670.9
+[Histo::save] ROOT: files writing...
+[Histo::save] ROOT: files closing...
+#
+G4 kernel has come to Quit state.
