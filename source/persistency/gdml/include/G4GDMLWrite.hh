@@ -67,11 +67,11 @@ protected:
    virtual void structureWrite(xercesc::DOMElement*)=0;
    virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int)=0;
    virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-   G4String Modularize(const G4VPhysicalVolume* const,G4int);
+   G4String Modularize(const G4VPhysicalVolume* const,const G4int);
 public:
-   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,G4int);
+   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4int);
    void AddModule(const G4VPhysicalVolume* const,const G4String&);
-   void AddModule(G4int);
+   void AddModule(const G4int);
    static void SetAddPointerToName(bool);
 };
 

@@ -558,5 +558,5 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr) {
    if (const G4TwistedTrap* twistedtrapPtr = dynamic_cast<const G4TwistedTrap*>(solidPtr)) { twistedtrapWrite(solidsElement,twistedtrapPtr); } else
    if (const G4TwistedTrd* twistedtrdPtr = dynamic_cast<const G4TwistedTrd*>(solidPtr)) { twistedtrdWrite(solidsElement,twistedtrdPtr); } else
    if (const G4TwistedTubs* twistedtubsPtr = dynamic_cast<const G4TwistedTubs*>(solidPtr)) { twistedtubsWrite(solidsElement,twistedtubsPtr); } else
-   G4Exception("GDML Writer: ERROR! Unknown solid: "+solidPtr->GetName());
+   G4Exception("G4GDML: ERROR! Unknown solid: "+solidPtr->GetName());
 }

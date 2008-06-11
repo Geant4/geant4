@@ -72,9 +72,9 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
    T.getDecomposition(scale,rotate,translate);
 
-   G4ThreeVector scl(scale(0,0),scale(1,1),scale(2,2));
-   G4ThreeVector rot = getAngles(rotate.getRotation());
-   G4ThreeVector pos = T.getTranslation();
+   const G4ThreeVector scl(scale(0,0),scale(1,1),scale(2,2));
+   const G4ThreeVector rot = getAngles(rotate.getRotation());
+   const G4ThreeVector pos = T.getTranslation();
 
    xercesc::DOMElement* physvolElement = newElement("physvol");
    physvolElement->setAttributeNode(newAttribute("name",physvol->GetName())); // We keep the original name for every physical volume!
@@ -142,23 +142,23 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
    gdmlElement->appendChild(structureElement);
 }
 
-G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,G4int depth) {
+G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,const G4int depth) {
 
    if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
 
-   G4Transform3D R,invR;
-   int displaced = 0;
    G4VSolid* solidPtr = volumePtr->GetSolid();
+   G4Transform3D R,invR;
+   G4int reflected = 0;
 
    while (true) { // Solve possible displacement/reflection of the referenced solid!
    
-      if (displaced>maxDisplacements) G4Exception("G4GDML: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
+      if (reflected>maxReflections) G4Exception("G4GDML: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
    
       if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
    
          R = R*refl->GetTransform3D();
          solidPtr = refl->GetConstituentMovedSolid();
-         displaced++;
+         reflected++;
          continue;
       }
 
@@ -166,14 +166,14 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       
          R = R*G4Transform3D(disp->GetObjectRotation(),disp->GetObjectTranslation());
          solidPtr = disp->GetConstituentMovedSolid();
-         displaced++;
+         reflected++;
          continue;
       }
 
       break;
    }
 
-   if (displaced>0) invR = R.inverse(); // Only compute the inverse when necessary!
+   if (reflected>0) invR = R.inverse(); // Only compute the inverse when necessary!
 
    G4String name = GenerateName(volumePtr->GetName(),volumePtr);
 
@@ -197,10 +197,10 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-      G4String ModuleName = Modularize(physvol,depth);
+      const G4String ModuleName = Modularize(physvol,depth);
       G4Transform3D daughterR;
       
-      if (ModuleName.empty()) {
+      if (ModuleName.empty()) { // Check if subtree requested to be a separate module!
 
          daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
       } else {

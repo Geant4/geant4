@@ -34,9 +34,8 @@ bool G4GDMLWrite::addPointerToName = true;
 
 bool G4GDMLWrite::FileExists(const G4String& fname) const {
 
-  struct stat stFileInfo;
-  int intStat = stat(fname.c_str(),&stFileInfo);
-  return (intStat == 0); 
+  struct stat FileInfo;
+  return (stat(fname.c_str(),&FileInfo) == 0); 
 }
 
 G4GDMLWrite::VolumeMapType& G4GDMLWrite::volumeMap() {
@@ -86,12 +85,12 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
    return doc->createElement(tempStr);
 }
 
-G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,G4int depth) {
+G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,const G4int depth) {
 
    if (depth==0) G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl;
    else G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl;
    
-   if (FileExists(fname)) G4Exception("GDML Writer: ERROR! File '"+fname+"' already exists!");
+   if (FileExists(fname)) G4Exception("G4GDML: ERROR! File '"+fname+"' already exists!");
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
    xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
@@ -122,18 +121,18 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    } catch (const xercesc::XMLException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.getMessage());
-      G4cout << "G4GDML: Exception message is: \n" << message << "\n" << G4endl;
+      G4cout << "G4GDML: Exception message is: " << message << G4endl;
       xercesc::XMLString::release(&message);
       return G4Transform3D::Identity;
    } catch (const xercesc::DOMException& toCatch) {
    
       char* message = xercesc::XMLString::transcode(toCatch.msg);
-      G4cout << "G4GDML: Exception message is: \n" << message << "\n" << G4endl;
+      G4cout << "G4GDML: Exception message is: " << message << G4endl;
       xercesc::XMLString::release(&message);
       return G4Transform3D::Identity;
    } catch (...) {
       
-      G4cout << "G4GDML: Unexpected Exception \n" << G4endl;
+      G4cout << "G4GDML: Unexpected Exception!" << G4endl;
       return G4Transform3D::Identity;
    }        
 
@@ -155,14 +154,16 @@ void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol,const G4Strin
    volumeMap()[physvol] = fname;
 }
 
-void G4GDMLWrite::AddModule(G4int depth) {
+void G4GDMLWrite::AddModule(const G4int depth) {
 
    G4cout << "G4GDML: Adding module(s) at depth " << depth << "..." << G4endl;
+
+   if (depthMap().find(depth) != depthMap().end()) G4Exception("G4GDML: ERROR! Adding module(s) at this depth is already requested!");
 
    depthMap()[depth] = 0;
 }
 
-G4String G4GDMLWrite::Modularize(const G4VPhysicalVolume* const physvol,G4int depth) {
+G4String G4GDMLWrite::Modularize(const G4VPhysicalVolume* const physvol,const G4int depth) {
 
    if (volumeMap().find(physvol) != volumeMap().end()) return volumeMap()[physvol]; // Modularize via physvol
 

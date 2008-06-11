@@ -49,13 +49,13 @@ private:
    std::map<const G4LogicalVolume*,G4Transform3D> volumeMap;
    xercesc::DOMElement* structureElement;
 
-   static const int maxDisplacements = 8; // Constant for limiting the number displacements/reflections applied to a single solid
+   static const int maxReflections = 8; // Constant for limiting the number displacements/reflections applied to a single solid
 
    void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
    void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4String&);
    void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void structureWrite(xercesc::DOMElement*);
-   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int);
+   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,const G4int);
 };
 
 #endif
