@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2008-06-11 05:23:31 kmura Exp $
+$Id: History,v 1.42 2008-06-12 10:27:24 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 June 2008 K. Murakami
+ - tools/g4autobuild : add treatment of XERCESCROOT
 
 4 June 2008 K. Murakami
  - add G4AtomicShells
