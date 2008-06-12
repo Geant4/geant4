@@ -53,7 +53,7 @@ class IHistogramFactory;
 class ITree;
 class ITupleFactory;
 class ITuple;
-};
+}
 #endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
