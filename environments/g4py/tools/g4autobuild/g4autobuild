@@ -2,7 +2,7 @@
 # ======================================================================
 #  A script for Geant4 autobuild
 #
-#  Version 2.0 Jan 2008
+#  Version 2.1 June 2008
 #
 #  [usage]
 #    g4autobuild [<options>]
