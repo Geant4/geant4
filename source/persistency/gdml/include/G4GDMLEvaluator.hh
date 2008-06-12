@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.13 2008-03-07 09:48:54 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.14 2008-06-12 13:09:47 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@
 
 #include "G4Types.hh"
 #include "G4String.hh"
-#include "G4Box.hh"
+#include "G4Box.hh" // Because we need "G4Exception()"...
 
 class G4GDMLEvaluator {
    HepTool::Evaluator eval;

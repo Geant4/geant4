@@ -36,7 +36,7 @@ void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4Logic
    setupElement->setAttributeNode(newAttribute("version","1.0"));
    setupElement->setAttributeNode(newAttribute("name","Default"));
 
-   G4String worldref = GenerateName(logvol->GetName(),logvol);
+   const G4String worldref = GenerateName(logvol->GetName(),logvol);
 
    xercesc::DOMElement* worldElement = newElement("world");
    worldElement->setAttributeNode(newAttribute("ref",worldref));

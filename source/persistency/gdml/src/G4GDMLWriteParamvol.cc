@@ -58,11 +58,11 @@ void G4GDMLWriteParamvol::trd_dimensionsWrite(xercesc::DOMElement* parametersEle
 
 void G4GDMLWriteParamvol::trap_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Trap* const trap) {
 
-   G4ThreeVector simaxis = trap->GetSymAxis();
-   G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
-   G4double theta = acos(simaxis.z());
-   G4double alpha1 = atan(trap->GetTanAlpha1());
-   G4double alpha2 = atan(trap->GetTanAlpha2());
+   const G4ThreeVector simaxis = trap->GetSymAxis();
+   const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double theta = acos(simaxis.z());
+   const G4double alpha1 = atan(trap->GetTanAlpha1());
+   const G4double alpha2 = atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trap_dimensionsElement = newElement("trap");
    trap_dimensionsElement->setAttributeNode(newAttribute("name",trap->GetName()));
@@ -152,10 +152,10 @@ void G4GDMLWriteParamvol::torus_dimensionsWrite(xercesc::DOMElement* parametersE
 
 void G4GDMLWriteParamvol::para_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Para* const para) {
 
-   G4ThreeVector simaxis = para->GetSymAxis();
-   G4double alpha = atan(para->GetTanAlpha());
-   G4double theta = acos(simaxis.z());
-   G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4ThreeVector simaxis = para->GetSymAxis();
+   const G4double alpha = atan(para->GetTanAlpha());
+   const G4double theta = acos(simaxis.z());
+   const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
 
    xercesc::DOMElement* para_dimensionsElement = newElement("para_dimensions");
    para_dimensionsElement->setAttributeNode(newAttribute("name",para->GetName()));
