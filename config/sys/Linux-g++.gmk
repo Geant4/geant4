@@ -20,15 +20,20 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   := -O2
   else
     ifdef G4DEBUG
-      CXXFLAGS  += -O -g
-      FCFLAGS   := -O -g
-      CCFLAGS   := -O -g
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
     endif
   endif
   ifdef G4PROFILE
     CXXFLAGS  += -pg
     FCFLAGS   += -pg
     CCFLAGS   += -pg
+  endif
+  ifdef G4OPTDEBUG
+    CXXFLAGS  += -O2 -g
+    FCFLAGS   += -O2 -g
+    CCFLAGS   += -O2 -g
   endif
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS  += -fPIC
