@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.61 2008-06-12 15:18:24 grichine Exp $
+// $Id: G4Sphere.cc,v 1.62 2008-06-12 16:06:28 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2434,7 +2434,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 if( calcNorm )   *validNorm = false;		
                                   return snxt = 0.;               
 	      }
-	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) s = -b + d ; // 2nd root
+	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) s = -b + d ; // 2nd root
 	      else if( s < 0. )                                           s = -b + d ; // 2nd root
 
 	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) // leave
