@@ -93,7 +93,7 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
 
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
 
-   G4String name = GenerateName(box->GetName(),box);
+   const G4String name = GenerateName(box->GetName(),box);
 
    xercesc::DOMElement* boxElement = newElement("box");
    boxElement->setAttributeNode(newAttribute("name",name));
@@ -106,7 +106,7 @@ void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box*
 
 void G4GDMLWriteSolids::coneWrite(xercesc::DOMElement* solidsElement,const G4Cons* const cone) {
 
-   G4String name = GenerateName(cone->GetName(),cone);
+   const G4String name = GenerateName(cone->GetName(),cone);
 
    xercesc::DOMElement* coneElement = newElement("cone");
    coneElement->setAttributeNode(newAttribute("name",name));
@@ -124,7 +124,7 @@ void G4GDMLWriteSolids::coneWrite(xercesc::DOMElement* solidsElement,const G4Con
 
 void G4GDMLWriteSolids::ellipsoidWrite(xercesc::DOMElement* solidsElement,const G4Ellipsoid* const ellipsoid) {
 
-   G4String name = GenerateName(ellipsoid->GetName(),ellipsoid);
+   const G4String name = GenerateName(ellipsoid->GetName(),ellipsoid);
 
    xercesc::DOMElement* ellipsoidElement = newElement("ellipsoid");
    ellipsoidElement->setAttributeNode(newAttribute("name",name));
@@ -139,7 +139,7 @@ void G4GDMLWriteSolids::ellipsoidWrite(xercesc::DOMElement* solidsElement,const 
 
 void G4GDMLWriteSolids::eltubeWrite(xercesc::DOMElement* solidsElement,const G4EllipticalTube* const eltube) {
 
-   G4String name = GenerateName(eltube->GetName(),eltube);
+   const G4String name = GenerateName(eltube->GetName(),eltube);
 
    xercesc::DOMElement* eltubeElement = newElement("eltube");
    eltubeElement->setAttributeNode(newAttribute("name",name));
@@ -152,7 +152,7 @@ void G4GDMLWriteSolids::eltubeWrite(xercesc::DOMElement* solidsElement,const G4E
 
 void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4ExtrudedSolid* const xtru) {
 
-   G4String name = GenerateName(xtru->GetName(),xtru);
+   const G4String name = GenerateName(xtru->GetName(),xtru);
 
    xercesc::DOMElement* xtruElement = newElement("xtru");
    xtruElement->setAttributeNode(newAttribute("name",name));
@@ -191,7 +191,7 @@ void G4GDMLWriteSolids::xtruWrite(xercesc::DOMElement* solidsElement,const G4Ext
 
 void G4GDMLWriteSolids::hypeWrite(xercesc::DOMElement* solidsElement,const G4Hype* const hype) {
 
-   G4String name = GenerateName(hype->GetName(),hype);
+   const G4String name = GenerateName(hype->GetName(),hype);
 
    xercesc::DOMElement* hypeElement = newElement("hype");
    hypeElement->setAttributeNode(newAttribute("name",name));
@@ -207,7 +207,7 @@ void G4GDMLWriteSolids::hypeWrite(xercesc::DOMElement* solidsElement,const G4Hyp
 
 void G4GDMLWriteSolids::orbWrite(xercesc::DOMElement* solidsElement,const G4Orb* const orb) {
 
-   G4String name = GenerateName(orb->GetName(),orb);
+   const G4String name = GenerateName(orb->GetName(),orb);
 
    xercesc::DOMElement* orbElement = newElement("orb");
    orbElement->setAttributeNode(newAttribute("name",name));
@@ -218,7 +218,7 @@ void G4GDMLWriteSolids::orbWrite(xercesc::DOMElement* solidsElement,const G4Orb*
 
 void G4GDMLWriteSolids::paraWrite(xercesc::DOMElement* solidsElement,const G4Para* const para) {
 
-   G4String name = GenerateName(para->GetName(),para);
+   const G4String name = GenerateName(para->GetName(),para);
 
    G4ThreeVector simaxis = para->GetSymAxis();
    G4double alpha = atan(para->GetTanAlpha());
@@ -240,7 +240,7 @@ void G4GDMLWriteSolids::paraWrite(xercesc::DOMElement* solidsElement,const G4Par
 
 void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G4Polycone* const polycone) {
 
-   G4String name = GenerateName(polycone->GetName(),polycone);
+   const G4String name = GenerateName(polycone->GetName(),polycone);
 
    xercesc::DOMElement* polyconeElement = newElement("polycone");
    polyconeElement->setAttributeNode(newAttribute("name",name));
@@ -261,7 +261,7 @@ void G4GDMLWriteSolids::polyconeWrite(xercesc::DOMElement* solidsElement,const G
 
 void G4GDMLWriteSolids::polyhedraWrite(xercesc::DOMElement* solidsElement,const G4Polyhedra* const polyhedra) {
 
-   G4String name = GenerateName(polyhedra->GetName(),polyhedra);
+   const G4String name = GenerateName(polyhedra->GetName(),polyhedra);
 
    xercesc::DOMElement* polyhedraElement = newElement("polyhedra");
    polyhedraElement->setAttributeNode(newAttribute("name",name));
@@ -285,7 +285,7 @@ void G4GDMLWriteSolids::polyhedraWrite(xercesc::DOMElement* solidsElement,const 
 
 void G4GDMLWriteSolids::sphereWrite(xercesc::DOMElement* solidsElement,const G4Sphere* const sphere) {
 
-   G4String name = GenerateName(sphere->GetName(),sphere);
+   const G4String name = GenerateName(sphere->GetName(),sphere);
 
    xercesc::DOMElement* sphereElement = newElement("sphere");
    sphereElement->setAttributeNode(newAttribute("name",name));
@@ -302,7 +302,7 @@ void G4GDMLWriteSolids::sphereWrite(xercesc::DOMElement* solidsElement,const G4S
 
 void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,const G4TessellatedSolid* const tessellated) {
 
-   G4String name = GenerateName(tessellated->GetName(),tessellated);
+   const G4String name = GenerateName(tessellated->GetName(),tessellated);
 
    xercesc::DOMElement* tessellatedElement = newElement("tessellated");
    tessellatedElement->setAttributeNode(newAttribute("name",name));
@@ -347,7 +347,7 @@ void G4GDMLWriteSolids::tessellatedWrite(xercesc::DOMElement* solidsElement,cons
 
 void G4GDMLWriteSolids::tetWrite(xercesc::DOMElement* solidsElement,const G4Tet* const tet) {
 
-   G4String name = GenerateName(tet->GetName(),tet);
+   const G4String name = GenerateName(tet->GetName(),tet);
 
    std::vector<G4ThreeVector> vertexList = tet->GetVertices();
 
@@ -367,7 +367,7 @@ void G4GDMLWriteSolids::tetWrite(xercesc::DOMElement* solidsElement,const G4Tet*
 
 void G4GDMLWriteSolids::torusWrite(xercesc::DOMElement* solidsElement,const G4Torus* const torus) {
 
-   G4String name = GenerateName(torus->GetName(),torus);
+   const G4String name = GenerateName(torus->GetName(),torus);
 
    xercesc::DOMElement* torusElement = newElement("torus");
    torusElement->setAttributeNode(newAttribute("name",name));
@@ -383,13 +383,13 @@ void G4GDMLWriteSolids::torusWrite(xercesc::DOMElement* solidsElement,const G4To
 
 void G4GDMLWriteSolids::trapWrite(xercesc::DOMElement* solidsElement,const G4Trap* const trap) {
 
-   G4String name = GenerateName(trap->GetName(),trap);
+   const G4String name = GenerateName(trap->GetName(),trap);
 
-   G4ThreeVector simaxis = trap->GetSymAxis();
-   G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
-   G4double theta = acos(simaxis.z());
-   G4double alpha1 = atan(trap->GetTanAlpha1());
-   G4double alpha2 = atan(trap->GetTanAlpha2());
+   const G4ThreeVector simaxis = trap->GetSymAxis();
+   const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double theta = acos(simaxis.z());
+   const G4double alpha1 = atan(trap->GetTanAlpha1());
+   const G4double alpha2 = atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trapElement = newElement("trap");
    trapElement->setAttributeNode(newAttribute("name",name));
@@ -411,7 +411,7 @@ void G4GDMLWriteSolids::trapWrite(xercesc::DOMElement* solidsElement,const G4Tra
 
 void G4GDMLWriteSolids::trdWrite(xercesc::DOMElement* solidsElement,const G4Trd* const trd) {
 
-   G4String name = GenerateName(trd->GetName(),trd);
+   const G4String name = GenerateName(trd->GetName(),trd);
 
    xercesc::DOMElement* trdElement = newElement("trd");
    trdElement->setAttributeNode(newAttribute("name",name));
@@ -426,7 +426,7 @@ void G4GDMLWriteSolids::trdWrite(xercesc::DOMElement* solidsElement,const G4Trd*
 
 void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tubs* const tube) {
 
-   G4String name = GenerateName(tube->GetName(),tube);
+   const G4String name = GenerateName(tube->GetName(),tube);
 
    xercesc::DOMElement* tubeElement = newElement("tube");
    tubeElement->setAttributeNode(newAttribute("name",name));
@@ -442,7 +442,7 @@ void G4GDMLWriteSolids::tubeWrite(xercesc::DOMElement* solidsElement,const G4Tub
 
 void G4GDMLWriteSolids::twistedboxWrite(xercesc::DOMElement* solidsElement,const G4TwistedBox* const twistedbox) {
 
-   G4String name = GenerateName(twistedbox->GetName(),twistedbox);
+   const G4String name = GenerateName(twistedbox->GetName(),twistedbox);
 
    xercesc::DOMElement* twistedboxElement = newElement("twistedbox");
    twistedboxElement->setAttributeNode(newAttribute("name",name));
@@ -457,7 +457,7 @@ void G4GDMLWriteSolids::twistedboxWrite(xercesc::DOMElement* solidsElement,const
 
 void G4GDMLWriteSolids::twistedtrapWrite(xercesc::DOMElement* solidsElement,const G4TwistedTrap* const twistedtrap) {
 
-   G4String name = GenerateName(twistedtrap->GetName(),twistedtrap);
+   const G4String name = GenerateName(twistedtrap->GetName(),twistedtrap);
 
    xercesc::DOMElement* twistedtrapElement = newElement("twistedtrap");
    twistedtrapElement->setAttributeNode(newAttribute("name",name));
@@ -479,7 +479,7 @@ void G4GDMLWriteSolids::twistedtrapWrite(xercesc::DOMElement* solidsElement,cons
 
 void G4GDMLWriteSolids::twistedtrdWrite(xercesc::DOMElement* solidsElement,const G4TwistedTrd* const twistedtrd) {
 
-   G4String name = GenerateName(twistedtrd->GetName(),twistedtrd);
+   const G4String name = GenerateName(twistedtrd->GetName(),twistedtrd);
 
    xercesc::DOMElement* twistedtrdElement = newElement("twistedtrd");
    twistedtrdElement->setAttributeNode(newAttribute("name",name));
@@ -496,7 +496,7 @@ void G4GDMLWriteSolids::twistedtrdWrite(xercesc::DOMElement* solidsElement,const
 
 void G4GDMLWriteSolids::twistedtubsWrite(xercesc::DOMElement* solidsElement,const G4TwistedTubs* const twistedtubs) {
 
-   G4String name = GenerateName(twistedtubs->GetName(),twistedtubs);
+   const G4String name = GenerateName(twistedtubs->GetName(),twistedtubs);
 
    xercesc::DOMElement* twistedtubsElement = newElement("twistedtubs");
    twistedtubsElement->setAttributeNode(newAttribute("name",name));

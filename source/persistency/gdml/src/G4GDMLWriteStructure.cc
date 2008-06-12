@@ -57,7 +57,7 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    divisionvolElement->setAttributeNode(newAttribute("unit",unitString));
    volumeElement->appendChild(divisionvolElement);
 
-   G4String volumeref = GenerateName(divisionvol->GetLogicalVolume()->GetName(),divisionvol->GetLogicalVolume());
+   const G4String volumeref = GenerateName(divisionvol->GetLogicalVolume()->GetName(),divisionvol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
@@ -80,7 +80,7 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    physvolElement->setAttributeNode(newAttribute("name",physvol->GetName())); // We keep the original name for every physical volume!
    volumeElement->appendChild(physvolElement);
 
-   G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
+   const G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
    
    if (ModuleName.empty()) {
 
@@ -127,7 +127,7 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    replicavolElement->setAttributeNode(newAttribute("unit",unitString));
    volumeElement->appendChild(replicavolElement);
 
-   G4String volumeref = GenerateName(replicavol->GetLogicalVolume()->GetName(),replicavol->GetLogicalVolume());
+   const G4String volumeref = GenerateName(replicavol->GetLogicalVolume()->GetName(),replicavol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
@@ -175,18 +175,18 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
    if (reflected>0) invR = R.inverse(); // Only compute the inverse when necessary!
 
-   G4String name = GenerateName(volumePtr->GetName(),volumePtr);
+   const G4String name = GenerateName(volumePtr->GetName(),volumePtr);
 
    xercesc::DOMElement* volumeElement = newElement("volume");
    volumeElement->setAttributeNode(newAttribute("name",name));
 
-   G4String materialref = GenerateName(volumePtr->GetMaterial()->GetName(),volumePtr->GetMaterial());
+   const G4String materialref = GenerateName(volumePtr->GetMaterial()->GetName(),volumePtr->GetMaterial());
 
    xercesc::DOMElement* materialrefElement = newElement("materialref");
    materialrefElement->setAttributeNode(newAttribute("ref",materialref));
    volumeElement->appendChild(materialrefElement);
 
-   G4String solidref = GenerateName(solidPtr->GetName(),solidPtr);
+   const G4String solidref = GenerateName(solidPtr->GetName(),solidPtr);
 
    xercesc::DOMElement* solidrefElement = newElement("solidref");
    solidrefElement->setAttributeNode(newAttribute("ref",solidref));
