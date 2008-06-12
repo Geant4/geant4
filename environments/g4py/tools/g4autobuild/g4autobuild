@@ -39,6 +39,25 @@ EOF
 }
 
 # ======================================================================
+# external environment
+# ======================================================================
+add_ext_env() {
+aext=$1
+aval=$2
+
+# for bash
+cat >> g4rc.sh <<EOF
+export $aext=$aval
+EOF
+
+# for csh
+cat >> g4rc.csh <<EOF
+setenv $aext $aval
+EOF
+
+}
+
+# ======================================================================
 # vis. environment
 # ======================================================================
 add_vis_envs() {
@@ -161,6 +180,7 @@ fi
 g4sys=`grep '^G4SYS'  $config | awk '{print $2}'`
 g4base=`grep '^G4BASE' $config | awk '{print $2}'`
 clhepbase=`grep '^CLHEPBASE' $config | awk '{print $2}'`
+xercescroot=`grep '^XERCESCROOT' $config | awk '{print $2}'`
 geant4_set=`grep '^-' $config | awk '{print $2}'`
 clhep_set=( `grep '^-' $config | awk '{print $3}'` )
 vis_set=`grep '^v' $config | awk '{print $2}'`
@@ -175,6 +195,13 @@ fi
 if [ ! -d $clhepbase ]; then
   echo "*** abort :$clhepbase does not exist."
   exit -1
+fi
+
+if [  $xercescroot ]; then
+  if [ ! -d $xercescroot ]; then
+    echo "*** abort :$xercescroot does not exist."
+    exit -1
+  fi
 fi
 
 # ======================================================================
@@ -206,10 +233,6 @@ export LANG=C
 export G4SYSTEM=$g4sys
 export G4INSTALL=$g4base/$g4
 export CLHEP_BASE_DIR=$clhepbase/${clhep_set[$idx]}
-
-# ========================================================================
-# Visualization
-# ========================================================================
 EOF
 
   cat > g4rc.csh << EOF
@@ -224,6 +247,21 @@ setenv LANG C
 setenv G4SYSTEM $g4sys
 setenv G4INSTALL $g4base/$g4
 setenv CLHEP_BASE_DIR $clhepbase/${clhep_set[$idx]}
+EOF
+
+if [  $xercescroot ]; then
+  envval=XERCESCROOT
+  add_ext_env XERCESCROOT $xercescroot
+fi
+
+  cat >> g4rc.sh <<EOF
+
+# ========================================================================
+# Visualization
+# ========================================================================
+EOF
+
+  cat >> g4rc.csh <<EOF
 
 # ========================================================================
 # Visualization
