@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.1 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.2 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -179,8 +179,15 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetTotalCrossSection(Xtotal);
       SetElastisCrossSection(Xelastic);
       SetInelasticCrossSection(Xtotal-Xelastic);
+
+//  // Interactions with elastic ans inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
+//
+/* //==== No elastic scattering ============================
+      SetProbabilityOfElasticScatt(Xtotal, 0.);
+      SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
+*/ //=======================================================
 
 //G4cout<<" Rnn "<<Xtotal/pi/10.<<" "<<Xtotal/pi/10.*fermi*fermi<<G4endl;
 //G4cout<<"G4FTFParameters Xt Xel MeV "<<Xtotal<<" "<<Xelastic<<" "<<GeV<<G4endl;
@@ -212,33 +219,39 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
              }
            else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
              {
-              SetProjMinDiffMass(0.6);                    // GeV
-              SetProjMinNonDiffMass(1.0);                 // GeV
-              SetProbabilityOfProjDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProjMinDiffMass(0.5);                    // GeV
+              SetProjMinNonDiffMass(0.3);                 // GeV
+              SetProbabilityOfProjDiff(0.62*pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.62*pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
+/*
+SetProjMinDiffMass(0.5);
+SetProjMinNonDiffMass(0.3);   // Uzhi 12.06.08
+SetProbabilityOfProjDiff(0.05); 
+SetProbabilityOfTarDiff(0.05);
+*/
               SetAveragePt2(0.3);                         // GeV^2
              }
            else if( absPDGcode == 321 || PDGcode == -311) //------Projectile is Kaon -----------
              {
               SetProjMinDiffMass(0.7);                    // GeV 1.1
-              SetProjMinNonDiffMass(1.0);                 // GeV
-              SetProbabilityOfProjDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProjMinNonDiffMass(0.7);                 // GeV
+              SetProbabilityOfProjDiff(0.85*pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.85*pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
              }
            else                                           //------Projectile is undefined,
                                                           //------Nucleon assumed
              {
-              SetProjMinDiffMass(1.1);                    // GeV
-              SetProjMinNonDiffMass(1.1);                 // GeV
+              SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
+              SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProbabilityOfProjDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV

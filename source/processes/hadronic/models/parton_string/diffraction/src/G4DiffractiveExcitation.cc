@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.5 2008-05-19 12:56:36 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.6 2008-06-13 12:49:23 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -544,6 +544,14 @@ else     {
           }
 */
 //
+/*
+if(G4UniformRand() < 1.) {
+           G4ParticleDefinition * t_Definition=projectile->GetDefinition();
+           projectile->SetDefinition(target->GetDefinition());
+           target->SetDefinition(t_Definition);
+}
+*/ // For flip, for HARP
+
            G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
 // It is assumed that nucleon z-coordinates are ordered on increasing -----------
 

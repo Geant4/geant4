@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.11 2008-05-19 13:00:54 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.12 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -493,8 +493,10 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
 
 void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
    {
+
    // `yo-yo` formation time
-   const G4double kappa = 1.0 * GeV/fermi;
+   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
+
    for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 

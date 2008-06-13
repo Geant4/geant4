@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.10 2008-05-19 12:56:36 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -109,7 +109,7 @@ G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
       theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
                                           aNucleus.GetN(),aNucleus.GetZ(),
                                           s);// ------------------------- Uzhi 19.04.08
-//theParameters->SetProbabilityOfElasticScatt(1.); // To turn on/off (1/0) elastic scattering
+//theParameters->SetProbabilityOfElasticScatt(0.); // To turn on/off (1/0) elastic scattering
 }
 
 // ------------------------------------------------------------

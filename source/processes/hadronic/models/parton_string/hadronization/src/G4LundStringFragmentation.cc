@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.10 2008-05-19 13:00:53 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4LundStringFragmentation.cc,v 1.10 2008-05-19 13:00:53 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -186,7 +186,15 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
  // One hadron is saved in the interaction
             LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
             LeftVector->operator[](0)->SetPosition(theString.GetPosition());
-            
+
+/* // To set large formation time open *
+            LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation()+100.*fermi);
+            LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+            G4ThreeVector aPosition(theString.GetPosition().x(),
+                                    theString.GetPosition().y(),
+                                    theString.GetPosition().z()+100.*fermi);
+            LeftVector->operator[](0)->SetPosition(aPosition);
+*/            
 //G4cout<<"Single hadron "<<LeftVector->operator[](0)->GetPosition()<<" "<<LeftVector->operator[](0)->GetFormationTime()<<G4endl;
           } else {    // 2 hadrons created from qq-qqbar are stored
             LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
@@ -284,6 +292,14 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation();
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
+
+/*  // For large formation time open *
+        G4double      TimeOftheStringCreation=theString.GetTimeOfCreation()+100*fermi;
+        G4ThreeVector PositionOftheStringCreation(theString.GetPosition().x(),
+                                                  theString.GetPosition().y(),
+                                                  theString.GetPosition().z()+100*fermi);
+*/
+
 /*
         if(theString.GetPosition().y() > 100.*fermi){    
 // It is a projectile-like string -------------------------------------
@@ -488,8 +504,8 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
        AntiMom->setPx(-px); AntiMom->setPy(-py); AntiMom->setPz(-pz);
        AntiMom->setE (std::sqrt(Pabs*Pabs + AntiMass*AntiMass));
     }         
-    else
-    {
+    else 
+   {
       do                                                                      
       {                                                                     
          Pt=SampleQuarkPt(); Pt.setZ(0); G4double Pt2=Pt.mag2();              

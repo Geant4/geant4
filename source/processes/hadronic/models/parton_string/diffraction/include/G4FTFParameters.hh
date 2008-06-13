@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.1 2008-04-25 14:20:13 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.2 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -160,7 +160,10 @@ inline  void G4FTFParameters::SetGamma0(const G4double Gamma0)
 
 // --------- Set parameters of elastic scattering ---------------------
 inline  void G4FTFParameters::SetAvaragePt2ofElasticScattering(const G4double aPt2)
-                 {AvaragePt2ofElasticScattering = aPt2;}
+                 {
+//G4cout<<"Pt2 El "<<aPt2<<" "<<std::sqrt(aPt2)<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+AvaragePt2ofElasticScattering = aPt2;}
 
 // --------- Set parameters of excitations ----------------------------
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)   // Uzhi 19.04.08

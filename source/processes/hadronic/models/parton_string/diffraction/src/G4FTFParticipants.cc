@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.8 2008-03-31 15:34:02 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.9 2008-06-13 12:49:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -97,7 +97,9 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
-	while ( (nucleon=theNucleus->GetNextNucleon()) )
+//G4int InterNumber=0;           // Uzhi
+//while ( (nucleon=theNucleus->GetNextNucleon())&& (InterNumber < 1) ) // Uzhi
+	while ( (nucleon=theNucleus->GetNextNucleon()) ) // Uzhi
 	{
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
                              sqr(impactY - nucleon->GetPosition().y());
@@ -106,6 +108,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	   if ( theParameters->GetProbabilityOfInteraction(impact2/fermi/fermi) // Uzhi 29.03.08 
 		> G4UniformRand() )
 	   {
+//InterNumber++;
 	   	if ( nucleusNeedsShift ) 
 	   	{			// on the first hit, shift nucleus 
 	   	     nucleusNeedsShift = false;
