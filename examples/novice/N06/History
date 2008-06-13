@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2008-05-07 10:09:02 allison Exp $
+$Id: History,v 1.37 2008-06-13 01:59:58 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12th June 2008 P. Gumplinger (exampleN06-V09-01-00)
+- now use G4EmSaturation to implement the Birks Correction
+  for G4Scintillation
 
 07th May 2008 J.Allison (exampleN06-V09-01-00)
 - Protected "/control/execute vis.mac" with G4VIS_USE flag.
