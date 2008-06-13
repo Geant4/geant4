@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 June 2008 A.Howard (hadr-deex-V09-01-09)
+---------------------------------------------------
+
+Fixed memory leak in G4ExcitationHandler thanks to Tatsumi Koi.  The fix is on
+top of hadr-deex-V09-01-01, but does not include any of the other subsequent
+developments.  Required for public beta release.
+
 05 June 2008 J. M. Quesada (hadr-deex-V09-01-08)
 ---------------------------------------------------
 
