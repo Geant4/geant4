@@ -63,13 +63,11 @@ class G4QMDReaction : public G4HadronicInteraction
       G4HadFinalState *ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus & targetNucleus );
 
    private:
-      void setInitialCondition( G4QMDSystem* , G4QMDSystem* );
 
       G4QMDMeanField* meanField;
 
       G4QMDCollision* collision;
 
-      void doPropagation();
       void doCollision();
       std::vector< G4QMDSystem* > doClusterJudgment();
       

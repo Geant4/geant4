@@ -25,20 +25,21 @@
 //
 // 080505 Fixed and changed sampling method of impact parameter by T. Koi 
 // 080602 Fix memory leaks by T. Koi 
+// 080612 Delete unnecessary dependency and unused functions
+//        Change criterion of reaction by T. Koi
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
-
 #include "G4QMDGroundStateNucleus.hh"
-#include "G4Fancy3DNucleus.hh"
 
 #include "G4NistManager.hh"
 
 G4QMDReaction::G4QMDReaction()
-:system ( 0 )
+: system ( NULL )
 , deltaT ( 1 ) // in fsec
 , maxTime ( 100 ) // will have maxTime-th time step
 {
+
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
@@ -58,20 +59,6 @@ G4QMDReaction::~G4QMDReaction()
    delete excitationHandler;
    delete collision;
    delete meanField;
-}
-
-
-
-void G4QMDReaction::setInitialCondition( G4QMDSystem* , G4QMDSystem* )
-{
-   ;
-}
-
-
-
-void G4QMDReaction::doPropagation()
-{
-   ;
 }
 
 
@@ -386,9 +373,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 //       ElasticLike with Collision 
          //if ( elasticLike_energy == true && withCollision == true ) elastic = true;   // ielst = 1 
 //       InelasticLike without Collision 
-         if ( elasticLike_energy == false ) elastic = false;                          // ielst = 2                
+         //if ( elasticLike_energy == false ) elastic = false;                          // ielst = 2                
 //       InelasticLike with Collision 
-         //if ( elasticLike_energy == false && withCollision == true ) elastic = false; // ielst = 3
+         if ( elasticLike_energy == false && withCollision == true ) elastic = false; // ielst = 3
 
       }
 
