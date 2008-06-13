@@ -31,6 +31,7 @@
 // 080318 Fix Compilation warnings - gcc-4.3.0 by T. Koi
 //        (This fix has a real effect to the code.) 
 // 080409 Fix div0 error with G4FPE by T. Koi
+// 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -66,7 +67,7 @@
 
   G4ReactionProduct * 
   G4NeutronHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
-                                    G4int angularRep, G4int /*interpolE*/)
+                                    G4int angularRep, G4int interpolE )
   {
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);
@@ -109,6 +110,35 @@
     G4double cosTh(0);
     if(angularRep==1)
     {
+// 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
+	if (interpolE == 2)
+	{
+	    G4double random = G4UniformRand();
+	    G4double * running = new G4double[nEnergies+1];
+	    running[0]=0;
+	    for(i=1; i<nEnergies+1; i++)
+	    {
+		if(i!=0) running[i]=running[i-1];
+		running[i] += theAngular[i-1].GetValue(0);
+	    }
+	    for(i=1; i<nEnergies+1; i++)
+	    {
+		it = i-1;
+		if(random > running[i-1]/running[nEnergies] && random <= running[i]/running[nEnergies]) break;
+	    }
+	    fsEnergy = theAngular[it].GetLabel();
+	    G4NeutronHPLegendreStore theStore(1);
+	    theStore.Init(0,fsEnergy,nAngularParameters);
+	    for(i=0;i<nAngularParameters;i++)
+	    {
+		theStore.SetCoeff(0,i,theAngular[it].GetValue(i));
+	    }
+	    // use it to sample.
+	    cosTh = theStore.SampleMax(fsEnergy);
+        }
+      else 
+      {
+     
       G4double random = G4UniformRand();
       G4double * running = new G4double[nEnergies];
       running[0]=0;
@@ -200,6 +230,7 @@
         cosTh = theStore.SampleMax(fsEnergy);
       }
       delete [] running;
+      }
     }
     else if(angularRep==2)
     {
