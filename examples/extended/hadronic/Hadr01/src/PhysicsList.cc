@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.25 2008-05-19 10:43:03 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.26 2008-06-13 15:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -62,6 +62,7 @@
 #include "HadronPhysicsFTFC.hh"
 #include "HadronPhysicsFTFP.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
+#include "HadronPhysicsFTF_BIC.hh"
 #include "HadronPhysicsLHEP.hh"
 #include "HadronPhysicsLHEP_BERT.hh"
 #include "HadronPhysicsLHEP_EMV.hh"
@@ -178,6 +179,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     AddPhysicsList("emstandard_opt1");
     AddPhysicsList("FTFP");
+
+  } else if (name == "FTF_BIC") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new HadronPhysicsFTF_BIC("hadron",true));
+    dump = true;
 
   } else if (name == "LHEP") {
 
@@ -448,7 +455,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::List()
 {
-  G4cout << "### PhysicsLists available: FTFC FTFP FTFP_BERT FTFP_EMV LHEP LHEP_BERT LHEP_EMV "
+  G4cout << "### PhysicsLists available: FTFC FTFP FTFP_BERT FTFP_EMV FTF_BIC LHEP LHEP_BERT LHEP_EMV"
 	 << G4endl;
   G4cout << "                            LHEP_PRECO_HP QBBC QBBC_DEL QBBC_HEL QBBC_HP QGSC "
 	 << G4endl; 
