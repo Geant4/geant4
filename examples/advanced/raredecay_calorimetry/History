@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2006-11-22 09:44:58 gcosmo Exp $
+$Id: History,v 1.3 2008-06-13 14:59:09 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun. 13, 2008 G.A.P.Cirrone (raredecay-V09-01-00)
+- Input file corrected
 
 Nov. 22, 2006 Gabriele Cosmo (raredecay-V08-01-00)
 - Removed obsolete vis-manager classes. Now using G4VisExecutive.

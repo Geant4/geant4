@@ -10,7 +10,7 @@
 ##
 ##
 ##
-/run/setCutForRegqion Region0 0.2 mm
+/run/setCutForRegion Region0 0.2 mm
 /run/setCutForRegion Region1 2 mm
 /run/setCutForRegion Region2 2 cm
 /PhotIn/projParticle pi-
