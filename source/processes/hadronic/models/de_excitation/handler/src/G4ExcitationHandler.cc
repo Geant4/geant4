@@ -35,6 +35,9 @@
 //              Evaporation: G4StatEvaporation
 //              MultiFragmentation: G4DummyMF (a dummy one)
 //              Fermi Breakup model: G4StatFermiBreakUp
+//
+// 25/5/08: Proposed by M. A> Cortes Giraldo:
+//      -Max Z,A for Fermi Break-Up turns to 9,17 by default
 
 
 #include "G4ExcitationHandler.hh"
@@ -44,7 +47,8 @@
 
 
 G4ExcitationHandler::G4ExcitationHandler():
-  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
+  //  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true)
 {                                                                          
