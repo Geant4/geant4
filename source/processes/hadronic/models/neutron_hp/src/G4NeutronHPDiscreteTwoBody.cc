@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+//080612 Bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #2,3
+//
 #include "G4NeutronHPDiscreteTwoBody.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -94,7 +96,9 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
        G4NeutronHPLegendreStore theStore(1);
        theStore.SetCoeff(0, theCoeff);
        theStore.SetManager(theManager);
-       cosTh = theStore.SampleMax(anEnergy);
+       //cosTh = theStore.SampleMax(anEnergy);
+       //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3
+       cosTh = theStore.Sample(anEnergy);
      }
      else if(theCoeff[it].GetRepresentation()==12) // means LINLIN
      {
@@ -265,13 +269,19 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
    
 // now get the energy from kinematics and Q-value.
 
-   G4double restEnergy = anEnergy+GetQValue();
+   //G4double restEnergy = anEnergy+GetQValue();
    
 // assumed to be in CMS @@@@@@@@@@@@@@@@@
 
-   G4double residualMass =   GetTarget()->GetMass() + GetNeutron()->GetMass()
-                           - result->GetMass() - GetQValue();
-   G4double kinE = restEnergy/(1+result->GetMass()/residualMass); // non relativistic @@
+   //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #2
+   //G4double residualMass =   GetTarget()->GetMass() + GetNeutron()->GetMass()
+   //                        - result->GetMass() - GetQValue();
+   //G4double kinE = restEnergy/(1+result->GetMass()/residualMass); // non relativistic @@
+   G4double A1     =  GetTarget()->GetMass()/GetNeutron()->GetMass(); 
+   G4double A1prim =  result->GetMass()/GetNeutron()->GetMass();
+   G4double E1     =  (A1+1)*(A1+1)/A1/A1*anEnergy; 
+   G4double kinE = (A1+1-A1prim)/(A1+1)/(A1+1)*(A1*E1+(1+A1)*GetQValue());
+
    result->SetKineticEnergy(kinE); // non relativistic @@
    G4double phi = twopi*G4UniformRand();
    G4double theta = std::acos(cosTh);
