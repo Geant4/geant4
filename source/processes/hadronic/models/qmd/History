@@ -13,6 +13,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-04)
+- Delete unnecessary dependency and unused functions
+  Change criterion of reaction by T. Koi
+	include/G4QMDReaction.hh
+	src/G4QMDReaction.cc  
+
+
 06-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-03)
 - Fix memory leaks by T. Koi 
 	include/G4QMDSystem.hh  
