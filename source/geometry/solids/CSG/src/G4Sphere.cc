@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.62 2008-06-12 16:06:28 grichine Exp $
+// $Id: G4Sphere.cc,v 1.63 2008-06-13 06:29:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2400,6 +2400,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) s = -b + d ; // 2nd root
 	      else if( s < 0. )                                           s = -b + d ; // 2nd root
 
+	      // if 2nd root, checks again
+
 	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) // leave
 	      {
                 if( calcNorm ) 
@@ -2418,7 +2420,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 return snxt = 0.;               
 	      }            
 	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.); // s = kInfinity; // no x
-	      else if( s < -flexRadMaxTolerance*0.5 );                     // s = kInfinity; // no x        
+	      else if( s < -flexRadMaxTolerance*0.5 );                     // s = kInfinity; // no x 
 	      else if( s >  flexRadMaxTolerance*0.5 )  
 	      {
                 stheta    = s;
@@ -2429,7 +2431,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 	    {
               s = -b - d;         // First root
 
-	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) // leave
+	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0. && p.z() >=0. ) // leave
 	      {
                 if( calcNorm )   *validNorm = false;		
                                   return snxt = 0.;               
@@ -2437,13 +2439,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) s = -b + d ; // 2nd root
 	      else if( s < 0. )                                           s = -b + d ; // 2nd root
 
-	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) // leave
+	      if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0. && p.z() >=0. ) // leave
 	      {
                 if( calcNorm ) *validNorm = false;
                                 return snxt = 0.;               
 	      }            
 	      else if( std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.); // s = kInfinity; // no x
-	      else if( s < -flexRadMaxTolerance*0.5 );                     // s = kInfinity; // no x        
+	      else if( s < -flexRadMaxTolerance*0.5 );                     // s = kInfinity; // no x
 	      else if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() > 0.)  
 	      {
                 stheta    = s;
