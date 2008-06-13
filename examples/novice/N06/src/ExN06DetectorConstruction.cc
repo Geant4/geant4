@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.15 2006-06-29 17:54:17 gunter Exp $
+// $Id: ExN06DetectorConstruction.cc,v 1.16 2008-06-13 01:57:19 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,6 +146,10 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   myMPT1->AddConstProperty("YIELDRATIO",0.8);
   
   Water->SetMaterialPropertiesTable(myMPT1);
+
+  // Set the Birks Constant for the Water scintillator
+
+  Water->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
 
 //
 // Air

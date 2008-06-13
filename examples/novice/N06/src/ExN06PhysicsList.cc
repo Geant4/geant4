@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.14 2007-09-30 22:51:03 gum Exp $
+// $Id: ExN06PhysicsList.cc,v 1.15 2008-06-13 01:57:42 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,9 @@
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
 #include "G4OpBoundaryProcess.hh"
+
+#include "G4LossTableManager.hh"
+#include "G4EmSaturation.hh"
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -262,6 +265,11 @@ void ExN06PhysicsList::ConstructOp()
   
   theScintillationProcess->SetScintillationYieldFactor(1.);
   theScintillationProcess->SetTrackSecondariesFirst(true);
+
+  // Use Birks Correction in the Scintillation process
+
+  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+  theScintillationProcess->AddSaturation(emSaturation);
 
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
