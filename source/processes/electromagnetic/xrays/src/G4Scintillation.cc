@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.28 2008-06-05 23:45:54 gum Exp $
+// $Id: G4Scintillation.cc,v 1.29 2008-06-13 01:05:05 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -100,6 +100,8 @@ G4Scintillation::G4Scintillation(const G4String& processName,
 	}
 
 	BuildThePhysicsTable();
+
+        emSaturation = NULL;
 }
 
         ////////////////
@@ -186,28 +188,17 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         // Birks law saturation:
 
-        G4double constBirks         = aMaterialPropertiesTable->
-                                      GetConstProperty("BIRKSCONSTANT");
+        G4double constBirks = 0.0;
+
+        constBirks = aMaterial->GetIonisation()->GetBirksConstant();
 
         G4double MeanNumberOfPhotons;
 
-        if (constBirks > DBL_MIN)
-        {
-          G4double length      = aStep.GetStepLength();
-
-          if (length > DBL_MIN)
-          {
-            MeanNumberOfPhotons  = ScintillationYield*TotalEnergyDeposit;
-            MeanNumberOfPhotons /= 1 + constBirks*TotalEnergyDeposit/length;
-          } 
-          else
-          {
-            MeanNumberOfPhotons = ScintillationYield*length/constBirks;
-          }
-        } 
-        else
-        {
-          MeanNumberOfPhotons  = ScintillationYield*TotalEnergyDeposit;
+        if (emSaturation) {
+           MeanNumberOfPhotons = ScintillationYield*
+                              (emSaturation->VisibleEnergyDeposition(&aStep));
+        } else {
+           MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
         }
 
         G4int NumPhotons;
