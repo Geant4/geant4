@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+13 June 2008 V. Uzhinsky    (hadr-prtn-V09-01-00)
+----------------------------------------------- 
+1. String fragmentation was revised, and parameters were tuned.
+2. FTF parameters were tuned for proton-proton interaction
+3. FTF parameters for pion-nucleon interactions were determined very rouhgly
+4. Quiasi-elastic hadron-nucleus scattering was implemented in FTF
+5. Formation time was implemented in FTF, and string tension was tuned
+
+
 25 May 2007 G.Folger       (hadr-prtn-V08-02-02)
 -----------------------------------------------
 - Seperate G4DiffractiveExcitation for FTF from QGS (see next entry by V.Uzhinsky) 
