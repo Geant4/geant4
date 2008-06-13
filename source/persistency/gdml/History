@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2008-06-10 12:55:12 ztorzsok Exp $
+$Id: History,v 1.68 2008-06-13 15:53:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10 june 2008 Zoltan Torzsok
+10 June 2008 Zoltan Torzsok (gdml-V09-01-06)
 - Modularization can be done either by physvol/depth/mixed.
-  Volume auxiliary information is requested by pointer instead name
+  Volume auxiliary information is requested by pointer instead of by name.
 
-09 june 2008 Zoltan Torzsok
-- Naming convention can be configured in the writer
+9 June 2008 Zoltan Torzsok
+- Naming convention can be configured in the writer.
 
-05 june 2008 Zoltan Torzsok
-- Module name is optional now. If no name is specified, the logical volume name will be the filename.
-
-02 june 2008 Zoltan Torzsok
-- Writer checks if the file to be created does already exist
-- GetVolume function added
+5 June 2008 Zoltan Torzsok
+- Module name is optional now. If no name is specified,
+  the logical volume name will be the filename.
 
 2 June 2008 Zoltan Torzsok (gdml-V09-01-05)
 - Writer checks if the file to be created does already exist.
