@@ -1,4 +1,4 @@
-$Id: History,v 1.391 2008-06-11 08:51:00 vnivanch Exp $
+$Id: History,v 1.392 2008-06-13 08:19:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4CoulombScattering - added SetHEModelLimit method
 
 11 June 08: V.Ivant (emstand-V09-01-17)
 - G4eCoulombScatteringModel - SelectIsotope method moved from the derived
