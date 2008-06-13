@@ -158,6 +158,8 @@ void G4GDMLWrite::AddModule(const G4int depth) {
 
    G4cout << "G4GDML: Adding module(s) at depth " << depth << "..." << G4endl;
 
+   if (depth<0) G4Exception("G4GDML: ERROR! Depth must be a positive integer number!");
+
    if (depthMap().find(depth) != depthMap().end()) G4Exception("G4GDML: ERROR! Adding module(s) at this depth is already requested!");
 
    depthMap()[depth] = 0;
