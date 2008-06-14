@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2008-01-30 11:20:03 lgarnier Exp $
+$Id: History,v 1.72 2008-06-14 17:41:39 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30th January 2007, Laurent Garnier
+14 June 2008 K.Murakami (intercoms-V09-01-00)
+- tagged
+
+30th January 2008, Laurent Garnier
  - Add a new function in G4UIcommandTree to find a subtree
 
 August 10, 2007 K.Murakami (intercoms-V09-00-01)
