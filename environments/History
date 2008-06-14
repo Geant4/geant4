@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2008-03-13 07:55:04 kmura Exp $
+$Id: History,v 1.35 2008-06-14 17:05:33 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-01-01  14 Jun. 2008 Koichi Murakami
+ [g4py]
+ - update configure scripts
+ - fix some minor bugs
 
 envs-V09-01-00  13 Mar. 2008 Koichi Murakami
  [g4py]
