@@ -2,6 +2,8 @@
 # ======================================================================
 #  A script for Geant4 packaging
 #
+#  Version 2.1 June 2008
+#
 # ======================================================================
 export LANG=C
 
@@ -10,6 +12,20 @@ IFS='
 
 PATH=/bin:/usr/bin
 export PATH
+
+# ======================================================================
+# testing the echo features
+# ======================================================================
+if `(echo "testing\c"; echo 1,2,3) | grep c > /dev/null` ; then
+  if `(echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn > /dev/null`; then
+    ac_n= ac_c='
+' ac_t='        '
+  else
+    ac_n=-n ac_c= ac_t=
+  fi
+else
+  ac_n= ac_c='\c' ac_t=
+fi
 
 # ======================================================================
 # help message
@@ -130,7 +146,7 @@ if [ $g4system == Darwin-g++ ]; then
   shlib=dylib
 fi
 
-echo -n "Checking for G4 dir ..."
+echo $ac_n "Checking for G4 dir ...$ac_c"
 if [ ! -d $g4dir ]; then
   echo "no"
   echo "### $g4dir does not exist."
@@ -138,7 +154,7 @@ if [ ! -d $g4dir ]; then
 fi
 echo $g4dir
 
-echo -n "Checking for CLHEP dir ..."
+echo $ac_n "Checking for CLHEP dir ...$ac_c"
 if [ ! -d $clhepdir ]; then
   echo "no"
   echo "### $clhepdir does not exist."
@@ -146,7 +162,7 @@ if [ ! -d $clhepdir ]; then
 fi
 echo $clhepdir
 
-echo -n "Checking for G4SYSTEM ..."
+echo $ac_n "Checking for G4SYSTEM ...$ac_c"
 if [ ! -e $g4dir/config/sys/$g4system.gmk ]; then
   echo "no"
   echo "### $g4system is invalid."
@@ -155,7 +171,7 @@ fi
 echo $g4system
 
 if [ $enable_lib == 1 ]; then
-  echo -n "Checking for lib dir ..."
+  echo $ac_n "Checking for lib dir ...$ac_c"
   if [ ! -d $g4dir/$libdir ]; then
     echo "no"
     echo "### $libdir is invalid."
@@ -165,7 +181,7 @@ if [ $enable_lib == 1 ]; then
 fi
 
 if [ $enable_glib == 1 ]; then
-  echo -n "Checking for glib dir ..."
+  echo $ac_n "Checking for glib dir ...$ac_c"
   if [ ! -d $g4dir/$glibdir ]; then
     echo "no"
     echo "### $glibdir is invalid."
@@ -175,7 +191,7 @@ if [ $enable_glib == 1 ]; then
 fi
 
 if [ $enable_slib == 1 ]; then
-  echo -n "Checking for slib dir ..."
+  echo $ac_n "Checking for slib dir ...$ac_c"
   if [ ! -d $g4dir/$slibdir ]; then
     echo "no"
     echo "### $slibdir is invalid."
