@@ -372,7 +372,7 @@ G4int icurpixel;
 
 static const G4int NumberOfHpds=4;
 static const G4double HpdPosRad=146.5*mm;
-static const G4double HpdZfromEnd=HpdMasterHalfZ-VesselPosZ+1.0*mm;;
+static const G4double HpdZfromEnd=HpdMasterHalfZ-VesselPosZ+1.0*mm;
 
 static const  G4double HpdMasterPosX[NumberOfHpds]=
     {HpdPosRad,0.0*mm,-HpdPosRad,0.0*mm};
