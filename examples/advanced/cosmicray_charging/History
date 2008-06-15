@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.06.2008 -- G.A.P.Cirrone; Tag: cosmicray_charging-V09-01-00
+              Removed no more necessary AIDA commands from GNUmakefile
+
 24.05.2007 - Vladimir Ivanchenko, tag cosmicray_charging-V08-03-00
              Fix compilation problem in Physics List 
 

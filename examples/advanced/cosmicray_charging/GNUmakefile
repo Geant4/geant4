@@ -15,8 +15,4 @@ all:  lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
-endif
+
