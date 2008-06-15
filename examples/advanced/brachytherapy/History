@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.22 2008-06-05 13:45:39 cirrone Exp $
+$Id: History,v 1.23 2008-06-15 18:05:59 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.22 2008-06-05 13:45:39 cirrone Exp $
 
                       Category History file
                       ---------------------
+15.06.2008 -- G.A.P.Cirrone; Tag: air_shower-V09-01-01
+              Removed no more necessary AIDA commands from GNUmakefile
+
 05th June 2008: G.A.P.Cirrone (cirrone@lns.infn.it). Tag version: brachy-V09-01-00
 - Compilation error corrected in the BrachyAnalysiManager
 - Bad type assignment in BrachyAnalysismanager
