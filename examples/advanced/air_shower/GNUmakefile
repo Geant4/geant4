@@ -22,11 +22,6 @@ ifdef ULTRA_GROUND_USE
   CPPFLAGS += -DULTRA_GROUND_USE
 endif
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-endif
-
 
 .PHONY: all
 all: lib bin
