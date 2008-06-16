@@ -106,6 +106,10 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
       writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
 
+   gdml->setAttributeNode(newAttribute("xmlns:gdml","http://cern.ch/2001/Schemas/GDML"));
+   gdml->setAttributeNode(newAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance"));
+   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","gdml.xsd"));
+
    defineWrite(gdml);
    materialsWrite(gdml);
    solidsWrite(gdml);
