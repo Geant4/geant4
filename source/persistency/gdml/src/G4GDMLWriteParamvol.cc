@@ -32,10 +32,7 @@
 
 void G4GDMLWriteParamvol::box_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Box* const box) {
 
-   G4String name = GenerateName(box->GetName(),box);
-
    xercesc::DOMElement* box_dimensionsElement = newElement("box_dimensions");
-   box_dimensionsElement->setAttributeNode(newAttribute("name",name));
    box_dimensionsElement->setAttributeNode(newAttribute("x",2.0*box->GetXHalfLength()/mm));
    box_dimensionsElement->setAttributeNode(newAttribute("y",2.0*box->GetYHalfLength()/mm));
    box_dimensionsElement->setAttributeNode(newAttribute("z",2.0*box->GetZHalfLength()/mm));
@@ -46,7 +43,6 @@ void G4GDMLWriteParamvol::box_dimensionsWrite(xercesc::DOMElement* parametersEle
 void G4GDMLWriteParamvol::trd_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Trd* const trd) {
 
    xercesc::DOMElement* trd_dimensionsElement = newElement("trd_dimensions");
-   trd_dimensionsElement->setAttributeNode(newAttribute("name",trd->GetName()));
    trd_dimensionsElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()/mm));
    trd_dimensionsElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()/mm));
    trd_dimensionsElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()/mm));
@@ -65,7 +61,6 @@ void G4GDMLWriteParamvol::trap_dimensionsWrite(xercesc::DOMElement* parametersEl
    const G4double alpha2 = atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trap_dimensionsElement = newElement("trap");
-   trap_dimensionsElement->setAttributeNode(newAttribute("name",trap->GetName()));
    trap_dimensionsElement->setAttributeNode(newAttribute("z",2.0*trap->GetZHalfLength()/mm));
    trap_dimensionsElement->setAttributeNode(newAttribute("theta",theta/degree));
    trap_dimensionsElement->setAttributeNode(newAttribute("phi",phi/degree));
@@ -85,7 +80,6 @@ void G4GDMLWriteParamvol::trap_dimensionsWrite(xercesc::DOMElement* parametersEl
 void G4GDMLWriteParamvol::tube_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Tubs* const tube) {
 
    xercesc::DOMElement* tube_dimensionsElement = newElement("tube");
-   tube_dimensionsElement->setAttributeNode(newAttribute("name",tube->GetName()));
    tube_dimensionsElement->setAttributeNode(newAttribute("rmin",tube->GetInnerRadius()/mm));
    tube_dimensionsElement->setAttributeNode(newAttribute("rmax",tube->GetOuterRadius()/mm));
    tube_dimensionsElement->setAttributeNode(newAttribute("z",2.0*tube->GetZHalfLength()/mm));
@@ -99,7 +93,6 @@ void G4GDMLWriteParamvol::tube_dimensionsWrite(xercesc::DOMElement* parametersEl
 void G4GDMLWriteParamvol::cone_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Cons* const cone) {
 
    xercesc::DOMElement* cone_dimensionsElement = newElement("cone_dimensions");
-   cone_dimensionsElement->setAttributeNode(newAttribute("name",cone->GetName()));
    cone_dimensionsElement->setAttributeNode(newAttribute("rmin1",cone->GetInnerRadiusMinusZ()/mm));
    cone_dimensionsElement->setAttributeNode(newAttribute("rmax1",cone->GetOuterRadiusMinusZ()/mm));
    cone_dimensionsElement->setAttributeNode(newAttribute("rmin2",cone->GetInnerRadiusPlusZ()/mm));
@@ -115,7 +108,6 @@ void G4GDMLWriteParamvol::cone_dimensionsWrite(xercesc::DOMElement* parametersEl
 void G4GDMLWriteParamvol::sphere_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Sphere* const sphere) {
 
    xercesc::DOMElement* sphere_dimensionsElement = newElement("sphere_dimensions");
-   sphere_dimensionsElement->setAttributeNode(newAttribute("name",sphere->GetName()));
    sphere_dimensionsElement->setAttributeNode(newAttribute("rmin",sphere->GetInsideRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(newAttribute("rmax",sphere->GetOuterRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(newAttribute("startphi",sphere->GetStartPhiAngle()/degree));
@@ -130,7 +122,6 @@ void G4GDMLWriteParamvol::sphere_dimensionsWrite(xercesc::DOMElement* parameters
 void G4GDMLWriteParamvol::orb_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Orb* const orb) {
 
    xercesc::DOMElement* orb_dimensionsElement = newElement("orb_dimensions");
-   orb_dimensionsElement->setAttributeNode(newAttribute("name",orb->GetName()));
    orb_dimensionsElement->setAttributeNode(newAttribute("r",orb->GetRadius()/mm));
    orb_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
    parametersElement->appendChild(orb_dimensionsElement);
@@ -139,7 +130,6 @@ void G4GDMLWriteParamvol::orb_dimensionsWrite(xercesc::DOMElement* parametersEle
 void G4GDMLWriteParamvol::torus_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Torus* const torus) {
 
    xercesc::DOMElement* torus_dimensionsElement = newElement("torus_dimensions");
-   torus_dimensionsElement->setAttributeNode(newAttribute("name",torus->GetName()));
    torus_dimensionsElement->setAttributeNode(newAttribute("rmin",torus->GetRmin()/mm));
    torus_dimensionsElement->setAttributeNode(newAttribute("rmax",torus->GetRmax()/mm));
    torus_dimensionsElement->setAttributeNode(newAttribute("rtor",torus->GetRtor()/mm));
@@ -158,7 +148,6 @@ void G4GDMLWriteParamvol::para_dimensionsWrite(xercesc::DOMElement* parametersEl
    const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
 
    xercesc::DOMElement* para_dimensionsElement = newElement("para_dimensions");
-   para_dimensionsElement->setAttributeNode(newAttribute("name",para->GetName()));
    para_dimensionsElement->setAttributeNode(newAttribute("x",2.0*para->GetXHalfLength()/mm));
    para_dimensionsElement->setAttributeNode(newAttribute("y",2.0*para->GetYHalfLength()/mm));
    para_dimensionsElement->setAttributeNode(newAttribute("z",2.0*para->GetZHalfLength()/mm));
@@ -173,7 +162,6 @@ void G4GDMLWriteParamvol::para_dimensionsWrite(xercesc::DOMElement* parametersEl
 void G4GDMLWriteParamvol::hype_dimensionsWrite(xercesc::DOMElement* parametersElement,const G4Hype* const hype) {
 
    xercesc::DOMElement* hype_dimensionsElement = newElement("hype_dimensions");
-   hype_dimensionsElement->setAttributeNode(newAttribute("name",hype->GetName()));
    hype_dimensionsElement->setAttributeNode(newAttribute("rmin",hype->GetInnerRadius()/mm));
    hype_dimensionsElement->setAttributeNode(newAttribute("rmax",hype->GetOuterRadius()/mm));
    hype_dimensionsElement->setAttributeNode(newAttribute("inst",hype->GetInnerStereo()/degree));
@@ -253,7 +241,7 @@ void G4GDMLWriteParamvol::paramvolWrite(xercesc::DOMElement* volumeElement,const
    xercesc::DOMElement* paramvolElement = newElement("paramvol");
    volumeElement->appendChild(paramvolElement);
 
-   G4String volumeref = GenerateName(paramvol->GetLogicalVolume()->GetName(),paramvol->GetLogicalVolume());
+   const G4String volumeref = GenerateName(paramvol->GetLogicalVolume()->GetName(),paramvol->GetLogicalVolume());
 
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
