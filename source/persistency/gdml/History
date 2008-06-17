@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2008-06-13 15:53:20 gcosmo Exp $
+$Id: History,v 1.69 2008-06-17 11:36:32 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 June 2008 Zoltan Torzsok
+- Schema validation added
+  Schema definition files added
 
 10 June 2008 Zoltan Torzsok (gdml-V09-01-06)
 - Modularization can be done either by physvol/depth/mixed.
