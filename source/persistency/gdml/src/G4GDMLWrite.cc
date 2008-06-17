@@ -108,7 +108,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
 
    gdml->setAttributeNode(newAttribute("xmlns:gdml","http://cern.ch/2001/Schemas/GDML"));
    gdml->setAttributeNode(newAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance"));
-   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","gdml.xsd"));
+   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","/home/ztorzsok/geant4/source/persistency/gdml/schema/gdml.xsd"));
 
    defineWrite(gdml);
    materialsWrite(gdml);
@@ -153,6 +153,10 @@ void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol,const G4Strin
 
    G4cout << "G4GDML: Adding module '" << fname << "'..." << G4endl;
 
+   if (dynamic_cast<const G4PVDivision* const>(physvol)) G4Exception("G4GDML: ERROR! It is not possible to modularize by divisionvol!");
+   if (physvol->IsParameterised()) G4Exception("G4GDML: ERROR! It is not possible to modularize by parameterised volume!");
+   if (physvol->IsReplicated()) G4Exception("G4GDML: ERROR! It is not possible to modularize by replicated volume!");
+
    if (volumeMap().find(physvol) != volumeMap().end()) G4Exception("G4GDML: ERROR! Module name '"+fname+"' already defined!");
 
    volumeMap()[physvol] = fname;
@@ -162,7 +166,7 @@ void G4GDMLWrite::AddModule(const G4int depth) {
 
    G4cout << "G4GDML: Adding module(s) at depth " << depth << "..." << G4endl;
 
-   if (depth<0) G4Exception("G4GDML: ERROR! Depth must be a positive integer number!");
+   if (depth<0) G4Exception("G4GDML: ERROR! Depth must be a positive number!");
 
    if (depthMap().find(depth) != depthMap().end()) G4Exception("G4GDML: ERROR! Adding module(s) at this depth is already requested!");
 

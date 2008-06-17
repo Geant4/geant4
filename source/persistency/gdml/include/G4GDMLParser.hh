@@ -40,8 +40,17 @@ public:
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& fname) { reader.Read(fname,false); }
-   void Write(const G4String& fname,const G4LogicalVolume* const logvol) { writer.Write(fname,logvol,0); }
+   void Read(const G4String& fname,bool Validate=true) { 
+      
+      const bool IsModule = false;
+      reader.Read(fname,Validate,IsModule); 
+   }
+
+   void Write(const G4String& fname,const G4LogicalVolume* const logvol) { 
+   
+      const G4int depth = 0;
+      writer.Write(fname,logvol,depth);
+   }
 
    G4double GetConstant(const G4String& name) { return reader.getConstant(name); }
    G4double GetVariable(const G4String& name) { return reader.getVariable(name); }

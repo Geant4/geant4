@@ -179,8 +179,9 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
       if (attName=="volname") volname = attValue;
    }
 
-   G4GDMLReadStructure structure; // We create a new structure with a new evaluator
-   structure.Read(name,true);
+   const bool IsModule = true;
+   G4GDMLReadStructure structure;
+   structure.Read(name,Validate,IsModule);
 
    if (volname.empty()) return structure.getVolume(structure.getSetup("Default"));
    else return structure.getVolume(structure.GenerateName(volname));

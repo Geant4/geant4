@@ -48,8 +48,10 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
+   const G4String name = GenerateName(divisionvol->GetName(),divisionvol);
+
    xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
-   divisionvolElement->setAttributeNode(newAttribute("name",divisionvol->GetName())); // We keep the original name for every physical volume!
+   divisionvolElement->setAttributeNode(newAttribute("name",name));
    divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
    divisionvolElement->setAttributeNode(newAttribute("number",number));
    divisionvolElement->setAttributeNode(newAttribute("width",width));
@@ -76,8 +78,10 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    const G4ThreeVector rot = getAngles(rotate.getRotation());
    const G4ThreeVector pos = T.getTranslation();
 
+   const G4String name = GenerateName(physvol->GetName(),physvol);
+
    xercesc::DOMElement* physvolElement = newElement("physvol");
-   physvolElement->setAttributeNode(newAttribute("name",physvol->GetName())); // We keep the original name for every physical volume!
+   physvolElement->setAttributeNode(newAttribute("name",name));
    volumeElement->appendChild(physvolElement);
 
    const G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
@@ -95,9 +99,26 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
       physvolElement->appendChild(fileElement);
    }
 
-   if (fabs(scl.x()-1.0) > kRelativePrecision || fabs(scl.y()-1.0) > kRelativePrecision || fabs(scl.z()-1.0) > kRelativePrecision) scaleWrite(physvolElement,"",scl);
-   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) rotationWrite(physvolElement,"",rot);
-   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) positionWrite(physvolElement,"",pos);
+   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) {
+
+      std::stringstream ptr_stream;
+      ptr_stream << physvol;
+      positionWrite(physvolElement,"position"+ptr_stream.str(),pos);
+   }
+
+   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) { 
+   
+      std::stringstream ptr_stream;
+      ptr_stream << physvol;
+      rotationWrite(physvolElement,"rotation"+ptr_stream.str(),rot);
+   }
+   
+   if (fabs(scl.x()-1.0) > kRelativePrecision || fabs(scl.y()-1.0) > kRelativePrecision || fabs(scl.z()-1.0) > kRelativePrecision) { 
+
+      std::stringstream ptr_stream;
+      ptr_stream << physvol;
+      scaleWrite(physvolElement,"scale"+ptr_stream.str(),scl);
+   }
 }
 
 void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
@@ -118,8 +139,10 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
+   const G4String name = GenerateName(replicavol->GetName(),replicavol);
+
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
-   replicavolElement->setAttributeNode(newAttribute("name",replicavol->GetName())); // We keep the original name for every physical volume!
+   replicavolElement->setAttributeNode(newAttribute("name",name));
    replicavolElement->setAttributeNode(newAttribute("axis",axisString));
    replicavolElement->setAttributeNode(newAttribute("number",number));
    replicavolElement->setAttributeNode(newAttribute("width",width));

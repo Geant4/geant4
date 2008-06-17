@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.12 2008-06-11 13:06:21 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.13 2008-06-17 11:35:33 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -40,16 +40,46 @@
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/sax/HandlerBase.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/dom/DOM.hpp>
 
-#include <sstream>
+#include "G4GDMLEvaluator.hh"
 
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
+#include "G4PVPlacement.hh"
 
-#include "G4GDMLEvaluator.hh"
+#include <sstream>
+
+class MyErrorHandler : public xercesc::ErrorHandler {
+   bool Suppress;
+public:
+   MyErrorHandler(bool set) { Suppress = set; }
+
+   void warning(const xercesc::SAXParseException& exception) {
+   
+      if (Suppress) return;
+   
+      char* message = xercesc::XMLString::transcode(exception.getMessage());
+      G4cout << "G4GDML: WARNING! " << message << " at line: " << exception.getLineNumber() << G4endl;
+   }
+
+   void error(const xercesc::SAXParseException& exception) {
+
+      if (Suppress) return;
+
+      char* message = xercesc::XMLString::transcode(exception.getMessage());
+      G4cout << "G4GDML: ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
+   }
+
+   void fatalError(const xercesc::SAXParseException& exception) {
+   
+      error(exception);
+   }
+   
+   void resetErrors() {}
+};
 
 class G4GDMLRead {
 private:
@@ -57,6 +87,7 @@ private:
    G4int InLoop;
 protected:
    G4GDMLEvaluator eval;
+   bool Validate;
 
    G4String GenerateName(const G4String&);
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
@@ -71,7 +102,7 @@ public:
    virtual void structureRead(const xercesc::DOMElement* const)=0;
    virtual G4LogicalVolume* getVolume(const G4String&) const=0;
    virtual G4String getSetup(const G4String&)=0;
-   void Read(const G4String&,bool IsModule);
+   void Read(const G4String&,bool SetValidate,bool IsModule);
 };
 
 #endif

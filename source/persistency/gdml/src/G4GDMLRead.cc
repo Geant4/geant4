@@ -43,7 +43,10 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* p
    G4String nameOut = nameIn;
 
    if (nameOut.empty()) {
-      nameOut = physvol->GetLogicalVolume()->GetName() + "_in_" + physvol->GetMotherLogical()->GetName();
+      
+      std::stringstream stream;
+      stream << physvol->GetLogicalVolume()->GetName() << "_in_" << physvol->GetMotherLogical()->GetName() << physvol;
+      nameOut = stream.str();
    } else {
    
      nameOut = ModuleName + nameOut;
@@ -107,14 +110,14 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    InLoop--;
 }
 
-void G4GDMLRead::Read(const G4String& fileName,bool IsModule) {
+void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
 
    if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
    else G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
 
    InLoop = 0;
-
    ModuleName.clear();
+   Validate = SetValidate;
 
    if (IsModule) { 
    
@@ -123,13 +126,15 @@ void G4GDMLRead::Read(const G4String& fileName,bool IsModule) {
       ModuleName += "_";
    }
 
+   xercesc::ErrorHandler* handler = new MyErrorHandler(!Validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-   parser->setDoNamespaces(true);
-   parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
    parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
+   parser->setDoNamespaces(true);
+   parser->setDoSchema(true);
+   parser->setErrorHandler(handler);
 
    try {
 
@@ -172,7 +177,8 @@ void G4GDMLRead::Read(const G4String& fileName,bool IsModule) {
       G4Exception("G4GDML: ERROR! Unknown tag in gdml: "+tag);
    }
 
-   delete parser;
+   if (parser) delete parser;
+   if (handler) delete handler;
 
    if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
    else G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;

@@ -60,13 +60,11 @@ void G4GDMLWriteDefine::scaleWrite(xercesc::DOMElement* element,const G4String& 
    xercesc::DOMElement* scaleElement = newElement("scale");
    element->appendChild(scaleElement);
 
-   if (!name.empty())
-      scaleElement->setAttributeNode(newAttribute("name",name));
-
    G4double x = (fabs(scl.x()-1.0) < kRelativePrecision) ? 1.0 : scl.x();
    G4double y = (fabs(scl.y()-1.0) < kRelativePrecision) ? 1.0 : scl.y();
    G4double z = (fabs(scl.z()-1.0) < kRelativePrecision) ? 1.0 : scl.z();
 
+   scaleElement->setAttributeNode(newAttribute("name",name));
    scaleElement->setAttributeNode(newAttribute("x",x));
    scaleElement->setAttributeNode(newAttribute("y",y));
    scaleElement->setAttributeNode(newAttribute("z",z));
@@ -77,13 +75,11 @@ void G4GDMLWriteDefine::rotationWrite(xercesc::DOMElement* element,const G4Strin
    xercesc::DOMElement* rotationElement = newElement("rotation");
    element->appendChild(rotationElement);
 
-   if (!name.empty())
-      rotationElement->setAttributeNode(newAttribute("name",name));
-
    G4double x = (fabs(rot.x()) < kAngularPrecision) ? 0.0 : rot.x();
    G4double y = (fabs(rot.y()) < kAngularPrecision) ? 0.0 : rot.y();
    G4double z = (fabs(rot.z()) < kAngularPrecision) ? 0.0 : rot.z();
 
+   rotationElement->setAttributeNode(newAttribute("name",name));
    rotationElement->setAttributeNode(newAttribute("x",x/degree));
    rotationElement->setAttributeNode(newAttribute("y",y/degree));
    rotationElement->setAttributeNode(newAttribute("z",z/degree));
@@ -95,13 +91,11 @@ void G4GDMLWriteDefine::positionWrite(xercesc::DOMElement* element,const G4Strin
    xercesc::DOMElement* positionElement = newElement("position");
    element->appendChild(positionElement);
 
-   if (!name.empty())
-      positionElement->setAttributeNode(newAttribute("name",name));
-
    G4double x = (fabs(pos.x()) < kLinearPrecision) ? 0.0 : pos.x();
    G4double y = (fabs(pos.y()) < kLinearPrecision) ? 0.0 : pos.y();
    G4double z = (fabs(pos.z()) < kLinearPrecision) ? 0.0 : pos.z();
 
+   positionElement->setAttributeNode(newAttribute("name",name));
    positionElement->setAttributeNode(newAttribute("x",x/mm));
    positionElement->setAttributeNode(newAttribute("y",y/mm));
    positionElement->setAttributeNode(newAttribute("z",z/mm));

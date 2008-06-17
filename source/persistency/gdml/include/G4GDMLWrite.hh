@@ -43,6 +43,7 @@
 
 #include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
+#include "G4PVDivision.hh"
 
 class G4GDMLWrite {
 private:
