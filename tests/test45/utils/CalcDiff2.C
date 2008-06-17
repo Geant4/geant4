@@ -5,7 +5,7 @@ gROOT->ProcessLine(".x  $TEST45/utils/Calc0.C");
 TFile ff(file1);
 TH1F *h;
 Int_t j1 = 11; 
-Int_t j2 = 41; 
+Int_t j2 = 39; 
 Double_t z1, z2, z3, z4;
 z1 = 0.0;
 z2 = 0.0;
@@ -33,27 +33,22 @@ for (i = 0; i < npl; i++) {
     if(i==3) {z3 = y44[j]; z4 = erry44[j];}
     if(i==4) {z3 = y55[j]; z4 = erry55[j];}
     if(i==5) {z3 = y66[j]; z4 = erry66[j];}
-    //    if(i==5) {cout  << "## Hello i= " << i << "  j= " << j << endl;}
    
     if(z3 == 0.0) {yy[j] = 0.0; erry[j] = 0.0;}
     else if(z1 == 0.0) {yy[j] = 0.0; erry[j] = z2/z3;}
     else {
-      //  cout << "i= "<< i  << " j= " << j << " x= " << x11[j] << " y= " << z1/z3 << " dx= " << errx11[j] << " dy= " << erry[j] <<endl;    
       yy[j] = z1/z3;
       z4    = z4/z3;
       z3    = z2/z1;
       erry[j] = yy[j]*sqrt(z3*z3 + z4*z4);
     }
-    //  cout << "i= "<< i  << " j= " << j << " x= " << x11[j] << " y= " << yy[j] << " dx= " << errx11[j] << " dy= " << erry[j] <<endl;    
+   cout << "i= "<< i  << " j= " << j << " x= " << x11[j] << " y= " << yy[j] << " dx= " << errx11[j] << " dy= " << erry[j] <<endl;    
   }
   
   gr[i] = new TGraphErrors(bin,x11,yy,errx11,erry);
   gr[i]->SetMarkerColor(coll[jj]);
   gr[i]->Draw("P SAME");  
   if (i == 5)  {leg[0]->AddEntry(gr[5], nam1[jj], "p"); }
-  cout  << "## i= " << i << "  j= " << j << endl;
-  if(i==5) {cout  << "## Hello last line N1 " << endl;}
-//  cout  << "## Hello last line N2 " << endl;
+  //  cout  << "## i= " << i << "  j= " << j << endl;
 }
-  cout  << "## Hello last line N2 " << endl;
 }

@@ -2,12 +2,12 @@
 gROOT->ProcessLine(".x   $TEST45/utils/StyleBase.C");
 gStyle->SetLabelOffset(0.005, "x");
 gStyle->SetLabelOffset(0.005, "y");
-gStyle->SetLabelSize(.05, "x");
-gStyle->SetLabelSize(.05, "y");
+gStyle->SetLabelSize(.055, "x");
+gStyle->SetLabelSize(.055, "y");
 gStyle->SetTitleOffset(.95, "x");
 gStyle->SetTitleOffset(.95, "y");
-gStyle->SetTitleSize(.06, "x");
-gStyle->SetTitleSize(.06, "y");
+gStyle->SetTitleSize(.07, "x");
+gStyle->SetTitleSize(.07, "y");
 gStyle->SetPadBottomMargin(.15);          
 gStyle->SetPadTopMargin(.05);
 gStyle->SetPadLeftMargin(.15);

@@ -5,7 +5,7 @@ gROOT->ProcessLine(".x  $TEST45/utils/Calc0.C");
 TFile ff(file1);
 TH1F *h;
 Int_t j1 = 11; 
-Int_t j2 = 41; 
+Int_t j2 = 39; 
 Double_t z1, z2, z3, z4;
 
 for (i = 0; i < npl; i++) {
@@ -40,7 +40,7 @@ for (i = 0; i < npl; i++) {
       z3    = z2/z1;
       erry[j] = yy[j]*sqrt(z3*z3 + z4*z4);
     }
-    //  cout << "i= "<< i  << " j= " << j << " x= " << x11[j] << " y= " << yy[j] << " dx= " << errx11[j] << " dy= " << erry[j] <<endl;    
+   cout << "i= "<< i  << " j= " << j << " x= " << x11[j] << " y= " << yy[j] << " dx= " << errx11[j] << " dy= " << erry[j] <<endl;    
   }
   
   gr[i] = new TGraphErrors(bin,x11,yy,errx11,erry);
