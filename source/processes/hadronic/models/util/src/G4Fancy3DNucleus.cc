@@ -396,12 +396,24 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
 
 
+//G4cout<<"Fermi momenta"<<G4endl;                       // Uzhi
     G4double energy;
     for ( i=0; i< myA ; i++ )
     {
+//G4cout<<"nucleon i "<<i<<" mom "<<momentum[i]<<G4endl; // Uzhi
+//    // Uzhi close Fermi-motion
        energy = theNucleons[i].GetParticleType()->GetPDGMass()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
+//   // Uzhi
+/*   // Uzhi
+       energy = theNucleons[i].GetParticleType()->GetPDGMass();
+//	        - BindingEnergy()/myA;
+       G4LorentzVector tempV(0.,0.,0.,energy);
+*/   // Uzhi
+
+//G4cout<<"nucleon 4-mom   "<<tempV<<G4endl;             // Uzhi
+
        theNucleons[i].SetMomentum(tempV);
     }
 
