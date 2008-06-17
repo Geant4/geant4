@@ -114,7 +114,7 @@ G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
   for (G4int i = 0 ; i< Entries(); i++) {
     if(fIsotopeNameList[i] == fname) j = i;}
   if (j >=0) {
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
     G4cout <<"G4RIsotopeTable::GetIsotope No. : ";
     G4cout <<j<<G4endl;   
     }
@@ -143,7 +143,7 @@ G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
     fIsotopeList.push_back(fProperty);
     fname = GetIsotopeName(Z, A, E);
     fIsotopeNameList.push_back(fname);
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout <<"G4RIsotopeTable::GetIsotope create: ";
       G4cout <<fname <<G4endl;  
     }
@@ -159,9 +159,9 @@ G4String G4RIsotopeTable::GetIsotopeName(G4int Z, G4int A, G4double E)
   os.setf(std::ios::fixed);
   os <<"A"<< A << "Z" << Z <<'[' << std::setprecision(1) << E/keV << ']';
   G4String name = os.str();
-  if (GetVerboseLevel()>0) {
-    G4cerr <<"G4RIsotopeTable::GetIsotope Name: ";
-    G4cerr <<name <<G4endl;   
+  if (GetVerboseLevel()>1) {
+    G4cout <<"G4RIsotopeTable::GetIsotope Name: ";
+    G4cout <<name <<G4endl;   
   }
   return name;
 }
@@ -185,7 +185,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
 
   if (!DecaySchemeFile )
   {
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout <<"G4RIsotopeTable::GetMeanLife() : "
 	     <<"cannot find ion radioactive decay file: " 
 	     <<file <<G4endl;
@@ -229,7 +229,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
     }
     if (!found && aE )
       {
-	if (GetVerboseLevel()>0) {
+	if (GetVerboseLevel()>1) {
 	  G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
 	  G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
 	  G4cout <<"state in radioactive data file " <<G4endl;
@@ -240,7 +240,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
       }
     if (!found && !aE )
       {
-	if (GetVerboseLevel()>0) {
+	if (GetVerboseLevel()>1) {
 	  G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
 	  G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
 	  G4cout <<"state in radioactive data file " <<G4endl;
@@ -250,7 +250,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
       }
     DecaySchemeFile.close();
   }
-  if (GetVerboseLevel()>0) {
+  if (GetVerboseLevel()>1) {
     G4cout <<"G4RIsotopeTable::GetMeanLifeTime: ";
     G4cout <<lifetime << " for " << GetIsotopeName(Z, A, aE) <<G4endl;   
   }

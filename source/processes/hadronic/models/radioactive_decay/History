@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17 June 2008 Fan Lei (radioactive_decay-V09-01-01)
+- GRIsotopeTable.cc
+	i) change default verbosity level to 1
+	ii) correct use G4cout instead of G4cerr  
+
 01 May 2008 Fan Lei (radioactive_decay-V09-01-00)
 - G4NuclearDecayChannel.cc
 	i) ARM is no longer applied in photon-evaporation for IT mode and 
