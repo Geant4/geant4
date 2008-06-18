@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 June 2008 Tatsumi Koi (hadr-hpn-V09-01-11)
+---------------------------------------------
+- Fix for tag hadr-hpn-V09-01-09 and 10 
+	G4NeutronHPDiscreteTwoBody.cc
+
 13 June 2008 Tatsumi Koi (hadr-hpn-V09-01-10)
 ---------------------------------------------
 - Bug fixes contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
