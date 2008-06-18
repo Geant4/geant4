@@ -98,7 +98,7 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
        theStore.SetManager(theManager);
        //cosTh = theStore.SampleMax(anEnergy);
        //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3
-       cosTh = theStore.Sample(anEnergy);
+       cosTh = theStore.SampleDiscreteTwoBody(anEnergy);
      }
      else if(theCoeff[it].GetRepresentation()==12) // means LINLIN
      {
