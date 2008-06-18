@@ -271,7 +271,6 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
     y1 = Integrate(low, costh);
     y2 = Integrate(high, costh);
     y = theInt.Interpolate(theManager.GetScheme(high), energy, x1, x2, y1, y2);
-G4cout << "TKDB " << i0 << " "  <<  y << G4endl;    
     theBuffer.SetData(i0, costh, y);
 //     G4cout << "Integration "<<low<<" "<<costh<<" "<<y1<<" "<<y2<<" "<<y<<G4endl;
   }
