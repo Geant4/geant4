@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.13 2008-06-17 11:35:33 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.14 2008-06-18 11:38:55 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -73,11 +73,7 @@ public:
       G4cout << "G4GDML: ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
    }
 
-   void fatalError(const xercesc::SAXParseException& exception) {
-   
-      error(exception);
-   }
-   
+   void fatalError(const xercesc::SAXParseException& exception) { error(exception); }
    void resetErrors() {}
 };
 
