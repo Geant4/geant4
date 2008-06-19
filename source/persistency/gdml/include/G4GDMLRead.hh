@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.14 2008-06-18 11:38:55 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.15 2008-06-19 09:37:51 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -55,22 +55,22 @@
 class MyErrorHandler : public xercesc::ErrorHandler {
    bool Suppress;
 public:
-   MyErrorHandler(bool set) { Suppress = set; }
+   MyErrorHandler(const bool set) { Suppress = set; }
 
    void warning(const xercesc::SAXParseException& exception) {
    
       if (Suppress) return;
    
-      char* message = xercesc::XMLString::transcode(exception.getMessage());
-      G4cout << "G4GDML: WARNING! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      const char* message = xercesc::XMLString::transcode(exception.getMessage());
+      G4cout << "G4GDML: VALIDATION WARNING! " << message << " at line: " << exception.getLineNumber() << G4endl;
    }
 
    void error(const xercesc::SAXParseException& exception) {
 
       if (Suppress) return;
 
-      char* message = xercesc::XMLString::transcode(exception.getMessage());
-      G4cout << "G4GDML: ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      const char* message = xercesc::XMLString::transcode(exception.getMessage());
+      G4cout << "G4GDML: VALIDATION ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
    }
 
    void fatalError(const xercesc::SAXParseException& exception) { error(exception); }

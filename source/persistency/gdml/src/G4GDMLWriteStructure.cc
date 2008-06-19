@@ -99,26 +99,13 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
       physvolElement->appendChild(fileElement);
    }
 
-   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) {
+   std::stringstream ptr_stream;
+   ptr_stream << physvol;
+   const G4String ptr_string = ptr_stream.str();
 
-      std::stringstream ptr_stream;
-      ptr_stream << physvol;
-      positionWrite(physvolElement,"position"+ptr_stream.str(),pos);
-   }
-
-   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) { 
-   
-      std::stringstream ptr_stream;
-      ptr_stream << physvol;
-      rotationWrite(physvolElement,"rotation"+ptr_stream.str(),rot);
-   }
-   
-   if (fabs(scl.x()-1.0) > kRelativePrecision || fabs(scl.y()-1.0) > kRelativePrecision || fabs(scl.z()-1.0) > kRelativePrecision) { 
-
-      std::stringstream ptr_stream;
-      ptr_stream << physvol;
-      scaleWrite(physvolElement,"scale"+ptr_stream.str(),scl);
-   }
+   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) positionWrite(physvolElement,"position"+ptr_string,pos);
+   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) rotationWrite(physvolElement,"rotation"+ptr_string,rot);
+   if (fabs(scl.x()-1.0) > kRelativePrecision || fabs(scl.y()-1.0) > kRelativePrecision || fabs(scl.z()-1.0) > kRelativePrecision) scaleWrite(physvolElement,"scale"+ptr_string,scl);
 }
 
 void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {

@@ -33,7 +33,6 @@
 void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4BooleanSolid* const boolean) {
 
    G4String tag("undefined");
-
    if (dynamic_cast<const G4IntersectionSolid*>(boolean)) { tag = "intersection"; } else
    if (dynamic_cast<const G4SubtractionSolid*>(boolean)) { tag = "subtraction"; } else
    if (dynamic_cast<const G4UnionSolid*>(boolean)) { tag = "union"; }
@@ -41,16 +40,13 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    G4VSolid* firstPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(0));
    G4VSolid* secondPtr = const_cast<G4VSolid*>(boolean->GetConstituentSolid(1));
    
-   G4ThreeVector firstpos,firstrot;
-   G4ThreeVector pos,rot;
-   bool IsFirstDisplaced = false;
+   G4ThreeVector firstpos,firstrot,pos,rot;
 
    if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(firstPtr)) {
    
       firstpos = disp->GetObjectTranslation();
       firstrot = getAngles(disp->GetObjectRotation());
       firstPtr = disp->GetConstituentMovedSolid();
-      IsFirstDisplaced = true;
    }
 
    if (const G4DisplacedSolid* disp = dynamic_cast<const G4DisplacedSolid*>(secondPtr)) {
@@ -81,13 +77,28 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    secondElement->setAttributeNode(newAttribute("ref",secondref));
    booleanElement->appendChild(secondElement);
 
-   positionWrite(booleanElement,"",pos);
-   rotationWrite(booleanElement,"",rot);
+   std::stringstream ptr_stream;
+   ptr_stream << boolean;
+   const G4String ptr_string = ptr_stream.str();
 
-   if (IsFirstDisplaced) {
+   if (fabs(firstpos.x()) > kLinearPrecision || fabs(firstpos.y()) > kLinearPrecision || fabs(firstpos.z()) > kLinearPrecision) {
    
-      firstpositionWrite(booleanElement,firstpos);
-      firstrotationWrite(booleanElement,firstrot);
+      firstpositionWrite(booleanElement,"firstposition"+ptr_string,firstpos);
+   }
+   
+   if (fabs(firstrot.x()) > kAngularPrecision || fabs(firstrot.y()) > kAngularPrecision || fabs(firstrot.z()) > kAngularPrecision) {
+   
+      firstrotationWrite(booleanElement,"firstrotation"+ptr_string,firstrot);
+   }
+
+   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) {
+   
+      positionWrite(booleanElement,"position"+ptr_string,pos);
+   }
+   
+   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) {
+   
+      rotationWrite(booleanElement,"rotation"+ptr_string,rot);
    }
 }
 
