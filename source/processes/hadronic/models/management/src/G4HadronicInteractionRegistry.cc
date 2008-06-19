@@ -48,10 +48,12 @@ RemoveMe(G4HadronicInteraction * aModel)
 
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 {
+  /*
   while(allModels.size()!=0)
   {
     delete allModels.front();
   }
+  */
 }
 
 void G4HadronicInteractionRegistry::
