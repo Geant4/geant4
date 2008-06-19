@@ -56,7 +56,7 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
       secondPtr = disp->GetConstituentMovedSolid();
    }
 
-   AddSolid(firstPtr);   // At first add the referenced solids!
+   AddSolid(firstPtr);   // At first add the constituent solids!
    AddSolid(secondPtr);
 
    const G4String name = GenerateName(boolean->GetName(),boolean);
@@ -71,7 +71,7 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    xercesc::DOMElement* secondElement = newElement("second");
    secondElement->setAttributeNode(newAttribute("ref",secondref));
    booleanElement->appendChild(secondElement);
-   solidsElement->appendChild(booleanElement);
+   solidsElement->appendChild(booleanElement); // Add the boolean solid AFTER the constituent solids!
 
    std::stringstream ptr_stream;
    ptr_stream << boolean;

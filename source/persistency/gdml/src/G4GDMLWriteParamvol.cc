@@ -238,14 +238,13 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
 
 void G4GDMLWriteParamvol::paramvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const paramvol) {
 
-   xercesc::DOMElement* paramvolElement = newElement("paramvol");
-   volumeElement->appendChild(paramvolElement);
-
    const G4String volumeref = GenerateName(paramvol->GetLogicalVolume()->GetName(),paramvol->GetLogicalVolume());
 
+   xercesc::DOMElement* paramvolElement = newElement("paramvol");
    xercesc::DOMElement* volumerefElement = newElement("volumeref");
    volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
    paramvolElement->appendChild(volumerefElement);
+   volumeElement->appendChild(paramvolElement);
 
    const G4int parameterCount = paramvol->GetMultiplicity();
 
