@@ -70,7 +70,7 @@ class G4ExcitedString
 
       int operator!=(const G4ExcitedString &right) const;
 
-      const G4double GetTimeOfCreation() const;                // Uzhi 15.05.08
+      G4double GetTimeOfCreation() const;               // Uzhi 15.05.08
 
       void  SetTimeOfCreation(G4double aTime);          // Uzhi 15.05.08
 
@@ -130,7 +130,7 @@ int G4ExcitedString::operator!=(const G4ExcitedString &right) const
 }
 
 inline
-const G4double G4ExcitedString::GetTimeOfCreation() const       // Uzhi 15.05.08
+G4double G4ExcitedString::GetTimeOfCreation() const      // Uzhi 15.05.08
 {
 	return theTimeOfCreation;
 }
