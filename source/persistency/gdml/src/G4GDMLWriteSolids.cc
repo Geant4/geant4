@@ -60,46 +60,27 @@ void G4GDMLWriteSolids::booleanWrite(xercesc::DOMElement* solidsElement,const G4
    AddSolid(secondPtr);
 
    const G4String name = GenerateName(boolean->GetName(),boolean);
+   const G4String firstref = GenerateName(firstPtr->GetName(),firstPtr);
+   const G4String secondref = GenerateName(secondPtr->GetName(),secondPtr);
 
    xercesc::DOMElement* booleanElement = newElement(tag);
    booleanElement->setAttributeNode(newAttribute("name",name));
-   solidsElement->appendChild(booleanElement);
-
-   const G4String firstref = GenerateName(firstPtr->GetName(),firstPtr);
-
    xercesc::DOMElement* firstElement = newElement("first");
    firstElement->setAttributeNode(newAttribute("ref",firstref));
    booleanElement->appendChild(firstElement);
-
-   const G4String secondref = GenerateName(secondPtr->GetName(),secondPtr);
-
    xercesc::DOMElement* secondElement = newElement("second");
    secondElement->setAttributeNode(newAttribute("ref",secondref));
    booleanElement->appendChild(secondElement);
+   solidsElement->appendChild(booleanElement);
 
    std::stringstream ptr_stream;
    ptr_stream << boolean;
    const G4String ptr_string = ptr_stream.str();
 
-   if (fabs(firstpos.x()) > kLinearPrecision || fabs(firstpos.y()) > kLinearPrecision || fabs(firstpos.z()) > kLinearPrecision) {
-   
-      firstpositionWrite(booleanElement,"firstposition"+ptr_string,firstpos);
-   }
-   
-   if (fabs(firstrot.x()) > kAngularPrecision || fabs(firstrot.y()) > kAngularPrecision || fabs(firstrot.z()) > kAngularPrecision) {
-   
-      firstrotationWrite(booleanElement,"firstrotation"+ptr_string,firstrot);
-   }
-
-   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) {
-   
-      positionWrite(booleanElement,"position"+ptr_string,pos);
-   }
-   
-   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) {
-   
-      rotationWrite(booleanElement,"rotation"+ptr_string,rot);
-   }
+   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) positionWrite(booleanElement,"position"+ptr_string,pos);
+   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) rotationWrite(booleanElement,"rotation"+ptr_string,rot);
+   if (fabs(firstpos.x()) > kLinearPrecision || fabs(firstpos.y()) > kLinearPrecision || fabs(firstpos.z()) > kLinearPrecision) firstpositionWrite(booleanElement,"firstposition"+ptr_string,firstpos);
+   if (fabs(firstrot.x()) > kAngularPrecision || fabs(firstrot.y()) > kAngularPrecision || fabs(firstrot.z()) > kAngularPrecision) firstrotationWrite(booleanElement,"firstrotation"+ptr_string,firstrot);
 }
 
 void G4GDMLWriteSolids::boxWrite(xercesc::DOMElement* solidsElement,const G4Box* const box) {
