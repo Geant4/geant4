@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.hh,v 1.2 2008-04-25 14:53:34 gunter Exp $
+// $Id: HadronPhysicsFTF_BIC.hh,v 1.3 2008-06-19 08:08:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2007 Gunter Folger
 //
 // Modified:
+// 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
 //
 //----------------------------------------------------------------------------
 //
@@ -63,7 +64,7 @@
 class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTF_BIC(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsFTF_BIC(const G4String& name ="hadron",G4bool quasiElastic=false);
     virtual ~HadronPhysicsFTF_BIC();
 
   public: 
