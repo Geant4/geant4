@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+18 June 2008 V. Uzhinsky (hadr-mod-util-V09-01-03)
+--------------------------------------------------
+-  G4ExcitedString::GetTimeOfCreation() const;
+-  G4ExcitedString::SetTimeOfCreation(G4double aTime);
+   Two new methods for operations with Time of a string Creation
 
 14 May 2008 G.Folger      (hadr-mod-util-V09-01-02)
 ---------------------------------------------------
