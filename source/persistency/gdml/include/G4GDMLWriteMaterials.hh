@@ -46,10 +46,10 @@ private:
    std::vector<const G4Material*> materialList;
    xercesc::DOMElement* materialsElement;
    
-   void atomWrite(xercesc::DOMElement*,G4double);
-   void DWrite(xercesc::DOMElement*,G4double);
-   void PWrite(xercesc::DOMElement*,G4double);
-   void TWrite(xercesc::DOMElement*,G4double);
+   void atomWrite(xercesc::DOMElement*,const G4double&);
+   void DWrite(xercesc::DOMElement*,const G4double&);
+   void PWrite(xercesc::DOMElement*,const G4double&);
+   void TWrite(xercesc::DOMElement*,const G4double&);
    void isotopeWrite(const G4Isotope* const);
    void elementWrite(const G4Element* const);
    void materialWrite(const G4Material* const);

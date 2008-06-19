@@ -30,49 +30,41 @@
 
 #include "G4GDMLWriteMaterials.hh"
 
-void G4GDMLWriteMaterials::atomWrite(xercesc::DOMElement* element,G4double a) {
-
-   a /= (g/mole);
+void G4GDMLWriteMaterials::atomWrite(xercesc::DOMElement* element,const G4double& a) {
 
    xercesc::DOMElement* atomElement = newElement("atom");
    atomElement->setAttributeNode(newAttribute("unit","g/mole"));
-   atomElement->setAttributeNode(newAttribute("value",a));
+   atomElement->setAttributeNode(newAttribute("value",a/(g/mole)));
    element->appendChild(atomElement);
 }
 
-void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,G4double d) {
-
-   d /= (g/cm3);
+void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,const G4double& d) {
 
    xercesc::DOMElement* DElement = newElement("D");
    DElement->setAttributeNode(newAttribute("unit","g/cm3"));
-   DElement->setAttributeNode(newAttribute("value",d));
+   DElement->setAttributeNode(newAttribute("value",d/(g/cm3)));
    element->appendChild(DElement);
 }
 
-void G4GDMLWriteMaterials::PWrite(xercesc::DOMElement* element,G4double P) {
-
-   P /= pascal;
+void G4GDMLWriteMaterials::PWrite(xercesc::DOMElement* element,const G4double& P) {
 
    xercesc::DOMElement* PElement = newElement("P");
    PElement->setAttributeNode(newAttribute("unit","pascal"));
-   PElement->setAttributeNode(newAttribute("value",P));
+   PElement->setAttributeNode(newAttribute("value",P/pascal));
    element->appendChild(PElement);
 }
 
-void G4GDMLWriteMaterials::TWrite(xercesc::DOMElement* element,G4double T) {
-
-   T /= kelvin;
+void G4GDMLWriteMaterials::TWrite(xercesc::DOMElement* element,const G4double& T) {
 
    xercesc::DOMElement* TElement = newElement("T");
    TElement->setAttributeNode(newAttribute("unit","K"));
-   TElement->setAttributeNode(newAttribute("value",T));
+   TElement->setAttributeNode(newAttribute("value",T/kelvin));
    element->appendChild(TElement);
 }
 
 void G4GDMLWriteMaterials::isotopeWrite(const G4Isotope* const isotopePtr) {
 
-   G4String name = GenerateName(isotopePtr->GetName(),isotopePtr);
+   const G4String name = GenerateName(isotopePtr->GetName(),isotopePtr);
 
    xercesc::DOMElement* isotopeElement = newElement("isotope");
    isotopeElement->setAttributeNode(newAttribute("name",name));
@@ -84,7 +76,7 @@ void G4GDMLWriteMaterials::isotopeWrite(const G4Isotope* const isotopePtr) {
 
 void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
 
-   G4String name = GenerateName(elementPtr->GetName(),elementPtr);
+   const G4String name = GenerateName(elementPtr->GetName(),elementPtr);
 
    xercesc::DOMElement* elementElement = newElement("element");
    elementElement->setAttributeNode(newAttribute("name",name));
@@ -117,12 +109,12 @@ void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
 void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
    G4String state_str("undefined");
-   G4State state = materialPtr->GetState();
+   const G4State state = materialPtr->GetState();
    if (state==kStateSolid) state_str = "solid"; else
    if (state==kStateLiquid) state_str = "liquid"; else
    if (state==kStateGas) state_str = "gas";
 
-   G4String name = GenerateName(materialPtr->GetName(),materialPtr);
+   const G4String name = GenerateName(materialPtr->GetName(),materialPtr);
 
    xercesc::DOMElement* materialElement = newElement("material");
    materialElement->setAttributeNode(newAttribute("name",name));
@@ -130,7 +122,6 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
    if (fabs(materialPtr->GetTemperature()-STP_Temperature) > kRelativePrecision) TWrite(materialElement,materialPtr->GetTemperature());
    if (fabs(materialPtr->GetPressure()-STP_Pressure) > kRelativePrecision) PWrite(materialElement,materialPtr->GetPressure());
-
    DWrite(materialElement,materialPtr->GetDensity());
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
@@ -141,7 +132,7 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
 
       for (size_t i=0;i<NumberOfElements;i++) {
       
-         G4String fractionref = GenerateName(materialPtr->GetElement(i)->GetName(),materialPtr->GetElement(i));
+         const G4String fractionref = GenerateName(materialPtr->GetElement(i)->GetName(),materialPtr->GetElement(i));
       
          xercesc::DOMElement* fractionElement = newElement("fraction");
          fractionElement->setAttributeNode(newAttribute("n",MassFractionVector[i]));
