@@ -108,7 +108,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
 
    gdml->setAttributeNode(newAttribute("xmlns:gdml","http://cern.ch/2001/Schemas/GDML"));
    gdml->setAttributeNode(newAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance"));
-   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","/home/ztorzsok/geant4/source/persistency/gdml/schema/gdml.xsd"));
+   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd"));
 
    defineWrite(gdml);
    materialsWrite(gdml);
