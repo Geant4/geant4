@@ -27,16 +27,8 @@
 #include "G4CascadeChannel.hh"
 #include "Randomize.hh"
 
-
-G4CascadeChannel::G4CascadeChannel()
-{;}
- 
-G4CascadeChannel::~G4CascadeChannel()
-{;}
-
-
 std::pair<G4int, G4double> 
-G4CascadeChannel::interpolateEnergy(G4double e) const
+G4CascadeChannel::interpolateEnergy(G4double e)
 {
   G4int index = 30;
   G4double fraction = 0.0;
@@ -53,7 +45,7 @@ G4CascadeChannel::interpolateEnergy(G4double e) const
 
 
 G4int 
-G4CascadeChannel::sampleFlat(std::vector<G4double> sigma) const
+G4CascadeChannel::sampleFlat(std::vector<G4double> const& sigma)
 {
   G4int i;
   G4double sum(0.);
@@ -76,7 +68,7 @@ G4CascadeChannel::sampleFlat(std::vector<G4double> sigma) const
 
 
 std::vector<G4int> 
-G4CascadeChannel::getQnums(G4int type) const
+G4CascadeChannel::getQnums(G4int type)
 {
   G4int bary=0, str=0, ch=0;
   std::vector<G4int> Qnums(3);
