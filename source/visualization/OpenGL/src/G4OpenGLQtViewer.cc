@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.23 2008-04-29 16:58:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.24 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -289,12 +289,16 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
   ,fRecordFrameNumber(0)
+  ,fRotationAngleX(0)
+  ,fRotationAngleY(0)
+  ,fDeltaRotationAngleX(0)
+  ,fDeltaRotationAngleY(0)
   ,fContextMenu(0)
   ,fMouseAction(STYLE1)
   ,fDeltaRotation(1)
   ,fDeltaSceneTranslation(0.01)
   ,fDeltaDepth(0.01)
-  ,fDeltaZoom(0.1)
+  ,fDeltaZoom(0.05)
   ,fDeltaMove(0.05)
   ,fHoldKeyEvent(false)
   ,fHoldMoveEvent(false)
@@ -308,12 +312,19 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
   ,fProcess(NULL)
+  ,fLaunchSpinDelay(100)
 {
 
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
 
+  fLastPos3 = QPoint(-1,-1);    
+  fLastPos2 = QPoint(-1,-1);    
+  fLastPos1 = QPoint(-1,-1);    
+  
   initMovieParameters();
+
+  fLastEventTime = new QTime();
 
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
@@ -1506,15 +1517,58 @@ void Graph::exportToSVG(const QString& fname)
    @param p mouse click point
 */
 #if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MousePressEvent(QPoint p,Qt::ButtonState mButtons)
+void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 #else
-void G4OpenGLQtViewer::G4MousePressEvent(QPoint p,Qt::MouseButtons mButtons)
+void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 #endif
 {
   fAutoMove = false; // stop automove
-  fLastPos = p;
+  fLastPos1 = p;
+  fLastPos2 = fLastPos1;
+  fLastPos3 = fLastPos2;
+  fLastEventTime->start();
   if (fMouseAction == STYLE2){  // pick
     Pick(p.x(),p.y());
+  }
+}
+
+/**
+*/
+void G4OpenGLQtViewer::G4MouseReleaseEvent()
+{
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::mouseRealease() %d,%d  %d,%d  %d,%d\n",fLastPos1.x(),fLastPos1.y(),fLastPos2.x(),fLastPos2.y(),fLastPos3.x(),fLastPos3.y());
+#endif
+  fSpinningDelay = fLastEventTime->elapsed();
+  QPoint delta = (fLastPos3-fLastPos1);
+  if ((delta.x() == 0) && (delta.y() == 0)) {
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::mouseRealease() EXIT 1 \n");
+#endif
+    return;
+  }
+  if (fSpinningDelay < fLaunchSpinDelay ) {
+    fAutoMove = true;
+    QTime lastMoveTime;
+    lastMoveTime.start();
+    // try to addapt speed move/rotate looking to drawing speed
+    int cycles = 4;
+    while (fAutoMove) {
+      //      if ( lastMoveTime.elapsed() > (fSpinningDelay / (cycles/2))) {
+        if (fMouseAction == STYLE1) {  // rotate
+          rotateQtScene(((float)delta.x())/cycles,((float)delta.y())/cycles);
+        } else if (fMouseAction == STYLE2) {  // move
+          moveScene(-((float)delta.x())/cycles,-((float)delta.y())/cycles,0,true);
+        }
+        lastMoveTime.start();
+        cycles = 1 ;
+        //      }
+      ((QApplication*)G4Qt::getInstance ())->processEvents();
+#ifdef GEANT4_QT_DEBUG
+        printf("G4OpenGLQtViewer::mouseRealease() cycle :%d \n",lastMoveTime.elapsed());
+#endif
+      cycles ++ ;
+    }
   }
 }
 
@@ -1527,39 +1581,34 @@ void G4OpenGLQtViewer::G4MousePressEvent(QPoint p,Qt::MouseButtons mButtons)
 */
 
 #if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mButtons,bool mAutoMove)
+void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mButtons)
 #else
-  void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons,bool mAutoMove)
+  void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons)
 #endif
 {
-  fAutoMove = mAutoMove;
 
-  if (!fAutoMove) {  // keep old delta if automove
-    fDeltaPosX = fLastPos.x() - pos_x;
-    fDeltaPosY = fLastPos.y() - pos_y;
+  if (fAutoMove) {
+    return;
   }
 
-  if ((fDeltaPosX == 0) && (fDeltaPosY == 0)) {
-    fAutoMove = false;
-  }
+  fLastPos3 = fLastPos2;
+  fLastPos2 = fLastPos1;
+  fLastPos1 = QPoint(pos_x, pos_y);
+
+  int deltaX = fLastPos2.x()-fLastPos1.x();
+  int deltaY = fLastPos2.y()-fLastPos1.y();
 
   if (fMouseAction == STYLE1) {  // rotate
     if (mButtons & Qt::LeftButton) {
-      rotateScene(fDeltaPosX,fDeltaPosY,fAutoMove);
+      rotateQtScene(deltaX,deltaY);
     }
   } else if (fMouseAction == STYLE2) {  // move
     if (mButtons & Qt::LeftButton) {
-      if (fAutoMove) {
-        while (fAutoMove) {
-          moveScene(-fDeltaPosX,-fDeltaPosY,0,true,true);
-          ((QApplication*)G4Qt::getInstance ())->processEvents();
-        }
-      } else {
-        moveScene(-fDeltaPosX,-fDeltaPosY,0,true,false);
-      }
+      moveScene(-deltaX,-deltaY,0,true);
     }
   }
-  fLastPos = QPoint(pos_x, pos_y);
+
+  fLastEventTime->start();
 }
 
 
@@ -1567,40 +1616,35 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mBu
    Move the scene of dx, dy, dz values.
    @param dx delta mouse x position
    @param dy delta mouse y position
-   @param mouseMove : true if even comes froma mouse move, false if even comes from key action
+   @param mouseMove : true if even comes from a mouse move, false if even comes from key action
 */
 
-void G4OpenGLQtViewer::moveScene(G4double dx,G4double dy, G4double dz,bool mouseMove,bool mAutoMove)
+void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
 {
   if (fHoldMoveEvent)
     return;
   fHoldMoveEvent = true;
 
-  if( mAutoMove == false) {
-    fAutoMove = true;
-  }
   G4double coefTrans = 0;
   GLdouble coefDepth = 0;
-  while (fAutoMove) {
-    if( mAutoMove == false) {
-      fAutoMove = false;
+  if(mouseMove) {
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
+    if (WinSize_y <WinSize_x) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
     }
-    if(mouseMove) {
-      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
-      if (WinSize_y <WinSize_x) {
-        coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
-      }
-    } else {
-      coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
-      coefDepth = getSceneDepth()*fDeltaDepth;
-    }
-    fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-    
-    updateQWidget();
-    if (fAutoMove)
-      ((QApplication*)G4Qt::getInstance ())->processEvents();
+  } else {
+    coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
+    coefDepth = getSceneDepth()*fDeltaDepth;
   }
-
+  fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
+  emit moveX(-dx*coefTrans);
+  emit moveY(dy*coefTrans);
+  emit moveZ(dz*coefTrans);
+  
+  updateQWidget();
+  if (fAutoMove)
+    ((QApplication*)G4Qt::getInstance ())->processEvents();
+  
   fHoldMoveEvent = false;
 }
 
@@ -1610,108 +1654,46 @@ void G4OpenGLQtViewer::moveScene(G4double dx,G4double dy, G4double dz,bool mouse
    @param dy delta mouse y position
 */
 
-void G4OpenGLQtViewer::rotateScene(G4double dx, G4double dy,bool mAutoRotate)
+void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
+{
+  if (fHoldRotateEvent)
+    return;
+  fHoldRotateEvent = true;
+  
+  if( dx != 0) {
+    rotateScene(dx,0,fDeltaRotation);
+    emit rotateTheta(dx);
+  }
+  if( dy != 0) {
+    rotateScene(0,dy,fDeltaRotation);
+    emit rotatePhi(dy);
+  }
+  updateQWidget();
+  
+  fHoldRotateEvent = false;
+}
+
+/**
+   @param dx delta mouse x position
+   @param dy delta mouse y position
+*/
+
+void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
 {
   if (fHoldRotateEvent)
     return;
   fHoldRotateEvent = true;
 
-  if( mAutoRotate == false) {
-    fAutoMove = true;
-  }
-  G4Vector3D vp;
-  G4Vector3D up;
-  
-  G4Vector3D xprime;
-  G4Vector3D yprime;
-  G4Vector3D zprime;
-  
-  G4double delta_alpha;
-  G4double delta_theta;
-  
-  G4Vector3D new_vp;
-  G4Vector3D new_up;
-  
-  G4double cosalpha;
-  G4double sinalpha;
-  
-  G4Vector3D a1;
-  G4Vector3D a2;
-  G4Vector3D delta;
-  G4Vector3D viewPoint;
-
-  while (fAutoMove) {
-    if( mAutoRotate == false) {
-      fAutoMove = false;
-    }
-    
-    //phi spin stuff here
-  
-    vp = fVP.GetViewpointDirection ().unit ();
-    up = fVP.GetUpVector ().unit ();
-  
-    yprime = (up.cross(vp)).unit();
-    zprime = (vp.cross(yprime)).unit();
-  
-    if (fVP.GetLightsMoveWithCamera()) {
-      delta_alpha = dy * fDeltaRotation;
-      delta_theta = -dx * fDeltaRotation;
-    } else {
-      delta_alpha = -dy * fDeltaRotation;
-      delta_theta = dx * fDeltaRotation;
-    }    
-  
-    delta_alpha *= deg;
-    delta_theta *= deg;
-  
-    new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
-
-    // to avoid z rotation flipping
-    // to allow more than 360° rotation
-    if (fVP.GetLightsMoveWithCamera()) {
-      new_up = (new_vp.cross(yprime)).unit();
-      if (new_vp.z()*vp.z() <0) {
-        new_up.set(new_up.x(),-new_up.y(),new_up.z());
-      }
-    } else {
-      new_up = up;
-      if (new_vp.z()*vp.z() <0) {
-        new_up.set(new_up.x(),-new_up.y(),new_up.z());
-      }
-    }
-    fVP.SetUpVector(new_up);
-    ////////////////
-    // Rotates by fixed azimuthal angle delta_theta.
-    
-    cosalpha = new_up.dot (new_vp.unit());
-    sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
-    yprime = (new_up.cross (new_vp.unit())).unit ();
-    xprime = yprime.cross (new_up);
-    // Projection of vp on plane perpendicular to up...
-    a1 = sinalpha * xprime;
-    // Required new projection...
-    a2 = sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
-    // Required Increment vector...
-    delta = a2 - a1;
-    // So new viewpoint is...
-    viewPoint = new_vp.unit() + delta;
-    
-#ifdef GEANT4_QT_DEBUG
-//      printf("vp Vector : %f %f %f delta_alpha:%f delta_theta:%f cosalpha:%f sinalpha:%f\n",viewPoint.x(),viewPoint.y(),viewPoint.z(),delta_alpha,delta_theta,cosalpha,sinalpha);
-//      printf("up : %f %f %f\n",up.x(),up.y(),up.z());
-//      printf("new up : %f %f %f\n",new_up.x(),new_up.y(),new_up.z());
-//      printf("vp : %f %f %f\n",vp.x(),vp.y(),vp.z());
-//      printf("new_vp : %f %f %f\n",new_vp.x(),new_vp.y(),new_vp.z());
-#endif
-    fVP.SetViewAndLights (viewPoint);
-    updateQWidget();
-    
-    if (fAutoMove)
-      ((QApplication*)G4Qt::getInstance ())->processEvents();
-  }
+  rotateScene(dx,dy,fDeltaRotation);
+  emit rotateTheta(dx);
+  emit rotatePhi(dy);
+  updateQWidget();
   
   fHoldRotateEvent = false;
 }
+
+
+
 
 /** This is the benning of a rescale function. It does nothing for the moment
     @param aWidth : new width
@@ -2003,6 +1985,16 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 }
 
 
+void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event) 
+{
+  fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(event->delta())/1200)); 
+  updateQWidget();
+
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::wheel event  +++++++++++++++++++++ %f %d\n",fVP.GetZoomFactor(),event->delta());
+#endif
+}
+
 
 void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
 {
@@ -2031,28 +2023,28 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event)
 #else
   if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
 #endif
-    rotateScene(0,-1);
+    rotateQtCamera(0,-1);
   }
 #if QT_VERSION < 0x040000
   else if ((event->key() == Qt::Key_Up) && (event->state() & Qt::ShiftButton)) { // rotate phi
 #else
   else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ShiftModifier)) { // rotate phi
 #endif
-    rotateScene(0,1);
+    rotateQtCamera(0,1);
   }
 #if QT_VERSION < 0x040000
   if ((event->key() == Qt::Key_Left) && (event->state() & Qt::ShiftButton)) { // rotate theta
 #else
   if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
 #endif
-    rotateScene(1,0);
+    rotateQtCamera(1,0);
   }
 #if QT_VERSION < 0x040000
   else if ((event->key() == Qt::Key_Right) && (event->state() & Qt::ShiftButton)) { // rotate theta
 #else
   else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ShiftModifier)) { // rotate theta
 #endif
-    rotateScene(-1,0);
+    rotateQtCamera(-1,0);
   }
 
 #if QT_VERSION < 0x040000

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.14 2008-04-29 16:58:04 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.15 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -121,6 +121,7 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 void G4OpenGLStoredQtViewer::DrawView () {
 
 #ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLQtViewer::setupViewport\n");
   printf("G4OpenGLStoredQtViewer::DrawView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
 #endif
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
@@ -157,21 +158,18 @@ void G4OpenGLStoredQtViewer::DrawView () {
     FinishView ();
 
   } else {
-#ifdef GEANT4_QT_DEBUG
-    printf("***************************  CASE 1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
      
     // If kernel visit was needed, drawing and FinishView will already
     // have been done, so...
     if (!kernelVisitWasNeeded) {
 #ifdef GEANT4_QT_DEBUG
-      printf("***************************  CASE 2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
+      printf("**************************  G4OpenGLStoredQtViewer::DrawView Don't need kernel Visit \n");
 #endif
       DrawDisplayLists ();
       FinishView ();
     } else {
 #ifdef GEANT4_QT_DEBUG
-      printf("***************************  CASE 3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
+      printf("**************************  G4OpenGLStoredQtViewer::DrawView need kernel Visit \n");
 #endif
       // However, union cutaways are implemented in DrawDisplayLists, so make
       // an extra pass...
@@ -207,16 +205,8 @@ void G4OpenGLStoredQtViewer::FinishView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::FinishView VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
-#endif
-
   glFlush ();
   swapBuffers ();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::FinishView ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
-#endif
-
 }
 
 
@@ -313,13 +303,18 @@ void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
     printf("G4OpenGLStoredQtViewer::mousePressEvent\n");
 #endif
     setMouseTracking(true);
-    G4MousePressEvent(event->pos(),Qt::LeftButton);
+    G4MousePressEvent(event->pos());
   }
 }
 
 void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event) 
 {
   G4keyPressEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event) 
+{
+  G4wheelEvent(event);
 }
 
 /**
@@ -337,8 +332,9 @@ void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *event)
 
 void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
 {
+  G4MouseReleaseEvent();
 #ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLStoredQtViewer::mouseReleaseEvent\n");
+  printf("G4OpenGLStoredQtViewer::mouseReleaseEvent ================\n");
 #endif
   setMouseTracking(false);
 }
@@ -350,12 +346,6 @@ void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
   G4MouseMoveEvent(event->x(),event->y(),event->state());
 #else
   G4MouseMoveEvent(event->x(),event->y(),event->buttons());
-#endif
-  if (hasPendingEvents ())
-#if QT_VERSION < 0x040000
-    G4MouseMoveEvent(event->x(),event->y(),event->state());
-#else
-    G4MouseMoveEvent(event->x(),event->y(),event->buttons());
 #endif
 }
 

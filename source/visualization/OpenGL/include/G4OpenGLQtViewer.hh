@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.9 2008-03-11 16:05:56 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.10 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,9 @@ class QImage;
 class QAction;
 class QMouseEvent;
 class QKeyEvent;
+class QWheelEvent;
 class QProcess;
+class QTime;
 
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
@@ -91,19 +93,22 @@ protected:
   virtual void CreateMainWindow (QGLWidget*);
   void manageContextMenuEvent(QContextMenuEvent *e);
 #if QT_VERSION < 0x040000
-  void G4MousePressEvent(QPoint, Qt::ButtonState);
+  void G4MousePressEvent(QPoint);
 #else
-  void G4MousePressEvent(QPoint, Qt::MouseButtons);
+  void G4MousePressEvent(QPoint);
 #endif
+  void G4MouseReleaseEvent();
   void G4MouseDoubleClickEvent(QPoint p);
 #if QT_VERSION < 0x040000
-  void G4MouseMoveEvent(int, int, Qt::ButtonState,bool mAutoMove = false);
+  void G4MouseMoveEvent(int, int, Qt::ButtonState);
 #else
-  void G4MouseMoveEvent(int, int, Qt::MouseButtons,bool mAutoMove = false);
+  void G4MouseMoveEvent(int, int, Qt::MouseButtons);
 #endif
+  void G4wheelEvent (QWheelEvent * event); 
   void G4keyPressEvent (QKeyEvent * event); 
-  void rotateScene(G4double, G4double,bool mAutoRotate=false);
-  void moveScene(G4double, G4double, G4double,bool,bool mAutoMove=false);
+  void rotateQtScene(float, float);
+  void rotateQtCamera(float, float);
+  void moveScene(float, float, float,bool);
 
 
 protected:
@@ -114,6 +119,12 @@ protected:
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
+  float fRotationAngleX;
+  float fRotationAngleY;
+  float fRotationAngleZ;
+  float fDeltaRotationAngleX;
+  float fDeltaRotationAngleY;
+  float fDeltaRotationAngleZ;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
@@ -143,11 +154,9 @@ private:
 #endif
 
   mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
-  QPoint fLastPos;
-  /** delta X of move event */
-  G4double fDeltaPosX;
-  /** delta Y of move event */
-  G4double fDeltaPosY;
+  QPoint fLastPos1;
+  QPoint fLastPos2;
+  QPoint fLastPos3;
   /** delta of scene rotation. This delta is put in degree */
   G4double fDeltaRotation;
   /** delta of scene translation. This delta is put in % of the scene view */
@@ -182,6 +191,16 @@ private:
   G4OpenGLQtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
   QProcess *fProcess;
+  QTime *fLastEventTime;
+  int fSpinningDelay;
+  int fLaunchSpinDelay;
+
+signals:
+ void rotateTheta(int);
+ void rotatePhi(int);
+ void moveX(int);
+ void moveY(int);
+ void moveZ(int);
 
 private slots :
   void actionMouseRotate();

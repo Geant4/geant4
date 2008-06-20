@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.22 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.23 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@ protected:
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   virtual void print();
+  void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);

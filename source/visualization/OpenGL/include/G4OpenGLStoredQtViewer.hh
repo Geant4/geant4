@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.5 2008-01-30 10:54:13 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.6 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include <qgl.h>  // include qglwidget
 
 class QMouseEvent;
+class QWheelEvent;
 class QContextMenuEvent;
 
 class G4OpenGLStoredSceneHandler;
@@ -63,6 +64,7 @@ public:
   void updateQWidget();
 
 protected:
+  void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);

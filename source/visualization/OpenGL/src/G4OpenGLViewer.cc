@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.37 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.38 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 // OpenGL view - opens window, hard copy, etc.
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
+
+//#define GEANT4_QT_DEBUG
 
 #include "G4ios.hh"
 #include "G4OpenGLViewer.hh"
@@ -874,6 +876,108 @@ void G4OpenGLViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffe
   }
 
   free(prims);
+}
+
+void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
+{
+
+  G4Vector3D vp;
+  G4Vector3D up;
+  
+  G4Vector3D xprime;
+  G4Vector3D yprime;
+  G4Vector3D zprime;
+  
+  G4double delta_alpha;
+  G4double delta_theta;
+  
+  G4Vector3D new_vp;
+  G4Vector3D new_up;
+  
+  G4double cosalpha;
+  G4double sinalpha;
+  
+  G4Vector3D a1;
+  G4Vector3D a2;
+  G4Vector3D delta;
+  G4Vector3D viewPoint;
+
+    
+  //phi spin stuff here
+  
+  vp = fVP.GetViewpointDirection ().unit ();
+  up = fVP.GetUpVector ().unit ();
+  
+  yprime = (up.cross(vp)).unit();
+  zprime = (vp.cross(yprime)).unit();
+  
+  if (fVP.GetLightsMoveWithCamera()) {
+    delta_alpha = dy * deltaRotation;
+    delta_theta = -dx * deltaRotation;
+  } else {
+    delta_alpha = -dy * deltaRotation;
+    delta_theta = dx * deltaRotation;
+  }    
+  
+  delta_alpha *= deg;
+  delta_theta *= deg;
+  
+  new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
+  
+  // to avoid z rotation flipping
+  // to allow more than 360° rotation
+#ifdef GEANT4_QT_DEBUG
+  const G4Point3D targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+  if(radius<=0.) radius = 1.;
+  const G4double cameraDistance = fVP.GetCameraDistance (radius);
+  const G4Point3D cameraPosition =
+    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
+
+
+  printf("G4OpenGLViewer:: Tp: %f %f %f Vpd:%f %f %f - Up:%f %f %f Cp:%f %f %f\n",
+         targetPoint[0],targetPoint[1],targetPoint[2],
+         vp.x(),vp.y(),vp.z(),
+         up.x(),up.y(),up.z(),
+         cameraPosition[0],cameraPosition[1],cameraPosition[2]);
+#endif
+
+  if (fVP.GetLightsMoveWithCamera()) {
+    new_up = (new_vp.cross(yprime)).unit();
+    if (new_vp.z()*vp.z() <0) {
+      new_up.set(new_up.x(),-new_up.y(),new_up.z());
+    }
+  } else {
+    new_up = up;
+    if (new_vp.z()*vp.z() <0) {
+#ifdef GEANT4_QT_DEBUG
+      //      printf("G4OpenGLViewer:: ***********************************************************\n");
+#endif
+      new_up.set(new_up.x(),-new_up.y(),new_up.z());
+      //      new_vp.set(-new_vp.x(),new_vp.y(),new_vp.z());
+    }
+  }
+  new_up.set(new_up.x(),-new_up.y(),new_up.z());
+  fVP.SetUpVector(new_up);
+  ////////////////
+  // Rotates by fixed azimuthal angle delta_theta.
+  
+  cosalpha = new_up.dot (new_vp.unit());
+  sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
+  yprime = (new_up.cross (new_vp.unit())).unit ();
+  xprime = yprime.cross (new_up);
+  // Projection of vp on plane perpendicular to up...
+  a1 = sinalpha * xprime;
+  // Required new projection...
+  a2 = sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
+  // Required Increment vector...
+  delta = a2 - a1;
+  // So new viewpoint is...
+  viewPoint = new_vp.unit() + delta;
+  
+  fVP.SetViewAndLights (viewPoint);
 }
 
 #endif

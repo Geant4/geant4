@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.14 2006-06-29 21:19:56 gunter Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.15 2008-06-20 13:55:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,10 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
 {
   //theta spin stuff here
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
+
+  pView->rotateScene((G4double)pView->rot_sens,0,1);
+
+  /*
   G4double delta_theta;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
@@ -99,6 +103,7 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   G4Vector3D viewPoint = vp + delta;
 
   pView->fVP.SetViewAndLights (viewPoint);  
+  */
 
   pView->SetView ();
   pView->ClearView ();
@@ -134,6 +139,9 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
   G4double delta_alpha;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
+  pView->rotateScene(0,(G4double)pView->rot_sens,1);
+
+  /*
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {
       delta_alpha = -((G4double)pView->rot_sens);
@@ -166,6 +174,7 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
     pView->fVP.SetUpVector(new_up);
   }
 
+  */
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();
