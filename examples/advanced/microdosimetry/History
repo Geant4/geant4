@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2008-06-11 11:56:16 sincerti Exp $
+$Id: History,v 1.6 2008-06-20 21:09:45 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,10 +9,10 @@ $Id: History,v 1.5 2008-06-11 11:56:16 sincerti Exp $
                        Package History file
                        --------------------
 
-10 Jun 2008 - S. Incerti
+10 Jun 2008 - S. Incerti - microdosimetry-V09-01-02
 - added G4CrossSectionExcitationEmfietzoglou.cc with higher low energy limit (10 eV) than default (7.4 eV)
 - added G4DNA process names in Physics list
 - removed useless G4DNAProcess.hh and G4DNAProcess.icc files
 
-06 Jun 2008 - S. Incerti
+06 Jun 2008 - S. Incerti - microdosimetry-V09-01-01
 - Package created.
