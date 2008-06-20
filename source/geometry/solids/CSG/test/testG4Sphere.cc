@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.24 2008-06-19 09:48:36 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.25 2008-06-20 15:07:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -154,6 +154,7 @@ int main(void)
     G4Sphere sn13("sn13",0,50,0,twopi,0.75*pi,0.25*pi);
     G4Sphere sn14("sn14",0,50,0,twopi,0.25*pi,0.75*pi);
     G4Sphere sn15("sn15",0,50,0,twopi,89.*deg,91.*deg);
+    G4Sphere sn16("sn15",0,50,0,twopi,0.*deg,89.*deg);
 
     G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
     G4Sphere sn2("sn2",45,50,halfpi,halfpi,0,pi);
@@ -543,6 +544,15 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     // G4cout<<"sn12.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,0.));
 
+    Dist=sn12.DistanceToOut(G4ThreeVector(10.,0.,10.),vz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"sn12.DistanceToOut(G4ThreeVector(10.,0.,10.),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,38.989794855663561179));
+
+
+    Dist=sn12.DistanceToOut(G4ThreeVector(10.,0.,10.),vmz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"sn12.DistanceToOut(G4ThreeVector(10.,0.,10.),vmz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0.));
+
 
     Dist=sn14.DistanceToOut(G4ThreeVector(10.,0.,10.),vz,calcNorm,pgoodNorm,pNorm);
     // G4cout<<"sn14.DistanceToOut(G4ThreeVector(10.,0.,10.),vz... = "<<Dist<<G4endl;
@@ -561,6 +571,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     Dist=sn14.DistanceToOut(G4ThreeVector(10.,0.,10.),vmxz,calcNorm,pgoodNorm,pNorm);
     // G4cout<<"sn14.DistanceToOut(G4ThreeVector(10.,0.,10.),vmxz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,0.));
+
 
 
     iMax = 10000;
@@ -595,7 +606,37 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     assert(ApproxEqual(Dist,1.3409673565670394701));
 
 
+    zP   = 1.;
 
+    for( i = 0; i < iMax; i++)
+    {
+      rRand = rMax*G4UniformRand();
+      phi   = twopi*G4UniformRand();
+      pRand = G4ThreeVector( rRand*std::cos(phi), rRand*std::sin(phi), zP);
+
+      cosTheta =  -0.99*G4UniformRand();
+
+      sinTheta = std::sqrt((1.-cosTheta)*(1.+cosTheta));     
+      phi   = twopi*G4UniformRand();
+      vRand = G4ThreeVector( sinTheta*std::cos(phi), sinTheta*std::sin(phi), cosTheta);
+
+      Dist = sn16.DistanceToOut(pRand,vRand,calcNorm,pgoodNorm,pNorm);
+
+      if( -Dist*cosTheta > 2.*zP )
+      {
+        G4cout<<pRand.x()<<", "<<pRand.y()<<", "<<pRand.z()<<G4endl;
+        G4cout<<vRand.x()<<", "<<vRand.y()<<", "<<vRand.z()<<G4endl;
+	break;
+      }
+    }
+
+
+
+    pRand = G4ThreeVector( -18.872396210750576273, 11.573660000258405134, 1);
+    vRand = G4ThreeVector( -0.85674495247509219187, -0.51247617288646407641, -0.057933225631713866632);
+    Dist = sn16.DistanceToOut(pRand,vRand,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"sn16.DistanceToOut(pRand,vRand... = "<<Dist<<G4endl;  
+    assert(ApproxEqual(Dist,8.9849541128705734394));
    
 // Checking G4Sphere::DistanceToIn(P)
 
