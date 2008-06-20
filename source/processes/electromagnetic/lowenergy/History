@@ -1,4 +1,4 @@
-$Id: History,v 1.300 2008-06-11 12:22:53 sincerti Exp $
+$Id: History,v 1.301 2008-06-20 19:56:01 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.06.2008   S. Incerti, tag emlowen-V09-01-18
+             Added 4 protections against FPE in G4hLowEnergyLoss.cc
 
 11.06.2008   S. Incerti, tag emlowen-V09-01-17
              - added missing & for cosTheta and phi variables in G4FinalStateIonisationRudd.hh and .cc
