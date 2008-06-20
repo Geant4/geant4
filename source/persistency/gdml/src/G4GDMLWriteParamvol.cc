@@ -176,9 +176,13 @@ void G4GDMLWriteParamvol::parametersWrite(xercesc::DOMElement* paramvolElement,c
 
    paramvol->GetParameterisation()->ComputeTransformation(index,const_cast<G4VPhysicalVolume*>(paramvol));
    
+   std::stringstream ptr_stream;
+   ptr_stream << paramvol;
+   const G4String ptr_string(ptr_stream.str());
+   
    xercesc::DOMElement* parametersElement = newElement("parameters");
-   rotationWrite(parametersElement,"",getAngles(paramvol->GetObjectRotationValue()));
-   positionWrite(parametersElement,"",paramvol->GetObjectTranslation());
+   rotationWrite(parametersElement,"rotation"+ptr_string,getAngles(paramvol->GetObjectRotationValue()));
+   positionWrite(parametersElement,"position"+ptr_string,paramvol->GetObjectTranslation());
    paramvolElement->appendChild(parametersElement);
 
    G4VSolid* solid = paramvol->GetLogicalVolume()->GetSolid();

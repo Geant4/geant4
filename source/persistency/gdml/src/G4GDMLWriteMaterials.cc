@@ -103,7 +103,7 @@ void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr) {
       atomWrite(elementElement,elementPtr->GetA());
    }
 
-   materialsElement->appendChild(elementElement); // Append the element after all the possible components are appended!
+   materialsElement->appendChild(elementElement); // Append the element AFTER all the possible components are appended!
 }
 
 void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
@@ -146,7 +146,7 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
       atomWrite(materialElement,materialPtr->GetA());
    }
 
-   materialsElement->appendChild(materialElement); // Append the material after all the possible components are appended!
+   materialsElement->appendChild(materialElement); // Append the material AFTER all the possible components are appended!
 }
 
 void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element) {

@@ -206,31 +206,32 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
          daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
       } else {
-         G4GDMLWriteStructure writer;
+         
+	 G4GDMLWriteStructure writer;
          daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),depth+1);
       }
 
-      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { 
+      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { // Is it a divisionvol?
       
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
 	    G4Exception("G4GDML: ERROR! divisionvol in '"+name+"' can not be related to reflected solid!");
 
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
-      if (physvol->IsParameterised()) { 
+      if (physvol->IsParameterised()) { // Is it a paramvol?
        
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
 	    G4Exception("G4GDML: ERROR! paramvol in '"+name+"' can not be related to reflected solid!");
 
          paramvolWrite(volumeElement,physvol);
       } else
-      if (physvol->IsReplicated()) { 
+      if (physvol->IsReplicated()) { // Is it a replicavol?
 
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
 	    G4Exception("G4GDML: ERROR! replicavol in '"+name+"' can not be related to reflected solid!");
 
          replicavolWrite(volumeElement,physvol); 
-      } else {
+      } else { // Is it a physvol?
    
          G4RotationMatrix rot;
 

@@ -187,7 +187,7 @@ G4String G4GDMLWrite::Modularize(const G4VPhysicalVolume* const physvol,const G4
       return G4String(stream.str());
    }
 
-   return G4String(""); // No modularization!
+   return G4String(""); // Empty string for module name = no modularization was requested at that level/physvol!
 }
 
 void G4GDMLWrite::SetAddPointerToName(bool set) {
