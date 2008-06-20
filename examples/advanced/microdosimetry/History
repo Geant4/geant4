@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2008-06-20 21:09:45 sincerti Exp $
+$Id: History,v 1.7 2008-06-20 21:11:08 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.6 2008-06-20 21:09:45 sincerti Exp $
 
                        Package History file
                        --------------------
+
+20 Jun 2008 - S. Incerti - microdosimetry-V09-01-03
+- updated History
 
 10 Jun 2008 - S. Incerti - microdosimetry-V09-01-02
 - added G4CrossSectionExcitationEmfietzoglou.cc with higher low energy limit (10 eV) than default (7.4 eV)
