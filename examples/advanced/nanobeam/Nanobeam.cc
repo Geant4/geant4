@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.5 2008-06-02 10:00:40 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.6 2008-06-21 19:28:03 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -85,11 +85,11 @@ int main(int argc,char** argv) {
   system ("rm -rf  ./results/profile.txt");
   system ("rm -rf  ./results/grid.txt");
 
-/*
   if (argc==1)   // Define UI session for interactive mode.
   { 
     // G4UIterminal is a (dumb) terminal.
     G4UIsession * session = new G4UIterminal;    
+    UI->ApplyCommand("/control/execute default.mac");
     session->SessionStart();
     delete session;
   }
@@ -101,10 +101,9 @@ int main(int argc,char** argv) {
     UI->ApplyCommand(command+fileName);
   }
 
-*/
 
 // test
-
+/*
   if (argc!=1) 
   {
     G4String command = "/control/execute ";
@@ -127,7 +126,7 @@ int main(int argc,char** argv) {
     delete session;
   }
 
-
+*/
 // end test
 
   delete runManager;

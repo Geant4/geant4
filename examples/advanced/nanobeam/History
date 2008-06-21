@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.3 2008-01-25 20:49:23 sincerti Exp $
+$Id: History,v 1.4 2008-06-21 19:28:03 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.3 2008-01-25 20:49:23 sincerti Exp $
 
                        Package History file
                        --------------------
+
+21 June 2008 - tag nanobeam-V09-01-11 - S. Incerti
+- several tags to try to resolve conflict with system testing
 
 25 January 2008 - tag nanobeam-V09-01-01 - S. Incerti
 - first version of nanobeam example committed
