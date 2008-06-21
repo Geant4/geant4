@@ -45,7 +45,6 @@
 #ifdef G4ANALYSIS_USE_ROOT
 #include "TROOT.h"
 #include "TFile.h"
-//#include "TApplication.h"
 #include "TH1D.h"
 #endif
 
@@ -71,7 +70,6 @@ Histo::Histo()
 #endif
   //
 #ifdef G4ANALYSIS_USE_ROOT
-  //  m_root = new TApplication("App", ((int *)0), ((char **)0));
   histType   = "root";
 #endif
 }
@@ -113,8 +111,9 @@ void Histo::book()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
-    if(active[i]) 
+    if(active[i]) {
       histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
+    }
   }
   delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree
@@ -163,7 +162,8 @@ void Histo::save()
 
   // Writing and closing the ROOT file
 #ifdef G4ANALYSIS_USE_ROOT
-  G4cout << "[Histo::save] ROOT: files writing..." << G4endl;
+  G4String nam = histName + "." + histType;
+  G4cout << "[Histo::save] ROOT: file writing <" <<nam << ">"<< G4endl;
   m_ROOT_file->Write();
   G4cout << "[Histo::save] ROOT: files closing..." << G4endl;
   m_ROOT_file->Close();
