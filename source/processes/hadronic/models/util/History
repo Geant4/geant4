@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 June 2008 G.Folger (hadr-mod-util-V09-01-06)
+-----------------------------------------------
+-  Attempt to fix memory leak in G4Fancy3DNucleus::SortNucleonsInZ().
+-   remove debug introduced code by VU
+
 19 June 2008 G. Cosmo (hadr-mod-util-V09-01-05)
 -----------------------------------------------
 -  Fixed noisy compilation warning in G4ExcitedString.hh for
