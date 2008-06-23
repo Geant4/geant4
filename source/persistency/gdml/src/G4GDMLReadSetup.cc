@@ -52,9 +52,8 @@ void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName  = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName  = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = attValue;
    }
@@ -64,8 +63,7 @@ void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag == "world") setupMap[name] = GenerateName(refRead(child));
    }

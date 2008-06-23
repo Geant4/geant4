@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.15 2008-06-19 09:37:51 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.16 2008-06-23 10:48:58 ztorzsok Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLBase
@@ -60,17 +60,17 @@ public:
    void warning(const xercesc::SAXParseException& exception) {
    
       if (Suppress) return;
-   
-      const char* message = xercesc::XMLString::transcode(exception.getMessage());
+      char* message = xercesc::XMLString::transcode(exception.getMessage());
       G4cout << "G4GDML: VALIDATION WARNING! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      xercesc::XMLString::release(&message);
    }
 
    void error(const xercesc::SAXParseException& exception) {
 
       if (Suppress) return;
-
-      const char* message = xercesc::XMLString::transcode(exception.getMessage());
+      char* message = xercesc::XMLString::transcode(exception.getMessage());
       G4cout << "G4GDML: VALIDATION ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      xercesc::XMLString::release(&message);
    }
 
    void fatalError(const xercesc::SAXParseException& exception) { error(exception); }
@@ -85,6 +85,7 @@ protected:
    G4GDMLEvaluator eval;
    bool Validate;
 
+   G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String&);
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
    void loopRead(const xercesc::DOMElement* const,void(G4GDMLRead::*)(const xercesc::DOMElement* const));

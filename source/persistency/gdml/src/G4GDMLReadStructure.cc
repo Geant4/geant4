@@ -43,8 +43,8 @@ G4GDMLAuxPairType G4GDMLReadStructure::auxiliaryRead(const xercesc::DOMElement* 
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="auxtype") auxpair.type = attValue; else
       if (attName=="auxvalue") auxpair.value = eval.Evaluate(attValue);
@@ -71,8 +71,8 @@ void G4GDMLReadStructure::bordersurfaceRead(const xercesc::DOMElement* const bor
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="surfaceproperty") prop = getSurfaceProperty(GenerateName(attValue));
@@ -83,7 +83,7 @@ void G4GDMLReadStructure::bordersurfaceRead(const xercesc::DOMElement* const bor
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag != "physvolref") continue; 
       
@@ -115,8 +115,8 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = attValue; else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
@@ -141,7 +141,7 @@ void G4GDMLReadStructure::divisionvolRead(const xercesc::DOMElement* const divis
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
@@ -172,8 +172,8 @@ G4LogicalVolume* G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const 
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = attValue; else
       if (attName=="volname") volname = attValue;
@@ -205,8 +205,8 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = attValue;
    }
@@ -216,7 +216,7 @@ void G4GDMLReadStructure::physvolRead(const xercesc::DOMElement* const physvolEl
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="file") logvol = fileRead(child); else
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child))); else
@@ -258,8 +258,8 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = attValue; else
       if (attName=="unit") unit = eval.Evaluate(attValue); else
@@ -284,7 +284,7 @@ void G4GDMLReadStructure::replicavolRead(const xercesc::DOMElement* const replic
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child)));
    }
@@ -302,7 +302,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
    G4GDMLAuxListType auxList;
    
    XMLCh *name_attr = xercesc::XMLString::transcode("name");
-   G4String name = xercesc::XMLString::transcode(volumeElement->getAttribute(name_attr));
+   const G4String name = Transcode(volumeElement->getAttribute(name_attr));
    xercesc::XMLString::release(&name_attr);
 
    for (xercesc::DOMNode* iter = volumeElement->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
@@ -310,7 +310,7 @@ void G4GDMLReadStructure::volumeRead(const xercesc::DOMElement* const volumeElem
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="auxiliary") auxList.push_back(auxiliaryRead(child)); else
       if (tag=="materialref") materialPtr = getMaterial(GenerateName(refRead(child))); else
@@ -340,8 +340,8 @@ void G4GDMLReadStructure::skinsurfaceRead(const xercesc::DOMElement* const skins
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") name = GenerateName(attValue); else
       if (attName=="surfaceproperty") prop = getSurfaceProperty(GenerateName(attValue));
@@ -352,7 +352,7 @@ void G4GDMLReadStructure::skinsurfaceRead(const xercesc::DOMElement* const skins
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") logvol = getVolume(GenerateName(refRead(child))); else
       G4Exception("G4GDML: ERROR! Unknown tag in skinsurface: "+tag);
@@ -368,7 +368,7 @@ void G4GDMLReadStructure::volume_contentRead(const xercesc::DOMElement* const vo
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="auxiliary" || tag=="materialref" || tag=="solidref") { } else // These are already processed in volmeRead
       if (tag=="paramvol") paramvolRead(child,pMotherLogical); else
@@ -389,7 +389,7 @@ void G4GDMLReadStructure::structureRead(const xercesc::DOMElement* const structu
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="bordersurface") bordersurfaceRead(child); else
       if (tag=="skinsurface") skinsurfaceRead(child); else

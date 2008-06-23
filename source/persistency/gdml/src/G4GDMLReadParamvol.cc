@@ -14,9 +14,8 @@ void G4GDMLReadParamvol::box_dimensionsRead(const xercesc::DOMElement* const ele
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="x") parameter.dimension[0] = eval.Evaluate(attValue); else
@@ -43,9 +42,8 @@ void G4GDMLReadParamvol::trd_dimensionsRead(const xercesc::DOMElement* const ele
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="x1") parameter.dimension[0] = eval.Evaluate(attValue); else
@@ -77,9 +75,8 @@ void G4GDMLReadParamvol::trap_dimensionsRead(const xercesc::DOMElement* const el
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -124,9 +121,8 @@ void G4GDMLReadParamvol::tube_dimensionsRead(const xercesc::DOMElement* const el
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -159,9 +155,8 @@ void G4GDMLReadParamvol::cone_dimensionsRead(const xercesc::DOMElement* const el
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -198,9 +193,8 @@ void G4GDMLReadParamvol::sphere_dimensionsRead(const xercesc::DOMElement* const 
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -234,9 +228,8 @@ void G4GDMLReadParamvol::orb_dimensionsRead(const xercesc::DOMElement* const ele
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="r") parameter.dimension[0] = eval.Evaluate(attValue);
@@ -260,9 +253,8 @@ void G4GDMLReadParamvol::torus_dimensionsRead(const xercesc::DOMElement* const e
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -295,9 +287,8 @@ void G4GDMLReadParamvol::para_dimensionsRead(const xercesc::DOMElement* const el
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -332,9 +323,8 @@ void G4GDMLReadParamvol::hype_dimensionsRead(const xercesc::DOMElement* const el
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attName = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attValue = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit") lunit = eval.Evaluate(attValue); else
       if (attName=="aunit") aunit = eval.Evaluate(attValue); else
@@ -364,8 +354,7 @@ void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
       
       if (tag=="rotation") vectorRead(child,rotation); else
       if (tag=="position") vectorRead(child,position); else
@@ -400,8 +389,7 @@ void G4GDMLReadParamvol::paramvol_contentRead(const xercesc::DOMElement* const e
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
        if (tag=="parameters") parametersRead(child); else
        if (tag=="loop") loopRead(child,&G4GDMLRead::paramvol_contentRead);
@@ -419,8 +407,7 @@ void G4GDMLReadParamvol::paramvolRead(const xercesc::DOMElement* const element,G
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
        if (tag=="volumeref") volumeref = refRead(child);
    }

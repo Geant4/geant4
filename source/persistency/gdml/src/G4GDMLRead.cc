@@ -29,6 +29,14 @@
 
 #include "G4GDMLRead.hh"
 
+G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode) {
+
+   char* char_str = xercesc::XMLString::transcode(toTranscode);
+   G4String my_str(char_str);
+   xercesc::XMLString::release(&char_str);
+   return my_str;
+}
+
 G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
 
    G4String nameOut(nameIn);
@@ -72,9 +80,8 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
       if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
 
       const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-
-      const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
-      const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
+      const G4String attribute_name = Transcode(attribute->getName());
+      const G4String attribute_value = Transcode(attribute->getValue());
 
       if (attribute_name=="for") var = attribute_value; else
       if (attribute_name=="from") from = attribute_value; else
@@ -136,22 +143,9 @@ void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
    parser->setDoSchema(true);
    parser->setErrorHandler(handler);
 
-   try {
-
-      parser->parse(fileName.c_str());
-   }
-   catch (const xercesc::XMLException &e) {
-   
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "G4GDML: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
-   catch (const xercesc::DOMException &e) {
-   
-      char* message = xercesc::XMLString::transcode(e.getMessage());
-      G4cout << "G4GDML: " << message << G4endl;
-      xercesc::XMLString::release(&message);
-   }
+   try { parser->parse(fileName.c_str()); }
+   catch (const xercesc::XMLException &e) { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
+   catch (const xercesc::DOMException &e) { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
 
    xercesc::DOMDocument* doc = parser->getDocument();
 
@@ -166,8 +160,7 @@ void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
 
       const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-
-      const G4String tag = xercesc::XMLString::transcode(child->getTagName());
+      const G4String tag = Transcode(child->getTagName());
 
       if (tag=="define") defineRead(child); else
       if (tag=="materials") materialsRead(child); else
