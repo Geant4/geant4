@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.66 2008-06-23 07:41:33 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.67 2008-06-23 13:47:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -1959,7 +1959,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   G4double cosHDPhiOT,cosHDPhiIT;
 
   G4bool segTheta;                             // Theta flag and precals
-  G4double tanSTheta=0.,tanETheta, rhoSecTheta;
+  G4double tanSTheta=0.,tanETheta=0., rhoSecTheta;
   G4double tanSTheta2=0.,tanETheta2=0.;
   G4double dist2STheta, dist2ETheta, distTheta;
   G4double d2,s;
