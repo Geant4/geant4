@@ -30,10 +30,12 @@
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
+#include "G4STEPRead.hh"
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
 class G4GDMLParser {
+   G4STEPStep stepreader;
    G4GDMLReadStructure reader;
    G4GDMLWriteStructure writer;
 public:
@@ -46,10 +48,11 @@ public:
       reader.Read(fname,Validate,IsModule); 
    }
 
-   void Write(const G4String& fname,const G4LogicalVolume* const logvol) { 
+   void Write(const G4String& fname,const G4LogicalVolume* const logvol,
+   const G4String& SchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd") { 
    
       const G4int depth = 0;
-      writer.Write(fname,logvol,depth);
+      writer.Write(fname,logvol,SchemaLocation,depth);
    }
 
    G4double GetConstant(const G4String& name) { return reader.getConstant(name); }

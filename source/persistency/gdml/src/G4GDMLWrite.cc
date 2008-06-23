@@ -85,7 +85,9 @@ xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name) {
    return doc->createElement(tempStr);
 }
 
-G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,const G4int depth) {
+G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* const logvol,const G4String& setSchemaLocation,const G4int depth) {
+
+   SchemaLocation = setSchemaLocation;
 
    if (depth==0) G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl;
    else G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl;
@@ -106,9 +108,8 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true))
       writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,true);
 
-   gdml->setAttributeNode(newAttribute("xmlns:gdml","http://cern.ch/2001/Schemas/GDML"));
    gdml->setAttributeNode(newAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance"));
-   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation","http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd"));
+   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation",SchemaLocation));
 
    defineWrite(gdml);
    materialsWrite(gdml);

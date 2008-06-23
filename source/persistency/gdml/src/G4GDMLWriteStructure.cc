@@ -208,7 +208,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       } else {
          
 	 G4GDMLWriteStructure writer;
-         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),depth+1);
+         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),SchemaLocation,depth+1);
       }
 
       if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { // Is it a divisionvol?

@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2008-06-23 10:48:58 ztorzsok Exp $
+$Id: History,v 1.73 2008-06-23 13:46:34 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 23 June 2008 Zoltan Torzsok
 - String handling optimized
+  Schema location can be set in the writer
 
 20 June 2008 Zoltan Torzsok
 - noNamespaceSchemaLocation is set to url of GDML2_10_0

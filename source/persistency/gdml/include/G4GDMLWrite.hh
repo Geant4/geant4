@@ -57,11 +57,12 @@ private:
    VolumeMapType& volumeMap();
    DepthMapType& depthMap();
 protected:
+   G4String SchemaLocation;
+
    G4String GenerateName(const G4String&,const void* const);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
    xercesc::DOMElement* newElement(const G4String&);
-
    virtual void defineWrite(xercesc::DOMElement*)=0;
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
@@ -70,7 +71,7 @@ protected:
    virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
    G4String Modularize(const G4VPhysicalVolume* const,const G4int);
 public:
-   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4int);
+   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4String&,const G4int);
    void AddModule(const G4VPhysicalVolume* const,const G4String&);
    void AddModule(const G4int);
    static void SetAddPointerToName(bool);
