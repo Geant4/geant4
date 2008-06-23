@@ -104,7 +104,7 @@ global: lib bin
 
 all: lib
 
-lib: libc libF
+lib: cleanf libc libF
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 libc : $(G4LIBDIR)/lib$(name).$(SHEXT)
