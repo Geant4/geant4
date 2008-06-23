@@ -42,10 +42,6 @@
 #include <algorithm>
 #include "G4HadronicException.hh"
 
-   bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon* nuc1, const G4Nucleon* nuc2)
-{
-	return nuc1->GetPosition().z() < nuc2->GetPosition().z();
-}    
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -135,23 +131,31 @@ const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 	return theRWNucleons;
 }
 
+   bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon* nuc1, const G4Nucleon* nuc2)
+{
+	return nuc1->GetPosition().z() < nuc2->GetPosition().z();
+}    
+
 void G4Fancy3DNucleus::SortNucleonsInZ()
 {
-        G4Nucleon * sortedNucleons = new G4Nucleon[myA];
 	
 	GetNucleons();   // make sure theRWNucleons is initialised
 
 	if (theRWNucleons.size() < 2 ) return; 
+
 	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
 
 // now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
 //  so we need to copy to new, and then swap. 
+        G4Nucleon * sortedNucleons = new G4Nucleon[myA];
 	for ( unsigned int i=0; i<theRWNucleons.size(); i++ )
 	{
 	   sortedNucleons[i]= *(theRWNucleons[i]);
 	}
-	theRWNucleons.clear();   // about to delete array elements these point to....
+
+	theRWNucleons.clear();   // about to delete array these point to....
 	delete [] theNucleons;
+	
 	theNucleons=sortedNucleons;
 
 	return;
@@ -396,24 +400,12 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
 
 
-//G4cout<<"Fermi momenta"<<G4endl;                       // Uzhi
     G4double energy;
     for ( i=0; i< myA ; i++ )
     {
-//G4cout<<"nucleon i "<<i<<" mom "<<momentum[i]<<G4endl; // Uzhi
-//    // Uzhi close Fermi-motion
        energy = theNucleons[i].GetParticleType()->GetPDGMass()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
-//   // Uzhi
-/*   // Uzhi
-       energy = theNucleons[i].GetParticleType()->GetPDGMass();
-//	        - BindingEnergy()/myA;
-       G4LorentzVector tempV(0.,0.,0.,energy);
-*/   // Uzhi
-
-//G4cout<<"nucleon 4-mom   "<<tempV<<G4endl;             // Uzhi
-
        theNucleons[i].SetMomentum(tempV);
     }
 
