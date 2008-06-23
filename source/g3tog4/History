@@ -1,7 +1,11 @@
-$Id: History,v 1.61 2005-11-14 18:21:56 gcosmo Exp $
+$Id: History,v 1.62 2008-06-23 09:47:50 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V09-01-00 23-Jun-2008 G.Cosmo
+- GNUmakefile: clean Fortran objects in 'lib' target before building
+  the libraries.
 
 g3tog4-V07-01-01 14-Nov-2005 G.Cosmo
 - Implemented migration to <sstream> from deprecated <strstream>.
