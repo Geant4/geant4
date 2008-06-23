@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 28-Jun-2007
+# Last update: 23-Jun-2008
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -253,6 +253,7 @@ listDirWarnings = open( "listDirWarnings.txt", "w" )
 listWarningMessages = open( "listWarningMessages.txt", "w" )
 
 countDir = 0
+countDirFailed = 0
 countDirWithRunCrashes = 0
 countDirWithEnergyNotConserved = 0
 countDirWithNtuples = 0
@@ -373,6 +374,7 @@ for dir in listDir :
     if ( foundPS ) :
         countDirWithPS += 1
     if ( not foundNtuples  or  not foundPvalues ) :
+        countDirFailed += 1
         listDirFailed.write( currentDir + "\n" )
     if ( foundNan ) :
         countDirWithNan += 1
@@ -400,6 +402,7 @@ print " Summary: "
 print " Number of found expected tar-balls = ", countExpectedTarBallsFound
 print " Number of NOT found expected tar-balls = ", countExpectedTarBallsNotFound
 print " Number of directories = ", countDir
+print " Number of directories that Failed = ", countDirFailed
 print " Number of directories with Run crashes = ", countDirWithRunCrashes
 print " Number of directories with Energy NOT conserved = ", \
       countDirWithEnergyNotConserved
