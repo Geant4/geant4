@@ -26,13 +26,15 @@
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
-
+ 
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
 #include "G4STEPRead.hh"
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
+
+#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser {
    G4STEPRead stepreader;
@@ -48,8 +50,7 @@ public:
       reader.Read(fname,Validate,IsModule); 
    }
 
-   void Write(const G4String& fname,const G4LogicalVolume* const logvol,
-   const G4String& SchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd") { 
+   void Write(const G4String& fname,const G4LogicalVolume* const logvol,const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION) { 
    
       const G4int depth = 0;
       writer.Write(fname,logvol,SchemaLocation,depth);
