@@ -35,7 +35,7 @@
 #include "G4GDMLWriteStructure.hh"
 
 class G4GDMLParser {
-   G4STEPStep stepreader;
+   G4STEPRead stepreader;
    G4GDMLReadStructure reader;
    G4GDMLWriteStructure writer;
 public:
