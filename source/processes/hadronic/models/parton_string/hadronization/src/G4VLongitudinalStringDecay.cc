@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.12 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.13 2008-06-23 08:35:55 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -105,6 +105,9 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    PastInitPhase=false;
    hadronizer = new G4HadronBuilder(pspin_meson,pspin_barion,
 		   		scalarMesonMix,vectorMesonMix);
+   Kappa = 1.0 * GeV/fermi;
+
+
 }
    
 
@@ -351,7 +354,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
                                                                 // quark containt of new string
        G4LorentzVector* HadronMomentum=SplitEandP(HadronDefinition, string, newString);
 
-       delete newString;
+       delete newString; newString=0;                          // Uzhi 20.06.08
 	
        G4KineticTrack * Hadron =0;
        if ( HadronMomentum != 0 ) {    
@@ -495,8 +498,10 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
    {
 
    // `yo-yo` formation time
-   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
-
+//   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
+     G4double kappa = GetStringTensionParameter();
+//G4cout<<"Kappa "<<kappa<<G4endl;                   // Uzhi 20.06.08
+//G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
    for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 
@@ -654,6 +659,12 @@ void G4VLongitudinalStringDecay::SetVectorMesonMixings(std::vector<G4double> aVe
 		   		scalarMesonMix,vectorMesonMix);
   
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+void G4VLongitudinalStringDecay::SetStringTensionParameter(G4double aValue)// Uzhi 20 June 08
+{
+          Kappa = aValue * GeV/fermi;
 }	
 //**************************************************************************************
 

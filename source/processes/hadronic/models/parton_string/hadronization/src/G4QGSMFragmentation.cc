@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.8 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4QGSMFragmentation.cc,v 1.9 2008-06-23 08:35:55 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -120,6 +120,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 			   currentString=newString;
 			} else {
 			 // abandon ... start from the beginning
+			   if (newString) delete newString;          // Uzhi restore 20.06.08
 			   if (Hadron)    delete Hadron;
 			   inner_sucess=false;
 			   break;

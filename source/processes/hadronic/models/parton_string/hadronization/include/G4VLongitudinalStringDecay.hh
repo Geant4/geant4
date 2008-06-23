@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.5 2007-12-20 15:38:07 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.6 2008-06-23 08:35:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Maxim Komogorov
 //
@@ -158,6 +158,8 @@ public:
    void SetScalarMesonMixings( std::vector<G4double> aVector);
    void SetVectorMesonMixings( std::vector<G4double> aVector);
 
+   void SetStringTensionParameter(G4double aValue);            // Uzhi 20 June 08
+
 //private:
 protected:  
    G4double GetDiquarkSuppress()	{return DiquarkSuppress;};
@@ -165,6 +167,8 @@ protected:
    G4double GetStrangeSuppress()	{return StrangeSuppress;};
    G4double GetClusterMass()		{return ClusterMass;};
    G4int    GetClusterLoopInterrupt()   {return ClusterLoopInterrupt;};
+
+   G4double GetStringTensionParameter() {return Kappa;};       // Uzhi 20 June 08
    
 //private:
 protected:  
@@ -186,6 +190,8 @@ protected:
    std::vector<G4double> scalarMesonMix;
    
    G4bool    PastInitPhase;
+
+   G4double Kappa; // String tension parameter                 // Uzhi 20 June 08
 
 //   G4double MinFragmentationMass(G4ExcitedString * theString,
 //				G4ParticleDefinition*& Hadron1,

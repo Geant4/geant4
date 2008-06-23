@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.12 2008-06-23 08:35:55 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4LundStringFragmentation.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.12 2008-06-23 08:35:55 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
-//      GEANT 4 class implementation file
+//      GEANT 4 class implementation fileSetStringTensionParameter(G4double aValue);            // Uzhi 20 June 08
 //
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
@@ -58,6 +58,8 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 // ------ Smooth parameter used at a string fragmentation for ---
 // ------ smearinr sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
+
+    SetStringTensionParameter(0.25);                           // Uzhi 20 June 08
    }
 
 // --------------------------------------------------------------
