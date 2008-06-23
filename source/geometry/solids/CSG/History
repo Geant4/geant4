@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2008-04-23 09:47:01 gcosmo Exp $
+$Id: History,v 1.103 2008-06-23 07:41:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 20, 2008  V.Grichine
+- G4Sphere: fixed calculation of roots in DistanceToOut(p,v,...) for
+  theta-conical surfaces interserctions and for sTheta<=90 degree intersection.
+  Addresses issue reported when running PET application with optical photons
+  about mis-computation of distance on half-sphere constructs.
+- Updated unit test for sphere.
 
 Apr 22, 2008  V.Grichine                 geom-csg-V09-01-02
 - G4Trap: corrections for arithmetic operations in 8-point constructor.
