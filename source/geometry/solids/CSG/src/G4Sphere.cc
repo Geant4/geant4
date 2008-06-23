@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.65 2008-06-23 07:29:57 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.66 2008-06-23 07:41:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -33,8 +33,7 @@
 //
 // History:
 //
-//
-// 12.06.08 V. Grichine theta intersections in Distance ToOut(p,v,...)
+// 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
 // 22.07.05 O.Link    : Added check for intersection with double cone
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
@@ -48,7 +47,7 @@
 // 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
 // 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
 // 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
 // 17.09.96 V.Grichine: final modifications to commit
 // 28.03.94 P.Kent: old C++ code converted to tolerant geometry
 // --------------------------------------------------------------------
