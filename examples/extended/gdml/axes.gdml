@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd">
 
    <define>
       <constant name="XLength" value="100"/>
@@ -33,7 +33,7 @@
    </materials>
 
    <solids>
-      <box name="WorldBox" x="2000" y="2000" z="2000"/>
+      <box name="WorldBox" x="700" y="700" z="700"/>
       <box name="XBox" x="100" y="005" z="005"/>
       <box name="YBox" x="005" y="200" z="005"/>
       <box name="ZBox" x="005" y="005" z="300"/>
@@ -71,7 +71,7 @@
       <volume name="TOP">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
-         <physvol>
+         <physvol name="pvXAxis">
             <volumeref ref="vXBox"/>
             <positionref ref="XBoxPos"/>
 	 </physvol>
@@ -88,18 +88,18 @@
          </physvol>
          <physvol>
             <volumeref ref="vArrow"/>
-            <rotationref ref="XArrowRot"/>
             <positionref ref="XArrowPos"/>
+            <rotationref ref="XArrowRot"/>
          </physvol>
          <physvol>
             <volumeref ref="vArrow"/>
-            <rotationref ref="YArrowRot"/>
             <positionref ref="YArrowPos"/>
+            <rotationref ref="YArrowRot"/>
          </physvol>
          <physvol>
             <volumeref ref="vArrow"/>
-            <rotationref ref="ZArrowRot"/>
             <positionref ref="ZArrowPos"/>
+            <rotationref ref="ZArrowRot"/>
          </physvol>
       </volume>
    </structure>

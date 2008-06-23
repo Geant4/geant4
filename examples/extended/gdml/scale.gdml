@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
-
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd" >
    <define>
-      <position name="DiamondPos" x="100" y="0"/>
-      <rotation name="DiamondRot" z="30" unit="deg"/>
-      <scale name="DiamondScl" x="-1" y="+1" z="+1"/>
    </define>
 
    <materials>
@@ -20,6 +16,7 @@
 
    <solids>
       <box y="200" x="200" lunit="cm" z="200" name="WorldBox"/>
+      <box y="50" x="25" lunit="cm" z="100" name="DiamondBox"/>
       <xtru name="Extruded">
          <twoDimVertex x="0" y="0"/>
          <twoDimVertex x="100" y="0"/>
@@ -36,10 +33,10 @@
       </volume>
       <volume name="VDiamond">
          <materialref ref="ALU"/>
-         <solidref ref="Extruded"/>
+         <solidref ref="DiamondBox"/>
          <physvol>
             <volumeref ref="VExtruded"/>
-            <scale name="ScalePPP" x="+1" y="+1" z="+1"/>
+	    <scale name="ScalePPP" x="+1" y="+1" z="+1"/>
          </physvol>
          <physvol>
             <volumeref ref="VExtruded"/>
@@ -48,14 +45,14 @@
          <physvol>
             <volumeref ref="VExtruded"/>
             <scale name="ScalePNP" x="+1" y="-1" z="+1"/>
+         </physvol> 
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScaleNNP" x="-1" y="-1" z="+1"/>
          </physvol>
          <physvol>
             <volumeref ref="VExtruded"/>
             <scale name="ScalePPN" x="+1" y="+1" z="-1"/>
-         </physvol>
-         <physvol>
-            <volumeref ref="VExtruded"/>
-            <scale name="ScaleNNP" x="-1" y="-1" z="+1"/>
          </physvol>
          <physvol>
             <volumeref ref="VExtruded"/>
@@ -75,20 +72,22 @@
          <solidref ref="WorldBox"/>
          <physvol>
             <volumeref ref="VDiamond"/>
-            <positionref ref="DiamondPos"/>
-            <rotation z="30" unit="deg"/>
-            <scaleref ref="DiamondScl"/>
+            <position name="pos" x="200"/>
+            <rotation name="rot" z="30" unit="deg"/>
          </physvol>
       </volume>
       <volume name="TOP">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
          <physvol>
-            <file name="axes.gdml" volname="TOP"/>
+            <file name="axes.gdml"/>
          </physvol>
          <physvol>
             <volumeref ref="VMother"/>
-            <scaleref ref="DiamondScl"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VMother"/>
+            <scale name="scl" x="-1" y="1" z="1"/>
          </physvol>
       </volume>
    </structure>
