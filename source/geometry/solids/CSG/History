@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2008-06-23 07:41:47 gcosmo Exp $
+$Id: History,v 1.104 2008-06-23 13:41:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 23, 2008  T.Nikitina                 geom-csg-V09-01-03
+- G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
+  very small tangent direction; now returning kInfinity and no longer zero.
+  It fixes rare observed cases of zero value returned by both DistanceToIn()
+  and DistanceToOut(), causing stuck tracks with zero step length.
 
 Jun 20, 2008  V.Grichine
 - G4Sphere: fixed calculation of roots in DistanceToOut(p,v,...) for
