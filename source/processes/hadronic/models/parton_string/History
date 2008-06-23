@@ -13,6 +13,15 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+23 June 2008 V. Uzhinsky (hadr-prtn-V09-01-02)
+   G4QGSMFragmentation.cc and G4LundStringFragmentation.cc were
+   decoupled at calculation of formation time due to adding methods
+   and member in G4VLongitudinalStringDecay class for manipulation
+   with string tension.
+
+   Memory leak was erased in G4QGSMFragmentation.cc and 
+   G4VLongitudinalStringDecay.cc thank to Gunter.
+
 18 June 2008 V. Uzhinsky (hadr-prtn-V09-01-01)
    Changes in G4ExcitedString class were tagged. They are needed for
    operation of FTF.
