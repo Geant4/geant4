@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.12 2008-06-23 08:35:55 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4LundStringFragmentation.cc,v 1.12 2008-06-23 08:35:55 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.13 2008-06-23 09:17:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
-//      GEANT 4 class implementation fileSetStringTensionParameter(G4double aValue);            // Uzhi 20 June 08
+//      GEANT 4 class implementation file
 //
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
