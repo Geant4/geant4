@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test17.cc,v 1.12 2006-06-29 21:43:28 gunter Exp $
+// $Id: test17.cc,v 1.13 2008-06-24 13:46:00 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI terminal for interactive mode
     {
      G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");
+     //UI->ApplyCommand("/control/execute init.mac");
      session->SessionStart();
      delete session;
     }
