@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2008-06-23 13:46:34 ztorzsok Exp $
+$Id: History,v 1.74 2008-06-24 08:43:00 ztorzsok Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 June 2008 Zoltan Torzsok
+- geom file parsing added
 
 23 June 2008 Zoltan Torzsok
 - String handling optimized
