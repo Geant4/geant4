@@ -34,7 +34,7 @@ void G4GDMLWriteMaterials::atomWrite(xercesc::DOMElement* element,const G4double
 
    xercesc::DOMElement* atomElement = newElement("atom");
    atomElement->setAttributeNode(newAttribute("unit","g/mole"));
-   atomElement->setAttributeNode(newAttribute("value",a/(g/mole)));
+   atomElement->setAttributeNode(newAttribute("value",a*mole/g));
    element->appendChild(atomElement);
 }
 
@@ -42,7 +42,7 @@ void G4GDMLWriteMaterials::DWrite(xercesc::DOMElement* element,const G4double& d
 
    xercesc::DOMElement* DElement = newElement("D");
    DElement->setAttributeNode(newAttribute("unit","g/cm3"));
-   DElement->setAttributeNode(newAttribute("value",d/(g/cm3)));
+   DElement->setAttributeNode(newAttribute("value",d*cm3/g));
    element->appendChild(DElement);
 }
 
@@ -120,8 +120,8 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr) {
    materialElement->setAttributeNode(newAttribute("name",name));
    materialElement->setAttributeNode(newAttribute("state",state_str));
 
-   if (fabs(materialPtr->GetTemperature()-STP_Temperature) > kRelativePrecision) TWrite(materialElement,materialPtr->GetTemperature());
-   if (fabs(materialPtr->GetPressure()-STP_Pressure) > kRelativePrecision) PWrite(materialElement,materialPtr->GetPressure());
+   if (materialPtr->GetTemperature() != STP_Temperature) TWrite(materialElement,materialPtr->GetTemperature());
+   if (materialPtr->GetPressure() != STP_Pressure) PWrite(materialElement,materialPtr->GetPressure());
    DWrite(materialElement,materialPtr->GetDensity());
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
