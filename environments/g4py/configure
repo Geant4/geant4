@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.13 2008-06-14 16:55:09 kmura Exp $
+#$Id: configure,v 1.14 2008-06-25 05:33:52 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -285,10 +285,10 @@ echo "lib${clhep_lib}.${shlib}"
 echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
 # check version
 set python python2.5 python2.4 python2.3
-for incdir in $*
+for aincdir in $*
 do
-  if [ -d /usr/include/$incdir ]; then
-    python_incdir=/usr/include/$incdir
+  if [ -d /usr/include/$aincdir ]; then
+    python_incdir=/usr/include/$aincdir
     break
   fi
 done
