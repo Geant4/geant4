@@ -37,7 +37,6 @@
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser {
-   G4STEPRead stepreader;
    G4GDMLReadStructure reader;
    G4GDMLWriteStructure writer;
 public:

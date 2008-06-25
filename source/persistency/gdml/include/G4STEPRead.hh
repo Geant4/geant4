@@ -10,8 +10,14 @@
 #include <fstream>
 
 class G4STEPRead {
-   G4TessellatedSolid* ReadTessellatedSolid(const std::string&);
-   G4VFacet* ReadFacet(const std::string&);
+   std::vector<G4LogicalVolume*> volumeList;
+   std::vector<G4TessellatedSolid*> tessellatedList;
+
+   G4Material* solid_material;
+   G4Material* medium_material;
+
+   void tessellatedRead(const std::string&);
+   void facetRead(const std::string&);
 public:
    void ReadGeom(const G4String&);
 };

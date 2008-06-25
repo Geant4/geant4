@@ -119,10 +119,6 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
 
 void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
 
-   G4cout.precision(15);
-   G4cout << "g/mole = " << g/mole << G4endl;
-   G4cout << "eval('g/mole') = " << eval.Evaluate("g/mole") << G4endl;
-
    if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
    else G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
 
