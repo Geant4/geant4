@@ -14,7 +14,7 @@ accuracy needs also to be assessed.
 
 Above the energy 200 MeV it is necessary to use reliable models due to
 the prohibitive number of open channels. The most appropriate modeling
-technique in this energy region is intranuclear cascade (INC) combined
+technique in this energy region is intra-nuclear cascade (INC) combined
 with evaporation model. One such pair of models is the Li\`ege cascade
 model INCL4.2 coupled with ABLA evaporation model. The strategy adopted
 by the INCL4.2 cascade is to improve the quasi-classical treatment of
@@ -151,7 +151,7 @@ Carbon to Uranium.
 % result of the collisions fast nucleons and pions exit the nucleus.
 % This stage lasts usually $10^{-23}$ - $10^{-22}$ seconds.
 
-% After cascade comes pre-equilibrium and evaporation cometing with
+% After cascade comes pre-equilibrium and evaporation competing with
 % fission stages.  At this stage more nucleons are ejected from the
 % nucleus.  This process is slower than the \emph{cascade} taking
 % $10^{-18}$-$10^{-16}$ seconds.
@@ -357,15 +357,15 @@ the temperature of the nucleus.
 
 
 \begin{table}[ht]
-  \caption{ABLA V3 (located in the Geant4 directory
+  \caption{{\sf ABLA V3} (located in the {\sf Geant4} directory
     {\tt source/\-processes/\-hadronic/\-models/\-incl}) feature summary.}
 \label{tbl:ablasummary}
 \vskip1cm
 \begin{center}
-\begin{tabular}{l|l}
+\begin{tabular}{l | p{5 cm} l}
 \hline
 {\bf Requirements} & \\
-External data file & G4ABLA3.0 available at Geant4 site \\
+External data file & {\tt G4ABLA3.0.tar.gz} available at Geant4 site~\cite{DataFiles} \\
 Environment variable & {\tt G4ABLADATA} \\ 
 for external data & \\
 \hline
@@ -387,10 +387,13 @@ Physics list     & Not yet implemented, \\
 {\bf Features} & evaporation of proton, neutron and $\alpha$ \\
                     & fission \\
 \hline
+{\bf Fission}  & {\sf SimFis3} (default model from GSI) \\
+               & {\sf SimFis18} \\
+\hline
 {\bf Misc.}                & 5 classes, 5k lines \\
                     & 0.9 $<$ speed C++/F77 $<$ 1.1 \\
 \hline
-{\bf References}    & Key reference: \cite{Junghans98a}, see also \cite{Benlliure98a} \\
+{\bf References}    & Key reference: \cite{Junghans98a}. For fission see \cite{Benlliure98a} and \cite{FissionModels} \\
 \hline
 \end{tabular}
 \end{center}
@@ -416,13 +419,169 @@ of the nucleus.
 %where {\tt ald->av} is 0.073, {\tt ald->as} is 0.095 and {\tt ald->ak}
 %is 0.
 
-\subsection{Fission}
+\section{ABLA Fission}
 \index{fission}
 
 Fission barrier, used to calculate fission width
-\ref{eqn:fissionwidth}, is calculated using a semi-empirical model
+Eqn.~(\ref{eqn:fissionwidth}), is calculated using a semi-empirical model
 fitting to data obtained from nuclear physics experiments.
 
+\subsection{SimFis3 code based on PROFI fission model}
+\label{simfis3}
+
+%Values calculated from proposition of \emph{Gverdovskii et al.,
+%Sov. J. Nucl. Phys. 55 (1992) 9}.
+
+Saddle-scission energy
+\begin{equation}
+E_{saddle\_scission} = (3.535E0 * Z^2/A - 121.1E0) * Friction\_factor
+\end{equation}
+from \emph{Wilkins et al. Proc. Int. Symp. Nucl. Fission} and
+\emph{Heavy Ion Induced Reactions, Schroeder W. ed.,Harwood, 1986,
+  101}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{fragments.eps}
+%\includegraphics[angle=0,scale=0.65]{hadronic/theory_driven/Incl/fragments.eps}
+\end{center}
+\caption{{\sf SimFis3} Geant4 model (red) and the original FORTRAN
+  model (black) compared with experimental data (blue) from GSI.}
+\label{fig:fragments}
+\end{figure}
+
+% Semiempirical fission model: fits to experimental result.
+
+Excitation energies at the saddle point excitation energy at saddle
+point is calculated without and with shell effect Similarly excitation
+energies at the scission point are calculated for heavy fragment
+without and with shell effect.
+
+
+For even-odd effect a simple parametrization is used.  Three fission
+modes: symmetric or asymmetric.  Liquid-drop mass (functions mass and
+massdef) from \emph{Myers \& Swiatecki, Lysekil, 1967}. Pure liquid
+drop, without pairing and shell effects.
+
+Further details describing {\sf SimFis3} fission model:
+\begin{itemize}
+\item Parametrization of T. Enqvist for the potential stiffness is
+  treated according to \emph{Mulgin et al. NPA 640 (1998) 375}.
+\item Coulomb energy between two deformed nuclei is calculated
+  following (\emph{Wilkins 1976}) and position of valley due to
+  influence of liquid-drop potential follows \emph{Wagemanns p. 397}.
+\item Widhts at the scission point are calculated using fits from
+  Ref. \emph{Beizin 1991}. % (Plots brought to GSI by Sergei Zhdanov).
+\end{itemize}
+
+\subsubsection{SimFis3 model history}
+
+\begin{itemize}
+\item Copy from {\sf SimFis3}, K. H. Schmidt (KHS), 8. February 1995
+\item Modifications made by Jose Benlliure and KHS in August 1996
+\item The excitation energy at the saddle point is calculated from the
+  lowest potencial well J.Benlliure Sept 1996
+\end{itemize}
+
+\subsection{SimFis18}
+\label{simfig18}
+
+{\sf SimFis18}, based on GSI PROFI fission model, calculates isotopic
+distributions of fission fragments with a semiempirical model.
+
+The excitation energy was calculated now for each fission channel
+separately. The dissipation from saddle to scission was taken from
+systematics, the deformation energy at scission considers the shell
+effects in a simplified way, and the fluctuation is included. 
+KHS, April 1999.
+
+The width in N/Z was carefully adapted to values given by \emph{Lang
+  et al.}  The width and eventually a shift in N/Z (polarization).
+
+The line N/Z following UCD has an angle of {\tt std::atan(Zcn/Ncn)}
+to the horizontal axis on a chart of nuclides.
+(For 238U the angle is 32.2 deg.)
+
+Several modifications, starting from {\sf SimFis12} (KHS November 2000).
+This version seems to work quite well for 238U.                  
+The transition from symmetric to asymmetric fission around 226Th 
+is reasonably well reproduced, although standard (St.) I is too strong and St. II
+is too weak. St. I and St. II are also weakly seen for 208Pb.
+
+Defalt parameters (IPARS) rather carefully adjusted to
+pre-neutron mass distributions of Vives et al. (238U + n).
+Parameters of the model carefully adjusted by KHS (2.2.2001) to
+238U + 208Pb, 1000 A MeV, \emph{T. Enqvist et al.}
+
+\begin{figure}
+\begin{verbatim}
+IF Z**2/A < 33.15E0 THEN
+MassCurv = 30.5438538E0 - 4.00212049E0 * Z**2/A
+           + 0.11983384E0 * Z**4 / (A**2)
+ELSE
+MassCurv = 10.E0 ** (7.16993332E0 - 0.26602401E0 * Z**2/A
+           + 0.00283802E0 * Z**4 / (A**2))
+ENDIF
+\end{verbatim}
+\caption{Fit to experimental result on curvature of potential at saddle.}
+\label{fig:masscurv2}
+\end{figure}
+
+\begin{figure}
+\begin{verbatim}
+  if ( (std::pow(z,2))/a < 34.0) {
+    masscurv =  std::pow( 10.0,(-1.093364 + 0.082933 * (std::pow(z,2)/a)
+			   - 0.0002602 * (std::pow(z,4)/std::pow(a,2))) );
+  } else {
+    masscurv = std::pow( 10.0,(3.053536 - 0.056477 * (std::pow(z,2)/a)
+			  + 0.0002454 * (std::pow(z,4)/std::pow(a,2))) );
+  }
+  cz_symm = (8.0/std::pow(z,2)) * masscurv;
+\end{verbatim}
+\caption{Parametrization of T. Enqvist according to \emph{Mulgin et
+    al. 1998}.}
+\label{fig:masscurv}
+\end{figure}
+
+%% Minimum of potential with respect to liquid drop potential at symmetry
+%% dueff = min(epot_mode1_saddle,epot_mode2_saddle);
+%% dueff = min(dueff,epot_symm_saddle);
+%% dueff = dueff - epot_symm_saddle;
+%% eld = e + dueff + e_zero_point;
+
+Excitation energies formulated in energies in close consistency with
+the fission model.
+Variable {\tt e\_defo} contains the deformation energy of the liquid
+drop for deformation $beta = 0.6$ which is most probable at scission.
+For symmetric fission channel the deformation is calculated for
+optimum energy at the scission point (see fitted functions for
+{\tt beta}, {\tt beta1} and {\tt beta2} variables).
+
+Further details describing {\sf SimFis18} fission model:
+\begin{itemize}
+\item Excitation energy is now calculated above the lowest potential
+  point. % Inclusion of a distribution of excitation energies.
+\item Charge polarisation from \emph{Wagemanns p. 397}: Compared to
+  {\sf SimFis3} polarisation is assumed (see variable {\tt cpol}).
+\item Energy dissipated from saddle to scission \emph{F. Rejmund et
+  al., Nucl. Phys. A 678 (2000) 215}, (see Fig. 4b).
+\item Excitation energy variance for fragments is $e^*_{\sigma} = 5.5$
+  which has been extracted from \emph{Lang et al. Nucl. Phys. A 345
+    (1980) 34}.
+\end{itemize}
+
+\subsubsection{SimFis18 model history}
+
+\begin{itemize}
+\item Copy from {\sf SimFis3}, KHS, 8. February 1995 (see section \ref{simfis3})
+\item Modifications made by Jose Benlliure and KHS in August 1996
+\item Energy counted from lowest barrier, J. Benlliure and KHS 1997
+\item Some bugs corrected, J. Benlliure and KHS 1997         
+\item Version used for thesis S. Steinhaueser, August 1997
+\item {\sf SimFis12}: KHS November 2000
+\item Extensions for an event generator of fission events (21.11.2000,KHS)
+\item Translation of {\tt SIMFIS18.PLI}, KHS 2.1.2001
+\end{itemize}
 
 \section{External data file required}
 
@@ -519,8 +678,12 @@ the current status of the INCL/ABLA code.
 \bibitem{Cugnon87a} J. Cugnon et al \emph{Nuc. Phys. A462} (1987) 751
 \bibitem{Cugnon89a} J. Cugnon et al \emph{Nuc. Phys. A500} (1989) 701
 \bibitem{Cugnon97a} J. Cugnon et al \emph{Nuc. Phys. A620} (1997) 745
+\bibitem{DataFiles} Data files for nuclear shell effects in INCL/ABLA hadronic
+  model - version 3.0, available at {\tt
+    http://geant4.web.cern.ch/geant4/support/download.shtml}
 \bibitem{Junghans98a} A.R. Junghans et al \emph{Nuc. Phys. A629} (1998) 635
 \bibitem{Benlliure98a} J. Benlliure et al \emph{Nuc. Phys. A628} (1998) 458
+\bibitem{FissionModels} Models for nuclear reactions {\tt http://www-w2k.gsi.de/charms/models.htm}
 \bibitem{Kaitaniemi07a} P. Kaitaniemi et al. \emph{Implementation of
     INCL4 cascade and ABLA evaporation codes in Geant4} (To be
     published in the proceedings of CHEP 2007, September 2-6,

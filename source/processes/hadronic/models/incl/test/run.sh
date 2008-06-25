@@ -20,10 +20,21 @@
 # runN.root (C++ version)
 # runN-ref.hbook (FORTRAN version)
 
+# Environment variable $RUNFILE contains the name of the file where
+# runs are defined. If this variable is NOT defined, the default run
+# file is runs.conf.
+
+if [ -n "$RUNFILE" ]; then
+    echo "Using runfile: $RUNFILE"
+    echo "RunID: $1"
+else
+    RUNFILE=runs.conf
+fi
+
 runID=$1
 
 # Check that we have a valid runID
-entries=$(cat runs.conf |grep "$runID\ " |wc -l)
+entries=$(cat $RUNFILE |grep "$runID\ " |wc -l)
 if test $entries != "1"; then
     if test $entries = "0"; then
 	echo -n "run.sh: Fatal error. Run "
@@ -38,13 +49,13 @@ if test $entries != "1"; then
     exit 1
 fi
 
-name=$(cat runs.conf |grep "$runID\ " |awk '{print $1}')
-type=$(cat runs.conf |grep "$runID\ " |awk '{print $2}') 
-A=$(cat runs.conf |grep "$runID\ " |awk '{print $3}')
-Z=$(cat runs.conf |grep "$runID\ " |awk '{print $4}')
-proj=$(cat runs.conf |grep "$runID\ " |awk '{print $5}')
-energy=$(cat runs.conf |grep "$runID\ " |awk '{print $6}')
-events=$(cat runs.conf |grep "$runID\ " |awk '{print $7}')
+name=$(cat $RUNFILE |grep "$runID\ " |awk '{print $1}')
+type=$(cat $RUNFILE |grep "$runID\ " |awk '{print $2}') 
+A=$(cat $RUNFILE |grep "$runID\ " |awk '{print $3}')
+Z=$(cat $RUNFILE |grep "$runID\ " |awk '{print $4}')
+proj=$(cat $RUNFILE |grep "$runID\ " |awk '{print $5}')
+energy=$(cat $RUNFILE |grep "$runID\ " |awk '{print $6}')
+events=$(cat $RUNFILE |grep "$runID\ " |awk '{print $7}')
 
 datadir="tmp"
 output=$datadir"/"$name".root"

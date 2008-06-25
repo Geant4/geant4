@@ -290,6 +290,7 @@ void residus() {
   histfortran->Draw("same");
   grexpa->Draw("PZ");
   c1->SaveAs("fragments.png");
+  c1->SaveAs("fragments.eps");
   c1->Print(psFileName,"Portrait"); // saving the ps file
 
   // Second page, isotopic cross sections

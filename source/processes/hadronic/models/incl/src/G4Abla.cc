@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.17 2008-05-27 17:31:16 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.18 2008-06-25 17:20:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -31,7 +31,6 @@
 // Aatos Heikkinen, HIP (project coordination)
 
 #include <time.h>
-#include <assert.h>
 
 #include "G4Abla.hh"
 #include "G4InclAblaDataFile.hh"
@@ -84,7 +83,6 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   // ABLA fission
   //  fissionModel = new G4AblaFissionSimfis18(hazard, randomGenerator);
   fissionModel = new G4AblaFission(hazard, randomGenerator);
-  verboseLevel = 1;
   if(verboseLevel > 0) {
     fissionModel->about();
   }
@@ -210,14 +208,10 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   
   G4double pcorem = std::sqrt(erecrem*(erecrem +2.*938.2796*nucleusA));
     // G4double pcorem = std::sqrt(std::pow(momX,2) + std::pow(momY,2) + std::pow(momZ,2));
-    // assert(isnan(pcorem) == false);
   if(pcorem != 0) { // Guard against division by zero.
     alrem = pxrem/pcorem;
-    // assert(isnan(alrem) == false);
     berem = pyrem/pcorem;
-    // assert(isnan(berem) == false);
     garem = pzrem/pcorem;
-    // assert(isnan(garem) == false);
   } else {
     alrem = 0.0;
     berem = 0.0;
@@ -271,9 +265,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     pyeva = pyrem;
     pleva = pzrem;
   }
-  // assert(isnan(zf) == false);
-  // assert(isnan(af) == false);
-  // assert(isnan(ee) == false);
 
   if (ff == 1) {
     // Fission:
@@ -290,7 +281,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     varntp->kfis = 1;
     G4double gamrem = (remmass + trem)/remmass;
     G4double etrem = std::sqrt(trem*(trem + 2.0*remmass))/remmass;
-    // assert(isnan(etrem) == false);
 
     //  This is not treated as accurately as for the non fission case for which
     //  the remnant mass is computed to satisfy the energy conservation 
@@ -301,9 +291,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     mglms(aprf,zprf,0,&el);
     remmass = zprf*fmp + (aprf-zprf)*fmn + el + double(esrem);
     gamrem = std::sqrt(std::pow(pcorem,2) + std::pow(remmass,2))/remmass;
-    // assert(isnan(gamrem) == false);
     etrem = pcorem/remmass;
-    // assert(isnan(etrem) == false);
     
     csrem[0] = 0.0; // Should not be used.
     csrem[1] = alrem;
@@ -322,15 +310,9 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     G4double masse = 0.0;
     
     for(G4int iloc = 1; iloc <= volant->iv; iloc++) { //DO iloc=1,iv
-      // assert(isnan(volant->zpcv[iloc]) == false);
-      assert(volant->acv[iloc] != 0);
-      //      assert(volant->zpcv[iloc] != 0);
       mglms(double(volant->acv[iloc]),double(volant->zpcv[iloc]),0,&el);
-      // assert(isnan(el) == false);
       masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el;
-      // assert(isnan(masse) == false);
       bil_e = bil_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
-      // assert(isnan(bil_e) == false); 
       bil_px = bil_px + volant->pcv[iloc]*(volant->xcv[iloc]);
       bil_py = bil_py + volant->pcv[iloc]*(volant->ycv[iloc]);
       bil_pz = bil_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
@@ -391,7 +373,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     G4int jboud = idnint(af-zf);                                             
     //G4double ef = fb->efa[kboud][jboud]; // barriere de fission
     G4double ef = fb->efa[jboud][kboud]; // barriere de fission
-    // assert(isnan(ef) == false);
     varntp->estfis = ee + ef;   	// copie dans le ntuple   
      
     // C           MASSEF = pace2(AF,ZF)
@@ -404,17 +385,11 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     // C MGLMS est la fonction de masse cohérente avec KHS evapo-fis.
     // C   Attention aux parametres, ici 0=OPTSHP, NO microscopic correct. 
     mglms(af,zf,0,&el);
-    // assert(isnan(el) == false);
     G4double massef = zf*fmp + (af - zf)*fmn + el + ee + ef;
-    // assert(isnan(massef) == false);
     mglms(double(aff1),double(zff1),0,&el);
-    // assert(isnan(el) == false);
     G4double masse1 = zff1*fmp + (aff1-zff1)*fmn + el + eff1;
-    // assert(isnan(masse1) == false);
     mglms(aff2,zff2,0,&el);
-    // assert(isnan(el) == false);
     G4double masse2 = zff2*fmp + (aff2 - zff2)*fmn + el + eff2;
-    // assert(isnan(masse2) == false);
     // C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2	   
     G4double b = massef - masse1 - masse2;
     if(b < 0.0) { //then
@@ -425,9 +400,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       }
     } //endif
     G4double t1 = b*(b + 2.0*masse2)/(2.0*massef);
-    // assert(isnan(t1) == false);
     G4double p1 = std::sqrt(t1*(t1 + 2.0*masse1));
-    // assert(isnan(p1) == false);
     
     G4double rndm;
     rndm = randomGenerator->getRandom();
@@ -440,9 +413,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     // C ----Coefs de la transformation de Lorentz (noyau de fission -> Remnant) 
     G4double peva = std::pow(pxeva,2) + std::pow(pyeva,2) + std::pow(pleva,2);
     G4double gamfis = std::sqrt(std::pow(massef,2) + peva)/massef;
-    // assert(isnan(gamfis) == false);
     peva = std::sqrt(peva);
-    // assert(isnan(peva) == false);
     G4double etfis = peva/massef;
       
     G4double epf1_in = 0.0;
@@ -451,7 +422,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     // C ----Matrice de rotation (noyau de fission -> Remnant)
     if(peva >= 1.0e-4) {
       sitet = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2))/peva;
-      // assert(isnan(sitet) == false);
     }
     if(sitet > 1.0e-5) { //then
       G4double cstet = pleva/peva;
@@ -500,20 +470,16 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
       // C On ajoute le fragment:
       volant->iv = volant->iv + 1;
-      assert(af1 != 0);
-      assert(zf1 != 0);
       volant->acv[volant->iv] = af1;
       volant->zpcv[volant->iv] = zf1;
       if(verboseLevel > 2) {
 	G4cout << __FILE__ << ":" << __LINE__ << " Added: zf1 = " << zf1 << " af1 = " << af1 << " at index " << volant->iv << G4endl;
 	volant->dump();
       }
-    //      assert(volant->getTotalMass() <= 209);
       if(verboseLevel > 2) {
 	G4cout <<"Added fission fragment: a = " << volant->acv[volant->iv] << " z = " << volant->zpcv[volant->iv] << G4endl;
       }
       peva = std::sqrt(std::pow(ffpxeva1,2) + std::pow(ffpyeva1,2) + std::pow(ffpleva1,2));
-      // assert(isnan(peva) == false);
       volant->pcv[volant->iv] = peva;
       if(peva > 0.001) { // then
 	volant->xcv[volant->iv] = ffpxeva1/peva;
@@ -535,9 +501,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	//      for(G4int iloc = nbpevap + 1; iloc <= volant->iv + 1; iloc++) { //do iloc=nbpevap+1,iv
 	mglms(volant->acv[iloc], volant->zpcv[iloc],0,&el);
        	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
-	// assert(isnan(masse) == false);
  	bil1_e = bil1_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
-	// assert(isnan(bil1_e) == false);
  	bil1_px = bil1_px + volant->pcv[iloc]*(volant->xcv[iloc]);
  	bil1_py = bil1_py + volant->pcv[iloc]*(volant->ycv[iloc]);
  	bil1_pz = bil1_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
@@ -591,7 +555,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	G4cout <<"Added fission fragment: a = " << volant->acv[volant->iv] << " z = " << volant->zpcv[volant->iv] << G4endl;
       }
       peva = std::sqrt(std::pow(ffpxeva2,2) + std::pow(ffpyeva2,2) + std::pow(ffpleva2,2));
-      // assert(isnan(peva) == false);
       volant->pcv[volant->iv] = peva;
       //      exit(0);
       if(peva > 0.001) { //then
@@ -614,7 +577,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	mglms(volant->acv[iloc],volant->zpcv[iloc],0,&el);
       	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
 	bil2_e = bil2_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
-	// assert(isnan(bil2_e) == false);
 	bil2_px = bil2_px + volant->pcv[iloc]*(volant->xcv[iloc]);
 	bil2_py = bil2_py + volant->pcv[iloc]*(volant->ycv[iloc]);
 	bil2_pz = bil2_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
@@ -625,12 +587,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double t2 = b - t1;
       //      G4double ctet2 = -ctet1;
       ctet2 = -1.0*ctet1;
-      assert(std::fabs(ctet2) <= 1.0);
-      // assert(isnan(ctet2) == false);
       phi2 = dmod(phi1+3.141592654,6.283185308);
-      // assert(isnan(phi2) == false);
       G4double p2 = std::sqrt(t2*(t2+2.0*masse2));
-      // assert(isnan(p2) == false);
       
       //   void translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet1,
       // 		  G4double phi1, G4double gamrem, G4double etrem, G4double R[][4],
@@ -658,7 +616,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     rotab(R,pfis_trav,pfis_rem);
       
     stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
-    // assert(isnan(stet1) == false);
     pf1_rem[1] = p1*stet1*std::cos(phi1);
     pf1_rem[2] = p1*stet1*std::sin(phi1);
     pf1_rem[3] = p1*ctet1;
@@ -667,9 +624,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     rotab(R,pfis_trav,pf1_rem);
 
     stet2 = std::sqrt(1.0 - std::pow(ctet2,2));
-    assert(std::pow(ctet2,2) >= 0.0);
-    assert(std::pow(ctet2,2) <= 1.0);
-    // assert(isnan(stet2) == false);
     
     G4double pf2_rem[4];
     G4double e2_rem;
@@ -751,7 +705,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     if(verboseLevel > 2)
       G4cout << __FILE__ << ":" << __LINE__ << " Added: zf = " << zf << " af = " << af << " at index " << volant->iv << G4endl;
     G4double peva = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2)+std::pow(pleva,2));
-    // assert(isnan(peva) == false);
     volant->pcv[volant->iv] = peva;
     if(peva > 0.001) { //then
       volant->xcv[volant->iv] = pxeva/peva;
@@ -787,12 +740,9 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
 	}
       }
       if(volant->acv[j] > 0) {
-	assert(volant->acv[j] != 0);
-	//      assert(volant->zpcv[j] != 0);
 	mglms(volant->acv[j],volant->zpcv[j],0,&el);
 	fmcv = volant->zpcv[j]*fmp + (volant->acv[j] - volant->zpcv[j])*fmn + el;
 	e_evapo = e_evapo + std::sqrt(std::pow(volant->pcv[j],2) + std::pow(fmcv,2));
-	// assert(isnan(e_evapo) == false);
       }
     } // enddo
 
@@ -802,7 +752,6 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
     remmass = e_evapo;
       
     G4double gamrem = std::sqrt(std::pow(pcorem,2)+std::pow(remmass,2))/remmass;
-    // assert(isnan(gamrem) == false);
     G4double etrem = pcorem/remmass;
 
     if(verboseLevel > 2)
@@ -1159,14 +1108,11 @@ void G4Abla::mglms(G4double a, G4double z, G4int refopt4, G4double *el)
   else {
     // binding energy incl. pairing contr. is calculated from                
     // function eflmac                                                       
-    assert(a1 != 0);
     (*el) = eflmac(a1,z1,0,refopt4);
-    // assert(isnan((*el)) == false);
     if (refopt4 > 0) {
       if (refopt4 != 2) {
 	(*el) = (*el) + ec2sub->ecnz[a1-z1][z1];
 	//(*el) = (*el) + ec2sub->ecnz[z1][a1-z1];
-	//assert(isnan((*el)) == false);
       }
     }
   }
@@ -1442,16 +1388,10 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   // plus separation energies and kinetic energies of the particles        
   direct(zf,af,ee,jprf,&probp,&probn,&proba,&probf,&ptotl,
 	 &sn,&sbp,&sba,&ecn,&ecp,&eca,&bp,&ba,inttype,inum,itest); //:::FIXME::: Call
-  // assert(isnan(proba) == false);
-  // assert(isnan(probp) == false);  
-  // assert(isnan(probn) == false);
-  // assert(isnan(probf) == false);  
-  assert((eca+ba) >= 0);
-  assert((ecp+bp) >= 0);
-  // assert(isnan(ecp) == false);
-  // assert(isnan(ecn) == false);
-  // assert(isnan(bp) == false);
-  // assert(isnan(ba) == false);
+  if((eca+ba) < 0) {
+    eca = 0.0;
+    ba = 0.0;
+  }
   k = idnint(zf);
   j = idnint(af-zf);
 
@@ -1461,7 +1401,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   // note *** shell correction! (ecgnz)  jb mvr 20-7-1999
   il  = idnint(jprf);
   barfit(k,k+j,il,&sbfis,&segs,&selmax);
-  // assert(isnan(sbfis) == false);
   
   if ((fiss->optshp == 1) || (fiss->optshp == 3)) { //then                     
     //    fb->efa[k][j] = G4double(sbfis) -  ecld->ecgnz[j][k];
@@ -1473,7 +1412,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   } //end if 
   ef = fb->efa[j][k];
   //  ef = fb->efa[j][k];
-  // assert(isnan(fb->efa[j][k]) == false);
   // here the final steps of the evaporation are calculated                
   if ((sortie == 1) || (ptotl == 0.e0)) {
     e = dmin1(sn,sbp,sba);
@@ -1526,9 +1464,7 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 4.0;
     zmoins = 2.0;
     epsiln = sba + eca;
-    assert((std::pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) >= 0);
     pc = std::sqrt(std::pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) * 3.72834e3;
-    // assert(isnan(pc) == false);
     malpha = 4.0;
 
     // volant:
@@ -1545,9 +1481,7 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 1.0;
     zmoins = 1.0;
     epsiln = sbp + ecp;
-    assert((std::pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) >= 0);
     pc = std::sqrt(std::pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) * 9.3827e2;
-    // assert(isnan(pc) == false);
     malpha = 0.0;
     // volant:
     volant->iv = volant->iv + 1;
@@ -1563,12 +1497,10 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     amoins = 1.0;
     zmoins = 0.0;
     epsiln = sn + ecn;
-    assert((std::pow((1.0 + (ecn)/9.3956e2),2) - 1.0) >= 0);
     pc = std::sqrt(std::pow((1.0 + (ecn)/9.3956e2),2) - 1.0) * 9.3956e2;
     if(itest == 1) {
       G4cout <<"PK::: pc " << pc << G4endl;
     }
-    // assert(isnan(pc) == false);
     malpha = 0.0;
   
     // volant:
@@ -1622,14 +1554,12 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     //    standardRandom(&rnd,&(hazard->igraine[4]));
     phi1 = rnd*2.0*3.141592654;
     stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
-    // assert(isnan(stet1) == false);
     volant->xcv[volant->iv] = stet1*std::cos(phi1);
     volant->ycv[volant->iv] = stet1*std::sin(phi1);
     volant->zcv[volant->iv] = ctet1;
     pxeva = pxeva - pc * volant->xcv[volant->iv];
     pyeva = pyeva - pc * volant->ycv[volant->iv];
     pleva = pleva - pc * ctet1;
-    // assert(isnan(pleva) == false);
   }
 
   // condition for end of evaporation                                   
@@ -1843,10 +1773,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     mglw(a-1.0,zprf-1.0,&ma1z1);
     mglw(a-4.0,zprf-2.0,&ma4z2);
   }
-  // assert(isnan(maz) == false);
-  // assert(isnan(ma1z) == false);
-  // assert(isnan(ma1z1) == false);
-  // assert(isnan(ma4z2) == false);
   
   // separation energies and effective barriers                     
   sn = ma1z - maz;
@@ -1863,8 +1789,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   bp = 1.44*(zprf - 1.0)/(2.1*std::pow((a - 1.0),(1.0/3.0)) + 0.0);
 
   sbp = sp + bp;
-  // assert(isnan(sbp) == false);
-  // assert(isinf(sbp) == false);
   if (a-4.0 <= 0.0) {
     sba = 1.0e+75;
     goto direct30;
@@ -1876,8 +1800,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   ba = 2.88*(zprf - 2.0)/(2.2*std::pow((a - 4.0),(1.0/3.0)) + 0.0);
 
   sba = sa + ba;
-  // assert(isnan(sba) == false);
-  // assert(isinf(sba) == false);
  direct30:
 
   // calculation of surface and curvature integrals needed to      
@@ -1892,7 +1814,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     // note *** shell correction! (ecgnz)  jb mvr 20-7-1999
     il = idnint(jprf);
     barfit(k,k+j,il,&sbfis,&segs,&selmax);
-    // assert(isnan(sbfis) == false);
     if ((fiss->optshp == 1) || (fiss->optshp == 3)) {
       //      fb->efa[k][j] = G4double(sbfis) -  ecld->ecgnz[j][k];
       //      fb->efa[j][k] = G4double(sbfis) -  ecld->ecgnz[j][k];
@@ -1916,7 +1837,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       }
       fb->efa[j][k] = 0.0;
     }
-    // assert(isnan(fb->efa[j][k]) == false);
     
     // factor with jprf should be 0.0025d0 - 0.01d0 for                     
     // approximate influence of ang. momentum on bfis  a.j. 22.07.96        
@@ -1926,8 +1846,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       ef = 0.0;
     }
     xx = fissility((k+j),k,fiss->optxfis);
-    // assert(isnan(xx) == false);
-    // assert(isinf(xx) == false);
     
     y = 1.00 - xx;
     if (y < 0.0) {
@@ -1937,11 +1855,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
       y = 1.0;
     }
     bs = bipol(1,y);
-    // assert(isnan(bs) == false);
-    // assert(isinf(bs) == false);
     bk = bipol(2,y);
-    // assert(isnan(bk) == false);
-    // assert(isinf(bk) == false);
   }
   else {
     ef = 1.0e40;
@@ -1954,7 +1868,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   iz = idnint(zprf);
   in = afp - iz;
   bshell = ecld->ecfnz[in][iz];
-  // assert(isnan(bshell) == false);
 
   // ld saddle point deformation                                          
   // here: beta2 = std::sqrt(5/(4pi)) * alpha2                                  
@@ -1964,7 +1877,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   // alpha-deformation table 1.5d0 should be used                          
   // a.r.j. 6.8.97                                                         
   defbet = 1.58533e0 * spdef(idnint(a),idnint(zprf),fiss->optxfis);
-  // assert(isnan(defbet) == false);
   
   // level density and temperature at the saddle point                     
   //   G4cout <<"a = " << a << G4endl;
@@ -1978,9 +1890,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   densniv(a,zprf,ee,ef,&densf,bshell,bs,bk,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
   //   G4cout <<"densf = " << densf << G4endl;
   //   G4cout <<"temp = " << temp << G4endl;
-  // assert(isnan(densf) == false);
-  // assert(isnan(temp) == false);
-  //  assert(temp != 0);
   ft = temp;
   if (iz >= 2) {
     bshell = ecld->ecgnz[in][iz-1] - ecld->vgsld[in][iz-1];
@@ -1988,8 +1897,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 
     // level density and temperature in the proton daughter                  
     densniv(a-1.0,zprf-1.0e0,ee,sbp,&densp, bshell,1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-    assert(temp >= 0);
-    // assert(isnan(temp) == false);
     pt = temp;
     if (imaxwell == 1) {
       // valentina - random kinetic energy in a maxwelliam distribution
@@ -2008,7 +1915,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 	rnd = randomGenerator->getRandom();
 	//	standardRandom(&rnd,&(hazard->igraine[5]));
 	ecp=std::sqrt(rnd)*(eer-sbp);
-	// assert(isnan(ecp) == false);
 	goto direct2914;
       }
       if((ecp+sbp) > eer) {
@@ -2062,7 +1968,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 	ecn = std::sqrt(rnd)*(eer-sn);
 	if(verboseLevel > 2)
 	  G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
-	// assert(isnan(ecn) == false);
 	goto direct2915;
       }
       if((ecn+sn) > eer) {
@@ -2122,7 +2027,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 	rnd = randomGenerator->getRandom();
 	//	standardRandom(&rnd,&(hazard->igraine[7]));
 	eca=std::sqrt(rnd)*(eer-sba);
-	// assert(isnan(eca) == false);
 	goto direct2916;
       }
       if((eca+sba) > eer) {
@@ -2169,8 +2073,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 
   // compound nucleus level density                                        
   densniv(a,zprf,ee,0.0e0,&densg,bshell,1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-  // assert(isnan(densg) == false);
-  // assert(isnan(temp) == false);
   
   if ( densg > 0.e0) {
     // calculation of the partial decay width                                
@@ -2179,14 +2081,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     gn = (std::pow(a,(2.0/3.0))/fiss->akap)*densn/densg/pi*std::pow(nt,2);
     ga = (std::pow(a,(2.0/3.0))/fiss->akap)*densa/densg/pi*2.0*std::pow(at,2);
     gf = densf/densg/pi/2.0*ft;
-    // assert(isnan(gf) == false);
-    
-    //     assert(isnan(gp) == false);
-    //     assert(isnan(gn) == false);
-    //     assert(isnan(ga) == false);
-    //     assert(isnan(ft) == false);
-    //    assert(ft != 0);
-    //    assert(isnan(gf) == false);
     
     if(itest == 1) {
       G4cout <<"gn,gp,ga,gf " << gn <<","<< gp <<","<< ga <<","<< gf << G4endl;
@@ -2199,8 +2093,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   }
 
   gsum = ga + gp + gn;
-  // assert(isinf(gsum) == false);
-  // assert(isnan(gsum) == false);
   if (gsum > 0.0) {
     ts1  = hbar / gsum;
   }
@@ -2244,9 +2136,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     rf = 0.0;
     rp = 1.0;
     rn = densn/densp*std::pow((nt/pt),2);
-    // assert(isnan(rn) == false);
     ra = densa*2.0/densp*std::pow((at/pt),2);
-    // assert(isnan(ra) == false);
     goto direct50;
   }
 
@@ -2273,7 +2163,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     else {
       // transient time tau()                                                  
       tauc = tau(fiss->bet,fiss->homega,ef,ft);
-      // assert(isnan(tauc) == false);
     }
     wfex = (tauc - tsum)/ts1;
 
@@ -2298,12 +2187,10 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   // change by g.k. and a.h. 5.9.95                                       
   tconst = 0.7;
   dconst = 12.0/std::sqrt(a);
-  // assert(isnan(dconst) == false);
   nprf = a - zprf;
 
   if (fiss->optshp >= 2) { //then                                           
     parite(nprf,&parc);
-    // assert(isnan(parc) == false);
     dconst = dconst*parc;
   }
   else {
@@ -2323,53 +2210,28 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     }
     else {
       rn=gngf;
-      // assert(isnan(rn) == false);
       rp=gngf*gp/gn;
-      // assert(isnan(rp) == false);      
       ra=gngf*ga/gn;
-      // assert(isnan(ra) == false);      
     }
   } else {
-    // assert(isnan(cf) == false);
-    // assert(isinf(gn) == false);
-    // assert(isinf(gf) == false);
-    // assert(isinf(cf) == false);        
-    assert(gn > 0 || (gf != 0 && cf != 0));
     rn = gn/(gf*cf);
 //     G4cout <<"rn = " << G4endl;
 //     G4cout <<"gn = " << gn << " gf = " << gf << " cf = " << cf << G4endl;
-    // assert(isnan(rn) == false);
     rp = gp/(gf*cf);
-    // assert(isnan(rp) == false);    
     ra = ga/(gf*cf);
-    // assert(isnan(ra) == false);    
   }
  direct50:
   // relative decay probabilities                                          
-  // assert(isnan(ra) == false);
-  // assert(isnan(rp) == false);
-  // assert(isnan(rn) == false);
-  // assert(isnan(rf) == false);
-  
   denomi = rp+rn+ra+rf;
-  // assert(isnan(denomi) == false);
-  assert(denomi > 0);
   // decay probabilities after transient time
   probf = rf/denomi;
-  // assert(isnan(probf) == false);
   probp = rp/denomi;
-  // assert(isnan(probp) == false);
   probn = rn/denomi;
-  // assert(isnan(probn) == false);
   proba = ra/denomi;
-  // assert(isnan(proba) == false);
-  // assert(isinf(proba) == false);
   
   // new treatment of grange-weidenmueller factor, 5.1.2000, khs !!!
 
   // decay probabilites with transient time included
-  // assert(isnan(wf) == false);
-  assert(std::fabs(probf) <= 1.0);
   probf = probf * wf;
   if(probf == 1.0) {
     probp = 0.0;
@@ -2382,18 +2244,12 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     proba = proba * (wf + (1.e0-wf)/(1.e0-probf));
   }
  direct70:
-  // assert(isnan(probp) == false);
-  // assert(isnan(probn) == false);
-  // assert(isnan(probf) == false);  
-  // assert(isnan(proba) == false);
   ptotl = probp+probn+proba+probf;
-  // assert(isnan(ptotl) == false);
   
   ee = eer;
   ilast = inum;
 
   // Return values:
-  // assert(isnan(proba) == false);
   (*probp_par) = probp;
   (*probn_par) = probn;
   (*proba_par) = proba;
@@ -2535,20 +2391,16 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
       // pairing energy shift with condensation energy a.r.j. 10.03.97        
       //      deltpp = -0.25e0* (delta0/std::pow(std::sqrt(a),2)) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
       deltpp = -0.25e0* std::pow((delta0/std::sqrt(a)),2) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
-      // assert(isnan(deltpp) == false);
       
       parite(a,&para);
       if (para < 0.0) {
 	e = e - delta0/std::sqrt(a);
-	// assert(isnan(e) == false);
       } else {                                                         
 	parite(z,&parz);
 	if (parz > 0.e0) {
 	  e = e - 2.0*delta0/std::sqrt(a);
-	  // assert(isnan(e) == false);
 	} else {
 	  e = e;
-	  // assert(isnan(e) == false);
 	}
       }
     } else {                                                          
@@ -2592,46 +2444,35 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   // to avoid the singularity e = 0                                        
   if (ee < 5.0) {
     y1 = std::sqrt(pa*ecor);
-    // assert(isnan(y1) == false);
     for(int j = 0; j < 5; j++) {
       y2 = pa*ecor*(1.e0-std::exp(-y1));
-      // assert(isnan(y2) == false);
       y1 = std::sqrt(y2);
-      // assert(isnan(y1) == false);
     }
     
     y0 = pa/y1;
-    // assert(isnan(y0) == false);
-    assert(y0 != 0.0);
     (*temp)=1.0/y0;
     (*dens) = std::exp(y0*ecor)/ (std::pow((std::pow(ecor,3)*y0),0.5)*std::pow((1.0-0.5*y0*ecor*std::exp(-y1)),0.5))* std::exp(y1)*(1.0-std::exp(-y1))*0.1477045;
     if (ecor < 1.0) {
       ecor1=1.0;
       y11 = std::sqrt(pa*ecor1);
-      // assert(isnan(y11) == false);
       for(int j = 0; j < 7; j++) {
 	y21 = pa*ecor1*(1.0-std::exp(-y11));
-	// assert(isnan(21) == false);
 	y11 = std::sqrt(y21);
-	// assert(isnan(y11) == false);
       }
 
       y01 = pa/y11;
-      // assert(isnan(y01) == false);
       (*dens) = (*dens)*std::pow((y01/y0),1.5);
       (*temp) = (*temp)*std::pow((y01/y0),1.5);
     }
   }
   else {
     ponniv = 2.0*std::sqrt(pa*ecor);
-    // assert(isnan(ponniv) == false);
     if (ponniv > 700.0) {
       ponniv = 700.0;
     }
 
     // fermi gas state density                                               
     (*dens) = std::pow(pa,(-0.25e0))*std::pow(ecor,(-1.25e0))*std::exp(ponniv) * 0.1477045e0;
-    // assert(isnan(std::sqrt(ecor/pa)) == false);
     (*temp) = std::sqrt(ecor/pa);
   }
  densniv100:
@@ -2786,23 +2627,10 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   dn  = rmac*bs/std::pow(n,(1.0/3.0));
   dp  = rmac*bs/std::pow(z,(1.0/3.0));
   dpn = h/bs/std::pow(a,(2.0/3.0));
-  // assert(isnan(dpn) == false);
   
   c1  = 3.0/5.0*esq/r0;
-  // assert(isnan(c1) == false);
-  // assert(isinf(c1) == false);
-  
   c4  = 5.0/4.0*std::pow((3.0/(2.0*pi)),(2.0/3.0)) * c1;
-  // assert(isnan(c4) == false);
-  // assert(isinf(c4) == false);
- 
-  // assert(isnan(pi) == false);
-  // assert(isnan(z) == false);
-  // assert(isnan(a) == false);
-  // assert(isnan(r0) == false);
   kf  = std::pow((9.0*pi*z/(4.0*a)),(1.0/3.0))/r0;
-  // assert(isnan(kf) == false);
-  // assert(isinf(kf) == false);
   
   f = -1.0/8.0*rp*rp*esq/std::pow(r0,3) * (145.0/48.0 - 327.0/2880.0*std::pow(kf,2) * std::pow(rp,2) + 1527.0/1209600.0*std::pow(kf,4) * std::pow(rp,4));
   i   = (n-z)/a;
@@ -2877,11 +2705,9 @@ void G4Abla::appariem(G4double a, G4double z, G4double *del)
   else {
     parite(z, &parz);
     if (parz > 0.0) {
-      // assert(isnan(std::sqrt(a)) == false);
       (*del) = -12.0/std::sqrt(a);
     }
     else {
-      // assert(isnan(std::sqrt(a)) == false);
       (*del) = 12.0/std::sqrt(a);
     }
   }
@@ -2933,11 +2759,9 @@ G4double G4Abla::tau(G4double bet, G4double homega, G4double ef, G4double t)
   // modified bj and khs 6.1.2000:
   if (bet/(std::sqrt(2.0)*10.0*(homega/6.582122)) <= 1.0) {
     tauResult = std::log(10.0*ef/t)/(bet*1.0e21);
-    //    assert(isnan(tauResult) == false);
   }
   else {
     tauResult = std::log(10.0*ef/t)/ (2.0*std::pow((10.0*homega/6.582122),2))*(bet*1.0e-21);
-    // assert(isnan(tauResult) == false);
   } //end if                                                            
 
   return tauResult;
@@ -2957,7 +2781,6 @@ G4double G4Abla::cram(G4double bet, G4double homega)
     cramResult = 1.0;
   }
 
-  // assert(isnan(cramResult) == false);
   return cramResult;
 }
 
@@ -2997,7 +2820,6 @@ G4double G4Abla::bipol(int iflag, G4double y)
 			   1.26147,1.26147,1.25992,1.25992, 0.0};
 
   i = idint(y/(2.0e-02)) + 1;
-  assert(i >= 1);
     
   if(i >= bsbkSize) {
     if(verboseLevel > 2) {
@@ -3014,7 +2836,6 @@ G4double G4Abla::bipol(int iflag, G4double y)
     }
   }
   
-  // assert(isnan(bipolResult) == false);
   return bipolResult;
 }
 
@@ -3209,7 +3030,6 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   }
 
   bfis=bfis0;
-  // assert(isnan(bfis) == false);
   
   (*sbfis)=bfis;
   egs=0.0;
@@ -3254,7 +3074,6 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
     }
   }
 
-  // assert(isnan(elmax) == false);
   (*selmax)=elmax;
 
   // value of barrier at ang.mom.  l          
@@ -3263,9 +3082,7 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   }
 
   x = sel20/(*selmax);
-  // assert(isnan(x) == false);
   y = sel80/(*selmax);
-  // assert(isnan(y) == false);
   
   if(el <= sel20) {
     // low l              
@@ -3351,7 +3168,6 @@ G4double G4Abla::expohaz(G4int k, G4double T)
 {
   // TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
 
-  // assert(isnan((-1*T*std::log(haz(k)))) == false);
   return (-1.0*T*std::log(haz(k)));
 }
 
@@ -3658,18 +3474,15 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
     }
     else {
       mglms(double(volant->acv[i]),double(volant->zpcv[i]),0, &el);
-      // assert(isnan(el) == false);
       masse = volant->zpcv[i]*938.27 + (volant->acv[i] - volant->zpcv[i])*939.56 + el;
     } //end if
 	
     er = std::sqrt(std::pow(volant->pcv[i],2) + std::pow(masse,2));
-    // assert(isnan(er) == false);
     plabi[1] = volant->pcv[i]*(volant->xcv[i]);
     plabi[2] = volant->pcv[i]*(volant->ycv[i]);
     plabi[3] = er*etrem + gamrem*(volant->pcv[i])*(volant->zcv[i]);
 	
     ptrav2 = std::pow(plabi[1],2) + std::pow(plabi[2],2) + std::pow(plabi[3],2);
-    // assert(isnan(ptrav2) == false);
 #ifdef USE_LEGACY_CODE
     varntp->plab[intp] = std::sqrt(ptrav2); 
 #else
@@ -3732,7 +3545,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 #else
       bidon = plabf[3]/plab;
 #endif
-      // assert(isnan(bidon) == false);
       if(bidon > 1.0) { 
 	bidon = 1.0;
       }

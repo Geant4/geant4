@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.12 2008-05-27 17:31:16 kaitanie Exp $
+$Id: History,v 1.13 2008-06-25 17:20:03 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,14 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+25 June 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-01)
+------------------------------
+- Portability fixes and code clean-up:
+  o Removed all assert() calls.
+  o Removed all isnan() and isinf() calls.
+  o All math functions now use std:: namespace.
+  o Silenced the fission models.
 
 26 May 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-00)
 ------------------------------

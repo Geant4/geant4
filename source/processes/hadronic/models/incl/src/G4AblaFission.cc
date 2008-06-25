@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFission.cc,v 1.1 2008-05-27 17:31:16 kaitanie Exp $
+// $Id: G4AblaFission.cc,v 1.2 2008-06-25 17:20:04 kaitanie Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -131,16 +131,13 @@ G4double G4AblaFission::umass(G4double z,G4double n,G4double beta)
 
   a = n + z;
   alpha = ( std::sqrt(5.0/(4.0*pi)) ) * beta;
-  // assert(isnan(alpha) == false);
   
   xcom = 1.0 - 1.7826 * ((a - 2.0*z)/a)*((a - 2.0*z)/a);
-  // assert(isnan(xcom) == false);
   // factor for asymmetry dependence of surface and volume term
   xvs = - xcom * ( 15.4941 * a - 
 		   17.9439 * std::pow(a,2.0/3.0) * (1.0+0.4*alpha*alpha) );
   // sum of volume and surface energy
   xe = z*z * (0.7053/(std::pow(a,1.0/3.0)) * (1.0-0.2*alpha*alpha) - 1.1529/a);
-  // assert(isnan(xe) == false);
   umass = xvs + xe;
   
   return umass;
@@ -170,7 +167,6 @@ G4double G4AblaFission::ecoul(G4double z1,G4double n1,G4double beta1,G4double z2
 		+ std::pow((z2+n2),1.0/3.0) * (1.0+0.6666*beta2) ) + d;
   ecoul = z1 * z2 * 1.44 / dtot;
 
-  // assert(isnan(ecoul) == false);
   return ecoul;
 }
 
@@ -1166,7 +1162,6 @@ G4double G4AblaFission::gausshaz(int k, double xmoy, double sig)
     } while(r >= 1);
 
     fac = std::sqrt(-2.*std::log(r)/r);
-    // assert(isnan(fac) == false);
     gset = v1*fac;
     gausshaz = v2*fac*sig+xmoy;
     iset = 1;
