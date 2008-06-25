@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2008-06-14 17:04:02 kmura Exp $
+$Id: History,v 1.44 2008-06-25 06:32:42 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 June 2008 K. Murakami
+ - configure : fix a wrong incdir variable.
+ - config/sys/linux.gmk, linuxx8664gcc : 
+               add -fpermissive compile option for gcc 4.3
 
 12 June 2008 K. Murakami (1.6.1)
  - configure : fix echo -n problem, add --with-extra-dir flag
