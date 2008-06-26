@@ -1,4 +1,4 @@
-$Id: History,v 1.301 2008-06-20 19:56:01 sincerti Exp $
+$Id: History,v 1.302 2008-06-26 18:19:10 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.06.2208   S. Incerti, tag emlowen-V09-01-19
+             Added protection against FPE in G4hShellCrossSectionDoubleExp.cc
 
 20.06.2008   S. Incerti, tag emlowen-V09-01-18
              Added 4 protections against FPE in G4hLowEnergyLoss.cc
