@@ -10,7 +10,7 @@ void G4STEPRead::tessellatedRead(const std::string& line) {
    stream >> name;
    
    G4TessellatedSolid* tessellated = new G4TessellatedSolid(name);
-   volumeMap[tessellated] = new G4LogicalVolume(tessellated,solid_material,"volume"+name,0,0,0);
+   volumeMap[tessellated] = new G4LogicalVolume(tessellated,solid_material,"volume",0,0,0);
    tessellatedList.push_back(tessellated);
 
    G4cout << "G4STEPRead: Reading solid: " << name << G4endl;
@@ -59,6 +59,8 @@ void G4STEPRead::physvolRead(const std::string& line) {
 
    name.resize(name.rfind("_"));
 
+   G4cout << "G4STEPRead: Placing solid: " << name << G4endl;
+
    G4TessellatedSolid* tessellated = 0;
 
    for (size_t i=0;i<tessellatedList.size();i++) { // Find the volume for this physvol!
@@ -73,7 +75,7 @@ void G4STEPRead::physvolRead(const std::string& line) {
    if (tessellated == 0) G4Exception("G4STEPRead: ERROR! Referenced solid '"+name+"' not found!");
 
    G4RotationMatrix* rot = new G4RotationMatrix(G4ThreeVector(r1,r2,r3),G4ThreeVector(r4,r5,r6),G4ThreeVector(r7,r8,r9));
-   G4PVPlacement(rot,G4ThreeVector(pX,pY,pZ),volumeMap[tessellated],"physvol"+name,world_volume,0,0);
+   new G4PVPlacement(rot,G4ThreeVector(pX,pY,pZ),volumeMap[tessellated],"",world_volume,0,0);
 }
 
 void G4STEPRead::ReadGeom(const G4String& name) {
@@ -112,7 +114,6 @@ void G4STEPRead::ReadTree(const G4String& name) {
 
    if (!TreeFile) G4Exception("G4STEPRead: ERROR! Can not open file: "+name);
 
-
    std::string line;
    
    while (getline(TreeFile,line)) {
@@ -130,15 +131,6 @@ void G4STEPRead::Read(const G4String& name) {
 }
 
 G4VPhysicalVolume* G4STEPRead::GetWorldVolume() {
-
-   world_box = new G4Box("WorldBox",100,50,100);
-   medium_material = new G4Material("Aluminium",13,26.98*g/mole,2.7*g/cm3,kStateSolid);
-   world_volume = new G4LogicalVolume(world_box,medium_material,"WorldLogicalVolume",0,0,0);
-
-   G4Box* box = new G4Box("TheBox",10,30,60);
-   solid_material = new G4Material("Aluminium",13,26.98*g/mole,2.7*g/cm3,kStateSolid);
-   G4LogicalVolume* vol= new G4LogicalVolume(box,solid_material,"volume",0,0,0);
-   G4PVPlacement(0,G4ThreeVector(0,0,0),vol,"physvol",world_volume,0,0);
 
    return new G4PVPlacement(0,G4ThreeVector(0,0,0),world_volume,"WorldPhysicalVolume",0,0,0);
 }
