@@ -35,5 +35,5 @@
 /gps/particle opticalphoton
 /gps/energy 1.0 eV	
 /mysetrun/SetRunID 9999
-/run/beamOn 50
+/run/beamOn 500
 

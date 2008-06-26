@@ -264,7 +264,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
   // Refractive index 
 
   const G4int N_RINDEX_QUARTZ = 2 ;
-  G4double X_RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {0.0*eV, 10.0*eV};
+  G4double X_RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {0.1*eV, 10.0*eV};
   G4double RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {1.54, 1.54};
 
   G4MaterialPropertiesTable *MPT_PMT = new G4MaterialPropertiesTable();
