@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Version.hh,v 1.15 2008-06-23 09:07:57 gcosmo Exp $
+// $Id: G4Version.hh,v 1.16 2008-06-26 06:38:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Version information
@@ -46,7 +46,7 @@
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  92b1
+#define G4VERSION_NUMBER  920
 #endif
 
 #ifndef G4VERSION_TAG
