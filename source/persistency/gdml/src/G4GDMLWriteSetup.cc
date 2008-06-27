@@ -32,6 +32,8 @@
 
 void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const logvol) {
 
+   G4cout << "G4GDML: Writing setup..." << G4endl;
+
    const G4String worldref = GenerateName(logvol->GetName(),logvol);
 
    xercesc::DOMElement* setupElement = newElement("setup");

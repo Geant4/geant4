@@ -10,7 +10,7 @@ void G4STEPRead::tessellatedRead(const std::string& line) {
    stream >> name;
    
    G4TessellatedSolid* tessellated = new G4TessellatedSolid(name);
-   volumeMap[tessellated] = new G4LogicalVolume(tessellated,solid_material,"volume",0,0,0);
+   volumeMap[tessellated] = new G4LogicalVolume(tessellated,solid_material,"volume"+name,0,0,0);
    tessellatedList.push_back(tessellated);
 
    G4cout << "G4STEPRead: Reading solid: " << name << G4endl;
@@ -73,9 +73,27 @@ void G4STEPRead::physvolRead(const std::string& line) {
    }
 
    if (tessellated == 0) G4Exception("G4STEPRead: ERROR! Referenced solid '"+name+"' not found!");
+   if (volumeMap.find(tessellated) == volumeMap.end()) G4Exception("G4STEPRead: ERROR! Referenced solid '"+name+"' is not associated with a logical volume!");
 
-   G4RotationMatrix* rot = new G4RotationMatrix(G4ThreeVector(r1,r2,r3),G4ThreeVector(r4,r5,r6),G4ThreeVector(r7,r8,r9));
-   new G4PVPlacement(rot,G4ThreeVector(pX,pY,pZ),volumeMap[tessellated],"",world_volume,0,0);
+   const G4RotationMatrix rot(G4ThreeVector(r1,r2,r3),G4ThreeVector(r4,r5,r6),G4ThreeVector(r7,r8,r9));
+   const G4ThreeVector pos(pX,pY,pZ);
+
+   new G4PVPlacement(G4Transform3D(rot.inverse(),pos),volumeMap[tessellated],"physvol"+name,world_volume,0,0); // Note: INVERSE of rotation is needed!!!
+
+   G4double minx,miny,minz;
+   G4double maxx,maxy,maxz;
+   const G4VoxelLimits limits;
+
+   tessellated->CalculateExtent(kXAxis,limits,G4AffineTransform(rot,pos),minx,maxx);
+   tessellated->CalculateExtent(kYAxis,limits,G4AffineTransform(rot,pos),miny,maxy);
+   tessellated->CalculateExtent(kZAxis,limits,G4AffineTransform(rot,pos),minz,maxz);
+
+   if (world_extent.x() < fabs(minx)) world_extent.setX(fabs(minx));
+   if (world_extent.y() < fabs(miny)) world_extent.setY(fabs(miny));
+   if (world_extent.z() < fabs(minz)) world_extent.setZ(fabs(minz));
+   if (world_extent.x() < fabs(maxx)) world_extent.setX(fabs(maxx));
+   if (world_extent.y() < fabs(maxy)) world_extent.setY(fabs(maxy));
+   if (world_extent.z() < fabs(maxz)) world_extent.setZ(fabs(maxz));
 }
 
 void G4STEPRead::ReadGeom(const G4String& name) {
@@ -105,11 +123,6 @@ void G4STEPRead::ReadTree(const G4String& name) {
 
    G4cout << "G4STEPRead: Reading '" << name << "'..." << G4endl;
 
-   world_box = new G4Box("WorldBox",100,50,100);
-   medium_material = new G4Material("Aluminium",13,26.98*g/mole,2.7*g/cm3,kStateSolid);
-   solid_material = new G4Material("Aluminium",13,26.98*g/mole,2.7*g/cm3,kStateSolid);
-   world_volume = new G4LogicalVolume(world_box,medium_material,"WorldLogicalVolume",0,0,0);
-
    std::ifstream TreeFile(name);
 
    if (!TreeFile) G4Exception("G4STEPRead: ERROR! Can not open file: "+name);
@@ -124,10 +137,23 @@ void G4STEPRead::ReadTree(const G4String& name) {
    G4cout << "G4STEPRead: Reading '" << name << "' done." << G4endl;
 }
 
-void G4STEPRead::Read(const G4String& name) {
+void G4STEPRead::Read(const G4String& name,G4Material* mediumMaterial,G4Material* solidMaterial) {
+
+   if (mediumMaterial == 0) G4Exception("G4STEPRead: ERROR! Pointer to medium material is nod valid!");
+   if (solidMaterial == 0) G4Exception("G4STEPRead: ERROR! Pointer to solid material is nod valid!");
+
+   solid_material = solidMaterial;
+
+   world_box = new G4Box("WorldBox",kInfinity,kInfinity,kInfinity); // We don't know the extent of the world yet!
+   world_volume = new G4LogicalVolume(world_box,mediumMaterial,"WorldLogicalVolume",0,0,0);
+   world_extent = G4ThreeVector(0,0,0);
 
    ReadGeom(name+".geom");
    ReadTree(name+".tree");
+
+   if (world_box->GetXHalfLength() > world_extent.x()) { world_box->SetXHalfLength(world_extent.x()); } // Now we know the world extent!
+   if (world_box->GetYHalfLength() > world_extent.y()) { world_box->SetYHalfLength(world_extent.y()); }
+   if (world_box->GetZHalfLength() > world_extent.z()) { world_box->SetZHalfLength(world_extent.z()); }
 }
 
 G4VPhysicalVolume* G4STEPRead::GetWorldVolume() {

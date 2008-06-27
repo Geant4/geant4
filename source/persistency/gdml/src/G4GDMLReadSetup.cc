@@ -40,6 +40,8 @@ G4String G4GDMLReadSetup::getSetup(const G4String& ref) {
 
 void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
 
+   G4cout << "G4GDML: Reading setup..." << G4endl;
+
    G4String name;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();

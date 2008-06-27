@@ -197,7 +197,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
       const G4String ModuleName = Modularize(physvol,depth);
       G4Transform3D daughterR;
-      
+
       if (ModuleName.empty()) { // Check if subtree requested to be a separate module!
 
          daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
