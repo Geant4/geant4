@@ -52,10 +52,10 @@ private:
    static const int maxReflections = 8; // Constant for limiting the number displacements/reflections applied to a single solid
 
    void divisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
-   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4String&);
+   void physvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4Transform3D&,const G4bool&);
    void replicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
    void structureWrite(xercesc::DOMElement*);
-   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,const G4int);
+   G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,const G4long);
 };
 
 #endif

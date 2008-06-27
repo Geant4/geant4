@@ -72,7 +72,7 @@ public:
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) { return reader.getVolumeAuxiliaryInformation(logvol); }
    void AddModule(const G4VPhysicalVolume* const physvol,const G4String& name) { writer.AddModule(physvol,name); }
-   void AddModule(const G4int depth) { writer.AddModule(depth); }
+   void AddModule(const G4long depth) { writer.AddModule(depth); }
    void SetAddPointerToName(bool set) { writer.SetAddPointerToName(set); }
 };
 

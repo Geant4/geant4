@@ -47,15 +47,15 @@
 
 class G4GDMLWrite {
 private:
-   typedef std::map<const G4VPhysicalVolume*,G4String> VolumeMapType;
-   typedef std::map<G4int,G4int> DepthMapType;
+   typedef std::vector<const G4VPhysicalVolume*> VolumeListType;
+   typedef std::vector<G4long> DepthListType;
    static bool addPointerToName;
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 
    bool FileExists(const G4String&) const;
-   VolumeMapType& volumeMap();
-   DepthMapType& depthMap();
+   VolumeListType& volumeList();
+   DepthListType& depthList();
 protected:
    G4String SchemaLocation;
 
@@ -67,13 +67,13 @@ protected:
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int)=0;
+   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4long)=0;
    virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-   G4String Modularize(const G4VPhysicalVolume* const,const G4int);
+   bool Modularize(const G4VPhysicalVolume* const,const G4long);
 public:
-   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4String&,const G4int);
-   void AddModule(const G4VPhysicalVolume* const,const G4String&);
-   void AddModule(const G4int);
+   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4String&,const G4long);
+   void AddModule(const G4VPhysicalVolume* const);
+   void AddModule(const G4long);
    static void SetAddPointerToName(bool);
 };
 
