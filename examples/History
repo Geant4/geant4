@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2008-06-04 13:38:58 gcosmo Exp $
+$Id: History,v 1.135 2008-06-27 10:13:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th June 2008  Gabriele Cosmo (examples-V09-01-06)
+- Updated reference outputs according to reference tag geant4-09-01-ref-06.
+- Includes tags: air_shower-V09-01-02, brachy-V09-01-01, ccal-V09-01-00
+                 cosmicray_charging-V09-01-00, hadrontherapy-V09-01-05,
+                 gammaraytel-V09-01-00, lAr_calorimeter-V09-01-00,
+                 microbeam-V09-01-01, microdosimentry-V09-01-03, DMX-V09-01-01,
+                 nanobeam-V09-01-11, Rich-V09-01-00, Tiara-V09-01-00,
+                 xraytel-V09-01-00, monopole-V09-01-00, exhadr01-V09-01-02,
+                 fano-V09-01-02, fano2-V09-01-02, gtherapy-V09-01-00,
+                 expol01-V09-01-00, testem1-V09-01-03, testem2-V09-01-04,
+                 testem3-V09-01-06, testem4-V09-01-02, testem5-V09-01-05,
+                 testem6-V09-01-01, testem7-V09-01-09, testem8-V09-01-00,
+                 testem9-V09-01-04, testem10-V09-01-01, testem11-V09-01-03,
+                 testem12-V09-01-04, testem13-V09-01-00, testem14-V09-01-02,
+                 testem15-V09-01-03, testem16-V09-01-01, testem17-V09-01-03,
+                 testem18-V09-01-03, exampleN06-V09-01-00.
+- Retired advanced example "raredecay_calorimetry".
 
 4th June 2008  Gabriele Cosmo (examples-V09-01-05)
 - Updated reference outputs according to reference tag geant4-09-01-ref-05.
