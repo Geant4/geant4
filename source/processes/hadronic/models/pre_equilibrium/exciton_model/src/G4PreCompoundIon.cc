@@ -59,8 +59,7 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
 
-//JMQ commented for test30_04-06-08 OPT=3
-//JMQ 02-05-08 Coulomb cutoff in xs is included here
+//JMQ June 08, coulomb cutoff included in xs (only needed for OPT=2 & OPT=4)
 //  if (eKin<theCoulombBarrier) return 0.0;
 
 
@@ -82,25 +81,24 @@ ProbabilityDistributionFunction(const G4double eKin,
   return Probability;
 }
 ////////////////////////////////////////////////////////////////////////////////////
-//J. M. Quesada (Dec 2007-Apr 2008): New inverse reaction cross sections 
-//OPT=1 Chatterjee's paramaterization for all ejectiles
-//OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons
-//OPT=3 Kalbach's parameterization for all ejectiles
-//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons
-
+//J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
+//OPT=1 Chatterjee's paramaterization for all ejectiles+Coulomb cutoff
+//OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons + Coulomb cutoff
+//OPT=3 Kalbach's parameterization for all ejectiles (improved for protons). NO Coulomb cutoff explicitely needed
+//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons (Coulomb cutoff just for Wellisch's xs for protons)
+// 
 G4double G4PreCompoundIon::CrossSection(const G4double K)
 {
       G4double ResidualA=GetRestA();
       G4double ResidualZ=GetRestZ(); 
-      G4int theA=static_cast<G4int>(GetA());
-      G4int theZ=static_cast<G4int>(GetZ());
+      G4double theA=GetA();
+      G4double theZ=GetZ();
+      G4double athrd=std::pow(ResidualA,0.33333);
       G4double fragmentA=GetA()+GetRestA();
 
 
-// OPT=2 //Default: Chatterjee's + Wellish's parameterizations
-//JMQ 03-06-08 change to OPT=3 for n-Bi @ 63 MeV test
-//JMQ 04-06-08 change to OPT=1 for test
-      G4int OPT=1;
+// Default OPT=2  
+      G4int OPT=2;
 
 
 // Loop on XS options starts:
@@ -111,8 +109,11 @@ G4double Kc=K;
 // JMQ xsec is set constat above limit of validity
  if (K>50) Kc=50;
 
-
  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,p, p0, p1, p2, Ec,delta,q,r,ji,xs;
+//G4double Eo(0),epsilon1(0),epsilon2(0),discri(0);
+
+       //JMQ (June 08) Coulomb cutoff
+         if(K<=theCoulombBarrier) return xs=0.0; 
 
  if (theA==2 && theZ==1) {
        p0 = -38.21;
@@ -174,39 +175,50 @@ else  {
      throw G4HadronicException(__FILE__, __LINE__, errOs.str());
 }
 
-      Ec = 1.44*theZ*ResidualZ/(1.5*std::pow(ResidualA,0.333333)+delta);
-      p = p0 + p1/Ec + p2/std::pow(Ec,2.);
+      Ec = 1.44*theZ*ResidualZ/(1.5*athrd+delta);
+      p = p0 + p1/Ec + p2/(Ec*Ec);
       landa = landa0*ResidualA + landa1;
       mu = mu0*std::pow(ResidualA,mu1);
-      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*std::pow(Ec,2.));
-
-      q = landa - nu/std::pow(Ec,2.) - 2*p*Ec;
-      r = mu + 2*nu/Ec + p*std::pow(Ec,2.);
+      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
+      q = landa - nu/(Ec*Ec) - 2*p*Ec;
+      r = mu + 2*nu/Ec + p*(Ec*Ec);
 
    ji=std::max(Kc,Ec);
-   if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
-   else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+  if(Kc < Ec) { xs = p*Kc*Kc + q*Kc + r;}
+  else {xs = p*(Kc - ji)*(Kc - ji) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
 
-  //JMQ 05-06-08 bug fixed unphysical of xs values removed
-   G4double Eo,epsilon1,epsilon2;
-   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
-   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
-   if(p>0.) Eo=std::max(epsilon1,epsilon2);
-   else    Eo=std::min(epsilon1,epsilon2);
-   if (Kc<Eo) xs=0.;
- //
-
-
+//JMQ 13-06-08 bug fixed unphysical negative xs values set to 0
+//JMQ 16-06-08 problems when Eo>Ec...commented and trivially solved  
+//   discri=q*q-4.*p*r;
+//   if(discri>=0) {
+//   epsilon1=(-q+std::sqrt(discri))/2./p;
+//   epsilon2=(-q-std::sqrt(discri))/2./p;
+//   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+//   else    Eo=std::min(epsilon1,epsilon2);
+//   if (Kc<Eo) {return xs=0.;} 
+//                 }
    if (xs <0.0) {xs=0.0;}
+//
+//   if (xs < 0.0){
+//       std::ostringstream errOs;
+//       G4cout<<"WARNING:  NEGATIVE OPT=1 || OPT=2  CLUSTER cross section "<<G4endl;        
+//   G4cout<<"discri ="<<discri<<"p, epsilon1, epsilon2, Eo = "<<p<<"  "<<epsilon1<<"   "<<epsilon2<<"  "<<Eo<<G4endl;
+//        errOs << "EJECTILE: A=" << theA << " Z=" << theZ <<G4endl;
+//        errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+//        errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;       
+//        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+//              }
    return xs;
 }
 else if (OPT==3 || OPT==4) {
 //PRECO inverse cross sections are chosen
 
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,p, p0, p1, p2, signor,sig;
-G4double flow,spill,xout,xpout,ares,athrd,ec,ecsq,xnulam,etest,ra,rz,a,w,c; 
+G4double flow,spill,ec,ecsq,xnulam,etest,ra,a,w,c; 
 G4double b,ecut,cut,ecut2,geom,elab;
-G4int jout,jpout,jnout;
+
+       //JMQ (June 08) Coulomb cutoff
+//         if(K<=theCoulombBarrier) return sig=0.0; 
 
 //safety initialization
 landa0=0;
@@ -225,17 +237,11 @@ c=0.;
       flow = std::pow(10.,-18);
       spill= std::pow(10.,+18);
 
-      jout=theA;
-      jpout=theZ;
-      jnout=jout-jpout;
-      xout=GetA();
-      ares=ResidualA;
-      athrd = std::pow(ares,0.3333);
-
       signor = 1.;
  
  if (theA==2 && theZ==1) { // start deuterons
 //     ** d from o.m. of perey and perey
+
       p0 = 0.798;
       p1 = 420.3;
       p2 = -1651.;
@@ -303,13 +309,12 @@ else  {
            ra=1.20;
            if (theA==2 || theA==3) ra=0.8; 
        
-           xpout = theZ;
-           rz = ResidualZ;
-           ec = 1.44 * xpout * rz / (1.5*athrd+ra);
+
+           ec = 1.44 * theZ * ResidualZ / (1.5*athrd+ra);
            ecsq = ec * ec;
            p = p0 + p1/ec + p2/ecsq;
-           landa = landa0*ares + landa1;
-           a = std::pow(ares,mu1);
+           landa = landa0*ResidualA + landa1;
+           a = std::pow(ResidualA,mu1);
            mu = mu0 * a;
            nu = a* (nu0+nu1*ec+nu2*ecsq);  
            xnulam = nu / landa;
@@ -327,7 +332,7 @@ loop1:
       ecut = (ecut-a) / (p+p);
       ecut2 = ecut;
       if (cut < 0.) ecut2 = ecut - 2.;
-      elab = K * fragmentA / ares;
+      elab = K * fragmentA / ResidualA;
       sig = 0.;
  
       if (elab <= ec) { //start for E<Ec
@@ -336,16 +341,12 @@ loop1:
       else {           //start for E>Ec
            sig = (landa*elab+mu+nu/elab) * signor;
            geom = 0.;
-//           if (xnulam < flow) goto loop2;
-//           if (elab < etest) goto loop2;
        if (xnulam < flow || elab < etest) return sig;
-           geom = std::sqrt(xout*K);
+           geom = std::sqrt(theA*K);
            geom = 1.23*athrd + ra + 4.573/geom;
            geom = 31.416 * geom * geom;
            sig = std::max(geom,sig);
       }
-
-//loop2:
  return sig;}
 else 
 {
