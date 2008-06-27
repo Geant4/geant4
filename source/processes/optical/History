@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th June 2008 Peter Gumplinger (op-V09-01-03)
+               In G4OpBoundaryProcess changed unsafe cast
+               (G4OpticalSurface*) to dynamic_cast<G4OpticalSurface*>
+               following suggestion in bug-report #1014
+
 6th June 2008 Peter Gumplinger (op-V09-01-02)
               G4OpRayleigh, G4OpWLS = trivial name changes: 
               momentum->energy, momenta->energies
