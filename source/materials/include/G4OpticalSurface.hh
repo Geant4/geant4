@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.8 2006-06-29 19:12:31 gunter Exp $
+// $Id: G4OpticalSurface.hh,v 1.9 2008-06-27 08:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ public: // With description
 
 public: // Without description
 
-	~G4OpticalSurface();
+	virtual ~G4OpticalSurface();
 
 	////////////
 	// Methods

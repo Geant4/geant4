@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.4 2007-04-25 16:18:34 gum Exp $
+// $Id: G4SurfaceProperty.hh,v 1.5 2008-06-27 08:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,17 +96,12 @@ public: // With description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4SurfaceProperty(const G4String& name,
-			  G4SurfaceType type = x_ray)
-	  : theName(name), theType(type)
-        {
-          theSurfacePropertyTable.push_back(this);
-        }
+        G4SurfaceProperty(const G4String& name, G4SurfaceType type = x_ray);
         // Constructor of a X-ray optical surface object.
 
 public: // Without description
 
-	~G4SurfaceProperty(){};
+	virtual ~G4SurfaceProperty();
 
 	////////////
 	// Methods

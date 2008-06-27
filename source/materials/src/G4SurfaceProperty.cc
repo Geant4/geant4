@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.1 2007-04-25 16:19:26 gum Exp $
+// $Id: G4SurfaceProperty.cc,v 1.2 2008-06-27 08:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,20 @@
 #include "G4SurfaceProperty.hh"
 
 G4SurfacePropertyTable G4SurfaceProperty::theSurfacePropertyTable;
+
+//
+// Constructor and destructor
+//
+G4SurfaceProperty::G4SurfaceProperty( const G4String& name,
+			                    G4SurfaceType type )
+  : theName(name), theType(type)
+{
+  theSurfacePropertyTable.push_back(this);
+}
+
+G4SurfaceProperty::~G4SurfaceProperty()
+{
+}
 
 //
 // Methods
