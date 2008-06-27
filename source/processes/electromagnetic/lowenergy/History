@@ -1,4 +1,4 @@
-$Id: History,v 1.302 2008-06-26 18:19:10 sincerti Exp $
+$Id: History,v 1.303 2008-06-27 12:22:25 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.06.2008   S. Incerti, tag emlowen-VOÂ9-01-20
+             - added protection against negative log argument in G4LogLogInterpolation.cc
+             - added protection against energies above 200 eV in G4FinalStateElasticBrennerZaider.cc
+             - removed verbose in G4CrossSectionChargeTransferExp.cc and in G4CrossSectionExcitationBorn.cc
 
 26.06.2208   S. Incerti, tag emlowen-V09-01-19
              Added protection against FPE in G4hShellCrossSectionDoubleExp.cc
