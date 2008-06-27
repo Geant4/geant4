@@ -137,7 +137,7 @@ void G4STEPRead::ReadTree(const G4String& name) {
    G4cout << "G4STEPRead: Reading '" << name << "' done." << G4endl;
 }
 
-void G4STEPRead::Read(const G4String& name,G4Material* mediumMaterial,G4Material* solidMaterial) {
+G4VPhysicalVolume* G4STEPRead::Read(const G4String& name,G4Material* mediumMaterial,G4Material* solidMaterial) {
 
    if (mediumMaterial == 0) G4Exception("G4STEPRead: ERROR! Pointer to medium material is nod valid!");
    if (solidMaterial == 0) G4Exception("G4STEPRead: ERROR! Pointer to solid material is nod valid!");
@@ -154,9 +154,6 @@ void G4STEPRead::Read(const G4String& name,G4Material* mediumMaterial,G4Material
    if (world_box->GetXHalfLength() > world_extent.x()) { world_box->SetXHalfLength(world_extent.x()); } // Now we know the world extent!
    if (world_box->GetYHalfLength() > world_extent.y()) { world_box->SetYHalfLength(world_extent.y()); }
    if (world_box->GetZHalfLength() > world_extent.z()) { world_box->SetZHalfLength(world_extent.z()); }
-}
-
-G4VPhysicalVolume* G4STEPRead::GetWorldVolume() {
 
    return new G4PVPlacement(0,G4ThreeVector(0,0,0),world_volume,"WorldPhysicalVolume",0,0,0);
 }

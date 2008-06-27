@@ -28,8 +28,7 @@ class G4STEPRead {
    void ReadGeom(const G4String&);
    void ReadTree(const G4String&);
 public:
-   void Read(const G4String&,G4Material* mediumMaterial,G4Material* solidMaterial);
-   G4VPhysicalVolume* GetWorldVolume();
+   G4VPhysicalVolume* Read(const G4String&,G4Material* mediumMaterial,G4Material* solidMaterial);
 };
 
 #endif
