@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferExp.cc,v 1.4 2008-04-24 15:14:22 pia Exp $
+// $Id: G4CrossSectionChargeTransferExp.cc,v 1.5 2008-06-27 12:22:25 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -228,7 +228,7 @@ G4VEMDataSet* G4CrossSectionChargeTransferExp::LoadData(const G4String& fileName
   G4VDataSetAlgorithm* algo = new G4LogLogInterpolation;
   G4VEMDataSet* dataSet = new G4EMDataSet(0,energies,data,algo);
 
-  dataSet->PrintData();
+  //dataSet->PrintData();
 
   return dataSet;
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationBorn.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
+// $Id: G4CrossSectionExcitationBorn.cc,v 1.3 2008-06-27 12:22:26 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -90,7 +90,7 @@ G4double G4CrossSectionExcitationBorn::CrossSection(const G4Track& track)
       table->LoadData("dna/sigma_excitation_p_born");
       
       // ---- MGP ---- Temporary
-      table->PrintData();
+      //table->PrintData();
     }
 
   const G4DynamicParticle* particle = track.GetDynamicParticle();

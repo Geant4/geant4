@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.2 2008-04-24 15:30:05 pia Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.3 2008-06-27 12:22:26 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -114,6 +114,9 @@ const G4FinalStateProduct& G4FinalStateElasticBrennerZaider::GenerateFinalState(
 
   // Kinetic energy of primary particle
   G4double k = track.GetDynamicParticle()->GetKineticEnergy();
+  
+  if (k<=200*eV) // SI - 26 June 2008 - temporary fix
+  {
 
   // Assume material = water; H2O number of electrons
   // ---- MGP ---- To be generalized later
@@ -147,6 +150,7 @@ const G4FinalStateProduct& G4FinalStateElasticBrennerZaider::GenerateFinalState(
   //  this->aParticleChange.ProposeEnergy(k);
   //  this->aParticleChange.ProposeMomentumDirection(zPrimeVers);
   //  this->aParticleChange.SetNumberOfSecondaries(0);
+  }
 
   return product;
 }
@@ -163,9 +167,11 @@ G4double G4FinalStateElasticBrennerZaider::RandomizeCosTheta(G4double k)
   
   // gamma(K), beta(K) and delta(K) are polynomials with coefficients for energy measured in eV
   k /= eV;
-  
+  //G4cout << "1** " << G4endl;
   G4double beta = std::exp(CalculatePolynomial(k,betaCoeff)); 
+  //G4cout << "2** " << beta << "direct=" << std::exp(CalculatePolynomial(k,betaCoeff)) << G4endl;
   G4double delta = std::exp(CalculatePolynomial(k,deltaCoeff)); 
+  //G4cout << "3** " << delta << G4endl;
   
   G4double gamma;
   if (k > 100.)
@@ -184,8 +190,9 @@ G4double G4FinalStateElasticBrennerZaider::RandomizeCosTheta(G4double k)
 	  gamma = std::exp(CalculatePolynomial(k, gamma035_10Coeff));
 	}
     }
-  
-  // G4cout << "beta = " << beta << ", gamma = " << gamma << ", delta = " << delta << G4endl;
+  //  G4cout << "4** " << gamma << G4endl;
+
+  //G4cout << "k=" << k  << "beta = " << beta << ", gamma = " << gamma << ", delta = " << delta << G4endl;
 
   G4double oneOverMax = 1. / (1./(4.*gamma*gamma) + beta/(4.*delta*delta));
   
@@ -226,6 +233,8 @@ G4double G4FinalStateElasticBrennerZaider::CalculatePolynomial(G4double k, std::
       
       result *= k;
       result += vec[size];
+      
+      //G4cout << "res=" << result << G4endl;
     }
   
   return result;
