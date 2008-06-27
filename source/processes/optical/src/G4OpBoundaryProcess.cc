@@ -248,8 +248,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	  }
 	}
 
-	//	if (Surface) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
-	if (Surface) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
+	if (Surface) OpticalSurface = 
+           dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
 
 	if (OpticalSurface) {
 
