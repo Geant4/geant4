@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.2 2007-10-15 08:36:35 pia Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.3 2008-06-27 20:09:54 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -58,7 +58,7 @@ G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
 {
 
   name = "CrossSectionExcitationEmfietzoglou";
-  lowEnergyLimit = 7.4 * eV;
+  lowEnergyLimit = 10.*eV; // 7.4 * eV;
   highEnergyLimit = 10. * MeV;
 }
 

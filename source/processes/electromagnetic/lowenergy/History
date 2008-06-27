@@ -1,4 +1,4 @@
-$Id: History,v 1.304 2008-06-27 12:23:15 sincerti Exp $
+$Id: History,v 1.305 2008-06-27 20:09:54 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27.06.2008   S. Incerti, tag emlowen-VO99-01-20
+27.06.2008   S. Incerti, tag emlowen-V09-01-21
+             - added two new classes for electron elastic scattering
+             G4CrossSectionElasticScreenedRutherfordLE.cc and .hh below 200 eV
+             G4CrossSectionElasticScreenedRutherfordHE.cc and .hh above 200 eV
+             that should replace the G4CrossSectionElasticScreenedRutherfordHE class
+             - raised lower energy limit of G4CrossSectionExcitationEmfietzoglou.cc up to 10 eV
+
+27.06.2008   S. Incerti, tag emlowen-VO9-01-20
              - added protection against negative log argument in G4LogLogInterpolation.cc
              - added protection against energies above 200 eV in G4FinalStateElasticBrennerZaider.cc
              - removed verbose in G4CrossSectionChargeTransferExp.cc and in G4CrossSectionExcitationBorn.cc
