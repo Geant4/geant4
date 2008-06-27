@@ -14,36 +14,34 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27 June 2008 V.Ivanchenko  (hadr-pre-V09-01-05)
+27 June 2008 V.Ivanchenko    hadr-pre-V09-01-05
 ---------------------------------------------------
 Fixed G4PreCompoundNucleon and G4PreCompoundIon for
-Coulomb barrier, added protections fro zero cross sections
-(J.M.Quesada)
+Coulomb barrier, added protections for zero cross sections,
+OPT=2 is used (J.M.Quesada)
 
-05 June 2008 J. M. Quesada (hadr-pre-V09-01-04)
+05 June 2008 J. M. Quesada   hadr-pre-V09-01-04
 ---------------------------------------------------
-
- Bug fixed in OPT=1 (Chatterjee) charged particle cross sections.
+Bug fixed in OPT=1 (Chatterjee) charged particle cross sections.
 Unphysical values at very low emission energies have been corrected (set
-to 0).
-OPT=1 by default ( OPT=2 in previous tag)
+to 0); OPT=1 ( OPT=2 in previous tag)
 
 
 15-May 2008 J. M.Quesada     hadr-pre-V09-01-03
 -----------------------------------------------
-   The retrieval of transition probabilities in G4PreCompoundModel.cc ( for protection
-against unphysically crossing the landa_+=landa_- condition) was misplaced.  Now it has been
-placed inside the preequilibrium transitions loop. 
-
+The retrieval of transition probabilities in G4PreCompoundModel.cc 
+(for protection against unphysically crossing the landa_+=landa_- condition) 
+was misplaced.  Now it has been placed inside the preequilibrium transitions 
+loop. 
 
 8-May 2008 J. M.Quesada     hadr-pre-V09-01-02
 -----------------------------------------------
-
-Protection against non physical situation has been set:  Equilibrium exciton number Neq
-(when reached, equilibrium regime starts) should correspond to equal transition probabilities 
-"back" and "forth". Nevertheless,  for heavy target (Neq is big even for low incident energies)
-after first emission this condition (equal trans. prob.) is reached far before reaching corresponding Neq
-of the residual. Unless this "jump" to equilibrium is forced in this case, preequilibrium will be 
+Protection against non physical situation has been set: Equilibrium exciton number 
+Neq (when reached, equilibrium regime starts) should correspond to equal transition 
+probabilities "back" and "forth". Nevertheless,  for heavy target (Neq is big even 
+for low incident energies) after first emission this condition (equal trans. prob.) 
+is reached far before reaching corresponding Neq of the residual. Unless this "jump" 
+to equilibrium is forced in this case, preequilibrium will be 
 spuriously prolonged (as a side effect, with huge CPU consumption).  
 G4PreCompoundModel and G4PreCompoundTransitions classes have been modified.
 
