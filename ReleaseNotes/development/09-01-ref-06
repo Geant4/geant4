@@ -63,12 +63,14 @@ interfaces                                       interfaces-V09-01-01
 ----------
 - Improvements for layout in Qt driver for Qt3; updated configuration files.
 
-materials                                        materials-V09-01-07
+materials                                        materials-V09-01-08
 ---------
 - G4NistElementBuilder: provide unique name for each isotope of an element.
 - G4IonisParamElm: added Fermi velocity and L-factor (both used for
   parameterizations of the effective charge and straggling of ions).
   G4IonisParamMat: use Fermi velocity and L-factor from G4IonisParamElm.
+- Added virtual destructor to G4OpticalSurface and derivated.
+  Addresses problem report #1014.
 - Trivial name changes (momentum->energy, momenta->energies) in classes
   G4MPVEntry, G4MaterialPropertyVector, G4MaterialPropertiesTable.
 
