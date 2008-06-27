@@ -206,6 +206,7 @@ void test31SD::EndOfEvent(G4HCofThisEvent*)
   // Integrated energy deposition to nTuple
   G4int nMax = 60;
   G4double EE[60];
+  /*
   G4String eSlice[60]={
       "S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", 
       "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", 
@@ -220,7 +221,7 @@ void test31SD::EndOfEvent(G4HCofThisEvent*)
       "E30", "E31", "E32", "E33", "E34", "E35", "E36", "E37", "E38", "E39", 
       "E40", "E41", "E42", "E43", "E44", "E45", "E46", "E47", "E48", "E49", 
       "E50", "E51", "E52", "E53", "E54", "E55", "E56", "E57", "E58", "E59"};
-
+  */
   G4int k = theHisto->GetNumAbsorbersSaved();
   if (nMax > k) nMax = k;
 

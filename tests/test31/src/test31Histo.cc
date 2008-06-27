@@ -469,7 +469,6 @@ void test31Histo::TableControl()
 	  L2   = emc->BlochCorrection(part,mat,e);
 	  del  = -0.5*emc->DensityCorrection(part,mat,e);
 	  mk   = 0.5*emc->MottCorrection(part,mat,e);
-	  fs   = 0.5*emc->FiniteSizeCorrectionDEDX(part,mat,e,e);
 	  nuc  = fact*emc->NuclearDEDX(part,mat,e,false);
 	  L = L0 + L1 + L2 +fs + del -S;
 	  dedx = L*fac/beta2;
@@ -487,7 +486,7 @@ void test31Histo::TableControl()
 		 << " L2= " << L2
 		 << " dn= " << del
 		 << " mott= " << mk
-	    	 << " fs= " << fs
+	    //	    	 << " fs= " << fs
 		 << " L= " << L
 		 << " dedx= " << dedx
 	    //     << " dedx0= " << dedx0
