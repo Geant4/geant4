@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-04    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,8 +21,6 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -567,7 +565,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 ** Photon absorbed! **
     1  -25.5 cm   11.3 cm   1.63 cm   3.88 eV      0 eV     28 cm     28 cm         Tank  OpAbsorption
 Number of optical photons produces in this event : 24
-number of event = 1 User=0.01s Real=0.01s Sys=0s
+number of event = 1 User=0s Real=0.01s Sys=0s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -754,6 +752,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1   1.45 m   -3.09 m       5 m     511 keV     0 eV   6.05 m    6.05 m          Tank  Transportation
     2    2.9 m   -6.17 m      10 m     511 keV     0 eV   6.05 m    12.1 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 3
-number of event = 1 User=0s Real=0s Sys=0s
+number of event = 1 User=0s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...

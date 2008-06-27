@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -129,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.39s Real=0.39s Sys=0s
+  User=0.38s Real=0.39s Sys=0.01s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 

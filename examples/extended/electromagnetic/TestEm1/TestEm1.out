@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -169,7 +169,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping= 1
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
@@ -181,6 +181,26 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 1 GeV in 70 bins
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
+      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      CSDA range table up to 1 GeV in 70 bins
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
+      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       CSDA range table up to 1 GeV in 70 bins
@@ -292,7 +312,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=13.73s Real=19.07s Sys=0.56s
+  User=13.5s Real=18.8s Sys=0.59s
 
  ======================== run summary ======================
 
@@ -360,7 +380,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=25.25s Real=30.71s Sys=0.61s
+  User=24.85s Real=29.99s Sys=0.59s
 
  ======================== run summary ======================
 

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -206,37 +206,4 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 -> Event= 32: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
     =>IMAGE : X(microns)=1.7167643 Y(microns)=0.11826552 THETA(mrad)=5.8315736 PHI(mrad)=9.1248899
-
-
-===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :
-
-<x|theta>=
-      16.452963
-
-<x|theta*delta>=
-              0
-
-<x|theta^3>=
-              0
-
-<x|theta*phi^2>=
-              0
-
-<x|x>=
-      18.355484
-
-<y|phi>=
-      2.0164348
-
-<y|phi*delta>=
-              0
-
-<y|theta^2*phi>=
-              0
-
-<y|phi^3>=
-              0
-
-<y|y>=
-     -1.3944387
 

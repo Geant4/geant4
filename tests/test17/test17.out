@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,11 +52,11 @@ Material available: Graphite
  Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  70.893 eV 
+ Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:  Methane CH_4   density:  0.667 mg/cm3  RadL: 696.375 m    Nucl.Int.Length: 907.942 m    Imean:  46.842 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Methane CH_4   density:  0.667 mg/cm3  RadL: 696.375 m    Nucl.Int.Length: 907.942 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  25.19 %  ElmAbundance  80.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction:  74.81 %  ElmAbundance  20.00 %
 
@@ -357,14 +357,14 @@ Run Summary
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18366 +- 0.00529316  microns 
-    CSDA  Range  in absorber = 9.04809 +- 0.00575228  microns 
+    Track Length in absorber = 9.18367 +- 0.00529313  microns 
+    CSDA  Range  in absorber = 9.0481 +- 0.00575201  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.124663 +- 0.00529316 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.179094 +- 0.00575228 microns 
+    Track Length (G4 - ICRU49) = 0.124669 +- 0.00529313 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.1791 +- 0.00575201 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -396,12 +396,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.34s Sys=0s
+  User=0.34s Real=0.34s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18397 +- 0.00602289  microns 
-    CSDA  Range  in absorber = 9.03917 +- 0.00624264  microns 
+    Track Length in absorber = 9.18397 +- 0.00602301  microns 
+    CSDA  Range  in absorber = 9.03917 +- 0.00624271  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -437,12 +437,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.77s Real=0.77s Sys=0s
+  User=0.75s Real=0.75s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.57078 +- 0.00121658  microns 
-    CSDA  Range  in absorber = 6.95956 +- 0.0114  microns 
+    Track Length in absorber = 8.56911 +- 0.00118061  microns 
+    CSDA  Range  in absorber = 6.92522 +- 0.0118302  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -479,21 +479,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.17s Real=1.18s Sys=0s
+  User=1.13s Real=1.12s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19415 +- 0.0163209  microns 
-    CSDA  Range  in absorber = 9.05272 +- 0.0199354  microns 
+    Track Length in absorber = 9.19915 +- 0.0160238  microns 
+    CSDA  Range  in absorber = 9.06967 +- 0.0158716  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.135145 +- 0.0163209 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.18372 +- 0.0199354 microns 
+    Track Length (G4 - ICRU49) = 0.140151 +- 0.0160238 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.200667 +- 0.0158716 microns 
 
-Average Number electrons per event = 22.25
-Average Number photons per event   = 22.25
+Average Number electrons per event = 22.24
+Average Number photons per event   = 22.24
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -523,20 +523,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.51s Real=2.51s Sys=0s
+  User=2.44s Real=2.45s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.20791 +- 0.0168858  microns 
-    CSDA  Range  in absorber = 9.07515 +- 0.0166069  microns 
+    Track Length in absorber = 9.14363 +- 0.0136817  microns 
+    CSDA  Range  in absorber = 9.01636 +- 0.0134521  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.148908 +- 0.0168858 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.206152 +- 0.0166069 microns 
+    Track Length (G4 - ICRU49) = 0.0846258 +- 0.0136817 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.14736 +- 0.0134521 microns 
 
-Average Number electrons per event = 520.06
-Average Number photons per event   = 2.8
+Average Number electrons per event = 523.11
+Average Number photons per event   = 2.95
 
 G4 kernel has come to Quit state.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,12 +27,12 @@ PhysicsList::AddPhysicsList: <QBBC>
 
  Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204311173.221 pc   Nucl.Int.Length: 114319773.046 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 Thank you for using G4BinaryCascade. 
@@ -129,34 +129,35 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1s Real=1.01s Sys=0.01s
+  User=0.77s Real=0.77s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         64.08   RMS(MeV) 51.02
-Average number of steps              277.2
-Average number of gamma              2.75
-Average number of e-                 4.3
-Average number of e+                 0.05
-Average number of neutrons           1
-Average number of protons            1.05
+Average energy deposit (MeV)         55.6   RMS(MeV) 30.66
+Average number of steps              264.7
+Average number of gamma              2.2
+Average number of e-                 4.15
+Average number of e+                 0.04
+Average number of neutrons           0.76
+Average number of protons            0.86
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.4
-Average number of pi0                0.19
+Average number of pi+ & pi-          0.23
+Average number of pi0                0.15
 Average number of kaons              0
 Average number of muons              0
-Average number of deuterons+tritons  0.04
-Average number of He3+alpha          0.08
-Average number of ions               0.59
-Average number of forward neutrons   0.09
-Average number of reflected neutrons 0.02
-Average number of leaked neutrons    0.78
-Average number of proton leak        0.43
-Average number of pion leak          0.38
+Average number of deuterons+tritons  0.01
+Average number of He3+alpha          0.03
+Average number of ions               0.56
+Average number of forward neutrons   0.11
+Average number of reflected neutrons 0.01
+Average number of leaked neutrons    0.56
+Average number of proton leak        0.42
+Average number of pion leak          0.21
 ========================================================
 
 #
+### G4HadronElastic destructor Warnings: ###          N(cost <-1)= 1###
 G4 kernel has come to Quit state.

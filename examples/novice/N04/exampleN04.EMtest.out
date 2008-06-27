@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,7 +83,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping= 1
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
@@ -93,6 +93,22 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
@@ -209,22 +225,22 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     44 hits are stored in ExN04TrackerHitsCollection.
-     9 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.5475295 (GeV)
+     84 hits are stored in ExN04TrackerHitsCollection.
+     8 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.53122454 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     83 hits are stored in ExN04TrackerHitsCollection.
-     41 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.7998453 (GeV)
+     19 hits are stored in ExN04TrackerHitsCollection.
+     16 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.241335 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     25 hits are stored in ExN04TrackerHitsCollection.
-     21 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.201635 (GeV)
+     35 hits are stored in ExN04TrackerHitsCollection.
+     22 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.6749638 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

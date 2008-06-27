@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-06    (9-May-2008)
+ Geant4 version Name: global-V09-01-09    (4-July-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -39,12 +39,12 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
 
 
@@ -142,7 +142,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping= 1
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
@@ -153,6 +153,24 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Subcutoff sampling in 1 regions
@@ -273,28 +291,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=38.95s Real=64.24s Sys=2.98s
+  User=39.58s Real=64.65s Sys=3.03s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.6545 cm    rms= 1.86175 mm 
- Mean number of primary steps = 198.939
+ Projected Range= 17.6539 cm    rms= 2.32624 mm 
+ Mean number of primary steps = 198.588
  Total energy deposit= 160 MeV
- NIEL energy deposit = 50.499 keV
+ NIEL energy deposit = 50.5142 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.65791 GeV	0.291119 % 	9.3285e-05 Gy
- tally 1: 	 	5.08203 GeV	0.317627 % 	0.000101779 Gy
- tally 2: 	 	3.454 GeV	0.215875 % 	6.91741e-05 Gy
- tally 3: 	 	2.13049 GeV	0.133156 % 	4.26678e-05 Gy
+ tally 0: 	 	4.57113 GeV	0.285696 % 	9.1547e-05 Gy
+ tally 1: 	 	5.01168 GeV	0.31323 % 	0.00010037 Gy
+ tally 2: 	 	3.30629 GeV	0.206643 % 	6.62157e-05 Gy
+ tally 3: 	 	1.88786 GeV	0.117991 % 	3.78086e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 765155444, 923964747
+ Current couple of seeds = 329955329, 1713564668
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -324,7 +342,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 765155444, 923964747
+ Current couple of seeds = 329955329, 1713564668
 ----------------------------------------
 Start Run processing.
 
@@ -332,28 +350,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=29.53s Real=32.46s Sys=0.35s
+  User=28.91s Real=32.91s Sys=0.35s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.1041 cm    rms= 571.898 um 
- Mean number of primary steps = 120.971
- Total energy deposit= 3.49996 GeV
- NIEL energy deposit = 1.35826 MeV
+ Projected Range= 16.2532 cm    rms= 444.637 um 
+ Mean number of primary steps = 121.253
+ Total energy deposit= 3.49997 GeV
+ NIEL energy deposit = 1.37097 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.5106 GeV	0.328873 % 	0.000230525 Gy
- tally 1: 	 	13.4663 GeV	0.384751 % 	0.000269692 Gy
- tally 2: 	 	16.0775 GeV	0.459357 % 	0.000321988 Gy
- tally 3: 	 	26.3345 GeV	0.752414 % 	0.000527407 Gy
+ tally 0: 	 	11.4143 GeV	0.326122 % 	0.000228596 Gy
+ tally 1: 	 	12.958 GeV	0.370229 % 	0.000259513 Gy
+ tally 2: 	 	15.0444 GeV	0.429841 % 	0.000301298 Gy
+ tally 3: 	 	24.7141 GeV	0.706118 % 	0.000494955 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1416166631, 1629032074
+ Current couple of seeds = 1787799664, 1176411736
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/update
@@ -377,17 +395,17 @@ Run Summary
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:    G4_Cu     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.576 cm   Imean: 322.000 eV 
    --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
-   --->  Isotope:    Cu   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
-   --->  Isotope:    Cu   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 
@@ -481,7 +499,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping= 1
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
@@ -492,6 +510,24 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Subcutoff sampling in 1 regions
@@ -593,7 +629,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1416166631, 1629032074
+ Current couple of seeds = 1787799664, 1176411736
 ----------------------------------------
 Start Run processing.
 
@@ -601,20 +637,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.34s Real=7.92s Sys=0.32s
+  User=5.55s Real=8.33s Sys=0.34s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.13901 cm    rms= 1.62716 mm 
- Mean number of primary steps = 24.745
- Total energy deposit= 285.085 MeV
- NIEL energy deposit = 21.8428 keV
+ Projected Range= 2.15154 cm    rms= 1.2664 mm 
+ Mean number of primary steps = 25.19
+ Total energy deposit= 287.679 MeV
+ NIEL energy deposit = 21.6815 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	374.216 MeV	0.374216 % 	7.49451e-06 Gy
- tally 1: 	 	1.58221 keV	1.58221e-06 % 	3.16873e-11 Gy
- tally 2: 	 	117.523 keV	0.000117523 % 	2.35365e-09 Gy
+ tally 0: 	 	426.533 MeV	0.426533 % 	8.54226e-06 Gy
+ tally 1: 	 	30.4323 keV	3.04323e-05 % 	6.09474e-10 Gy
+ tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
 ---------------------------------------------------------
@@ -622,7 +658,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2089696956, 1561259131
+ Current couple of seeds = 1228178101, 1461318620
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/update
@@ -646,17 +682,17 @@ Run Summary
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  75.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:    G4_Cu     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.576 cm   Imean: 322.000 eV 
    --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
-   --->  Isotope:    Cu   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
-   --->  Isotope:    Cu   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 
@@ -750,7 +786,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping= 1
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
@@ -761,6 +797,24 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+      Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Subcutoff sampling in 1 regions
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Subcutoff sampling in 1 regions
@@ -867,7 +921,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2089696956, 1561259131
+ Current couple of seeds = 1228178101, 1461318620
 ----------------------------------------
 Start Run processing.
 
@@ -875,18 +929,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.26s Sys=0.05s
+  User=0s Real=0.27s Sys=0.03s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 mg/cm3)
 
- Projected Range= 203.618 um    rms= 162.417 um 
- Mean number of primary steps = 2.66
+ Projected Range= 220.09 um    rms= 157.965 um 
+ Mean number of primary steps = 2
  Total energy deposit= 265 eV 
- NIEL energy deposit = 242.967 eV 
+ NIEL energy deposit = 227.863 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	9.95838 keV	37.5788 % 	1.99439e-10 Gy
+ tally 0: 	 	9.01 keV	34 % 	1.80445e-10 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -896,6 +950,6 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1418592530, 1144749506
+ Current couple of seeds = 616649608, 2120421480
 ----------------------------------------
 G4 kernel has come to Quit state.
