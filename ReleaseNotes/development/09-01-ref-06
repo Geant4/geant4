@@ -69,7 +69,7 @@ materials                                        materials-V09-01-08
 - G4IonisParamElm: added Fermi velocity and L-factor (both used for
   parameterizations of the effective charge and straggling of ions).
   G4IonisParamMat: use Fermi velocity and L-factor from G4IonisParamElm.
-- Added virtual destructor to G4OpticalSurface and derivated.
+- Added virtual destructor to G4SurfaceProperty and derivated.
   Addresses problem report #1014.
 - Trivial name changes (momentum->energy, momenta->energies) in classes
   G4MPVEntry, G4MaterialPropertyVector, G4MaterialPropertiesTable.
