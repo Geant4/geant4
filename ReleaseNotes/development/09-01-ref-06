@@ -1,0 +1,265 @@
+
+                       geant4-09-01-ref-06
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Added support for modular files in GDML writer and reader. Added handling
+   of precision and optional rounding of errors for imported/exported values.
+   Added schema validation mechanism and schema files.
+ o Added UI command for setting the verbosity level on the particle-table.
+ o Added scintillation with Birk's law and make now use of G4EmSaturation to
+   implement Birks Correction.
+ o Revised string fragmentation and tuned parameters in FTF model for Pi+P
+   and pion-nucleon interactions. Implemented quasi-elastic hadron-nucleus
+   scattering in FTF and formation time; tuned string tension.
+ o Updated FTF* physics-lists and ancillary classes to make use of
+   quasi-elastic now embedded in the FTF model itself.
+ o Improvements for layout in Qt driver for Qt3 and updated overall
+   configuration for Qt.
+ o Embedded AIDA setup in central configuration scripts, simplified
+   GNUmakefiles in examples and tests.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-06
+------
+- Integrated improvements to Qt setup and AIDA.
+  Restored Qt libs setup to include GL as default.
+- Linux-g++.gmk: added G4OPTDEBUG flag for "-O2 -g" combined compilation.
+- AIX-xlC.gmk: added shared libs section as for Linux-g++.
+
+environments                                     envs-V09-01-02
+------------
+- Updated configure scripts and fixed some minor bugs.
+
+g3tog4                                           g3tog4-V09-01-00
+------
+- GNUmakefile: clean Fortran objects in 'lib' target before building libraries.
+
+geometry/solids/CSG                              geom-csg-V09-01-03
+-------------------
+- G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
+  very small tangent direction; now returning kInfinity and no longer zero.
+  It fixes rare observed cases of zero value returned by both DistanceToIn()
+  and DistanceToOut(), causing stuck tracks with zero step length.
+- G4Sphere: fixed calculation of roots in DistanceToOut(p,v,...) for
+  theta-conical surfaces interserctions and for sTheta<=90 degree intersection.
+  Addresses issue reported when running PET application with optical photons
+  about mis-computation of distance on half-sphere constructs.
+
+global                                           global-V09-01-09
+------
+- Changed date for release 9.2-beta.
+
+intercoms                                        intercoms-V09-01-00
+---------
+- Added a new function in G4UIcommandTree to find a subtree.
+
+interfaces                                       interfaces-V09-01-01
+----------
+- Improvements for layout in Qt driver for Qt3; updated configuration files.
+
+materials                                        materials-V09-01-07
+---------
+- G4NistElementBuilder: provide unique name for each isotope of an element.
+- G4IonisParamElm: added Fermi velocity and L-factor (both used for
+  parameterizations of the effective charge and straggling of ions).
+  G4IonisParamMat: use Fermi velocity and L-factor from G4IonisParamElm.
+- Trivial name changes (momentum->energy, momenta->energies) in classes
+  G4MPVEntry, G4MaterialPropertyVector, G4MaterialPropertiesTable.
+
+particles                                        particles-V09-01-03
+---------
+- Added /particle/verbose command for setting verbose level for
+  G4ParticleTable. Initial verbose level of the particle-table is set to 1.
+- The verbose level of the ParticleDefinition at the construction is set same
+  as for the particle-table.
+
+persistency/gdml                                 gdml-V09-01-07
+----------------
+- Writer: precision is now considered in case of scale, rotation and position
+  of the physical-volume. DBL_EPSILON is used to filter precision for avoiding
+  unnecessary scaling, rotation or positioning.
+- Added support for writing modular files. Modularization can be done either
+  by physvol/depth/mixed. Module name is optional; if no name is specified,
+  the logical volume name will be the filename.
+- Optimized/simplified writing of structure: no array required for sorting.
+  Only the referenced solids are written out, not the whole solid store.
+  Assigned the name to world physical volume.
+  Naming convention can be configured in the writer.
+- Volume auxiliary information is requested by pointer instead of by name.
+- Writer checks if the file to be created does already exist.
+- Added schema validation mechanism and schema files.
+- Added GetVolume() function to reader.
+- Set correct URL for schema for 'noNamespaceSchemaLocation' parameter.
+
+physics_lists                                    phys-lists-V09-01-09
+-------------
+- Updated FTF* lists and physics NOT to use Quasielastic from CHIPS.
+  FTF now has quasi-elastic included in the FTF model itself.
+
+processes/electromagnetic/lowenergy              emlowen-V09-01-19
+-----------------------------------
+- Added missing condition for cosTheta and phi variables in class
+  G4FinalStateIonisationRudd which were causing wrong angular distributions.
+- Added 4 protections against NaN in class G4hLowEnergyLoss.
+- Added protection against division by zero in G4hShellCrossSectionDoubleExp.
+- Removed annoying printout in G4CrossSectionExcitationBornPartial.
+
+processes/electromagnetic/standard               emstand-V09-01-18
+----------------------------------
+- G4eBremsstrahlungHEModel: new model, an extension of the standard
+  Bremsstrahlung model but using a more sophisticated LPM approach.
+- G4CoulombScattering: added SetHEModelLimit() method to provide easier
+  initialisation.
+- G4eCoulombScatteringModel: method SelectIsotope() method has been moved
+  from the derived class; sampling of the recoil ion is performed.
+- G4CoulombScatteringModel: method SelectIsotope() method has been moved to
+  the base class.
+- G4PAIxSection: new functions for resonance and Rutherford collisions.
+- G4IonFluctuations: fixed index and added method SetParticleAndCharge().
+- G4ionIonisation: use G4BraggModel for low-energy ions heavier than He;
+  compute nuclear stopping before adding corrections.
+- G4ionGasIonisation: added pointer to G4IonFluctuations and use of method
+  SetParticleAndCharge(). Fixed bug in update of the dynamic charge of an ion.
+- G4hIonisation: build separate tables for kaons to allow for use of hadron
+  Bremsstrahlung and pair production by kaons.
+- G4IonFluctuations: use summed fluctuation of components of a mixture instead
+  of computation for average Z.
+- G4BetheBlochModel: added projectile form-factor in computation of maximum
+  energy transfer and in sampling of the energy of e-.
+- G4hMultipleScattering: added method AlongStepGetPhysicalInteractionLength()
+  in which scaled energy normalized to one nucleon is used for ions.
+
+processes/electromagnetic/utils                  emutils-V09-01-18
+-------------------------------
+- G4ionEffectiveCharge: in using the Ziegler formula for effective charge of
+  ions, the minimum effective charge is 1.0 (instead of 0.1).
+- G4EmCorrections: minor change of the scale for external ion data.
+
+processes/electromagnetic/xrays                  xrays-V09-01-02
+-------------------------------
+- Added scintillation with Birk's law to the G4Scintillation and make now
+  use of G4EmSaturation to implement Birks Correction.
+- Trivial name changes (momentum->energy, momenta->energies) in classes
+  G4Scintillation and G4Cerenkov.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-01-03)
+  o G4HadronicProcessStore: temporarly commented out destruction of processes
+    in destructor.
+  o G4HadronicProcess: turned off warning message in case of 'fStopButAlive',
+    but leave it in place for 'fStopAndKill', 'fKillTrackAndSecondaries' and
+    'fPostponeToNextEvent'.
+- models/de_excitation (hadr-deex-V09-01-09)
+  o Fixed minor memory leak in G4ExcitationHandler.
+- models/high_energy (hadr-hep-V09-01-01)
+  o Removed error message "total mass > total energy" in NBodyPhaseSpace()
+    in G4HEInelastic; replaced with message only when verbosity greater than 1.
+- models/management (hadr-modman-V09-01-03)
+  o Added pure virtual method G4V3DNucleus::SortNucleonsInZ().
+  o Commented out destruction of models in G4HadronicInteractionRegistry
+    destructor.
+- models/neutron_hp (hadr-hpn-V09-01-12)
+  o Fixed minor memory leak in class G4NeutronHPPhotonDist.
+  o Fixes to classes: G4NeutronHPContAngularPar, G4NeutronHPLegendreStore,
+    G4NeutronHPAngular, G4NeutronHPDiscreteTwoBody, G4NeutronHPInelasticCompFS.
+  o Fixed conditional jump on uninitialised value in G4NeutronHPInelasticData,
+    and G4NeutronHPCaptureData.
+- models/parton_string (hadr-prtn-V09-01-02)
+  o Implemented and tuned FTF model tuned for Pi+P interactions.
+  o Tuned FTF parameters were for proton-proton interactions.
+  o Revised string fragmentation and tuned parameters.
+  o Roughly determined FTF parameters for pion-nucleon interactions.
+  o Implemented quasi-elastic hadron-nucleus scattering in FTF.
+  o Implemented formation time in FTF, and tuned string tension.
+  o Moved modified G4DiffractiveExcitation from 'management' to 'diffraction'
+    modules. Separated G4DiffractiveExcitation for FTF from QGS; added original
+    G4DiffractiveExcitation to qgsm as class G4QGSDiffractiveExcitation
+    Moved G4SingleDiffractiveExcitation from management to qgsm.
+  o Decoupled G4QGSMFragmentation and G4LundStringFragmentation for the
+    calculation of formation time, by adding methods and members in class
+    G4VLongitudinalStringDecay for the manipulation with string tension.
+  o Fixed memory leak in G4QGSMFragmentation and G4VLongitudinalStringDecay.
+- models/qmd (hadr-qmd-V09-01-04)
+  o Deleted unnecessary dependency and unused functions in G4QMDReaction.
+  o Fixed memory leak in G4QMDSystem, G4QMDReaction, and G4QMDCollision.
+- models/radioactive_decay (radioactive_decay-V09-01-01)
+  o Changed default verbosity level to "1" in GRIsotopeTable and corrected
+    usage of G4cout and G4cerr.
+- models/rpg (hadr-rpg-V09-01-03)
+  o Removed unused variable 'ekIncident' in G4RPGFragmentation and
+    G4RPGTwoCluster.
+- models/util (hadr-mod-util-V09-01-06)
+  o Added new method G4Fancy3DNucleus::SortNucleonsInZ() to sort nucleons
+    using z-coordinate
+  o Added methods Get/SetTimeOfCreation() to G4ExcitedString.
+
+processes/management                             procman-V09-01-03
+--------------------
+- Fixed un-necessary double deletion/creation of vector in
+  G4ProcessVector::operator=().
+
+processes/optical                                op-V09-01-02
+-----------------
+- G4OpBoundaryProcess: removed 'swap' methods, replaced by global
+  G4SwapPtr() one; removed G4IsotropicRand() method, replaced by global
+  G4RandomDirection(). Added commented code to change absorption at a
+  dielectric/metal boundary into transmission.
+- Trivial name changes (momentum->energy, momenta->energies) in classes
+  G4OpRayleigh and G4OpWLS.
+
+examples                                         examples-V09-01-06
+--------
+- Updated reference outputs.
+- Removed AIDA setup from GNUmakefiles, now embedded in central scripts.
+- Retired obsolete advanced example "raredecay_calorimetry".
+- advanced/air_shower (air_shower-V09-01-02)
+  o Fixed compilation error in the analysis manager.
+  o Corrected definition of the refraction index of the Quartz in
+    DetectorConstruction class.
+- advanced/brachytheraphy (brachytheraphy-V09-01-01)
+  o Fixed compilation error in the analysis manager. Fixed bad type assignment.
+  o Activated generation of histogram files for output.
+- advanced/gammaray_telescope (gammaraytel-V09-01-00)
+  o Fixed compilation errors due to missing inclusion of headers.
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-01-00)
+  o Fixed compilation error in the analysis manager.
+- advanced/microbeam (microbeam-V09-01-01)
+  o Added units in MicrobeamPhantomconfiguration and MicrobeamSteppingAction.
+- advanced/microdosimetry (microdosimentry-V09-01-03)
+  o New application simulating 10 keV tracks Helium+ (positive charge is +e)
+    particle in liquid water using only G4DNA processes.
+- advanced/nanobeam (nanobeam-V09-01-11)
+  o Fixed mechanism for default macro reading.
+- advanced/Rich (Rich-V09-01-00)
+  o Adjusted initialisation of G4Cerenkov process now being a discrete process.
+  o Fixed compilation error and cleared compilation warnings.
+- advanced/Tiara (Tiara-V09-01-00)
+  o Fixed compilation error in TiaraCellScorerStore.
+- extended/exoticphysics/monopole (monopole-V09-01-00)
+  o Fixed compilation warnings.
+- extended/hadronic/Hadr01 (exhadr01-V09-01-02)
+  o Added FTF_BIC physics lists.
+- extended/medical/GammaTherapy (gtherapy-V09-01-00)
+  o Added opt3 variant of EM physics.
+- novice/N06 (exampleN06-V09-01-00)
+  o Now using G4EmSaturation to implement Birks correction for G4Scintillation.
+
+tests                                            tests-V09-01-06
+-----
+- Updated reference outputs and tools.
+- test30 (test30-V09-01-01)
+  o Do not multiply ion energy by ion mass.
+  o Removed AIDA setup from GNUmakefiles, now embedded in central scripts.
+- test31 (test31-V09-01-02)
+- test44 (test44-V09-01-01)
+  o Removed AIDA setup from GNUmakefiles, now embedded in central scripts.
+- test45 (test45-V09-01-01)
+  o New test for the validation of thick target data for low-energy proton
+    and ion beams stopped in different targets.
