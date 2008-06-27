@@ -166,9 +166,12 @@ processes/hadronic
   o Commented out destruction of models in G4HadronicInteractionRegistry
     destructor.
 - models/neutron_hp (hadr-hpn-V09-01-12)
+  o Improved energy and angular distributions for both scattered neutron
+    and recoil targets. Fixed missing inelastic gamma-ray lines.
+    Addresses problem report #1008.
+  o Fixed bug for missed pouch-out particles (reported in hadronic Hypernews
+    Forum, posting #932). 
   o Fixed minor memory leak in class G4NeutronHPPhotonDist.
-  o Fixes to classes: G4NeutronHPContAngularPar, G4NeutronHPLegendreStore,
-    G4NeutronHPAngular, G4NeutronHPDiscreteTwoBody, G4NeutronHPInelasticCompFS.
   o Fixed conditional jump on uninitialised value in G4NeutronHPInelasticData,
     and G4NeutronHPCaptureData.
 - models/parton_string (hadr-prtn-V09-01-02)
