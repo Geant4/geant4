@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.1 2008-06-04 12:57:55 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.2 2008-06-27 20:33:05 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,8 +63,8 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha+")   flagParticle = 5;
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "helium")   flagParticle = 6;
 
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticBrennerZaider") 		flagProcess =11;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticScreenedRutherford") 	flagProcess =12;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticScreenedRutherfordLE") 	flagProcess =11;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticScreenedRutherfordHE") 	flagProcess =12;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationBorn") 		flagProcess =13;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationEmfietzoglou") 	flagProcess =14;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationMillerGreen") 	flagProcess =15;

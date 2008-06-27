@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.2 2008-06-11 11:56:16 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.3 2008-06-27 20:33:05 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -135,7 +135,8 @@ void PhysicsList::ConstructProcess()
 #include "G4CrossSectionExcitationEmfietzoglou.hh"
 #include "G4FinalStateExcitationEmfietzoglou.hh"
 
-#include "G4CrossSectionElasticScreenedRutherford.hh"
+#include "G4CrossSectionElasticScreenedRutherfordLE.hh"
+#include "G4CrossSectionElasticScreenedRutherfordHE.hh"
 #include "G4FinalStateElasticScreenedRutherford.hh"
 #include "G4FinalStateElasticBrennerZaider.hh"
 
@@ -159,11 +160,11 @@ void PhysicsList::ConstructProcess()
 
 // Processes definition
 
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> 
-  ElasticScreenedRutherford;
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,G4FinalStateElasticScreenedRutherford> 
+  ElasticScreenedRutherfordHE;
 
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> 
-  ElasticBrennerZaider;
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,G4FinalStateElasticBrennerZaider> 
+  ElasticScreenedRutherfordLE;
 
 typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> 
   ExcitationEmfietzoglou;
@@ -204,8 +205,8 @@ void PhysicsList::ConstructEM()
 
    if (particleName == "e-") {
        pmanager->AddDiscreteProcess(new ExcitationEmfietzoglou("ExcitationEmfietzoglou"));
-       pmanager->AddDiscreteProcess(new ElasticScreenedRutherford("ElasticScreenedRutherford"));
-       pmanager->AddDiscreteProcess(new ElasticBrennerZaider("ElasticBrennerZaider"));
+       pmanager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
+       pmanager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
        pmanager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
 
     } else if ( particleName == "proton" ) {
@@ -221,7 +222,7 @@ void PhysicsList::ConstructEM()
 
     } else if ( particleName == "alpha" ) {
        pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationBorn"));
+       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
        pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
     
     } else if ( particleName == "alpha+" ) {
