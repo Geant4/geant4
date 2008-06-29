@@ -26,34 +26,14 @@
 #ifndef G4_CASCADE_LAMBDAP_CHANNEL_HH
 #define G4_CASCADE_LAMBDAP_CHANNEL_HH
 
-#include "G4CascadeChannel.hh"
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
 
+struct G4CascadeLambdaPChannelData {
+  typedef G4CascadeData<3,12,33,59,30,20,157> data_t;
+  static data_t data;
+};
 
-class G4CascadeLambdaPChannel : public G4CascadeChannel {
-
-public:
-
-  G4CascadeLambdaPChannel();
-  virtual ~G4CascadeLambdaPChannel();
-
-  G4double getCrossSection(G4double ke) const; 
-  G4int getMultiplicity(G4double ke) const;
-  std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke) const;
-
-private:
-
-  static G4double lptot[31];
-  static G4double lpMultiplicities[6][31];
-
-  static const G4int lpindex[6][2];
-  static const G4int lp2bfs[3][2];
-  static const G4int lp3bfs[12][3];
-  static const G4int lp4bfs[33][4];
-  static const G4int lp5bfs[59][5];
-  static const G4int lp6bfs[30][6];
-  static const G4int lp7bfs[20][7];
-
-  static const G4float lpCrossSections[157][31];
-};        
+typedef G4CascadeFunctions<G4CascadeLambdaPChannelData> G4CascadeLambdaPChannel;
 
 #endif

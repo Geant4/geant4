@@ -24,6 +24,28 @@
 // ********************************************************************
 //
 
+#include "G4CascadeKplusPChannel.hh"
+#include "G4CascadeKplusNChannel.hh"
+#include "G4CascadeKzeroPChannel.hh"
+#include "G4CascadeKzeroNChannel.hh"
+#include "G4CascadeKminusPChannel.hh"
+#include "G4CascadeKminusNChannel.hh"
+#include "G4CascadeKzeroBarPChannel.hh"
+#include "G4CascadeKzeroBarNChannel.hh"
+#include "G4CascadeLambdaPChannel.hh"
+#include "G4CascadeLambdaNChannel.hh"
+#include "G4CascadeSigmaPlusPChannel.hh"
+#include "G4CascadeSigmaPlusNChannel.hh"
+#include "G4CascadeSigmaZeroPChannel.hh"
+#include "G4CascadeSigmaZeroNChannel.hh"
+#include "G4CascadeSigmaMinusPChannel.hh"
+#include "G4CascadeSigmaMinusNChannel.hh"
+#include "G4CascadeXiZeroPChannel.hh"
+#include "G4CascadeXiZeroNChannel.hh"
+#include "G4CascadeXiMinusPChannel.hh"
+#include "G4CascadeXiMinusNChannel.hh"
+
+
 #include "G4Collider.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -42,10 +64,26 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
 
 G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 							 G4InuclParticle* target) {
+  G4InuclElementaryParticle* particle1 =
+    dynamic_cast<G4InuclElementaryParticle*>(bullet);
+  G4InuclElementaryParticle* particle2 =	
+    dynamic_cast<G4InuclElementaryParticle*>(target);
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider::collide" << G4endl;
+  G4CollisionOutput output;
+
+  if (!(particle1 && particle2)) {
+    G4cout << " ElementaryParticleCollider -> can collide only particle with particle " << G4endl;
+  } else {
+    collide(particle1, particle2, output);
   }
+  return output;	
+}
+
+
+void 
+G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
+				      G4InuclElementaryParticle* particle2,
+				      G4CollisionOutput& output) {
 
   std::vector<G4double> totscm(4, 0.0); //::: fix
   std::vector<G4double> totlab(4, 0.0);
@@ -53,199 +91,81 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
   // generate nucleon or pion collission with NUCLEON 
   // or pion with quasideutron
 
-  if (verboseLevel > 2){
-    G4cout << " here " << G4endl;
-  }
-
-  G4CollisionOutput output;  
-  G4InuclElementaryParticle* particle1 =
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-  G4InuclElementaryParticle* particle2 =	
-    dynamic_cast<G4InuclElementaryParticle*>(target);
-	     
-  if (particle1 && particle2) { // particle / particle 
-
-    if (!particle1->photon() && !particle2->photon()) { // ok
-
-      if (particle1->nucleon() || particle2->nucleon()) { // ok
-
-	if (verboseLevel > 2){
-	  G4cout << " here1 " << G4endl;
-	  particle1->printParticle();
-	  particle2->printParticle();
-
-	  std::vector<G4double> momb = particle1->getMomentum();
-	  std::vector<G4double> momt = particle2->getMomentum();
-
-	  for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
-	  G4cout << " total input: px " << momb[1] << " py " << momb[2] 
-		 << " pz " << momb[3] << " e " << momb[0] << G4endl;
-
-	}
-
-	G4LorentzConvertor convertToSCM;
-
-	if(particle2->nucleon()) {
-          convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
-          convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
-
-	} else {
-
-          convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
-          convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
-	};  
-
-        convertToSCM.toTheCenterOfMass();
- 
-        G4double ekin = convertToSCM.getKinEnergyInTheTRS();
-        G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-        G4double pscm = convertToSCM.getSCMMomentum();
-
-	if(verboseLevel > 2){
-	  G4cout << " ekin " << ekin << " etot_scm " << etot_scm << " pscm " <<
-	    pscm << G4endl;
-	}
-
-        std::vector<G4InuclElementaryParticle> particles = 	    
-	  generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
-
-	if(verboseLevel > 2){
-	  G4cout << " particles " << particles.size() << G4endl;
-
-	  for(G4int i = 0; i < G4int(particles.size()); i++) 
-	    particles[i].printParticle();
-
-	}
-
-	if(!particles.empty()) { // convert back to Lab
-
-	  particleIterator ipart;
-
-	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
-
-	    if(verboseLevel > 2){
-	      std::vector<G4double> mom_scm = ipart->getMomentum();
-	      G4cout << mom_scm[0] << " " <<  mom_scm[1] << " "
-	             << mom_scm[2] << " " <<  mom_scm[3] << G4endl;
-
-	      for(G4int i = 0; i < 4; i++) {
-		totscm[i] += mom_scm[i];
-		G4cout << "8" << "/" << i << G4endl;
-	      }
-
-	    }
-
-	    std::vector<G4double> mom = 
-	      convertToSCM.backToTheLab(ipart->getMomentum());
-	
-	    if(verboseLevel > 2){
-	      for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
-	    }
-
-	    ipart->setMomentum(mom); 
-	  };
-
-	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-
-	  if(verboseLevel > 2){
-	    G4cout << " In SCM: total outgoing momentum " << G4endl 
-		   << " E " << totscm[0] << " px " << totscm[1]
-		   << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
-	    G4cout << " In Lab: total outgoing momentum " << G4endl 
-		   << " E " << totlab[0] << " px " << totlab[1]
-		   << " py " << totlab[2] << " pz " << totlab[3] << G4endl; 
-	  }
-	};
-	
-	output.addOutgoingParticles(particles);
-
+  if (!particle1->photon() && !particle2->photon()) { // ok
+    if (particle1->nucleon() || particle2->nucleon()) { // ok
+      G4LorentzConvertor convertToSCM;
+      if(particle2->nucleon()) {
+	convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
+	convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
       } else {
-
-        if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
-
-	  if(particle1->pion() || particle2->pion()) {
-	    G4LorentzConvertor convertToSCM;
-
-            if(particle1->pion()) {
-              convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
-              convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
-
-	    } else {
-
-              convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
-              convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
-	    }; 
-
-            convertToSCM.toTheCenterOfMass(); 
-
-            G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-
-	    if(verboseLevel > 2){
-	      G4cout << " etot_scm " << etot_scm << G4endl;
-	    }
-
-            std::vector<G4InuclElementaryParticle> particles = 
-	      generateSCMpionAbsorption(etot_scm, particle1, particle2);
-
-	    if(verboseLevel > 2){
-	      G4cout << " particles " << particles.size() << G4endl;
-
-	      for(G4int i = 0; i < G4int(particles.size()); i++) 
-		particles[i].printParticle();
-
-	    }
-
-	    if(!particles.empty()) { // convert back to Lab
-	      particleIterator ipart;
-
-	      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-
-		if(verboseLevel > 2){
-		  std::vector<G4double> mom_scm = ipart->getMomentum();
-
-		  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
-
-		}
-
-	        std::vector<G4double> mom = 
-	          convertToSCM.backToTheLab(ipart->getMomentum());
-
-	        ipart->setMomentum(mom); 
-	      };
-
-	      std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-
-	      if(verboseLevel > 2){
-		G4cout << " In SCM: total outgoing momentum " << G4endl 
-		       << " E " << totscm[0] << " px " << totscm[1]
-		       << " py " << totscm[2] << " pz " << totscm[2] << G4endl; 
-	      }
-	
- 	      output.addOutgoingParticles(particles);
-            };
-
-	  } else {
-
-	    G4cout << " ElementaryParticleCollider -> can collide just pions with deutron at the moment " << G4endl;
-	  };
- 
-	} else {
-
-	  G4cout << " ElementaryParticleCollider -> can collide just smth. with nucleon or deutron at the moment " << G4endl;
-        };
+	convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
+	convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
       };  
+      convertToSCM.toTheCenterOfMass();
+      G4double ekin = convertToSCM.getKinEnergyInTheTRS();
+      G4double etot_scm = convertToSCM.getTotalSCMEnergy();
+      G4double pscm = convertToSCM.getSCMMomentum();
 
+      std::vector<G4InuclElementaryParticle> particles = 	    
+	generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
+
+      if(verboseLevel > 2){
+	G4cout << " particles " << particles.size() << G4endl;
+
+	for(G4int i = 0; i < G4int(particles.size()); i++) 
+	  particles[i].printParticle();
+
+      }
+      if(!particles.empty()) { // convert back to Lab
+	particleIterator ipart;
+	for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
+	  std::vector<G4double> mom = 
+	    convertToSCM.backToTheLab(ipart->getMomentum());
+	  ipart->setMomentum(mom); 
+	};
+	std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+      };
+      output.addOutgoingParticles(particles);
     } else {
+      if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
+	if(particle1->pion() || particle2->pion()) {
+	  G4LorentzConvertor convertToSCM;
+	  if(particle1->pion()) {
+	    convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
+	    convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
+	  } else {
+	    convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
+	    convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
+	  }; 
+	  convertToSCM.toTheCenterOfMass(); 
+	  G4double etot_scm = convertToSCM.getTotalSCMEnergy();
+	  std::vector<G4InuclElementaryParticle> particles = 
+	    generateSCMpionAbsorption(etot_scm, particle1, particle2);
 
-      G4cout << " ElementaryParticleCollider -> can not collide photons at the moment " << G4endl;
-    }; 
+	  if(!particles.empty()) { // convert back to Lab
+	    particleIterator ipart;
+	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+	      std::vector<G4double> mom = 
+		convertToSCM.backToTheLab(ipart->getMomentum());
+	      ipart->setMomentum(mom); 
+	    };
+	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	    output.addOutgoingParticles(particles);
+	  };
+
+	} else {
+	  G4cout << " ElementaryParticleCollider -> can collide just pions with deutron at the moment " << G4endl;
+	};
+      } else {
+	G4cout << " ElementaryParticleCollider -> can collide just smth. with nucleon or deutron at the moment " << G4endl;
+      };
+    };  
 
   } else {
 
-    G4cout << " ElementaryParticleCollider -> can collide only particle with particle " << G4endl;
-  }; 	 	 
+    G4cout << " ElementaryParticleCollider -> can not collide photons at the moment " << G4endl;
+  }; 
 
-  return output;
 }
 
 G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is, 
@@ -359,46 +279,46 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   if ( ( l > 10 && l < 14 ) || ( l > 14 && l < 63 ) ) {
     // strange particle branch
     if ( l == 11 ) {
-      mul = kpp.getMultiplicity(ekin);
+      mul = G4CascadeKplusPChannel::getMultiplicity(ekin);
     } else if ( l == 13 ) {
-      mul = kmp.getMultiplicity(ekin);
+      mul = G4CascadeKminusPChannel::getMultiplicity(ekin);
     } else if ( l == 15 ) {
-      mul = k0p.getMultiplicity(ekin);
+      mul = G4CascadeKzeroPChannel::getMultiplicity(ekin);
     } else if ( l == 17 ) {
-      mul = k0bp.getMultiplicity(ekin);
+      mul = G4CascadeKzeroBarPChannel::getMultiplicity(ekin);
     } else if ( l == 21 ) {
-      mul = lp.getMultiplicity(ekin);
+      mul = G4CascadeLambdaPChannel::getMultiplicity(ekin);
     } else if ( l == 23 ) {
-      mul = spp.getMultiplicity(ekin);
+      mul = G4CascadeSigmaPlusPChannel::getMultiplicity(ekin);
     } else if ( l == 25 ) {
-      mul = s0p.getMultiplicity(ekin);
+      mul = G4CascadeSigmaZeroPChannel::getMultiplicity(ekin);
     } else if ( l == 27 ) {
-      mul = smp.getMultiplicity(ekin);
+      mul = G4CascadeSigmaMinusPChannel::getMultiplicity(ekin);
     } else if ( l == 29 ) {
-      mul = x0p.getMultiplicity(ekin);
+      mul = G4CascadeXiZeroPChannel::getMultiplicity(ekin);
     } else if ( l == 31 ) {
-      mul = xmp.getMultiplicity(ekin);
+      mul = G4CascadeXiMinusPChannel::getMultiplicity(ekin);
 
     } else if ( l == 22 ) {
-      mul = kpn.getMultiplicity(ekin);
+      mul = G4CascadeKplusNChannel::getMultiplicity(ekin);
     } else if ( l == 26 ) {
-      mul = kmn.getMultiplicity(ekin);
+      mul = G4CascadeKminusNChannel::getMultiplicity(ekin);
     } else if ( l == 30 ) {
-      mul = k0n.getMultiplicity(ekin);
+      mul = G4CascadeKzeroNChannel::getMultiplicity(ekin);
     } else if ( l == 34 ) {
-      mul = k0bn.getMultiplicity(ekin);
+      mul = G4CascadeKzeroBarNChannel::getMultiplicity(ekin);
     } else if ( l == 42 ) {
-      mul = ln.getMultiplicity(ekin);
+      mul = G4CascadeLambdaNChannel::getMultiplicity(ekin);
     } else if ( l == 46 ) {
-      mul = spn.getMultiplicity(ekin);
+      mul = G4CascadeSigmaPlusNChannel::getMultiplicity(ekin);
     } else if ( l == 50 ) {
-      mul = s0n.getMultiplicity(ekin);
+      mul = G4CascadeSigmaZeroNChannel::getMultiplicity(ekin);
     } else if ( l == 54 ) {
-      mul = smn.getMultiplicity(ekin);
+      mul = G4CascadeSigmaMinusNChannel::getMultiplicity(ekin);
     } else if ( l == 58 ) {
-      mul = x0n.getMultiplicity(ekin);
+      mul = G4CascadeXiZeroNChannel::getMultiplicity(ekin);
     } else if ( l == 62 ) {
-      mul = xmn.getMultiplicity(ekin);
+      mul = G4CascadeXiMinusNChannel::getMultiplicity(ekin);
 
     } else {
       G4cout << " G4ElementaryParticleCollider:" 
@@ -425,8 +345,8 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
       for (G4int j = 0; j < 5; j++) {
         sigm[j] = std::fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
-	  		    sk * (asig[2][j][ik] + asig[3][j][ik] - 
-		  		  asig[2][j][ik - 1] - asig[3][j][ik - 1])));
+				   sk * (asig[2][j][ik] + asig[3][j][ik] - 
+					 asig[2][j][ik - 1] - asig[3][j][ik - 1])));
         stot += sigm[j];
       };
 
@@ -434,7 +354,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
       for (G4int j = 0; j < 5; j++) {
         sigm[j] = std::fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
-						    - asig[l - 1][j][ik - 1]));
+							   - asig[l - 1][j][ik - 1]));
         stot += sigm[j];
       };
     };
@@ -508,7 +428,7 @@ generateSCMfinalState(G4double ekin,
       kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
-            generateStrangeChannelPartTypes(is, 2, ekin);
+	  generateStrangeChannelPartTypes(is, 2, ekin);
 
         G4int finaltype = particle_kinds[0]*particle_kinds[1];
         if (finaltype != is) kw = 2;  // Charge or strangeness exchange
@@ -601,7 +521,7 @@ generateSCMfinalState(G4double ekin,
 
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
-            generateStrangeChannelPartTypes(is, multiplicity, ekin);
+	  generateStrangeChannelPartTypes(is, multiplicity, ekin);
       } else {
         particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
       }
@@ -721,7 +641,7 @@ generateSCMfinalState(G4double ekin,
 
 	    // handle last two
 	    G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
-				    tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
+					 tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
 	    G4double ct = -0.5 * (tot_mod * tot_mod + 
 				  modules[multiplicity - 2] * modules[multiplicity - 2] -
 				  modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
@@ -943,168 +863,168 @@ generateOutgoingKindsFor2toMany(
 
   const G4double bsig[4][20][20] = {
     {{1.20,3.70,3.98,3.85,3.51,2.90,2.86,2.81,2.77,2.80,
-    2.54,2.00,1.90,1.75,1.68,1.61,1.54,1.40,1.25,1.17},
-    {8.00,14.0,13.0,12.0,11.4,9.70,9.41,8.52,8.03,6.70,
-    5.73,5.20,4.80,4.54,4.36,4.28,4.16,4.10,3.80,3.00},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.37,0.41,0.92,1.10,0.98,0.85,0.74,0.74,0.83,
-    0.71,0.68,0.53,0.48,0.41,0.41,0.41,0.37,0.37,0.37},
-    {0.  ,0.30,1.22,2.51,2.67,2.95,2.95,2.95,2.96,2.84,
-    2.80,2.70,3.00,2.80,2.46,2.46,2.45,2.40,2.40,2.20},
-    {0.  ,1.40,2.37,4.07,3.90,3.80,3.70,3.70,3.60,3.40,
-    3.20,3.50,3.17,3.00,2.80,2.70,2.60,2.60,2.40,2.20},
-    {0.  ,0.20,0.28,0.31,0.36,0.38,0.40,0.42,0.43,0.44,
-    0.46,0.48,0.50,0.80,0.71,0.80,0.96,1.20,1.00,0.91},
-    {0.  ,0.  ,0.14,0.14,0.14,0.14,0.12,0.11,0.11,0.11,
-    0.14,0.17,0.16,0.16,0.16,0.15,0.15,0.15,0.15,0.14},
-    {0.  ,0.  ,0.02,0.21,0.74,1.10,1.50,1.76,1.98,2.40,
-    2.50,2.60,2.60,2.50,2.50,2.40,2.40,2.30,2.10,2.00},
-    {0.  ,0.  ,0.10,0.40,1.15,1.60,1.80,2.19,2.80,2.30,
-    2.90,2.60,2.60,2.60,2.50,2.50,2.50,2.40,2.20,1.85},
-    {0.  ,0.  ,0.80,1.90,1.50,1.80,1.70,1.60,1.80,1.90,
-    1.80,1.60,1.50,1.43,1.41,1.30,1.28,1.30,1.60,1.70},
-    {0.  ,0.  ,0.14,0.16,0.17,0.17,0.21,0.21,0.22,0.23,
-    0.24,0.25,0.41,0.36,0.40,0.46,0.52,0.50,0.50,0.46},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.  ,0.04,0.06,0.05,0.04,0.04,0.04,
-    0.04,0.05,0.05,0.05,0.04,0.04,0.04,0.03,0.03,0.03},
-    {0.  ,0.  ,0.  ,.005,0.02,0.07,0.11,0.15,0.17,0.19,
-    0.24,0.25,0.26,0.26,0.25,0.25,0.24,0.24,0.23,0.21},
-    {0.  ,0.  ,0.  ,0.  ,0.05,0.09,0.18,0.20,0.22,0.28,
-    0.36,0.41,0.42,0.43,0.44,0.45,0.46,0.46,0.47,0.47},
-    {0.  ,0.  ,0.  ,0.  ,0.09,0.16,0.18,0.22,0.28,0.23,
-    0.29,0.26,0.26,0.26,0.25,0.25,0.25,0.24,0.22,0.18},
-    {0.  ,0.  ,0.  ,0.  ,0.15,0.18,0.17,0.16,0.18,0.19,
-    0.18,0.16,0.15,0.14,0.14,0.13,0.12,0.13,0.16,0.17},
-    {0.  ,0.  ,0.  ,0.  ,0.02,0.02,0.02,0.02,0.04,0.05,
-    0.05,0.06,0.07,0.10,0.11,0.10,0.09,0.09,0.09,0.09},
-    {0.  ,0.  ,0.  ,0.  ,0.17,0.16,0.15,0.16,0.17,0.18,
-    0.20,0.21,0.22,0.23,0.24,0.21,0.18,0.19,0.20,0.21}},
+      2.54,2.00,1.90,1.75,1.68,1.61,1.54,1.40,1.25,1.17},
+     {8.00,14.0,13.0,12.0,11.4,9.70,9.41,8.52,8.03,6.70,
+      5.73,5.20,4.80,4.54,4.36,4.28,4.16,4.10,3.80,3.00},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.37,0.41,0.92,1.10,0.98,0.85,0.74,0.74,0.83,
+      0.71,0.68,0.53,0.48,0.41,0.41,0.41,0.37,0.37,0.37},
+     {0.  ,0.30,1.22,2.51,2.67,2.95,2.95,2.95,2.96,2.84,
+      2.80,2.70,3.00,2.80,2.46,2.46,2.45,2.40,2.40,2.20},
+     {0.  ,1.40,2.37,4.07,3.90,3.80,3.70,3.70,3.60,3.40,
+      3.20,3.50,3.17,3.00,2.80,2.70,2.60,2.60,2.40,2.20},
+     {0.  ,0.20,0.28,0.31,0.36,0.38,0.40,0.42,0.43,0.44,
+      0.46,0.48,0.50,0.80,0.71,0.80,0.96,1.20,1.00,0.91},
+     {0.  ,0.  ,0.14,0.14,0.14,0.14,0.12,0.11,0.11,0.11,
+      0.14,0.17,0.16,0.16,0.16,0.15,0.15,0.15,0.15,0.14},
+     {0.  ,0.  ,0.02,0.21,0.74,1.10,1.50,1.76,1.98,2.40,
+      2.50,2.60,2.60,2.50,2.50,2.40,2.40,2.30,2.10,2.00},
+     {0.  ,0.  ,0.10,0.40,1.15,1.60,1.80,2.19,2.80,2.30,
+      2.90,2.60,2.60,2.60,2.50,2.50,2.50,2.40,2.20,1.85},
+     {0.  ,0.  ,0.80,1.90,1.50,1.80,1.70,1.60,1.80,1.90,
+      1.80,1.60,1.50,1.43,1.41,1.30,1.28,1.30,1.60,1.70},
+     {0.  ,0.  ,0.14,0.16,0.17,0.17,0.21,0.21,0.22,0.23,
+      0.24,0.25,0.41,0.36,0.40,0.46,0.52,0.50,0.50,0.46},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.  ,0.04,0.06,0.05,0.04,0.04,0.04,
+      0.04,0.05,0.05,0.05,0.04,0.04,0.04,0.03,0.03,0.03},
+     {0.  ,0.  ,0.  ,.005,0.02,0.07,0.11,0.15,0.17,0.19,
+      0.24,0.25,0.26,0.26,0.25,0.25,0.24,0.24,0.23,0.21},
+     {0.  ,0.  ,0.  ,0.  ,0.05,0.09,0.18,0.20,0.22,0.28,
+      0.36,0.41,0.42,0.43,0.44,0.45,0.46,0.46,0.47,0.47},
+     {0.  ,0.  ,0.  ,0.  ,0.09,0.16,0.18,0.22,0.28,0.23,
+      0.29,0.26,0.26,0.26,0.25,0.25,0.25,0.24,0.22,0.18},
+     {0.  ,0.  ,0.  ,0.  ,0.15,0.18,0.17,0.16,0.18,0.19,
+      0.18,0.16,0.15,0.14,0.14,0.13,0.12,0.13,0.16,0.17},
+     {0.  ,0.  ,0.  ,0.  ,0.02,0.02,0.02,0.02,0.04,0.05,
+      0.05,0.06,0.07,0.10,0.11,0.10,0.09,0.09,0.09,0.09},
+     {0.  ,0.  ,0.  ,0.  ,0.17,0.16,0.15,0.16,0.17,0.18,
+      0.20,0.21,0.22,0.23,0.24,0.21,0.18,0.19,0.20,0.21}},
 
     {{12.0,14.0,13.1,12.0,11.0,10.0,8.70,6.30,5.20,7.80,
-    6.40,6.20,6.20,6.80,5.40,4.80,4.80,2.60,2.50,1.90},
-    {1.90,2.50,2.60,1.80,1.70,1.68,1.61,1.50,1.46,1.40,
-    1.31,1.17,1.14,1.10,1.09,1.03,1.00,0.99,0.97,0.96},
-    {5.60,4.30,4.20,4.80,5.00,2.70,3.20,2.60,3.40,2.80,
-    1.16,1.14,1.15,1.30,1.80,1.60,1.20,1.10,1.10,1.20},
-    {0.12,1.40,1.30,1.20,2.40,2.00,1.60,3.80,3.40,3.20,
-    3.50,3.80,3.70,3.30,3.30,3.40,3.50,3.16,3.80,4.10},
-    {0.  ,0.77,1.75,5.28,6.30,5.90,5.30,4.90,4.80,4.70,
-    4.20,3.72,3.60,3.40,3.20,3.50,3.90,4.10,4.30,4.50},
-    {0.  ,0.16,0.35,0.91,2.80,3.60,3.20,2.60,1.90,1.14,
-    1.15,1.16,1.14,1.11,1.08,0.99,0.94,0.91,0.86,0.83},
-    {0.56,0.43,0.42,0.96,1.20,0.80,0.64,0.71,0.84,1.20,
-    1.80,3.50,3.40,3.20,2.80,2.60,2.70,2.40,2.80,3.10},
-    {0.01,0.02,0.01,0.01,0.02,0.10,0.16,0.38,0.34,0.32,
-    0.35,0.38,0.37,0.33,0.35,0.36,0.31,0.42,0.41,0.39},
-    {0.  ,0.07,0.17,0.53,0.63,0.59,0.53,0.49,0.48,0.47,
-    0.42,0.37,0.36,0.34,0.32,0.35,0.39,0.41,0.43,0.45},
-    {0.09,0.18,0.21,0.28,0.36,0.37,0.20,0.64,0.68,0.56,
-    0.61,0.48,0.34,0.36,0.36,0.32,0.41,0.39,0.39,0.36},
-    {0.,0.02,0.04,0.18,0.28,0.36,0.32,0.26,0.19,0.12,
-    0.12,0.13,0.14,0.15,0.12,0.11,0.10,0.09,0.07,0.04},
-    {0.10,0.12,0.11,0.10,0.12,0.16,0.14,0.13,0.14,0.12,
-    0.15,0.18,0.21,0.21,0.14,0.13,0.12,0.11,0.09,0.08},
-    {0.02,0.11,0.10,0.09,0.11,0.17,0.16,0.14,0.12,0.11,
-    0.13,0.12,0.11,0.11,0.10,0.09,0.08,0.06,0.04,0.03},
-    {0.  ,0.  ,0.04,0.07,0.08,0.11,0.12,0.16,0.15,0.15,
-    0.14,0.13,0.12,0.18,0.17,0.16,0.15,0.09,0.09,0.03},
-    {0.  ,0.  ,0.09,0.10,0.11,0.12,0.28,0.49,0.58,0.53,
-    0.48,0.46,0.46,0.44,0.43,0.43,0.42,0.39,0.39,0.31},
-    {0.  ,0.  ,0.01,0.05,0.06,0.09,0.11,0.12,0.12,0.14,
-    0.15,0.16,0.15,0.14,0.14,0.13,0.18,0.16,0.14,0.13},
-    {0.  ,0.  ,0.  ,0.02,0.04,0.09,0.20,0.39,0.41,0.42,
-    0.42,0.44,0.45,0.43,0.41,0.43,0.42,0.39,0.39,0.30},
-    {0.  ,0.  ,0.  ,0.  ,0.01,0.02,0.08,0.04,0.08,0.09,
-    0.10,0.11,0.12,0.11,0.09,0.09,0.06,0.06,0.06,0.06},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.01,0.02,0.08,0.09,0.09,
-    0.09,0.09,0.10,0.11,0.11,0.08,0.07,0.07,0.07,0.06},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.02,0.04,0.12,0.11,0.10,
-    0.09,0.08,0.08,0.08,0.07,0.07,0.07,0.06,0.05,0.04}},
+      6.40,6.20,6.20,6.80,5.40,4.80,4.80,2.60,2.50,1.90},
+     {1.90,2.50,2.60,1.80,1.70,1.68,1.61,1.50,1.46,1.40,
+      1.31,1.17,1.14,1.10,1.09,1.03,1.00,0.99,0.97,0.96},
+     {5.60,4.30,4.20,4.80,5.00,2.70,3.20,2.60,3.40,2.80,
+      1.16,1.14,1.15,1.30,1.80,1.60,1.20,1.10,1.10,1.20},
+     {0.12,1.40,1.30,1.20,2.40,2.00,1.60,3.80,3.40,3.20,
+      3.50,3.80,3.70,3.30,3.30,3.40,3.50,3.16,3.80,4.10},
+     {0.  ,0.77,1.75,5.28,6.30,5.90,5.30,4.90,4.80,4.70,
+      4.20,3.72,3.60,3.40,3.20,3.50,3.90,4.10,4.30,4.50},
+     {0.  ,0.16,0.35,0.91,2.80,3.60,3.20,2.60,1.90,1.14,
+      1.15,1.16,1.14,1.11,1.08,0.99,0.94,0.91,0.86,0.83},
+     {0.56,0.43,0.42,0.96,1.20,0.80,0.64,0.71,0.84,1.20,
+      1.80,3.50,3.40,3.20,2.80,2.60,2.70,2.40,2.80,3.10},
+     {0.01,0.02,0.01,0.01,0.02,0.10,0.16,0.38,0.34,0.32,
+      0.35,0.38,0.37,0.33,0.35,0.36,0.31,0.42,0.41,0.39},
+     {0.  ,0.07,0.17,0.53,0.63,0.59,0.53,0.49,0.48,0.47,
+      0.42,0.37,0.36,0.34,0.32,0.35,0.39,0.41,0.43,0.45},
+     {0.09,0.18,0.21,0.28,0.36,0.37,0.20,0.64,0.68,0.56,
+      0.61,0.48,0.34,0.36,0.36,0.32,0.41,0.39,0.39,0.36},
+     {0.,0.02,0.04,0.18,0.28,0.36,0.32,0.26,0.19,0.12,
+      0.12,0.13,0.14,0.15,0.12,0.11,0.10,0.09,0.07,0.04},
+     {0.10,0.12,0.11,0.10,0.12,0.16,0.14,0.13,0.14,0.12,
+      0.15,0.18,0.21,0.21,0.14,0.13,0.12,0.11,0.09,0.08},
+     {0.02,0.11,0.10,0.09,0.11,0.17,0.16,0.14,0.12,0.11,
+      0.13,0.12,0.11,0.11,0.10,0.09,0.08,0.06,0.04,0.03},
+     {0.  ,0.  ,0.04,0.07,0.08,0.11,0.12,0.16,0.15,0.15,
+      0.14,0.13,0.12,0.18,0.17,0.16,0.15,0.09,0.09,0.03},
+     {0.  ,0.  ,0.09,0.10,0.11,0.12,0.28,0.49,0.58,0.53,
+      0.48,0.46,0.46,0.44,0.43,0.43,0.42,0.39,0.39,0.31},
+     {0.  ,0.  ,0.01,0.05,0.06,0.09,0.11,0.12,0.12,0.14,
+      0.15,0.16,0.15,0.14,0.14,0.13,0.18,0.16,0.14,0.13},
+     {0.  ,0.  ,0.  ,0.02,0.04,0.09,0.20,0.39,0.41,0.42,
+      0.42,0.44,0.45,0.43,0.41,0.43,0.42,0.39,0.39,0.30},
+     {0.  ,0.  ,0.  ,0.  ,0.01,0.02,0.08,0.04,0.08,0.09,
+      0.10,0.11,0.12,0.11,0.09,0.09,0.06,0.06,0.06,0.06},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.01,0.02,0.08,0.09,0.09,
+      0.09,0.09,0.10,0.11,0.11,0.08,0.07,0.07,0.07,0.06},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.02,0.04,0.12,0.11,0.10,
+      0.09,0.08,0.08,0.08,0.07,0.07,0.07,0.06,0.05,0.04}},
 
     {{1.80,9.19,7.40,5.29,3.64,3.48,2.47,2.21,1.30,0.95,
-    0.82,0.79,0.76,0.75,0.74,0.74,0.72,0.70,0.65,0.61},
-    {0.46,2.60,3.70,2.27,2.40,2.00,1.68,1.00,0.82,0.71,
-    0.72,0.74,0.71,0.68,0.65,0.61,0.57,0.53,0.48,0.45},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.02,0.15,1.55,2.31,1.98,1.52,1.30,1.10,0.68,0.51,
-    0.42,0.39,0.35,0.34,0.33,0.32,0.31,0.30,0.30,0.29},
-    {0.01,0.95,1.09,1.63,1.50,1.40,1.38,1.20,1.00,0.81,
-    0.63,0.52,0.38,0.34,0.32,0.31,0.24,0.23,0.22,0.21},
-    {0.02,1.09,3.38,3.42,3.49,2.91,3.85,2.79,2.56,1.92,
-    2.26,2.20,2.18,2.10,2.07,2.05,1.93,1.74,1.50,1.27},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.08,0.21,0.38,0.68,0.44,0.32,0.29,0.18,0.11,0.09,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.10,0.98,2.41,3.29,3.38,4.29,3.70,3.51,2.90,
-    1.94,2.00,2.08,2.16,2.15,2.14,2.12,1.95,1.48,1.39},
-    {0.  ,0.02,0.07,0.28,0.39,0.59,0.76,0.97,0.91,0.85,
-    0.82,0.80,0.78,0.76,0.74,0.74,0.63,0.59,0.52,0.4},
-    {0.05,0.26,0.37,0.23,0.24,0.20,0.17,0.10,0.08,0.07,
-    0.07,0.09,0.20,0.14,0.12,0.11,0.06,0.05,0.05,0.05},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.06,0.04,0.03,0.02,0.02,0.11,0.09,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.04,0.10,0.16,0.22,0.24,0.35,0.41,
-    0.41,0.40,0.42,0.42,0.43,0.43,0.44,0.44,0.43,0.39},
-    {0.  ,0.  ,0.  ,0.07,0.31,0.48,0.64,0.66,0.83,0.98,
-    0.74,0.38,0.40,0.41,0.41,0.42,0.43,0.41,0.26,0.24},
-    {0.  ,0.02,0.07,0.06,0.21,0.34,0.56,0.48,0.59,0.64,
-    0.68,0.71,0.54,0.46,0.38,0.38,0.41,0.36,0.32,0.33},
-    {0.  ,0.  ,0.  ,0.10,0.26,0.38,0.67,0.41,0.51,0.48,
-    0.36,0.21,0.24,0.22,0.21,0.21,0.18,0.17,0.17,0.16},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  }},
+      0.82,0.79,0.76,0.75,0.74,0.74,0.72,0.70,0.65,0.61},
+     {0.46,2.60,3.70,2.27,2.40,2.00,1.68,1.00,0.82,0.71,
+      0.72,0.74,0.71,0.68,0.65,0.61,0.57,0.53,0.48,0.45},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.02,0.15,1.55,2.31,1.98,1.52,1.30,1.10,0.68,0.51,
+      0.42,0.39,0.35,0.34,0.33,0.32,0.31,0.30,0.30,0.29},
+     {0.01,0.95,1.09,1.63,1.50,1.40,1.38,1.20,1.00,0.81,
+      0.63,0.52,0.38,0.34,0.32,0.31,0.24,0.23,0.22,0.21},
+     {0.02,1.09,3.38,3.42,3.49,2.91,3.85,2.79,2.56,1.92,
+      2.26,2.20,2.18,2.10,2.07,2.05,1.93,1.74,1.50,1.27},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.08,0.21,0.38,0.68,0.44,0.32,0.29,0.18,0.11,0.09,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.10,0.98,2.41,3.29,3.38,4.29,3.70,3.51,2.90,
+      1.94,2.00,2.08,2.16,2.15,2.14,2.12,1.95,1.48,1.39},
+     {0.  ,0.02,0.07,0.28,0.39,0.59,0.76,0.97,0.91,0.85,
+      0.82,0.80,0.78,0.76,0.74,0.74,0.63,0.59,0.52,0.4},
+     {0.05,0.26,0.37,0.23,0.24,0.20,0.17,0.10,0.08,0.07,
+      0.07,0.09,0.20,0.14,0.12,0.11,0.06,0.05,0.05,0.05},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.06,0.04,0.03,0.02,0.02,0.11,0.09,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.04,0.10,0.16,0.22,0.24,0.35,0.41,
+      0.41,0.40,0.42,0.42,0.43,0.43,0.44,0.44,0.43,0.39},
+     {0.  ,0.  ,0.  ,0.07,0.31,0.48,0.64,0.66,0.83,0.98,
+      0.74,0.38,0.40,0.41,0.41,0.42,0.43,0.41,0.26,0.24},
+     {0.  ,0.02,0.07,0.06,0.21,0.34,0.56,0.48,0.59,0.64,
+      0.68,0.71,0.54,0.46,0.38,0.38,0.41,0.36,0.32,0.33},
+     {0.  ,0.  ,0.  ,0.10,0.26,0.38,0.67,0.41,0.51,0.48,
+      0.36,0.21,0.24,0.22,0.21,0.21,0.18,0.17,0.17,0.16},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  }},
 
     {{2.05,5.30,4.72,3.70,2.60,2.70,2.20,1.88,1.90,1.43,
-    1.10,0.74,0.81,0.80,0.62,0.48,0.47,0.47,0.47,0.66},
-    {2.12,1.86,0.81,0.68,0.91,0.71,0.96,1.78,1.69,1.70,
-    1.30,0.94,1.03,1.04,0.84,0.84,0.67,0.67,0.66,0.65},
-    {4.93,10.40,6.67,5.40,4.00,3.50,3.70,2.80,2.60,2.00,
-    1.50,1.14,1.26,1.28,1.06,0.90,0.88,0.87,0.85,0.83},
-    {0.05,0.18,0.43,0.67,0.92,1.16,1.78,1.71,1.52,1.34,
-    1.04,0.97,0.92,1.02,0.89,0.82,0.77,0.73,0.70,0.66},
-    {0.08,0.32,0.70,1.60,1.65,1.88,1.68,1.92,1.79,1.64,
-    1.49,1.37,1.30,1.70,1.40,1.26,1.19,1.13,1.08,1.02},
-    {0.30,0.94,0.70,0.70,0.70,0.70,0.31,0.29,0.27,0.25,
-    0.23,0.21,0.18,0.15,0.13,0.11,0.09,0.07,0.05,0.03},
-    {0.33,1.19,1.89,3.56,4.20,3.78,3.35,2.93,2.51,2.12,
-    1.40,1.34,1.28,1.22,1.16,1.10,1.03,1.00,0.97,0.94},
-    {0.20,0.22,0.23,1.16,1.53,1.86,1.91,2.18,2.02,1.83,
-    1.65,1.52,1.72,1.55,1.39,1.23,1.11,1.02,1.36,1.69},
-    {0.30,0.40,0.70,2.20,2.10,1.80,1.90,2.10,2.20,2.00,
-    1.80,1.70,1.40,1.30,1.35,1.30,1.28,1.10,1.17,1.24},
-    {0.09,0.12,0.30,0.37,0.67,0.89,0.98,1.08,1.16,1.16,
-    1.16,1.17,1.17,1.21,0.79,0.55,0.66,0.79,0.89,1.00},
-    {0.  ,0.  ,0.09,0.11,0.05,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.15,0.26,0.43,0.35,0.28,0.14,0.10,0.08,
-    0.04,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-    0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
-    {0.  ,0.  ,0.10,0.28,0.44,0.85,1.15,1.87,2.22,1.80,
-    2.94,1.98,1.72,1.50,1.16,1.05,0.94,0.95,1.06,1.17},
-    {0.  ,0.02,0.04,0.12,0.60,1.60,1.30,1.50,2.10,2.40,
-    2.65,2.40,2.09,1.94,1.83,1.17,1.06,0.94,0.93,0.98},
-    {0.  ,.003,.041,0.13,0.40,0.09,0.10,0.38,0.96,1.07,
-    2.13,2.14,2.07,2.00,1.95,1.83,1.17,0.86,0.98,0.90},
-    {0.  ,.001,0.09,0.19,0.52,0.64,0.78,0.85,0.99,1.17,
-    1.86,1.93,2.14,1.98,1.83,1.76,1.52,1.43,1.35,1.24},
-    {0.10,0.10,0.03,0.16,0.35,0.37,0.52,0.64,0.82,0.95,
-    1.09,1.16,1.73,1.80,1.12,1.03,0.95,0.93,0.90,0.84},
-    {0.  ,.015,.008,0.11,0.20,0.21,0.34,0.58,0.46,0.38,
-    0.65,1.17,1.58,1.61,1.73,1.82,1.74,1.63,1.23,1.00},
-    {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-       0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.}}
+      1.10,0.74,0.81,0.80,0.62,0.48,0.47,0.47,0.47,0.66},
+     {2.12,1.86,0.81,0.68,0.91,0.71,0.96,1.78,1.69,1.70,
+      1.30,0.94,1.03,1.04,0.84,0.84,0.67,0.67,0.66,0.65},
+     {4.93,10.40,6.67,5.40,4.00,3.50,3.70,2.80,2.60,2.00,
+      1.50,1.14,1.26,1.28,1.06,0.90,0.88,0.87,0.85,0.83},
+     {0.05,0.18,0.43,0.67,0.92,1.16,1.78,1.71,1.52,1.34,
+      1.04,0.97,0.92,1.02,0.89,0.82,0.77,0.73,0.70,0.66},
+     {0.08,0.32,0.70,1.60,1.65,1.88,1.68,1.92,1.79,1.64,
+      1.49,1.37,1.30,1.70,1.40,1.26,1.19,1.13,1.08,1.02},
+     {0.30,0.94,0.70,0.70,0.70,0.70,0.31,0.29,0.27,0.25,
+      0.23,0.21,0.18,0.15,0.13,0.11,0.09,0.07,0.05,0.03},
+     {0.33,1.19,1.89,3.56,4.20,3.78,3.35,2.93,2.51,2.12,
+      1.40,1.34,1.28,1.22,1.16,1.10,1.03,1.00,0.97,0.94},
+     {0.20,0.22,0.23,1.16,1.53,1.86,1.91,2.18,2.02,1.83,
+      1.65,1.52,1.72,1.55,1.39,1.23,1.11,1.02,1.36,1.69},
+     {0.30,0.40,0.70,2.20,2.10,1.80,1.90,2.10,2.20,2.00,
+      1.80,1.70,1.40,1.30,1.35,1.30,1.28,1.10,1.17,1.24},
+     {0.09,0.12,0.30,0.37,0.67,0.89,0.98,1.08,1.16,1.16,
+      1.16,1.17,1.17,1.21,0.79,0.55,0.66,0.79,0.89,1.00},
+     {0.  ,0.  ,0.09,0.11,0.05,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.15,0.26,0.43,0.35,0.28,0.14,0.10,0.08,
+      0.04,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  },
+     {0.  ,0.  ,0.10,0.28,0.44,0.85,1.15,1.87,2.22,1.80,
+      2.94,1.98,1.72,1.50,1.16,1.05,0.94,0.95,1.06,1.17},
+     {0.  ,0.02,0.04,0.12,0.60,1.60,1.30,1.50,2.10,2.40,
+      2.65,2.40,2.09,1.94,1.83,1.17,1.06,0.94,0.93,0.98},
+     {0.  ,.003,.041,0.13,0.40,0.09,0.10,0.38,0.96,1.07,
+      2.13,2.14,2.07,2.00,1.95,1.83,1.17,0.86,0.98,0.90},
+     {0.  ,.001,0.09,0.19,0.52,0.64,0.78,0.85,0.99,1.17,
+      1.86,1.93,2.14,1.98,1.83,1.76,1.52,1.43,1.35,1.24},
+     {0.10,0.10,0.03,0.16,0.35,0.37,0.52,0.64,0.82,0.95,
+      1.09,1.16,1.73,1.80,1.12,1.03,0.95,0.93,0.90,0.84},
+     {0.  ,.015,.008,0.11,0.20,0.21,0.34,0.58,0.46,0.38,
+      0.65,1.17,1.58,1.61,1.73,1.82,1.74,1.63,1.23,1.00},
+     {0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
+      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.}}
   };
 
   const G4int ifkn[7][7][18] = {
@@ -1172,7 +1092,7 @@ generateOutgoingKindsFor2toMany(
   if(l == 10) {
     l = 3;
   
-} else if(l == 4) {
+  } else if(l == 4) {
 
     l = 1;
 
@@ -1303,46 +1223,46 @@ generateStrangeChannelPartTypes(G4int is, G4int mult, G4double ekin) const
   std::vector<G4int> kinds;
 
   if (is == 11) {
-    kinds = kpp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKplusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 13) {
-    kinds = kmp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKminusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 15) {
-    kinds = k0p.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKzeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 17) {
-    kinds = k0bp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 21) {
-    kinds = lp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeLambdaPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 23) {
-    kinds = spp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 25) {
-    kinds = s0p.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 27) {
-    kinds = smp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 29) {
-    kinds = x0p.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeXiZeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 31) {
-    kinds = xmp.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeXiMinusPChannel::getOutgoingParticleTypes(mult, ekin);
 
   } else if (is == 22) {
-    kinds = kpn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKplusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 26) {
-    kinds = kmn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKminusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 30) {
-    kinds = k0n.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKzeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 34) {
-    kinds = k0bn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 42) {
-    kinds = ln.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeLambdaNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 46) {
-    kinds = spn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 50) {
-    kinds = s0n.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 54) {
-    kinds = smn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 58) {
-    kinds = x0n.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeXiZeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 62) {
-    kinds = xmn.getOutgoingParticleTypes(mult, ekin);
+    kinds = G4CascadeXiMinusNChannel::getOutgoingParticleTypes(mult, ekin);
 
   } else {
     G4cout << " G4ElementaryParticleCollider:"
@@ -1937,7 +1857,7 @@ G4int G4ElementaryParticleCollider::getElasticCase(G4int is,
 
     l = 3;
   
-} else if(l == 5 || l == 6) {
+  } else if(l == 5 || l == 6) {
 
     l = 4;
   };

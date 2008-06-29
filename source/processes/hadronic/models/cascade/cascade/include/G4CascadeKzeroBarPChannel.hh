@@ -26,34 +26,16 @@
 #ifndef G4_CASCADE_KZEROBARP_CHANNEL_HH
 #define G4_CASCADE_KZEROBARP_CHANNEL_HH
 
-#include "G4CascadeChannel.hh"
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
 
 
-class G4CascadeKzeroBarPChannel : public G4CascadeChannel {
 
-public:
+struct G4CascadeKzeroBarPChannelData {
+  typedef G4CascadeData<5,15,28,42,20,11,121> data_t;
+  static data_t data;
+};
 
-  G4CascadeKzeroBarPChannel();
-  virtual ~G4CascadeKzeroBarPChannel();
-
-  G4double getCrossSection(G4double ke) const; 
-  G4int getMultiplicity(G4double ke) const;
-  std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke) const;
-
-private:
-
-  static G4double kzbptot[31];
-  static G4double kzbpMultiplicities[6][31];
-
-  static const G4int kzbpindex[6][2];
-  static const G4int kzbp2bfs[5][2];
-  static const G4int kzbp3bfs[15][3];
-  static const G4int kzbp4bfs[28][4];
-  static const G4int kzbp5bfs[42][5];
-  static const G4int kzbp6bfs[20][6];
-  static const G4int kzbp7bfs[11][7];
-
-  static const G4float kzbpCrossSections[121][31];
-};        
+typedef G4CascadeFunctions<G4CascadeKzeroBarPChannelData> G4CascadeKzeroBarPChannel;
 
 #endif

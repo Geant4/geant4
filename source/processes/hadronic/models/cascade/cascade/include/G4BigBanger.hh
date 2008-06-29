@@ -33,14 +33,14 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4BigBanger : public G4Collider {
+class G4BigBanger {
 
 public:
 
   G4BigBanger();
 
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private: 
 

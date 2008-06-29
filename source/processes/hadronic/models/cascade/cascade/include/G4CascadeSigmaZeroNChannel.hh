@@ -26,34 +26,15 @@
 #ifndef G4_CASCADE_SIGMAZERON_CHANNEL_HH
 #define G4_CASCADE_SIGMAZERON_CHANNEL_HH
 
-#include "G4CascadeChannel.hh"
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
 
 
-class G4CascadeSigmaZeroNChannel : public G4CascadeChannel {
+struct G4CascadeSigmaZeroNChannelData {
+  typedef G4CascadeData<3,12,33,59,30,20,157> data_t;
+  static data_t data;
+};
 
-public:
-
-  G4CascadeSigmaZeroNChannel();
-  virtual ~G4CascadeSigmaZeroNChannel();
-
-  G4double getCrossSection(G4double ke) const; 
-  G4int getMultiplicity(G4double ke) const;
-  std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke) const;
-
-private:
-
-  static G4double s0ntot[31];
-  static G4double s0nMultiplicities[6][31];
-
-  static const G4int s0nindex[6][2];
-  static const G4int s0n2bfs[3][2];
-  static const G4int s0n3bfs[12][3];
-  static const G4int s0n4bfs[33][4];
-  static const G4int s0n5bfs[59][5];
-  static const G4int s0n6bfs[30][6];
-  static const G4int s0n7bfs[20][7];
-
-  static const G4float s0nCrossSections[157][31];
-};        
+typedef G4CascadeFunctions<G4CascadeSigmaZeroNChannelData> G4CascadeSigmaZeroNChannel;
 
 #endif

@@ -29,6 +29,27 @@
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
 
+#include "G4CascadeKplusPChannel.hh"
+#include "G4CascadeKplusNChannel.hh"
+#include "G4CascadeKminusPChannel.hh"
+#include "G4CascadeKminusNChannel.hh"
+#include "G4CascadeKzeroPChannel.hh"
+#include "G4CascadeKzeroNChannel.hh"
+#include "G4CascadeKzeroBarPChannel.hh"
+#include "G4CascadeKzeroBarNChannel.hh"
+#include "G4CascadeLambdaPChannel.hh"
+#include "G4CascadeLambdaNChannel.hh"
+#include "G4CascadeSigmaPlusPChannel.hh"
+#include "G4CascadeSigmaPlusNChannel.hh"
+#include "G4CascadeSigmaZeroPChannel.hh"
+#include "G4CascadeSigmaZeroNChannel.hh"
+#include "G4CascadeSigmaMinusPChannel.hh"
+#include "G4CascadeSigmaMinusNChannel.hh"
+#include "G4CascadeXiZeroPChannel.hh"
+#include "G4CascadeXiZeroNChannel.hh"
+#include "G4CascadeXiMinusPChannel.hh"
+#include "G4CascadeXiMinusNChannel.hh"
+
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4NucleiModel::G4NucleiModel()
@@ -506,46 +527,46 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
       if ( (rtype > 10 && rtype < 14) || (rtype > 14 && rtype < 63) ) {
         // strange particle branch
         if (rtype == 11) {
-          csec = kpp.getCrossSection(ekin);
+          csec = G4CascadeKplusPChannel::getCrossSection(ekin);
         } else if (rtype == 13) {
-          csec = kmp.getCrossSection(ekin);
+          csec = G4CascadeKminusPChannel::getCrossSection(ekin);
         } else if (rtype == 15) {
-          csec = k0p.getCrossSection(ekin);
+          csec = G4CascadeKzeroPChannel::getCrossSection(ekin);
         } else if (rtype == 17) {
-          csec = k0bp.getCrossSection(ekin);
+          csec = G4CascadeKzeroBarPChannel::getCrossSection(ekin);
         } else if (rtype == 21) {
-          csec = lp.getCrossSection(ekin);
+          csec = G4CascadeLambdaPChannel::getCrossSection(ekin);
         } else if (rtype == 23) {
-          csec = spp.getCrossSection(ekin);
+          csec = G4CascadeSigmaPlusPChannel::getCrossSection(ekin);
         } else if (rtype == 25) {
-          csec = s0p.getCrossSection(ekin);
+          csec = G4CascadeSigmaZeroPChannel::getCrossSection(ekin);
         } else if (rtype == 27) {
-          csec = smp.getCrossSection(ekin);
+          csec = G4CascadeSigmaMinusPChannel::getCrossSection(ekin);
         } else if (rtype == 29) {
-          csec = x0p.getCrossSection(ekin);
+          csec = G4CascadeXiZeroPChannel::getCrossSection(ekin);
         } else if (rtype == 31) {
-          csec = xmp.getCrossSection(ekin);
+          csec = G4CascadeXiMinusPChannel::getCrossSection(ekin);
 
         } else if (rtype == 22) {
-          csec = kpn.getCrossSection(ekin);
+          csec = G4CascadeKplusNChannel::getCrossSection(ekin);
         } else if (rtype == 26) {
-          csec = kmn.getCrossSection(ekin);
+          csec = G4CascadeKminusNChannel::getCrossSection(ekin);
         } else if (rtype == 30) {
-          csec = k0n.getCrossSection(ekin);
+          csec = G4CascadeKzeroNChannel::getCrossSection(ekin);
         } else if (rtype == 34) {
-          csec = k0bn.getCrossSection(ekin);
+          csec = G4CascadeKzeroBarNChannel::getCrossSection(ekin);
         } else if (rtype == 42) {
-          csec = ln.getCrossSection(ekin);
+          csec = G4CascadeLambdaNChannel::getCrossSection(ekin);
         } else if (rtype == 46) {
-          csec = spn.getCrossSection(ekin);
+          csec = G4CascadeSigmaPlusNChannel::getCrossSection(ekin);
         } else if (rtype == 50) {
-          csec = s0n.getCrossSection(ekin);
+          csec = G4CascadeSigmaZeroNChannel::getCrossSection(ekin);
         } else if (rtype == 54) {
-          csec = smn.getCrossSection(ekin);
+          csec = G4CascadeSigmaMinusNChannel::getCrossSection(ekin);
         } else if (rtype == 58) {
-          csec = x0n.getCrossSection(ekin);
+          csec = G4CascadeXiZeroNChannel::getCrossSection(ekin);
         } else if (rtype == 62) {
-          csec = xmn.getCrossSection(ekin);
+          csec = G4CascadeXiMinusNChannel::getCrossSection(ekin);
 
         } else {
           csec = 0;

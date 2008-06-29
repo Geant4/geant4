@@ -33,16 +33,12 @@ class G4CascadeChannel {
 
 public:
 
-  G4CascadeChannel();
-  virtual ~G4CascadeChannel();
- 
-protected: 
+  static std::pair<G4int, G4double> interpolateEnergy(G4double ke);
+  static G4int sampleFlat(std::vector<G4double> const& sigma);
+  static std::vector<G4int> getQnums(G4int type);
 
-  std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
-  G4int sampleFlat(std::vector<G4double> sigma) const;
-
-  std::vector<G4int> getQnums(G4int type) const;
 private:
+  G4CascadeChannel(); // not implemented
 
   static const double energyScale[31];
 };        

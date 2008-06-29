@@ -38,7 +38,7 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4PreCompoundInuclCollider : public G4Collider {
+class G4PreCompoundInuclCollider {
 
 public:
 
@@ -78,8 +78,8 @@ public:
     theBigBanger = bigbanger;   
   };
   
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private: 
   G4int verboseLevel;

@@ -31,13 +31,13 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4NonEquilibriumEvaporator : public G4Collider {
+class G4NonEquilibriumEvaporator {
 
 public:
 
   G4NonEquilibriumEvaporator();
 
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
+  G4CollisionOutput collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target);
 
 private: 

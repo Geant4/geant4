@@ -40,7 +40,7 @@
 
 using namespace G4InuclSpecialFunctions;
 
-class G4InuclCollider : public G4Collider {
+class G4InuclCollider {
 
 public:
 
@@ -92,8 +92,8 @@ public:
     theBigBanger = bigbanger;   
   };
   
-  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+  G4CollisionOutput collide(G4InuclParticle* bullet,
+			    G4InuclParticle* target);
 
 private: 
 
