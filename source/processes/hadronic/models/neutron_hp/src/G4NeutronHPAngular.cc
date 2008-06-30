@@ -250,4 +250,5 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
   aHadron.Lorentz(aHadron, -1.*theTarget); 
 //  G4cout << aHadron.GetMomentum()<<" ";
 //  G4cout << aHadron.GetTotalMomentum()<<G4endl;
+  } 
 }
