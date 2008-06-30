@@ -114,8 +114,6 @@ processes/electromagnetic/lowenergy              emlowen-V09-01-19
 
 processes/electromagnetic/standard               emstand-V09-01-18
 ----------------------------------
-- G4eBremsstrahlungHEModel: new model, an extension of the standard
-  Bremsstrahlung model but using a more sophisticated LPM approach.
 - G4CoulombScattering: added SetHEModelLimit() method to provide easier
   initialisation.
 - G4eCoulombScatteringModel: method SelectIsotope() method has been moved
