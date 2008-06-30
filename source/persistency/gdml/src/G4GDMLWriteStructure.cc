@@ -146,7 +146,7 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
 
 G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,const G4long depth) {
 
-   if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
+   if (volumeMap().find(volumePtr) != volumeMap().end()) return volumeMap()[volumePtr]; // Volume is already processed
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
@@ -241,7 +241,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
    structureElement->appendChild(volumeElement); // Append the volume AFTER traversing the children so that the order of volumes will be correct!
 
-   volumeMap[volumePtr] = R;
+   volumeMap()[volumePtr] = R;
 
    G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());   // Add the involved materials and solids!
    G4GDMLWriteSolids::AddSolid(solidPtr);

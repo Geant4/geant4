@@ -38,6 +38,12 @@ bool G4GDMLWrite::FileExists(const G4String& fname) const {
   return (stat(fname.c_str(),&FileInfo) == 0); 
 }
 
+G4GDMLWrite::VolumeMapType& G4GDMLWrite::volumeMap() {
+
+   static VolumeMapType instance;
+   return instance;
+}
+
 G4GDMLWrite::VolumeListType& G4GDMLWrite::volumeList() {
 
    static VolumeListType instance;
@@ -93,6 +99,8 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,const G4LogicalVolume* co
    else G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl;
    
    if (FileExists(fname)) G4Exception("G4GDML: ERROR! File '"+fname+"' already exists!");
+
+   if (depth==0) volumeMap().clear(); // The module map is global for all modules, so clear it only at once!
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
    xercesc::DOMImplementation* impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);

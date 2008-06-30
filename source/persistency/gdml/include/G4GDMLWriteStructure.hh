@@ -46,7 +46,6 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol {
 private:
-   std::map<const G4LogicalVolume*,G4Transform3D> volumeMap;
    xercesc::DOMElement* structureElement;
 
    static const int maxReflections = 8; // Constant for limiting the number displacements/reflections applied to a single solid

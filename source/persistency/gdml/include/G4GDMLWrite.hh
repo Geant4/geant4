@@ -47,6 +47,7 @@
 
 class G4GDMLWrite {
 private:
+   typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
    typedef std::vector<const G4VPhysicalVolume*> VolumeListType;
    typedef std::vector<G4long> DepthListType;
    static bool addPointerToName;
@@ -59,6 +60,7 @@ private:
 protected:
    G4String SchemaLocation;
 
+   VolumeMapType& volumeMap();
    G4String GenerateName(const G4String&,const void* const);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
