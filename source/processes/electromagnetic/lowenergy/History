@@ -1,4 +1,4 @@
-$Id: History,v 1.305 2008-06-27 20:09:54 sincerti Exp $
+$Id: History,v 1.306 2008-06-30 08:12:38 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.06.2008   S. Incerti, tag emlowen-V09-01-22
+             corrected wrong upper energy limit for :
+             - hydrogen in G4CrossSectionIonisationRudd 
+             - proton in G4ChargeDecrease
 
 27.06.2008   S. Incerti, tag emlowen-V09-01-21
              - added two new classes for electron elastic scattering

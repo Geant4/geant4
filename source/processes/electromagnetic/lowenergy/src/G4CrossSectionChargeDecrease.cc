@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeDecrease.cc,v 1.2 2007-11-09 20:11:04 pia Exp $
+// $Id: G4CrossSectionChargeDecrease.cc,v 1.3 2008-06-30 08:12:38 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -78,7 +78,7 @@ G4CrossSectionChargeDecrease::G4CrossSectionChargeDecrease()
     {
       proton = protonDef->GetParticleName();
       lowEnergyLimit[proton] = 1. * keV;
-      highEnergyLimit[proton] = 10. * keV;
+      highEnergyLimit[proton] = 10. * MeV;
     }
   else
     {

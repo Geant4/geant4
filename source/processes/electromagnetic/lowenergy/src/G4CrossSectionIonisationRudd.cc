@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionIonisationRudd.cc,v 1.2 2007-11-09 16:20:16 pia Exp $
+// $Id: G4CrossSectionIonisationRudd.cc,v 1.3 2008-06-30 08:12:38 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -67,7 +67,7 @@ G4CrossSectionIonisationRudd::G4CrossSectionIonisationRudd()
   // Default energy limits (defined for protection against anomalous behaviour only)
   // ZERO LOW ENERGY LIMIT FOR ALLOWED KILLING
   lowEnergyLimitDefault = 0 * eV;
-  highEnergyLimitDefault = 100 * MeV;
+  highEnergyLimitDefault = 10 * MeV;
 
   G4String fileProton("dna/sigma_ionisation_p_rudd");
   G4String fileHydrogen("dna/sigma_ionisation_h_rudd");
@@ -127,7 +127,7 @@ G4CrossSectionIonisationRudd::G4CrossSectionIonisationRudd()
 
       // Energy limits
       lowEnergyLimit[hydrogen] = 0. * eV;
-      highEnergyLimit[hydrogen] = 100. * MeV;
+      highEnergyLimit[hydrogen] = 10. * MeV;
 
       // Create data set with hydrogen cross section data and load values stored in file
       G4DNACrossSectionDataSet* tableHydrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
