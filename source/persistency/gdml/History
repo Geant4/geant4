@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2008-06-27 10:33:07 ztorzsok Exp $
+$Id: History,v 1.78 2008-07-01 08:18:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,24 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27 June 2008 Zoltan Torzsok
-- St reader: medium and solid material must be specified when reading ST geometry
-
-26 June 2008 Zoltan Torzsok
-- ST reader is working
-
-25 June 2008 Zoltan Torzsok
+25 June 2008 Zoltan Torzsok (gdml-V09-01-08)
 - Units are set according to CLHEP units in G4GDMLEvaluator.
 
-24 June 2008 Zoltan Torzsok
-- geom file parsing added
-
 23 June 2008 Zoltan Torzsok
-- String handling optimized
-  Schema location can be set in the writer
-
-20 June 2008 Zoltan Torzsok
-- noNamespaceSchemaLocation is set to url of GDML2_10_0
+- Optimised string handling. Schema location can be set in the writer.
 
 20 June 2008 Zoltan Torzsok (gdml-V09-01-07)
 - Set correct URL for schema for 'noNamespaceSchemaLocation' parameter.
