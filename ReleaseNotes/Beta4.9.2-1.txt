@@ -101,9 +101,10 @@ List of main features and fixes included in this Beta release since 9.1.p02:
     -------------
     + Updated FTF* lists and physics NOT to use Quasielastic from CHIPS.
       FTF now has quasi-elastic included in the FTF model itself.
-    + Defining 'linLossLimit' per particle type in EM physics options;
-      added hadron induced bremsstrahlung and pair production.
-      Using Spline interpolation for Physics Tables.
+    + Updated option2 EM physics (EMX) and added option3. For these 
+      options it is now defined 'linLossLimit' per particle type;
+      added hadron induced bremsstrahlung and pair production;
+      using Spline interpolation for Physics Tables.
     + New helper class G4PhysListFactory for building Physics Lists.
     + Removed obsolete class G4HadronProcessStore.
 
@@ -122,7 +123,7 @@ List of main features and fixes included in this Beta release since 9.1.p02:
       o Allow for loading the complete Auger dataset on initialization.
       o Requires new data set G4EMLOW.6.1.
     + High Energy:
-      o Added new Bremsstrahlung and pair-production models.
+      o Added new Bremsstrahlung and pair-production models for hadrons.
       o Added initialization of 'SubType' for all processes.
     + Muons:
       o Several fixes and further developments in G4Mu* models and associated
@@ -136,6 +137,7 @@ List of main features and fixes included in this Beta release since 9.1.p02:
       o G4eBremsstrahlungHEModel: new model, an extension of the standard
         Bremsstrahlung model but using a more sophisticated LPM approach.
       o G4PAIxSection: new functions for resonance and Rutherford collisions.
+      o Fixed nuclear size correction for the G4BetheBlochModel.
       o G4ionGasIonisation: fixed bug in update of the dynamic charge of an ion.
       o G4IonFluctuations: added protection to the computation of the correction
         factor to dispersion which provide smooth transition to small velocities
