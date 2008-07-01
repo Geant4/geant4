@@ -99,12 +99,12 @@ List of main features and fixes included in this Beta release since 9.1.p02:
 
   o Physics Lists:
     -------------
-    + Updated FTF* lists and physics NOT to use Quasielastic from CHIPS.
+    + Updated FTF* lists and physics NOT to use quasi-elastic from CHIPS.
       FTF now has quasi-elastic included in the FTF model itself.
     + Updated option2 EM physics (EMX) and added option3. For these 
       options it is now defined 'linLossLimit' per particle type;
       added hadron induced bremsstrahlung and pair production;
-      using Spline interpolation for Physics Tables.
+      using Spline interpolation for physics tables.
     + New helper class G4PhysListFactory for building Physics Lists.
     + Removed obsolete class G4HadronProcessStore.
 
@@ -238,7 +238,7 @@ List of main features and fixes included in this Beta release since 9.1.p02:
     --------
     + Various fixes, improvements, adoption of new features.
     + advanced/hadrontherapy:
-      o Reviewed example to updaet to the new beaom line setup.
+      o Reviewed example to update to the new beam line setup.
     + advanced/microdosimetry:
       o New application simulating 10 keV tracks Helium+ (positive
         charge is +e) particle in liquid water using only G4DNA processes.
