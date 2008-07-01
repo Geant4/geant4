@@ -81,7 +81,7 @@ particles                                        particles-V09-01-03
 - The verbose level of the ParticleDefinition at the construction is set same
   as for the particle-table.
 
-persistency/gdml                                 gdml-V09-01-07
+persistency/gdml                                 gdml-V09-01-08
 ----------------
 - Writer: precision is now considered in case of scale, rotation and position
   of the physical-volume. DBL_EPSILON is used to filter precision for avoiding
@@ -98,6 +98,8 @@ persistency/gdml                                 gdml-V09-01-07
 - Added schema validation mechanism and schema files.
 - Added GetVolume() function to reader.
 - Set correct URL for schema for 'noNamespaceSchemaLocation' parameter.
+- Optimised string handling. Schema location can be set in the writer.
+- Units are set according to CLHEP units in G4GDMLEvaluator.
 
 physics_lists                                    phys-lists-V09-01-09
 -------------
@@ -247,6 +249,9 @@ examples                                         examples-V09-01-06
   o Fixed compilation error in TiaraCellScorerStore.
 - extended/exoticphysics/monopole (monopole-V09-01-00)
   o Fixed compilation warnings.
+- extended/gdml (exgdml-V09-01-02)
+  o Removed no longer needed toy gdml files: matrix.gdml, modular.gdml,
+    diamond.gdml. Updated files: axes.gdml, entity.gdml, scale.gdml.
 - extended/hadronic/Hadr01 (exhadr01-V09-01-02)
   o Added FTF_BIC physics lists.
 - extended/medical/GammaTherapy (gtherapy-V09-01-00)

@@ -96,8 +96,6 @@ List of main features and fixes included in this Beta release since 9.1.p02:
       and state of materials; NIST support. Added support for border surface
       and skin surface properties.
     + Added optional handling if precision on values loaded.
-    + Added reader of STWriter triangularised geometries from CAD systems
-      and GDML conversion to tessellated solids.
 
   o Physics Lists:
     -------------
