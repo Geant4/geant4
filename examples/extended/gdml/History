@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2008-04-11 16:17:43 gcosmo Exp $
+$Id: History,v 1.20 2008-07-01 08:30:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 1st, 2008  Zoltan Torzsok - exgdml-V09-01-02
+- Removed no longer needed toy gdml files: matrix.gdml, modular.gdml,
+  diamond.gdml. Updated files: axes.gdml, entity.gdml, scale.gdml.
 
 April 1st, 2008  Zoltan Torzsok - exgdml-V09-01-01
 - Fixed function calls in main() to follow convention of using first
