@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.16 2008-06-23 10:48:58 ztorzsok Exp $
+// $Id: G4GDMLRead.hh,v 1.17 2008-07-01 08:12:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4GDMLBase
+// class G4GDMLRead
 //
 // Class description:
 //
+// GDML reader.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

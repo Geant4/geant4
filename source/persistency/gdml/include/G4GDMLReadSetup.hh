@@ -23,8 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GDML class for geometry setup of physical volumes.
 //
+// $Id: G4GDMLReadSetup.hh,v 1.2 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLReadSetup
+//
+// Class description:
+//
+// GDML class for geometry setup of solids.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

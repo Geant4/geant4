@@ -23,6 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4GDMLParser.hh,v 1.43 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLParser
+//
+// Class description:
+//
+// GDML main parser.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
@@ -34,7 +45,7 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
-#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
+#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser {
    G4GDMLReadStructure reader;

@@ -24,8 +24,16 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteSolids.hh,v 1.28 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLWriteSolids
+//
 // Class description:
 //
+// GDML class for writing solids.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

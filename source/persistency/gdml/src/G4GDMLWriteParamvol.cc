@@ -24,6 +24,11 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteParamvol.cc,v 1.15 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// class G4GDMLParamVol Implementation
+//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------

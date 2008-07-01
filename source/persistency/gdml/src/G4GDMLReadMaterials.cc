@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.10 2008-06-23 10:48:58 ztorzsok Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.11 2008-07-01 08:12:32 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
-// class G4GDMLMaterials Implementation
+// class G4GDMLReadMaterials Implementation
 //
 // Original author: Zoltan Torzsok, November 2007
 //

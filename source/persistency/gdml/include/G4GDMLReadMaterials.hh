@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4GDMLReadMaterials.hh,v 1.6 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLReadMaterials
+//
 // Class description:
 //
 // GDML class for loading isotopes, elements and materials according to

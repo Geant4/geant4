@@ -24,8 +24,16 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteMaterials.hh,v 1.10 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLWriteMaterials
+//
 // Class description:
 //
+// GDML class for writing materials definitions.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

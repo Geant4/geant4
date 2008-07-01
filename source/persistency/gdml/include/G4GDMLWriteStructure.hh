@@ -24,8 +24,16 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteStructure.hh,v 1.30 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLWriteStructure
+//
 // Class description:
 //
+// GDML class for export of structures.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

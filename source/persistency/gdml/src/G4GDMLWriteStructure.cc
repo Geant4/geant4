@@ -24,6 +24,11 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteStructure.cc,v 1.63 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// class G4GDMLWriteStructure Implementation
+//
 // Original author: Zoltan Torzsok, November 2007
 //
 // --------------------------------------------------------------------

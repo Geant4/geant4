@@ -24,8 +24,16 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteSetup.hh,v 1.5 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLWriteSetup
+//
 // Class description:
 //
+// GDML writer class for geometry setup of volumes.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------

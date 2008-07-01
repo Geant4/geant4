@@ -24,8 +24,16 @@
 // ********************************************************************
 //
 //
+// $Id: G4GDMLWriteDefine.hh,v 1.9 2008-07-01 08:12:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLWriteDefine
+//
 // Class description:
 //
+// GDML writer class for positionings and transformations.
+
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
