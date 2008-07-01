@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.43 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.44 2008-07-01 08:18:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,8 @@
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
-#include "G4STEPRead.hh"
+// #include "G4STRead.hh"
+
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
@@ -65,13 +66,13 @@ public:
       const G4int depth = 0;
       writer.Write(name,logvol,SchemaLocation,depth);
    }
-
-   G4VPhysicalVolume* ReadSTEP(const G4String& name,G4Material* medium,G4Material* solid) {
+/*
+   G4VPhysicalVolume* ReadST(const G4String& name,G4Material* medium,G4Material* solid) {
    
-      G4STEPRead reader;
+      G4STRead reader;
       return reader.Read(name,medium,solid);
    }
-
+*/
    G4double GetConstant(const G4String& name) { return reader.getConstant(name); }
    G4double GetVariable(const G4String& name) { return reader.getVariable(name); }
    G4double GetQuantity(const G4String& name) { return reader.getQuantity(name); }
