@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2008-02-07 11:25:07 ztorzsok Exp $
+# $Id: GNUmakefile,v 1.10 2008-07-02 14:15:16 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -24,7 +24,7 @@ CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/intercoms/include \
             -I$(G4INSTALL)/source/geometry/management/include \
 	    -I$(G4INSTALL)/source/geometry/volumes/include \
-            -I$(G4INSTALL)/source/geometry/management/include \
+            -I$(G4INSTALL)/source/geometry/navigation/include \
             -I$(G4INSTALL)/source/geometry/solids/CSG/include \
             -I$(G4INSTALL)/source/geometry/solids/Boolean/include \
             -I$(G4INSTALL)/source/geometry/solids/specific/include \
