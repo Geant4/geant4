@@ -59,6 +59,9 @@ class UltraFresnelLens;
 
 class UltraDetectorConstruction : public G4VUserDetectorConstruction
 {
+ 
+  friend class UltraPrimaryGeneratorAction ;
+
   public:
     UltraDetectorConstruction();
     ~UltraDetectorConstruction();
@@ -81,7 +84,9 @@ class UltraDetectorConstruction : public G4VUserDetectorConstruction
   private:
     UltraPMTSD*   PMTSD  ;          //pointer to the photomultiplier sensitive detector
     G4SDManager*  SDmanager ;       // Sensitive Detector Manager
-
+    
+    G4double lambda_min ;
+    G4double lambda_max ;
 };
 
 #endif 
