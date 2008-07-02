@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.44 2008-07-01 08:18:02 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.45 2008-07-02 14:15:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,8 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
+#include "G4TransportationManager.hh"  // Used for the writing the whole structure
+
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser {
@@ -55,16 +57,18 @@ public:
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& name,bool Validate=true) { 
+   void Read(const G4String& filename, G4bool Validate=true) { 
       
-      const bool IsModule = false;
-      reader.Read(name,Validate,IsModule); 
+      const G4bool IsModule = false;
+      reader.Read(filename,Validate,IsModule); 
    }
 
-   void Write(const G4String& name,const G4LogicalVolume* const logvol,const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION) { 
+   void Write(const G4String& filename, const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION) { 
    
       const G4int depth = 0;
-      writer.Write(name,logvol,SchemaLocation,depth);
+      G4VPhysicalVolume* worldPV = G4TransportationManager::GetTransportationManager()
+                                 ->GetNavigatorForTracking()->GetWorldVolume();
+      writer.Write(filename,worldPV->GetLogicalVolume(),SchemaLocation,depth);
    }
 /*
    G4VPhysicalVolume* ReadST(const G4String& name,G4Material* medium,G4Material* solid) {
@@ -73,6 +77,8 @@ public:
       return reader.Read(name,medium,solid);
    }
 */
+   // Methods for Reader
+   //
    G4double GetConstant(const G4String& name) { return reader.getConstant(name); }
    G4double GetVariable(const G4String& name) { return reader.getVariable(name); }
    G4double GetQuantity(const G4String& name) { return reader.getQuantity(name); }
@@ -83,9 +89,13 @@ public:
    G4LogicalVolume* GetVolume(const G4String& name) { return reader.getVolume(name); }
    G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) { return reader.getVolumeAuxiliaryInformation(logvol); }
+
+   // Methods for Writer
+   //
    void AddModule(const G4VPhysicalVolume* const physvol) { writer.AddModule(physvol); }
-   void AddModule(const G4long depth) { writer.AddModule(depth); }
-   void SetAddPointerToName(bool set) { writer.SetAddPointerToName(set); }
+   void AddModule(const G4int depth) { writer.AddModule(depth); }
+
+   void SetAddPointerToName(G4bool set) { writer.SetAddPointerToName(set); }
 };
 
 #endif
