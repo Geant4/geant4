@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.45 2008-07-02 14:15:01 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.46 2008-07-02 16:55:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,7 @@
 
 #include "G4TransportationManager.hh"  // Used for the writing the whole structure
 
-#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
+#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser {
    G4GDMLReadStructure reader;
