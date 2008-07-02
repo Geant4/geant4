@@ -299,6 +299,49 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
   G4MaterialPropertiesTable *MPT_Acrylic = new G4MaterialPropertiesTable();
   MPT_Acrylic->AddProperty("RINDEX", ENERGY_ACRYLIC, RINDEX_ACRYLIC, NENTRIES);
+
+
+// Absorption
+  const G4int NENT = 25 ;
+  G4double LAMBDAABS[NENT] = 
+  {
+    100.0,
+    246.528671, 260.605103, 263.853516, 266.019104, 268.726105,    
+    271.433136, 273.598724, 276.305725, 279.554138, 300.127380,    
+    320.159241, 340.191101, 360.764343, 381.337585, 399.745239,    
+    421.401276, 440.891724, 460.382172, 480.414001, 500.987274,    
+    520.477722, 540.509583, 559.458618,
+    700.0    
+  } ;
+
+  G4double ABS[NENT] =   // Transmission (in %) of  3mm thick PMMA 
+  { 
+    0.0000000,
+    0.0000000,  5.295952,  9.657321, 19.937695, 29.283491, 
+    39.252335, 48.598133, 58.255451, 65.109039, 79.439247,
+    85.669785, 89.719627, 91.277260, 91.588783, 91.900307,
+    91.588783, 91.277260, 91.277260, 91.588783, 91.588783,
+    91.900307, 91.900307, 91.588783,
+    91.5
+  } ;
+
+
+  MPT_Acrylic->AddProperty("ABSLENGTH", new G4MaterialPropertyVector()) ;
+  for(G4int i=0;i<NENT; i++){
+    G4double energy    = h_Planck*c_light/(LAMBDAABS[i]*nm) ;
+    G4double abslength ;
+
+    if (ABS[i] <= 0.0) {
+      abslength = 1.0/kInfinity ;
+    }
+    else {
+      abslength = -3.0*mm/(std::log(ABS[i]/100.0)) ;
+    }
+
+    MPT_Acrylic->AddEntry("ABSLENGTH", energy, abslength);
+
+  }
+
   Acrylic->SetMaterialPropertiesTable(MPT_Acrylic);
   
 
