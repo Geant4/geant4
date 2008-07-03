@@ -144,8 +144,8 @@ void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      	const UltraDetectorConstruction * detector =  
      	dynamic_cast<const UltraDetectorConstruction *>((G4RunManager::GetRunManager())->GetUserDetectorConstruction()) ;
 
-	G4double lambda_min = detector->lambda_min ;
-	G4double lambda_max = detector->lambda_max ;
+	G4double lambda_min = detector->GetLambdaMin() ;
+	G4double lambda_max = detector->GetLambdaMax() ;
 
        	G4double energy = particleGun->GetParticleEnergy() ;
 
