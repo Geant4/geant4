@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.17 2007-11-28 13:44:42 bmorgan Exp $
+# $Id: Configure,v 1.18 2008-07-03 14:15:56 bmorgan Exp $
 #
-# Generated on Wed Nov 28 13:43:54 GMT 2007 [metaconfig 3.0 PL70]
+# Generated on Thu Jul  3 14:50:17 BST 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2763,7 +2763,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW5.1
+	g4ledata=$g4data/G4EMLOW6.1
 	;;
 esac
 
@@ -2824,7 +2824,7 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW5.1
+		g4ledata=$g4data/G4EMLOW6.1
 		g4neutronhpcrosssections=$g4data/G4NDL3.12
 		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
@@ -2879,7 +2879,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW5.1 data installed ?"
+		rp="Where is G4EMLOW6.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;

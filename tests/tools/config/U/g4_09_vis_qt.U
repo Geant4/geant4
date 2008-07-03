@@ -1,7 +1,7 @@
 ?RCS:
 ?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4_qthome g4vis_build_dawn_driver Myread Getfile Loc cat test
 ?MAKE:	-pick add $@ %<
-?S:g4vis_build_openglqt_driver
+?S:g4vis_build_openglqt_driver:
 ?S:	This variable determines whether the Qt OpenGL driver will be built 
 ?S:.
 ?S:g4vis_use_openglqt:
