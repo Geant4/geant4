@@ -1,4 +1,4 @@
-// $Id: History,v 1.7 2008-06-02 15:53:17 vnivanch Exp $
+// $Id: History,v 1.8 2008-07-03 20:31:59 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 3rd, 2008 Peter Gumplinger - fieldex04-V09-01-03
+- fix: setTheEngine BEFORE setTheSeed in field04.cc
 
 June 2th, 2008 Vladimir Ivanchenko - fieldex04-V09-01-02
 - removed obsolete G4HadronProcessStore from PhysicsList
