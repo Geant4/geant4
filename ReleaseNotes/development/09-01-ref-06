@@ -81,7 +81,7 @@ particles                                        particles-V09-01-03
 - The verbose level of the ParticleDefinition at the construction is set same
   as for the particle-table.
 
-persistency/gdml                                 gdml-V09-01-08
+persistency/gdml                                 gdml-V09-01-09
 ----------------
 - Writer: precision is now considered in case of scale, rotation and position
   of the physical-volume. DBL_EPSILON is used to filter precision for avoiding
