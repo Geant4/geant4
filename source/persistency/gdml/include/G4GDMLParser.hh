@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.46 2008-07-02 16:55:44 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.47 2008-07-03 07:59:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,18 +57,34 @@ public:
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& filename, G4bool Validate=true) { 
-      
+   void Read(const G4String& filename, G4bool Validate=true)
+   {   
       const G4bool IsModule = false;
       reader.Read(filename,Validate,IsModule); 
    }
 
-   void Write(const G4String& filename, const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION) { 
-   
+   void Write(const G4String& filename, const G4VPhysicalVolume* const pvol=0,
+              const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION)
+   { 
       const G4int depth = 0;
-      G4VPhysicalVolume* worldPV = G4TransportationManager::GetTransportationManager()
-                                 ->GetNavigatorForTracking()->GetWorldVolume();
-      writer.Write(filename,worldPV->GetLogicalVolume(),SchemaLocation,depth);
+      G4LogicalVolume* lvol = 0;
+
+      if (!pvol)
+      {
+        G4Navigator* tnav = G4TransportationManager::GetTransportationManager()
+                          ->GetNavigatorForTracking();
+        if (!tnav)
+        {
+           G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
+                       "Detector-Construction needs to be registered first!");
+        }
+        lvol = tnav->GetWorldVolume()->GetLogicalVolume();
+      }
+      else
+      {
+        lvol = pvol->GetLogicalVolume();
+      }
+      writer.Write(filename,lvol,SchemaLocation,depth);
    }
 /*
    G4VPhysicalVolume* ReadST(const G4String& name,G4Material* medium,G4Material* solid) {
