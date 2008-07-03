@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd" >
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd">
    <define>
    </define>
 
@@ -16,7 +16,7 @@
 
    <solids>
       <box y="200" x="200" lunit="cm" z="200" name="WorldBox"/>
-      <box y="50" x="25" lunit="cm" z="100" name="DiamondBox"/>
+      <box y="41" x="21" lunit="cm" z="100" name="DiamondBox"/>
       <xtru name="Extruded">
          <twoDimVertex x="0" y="0"/>
          <twoDimVertex x="100" y="0"/>
@@ -79,9 +79,6 @@
       <volume name="TOP">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
-         <physvol>
-            <file name="axes.gdml"/>
-         </physvol>
          <physvol>
             <volumeref ref="VMother"/>
          </physvol>

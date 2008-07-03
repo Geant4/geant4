@@ -1,51 +1,48 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd">
 
-   <define>
-   </define>
+  <define/>
 
-   <materials>
-      <material Z="1.0" name="AIR" state="gas">
-         <D value="1e-25"/>
-         <atom value="1.00794"/>
-      </material>
-      <material name="ALU" state="solid" Z="13.0">
-         <D value="2.70"/>
-         <atom value="26.98"/>
-      </material>
-   </materials>
+  <materials>
+    <material Z="13" name="ALU" state="solid">
+      <D unit="g/cm3" value="2.7"/>
+      <atom unit="g/mole" value="26.98"/>
+    </material>
+    <material Z="1" name="AIR" state="gas">
+      <D unit="g/cm3" value="1e-25"/>
+      <atom unit="g/mole" value="1.00794"/>
+    </material>
+  </materials>
 
-   <solids>
-      <box name="WorldBox" x="1000" y="1000" z="1000"/>
-      <box name="Cube" x="100" y="100" z="100"/>
-   </solids>
-   
-   <structure>
-      <volume name="lvCube">
-         <materialref ref="ALU"/>
-         <solidref ref="Cube"/>
-      </volume>
-      <volume name="lvReplica">
-         <materialref ref="AIR"/>
-         <solidref ref="WorldBox"/>
-         <replicavol axis="kXAxis" number="8" width="100" offset="0" unit="mm">
-            <volumeref ref="lvCube"/>
-         </replicavol>
-      </volume>
-      <volume name="TOP">
-         <materialref ref="AIR"/>
-         <solidref ref="WorldBox"/>
-         <physvol>
-            <volumeref ref="lvReplica"/>
-         </physvol>
-         <physvol>
-            <file name="axes.gdml"/>
-         </physvol>
-      </volume>
-   </structure>
+  <solids>
+    <box lunit="mm" name="Cube" x="100" y="100" z="100"/>
+    <box lunit="mm" name="MotherCube" x="800" y="100" z="100"/>
+    <box lunit="mm" name="WorldBox" x="1000" y="1000" z="1000"/>
+  </solids>
 
-   <setup version="1.0" name="Default">
-      <world ref="TOP"/>
-   </setup>
+  <structure>
+    <volume name="lvCube">
+      <materialref ref="ALU"/>
+      <solidref ref="Cube"/>
+    </volume>
+    <volume name="lvReplica">
+      <materialref ref="AIR"/>
+      <solidref ref="MotherCube"/>
+      <replicavol axis="kXAxis" name="lvReplica_slice" number="8" offset="0" unit="mm" width="100">
+        <volumeref ref="lvCube"/>
+      </replicavol>
+    </volume>
+    <volume name="TOP">
+      <materialref ref="AIR"/>
+      <solidref ref="WorldBox"/>
+      <physvol name="lvReplica_phys">
+        <volumeref ref="lvReplica"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="TOP"/>
+  </setup>
 
 </gdml>
