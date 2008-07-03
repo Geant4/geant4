@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.33 2008-07-03 08:38:29 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.34 2008-07-03 10:06:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,12 +53,12 @@
 #include "G4Transform3D.hh"
 #include "G4PVDivision.hh"
 
-class G4GDMLWrite {
-private:
-   typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
-// GC - 2
-// Added !
+class G4GDMLWrite
+{
 
+ private:
+
+   typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
    typedef std::map<const G4VPhysicalVolume*,G4String> PhysVolumeMapType;
    typedef std::map<G4int,G4int> DepthMapType;
 
@@ -70,12 +70,11 @@ private:
    PhysVolumeMapType& pvolumeMap();
    DepthMapType& depthMap();
 
-protected:
+ protected:
+
    G4String SchemaLocation;
 
    VolumeMapType& volumeMap();
-// GC - 2
-// Added !
 
    G4String GenerateName(const G4String&,const void* const);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
@@ -90,14 +89,12 @@ protected:
    virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
    G4String Modularize(const G4VPhysicalVolume* const topvol, const G4int depth);
 
-public:
+ public:  // without description
+
    G4Transform3D Write(const G4String& filename, const G4LogicalVolume* const topLog,
                        const G4String& schemaPath, const G4int depth);
    void AddModule(const G4VPhysicalVolume* const topVol);
    void AddModule(const G4int depth);
-// GC
-// void AddModule(const G4VPhysicalVolume* const,const G4String&);
-
    static void SetAddPointerToName(G4bool);
 };
 

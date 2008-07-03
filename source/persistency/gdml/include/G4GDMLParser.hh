@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.48 2008-07-03 08:46:10 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.49 2008-07-03 10:06:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,72 +46,49 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 
-#include "G4TransportationManager.hh"  // Used for the writing the whole structure
-
+#include "G4TransportationManager.hh"  // Used for the writing the whole
+                                       // geometrical structure
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
-class G4GDMLParser {
+class G4GDMLParser
+{
    G4GDMLReadStructure reader;
    G4GDMLWriteStructure writer;
-public:
+
+ public:  // with description
+
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
 
-   void Read(const G4String& filename, G4bool Validate=true)
-   {   
-      const G4bool IsModule = false;
-      reader.Read(filename,Validate,IsModule); 
-   }
+   inline void Read(const G4String& filename, G4bool Validate=true);
 
-   void Write(const G4String& filename, const G4VPhysicalVolume* const pvol=0,
-              const G4String& SchemaLocation=G4GDML_DEFAULT_SCHEMALOCATION)
-   { 
-      const G4int depth = 0;
-      G4LogicalVolume* lvol = 0;
-
-      if (!pvol)
-      {
-        G4VPhysicalVolume* worldPV = G4TransportationManager::GetTransportationManager()
-                                     ->GetNavigatorForTracking()->GetWorldVolume();
-        if (!worldPV)
-        {
-           G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
-                       "Detector-Construction needs to be registered first!");
-        }
-        lvol = worldPV->GetLogicalVolume();
-      }
-      else
-      {
-        lvol = pvol->GetLogicalVolume();
-      }
-      writer.Write(filename,lvol,SchemaLocation,depth);
-   }
+   inline void Write(const G4String& filename,
+                     const G4VPhysicalVolume* const pvol = 0,
+                     const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
 /*
-   G4VPhysicalVolume* ReadST(const G4String& name,G4Material* medium,G4Material* solid) {
-   
-      G4STRead reader;
-      return reader.Read(name,medium,solid);
-   }
+   inline G4VPhysicalVolume* ReadST(const G4String& name,
+                                    G4Material* medium, G4Material* solid);
 */
    // Methods for Reader
    //
-   G4double GetConstant(const G4String& name) { return reader.getConstant(name); }
-   G4double GetVariable(const G4String& name) { return reader.getVariable(name); }
-   G4double GetQuantity(const G4String& name) { return reader.getQuantity(name); }
-   G4ThreeVector GetPosition(const G4String& name) { return reader.getPosition(name); }
-   G4ThreeVector GetRotation(const G4String& name) { return reader.getRotation(name); }
-   G4ThreeVector GetScale(const G4String& name) { return reader.getScale(name); }
-   G4GDMLMatrix GetMatrix(const G4String& name) { return reader.getMatrix(name); }
-   G4LogicalVolume* GetVolume(const G4String& name) { return reader.getVolume(name); }
-   G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") { return reader.GetWorldVolume(setupName); }
-   G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol) { return reader.getVolumeAuxiliaryInformation(logvol); }
+   inline G4double GetConstant(const G4String& name);
+   inline G4double GetVariable(const G4String& name);
+   inline G4double GetQuantity(const G4String& name);
+   inline G4ThreeVector GetPosition(const G4String& name);
+   inline G4ThreeVector GetRotation(const G4String& name);
+   inline G4ThreeVector GetScale(const G4String& name);
+   inline G4GDMLMatrix GetMatrix(const G4String& name);
+   inline G4LogicalVolume* GetVolume(const G4String& name);
+   inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
+   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
 
    // Methods for Writer
    //
-   void AddModule(const G4VPhysicalVolume* const physvol) { writer.AddModule(physvol); }
-   void AddModule(const G4int depth) { writer.AddModule(depth); }
-
-   void SetAddPointerToName(G4bool set) { writer.SetAddPointerToName(set); }
+   inline void AddModule(const G4VPhysicalVolume* const physvol);
+   inline void AddModule(const G4int depth);
+   inline void SetAddPointerToName(G4bool set);
 };
+
+#include "G4GDMLParser.icc"
 
 #endif

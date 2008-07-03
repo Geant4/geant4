@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.65 2008-07-03 08:38:29 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.66 2008-07-03 10:06:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -35,8 +35,10 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,const G4PVDivision* const divisionvol) {
-
+void
+G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,
+                                       const G4PVDivision* const divisionvol)
+{
    EAxis axis = kUndefined;
    G4int number = 0;
    G4double width = 0.0;
@@ -47,14 +49,17 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
-   if (axis==kXAxis) axisString = "kXAxis"; else
-   if (axis==kYAxis) axisString = "kYAxis"; else
-   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kXAxis) { axisString = "kXAxis"; } else
+   if (axis==kYAxis) { axisString = "kYAxis"; } else
+   if (axis==kZAxis) { axisString = "kZAxis"; } else
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
-   const G4String name = GenerateName(divisionvol->GetName(),divisionvol);
-   const G4String volumeref = GenerateName(divisionvol->GetLogicalVolume()->GetName(),divisionvol->GetLogicalVolume());
+   const G4String name
+         = GenerateName(divisionvol->GetName(),divisionvol);
+   const G4String volumeref
+         = GenerateName(divisionvol->GetLogicalVolume()->GetName(),
+                        divisionvol->GetLogicalVolume());
 
    xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
    divisionvolElement->setAttributeNode(newAttribute("name",name));
@@ -69,8 +74,11 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
    volumeElement->appendChild(divisionvolElement);
 }
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T,const G4String& ModuleName) {
-
+void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
+                                        const G4VPhysicalVolume* const physvol,
+                                        const G4Transform3D& T,
+                                        const G4String& ModuleName)
+{
    HepGeom::Scale3D scale;
    HepGeom::Rotate3D rotate;
    HepGeom::Translate3D translate;
@@ -87,28 +95,47 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    physvolElement->setAttributeNode(newAttribute("name",name));
    volumeElement->appendChild(physvolElement);
 
-   const G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
+   const G4String volumeref
+         = GenerateName(physvol->GetLogicalVolume()->GetName(),
+                        physvol->GetLogicalVolume());
 
-   if (ModuleName.empty()) {
-
+   if (ModuleName.empty())
+   {
       xercesc::DOMElement* volumerefElement = newElement("volumeref");
       volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
       physvolElement->appendChild(volumerefElement);
-   } else {
-
+   }
+   else
+   {
       xercesc::DOMElement* fileElement = newElement("file");
       fileElement->setAttributeNode(newAttribute("name",ModuleName));
       fileElement->setAttributeNode(newAttribute("volname",volumeref));
       physvolElement->appendChild(fileElement);
    }
 
-   if (fabs(pos.x()) > kLinearPrecision || fabs(pos.y()) > kLinearPrecision || fabs(pos.z()) > kLinearPrecision) positionWrite(physvolElement,name+"position",pos);
-   if (fabs(rot.x()) > kAngularPrecision || fabs(rot.y()) > kAngularPrecision || fabs(rot.z()) > kAngularPrecision) rotationWrite(physvolElement,name+"rotation",rot);
-   if (fabs(scl.x()-1.0) > kRelativePrecision || fabs(scl.y()-1.0) > kRelativePrecision || fabs(scl.z()-1.0) > kRelativePrecision) scaleWrite(physvolElement,name+"scale",scl);
+   if (fabs(pos.x()) > kLinearPrecision
+    || fabs(pos.y()) > kLinearPrecision
+    || fabs(pos.z()) > kLinearPrecision)
+   {
+     positionWrite(physvolElement,name+"position", pos);
+   }
+   if (fabs(rot.x()) > kAngularPrecision
+    || fabs(rot.y()) > kAngularPrecision
+    || fabs(rot.z()) > kAngularPrecision)
+   {
+     rotationWrite(physvolElement,name+"rotation",rot);
+   }
+   if (fabs(scl.x()-1.0) > kRelativePrecision
+    || fabs(scl.y()-1.0) > kRelativePrecision
+    || fabs(scl.z()-1.0) > kRelativePrecision)
+   {
+     scaleWrite(physvolElement,name+"scale",scl);
+   }
 }
 
-void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const replicavol) {
-
+void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,
+                                     const G4VPhysicalVolume* const replicavol)
+{
    EAxis axis = kUndefined;
    G4int number = 0;
    G4double width = 0.0;
@@ -119,14 +146,17 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
-   if (axis==kXAxis) axisString = "kXAxis"; else
-   if (axis==kYAxis) axisString = "kYAxis"; else
-   if (axis==kZAxis) axisString = "kZAxis"; else
+   if (axis==kXAxis) { axisString = "kXAxis"; } else
+   if (axis==kYAxis) { axisString = "kYAxis"; } else
+   if (axis==kZAxis) { axisString = "kZAxis"; } else
    if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
-   const G4String name = GenerateName(replicavol->GetName(),replicavol);
-   const G4String volumeref = GenerateName(replicavol->GetLogicalVolume()->GetName(),replicavol->GetLogicalVolume());
+   const G4String name
+         = GenerateName(replicavol->GetName(),replicavol);
+   const G4String volumeref
+         = GenerateName(replicavol->GetLogicalVolume()->GetName(),
+                        replicavol->GetLogicalVolume());
 
    xercesc::DOMElement* replicavolElement = newElement("replicavol");
    replicavolElement->setAttributeNode(newAttribute("name",name));
@@ -141,39 +171,50 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,co
    volumeElement->appendChild(replicavolElement);
 }
 
-void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
-
+void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement)
+{
    G4cout << "G4GDML: Writing structure..." << G4endl;
 
    structureElement = newElement("structure");
    gdmlElement->appendChild(structureElement);
 }
 
-G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth) {
-
-   if (volumeMap().find(volumePtr) != volumeMap().end()) return volumeMap()[volumePtr]; // Volume is already processed
-// GC - 2
-// if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
+G4Transform3D
+G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,
+                                         const G4int depth)
+{
+   if (volumeMap().find(volumePtr) != volumeMap().end())
+   {
+     return volumeMap()[volumePtr]; // Volume is already processed
+   }
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
    G4int reflected = 0;
 
-   while (true) { // Solve possible displacement/reflection of the referenced solid!
-   
-      if (reflected>maxReflections) G4Exception("G4GDML: ERROR! Referenced solid in volume '"+volumePtr->GetName()+"' was displaced/reflected too many times!");
-   
-      if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr)) {
-   
+   while (true) // Solve possible displacement/reflection
+   {            // of the referenced solid!
+      if (reflected>maxReflections)
+      {
+        G4String ErrorMessage = "Referenced solid in volume '"
+                              + volumePtr->GetName()
+                              + "' was displaced/reflected too many times!";
+        G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                    "InvalidSetup", FatalException, ErrorMessage);
+      }
+
+      if (G4ReflectedSolid* refl = dynamic_cast<G4ReflectedSolid*>(solidPtr))
+      {
          R = R*refl->GetTransform3D();
          solidPtr = refl->GetConstituentMovedSolid();
          reflected++;
          continue;
       }
 
-      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(solidPtr)) {
-      
-         R = R*G4Transform3D(disp->GetObjectRotation(),disp->GetObjectTranslation());
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(solidPtr))
+      {
+         R = R*G4Transform3D(disp->GetObjectRotation(),
+                             disp->GetObjectTranslation());
          solidPtr = disp->GetConstituentMovedSolid();
          reflected++;
          continue;
@@ -182,11 +223,16 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
       break;
    }
 
-   if (reflected>0) invR = R.inverse(); // Only compute the inverse when necessary!
+   if (reflected>0) { invR = R.inverse(); }
+     // Only compute the inverse when necessary!
 
-   const G4String name = GenerateName(volumePtr->GetName(),volumePtr);
-   const G4String materialref = GenerateName(volumePtr->GetMaterial()->GetName(),volumePtr->GetMaterial());
-   const G4String solidref = GenerateName(solidPtr->GetName(),solidPtr);
+   const G4String name
+         = GenerateName(volumePtr->GetName(),volumePtr);
+   const G4String materialref
+         = GenerateName(volumePtr->GetMaterial()->GetName(),
+                        volumePtr->GetMaterial());
+   const G4String solidref
+         = GenerateName(solidPtr->GetName(),solidPtr);
 
    xercesc::DOMElement* volumeElement = newElement("volume");
    volumeElement->setAttributeNode(newAttribute("name",name));
@@ -199,60 +245,86 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
 
-   for (G4int i=0;i<daughterCount;i++) { // Traverse all the children!
-   
+   for (G4int i=0;i<daughterCount;i++)   // Traverse all the children!
+   {
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
       const G4String ModuleName = Modularize(physvol,depth);
 
       G4Transform3D daughterR;
 
-      if (ModuleName.empty()) { // Check if subtree requested to be a separate module!
-
+      if (ModuleName.empty())   // Check if subtree requested to be 
+      {                         // a separate module!
          daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
-      } else {
-         
+      }
+      else
+      {   
 	 G4GDMLWriteStructure writer;
-         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),SchemaLocation,depth+1);
+         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),
+                                  SchemaLocation,depth+1);
       }
 
-      if (const G4PVDivision* const divisionvol = dynamic_cast<const G4PVDivision* const>(physvol)) { // Is it a divisionvol?
-      
-         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
-	    G4Exception("G4GDML: ERROR! divisionvol in '"+name+"' can not be related to reflected solid!");
-
+      if (const G4PVDivision* const divisionvol
+         = dynamic_cast<const G4PVDivision* const>(physvol)) // Is it division?
+      {
+         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
+         {
+            G4String ErrorMessage = "Division volume in '"
+                                  + name
+                                  + "' can not be related to reflected solid!";
+	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                        "InvalidSetup", FatalException,
+                        ErrorMessage);
+         }
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
-      if (physvol->IsParameterised()) { // Is it a paramvol?
-       
-         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision)) 
-	    G4Exception("G4GDML: ERROR! paramvol in '"+name+"' can not be related to reflected solid!");
-
+      if (physvol->IsParameterised())   // Is it a paramvol?
+      {
+         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
+         {
+            G4String ErrorMessage = "Parameterised volume in '"
+                                  + name
+                                  + "' can not be related to reflected solid!";
+	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                        "InvalidSetup", FatalException,
+                        ErrorMessage);
+         }
          paramvolWrite(volumeElement,physvol);
       } else
-      if (physvol->IsReplicated()) { // Is it a replicavol?
-
+      if (physvol->IsReplicated())   // Is it a replicavol?
+      {
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
-	    G4Exception("G4GDML: ERROR! replicavol in '"+name+"' can not be related to reflected solid!");
-
+         {
+            G4String ErrorMessage = "Replica volume in '"
+                                  + name
+                                  + "' can not be related to reflected solid!";
+	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                        "InvalidSetup", FatalException,
+                        ErrorMessage);
+         }
          replicavolWrite(volumeElement,physvol); 
-      } else { // Is it a physvol?
-   
+      }
+      else   // Is it a physvol?
+      {
          G4RotationMatrix rot;
 
-         if (physvol->GetFrameRotation() != 0) rot = *(physvol->GetFrameRotation());
-   
+         if (physvol->GetFrameRotation() != 0)
+         {
+           rot = *(physvol->GetFrameRotation());
+         }
          G4Transform3D P(rot,physvol->GetObjectTranslation());
          physvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
    }
 
-   structureElement->appendChild(volumeElement); // Append the volume AFTER traversing the children so that the order of volumes will be correct!
+   structureElement->appendChild(volumeElement);
+     // Append the volume AFTER traversing the children so that
+     // the order of volumes will be correct!
 
    volumeMap()[volumePtr] = R;
-// GC - 2
-// volumeMap[volumePtr] = R;
 
-   G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());   // Add the involved materials and solids!
+   G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());
+     // Add the involved materials and solids!
+
    G4GDMLWriteSolids::AddSolid(solidPtr);
 
    return R;
