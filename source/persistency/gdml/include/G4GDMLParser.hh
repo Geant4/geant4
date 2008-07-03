@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.47 2008-07-03 07:59:41 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.48 2008-07-03 08:46:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,14 +71,14 @@ public:
 
       if (!pvol)
       {
-        G4Navigator* tnav = G4TransportationManager::GetTransportationManager()
-                          ->GetNavigatorForTracking();
-        if (!tnav)
+        G4VPhysicalVolume* worldPV = G4TransportationManager::GetTransportationManager()
+                                     ->GetNavigatorForTracking()->GetWorldVolume();
+        if (!worldPV)
         {
            G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
                        "Detector-Construction needs to be registered first!");
         }
-        lvol = tnav->GetWorldVolume()->GetLogicalVolume();
+        lvol = worldPV->GetLogicalVolume();
       }
       else
       {
