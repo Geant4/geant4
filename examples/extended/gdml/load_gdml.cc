@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.10 2008-04-01 07:28:06 ztorzsok Exp $
+// $Id: load_gdml.cc,v 1.11 2008-07-03 11:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,7 @@ int main(int argc,char **argv) {
 
    if (argc==3) {
 
-      parser.Write(argv[2],parser.getWorldVolume()->GetLogicalVolume());
+      parser.Write(argv[2],parser.GetWorldVolume());
    }
    
    if (argc>3) {
