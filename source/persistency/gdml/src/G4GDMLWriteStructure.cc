@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.63 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.64 2008-07-03 07:33:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -70,6 +70,8 @@ void G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,c
 }
 
 void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T,const G4bool& modularize) {
+// GC
+// void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const G4VPhysicalVolume* const physvol,const G4Transform3D& T,const G4String& ModuleName) {
 
    HepGeom::Scale3D scale;
    HepGeom::Rotate3D rotate;
@@ -90,6 +92,8 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
    const G4String volumeref = GenerateName(physvol->GetLogicalVolume()->GetName(),physvol->GetLogicalVolume());
 
    if (modularize) {
+// GC
+// if (ModuleName.empty()) {
 
       xercesc::DOMElement* volumerefElement = newElement("volumeref");
       volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
@@ -98,6 +102,9 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,const
 
       xercesc::DOMElement* fileElement = newElement("file");
       fileElement->setAttributeNode(newAttribute("name",name+".gdml")); // The module name is the physvol name + '.gdml'
+// GC
+// fileElement->setAttributeNode(newAttribute("name",ModuleName));
+
       fileElement->setAttributeNode(newAttribute("volname",volumeref));
       physvolElement->appendChild(fileElement);
    }
@@ -149,9 +156,11 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement) {
    gdmlElement->appendChild(structureElement);
 }
 
-G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,const G4long depth) {
+G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth) {
 
    if (volumeMap().find(volumePtr) != volumeMap().end()) return volumeMap()[volumePtr]; // Volume is already processed
+// GC - 2
+// if (volumeMap.find(volumePtr) != volumeMap.end()) return volumeMap[volumePtr]; // Volume is already processed
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
@@ -201,15 +210,23 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    
       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
       const G4bool modularize = Modularize(physvol,depth);
+// GC
+//    const G4String ModuleName = Modularize(physvol,depth);
+
       G4Transform3D daughterR;
 
       if (modularize) { // Check if subtree requested to be a separate module!
+// GC
+//    if (ModuleName.empty()) { // Check if subtree requested to be a separate module!
 
          daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
       } else {
          
 	 G4GDMLWriteStructure writer;
          const G4String ModuleName = GenerateName(physvol->GetName(),physvol)+".gdml"; // The module name is the physvol name + '.gdml'
+// GC
+// Added!
+
          daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),SchemaLocation,depth+1);
       }
 
@@ -241,12 +258,17 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* co
    
          G4Transform3D P(rot,physvol->GetObjectTranslation());
          physvolWrite(volumeElement,physvol,invR*P*daughterR,modularize);
+// GC
+//       physvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
+
       }
    }
 
    structureElement->appendChild(volumeElement); // Append the volume AFTER traversing the children so that the order of volumes will be correct!
 
    volumeMap()[volumePtr] = R;
+// GC - 2
+// volumeMap[volumePtr] = R;
 
    G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());   // Add the involved materials and solids!
    G4GDMLWriteSolids::AddSolid(solidPtr);

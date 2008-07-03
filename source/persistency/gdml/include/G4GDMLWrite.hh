@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.31 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.32 2008-07-03 07:33:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,19 +56,33 @@
 class G4GDMLWrite {
 private:
    typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
+// GC - 2
+// Added !
+
    typedef std::vector<const G4VPhysicalVolume*> VolumeListType;
-   typedef std::vector<G4long> DepthListType;
-   static bool addPointerToName;
+   typedef std::vector<G4int> DepthListType;
+// GC
+// typedef std::map<const G4VPhysicalVolume*,G4String> VolumeMapType;
+// typedef std::map<G4int,G4int> DepthMapType;
+
+   static G4bool addPointerToName;
    xercesc::DOMDocument* doc;
    XMLCh tempStr[100];
 
-   bool FileExists(const G4String&) const;
+   G4bool FileExists(const G4String&) const;
    VolumeListType& volumeList();
    DepthListType& depthList();
+// GC
+// VolumeMapType& volumeMap();
+// DepthMapType& depthMap();
+
 protected:
    G4String SchemaLocation;
 
    VolumeMapType& volumeMap();
+// GC - 2
+// Added !
+
    G4String GenerateName(const G4String&,const void* const);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
    xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
@@ -77,14 +91,20 @@ protected:
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4long)=0;
+   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int)=0;
+
    virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-   bool Modularize(const G4VPhysicalVolume* const,const G4long);
+   G4bool Modularize(const G4VPhysicalVolume* const topvol, const G4int depth);
+
 public:
-   G4Transform3D Write(const G4String&,const G4LogicalVolume* const,const G4String&,const G4long);
-   void AddModule(const G4VPhysicalVolume* const);
-   void AddModule(const G4long);
-   static void SetAddPointerToName(bool);
+   G4Transform3D Write(const G4String& filename, const G4LogicalVolume* const topLog,
+                       const G4String& schemaPath, const G4int depth);
+   void AddModule(const G4VPhysicalVolume* const topVol);
+   void AddModule(const G4int depth);
+// GC
+// void AddModule(const G4VPhysicalVolume* const,const G4String&);
+
+   static void SetAddPointerToName(G4bool);
 };
 
 #endif
