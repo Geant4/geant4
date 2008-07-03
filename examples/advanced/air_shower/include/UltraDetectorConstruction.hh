@@ -60,14 +60,15 @@ class UltraFresnelLens;
 class UltraDetectorConstruction : public G4VUserDetectorConstruction
 {
  
-  friend class UltraPrimaryGeneratorAction ;
-
   public:
     UltraDetectorConstruction();
     ~UltraDetectorConstruction();
 
   public:
     G4VPhysicalVolume* Construct();
+
+    inline G4double GetLambdaMin() const {return lambda_min;}
+    inline G4double GetLambdaMax() const {return lambda_max;}
 
   private:
     
