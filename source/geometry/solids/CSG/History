@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2008-06-23 13:41:23 gcosmo Exp $
+$Id: History,v 1.105 2008-07-07 10:43:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 07, 2008  V.Grichine                 geom-csg-V09-01-04
+- G4Sphere: fixed bug in DistanceToOut(p, v, ...) for normal 'fSTheta'
+  greater than 90*deg, and use of tangent giving negative value.
+  Completes series of corrections introduced in previous tag.
 
 Jun 23, 2008  T.Nikitina                 geom-csg-V09-01-03
 - G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
