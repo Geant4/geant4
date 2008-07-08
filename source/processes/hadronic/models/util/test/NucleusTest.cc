@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: NucleusTest.cc,v 1.3 2008-05-15 14:05:36 gunter Exp $
+// $Id: NucleusTest.cc,v 1.4 2008-07-08 16:08:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -69,7 +69,7 @@ int main()
 	   G4cout << " Isotopes"<< G4endl;
 	   for (G4int iso=0; iso<theIso.GetNumberOfIsotopes(Z); iso++)
 	   {
-	       G4double massnumber=
+	       G4int massnumber=
 	          theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(Z)+iso);
               for ( G4int repeat=0; repeat< 1; ++repeat )
 	      {
@@ -79,17 +79,17 @@ int main()
 	      G4cout << "Charge" << nucleus.GetCharge() << G4endl;
 	      G4cout << "Mass number" << nucleus.GetMassNumber() << G4endl;
 	      G4cout << "nuclear (Table)Mass/Binding energy/ Ion mass: " << 
-	        G4NucleiPropertiesTable::GetNuclearMass(Z,G4int(massnumber+0.5))
+	        G4NucleiPropertiesTable::GetNuclearMass(Z,massnumber)
 		<< " / " <<
-		G4NucleiPropertiesTable::GetBindingEnergy(Z,G4int(massnumber+0.5))
+		G4NucleiPropertiesTable::GetBindingEnergy(Z,massnumber)
 		<< " / " <<
 		G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,massnumber)
 	        << G4endl;
 	      std::pair<G4double,G4double> avmass=
 	      			AvergeMass(nucleus, massnumber, (G4double) Z);
-	      G4cout << "A, Z, N " << G4int(massnumber+0.5)
+	      G4cout << "A, Z, N " << massnumber
 	             << " " << Z
-		     << " " << G4int(massnumber+0.5) - Z
+		     << " " << massnumber - Z
 	      	     << " Mass " << nucleus.GetMass() 
 	             << " Average mass " << avmass.first 
 		     << " width " << avmass.second 
@@ -178,7 +178,7 @@ std::pair<G4double,G4double> AvergeMass(
 	std::pair<G4double,G4double> result;
 	G4double average=S_average/repeats;
 	result.first  =average;
-	result.second =sqrt(abs(
+	result.second =sqrt(std::fabs(
 		repeats/(repeats-1) * (S_average2/repeats - sqr(average)) ));
 	return result;
 }
