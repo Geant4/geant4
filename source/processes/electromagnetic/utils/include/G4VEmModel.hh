@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.50 2008-05-29 13:38:05 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.51 2008-07-08 10:58:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,6 +132,11 @@ public:
 					G4double kineticEnergy,
 					G4double cutEnergy = DBL_MAX);
 
+  inline G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                             const G4Element*,
+					     G4double kinEnergy, 
+					     G4double cutEnergy = 0.0,
+					     G4double maxEnergy = DBL_MAX);
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double kinEnergy, 
@@ -277,6 +282,19 @@ inline void G4VEmModel::SetLowEnergyLimit(G4double val)
 inline void G4VEmModel::SetPolarAngleLimit(G4double val)
 {
   polarAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
+		const G4ParticleDefinition* part,
+		const G4Element* elm,
+		G4double kinEnergy, 
+		G4double cutEnergy,
+		G4double maxEnergy)
+{
+  return ComputeCrossSectionPerAtom(part,kinEnergy,elm->GetZ(),elm->GetN(),
+				    cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
