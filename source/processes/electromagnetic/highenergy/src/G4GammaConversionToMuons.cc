@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.5 2008-03-06 18:44:58 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.6 2008-07-08 15:07:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -262,9 +262,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     if(W<1.) W=1.; // to avoid negative cross section at xmin
     G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
     result=xxp*log(W)*LogWmaxInv;
-    if(result>1.)
-    { G4cout << "error in dSigxPlusGen, result=" << result << " is >1" << '\n';
-      exit(10);
+    if(result>1.) {
+      G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
     }
   }
   while (G4UniformRand() > result);
@@ -286,9 +286,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     { t=G4UniformRand();
       f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
       if(f1<0 || f1> f1_max) // should never happend
-      { G4cout << "outside allowed range f1=" << f1 << G4endl;
-        exit(1);
-      }
+	{
+	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+		 << "outside allowed range f1=" << f1 << " is set to zero"
+		 << G4endl;
+          f1 = 0.0;
+	}
     }
     while ( G4UniformRand()*f1_max > f1);
     // generate psi by the rejection method
@@ -300,9 +303,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     { psi=2.*pi*G4UniformRand();
       f2=1.-2.*xPM+4.*xPM*t*(1.-t)*(1.+cos(2.*psi));
       if(f2<0 || f2> f2_max) // should never happend
-      { G4cout << "outside allowed range f2=" << f2 << G4endl;
-        exit(1);
-      }
+	{
+	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+		 << "outside allowed range f2=" << f2 << " is set to zero"
+		 << G4endl;
+          f2 = 0.0;
+	}
     }
     while ( G4UniformRand()*f2_max > f2);
 
