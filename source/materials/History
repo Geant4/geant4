@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2008-06-27 08:59:35 gcosmo Exp $
+$Id: History,v 1.118 2008-07-08 10:34:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-07-08 V.Ivanchenko (materials-V09-01-09)
+- G4IonisParamMat - added fMeanEnergyPerIon and Set/Get methods
 
 27-06-08 G.Cosmo (materials-V09-01-08)
 - Added virtual destructor to G4OpticalSurface and derivated.

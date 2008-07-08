@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.24 2008-06-04 08:27:29 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.25 2008-07-08 10:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,6 @@
 
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
-///#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -57,6 +56,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
   ComputeIonParameters();
   
   fBirks = 0.;
+  fMeanEnergyPerIon = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

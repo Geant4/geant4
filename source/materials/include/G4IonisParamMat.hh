@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.11 2008-03-10 15:47:25 maire Exp $
+// $Id: G4IonisParamMat.hh,v 1.12 2008-07-08 10:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,6 +98,10 @@ public:
     // parameters for Birks attenuation:
     void      SetBirksConstant(G4double value) {fBirks = value;}; 
     G4double  GetBirksConstant()         const {return fBirks;};
+
+    // parameters for average energy per ion 
+    void      SetMeanEnergyPerIonPair(G4double value) {fMeanEnergyPerIon = value;}; 
+    G4double  GetMeanEnergyPerIonPair()         const {return fMeanEnergyPerIon;};
       
 public:  // without description
 
@@ -162,6 +166,8 @@ private:
     
     // parameter for Birks attenuation
     G4double fBirks;
+    // average energy per ion pair
+    G4double fMeanEnergyPerIon;
 };
 
 #endif
