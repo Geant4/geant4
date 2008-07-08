@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.33 2006-06-29 19:55:09 gunter Exp $
+// $Id: G4EnergyLossTables.cc,v 1.34 2008-07-08 10:57:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -997,12 +997,13 @@ void G4EnergyLossTables::CPRWarning()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, const G4String& q)
+void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, 
+					    const G4String& q)
 {
-  G4String s = "G4EnergyLossTables:: " + q + " table not found for "
-             + aParticle->GetParticleName() + "!";
-  G4Exception(s);
-  exit(1);
+  G4String s = " " + q + " table not found for "
+             + aParticle->GetParticleName() + " !";
+  G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",
+	      FatalException, s);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

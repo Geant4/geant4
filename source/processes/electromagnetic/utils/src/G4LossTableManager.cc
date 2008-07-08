@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.89 2008-03-13 18:47:53 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.90 2008-07-08 10:57:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -368,10 +368,11 @@ G4EnergyLossMessenger* G4LossTableManager::GetMessenger()
 void G4LossTableManager::ParticleHaveNoLoss(
      const G4ParticleDefinition* aParticle)
 {
-  G4String s = "G4LossTableManager:: dE/dx table not found for "
-             + aParticle->GetParticleName() + "!";
-  G4Exception(s);
-  exit(1);
+  G4String s = " dE/dx table not found for "
+             + aParticle->GetParticleName() + " !";
+  G4Exception("G4LossTableManager::ParticleHaveNoLoss", "EM01",
+	      FatalException, s);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
