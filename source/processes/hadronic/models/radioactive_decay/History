@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 July 2008 Dennis Wright (radioactive_decay-V09-01-02)
+- replace exit() with G4Exception in G4RadioactiveDecay and G4NuclearDecayChannel
+
 17 June 2008 Fan Lei (radioactive_decay-V09-01-01)
 - GRIsotopeTable.cc
 	i) change default verbosity level to 1
