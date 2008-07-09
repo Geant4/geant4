@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-//
- // Hadronic Inelastic Process Class
- // J.L. Chuma, TRIUMF, 24-Mar-1997
- // Last modified: 27-Mar-1997
- // J.P. Wellisch: Bug hunting, 23-Apr-97
- // Modified by J.L.Chuma 8-Jul-97 to eliminate possible division by zero for sigma
+// Hadronic Inelastic Process Class
+// J.L. Chuma, TRIUMF, 24-Mar-1997
+// Last modified: 27-Mar-1997
+// J.P. Wellisch: Bug hunting, 23-Apr-97
+// Modified by J.L.Chuma 8-Jul-97 to eliminate possible division by zero for sigma
 //
 // 14-APR-98 F.W.Jones: variant G4HadronInelastic process for
 // G4CrossSectionDataSet/DataStore class design.
@@ -43,24 +42,25 @@
 #include "G4ProcessVector.hh"
 #include "G4HadronicException.hh"
   
- void G4HadronInelasticProcess::BuildThePhysicsTable()
-  {
-    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      return;
-    }
-    G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(*theParticle);
-  }
+void G4HadronInelasticProcess::BuildThePhysicsTable()
+{
+  if (!G4HadronicProcess::GetCrossSectionDataStore()) return;
+  G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(*theParticle);
+}
  
- G4HadronInelasticProcess::G4HadronInelasticProcess(
-  const G4String &processName,
-  G4ParticleDefinition *aParticle ) :
-   G4HadronicProcess( processName )
- {
-   G4HadronicProcess::AddDataSet(new G4HadronInelasticDataSet);
-   theParticle = aParticle;
- }
 
- G4HadronInelasticProcess::~G4HadronInelasticProcess() { }
+G4HadronInelasticProcess::G4HadronInelasticProcess(const G4String& processName,
+                                                   G4ParticleDefinition* aParticle):
+  G4HadronicProcess(processName)
+{
+  SetProcessSubType(12);
+  G4HadronicProcess::AddDataSet(new G4HadronInelasticDataSet);
+  theParticle = aParticle;
+}
+
+
+G4HadronInelasticProcess::~G4HadronInelasticProcess() { }
+
 
  G4VParticleChange *G4HadronInelasticProcess::
  PostStepDoIt(const G4Track &aTrack, const G4Step &aStep)

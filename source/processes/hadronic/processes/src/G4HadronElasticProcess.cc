@@ -49,20 +49,21 @@
 
 #include "G4HadronElasticProcess.hh"
  
-G4HadronElasticProcess::
-G4HadronElasticProcess(const G4String& processName) : 
-      G4HadronicProcess(processName)
+G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) : 
+  G4HadronicProcess(processName)
 {
+  SetProcessSubType(11);
   AddDataSet(new G4HadronElasticDataSet);
 }
+
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {
 }
  
 
-void G4HadronElasticProcess::
-BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+void 
+G4HadronElasticProcess::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
       return;

@@ -43,18 +43,14 @@
 
 #include "G4HadronFissionProcess.hh"
 
-//unsigned 
-//G4HadronicFissionProcessHashFun(const G4ParticleDefinition& aParticleDefinition)
-//{
-//   return aParticleDefinition.GetParticleName().hash();
-//}
 
-G4HadronFissionProcess::
-G4HadronFissionProcess(const G4String& processName) : 
-   G4HadronicProcess(processName)
+G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) : 
+  G4HadronicProcess(processName)
 {
-   AddDataSet(new G4HadronFissionDataSet);
+  SetProcessSubType(14);
+  AddDataSet(new G4HadronFissionDataSet);
 }
+
 
 G4HadronFissionProcess::~G4HadronFissionProcess()
 {
@@ -64,12 +60,12 @@ G4HadronFissionProcess::~G4HadronFissionProcess()
 void 
 G4HadronFissionProcess::BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
 {
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronFissionProcess", "007", FatalException,
-                  "no cross section data set");
-      return;
-   }
-   G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
+  if (!G4HadronicProcess::GetCrossSectionDataStore()) {
+    G4Exception("G4HadronFissionProcess", "007", FatalException,
+                "no cross section data set");
+    return;
+  }
+  G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
 }
 
 

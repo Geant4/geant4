@@ -46,8 +46,10 @@
 G4HadronCaptureProcess::G4HadronCaptureProcess(const G4String& processName) : 
    G4HadronicProcess(processName)
 {
-   G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet);
+  SetProcessSubType(13);
+  G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet);
 }
+
 
 G4HadronCaptureProcess::~G4HadronCaptureProcess()
 {
