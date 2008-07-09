@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.1 2007-11-23 13:42:59 mkossov Exp $
+// $Id: G4QIonIonElastic.cc,v 1.2 2008-07-09 19:48:02 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
@@ -51,13 +51,13 @@ std::vector<std::vector<G4double>*>G4QIonIonElastic::IsoProbInEl;//SumProbabIsot
 
 // Constructor
 G4QIonIonElastic::G4QIonIonElastic(const G4String& processName):
-  G4VDiscreteProcess(processName)
+  G4VDiscreteProcess(processName, fHadronic)
 {
 #ifdef debug
   G4cout<<"G4QIonIonElastic::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-
+  SetProcessSubType(11);
   //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 

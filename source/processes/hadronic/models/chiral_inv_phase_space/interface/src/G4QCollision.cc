@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.26 2008-05-06 15:45:44 dennis Exp $
+// $Id: G4QCollision.cc,v 1.27 2008-07-09 19:46:58 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -47,13 +47,14 @@ std::vector<G4double> G4QCollision::ElProbInMat;      // SumProbabilityElements 
 std::vector<std::vector<G4int>*> G4QCollision::ElIsoN;    // N of isotope(j) of Element(i)
 std::vector<std::vector<G4double>*>G4QCollision::IsoProbInEl;//SumProbabIsotopes inElementI
 
-G4QCollision::G4QCollision(const G4String& processName) : G4VDiscreteProcess(processName)
+G4QCollision::G4QCollision(const G4String& processName): 
+ G4VDiscreteProcess(processName, fHadronic)
 {
 #ifdef debug
   G4cout<<"G4QCollision::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-
+  SetProcessSubType(12);
   //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPSWorld (234 part.max)
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters

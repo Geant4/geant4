@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.2 2007-08-31 09:36:57 mkossov Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.3 2008-07-09 19:47:35 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer class -----------------
@@ -48,6 +48,7 @@ G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
   G4cout<<"G4QDiscProcessMixer::Constructor is called processName="<<name<<G4endl;
 #endif
   if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created "<<G4endl;
+  SetProcessSubType(10);
 }
 
 // Destructor

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.5 2008-03-21 21:43:46 dennis Exp $
+// $Id: G4QLowEnergy.cc,v 1.6 2008-07-09 19:48:15 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -51,13 +51,13 @@ std::vector<std::vector<G4double>*>G4QLowEnergy::IsoProbInEl;//SumProbIsotE(i)
 
 // Constructor
 G4QLowEnergy::G4QLowEnergy(const G4String& processName):
-  G4VDiscreteProcess(processName), evaporate(true)
+  G4VDiscreteProcess(processName, fHadronic), evaporate(true)
 {
 #ifdef debug
   G4cout<<"G4QLowEnergy::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created "<<G4endl;
-
+  SetProcessSubType(12);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 

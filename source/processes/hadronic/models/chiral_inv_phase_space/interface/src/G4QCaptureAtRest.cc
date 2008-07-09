@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.13 2007-10-02 10:00:37 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.14 2008-07-09 19:45:49 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -42,8 +42,9 @@
 #include "G4QCaptureAtRest.hh"
 
 G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
-  : G4VRestProcess(processName), Time(0.), EnergyDeposition(0.)
+  : G4VRestProcess(processName, fHadronic), Time(0.), EnergyDeposition(0.)
 {
+  SetProcessSubType(13);
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::Constructor is called"<<G4endl;
 #endif

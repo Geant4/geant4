@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.cc,v 1.2 2006-12-13 15:45:19 gunter Exp $
+// $Id: G4QAtomicElectronScattering.cc,v 1.3 2008-07-09 19:45:32 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QAtomicElectronScattering class -----------------
@@ -40,13 +40,13 @@
 #include "G4QAtomicElectronScattering.hh"
 
 G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& processName):
- G4VDiscreteProcess(processName)
+ G4VDiscreteProcess(processName, fElectromagnetic)
 {
 #ifdef debug
   G4cout<<"G4QAtomicElectronScattering::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-
+  SetProcessSubType(10);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters

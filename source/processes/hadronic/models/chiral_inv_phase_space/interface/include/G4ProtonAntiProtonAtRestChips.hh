@@ -49,7 +49,10 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
   public:
  
      G4ProtonAntiProtonAtRestChips(const G4String& processName ="AntiProtonAnnihilationAtRest")
-      : G4VRestProcess (processName) {}
+      : G4VRestProcess (processName, fHadronic) 
+     {
+       SetProcessSubType(15);
+     }
  
     ~G4ProtonAntiProtonAtRestChips() {}
 
