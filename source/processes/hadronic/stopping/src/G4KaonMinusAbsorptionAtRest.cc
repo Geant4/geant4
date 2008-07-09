@@ -50,6 +50,7 @@ G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& process
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
+  SetProcessSubType(15);
 
   // see Cohn et al, PLB27(1968) 527;
   //     Davis et al, PLB1(1967) 434; 

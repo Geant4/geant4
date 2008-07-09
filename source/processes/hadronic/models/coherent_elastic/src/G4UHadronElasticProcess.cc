@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.37 2008-05-19 10:00:13 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.38 2008-07-09 19:36:02 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -57,6 +57,7 @@
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double)
   : G4HadronicProcess(pName), lowestEnergy(0.0), first(true)
 {
+  SetProcessSubType(11);
   AddDataSet(new G4HadronElasticDataSet);
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
