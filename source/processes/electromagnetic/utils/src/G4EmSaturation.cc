@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.7 2008-03-14 14:27:23 vnivanch Exp $
+// $Id: G4EmSaturation.cc,v 1.8 2008-07-09 09:47:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -186,11 +186,9 @@ G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
     }
   }
 
-  if(curBirks == 0.0) {
-    if(verbose > 0) 
+  if(curBirks == 0.0 && verbose > 0) {
       G4cout << "### G4EmSaturation::FindBirksCoefficient fails "
 	" for material " << name << G4endl;
-    return curBirks;
   }
 
   // compute mean mass ratio
@@ -217,10 +215,10 @@ G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
   massFactors.push_back(curRatio);
   effCharges.push_back(curChargeSq);
   nMaterials++;
-  if(verbose > 0) 
+  if(curBirks > 0.0 && verbose > 0) {
     G4cout << "### G4EmSaturation::FindBirksCoefficient Birks coefficient for "
 	   << name << "  " << curBirks*MeV/mm << " mm/MeV" << G4endl;
-
+  }
   return curBirks;
 }
 
