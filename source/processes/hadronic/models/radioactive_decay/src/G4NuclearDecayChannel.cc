@@ -396,8 +396,8 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	break;
       case ERROR:
       default:
-	G4cerr << " There is an  error in decay mode selection! exit RDM now" << G4endl;
-	exit(0);		      
+        G4Exception("G4NuclearDecayChannel::DecayIt()", "601",
+                    FatalException, "Error in decay mode selection");
       }
   }
   // now deal with the IT case where ICM may have been applied

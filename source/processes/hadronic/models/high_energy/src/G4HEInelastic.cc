@@ -247,13 +247,16 @@ G4HEInelastic::pmltpc(G4int np, G4int nm, G4int nz, G4int n,
    return std::exp(r);
  }
 
+
 G4int G4HEInelastic::Factorial(G4int n)
- { 
-   G4int result = 1;
-   if(n<0) exit(EXIT_FAILURE);
-   while(n>1) result *= n--;
-   return result;
- } 
+{ 
+  G4int result = 1;
+  if (n < 0) G4Exception("G4HEInelastic::Factorial()", "601",
+                         FatalException, "Negative factorial argument");
+  while (n > 1) result *= n--;
+  return result;
+} 
+
 
 G4double G4HEInelastic::normal()
  {

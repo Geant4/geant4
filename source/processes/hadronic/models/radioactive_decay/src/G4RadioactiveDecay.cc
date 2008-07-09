@@ -901,10 +901,8 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		      break;
 		    case ERROR:
 		    default:
-		      // 
-		      // 
-		      G4cout << " There is an  error in decay mode selection! exit RDM now" << G4endl;
-		      exit(0);
+                      G4Exception("G4RadioactiveDecay::LoadDecayTable()", "601",
+                                  FatalException, "Error in decay mode selection");
 		      
 		    }
 		}

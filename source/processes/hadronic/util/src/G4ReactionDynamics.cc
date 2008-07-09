@@ -916,13 +916,8 @@
           } // for l
         } // if (resetEnergies)
       } // closes outer loop
-
-//      if( eliminateThisParticle )  // not enough energy, eliminate target
-//      {
-//        G4cerr << "Warning: eliminating target particle" << G4endl;
-//        exit( EXIT_FAILURE );
-//      }
     }
+
     //
     // Target particle finished.
     //
@@ -1015,7 +1010,8 @@
         G4cerr << "currentParticle side = " << currentParticle.GetSide() << G4endl;
         for( i=0; i<vecLen; ++i )
           G4cerr << "particle #" << i << " side = " << vec[i]->GetSide() << G4endl;
-        exit( EXIT_FAILURE );
+        G4Exception("G4ReactionDynamics::GenerateXandPt", "601", 
+                    FatalException, "Mismatch in nucleon count");
       }
       constantCrossSection = true;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
