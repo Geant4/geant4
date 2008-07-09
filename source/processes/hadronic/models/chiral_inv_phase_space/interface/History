@@ -12,6 +12,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 8-Jul-2008 Dennis Wright              (hadr-chips-inter-V09-01-06)
+-------------------------------------------------------------------
+- add G4QIonIonElastic from HEAD
+- add general process type, fHadronic to several processes
+- set process sub-type to 11 (elastic) for G4QElastic, G4QIonIonElastic
+- set process sub-type to 12 (inelastic) for G4QCollision, G4QDiffraction,
+    G4QGluonString, G4QLowEnergy
+- set process sub-type to 13 (capture) for G4QCaptureAtRest
+- set process sub-type to 15 (stopping) for G4PionMinusNuclearAtRestChips,
+    G4ProtonAntiProtonAtRestChips
+- set process sub-type to 16 (quasi-elastic) for G4QCoherentChargeExchange
+- set process sub-type to 10 (unknown) for G4QAtomicElectronScattering,
+    G4QDiscProcessMixer
+
  6-May-2008 Dennis Wright              (hadr-chips-inter-V09-01-05)
 -------------------------------------------------------------------
 - replace max-- with --max at lines 1191, 1195, 1197 of G4Collison.cc
