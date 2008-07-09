@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 //080612 Bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #2,3
+//080709 Bug fix Sampling Legendre expansion by T. Koi   
 //
 #include "G4NeutronHPDiscreteTwoBody.hh"
 #include "G4Gamma.hh"
@@ -93,6 +94,7 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
    {
      if(theCoeff[it].GetRepresentation()==0)
      {
+//TK Legendre expansion
        G4NeutronHPLegendreStore theStore(1);
        theStore.SetCoeff(0, theCoeff);
        theStore.SetManager(theManager);
@@ -139,13 +141,16 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
      {
        if(theCoeff[it].GetRepresentation()==0)
        {
+//TK Legendre expansion
 	 G4NeutronHPLegendreStore theStore(2);
 	 theStore.SetCoeff(0, &(theCoeff[it-1]));
 	 theStore.SetCoeff(1, &(theCoeff[it]));
          G4InterpolationManager aManager;
          aManager.Init(theManager.GetScheme(it), 2);
          theStore.SetManager(aManager);
-	 cosTh = theStore.SampleMax(anEnergy);
+	 //cosTh = theStore.SampleMax(anEnergy);
+//080709 TKDB
+         cosTh = theStore.SampleDiscreteTwoBody(anEnergy);
        }
        else if(theCoeff[it].GetRepresentation()==12) // LINLIN
        {
@@ -201,7 +206,7 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
          theStore.Merge(&theStore1, &theStore2); // merge takes care of interpolationschemes
 	 cosTh = theStore.Sample();
        }
-       else if(theCoeff[it].GetRepresentation()==14) 
+       else if(theCoeff[it].GetRepresentation()==14) //TK LOG_LIN
        {
 	 G4NeutronHPVector theBuff1;
          G4InterpolationManager aManager1;
