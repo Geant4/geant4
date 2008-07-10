@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.24 2006-06-29 18:30:57 gunter Exp $
+// $Id: G4LogicalVolume.icc,v 1.25 2008-07-10 09:40:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -433,6 +433,16 @@ inline
 void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
 {
   fCutsCouple = cuts;
+}
+
+// ********************************************************************
+// Lock
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::Lock()
+{
+  fLock = true;
 }
 
 // ********************************************************************
