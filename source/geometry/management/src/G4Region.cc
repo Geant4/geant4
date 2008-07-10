@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.24 2008-05-16 13:46:11 gcosmo Exp $
+// $Id: G4Region.cc,v 1.25 2008-07-10 09:46:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -231,7 +231,7 @@ void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
 //    regions. It also recomputes the materials list for the region.
 // *******************************************************************
 //
-void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
+void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
 {
   // Find and remove logical volume from the list
   //
@@ -239,20 +239,14 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv)
   pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos != fRootVolumes.end())
   {
-    if (fRootVolumes.size() != 1)  // Avoid resetting flag for world since
-    {                              // volume may be already deleted !
-      lv->SetRegionRootFlag(false);
-    }
+    lv->SetRegionRootFlag(false);
     fRootVolumes.erase(pos);
   }
 
-  // Scan recursively the tree of daugther volumes and reset regions
-  //
-  //ScanVolumeTree(lv, false);
-
-  // Update the materials list
-  //
-  //UpdateMaterialList();
+  if (scan)  // Update the materials list
+  {
+    UpdateMaterialList();
+  }
 
   // Set region as modified
   //
