@@ -24,16 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.13 2008-06-06 17:16:11 vnivanch Exp $
+// $Id: G4EvaporationProbability.cc,v 1.14 2008-07-10 18:29:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-// JMQ & MAC 07/12/2007: New inverse cross sections
-//
-//J.M. Quesada (Dec 2007-Apr 2008). Rebuilt class. Mayor changes: new inverse cross sections and 
-//numerical integration
+//J.M. Quesada (June 2008). Rebuilt class. Mayor changes: new inverse cross sections and numerical integration
 
 #include <iostream>
 using namespace std;
@@ -87,12 +84,10 @@ G4double G4EvaporationProbability::EmissionProbability(const G4Fragment & fragme
 
 G4double G4EvaporationProbability::CalculateProbability(const G4double anEnergy,const G4Fragment & fragment)
 {
-
-    G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
-    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
-
-    G4double U = fragment.GetExcitationEnergy();
-    G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
+//    G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
+//    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
+//    G4double U = fragment.GetExcitationEnergy();
+//    G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
 
     G4double MaximalKineticEnergy = anEnergy;
     G4double theEmissionProbability;
@@ -102,22 +97,20 @@ G4double G4EvaporationProbability::CalculateProbability(const G4double anEnergy,
       theEmissionProbability = 0.0;
       return 0.0;
   }  
-// JMQ:  
-// Now: integration is numericaly performed & cross section is set to 0. when negative =>
-// JMQ May.08 LowerLimit is set again to Coulomb Barrier
-  G4double LowerLimit = CoulombBarrier;
 
+
+// JMQ June 08 LowerLimit is set again to 0 (Coulomb cutoff included in xs)
+G4double LowerLimit=0.;
   
 
 // JMQ: The MaximalKinetic energy just is over the barrier. Asimptotic value is needed.
 //  G4double TrueMaximalKineticEnergy= MaximalKineticEnergy+CoulombBarrier;
-//  already accounted  in G4EvaporationChannel (11/12/07)     
+//  already accounted for in G4EvaporationChannel (11/12/07)     
 
   G4double UpperLimit = MaximalKineticEnergy;
 
 
   G4double Width = IntegrateEmissionProbability(LowerLimit,UpperLimit,fragment);
-  
   return Width;
   
 }
@@ -167,14 +160,12 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up, const G4
 
     }
   Total *= (Up-Low)/2.0;
-
-
   return Total;
 }
 
 
 ///////////////////////////////////////////////////////////////////////
-//JMQ Dec. 2008 new method
+//JMQ (Dec. 2008) new method
 
 G4double G4EvaporationProbability::ProbabilityDistributionFunction(const G4double K, const G4Fragment & fragment)
 { 
@@ -184,17 +175,14 @@ G4double G4EvaporationProbability::ProbabilityDistributionFunction(const G4doubl
   
     G4double U = fragment.GetExcitationEnergy();
    
-    // G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
-
 
    G4double delta01 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ));
 
    G4double delta00 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
 
-//
+
     G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
 
-//    G4double U = fragment.GetExcitationEnergy();
 
    G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
 
@@ -216,16 +204,13 @@ if (E1<0.) return 0.;
 
 G4double E0=U-delta00;
 
-//JMQ commented for test30_04-06-08 OPT=3
-//JMQ: 04-05-08 cross sections are set to 0 below Coulomb Barrier
-
+//JMQ (June 08). Commented: Coulomb cutoff included, when needed,  in  xs  
 //if(K<CoulombBarrier) {return 0.;}
-
 
 
 //JMQ: 04-02-08 without 1/hbar_Panck remains as a width
 
-Prob=std::pow(10.,-25.)*Gamma*NuclearMass/(std::pow(pi*hbar_Planck,2.)*std::exp(2*std::sqrt(a*E0)))*K*CrossSection(K,fragment)*std::exp(2*std::sqrt(ap*E1));
+Prob=std::pow(10.,-25.)*Gamma*NuclearMass/((pi*hbar_Planck)*(pi*hbar_Planck)*std::exp(2*std::sqrt(a*E0)))*K*CrossSection(K,fragment)*std::exp(2*std::sqrt(ap*E1));
 
 return Prob;
 
@@ -233,25 +218,26 @@ return Prob;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-//J. M. Quesada (Dec 2007-Apr 2008): New inverse reaction cross sections 
-//OPT=1 Chatterjee's paramaterization for all ejectiles
-//OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons
-//OPT=3 Kalbach's parameterization for all ejectiles
-//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons
+//J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
+//OPT=1 Chatterjee's paramaterization for all ejectiles+Coulomb cutoff
+//OPT=2     "                "         "  n,d,t,he3,alphas & Wellisch's parateterization for protons + Coulomb cutoff
+//OPT=3 Kalbach's parameterization for all ejectiles (improved for protons). NO Coulomb cutoff explicitely needed
+//OPT=4     "               "          "  n,d,t,he3,alphas & Wellisch's parateterization for protons (Coulomb cutoff just for Wellisch's xs for protons)
 // 
 G4double G4EvaporationProbability::CrossSection(const G4double K,const  G4Fragment & fragment )
 {
 
     G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
     G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
-    G4int theA=static_cast<G4int>(GetA());
-    G4int theZ=static_cast<G4int>(GetZ());
+    G4double      athrd=std::pow(ResidualA,0.33333);
 
+    G4double U = fragment.GetExcitationEnergy();
+   
+  G4double CoulombBarrier = theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
 
-// OPT=2 //Default: Chatterjee's + Wellish's parameterizations
-//JMQ 03-06-08 change to OPT=3 for n-Bi @ 63 MeV test
-//JMQ 04-06-08 change to OPT=1 for test
-      G4int OPT=1;
+// Default OPT=2
+      G4int OPT=2;
+
 
 // Loop on XS options starts:
 if ( OPT==1 ||OPT==2) { 
@@ -273,18 +259,20 @@ G4double Kc=K;
        nu0 = 0.172;
        nu1 = -15.39;
        nu2 = 804.8; 
-      landa = landa0*std::pow(ResidualA,-0.33333) + landa1;
-      mu = mu0*std::pow(ResidualA,0.333333) + mu1*std::pow(ResidualA,0.666666);
-      nu = nu0*std::pow(ResidualA,4./3.) + nu1*std::pow(ResidualA,0.666666) + nu2 ;
+
+ 
+      landa = landa0/athrd + landa1;
+      mu = mu0*athrd + mu1*athrd*athrd;
+      nu = nu0*athrd*athrd*athrd*athrd + nu1*athrd*athrd + nu2 ;
        xs=landa*Kc + mu + nu/Kc;
 
-if (xs <= 0.0 && Kc > 10){
+if (xs < 0.0){
        std::ostringstream errOs;
-   G4cout<<"WARNING: something funny happens with the Pramana neutron cross section "<<G4endl; 
-        errOs << "theA=" << theA <<G4endl;
-        errOs << "theZ=" << theZ <<G4endl;
-        errOs << "this ejectile does not exist"  <<G4endl;
-        throw G4HadronicException(__FILE__, __LINE__, errOs.str());}
+   G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
+        errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+        errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+             }
          return xs;
            } 
   else if( theA==1 && theZ==1 && OPT==1) {
@@ -295,7 +283,12 @@ if (xs <= 0.0 && Kc > 10){
  if (K>50.) Kc=50.;
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs(0.);
 G4double p, p0, p1, p2,Ec,delta,q,r,ji;
-       p0 = 15.72;
+//G4double Eo,epsilon1,epsilon2,discri;
+
+        //JMQ (June 08) Coulomb cutoff
+         if(K<=CoulombBarrier) return xs=0.0;   
+
+      p0 = 15.72;
       p1 = 9.65;
       p2 = -449.0;
       landa0 = 0.00437;
@@ -306,51 +299,61 @@ G4double p, p0, p1, p2,Ec,delta,q,r,ji;
       nu1 = -182.4;
       nu2 = -1.872;  
       delta=0.;  
-      Ec = 1.44*theZ*ResidualZ/(1.5*std::pow(ResidualA,0.333333)+delta);
-      p = p0 + p1/Ec + p2/std::pow(Ec,2.);
+      Ec = 1.44*theZ*ResidualZ/(1.5*athrd+delta);
+      p = p0 + p1/Ec + p2/(Ec*Ec);
       landa = landa0*ResidualA + landa1;
       mu = mu0*std::pow(ResidualA,mu1);
-      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*std::pow(Ec,2.));
-      q = landa - nu/std::pow(Ec,2.) - 2*p*Ec;
-      r = mu + 2*nu/Ec + p*std::pow(Ec,2.);
+      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*Ec*Ec);
+      q = landa - nu/(Ec*Ec) - 2*p*Ec;
+      r = mu + 2*nu/Ec + p*Ec*Ec;
+
+
+
    ji=std::max(Kc,Ec);
-   if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
-   else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+   if(Kc < Ec) { xs = p*Kc*Kc + q*Kc + r;}
+   else {xs = p*(Kc - ji)*(Kc - ji)+ landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
 
-  //JMQ 05-06-08 bug fixed unphysical of xs values removed
-   G4double Eo,epsilon1,epsilon2;
-   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
-   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
-   if(p>0.) Eo=std::max(epsilon1,epsilon2);
-   else    Eo=std::min(epsilon1,epsilon2);
-   if (Kc<Eo) xs=0.;
- //
-
-   if (xs <0.0) {xs=0.0;}
-if (xs <= 0.0 && Kc > 2*Ec){
-       std::ostringstream errOs;
-   G4cout<<"WARNING: something funny happens with the Pramana proton cross section "<<G4endl; 
-        errOs << "theA=" << theA <<G4endl;
-        errOs << "theZ=" << theZ <<G4endl;
-        errOs << "this ejectile does not exist"  <<G4endl;
-        throw G4HadronicException(__FILE__, __LINE__, errOs.str());}
+  //JMQ 13-06-08 bug fixed unphysical of xs values removed
+//JMQ 16-06-08 problems when Eo>Ec...commented and trivially solved 
+//   discri=q*q-4.*p*r;
+//   if(discri>=0) {
+//   epsilon1=(-q+std::sqrt(discri))/2./p;
+//   epsilon2=(-q-std::sqrt(discri))/2./p;
+//   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+//   else    Eo=std::min(epsilon1,epsilon2);
+//   if (Kc<Eo) return xs=0.;
+//                 }
+if (xs <0.0) {xs=0.0;}
+//
+//if (xs < 0.0 ){
+//       std::ostringstream errOs;
+//   G4cout<<"WARNING:  NEGATIVE OPT=1 proton cross section "<<G4endl; 
+//        errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+//        errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;       
+//        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+//              }
    return xs; 
 }
    else if (theA==1 && theZ==1 && OPT==2) {
 //Wellisch's  parameterization for protons is chosen
-G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.);
+G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.),athrdT;
+ 
+        //JMQ June 08 Coulomb cutoff
+         if(K<=CoulombBarrier) return xine_th=0.0;          
+
     eekin=K;
         rnpro=ResidualZ;
         rnneu=ResidualA-ResidualZ;
 	a=rnneu+rnpro;
+        athrdT=std::pow(a,0.333333);
 	ekin=eekin/1000;
         r0=1.36*std::pow(static_cast<G4double>(10),static_cast<G4double>(-15));
-	fac=pi*std::pow(r0,2);
-	b0=2.247-0.915*(1.-std::pow(a,-0.33333));
-	fac1=b0*(1.-std::pow(a,-0.333333));
+	fac=pi*r0*r0;
+	b0=2.247-0.915*(1.-1./athrdT);
+	fac1=b0*(1.-1./athrdT);
 	fac2=1.;
 	if(rnneu > 1.5) fac2=std::log(rnneu);
-	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+std::pow(a,0.3333)-fac1);
+	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+athrdT-fac1);
        xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*a);	
        ff1=0.70-0.0020*a ;
        ff2=1.00+1/a;
@@ -362,12 +365,20 @@ G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.);
 	fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
 	fac=1./(1.+std::exp(fac));
 	xine_th=xine_th*fac;
-        if (xine_th < 0.) {xine_th=0.0;}        
+//        if (xine_th < 0.) {xine_th=0.0;} 
+       if (xine_th < 0.0){
+       std::ostringstream errOs;
+       G4cout<<"WARNING: negative Wellisch cross section "<<G4endl; 
+        errOs << "RESIDUAL: A=" << ResidualA << " Z=" << ResidualZ <<G4endl;
+       errOs <<"  xsec("<<ekin<<" MeV) ="<<xine_th <<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, errOs.str());}  
+     
         return xine_th;
 } 
 else {
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs(0.);
 G4double p, p0, p1, p2,Ec,delta,q,r,ji;
+//G4double Eo,epsilon1,epsilon2,discri;
  
   if (theA==2 && theZ==1) {
 // JMQ 25/04/08 parameterization limit
@@ -437,38 +448,54 @@ else  {
       errOs << "this ejectile does not exist"  <<G4endl;
      throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
+
+        //JMQ (June 08) Coulomb cutoff
+         if(K<=CoulombBarrier) return xs=0.0;  
+//
       Ec = 1.44*theZ*ResidualZ/(1.5*std::pow(ResidualA,0.333333)+delta);
-      p = p0 + p1/Ec + p2/std::pow(Ec,2.);
+      p = p0 + p1/Ec + p2/(Ec*Ec);
       landa = landa0*ResidualA + landa1;
       mu = mu0*std::pow(ResidualA,mu1);
-      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*std::pow(Ec,2.));
-      q = landa - nu/std::pow(Ec,2.) - 2*p*Ec;
-      r = mu + 2*nu/Ec + p*std::pow(Ec,2.);
+      nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
+      q = landa - nu/(Ec*Ec) - 2*p*Ec;
+      r = mu + 2*nu/Ec + p*(Ec*Ec);
+
    ji=std::max(Kc,Ec);
-   if(Kc < Ec) { xs = p*std::pow(Kc,2.) + q*Kc + r;}
-   else {xs = p*std::pow((Kc - ji),2.) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+   if(Kc < Ec) {xs = p*(Kc*Kc) + q*Kc + r;}
+  else {xs = p*(Kc - ji)*(Kc - ji) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
 
 
-  //JMQ 05-06-08 bug fixed unphysical of xs values removed
-   G4double Eo,epsilon1,epsilon2;
-   epsilon1=(-q+std::sqrt(q*q-4.*p*r))/2./p;
-   epsilon2=(-q-std::sqrt(q*q-4.*p*r))/2./p;
-   if(p>0.) Eo=std::max(epsilon1,epsilon2);
-   else    Eo=std::min(epsilon1,epsilon2);
-   if (Kc<Eo) xs=0.;
- //
-
+//JMQ 13-06-08 bug fixed unphysical negative xs values set to 0
+//JMQ 16-06-08 problems when Eo>Ec...commented and trivially solved 
+//   discri=q*q-4.*p*r;
+//   if(discri>=0) {
+//   epsilon1=(-q+std::sqrt(discri))/2./p;
+//   epsilon2=(-q-std::sqrt(discri))/2./p;
+//   if(p>0.) Eo=std::max(epsilon1,epsilon2);
+//   else    Eo=std::min(epsilon1,epsilon2);
+//   if (Kc<Eo) return xs=0.;                
+//                 }
    if (xs <0.0) {xs=0.0;}
+//
+//if (xs < 0.0 ){
+//       std::ostringstream errOs;
+//   G4cout<<"WARNINGthe:  NEGATIVE OPT=1 || OPT=2 cluster cross section "<<G4endl; 
+//        errOs << "EJECTILE: A=" << theA << " Z=" << theZ <<G4endl;
+//        errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+//        errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;       
+//        throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+//                        }
    return xs;}
 }
 else if (OPT ==3 || OPT==4) {
 
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
 G4double p, p0, p1, p2;
-
-G4double flow,spill,xout,xpout,ares,athrd,ec,ecsq,xnulam,etest,ra,a,w,c,signor,signor2,sig(0.); 
+G4double flow,spill,ec,ecsq,xnulam,etest,ra,a,w,c,signor,signor2,sig(0.); 
 G4double b,ecut,cut,ecut2,geom,elab;
-G4int jout,jpout,jnout;
+// JMQ (June 08) parameters for PRECO proton cross section refinement 
+G4double afit,bfit,a2,b2;
+
 
 //safety initialization
 landa0=0;
@@ -484,16 +511,13 @@ p2=0.;
 etest=0.;
 w=0.;
 c=0.;
+afit=0.;
+bfit=0.;
+a2=0.;
+b2=0.;
       flow = std::pow(10.,-18);
       spill= std::pow(10.,+18);
-
-      jout=theA;
-      jpout=theZ;
-      jnout=jout-jpout;
-      xout=GetA();
-      ares=ResidualA;
-      athrd = std::pow(ares,0.3333);
-
+ 
       signor = 1.;
 
    if (theA==1  && theZ==0) {
@@ -510,11 +534,11 @@ c=0.;
       nu1 = -106.1;
       nu2 = 1280.8; 
 
-           if (ares < 40.) signor=0.7+ares*0.0075;
-          if (ares > 210.) signor = 1. + (ares-210.)/250.;
+           if (ResidualA < 40.) signor=0.7+ResidualA*0.0075;
+          if (ResidualA > 210.) signor = 1. + (ResidualA-210.)/250.;
           landa = landa0/athrd + landa1;
            mu = mu0*athrd + mu1*athrd*athrd;
-           nu = nu0*athrd*ares + nu1*athrd*athrd + nu2;
+           nu = nu0*athrd*ResidualA + nu1*athrd*athrd + nu2;
            ec = 0.5;
            ecsq = 0.25;
           p = p0;
@@ -547,22 +571,37 @@ c=0.;
      nu1 = -182.4;
       nu2 = -1.872;
 
+//JMQ 12/06/08  refinement of PRECO proton cross sections
+//            afit=0.00464447;
+//            bfit=2.94443;
+//            a2= -0.00211134;
+//            b2= 0.0548949;    
+//JMQ 15/06/08  
+            afit=-0.0785656;
+            bfit=5.10789;
+            a2= -0.00089076;
+            b2= 0.0231597;  
          } //end protons with PRECO's param.
 
  else if (theA==1 && theZ ==1 && OPT==4) { //Wellisch's  parameterization for protons is chosen
- G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.);
-    eekin=K;
+ G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.),athrdT;
+
+        //JMQ (June 08) Coulomb cutoff
+        if(K<=CoulombBarrier) return xine_th=0.0;          
+
+        eekin=K;
         rnpro=ResidualZ;
         rnneu=ResidualA-ResidualZ;
 	a=rnneu+rnpro;
+        athrdT=std::pow(a,0.33333);
 	ekin=eekin/1000;
         r0=1.36*std::pow(static_cast<G4double>(10),static_cast<G4double>(-15));
 	fac=pi*std::pow(r0,2);
-	b0=2.247-0.915*(1.-std::pow(a,-0.33333));
-	fac1=b0*(1.-std::pow(a,-0.333333));
+	b0=2.247-0.915*(1.-1./athrdT);
+	fac1=b0*(1.-1./athrdT);
 	fac2=1.;
 	if(rnneu > 1.5) fac2=std::log(rnneu);
-	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+std::pow(a,0.3333)-fac1);
+	xine_th= std::pow(static_cast<G4double>(10),static_cast<G4double>(31))*fac*fac2*(1.+athrdT-fac1);
        xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*a);	
        ff1=0.70-0.0020*a ;
        ff2=1.00+1/a;
@@ -574,11 +613,21 @@ c=0.;
 	fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
 	fac=1./(1.+std::exp(fac));
 	xine_th=xine_th*fac;
-        if (xine_th < 0.) {xine_th=0.0;}        
-        return xine_th;
+//        if (xine_th < 0.) {xine_th=0.0;}    
+if (xine_th < 0.0){
+       std::ostringstream errOs;
+   G4cout<<"WARNING: negative Wellisch cross section "<<G4endl; 
+        errOs << "RESIDUAL: A=" << ResidualA << " Z=" << ResidualZ <<G4endl;
+       errOs <<"  xsec("<<ekin<<" MeV) ="<<xine_th <<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, errOs.str());}
+
+        return xine_th;     
 }
  
  else if (theA==2 && theZ==1) { //start deuterons
+
+        //JMQ (June 08) Coulomb cutoff
+ //        if(K<=CoulombBarrier) return sig=0.0;  
 
      p0 = 0.798;
       p1 = 420.3;
@@ -594,6 +643,10 @@ c=0.;
  else if (theA==3 && theZ==1) {       //start  tritons
 
 //     ** t from o.m. of hafele, flynn et al
+
+        //JMQ (June 08) Coulomb cutoff
+ //        if(K<=CoulombBarrier) return sig=0.0;  
+
       p0 = -21.45;
     p1 = 484.7;
      p2 = -1608.;
@@ -610,6 +663,10 @@ c=0.;
 else if (theA==3 && theZ==2) {   //start he3
 
 //     ** 3he from o.m. of gibson et al
+
+        //JMQ (June 08) Coulomb cutoff
+//         if(K<=CoulombBarrier) return sig=0.0;  
+
      p0 = -2.88;
       p1 = 205.6;
      p2 = -1487.;
@@ -626,6 +683,10 @@ else if (theA==3 && theZ==2) {   //start he3
 else if (theA==4 && theZ==2) { //start  alphas
 
 //      ** alpha from huizenga and igo
+
+        //JMQ (June 08) Coulomb cutoff
+//         if(K<=CoulombBarrier) return sig=0.0;  
+
         p0 = 10.95;
       p1 = -85.2;
       p2 = 1146.;
@@ -641,7 +702,7 @@ else  {
      std::ostringstream errOs;
       errOs << "theA=" << theA <<G4endl;
       errOs << "theZ=" << theZ <<G4endl;
-      errOs << "this ejectile does not exist"  <<G4endl;
+      errOs << "WARNING: OPT=3 || OPT=4: this ejectile does not exist"  <<G4endl;
      throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
  
@@ -650,27 +711,25 @@ else  {
 //just for protons
            if (theA==1 && theZ==1) {
                  ra = 0.;
-                if (ares <= 60.)  signor = 0.92;
-                else if (ares < 100.) signor = 0.8 + ares*0.002;
+                if (ResidualA <= 60.)  signor = 0.92;
+                else if (ResidualA < 100.) signor = 0.8 + ResidualA*0.002;
           }
-           xpout = theZ;
- G4double  rz = ResidualZ;
 
-           ec = 1.44 * xpout * rz / (1.5*athrd+ra);
+           ec = 1.44 * theZ * ResidualZ / (1.5*athrd+ra);
            ecsq = ec * ec;
            p = p0 + p1/ec + p2/ecsq;
-           landa = landa0*ares + landa1;
-           a = std::pow(ares,mu1);
+           landa = landa0*ResidualA + landa1;
+           a = std::pow(ResidualA,mu1);
           mu = mu0 * a;
            nu = a* (nu0+nu1*ec+nu2*ecsq);
-           if (jout==2 || jout==3) ra=0.8;
-             if (jpout==1 && jnout==0) {
+           if (theA==2 || theA==3) ra=0.8;
+             if (theA==1 && theZ==1) {
                 c =std::min(3.15,ec*0.5);
                 w = 0.7 * c / 3.15; }
            xnulam = nu / landa;
            if (xnulam > spill) xnulam=0.;
            if (xnulam < flow) goto loop1;
-           if(jpout==1 && jnout==0)  etest =std::sqrt(xnulam) + 7.;
+           if(theA==1 && theZ==1)  etest =std::sqrt(xnulam) + 7.;
  
 // and for the rest of charged
             else    etest = 1.2 *std::sqrt(xnulam);
@@ -688,30 +747,33 @@ loop1:
       ecut = (ecut-a) / (p+p);
       ecut2 = ecut;
       if (cut < 0.) ecut2 = ecut - 2.;
-     elab = K * fragment.GetA() / ares;
+     elab = K * fragment.GetA() / ResidualA;
       sig = 0.;
 
       if (elab <= ec) {  
            if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
-             if(jpout==1 && jnout==0) { 
+             if(theA==1 && theZ==1) { 
                      signor2 = (ec-elab-c) / w;
                      signor2 = 1. + std::exp(signor2);
-                     sig = sig / signor2;                     }   
-            }              
-      else {           
-           sig = (landa*elab+mu+nu/elab) * signor;
+                     sig = sig / signor2; 
+// signor2 is empirical global corr'n at low elab for protons in PRECO, not enough for p+27Al
+//JMQ 12/06/08  refinement for proton cross section
+   if (ResidualZ<=26) {sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec)); 
+}
+                                      } 
+                       }              
+      else {sig = (landa*elab+mu+nu/elab) * signor;
+//JMQ 12/06/08  refinement for proton cross section
+   if (theA==1 && theZ==1 && ResidualZ<=26 && elab <=(afit*ResidualZ+bfit)*ec) {sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec));}
+//
            geom = 0.;
-//           if (xnulam < flow) goto loop2; 
-//           if (elab < etest) goto loop2;
          if (xnulam < flow || elab < etest) return sig;
-           geom = std::sqrt(xout*K);
+           geom = std::sqrt(theA*K);
            geom = 1.23*athrd + ra + 4.573/geom;
            geom = 31.416 * geom * geom;
            sig = std::max(geom,sig);
       }
-
-//loop2:
- return sig;} 
+return sig;} 
 else 
 {
 std::ostringstream errOs;
