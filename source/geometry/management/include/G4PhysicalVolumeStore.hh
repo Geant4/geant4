@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.15 2007-04-10 10:13:50 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.hh,v 1.16 2008-07-10 09:41:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PhysicalVolume
@@ -72,11 +72,9 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
       // Get a ptr to the unique G4PhysicalVolumeStore, creating it if necessary.
     static void SetNotifier(G4VStoreNotifier* pNotifier);
       // Assign a notifier for allocation/deallocation of the physical volumes.
-    static void Clean(G4bool notifyLV=false);
-      // Delete all volumes from the store. The flag 'notifyLV' must be set to
-      // true when the whole geometry tree is cleared at run-time through this
-      // store; the flag will guarantee that physical volumes to be deregistered
-      // from LV's list of daughters.
+    static void Clean();
+      // Delete all physical volumes from the store. Mother logical volumes
+      // are automatically notified and have their daughters de-registered.
 
     G4VPhysicalVolume* GetVolume(const G4String& name,
                                  G4bool verbose=true) const;
