@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.42 2007-11-28 02:51:41 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.43 2008-07-10 09:27:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
-  defaultRegion = new G4Region("DefaultRegionForTheWorld");
+  defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
   defaultRegion->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
@@ -129,8 +129,6 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   delete eventManager;
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
-  delete defaultRegion;
-  if(verboseLevel>1) G4cout << "Default detector region deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
     if(pUImanager) delete pUImanager;
@@ -188,7 +186,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     }
     std::vector<G4LogicalVolume*>::iterator lvItr
      = defaultRegion->GetRootLogicalVolumeIterator();
-    defaultRegion->RemoveRootLogicalVolume(*lvItr);
+    defaultRegion->RemoveRootLogicalVolume(*lvItr,false);
     if(verboseLevel>1) G4cout 
      << "Obsolete world logical volume is removed from the default region." << G4endl;
   }
