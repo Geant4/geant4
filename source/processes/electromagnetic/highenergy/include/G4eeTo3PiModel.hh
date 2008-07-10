@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.4 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4eeTo3PiModel.hh,v 1.1 2008-07-10 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToTwoPiModel
+// File name:     G4eeTo3PiModel
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -47,8 +47,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eeToTwoPiModel_h
-#define G4eeToTwoPiModel_h 1
+#ifndef G4eeTo3PiModel_h
+#define G4eeTo3PiModel_h 1
 
 #include "G4Vee2hadrons.hh"
 #include "globals.hh"
@@ -57,14 +57,14 @@
 class G4DynamicParticle;
 class G4PhysicsVector;
 
-class G4eeToTwoPiModel : public G4Vee2hadrons
+class G4eeTo3PiModel : public G4Vee2hadrons
 {
 
 public:
 
-  G4eeToTwoPiModel(G4eeCrossSections*);
+  G4eeTo3PiModel(G4eeCrossSections*);
 
-  virtual ~G4eeToTwoPiModel();
+  virtual ~G4eeTo3PiModel();
 
   G4double ThresholdEnergy() const;
 
@@ -80,36 +80,41 @@ public:
 private:
 
   // hide assignment operator
-  G4eeToTwoPiModel & operator=(const  G4eeToTwoPiModel &right);
-  G4eeToTwoPiModel(const  G4eeToTwoPiModel&);
+  G4eeTo3PiModel & operator=(const  G4eeTo3PiModel &right);
+  G4eeTo3PiModel(const  G4eeTo3PiModel&);
 
   G4eeCrossSections* cross;
 
   G4double massPi;
-  G4double massRho;
-
+  G4double massPi0;
+  G4double massOm;
+  G4double massPhi;
+  G4double gcash;
+  G4double gmax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ThresholdEnergy() const
+inline G4double G4eeTo3PiModel::ThresholdEnergy() const
 {
-  return 2.0*massPi;
+  return std::max(LowEnergy(),2.0*massPi + massPi0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::PeakEnergy() const
+inline G4double G4eeTo3PiModel::PeakEnergy() const
 {
-  return massRho;
+  G4double e = massOm;
+  if(HighEnergy() > massPhi) e = massPhi; 
+  return e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
+inline G4double G4eeTo3PiModel::ComputeCrossSection(G4double e) const
 {
   G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2pi(ee);
+  return cross->CrossSection3pi(ee);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

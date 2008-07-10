@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2008-07-08 15:07:32 vnivanch Exp $
+$Id: History,v 1.28 2008-07-10 18:06:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 July 08:  V.Ivanchenko (emhighenergy-V09-01-04)
+- G4eeCrossSections - migrated to PDG 2006
+- G4eeToHadronsMultiModel - added main reaction channels for omega and 
+                            phi resonances
+- New models: G4eeTo3PiModel, G4eeToPGammaModel, G4ee2KChargedModel, 
+  G4ee2KNeutralModel
 
 8 July 08:  V.Ivanchenko (emhighenergy-V09-01-03)
 - G4GammaConversionToMuons - all exit() substituted by warnings 

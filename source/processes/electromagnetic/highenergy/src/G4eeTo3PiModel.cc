@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.6 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4eeTo3PiModel.cc,v 1.1 2008-07-10 18:07:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToTwoPiModel
+// File name:     G4eeTo3PiModel
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -47,39 +47,49 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4eeToTwoPiModel.hh"
+#include "G4eeTo3PiModel.hh"
 #include "Randomize.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4PionZero.hh"
 #include "G4DynamicParticle.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
 #include "G4eeCrossSections.hh"
+#include "G4RandomDirection.hh"
+#include <complex>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr):
+G4eeTo3PiModel::G4eeTo3PiModel(G4eeCrossSections* cr):
   cross(cr)
 {
-  massPi = G4PionPlus::PionPlus()->GetPDGMass();
-  massRho = 775.5*MeV;
+  massPi  = G4PionPlus::PionPlus()->GetPDGMass();
+  massPi0 = G4PionZero::PionZero()->GetPDGMass();
+  massOm  = 782.62*MeV;
+  massPhi = 1019.46*MeV;
+  gcash   = 0.0;
+  gmax    = 1.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eeToTwoPiModel::~G4eeToTwoPiModel()
-{}
+G4eeTo3PiModel::~G4eeTo3PiModel()
+{
+  G4cout << "### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= "
+	 << gmax << " gcash= " << gcash << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin, 
-                                                 G4double emax) const
+G4PhysicsVector* G4eeTo3PiModel::PhysicsVector(G4double emin, 
+					       G4double emax) const
 {
-  G4double tmin = std::max(emin, 2.0*massPi);
+  G4double tmin = std::max(emin, ThresholdEnergy());
   G4double tmax = std::max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/(5.*MeV));
+  G4int nbins = (G4int)((tmax - tmin)/(1.*MeV));
   G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
   v->SetSpline(true);
   return v;
@@ -87,30 +97,73 @@ G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToTwoPiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
-	    G4double e, const G4ThreeVector& direction)
+void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+	    G4double e, const G4ThreeVector& direction) 
 {
+  if(e < ThresholdEnergy()) return;
 
-  G4double tkin = 0.5*e - massPi;
-  if(tkin < 0.0) tkin = 0.0;
-  G4double cost;
+  G4double x0 = massPi0/e;
+  G4double x1 = massPi/e;
+
+  G4LorentzVector w0, w1, w2;
+  G4ThreeVector dir0, dir1, mom, mom1, mom2;
+  G4double e0, p0, e2, p, g, m01, m02, m12;
+
+  // max pi0 energy
+  G4double edel  = 0.5*e*(1.0 + x0*x0 - 4.0*x1*x1) - massPi0;
+
   do {
-    cost = 2.0*G4UniformRand() - 1.0;
-  } while( G4UniformRand() > 1.0 - cost*cost );
+    // pi0 sample
+    e0 = edel*G4UniformRand() + massPi0;
+    p0 = sqrt(e0 - massPi0*massPi0);
+    dir0 = G4RandomDirection();
+    w0 = G4LorentzVector(p0*dir0.x(),p0*dir0.y(),p0*dir0.z(),e0);
 
-  G4double sint = sqrt(1.0 - cost*cost);
-  G4double phi  = twopi * G4UniformRand();
+    // pi+pi- pair
+    w1 = G4LorentzVector(-p0*dir0.x(),-p0*dir0.y(),-p0*dir0.z(),e-e0);
+    G4ThreeVector bst = w1.boostVector();
+    e2 = 0.25*w1.m2();
 
-  G4ThreeVector dir(sint*cos(phi),sint*sin(phi), cost);
-  dir.rotateUz(direction);
+    // pi+ 
+    p = sqrt(e2 - massPi*massPi);
+    dir1 = G4RandomDirection();
+    w2 = G4LorentzVector(p*dir1.x(),p*dir1.y(),p*dir1.z(),sqrt(e2));
+    w2.boost(bst);
+    mom2 = w2.vect();
 
-  // create G4DynamicParticle objects
-  G4DynamicParticle* pip = 
-     new G4DynamicParticle(G4PionPlus::PionPlus(),dir,tkin);
-  G4DynamicParticle* pin = 
-     new G4DynamicParticle(G4PionMinus::PionMinus(),-dir,tkin);
-  newp->push_back(pip);
-  newp->push_back(pin);
+    // pi- 
+    w1 -= w2;
+    mom1 = w2.vect();
+
+    m01 = w0*w1;
+    m02 = w0*w2;
+    m12 = w1*w2;
+
+    mom = mom1*mom2;
+    g = mom.mag2()*norm( 1.0/cross->DpRho(m01) +  1.0/cross->DpRho(m02)
+			 + 1.0/cross->DpRho(m12) );
+    if(g > gmax) {
+      G4cout << "G4eeTo3PiModel::SampleSecondaries WARNING matrix element g= "
+	     << g << " > " << gmax << " (majoranta)" << G4endl;
+    }
+    if(g > gcash) gcash = g;
+    
+  } while( gmax*G4UniformRand() > g );
+
+  w0.rotateUz(direction);
+  w1.rotateUz(direction);
+  w2.rotateUz(direction);
+
+  // create G4DynamicParticle objects 
+  G4DynamicParticle* dp0 = 
+     new G4DynamicParticle(G4PionZero::PionZero(), w0);
+  G4DynamicParticle* dp1 = 
+     new G4DynamicParticle(G4PionPlus::PionPlus(), w1);
+  G4DynamicParticle* dp2 = 
+     new G4DynamicParticle(G4PionMinus::PionMinus(), w2);
+  newp->push_back(dp0);
+  newp->push_back(dp1);
+  newp->push_back(dp2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

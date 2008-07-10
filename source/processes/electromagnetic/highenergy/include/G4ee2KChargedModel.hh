@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.4 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4ee2KChargedModel.hh,v 1.1 2008-07-10 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,11 +31,11 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToTwoPiModel
+// File name:     G4ee2KChargedModel
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 25.10.2003
+// Creation date: 09.07.2008
 //
 // Modifications:
 //
@@ -47,8 +47,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eeToTwoPiModel_h
-#define G4eeToTwoPiModel_h 1
+#ifndef G4ee2KChargedModel_h
+#define G4ee2KChargedModel_h 1
 
 #include "G4Vee2hadrons.hh"
 #include "globals.hh"
@@ -57,14 +57,14 @@
 class G4DynamicParticle;
 class G4PhysicsVector;
 
-class G4eeToTwoPiModel : public G4Vee2hadrons
+class G4ee2KChargedModel : public G4Vee2hadrons
 {
 
 public:
 
-  G4eeToTwoPiModel(G4eeCrossSections*);
+  G4ee2KChargedModel(G4eeCrossSections*);
 
-  virtual ~G4eeToTwoPiModel();
+  virtual ~G4ee2KChargedModel();
 
   G4double ThresholdEnergy() const;
 
@@ -80,36 +80,35 @@ public:
 private:
 
   // hide assignment operator
-  G4eeToTwoPiModel & operator=(const  G4eeToTwoPiModel &right);
-  G4eeToTwoPiModel(const  G4eeToTwoPiModel&);
+  G4ee2KChargedModel & operator=(const  G4ee2KChargedModel &right);
+  G4ee2KChargedModel(const  G4ee2KChargedModel&);
 
   G4eeCrossSections* cross;
 
-  G4double massPi;
-  G4double massRho;
-
+  G4double massK;
+  G4double massPhi;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ThresholdEnergy() const
+inline G4double G4ee2KChargedModel::ThresholdEnergy() const
 {
-  return 2.0*massPi;
+  return 2.0*massK;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::PeakEnergy() const
+inline G4double G4ee2KChargedModel::PeakEnergy() const
 {
-  return massRho;
+  return massPhi;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
+inline G4double G4ee2KChargedModel::ComputeCrossSection(G4double e) const
 {
   G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2pi(ee);
+  return cross->CrossSection2Kcharged(ee);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.4 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4ee2KNeutralModel.cc,v 1.1 2008-07-10 18:07:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,87 +31,88 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4eeToTwoPiModel
+// File name:     G4ee2KNeutralModel
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 25.10.2003
+// Creation date: 09.07.2008
 //
 // Modifications:
 //
-
 //
-// Class Description:
-//
-
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eeToTwoPiModel_h
-#define G4eeToTwoPiModel_h 1
 
-#include "G4Vee2hadrons.hh"
-#include "globals.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4ee2KNeutralModel.hh"
+#include "Randomize.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
+#include "G4DynamicParticle.hh"
+#include "G4PhysicsVector.hh"
+#include "G4PhysicsLinearVector.hh"
 #include "G4eeCrossSections.hh"
 
-class G4DynamicParticle;
-class G4PhysicsVector;
-
-class G4eeToTwoPiModel : public G4Vee2hadrons
-{
-
-public:
-
-  G4eeToTwoPiModel(G4eeCrossSections*);
-
-  virtual ~G4eeToTwoPiModel();
-
-  G4double ThresholdEnergy() const;
-
-  G4double PeakEnergy() const;
-
-  G4double ComputeCrossSection(G4double) const;
-
-  G4PhysicsVector* PhysicsVector(G4double, G4double) const;
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-              G4double, const G4ThreeVector&);
-
-private:
-
-  // hide assignment operator
-  G4eeToTwoPiModel & operator=(const  G4eeToTwoPiModel &right);
-  G4eeToTwoPiModel(const  G4eeToTwoPiModel&);
-
-  G4eeCrossSections* cross;
-
-  G4double massPi;
-  G4double massRho;
-
-};
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ThresholdEnergy() const
+using namespace std;
+
+G4ee2KNeutralModel::G4ee2KNeutralModel(G4eeCrossSections* cr):
+  cross(cr)
 {
-  return 2.0*massPi;
+  massK = G4KaonZeroLong::KaonZeroLong()->GetPDGMass();
+  massPhi = 1019.46*MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::PeakEnergy() const
+G4ee2KNeutralModel::~G4ee2KNeutralModel()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsVector* G4ee2KNeutralModel::PhysicsVector(G4double emin, 
+						   G4double emax) const
 {
-  return massRho;
+  G4double tmin = std::max(emin, 2.0*massK);
+  G4double tmax = std::max(tmin, emax);
+  G4int nbins = (G4int)((tmax - tmin)/(1.0*MeV));
+  G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
+  v->SetSpline(true);
+  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
+void G4ee2KNeutralModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+	    G4double e, const G4ThreeVector& direction) 
 {
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2pi(ee);
+
+  G4double tkin = 0.5*e - massK;
+  if(tkin < 0.0) tkin = 0.0;
+
+  G4double cost;
+  do {
+    cost = 2.0*G4UniformRand() - 1.0;
+  } while( G4UniformRand() > 1.0 - cost*cost );
+
+  G4double sint = sqrt(1.0 - cost*cost);
+  G4double phi  = twopi * G4UniformRand();
+
+  G4ThreeVector dir(sint*cos(phi),sint*sin(phi), cost);
+  dir.rotateUz(direction);
+
+  // create G4DynamicParticle objects
+  G4DynamicParticle* p1 = 
+     new G4DynamicParticle(G4KaonZeroLong::KaonZeroLong(),dir,tkin);
+  G4DynamicParticle* p2 = 
+     new G4DynamicParticle(G4KaonZeroShort::KaonZeroShort(),-dir,tkin);
+  newp->push_back(p1);
+  newp->push_back(p2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
