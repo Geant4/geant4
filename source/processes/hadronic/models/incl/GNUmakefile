@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2008-06-25 17:20:03 kaitanie Exp $
+# $Id: GNUmakefile,v 1.8 2008-07-11 08:25:37 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -6,7 +6,7 @@
 name := G4hadronic_incl_cascade
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../..
+  G4INSTALL = ../../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
