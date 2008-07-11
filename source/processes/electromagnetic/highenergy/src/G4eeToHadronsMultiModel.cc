@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.5 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.6 2008-07-11 17:49:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -202,8 +202,12 @@ void G4eeToHadronsMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 void G4eeToHadronsMultiModel::PrintInfo()
 {
   if(verbose > 0) {
-    G4cout << "      e+ annihilation into hadrons active above "
-           << thKineticEnergy/GeV << " GeV"
+    G4double e1 = 0.5*thKineticEnergy*thKineticEnergy/electron_mass_c2 
+      - 2.0*electron_mass_c2; 
+    G4double e2 = 0.5*maxKineticEnergy*maxKineticEnergy/electron_mass_c2 
+      - 2.0*electron_mass_c2; 
+    G4cout << "      e+ annihilation into hadrons active from "
+           << e1/GeV << " GeV to " << e2/GeV << " GeV"
            << G4endl;
   }
 }
@@ -215,8 +219,8 @@ void G4eeToHadronsMultiModel::SetCrossSecFactor(G4double fac)
   if(fac > 1.0) {
     csFactor = fac;
     if(verbose > 0)
-      G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel is  "
-             << "increased by the Factor= " << csFactor << G4endl;
+      G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel "
+             << " is increased by the Factor= " << csFactor << G4endl;
   }
 }
 
