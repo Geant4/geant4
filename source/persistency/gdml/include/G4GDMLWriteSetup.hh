@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.hh,v 1.5 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteSetup.hh,v 1.6 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,9 +43,11 @@
 
 #include "G4GDMLWriteSolids.hh"
 
-class G4GDMLWriteSetup : public G4GDMLWriteSolids {
-private:
-   void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const);
+class G4GDMLWriteSetup : public G4GDMLWriteSolids
+{
+ private:
+
+   void setupWrite(xercesc::DOMElement*, const G4LogicalVolume* const);
 };
 
 #endif

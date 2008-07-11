@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.hh,v 1.6 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.hh,v 1.7 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,21 +46,26 @@
 
 #include "G4GDMLWriteSetup.hh"
 
-class G4GDMLWriteParamvol : public G4GDMLWriteSetup {
-private:
-   void box_dimensionsWrite(xercesc::DOMElement*,const G4Box* const);
-   void trd_dimensionsWrite(xercesc::DOMElement*,const G4Trd* const);
-   void trap_dimensionsWrite(xercesc::DOMElement*,const G4Trap* const);
-   void tube_dimensionsWrite(xercesc::DOMElement*,const G4Tubs* const);
-   void cone_dimensionsWrite(xercesc::DOMElement*,const G4Cons* const);
-   void sphere_dimensionsWrite(xercesc::DOMElement*,const G4Sphere* const);
-   void orb_dimensionsWrite(xercesc::DOMElement*,const G4Orb* const);
-   void torus_dimensionsWrite(xercesc::DOMElement*,const G4Torus* const);
-   void para_dimensionsWrite(xercesc::DOMElement*,const G4Para* const);
-   void hype_dimensionsWrite(xercesc::DOMElement*,const G4Hype* const);
-   void parametersWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const,const G4int&);
-protected:
-   void paramvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
+class G4GDMLWriteParamvol : public G4GDMLWriteSetup
+{
+ private:
+
+   void box_dimensionsWrite(xercesc::DOMElement*, const G4Box* const);
+   void trd_dimensionsWrite(xercesc::DOMElement*, const G4Trd* const);
+   void trap_dimensionsWrite(xercesc::DOMElement*, const G4Trap* const);
+   void tube_dimensionsWrite(xercesc::DOMElement*, const G4Tubs* const);
+   void cone_dimensionsWrite(xercesc::DOMElement*, const G4Cons* const);
+   void sphere_dimensionsWrite(xercesc::DOMElement*, const G4Sphere* const);
+   void orb_dimensionsWrite(xercesc::DOMElement*, const G4Orb* const);
+   void torus_dimensionsWrite(xercesc::DOMElement*, const G4Torus* const);
+   void para_dimensionsWrite(xercesc::DOMElement*, const G4Para* const);
+   void hype_dimensionsWrite(xercesc::DOMElement*, const G4Hype* const);
+   void parametersWrite(xercesc::DOMElement*,
+                        const G4VPhysicalVolume* const, const G4int&);
+
+ protected:
+
+   void paramvolWrite(xercesc::DOMElement*, const G4VPhysicalVolume* const);
 };
 
 #endif

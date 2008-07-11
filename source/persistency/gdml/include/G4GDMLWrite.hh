@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.34 2008-07-03 10:06:27 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.35 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,21 +77,24 @@ class G4GDMLWrite
    VolumeMapType& volumeMap();
 
    G4String GenerateName(const G4String&,const void* const);
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4String&);
-   xercesc::DOMAttr* newAttribute(const G4String&,const G4double&);
+   xercesc::DOMAttr* newAttribute(const G4String&, const G4String&);
+   xercesc::DOMAttr* newAttribute(const G4String&, const G4double&);
    xercesc::DOMElement* newElement(const G4String&);
    virtual void defineWrite(xercesc::DOMElement*)=0;
    virtual void materialsWrite(xercesc::DOMElement*)=0;
    virtual void solidsWrite(xercesc::DOMElement*)=0;
    virtual void structureWrite(xercesc::DOMElement*)=0;
-   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,G4int)=0;
-
-   virtual void setupWrite(xercesc::DOMElement*,const G4LogicalVolume* const)=0;
-   G4String Modularize(const G4VPhysicalVolume* const topvol, const G4int depth);
+   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,
+                                            const G4int)=0;
+   virtual void setupWrite(xercesc::DOMElement*,
+                           const G4LogicalVolume* const)=0;
+   G4String Modularize(const G4VPhysicalVolume* const topvol,
+                       const G4int depth);
 
  public:  // without description
 
-   G4Transform3D Write(const G4String& filename, const G4LogicalVolume* const topLog,
+   G4Transform3D Write(const G4String& filename,
+                       const G4LogicalVolume* const topLog,
                        const G4String& schemaPath, const G4int depth);
    void AddModule(const G4VPhysicalVolume* const topVol);
    void AddModule(const G4int depth);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.17 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.18 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -54,44 +54,58 @@
 
 #include <sstream>
 
-class MyErrorHandler : public xercesc::ErrorHandler {
-   bool Suppress;
-public:
-   MyErrorHandler(const bool set) { Suppress = set; }
+class MyErrorHandler : public xercesc::ErrorHandler
+{
+   G4bool Suppress;
 
-   void warning(const xercesc::SAXParseException& exception) {
-   
-      if (Suppress) return;
+ public:
+
+   MyErrorHandler(const G4bool set) { Suppress = set; }
+
+   void warning(const xercesc::SAXParseException& exception)
+   {
+      if (Suppress)  { return; }
       char* message = xercesc::XMLString::transcode(exception.getMessage());
-      G4cout << "G4GDML: VALIDATION WARNING! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      G4cout << "G4GDML: VALIDATION WARNING! " << message
+             << " at line: " << exception.getLineNumber() << G4endl;
       xercesc::XMLString::release(&message);
    }
 
-   void error(const xercesc::SAXParseException& exception) {
-
-      if (Suppress) return;
+   void error(const xercesc::SAXParseException& exception)
+   {
+      if (Suppress)  { return; }
       char* message = xercesc::XMLString::transcode(exception.getMessage());
-      G4cout << "G4GDML: VALIDATION ERROR! " << message << " at line: " << exception.getLineNumber() << G4endl;
+      G4cout << "G4GDML: VALIDATION ERROR! " << message
+             << " at line: " << exception.getLineNumber() << G4endl;
       xercesc::XMLString::release(&message);
    }
 
-   void fatalError(const xercesc::SAXParseException& exception) { error(exception); }
+   void fatalError(const xercesc::SAXParseException& exception)
+   {
+      error(exception);
+   }
    void resetErrors() {}
 };
 
-class G4GDMLRead {
-private:
+class G4GDMLRead
+{
+ private:
+
    G4String ModuleName;
    G4int InLoop;
-protected:
+
+ protected:
+
    G4GDMLEvaluator eval;
-   bool Validate;
+   G4bool Validate;
 
    G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String&);
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
-   void loopRead(const xercesc::DOMElement* const,void(G4GDMLRead::*)(const xercesc::DOMElement* const));
-public:
+   void loopRead(const xercesc::DOMElement* const,
+                 void(G4GDMLRead::*)(const xercesc::DOMElement* const));
+ public:
+
    virtual void defineRead(const xercesc::DOMElement* const)=0;
    virtual void materialsRead(const xercesc::DOMElement* const)=0;
    virtual void setupRead(const xercesc::DOMElement* const)=0;
@@ -101,7 +115,7 @@ public:
    virtual void structureRead(const xercesc::DOMElement* const)=0;
    virtual G4LogicalVolume* getVolume(const G4String&) const=0;
    virtual G4String getSetup(const G4String&)=0;
-   void Read(const G4String&,bool SetValidate,bool IsModule);
+   void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
 };
 
 #endif

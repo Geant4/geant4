@@ -42,10 +42,13 @@
 #include "G4ThreeVector.hh"
 #include "G4GDMLRead.hh"
 
-class G4GDMLMatrix {
+class G4GDMLMatrix
+{
    G4double *m;
    size_t rows,cols;
-public:
+
+ public:
+
    G4GDMLMatrix();
    G4GDMLMatrix(size_t rows0,size_t cols0);
    ~G4GDMLMatrix();
@@ -56,8 +59,10 @@ public:
    size_t getCols() const;
 };
 
-class G4GDMLReadDefine : public G4GDMLRead {
-private:
+class G4GDMLReadDefine : public G4GDMLRead
+{
+ private:
+
    std::map<G4String,G4double> quantityMap;
    std::map<G4String,G4ThreeVector> positionMap;
    std::map<G4String,G4ThreeVector> rotationMap;
@@ -72,11 +77,15 @@ private:
    void variableRead(const xercesc::DOMElement* const); 
    void quantityRead(const xercesc::DOMElement* const); 
    void defineRead(const xercesc::DOMElement* const);
-protected:
+
+ protected:
+
    G4RotationMatrix getRotationMatrix(const G4ThreeVector&);
    void vectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String refRead(const xercesc::DOMElement* const);
-public:
+
+ public:
+
    G4double getConstant(const G4String&);
    G4double getVariable(const G4String&);
    G4double getQuantity(const G4String&);

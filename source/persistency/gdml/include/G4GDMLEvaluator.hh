@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.14 2008-06-12 13:09:47 ztorzsok Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.15 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,22 +42,24 @@
 #define _G4GDMLEVALUATOR_INCLUDED_
 
 #include <CLHEP/Evaluator/Evaluator.h>
+#include <vector>
 
-#include "G4Types.hh"
-#include "G4String.hh"
-#include "G4Box.hh" // Because we need "G4Exception()"...
+#include "globals.hh"
 
-class G4GDMLEvaluator {
+class G4GDMLEvaluator
+{
    HepTool::Evaluator eval;
    std::vector<G4String> variableList;
-public:
+
+ public:
+
    G4GDMLEvaluator();
 
-   void defineConstant(const G4String&,G4double);
-   void defineVariable(const G4String&,G4double);
-   void defineMatrix(const G4String&,G4int,std::vector<G4double>);
-   void setVariable(const G4String&,G4double);
-   bool isVariable(const G4String&) const;
+   void defineConstant(const G4String&, G4double);
+   void defineVariable(const G4String&, G4double);
+   void defineMatrix(const G4String&, G4int, std::vector<G4double>);
+   void setVariable(const G4String&, G4double);
+   G4bool isVariable(const G4String&) const;
    G4String SolveBrackets(const G4String&);
    G4double Evaluate(const G4String&);
    G4int EvaluateInteger(const G4String&);

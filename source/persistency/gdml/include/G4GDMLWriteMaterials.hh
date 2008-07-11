@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh,v 1.10 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.hh,v 1.11 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,8 +47,10 @@
 
 #include "G4GDMLWriteDefine.hh"
 
-class G4GDMLWriteMaterials : public G4GDMLWriteDefine {
-private:
+class G4GDMLWriteMaterials : public G4GDMLWriteDefine
+{
+ private:
+
    std::vector<const G4Isotope*> isotopeList;
    std::vector<const G4Element*> elementList;
    std::vector<const G4Material*> materialList;
@@ -62,7 +64,9 @@ private:
    void elementWrite(const G4Element* const);
    void materialWrite(const G4Material* const);
    void materialsWrite(xercesc::DOMElement*);
-protected:
+
+ protected:
+
    void AddIsotope(const G4Isotope* const);
    void AddElement(const G4Element* const);
    void AddMaterial(const G4Material* const);

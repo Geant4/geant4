@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadParamvol.hh,v 1.2 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.hh,v 1.3 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,24 +49,36 @@
 #include "G4GDMLParameterisation.hh"
 #include "G4GDMLReadSetup.hh"
 
-class G4GDMLReadParamvol : public G4GDMLReadSetup {
-
+class G4GDMLReadParamvol : public G4GDMLReadSetup
+{
    G4GDMLParameterisation* parameterisation;
 
-   void box_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void trd_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void trap_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void tube_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void cone_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void sphere_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void orb_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void torus_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void para_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
-   void hype_dimensionsRead(const xercesc::DOMElement* const,G4GDMLParameterisation::PARAMETER&);
+   void box_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void trd_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void trap_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void tube_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void cone_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void sphere_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void orb_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void torus_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void para_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void hype_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
   
    void parametersRead(const xercesc::DOMElement* const);
    void paramvol_contentRead(const xercesc::DOMElement* const);
-protected:
+
+ protected:
+
    void paramvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
 };
 

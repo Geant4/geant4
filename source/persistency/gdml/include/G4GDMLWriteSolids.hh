@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.28 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.29 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,36 +70,41 @@
 
 #include "G4GDMLWriteMaterials.hh"
 
-class G4GDMLWriteSolids : public G4GDMLWriteMaterials {
-private:
+class G4GDMLWriteSolids : public G4GDMLWriteMaterials
+{
+ private:
+
    std::vector<const G4VSolid*> solidList;
    xercesc::DOMElement* solidsElement;
 
-   void booleanWrite(xercesc::DOMElement*,const G4BooleanSolid* const);
-   void boxWrite(xercesc::DOMElement*,const G4Box* const);
-   void coneWrite(xercesc::DOMElement*,const G4Cons* const);
-   void ellipsoidWrite(xercesc::DOMElement*,const G4Ellipsoid* const);
-   void eltubeWrite(xercesc::DOMElement*,const G4EllipticalTube* const);
-   void xtruWrite(xercesc::DOMElement*,const G4ExtrudedSolid* const);
-   void hypeWrite(xercesc::DOMElement*,const G4Hype* const);
-   void orbWrite(xercesc::DOMElement*,const G4Orb* const);
-   void paraWrite(xercesc::DOMElement*,const G4Para* const);
-   void polyconeWrite(xercesc::DOMElement*,const G4Polycone* const);
-   void polyhedraWrite(xercesc::DOMElement*,const G4Polyhedra* const);
-   void sphereWrite(xercesc::DOMElement*,const G4Sphere* const);
-   void tessellatedWrite(xercesc::DOMElement*,const G4TessellatedSolid* const);
-   void tetWrite(xercesc::DOMElement*,const G4Tet* const);
-   void torusWrite(xercesc::DOMElement*,const G4Torus* const);
-   void trapWrite(xercesc::DOMElement*,const G4Trap* const);
-   void trdWrite(xercesc::DOMElement*,const G4Trd* const);
-   void tubeWrite(xercesc::DOMElement*,const G4Tubs* const);
-   void twistedboxWrite(xercesc::DOMElement*,const G4TwistedBox* const);
-   void twistedtrapWrite(xercesc::DOMElement*,const G4TwistedTrap* const);
-   void twistedtrdWrite(xercesc::DOMElement*,const G4TwistedTrd* const);
-   void twistedtubsWrite(xercesc::DOMElement*,const G4TwistedTubs* const);
-   void zplaneWrite(xercesc::DOMElement*,const G4double&,const G4double&,const G4double&);
+   void booleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
+   void boxWrite(xercesc::DOMElement*, const G4Box* const);
+   void coneWrite(xercesc::DOMElement*, const G4Cons* const);
+   void ellipsoidWrite(xercesc::DOMElement*, const G4Ellipsoid* const);
+   void eltubeWrite(xercesc::DOMElement*, const G4EllipticalTube* const);
+   void xtruWrite(xercesc::DOMElement*, const G4ExtrudedSolid* const);
+   void hypeWrite(xercesc::DOMElement*, const G4Hype* const);
+   void orbWrite(xercesc::DOMElement*, const G4Orb* const);
+   void paraWrite(xercesc::DOMElement*, const G4Para* const);
+   void polyconeWrite(xercesc::DOMElement*, const G4Polycone* const);
+   void polyhedraWrite(xercesc::DOMElement*, const G4Polyhedra* const);
+   void sphereWrite(xercesc::DOMElement*, const G4Sphere* const);
+   void tessellatedWrite(xercesc::DOMElement*, const G4TessellatedSolid* const);
+   void tetWrite(xercesc::DOMElement*, const G4Tet* const);
+   void torusWrite(xercesc::DOMElement*, const G4Torus* const);
+   void trapWrite(xercesc::DOMElement*, const G4Trap* const);
+   void trdWrite(xercesc::DOMElement*, const G4Trd* const);
+   void tubeWrite(xercesc::DOMElement*, const G4Tubs* const);
+   void twistedboxWrite(xercesc::DOMElement*, const G4TwistedBox* const);
+   void twistedtrapWrite(xercesc::DOMElement*, const G4TwistedTrap* const);
+   void twistedtrdWrite(xercesc::DOMElement*, const G4TwistedTrd* const);
+   void twistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
+   void zplaneWrite(xercesc::DOMElement*, const G4double&,
+                    const G4double&, const G4double&);
    void solidsWrite(xercesc::DOMElement*);
-protected:
+
+ protected:
+
    void AddSolid(const G4VSolid* const);
 };
 

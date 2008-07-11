@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.7 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.8 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,8 +75,8 @@
 
 #include "G4GDMLReadMaterials.hh"
 
-class G4GDMLReadSolids : public G4GDMLReadMaterials {
-
+class G4GDMLReadSolids : public G4GDMLReadMaterials
+{
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct { G4double rmin,rmax,z; } zplaneType;
 
@@ -110,7 +110,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials {
    zplaneType zplaneRead(const xercesc::DOMElement* const);
    void opticalsurfaceRead(const xercesc::DOMElement* const);
    void solidsRead(const xercesc::DOMElement* const);
-protected:
+
+ protected:
+
    G4VSolid* getSolid(const G4String&) const;
    G4SurfaceProperty* getSurfaceProperty(const G4String&) const;
 };

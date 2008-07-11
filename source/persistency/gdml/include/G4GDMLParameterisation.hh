@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParameterisation.hh,v 1.8 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLParameterisation.hh,v 1.9 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,10 +61,12 @@
 
 #include <vector>
 
-class G4GDMLParameterisation : public G4VPVParameterisation {
-public:
-   struct PARAMETER {
-   
+class G4GDMLParameterisation : public G4VPVParameterisation
+{
+ public:
+
+   struct PARAMETER
+   {
       G4RotationMatrix* pRot;
       G4ThreeVector position;
       G4double dimension[16];
@@ -74,7 +76,9 @@ public:
 
    G4int getSize() const;
    void addParameter(const PARAMETER&);
-private:
+
+ private:
+
    std::vector<PARAMETER> parameterList;
 
    void ComputeTransformation(const G4int,G4VPhysicalVolume*) const;

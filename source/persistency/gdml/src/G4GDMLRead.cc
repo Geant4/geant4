@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.27 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.28 2008-07-11 07:50:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -34,42 +34,46 @@
 
 #include "G4GDMLRead.hh"
 
-G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode) {
-
+G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode)
+{
    char* char_str = xercesc::XMLString::transcode(toTranscode);
    G4String my_str(char_str);
    xercesc::XMLString::release(&char_str);
    return my_str;
 }
 
-G4String G4GDMLRead::GenerateName(const G4String& nameIn) {
-
+G4String G4GDMLRead::GenerateName(const G4String& nameIn)
+{
    G4String nameOut(nameIn);
 
-   if (InLoop>0) nameOut = eval.SolveBrackets(nameOut);
+   if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
 
    return G4String(ModuleName + nameOut);
 }
 
-void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,G4VPhysicalVolume* physvol) {
-
+void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
+                                     G4VPhysicalVolume* physvol)
+{
    G4String nameOut = nameIn;
 
-   if (nameOut.empty()) {
-      
+   if (nameOut.empty())
+   {
       std::stringstream stream;
-      stream << physvol->GetLogicalVolume()->GetName() << "_in_" << physvol->GetMotherLogical()->GetName() << physvol;
+      stream << physvol->GetLogicalVolume()->GetName()
+             << "_in_" << physvol->GetMotherLogical()->GetName() << physvol;
       nameOut = stream.str();
-   } else {
-   
+   }
+   else
+   {
      nameOut = ModuleName + nameOut;
    }
    
    physvol->SetName(eval.SolveBrackets(nameOut));
 }
 
-void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRead::*func)(const xercesc::DOMElement* const)) {
-
+void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,
+     void(G4GDMLRead::*func)(const xercesc::DOMElement* const))
+{
    G4String var;
    G4String from;
    G4String to;
@@ -78,41 +82,64 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount;attribute_index++)
+   {
       xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
 
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+      { continue; }
 
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
       const G4String attribute_name = Transcode(attribute->getName());
       const G4String attribute_value = Transcode(attribute->getValue());
 
-      if (attribute_name=="for") var = attribute_value; else
-      if (attribute_name=="from") from = attribute_value; else
-      if (attribute_name=="to") to = attribute_value; else
-      if (attribute_name=="step") step = attribute_value;
+      if (attribute_name=="for")  { var = attribute_value; }  else
+      if (attribute_name=="from") { from = attribute_value; } else
+      if (attribute_name=="to")   { to = attribute_value; }   else
+      if (attribute_name=="step") { step = attribute_value; }
    }
 
-   if (var.empty()) G4Exception("G4GDML: ERROR! No variable is determined for loop!");
+   if (var.empty())
+   {
+     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
+                 FatalException, "No variable is determined for loop!");
+   }
 
-   if (!eval.isVariable(var)) G4Exception("G4GDML: ERROR! Variable is not defined in loop!");
+   if (!eval.isVariable(var))
+   {
+     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
+                 FatalException, "Variable is not defined in loop!");
+   }
 
    G4int _var = eval.EvaluateInteger(var);
    G4int _from = eval.EvaluateInteger(from);
    G4int _to = eval.EvaluateInteger(to);
    G4int _step = eval.EvaluateInteger(step);
    
-   if (!from.empty()) _var = _from;
+   if (!from.empty()) { _var = _from; }
 
-   if (_from == _to) G4Exception("G4GDML: ERROR! Empty loop!");
-   if (_from < _to && _step <= 0) G4Exception("G4GDML: ERROR! Infinite loop!");
-   if (_from > _to && _step >= 0) G4Exception("G4GDML: ERROR! Infinite loop!");
-   
+   if (_from == _to)
+   {
+     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
+                 FatalException, "Empty loop!");
+   }
+   if (_from < _to && _step <= 0)
+   {
+     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
+                 FatalException, "Infinite loop!");
+   }
+   if (_from > _to && _step >= 0)
+   {
+     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
+                 FatalException, "Infinite loop!");
+   }
+
    InLoop++;
    
-   while (_var <= _to) {
-   
+   while (_var <= _to)
+   {
       eval.setVariable(var,_var);
       (this->*func)(element);
 
@@ -122,17 +149,25 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,void(G4GDMLRe
    InLoop--;
 }
 
-void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
-
-   if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
-   else G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
+void G4GDMLRead::Read(const G4String& fileName,
+                            G4bool SetValidate,
+                            G4bool IsModule)
+{
+   if (IsModule)
+   {
+      G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
+   }
+   else
+   {
+      G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
+   }
 
    InLoop = 0;
    ModuleName.clear();
    Validate = SetValidate;
 
-   if (IsModule) { 
-   
+   if (IsModule)
+   {
       ModuleName = fileName;
       ModuleName.remove(ModuleName.length()-5,5); // remove ".gdml"
       ModuleName += "_";
@@ -143,41 +178,66 @@ void G4GDMLRead::Read(const G4String& fileName,bool SetValidate,bool IsModule) {
 
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
    parser->setValidationSchemaFullChecking(true);
-   parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
+   parser->setCreateEntityReferenceNodes(false); 
+     // Entities will be automatically resolved by Xerces
+
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setErrorHandler(handler);
 
    try { parser->parse(fileName.c_str()); }
-   catch (const xercesc::XMLException &e) { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
-   catch (const xercesc::DOMException &e) { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
+   catch (const xercesc::XMLException &e)
+     { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
+   catch (const xercesc::DOMException &e)
+     { G4cout << "G4GDML: " << Transcode(e.getMessage()) << G4endl; }
 
    xercesc::DOMDocument* doc = parser->getDocument();
 
-   if (!doc) G4Exception("G4GDML: ERROR! Unable to open document: "+fileName);
-
+   if (!doc)
+   {
+     G4String error_msg = "Unable to open document: " + fileName;
+     G4Exception("G4GDMLRead::Read()", "InvalidRead",
+                 FatalException, error_msg);
+   }
    xercesc::DOMElement* element = doc->getDocumentElement();
 
-   if (!element) G4Exception("G4GDML: ERROR! Empty document!");
-
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
-
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = Transcode(child->getTagName());
-
-      if (tag=="define") defineRead(child); else
-      if (tag=="materials") materialsRead(child); else
-      if (tag=="solids") solidsRead(child); else
-      if (tag=="setup") setupRead(child); else
-      if (tag=="structure") structureRead(child); else
-      G4Exception("G4GDML: ERROR! Unknown tag in gdml: "+tag);
+   if (!element)
+   {
+     G4Exception("G4GDMLRead::Read()", "InvalidRead",
+                 FatalException, "Empty document!");
    }
 
-   if (parser) delete parser;
-   if (handler) delete handler;
+   for (xercesc::DOMNode* iter = element->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
 
-   if (IsModule) G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
-   else G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="define")    { defineRead(child);    } else
+      if (tag=="materials") { materialsRead(child); } else
+      if (tag=="solids")    { solidsRead(child);    } else
+      if (tag=="setup")     { setupRead(child);     } else
+      if (tag=="structure") { structureRead(child); }
+      else
+      {
+        G4String error_msg = "Unknown tag in gdml: " + tag;
+        G4Exception("G4GDMLRead::Read()", "InvalidRead",
+                    FatalException, error_msg);
+      }
+   }
+
+   if (parser)  { delete parser;  }
+   if (handler) { delete handler; }
+
+   if (IsModule)
+   {
+      G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
+   }
+   else
+   {
+      G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
+   }
 }

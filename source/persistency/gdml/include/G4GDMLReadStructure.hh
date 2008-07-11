@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.18 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.19 2008-07-11 07:50:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,8 +58,8 @@
 
 #include "G4GDMLReadParamvol.hh"
 
-struct G4GDMLAuxPairType {
-
+struct G4GDMLAuxPairType
+{
    G4String type;
    G4double value;
 };
@@ -67,8 +67,10 @@ struct G4GDMLAuxPairType {
 typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
 typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
 
-class G4GDMLReadStructure : public G4GDMLReadParamvol {
-private:
+class G4GDMLReadStructure : public G4GDMLReadParamvol
+{
+ private:
+
    G4GDMLAuxMapType auxMap;
    G4LogicalVolume *pMotherLogical;
 
@@ -82,7 +84,9 @@ private:
    void volumeRead(const xercesc::DOMElement* const);
    void volume_contentRead(const xercesc::DOMElement* const);
    void structureRead(const xercesc::DOMElement* const);
-public:
+
+ public:
+
    G4VPhysicalVolume* getPhysvol(const G4String&) const;
    G4LogicalVolume* getVolume(const G4String&) const;
    G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
