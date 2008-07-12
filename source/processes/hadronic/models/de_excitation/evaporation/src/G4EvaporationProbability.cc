@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.14 2008-07-10 18:29:23 vnivanch Exp $
+// $Id: G4EvaporationProbability.cc,v 1.15 2008-07-12 13:33:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,13 +32,11 @@
 //
 //J.M. Quesada (June 2008). Rebuilt class. Mayor changes: new inverse cross sections and numerical integration
 
-#include <iostream>
-using namespace std;
-
 #include "G4EvaporationProbability.hh"
 #include "G4PairingCorrection.hh"
+#include <iostream>
 
-
+using namespace std;
 
 G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &) : G4VEmissionProbability()
 {
