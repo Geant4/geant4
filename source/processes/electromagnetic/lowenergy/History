@@ -1,4 +1,4 @@
-$Id: History,v 1.306 2008-06-30 08:12:38 sincerti Exp $
+$Id: History,v 1.307 2008-07-14 20:47:32 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.07.2008   S. Incerti, tag emlowen-V09-01-23
+             cleaned and updated energy mitis of the following 
+             25 files (Geant4 DNA)
+
+-G4CrossSectionChargeDecrease.hh and .cc
+-G4CrossSectionChargeDecreasePartial.hh and .cc
+-G4CrossSectionChargeIncrease.hh and .cc
+-G4CrossSectionChargeIncreasePartial.hh and .cc
+-G4CrossSectionElasticScreenedRutherfordHE.hh and .cc
+-G4CrossSectionElasticScreenedRutherfordLE.hh and .cc
+-G4CrossSectionExcitationBorn.hh and .cc
+-G4CrossSectionExcitationBornPartial.hh and .cc
+-G4CrossSectionExcitationEmfietzoglou.hh and .cc
+-G4CrossSectionExcitationEmfietzoglouPartial.hh and .cc
+-G4CrossSectionExcitationMillerGreen.hh and .cc
+-G4CrossSectionExcitationMillerGreenPartial.hh and .cc
+-G4CrossSectionIonisationBorn.hh and .cc
+-G4CrossSectionIonisationBornPartial.hh and .cc
+-G4CrossSectionIonisationRudd.hh and .cc
+-G4CrossSectionIonisationRuddPartial.hh and .cc
+-G4FinalStateChargeDecrease.hh and .cc
+-G4FinalStateChargeIncrease.hh and .cc
+-G4FinalStateElasticBrennerZaider.hh and .cc
+-G4FinalStateElasticScreenedRutherford.hh and .cc
+-G4FinalStateExcitationBorn.hh and .cc
+-G4FinalStateExcitationEmfietzoglou.hh and .cc
+-G4FinalStateExcitationMillerGreen.hh and .cc
+-G4FinalStateIonisationBorn.hh and .cc
+-G4FinalStateIonisationRudd.hh and .cc
 
 30.06.2008   S. Incerti, tag emlowen-V09-01-22
              corrected wrong upper energy limit for :

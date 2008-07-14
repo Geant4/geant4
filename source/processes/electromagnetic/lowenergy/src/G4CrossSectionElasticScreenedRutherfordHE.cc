@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElasticScreenedRutherfordHE.cc,v 1.1 2008-06-27 20:09:54 sincerti Exp $
+// $Id: G4CrossSectionElasticScreenedRutherfordHE.cc,v 1.2 2008-07-14 20:47:34 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionElasticScreenedRutherfordHE.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionElasticScreenedRutherfordHE::G4CrossSectionElasticScreenedRutherfordHE()
 {
@@ -34,10 +36,12 @@ G4CrossSectionElasticScreenedRutherfordHE::G4CrossSectionElasticScreenedRutherfo
   highEnergyLimit = 10. * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionElasticScreenedRutherfordHE::~G4CrossSectionElasticScreenedRutherfordHE()
 {}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionElasticScreenedRutherfordHE::CrossSection(const G4Track& track)
 {
@@ -46,7 +50,7 @@ G4double G4CrossSectionElasticScreenedRutherfordHE::CrossSection(const G4Track& 
 
   G4double screenedCrossSection = 0.;
 
-  if (k > lowEnergyLimit && k < highEnergyLimit)
+  if (k > lowEnergyLimit && k <= highEnergyLimit)
     {      
       G4double z = 10.;
       G4double n = ScreeningFactor(k,z);
@@ -56,6 +60,8 @@ G4double G4CrossSectionElasticScreenedRutherfordHE::CrossSection(const G4Track& 
 
   return screenedCrossSection;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4double G4CrossSectionElasticScreenedRutherfordHE::RutherfordCrossSection(G4double k, G4double z)
 {
@@ -73,6 +79,8 @@ G4double G4CrossSectionElasticScreenedRutherfordHE::RutherfordCrossSection(G4dou
   
   return cross;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionElasticScreenedRutherfordHE::ScreeningFactor(G4double k, G4double z)
 {

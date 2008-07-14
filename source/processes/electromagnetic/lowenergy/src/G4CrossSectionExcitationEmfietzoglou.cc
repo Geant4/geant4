@@ -23,61 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.3 2008-06-27 20:09:54 sincerti Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.4 2008-07-14 20:47:34 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// Reference: TNS Geant4-DNA paper
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
 
 #include "G4CrossSectionExcitationEmfietzoglou.hh"
-#include "G4Track.hh"
-#include "G4DynamicParticle.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
 {
-
-  name = "CrossSectionExcitationEmfietzoglou";
-  lowEnergyLimit = 10.*eV; // 7.4 * eV;
+  lowEnergyLimit = 0. * eV;
   highEnergyLimit = 10. * MeV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionExcitationEmfietzoglou::~G4CrossSectionExcitationEmfietzoglou()
-{ }
+{}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionExcitationEmfietzoglou::CrossSection(const G4Track& track)
 {
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double k = particle->GetKineticEnergy();
 
-  // Cross section = 0 outside the energy validity limits set in the constructor
-  // ---- MGP ---- Better handling of these limits to be set in a following design iteration 
-
   G4double sigma = 0.;
 
-  if (k > lowEnergyLimit && k < highEnergyLimit) sigma = partialCrossSection.Sum(k);
+  if (k >= lowEnergyLimit && k <= highEnergyLimit) sigma = partialCrossSection.Sum(k);
 
   return sigma;
 }

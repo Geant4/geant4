@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElasticScreenedRutherfordLE.hh,v 1.1 2008-06-27 20:09:54 sincerti Exp $
+// $Id: G4CrossSectionElasticScreenedRutherfordLE.hh,v 1.2 2008-07-14 20:47:33 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4CROSSSECTIONELASTICSCREENEDRUTHERFORDLE_HH
@@ -51,4 +51,5 @@ private:
   G4double highEnergyLimit;
   
 };
+
 #endif

@@ -22,19 +22,26 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: G4CrossSectionElasticScreenedRutherfordLE.cc,v 1.2 2008-07-14 20:47:34 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionElasticScreenedRutherfordLE.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4CrossSectionElasticScreenedRutherfordLE::G4CrossSectionElasticScreenedRutherfordLE()
 {
-  lowEnergyLimit = 10 * eV; // Low energy limit identical to ExcitationEmfietzoglou's
+  lowEnergyLimit = 0 * eV; 
   highEnergyLimit = 200 * eV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4CrossSectionElasticScreenedRutherfordLE::~G4CrossSectionElasticScreenedRutherfordLE()
 {}
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionElasticScreenedRutherfordLE::CrossSection(const G4Track& track)
 {
@@ -43,17 +50,19 @@ G4double G4CrossSectionElasticScreenedRutherfordLE::CrossSection(const G4Track& 
 
   G4double screenedCrossSection = 0.;
 
-  if (k > lowEnergyLimit && k < highEnergyLimit)
-    {      
+  if (k > lowEnergyLimit && k <= highEnergyLimit)
+  {      
       G4double z = 10.;
       G4double n = ScreeningFactor(k,z);
       G4double crossSection = RutherfordCrossSection(k, z);
       screenedCrossSection = pi *  crossSection / (n * (n + 1.));
-    }    
+  }    
 
   return screenedCrossSection;
 }
   
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4CrossSectionElasticScreenedRutherfordLE::RutherfordCrossSection(G4double k, G4double z)
 {
   //   
@@ -70,6 +79,8 @@ G4double G4CrossSectionElasticScreenedRutherfordLE::RutherfordCrossSection(G4dou
   
   return cross;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4CrossSectionElasticScreenedRutherfordLE::ScreeningFactor(G4double k, G4double z)
 {
