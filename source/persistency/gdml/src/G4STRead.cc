@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STEPRead.cc,v 1.9 2008-07-14 16:57:10 gcosmo Exp $
+// $Id: G4STRead.cc,v 1.1 2008-07-14 17:12:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4STEPRead Implementation
+// class G4STRead Implementation
 //
 // History:
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#include "G4STEPRead.hh"
+#include "G4STRead.hh"
 
-void G4STEPRead::tessellatedRead(const std::string& line)
+void G4STRead::tessellatedRead(const std::string& line)
 {
    if (tessellatedList.size()>0)
    {
@@ -55,7 +55,7 @@ void G4STEPRead::tessellatedRead(const std::string& line)
    G4cout << "G4STRead: Reading solid: " << name << G4endl;
 }
 
-void G4STEPRead::facetRead(const std::string& line)
+void G4STRead::facetRead(const std::string& line)
 {
    if (tessellatedList.size()==0)
    {
@@ -99,7 +99,7 @@ void G4STEPRead::facetRead(const std::string& line)
    }
 }
 
-void G4STEPRead::physvolRead(const std::string& line)
+void G4STRead::physvolRead(const std::string& line)
 {
    G4int level;
    G4String name;
@@ -176,7 +176,7 @@ void G4STEPRead::physvolRead(const std::string& line)
      { world_extent.setZ(std::fabs(maxz)); }
 }
 
-void G4STEPRead::ReadGeom(const G4String& name)
+void G4STRead::ReadGeom(const G4String& name)
 {
    G4cout << "G4STRead: Reading '" << name << "'..." << G4endl;
 
@@ -207,7 +207,7 @@ void G4STEPRead::ReadGeom(const G4String& name)
    G4cout << "G4STRead: Reading '" << name << "' done." << G4endl;
 }
 
-void G4STEPRead::ReadTree(const G4String& name)
+void G4STRead::ReadTree(const G4String& name)
 {
    G4cout << "G4STRead: Reading '" << name << "'..." << G4endl;
 
@@ -231,7 +231,7 @@ void G4STEPRead::ReadTree(const G4String& name)
 }
 
 G4VPhysicalVolume*
-G4STEPRead::Read(const G4String& name, G4Material* mediumMaterial,
+G4STRead::Read(const G4String& name, G4Material* mediumMaterial,
                                        G4Material* solidMaterial)
 {
    if (mediumMaterial == 0)

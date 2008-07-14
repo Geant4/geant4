@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4STEPRead.hh,v 1.7 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4STRead.hh,v 1.1 2008-07-14 17:12:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4STEPRead
+// class G4STRead
 //
 // Class description:
 //
@@ -40,8 +40,12 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4STEPREAD_INCLUDED_
-#define _G4STEPREAD_INCLUDED_
+#ifndef _G4STREAD_INCLUDED_
+#define _G4STREAD_INCLUDED_
+
+#include <fstream>
+#include <vector>
+#include <map>
 
 #include "G4TessellatedSolid.hh"
 #include "G4QuadrangularFacet.hh"
@@ -51,11 +55,22 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 
-#include <fstream>
-#include <vector>
-#include <map>
+class G4STRead
+{
+  public:  // with description
 
-class G4STEPRead {
+    G4VPhysicalVolume* Read(const G4String&, G4Material* mediumMaterial,
+                                             G4Material* solidMaterial);
+  private:
+
+   void tessellatedRead(const std::string&);
+   void facetRead(const std::string&);
+   void physvolRead(const std::string&);
+   void ReadGeom(const G4String&);
+   void ReadTree(const G4String&);
+
+  private:
+
    G4Box* world_box;
    G4ThreeVector world_extent;
    G4Material* solid_material;
@@ -63,14 +78,6 @@ class G4STEPRead {
    G4LogicalVolume* world_volume;
    std::vector<G4TessellatedSolid*> tessellatedList;
    std::map<G4TessellatedSolid*,G4LogicalVolume*> volumeMap;
-
-   void tessellatedRead(const std::string&);
-   void facetRead(const std::string&);
-   void physvolRead(const std::string&);
-   void ReadGeom(const G4String&);
-   void ReadTree(const G4String&);
-public:
-   G4VPhysicalVolume* Read(const G4String&,G4Material* mediumMaterial,G4Material* solidMaterial);
 };
 
 #endif
