@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc,v 1.15 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.cc,v 1.16 2008-07-14 16:01:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteDefine Implementation
@@ -39,19 +39,20 @@ const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kAngularPrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kLinearPrecision = DBL_EPSILON;
 
-G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {
-
+G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat)
+{
    G4double x,y,z;
 
    const G4double cosb = sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
 
-   if (cosb > kRelativePrecision) {
-
+   if (cosb > kRelativePrecision)
+   {
       x = atan2(mat.zy(),mat.zz());
       y = atan2(-mat.zx(),cosb);
       z = atan2(mat.yx(),mat.xx());
-   } else {
-
+   }
+   else
+   {
       x = atan2(-mat.yz(),mat.yy());
       y = atan2(-mat.zx(),cosb);
       z = 0.0;
@@ -60,8 +61,10 @@ G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat) {
    return G4ThreeVector(x,y,z);
 }
 
-void G4GDMLWriteDefine::scale_vectorWrite(xercesc::DOMElement* element,const G4String& tag,const G4String& name,const G4ThreeVector& scl) {
-
+void G4GDMLWriteDefine::
+scale_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+                  const G4String& name, const G4ThreeVector& scl)
+{
    const G4double x = (fabs(scl.x()-1.0) < kRelativePrecision) ? 1.0 : scl.x();
    const G4double y = (fabs(scl.y()-1.0) < kRelativePrecision) ? 1.0 : scl.y();
    const G4double z = (fabs(scl.z()-1.0) < kRelativePrecision) ? 1.0 : scl.z();
@@ -74,8 +77,10 @@ void G4GDMLWriteDefine::scale_vectorWrite(xercesc::DOMElement* element,const G4S
    element->appendChild(scaleElement);
 }
 
-void G4GDMLWriteDefine::rotation_vectorWrite(xercesc::DOMElement* element,const G4String& tag,const G4String& name,const G4ThreeVector& rot) {
-
+void G4GDMLWriteDefine::
+rotation_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+                     const G4String& name, const G4ThreeVector& rot)
+{
    const G4double x = (fabs(rot.x()) < kAngularPrecision) ? 0.0 : rot.x();
    const G4double y = (fabs(rot.y()) < kAngularPrecision) ? 0.0 : rot.y();
    const G4double z = (fabs(rot.z()) < kAngularPrecision) ? 0.0 : rot.z();
@@ -89,8 +94,10 @@ void G4GDMLWriteDefine::rotation_vectorWrite(xercesc::DOMElement* element,const 
    element->appendChild(rotationElement);
 }
 
-void G4GDMLWriteDefine::position_vectorWrite(xercesc::DOMElement* element,const G4String& tag,const G4String& name,const G4ThreeVector& pos) {
-
+void G4GDMLWriteDefine::
+position_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+                     const G4String& name, const G4ThreeVector& pos)
+{
    const G4double x = (fabs(pos.x()) < kLinearPrecision) ? 0.0 : pos.x();
    const G4double y = (fabs(pos.y()) < kLinearPrecision) ? 0.0 : pos.y();
    const G4double z = (fabs(pos.z()) < kLinearPrecision) ? 0.0 : pos.z();
@@ -104,8 +111,8 @@ void G4GDMLWriteDefine::position_vectorWrite(xercesc::DOMElement* element,const 
    element->appendChild(positionElement);
 }
 
-void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element) {
-
+void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element)
+{
    G4cout << "G4GDML: Writing definitions..." << G4endl;
 
    defineElement = newElement("define");

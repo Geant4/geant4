@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc,v 1.7 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLReadSetup.cc,v 1.8 2008-07-14 16:01:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSetup Implementation
@@ -34,17 +34,25 @@
 
 #include "G4GDMLReadSetup.hh"
 
-G4String G4GDMLReadSetup::getSetup(const G4String& ref) {
+G4String G4GDMLReadSetup::getSetup(const G4String& ref)
+{
+   if (setupMap.size() == 1)     // If there is only one setup defined,
+   {                             // no matter how it is named
+     return setupMap.begin()->second;
+   }
 
-   if (setupMap.size() == 1) return setupMap.begin()->second;   // If there is only one setup defined, no matter how it is named
-
-   if (setupMap.find(ref) == setupMap.end()) G4Exception("G4GDML: ERROR! Referenced setup '"+ref+"' was not found!");
+   if (setupMap.find(ref) == setupMap.end())
+   {
+     G4String error_msg = "Referenced setup '" + ref + "' was not found!";
+     G4Exception("G4GDMLReadSetup::getSetup()", "ReadError",
+                 FatalException, error_msg);
+   }
 
    return setupMap[ref];
 }
 
-void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
-
+void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element)
+{
    G4cout << "G4GDML: Reading setup..." << G4endl;
 
    G4String name;
@@ -52,26 +60,31 @@ void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element) {
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
-   for (XMLSize_t attribute_index=0;attribute_index<attributeCount;attribute_index++) {
-
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
       xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
 
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) continue;
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
 
-      const xercesc::DOMAttr* const attribute = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
       const G4String attName  = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") name = attValue;
+      if (attName=="name")  { name = attValue; }
    }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();iter != 0;iter = iter->getNextSibling()) {
+   for (xercesc::DOMNode* iter = element->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
 
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) continue;
-
-      const xercesc::DOMElement* const child = dynamic_cast<xercesc::DOMElement*>(iter);
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag == "world") setupMap[name] = GenerateName(refRead(child));
+      if (tag == "world") { setupMap[name] = GenerateName(refRead(child)); }
    }
 }

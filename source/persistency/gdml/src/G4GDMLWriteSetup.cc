@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.cc,v 1.9 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLWriteSetup.cc,v 1.10 2008-07-14 16:01:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSetup Implementation
@@ -35,8 +35,9 @@
 
 #include "G4GDMLWriteSetup.hh"
 
-void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,const G4LogicalVolume* const logvol) {
-
+void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,
+                                  const G4LogicalVolume* const logvol)
+{
    G4cout << "G4GDML: Writing setup..." << G4endl;
 
    const G4String worldref = GenerateName(logvol->GetName(),logvol);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.66 2008-07-03 10:06:27 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.67 2008-07-14 16:01:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -179,9 +179,8 @@ void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement)
    gdmlElement->appendChild(structureElement);
 }
 
-G4Transform3D
-G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,
-                                         const G4int depth)
+G4Transform3D G4GDMLWriteStructure::
+TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 {
    if (volumeMap().find(volumePtr) != volumeMap().end())
    {
@@ -272,8 +271,7 @@ G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,
                                   + name
                                   + "' can not be related to reflected solid!";
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException,
-                        ErrorMessage);
+                        "InvalidSetup", FatalException, ErrorMessage);
          }
          divisionvolWrite(volumeElement,divisionvol); 
       } else 
@@ -285,8 +283,7 @@ G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,
                                   + name
                                   + "' can not be related to reflected solid!";
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException,
-                        ErrorMessage);
+                        "InvalidSetup", FatalException, ErrorMessage);
          }
          paramvolWrite(volumeElement,physvol);
       } else
@@ -298,8 +295,7 @@ G4GDMLWriteStructure::TraverseVolumeTree(const G4LogicalVolume* const volumePtr,
                                   + name
                                   + "' can not be related to reflected solid!";
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException,
-                        ErrorMessage);
+                        "InvalidSetup", FatalException, ErrorMessage);
          }
          replicavolWrite(volumeElement,physvol); 
       }
