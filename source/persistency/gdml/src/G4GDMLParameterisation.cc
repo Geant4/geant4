@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLParameterisation.cc,v 1.9 2008-07-01 08:12:32 gcosmo Exp $
+// $Id: G4GDMLParameterisation.cc,v 1.10 2008-07-14 16:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParameterisation Implementation
@@ -131,7 +131,7 @@ void G4GDMLParameterisation::ComputeDimensions(G4Para& para,const G4int index,co
    para.SetYHalfLength(parameterList[index].dimension[1]);
    para.SetZHalfLength(parameterList[index].dimension[2]);
    para.SetAlpha(parameterList[index].dimension[3]);
-   para.SetTanAlpha(tan(parameterList[index].dimension[3]));
+   para.SetTanAlpha(std::tan(parameterList[index].dimension[3]));
    para.SetThetaAndPhi(parameterList[index].dimension[4],parameterList[index].dimension[5]);
 }
 

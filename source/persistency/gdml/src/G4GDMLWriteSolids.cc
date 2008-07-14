@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.49 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.50 2008-07-14 16:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -86,30 +86,30 @@ booleanWrite(xercesc::DOMElement* solidsElement,
    solidsElement->appendChild(booleanElement);
      // Add the boolean solid AFTER the constituent solids!
 
-   if ( (fabs(pos.x()) > kLinearPrecision)
-     || (fabs(pos.y()) > kLinearPrecision)
-     || (fabs(pos.z()) > kLinearPrecision) )
+   if ( (std::fabs(pos.x()) > kLinearPrecision)
+     || (std::fabs(pos.y()) > kLinearPrecision)
+     || (std::fabs(pos.z()) > kLinearPrecision) )
    {
      positionWrite(booleanElement,name+"position",pos);
    }
 
-   if ( (fabs(rot.x()) > kAngularPrecision)
-     || (fabs(rot.y()) > kAngularPrecision)
-     || (fabs(rot.z()) > kAngularPrecision) )
+   if ( (std::fabs(rot.x()) > kAngularPrecision)
+     || (std::fabs(rot.y()) > kAngularPrecision)
+     || (std::fabs(rot.z()) > kAngularPrecision) )
    {
      rotationWrite(booleanElement,name+"rotation",rot);
    }
 
-   if ( (fabs(firstpos.x()) > kLinearPrecision)
-     || (fabs(firstpos.y()) > kLinearPrecision)
-     || (fabs(firstpos.z()) > kLinearPrecision) )
+   if ( (std::fabs(firstpos.x()) > kLinearPrecision)
+     || (std::fabs(firstpos.y()) > kLinearPrecision)
+     || (std::fabs(firstpos.z()) > kLinearPrecision) )
    {
      firstpositionWrite(booleanElement,name+"firstposition",firstpos);
    }
 
-   if ( (fabs(firstrot.x()) > kAngularPrecision)
-     || (fabs(firstrot.y()) > kAngularPrecision)
-     || (fabs(firstrot.z()) > kAngularPrecision) )
+   if ( (std::fabs(firstrot.x()) > kAngularPrecision)
+     || (std::fabs(firstrot.y()) > kAngularPrecision)
+     || (std::fabs(firstrot.z()) > kAngularPrecision) )
    {
      firstrotationWrite(booleanElement,name+"firstrotation",firstrot);
    }
@@ -243,8 +243,10 @@ hypeWrite(xercesc::DOMElement* solidsElement, const G4Hype* const hype)
 
    xercesc::DOMElement* hypeElement = newElement("hype");
    hypeElement->setAttributeNode(newAttribute("name",name));
-   hypeElement->setAttributeNode(newAttribute("rmin",hype->GetInnerRadius()/mm));
-   hypeElement->setAttributeNode(newAttribute("rmax",hype->GetOuterRadius()/mm));
+   hypeElement->setAttributeNode(newAttribute("rmin",
+                hype->GetInnerRadius()/mm));
+   hypeElement->setAttributeNode(newAttribute("rmax",
+                hype->GetOuterRadius()/mm));
    hypeElement->setAttributeNode(newAttribute("inst",
                 hype->GetInnerStereo()/degree));
    hypeElement->setAttributeNode(newAttribute("outst",
@@ -274,15 +276,19 @@ paraWrite(xercesc::DOMElement* solidsElement, const G4Para* const para)
    const G4String name = GenerateName(para->GetName(),para);
 
    const G4ThreeVector simaxis = para->GetSymAxis();
-   const G4double alpha = atan(para->GetTanAlpha());
-   const G4double theta = acos(simaxis.z());
-   const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double alpha = std::atan(para->GetTanAlpha());
+   const G4double theta = std::acos(simaxis.z());
+   const G4double phi = (simaxis.z() != 1.0)
+                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
 
    xercesc::DOMElement* paraElement = newElement("para");
    paraElement->setAttributeNode(newAttribute("name",name));
-   paraElement->setAttributeNode(newAttribute("x",2.0*para->GetXHalfLength()/mm));
-   paraElement->setAttributeNode(newAttribute("y",2.0*para->GetYHalfLength()/mm));
-   paraElement->setAttributeNode(newAttribute("z",2.0*para->GetZHalfLength()/mm));
+   paraElement->setAttributeNode(newAttribute("x",
+                2.0*para->GetXHalfLength()/mm));
+   paraElement->setAttributeNode(newAttribute("y",
+                2.0*para->GetYHalfLength()/mm));
+   paraElement->setAttributeNode(newAttribute("z",
+                2.0*para->GetZHalfLength()/mm));
    paraElement->setAttributeNode(newAttribute("alpha",alpha/degree));
    paraElement->setAttributeNode(newAttribute("theta",theta/degree));
    paraElement->setAttributeNode(newAttribute("phi",phi/degree));
@@ -342,7 +348,7 @@ polyhedraWrite(xercesc::DOMElement* solidsElement,
    const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
 
    const G4double convertRad =
-         cos(0.5*polyhedra->GetOriginalParameters()->Opening_angle
+         std::cos(0.5*polyhedra->GetOriginalParameters()->Opening_angle
        / polyhedra->GetOriginalParameters()->numSide);
 
    for (size_t i=0;i<num_zplanes;i++)
@@ -474,23 +480,31 @@ trapWrite(xercesc::DOMElement* solidsElement, const G4Trap* const trap)
    const G4String name = GenerateName(trap->GetName(),trap);
 
    const G4ThreeVector simaxis = trap->GetSymAxis();
-   const G4double phi = (simaxis.z() != 1.0) ? (atan(simaxis.y()/simaxis.x())) : (0.0);
-   const G4double theta = acos(simaxis.z());
-   const G4double alpha1 = atan(trap->GetTanAlpha1());
-   const G4double alpha2 = atan(trap->GetTanAlpha2());
+   const G4double phi = (simaxis.z() != 1.0)
+                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double theta = std::acos(simaxis.z());
+   const G4double alpha1 = std::atan(trap->GetTanAlpha1());
+   const G4double alpha2 = std::atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trapElement = newElement("trap");
    trapElement->setAttributeNode(newAttribute("name",name));
-   trapElement->setAttributeNode(newAttribute("z",2.0*trap->GetZHalfLength()/mm));
+   trapElement->setAttributeNode(newAttribute("z",
+                2.0*trap->GetZHalfLength()/mm));
    trapElement->setAttributeNode(newAttribute("theta",theta/degree));
    trapElement->setAttributeNode(newAttribute("phi",phi/degree));
-   trapElement->setAttributeNode(newAttribute("y1",2.0*trap->GetYHalfLength1()/mm));
-   trapElement->setAttributeNode(newAttribute("x1",2.0*trap->GetXHalfLength1()/mm));
-   trapElement->setAttributeNode(newAttribute("x2",2.0*trap->GetXHalfLength2()/mm));
+   trapElement->setAttributeNode(newAttribute("y1",
+                2.0*trap->GetYHalfLength1()/mm));
+   trapElement->setAttributeNode(newAttribute("x1",
+                2.0*trap->GetXHalfLength1()/mm));
+   trapElement->setAttributeNode(newAttribute("x2",
+                2.0*trap->GetXHalfLength2()/mm));
    trapElement->setAttributeNode(newAttribute("alpha1",alpha1/degree));
-   trapElement->setAttributeNode(newAttribute("y2",2.0*trap->GetYHalfLength2()/mm));
-   trapElement->setAttributeNode(newAttribute("x3",2.0*trap->GetXHalfLength3()/mm));
-   trapElement->setAttributeNode(newAttribute("x4",2.0*trap->GetXHalfLength4()/mm));
+   trapElement->setAttributeNode(newAttribute("y2",
+                2.0*trap->GetYHalfLength2()/mm));
+   trapElement->setAttributeNode(newAttribute("x3",
+                2.0*trap->GetXHalfLength3()/mm));
+   trapElement->setAttributeNode(newAttribute("x4",
+                2.0*trap->GetXHalfLength4()/mm));
    trapElement->setAttributeNode(newAttribute("alpha2",alpha2/degree));
    trapElement->setAttributeNode(newAttribute("aunit","deg"));
    trapElement->setAttributeNode(newAttribute("lunit","mm"));
@@ -504,11 +518,16 @@ trdWrite(xercesc::DOMElement* solidsElement, const G4Trd* const trd)
 
    xercesc::DOMElement* trdElement = newElement("trd");
    trdElement->setAttributeNode(newAttribute("name",name));
-   trdElement->setAttributeNode(newAttribute("x1",2.0*trd->GetXHalfLength1()/mm));
-   trdElement->setAttributeNode(newAttribute("x2",2.0*trd->GetXHalfLength2()/mm));
-   trdElement->setAttributeNode(newAttribute("y1",2.0*trd->GetYHalfLength1()/mm));
-   trdElement->setAttributeNode(newAttribute("y2",2.0*trd->GetYHalfLength2()/mm));
-   trdElement->setAttributeNode(newAttribute("z",2.0*trd->GetZHalfLength()/mm));
+   trdElement->setAttributeNode(newAttribute("x1",
+               2.0*trd->GetXHalfLength1()/mm));
+   trdElement->setAttributeNode(newAttribute("x2",
+               2.0*trd->GetXHalfLength2()/mm));
+   trdElement->setAttributeNode(newAttribute("y1",
+               2.0*trd->GetYHalfLength1()/mm));
+   trdElement->setAttributeNode(newAttribute("y2",
+               2.0*trd->GetYHalfLength2()/mm));
+   trdElement->setAttributeNode(newAttribute("z",
+               2.0*trd->GetZHalfLength()/mm));
    trdElement->setAttributeNode(newAttribute("lunit","mm"));
    solidsElement->appendChild(trdElement);
 }
@@ -520,14 +539,16 @@ tubeWrite(xercesc::DOMElement* solidsElement, const G4Tubs* const tube)
 
    xercesc::DOMElement* tubeElement = newElement("tube");
    tubeElement->setAttributeNode(newAttribute("name",name));
-   tubeElement->setAttributeNode(newAttribute("rmin",tube->GetInnerRadius()/mm));
-   tubeElement->setAttributeNode(newAttribute("rmax",tube->GetOuterRadius()/mm));
-   tubeElement->
-     setAttributeNode(newAttribute("z",2.0*tube->GetZHalfLength()/mm));
-   tubeElement->
-     setAttributeNode(newAttribute("startphi",tube->GetStartPhiAngle()/degree));
-   tubeElement->
-     setAttributeNode(newAttribute("deltaphi",tube->GetDeltaPhiAngle()/degree));
+   tubeElement->setAttributeNode(newAttribute("rmin",
+                tube->GetInnerRadius()/mm));
+   tubeElement->setAttributeNode(newAttribute("rmax",
+                tube->GetOuterRadius()/mm));
+   tubeElement->setAttributeNode(newAttribute("z",
+                2.0*tube->GetZHalfLength()/mm));
+   tubeElement->setAttributeNode(newAttribute("startphi",
+                tube->GetStartPhiAngle()/degree));
+   tubeElement->setAttributeNode(newAttribute("deltaphi",
+                tube->GetDeltaPhiAngle()/degree));
    tubeElement->setAttributeNode(newAttribute("aunit","deg"));
    tubeElement->setAttributeNode(newAttribute("lunit","mm"));
    solidsElement->appendChild(tubeElement);
@@ -541,14 +562,14 @@ twistedboxWrite(xercesc::DOMElement* solidsElement,
 
    xercesc::DOMElement* twistedboxElement = newElement("twistedbox");
    twistedboxElement->setAttributeNode(newAttribute("name",name));
-   twistedboxElement->
-     setAttributeNode(newAttribute("x",2.0*twistedbox->GetXHalfLength()/mm));
-   twistedboxElement->
-     setAttributeNode(newAttribute("y",2.0*twistedbox->GetYHalfLength()/mm));
-   twistedboxElement->
-     setAttributeNode(newAttribute("z",2.0*twistedbox->GetZHalfLength()/mm));
-   twistedboxElement->
-     setAttributeNode(newAttribute("PhiTwist",twistedbox->GetPhiTwist()/degree));
+   twistedboxElement->setAttributeNode(newAttribute("x",
+                      2.0*twistedbox->GetXHalfLength()/mm));
+   twistedboxElement->setAttributeNode(newAttribute("y",
+                      2.0*twistedbox->GetYHalfLength()/mm));
+   twistedboxElement->setAttributeNode(newAttribute("z",
+                      2.0*twistedbox->GetZHalfLength()/mm));
+   twistedboxElement->setAttributeNode(newAttribute("PhiTwist",
+                      twistedbox->GetPhiTwist()/degree));
    twistedboxElement->setAttributeNode(newAttribute("aunit","deg"));
    twistedboxElement->setAttributeNode(newAttribute("lunit","mm"));
    solidsElement->appendChild(twistedboxElement);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.16 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.17 2008-07-14 16:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -77,10 +77,10 @@ trap_dimensionsWrite(xercesc::DOMElement* parametersElement,
 {
    const G4ThreeVector simaxis = trap->GetSymAxis();
    const G4double phi = (simaxis.z() != 1.0)
-                      ? (atan(simaxis.y()/simaxis.x())) : (0.0);
-   const G4double theta = acos(simaxis.z());
-   const G4double alpha1 = atan(trap->GetTanAlpha1());
-   const G4double alpha2 = atan(trap->GetTanAlpha2());
+                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double theta = std::acos(simaxis.z());
+   const G4double alpha1 = std::atan(trap->GetTanAlpha1());
+   const G4double alpha2 = std::atan(trap->GetTanAlpha2());
 
    xercesc::DOMElement* trap_dimensionsElement = newElement("trap");
    trap_dimensionsElement->
@@ -165,22 +165,20 @@ sphere_dimensionsWrite(xercesc::DOMElement* parametersElement,
 {
    xercesc::DOMElement* sphere_dimensionsElement =
                         newElement("sphere_dimensions");
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("rmin",sphere->GetInsideRadius()/mm));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("rmax",sphere->GetOuterRadius()/mm));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("startphi",sphere->GetStartPhiAngle()/degree));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("deltaphi",sphere->GetDeltaPhiAngle()/degree));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("starttheta",sphere->GetStartThetaAngle()/degree));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("deltatheta",sphere->GetDeltaThetaAngle()/degree));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("aunit","deg"));
-   sphere_dimensionsElement->
-     setAttributeNode(newAttribute("lunit","mm"));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("rmin",
+                             sphere->GetInsideRadius()/mm));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("rmax",
+                             sphere->GetOuterRadius()/mm));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("startphi",
+                             sphere->GetStartPhiAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("deltaphi",
+                             sphere->GetDeltaPhiAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("starttheta",
+                             sphere->GetStartThetaAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("deltatheta",
+                             sphere->GetDeltaThetaAngle()/degree));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("aunit","deg"));
+   sphere_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
    parametersElement->appendChild(sphere_dimensionsElement);
 }
 
@@ -189,7 +187,8 @@ orb_dimensionsWrite(xercesc::DOMElement* parametersElement,
                     const G4Orb* const orb)
 {
    xercesc::DOMElement* orb_dimensionsElement = newElement("orb_dimensions");
-   orb_dimensionsElement->setAttributeNode(newAttribute("r",orb->GetRadius()/mm));
+   orb_dimensionsElement->setAttributeNode(newAttribute("r",
+                          orb->GetRadius()/mm));
    orb_dimensionsElement->setAttributeNode(newAttribute("lunit","mm"));
    parametersElement->appendChild(orb_dimensionsElement);
 }
@@ -198,7 +197,8 @@ void G4GDMLWriteParamvol::
 torus_dimensionsWrite(xercesc::DOMElement* parametersElement,
                       const G4Torus* const torus)
 {
-   xercesc::DOMElement* torus_dimensionsElement = newElement("torus_dimensions");
+   xercesc::DOMElement* torus_dimensionsElement =
+                        newElement("torus_dimensions");
    torus_dimensionsElement->
      setAttributeNode(newAttribute("rmin",torus->GetRmin()/mm));
    torus_dimensionsElement->
@@ -221,10 +221,10 @@ para_dimensionsWrite(xercesc::DOMElement* parametersElement,
                      const G4Para* const para)
 {
    const G4ThreeVector simaxis = para->GetSymAxis();
-   const G4double alpha = atan(para->GetTanAlpha());
-   const G4double theta = acos(simaxis.z());
+   const G4double alpha = std::atan(para->GetTanAlpha());
+   const G4double theta = std::acos(simaxis.z());
    const G4double phi = (simaxis.z() != 1.0)
-                      ? (atan(simaxis.y()/simaxis.x())) : (0.0);
+                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
 
    xercesc::DOMElement* para_dimensionsElement = newElement("para_dimensions");
    para_dimensionsElement->
@@ -288,62 +288,62 @@ parametersWrite(xercesc::DOMElement* paramvolElement,
 
    if (G4Box* box = dynamic_cast<G4Box*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*box,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*box,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       box_dimensionsWrite(parametersElement,box);
    } else
    if (G4Trd* trd = dynamic_cast<G4Trd*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*trd,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*trd,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       trd_dimensionsWrite(parametersElement,trd);
    } else
    if (G4Trap* trap = dynamic_cast<G4Trap*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*trap,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*trap,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       trap_dimensionsWrite(parametersElement,trap);
    } else
    if (G4Tubs* tube = dynamic_cast<G4Tubs*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*tube,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*tube,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       tube_dimensionsWrite(parametersElement,tube);
    } else
    if (G4Cons* cone = dynamic_cast<G4Cons*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*cone,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*cone,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       cone_dimensionsWrite(parametersElement,cone);
    } else
    if (G4Sphere* sphere = dynamic_cast<G4Sphere*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*sphere,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*sphere,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       sphere_dimensionsWrite(parametersElement,sphere);
    } else
    if (G4Orb* orb = dynamic_cast<G4Orb*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*orb,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*orb,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       orb_dimensionsWrite(parametersElement,orb);
    } else
    if (G4Torus* torus = dynamic_cast<G4Torus*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*torus,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*torus,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       torus_dimensionsWrite(parametersElement,torus);
    } else
    if (G4Para* para = dynamic_cast<G4Para*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*para,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*para,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       para_dimensionsWrite(parametersElement,para);
    } else
    if (G4Hype* hype = dynamic_cast<G4Hype*>(solid))
    {
-      paramvol->GetParameterisation()->
-        ComputeDimensions(*hype,index,const_cast<G4VPhysicalVolume*>(paramvol));
+      paramvol->GetParameterisation()->ComputeDimensions(*hype,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
       hype_dimensionsWrite(parametersElement,hype);
    }
    else

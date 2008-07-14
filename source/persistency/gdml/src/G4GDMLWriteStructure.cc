@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.67 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.68 2008-07-14 16:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -113,21 +113,21 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
       physvolElement->appendChild(fileElement);
    }
 
-   if (fabs(pos.x()) > kLinearPrecision
-    || fabs(pos.y()) > kLinearPrecision
-    || fabs(pos.z()) > kLinearPrecision)
+   if (std::fabs(pos.x()) > kLinearPrecision
+    || std::fabs(pos.y()) > kLinearPrecision
+    || std::fabs(pos.z()) > kLinearPrecision)
    {
      positionWrite(physvolElement,name+"position", pos);
    }
-   if (fabs(rot.x()) > kAngularPrecision
-    || fabs(rot.y()) > kAngularPrecision
-    || fabs(rot.z()) > kAngularPrecision)
+   if (std::fabs(rot.x()) > kAngularPrecision
+    || std::fabs(rot.y()) > kAngularPrecision
+    || std::fabs(rot.z()) > kAngularPrecision)
    {
      rotationWrite(physvolElement,name+"rotation",rot);
    }
-   if (fabs(scl.x()-1.0) > kRelativePrecision
-    || fabs(scl.y()-1.0) > kRelativePrecision
-    || fabs(scl.z()-1.0) > kRelativePrecision)
+   if (std::fabs(scl.x()-1.0) > kRelativePrecision
+    || std::fabs(scl.y()-1.0) > kRelativePrecision
+    || std::fabs(scl.z()-1.0) > kRelativePrecision)
    {
      scaleWrite(physvolElement,name+"scale",scl);
    }
