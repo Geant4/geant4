@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.25 2008-07-10 09:46:01 gcosmo Exp $
+// $Id: G4Region.cc,v 1.26 2008-07-15 10:27:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -239,7 +239,10 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
   pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos != fRootVolumes.end())
   {
-    lv->SetRegionRootFlag(false);
+    if (fRootVolumes.size() != 1)  // Avoid resetting flag for world since
+    {                              // volume may be already deleted !
+      lv->SetRegionRootFlag(false);
+    }
     fRootVolumes.erase(pos);
   }
 
