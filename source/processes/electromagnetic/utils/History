@@ -1,4 +1,4 @@
-$Id: History,v 1.336 2008-07-15 16:56:38 vnivanch Exp $
+$Id: History,v 1.337 2008-07-15 18:19:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,9 @@ G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess -
                    multi-thread developments: separated members
                    fixed at construction, defined at ininitialisation, and
                    modified in run time
+G4VEnergyLossProcess - added register/deregister mechanism and deletion
+                   at the end of job for models
+G4EmModelManager - does not delete models anymore
 
 9 July 08: V.Ivant (emutils-V09-01-20)
 G4ElectronIonPair - a new helper class to sample number of primary ionisations
