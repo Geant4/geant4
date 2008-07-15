@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.11 2008-05-29 16:03:17 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.12 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,19 +50,24 @@
 //
 
 #include "G4VEmModel.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  lowLimit(0.1*keV), highLimit(100.0*TeV), polarAngleLimit(0.0),
-  fluc(0), name(nam), pParticleChange(0) 
-{}
+  fluc(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
+  polarAngleLimit(0.0), pParticleChange(0) 
+{
+  G4LossTableManager::Instance()->Register(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::~G4VEmModel()
-{}
+{
+  G4LossTableManager::Instance()->DeRegister(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

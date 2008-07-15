@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.40 2007-11-09 11:35:54 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.41 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,41 +138,7 @@ G4EmModelManager::G4EmModelManager():
 
 G4EmModelManager::~G4EmModelManager()
 {
-  G4int i,j;
   Clear();
-  if(1 < verboseLevel) {
-    G4cout << "G4EmModelManager:: delete models ";
-    if(particle) G4cout << " for " << particle->GetParticleName();
-    G4cout << " nModels=" << nEmModels <<G4endl;
-  }
-
-  for(i = 0; i<nEmModels; i++) {
-    orderOfModels[i] = 1;
-  }
-  for(i = 0; i<nEmModels; i++) {
-    if (orderOfModels[i]) {
-      orderOfModels[i] = 0;
-      for(j = i+1; j<nEmModels; j++) {
-        if(models[i] == models[j]) orderOfModels[j] = 0;
-      }
-      G4String nam = models[i]->GetName();
-      if(nam != "PAI" && nam != "PAIModel" ) delete models[i];
-    }
-  }
-  for(i = 0; i<nEmModels; i++) {
-    orderOfModels[i] = 1;
-  }
-  for(i = 0; i<nEmModels; i++) {
-    if (orderOfModels[i]) {
-      orderOfModels[i] = 0;
-      for(j = i+1; j<nEmModels; j++) {
-        if(flucModels[i] == flucModels[j]) orderOfModels[j] = 0;
-      }
-      delete flucModels[i];
-    }
-  }
-  if(1 < verboseLevel) 
-    G4cout << "G4EmModelManager:: models are deleted!" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

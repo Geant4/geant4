@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.52 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.53 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,21 +81,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-                      G4VDiscreteProcess(name, type),
-  selectedModel(0),		      
+  G4VDiscreteProcess(name, type),
+  secondaryParticle(0),
+  buildLambdaTable(true),
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
-  particle(0),
-  secondaryParticle(0),
   nLambdaBins(90),
   lambdaFactor(0.8),
-  currentCouple(0),
   integral(false),
-  buildLambdaTable(true),
   applyCuts(false),
   startFromNull(true),
-  nRegions(0)
+  nRegions(0),
+  selectedModel(0),
+  particle(0),
+  currentCouple(0)
 {
   SetVerboseLevel(1);
   minKinEnergy = 0.1*keV;

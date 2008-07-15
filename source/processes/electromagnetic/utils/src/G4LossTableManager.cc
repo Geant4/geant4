@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.90 2008-07-08 10:57:22 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.91 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,11 +117,19 @@ G4LossTableManager::~G4LossTableManager()
   }
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; j++) {
-    if(msc_vector[j] ) delete msc_vector[j];
+    if( msc_vector[j] ) delete msc_vector[j];
   }
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; k++) {
-    if(emp_vector[k] ) delete emp_vector[k];
+    if( emp_vector[k] ) delete emp_vector[k];
+  }
+  size_t mod = mod_vector.size();
+  for (size_t a=0; a<mod; a++) {
+    if( mod_vector[a] ) delete mod_vector[a];
+  }
+  size_t fmod = fmod_vector.size();
+  for (size_t b=0; b<fmod; b++) {
+    if( fmod_vector[b] ) delete fmod_vector[b];
   }
   Clear();
   delete theMessenger;
@@ -230,9 +238,10 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
   msc_vector.push_back(p);
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VMultipleScattering : " 
 	   << p->GetProcessName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -250,9 +259,10 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 void G4LossTableManager::Register(G4VEmProcess* p)
 {
   emp_vector.push_back(p);
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VEmProcess : " 
 	   << p->GetProcessName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -262,6 +272,48 @@ void G4LossTableManager::DeRegister(G4VEmProcess* p)
   size_t emp = emp_vector.size();
   for (size_t i=0; i<emp; i++) {
     if(emp_vector[i] == p) emp_vector[i] = 0;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::Register(G4VEmModel* p)
+{
+  mod_vector.push_back(p);
+  if(verbose > 1) {
+    G4cout << "G4LossTableManager::Register G4VEmModel : " 
+	   << p->GetName() << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VEmModel* p)
+{
+  size_t n = mod_vector.size();
+  for (size_t i=0; i<n; i++) {
+    if(mod_vector[i] == p) mod_vector[i] = 0;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::Register(G4VEmFluctuationModel* p)
+{
+  fmod_vector.push_back(p);
+  if(verbose > 1) {
+    G4cout << "G4LossTableManager::Register G4VEmFluctuationModel : " 
+	   << p->GetName() << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VEmFluctuationModel* p)
+{
+  size_t n = fmod_vector.size();
+  for (size_t i=0; i<n; i++) {
+    if(fmod_vector[i] == p) fmod_vector[i] = 0;
   }
 }
 

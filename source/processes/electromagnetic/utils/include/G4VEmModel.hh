@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.51 2008-07-08 10:58:01 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.52 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
 // 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
 // 29-10-07 Added SampleScattering (V.Ivanchenko)
+// 15-07-08 Reorder class members for further multi-thread development (VI)
 //
 // Class Description:
 //
@@ -226,19 +227,28 @@ private:
   G4VEmModel & operator=(const  G4VEmModel &right);
   G4VEmModel(const  G4VEmModel&);
 
+  // ======== Parameters of the class fixed at construction =========
+
+  G4VEmFluctuationModel* fluc;
+  const G4String   name;
+
+  // ======== Parameters of the class fixed at initialisation =======
+
   G4double        lowLimit;
   G4double        highLimit;
   G4double        polarAngleLimit;
-  G4double        xsec[40];
-
-  G4VEmFluctuationModel* fluc;
-
-  const G4String   name;
-  const G4Element* currentElement;
 
 protected:
 
   G4VParticleChange*  pParticleChange;
+
+  // ======== Cashed values - may be state dependent ================
+
+private:
+
+  const G4Element* currentElement;
+  G4double         xsec[40];
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

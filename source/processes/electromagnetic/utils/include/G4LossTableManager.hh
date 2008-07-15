@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.52 2008-03-10 18:39:45 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.53 2008-07-15 16:56:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -152,6 +152,14 @@ public:
 
   void DeRegister(G4VEmProcess* p);
 
+  void Register(G4VEmModel* p);
+
+  void DeRegister(G4VEmModel* p);
+
+  void Register(G4VEmFluctuationModel* p);
+
+  void DeRegister(G4VEmFluctuationModel* p);
+
   void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, 
 				      G4VEnergyLossProcess* p);
   
@@ -256,6 +264,8 @@ private:
   std::vector<G4PhysicsTable*> inv_range_vector;
   std::vector<G4VMultipleScattering*> msc_vector;
   std::vector<G4VEmProcess*> emp_vector;
+  std::vector<G4VEmModel*> mod_vector;
+  std::vector<G4VEmFluctuationModel*> fmod_vector;
 
   // cash
   G4VEnergyLossProcess* currentLoss;

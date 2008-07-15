@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.78 2008-04-08 15:52:17 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.79 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@
 // 25-09-07 More accurate handling zero xsect in 
 //          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 15-07-08 Reorder class members for further multi-thread development (VI)
 //
 // Class Description:
 //
@@ -425,22 +426,25 @@ private:
   G4VEnergyLossProcess(G4VEnergyLossProcess &);
   G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
 
-// =====================================================================
+  // ======== Parameters of the class fixed at construction =========
 
-protected:
+  G4EmModelManager*           modelManager;
+  G4SafetyHelper*             safetyHelper;
 
-  G4ParticleChangeForLoss               fParticleChange;
+  const G4ParticleDefinition* secondaryParticle;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
 
-private:
+  G4PhysicsVector*            vstrag;
 
-  G4EmModelManager*                     modelManager;
+  // ======== Parameters of the class fixed at initialisation =======
+
   std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
   G4int*                                idxSCoffRegions;
-  std::vector<G4DynamicParticle*>       secParticles;
-  std::vector<G4Track*>                 scTracks;
+
   std::vector<G4VEnergyLossProcess*>    scProcesses;
   G4int                                 nProcesses;
 
@@ -464,29 +468,48 @@ private:
   const G4DataVector*         theCuts;
   const G4DataVector*         theSubCuts;
 
-  G4SafetyHelper*             safetyHelper;
+  const G4ParticleDefinition* baseParticle;
+
+  G4int    nBins;
+  G4int    nBinsCSDA;
+
+  G4double lowestKinEnergy;
+  G4double minKinEnergy;
+  G4double maxKinEnergy;
+  G4double maxKinEnergyCSDA;
+
+  G4double linLossLimit;
+  G4double minSubRange;
+  G4double dRoverRange;
+  G4double finalRange;
+  G4double lambdaFactor;
+
+  G4bool   lossFluctuationFlag;
+  G4bool   rndmStepFlag;
+  G4bool   tablesAreBuilt;
+  G4bool   integral;
+  G4bool   isIonisation;
+  G4bool   useSubCutoff;
+
+  // ======== Cashed values - may be state dependent ================
+
+protected:
+
+  G4ParticleChangeForLoss          fParticleChange;
+
+private:
+
+  std::vector<G4DynamicParticle*>  secParticles;
+  std::vector<G4Track*>            scTracks;
 
   const G4ParticleDefinition* particle;
-  const G4ParticleDefinition* baseParticle;
-  const G4ParticleDefinition* secondaryParticle;
-  const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* thePositron;
-
-  G4PhysicsVector*            vstrag;
 
   // cash
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
 
-  G4int    nBins;
-  G4int    nBinsCSDA;
   G4int    nWarnings;
-
-  G4double lowestKinEnergy;
-  G4double minKinEnergy;
-  G4double maxKinEnergy;
-  G4double maxKinEnergyCSDA;
 
   G4double massRatio;
   G4double reduceFactor;
@@ -497,21 +520,10 @@ private:
   G4double fRange;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
-  G4double linLossLimit;
-  G4double minSubRange;
-  G4double dRoverRange;
-  G4double finalRange;
-  G4double lambdaFactor;
   G4double mfpKinEnergy;
 
   G4GPILSelection  aGPILSelection;
 
-  G4bool   lossFluctuationFlag;
-  G4bool   rndmStepFlag;
-  G4bool   tablesAreBuilt;
-  G4bool   integral;
-  G4bool   isIonisation;
-  G4bool   useSubCutoff;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

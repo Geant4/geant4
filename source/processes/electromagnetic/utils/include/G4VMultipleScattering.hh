@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.51 2008-05-09 08:19:38 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.52 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
 // 12-02-07 Add get/set skin (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 15-07-08 Reorder class members for further multi-thread development (VI)
 //
 
 // -------------------------------------------------------------------
@@ -71,7 +72,6 @@
 #define G4VMultipleScattering_h 1
 
 #include "G4VContinuousDiscreteProcess.hh"
-#include "G4LossTableManager.hh"
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -290,26 +290,15 @@ private:
   G4VMultipleScattering(G4VMultipleScattering &);
   G4VMultipleScattering & operator=(const G4VMultipleScattering &right);
 
-  // =====================================================================
-
-protected:
-
-  G4GPILSelection             valueGPILSelectionMSC;
-  G4ParticleChangeForMSC      fParticleChange;
-
-private:
+  // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*           modelManager;
-  G4VEmModel*                 currentModel;
+  G4bool                      buildLambdaTable;
+
+  // ======== Parameters of the class fixed at initialisation =======
+
   G4PhysicsTable*             theLambdaTable;
-
-  // cache
   const G4ParticleDefinition* firstParticle;
-  const G4ParticleDefinition* currentParticle;
-  const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentMaterialIndex;
-
-  G4int                       nBins;
 
   G4MscStepLimitType          stepLimit;
 
@@ -320,8 +309,26 @@ private:
   G4double                    facgeom;
   G4double                    polarAngleLimit;
 
+  G4int                       nBins;
+
   G4bool                      latDisplasment;
-  G4bool                      buildLambdaTable;
+
+  // ======== Cashed values - may be state dependent ================
+
+protected:
+
+  G4GPILSelection             valueGPILSelectionMSC;
+  G4ParticleChangeForMSC      fParticleChange;
+
+private:
+
+  G4VEmModel*                 currentModel;
+
+  // cache
+  const G4ParticleDefinition* currentParticle;
+  const G4MaterialCutsCouple* currentCouple;
+  size_t                      currentMaterialIndex;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

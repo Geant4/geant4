@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.133 2008-05-29 16:34:24 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.134 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,7 +145,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, 
-  G4ProcessType type): G4VContinuousDiscreteProcess(name, type),
+					   G4ProcessType type): 
+  G4VContinuousDiscreteProcess(name, type),
+  secondaryParticle(0),
   nSCoffRegions(0),
   idxSCoffRegions(0),
   nProcesses(0),
@@ -164,23 +166,22 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theRangeAtMaxEnergy(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
-  particle(0),
   baseParticle(0),
-  secondaryParticle(0),
-  currentCouple(0),
   nBins(120),
   nBinsCSDA(70),
-  nWarnings(0),
   linLossLimit(0.05),
   minSubRange(0.1),
   lambdaFactor(0.8),
-  mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   tablesAreBuilt(false),
   integral(true),
   isIonisation(true),
-  useSubCutoff(false)
+  useSubCutoff(false),
+  particle(0),
+  currentCouple(0),
+  nWarnings(0),
+  mfpKinEnergy(0.0)
 {
   SetVerboseLevel(1);
 

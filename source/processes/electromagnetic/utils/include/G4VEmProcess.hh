@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.44 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.45 2008-07-15 16:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 25-09-07 More accurate handling zero xsect in 
 //          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 15-07-08 Reorder class members for further multi-thread development (VI)
 //
 // Class Description:
 //
@@ -280,29 +281,22 @@ private:
   G4VEmProcess(G4VEmProcess &);
   G4VEmProcess & operator=(const G4VEmProcess &right);
 
-// =====================================================================
-
-protected:
-
-  G4ParticleChangeForGamma     fParticleChange;
-
-private:
-
-  std::vector<G4DynamicParticle*> secParticles;
+  // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*            modelManager;
-  G4VEmModel*                  selectedModel;  
+  const G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition*  theElectron;
+  const G4ParticleDefinition*  thePositron;
+  const G4ParticleDefinition*  secondaryParticle;
+
+  G4bool                       buildLambdaTable;
+
+  // ======== Parameters of the class fixed at initialisation =======
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
   G4double*                    theEnergyOfCrossSectionMax;
   G4double*                    theCrossSectionMax;
-
-  const G4ParticleDefinition*  particle;
-  const G4ParticleDefinition*  secondaryParticle;
-  const G4ParticleDefinition*  theGamma;
-  const G4ParticleDefinition*  theElectron;
-  const G4ParticleDefinition*  thePositron;
 
   const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
@@ -316,6 +310,28 @@ private:
   G4double                     lambdaFactor;
   G4double                     polarAngleLimit;
 
+  G4bool                       integral;
+  G4bool                       applyCuts;
+  G4bool                       startFromNull;
+
+  G4int                        nRegions;
+  std::vector<G4Region*>       regions;
+  std::vector<G4bool>          flagsDeexcitation;
+
+  // ======== Cashed values - may be state dependent ================
+
+protected:
+
+  G4ParticleChangeForGamma     fParticleChange;
+
+private:
+
+  std::vector<G4DynamicParticle*> secParticles;
+
+  G4VEmModel*                  selectedModel;  
+
+  const G4ParticleDefinition*  particle;
+
   // cash
   const G4Material*            currentMaterial;
   const G4MaterialCutsCouple*  currentCouple;
@@ -324,15 +340,6 @@ private:
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
-
-  G4bool                       integral;
-  G4bool                       buildLambdaTable;
-  G4bool                       applyCuts;
-  G4bool                       startFromNull;
-
-  G4int                        nRegions;
-  std::vector<G4Region*>       regions;
-  std::vector<G4bool>          flagsDeexcitation;
 
 };
 
