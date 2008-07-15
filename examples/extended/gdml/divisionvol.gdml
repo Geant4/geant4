@@ -6,7 +6,7 @@
 
    <materials>
       <material Z="1.0" name="AIR" state="gas">
-         <D value="1e-25"/>
+         <D value="1e-24"/>
          <atom value="1.00794"/>
       </material>
       <material name="ALU" state="solid" Z="13.0">
@@ -28,7 +28,7 @@
       <volume name="lvDivision">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
-         <divisionvol axis="kXAxis" number="8" unit="mm">
+         <divisionvol axis="kXAxis" number="8" unit="mm" width="0" offset="0">
             <volumeref ref="lvCube"/>
          </divisionvol>
       </volume>

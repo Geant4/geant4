@@ -9,7 +9,7 @@
       <atom unit="g/mole" value="26.98"/>
     </material>
     <material Z="1" name="AIR" state="gas">
-      <D unit="g/cm3" value="1e-25"/>
+      <D unit="g/cm3" value="1e-24"/>
       <atom unit="g/mole" value="1.00794"/>
     </material>
   </materials>

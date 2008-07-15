@@ -23,7 +23,7 @@
 
    <materials>
       <material Z="1.0" name="AIR" state="gas">
-         <D value="1e-25"/>
+         <D value="1e-24"/>
          <atom value="1.00794"/>
       </material>
       <material name="ALU" state="solid" Z="13.0">

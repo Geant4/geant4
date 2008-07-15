@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd">
 
    <define>
       <constant name="box_num" value="20"/>
@@ -9,7 +9,7 @@
 
    <materials>
       <material Z="1.0" name="AIR">
-         <D value="1e-25"/>
+         <D value="1e-24"/>
          <atom value="1.00794"/>
       </material>
       <material name="ALU" Z="13.0">
@@ -29,12 +29,12 @@
          <solidref ref="Box"/>
       </volume>
       <volume name="PARAM">
-         <solidref ref="WorldBox"/>
          <materialref ref="AIR"/>
-         <paramvol>
+         <solidref ref="WorldBox"/>
+         <paramvol ncopies="400">
             <volumeref ref="vBox"/>
-               <loop for="i" from="0" to="box_num" step="1">
-               <loop for="j" from="0" to="box_num" step="1">
+               <loop for="i" from="0" to="20" step="1">
+               <loop for="j" from="0" to="20" step="1">
                   <parameters>
                      <position x="1000*(i/box_num-0.5)" y="200*sin(2.0*pi*i/box_num)*cos(2.0*pi*j/box_num)" z="1000*(j/box_num-0.5)"/>
 		     <box_dimensions x="20" y="20" z="20"/>
@@ -44,8 +44,8 @@
          </paramvol>
       </volume>
       <volume name="TOP">
-         <solidref ref="WorldBox"/>
          <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
          <physvol>
             <volumeref ref="PARAM"/>
          </physvol>
