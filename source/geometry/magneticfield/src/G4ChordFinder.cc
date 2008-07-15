@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.48 2008-05-28 09:19:08 tnikitin Exp $
+// $Id: G4ChordFinder.cc,v 1.49 2008-07-15 14:02:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -226,7 +226,7 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
 // ............................................................................
 
 G4double
-G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
+G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
                                      G4double     stepMax,
                                      G4FieldTrack&   yEnd, // Endpoint
                                      G4double&   dyErrPos, // Error of endpoint

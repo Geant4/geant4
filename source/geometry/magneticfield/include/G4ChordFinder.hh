@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.18 2008-05-28 09:18:10 tnikitin Exp $
+// $Id: G4ChordFinder.hh,v 1.19 2008-07-15 14:02:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,7 @@ class G4ChordFinder
                         G4double dChordStep,     // Current dchord estimate
                         G4double& stepEstimate_Unconstrained ) ;  
       
-      virtual G4double FindNextChord( const  G4FieldTrack  yStart,
+      virtual G4double FindNextChord( const  G4FieldTrack& yStart,
                               G4double     stepMax,
                               G4FieldTrack& yEnd,
                               G4double&    dyErr,      //  Error of endpoint 
