@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.49 2008-07-03 10:06:27 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.50 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,10 +52,7 @@
 
 class G4GDMLParser
 {
-   G4GDMLReadStructure reader;
-   G4GDMLWriteStructure writer;
-
- public:  // with description
+  public:  // with description
 
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
@@ -87,6 +84,12 @@ class G4GDMLParser
    inline void AddModule(const G4VPhysicalVolume* const physvol);
    inline void AddModule(const G4int depth);
    inline void SetAddPointerToName(G4bool set);
+
+  private:
+
+   G4GDMLReadStructure reader;
+   G4GDMLWriteStructure writer;
+
 };
 
 #include "G4GDMLParser.icc"

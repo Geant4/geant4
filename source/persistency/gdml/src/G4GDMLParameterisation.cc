@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLParameterisation.cc,v 1.10 2008-07-14 16:57:10 gcosmo Exp $
+// $Id: G4GDMLParameterisation.cc,v 1.11 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParameterisation Implementation
@@ -34,31 +34,34 @@
 
 #include "G4GDMLParameterisation.hh"
 
-G4int G4GDMLParameterisation::getSize() const {
-
+G4int G4GDMLParameterisation::GetSize() const
+{
    return (G4int)parameterList.size();
 }
 
-void G4GDMLParameterisation::addParameter(const PARAMETER& newParameter) {
-
+void G4GDMLParameterisation::AddParameter(const PARAMETER& newParameter)
+{
    parameterList.push_back(newParameter);
 }
 
-void G4GDMLParameterisation::ComputeTransformation(const G4int index,G4VPhysicalVolume* physvol) const {
-
+void G4GDMLParameterisation::
+ComputeTransformation(const G4int index,G4VPhysicalVolume* physvol) const
+{
    physvol->SetTranslation(parameterList[index].position);
    physvol->SetRotation(parameterList[index].pRot);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Box& box,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Box& box,const G4int index,const G4VPhysicalVolume*) const
+{
    box.SetXHalfLength(parameterList[index].dimension[0]);
    box.SetYHalfLength(parameterList[index].dimension[1]);
    box.SetZHalfLength(parameterList[index].dimension[2]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Trd& trd,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Trd& trd,const G4int index,const G4VPhysicalVolume*) const
+{
    trd.SetXHalfLength1(parameterList[index].dimension[0]);
    trd.SetXHalfLength2(parameterList[index].dimension[1]);
    trd.SetYHalfLength1(parameterList[index].dimension[2]);
@@ -66,8 +69,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Trd& trd,const G4int index,cons
    trd.SetZHalfLength(parameterList[index].dimension[4]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Trap& trap,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Trap& trap,const G4int index,const G4VPhysicalVolume*) const
+{
    trap.SetAllParameters(parameterList[index].dimension[0], // Dz
                          parameterList[index].dimension[1], // Theta
                          parameterList[index].dimension[2], // Phi
@@ -81,8 +85,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Trap& trap,const G4int index,co
                          parameterList[index].dimension[10]); // pAlp2
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Tubs& tubs,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Tubs& tubs,const G4int index,const G4VPhysicalVolume*) const
+{
    tubs.SetInnerRadius(parameterList[index].dimension[0]);
    tubs.SetOuterRadius(parameterList[index].dimension[1]);
    tubs.SetZHalfLength(parameterList[index].dimension[2]);
@@ -90,8 +95,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Tubs& tubs,const G4int index,co
    tubs.SetDeltaPhiAngle(parameterList[index].dimension[4]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Cons& cons,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Cons& cons,const G4int index,const G4VPhysicalVolume*) const
+{
    cons.SetInnerRadiusMinusZ(parameterList[index].dimension[0]);
    cons.SetOuterRadiusMinusZ(parameterList[index].dimension[1]);
    cons.SetInnerRadiusPlusZ(parameterList[index].dimension[2]);
@@ -101,8 +107,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Cons& cons,const G4int index,co
    cons.SetDeltaPhiAngle(parameterList[index].dimension[6]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Sphere& sphere,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Sphere& sphere,const G4int index,const G4VPhysicalVolume*) const
+{
    sphere.SetInsideRadius(parameterList[index].dimension[0]);
    sphere.SetOuterRadius(parameterList[index].dimension[1]);
    sphere.SetStartPhiAngle(parameterList[index].dimension[2]);
@@ -111,13 +118,15 @@ void G4GDMLParameterisation::ComputeDimensions(G4Sphere& sphere,const G4int inde
    sphere.SetDeltaThetaAngle(parameterList[index].dimension[5]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Orb& orb,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Orb& orb,const G4int index,const G4VPhysicalVolume*) const
+{
    orb.SetRadius(parameterList[index].dimension[0]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Torus& torus,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Torus& torus,const G4int index,const G4VPhysicalVolume*) const
+{
    torus.SetAllParameters(parameterList[index].dimension[0], // pRmin
                           parameterList[index].dimension[1], // pRmax
 			  parameterList[index].dimension[2], // pRtor
@@ -125,8 +134,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Torus& torus,const G4int index,
 			  parameterList[index].dimension[4]); // pDPhi
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Para& para,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Para& para,const G4int index,const G4VPhysicalVolume*) const
+{
    para.SetXHalfLength(parameterList[index].dimension[0]);
    para.SetYHalfLength(parameterList[index].dimension[1]);
    para.SetZHalfLength(parameterList[index].dimension[2]);
@@ -135,8 +145,9 @@ void G4GDMLParameterisation::ComputeDimensions(G4Para& para,const G4int index,co
    para.SetThetaAndPhi(parameterList[index].dimension[4],parameterList[index].dimension[5]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Hype& hype,const G4int index,const G4VPhysicalVolume*) const {
-
+void G4GDMLParameterisation::
+ComputeDimensions(G4Hype& hype,const G4int index,const G4VPhysicalVolume*) const
+{
    hype.SetInnerRadius(parameterList[index].dimension[0]);
    hype.SetOuterRadius(parameterList[index].dimension[1]);
    hype.SetZHalfLength(parameterList[index].dimension[4]);
@@ -144,14 +155,18 @@ void G4GDMLParameterisation::ComputeDimensions(G4Hype& hype,const G4int index,co
    hype.SetOuterStereo(parameterList[index].dimension[3]);
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const {
-
-   G4Exception("G4GDML: ERROR! Polycone can not be used in parameterised volume!");
+void G4GDMLParameterisation::
+ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const
+{
+   G4Exception("G4GDMLParameterisation::ComputeDimensions()",
+               "InvalidSetup", FatalException,
+               "Parameterisation of G4Polycone not implemented yet. Sorry!");
 }
 
-void G4GDMLParameterisation::ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {
-
-   G4Exception("G4GDML: ERROR! Polyhedra can not be used in parameterised volume!");
+void G4GDMLParameterisation::
+ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const
+{
+   G4Exception("G4GDMLParameterisation::ComputeDimensions()",
+               "InvalidSetup", FatalException,
+               "Parameterisation of G4Polyhedra not implemented yet. Sorry!");
 }
-
-

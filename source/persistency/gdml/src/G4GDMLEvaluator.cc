@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.19 2008-07-11 07:50:08 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.20 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -43,30 +43,30 @@ G4GDMLEvaluator::G4GDMLEvaluator()
    eval.setSystemOfUnits(meter,kilogram,second,ampere,kelvin,mole,candela);
 }
 
-void G4GDMLEvaluator::defineConstant(const G4String& name, G4double value)
+void G4GDMLEvaluator::DefineConstant(const G4String& name, G4double value)
 {
    if (eval.findVariable(name))
    {
      G4String error_msg = "Redefinition of constant or variable: "+name;
-     G4Exception("G4GDMLEvaluator::defineConstant()", "InvalidExpression",
+     G4Exception("G4GDMLEvaluator::DefineConstant()", "InvalidExpression",
                  FatalException, error_msg);
    }
    eval.setVariable(name.c_str(),value);
 }
 
-void G4GDMLEvaluator::defineVariable(const G4String& name,G4double value)
+void G4GDMLEvaluator::DefineVariable(const G4String& name,G4double value)
 {
    if (eval.findVariable(name))
    {
      G4String error_msg = "Redefinition of constant or variable: "+name;
-     G4Exception("G4GDMLEvaluator::defineVariable()", "InvalidExpression",
+     G4Exception("G4GDMLEvaluator::DefineVariable()", "InvalidExpression",
                  FatalException, error_msg);
    }
    eval.setVariable(name.c_str(),value);
    variableList.push_back(name);
 }
 
-void G4GDMLEvaluator::defineMatrix(const G4String& name,
+void G4GDMLEvaluator::DefineMatrix(const G4String& name,
                                          G4int coldim,
                                          std::vector<G4double> valueList)
 {
@@ -75,7 +75,7 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,
    if (size == 0)
    {
      G4String error_msg = "Matrix '"+name+"' is empty!";
-     G4Exception("G4GDMLEvaluator::defineMatrix()", "InvalidSize",
+     G4Exception("G4GDMLEvaluator::DefineMatrix()", "InvalidSize",
                  FatalException, error_msg);
    }
    if (size == 1)
@@ -83,13 +83,13 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,
      G4String error_msg = "Matrix '" + name
                         + "' has only one element! "
                         + "Define a constant instead!!";
-     G4Exception("G4GDMLEvaluator::defineMatrix()", "InvalidSize",
+     G4Exception("G4GDMLEvaluator::DefineMatrix()", "InvalidSize",
                  FatalException, error_msg);
    }
    if (size % coldim != 0)
    {
      G4String error_msg = "Matrix '" + name + "' is not filled correctly!";
-     G4Exception("G4GDMLEvaluator::defineMatrix()", "InvalidSize",
+     G4Exception("G4GDMLEvaluator::DefineMatrix()", "InvalidSize",
                  FatalException, error_msg);
    }
 
@@ -99,7 +99,7 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,
       {
          std::stringstream MatrixElementNameStream;
          MatrixElementNameStream << name << "_" << i;
-         defineConstant(MatrixElementNameStream.str(),valueList[i]);
+         DefineConstant(MatrixElementNameStream.str(),valueList[i]);
       }
    }
    else   // Normal matrix
@@ -112,24 +112,24 @@ void G4GDMLEvaluator::defineMatrix(const G4String& name,
         {
           std::stringstream MatrixElementNameStream;
           MatrixElementNameStream << name << "_" << i << "_" << j;
-          defineConstant(MatrixElementNameStream.str(),valueList[coldim*i+j]);
+          DefineConstant(MatrixElementNameStream.str(),valueList[coldim*i+j]);
         }
       }
    }
 }
 
-void G4GDMLEvaluator::setVariable(const G4String& name, G4double value)
+void G4GDMLEvaluator::SetVariable(const G4String& name, G4double value)
 {
-   if (!isVariable(name))
+   if (!IsVariable(name))
    {
      G4String error_msg = "Variable '" + name + "' is not defined!";
-     G4Exception("G4GDMLEvaluator::setVariable()", "InvalidSetup",
+     G4Exception("G4GDMLEvaluator::SetVariable()", "InvalidSetup",
                  FatalException, error_msg);
    }
    eval.setVariable(name.c_str(),value);
 }
 
-G4bool G4GDMLEvaluator::isVariable(const G4String& name) const
+G4bool G4GDMLEvaluator::IsVariable(const G4String& name) const
 {
    const size_t variableCount = variableList.size();
 
@@ -221,30 +221,30 @@ G4int G4GDMLEvaluator::EvaluateInteger(const G4String& expression)
    return whole;
 }
 
-G4double G4GDMLEvaluator::getConstant(const G4String& name)
+G4double G4GDMLEvaluator::GetConstant(const G4String& name)
 {
-   if (isVariable(name))
+   if (IsVariable(name))
    {
      G4String error_msg = "Constant '" + name
                         + "' is not defined! It is a variable!";
-     G4Exception("G4GDMLEvaluator::getConstant()", "InvalidSetup",
+     G4Exception("G4GDMLEvaluator::GetConstant()", "InvalidSetup",
                  FatalException, error_msg);
    }
    if (!eval.findVariable(name))
    {
      G4String error_msg = "Constant '" + name + "' is not defined!";
-     G4Exception("G4GDMLEvaluator::getConstant()", "InvalidSetup",
+     G4Exception("G4GDMLEvaluator::GetConstant()", "InvalidSetup",
                  FatalException, error_msg);
    }
    return Evaluate(name);
 }
 
-G4double G4GDMLEvaluator::getVariable(const G4String& name)
+G4double G4GDMLEvaluator::GetVariable(const G4String& name)
 {
-   if (!isVariable(name))
+   if (!IsVariable(name))
    {
      G4String error_msg = "Variable '" + name + "' is not a defined!";
-     G4Exception("G4GDMLEvaluator::getConstant()", "InvalidSetup",
+     G4Exception("G4GDMLEvaluator::GetVariable()", "InvalidSetup",
                  FatalException, error_msg);
    }
    return Evaluate(name);

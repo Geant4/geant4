@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.19 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.cc,v 1.20 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
@@ -36,60 +36,60 @@
 #include "G4GDMLWriteMaterials.hh"
 
 void G4GDMLWriteMaterials::
-atomWrite(xercesc::DOMElement* element,const G4double& a)
+AtomWrite(xercesc::DOMElement* element,const G4double& a)
 {
-   xercesc::DOMElement* atomElement = newElement("atom");
-   atomElement->setAttributeNode(newAttribute("unit","g/mole"));
-   atomElement->setAttributeNode(newAttribute("value",a*mole/g));
+   xercesc::DOMElement* atomElement = NewElement("atom");
+   atomElement->setAttributeNode(NewAttribute("unit","g/mole"));
+   atomElement->setAttributeNode(NewAttribute("value",a*mole/g));
    element->appendChild(atomElement);
 }
 
 void G4GDMLWriteMaterials::
 DWrite(xercesc::DOMElement* element,const G4double& d)
 {
-   xercesc::DOMElement* DElement = newElement("D");
-   DElement->setAttributeNode(newAttribute("unit","g/cm3"));
-   DElement->setAttributeNode(newAttribute("value",d*cm3/g));
+   xercesc::DOMElement* DElement = NewElement("D");
+   DElement->setAttributeNode(NewAttribute("unit","g/cm3"));
+   DElement->setAttributeNode(NewAttribute("value",d*cm3/g));
    element->appendChild(DElement);
 }
 
 void G4GDMLWriteMaterials::
 PWrite(xercesc::DOMElement* element,const G4double& P)
 {
-   xercesc::DOMElement* PElement = newElement("P");
-   PElement->setAttributeNode(newAttribute("unit","pascal"));
-   PElement->setAttributeNode(newAttribute("value",P/pascal));
+   xercesc::DOMElement* PElement = NewElement("P");
+   PElement->setAttributeNode(NewAttribute("unit","pascal"));
+   PElement->setAttributeNode(NewAttribute("value",P/pascal));
    element->appendChild(PElement);
 }
 
 void G4GDMLWriteMaterials::
 TWrite(xercesc::DOMElement* element,const G4double& T)
 {
-   xercesc::DOMElement* TElement = newElement("T");
-   TElement->setAttributeNode(newAttribute("unit","K"));
-   TElement->setAttributeNode(newAttribute("value",T/kelvin));
+   xercesc::DOMElement* TElement = NewElement("T");
+   TElement->setAttributeNode(NewAttribute("unit","K"));
+   TElement->setAttributeNode(NewAttribute("value",T/kelvin));
    element->appendChild(TElement);
 }
 
 void G4GDMLWriteMaterials::
-isotopeWrite(const G4Isotope* const isotopePtr)
+IsotopeWrite(const G4Isotope* const isotopePtr)
 {
    const G4String name = GenerateName(isotopePtr->GetName(),isotopePtr);
 
-   xercesc::DOMElement* isotopeElement = newElement("isotope");
-   isotopeElement->setAttributeNode(newAttribute("name",name));
-   isotopeElement->setAttributeNode(newAttribute("N",isotopePtr->GetN()));
-   isotopeElement->setAttributeNode(newAttribute("Z",isotopePtr->GetZ()));
+   xercesc::DOMElement* isotopeElement = NewElement("isotope");
+   isotopeElement->setAttributeNode(NewAttribute("name",name));
+   isotopeElement->setAttributeNode(NewAttribute("N",isotopePtr->GetN()));
+   isotopeElement->setAttributeNode(NewAttribute("Z",isotopePtr->GetZ()));
    materialsElement->appendChild(isotopeElement);
-   atomWrite(isotopeElement,isotopePtr->GetA());
+   AtomWrite(isotopeElement,isotopePtr->GetA());
 }
 
-void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr)
+void G4GDMLWriteMaterials::ElementWrite(const G4Element* const elementPtr)
 {
    const G4String name = GenerateName(elementPtr->GetName(),elementPtr);
 
-   xercesc::DOMElement* elementElement = newElement("element");
-   elementElement->setAttributeNode(newAttribute("name",name));
+   xercesc::DOMElement* elementElement = NewElement("element");
+   elementElement->setAttributeNode(NewAttribute("name",name));
 
    const size_t NumberOfIsotopes = elementPtr->GetNumberOfIsotopes();
 
@@ -101,25 +101,25 @@ void G4GDMLWriteMaterials::elementWrite(const G4Element* const elementPtr)
       {
          G4String fractionref = GenerateName(elementPtr->GetIsotope(i)->GetName(),
                                              elementPtr->GetIsotope(i));
-         xercesc::DOMElement* fractionElement = newElement("fraction");
-         fractionElement->setAttributeNode(newAttribute("n",
+         xercesc::DOMElement* fractionElement = NewElement("fraction");
+         fractionElement->setAttributeNode(NewAttribute("n",
                                            RelativeAbundanceVector[i]));
-         fractionElement->setAttributeNode(newAttribute("ref",fractionref));
+         fractionElement->setAttributeNode(NewAttribute("ref",fractionref));
          elementElement->appendChild(fractionElement);
          AddIsotope(elementPtr->GetIsotope(i));
       }
    }
    else
    {
-      elementElement->setAttributeNode(newAttribute("Z",elementPtr->GetZ()));
-      atomWrite(elementElement,elementPtr->GetA());
+      elementElement->setAttributeNode(NewAttribute("Z",elementPtr->GetZ()));
+      AtomWrite(elementElement,elementPtr->GetA());
    }
 
    materialsElement->appendChild(elementElement);
      // Append the element AFTER all the possible components are appended!
 }
 
-void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr)
+void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 {
    G4String state_str("undefined");
    const G4State state = materialPtr->GetState();
@@ -129,9 +129,9 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr)
 
    const G4String name = GenerateName(materialPtr->GetName(), materialPtr);
 
-   xercesc::DOMElement* materialElement = newElement("material");
-   materialElement->setAttributeNode(newAttribute("name",name));
-   materialElement->setAttributeNode(newAttribute("state",state_str));
+   xercesc::DOMElement* materialElement = NewElement("material");
+   materialElement->setAttributeNode(NewAttribute("name",name));
+   materialElement->setAttributeNode(NewAttribute("state",state_str));
 
    if (materialPtr->GetTemperature() != STP_Temperature)
      { TWrite(materialElement,materialPtr->GetTemperature()); }
@@ -150,29 +150,29 @@ void G4GDMLWriteMaterials::materialWrite(const G4Material* const materialPtr)
          const G4String fractionref =
                         GenerateName(materialPtr->GetElement(i)->GetName(),
                                      materialPtr->GetElement(i));
-         xercesc::DOMElement* fractionElement = newElement("fraction");
-         fractionElement->setAttributeNode(newAttribute("n",
+         xercesc::DOMElement* fractionElement = NewElement("fraction");
+         fractionElement->setAttributeNode(NewAttribute("n",
                                            MassFractionVector[i]));
-         fractionElement->setAttributeNode(newAttribute("ref",fractionref));
+         fractionElement->setAttributeNode(NewAttribute("ref",fractionref));
          materialElement->appendChild(fractionElement);
          AddElement(materialPtr->GetElement(i));
       }
    }
    else
    {
-      materialElement->setAttributeNode(newAttribute("Z",materialPtr->GetZ()));
-      atomWrite(materialElement,materialPtr->GetA());
+      materialElement->setAttributeNode(NewAttribute("Z",materialPtr->GetZ()));
+      AtomWrite(materialElement,materialPtr->GetA());
    }
 
    materialsElement->appendChild(materialElement);
      // Append the material AFTER all the possible components are appended!
 }
 
-void G4GDMLWriteMaterials::materialsWrite(xercesc::DOMElement* element)
+void G4GDMLWriteMaterials::MaterialsWrite(xercesc::DOMElement* element)
 {
    G4cout << "G4GDML: Writing materials..." << G4endl;
 
-   materialsElement = newElement("materials");
+   materialsElement = NewElement("materials");
    element->appendChild(materialsElement);
 
    isotopeList.clear();
@@ -187,7 +187,7 @@ void G4GDMLWriteMaterials::AddIsotope(const G4Isotope* const isotopePtr)
      if (isotopeList[i] == isotopePtr)  { return; }
    }
    isotopeList.push_back(isotopePtr);
-   isotopeWrite(isotopePtr);
+   IsotopeWrite(isotopePtr);
 }
 
 void G4GDMLWriteMaterials::AddElement(const G4Element* const elementPtr)
@@ -197,7 +197,7 @@ void G4GDMLWriteMaterials::AddElement(const G4Element* const elementPtr)
       if (elementList[i] == elementPtr) { return; }
    }
    elementList.push_back(elementPtr);
-   elementWrite(elementPtr);
+   ElementWrite(elementPtr);
 }
 
 void G4GDMLWriteMaterials::AddMaterial(const G4Material* const materialPtr)
@@ -207,5 +207,5 @@ void G4GDMLWriteMaterials::AddMaterial(const G4Material* const materialPtr)
       if (materialList[i] == materialPtr)  { return; }
    }
    materialList.push_back(materialPtr);
-   materialWrite(materialPtr);
+   MaterialWrite(materialPtr);
 }

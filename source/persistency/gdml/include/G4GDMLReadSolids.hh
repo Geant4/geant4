@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.8 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.9 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,41 +80,43 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct { G4double rmin,rmax,z; } zplaneType;
 
-   void booleanRead(const xercesc::DOMElement* const,const BooleanOp);
-   void boxRead(const xercesc::DOMElement* const);
-   void coneRead(const xercesc::DOMElement* const);
-   void ellipsoidRead(const xercesc::DOMElement* const);
-   void eltubeRead(const xercesc::DOMElement* const);
-   void xtruRead(const xercesc::DOMElement* const);
-   void hypeRead(const xercesc::DOMElement* const);
-   void orbRead(const xercesc::DOMElement* const);
-   void paraRead(const xercesc::DOMElement* const);
-   void polyconeRead(const xercesc::DOMElement* const);
-   void polyhedraRead(const xercesc::DOMElement* const);
-   G4QuadrangularFacet* quadrangularRead(const xercesc::DOMElement* const);
-   void reflectedSolidRead(const xercesc::DOMElement* const);
-   G4ExtrudedSolid::ZSection sectionRead(const xercesc::DOMElement* const,G4double);
-   void sphereRead(const xercesc::DOMElement* const);
-   void tessellatedRead(const xercesc::DOMElement* const);
-   void tetRead(const xercesc::DOMElement* const);
-   void torusRead(const xercesc::DOMElement* const);
-   void trapRead(const xercesc::DOMElement* const);
-   void trdRead(const xercesc::DOMElement* const);
-   void tubeRead(const xercesc::DOMElement* const);
-   void twistedboxRead(const xercesc::DOMElement* const);
-   void twistedtrapRead(const xercesc::DOMElement* const);
-   void twistedtrdRead(const xercesc::DOMElement* const);
-   void twistedtubsRead(const xercesc::DOMElement* const);
-   G4TriangularFacet* triangularRead(const xercesc::DOMElement* const);
-   G4TwoVector twoDimVertexRead(const xercesc::DOMElement* const,G4double);
-   zplaneType zplaneRead(const xercesc::DOMElement* const);
-   void opticalsurfaceRead(const xercesc::DOMElement* const);
-   void solidsRead(const xercesc::DOMElement* const);
-
  protected:
 
-   G4VSolid* getSolid(const G4String&) const;
-   G4SurfaceProperty* getSurfaceProperty(const G4String&) const;
+   G4VSolid* GetSolid(const G4String&) const;
+   G4SurfaceProperty* GetSurfaceProperty(const G4String&) const;
+
+ private:
+
+   void BooleanRead(const xercesc::DOMElement* const,const BooleanOp);
+   void BoxRead(const xercesc::DOMElement* const);
+   void ConeRead(const xercesc::DOMElement* const);
+   void EllipsoidRead(const xercesc::DOMElement* const);
+   void EltubeRead(const xercesc::DOMElement* const);
+   void XtruRead(const xercesc::DOMElement* const);
+   void HypeRead(const xercesc::DOMElement* const);
+   void OrbRead(const xercesc::DOMElement* const);
+   void ParaRead(const xercesc::DOMElement* const);
+   void PolyconeRead(const xercesc::DOMElement* const);
+   void PolyhedraRead(const xercesc::DOMElement* const);
+   G4QuadrangularFacet* QuadrangularRead(const xercesc::DOMElement* const);
+   void ReflectedSolidRead(const xercesc::DOMElement* const);
+   G4ExtrudedSolid::ZSection SectionRead(const xercesc::DOMElement* const,G4double);
+   void SphereRead(const xercesc::DOMElement* const);
+   void TessellatedRead(const xercesc::DOMElement* const);
+   void TetRead(const xercesc::DOMElement* const);
+   void TorusRead(const xercesc::DOMElement* const);
+   void TrapRead(const xercesc::DOMElement* const);
+   void TrdRead(const xercesc::DOMElement* const);
+   void TubeRead(const xercesc::DOMElement* const);
+   void TwistedboxRead(const xercesc::DOMElement* const);
+   void TwistedtrapRead(const xercesc::DOMElement* const);
+   void TwistedtrdRead(const xercesc::DOMElement* const);
+   void TwistedtubsRead(const xercesc::DOMElement* const);
+   G4TriangularFacet* TriangularRead(const xercesc::DOMElement* const);
+   G4TwoVector TwoDimVertexRead(const xercesc::DOMElement* const,G4double);
+   zplaneType ZplaneRead(const xercesc::DOMElement* const);
+   void OpticalsurfaceRead(const xercesc::DOMElement* const);
+   void SolidsRead(const xercesc::DOMElement* const);
 };
 
 #endif

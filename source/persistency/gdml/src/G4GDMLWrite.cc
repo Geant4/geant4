@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.46 2008-07-03 10:06:27 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.47 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -43,19 +43,19 @@ G4bool G4GDMLWrite::FileExists(const G4String& fname) const
   return (stat(fname.c_str(),&FileInfo) == 0); 
 }
 
-G4GDMLWrite::VolumeMapType& G4GDMLWrite::volumeMap()
+G4GDMLWrite::VolumeMapType& G4GDMLWrite::VolumeMap()
 {
    static VolumeMapType instance;
    return instance;
 }
 
-G4GDMLWrite::PhysVolumeMapType& G4GDMLWrite::pvolumeMap()
+G4GDMLWrite::PhysVolumeMapType& G4GDMLWrite::PvolumeMap()
 {
    static PhysVolumeMapType instance;
    return instance;
 }
 
-G4GDMLWrite::DepthMapType& G4GDMLWrite::depthMap()
+G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 {
    static DepthMapType instance;
    return instance;
@@ -68,7 +68,7 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
    return G4String(stream.str());
 }
 
-xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,
+xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
                                             const G4String& value)
 {
    xercesc::XMLString::transcode(name,tempStr,99);
@@ -78,7 +78,7 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,
    return att;
 }
 
-xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,
+xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
                                             const G4double& value)
 {
    xercesc::XMLString::transcode(name,tempStr,99);
@@ -92,7 +92,7 @@ xercesc::DOMAttr* G4GDMLWrite::newAttribute(const G4String& name,
    return att;
 }
 
-xercesc::DOMElement* G4GDMLWrite::newElement(const G4String& name)
+xercesc::DOMElement* G4GDMLWrite::NewElement(const G4String& name)
 {
    xercesc::XMLString::transcode(name,tempStr,99);
    return doc->createElement(tempStr);
@@ -115,7 +115,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
                  FatalException, ErrorMessage);
    }
    
-   volumeMap().clear(); // The module map is global for all modules,
+   VolumeMap().clear(); // The module map is global for all modules,
                         // so clear it only at once!
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
@@ -134,16 +134,16 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true))
        writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-   gdml->setAttributeNode(newAttribute("xmlns:xsi",
+   gdml->setAttributeNode(NewAttribute("xmlns:xsi",
                           "http://www.w3.org/2001/XMLSchema-instance"));
-   gdml->setAttributeNode(newAttribute("xsi:noNamespaceSchemaLocation",
+   gdml->setAttributeNode(NewAttribute("xsi:noNamespaceSchemaLocation",
                           SchemaLocation));
 
-   defineWrite(gdml);
-   materialsWrite(gdml);
-   solidsWrite(gdml);
-   structureWrite(gdml);
-   setupWrite(gdml,logvol);
+   DefineWrite(gdml);
+   MaterialsWrite(gdml);
+   SolidsWrite(gdml);
+   StructureWrite(gdml);
+   SetupWrite(gdml,logvol);
 
    G4Transform3D R = TraverseVolumeTree(logvol,depth);
 
@@ -215,7 +215,7 @@ void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol)
                  "It is not possible to modularize by replicated volume!");
    }
 
-   pvolumeMap()[physvol] = fname;
+   PvolumeMap()[physvol] = fname;
 }
 
 void G4GDMLWrite::AddModule(const G4int depth)
@@ -225,27 +225,27 @@ void G4GDMLWrite::AddModule(const G4int depth)
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "Depth must be a positive number!");
    }
-   if (depthMap().find(depth) != depthMap().end())
+   if (DepthMap().find(depth) != DepthMap().end())
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "Adding module(s) at this depth is already requested!");
    }
-   depthMap()[depth] = 0;
+   DepthMap()[depth] = 0;
 }
 
 G4String G4GDMLWrite::Modularize( const G4VPhysicalVolume* const physvol,
                                   const G4int depth )
 {
-   if (pvolumeMap().find(physvol) != pvolumeMap().end())
+   if (PvolumeMap().find(physvol) != PvolumeMap().end())
    {
-     return pvolumeMap()[physvol]; // Modularize via physvol
+     return PvolumeMap()[physvol]; // Modularize via physvol
    }
 
-   if (depthMap().find(depth) != depthMap().end()) // Modularize via depth
+   if (DepthMap().find(depth) != DepthMap().end()) // Modularize via depth
    {
      std::stringstream stream;
-     stream << "depth" << depth << "_module" << depthMap()[depth] << ".gdml";
-     depthMap()[depth]++;           // There can be more modules at this depth!
+     stream << "depth" << depth << "_module" << DepthMap()[depth] << ".gdml";
+     DepthMap()[depth]++;           // There can be more modules at this depth!
      return G4String(stream.str());
    }
 

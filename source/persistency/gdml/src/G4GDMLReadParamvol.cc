@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.7 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.cc,v 1.8 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadParamvol Implementation
@@ -35,7 +35,7 @@
 #include "G4GDMLReadParamvol.hh"
 
 void G4GDMLReadParamvol::
-box_dimensionsRead( const xercesc::DOMElement* const element,
+Box_dimensionsRead( const xercesc::DOMElement* const element,
                     G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -68,7 +68,7 @@ box_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-trd_dimensionsRead( const xercesc::DOMElement* const element,
+Trd_dimensionsRead( const xercesc::DOMElement* const element,
                     G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -105,7 +105,7 @@ trd_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-trap_dimensionsRead( const xercesc::DOMElement* const element,
+Trap_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -169,7 +169,7 @@ trap_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-tube_dimensionsRead( const xercesc::DOMElement* const element,
+Tube_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -215,7 +215,7 @@ tube_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-cone_dimensionsRead( const xercesc::DOMElement* const element,
+Cone_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -267,7 +267,7 @@ cone_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-sphere_dimensionsRead( const xercesc::DOMElement* const element,
+Sphere_dimensionsRead( const xercesc::DOMElement* const element,
                        G4GDMLParameterisation::PARAMETER& parameter ) 
 {
    G4double lunit = 1.0;
@@ -316,7 +316,7 @@ sphere_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-orb_dimensionsRead( const xercesc::DOMElement* const element,
+Orb_dimensionsRead( const xercesc::DOMElement* const element,
                     G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -345,7 +345,7 @@ orb_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-torus_dimensionsRead( const xercesc::DOMElement* const element,
+Torus_dimensionsRead( const xercesc::DOMElement* const element,
                       G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -391,7 +391,7 @@ torus_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-para_dimensionsRead( const xercesc::DOMElement* const element,
+Para_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -440,7 +440,7 @@ para_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-hype_dimensionsRead( const xercesc::DOMElement* const element,
+Hype_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
    G4double lunit = 1.0;
@@ -485,7 +485,8 @@ hype_dimensionsRead( const xercesc::DOMElement* const element,
    parameter.dimension[4] = 0.5*lunit;
 }
 
-void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element) {
+void G4GDMLReadParamvol::
+ParametersRead(const xercesc::DOMElement* const element) {
 
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector position(0.0,0.0,0.0);
@@ -501,22 +502,22 @@ void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
       
-      if (tag=="rotation") { vectorRead(child,rotation); } else
-      if (tag=="position") { vectorRead(child,position); } else
-      if (tag=="box_dimensions") { box_dimensionsRead(child,parameter); } else
-      if (tag=="trd_dimensions") { trd_dimensionsRead(child,parameter); } else
-      if (tag=="trap_dimensions") { trap_dimensionsRead(child,parameter); } else
-      if (tag=="tube_dimensions") { tube_dimensionsRead(child,parameter); } else
-      if (tag=="cone_dimensions") { cone_dimensionsRead(child,parameter); } else
-      if (tag=="sphere_dimensions") { cone_dimensionsRead(child,parameter); } else
-      if (tag=="orb_dimensions") { cone_dimensionsRead(child,parameter); } else
-      if (tag=="torus_dimensions") { cone_dimensionsRead(child,parameter); } else
-      if (tag=="para_dimensions") { cone_dimensionsRead(child,parameter); } else
-      if (tag=="hype_dimensions") { hype_dimensionsRead(child,parameter); }
+      if (tag=="rotation") { VectorRead(child,rotation); } else
+      if (tag=="position") { VectorRead(child,position); } else
+      if (tag=="box_dimensions") { Box_dimensionsRead(child,parameter); } else
+      if (tag=="trd_dimensions") { Trd_dimensionsRead(child,parameter); } else
+      if (tag=="trap_dimensions") { Trap_dimensionsRead(child,parameter); } else
+      if (tag=="tube_dimensions") { Tube_dimensionsRead(child,parameter); } else
+      if (tag=="cone_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="sphere_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="orb_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="torus_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="para_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="hype_dimensions") { Hype_dimensionsRead(child,parameter); }
       else
       {
         G4String error_msg = "Unknown tag in parameters: " + tag;
-        G4Exception("G4GDMLReadParamvol::parametersRead()", "ReadError",
+        G4Exception("G4GDMLReadParamvol::ParametersRead()", "ReadError",
                     FatalException, error_msg);
       }
    }
@@ -529,11 +530,11 @@ void G4GDMLReadParamvol::parametersRead(const xercesc::DOMElement* const element
 
    parameter.position = position;
 
-   parameterisation->addParameter(parameter);
+   parameterisation->AddParameter(parameter);
 }
 
 void G4GDMLReadParamvol::
-paramvol_contentRead(const xercesc::DOMElement* const element)
+Paramvol_contentRead(const xercesc::DOMElement* const element)
 {
    for (xercesc::DOMNode* iter = element->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
@@ -544,13 +545,13 @@ paramvol_contentRead(const xercesc::DOMElement* const element)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="parameters") { parametersRead(child); } else
-      if (tag=="loop") { loopRead(child,&G4GDMLRead::paramvol_contentRead); }
+      if (tag=="parameters") { ParametersRead(child); } else
+      if (tag=="loop") { LoopRead(child,&G4GDMLRead::Paramvol_contentRead); }
     }
 }
 
 void G4GDMLReadParamvol::
-paramvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
+ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
 {
    G4String volumeref;
 
@@ -565,20 +566,20 @@ paramvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="volumeref") { volumeref = refRead(child); }
+      if (tag=="volumeref") { volumeref = RefRead(child); }
    }
 
-   paramvol_contentRead(element);
+   Paramvol_contentRead(element);
 
-   G4LogicalVolume* logvol = getVolume(GenerateName(volumeref));
+   G4LogicalVolume* logvol = GetVolume(GenerateName(volumeref));
 
-   if (parameterisation->getSize()==0)
+   if (parameterisation->GetSize()==0)
    {
-     G4Exception("G4GDMLReadParamvol::paramvolRead()",
+     G4Exception("G4GDMLReadParamvol::ParamvolRead()",
                  "ReadError", FatalException,
                  "No parameters are defined in parameterised volume!");
    }
    G4String pv_name = logvol->GetName() + "_param";
    new G4PVParameterised(pv_name, logvol, mother, kUndefined,
-                         parameterisation->getSize(), parameterisation);
+                         parameterisation->GetSize(), parameterisation);
 }

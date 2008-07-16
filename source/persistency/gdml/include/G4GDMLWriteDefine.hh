@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.hh,v 1.10 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.hh,v 1.11 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,17 +46,28 @@
 
 class G4GDMLWriteDefine : public G4GDMLWrite
 {
- private:
 
-   xercesc::DOMElement* defineElement;
+ protected:
 
-   void scale_vectorWrite(xercesc::DOMElement*, const G4String&,
-                             const G4String&, const G4ThreeVector&);
-   void rotation_vectorWrite(xercesc::DOMElement*, const G4String&,
-                             const G4String&, const G4ThreeVector&);
-   void position_vectorWrite(xercesc::DOMElement*, const G4String&,
-                             const G4String&, const G4ThreeVector&);
-   void defineWrite(xercesc::DOMElement*);
+   G4ThreeVector GetAngles(const G4RotationMatrix&);
+   void ScaleWrite(xercesc::DOMElement* element, const G4String& name,
+                    const G4ThreeVector& scl)
+     { Scale_vectorWrite(element,"scale",name,scl); }
+   void RotationWrite(xercesc::DOMElement* element, const G4String& name,
+                    const G4ThreeVector& rot)
+     { Rotation_vectorWrite(element,"rotation",name,rot); }
+   void PositionWrite(xercesc::DOMElement* element, const G4String& name,
+                    const G4ThreeVector& pos)
+     { Position_vectorWrite(element,"position",name,pos); }
+   void FirstrotationWrite(xercesc::DOMElement* element, const G4String& name,
+                    const G4ThreeVector& rot)
+     { Rotation_vectorWrite(element,"firstrotation",name,rot); }
+   void FirstpositionWrite(xercesc::DOMElement* element, const G4String& name,
+                    const G4ThreeVector& pos)
+     { Position_vectorWrite(element,"firstposition",name,pos); }
+   void AddPosition(const G4String& name,
+                    const G4ThreeVector& pos)
+     { Position_vectorWrite(defineElement,"position",name,pos); }
 
  protected:
 
@@ -64,25 +75,20 @@ class G4GDMLWriteDefine : public G4GDMLWrite
    static const G4double kAngularPrecision;
    static const G4double kLinearPrecision;
   
-   G4ThreeVector getAngles(const G4RotationMatrix&);
-   void scaleWrite(xercesc::DOMElement* element, const G4String& name,
-                    const G4ThreeVector& scl)
-     { scale_vectorWrite(element,"scale",name,scl); }
-   void rotationWrite(xercesc::DOMElement* element, const G4String& name,
-                    const G4ThreeVector& rot)
-     { rotation_vectorWrite(element,"rotation",name,rot); }
-   void positionWrite(xercesc::DOMElement* element, const G4String& name,
-                    const G4ThreeVector& pos)
-     { position_vectorWrite(element,"position",name,pos); }
-   void firstrotationWrite(xercesc::DOMElement* element, const G4String& name,
-                    const G4ThreeVector& rot)
-     { rotation_vectorWrite(element,"firstrotation",name,rot); }
-   void firstpositionWrite(xercesc::DOMElement* element, const G4String& name,
-                    const G4ThreeVector& pos)
-     { position_vectorWrite(element,"firstposition",name,pos); }
-   void AddPosition(const G4String& name,
-                    const G4ThreeVector& pos)
-     { position_vectorWrite(defineElement,"position",name,pos); }
+ private:
+
+   void Scale_vectorWrite(xercesc::DOMElement*, const G4String&,
+                             const G4String&, const G4ThreeVector&);
+   void Rotation_vectorWrite(xercesc::DOMElement*, const G4String&,
+                             const G4String&, const G4ThreeVector&);
+   void Position_vectorWrite(xercesc::DOMElement*, const G4String&,
+                             const G4String&, const G4ThreeVector&);
+   void DefineWrite(xercesc::DOMElement*);
+
+ private:
+
+   xercesc::DOMElement* defineElement;
+
 };
 
 #endif

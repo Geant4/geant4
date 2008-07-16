@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.68 2008-07-14 16:57:10 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.69 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -36,7 +36,7 @@
 #include "G4GDMLWriteStructure.hh"
 
 void
-G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,
+G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
                                        const G4PVDivision* const divisionvol)
 {
    EAxis axis = kUndefined;
@@ -61,20 +61,20 @@ G4GDMLWriteStructure::divisionvolWrite(xercesc::DOMElement* volumeElement,
          = GenerateName(divisionvol->GetLogicalVolume()->GetName(),
                         divisionvol->GetLogicalVolume());
 
-   xercesc::DOMElement* divisionvolElement = newElement("divisionvol");
-   divisionvolElement->setAttributeNode(newAttribute("name",name));
-   divisionvolElement->setAttributeNode(newAttribute("axis",axisString));
-   divisionvolElement->setAttributeNode(newAttribute("number",number));
-   divisionvolElement->setAttributeNode(newAttribute("width",width));
-   divisionvolElement->setAttributeNode(newAttribute("offset",offset));
-   divisionvolElement->setAttributeNode(newAttribute("unit",unitString));
-   xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   xercesc::DOMElement* divisionvolElement = NewElement("divisionvol");
+   divisionvolElement->setAttributeNode(NewAttribute("name",name));
+   divisionvolElement->setAttributeNode(NewAttribute("axis",axisString));
+   divisionvolElement->setAttributeNode(NewAttribute("number",number));
+   divisionvolElement->setAttributeNode(NewAttribute("width",width));
+   divisionvolElement->setAttributeNode(NewAttribute("offset",offset));
+   divisionvolElement->setAttributeNode(NewAttribute("unit",unitString));
+   xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+   volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    divisionvolElement->appendChild(volumerefElement);
    volumeElement->appendChild(divisionvolElement);
 }
 
-void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
+void G4GDMLWriteStructure::PhysvolWrite(xercesc::DOMElement* volumeElement,
                                         const G4VPhysicalVolume* const physvol,
                                         const G4Transform3D& T,
                                         const G4String& ModuleName)
@@ -86,13 +86,13 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
    T.getDecomposition(scale,rotate,translate);
 
    const G4ThreeVector scl(scale(0,0),scale(1,1),scale(2,2));
-   const G4ThreeVector rot = getAngles(rotate.getRotation());
+   const G4ThreeVector rot = GetAngles(rotate.getRotation());
    const G4ThreeVector pos = T.getTranslation();
 
    const G4String name = GenerateName(physvol->GetName(),physvol);
 
-   xercesc::DOMElement* physvolElement = newElement("physvol");
-   physvolElement->setAttributeNode(newAttribute("name",name));
+   xercesc::DOMElement* physvolElement = NewElement("physvol");
+   physvolElement->setAttributeNode(NewAttribute("name",name));
    volumeElement->appendChild(physvolElement);
 
    const G4String volumeref
@@ -101,15 +101,15 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
 
    if (ModuleName.empty())
    {
-      xercesc::DOMElement* volumerefElement = newElement("volumeref");
-      volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+      xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+      volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
       physvolElement->appendChild(volumerefElement);
    }
    else
    {
-      xercesc::DOMElement* fileElement = newElement("file");
-      fileElement->setAttributeNode(newAttribute("name",ModuleName));
-      fileElement->setAttributeNode(newAttribute("volname",volumeref));
+      xercesc::DOMElement* fileElement = NewElement("file");
+      fileElement->setAttributeNode(NewAttribute("name",ModuleName));
+      fileElement->setAttributeNode(NewAttribute("volname",volumeref));
       physvolElement->appendChild(fileElement);
    }
 
@@ -117,23 +117,23 @@ void G4GDMLWriteStructure::physvolWrite(xercesc::DOMElement* volumeElement,
     || std::fabs(pos.y()) > kLinearPrecision
     || std::fabs(pos.z()) > kLinearPrecision)
    {
-     positionWrite(physvolElement,name+"position", pos);
+     PositionWrite(physvolElement,name+"position", pos);
    }
    if (std::fabs(rot.x()) > kAngularPrecision
     || std::fabs(rot.y()) > kAngularPrecision
     || std::fabs(rot.z()) > kAngularPrecision)
    {
-     rotationWrite(physvolElement,name+"rotation",rot);
+     RotationWrite(physvolElement,name+"rotation",rot);
    }
    if (std::fabs(scl.x()-1.0) > kRelativePrecision
     || std::fabs(scl.y()-1.0) > kRelativePrecision
     || std::fabs(scl.z()-1.0) > kRelativePrecision)
    {
-     scaleWrite(physvolElement,name+"scale",scl);
+     ScaleWrite(physvolElement,name+"scale",scl);
    }
 }
 
-void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,
+void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
                                      const G4VPhysicalVolume* const replicavol)
 {
    EAxis axis = kUndefined;
@@ -158,33 +158,33 @@ void G4GDMLWriteStructure::replicavolWrite(xercesc::DOMElement* volumeElement,
          = GenerateName(replicavol->GetLogicalVolume()->GetName(),
                         replicavol->GetLogicalVolume());
 
-   xercesc::DOMElement* replicavolElement = newElement("replicavol");
-   replicavolElement->setAttributeNode(newAttribute("name",name));
-   replicavolElement->setAttributeNode(newAttribute("axis",axisString));
-   replicavolElement->setAttributeNode(newAttribute("number",number));
-   replicavolElement->setAttributeNode(newAttribute("width",width));
-   replicavolElement->setAttributeNode(newAttribute("offset",offset));
-   replicavolElement->setAttributeNode(newAttribute("unit",unitString));
-   xercesc::DOMElement* volumerefElement = newElement("volumeref");
-   volumerefElement->setAttributeNode(newAttribute("ref",volumeref));
+   xercesc::DOMElement* replicavolElement = NewElement("replicavol");
+   replicavolElement->setAttributeNode(NewAttribute("name",name));
+   replicavolElement->setAttributeNode(NewAttribute("axis",axisString));
+   replicavolElement->setAttributeNode(NewAttribute("number",number));
+   replicavolElement->setAttributeNode(NewAttribute("width",width));
+   replicavolElement->setAttributeNode(NewAttribute("offset",offset));
+   replicavolElement->setAttributeNode(NewAttribute("unit",unitString));
+   xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+   volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
    volumeElement->appendChild(replicavolElement);
 }
 
-void G4GDMLWriteStructure::structureWrite(xercesc::DOMElement* gdmlElement)
+void G4GDMLWriteStructure::StructureWrite(xercesc::DOMElement* gdmlElement)
 {
    G4cout << "G4GDML: Writing structure..." << G4endl;
 
-   structureElement = newElement("structure");
+   structureElement = NewElement("structure");
    gdmlElement->appendChild(structureElement);
 }
 
 G4Transform3D G4GDMLWriteStructure::
 TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 {
-   if (volumeMap().find(volumePtr) != volumeMap().end())
+   if (VolumeMap().find(volumePtr) != VolumeMap().end())
    {
-     return volumeMap()[volumePtr]; // Volume is already processed
+     return VolumeMap()[volumePtr]; // Volume is already processed
    }
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
@@ -233,13 +233,13 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    const G4String solidref
          = GenerateName(solidPtr->GetName(),solidPtr);
 
-   xercesc::DOMElement* volumeElement = newElement("volume");
-   volumeElement->setAttributeNode(newAttribute("name",name));
-   xercesc::DOMElement* materialrefElement = newElement("materialref");
-   materialrefElement->setAttributeNode(newAttribute("ref",materialref));
+   xercesc::DOMElement* volumeElement = NewElement("volume");
+   volumeElement->setAttributeNode(NewAttribute("name",name));
+   xercesc::DOMElement* materialrefElement = NewElement("materialref");
+   materialrefElement->setAttributeNode(NewAttribute("ref",materialref));
    volumeElement->appendChild(materialrefElement);
-   xercesc::DOMElement* solidrefElement = newElement("solidref");
-   solidrefElement->setAttributeNode(newAttribute("ref",solidref));
+   xercesc::DOMElement* solidrefElement = NewElement("solidref");
+   solidrefElement->setAttributeNode(NewAttribute("ref",solidref));
    volumeElement->appendChild(solidrefElement);
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
@@ -273,7 +273,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
-         divisionvolWrite(volumeElement,divisionvol); 
+         DivisionvolWrite(volumeElement,divisionvol); 
       } else 
       if (physvol->IsParameterised())   // Is it a paramvol?
       {
@@ -285,7 +285,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
-         paramvolWrite(volumeElement,physvol);
+         ParamvolWrite(volumeElement,physvol);
       } else
       if (physvol->IsReplicated())   // Is it a replicavol?
       {
@@ -297,7 +297,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
-         replicavolWrite(volumeElement,physvol); 
+         ReplicavolWrite(volumeElement,physvol); 
       }
       else   // Is it a physvol?
       {
@@ -308,7 +308,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
            rot = *(physvol->GetFrameRotation());
          }
          G4Transform3D P(rot,physvol->GetObjectTranslation());
-         physvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
+         PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
    }
 
@@ -316,7 +316,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
      // Append the volume AFTER traversing the children so that
      // the order of volumes will be correct!
 
-   volumeMap()[volumePtr] = R;
+   VolumeMap()[volumePtr] = R;
 
    G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());
      // Add the involved materials and solids!

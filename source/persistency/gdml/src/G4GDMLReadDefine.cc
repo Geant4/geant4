@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.19 2008-07-11 07:50:08 gcosmo Exp $
+// $Id: G4GDMLReadDefine.cc,v 1.20 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadDefine Implementation
@@ -53,7 +53,7 @@ G4GDMLMatrix::~G4GDMLMatrix()
    if (m) { delete [] m; }
 }
 
-void G4GDMLMatrix::set(size_t r,size_t c,G4double a)
+void G4GDMLMatrix::Set(size_t r,size_t c,G4double a)
 {   
    if (r>=rows || c>=cols)
    {
@@ -63,7 +63,7 @@ void G4GDMLMatrix::set(size_t r,size_t c,G4double a)
    m[cols*r+c] = a;
 }
 
-G4double G4GDMLMatrix::get(size_t r,size_t c) const
+G4double G4GDMLMatrix::Get(size_t r,size_t c) const
 {   
    if (r>=rows || c>=cols)
    {
@@ -73,18 +73,18 @@ G4double G4GDMLMatrix::get(size_t r,size_t c) const
    return m[cols*r+c];
 }
 
-size_t G4GDMLMatrix::getRows() const
+size_t G4GDMLMatrix::GetRows() const
 {
    return rows;
 }
 
-size_t G4GDMLMatrix::getCols() const
+size_t G4GDMLMatrix::GetCols() const
 {
    return cols;
 }
 
 G4RotationMatrix
-G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles)
+G4GDMLReadDefine::GetRotationMatrix(const G4ThreeVector& angles)
 {
    G4RotationMatrix rot;
 
@@ -96,7 +96,7 @@ G4GDMLReadDefine::getRotationMatrix(const G4ThreeVector& angles)
 }
 
 void
-G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const constantElement)
+G4GDMLReadDefine::ConstantRead(const xercesc::DOMElement* const constantElement)
 {
    G4String name  = "";
    G4double value = 0.0;
@@ -121,11 +121,11 @@ G4GDMLReadDefine::constantRead(const xercesc::DOMElement* const constantElement)
       if (attName=="value") { value = eval.Evaluate(attValue); }
    }
 
-   eval.defineConstant(name,value);
+   eval.DefineConstant(name,value);
 }
 
 void
-G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement) 
+G4GDMLReadDefine::MatrixRead(const xercesc::DOMElement* const matrixElement) 
 {
    G4String name = "";
    G4int coldim  = 0;
@@ -162,20 +162,20 @@ G4GDMLReadDefine::matrixRead(const xercesc::DOMElement* const matrixElement)
       valueList.push_back(eval.Evaluate(MatrixValue));
    }
 
-   eval.defineMatrix(name,coldim,valueList);
+   eval.DefineMatrix(name,coldim,valueList);
 
    G4GDMLMatrix matrix(valueList.size()/coldim,coldim);
 
    for (size_t i=0;i<valueList.size();i++)
    {
-      matrix.set(i/coldim,i%coldim,valueList[i]);
+      matrix.Set(i/coldim,i%coldim,valueList[i]);
    }
 
    matrixMap[name] = matrix;
 }
 
 void
-G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement)
+G4GDMLReadDefine::PositionRead(const xercesc::DOMElement* const positionElement)
 {
    G4String name = "";
    G4double unit = 1.0;
@@ -208,7 +208,7 @@ G4GDMLReadDefine::positionRead(const xercesc::DOMElement* const positionElement)
 }
 
 void
-G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const rotationElement)
+G4GDMLReadDefine::RotationRead(const xercesc::DOMElement* const rotationElement)
 {
    G4String name = "";
    G4double unit = 1.0;
@@ -240,7 +240,7 @@ G4GDMLReadDefine::rotationRead(const xercesc::DOMElement* const rotationElement)
    rotationMap[name] = rotation*unit;
 }
 
-void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const scaleElement)
+void G4GDMLReadDefine::ScaleRead(const xercesc::DOMElement* const scaleElement)
 {
    G4String name = "";
    G4ThreeVector scale(1.0,1.0,1.0);
@@ -271,7 +271,7 @@ void G4GDMLReadDefine::scaleRead(const xercesc::DOMElement* const scaleElement)
 }
 
 void
-G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const variableElement)
+G4GDMLReadDefine::VariableRead(const xercesc::DOMElement* const variableElement)
 {
    G4String name  = "";
    G4double value = 0.0;
@@ -296,10 +296,10 @@ G4GDMLReadDefine::variableRead(const xercesc::DOMElement* const variableElement)
       if (attName=="value") { value = eval.Evaluate(attValue); }
    }
 
-   eval.defineVariable(name,value);
+   eval.DefineVariable(name,value);
 }
 
-void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element)
+void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
 {
    G4String name = "";
    G4double unit = 1.0;
@@ -330,7 +330,7 @@ void G4GDMLReadDefine::quantityRead(const xercesc::DOMElement* const element)
 }
 
 void
-G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement)
+G4GDMLReadDefine::DefineRead(const xercesc::DOMElement* const defineElement)
 {
    G4cout << "G4GDML: Reading definitions..." << G4endl;
 
@@ -343,13 +343,13 @@ G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="constant") { constantRead(child); } else
-      if (tag=="matrix")   { matrixRead(child); }   else
-      if (tag=="position") { positionRead(child); } else
-      if (tag=="rotation") { rotationRead(child); } else
-      if (tag=="scale")    { scaleRead(child); }    else
-      if (tag=="variable") { variableRead(child); } else
-      if (tag=="quantity") { quantityRead(child); }
+      if (tag=="constant") { ConstantRead(child); } else
+      if (tag=="matrix")   { MatrixRead(child); }   else
+      if (tag=="position") { PositionRead(child); } else
+      if (tag=="rotation") { RotationRead(child); } else
+      if (tag=="scale")    { ScaleRead(child); }    else
+      if (tag=="variable") { VariableRead(child); } else
+      if (tag=="quantity") { QuantityRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in define: "+tag;
@@ -360,7 +360,7 @@ G4GDMLReadDefine::defineRead(const xercesc::DOMElement* const defineElement)
 }
 
 void
-G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vectorElement,
+G4GDMLReadDefine::VectorRead(const xercesc::DOMElement* const vectorElement,
                              G4ThreeVector& vec)
 {
    G4double unit = 1.0;
@@ -391,7 +391,7 @@ G4GDMLReadDefine::vectorRead(const xercesc::DOMElement* const vectorElement,
    vec *= unit;
 }
 
-G4String G4GDMLReadDefine::refRead(const xercesc::DOMElement* const element)
+G4String G4GDMLReadDefine::RefRead(const xercesc::DOMElement* const element)
 {
    G4String ref;
 
@@ -417,17 +417,17 @@ G4String G4GDMLReadDefine::refRead(const xercesc::DOMElement* const element)
    return ref;
 }
 
-G4double G4GDMLReadDefine::getConstant(const G4String& ref)
+G4double G4GDMLReadDefine::GetConstant(const G4String& ref)
 {
-   return eval.getConstant(ref);
+   return eval.GetConstant(ref);
 }
 
-G4double G4GDMLReadDefine::getVariable(const G4String& ref)
+G4double G4GDMLReadDefine::GetVariable(const G4String& ref)
 {
-   return eval.getVariable(ref);
+   return eval.GetVariable(ref);
 }
 
-G4double G4GDMLReadDefine::getQuantity(const G4String& ref)
+G4double G4GDMLReadDefine::GetQuantity(const G4String& ref)
 {
    if (quantityMap.find(ref) == quantityMap.end())
    {
@@ -438,7 +438,7 @@ G4double G4GDMLReadDefine::getQuantity(const G4String& ref)
    return quantityMap[ref];
 }
 
-G4ThreeVector G4GDMLReadDefine::getPosition(const G4String& ref)
+G4ThreeVector G4GDMLReadDefine::GetPosition(const G4String& ref)
 {
    if (positionMap.find(ref) == positionMap.end())
    {
@@ -449,7 +449,7 @@ G4ThreeVector G4GDMLReadDefine::getPosition(const G4String& ref)
    return positionMap[ref];
 }
 
-G4ThreeVector G4GDMLReadDefine::getRotation(const G4String& ref)
+G4ThreeVector G4GDMLReadDefine::GetRotation(const G4String& ref)
 {
    if (rotationMap.find(ref) == rotationMap.end())
    {
@@ -460,7 +460,7 @@ G4ThreeVector G4GDMLReadDefine::getRotation(const G4String& ref)
    return rotationMap[ref];
 }
 
-G4ThreeVector G4GDMLReadDefine::getScale(const G4String& ref)
+G4ThreeVector G4GDMLReadDefine::GetScale(const G4String& ref)
 {
    if (scaleMap.find(ref) == scaleMap.end())
    {
@@ -471,7 +471,7 @@ G4ThreeVector G4GDMLReadDefine::getScale(const G4String& ref)
    return scaleMap[ref];
 }
 
-G4GDMLMatrix G4GDMLReadDefine::getMatrix(const G4String& ref)
+G4GDMLMatrix G4GDMLReadDefine::GetMatrix(const G4String& ref)
 {
    if (matrixMap.find(ref) == matrixMap.end())
    {

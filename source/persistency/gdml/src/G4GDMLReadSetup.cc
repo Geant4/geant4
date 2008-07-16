@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc,v 1.8 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLReadSetup.cc,v 1.9 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSetup Implementation
@@ -34,7 +34,7 @@
 
 #include "G4GDMLReadSetup.hh"
 
-G4String G4GDMLReadSetup::getSetup(const G4String& ref)
+G4String G4GDMLReadSetup::GetSetup(const G4String& ref)
 {
    if (setupMap.size() == 1)     // If there is only one setup defined,
    {                             // no matter how it is named
@@ -51,7 +51,7 @@ G4String G4GDMLReadSetup::getSetup(const G4String& ref)
    return setupMap[ref];
 }
 
-void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element)
+void G4GDMLReadSetup::SetupRead(const xercesc::DOMElement* const element)
 {
    G4cout << "G4GDML: Reading setup..." << G4endl;
 
@@ -85,6 +85,6 @@ void G4GDMLReadSetup::setupRead(const xercesc::DOMElement* const element)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag == "world") { setupMap[name] = GenerateName(refRead(child)); }
+      if (tag == "world") { setupMap[name] = GenerateName(RefRead(child)); }
    }
 }

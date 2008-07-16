@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.7 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.hh,v 1.8 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,25 +51,29 @@
 
 class G4GDMLReadMaterials : public G4GDMLReadDefine 
 {
-   G4double atomRead(const xercesc::DOMElement* const);
-   G4int compositeRead(const xercesc::DOMElement* const,G4String&);
-   G4double DRead(const xercesc::DOMElement* const);
-   G4double PRead(const xercesc::DOMElement* const);
-   G4double TRead(const xercesc::DOMElement* const);
-   void elementRead(const xercesc::DOMElement* const);
-   G4double fractionRead(const xercesc::DOMElement* const,G4String&);
-   void isotopeRead(const xercesc::DOMElement* const);
-   void materialRead(const xercesc::DOMElement* const);
-   void mixtureRead(const xercesc::DOMElement* const,G4Element*);
-   void mixtureRead(const xercesc::DOMElement* const,G4Material*);
-   void propertyRead(const xercesc::DOMElement* const,G4Material*);
-   void materialsRead(const xercesc::DOMElement* const);
 
  protected:
 
-   G4Element* getElement(const G4String&,bool verbose=true) const;
-   G4Isotope* getIsotope(const G4String&,bool verbose=true) const;
-   G4Material* getMaterial(const G4String&,bool verbose=true) const;
+   G4Element* GetElement(const G4String&,bool verbose=true) const;
+   G4Isotope* GetIsotope(const G4String&,bool verbose=true) const;
+   G4Material* GetMaterial(const G4String&,bool verbose=true) const;
+
+ private:
+
+   G4double AtomRead(const xercesc::DOMElement* const);
+   G4int CompositeRead(const xercesc::DOMElement* const,G4String&);
+   G4double DRead(const xercesc::DOMElement* const);
+   G4double PRead(const xercesc::DOMElement* const);
+   G4double TRead(const xercesc::DOMElement* const);
+   void ElementRead(const xercesc::DOMElement* const);
+   G4double FractionRead(const xercesc::DOMElement* const,G4String&);
+   void IsotopeRead(const xercesc::DOMElement* const);
+   void MaterialRead(const xercesc::DOMElement* const);
+   void MixtureRead(const xercesc::DOMElement* const,G4Element*);
+   void MixtureRead(const xercesc::DOMElement* const,G4Material*);
+   void PropertyRead(const xercesc::DOMElement* const,G4Material*);
+   void MaterialsRead(const xercesc::DOMElement* const);
+
 };
 
 #endif

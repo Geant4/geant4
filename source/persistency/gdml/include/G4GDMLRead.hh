@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.18 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.19 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -54,13 +54,13 @@
 
 #include <sstream>
 
-class MyErrorHandler : public xercesc::ErrorHandler
+class G4GDMLErrorHandler : public xercesc::ErrorHandler
 {
    G4bool Suppress;
 
  public:
 
-   MyErrorHandler(const G4bool set) { Suppress = set; }
+   G4GDMLErrorHandler(const G4bool set) { Suppress = set; }
 
    void warning(const xercesc::SAXParseException& exception)
    {
@@ -89,10 +89,19 @@ class MyErrorHandler : public xercesc::ErrorHandler
 
 class G4GDMLRead
 {
- private:
 
-   G4String ModuleName;
-   G4int InLoop;
+ public:
+
+   virtual void DefineRead(const xercesc::DOMElement* const)=0;
+   virtual void MaterialsRead(const xercesc::DOMElement* const)=0;
+   virtual void SetupRead(const xercesc::DOMElement* const)=0;
+   virtual void SolidsRead(const xercesc::DOMElement* const)=0;
+   virtual void Paramvol_contentRead(const xercesc::DOMElement* const)=0;
+   virtual void Volume_contentRead(const xercesc::DOMElement* const)=0;
+   virtual void StructureRead(const xercesc::DOMElement* const)=0;
+   virtual G4LogicalVolume* GetVolume(const G4String&) const=0;
+   virtual G4String GetSetup(const G4String&)=0;
+   void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
 
  protected:
 
@@ -102,20 +111,13 @@ class G4GDMLRead
    G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String&);
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
-   void loopRead(const xercesc::DOMElement* const,
+   void LoopRead(const xercesc::DOMElement* const,
                  void(G4GDMLRead::*)(const xercesc::DOMElement* const));
- public:
+ private:
 
-   virtual void defineRead(const xercesc::DOMElement* const)=0;
-   virtual void materialsRead(const xercesc::DOMElement* const)=0;
-   virtual void setupRead(const xercesc::DOMElement* const)=0;
-   virtual void solidsRead(const xercesc::DOMElement* const)=0;
-   virtual void paramvol_contentRead(const xercesc::DOMElement* const)=0;
-   virtual void volume_contentRead(const xercesc::DOMElement* const)=0;
-   virtual void structureRead(const xercesc::DOMElement* const)=0;
-   virtual G4LogicalVolume* getVolume(const G4String&) const=0;
-   virtual G4String getSetup(const G4String&)=0;
-   void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
+   G4String ModuleName;
+   G4int InLoop;
+
 };
 
 #endif

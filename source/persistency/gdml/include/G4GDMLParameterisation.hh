@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParameterisation.hh,v 1.9 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLParameterisation.hh,v 1.10 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,6 +63,7 @@
 
 class G4GDMLParameterisation : public G4VPVParameterisation
 {
+
  public:
 
    struct PARAMETER
@@ -74,12 +75,10 @@ class G4GDMLParameterisation : public G4VPVParameterisation
       PARAMETER() { memset(dimension,0,sizeof(dimension)); }
    };
 
-   G4int getSize() const;
-   void addParameter(const PARAMETER&);
+   G4int GetSize() const;
+   void  AddParameter(const PARAMETER&);
 
  private:
-
-   std::vector<PARAMETER> parameterList;
 
    void ComputeTransformation(const G4int,G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Box&,const G4int,const G4VPhysicalVolume*) const;
@@ -94,6 +93,11 @@ class G4GDMLParameterisation : public G4VPVParameterisation
    void ComputeDimensions(G4Tubs&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const;
+
+ private:
+
+   std::vector<PARAMETER> parameterList;
+
 };
 
 #endif

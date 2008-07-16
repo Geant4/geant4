@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc,v 1.17 2008-07-14 16:57:10 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.cc,v 1.18 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteDefine Implementation
@@ -39,7 +39,7 @@ const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kAngularPrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kLinearPrecision = DBL_EPSILON;
 
-G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat)
+G4ThreeVector G4GDMLWriteDefine::GetAngles(const G4RotationMatrix& mat)
 {
    G4double x,y,z;
 
@@ -62,7 +62,7 @@ G4ThreeVector G4GDMLWriteDefine::getAngles(const G4RotationMatrix& mat)
 }
 
 void G4GDMLWriteDefine::
-scale_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+Scale_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
                   const G4String& name, const G4ThreeVector& scl)
 {
    const G4double x = (std::fabs(scl.x()-1.0) < kRelativePrecision)
@@ -72,52 +72,52 @@ scale_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
    const G4double z = (std::fabs(scl.z()-1.0) < kRelativePrecision)
                     ? 1.0 : scl.z();
 
-   xercesc::DOMElement* scaleElement = newElement(tag);
-   scaleElement->setAttributeNode(newAttribute("name",name));
-   scaleElement->setAttributeNode(newAttribute("x",x));
-   scaleElement->setAttributeNode(newAttribute("y",y));
-   scaleElement->setAttributeNode(newAttribute("z",z));
+   xercesc::DOMElement* scaleElement = NewElement(tag);
+   scaleElement->setAttributeNode(NewAttribute("name",name));
+   scaleElement->setAttributeNode(NewAttribute("x",x));
+   scaleElement->setAttributeNode(NewAttribute("y",y));
+   scaleElement->setAttributeNode(NewAttribute("z",z));
    element->appendChild(scaleElement);
 }
 
 void G4GDMLWriteDefine::
-rotation_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+Rotation_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
                      const G4String& name, const G4ThreeVector& rot)
 {
    const G4double x = (std::fabs(rot.x()) < kAngularPrecision) ? 0.0 : rot.x();
    const G4double y = (std::fabs(rot.y()) < kAngularPrecision) ? 0.0 : rot.y();
    const G4double z = (std::fabs(rot.z()) < kAngularPrecision) ? 0.0 : rot.z();
 
-   xercesc::DOMElement* rotationElement = newElement(tag);
-   rotationElement->setAttributeNode(newAttribute("name",name));
-   rotationElement->setAttributeNode(newAttribute("x",x/degree));
-   rotationElement->setAttributeNode(newAttribute("y",y/degree));
-   rotationElement->setAttributeNode(newAttribute("z",z/degree));
-   rotationElement->setAttributeNode(newAttribute("unit","deg"));
+   xercesc::DOMElement* rotationElement = NewElement(tag);
+   rotationElement->setAttributeNode(NewAttribute("name",name));
+   rotationElement->setAttributeNode(NewAttribute("x",x/degree));
+   rotationElement->setAttributeNode(NewAttribute("y",y/degree));
+   rotationElement->setAttributeNode(NewAttribute("z",z/degree));
+   rotationElement->setAttributeNode(NewAttribute("unit","deg"));
    element->appendChild(rotationElement);
 }
 
 void G4GDMLWriteDefine::
-position_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
+Position_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
                      const G4String& name, const G4ThreeVector& pos)
 {
    const G4double x = (std::fabs(pos.x()) < kLinearPrecision) ? 0.0 : pos.x();
    const G4double y = (std::fabs(pos.y()) < kLinearPrecision) ? 0.0 : pos.y();
    const G4double z = (std::fabs(pos.z()) < kLinearPrecision) ? 0.0 : pos.z();
 
-   xercesc::DOMElement* positionElement = newElement(tag);
-   positionElement->setAttributeNode(newAttribute("name",name));
-   positionElement->setAttributeNode(newAttribute("x",x/mm));
-   positionElement->setAttributeNode(newAttribute("y",y/mm));
-   positionElement->setAttributeNode(newAttribute("z",z/mm));
-   positionElement->setAttributeNode(newAttribute("unit","mm"));
+   xercesc::DOMElement* positionElement = NewElement(tag);
+   positionElement->setAttributeNode(NewAttribute("name",name));
+   positionElement->setAttributeNode(NewAttribute("x",x/mm));
+   positionElement->setAttributeNode(NewAttribute("y",y/mm));
+   positionElement->setAttributeNode(NewAttribute("z",z/mm));
+   positionElement->setAttributeNode(NewAttribute("unit","mm"));
    element->appendChild(positionElement);
 }
 
-void G4GDMLWriteDefine::defineWrite(xercesc::DOMElement* element)
+void G4GDMLWriteDefine::DefineWrite(xercesc::DOMElement* element)
 {
    G4cout << "G4GDML: Writing definitions..." << G4endl;
 
-   defineElement = newElement("define");
+   defineElement = NewElement("define");
    element->appendChild(defineElement);
 }

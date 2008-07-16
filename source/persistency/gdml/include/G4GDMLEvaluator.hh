@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.15 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.16 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,23 +48,26 @@
 
 class G4GDMLEvaluator
 {
-   HepTool::Evaluator eval;
-   std::vector<G4String> variableList;
 
  public:
 
    G4GDMLEvaluator();
 
-   void defineConstant(const G4String&, G4double);
-   void defineVariable(const G4String&, G4double);
-   void defineMatrix(const G4String&, G4int, std::vector<G4double>);
-   void setVariable(const G4String&, G4double);
-   G4bool isVariable(const G4String&) const;
+   void DefineConstant(const G4String&, G4double);
+   void DefineVariable(const G4String&, G4double);
+   void DefineMatrix(const G4String&, G4int, std::vector<G4double>);
+   void SetVariable(const G4String&, G4double);
+   G4bool IsVariable(const G4String&) const;
    G4String SolveBrackets(const G4String&);
    G4double Evaluate(const G4String&);
    G4int EvaluateInteger(const G4String&);
-   G4double getConstant(const G4String&);
-   G4double getVariable(const G4String&);
+   G4double GetConstant(const G4String&);
+   G4double GetVariable(const G4String&);
+
+ private:
+
+   HepTool::Evaluator eval;
+   std::vector<G4String> variableList;
 };
 
 #endif

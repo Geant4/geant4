@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.1 2008-07-03 10:11:13 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.2 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,42 +79,42 @@ G4VPhysicalVolume* G4GDMLParser::ReadST(const G4String& name,
 
 G4double G4GDMLParser::GetConstant(const G4String& name)
 {
-  return reader.getConstant(name);
+  return reader.GetConstant(name);
 }
 
 G4double G4GDMLParser::GetVariable(const G4String& name)
 {
-  return reader.getVariable(name);
+  return reader.GetVariable(name);
 }
 
 G4double G4GDMLParser::GetQuantity(const G4String& name)
 {
-  return reader.getQuantity(name);
+  return reader.GetQuantity(name);
 }
 
 G4ThreeVector G4GDMLParser::GetPosition(const G4String& name)
 {
-  return reader.getPosition(name);
+  return reader.GetPosition(name);
 }
 
 G4ThreeVector G4GDMLParser::GetRotation(const G4String& name)
 {
-  return reader.getRotation(name);
+  return reader.GetRotation(name);
 }
 
 G4ThreeVector G4GDMLParser::GetScale(const G4String& name)
 {
-  return reader.getScale(name);
+  return reader.GetScale(name);
 }
 
 G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name)
 {
-  return reader.getMatrix(name);
+  return reader.GetMatrix(name);
 }
 
 G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name)
 {
-  return reader.getVolume(name);
+  return reader.GetVolume(name);
 }
 
 G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
@@ -125,7 +125,7 @@ G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
 G4GDMLAuxListType
 G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
-  return reader.getVolumeAuxiliaryInformation(logvol);
+  return reader.GetVolumeAuxiliaryInformation(logvol);
 }
 
 //
@@ -146,4 +146,3 @@ void G4GDMLParser::SetAddPointerToName(G4bool set)
 {
   writer.SetAddPointerToName(set);
 }
-

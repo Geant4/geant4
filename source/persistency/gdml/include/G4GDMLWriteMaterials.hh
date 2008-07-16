@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh,v 1.11 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.hh,v 1.12 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,27 +49,30 @@
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine
 {
- private:
-
-   std::vector<const G4Isotope*> isotopeList;
-   std::vector<const G4Element*> elementList;
-   std::vector<const G4Material*> materialList;
-   xercesc::DOMElement* materialsElement;
-   
-   void atomWrite(xercesc::DOMElement*,const G4double&);
-   void DWrite(xercesc::DOMElement*,const G4double&);
-   void PWrite(xercesc::DOMElement*,const G4double&);
-   void TWrite(xercesc::DOMElement*,const G4double&);
-   void isotopeWrite(const G4Isotope* const);
-   void elementWrite(const G4Element* const);
-   void materialWrite(const G4Material* const);
-   void materialsWrite(xercesc::DOMElement*);
 
  protected:
 
    void AddIsotope(const G4Isotope* const);
    void AddElement(const G4Element* const);
    void AddMaterial(const G4Material* const);
+
+ private:
+
+   void AtomWrite(xercesc::DOMElement*,const G4double&);
+   void DWrite(xercesc::DOMElement*,const G4double&);
+   void PWrite(xercesc::DOMElement*,const G4double&);
+   void TWrite(xercesc::DOMElement*,const G4double&);
+   void IsotopeWrite(const G4Isotope* const);
+   void ElementWrite(const G4Element* const);
+   void MaterialWrite(const G4Material* const);
+   void MaterialsWrite(xercesc::DOMElement*);
+
+ private:
+
+   std::vector<const G4Isotope*> isotopeList;
+   std::vector<const G4Element*> elementList;
+   std::vector<const G4Material*> materialList;
+   xercesc::DOMElement* materialsElement;
 };
 
 #endif

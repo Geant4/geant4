@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSetup.hh,v 1.3 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLReadSetup.hh,v 1.4 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,14 +49,17 @@
 
 class G4GDMLReadSetup : public G4GDMLReadSolids
 {
+ public:
+
+   G4String GetSetup(const G4String&);
+
+ private:
+
+   void SetupRead(const xercesc::DOMElement* const element);
+
  private:
 
    std::map<G4String,G4String> setupMap;
-   void setupRead(const xercesc::DOMElement* const element);
-
- public:
-
-   G4String getSetup(const G4String&);
 };
 
 #endif

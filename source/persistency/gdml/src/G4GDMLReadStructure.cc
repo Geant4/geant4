@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.44 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.45 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -35,7 +35,7 @@
 #include "G4GDMLReadStructure.hh"
 
 G4GDMLAuxPairType G4GDMLReadStructure::
-auxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
+AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 {
    G4GDMLAuxPairType auxpair;
 
@@ -64,7 +64,7 @@ auxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 }
 
 void G4GDMLReadStructure::
-bordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
+BordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
 {
    G4String name;
    G4VPhysicalVolume* pv1 = 0;
@@ -92,7 +92,7 @@ bordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
       if (attName=="name")
         { name = GenerateName(attValue); } else
       if (attName=="surfaceproperty")
-        { prop = getSurfaceProperty(GenerateName(attValue)); }
+        { prop = GetSurfaceProperty(GenerateName(attValue)); }
    }
 
    for (xercesc::DOMNode* iter = bordersurfaceElement->getFirstChild();
@@ -107,9 +107,9 @@ bordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
       if (tag != "physvolref")  { continue; }
  
       if (index==0)
-        { pv1 = getPhysvol(GenerateName(refRead(child))); index++; } else
+        { pv1 = GetPhysvol(GenerateName(RefRead(child))); index++; } else
       if (index==1)
-        { pv2 = getPhysvol(GenerateName(refRead(child))); index++; } else
+        { pv2 = GetPhysvol(GenerateName(RefRead(child))); index++; } else
       break;
    }
 
@@ -117,7 +117,7 @@ bordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
 }
 
 void G4GDMLReadStructure::
-divisionvolRead(const xercesc::DOMElement* const divisionvolElement)
+DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
 {
    G4String name;
    G4double unit = 1.0;
@@ -171,7 +171,7 @@ divisionvolRead(const xercesc::DOMElement* const divisionvolElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="volumeref") { logvol = getVolume(GenerateName(refRead(child))); }
+      if (tag=="volumeref") { logvol = GetVolume(GenerateName(RefRead(child))); }
    }
 
    G4PVDivisionFactory::GetInstance();
@@ -199,7 +199,7 @@ divisionvolRead(const xercesc::DOMElement* const divisionvolElement)
 }
 
 G4LogicalVolume*
-G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement)
+G4GDMLReadStructure::FileRead(const xercesc::DOMElement* const fileElement)
 {
    G4String name;
    G4String volname;
@@ -231,16 +231,16 @@ G4GDMLReadStructure::fileRead(const xercesc::DOMElement* const fileElement)
 
    if (volname.empty())
    {
-     return structure.getVolume(structure.getSetup("Default"));
+     return structure.GetVolume(structure.GetSetup("Default"));
    }
    else
    {
-     return structure.getVolume(structure.GenerateName(volname));
+     return structure.GetVolume(structure.GenerateName(volname));
    }
 }
 
 void G4GDMLReadStructure::
-physvolRead(const xercesc::DOMElement* const physvolElement)
+PhysvolRead(const xercesc::DOMElement* const physvolElement)
 {
    G4String name;
    G4LogicalVolume* logvol = 0;
@@ -278,30 +278,30 @@ physvolRead(const xercesc::DOMElement* const physvolElement)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="file")
-        { logvol = fileRead(child); } else
+        { logvol = FileRead(child); } else
       if (tag=="volumeref")
-        { logvol = getVolume(GenerateName(refRead(child))); } else
+        { logvol = GetVolume(GenerateName(RefRead(child))); } else
       if (tag=="position")
-        { vectorRead(child,position); } else
+        { VectorRead(child,position); } else
       if (tag=="rotation")
-        { vectorRead(child,rotation); } else
+        { VectorRead(child,rotation); } else
       if (tag=="scale")
-        { vectorRead(child,scale); } else
+        { VectorRead(child,scale); } else
       if (tag=="positionref")
-        { position = getPosition(GenerateName(refRead(child))); } else
+        { position = GetPosition(GenerateName(RefRead(child))); } else
       if (tag=="rotationref")
-        { rotation = getRotation(GenerateName(refRead(child))); } else
+        { rotation = GetRotation(GenerateName(RefRead(child))); } else
       if (tag=="scaleref")
-        { scale = getScale(GenerateName(refRead(child))); }
+        { scale = GetScale(GenerateName(RefRead(child))); }
       else
       {
         G4String error_msg = "Unknown tag in physvol: " + tag;
-        G4Exception("G4GDMLReadStructure::physvolRead()", "ReadError",
+        G4Exception("G4GDMLReadStructure::PhysvolRead()", "ReadError",
                     FatalException, error_msg);
       }
    }
 
-   G4Transform3D transform(getRotationMatrix(rotation).inverse(),position);
+   G4Transform3D transform(GetRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
    G4String pv_name = logvol->GetName() + "_refl";
@@ -313,7 +313,7 @@ physvolRead(const xercesc::DOMElement* const physvolElement)
 }
 
 void G4GDMLReadStructure::
-replicavolRead(const xercesc::DOMElement* const replicavolElement)
+ReplicavolRead(const xercesc::DOMElement* const replicavolElement)
 {
    G4String name;
    G4double unit = 1.0;
@@ -367,7 +367,7 @@ replicavolRead(const xercesc::DOMElement* const replicavolElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="volumeref") { logvol = getVolume(GenerateName(refRead(child))); }
+      if (tag=="volumeref") { logvol = GetVolume(GenerateName(RefRead(child))); }
    }
 
    G4String pv_name = logvol->GetName() + "_refl";
@@ -379,7 +379,7 @@ replicavolRead(const xercesc::DOMElement* const replicavolElement)
 }
 
 void G4GDMLReadStructure::
-volumeRead(const xercesc::DOMElement* const volumeElement)
+VolumeRead(const xercesc::DOMElement* const volumeElement)
 {
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
@@ -399,11 +399,11 @@ volumeRead(const xercesc::DOMElement* const volumeElement)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="auxiliary")
-        { auxList.push_back(auxiliaryRead(child)); } else
+        { auxList.push_back(AuxiliaryRead(child)); } else
       if (tag=="materialref")
-        { materialPtr = getMaterial(GenerateName(refRead(child))); } else
+        { materialPtr = GetMaterial(GenerateName(RefRead(child))); } else
       if (tag=="solidref")
-        { solidPtr = getSolid(GenerateName(refRead(child))); }
+        { solidPtr = GetSolid(GenerateName(RefRead(child))); }
    }
 
    pMotherLogical = new G4LogicalVolume(solidPtr,materialPtr,
@@ -411,11 +411,11 @@ volumeRead(const xercesc::DOMElement* const volumeElement)
 
    if (!auxList.empty()) { auxMap[pMotherLogical] = auxList; }
 
-   volume_contentRead(volumeElement);
+   Volume_contentRead(volumeElement);
 }
 
 void G4GDMLReadStructure::
-skinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
+SkinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 {
    G4String name;
    G4LogicalVolume* logvol = 0;
@@ -441,7 +441,7 @@ skinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
       if (attName=="name")
         { name = GenerateName(attValue); } else
       if (attName=="surfaceproperty")
-        { prop = getSurfaceProperty(GenerateName(attValue)); }
+        { prop = GetSurfaceProperty(GenerateName(attValue)); }
    }
 
    for (xercesc::DOMNode* iter = skinsurfaceElement->getFirstChild();
@@ -455,12 +455,12 @@ skinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 
       if (tag=="volumeref")
       {
-        logvol = getVolume(GenerateName(refRead(child)));
+        logvol = GetVolume(GenerateName(RefRead(child)));
       }
       else
       {
         G4String error_msg = "Unknown tag in skinsurface: " + tag;
-        G4Exception("G4GDMLReadStructure::skinsurfaceRead()", "ReadError",
+        G4Exception("G4GDMLReadStructure::SkinsurfaceRead()", "ReadError",
                     FatalException, error_msg);
       }
    }
@@ -469,7 +469,7 @@ skinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 }
 
 void G4GDMLReadStructure::
-volume_contentRead(const xercesc::DOMElement* const volumeElement)
+Volume_contentRead(const xercesc::DOMElement* const volumeElement)
 {
    for (xercesc::DOMNode* iter = volumeElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
@@ -483,26 +483,26 @@ volume_contentRead(const xercesc::DOMElement* const volumeElement)
       if ((tag=="auxiliary") || (tag=="materialref") || (tag=="solidref"))
         { } else // These are already processed in volmeRead
       if (tag=="paramvol")
-        { paramvolRead(child,pMotherLogical); } else
+        { ParamvolRead(child,pMotherLogical); } else
       if (tag=="physvol")
-        { physvolRead(child); } else
+        { PhysvolRead(child); } else
       if (tag=="replicavol")
-        { replicavolRead(child); } else
+        { ReplicavolRead(child); } else
       if (tag=="divisionvol")
-        { divisionvolRead(child); } else
+        { DivisionvolRead(child); } else
       if (tag=="loop")
-        { loopRead(child,&G4GDMLRead::volume_contentRead); }
+        { LoopRead(child,&G4GDMLRead::Volume_contentRead); }
       else
       {
         G4String error_msg = "Unknown tag in volume: " + tag;
-        G4Exception("G4GDMLReadStructure::volume_contentRead()",
+        G4Exception("G4GDMLReadStructure::Volume_contentRead()",
                     "ReadError", FatalException, error_msg);
       }
    }
 }
 
 void G4GDMLReadStructure::
-structureRead(const xercesc::DOMElement* const structureElement)
+StructureRead(const xercesc::DOMElement* const structureElement)
 {
    G4cout << "G4GDML: Reading structure..." << G4endl;
 
@@ -515,20 +515,20 @@ structureRead(const xercesc::DOMElement* const structureElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="bordersurface") { bordersurfaceRead(child); } else
-      if (tag=="skinsurface") { skinsurfaceRead(child); } else
-      if (tag=="volume") { volumeRead(child); } else
-      if (tag=="loop") { loopRead(child,&G4GDMLRead::structureRead); }
+      if (tag=="bordersurface") { BordersurfaceRead(child); } else
+      if (tag=="skinsurface") { SkinsurfaceRead(child); } else
+      if (tag=="volume") { VolumeRead(child); } else
+      if (tag=="loop") { LoopRead(child,&G4GDMLRead::StructureRead); }
       else
       {
         G4String error_msg = "Unknown tag in structure: " + tag;
-        G4Exception("G4GDMLReadStructure::structureRead()",
+        G4Exception("G4GDMLReadStructure::StructureRead()",
                     "ReadError", FatalException, error_msg);
       }
    }
 }
 
-G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const
+G4VPhysicalVolume* G4GDMLReadStructure::GetPhysvol(const G4String& ref) const
 {
    G4VPhysicalVolume* physvolPtr =
      G4PhysicalVolumeStore::GetInstance()->GetVolume(ref,false);
@@ -536,14 +536,14 @@ G4VPhysicalVolume* G4GDMLReadStructure::getPhysvol(const G4String& ref) const
    if (!physvolPtr)
    {
      G4String error_msg = "Referenced physvol '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadStructure::getPhysvol()", "ReadError",
+     G4Exception("G4GDMLReadStructure::GetPhysvol()", "ReadError",
                  FatalException, error_msg);
    }
 
    return physvolPtr;
 }
 
-G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
+G4LogicalVolume* G4GDMLReadStructure::GetVolume(const G4String& ref) const {
 
    G4LogicalVolume *volumePtr
    = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
@@ -551,7 +551,7 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
    if (!volumePtr)
    {
      G4String error_msg = "Referenced volume '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadStructure::getVolume()", "ReadError",
+     G4Exception("G4GDMLReadStructure::GetVolume()", "ReadError",
                  FatalException, error_msg);
    }
 
@@ -559,7 +559,7 @@ G4LogicalVolume* G4GDMLReadStructure::getVolume(const G4String& ref) const {
 }
 
 G4GDMLAuxListType G4GDMLReadStructure::
-getVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
+GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
    if (auxMap.find(logvol) != auxMap.end()) { return auxMap[logvol]; }
    else { return G4GDMLAuxListType(); }
@@ -568,7 +568,7 @@ getVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 G4VPhysicalVolume*
 G4GDMLReadStructure::GetWorldVolume(const G4String& setupName)
 {    
-   G4LogicalVolume* volume = getVolume(getSetup(setupName));
+   G4LogicalVolume* volume = GetVolume(GetSetup(setupName));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
    G4VPhysicalVolume* pvWorld =
      new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);

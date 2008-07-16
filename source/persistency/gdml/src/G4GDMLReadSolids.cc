@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.16 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.17 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -35,7 +35,7 @@
 #include "G4GDMLReadSolids.hh"
 
 void G4GDMLReadSolids::
-booleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
+BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
 {
    G4String name;
    G4String first;
@@ -74,31 +74,31 @@ booleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="first") { first = refRead(child); } else
-      if (tag=="second") { second = refRead(child); } else
-      if (tag=="position") { vectorRead(child,position); } else
-      if (tag=="rotation") { vectorRead(child,rotation); } else
-      if (tag=="firstposition") { vectorRead(child,firstposition); } else
-      if (tag=="firstrotation") { vectorRead(child,firstrotation); }
+      if (tag=="first") { first = RefRead(child); } else
+      if (tag=="second") { second = RefRead(child); } else
+      if (tag=="position") { VectorRead(child,position); } else
+      if (tag=="rotation") { VectorRead(child,rotation); } else
+      if (tag=="firstposition") { VectorRead(child,firstposition); } else
+      if (tag=="firstrotation") { VectorRead(child,firstrotation); }
       else
       {
         G4String error_msg = "Unknown tag in boolean solid: " + tag;
-        G4Exception("G4GDMLReadSolids::booleanRead()", "ReadError",
+        G4Exception("G4GDMLReadSolids::BooleanRead()", "ReadError",
                     FatalException, error_msg);
       }
    }
 
-   G4VSolid* firstSolid = getSolid(GenerateName(first));
-   G4VSolid* secondSolid = getSolid(GenerateName(second));
+   G4VSolid* firstSolid = GetSolid(GenerateName(first));
+   G4VSolid* secondSolid = GetSolid(GenerateName(second));
 
-   G4Transform3D transform(getRotationMatrix(rotation),position);
+   G4Transform3D transform(GetRotationMatrix(rotation),position);
 
    if (( (firstrotation.x()!=0.0) || (firstrotation.y()!=0.0)
                                   || (firstrotation.z()!=0.0))
     || ( (firstposition.x()!=0.0) || (firstposition.y()!=0.0)
                                   || (firstposition.z()!=0.0)))
    { 
-      G4Transform3D firsttransform(getRotationMatrix(firstrotation),
+      G4Transform3D firsttransform(GetRotationMatrix(firstrotation),
                                    firstposition);
       firstSolid = new G4DisplacedSolid(GenerateName("displaced_"+first),
                                         firstSolid, firsttransform);
@@ -112,7 +112,7 @@ booleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
      { new G4IntersectionSolid(name,firstSolid,secondSolid,transform); }
 }
 
-void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const boxElement)
+void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -153,7 +153,7 @@ void G4GDMLReadSolids::boxRead(const xercesc::DOMElement* const boxElement)
    new G4Box(name,x,y,z);
 }
 
-void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const coneElement)
+void G4GDMLReadSolids::ConeRead(const xercesc::DOMElement* const coneElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -207,7 +207,7 @@ void G4GDMLReadSolids::coneRead(const xercesc::DOMElement* const coneElement)
 }
 
 void G4GDMLReadSolids::
-ellipsoidRead(const xercesc::DOMElement* const ellipsoidElement)
+EllipsoidRead(const xercesc::DOMElement* const ellipsoidElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -253,7 +253,7 @@ ellipsoidRead(const xercesc::DOMElement* const ellipsoidElement)
 }
 
 void G4GDMLReadSolids::
-eltubeRead(const xercesc::DOMElement* const eltubeElement)
+EltubeRead(const xercesc::DOMElement* const eltubeElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -292,7 +292,7 @@ eltubeRead(const xercesc::DOMElement* const eltubeElement)
    new G4EllipticalTube(name,dx,dy,dz);
 }
 
-void G4GDMLReadSolids::xtruRead(const xercesc::DOMElement* const xtruElement)
+void G4GDMLReadSolids::XtruRead(const xercesc::DOMElement* const xtruElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -331,15 +331,15 @@ void G4GDMLReadSolids::xtruRead(const xercesc::DOMElement* const xtruElement)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="twoDimVertex")
-        { twoDimVertexList.push_back(twoDimVertexRead(child,lunit)); } else
+        { twoDimVertexList.push_back(TwoDimVertexRead(child,lunit)); } else
       if (tag=="section")
-        { sectionList.push_back(sectionRead(child,lunit)); }
+        { sectionList.push_back(SectionRead(child,lunit)); }
    }
 
    new G4ExtrudedSolid(name,twoDimVertexList,sectionList);
 }
 
-void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const hypeElement)
+void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -386,7 +386,7 @@ void G4GDMLReadSolids::hypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const orbElement)
+void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -419,7 +419,7 @@ void G4GDMLReadSolids::orbRead(const xercesc::DOMElement* const orbElement)
    new G4Orb(name,r);
 }
 
-void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const paraElement)
+void G4GDMLReadSolids::ParaRead(const xercesc::DOMElement* const paraElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -470,7 +470,7 @@ void G4GDMLReadSolids::paraRead(const xercesc::DOMElement* const paraElement)
 }
 
 void G4GDMLReadSolids::
-polyconeRead(const xercesc::DOMElement* const polyconeElement) 
+PolyconeRead(const xercesc::DOMElement* const polyconeElement) 
 {
    G4String name;
    G4double lunit = 1.0;
@@ -516,7 +516,7 @@ polyconeRead(const xercesc::DOMElement* const polyconeElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="zplane") { zplaneList.push_back(zplaneRead(child)); }
+      if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
    }
 
    G4int numZPlanes = zplaneList.size();
@@ -537,7 +537,7 @@ polyconeRead(const xercesc::DOMElement* const polyconeElement)
 }
 
 void G4GDMLReadSolids::
-polyhedraRead(const xercesc::DOMElement* const polyhedraElement)
+PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -585,7 +585,7 @@ polyhedraRead(const xercesc::DOMElement* const polyhedraElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="zplane") { zplaneList.push_back(zplaneRead(child)); }
+      if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
    }
 
    G4int numZPlanes = zplaneList.size();
@@ -606,7 +606,7 @@ polyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 }
 
 G4QuadrangularFacet* G4GDMLReadSolids::
-quadrangularRead(const xercesc::DOMElement* const quadrangularElement)
+QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
 {
    G4ThreeVector vertex1;
    G4ThreeVector vertex2;
@@ -632,13 +632,13 @@ quadrangularRead(const xercesc::DOMElement* const quadrangularElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="vertex1")
-        { vertex1 = getPosition(GenerateName(attValue)); } else
+        { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
-        { vertex2 = getPosition(GenerateName(attValue)); } else
+        { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
-        { vertex3 = getPosition(GenerateName(attValue)); } else
+        { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex4")
-        { vertex4 = getPosition(GenerateName(attValue)); } else
+        { vertex4 = GetPosition(GenerateName(attValue)); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
@@ -647,7 +647,7 @@ quadrangularRead(const xercesc::DOMElement* const quadrangularElement)
 }
 
 void G4GDMLReadSolids::
-reflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
+ReflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -692,14 +692,14 @@ reflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
    rotation *= aunit;
    position *= lunit;
 
-   G4Transform3D transform(getRotationMatrix(rotation),position);
+   G4Transform3D transform(GetRotationMatrix(rotation),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
           
-   new G4ReflectedSolid(name,getSolid(solid),transform);
+   new G4ReflectedSolid(name,GetSolid(solid),transform);
 }
 
 G4ExtrudedSolid::ZSection G4GDMLReadSolids::
-sectionRead(const xercesc::DOMElement* const sectionElement,G4double lunit) 
+SectionRead(const xercesc::DOMElement* const sectionElement,G4double lunit) 
 {
    G4double zPosition = 0.0;
    G4TwoVector Offset;
@@ -736,7 +736,7 @@ sectionRead(const xercesc::DOMElement* const sectionElement,G4double lunit)
 }
 
 void G4GDMLReadSolids::
-sphereRead(const xercesc::DOMElement* const sphereElement)
+SphereRead(const xercesc::DOMElement* const sphereElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -787,7 +787,7 @@ sphereRead(const xercesc::DOMElement* const sphereElement)
 }
 
 void G4GDMLReadSolids::
-tessellatedRead(const xercesc::DOMElement* const tessellatedElement)
+TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
 {
    G4String name;
 
@@ -823,15 +823,15 @@ tessellatedRead(const xercesc::DOMElement* const tessellatedElement)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="triangular")
-        { tessellated->AddFacet(triangularRead(child)); } else
+        { tessellated->AddFacet(TriangularRead(child)); } else
       if (tag=="quadrangular")
-        { tessellated->AddFacet(quadrangularRead(child)); }
+        { tessellated->AddFacet(QuadrangularRead(child)); }
    }
 
    tessellated->SetSolidClosed(true);
 }
 
-void G4GDMLReadSolids::tetRead(const xercesc::DOMElement* const tetElement)
+void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
 {
    G4String name;
    G4ThreeVector vertex1;
@@ -859,19 +859,19 @@ void G4GDMLReadSolids::tetRead(const xercesc::DOMElement* const tetElement)
       if (attName=="name")
         { name = GenerateName(attValue); } else
       if (attName=="vertex1")
-        { vertex1 = getPosition(GenerateName(attValue)); } else
+        { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
-        { vertex2 = getPosition(GenerateName(attValue)); } else
+        { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
-        { vertex3 = getPosition(GenerateName(attValue)); } else
+        { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex4")
-        { vertex4 = getPosition(GenerateName(attValue)); }
+        { vertex4 = GetPosition(GenerateName(attValue)); }
    }
 
    new G4Tet(name,vertex1,vertex2,vertex3,vertex4);
 }
 
-void G4GDMLReadSolids::torusRead(const xercesc::DOMElement* const torusElement)
+void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -918,7 +918,7 @@ void G4GDMLReadSolids::torusRead(const xercesc::DOMElement* const torusElement)
    new G4Torus(name,rmin,rmax,rtor,startphi,deltaphi);
 }
 
-void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const trapElement)
+void G4GDMLReadSolids::TrapRead(const xercesc::DOMElement* const trapElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -983,7 +983,7 @@ void G4GDMLReadSolids::trapRead(const xercesc::DOMElement* const trapElement)
    new G4Trap(name,z,theta,phi,y1,x1,x2,alpha1,y2,x3,x4,alpha2);
 }
 
-void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const trdElement)
+void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1030,7 +1030,7 @@ void G4GDMLReadSolids::trdRead(const xercesc::DOMElement* const trdElement)
 }
 
 G4TriangularFacet* G4GDMLReadSolids::
-triangularRead(const xercesc::DOMElement* const triangularElement)
+TriangularRead(const xercesc::DOMElement* const triangularElement)
 {
    G4ThreeVector vertex1;
    G4ThreeVector vertex2;
@@ -1055,11 +1055,11 @@ triangularRead(const xercesc::DOMElement* const triangularElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="vertex1")
-        { vertex1 = getPosition(GenerateName(attValue)); } else
+        { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
-        { vertex2 = getPosition(GenerateName(attValue)); } else
+        { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
-        { vertex3 = getPosition(GenerateName(attValue)); } else
+        { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
@@ -1067,7 +1067,7 @@ triangularRead(const xercesc::DOMElement* const triangularElement)
    return new G4TriangularFacet(vertex1,vertex2,vertex3,type);
 }
 
-void G4GDMLReadSolids::tubeRead(const xercesc::DOMElement* const tubeElement)
+void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1115,7 +1115,7 @@ void G4GDMLReadSolids::tubeRead(const xercesc::DOMElement* const tubeElement)
 }
 
 void G4GDMLReadSolids::
-twistedboxRead(const xercesc::DOMElement* const twistedboxElement)
+TwistedboxRead(const xercesc::DOMElement* const twistedboxElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1160,7 +1160,7 @@ twistedboxRead(const xercesc::DOMElement* const twistedboxElement)
 }
 
 void G4GDMLReadSolids::
-twistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
+TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1225,7 +1225,7 @@ twistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
 }
 
 void G4GDMLReadSolids::
-twistedtrdRead(const xercesc::DOMElement* const twistedtrdElement)
+TwistedtrdRead(const xercesc::DOMElement* const twistedtrdElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1276,7 +1276,7 @@ twistedtrdRead(const xercesc::DOMElement* const twistedtrdElement)
 }
 
 void G4GDMLReadSolids::
-twistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
+TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
 {
    G4String name;
    G4double lunit = 1.0;
@@ -1324,7 +1324,7 @@ twistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
 }
 
 G4TwoVector G4GDMLReadSolids::
-twoDimVertexRead(const xercesc::DOMElement* const element, G4double lunit)
+TwoDimVertexRead(const xercesc::DOMElement* const element, G4double lunit)
 {
    G4TwoVector vec;
    
@@ -1352,7 +1352,7 @@ twoDimVertexRead(const xercesc::DOMElement* const element, G4double lunit)
 }
 
 G4GDMLReadSolids::zplaneType G4GDMLReadSolids::
-zplaneRead(const xercesc::DOMElement* const zplaneElement)
+ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 {
    zplaneType zplane;
 
@@ -1381,7 +1381,7 @@ zplaneRead(const xercesc::DOMElement* const zplaneElement)
 }
 
 void G4GDMLReadSolids::
-opticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
+OpticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 {
    G4String name;
    G4String smodel;
@@ -1432,7 +1432,7 @@ opticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
    new G4OpticalSurface(name,model,finish,type,value);
 }
 
-void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const solidsElement)
+void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement)
 {
    G4cout << "G4GDML: Reading solids..." << G4endl;
 
@@ -1445,50 +1445,50 @@ void G4GDMLReadSolids::solidsRead(const xercesc::DOMElement* const solidsElement
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="box") { boxRead(child); } else
-      if (tag=="cone") { coneRead(child); } else
-      if (tag=="ellipsoid") { ellipsoidRead(child); }else
-      if (tag=="eltube") { eltubeRead(child); } else
-      if (tag=="xtru") { xtruRead(child); } else
-      if (tag=="hype") { hypeRead(child); } else
-      if (tag=="intersection") { booleanRead(child,INTERSECTION); } else
-      if (tag=="orb") { orbRead(child); } else
-      if (tag=="para") { paraRead(child); } else
-      if (tag=="polycone") { polyconeRead(child); } else
-      if (tag=="polyhedra") { polyhedraRead(child); } else
-      if (tag=="reflectedSolid") { reflectedSolidRead(child); } else
-      if (tag=="sphere") { sphereRead(child); } else
-      if (tag=="subtraction") { booleanRead(child,SUBTRACTION); } else
-      if (tag=="tessellated") { tessellatedRead(child); } else
-      if (tag=="tet") { tetRead(child); } else
-      if (tag=="torus") { torusRead(child); } else
-      if (tag=="trap") { trapRead(child); } else
-      if (tag=="trd") { trdRead(child); } else
-      if (tag=="tube") { tubeRead(child); } else
-      if (tag=="twistedbox") { twistedboxRead(child); } else
-      if (tag=="twistedtrap") { twistedtrapRead(child); } else
-      if (tag=="twistedtrd") { twistedtrdRead(child); } else
-      if (tag=="twistedtubs") { twistedtubsRead(child); } else
-      if (tag=="union") { booleanRead(child,UNION); } else
-      if (tag=="opticalsurface") { opticalsurfaceRead(child); } else
-      if (tag=="loop") { loopRead(child,&G4GDMLRead::solidsRead); }
+      if (tag=="box") { BoxRead(child); } else
+      if (tag=="cone") { ConeRead(child); } else
+      if (tag=="ellipsoid") { EllipsoidRead(child); }else
+      if (tag=="eltube") { EltubeRead(child); } else
+      if (tag=="xtru") { XtruRead(child); } else
+      if (tag=="hype") { HypeRead(child); } else
+      if (tag=="intersection") { BooleanRead(child,INTERSECTION); } else
+      if (tag=="orb") { OrbRead(child); } else
+      if (tag=="para") { ParaRead(child); } else
+      if (tag=="polycone") { PolyconeRead(child); } else
+      if (tag=="polyhedra") { PolyhedraRead(child); } else
+      if (tag=="reflectedSolid") { ReflectedSolidRead(child); } else
+      if (tag=="sphere") { SphereRead(child); } else
+      if (tag=="subtraction") { BooleanRead(child,SUBTRACTION); } else
+      if (tag=="tessellated") { TessellatedRead(child); } else
+      if (tag=="tet") { TetRead(child); } else
+      if (tag=="torus") { TorusRead(child); } else
+      if (tag=="trap") { TrapRead(child); } else
+      if (tag=="trd") { TrdRead(child); } else
+      if (tag=="tube") { TubeRead(child); } else
+      if (tag=="twistedbox") { TwistedboxRead(child); } else
+      if (tag=="twistedtrap") { TwistedtrapRead(child); } else
+      if (tag=="twistedtrd") { TwistedtrdRead(child); } else
+      if (tag=="twistedtubs") { TwistedtubsRead(child); } else
+      if (tag=="union") { BooleanRead(child,UNION); } else
+      if (tag=="opticalsurface") { OpticalsurfaceRead(child); } else
+      if (tag=="loop") { LoopRead(child,&G4GDMLRead::SolidsRead); }
       else
       {
         G4String error_msg = "Unknown tag in solids: " + tag;
-        G4Exception("G4GDMLReadSolids::solidsRead()", "ReadError",
+        G4Exception("G4GDMLReadSolids::SolidsRead()", "ReadError",
                     FatalException, error_msg);
       }
    }
 }
 
-G4VSolid* G4GDMLReadSolids::getSolid(const G4String& ref) const
+G4VSolid* G4GDMLReadSolids::GetSolid(const G4String& ref) const
 {
    G4VSolid* solidPtr = G4SolidStore::GetInstance()->GetSolid(ref,false);
 
    if (!solidPtr)
    {
      G4String error_msg = "Referenced solid '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadSolids::getSolid()", "ReadError",
+     G4Exception("G4GDMLReadSolids::GetSolid()", "ReadError",
                  FatalException, error_msg);
    }
 
@@ -1496,7 +1496,7 @@ G4VSolid* G4GDMLReadSolids::getSolid(const G4String& ref) const
 }
 
 G4SurfaceProperty* G4GDMLReadSolids::
-getSurfaceProperty(const G4String& ref) const
+GetSurfaceProperty(const G4String& ref) const
 {
    const G4SurfacePropertyTable* surfaceList
          = G4SurfaceProperty::GetSurfacePropertyTable();
@@ -1508,7 +1508,7 @@ getSurfaceProperty(const G4String& ref) const
    }
 
    G4String error_msg = "Referenced optical surface '" + ref + "' was not found!";
-   G4Exception("G4GDMLReadSolids::getSurfaceProperty()", "ReadError",
+   G4Exception("G4GDMLReadSolids::GetSurfaceProperty()", "ReadError",
                FatalException, error_msg);
 
    return 0;

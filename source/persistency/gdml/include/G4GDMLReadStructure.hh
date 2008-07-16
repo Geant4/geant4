@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.19 2008-07-11 07:50:07 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.20 2008-07-16 15:46:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,28 +69,32 @@ typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
 
 class G4GDMLReadStructure : public G4GDMLReadParamvol
 {
+
+ public:
+
+   G4VPhysicalVolume* GetPhysvol(const G4String&) const;
+   G4LogicalVolume* GetVolume(const G4String&) const;
+   G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
+   G4VPhysicalVolume* GetWorldVolume(const G4String&);
+
+ private:
+
+   G4GDMLAuxPairType AuxiliaryRead(const xercesc::DOMElement* const);
+   void BordersurfaceRead(const xercesc::DOMElement* const);
+   void DivisionvolRead(const xercesc::DOMElement* const);
+   G4LogicalVolume* FileRead(const xercesc::DOMElement* const);
+   void PhysvolRead(const xercesc::DOMElement* const);
+   void ReplicavolRead(const xercesc::DOMElement* const);
+   void SkinsurfaceRead(const xercesc::DOMElement* const);
+   void VolumeRead(const xercesc::DOMElement* const);
+   void Volume_contentRead(const xercesc::DOMElement* const);
+   void StructureRead(const xercesc::DOMElement* const);
+
  private:
 
    G4GDMLAuxMapType auxMap;
    G4LogicalVolume *pMotherLogical;
 
-   G4GDMLAuxPairType auxiliaryRead(const xercesc::DOMElement* const);
-   void bordersurfaceRead(const xercesc::DOMElement* const);
-   void divisionvolRead(const xercesc::DOMElement* const);
-   G4LogicalVolume* fileRead(const xercesc::DOMElement* const);
-   void physvolRead(const xercesc::DOMElement* const);
-   void replicavolRead(const xercesc::DOMElement* const);
-   void skinsurfaceRead(const xercesc::DOMElement* const);
-   void volumeRead(const xercesc::DOMElement* const);
-   void volume_contentRead(const xercesc::DOMElement* const);
-   void structureRead(const xercesc::DOMElement* const);
-
- public:
-
-   G4VPhysicalVolume* getPhysvol(const G4String&) const;
-   G4LogicalVolume* getVolume(const G4String&) const;
-   G4GDMLAuxListType getVolumeAuxiliaryInformation(const G4LogicalVolume* const);
-   G4VPhysicalVolume* GetWorldVolume(const G4String&);
 };
 
 #endif

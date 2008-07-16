@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.12 2008-07-11 07:50:08 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.13 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -36,7 +36,7 @@
 #include "G4GDMLReadMaterials.hh"
 
 G4double
-G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const atomElement)
+G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)
 {
    G4double value = 0.0;
    G4double unit = g/mole;
@@ -66,7 +66,7 @@ G4GDMLReadMaterials::atomRead(const xercesc::DOMElement* const atomElement)
 }
 
 G4int G4GDMLReadMaterials::
-compositeRead(const xercesc::DOMElement* const compositeElement,G4String& ref)
+CompositeRead(const xercesc::DOMElement* const compositeElement,G4String& ref)
 {
    G4int n = 0;
 
@@ -180,7 +180,7 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
 }
 
 void G4GDMLReadMaterials::
-elementRead(const xercesc::DOMElement* const elementElement) 
+ElementRead(const xercesc::DOMElement* const elementElement) 
 {
    G4String name;
    G4String formula;
@@ -220,13 +220,13 @@ elementRead(const xercesc::DOMElement* const elementElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="atom") { a = atomRead(child); }  else
+      if (tag=="atom") { a = AtomRead(child); }  else
       if (tag=="fraction") { nComponents++; }
    }
 
    if (nComponents>0)
    {
-     mixtureRead(elementElement, new G4Element(name,formula,nComponents));
+     MixtureRead(elementElement, new G4Element(name,formula,nComponents));
    }
    else
    {
@@ -235,7 +235,7 @@ elementRead(const xercesc::DOMElement* const elementElement)
 }
 
 G4double G4GDMLReadMaterials::
-fractionRead(const xercesc::DOMElement* const fractionElement, G4String& ref)
+FractionRead(const xercesc::DOMElement* const fractionElement, G4String& ref)
 {
    G4double n = 0.0;
 
@@ -264,7 +264,7 @@ fractionRead(const xercesc::DOMElement* const fractionElement, G4String& ref)
 }
 
 void G4GDMLReadMaterials::
-isotopeRead(const xercesc::DOMElement* const isotopeElement)
+IsotopeRead(const xercesc::DOMElement* const isotopeElement)
 {
    G4String name;
    G4int Z = 0;
@@ -302,14 +302,14 @@ isotopeRead(const xercesc::DOMElement* const isotopeElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="atom")  { a = atomRead(child); }
+      if (tag=="atom")  { a = AtomRead(child); }
    }
 
    new G4Isotope(name,Z,N,a);
 }
 
 void G4GDMLReadMaterials::
-materialRead(const xercesc::DOMElement* const materialElement)
+MaterialRead(const xercesc::DOMElement* const materialElement)
 {
    G4String name;
    G4double Z = 0.0;
@@ -357,10 +357,10 @@ materialRead(const xercesc::DOMElement* const materialElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="atom") { a = atomRead(child); } else
-      if (tag=="Dref") { D = getQuantity(GenerateName(refRead(child))); } else
-      if (tag=="Pref") { P = getQuantity(GenerateName(refRead(child))); } else
-      if (tag=="Tref") { T = getQuantity(GenerateName(refRead(child))); } else
+      if (tag=="atom") { a = AtomRead(child); } else
+      if (tag=="Dref") { D = GetQuantity(GenerateName(RefRead(child))); } else
+      if (tag=="Pref") { P = GetQuantity(GenerateName(RefRead(child))); } else
+      if (tag=="Tref") { T = GetQuantity(GenerateName(RefRead(child))); } else
       if (tag=="D") { D = DRead(child); } else
       if (tag=="P") { P = PRead(child); } else
       if (tag=="T") { T = TRead(child); } else
@@ -375,7 +375,7 @@ materialRead(const xercesc::DOMElement* const materialElement)
    }
    else
    {
-     mixtureRead(materialElement,
+     MixtureRead(materialElement,
                  material = new G4Material(name,D,nComponents,state,T,P));
    }
 
@@ -388,12 +388,12 @@ materialRead(const xercesc::DOMElement* const materialElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="property") { propertyRead(child,material); }
+      if (tag=="property") { PropertyRead(child,material); }
    }
 }
 
 void G4GDMLReadMaterials::
-mixtureRead(const xercesc::DOMElement *const mixtureElement, G4Element *element)
+MixtureRead(const xercesc::DOMElement *const mixtureElement, G4Element *element)
 {
    for (xercesc::DOMNode* iter = mixtureElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
@@ -407,14 +407,14 @@ mixtureRead(const xercesc::DOMElement *const mixtureElement, G4Element *element)
       if (tag=="fraction")
       {
          G4String ref;
-         G4double n = fractionRead(child,ref);
-         element->AddIsotope(getIsotope(GenerateName(ref)),n);
+         G4double n = FractionRead(child,ref);
+         element->AddIsotope(GetIsotope(GenerateName(ref)),n);
       }
    }
 }
 
 void G4GDMLReadMaterials::
-mixtureRead(const xercesc::DOMElement *const mixtureElement,
+MixtureRead(const xercesc::DOMElement *const mixtureElement,
             G4Material *material)
 {
    for (xercesc::DOMNode* iter = mixtureElement->getFirstChild();
@@ -429,10 +429,10 @@ mixtureRead(const xercesc::DOMElement *const mixtureElement,
       if (tag=="fraction")
       {
          G4String ref;
-         G4double n = fractionRead(child,ref);
+         G4double n = FractionRead(child,ref);
          
-         G4Material *materialPtr = getMaterial(GenerateName(ref), false);
-         G4Element *elementPtr = getElement(GenerateName(ref), false);
+         G4Material *materialPtr = GetMaterial(GenerateName(ref), false);
+         G4Element *elementPtr = GetElement(GenerateName(ref), false);
 
          if (materialPtr != 0) { material->AddMaterial(materialPtr,n); } else
          if (elementPtr != 0)  { material->AddElement(elementPtr,n); }
@@ -441,23 +441,23 @@ mixtureRead(const xercesc::DOMElement *const mixtureElement,
          {
             G4String error_msg = "Referenced material/element '"
                                + GenerateName(ref) + "' was not found!";
-            G4Exception("G4GDMLReadMaterials::mixtureRead()", "InvalidSetup",
+            G4Exception("G4GDMLReadMaterials::MixtureRead()", "InvalidSetup",
                         FatalException, error_msg);   
          }
       } 
       else if (tag=="composite")
       {
          G4String ref;
-         G4int n = compositeRead(child,ref);
+         G4int n = CompositeRead(child,ref);
 
-         G4Element *elementPtr = getElement(GenerateName(ref));
+         G4Element *elementPtr = GetElement(GenerateName(ref));
          material->AddElement(elementPtr,n);
       }
    }
 }
 
 void G4GDMLReadMaterials::
-propertyRead(const xercesc::DOMElement* const propertyElement,
+PropertyRead(const xercesc::DOMElement* const propertyElement,
              G4Material* material)
 {
    G4String name;
@@ -482,18 +482,18 @@ propertyRead(const xercesc::DOMElement* const propertyElement,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="ref")  { matrix = getMatrix(ref=attValue); }
+      if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
    }
 
-   if (matrix.getCols() != 2)
+   if (matrix.GetCols() != 2)
    {
      G4String error_msg = "Referenced matrix '" + ref
             + "' should have \n two columns as a property table for material: "
             + material->GetName();
-     G4Exception("G4GDMLReadMaterials::propertyRead()", "InvalidRead",
+     G4Exception("G4GDMLReadMaterials::PropertyRead()", "InvalidRead",
                  FatalException, error_msg);
    }
-   if (matrix.getRows() == 0) { return; }
+   if (matrix.GetRows() == 0) { return; }
 
    G4MaterialPropertiesTable* matprop = material->GetMaterialPropertiesTable();
    if (!matprop)
@@ -502,15 +502,15 @@ propertyRead(const xercesc::DOMElement* const propertyElement,
                matprop = new G4MaterialPropertiesTable());
    }
    G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
-   for (size_t i=0; i<matrix.getRows(); i++)
+   for (size_t i=0; i<matrix.GetRows(); i++)
    {
-     propvect->AddElement(matrix.get(i,0),matrix.get(i,1));
+     propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
    }
    matprop->AddProperty(name,propvect);
 }
 
 void G4GDMLReadMaterials::
-materialsRead(const xercesc::DOMElement* const materialsElement)
+MaterialsRead(const xercesc::DOMElement* const materialsElement)
 {
    G4cout << "G4GDML: Reading materials..." << G4endl;
 
@@ -523,20 +523,20 @@ materialsRead(const xercesc::DOMElement* const materialsElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="element")  { elementRead(child); }  else 
-      if (tag=="isotope")  { isotopeRead(child); }  else 
-      if (tag=="material") { materialRead(child); }
+      if (tag=="element")  { ElementRead(child); }  else 
+      if (tag=="isotope")  { IsotopeRead(child); }  else 
+      if (tag=="material") { MaterialRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in materials: " + tag;
-        G4Exception("G4GDMLReadMaterials::materialsRead()", "InvalidSetup",
+        G4Exception("G4GDMLReadMaterials::MaterialsRead()", "InvalidSetup",
                     FatalException, error_msg);
       }
    }
 }
 
-G4Element*
-G4GDMLReadMaterials::getElement(const G4String& ref, G4bool verbose) const
+G4Element* G4GDMLReadMaterials::
+GetElement(const G4String& ref, G4bool verbose) const
 {
    G4Element* elementPtr = G4Element::GetElement(ref,false);
 
@@ -548,14 +548,14 @@ G4GDMLReadMaterials::getElement(const G4String& ref, G4bool verbose) const
    if (verbose && !elementPtr)
    {
      G4String error_msg = "Referenced element '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadMaterials::getElement()", "InvalidRead",
+     G4Exception("G4GDMLReadMaterials::GetElement()", "InvalidRead",
                  FatalException, error_msg);
    }
 
    return elementPtr;
 }
 
-G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref,
+G4Isotope* G4GDMLReadMaterials::GetIsotope(const G4String& ref,
                                            G4bool verbose) const
 {
    G4Isotope* isotopePtr = G4Isotope::GetIsotope(ref,false);
@@ -563,14 +563,14 @@ G4Isotope* G4GDMLReadMaterials::getIsotope(const G4String& ref,
    if (verbose && !isotopePtr)
    {
      G4String error_msg = "Referenced isotope '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadMaterials::getIsotope()", "InvalidRead",
+     G4Exception("G4GDMLReadMaterials::GetIsotope()", "InvalidRead",
                  FatalException, error_msg);
    }
 
    return isotopePtr;
 }
 
-G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref,
+G4Material* G4GDMLReadMaterials::GetMaterial(const G4String& ref,
                                              G4bool verbose) const
 {
    G4Material *materialPtr = G4Material::GetMaterial(ref,false);
@@ -583,7 +583,7 @@ G4Material* G4GDMLReadMaterials::getMaterial(const G4String& ref,
    if (verbose && !materialPtr)
    {
      G4String error_msg = "Referenced material '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadMaterials::getMaterial()", "InvalidRead",
+     G4Exception("G4GDMLReadMaterials::GetMaterial()", "InvalidRead",
                  FatalException, error_msg);
    }
 

@@ -44,8 +44,6 @@
 
 class G4GDMLMatrix
 {
-   G4double *m;
-   size_t rows,cols;
 
  public:
 
@@ -53,14 +51,47 @@ class G4GDMLMatrix
    G4GDMLMatrix(size_t rows0,size_t cols0);
    ~G4GDMLMatrix();
 
-   void set(size_t r,size_t c,G4double a);
-   G4double get(size_t r,size_t c) const;
-   size_t getRows() const;
-   size_t getCols() const;
+   void Set(size_t r,size_t c,G4double a);
+   G4double Get(size_t r,size_t c) const;
+   size_t GetRows() const;
+   size_t GetCols() const;
+
+ private:
+
+   G4double *m;
+   size_t rows,cols;
 };
 
 class G4GDMLReadDefine : public G4GDMLRead
 {
+
+ public:
+
+   G4double GetConstant(const G4String&);
+   G4double GetVariable(const G4String&);
+   G4double GetQuantity(const G4String&);
+   G4ThreeVector GetPosition(const G4String&);
+   G4ThreeVector GetRotation(const G4String&);
+   G4ThreeVector GetScale(const G4String&);
+   G4GDMLMatrix GetMatrix(const G4String&);
+
+ protected:
+
+   G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
+   void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
+   G4String RefRead(const xercesc::DOMElement* const);
+
+ private:
+
+   void ConstantRead(const xercesc::DOMElement* const); 
+   void MatrixRead(const xercesc::DOMElement* const);
+   void PositionRead(const xercesc::DOMElement* const);
+   void RotationRead(const xercesc::DOMElement* const);
+   void ScaleRead(const xercesc::DOMElement* const);
+   void VariableRead(const xercesc::DOMElement* const); 
+   void QuantityRead(const xercesc::DOMElement* const); 
+   void DefineRead(const xercesc::DOMElement* const);
+
  private:
 
    std::map<G4String,G4double> quantityMap;
@@ -68,31 +99,6 @@ class G4GDMLReadDefine : public G4GDMLRead
    std::map<G4String,G4ThreeVector> rotationMap;
    std::map<G4String,G4ThreeVector> scaleMap;
    std::map<G4String,G4GDMLMatrix> matrixMap;
-
-   void constantRead(const xercesc::DOMElement* const); 
-   void matrixRead(const xercesc::DOMElement* const);
-   void positionRead(const xercesc::DOMElement* const);
-   void rotationRead(const xercesc::DOMElement* const);
-   void scaleRead(const xercesc::DOMElement* const);
-   void variableRead(const xercesc::DOMElement* const); 
-   void quantityRead(const xercesc::DOMElement* const); 
-   void defineRead(const xercesc::DOMElement* const);
-
- protected:
-
-   G4RotationMatrix getRotationMatrix(const G4ThreeVector&);
-   void vectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
-   G4String refRead(const xercesc::DOMElement* const);
-
- public:
-
-   G4double getConstant(const G4String&);
-   G4double getVariable(const G4String&);
-   G4double getQuantity(const G4String&);
-   G4ThreeVector getPosition(const G4String&);
-   G4ThreeVector getRotation(const G4String&);
-   G4ThreeVector getScale(const G4String&);
-   G4GDMLMatrix getMatrix(const G4String&);
 };
 
 #endif

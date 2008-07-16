@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STRead.cc,v 1.1 2008-07-14 17:12:57 gcosmo Exp $
+// $Id: G4STRead.cc,v 1.2 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4STRead Implementation
@@ -34,7 +34,7 @@
 
 #include "G4STRead.hh"
 
-void G4STRead::tessellatedRead(const std::string& line)
+void G4STRead::TessellatedRead(const std::string& line)
 {
    if (tessellatedList.size()>0)
    {
@@ -55,11 +55,11 @@ void G4STRead::tessellatedRead(const std::string& line)
    G4cout << "G4STRead: Reading solid: " << name << G4endl;
 }
 
-void G4STRead::facetRead(const std::string& line)
+void G4STRead::FacetRead(const std::string& line)
 {
    if (tessellatedList.size()==0)
    {
-     G4Exception("G4STRead::facetRead()", "ReadError", FatalException,
+     G4Exception("G4STRead::FacetRead()", "ReadError", FatalException,
                  "A solid must be defined before defining a facet!");
    }
 
@@ -94,12 +94,12 @@ void G4STRead::facetRead(const std::string& line)
    }
    else
    {
-     G4Exception("G4STRead::facetRead()", "ReadError", FatalException,
+     G4Exception("G4STRead::FacetRead()", "ReadError", FatalException,
                  "Number of vertices per facet should be either 3 or 4!");
    }
 }
 
-void G4STRead::physvolRead(const std::string& line)
+void G4STRead::PhysvolRead(const std::string& line)
 {
    G4int level;
    G4String name;
@@ -131,14 +131,14 @@ void G4STRead::physvolRead(const std::string& line)
    if (tessellated == 0)
    {
      G4String error_msg = "Referenced solid '" + name + "' not found!";
-     G4Exception("G4STRead::physvolRead()", "ReadError",
+     G4Exception("G4STRead::PhysvolRead()", "ReadError",
                  FatalException, error_msg);
    }
    if (volumeMap.find(tessellated) == volumeMap.end())
    {
      G4String error_msg = "Referenced solid '" + name
                         + "' is not associated with a logical volume!";
-     G4Exception("G4STRead::physvolRead()", "InvalidSetup",
+     G4Exception("G4STRead::PhysvolRead()", "InvalidSetup",
                  FatalException, error_msg);
    }
    const G4RotationMatrix rot(G4ThreeVector(r1,r2,r3),
@@ -195,8 +195,8 @@ void G4STRead::ReadGeom(const G4String& name)
    
    while (getline(GeomFile,line))
    {
-      if (line[0] == 'f') { tessellatedRead(line); } else
-      if (line[0] == 'p') { facetRead(line); }
+      if (line[0] == 'f') { TessellatedRead(line); } else
+      if (line[0] == 'p') { FacetRead(line); }
    }
 
    if (tessellatedList.size()>0)   // Finish the last solid!
@@ -224,7 +224,7 @@ void G4STRead::ReadTree(const G4String& name)
    
    while (getline(TreeFile,line))
    {
-      if (line[0] == 'g')  { physvolRead(line); }
+      if (line[0] == 'g')  { PhysvolRead(line); }
    }
 
    G4cout << "G4STRead: Reading '" << name << "' done." << G4endl;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.cc,v 1.10 2008-07-14 16:01:14 gcosmo Exp $
+// $Id: G4GDMLWriteSetup.cc,v 1.11 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSetup Implementation
@@ -35,18 +35,18 @@
 
 #include "G4GDMLWriteSetup.hh"
 
-void G4GDMLWriteSetup::setupWrite(xercesc::DOMElement* gdmlElement,
+void G4GDMLWriteSetup::SetupWrite(xercesc::DOMElement* gdmlElement,
                                   const G4LogicalVolume* const logvol)
 {
    G4cout << "G4GDML: Writing setup..." << G4endl;
 
    const G4String worldref = GenerateName(logvol->GetName(),logvol);
 
-   xercesc::DOMElement* setupElement = newElement("setup");
-   setupElement->setAttributeNode(newAttribute("version","1.0"));
-   setupElement->setAttributeNode(newAttribute("name","Default"));
-   xercesc::DOMElement* worldElement = newElement("world");
-   worldElement->setAttributeNode(newAttribute("ref",worldref));
+   xercesc::DOMElement* setupElement = NewElement("setup");
+   setupElement->setAttributeNode(NewAttribute("version","1.0"));
+   setupElement->setAttributeNode(NewAttribute("name","Default"));
+   xercesc::DOMElement* worldElement = NewElement("world");
+   worldElement->setAttributeNode(NewAttribute("ref",worldref));
    setupElement->appendChild(worldElement);
    gdmlElement->appendChild(setupElement);
 }

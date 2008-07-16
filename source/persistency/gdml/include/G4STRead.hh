@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4STRead.hh,v 1.1 2008-07-14 17:12:57 gcosmo Exp $
+// $Id: G4STRead.hh,v 1.2 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,9 +63,9 @@ class G4STRead
                                              G4Material* solidMaterial);
   private:
 
-   void tessellatedRead(const std::string&);
-   void facetRead(const std::string&);
-   void physvolRead(const std::string&);
+   void TessellatedRead(const std::string&);
+   void FacetRead(const std::string&);
+   void PhysvolRead(const std::string&);
    void ReadGeom(const G4String&);
    void ReadTree(const G4String&);
 

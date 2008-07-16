@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.28 2008-07-11 07:50:08 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.29 2008-07-16 15:46:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -71,7 +71,7 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
    physvol->SetName(eval.SolveBrackets(nameOut));
 }
 
-void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,
+void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
      void(G4GDMLRead::*func)(const xercesc::DOMElement* const))
 {
    G4String var;
@@ -107,7 +107,7 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,
                  FatalException, "No variable is determined for loop!");
    }
 
-   if (!eval.isVariable(var))
+   if (!eval.IsVariable(var))
    {
      G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
                  FatalException, "Variable is not defined in loop!");
@@ -140,7 +140,7 @@ void G4GDMLRead::loopRead(const xercesc::DOMElement* const element,
    
    while (_var <= _to)
    {
-      eval.setVariable(var,_var);
+      eval.SetVariable(var,_var);
       (this->*func)(element);
 
       _var += _step;
@@ -173,7 +173,7 @@ void G4GDMLRead::Read(const G4String& fileName,
       ModuleName += "_";
    }
 
-   xercesc::ErrorHandler* handler = new MyErrorHandler(!Validate);
+   xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!Validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
    parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
@@ -216,11 +216,11 @@ void G4GDMLRead::Read(const G4String& fileName,
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="define")    { defineRead(child);    } else
-      if (tag=="materials") { materialsRead(child); } else
-      if (tag=="solids")    { solidsRead(child);    } else
-      if (tag=="setup")     { setupRead(child);     } else
-      if (tag=="structure") { structureRead(child); }
+      if (tag=="define")    { DefineRead(child);    } else
+      if (tag=="materials") { MaterialsRead(child); } else
+      if (tag=="solids")    { SolidsRead(child);    } else
+      if (tag=="setup")     { SetupRead(child);     } else
+      if (tag=="structure") { StructureRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in gdml: " + tag;
