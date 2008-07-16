@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2008-07-03 10:09:21 gcosmo Exp $
+$Id: History,v 1.80 2008-07-16 07:57:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 July 2008 Gabriele Cosmo (gdml-V09-01-10)
+- Code review, formatting and adoption of canonical form for calls to
+  G4Exception. Usage of std:: namespace for calls to standard mathematical
+  functions.
+- Added class G4STRead, copy of the original class implemented by Z.Torzsok.
+- Corrected compilation error on Windows/VC++8 compiler for incorrect
+  signature of method in base class.
 
 3 July 2008 Gabriele Cosmo (gdml-V09-01-09)
 - Corrected bugs introduced in last commits for modularization of files;
