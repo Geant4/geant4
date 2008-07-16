@@ -67,7 +67,7 @@ class G4PAIPhotonModel : public G4VEmModel, public G4VEmFluctuationModel
 
 public:
 
-  G4PAIPhotonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
+  G4PAIPhotonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAIPhoton");
 
   virtual ~G4PAIPhotonModel();
 
