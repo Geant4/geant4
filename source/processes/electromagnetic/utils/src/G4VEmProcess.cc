@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.53 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.54 2008-07-16 09:45:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -431,8 +431,8 @@ void G4VEmProcess::PrintInfoDefinition()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
-                                         const G4MaterialCutsCouple* couple)
+G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
+					     const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
@@ -441,8 +441,6 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
   if(theLambdaTable) {
     cross = (((*theLambdaTable)[currentMaterialIndex])->
                            GetValue(kineticEnergy, b));
-
-    cross /= currentMaterial->GetTotNbOfAtomsPerVolume();
   } else {
     G4VEmModel* model = SelectModel(kineticEnergy);
     cross = 

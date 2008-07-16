@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.134 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.135 2008-07-16 09:45:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1350,17 +1350,22 @@ G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEnergyLossProcess::MicroscopicCrossSection(
-         G4double kineticEnergy, const G4MaterialCutsCouple* couple)
+G4double G4VEnergyLossProcess::CrossSectionPerVolume(
+	 G4double kineticEnergy, const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
   G4bool b;
-  if(theLambdaTable) 
+  if(theLambdaTable) {
     cross = 
-      ((*theLambdaTable)[currentMaterialIndex])->GetValue(kineticEnergy, b)/
-      currentMaterial->GetTotNbOfAtomsPerVolume();
+      ((*theLambdaTable)[currentMaterialIndex])->GetValue(kineticEnergy, b);
+  } else {
+    G4VEmModel* model = SelectModel(kineticEnergy);
+    cross = 
+      model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy,
+				   (*theCuts)[currentMaterialIndex]);
+  }
 
   return cross;
 }

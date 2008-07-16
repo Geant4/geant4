@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.41 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.42 2008-07-16 09:45:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,7 +98,6 @@ G4RegionModels::~G4RegionModels()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4LossTableManager.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"

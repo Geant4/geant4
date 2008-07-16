@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.52 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.53 2008-07-16 09:45:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,7 +103,6 @@ public:
   //------------------------------------------------------------------------
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
-    // True for all charged particles
 
   virtual void PrintInfo() = 0;
 
@@ -111,9 +110,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
-  //------------------------------------------------------------------------
-  // Methods with standard implementation; may be overwritten if needed
-  //------------------------------------------------------------------------
 public:
 
   //------------------------------------------------------------------------
@@ -187,7 +183,6 @@ public:
 
   inline void SetMinKinEnergy(G4double e);
   inline G4double MinKinEnergy() const;
-    // Print out of the class parameters
 
   inline void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
@@ -220,7 +215,6 @@ public:
   //------------------------------------------------------------------------
 
   inline void SetLateralDisplasmentFlag(G4bool val);
-     // lateral displacement to be/not to be computed
 
   inline void SetSkin(G4double val);
 
@@ -262,14 +256,15 @@ protected:
   // Select concrete model
 
   inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
-  // Return current G4MaterialCutsCouple
 
-  inline void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
+  inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
   //------------------------------------------------------------------------
   // Access parameters of multiple scattering
   //------------------------------------------------------------------------
+
+  inline G4ParticleChangeForMSC* GetParticleChange();
 
   inline G4double Skin() const;
 
@@ -469,6 +464,13 @@ inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4ParticleChangeForMSC* G4VMultipleScattering::GetParticleChange()
+{
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline  G4double G4VMultipleScattering::Skin() const
 {
   return skin;
@@ -577,7 +579,7 @@ inline void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
-  if(p)p->SetParticleChange(pParticleChange);
+  if(p) p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

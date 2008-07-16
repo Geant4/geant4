@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.79 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.80 2008-07-16 09:45:49 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -141,6 +141,7 @@ protected:
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
+
 protected:
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
@@ -155,6 +156,7 @@ protected:
   //------------------------------------------------------------------------
   // Generic methods common to all ContinuousDiscrete processes 
   //------------------------------------------------------------------------
+
 public:
 
   void PrintInfoDefinition();
@@ -228,8 +230,8 @@ public:
   // Specific methods to build and access Physics Tables
   //------------------------------------------------------------------------
 
-  G4double MicroscopicCrossSection(G4double kineticEnergy,
-				   const G4MaterialCutsCouple* couple);
+  G4double CrossSectionPerVolume(G4double kineticEnergy,
+				 const G4MaterialCutsCouple* couple);
 
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
 
@@ -378,6 +380,8 @@ protected:
 				       G4double cut);
 
   inline virtual void InitialiseMassCharge(const G4Track&);
+
+  inline G4ParticleChangeForLoss* GetParticleChange();
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
@@ -823,6 +827,13 @@ inline G4VEmModel* G4VEnergyLossProcess::SelectModelForMaterial(
                    G4double kinEnergy, size_t& idx) const
 {
   return modelManager->SelectModel(kinEnergy, idx);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4ParticleChangeForLoss* G4VEnergyLossProcess::GetParticleChange()
+{
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

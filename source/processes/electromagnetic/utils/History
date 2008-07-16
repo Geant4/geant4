@@ -1,4 +1,4 @@
-$Id: History,v 1.337 2008-07-15 18:19:50 vnivanch Exp $
+$Id: History,v 1.338 2008-07-16 09:45:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,13 +20,16 @@ committal in the CVS repository !
 15 July 08: V.Ivant (emutils-V09-01-21)
 G4EmConfigurator - a new helper class to add model per particle type,
                    process, energy range and G4Region
-G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess -
+G4VEmProcess, G4VEnergyLossProcess - renamed and improved method 
+                   "MicroscopicCrossSection" by "CrossSectionPerVolume"
+G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess 
                    reodering of members of classes is perform for further
-                   multi-thread developments: separated members
-                   fixed at construction, defined at ininitialisation, and
-                   modified in run time
-G4VEnergyLossProcess - added register/deregister mechanism and deletion
-                   at the end of job for models
+                   multi-thread developments: 
+                   - separated members fixed at construction, defined at 
+                     ininitialisation, and modified in run time
+                   - improved comments in header files
+G4LossTableManager - added register/deregister mechanism and deletion
+                   at the end of job for G4VEmModel
 G4EmModelManager - does not delete models anymore
 
 9 July 08: V.Ivant (emutils-V09-01-20)
