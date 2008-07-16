@@ -1,4 +1,4 @@
-$Id: History,v 1.393 2008-06-14 16:32:36 vnivanch Exp $
+$Id: History,v 1.394 2008-07-16 11:27:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 June 08: V.Ivant (emstand-V09-01-19)
+G4PAIPhotonModel - change model name
+G4MultipleScattering71 - move inline virtual method to source to avoid 
+                         compillation warning
 
 14 June 08: V.Ivant (emstand-V09-01-18)
 - G4CoulombScattering - added SetHEModelLimit method to provide more easy
