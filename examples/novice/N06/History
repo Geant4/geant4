@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2008-06-13 02:01:04 gum Exp $
+$Id: History,v 1.39 2008-07-17 00:34:23 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th July 2008 P. Gumplinger (exampleN06-V09-01-02)
+- use dynamic_cast <G4OpticalSurface*> in ExN06DetectorConstruction.cc
 
 12th June 2008 P. Gumplinger (exampleN06-V09-01-01)
 - now use G4EmSaturation to implement the Birks Correction
