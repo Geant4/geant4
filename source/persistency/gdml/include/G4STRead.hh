@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4STRead.hh,v 1.2 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4STRead.hh,v 1.3 2008-07-17 14:05:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,25 +59,25 @@ class G4STRead
 {
   public:  // with description
 
-    G4VPhysicalVolume* Read(const G4String&, G4Material* mediumMaterial,
-                                             G4Material* solidMaterial);
+    G4LogicalVolume* Read(const G4String&, G4Material* mediumMaterial,
+                                           G4Material* solidMaterial);
   private:
 
-   void TessellatedRead(const std::string&);
-   void FacetRead(const std::string&);
-   void PhysvolRead(const std::string&);
-   void ReadGeom(const G4String&);
-   void ReadTree(const G4String&);
+    void TessellatedRead(const std::string&);
+    void FacetRead(const std::string&);
+    void PhysvolRead(const std::string&);
+    void ReadGeom(const G4String&);
+    void ReadTree(const G4String&);
 
   private:
 
-   G4Box* world_box;
-   G4ThreeVector world_extent;
-   G4Material* solid_material;
-   G4Material* medium_material;
-   G4LogicalVolume* world_volume;
-   std::vector<G4TessellatedSolid*> tessellatedList;
-   std::map<G4TessellatedSolid*,G4LogicalVolume*> volumeMap;
+    G4Box* world_box;
+    G4ThreeVector world_extent;
+    G4Material* solid_material;
+    G4Material* medium_material;
+    G4LogicalVolume* world_volume;
+    std::vector<G4TessellatedSolid*> tessellatedList;
+    std::map<G4TessellatedSolid*,G4LogicalVolume*> volumeMap;
 };
 
 #endif

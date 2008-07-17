@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STRead.cc,v 1.2 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4STRead.cc,v 1.3 2008-07-17 14:05:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4STRead Implementation
@@ -49,7 +49,7 @@ void G4STRead::TessellatedRead(const std::string& line)
    
    G4TessellatedSolid* tessellated = new G4TessellatedSolid(name);
    volumeMap[tessellated] =
-     new G4LogicalVolume(tessellated,solid_material,"volume"+name,0,0,0);
+     new G4LogicalVolume(tessellated, solid_material, name+"_LV" , 0, 0, 0);
    tessellatedList.push_back(tessellated);
 
    G4cout << "G4STRead: Reading solid: " << name << G4endl;
@@ -115,7 +115,7 @@ void G4STRead::PhysvolRead(const std::string& line)
 
    name.resize(name.rfind("_"));
 
-   G4cout << "G4STRead: Placing solid: " << name << G4endl;
+   G4cout << "G4STRead: Placing tessellated solid: " << name << G4endl;
 
    G4TessellatedSolid* tessellated = 0;
 
@@ -147,8 +147,7 @@ void G4STRead::PhysvolRead(const std::string& line)
    const G4ThreeVector pos(pX,pY,pZ);
 
    new G4PVPlacement(G4Transform3D(rot.inverse(),pos),
-                     volumeMap[tessellated], "physvol"+name,
-                     world_volume, 0,0);
+                     volumeMap[tessellated], name+"_PV", world_volume, 0, 0);
      // Note: INVERSE of rotation is needed!!!
 
    G4double minx,miny,minz;
@@ -230,9 +229,9 @@ void G4STRead::ReadTree(const G4String& name)
    G4cout << "G4STRead: Reading '" << name << "' done." << G4endl;
 }
 
-G4VPhysicalVolume*
+G4LogicalVolume*
 G4STRead::Read(const G4String& name, G4Material* mediumMaterial,
-                                       G4Material* solidMaterial)
+                                     G4Material* solidMaterial)
 {
    if (mediumMaterial == 0)
    {
@@ -247,10 +246,10 @@ G4STRead::Read(const G4String& name, G4Material* mediumMaterial,
 
    solid_material = solidMaterial;
 
-   world_box = new G4Box("WorldBox", kInfinity, kInfinity, kInfinity);
+   world_box = new G4Box("TessellatedWorldBox",kInfinity,kInfinity,kInfinity);
      // We don't know the extent of the world yet!
    world_volume = new G4LogicalVolume(world_box, mediumMaterial,
-                                      "WorldLogicalVolume", 0, 0, 0);
+                                      "TessellatedWorldLV", 0, 0, 0);
    world_extent = G4ThreeVector(0,0,0);
 
    ReadGeom(name+".geom");
@@ -265,6 +264,5 @@ G4STRead::Read(const G4String& name, G4Material* mediumMaterial,
    if (world_box->GetZHalfLength() > world_extent.z())
      { world_box->SetZHalfLength(world_extent.z()); }
 
-   return new G4PVPlacement(0, G4ThreeVector(0,0,0), world_volume,
-                            "WorldPhysicalVolume", 0, 0, 0);
+   return world_volume;
 }

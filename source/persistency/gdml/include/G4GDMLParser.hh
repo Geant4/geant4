@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.50 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.51 2008-07-17 14:05:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,10 +41,9 @@
 #ifndef _G4GDMLPARSER_INCLUDED_
 #define _G4GDMLPARSER_INCLUDED_
 
-// #include "G4STRead.hh"
-
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
+#include "G4STRead.hh"
 
 #include "G4TransportationManager.hh"  // Used for the writing the whole
                                        // geometrical structure
@@ -62,10 +61,10 @@ class G4GDMLParser
    inline void Write(const G4String& filename,
                      const G4VPhysicalVolume* const pvol = 0,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
-/*
-   inline G4VPhysicalVolume* ReadST(const G4String& name,
-                                    G4Material* medium, G4Material* solid);
-*/
+
+   inline G4LogicalVolume* ParseST(const G4String& name,
+                                   G4Material* medium, G4Material* solid);
+
    // Methods for Reader
    //
    inline G4double GetConstant(const G4String& name);
