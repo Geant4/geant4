@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2008-02-04 09:29:49 gcosmo Exp $
+$Id: History,v 1.152 2008-07-17 00:44:58 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 16th, 2008      P.Gumplinger - geomvol-V09-01-01
+- Change the name of the method DumpInfo to DumpTableInfo
+  in G4LogicalSkinSurface and G4LogicalBorderSurface.
 
 Feb 4th, 2008       I.Hrivnacova - geomvol-V09-01-00
 - Fixed problem of double-deletion of rotation matrix in destructor
