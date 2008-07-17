@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.17 2008-04-04 05:54:26 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.18 2008-07-17 08:59:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,13 +86,22 @@ G4NistManager::G4NistManager()
   matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
   
   messenger  = new G4NistMessenger(this);  
+
+  // compute frequently used values
   for(G4int i=1; i<256; i++) {
     G4double x = G4double(i);
     POWERZ13[i] = std::pow(x,1.0/3.0);
     LOGA[i] = std::log(x);
   }
+  for(G4int j=1; j<136; j++) {
+    G4double A = elmBuilder->GetA(j);
+    POWERA27[j] = std::pow(A,0.27);
+    LOGAZ[j]    = std::log(A);
+  }
   POWERZ13[0] = 1.0;
+  POWERA27[0] = 1.0;
   LOGA[0]     = 0.0;
+  LOGAZ[0]    = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

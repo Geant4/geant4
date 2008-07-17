@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.19 2008-04-28 09:23:32 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.20 2008-07-17 08:59:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -214,10 +214,19 @@ public:
   // Fast computation of Z^1/3
   //
   inline G4double GetZ13(G4double Z);
+  inline G4double GetZ13(G4int Z);
+
+  // Fast computation of A^0.27 for natuaral abandances
+  //
+  inline G4double GetA27(G4int Z);
 
   // Fast computation of log(A)
   //
   inline G4double GetLOGA(G4double A);
+
+  // Fast computation of log(A) for natuaral abandances
+  //
+  inline G4double GetLOGA(G4int Z);
 
 private:
 
@@ -226,6 +235,8 @@ private:
 
   G4double POWERZ13[256];
   G4double LOGA[256];
+  G4double POWERA27[136];
+  G4double LOGAZ[136];
   
   std::vector<G4Element*>   elements;
   std::vector<G4Material*>  materials;
@@ -244,16 +255,14 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-size_t G4NistManager::GetNumberOfMaterials() 
+inline size_t G4NistManager::GetNumberOfMaterials() 
 {
   return nMaterials;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4Element* G4NistManager::GetElement(size_t index)
+inline G4Element* G4NistManager::GetElement(size_t index)
 {
   G4Element* elm = 0; 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
@@ -280,24 +289,21 @@ G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-size_t G4NistManager::GetNumberOfElements() const
+inline size_t G4NistManager::GetNumberOfElements() const
 { 
   return nElements;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4int G4NistManager::GetZ(const G4String& symb) const
+inline G4int G4NistManager::GetZ(const G4String& symb) const
 {
   return elmBuilder->GetZ(symb);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4double G4NistManager::GetAtomicMassAmu(G4int Z) const
+inline G4double G4NistManager::GetAtomicMassAmu(G4int Z) const
 {
   return elmBuilder->GetA(Z);
 }
@@ -352,16 +358,14 @@ const std::vector<G4String>& G4NistManager::GetNistElementNames() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-void G4NistManager::PrintElement(G4int Z)
+inline void G4NistManager::PrintElement(G4int Z)
 {
   elmBuilder->PrintElement(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4Material* G4NistManager::GetMaterial(size_t index)
+inline G4Material* G4NistManager::GetMaterial(size_t index)
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4Material* mat = 0;
@@ -371,8 +375,7 @@ G4Material* G4NistManager::GetMaterial(size_t index)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4int G4NistManager::GetVerbose()
+inline G4int G4NistManager::GetVerbose()
 {
   return verbose;
 }
@@ -389,8 +392,7 @@ G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4Material* G4NistManager::ConstructNewMaterial(
+inline G4Material* G4NistManager::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
@@ -407,8 +409,7 @@ G4Material* G4NistManager::ConstructNewMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4Material* G4NistManager::ConstructNewMaterial(
+inline G4Material* G4NistManager::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
@@ -423,8 +424,7 @@ G4Material* G4NistManager::ConstructNewMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4Material* G4NistManager::ConstructNewGasMaterial(
+inline G4Material* G4NistManager::ConstructNewGasMaterial(
 				      const G4String& name,
                                       const G4String& nameNist,
 				      G4double temp, G4double pres, 
@@ -436,8 +436,7 @@ G4Material* G4NistManager::ConstructNewGasMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-void G4NistManager::ListMaterials(const G4String& list)
+inline void G4NistManager::ListMaterials(const G4String& list)
 {
   matBuilder->ListMaterials(list);
 }
@@ -452,8 +451,7 @@ const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4double G4NistManager::GetZ13(G4double Z)
+inline G4double G4NistManager::GetZ13(G4double Z)
 {
   G4int iz = G4int(Z);
   G4double x = (Z - G4double(iz))/(3.0*Z);
@@ -464,14 +462,34 @@ G4double G4NistManager::GetZ13(G4double Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4double G4NistManager::GetLOGA(G4double A)
+inline G4double G4NistManager::GetZ13(G4int Z)
+{
+  return POWERZ13[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetA27(G4int Z)
+{
+  return POWERA27[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetLOGA(G4double A)
 {
   G4int ia = G4int(A);
   G4double x = (A - G4double(ia))/A;
   if(ia > 255) ia = 255;
   else if(ia < 0) ia = 0;
   return LOGA[ia] + x*(1.0 - 0.5*x);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetLOGA(G4int Z)
+{
+  return LOGAZ[Z];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
