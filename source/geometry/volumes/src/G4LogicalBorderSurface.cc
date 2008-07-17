@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.15 2007-10-12 20:15:23 gum Exp $
+// $Id: G4LogicalBorderSurface.cc,v 1.16 2008-07-17 00:43:51 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -135,7 +135,7 @@ G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 
 // Dump info for known surfaces
 //
-void G4LogicalBorderSurface::DumpInfo()
+void G4LogicalBorderSurface::DumpTableInfo()
 {
   G4cout << "***** Surface Table : Nb of Surfaces = "
          << GetNumberOfBorderSurfaces() << " *****" << G4endl;

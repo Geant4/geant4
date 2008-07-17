@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.15 2007-10-12 20:08:28 gum Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.16 2008-07-17 00:43:33 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalSkinSurface
@@ -71,7 +71,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     static void CleanSurfaceTable();
     static const G4LogicalSkinSurfaceTable* GetSurfaceTable();
     static size_t GetNumberOfSkinSurfaces();
-    static void DumpInfo(); // const 
+    static void DumpTableInfo(); // const 
       // To handle with the table of surfaces.
 
     G4int operator==(const G4LogicalSkinSurface &right) const;
