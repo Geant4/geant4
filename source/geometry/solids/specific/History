@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2008-05-22 10:23:06 gcosmo Exp $
+$Id: History,v 1.144 2008-07-17 07:33:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Jul-2008, T.Nikitina (geom-specific-V09-01-13)
+- G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report
+  #1015. Fixed precision problem when solving quadratic equation; apply
+  comparison with kCarTolerance and not with zero; fixed logic problem in
+  algoritm for points on surface and direction inside, relative to directions
+  along Z, (0,0,Vz).
 
 22-May-2008, G.Cosmo (geom-specific-V09-01-12)
 - Removed left-over debug printout in G4VCSGFaceted::DistanceToIn().
