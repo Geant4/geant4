@@ -35,6 +35,9 @@
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpWLS.hh"
 
+#include "G4LossTableManager.hh"
+#include "G4EmSaturation.hh"
+
 LXeOpticalPhysics::LXeOpticalPhysics(const G4String& name)
   :  G4VPhysicsConstructor(name)
 {
@@ -82,6 +85,11 @@ void LXeOpticalPhysics::ConstructProcess()
   theScintProcess->SetScintillationYieldFactor(1.);
   theScintProcess->SetScintillationExcitationRatio(0.0);
   theScintProcess->SetTrackSecondariesFirst(true);
+
+  // Use Birks Correction in the Scintillation process
+
+  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+  theScintProcess->AddSaturation(emSaturation);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){

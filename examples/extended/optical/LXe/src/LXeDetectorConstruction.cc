@@ -139,6 +139,10 @@ void LXeDetectorConstruction::DefineMaterials(){
   LXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
   LXe_mt->AddConstProperty("YIELDRATIO",1.0);
   LXe->SetMaterialPropertiesTable(LXe_mt);
+
+  // Set the Birks Constant for the LXe scintillator
+
+  LXe->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
   
   G4double Glass_RIND[LXe_NUMENTRIES]={1.49,1.49,1.49};
   G4double Glass_AbsLength[LXe_NUMENTRIES]={420.*cm,420.*cm,420.*cm};
@@ -169,6 +173,10 @@ void LXeDetectorConstruction::DefineMaterials(){
   MPTPStyrene->AddConstProperty("RESOLUTIONSCALE",1.0);
   MPTPStyrene->AddConstProperty("FASTTIMECONSTANT", 10.*ns);
   Pstyrene->SetMaterialPropertiesTable(MPTPStyrene);
+
+  // Set the Birks Constant for the Polystyrene scintillator
+
+  Pstyrene->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
 
   G4double RefractiveIndexFiber[WLS_NUMENTRIES]={ 1.60, 1.60, 1.60, 1.60};
   G4double AbsFiber[WLS_NUMENTRIES]={9.00*m,9.00*m,0.1*mm,0.1*mm};
@@ -342,6 +350,7 @@ void LXeDetectorConstruction::UpdateGeometry(){
   G4SolidStore::GetInstance()->Clean();
   G4LogicalSkinSurface::CleanSurfaceTable();
   G4LogicalBorderSurface::CleanSurfaceTable();
+  G4SurfaceProperty::CleanSurfacePropertyTable();
 
   //define new one
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
