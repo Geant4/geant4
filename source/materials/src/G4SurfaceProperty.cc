@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.2 2008-06-27 08:59:12 gcosmo Exp $
+// $Id: G4SurfaceProperty.cc,v 1.3 2008-07-17 00:13:44 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ size_t G4SurfaceProperty::GetNumberOfSurfaceProperties()
 
 // Dump info for known surface properties
 //
-void G4SurfaceProperty::DumpInfo()
+void G4SurfaceProperty::DumpTableInfo()
 {
   G4cout << "***** Surface Property Table : Nb of Surface Properties = "
          << GetNumberOfSurfaceProperties() << " *****" << G4endl;
@@ -98,7 +98,7 @@ void G4SurfaceProperty::DumpInfo()
 
 void G4SurfaceProperty::CleanSurfacePropertyTable()
 {
-  DumpInfo();
+  DumpTableInfo();
   G4SurfacePropertyTable::iterator pos;
   for(pos=theSurfacePropertyTable.begin();
       pos!=theSurfacePropertyTable.end(); pos++)
@@ -106,5 +106,5 @@ void G4SurfaceProperty::CleanSurfacePropertyTable()
     if (*pos) delete *pos;
   }
   theSurfacePropertyTable.clear();
-  DumpInfo();
+  DumpTableInfo();
 }

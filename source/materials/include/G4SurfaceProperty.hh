@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.5 2008-06-27 08:59:12 gcosmo Exp $
+// $Id: G4SurfaceProperty.hh,v 1.6 2008-07-17 00:13:27 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,7 +124,7 @@ public: // With description
         static void CleanSurfacePropertyTable();
         static const G4SurfacePropertyTable* GetSurfacePropertyTable();
         static size_t GetNumberOfSurfaceProperties();
-        static void DumpInfo();
+        static void DumpTableInfo();
         // To handle the table of surface properties.
 
 protected:
