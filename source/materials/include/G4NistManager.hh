@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.20 2008-07-17 08:59:24 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.21 2008-07-17 10:19:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -223,6 +223,7 @@ public:
   // Fast computation of log(A)
   //
   inline G4double GetLOGA(G4double A);
+  inline G4double GetLOGZ(G4int Z);
 
   // Fast computation of log(A) for natuaral abandances
   //
@@ -472,6 +473,13 @@ inline G4double G4NistManager::GetZ13(G4int Z)
 inline G4double G4NistManager::GetA27(G4int Z)
 {
   return POWERA27[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetLOGZ(G4int Z)
+{
+  return LOGA[Z];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
