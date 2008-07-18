@@ -26,6 +26,12 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
+//
+// 080718 As for secondary photons, if its mean value has a value of integer, 
+//        then a sampling of multiplicity that based on Poisson Distribution 
+//        is not carried out and the mean is used as a multiplicity.
+//        modified by T. Koi.
+//
 #include "G4NeutronHPProduct.hh" 
 #include "G4Poisson.hh"
 #include "G4Proton.hh"
@@ -37,7 +43,19 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   G4double mean = theYield.GetY(anEnergy);
   G4int multi;
   multi = G4int(mean+0.0001);
-  if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
+  //if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
+  //080718
+  if ( theMassCode == 0 )
+  { 
+     if ( G4int ( mean ) == mean )
+     {
+        multi = (G4int) mean;
+     }
+     else
+     {
+        multi = G4Poisson ( mean ); 
+     }
+  }
   theDist->SetTarget(theTarget);
   theDist->SetNeutron(theNeutron);
   G4int i;
