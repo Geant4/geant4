@@ -31,6 +31,7 @@
 // 070606 bug fix and migrate to enable to Partial cases by T. Koi 
 // 080603 bug fix for Hadron Hyper News #932 by T. Koi 
 // 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4,6
+// 080717 bug fix of calculation of residual momentum by T. Koi
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -548,8 +549,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
         //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4
         //theResidual.SetMomentum(-1.*totalMomentum);
-	G4ThreeVector incidentNeutronMomentum = theNeutron.GetMomentum();
-        theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
+	//G4ThreeVector incidentNeutronMomentum = theNeutron.GetMomentum();
+        //theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
+//080717 TK Comment still do NOT include photon's mometum which produce by thePhotons
+        theResidual.SetMomentum( theNeutron.GetMomentum() + theTarget.GetMomentum() - totalMomentum );
 
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
