@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: test02.cc,v 1.5 2006-06-29 21:35:14 gunter Exp $
+// $Id: test02.cc,v 1.6 2008-07-18 09:31:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "Tst02DetectorConstruction.hh"
 #include "Tst02RunAction.hh"
 #include "Tst02PrimaryGeneratorAction.hh"
-#include "Tst02PhysicsList.hh"
+#include "LHEP.hh"
 #include "Tst02SteppingAction.hh"
 
 #include "G4UImanager.hh"
@@ -51,7 +51,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst02DetectorConstruction);
-  runManager->SetUserInitialization(new Tst02PhysicsList);
+  runManager->SetUserInitialization(new LHEP);
 
   // UserAction classes
   runManager->SetUserAction(new Tst02RunAction);
