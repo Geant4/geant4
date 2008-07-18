@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.16 2008-01-15 08:13:34 kmura Exp $
+// $Id: G4UItcsh.cc,v 1.17 2008-07-18 06:37:06 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -558,9 +558,7 @@ G4String G4UItcsh::ReadLine()
     case AsciiCtrD:       // ... delete/exit/show matched list
       if(commandLine.length()!=0 && IsCursorLast()) ListMatchedCommand();
       else if (commandLine.empty()) {
-	G4cout << G4endl;
-        RestoreTerm();
-	exit(0);
+        return G4String("exit");	
       } else DeleteCharacter();
       break;
     case AsciiCtrE:       // ... move cursor to the end
