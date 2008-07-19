@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.10 2008-06-05 23:54:30 gum Exp $
+// $Id: G4OpWLS.cc,v 1.11 2008-07-19 00:35:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -229,8 +229,9 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
     G4Track* aSecondaryTrack = 
       new G4Track(aWLSPhoton,aSecondaryTime,aSecondaryPosition);
-    
-    aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
+   
+    aSecondaryTrack->SetTouchableHandle(aTrack.GetTouchableHandle()); 
+    // aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
     
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
     
