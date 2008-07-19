@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th July 2008 Peter Gumplinger (op-V09-01-04)
+              In G4OpWLS now SetTouchableHandle(aTrack.GetTouchableHandle())
+              for the secondaries in the DoIt.
+              In G4OpBoundaryProcess.cc initialize the pointer:
+              G4LogicalSurface* Surface = NULL;
+
 27th June 2008 Peter Gumplinger (op-V09-01-03)
                In G4OpBoundaryProcess changed unsafe cast
                (G4OpticalSurface*) to dynamic_cast<G4OpticalSurface*>
