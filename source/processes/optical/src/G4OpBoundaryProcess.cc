@@ -219,9 +219,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         Rindex = NULL;
         OpticalSurface = NULL;
 
-        G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
-				    (pPreStepPoint ->GetPhysicalVolume(),
-				     pPostStepPoint->GetPhysicalVolume());
+        G4LogicalSurface* Surface = NULL;
+
+        Surface = G4LogicalBorderSurface::GetSurface
+	          (pPreStepPoint ->GetPhysicalVolume(),
+	           pPostStepPoint->GetPhysicalVolume());
 
         if (Surface == NULL){
 	  G4bool enteredDaughter=(pPostStepPoint->GetPhysicalVolume()
