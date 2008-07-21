@@ -69,7 +69,7 @@ G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolum
   G4int iy = parentTouch->GetReplicaNumber(1);
   G4int iz = copyNoZ;
 
-  G4int copyNo = ix + fnZ*iy + fnX*fnY*iz;
+  G4int copyNo = ix + fnX*iy + fnX*fnY*iz;
 
   size_t matIndex = GetMaterialIndex(copyNo);
 
