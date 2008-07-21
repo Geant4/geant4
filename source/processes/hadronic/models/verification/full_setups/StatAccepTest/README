@@ -1,5 +1,5 @@
 
- Last update: 22-Nov-2007
+ Last update: 21-Jul-2008
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -189,6 +189,11 @@
 
  The subdirectory  dirCPUbench/  is dedicated to some CPU performance
  benchmarks of Geant4 (see the README file in that directory).
+
+ The subdirectory  dirEnergyScan/  is dedicated to the study of
+ calorimeter observables (in particular, visible energy and
+ energy resolution) as a function of the beam energy, scanning
+ the interval 1 - 30 GeV (see the README file in that directory).
 
  The files that end with  "-m32"  have been added to allow
  to build/run in 32-bit compatibility mode in 64-bit architectures.
