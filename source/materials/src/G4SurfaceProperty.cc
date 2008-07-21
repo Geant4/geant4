@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.3 2008-07-17 00:13:44 gum Exp $
+// $Id: G4SurfaceProperty.cc,v 1.4 2008-07-21 20:55:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,6 +62,7 @@ G4SurfaceProperty::G4SurfaceProperty( const G4String& name,
 
 G4SurfaceProperty::~G4SurfaceProperty()
 {
+  Overwrite();
 }
 
 //

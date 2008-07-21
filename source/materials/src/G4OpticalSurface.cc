@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.10 2006-06-29 19:13:08 gunter Exp $
+// $Id: G4OpticalSurface.cc,v 1.11 2008-07-21 20:55:51 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,7 +103,10 @@ G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
 	*this = right;
 }
 
-G4OpticalSurface::~G4OpticalSurface(){}
+G4OpticalSurface::~G4OpticalSurface()
+{
+  Overwrite();
+}
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
 {

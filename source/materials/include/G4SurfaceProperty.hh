@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.6 2008-07-17 00:13:27 gum Exp $
+// $Id: G4SurfaceProperty.hh,v 1.7 2008-07-21 20:55:16 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,6 +110,8 @@ public: // Without description
 	// public methods
 
 public: // With description
+
+        virtual void Overwrite() {G4cout << "G4SurfaceProperty" << G4endl;};
 
 	G4String GetName() const { return theName; };
         // Returns the surface name.

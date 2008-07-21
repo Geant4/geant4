@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.9 2008-06-27 08:59:12 gcosmo Exp $
+// $Id: G4OpticalSurface.hh,v 1.10 2008-07-21 20:54:57 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,6 +119,8 @@ public: // Without description
 	// public methods
 
 public: // With description
+
+        virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
 
         G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
         // Returns the optical surface finish.
