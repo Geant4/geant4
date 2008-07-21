@@ -66,11 +66,11 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="gamma");
   particleGun->SetParticleDefinition(particle);
-  G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1);
+  G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1.,-CLHEP::RandFlat::shoot());
   dir /= dir.mag();
   particleGun->SetParticleMomentumDirection(dir);       
   particleGun->SetParticleEnergy(5.*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-20.)); // put it close to the patient voxels
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.)); // put it close to the patient voxels
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
