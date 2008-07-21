@@ -31,6 +31,8 @@
 //        then a sampling of multiplicity that based on Poisson Distribution 
 //        is not carried out and the mean is used as a multiplicity.
 //        modified by T. Koi.
+// 080721 Using ClearHistories() methodl for limiting the sum of secondary energies
+//        modified by T. Koi.
 //
 #include "G4NeutronHPProduct.hh" 
 #include "G4Poisson.hh"
@@ -63,6 +65,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
 //                  - theActualStateQValue;
   theCurrentMultiplicity = static_cast<G4int>(mean);
   G4ReactionProduct * tmp;
+  theDist->ClearHistories();
   for(i=0;i<multi;i++)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);

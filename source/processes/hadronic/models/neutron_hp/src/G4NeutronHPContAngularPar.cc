@@ -32,6 +32,7 @@
 //        (This fix has a real effect to the code.) 
 // 080409 Fix div0 error with G4FPE by T. Koi
 // 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
+// 080714 Limiting the sum of energy of secondary particles by T. Koi
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -113,20 +114,41 @@
 // 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
 	if (interpolE == 2)
 	{
+
+            //TK080711
+           if ( fresh == true ) 
+           { 
+              remaining_energy = theAngular[0].GetLabel();
+              fresh = false; 
+            }
+            //TK080711
+
 	    G4double random = G4UniformRand();
 	    G4double * running = new G4double[nEnergies+1];
 	    running[0]=0;
+
+
 	    for(i=1; i<nEnergies+1; i++)
 	    {
-		if(i!=0) running[i]=running[i-1];
-		running[i] += theAngular[i-1].GetValue(0);
+               //TK080711
+               if ( remaining_energy >= theAngular[ i-1 ].GetLabel() ) 
+                  running[i] = running[i-1] + theAngular[i-1].GetValue(0);
+               else
+                  running[i] = running[i-1];
+               //TK080711
 	    }
+
 	    for(i=1; i<nEnergies+1; i++)
 	    {
 		it = i-1;
 		if(random > running[i-1]/running[nEnergies] && random <= running[i]/running[nEnergies]) break;
 	    }
 	    fsEnergy = theAngular[it].GetLabel();
+
+            //TK080711
+            if ( i == nEnergies+1 ) fsEnergy = remaining_energy;
+            //TK080711
+
 	    G4NeutronHPLegendreStore theStore(1);
 	    theStore.Init(0,fsEnergy,nAngularParameters);
 	    for(i=0;i<nAngularParameters;i++)
@@ -135,9 +157,22 @@
 	    }
 	    // use it to sample.
 	    cosTh = theStore.SampleMax(fsEnergy);
+
+            //TK080711
+            remaining_energy -= fsEnergy;
+            //TK080711
         }
       else 
       {
+
+            //080714 
+            if ( fresh == true )
+            {
+               remaining_energy = theAngular[ nEnergies-1 ].GetLabel();
+               fresh = false;
+            }
+            //080714 
+
      
       G4double random = G4UniformRand();
       G4double * running = new G4double[nEnergies];
@@ -145,6 +180,7 @@
       G4double weighted = 0;
       for(i=1; i<nEnergies; i++)
       {
+/*
         if(i!=0) 
         {
           running[i]=running[i-1];
@@ -155,6 +191,19 @@
         weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
                              theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
                              theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+*/
+
+        running[i]=running[i-1];
+        if ( remaining_energy >= theAngular[i].GetLabel() )
+        {
+           running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
+                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+           weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
+                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+        }
+
       }
       // cash the mean energy in this distribution
       //080409 TKDB
@@ -170,7 +219,12 @@
       {
         it = i;
         if(random<running[i]/running[nEnergies-1]) break;
-      }
+      } 
+
+      //080714
+      if ( running [ nEnergies-1 ] == 0 ) it = 0;
+      //080714
+
       if(it<nDiscreteEnergies||it==0) 
       {
         if(it == 0)
@@ -230,7 +284,13 @@
         cosTh = theStore.SampleMax(fsEnergy);
       }
       delete [] running;
+
+      //080714
+      remaining_energy -= fsEnergy;
+      //080714
+
       }
+
     }
     else if(angularRep==2)
     {

@@ -133,3 +133,4 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
   }   
   return result;
 }
+

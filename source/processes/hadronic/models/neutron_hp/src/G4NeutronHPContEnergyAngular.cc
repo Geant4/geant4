@@ -27,6 +27,9 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080721 To be "ClearHistories" effective, the selection scheme of angular distribution is modified by T. Koi
+//
+//
 #include "G4NeutronHPContEnergyAngular.hh"
 
 G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4double massCode, G4double /*mass*/)
@@ -54,10 +57,12 @@ G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4do
      // interpolation through alternating sampling. This needs improvement @@@
      // This is the cause of the He3 problem !!!!!!!!
      // See to it, if you can improve this.
-     G4double random = G4UniformRand();
-     G4double deltaE = theAngular[it].GetEnergy()-theAngular[it-1].GetEnergy();
-     G4double offset = theAngular[it].GetEnergy()-anEnergy;
-     if(random<offset/deltaE) it--; 
+     //080714 TK commnet Randomizing use angular distribution
+     //080714 TK Always use the upper side distribution. enabling ClearHistories method.
+     //G4double random = G4UniformRand();
+     //G4double deltaE = theAngular[it].GetEnergy()-theAngular[it-1].GetEnergy();
+     //G4double offset = theAngular[it].GetEnergy()-anEnergy;
+     //if(random<offset/deltaE) it--;
      theAngular[it].SetTarget(GetTarget());
      theAngular[it].SetTargetCode(theTargetCode);
      theAngular[it].SetPrimary(GetNeutron());
@@ -82,4 +87,15 @@ MeanEnergyOfThisInteraction()
    }
    currentMeanEnergy = -2;
    return result;
+}
+
+
+ 
+void G4NeutronHPContEnergyAngular::ClearHistories()
+{ 
+   if ( theAngular!= NULL )
+   { 
+      for ( G4int i = 0 ; i< nEnergy ; i++ ) 
+         theAngular[i].ClearHistories(); 
+   } 
 }

@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEnergyAngular.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
+// $Id: G4VNeutronHPEnergyAngular.hh,v 1.12 2008-07-21 23:26:29 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 080718 Add ClearHistories() method by T. Koi
 //
 #ifndef G4VNeutronHPEnergyAngular_h
 #define G4VNeutronHPEnergyAngular_h 1
@@ -86,5 +88,7 @@ class G4VNeutronHPEnergyAngular
   G4ReactionProduct * theNeutron;
   G4ReactionProduct theCMS;
     
+   public:
+      virtual void ClearHistories(){;};
 };
 #endif
