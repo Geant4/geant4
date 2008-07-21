@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 02-Nov-2007
+# Last update: 15-Jul-2008
 #
 # This script has 1 input argument, and should be run as:
 #
@@ -10,8 +10,7 @@
 # where the input  file  should be one of the log-files
 # produced by running the StatAccepTest simulations.
 # This script prints out (in the screen) the following
-# observables (in the case of a proper "file", otherwise
-# if it is not a log-file of StatAccepTest nothing will happen):
+# observables:
 #
 #   o  CPU times
 #   o  total visible energy
@@ -26,6 +25,12 @@
 #   o  information on the number of tracks per event
 #   o  information on track length
 #   o  information on particle exiting the calorimeter
+#
+# as extracted from the log-files.
+# In the case that the  file  does not exist, or it exists
+# but is not a log-file obtained by completing a running
+# of StatAccepTest, then "0" is print for each of the above
+# observables.
 #
 # See  ***LOOKHERE***  to switch on/off some of this observables.
 #
@@ -52,8 +57,8 @@ def funExtract( theFile ) :
     # Given the file in input, it returns all the observables values,
     # in the form of pairs: value error .
     
+    statusEndRun = 0
     if ( theFile ) :
-        statusEndRun = 0
         statusLfractions = 0
         statusRfractions = 0
         statusShowerPerParticle = 0
@@ -374,6 +379,153 @@ def funExtract( theFile ) :
                         print "  exitNumOthers = %.1f" % \
                               float( line.split( "=" )[1].split( "+/-" )[0] )
 
+    if ( statusEndRun == 0 ) :
+        print "  cpuTime =  0  "
+        print "  visEnergy =  0  "
+        print "  totEnergy =  0  "
+        print "  resolution =  0  "
+        print "  fL1 =  0  "
+        print "  fL2 =  0  "
+        print "  fL3 =  0  "
+        print "  fL4 =  0  "
+        print "  fR1 =  0  "
+        print "  fR2 =  0  "
+        print "  fR3 =  0  "
+        if ( isShowerPerParticleInformationOn ) :
+            print "  electronEvis =  0  "
+            print "  electronEtot =  0  "
+            print "  electronfL1 =  0  "
+            print "  electronfL2 =  0  "
+            print "  electronfL3 =  0  "
+            print "  electronfL4 =  0  "
+            print "  electronfR1 =  0  "
+            print "  electronfR2 =  0  "
+            print "  electronfR3 =  0  "
+            print "  protonEvis =  0  "
+            print "  protonEtot =  0  "
+            print "  protonfL1 =  0  "
+            print "  protonfL2 =  0  "
+            print "  protonfL3 =  0  "
+            print "  protonfL4 =  0  "
+            print "  protonfR1 =  0  "
+            print "  protonfR2 =  0  "
+            print "  protonfR3 =  0  "
+            print "  pionEvis =  0  "
+            print "  pionEtot =  0  "
+            print "  pionfL1 =  0  "
+            print "  pionfL2 =  0  "
+            print "  pionfL3 =  0  "
+            print "  pionfL4 =  0  "
+            print "  pionfR1 =  0  "
+            print "  pionfR2 =  0  "
+            print "  pionfR3 =  0  "
+            print "  nucleusEvis =  0  "
+            print "  nucleusEtot =  0  "
+            print "  nucleusfL1 =  0  "
+            print "  nucleusfL2 =  0  "
+            print "  nucleusfL3 =  0  "
+            print "  nucleusfL4 =  0  "
+            print "  nucleusfR1 =  0  "
+            print "  nucleusfR2 =  0  "
+            print "  nucleusfR3 =  0  "
+            print "  muonEvis =  0  "
+            print "  muonEtot =  0  "
+            print "  kaonEvis =  0  "
+            print "  kaonEtot =  0  "
+        if ( isNumberOfStepsInformationOn ) :
+            print "  # total steps =  0  " 
+            print "  # positives steps =  0  " 
+            print "  # neutrals steps =  0  " 
+            print "  # negatives steps =  0  " 
+            print "  # nuclei steps =  0  " 
+            print "  # particles with Unrecognized PDG code steps =  0  " 
+            print "  # electromagnetic (e+ , e- , gammas) steps =  0  " 
+            print "  # electroweak (mu+, mu-, tau+, tau-, neutrinos) steps =  0  " 
+            print "  # hadrons steps =  0  " 
+            print "  # mesons steps =  0  " 
+            print "  # baryons steps =  0  " 
+            print "  # light mesons (u/ubar/d/dbar) steps =  0  " 
+            print "  # light baryons (u/ubar/d/dbar) steps =  0  " 
+            print "  # strange (s/sbar) mesons steps =  0  " 
+            print "  # strange (s/sbar) baryons steps =  0  " 
+            print "  # heavy (c/cbar or b/bbar) mesons steps =  0  " 
+            print "  # heavy (c/cbar or b/bbar) baryons steps =  0  " 
+            print "  # electrons steps =  0  " 
+            print "  # gammas steps =  0  " 
+            print "  # positrons steps =  0  " 
+            print "  # mu- steps =  0  " 
+            print "  # mu+ steps =  0  " 
+            print "  # tau- steps =  0  "
+            print "  # tau+ steps =  0  " 
+            print "  # neutrinos steps =  0  " 
+            print "  # pi+ steps =  0  " 
+            print "  # pi0 steps =  0  " 
+            print "  # pi- steps =  0  " 
+            print "  # K+ steps =  0  " 
+            print "  # K-neutral (K0/K0bar or K0_S/K0_L) steps =  0  " 
+            print "  # K- steps =  0  " 
+            print "  # protons steps =  0  " 
+            print "  # anti-protons steps =  0  " 
+            print "  # neutrons steps =  0  " 
+            print "  # anti-neutrons steps =  0  " 
+        if ( isNumberOfTracksInformationOn ) :
+            print "  # total tracks =  0  " 
+            print "  # positives tracks =  0  " 
+            print "  # neutrals tracks =  0  " 
+            print "  # negatives tracks =  0  " 
+            print "  # nuclei tracks =  0  " 
+            print "  # particles with Unrecognized PDG code tracks =  0  " 
+            print "  # electromagnetic (e+ , e- , gammas) tracks =  0  " 
+            print "  # electroweak (mu+, mu-, tau+, tau-, neutrinos) tracks =  0  " 
+            print "  # hadrons tracks =  0  " 
+            print "  # mesons tracks =  0  " 
+            print "  # baryons tracks =  0  " 
+            print "  # light mesons (u/ubar/d/dbar) tracks =  0  " 
+            print "  # light baryons (u/ubar/d/dbar) tracks =  0  " 
+            print "  # strange (s/sbar) mesons tracks =  0  " 
+            print "  # strange (s/sbar) baryons tracks =  0  " 
+            print "  # heavy (c/cbar or b/bbar) mesons tracks =  0  " 
+            print "  # heavy (c/cbar or b/bbar) baryons tracks =  0  " 
+            print "  # electrons tracks =  0  " 
+            print "  # gammas tracks =  0  " 
+            print "  # positrons tracks =  0  " 
+            print "  # mu- tracks =  0  " 
+            print "  # mu+ tracks =  0  " 
+            print "  # tau- tracks =  0  "
+            print "  # tau+ tracks =  0  " 
+            print "  # neutrinos tracks =  0  " 
+            print "  # pi+ tracks =  0  " 
+            print "  # pi0 tracks =  0  " 
+            print "  # pi- tracks =  0  " 
+            print "  # K+ tracks =  0  " 
+            print "  # K-neutral (K0/K0bar or K0_S/K0_L) tracks =  0  " 
+            print "  # K- tracks =  0  " 
+            print "  # protons tracks =  0  " 
+            print "  # anti-protons tracks =  0  " 
+            print "  # neutrons tracks =  0  " 
+            print "  # anti-neutrons tracks =  0  "   
+        if ( isTrackLengthInformationOn ) :
+            print "  electronLength =  0  "
+            print "  pionLength =  0  "
+            print "  protonLength =  0  "
+            print "  gammaLength =  0  "
+            print "  neutronLength =  0  "
+        if ( isExitingInformationOn ) :
+            print "  exitKin =  0  "
+            print "  exitFracGammas =  0  "
+            print "  exitFracNeutrons =  0  "
+            print "  exitFracNeutrinos =  0  "
+            print "  exitFracMuons =  0  "
+            print "  exitFracElectrons =  0  "
+            print "  exitFracOthers =  0  "
+            print "  exitNum =  0  "
+            print "  exitNumGammas =  0  "
+            print "  exitNumNeutrons =  0  "
+            print "  exitNumNeutrinos =  0  "
+            print "  exitNumMuons =  0  "
+            print "  exitNumElectrons =  0  "
+            print "  exitNumOthers =  0  "
+            
     return
 
 
@@ -385,9 +537,12 @@ def funExtract( theFile ) :
 if ( len( sys.argv ) != 2 ) :
     print " Usage:  printInfoLogfile.py file"
 else :
-    theFile = open( sys.argv[1], "r" )
-    funExtract( theFile )
-    theFile.close()
+    if ( os.path.isfile( sys.argv[1] ) ) :
+        theFile = open( sys.argv[1], "r" )
+        funExtract( theFile )
+        theFile.close()
+    else :
+        funExtract( 0 )
 
 #-------------------------------------------------------------------
 
