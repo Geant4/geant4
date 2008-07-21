@@ -53,8 +53,8 @@
 
 DicomPhysicsList::DicomPhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 1.e-3*mm;
-  cutForGamma     = 1.e-3*mm;
+  defaultCutValue = 1.*mm;
+  cutForGamma     = 1.*mm;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
