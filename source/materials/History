@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2008-07-17 08:59:24 vnivanch Exp $
+$Id: History,v 1.122 2008-07-21 21:00:38 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-07-08 P.Gumplinger (materials-V09-01-12)
+- G4SurfaceProperty and G4OpticalSurface, make them truly Polymorphic
 
 17-07-08 V.Ivanchenko (materials-V09-01-11)
 - G4NistManager - added inline methods to speed up EM computations
