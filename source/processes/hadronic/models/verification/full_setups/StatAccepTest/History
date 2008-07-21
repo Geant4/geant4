@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+21-Jul-2008 - A.Ribon (statAccepTest-V09-01-02)
+- Added dirEnergyScan to study calorimeter observables
+  as a function of the beam energy.
+
+
 03-Jun-2008 - A.Ribon (statAccepTest-V09-01-01)
 - Added possibility to link against 2 different
   versions of CLHEP (i.e. 2.0.3.2 and 2.0.3.3).
