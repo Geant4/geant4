@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.31 2008-06-10 17:12:06 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.32 2008-07-22 16:03:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,13 +97,11 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SetRecoilThreshold(G4double eth);
+
 protected:
 
   G4double CrossSectionPerAtom();
-
-  void SelectAtomRandomly();
-
-  G4double SelectIsotope();
 
   G4double SampleCosineTheta();
 
@@ -113,13 +111,13 @@ protected:
 
   inline void SetupKinematic(G4double kinEnergy, G4double cut);
   
-  inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy); 
+  inline void SetupTarget(G4double Z, G4double kinEnergy); 
+
+  inline G4double ProbabilityScatteringOfElectron();
 
 private:
 
   void ComputeMaxElectronScattering(G4double cut);
-
-  inline G4double FormFactorMev2(G4double Z, G4double A);
 
   // hide assignment operator
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
@@ -151,12 +149,10 @@ protected:
   G4double                  cosTetMaxHad;
   G4double                  cosTetLimit;
   G4double                  q2Limit;
+  G4double                  recoilThreshold;
   G4double                  elecXSection;
   G4double                  nucXSection;
   G4double                  ecut;
-  G4double                  xsece[40];
-  G4double                  xsecn[40];
-  G4double                  xsect[40];
 
   // projectile
   const G4ParticleDefinition* particle;
@@ -171,7 +167,6 @@ protected:
 
   // target
   G4double                  targetZ;
-  G4double                  targetA;
   G4double                  screenZ;
   G4double                  formfactA;
   G4int                     idxelm;
@@ -227,8 +222,9 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
     if(cut > ekin && cosThetaMin < 1.0) {
       cosTetMinNuc = ekin*(1.0 + cosThetaMin)/cut - 1.0;  
     }
-    tkin  = ekin;
-    mom2  = tkin*(tkin + 2.0*mass);
+    ecut = cut;
+    tkin = ekin;
+    mom2 = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     ComputeMaxElectronScattering(cut);
   }
@@ -236,38 +232,48 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double A, 
-						   G4double e)
+inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
 {
-  if(Z != targetZ || A != targetA || e != etag) {
+  if(Z != targetZ || e != etag) {
     etag    = e; 
     targetZ = Z;
-    targetA = A;
     G4double x = fNistManager->GetZ13(Z);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     //screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
+    // A.V. Butkevich et al., NIM A 488 (2002) 282
+    G4int iz = G4int(Z);
+    if(iz > 99) iz = 99;
+    formfactA = FF[iz];
+    if(formfactA == 0.0) {
+      x = fNistManager->GetA27(iz); 
+      formfactA = constn*x*x;
+      FF[iz] = formfactA;
+    }
+    formfactA *= mom2;
+    cosTetMaxHad = 1.0 - 0.5*q2Limit/formfactA;
     cosTetLimit = cosTetMaxNuc;
-    if(particle == theProton && A < 1.5 && cosTetMaxNuc < 0.0) 
-      cosTetLimit = 0.0;
-    formfactA = mom2*FormFactorMev2(Z, A);
+    if(particle == theProton && 1 == iz) {
+      if(cosTetMaxNuc < 0.0) cosTetLimit = 0.0;
+      if(cosTetMaxHad < 0.0) cosTetMaxHad = 0.0;
+    }
   } 
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4double G4eCoulombScatteringModel::FormFactorMev2(G4double Z, 
-							  G4double A)
+
+inline G4double G4eCoulombScatteringModel::ProbabilityScatteringOfElectron()
 {
-  // A.V. Butkevich et al., NIM A 488 (2002) 282
-  G4int iz = G4int(Z);
-  if(iz > 99) iz = 99;
-  G4double res = FF[iz];
-  if(res == 0.0) { 
-    res = constn*std::pow(A,0.54);
-    FF[iz] = res;
-  }
-  cosTetMaxHad = 1.0 - 0.5*q2Limit/(res*mom2);
+  G4double res = 0.0;
+  G4double xs = ComputeCrossSectionPerAtom(particle,tkin,targetZ,0.0,ecut,tkin);
+  if(xs > 0.0) res = elecXSection/xs;
   return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eCoulombScatteringModel::SetRecoilThreshold(G4double eth)
+{
+  recoilThreshold = eth;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

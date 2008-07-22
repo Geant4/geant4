@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.35 2008-06-11 08:51:00 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.36 2008-07-22 16:03:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition* p,
 				G4double kinEnergy, 
 				G4double Z, 
-				G4double A, 
+				G4double, 
 				G4double cutEnergy,
 				G4double)
 {
@@ -105,7 +105,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   tkin = sqrt(mom2 + m12) - mass;
   invbeta2 = 1.0 +  m12/mom2;
 
-  SetupTarget(Z, A, tkin);
+  SetupTarget(Z, tkin);
 
   G4double xsec = CrossSectionPerAtom();
 
@@ -133,12 +133,11 @@ void G4CoulombScatteringModel::SampleSecondaries(
   SetupKinematic(ekin, cutEnergy);
 
   // Choose nucleus
-  SelectAtomRandomly();
-  G4double A  = SelectIsotope();
-  G4double Z  = currentElement->GetZ();
+  currentElement = SelectRandomAtom(currentMaterial,particle,tkin,ecut,tkin);
 
+  G4double Z  = currentElement->GetZ();
   G4int iz    = G4int(Z);
-  G4int ia    = G4int(A + 0.5);
+  G4int ia    = SelectIsotopeNumber(currentElement);
   G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
 
   // CM system
@@ -155,7 +154,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
   invbeta2 = 1.0 +  m12*fm*fm/mom2;
 
   // sample scattering angle in CM system
-  SetupTarget(Z, A, eCM - mass);
+  SetupTarget(Z, eCM - mass);
 
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
@@ -182,7 +181,11 @@ void G4CoulombScatteringModel::SampleSecondaries(
 
   // recoil
   G4double erec = kinEnergy - ekin;
-  if(erec > Z*currentMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
+  G4double th = 
+    std::min(recoilThreshold,
+	     Z*currentElement->GetIonisation()->GetMeanExcitationEnergy());
+
+  if(erec > th) {
     G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
     G4double plab = sqrt(ekin*(ekin + 2.0*mass));
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
