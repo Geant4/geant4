@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh,v 1.1 2008-05-29 13:38:05 vnivanch Exp $
+// $Id: G4EmElementSelector.hh,v 1.2 2008-07-22 15:55:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,7 +67,8 @@ class G4EmElementSelector
 public:
 
   G4EmElementSelector(G4VEmModel*, const G4Material*, G4int bins, 
-		      G4double emin, G4double emax);
+		      G4double emin, G4double emax, 
+		      G4bool spline = true);
 
   ~G4EmElementSelector();
 
@@ -87,11 +88,9 @@ private:
 
   G4VEmModel*       model;
   const G4Material* material;
-  const G4Element*  lastElement;
-
   const G4ElementVector* theElementVector;
 
-  G4int    nElements;
+  G4int    nElmMinusOne;
   G4int    nbins;
 
   G4double cutEnergy;
@@ -107,17 +106,18 @@ private:
 
 inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
 {
-  if (nElements > 1) {
+  const G4Element* elm = (*theElementVector)[nElmMinusOne];
+  if (nElmMinusOne > 0) {
     G4bool b;
-    G4double x = G4UniformRand()*(xSections[nElements-1])->GetValue(e,b);
-    for(G4int i=0; i<nElements; i++) {
+    G4double x = G4UniformRand();
+    for(G4int i=0; i<nElmMinusOne; i++) {
       if (x <= (xSections[i])->GetValue(e,b)) {
-	lastElement = (*theElementVector)[i];
+	elm = (*theElementVector)[i];
 	break;
       }
     }
   }
-  return lastElement;
+  return elm;
 }
 
 inline const G4Material* G4EmElementSelector::GetMaterial() const

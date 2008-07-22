@@ -1,4 +1,4 @@
-$Id: History,v 1.338 2008-07-16 09:45:49 vnivanch Exp $
+$Id: History,v 1.339 2008-07-22 15:55:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,14 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 July 08: V.Ivant (emutils-V09-01-22)
+G4VEmModel - added vector of G4ElementSelectors, in which vectors
+             of relative cross sections per elements of a compound 
+             material are stored; added new methods:
+             InitialisaElementSelectors and SelectRandomAtom,
+G4LossTableBuilder - remove dependence on G4LossTableManager
+G4LossTableManager - propagated spline flag to G4LossTableBuilder            
+
 15 July 08: V.Ivant (emutils-V09-01-21)
 G4EmConfigurator - a new helper class to add model per particle type,
                    process, energy range and G4Region
 G4VEmProcess, G4VEnergyLossProcess - renamed and improved method 
                    "MicroscopicCrossSection" by "CrossSectionPerVolume"
 G4VEmModel, G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess 
-                   reodering of members of classes is perform for further
-                   multi-thread developments: 
+                   reodering of members of classes and improved comments:
                    - separated members fixed at construction, defined at 
                      ininitialisation, and modified in run time
                    - improved comments in header files

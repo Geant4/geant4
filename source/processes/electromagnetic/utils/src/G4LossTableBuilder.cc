@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.26 2008-05-27 18:12:48 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.27 2008-07-22 15:55:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableBuilder.hh"
-#include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -64,7 +63,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LossTableBuilder::G4LossTableBuilder() 
-{}
+{
+  splineFlag = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,8 +74,9 @@ G4LossTableBuilder::~G4LossTableBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
-                                  const std::vector<G4PhysicsTable*>& list)
+void 
+G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
+				   const std::vector<G4PhysicsTable*>& list)
 {
   size_t n_processes = list.size();
   if(1 >= n_processes) return;
@@ -91,7 +93,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   for (size_t i=0; i<n_vectors; i++) {
 
     pv = new G4PhysicsLogVector(elow, ehigh, nbins);
-    pv->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+    pv->SetSpline(splineFlag);
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
       G4double energy = pv->GetLowEdgeEnergy(j);
@@ -142,7 +144,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
       // initialisation of a new vector
       G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
-      v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+      v->SetSpline(splineFlag);
 
       // assumed dedx proportional to beta
       G4double range  = 2.*elow/dedx1;
@@ -191,7 +193,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
       G4double rhigh = pv->GetValue(ehigh, b);
       
       G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
-      v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+      v->SetSpline(splineFlag);
 
       for (size_t j=0; j<nbins; j++) {
 	G4double e  = pv->GetLowEdgeEnergy(j);
