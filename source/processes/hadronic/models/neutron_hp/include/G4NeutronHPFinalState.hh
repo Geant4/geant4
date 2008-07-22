@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
+// $Id: G4NeutronHPFinalState.hh,v 1.14 2008-07-22 00:09:17 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 080721 Create adjust_final_state method by T. Koi  
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
@@ -48,6 +50,10 @@ public:
     hasAnyData = true;
     theBaseZ = 0;
     theBaseA = 0;
+
+     adjustResult = true;
+     if ( getenv( "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+
   };
   
   virtual ~G4NeutronHPFinalState(){};
@@ -57,23 +63,23 @@ public:
   {
     throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
     return 0;
-  }
+  };
   
   // of course this would better be Done templating G4NeutronHPChannel..., 
   // but due to peculiarities of the DEC compiler, this way it
   // is easier to maintain.
   virtual G4NeutronHPFinalState * New() = 0;
   
-  G4bool HasXsec() {return hasXsec;}
-  G4bool HasFSData() {return hasFSData;}
-  G4bool HasAnyData() {return hasAnyData;}
+  G4bool HasXsec() {return hasXsec;};
+  G4bool HasFSData() {return hasFSData;};
+  G4bool HasAnyData() {return hasAnyData;};
   
-  virtual G4double GetXsec(G4double ) { return 0; }
-  virtual G4NeutronHPVector * GetXsec() { return 0; }
+  virtual G4double GetXsec(G4double ) { return 0; };
+  virtual G4NeutronHPVector * GetXsec() { return 0; };
   
-  void     SetA_Z(G4double anA, G4double aZ) {theBaseA = anA; theBaseZ = aZ; }
-  G4double GetZ() { return theBaseZ; }
-  G4double GetN() { return theBaseA; }
+  void     SetA_Z(G4double anA, G4double aZ) {theBaseA = anA; theBaseZ = aZ; };
+  G4double GetZ() { return theBaseZ; };
+  G4double GetN() { return theBaseA; };
   
   protected:
   
@@ -87,7 +93,14 @@ public:
   G4double theBaseA;
   G4double theBaseZ;
 
-  private:
-  
+
+//080721
+   protected:
+      void adjust_final_state ( G4LorentzVector );
+
+   private:
+      G4bool adjustResult;
+
+
 };
 #endif

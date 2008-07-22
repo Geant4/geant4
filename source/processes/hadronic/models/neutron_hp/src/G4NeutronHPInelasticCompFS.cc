@@ -573,6 +573,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 // some garbage collection
       delete thePhotons;
     }
+
+//080721 
+   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+   G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
+   G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
+   G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
+   adjust_final_state ( init_4p_lab ); 
+
 // clean up the primary neutron
     theResult.SetStatusChange(stopAndKill);
 }
