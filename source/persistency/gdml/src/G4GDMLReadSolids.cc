@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.17 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.18 2008-07-22 13:23:01 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -468,6 +468,46 @@ void G4GDMLReadSolids::ParaRead(const xercesc::DOMElement* const paraElement)
 
    new G4Para(name,x,y,z,alpha,theta,phi);
 }
+void G4GDMLReadSolids::ParaboloidRead(const xercesc::DOMElement* const paraElement)
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double rlo = 0.0;
+   G4double rhi = 0.0;
+   G4double dz = 0.0;
+  
+   const xercesc::DOMNamedNodeMap* const attributes
+         = paraElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name")  { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
+      if (attName=="rlo")   { rlo =  eval.Evaluate(attValue); } else
+      if (attName=="rhi")   { rhi = eval.Evaluate(attValue); } else
+      if (attName=="dz")    { dz = eval.Evaluate(attValue); } 
+   }     
+
+   rlo *= 1.*lunit;
+   rhi *= 1.*lunit;
+   dz *= 1.*lunit;
+  
+   new G4Paraboloid(name,dz,rlo,rhi);
+}
 
 void G4GDMLReadSolids::
 PolyconeRead(const xercesc::DOMElement* const polyconeElement) 
@@ -603,6 +643,7 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,
                    z_array,rmin_array,rmax_array);
+
 }
 
 G4QuadrangularFacet* G4GDMLReadSolids::
@@ -1454,6 +1495,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="intersection") { BooleanRead(child,INTERSECTION); } else
       if (tag=="orb") { OrbRead(child); } else
       if (tag=="para") { ParaRead(child); } else
+      if (tag=="paraboloid") { ParaboloidRead(child); } else
       if (tag=="polycone") { PolyconeRead(child); } else
       if (tag=="polyhedra") { PolyhedraRead(child); } else
       if (tag=="reflectedSolid") { ReflectedSolidRead(child); } else

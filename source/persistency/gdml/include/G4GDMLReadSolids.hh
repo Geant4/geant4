@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.9 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.10 2008-07-22 13:22:25 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 #include "G4IntersectionSolid.hh"
 #include "G4Orb.hh"
 #include "G4Para.hh"
+#include "G4Paraboloid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4QuadrangularFacet.hh"
@@ -96,6 +97,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void HypeRead(const xercesc::DOMElement* const);
    void OrbRead(const xercesc::DOMElement* const);
    void ParaRead(const xercesc::DOMElement* const);
+   void ParaboloidRead(const xercesc::DOMElement* const);
    void PolyconeRead(const xercesc::DOMElement* const);
    void PolyhedraRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* QuadrangularRead(const xercesc::DOMElement* const);
