@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.30 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.31 2008-07-22 14:12:49 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 #include "G4Hype.hh"
 #include "G4Orb.hh"
 #include "G4Para.hh"
+#include "G4Paraboloid.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
@@ -88,6 +89,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void HypeWrite(xercesc::DOMElement*, const G4Hype* const);
    void OrbWrite(xercesc::DOMElement*, const G4Orb* const);
    void ParaWrite(xercesc::DOMElement*, const G4Para* const);
+   void ParaboloidWrite(xercesc::DOMElement*, const G4Paraboloid* const);
    void PolyconeWrite(xercesc::DOMElement*, const G4Polycone* const);
    void PolyhedraWrite(xercesc::DOMElement*, const G4Polyhedra* const);
    void SphereWrite(xercesc::DOMElement*, const G4Sphere* const);

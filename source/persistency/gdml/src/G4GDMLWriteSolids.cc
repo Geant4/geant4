@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.51 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.52 2008-07-22 14:13:04 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -295,6 +295,21 @@ ParaWrite(xercesc::DOMElement* solidsElement, const G4Para* const para)
    paraElement->setAttributeNode(NewAttribute("aunit","deg"));
    paraElement->setAttributeNode(NewAttribute("lunit","mm"));
    solidsElement->appendChild(paraElement);
+}
+
+
+void G4GDMLWriteSolids::
+ParaboloidWrite(xercesc::DOMElement* solidsElement, const G4Paraboloid* const paraboloid)
+{
+   const G4String name = GenerateName(paraboloid->GetName(),paraboloid);
+
+   xercesc::DOMElement* paraboloidElement = NewElement("paraboloid");
+   paraboloidElement->setAttributeNode(NewAttribute("name",name));
+   paraboloidElement->setAttributeNode(NewAttribute("rlo",paraboloid->GetRadiusMinusZ()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("rhi",paraboloid->GetRadiusPlusZ()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("dz",paraboloid->GetZHalfLength()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("lunit","mm"));
+   solidsElement->appendChild(paraboloidElement);
 }
 
 void G4GDMLWriteSolids::
@@ -715,6 +730,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4Para* const paraPtr
      = dynamic_cast<const G4Para* const>(solidPtr))
      { ParaWrite(solidsElement,paraPtr); } else
+   if (const G4Paraboloid* const paraboloidPtr
+     = dynamic_cast<const G4Paraboloid* const>(solidPtr))
+     { ParaboloidWrite(solidsElement,paraboloidPtr); } else
    if (const G4Polycone* const polyconePtr
      = dynamic_cast<const G4Polycone* const>(solidPtr))
      { PolyconeWrite(solidsElement,polyconePtr); } else
