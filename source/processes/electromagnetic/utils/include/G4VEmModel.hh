@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.52 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.53 2008-07-22 15:53:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,7 +60,8 @@
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
 // 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
 // 29-10-07 Added SampleScattering (V.Ivanchenko)
-// 15-07-08 Reorder class members for further multi-thread development (VI)
+// 15-07-08 Reorder class members and improve comments (VI)
+// 21-07-08 Added vector of G4ElementSelector and methods to use it (VI)
 //
 // Class Description:
 //
@@ -81,7 +82,9 @@
 #include "G4ElementVector.hh"
 #include "G4DataVector.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4EmElementSelector.hh"
 #include "Randomize.hh"
+#include <vector>
 
 class G4PhysicsTable;
 class G4Region;
@@ -101,8 +104,8 @@ public:
   // Virtual methods to be implemented for any concrete model
   //------------------------------------------------------------------------
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
-
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) = 0;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -114,52 +117,47 @@ public:
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-			const G4MaterialCutsCouple*);
-
+  // dEdx per unit length
   virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
 			       const G4ParticleDefinition*,
 			       G4double kineticEnergy,
 			       G4double cutEnergy = DBL_MAX);
 
+  // main method to compute dEdx
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy = DBL_MAX);
+
+  // cross section per volume
   virtual G4double CrossSection(const G4MaterialCutsCouple*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
 				G4double cutEnergy = 0.0,
 				G4double maxEnergy = DBL_MAX);
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy = DBL_MAX);
-
-  inline G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                             const G4Element*,
-					     G4double kinEnergy, 
-					     G4double cutEnergy = 0.0,
-					     G4double maxEnergy = DBL_MAX);
-
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double kinEnergy, 
-					      G4double Z, 
-					      G4double A = 0., 
-					      G4double cutEnergy = 0.0,
-					      G4double maxEnergy = DBL_MAX);
-				      
-  virtual G4double ComputeMeanFreePath(const G4ParticleDefinition*,
-				       G4double kineticEnergy,
-				       const G4Material*,    
-				       G4double cutEnergy = 0.0,
-				       G4double maxEnergy = DBL_MAX);
-				     
+  // main method to compute cross section per Volume
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy = 0.0,
 					 G4double maxEnergy = DBL_MAX);
 
+  // main method to compute cross section depending on atom
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A = 0., /* amu */
+					      G4double cutEnergy = 0.0,
+					      G4double maxEnergy = DBL_MAX);
+				      				     
+  // min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
+
 protected:
 
+  // kinematically allowed max kinetic energy of a secondary
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kineticEnergy);  
 				          
@@ -189,7 +187,45 @@ public:
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
+  // should be called at initialisation to build element selectors
+  void InitialiseElementSelectors(const G4ParticleDefinition*, 
+				  const G4DataVector&);
+
+  // compute mean free path via cross section per volume
+  G4double ComputeMeanFreePath(const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       const G4Material*,    
+			       G4double cutEnergy = 0.0,
+			       G4double maxEnergy = DBL_MAX);
+
+  // generic cross section per element
+  inline G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                             const G4Element*,
+					     G4double kinEnergy, 
+					     G4double cutEnergy = 0.0,
+					     G4double maxEnergy = DBL_MAX);
+
+  // atom can be selected effitiantly if element selectors are initialised 
+  inline const G4Element* SelectRandomAtom(const G4MaterialCutsCouple*,
+					   const G4ParticleDefinition*,
+					   G4double kineticEnergy,
+					   G4double cutEnergy = 0.0,
+					   G4double maxEnergy = DBL_MAX);
+
+  // this method can be used only in the case if generic method to compute
+  // cross section per volume is used and not overwritten in derived class 
+  inline const G4Element* SelectRandomAtom(const G4Material*,
+					   const G4ParticleDefinition*,
+					   G4double kineticEnergy,
+					   G4double cutEnergy = 0.0,
+					   G4double maxEnergy = DBL_MAX);
+
+  // select isotope in order to have precise mass of the nucleus
+  inline G4int SelectIsotopeNumber(const G4Element*);
+
+  //------------------------------------------------------------------------
+  // Get/Set methods
+  //------------------------------------------------------------------------
 
   inline G4VEmFluctuationModel* GetModelOfFluctuations();
 
@@ -207,13 +243,9 @@ public:
 
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
-  inline const G4Element* SelectRandomAtom(const G4Material*,
-					   const G4ParticleDefinition*,
-					   G4double kineticEnergy,
-					   G4double cutEnergy = 0.0,
-					   G4double maxEnergy = DBL_MAX);
-
   inline const G4String& GetName() const;
+
+  inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
 protected:
 
@@ -238,6 +270,9 @@ private:
   G4double        highLimit;
   G4double        polarAngleLimit;
 
+  G4int           nSelectors;
+  std::vector<G4EmElementSelector*> elmSelectors;
+
 protected:
 
   G4VParticleChange*  pParticleChange;
@@ -247,7 +282,8 @@ protected:
 private:
 
   const G4Element* currentElement;
-  G4double         xsec[40];
+  G4int                  nsec;
+  std::vector<G4double>  xsec;
 
 };
 
@@ -377,20 +413,39 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline const G4Element* G4VEmModel::SelectRandomAtom(
-				         const G4Material* material,
-				         const G4ParticleDefinition* pd,
-					 G4double kinEnergy,
-					 G4double tcut,
-					 G4double tmax)
+inline 
+const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
+					      const G4ParticleDefinition* p,
+					      G4double kinEnergy,
+					      G4double cutEnergy,
+					      G4double maxEnergy)
+{
+  if(nSelectors > 0) {
+    currentElement = 
+      elmSelectors[couple->GetIndex()]->SelectRandomAtom(kinEnergy);
+  } else {
+    currentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
+				      cutEnergy,maxEnergy);
+  }
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
+					      const G4ParticleDefinition* pd,
+					      G4double kinEnergy,
+					      G4double tcut,
+					      G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
-  currentElement = (*theElementVector)[nelm-1];
-  if (nelm > 1) {
+  G4int n = material->GetNumberOfElements() - 1;
+  currentElement = (*theElementVector)[n];
+  if (n > 0) {
     G4double x = G4UniformRand()*
                  CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    for(G4int i=0; i<nelm; i++) {
+    for(G4int i=0; i<n; i++) {
       if (x <= xsec[i]) {
 	currentElement = (*theElementVector)[i];
 	break;
@@ -398,6 +453,26 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
     }
   }
   return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
+{
+  G4int N = G4int(elm->GetN() + 0.5);
+  G4int ni   = elm->GetNumberOfIsotopes();
+  if(ni > 0) {
+    G4double* ab = currentElement->GetRelativeAbundanceVector();
+    G4double x = G4UniformRand();
+    G4int idx = 0;
+    for(; idx<ni; idx++) {
+      x -= ab[idx];
+      if (x <= 0.0) break;
+    }
+    if(idx >= ni) idx = ni - 1;
+    N = elm->GetIsotope(idx)->GetN();
+  }
+  return N;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -416,11 +491,11 @@ inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::MaxSecondaryKinEnergy(
-                                          const G4DynamicParticle* dynParticle)
+inline 
+G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
 {
-  return MaxSecondaryEnergy(dynParticle->GetDefinition(),
-                            dynParticle->GetKineticEnergy());
+  return MaxSecondaryEnergy(dynPart->GetDefinition(),
+                            dynPart->GetKineticEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
