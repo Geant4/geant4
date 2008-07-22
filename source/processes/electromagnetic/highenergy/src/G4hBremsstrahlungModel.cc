@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlungModel.cc,v 1.2 2008-04-04 14:37:03 vnivanch Exp $
+// $Id: G4hBremsstrahlungModel.cc,v 1.3 2008-07-22 16:15:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,6 @@ G4hBremsstrahlungModel::~G4hBremsstrahlungModel()
 G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
-                                           G4double A,
                                            G4double gammaEnergy)
 //  differential cross section
 {
@@ -82,11 +81,14 @@ G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
   G4double rab0=delta*sqrte ;
 
-  G4double z13 = 1.0/nist->GetZ13(Z);
-  G4double dn  = mass*exp(0.27*nist->GetLOGA(A))/(70.*MeV);
+  G4int iz = G4int(Z);
+  if(iz < 1) iz = 1;
 
-  G4double  b = btf;
-  if(Z<1.5) b = bh;
+  G4double z13 = 1.0/nist->GetZ13(iz);
+  G4double dn  = mass*nist->GetA27(iz)/(70.*MeV);
+
+  G4double    b = btf;
+  if(1 == iz) b = bh;
 
   // nucleus contribution logarithm
   G4double rab1=b*z13;

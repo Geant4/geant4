@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProductionModel.hh,v 1.1 2008-03-06 11:47:11 vnivanch Exp $
+// $Id: G4hPairProductionModel.hh,v 1.2 2008-07-22 16:15:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@ public:
 
   virtual ~G4hPairProductionModel();
 
+protected:
 
   virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
 						   G4double Z,
