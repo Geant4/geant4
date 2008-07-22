@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2008-04-21 06:17:15 vnivanch Exp $
+$Id: History,v 1.119 2008-07-22 16:11:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 April 08:  V.Ivanchenko (emmuons-V09-01-10)
+G4MuBremsstrahlungModel, G4MuPairProductionModel - use CrossSectionPerVolume
+                    from the base class, do not use A in CrossSEctionPerAtom
+G4MuMscModel - do not use A in SetupTarget
 
 04 April 08:  V.Ivanchenko (emmuons-V09-01-09)
 G4MuMultipleScattering - use G4WentzelVIModel model

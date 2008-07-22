@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.20 2008-04-04 14:33:32 vnivanch Exp $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.21 2008-07-22 16:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,13 +90,7 @@ public:
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
-				 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                         const G4ParticleDefinition*,
-                               G4double kineticEnergy,
-                               G4double cutEnergy,
-                               G4double maxEnergy);
-			       
+				 			       
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
@@ -108,21 +102,19 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy);
 
-  G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
+  inline void SetLowestKineticEnergy(G4double e);
+
+protected:
+
+  G4double ComputMuBremLoss(G4double Z, G4double tkin, G4double cut);
   
   G4double ComputeMicroscopicCrossSection(G4double tkin,
 					  G4double Z,
-					  G4double A,
 					  G4double cut);
 
   virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
 						   G4double Z,
-						   G4double A,
 						   G4double gammaEnergy);
-
-  inline void SetLowestKineticEnergy(G4double e);
-
-protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kineticEnergy);

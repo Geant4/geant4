@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.38 2008-03-27 11:02:41 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.39 2008-07-22 16:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,7 +190,7 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   SetCurrentElement(Z);
   G4double loss = 0.0;
 
-  G4double cut  = min(cutEnergy,tmax);
+  G4double cut = std::min(cutEnergy,tmax);
   if(cut <= minPairEnergy) return loss;
 
   // calculate the rectricted loss
@@ -225,13 +225,10 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
                                            G4double cut)
-
 {
-  G4double cross = 0. ;
-
+  G4double cross = 0.;
   SetCurrentElement(Z);
   G4double tmax = MaxSecondaryEnergy(particle, tkin);
-
   if (tmax <= cut) return cross;
 
   G4double ak1=6.9 ;
@@ -374,43 +371,20 @@ G4double G4MuPairProductionModel::ComputeCrossSectionPerAtom(
                                                  G4double kineticEnergy,
 						 G4double Z, G4double,
                                                  G4double cutEnergy,
-                                                 G4double)
-{
-  G4double cut  = max(minPairEnergy,cutEnergy);
-  G4double cross = ComputeMicroscopicCrossSection (kineticEnergy, Z, cut);
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuPairProductionModel::CrossSectionPerVolume(
-					       const G4Material* material,
-                                               const G4ParticleDefinition*,
-                                                     G4double kineticEnergy,
-                                                     G4double cutEnergy,
-						     G4double maxEnergy)
+                                                 G4double maxEnergy)
 {
   G4double cross = 0.0;
   if (kineticEnergy <= lowestKinEnergy) return cross;
 
-  maxEnergy += particleMass;
+  SetCurrentElement(Z);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  G4double cut  = std::min(cutEnergy, kineticEnergy);
+  if(cut < minPairEnergy) cut = minPairEnergy;
+  if (cut >= tmax) return cross;
 
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->
-                                                    GetAtomicNumDensityVector();
-
-  for (size_t i=0; i<material->GetNumberOfElements(); i++) {
-    G4double Z = (*theElementVector)[i]->GetZ();
-    SetCurrentElement(Z);
-    G4double tmax = min(maxEnergy,MaxSecondaryEnergy(particle, kineticEnergy));
-    G4double cut  = max(minPairEnergy,cutEnergy);
-
-    if(cut < tmax) {
-      G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cut)
-                  - ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
-
-      cross += theAtomNumDensityVector[i] * cr;
-    }
+  cross = ComputeMicroscopicCrossSection (kineticEnergy, Z, cut);
+  if(tmax < kineticEnergy) {
+    cross -= ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
   }
   return cross;
 }

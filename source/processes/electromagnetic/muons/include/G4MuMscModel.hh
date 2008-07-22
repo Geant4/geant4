@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.13 2008-03-26 13:33:30 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.14 2008-07-22 16:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,11 +117,9 @@ private:
 
   inline void SetupKinematic(G4double kinEnergy, G4double cut);
   
-  inline void SetupTarget(G4double Z, G4double A, G4double kinEnergy);
+  inline void SetupTarget(G4double Z, G4double kinEnergy);
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
-
-  inline G4double FormFactorMev2(G4double Z, G4double A);
 
   //  hide assignment operator
   G4MuMscModel & operator=(const  G4MuMscModel &right);
@@ -200,7 +198,6 @@ private:
 
   // target
   G4double targetZ;
-  G4double targetA;
   G4double screenZ;
   G4double formfactA;
   G4double FF[100];
@@ -273,33 +270,25 @@ inline void G4MuMscModel::SetupKinematic(G4double ekin, G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline void G4MuMscModel::SetupTarget(G4double Z, G4double A, G4double e)
+inline void G4MuMscModel::SetupTarget(G4double Z, G4double e)
 {
-  if(Z != targetZ || A != targetA || e != etag) {
+  if(Z != targetZ || e != etag) {
     etag    = e; 
     targetZ = Z;
-    targetA = A;
-    G4double x = fNistManager->GetZ13(Z);
+    G4int iz = G4int(Z);
+    G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
-    formfactA = mom2*FormFactorMev2(Z, A);
+    if(iz > 99) iz = 99;
+    formfactA = FF[iz];
+    if(formfactA == 0.0) {
+      x = fNistManager->GetA27(iz); 
+      formfactA = constn*x*x;
+      FF[iz] = formfactA;
+    }
+    formfactA *= mom2;
   } 
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4double G4MuMscModel::FormFactorMev2(G4double Z, G4double A)
-{
-  // A.V. Butkevich et al., NIM A 488 (2002) 282
-  G4int iz = G4int(Z);
-  if(iz > 99) iz = 99;
-  G4double res = FF[iz];
-  if(res == 0.0) { 
-    res = constn*std::exp(0.54*fNistManager->GetLOGA(A));
-    FF[iz] = res;
-  }
-  return res;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

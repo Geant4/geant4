@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.26 2008-03-06 11:37:59 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.27 2008-07-22 16:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,12 +88,6 @@ public:
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 				 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                         const G4ParticleDefinition*,
-                               G4double kineticEnergy,
-                               G4double cutEnergy,
-                               G4double maxEnergy);
-			       
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
@@ -105,6 +99,15 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SetLowestKineticEnergy(G4double e);
+
+  inline G4double MinEnergyCut(const G4ParticleDefinition*,
+			       const G4MaterialCutsCouple*);
+
+  inline void SetParticle(const G4ParticleDefinition*);
+
+protected:
+
   G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut,
                             G4double tmax);
 
@@ -115,15 +118,6 @@ public:
   virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
 						   G4double Z,
 						   G4double pairEnergy);
-
-  inline void SetLowestKineticEnergy(G4double e);
-
-  inline G4double MinEnergyCut(const G4ParticleDefinition*,
-			       const G4MaterialCutsCouple*);
-
-  inline void SetParticle(const G4ParticleDefinition*);
-
-protected:
 
   inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				     G4double kineticEnergy);
@@ -231,9 +225,10 @@ inline void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    z13 = nist->GetZ13(Z);
+    G4int iz = G4int(Z);
+    z13 = nist->GetZ13(iz);
     z23 = z13*z13;
-    lnZ = nist->GetLOGA(Z);
+    lnZ = nist->GetLOGZ(iz);
   }
 }
 

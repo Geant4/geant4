@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.23 2008-03-26 13:33:30 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.24 2008-07-22 16:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,11 +106,10 @@ G4MuMscModel::G4MuMscModel(G4double thetaMax,
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   constn = 6.937e-6/(MeV*MeV);
-  tkin = targetZ = targetA = mom2 = DBL_MIN;
+  tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   particle = 0;
   for(size_t j=0; j<100; j++) {
-    //    index[j] = -1;
     FF[j]    = 0.0;
   } 
 }
@@ -127,7 +126,7 @@ void G4MuMscModel::Initialise(const G4ParticleDefinition* p,
 {
   SetupParticle(p);
   newrun = true;
-  tkin = targetZ = targetA = mom2 = DBL_MIN;
+  tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   xSection = currentRange = 0.0;
   // set values of some data members
@@ -152,7 +151,7 @@ void G4MuMscModel::Initialise(const G4ParticleDefinition* p,
 G4double G4MuMscModel::ComputeCrossSectionPerAtom( 
                              const G4ParticleDefinition* p,
 			     G4double kinEnergy,
-			     G4double Z, G4double A,
+			     G4double Z, G4double,
 			     G4double cutEnergy, G4double)
 {
   if(p == particle && kinEnergy == tkin && Z == targetZ &&
@@ -161,7 +160,7 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
   SetupParticle(p);
   G4double ekin = std::max(keV, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
-  SetupTarget(Z, A, ekin);
+  SetupTarget(Z, ekin);
 
   G4double x, y, x1, x2, x3, x4;
 
@@ -504,7 +503,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	    for (size_t i=0; i<nelm; i++) {
 	      if(xsecn[i] > qsec || nelm-1 == i) {
 		const G4Element* elm = (*theElementVector)[i];
-		SetupTarget(elm->GetZ(), elm->GetN(), tkin);
+		SetupTarget(elm->GetZ(), tkin);
 		formf = formfactA;
 		//G4cout << "Reserford nuc Z= " << elm->GetZ() << G4endl;
 		break;
@@ -517,7 +516,7 @@ void G4MuMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	    for (size_t i=0; i<nelm; i++) {
 	      if(xsece[i] > qsec || nelm-1 == i) {
 		const G4Element* elm = (*theElementVector)[i];
-		SetupTarget(elm->GetZ(), elm->GetN(), tkin);
+		SetupTarget(elm->GetZ(), tkin);
 		//G4cout << "Reserford elec Z= " << elm->GetZ() << G4endl;
 		break;
 	      }
@@ -636,8 +635,7 @@ G4double G4MuMscModel::ComputeXSectionPerVolume()
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ();
-    G4double A = elm->GetN();
-    SetupTarget(Z, A, tkin);
+    SetupTarget(Z, tkin);
     G4double den = fac*theAtomNumDensityVector[i]*Z;
 
     G4double x  = 1.0 - cosThetaMin;
