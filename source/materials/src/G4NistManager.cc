@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.18 2008-07-17 08:59:24 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.19 2008-07-23 14:49:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,7 @@ G4NistManager::G4NistManager()
     POWERZ13[i] = std::pow(x,1.0/3.0);
     LOGA[i] = std::log(x);
   }
-  for(G4int j=1; j<136; j++) {
+  for(G4int j=1; j<101; j++) {
     G4double A = elmBuilder->GetA(j);
     POWERA27[j] = std::pow(A,0.27);
     LOGAZ[j]    = std::log(A);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.21 2008-07-17 10:19:23 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.22 2008-07-23 14:49:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -236,8 +236,8 @@ private:
 
   G4double POWERZ13[256];
   G4double LOGA[256];
-  G4double POWERA27[136];
-  G4double LOGAZ[136];
+  G4double POWERA27[101];
+  G4double LOGAZ[101];
   
   std::vector<G4Element*>   elements;
   std::vector<G4Material*>  materials;
@@ -472,14 +472,18 @@ inline G4double G4NistManager::GetZ13(G4int Z)
 
 inline G4double G4NistManager::GetA27(G4int Z)
 {
-  return POWERA27[Z];
+  G4double res = 0.0;
+  if(Z < 101) res = POWERA27[Z]; 
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistManager::GetLOGZ(G4int Z)
 {
-  return LOGA[Z];
+  G4double res = 0.0;
+  if(Z < 256) res = LOGA[Z];
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -497,7 +501,9 @@ inline G4double G4NistManager::GetLOGA(G4double A)
 
 inline G4double G4NistManager::GetLOGA(G4int Z)
 {
-  return LOGAZ[Z];
+  G4double res = 0.0;
+  if(Z < 101) res = LOGAZ[Z]; 
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
