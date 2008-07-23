@@ -14,6 +14,17 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+23 July 2008 - Dennis Wright for Vladimir Uzhinskiy (hadr-hep-V09-01-04)
+------------------------------------------------------------------------
+ G4HEInelastic::HighEnergyCascading: fix bug in momentum sampling which 
+   caused oscillatory behavior in spectrum.
+   Replace
+     xval = Amin(1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.));
+   with 
+     xval = Amin(1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])));
+
+  G4HEInelastic::MediumEnergyCascading: same as above
+
 9 July 2008 - Dennis Wright (hadr-hep-V09-01-03)
 ------------------------------------------------
  G4HEInelastic::Factorial: replace exit with G4Exception.
