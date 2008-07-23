@@ -48,8 +48,9 @@ public:
   // constructor  
   G4PreCompoundIon(const G4double anA, 
 		   const G4double aZ, 
+		   G4VCoulombBarrier* aCoulombBarrier,
 		   const G4String & aName): 
-    G4PreCompoundFragment(anA,aZ,aName) {}
+    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
     
   virtual ~G4PreCompoundIon() {}
     

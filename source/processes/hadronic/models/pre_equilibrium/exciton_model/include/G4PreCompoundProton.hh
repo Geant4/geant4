@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.hh,v 1.9 2008-05-08 10:33:46 quesada Exp $
+// $Id: G4PreCompoundProton.hh,v 1.10 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -39,12 +39,13 @@
 #include "G4Proton.hh"
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
+#include "G4ProtonCoulombBarrier.hh"
 
 class G4PreCompoundProton : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundProton():G4PreCompoundNucleon(1,1,"Proton") {}
+  G4PreCompoundProton():G4PreCompoundNucleon(1,1,&theProtonCoulombBarrier,"Proton") {}
 
   // copy constructor
   G4PreCompoundProton(const G4PreCompoundProton &right): G4PreCompoundNucleon(right) {}
@@ -93,6 +94,10 @@ private:
   {
     return (aFragment.GetNumberOfCharged() >= 1);
   }
+private:
+
+  G4ProtonCoulombBarrier theProtonCoulombBarrier;
+
   
 };
 

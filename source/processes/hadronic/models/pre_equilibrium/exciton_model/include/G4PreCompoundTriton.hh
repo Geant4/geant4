@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTriton.hh,v 1.8 2008-05-08 10:34:00 quesada Exp $
+// $Id: G4PreCompoundTriton.hh,v 1.9 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -37,7 +37,7 @@
 #include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Triton.hh"
-
+#include "G4TritonCoulombBarrier.hh"
 
 
 
@@ -45,7 +45,7 @@ class G4PreCompoundTriton : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundTriton():G4PreCompoundIon(3,1,"Triton") {}
+  G4PreCompoundTriton():G4PreCompoundIon(3,1,&theTritonCoulombBarrier,"Triton") {}
 
   // copy constructor
   G4PreCompoundTriton(const G4PreCompoundTriton &right): G4PreCompoundIon(right) {}
@@ -106,6 +106,9 @@ private:
   {
     return 243.0/(A*A);
   }    
+private:
+
+  G4TritonCoulombBarrier theTritonCoulombBarrier;
 
 
 };

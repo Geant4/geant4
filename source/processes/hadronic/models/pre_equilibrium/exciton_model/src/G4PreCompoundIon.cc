@@ -50,11 +50,16 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
-
+//JMQ July 08, small correction (we return to gj, Aj, values for the sake of consistency) 
+  G4double gj = (6.0/pi2)*GetA() *
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
   G4double A0 = ((P*P+H*H+P-H)/4.0 - H/2.0)/g0; //JMQ fix
 
   G4double A1 = std::max(0.0,(A0*g0 + GetA()*(GetA()-2.0*P-1.0)/4.0)/g1); //JMQ fix
+
+//JMQ July 08, small correction (we return to gj, Aj, values for the sake of consistency) 
+ G4double Aj = GetA()*(GetA()+1.0)/4.0/gj; //JMQ fix
 
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
@@ -65,7 +70,7 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1)); //JMQ re-fix 
 
-  G4double Ej = std::max(0.0,eKin + GetBindingEnergy() ); //JMQ re-fix 
+  G4double Ej = std::max(0.0,eKin + GetBindingEnergy() -Aj); //JMQ re-fix 
 
 
 //JMQ combinatorial factors Rj and new cross sections have been added 
@@ -74,7 +79,8 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
 
-  G4double pC = std::pow((g1*Ej)/(g0*E0),GetA()-1.0)*(g1/g0)/E0; //JMQ fix
+//JMQ July 08, small correction (we return to gj, Aj values for the sake of consistency) 
+  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0; 
 
   G4double Probability = pA * pB * pC;
 

@@ -26,7 +26,7 @@
 //
 // by V. Lara
 //
-//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed (NOW implicitely included through cross sections). Changes in integration limits.
+//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed (NOW implicitly included through cross sections). Changes in integration limits.
  
 #include "G4PreCompoundFragment.hh"
 
@@ -39,8 +39,9 @@ G4PreCompoundFragment(const G4PreCompoundFragment &right) :
 G4PreCompoundFragment::
 G4PreCompoundFragment(const G4double anA,
 		      const G4double aZ, 
+		      G4VCoulombBarrier* aCoulombBarrier,
 		      const G4String & aName):
-  G4VPreCompoundFragment(anA,aZ,aName)
+  G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName)
 {}
 
 

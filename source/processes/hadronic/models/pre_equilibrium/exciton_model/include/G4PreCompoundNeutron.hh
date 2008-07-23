@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.9 2008-05-08 10:33:38 quesada Exp $
+// $Id: G4PreCompoundNeutron.hh,v 1.10 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -40,14 +40,14 @@
 #include "G4Neutron.hh"
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
-
+#include "G4NeutronCoulombBarrier.hh"
 
 
 class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,"Neutron") {}
+  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulombBarrier,"Neutron") {}
 
   // copy constructor
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4PreCompoundNucleon(right) {}
@@ -94,6 +94,11 @@ private:
   {
     return ((aFragment.GetNumberOfParticles()-aFragment.GetNumberOfCharged()) >= 1);  
   }
+
+private:
+
+  G4NeutronCoulombBarrier theNeutronCoulombBarrier;
+
   
 };
 

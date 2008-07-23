@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.6 2008-05-08 10:42:35 quesada Exp $
+// $Id: G4VPreCompoundFragment.cc,v 1.7 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
-//
-//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  (NOW implicitely included through cross sections)
-// because of inheritance (just in case..) by HETC classes. They are not activeted by default.
+ 
 #include "G4VPreCompoundFragment.hh"
 #include "G4PreCompoundParameters.hh"
 
@@ -60,24 +58,10 @@ G4VPreCompoundFragment(const G4double anA,
   theCoulombBarrierPtr(aCoulombBarrier),
   theBindingEnergy(0.0), theMaximalKineticEnergy(-1.0),
   theEmissionProbability(0.0), theMomentum(0.0,0.0,0.0,0.0),
-  theFragmentName(aName),theStage(0),G4Prec(false)
+  theFragmentName(aName),theStage(0)
 {}
 
-//JMQ (May 08): new  constructor to be used by new G4PrecompoundFragment class (without coulomb barrier)
 
-
-G4VPreCompoundFragment::
-G4VPreCompoundFragment(const G4double anA,
-		       const G4double aZ, 		       
-		       const G4String & aName):
-  theA(anA),theZ(aZ), 
-  theRestNucleusA(0.0),theRestNucleusZ(0.0),
-  theBindingEnergy(0.0), theMaximalKineticEnergy(-1.0),
-  theEmissionProbability(0.0), theMomentum(0.0,0.0,0.0,0.0),
-  theFragmentName(aName),theStage(0),G4Prec(true)
-{}
-
-//JMQ end of new constructor 
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
 {
@@ -164,12 +148,11 @@ Initialize(const G4Fragment & aFragment)
       return;
     }
   
- //JMQ New "if" control structure to conform  to the case when no Coumlomb barrier is considered (ours).  
-  if (!G4Prec){
+  
   // Calculate Coulomb barrier
-    theCoulombBarrier = theCoulombBarrierPtr->
+  theCoulombBarrier = theCoulombBarrierPtr->
     GetCoulombBarrier(static_cast<G4int>(theRestNucleusA),static_cast<G4int>(theRestNucleusZ),
-    aFragment.GetExcitationEnergy());}
+		      aFragment.GetExcitationEnergy());
   
   // Compute Binding Energies for fragments 
   // (needed to separate a fragment from the nucleus)
@@ -183,7 +166,6 @@ Initialize(const G4Fragment & aFragment)
   G4double rm = GetRestNuclearMass();
   G4double em = GetNuclearMass();
   theMaximalKineticEnergy = ((m - rm)*(m + rm) + em*em)/(2.0*m) - em;
-//JMQ : this (previously) commented line expresses doubts of previous coder. Trivial matter. Warning! 
   // - theCoulombBarrier;
   
   return;

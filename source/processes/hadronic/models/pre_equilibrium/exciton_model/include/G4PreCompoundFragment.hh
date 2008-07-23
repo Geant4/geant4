@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 // by V. Lara
-//
-//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed (NOW implicitely included through cross sections) 
+
 #ifndef G4PreCompoundFragment_h
 #define G4PreCompoundFragment_h 1
 
@@ -43,6 +42,7 @@ public:
     
   // constructor  
   G4PreCompoundFragment(const G4double anA, const G4double aZ,
+			G4VCoulombBarrier * aCoulombBarrier,
 			const G4String &  aName);
   
   virtual ~G4PreCompoundFragment();

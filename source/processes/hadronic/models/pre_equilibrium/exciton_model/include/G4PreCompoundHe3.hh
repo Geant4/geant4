@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundHe3.hh,v 1.8 2008-05-08 10:34:07 quesada Exp $
+// $Id: G4PreCompoundHe3.hh,v 1.9 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -37,13 +37,13 @@
 #include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4He3.hh"
-
+#include "G4He3CoulombBarrier.hh"
 
 class G4PreCompoundHe3 : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundHe3():G4PreCompoundIon(3,2,"He3") {}
+  G4PreCompoundHe3():G4PreCompoundIon(3,2,&theHe3CoulombBarrier,"He3") {}
 
   // copy constructor
   G4PreCompoundHe3(const G4PreCompoundHe3 &right): G4PreCompoundIon(right) {}
@@ -105,6 +105,9 @@ private:
     return 243.0/(A*A);
   }    
 
+private:
+
+  G4He3CoulombBarrier theHe3CoulombBarrier;
 
 };
 

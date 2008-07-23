@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundAlpha.hh,v 1.8 2008-05-08 10:34:14 quesada Exp $
+// $Id: G4PreCompoundAlpha.hh,v 1.9 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -38,13 +38,13 @@
 #include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Alpha.hh"
-
+#include "G4AlphaCoulombBarrier.hh"
 
 class G4PreCompoundAlpha : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundAlpha():G4PreCompoundIon(4,2,"Alpha") {}
+  G4PreCompoundAlpha():G4PreCompoundIon(4,2,&theAlphaCoulombBarrier,"Alpha") {}
 
   // copy constructor
   G4PreCompoundAlpha(const G4PreCompoundAlpha &right): G4PreCompoundIon(right) {}
@@ -108,7 +108,12 @@ private:
   virtual G4double CoalescenceFactor(const G4double A)
   {
     return 4096.0/(A*A*A);
-  }    
+  }  
+
+private:
+
+  G4AlphaCoulombBarrier theAlphaCoulombBarrier;
+  
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundDeuteron.hh,v 1.9 2008-05-08 10:33:53 quesada Exp $
+// $Id: G4PreCompoundDeuteron.hh,v 1.10 2008-07-23 18:25:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -38,6 +38,7 @@
 #include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Deuteron.hh"
+#include "G4DeuteronCoulombBarrier.hh"
 
 
 
@@ -45,7 +46,7 @@ class G4PreCompoundDeuteron : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundDeuteron():G4PreCompoundIon(2,1,"Deuteron") {}
+  G4PreCompoundDeuteron():G4PreCompoundIon(2,1,&theDeuteronCoulombBarrier,"Deuteron") {}
 
   // copy constructor
   G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right): G4PreCompoundIon(right) {}
@@ -104,6 +105,9 @@ private:
   {
     return 16.0/A;
   }    
+private:
+
+  G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
 
 };
 

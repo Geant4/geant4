@@ -47,10 +47,12 @@ public:
 
   // constructor  
   G4PreCompoundNucleon(const G4double anA, 
-		       const G4double aZ, 		       
-		       const G4String & aName): 
-    G4PreCompoundFragment(anA,aZ,aName) {}
-  
+		       const G4double aZ, 
+		       G4VCoulombBarrier* aCoulombBarrier,		       
+		       const G4String & aName) :
+    G4PreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {} 
+
+
   virtual ~G4PreCompoundNucleon() {}
 
   // operators  
@@ -79,7 +81,9 @@ protected:
 
   virtual G4bool IsItPossible(const G4Fragment&) = 0;   
 
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0;  
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged) = 0; 
+
+
 };
 
 #endif
