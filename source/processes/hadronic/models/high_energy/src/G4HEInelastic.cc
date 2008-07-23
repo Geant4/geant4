@@ -1163,7 +1163,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                       ran = G4UniformRand()*dndl[19];
                       while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
                       l = Imin( 19, l );
-                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
                       pv[i].setMomentumAndUpdate( xval*et );  // Set the z-momentum
                       pvEnergy = pv[i].getEnergy();
@@ -3470,7 +3470,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       ran = G4UniformRand()*dndl[19];
                       while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
                       l = Imin( 19, l );
-                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
                       pv[i].setMomentumAndUpdate( xval*et );   // set the z-momentum
                       pvEnergy = pv[i].getEnergy();

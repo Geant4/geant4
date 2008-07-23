@@ -551,7 +551,7 @@
           l = 1;
           while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
           l = std::min( 19, l );
-          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
           if( vec[i]->GetSide() < 0 )x *= -1.;
           vec[i]->SetMomentum( x*et*GeV );              // set the z-momentum
           totalEnergy = std::sqrt( x*et*x*et + pt*pt + vecMass*vecMass );
@@ -735,7 +735,7 @@
     l = 1;
     while( (ran>dndl[l]) && (l<20) )l++;
     l = std::min( 19, l );
-    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );   
+    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
     currentParticle.SetMomentum( x*et*GeV );                 // set the z-momentum
     if( forwardEnergy < forwardKinetic )
       totalEnergy = vecMass + 0.04*std::fabs(normal());
@@ -803,7 +803,7 @@
           ran = G4UniformRand()*dndl[19];
           while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
           l = std::min( 19, l );
-          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
           if( targetParticle.GetSide() < 0 )x *= -1.;
           targetParticle.SetMomentum( x*et*GeV );                // set the z-momentum
           totalEnergy = std::sqrt( x*et*x*et + pt*pt + vecMass*vecMass );
