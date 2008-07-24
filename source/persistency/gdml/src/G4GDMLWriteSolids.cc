@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.52 2008-07-22 14:13:04 tnikitin Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.53 2008-07-24 10:19:42 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -614,14 +614,15 @@ TwistedtrapWrite(xercesc::DOMElement* solidsElement,
                        2.0*twistedtrap->GetZHalfLength()/mm));
    twistedtrapElement->setAttributeNode(NewAttribute("Alph",
                        twistedtrap->GetTiltAngleAlpha()/degree));
-   twistedtrapElement->setAttributeNode(NewAttribute("theta",
+   twistedtrapElement->setAttributeNode(NewAttribute("Theta",
                        twistedtrap->GetPolarAngleTheta()/degree));
-   twistedtrapElement->setAttributeNode(NewAttribute("phi",
+   twistedtrapElement->setAttributeNode(NewAttribute("Phi",
                        twistedtrap->GetAzimuthalAnglePhi()/degree));
    twistedtrapElement->setAttributeNode(NewAttribute("PhiTwist",
                        twistedtrap->GetPhiTwist()/degree));
    twistedtrapElement->setAttributeNode(NewAttribute("aunit","deg"));
    twistedtrapElement->setAttributeNode(NewAttribute("lunit","mm"));
+   
    solidsElement->appendChild(twistedtrapElement);
 }
 

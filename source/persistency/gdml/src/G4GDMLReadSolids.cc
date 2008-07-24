@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.18 2008-07-22 13:23:01 tnikitin Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.19 2008-07-24 10:19:06 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1208,8 +1208,8 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
    G4double aunit = 1.0;
    G4double PhiTwist = 0.0;
    G4double z = 0.0;
-   G4double theta = 0.0;
-   G4double phi = 0.0;
+   G4double Theta = 0.0;
+   G4double Phi = 0.0;
    G4double y1 = 0.0;
    G4double x1 = 0.0;
    G4double x2 = 0.0;
@@ -1240,8 +1240,8 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
       if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="PhiTwist") { PhiTwist = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
-      if (attName=="theta") { theta = eval.Evaluate(attValue); } else
-      if (attName=="phi") { phi = eval.Evaluate(attValue); } else
+      if (attName=="Theta") { Theta = eval.Evaluate(attValue); } else
+      if (attName=="Phi") { Phi = eval.Evaluate(attValue); } else
       if (attName=="y1") { y1 = eval.Evaluate(attValue); } else
       if (attName=="x1") { x1 = eval.Evaluate(attValue); } else
       if (attName=="x2") { x2 = eval.Evaluate(attValue); } else
@@ -1251,10 +1251,12 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
       if (attName=="Alph") { Alph = eval.Evaluate(attValue); }
    }
 
+
    PhiTwist *= aunit;
    z *= 0.5*lunit;
-   theta *= aunit;
-   phi *= aunit;
+   Theta *= aunit;
+   Phi *= aunit;
+   Alph *= aunit;
    y1 *= 0.5*lunit;
    x1 *= 0.5*lunit;
    x2 *= 0.5*lunit;
@@ -1262,7 +1264,7 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
    x3 *= 0.5*lunit;
    x4 *= 0.5*lunit;
 
-   new G4TwistedTrap(name,PhiTwist,z,theta,phi,y1,x1,x2,y2,x3,x4,Alph);
+   new G4TwistedTrap(name,PhiTwist,z,Theta,Phi,y1,x1,x2,y2,x3,x4,Alph);
 }
 
 void G4GDMLReadSolids::

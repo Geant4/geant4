@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2008-07-23 09:40:23 tnikitin Exp $
+$Id: History,v 1.83 2008-07-24 10:18:43 tnikitin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24 July 2008 Tatiana Nikitina
+- Fixes in Reading/Writing G4TwistedTrap
+ 
 22 July 2008 Tatiana Nikitina
 - Add G4Paraboloid to list of readed/writed Solids
 
