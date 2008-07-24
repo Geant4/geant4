@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.4 2008-03-25 09:03:16 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.5 2008-07-24 10:34:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,7 +105,7 @@ public:
 
 private:
 
-  G4double SimpleScattering(G4double xmeanth, G4double tau);
+  G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
 
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
 
@@ -142,6 +142,7 @@ private:
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
+  G4double tgeom;
 
   G4double geombig;
   G4double geommin;
@@ -161,10 +162,12 @@ private:
 
   G4double currentKinEnergy;
   G4double currentRange; 
+  G4double rangeinit;
   G4double currentRadLength;
 
-  G4double Zeff;
+  G4double Zeff,z43,y;
   G4double theta0max,rellossmax;
+  G4double third;
 
   G4int    currentMaterialIndex;
 

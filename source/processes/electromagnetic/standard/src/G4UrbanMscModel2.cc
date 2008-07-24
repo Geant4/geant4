@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.5 2008-03-25 09:03:17 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.6 2008-07-24 10:34:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,9 @@
 // 24-03-08  Step limitation in ComputeTruePathLengthLimit has been
 //           simplified further + some data members have been removed (L.Urban)
 //
+// 24-07-08  central part of scattering angle (theta0) has been tuned
+//           tail of the scattering angle distribution has been tuned
+//           using some e- and proton scattering data
 
 
 // Class Description:
@@ -69,8 +72,8 @@
 // H.W.Lewis Phys Rev 78 (1950) 526 and others
 
 // -------------------------------------------------------------------
-// In its present form the model should be used for simulation 
-//   of the e-/e+ multiple scattering
+// In its present form the model can be  used for simulation 
+//   of the e-/e+, muon and charged hadron multiple scattering
 //
 
 
@@ -104,20 +107,24 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   stepmin       = tlimitminfix;
   smallstep     = 1.e10;
   currentRange  = 0. ;
+  rangeinit     = 0.;
   tlimit        = 1.e10*mm;
   tlimitmin     = 10.*tlimitminfix;            
+  tgeom         = 1.e50*mm;
   geombig       = 1.e50*mm;
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
   Zeff          = 1.;
+  z43           = 1.;
+  y             = 0.;
   theta0max     = pi/6.;
   rellossmax    = 0.50;
+  third         = 1./3.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -456,9 +463,9 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       smallstep += 1.;
       insideskin = false;
 
-      G4double tgeom = geombig; 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
 	{
+          rangeinit = currentRange;
 	  if(stepNumber == 1) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
@@ -470,22 +477,25 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 	      else
 	        tgeom = 2.*geomlimit/facgeom;
 	    }
+
+          //define stepmin here (it depends on lambda!)
+          //rough estimation of lambda_elastic/lambda_transport
+          G4double rat = currentKinEnergy/MeV ;
+          rat = 1.e-3/(rat*(10.+rat)) ;
+          //stepmin ~ lambda_elastic
+          stepmin = rat*lambda0;
+          skindepth = skin*stepmin;
+
+          //define tlimitmin
+          tlimitmin = 10.*stepmin;
+          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+
         }
 
-      //define stepmin here (it depends on lambda!)
-      //rough estimation of lambda_elastic/lambda_transport
-      G4double rat = currentKinEnergy/MeV ;
-      rat = 1.e-3/(rat*(10.+rat)) ;
-      //stepmin ~ lambda_elastic
-      stepmin = rat*lambda0;
-      skindepth = skin*stepmin;
-
-      //define tlimitmin
-      tlimitmin = 10.*stepmin;
-      if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
 
       //step limit 
-      tlimit = facrange*currentRange ;
+    //tlimit = facrange*currentRange ;
+      tlimit = facrange*rangeinit;              
       if(tlimit < facsafety*presafety)
         tlimit = facsafety*presafety; 
 
@@ -541,14 +551,18 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
           return tPathLength;  
         }
 
-      //lower limit for tlimit
-      G4double rat = currentKinEnergy/MeV ;
-      rat = 1.e-3/(rat*(10.+rat)) ;
-      tlimitmin = 10.*lambda0*rat;
-      if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
-    
+      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      {
+        rangeinit = currentRange;
+
+        //lower limit for tlimit
+        G4double rat = currentKinEnergy/MeV ;
+        rat = 1.e-3/(rat*(10.+rat)) ;
+        tlimitmin = 10.*lambda0*rat;
+        if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+      }
       //step limit
-      tlimit = facrange*currentRange ;
+      tlimit = facrange*rangeinit;               
       if(tlimit < facsafety*presafety)
         tlimit = facsafety*presafety;
 
@@ -652,13 +666,13 @@ G4double G4UrbanMscModel2::ComputeGeomPathLength(G4double)
   //  sample z
   if(samplez)
   {
-    const G4double  ztmax = 0.99, onethird = 1./3. ;
+    const G4double  ztmax = 0.99 ;
     G4double zt = zmean/tPathLength ;
 
     if (tPathLength > stepmin && zt < ztmax)              
     {
       G4double u,cz1;
-      if(zt >= onethird)
+      if(zt >= third)
       {
         G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
         cz1 = 1.+cz ;
@@ -726,12 +740,13 @@ G4double G4UrbanMscModel2::ComputeTheta0(G4double trueStepLength,
   G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-  G4double y = trueStepLength/currentRadLength;
+  y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
   y = log(y);
-  // corr. factor tuned from 2.25 MeV e- scattering data
-  theta0 *= 1.+(3.93e-2+1.69e-4*Zeff)*y;
-   
+  z43 = exp(4.*log(Zeff)/3.);
+  // correction factor from e-/proton scattering data
+  theta0 *= (1.020-0.13/z43)+(0.050-0.020/z43)*y;
+
   return theta0;
 }
 
@@ -890,15 +905,18 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
-      G4double b=2.,bp1=3.,bm1=1.,ebp1=3.,ebm1=1.;
-      G4double prob = 0. ;
+      G4double xsi = 3.0;  
+      G4double x0 = 1.;
       G4double a = 1., ea = 0., eaa = 1.;
+      G4double b=2.,b1=3.,bx=1.,eb1=3.,ebx=1.;
+      G4double prob = 1. , qprob = 1. ;
       G4double xmean1 = 1., xmean2 = 0.;
       G4double xmeanth = exp(-tau);
+      G4double x2meanth = (1.+2.*exp(-2.5*tau))/3.;
 
       G4double relloss = 1.-KineticEnergy/currentKinEnergy;
       if(relloss > rellossmax) 
-        return SimpleScattering(xmeanth,tau);
+        return SimpleScattering(xmeanth,x2meanth);
 
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
@@ -906,45 +924,53 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       if(theta0 < tausmall) return cth;
     
       if(theta0 > theta0max)
-        return SimpleScattering(xmeanth,tau);
-
+        return SimpleScattering(xmeanth,x2meanth);
       G4double sth = sin(0.5*theta0);
       a = 0.25/(sth*sth);
 
-      ea = exp(-2.*a);
+      ea = exp(-xsi);
       eaa = 1.-ea ;
-      xmean1 = (1.+ea)/eaa-1./a;
+      xmean1 = 1.-(1.-(1.+xsi)*ea)/(a*eaa);
+      x0 = 1.-xsi/a;
 
-      if(xmean1 <= xmeanth)
-        return SimpleScattering(xmeanth,tau);
+      if(xmean1 <= 0.999*xmeanth)
+        return SimpleScattering(xmeanth,x2meanth);
 
-      // from 15.7 MeV e- in 9.6 um Au + 2.25 MeV e- in 98.5 um Al
-      G4double y = log(trueStepLength/currentRadLength);
-      if(y < -13.) y = -13.;
-      if(y > 0.)   y = 0.;
-      G4double c = 2.95+6.06e-4*Zeff+
-                   y*(0.146+1.52e-4*Zeff+0.0061*y) ;
-      if(abs(c-2.) < taulim) c = 2.+taulim;
+      // from e-/proton scattering data                                     
+      G4double c = (1.82+0.18/z43);
+      if(y > -15.) c += (0.0025+0.0020/z43)*(y+15.)*(y+15.) ; 
+
+      if(abs(c-3.) < 0.001)  c = 3.001;      
+      if(abs(c-2.) < 0.001)  c = 2.001;      
 
       G4double c1 = c-1.;
 
-      b = 1./xmeanth ;
-      bp1 = b+1.;
-      bm1 = b-1.;
-      ebp1 = exp(c1*log(bp1));
-      ebm1 = exp(c1*log(bm1));
+      //from continuity of derivatives
+      b = 1.+(c-xsi)/a;
 
-      xmean2 = (ebp1*(c1-b)+ebm1*(c1+b))/((c-2.)*(ebp1-ebm1));
+      b1 = b+1.;
+      bx = b-x0;
+      eb1 = exp(c1*log(b1));
+      ebx = exp(c1*log(bx));
 
-      prob = (xmeanth-xmean2)/(xmean1-xmean2);
+      xmean2 = (x0*eb1+ebx-(eb1*bx-b1*ebx)/(c-2.))/(eb1-ebx);
+      
+      G4double f1x0 = a*ea/eaa;
+      G4double f2x0 = c1*eb1/(bx*(eb1-ebx));
+      prob = f2x0/(f1x0+f2x0);
 
-      if(abs(prob) < 1.e-6) prob = 0.;
+      qprob = xmeanth/(prob*xmean1+(1.-prob)*xmean2);
 
       // sampling of costheta
-      if(G4UniformRand() < prob)
-        cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+      if(G4UniformRand() < qprob)
+      {
+        if(G4UniformRand() < prob)
+          cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+        else
+          cth = b-b1*bx/exp(log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
+      }
       else
-        cth = b-bp1*bm1/exp(log(ebm1+(ebp1-ebm1)*G4UniformRand())/c1) ;
+        cth = -1.+2.*G4UniformRand();
     }
   }  
   return cth ;
@@ -952,11 +978,10 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel2::SimpleScattering(G4double xmeanth,G4double tau)
+G4double G4UrbanMscModel2::SimpleScattering(G4double xmeanth,G4double x2meanth)
 {
   // 'large angle scattering'
   // 2 model functions with correct xmean and x2mean
-  G4double x2meanth = (1.+2.*exp(-2.5*tau))/3.;
   G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
   G4double prob = (a+2.)*xmeanth/a;
 
