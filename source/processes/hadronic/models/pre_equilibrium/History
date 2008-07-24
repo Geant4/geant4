@@ -13,11 +13,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-24 July 2008 J. M. Quesada   hadr-pre-V09-01-07
+
+24 July 2008 J. M. Quesada   hadr-pre-V09-01-08
 ---------------------------------------------------
 Minor fixes and Coulomb barrier just for Wellisch's proton cross section 
 (OPT=2) 
 
+
+23 July 2008 V.Ivanchenko    hadr-pre-V09-01-07
+---------------------------------------------------
+Fixed mistake in tagging
 
 23 July 2008 V.Ivanchenko    hadr-pre-V09-01-06
 ---------------------------------------------------
