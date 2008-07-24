@@ -14,10 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 July 2008 V.Ivanchenko (hadr-deex-V09-01-11)
+---------------------------------------------------
+G4EvaporationProbability - Coulomb barrier upgraded (J. M. Quesada)
+
 12 July 2008 V.Ivanchenko (hadr-deex-V09-01-10)
 ---------------------------------------------------
 Integraded fixes in G4EvaporationProbabilities and the tag hadr-deex-V09-01-08,
-OPT=2 is set
+OPT=2 is set (J. M. Quesada)
 
 05 June 2008 A.Howard (hadr-deex-V09-01-09)
 ---------------------------------------------------
