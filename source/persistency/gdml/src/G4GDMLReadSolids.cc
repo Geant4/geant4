@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.19 2008-07-24 10:19:06 tnikitin Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.20 2008-07-24 16:02:36 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -78,8 +78,16 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
       if (tag=="second") { second = RefRead(child); } else
       if (tag=="position") { VectorRead(child,position); } else
       if (tag=="rotation") { VectorRead(child,rotation); } else
+      if (tag=="positionref")
+        { position = GetPosition(GenerateName(RefRead(child))); } else
+      if (tag=="rotationref")
+        { rotation = GetRotation(GenerateName(RefRead(child))); } else
       if (tag=="firstposition") { VectorRead(child,firstposition); } else
-      if (tag=="firstrotation") { VectorRead(child,firstrotation); }
+      if (tag=="firstrotation") { VectorRead(child,firstrotation); } else
+      if (tag=="firstpositionref")
+        { firstposition = GetPosition(GenerateName(RefRead(child))); } else
+      if (tag=="firstrotationref")
+        { firstrotation = GetRotation(GenerateName(RefRead(child))); } 
       else
       {
         G4String error_msg = "Unknown tag in boolean solid: " + tag;
