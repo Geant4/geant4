@@ -1,4 +1,4 @@
-$Id: History,v 1.395 2008-07-22 16:07:05 vnivanch Exp $
+$Id: History,v 1.396 2008-07-24 13:44:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 July 08: V.Ivant (emstand-V09-01-21)
+G4UrbanMscModel2 - central part of scattering angle (theta0) and
+           tail of the scattering angle distribution have been tuned
+           using some e- and proton scattering data (L.Urban)
 
 21 July 08: V.Ivant (emstand-V09-01-20)
 G4eCoulombScatteringModel, G4CoulombScatteringModel  - added usage of 
