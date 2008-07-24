@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.16 2008-05-08 11:25:07 quesada Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.17 2008-07-24 13:52:42 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -77,9 +77,10 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double Z = static_cast<G4double>(aFragment.GetZ());
   G4double U = aFragment.GetExcitationEnergy();
 
+
 //J. M. Quesada (Feb. 08) new physics
 // OPT=1 Transitions are calculated according to Gudima's paper (original in G4PreCompound from VL) 
-// OPT=2 Transitions are calculated according to Machner's formulae
+// OPT=2 Transitions are calculated according to Gupta's formulae
 //
 // default OPT=2
         G4int OPT=2;
@@ -147,8 +148,7 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
 
   G4bool NeverGoBack(false);
-//JMQ 07/05/08 checking the stallment in test30_07-05-08-TARDE-4
-//  G4bool NeverGoBack(true);
+
 
   //JMQ/AH  bug fixed: if (U-Fph < 0.0) NeverGoBack = true;
   if (GE-Fph < 0.0) NeverGoBack = true;
@@ -174,6 +174,7 @@ CalculateProbability(const G4Fragment & aFragment)
       TransitionProb3 = TransitionProb1* ((N+1.0)/N) * ProbFactor  * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
       if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
     }
+
 //  G4cout<<"U = "<<U<<G4endl;
 //  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
 //  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
@@ -189,6 +190,7 @@ G4double Kmfp=2.;
 
        TransitionProb1=1./Kmfp*3./8.*1./c_light*std::pow(10.,-9.)*(1.4 *std::pow(10.,21.)*U-2./(N+1)*6.*std::pow(10.,18.)* std::pow(U,2.));
      if (TransitionProb1 < 0.0) TransitionProb1 = 0.0;
+
   
       if (N<=1) TransitionProb2=0. ;
      else  TransitionProb2=1./Kmfp*3./8.*1./c_light*std::pow(10.,-9.)*(N-1.)*(N-2.)*P*H/

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.7 2008-07-23 18:25:17 vnivanch Exp $
+// $Id: G4VPreCompoundFragment.cc,v 1.8 2008-07-24 13:52:42 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -153,7 +153,7 @@ Initialize(const G4Fragment & aFragment)
   theCoulombBarrier = theCoulombBarrierPtr->
     GetCoulombBarrier(static_cast<G4int>(theRestNucleusA),static_cast<G4int>(theRestNucleusZ),
 		      aFragment.GetExcitationEnergy());
-  
+
   // Compute Binding Energies for fragments 
   // (needed to separate a fragment from the nucleus)
   

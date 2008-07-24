@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundAlpha.hh,v 1.9 2008-07-23 18:25:17 vnivanch Exp $
+// $Id: G4PreCompoundAlpha.hh,v 1.10 2008-07-24 13:53:32 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
-//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed Coulomb barrier , GetAlpha and GetBeta methods
+//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed  GetAlpha and GetBeta methods
 
 
 #ifndef G4PreCompoundAlpha_h

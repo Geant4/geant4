@@ -26,7 +26,7 @@
 //
 // by V. Lara
 //
-//J. M. Quesada (Apr. 2008) . Explicit inclusion of Coulomb barrier has been removed (NOW implicitly included through cross sections). Changes in integration limits.
+//J. M. Quesada (Apr. 2008) . Changes in integration limits.
  
 #include "G4PreCompoundFragment.hh"
 
@@ -77,7 +77,10 @@ if (GetMaximalKineticEnergy() <= 0.0)
       theEmissionProbability = 0.0;
       return 0.0;
   }    
-
+  // Coulomb barrier is the lower limit 
+  // of integration over kinetic energy
+//  G4double LowerLimit = theCoulombBarrier;
+// JMQ:  not anymore; theCoulombBarrier effect is included in the emission probabilities
   G4double LowerLimit = 0.;
 // Excitation energy of nucleus after fragment emission is the upper limit of integration over kinetic energy
   G4double UpperLimit = this->GetMaximalKineticEnergy();

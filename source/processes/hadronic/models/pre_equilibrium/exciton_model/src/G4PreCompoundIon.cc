@@ -50,6 +50,7 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
+
 //JMQ July 08, small correction (we return to gj, Aj, values for the sake of consistency) 
   G4double gj = (6.0/pi2)*GetA() *
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
@@ -61,8 +62,10 @@ ProbabilityDistributionFunction(const G4double eKin,
 //JMQ July 08, small correction (we return to gj, Aj, values for the sake of consistency) 
  G4double Aj = GetA()*(GetA()+1.0)/4.0/gj; //JMQ fix
 
+
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
+
 
 //JMQ June 08, coulomb cutoff included in xs (only needed for OPT=2 & OPT=4)
 //  if (eKin<theCoulombBarrier) return 0.0;
@@ -77,10 +80,13 @@ ProbabilityDistributionFunction(const G4double eKin,
  G4double pA = std::pow(10.,-25.)*(3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
 (eKin+GetBindingEnergy()))))/(pi * r0 * r0 * std::pow(GetRestA(),2.0/3.0) )* eKin*CrossSection(eKin) /(r0*std::pow(GetRestA(),1.0/3.0)) * CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  ;
 
+
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
+
 
 //JMQ July 08, small correction (we return to gj, Aj values for the sake of consistency) 
   G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0; 
+
 
   G4double Probability = pA * pB * pC;
 
@@ -117,9 +123,6 @@ G4double Kc=K;
 
  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,p, p0, p1, p2, Ec,delta,q,r,ji,xs;
 //G4double Eo(0),epsilon1(0),epsilon2(0),discri(0);
-
-       //JMQ (June 08) Coulomb cutoff
-         if(K<=theCoulombBarrier) return xs=0.0; 
 
  if (theA==2 && theZ==1) {
        p0 = -38.21;
@@ -223,8 +226,7 @@ G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,p, p0, p1, p2, si
 G4double flow,spill,ec,ecsq,xnulam,etest,ra,a,w,c; 
 G4double b,ecut,cut,ecut2,geom,elab;
 
-       //JMQ (June 08) Coulomb cutoff
-//         if(K<=theCoulombBarrier) return sig=0.0; 
+
 
 //safety initialization
 landa0=0;

@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.hh,v 1.6 2008-05-08 10:34:47 quesada Exp $
+// $Id: G4VPreCompoundFragment.hh,v 1.7 2008-07-24 13:53:32 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
-//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  (NOW implicitely included through cross sections)
-// because of inheritance (just in case..) by HETC classes. They are not activeted by default.
+//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  
+
 
 #ifndef G4VPreCompoundFragment_h
 #define G4VPreCompoundFragment_h 1
@@ -63,9 +63,11 @@ public:
 			 G4VCoulombBarrier * aCoulombBarrier,
 			 const G4String &  aName);
 
+
 //JMQ (May 08): new  constructor to be used by new G4PrecompoundFragment class (without coulomb barrier)
- G4VPreCompoundFragment(const G4double anA, const G4double aZ,
-			 const G4String &  aName);
+// G4VPreCompoundFragment(const G4double anA, const G4double aZ, const G4String &  aName);
+
+
   
   virtual ~G4VPreCompoundFragment();
   

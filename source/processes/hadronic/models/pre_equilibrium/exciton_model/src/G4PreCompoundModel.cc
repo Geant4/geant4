@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.14 2008-05-15 16:08:22 quesada Exp $
+// $Id: G4PreCompoundModel.cc,v 1.15 2008-07-24 13:52:42 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara

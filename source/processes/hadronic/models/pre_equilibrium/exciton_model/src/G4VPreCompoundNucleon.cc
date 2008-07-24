@@ -24,12 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.cc,v 1.7 2008-05-08 10:41:38 quesada Exp $
+
+// $Id: G4VPreCompoundNucleon.cc,v 1.8 2008-07-24 13:52:42 quesada Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 // by V. Lara
 //
-//J.M. Quesada (Apr. 2008) DUMMY abstract base class for nucleons. Coulomb barrier not needed anymore.
+//J.M. Quesada (Apr. 2008) DUMMY abstract base class for nucleons.
 // it is not ihherited by anything
+// Suppressed
 
 

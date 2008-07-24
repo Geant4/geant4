@@ -147,9 +147,6 @@ if (xs <= 0.0 ){
 G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
 G4double p, p0, p1, p2,Ec,delta,q,r,ji;
 //G4double Eo,epsilon1,epsilon2,discri;
-
-        //JMQ (June 08) Coulomb cutoff
-         if(K<=theCoulombBarrier) return xs=0.0; 
   
        p0 = 15.72;
       p1 = 9.65;
@@ -201,7 +198,7 @@ G4double p, p0, p1, p2,Ec,delta,q,r,ji;
 
 G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0),athrdT;
  
-       //JMQ June 08 Coulomb cutoff
+       //JMQ June 08 Coulomb cutoff for OPT=2
 //       if(K<= 1.44*theZ*ResidualZ/(1.5*athrd)) return xine_th=0.0;
          if(K<=theCoulombBarrier) return xine_th=0.0;
 
@@ -465,6 +462,7 @@ std::ostringstream errOs;
 return 0.;
 }
 }
+
 
 
 
