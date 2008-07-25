@@ -16,7 +16,7 @@ code and to keep track of all tags.
 
 25 July 2008 V.Ivanchenko (hadr-deex-V09-01-12)
 ---------------------------------------------------
-Multi-Fragmentation model have been fixed by I.Pshenikov:
+Multi-Fragmentation model have been fixed by I.Pshenichnov:
 G4StatMFMacroMultiplicity - additional checks in solver of equation
                             for the chemical potential
 G4StatMFMacroCanonical - fixed infinite loop for a fagment with Z=A;
