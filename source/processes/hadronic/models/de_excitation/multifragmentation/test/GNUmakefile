@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2003-10-21 14:12:16 lara Exp $
+# $Id: GNUmakefile,v 1.2 2008-07-25 11:43:17 vnivanch Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -13,7 +13,16 @@ endif
 
 G4EXEC_BUILD = true
 
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += -DG4ANALYSIS_USE_ROOT
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
+
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+  LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
