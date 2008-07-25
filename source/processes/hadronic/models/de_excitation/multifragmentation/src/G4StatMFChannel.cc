@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.7 2008-03-21 22:46:41 dennis Exp $
+// $Id: G4StatMFChannel.cc,v 1.8 2008-07-25 11:20:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -91,7 +91,7 @@ G4bool G4StatMFChannel::CheckFragments(void)
       {
 	G4int A = static_cast<G4int>((*i)->GetA());
 	G4int Z = static_cast<G4int>((*i)->GetZ());
-	if ( (A > 1 && (Z >= A || Z <= 0)) || (A==1 && Z > A) || A <= 0 ) return false;
+       	if (A > 1 && (Z > A || Z <= 0) || (A==1 && Z > A) || A <= 0) return false;
     }
     
     return true;
@@ -223,7 +223,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 		    G4ThreeVector FragToFragVector = (*i)->GetPosition() - (*j)->GetPosition();
 		    G4double Rmin = R0*(std::pow((*i)->GetA(),1./3.) +
 					std::pow((*j)->GetA(),1./3));
-		    if ( (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) ) break;
+		    if (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) break;
 		  }
 		counter++;
 	      } while (ThereAreOverlaps && counter < 1000);
@@ -314,15 +314,19 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	G4double CTM12 = H*(1.0 - 2.0*_theFragments[i2]->GetNuclearMass()*AvailableE/p.mag2());
 	G4double CosTheta1;
 	G4double Sign;
-	do 
-	  {
-	    do 
-	      {
-		CosTheta1 = 1.0 - 2.0*G4UniformRand();
-	      } 
-	    while (CosTheta1*CosTheta1 < CTM12);
-	  }
-	while (CTM12 >= 0.0 && CosTheta1 < 0.0);
+
+        if (CTM12 > 0.9999) {CosTheta1 = 1.;} 
+        else {
+	 do 
+	   {
+	     do 
+	       {
+		 CosTheta1 = 1.0 - 2.0*G4UniformRand();
+	       } 
+	     while (CosTheta1*CosTheta1 < CTM12);
+	   }
+          while (CTM12 >= 0.0 && CosTheta1 < 0.0);
+	}
 
 	if (CTM12 < 0.0) Sign = 1.0;
 	else if (G4UniformRand() <= 0.5) Sign = -1.0;

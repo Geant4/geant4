@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMultiFragmentation.cc,v 1.5 2006-06-29 20:25:35 gunter Exp $
+// $Id: G4VMultiFragmentation.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

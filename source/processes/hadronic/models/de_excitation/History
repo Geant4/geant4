@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 July 2008 V.Ivanchenko (hadr-deex-V09-01-12)
+---------------------------------------------------
+Multi-Fragmentation model have been fixed by I.Pshenikov:
+G4StatMFMacroMultiplicity - additional checks in solver of equation
+                            for the chemical potential
+G4StatMFMacroCanonical - fixed infinite loop for a fagment with Z=A;
+                         fixed memory leak
+G4StatMFChannel - fixed semi-infine loop
+G4StatMFMacroMultiNucleon - fixed computation of the symmetry energy
+
 24 July 2008 V.Ivanchenko (hadr-deex-V09-01-11)
 ---------------------------------------------------
 G4EvaporationProbability - Coulomb barrier upgraded (J. M. Quesada)

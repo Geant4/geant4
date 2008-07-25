@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Solver.cc,v 1.3 2006-06-29 20:24:41 gunter Exp $
+// $Id: G4Solver.cc,v 1.4 2008-07-25 11:20:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.5 2006-06-29 20:25:06 gunter Exp $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -127,7 +127,7 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
     G4double EVol = static_cast<G4double>(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
 	
     // Symmetry term
-//	G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio * theZARatio);
+    G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio) * (1. - 2.* theZARatio);
 	
     // Surface term
     G4double ESurf = A23*(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T));
@@ -138,8 +138,8 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
     // Translational term
     G4double ETrans = (3./2.)*T;
 	
-	
-    return _Energy = EVol + ESurf + ECoul + ETrans; // + ESym; 
+       
+    return _Energy = EVol + ESurf + ECoul + ETrans + ESym;
 }
 
 
