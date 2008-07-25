@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.15 2008-05-15 11:48:09 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.16 2008-07-25 16:23:07 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,17 +61,21 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // General constructor 
 
+  G4String errorDescription = "InvalidSetup in \"";
+  errorDescription += pName;
+  errorDescription += "\"";
+
   // First check input parameters
 
   if ( fNv < 3 ) {
     G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+      "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
       FatalException, "Number of polygon vertices < 3");
   }
      
   if ( fNz < 2 ) {
     G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+      "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
       FatalException, "Number of z-sides < 2");
   }
      
@@ -80,14 +84,14 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
     if ( zsections[i].fZ > zsections[i+1].fZ ) 
     {
       G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+        "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections have to be ordered by z value (z0 < z1 < z2 ...)");
     }
-    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
     {
       G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+        "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections with the same z position are not supported.");
     }
@@ -105,7 +109,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Making facets failed.");
   }
   fIsConvex = IsConvex();
@@ -133,11 +137,15 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // Special constructor for solid with 2 z-sections
 
+  G4String errorDescription = "InvalidSetup in \"";
+  errorDescription += pName;
+  errorDescription += "\"";
+
   // First check input parameters
   //
   if ( fNv < 3 )
   {
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Number of polygon vertices < 3");
   }
      
@@ -153,7 +161,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
                 FatalException, "Making facets failed.");
   }
   fIsConvex = IsConvex();
@@ -264,11 +272,11 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
 
   if ( l1.x() == l2.x() )
   {
-    return std::fabs(p.x() - l1.x()) < kCarTolerance; 
+    return std::fabs(p.x() - l1.x()) < kCarTolerance * 0.5; 
   }
 
   return std::fabs (p.y() - l1.y() - ((l2.y() - l1.y())/(l2.x() - l1.x()))
-                                    *(p.x() - l1.x())) < kCarTolerance;
+                                    *(p.x() - l1.x())) < kCarTolerance * 0.5;
  }
 
 //_____________________________________________________________________________
@@ -279,10 +287,10 @@ G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,
   // Return true if p is on the line through l1, l2 and lies between
   // l1 and l2 
 
-  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance || 
-       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance ||
-       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance|| 
-       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance )
+  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance * 0.5 || 
+       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance * 0.5 ||
+       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5|| 
+       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance * 0.5 )
   {
     return false;
   }
@@ -308,7 +316,8 @@ G4bool G4ExtrudedSolid::IsSameSide(G4TwoVector p1, G4TwoVector p2,
 G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
                                       G4TwoVector c, G4TwoVector p) const
 {
-  // Return true if p is inside of triangle abc, else returns false 
+  // Return true if p is inside of triangle abc or on its edges, 
+  // else returns false 
 
   // Check extent first
   //
@@ -317,9 +326,17 @@ G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
        ( p.y() < a.y() && p.y() < b.y() && p.y() < c.y() ) || 
        ( p.y() > a.y() && p.y() > b.y() && p.y() > c.y() ) ) return false;
   
-  return   IsSameSide(p, a, b, c)
-        && IsSameSide(p, b, a, c)
-        && IsSameSide(p, c, a, b);
+  G4bool inside 
+    = IsSameSide(p, a, b, c)
+      && IsSameSide(p, b, a, c)
+      && IsSameSide(p, c, a, b);
+
+  G4bool onEdge
+    = IsSameLineSegment(p, a, b)
+      || IsSameLineSegment(p, b, c)
+      || IsSameLineSegment(p, c, a);
+      
+  return inside || onEdge;    
 }     
 
 //_____________________________________________________________________________
@@ -448,6 +465,11 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       c2 = c3;
       ++c3; 
       if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
+
+      // G4cout << "Looking at triangle : "
+      //        << c1->second << "  " << c2->second
+      //        << "  " << c3->second << G4endl;  
+
     }
 
     G4bool good = true;
@@ -622,12 +644,12 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
 
   // Check first if outside extent
   //
-  if ( p.x() < GetMinXExtent() - kCarTolerance ||
-       p.x() > GetMaxXExtent() + kCarTolerance ||
-       p.y() < GetMinYExtent() - kCarTolerance ||
-       p.y() > GetMaxYExtent() + kCarTolerance ||
-       p.z() < GetMinZExtent() - kCarTolerance ||
-       p.z() > GetMaxZExtent() + kCarTolerance )
+  if ( p.x() < GetMinXExtent() - kCarTolerance * 0.5 ||
+       p.x() > GetMaxXExtent() + kCarTolerance * 0.5 ||
+       p.y() < GetMinYExtent() - kCarTolerance * 0.5 ||
+       p.y() > GetMaxYExtent() + kCarTolerance * 0.5 ||
+       p.z() < GetMinZExtent() - kCarTolerance * 0.5 ||
+       p.z() > GetMaxZExtent() + kCarTolerance * 0.5 )
   {
     // G4cout << "G4ExtrudedSolid::Outside extent: " << p << G4endl;
     return kOutside;
@@ -659,11 +681,6 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     if ( IsPointInside(fPolygon[(*it)[0]], fPolygon[(*it)[1]],
                        fPolygon[(*it)[2]], pscaled) )  { inside = true; }
-                       
-    if ( IsSameLineSegment(pscaled, fPolygon[(*it)[0]], fPolygon[(*it)[1]]) ||
-         IsSameLineSegment(pscaled, fPolygon[(*it)[1]], fPolygon[(*it)[2]]) ||
-         IsSameLineSegment(pscaled, fPolygon[(*it)[2]], fPolygon[(*it)[0]]) )
-                                                       { inside = true; }
     ++it;
   } while ( (inside == false) && (it != fTriangles.end()) );
   
@@ -671,8 +688,8 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     // Check if on surface of z sides
     //
-    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance ||
-         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance )
+    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance * 0.5 ||
+         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance * 0.5 )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)"
       //        << G4endl;
