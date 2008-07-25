@@ -1,6 +1,21 @@
+#------------------------------------------------------------------------
+# Last update: 25-Jul-2008
+#
+# This simple shell script run a energy scan, in the beam energy range
+# 1 - 30 GeV, for 1 Physics List, 1 beam particle, and 4 types of
+# simplified calorimeter (cms, atlas, pbwo4, tile).
+#
+# See "***LOOKHERE***" below for the available choices.
+#
+# This script is similar to  scanEnergy1.sh : the difference is that
+# the latter runs only 1 simplified calorimeter, whereas  scanEnergy.sh
+# runs 4 simplified calorimeters (cms, atlas, pbwo4, tile),
+# Notice that  scanEnergy1.sh  can run  atlasTILE.g4 , whereas
+# scanEnergy.sh  cannot.
+#------------------------------------------------------------------------
 #
 #*****************************LOOKHERE***
-PHYSICS_LIST=QGSP_BERT
+PHYSICS_LIST=FTFP_BERT
 #
 G4_RELEASE=9.1.p02
 #
