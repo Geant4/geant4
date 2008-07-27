@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2008-04-30 10:07:28 allison Exp $
+$Id: History,v 1.111 2008-07-27 10:46:23 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+27th July 2008  John Allison
+- G4VisCommands.cc: Trap recursive use of /vis/reviewKeptEvents.
 
 30th April 2008  John Allison  (visman-V09-01-04)
 - Fixes more gcc-4.3.0 compiler warnings.
