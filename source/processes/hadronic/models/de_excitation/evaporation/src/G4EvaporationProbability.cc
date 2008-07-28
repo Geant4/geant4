@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.16 2008-07-24 14:10:15 quesada Exp $
+// $Id: G4EvaporationProbability.cc,v 1.17 2008-07-28 07:35:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,13 +32,11 @@
 //
 //J.M. Quesada (June 2008). Rebuilt class. Mayor changes: new inverse cross sections and numerical integration
 
-#include <iostream>
-using namespace std;
-
 #include "G4EvaporationProbability.hh"
 #include "G4PairingCorrection.hh"
+#include <iostream>
 
-
+using namespace std;
 
 G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &) : G4VEmissionProbability()
 {
@@ -286,7 +284,7 @@ G4double p, p0, p1, p2,Ec,delta,q,r,ji;
 //G4double Eo,epsilon1,epsilon2,discri;
 
         //JMQ (June 08) Coulomb cutoff
- //        if(K<=CoulombBarrier) return xs=0.0;   
+         if(K<=CoulombBarrier) return xs=0.0;   
 
       p0 = 15.72;
       p1 = 9.65;
@@ -450,7 +448,7 @@ else  {
   }
 
         //JMQ (June 08) Coulomb cutoff
-//         if(K<=CoulombBarrier) return xs=0.0;  
+         if(K<=CoulombBarrier) return xs=0.0;  
 //
       Ec = 1.44*theZ*ResidualZ/(1.5*std::pow(ResidualA,0.333333)+delta);
       p = p0 + p1/Ec + p2/(Ec*Ec);
@@ -587,7 +585,7 @@ b2=0.;
  G4double rnpro,rnneu,eekin,ekin,a,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0.),athrdT;
 
         //JMQ (June 08) Coulomb cutoff
- //       if(K<=CoulombBarrier) return xine_th=0.0;          
+        if(K<=CoulombBarrier) return xine_th=0.0;          
 
         eekin=K;
         rnpro=ResidualZ;
