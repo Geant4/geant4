@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.15 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.16 2008-07-28 15:36:45 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,8 +64,11 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   //theta spin stuff here
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotateScene((G4double)pView->rot_sens,0,1);
-
+  if (pView->rotate_right) {
+    pView->rotateScene((G4double)pView->rot_sens,0,1);
+  } else {
+    pView->rotateScene(-(G4double)pView->rot_sens,0,1);
+  }
   /*
   G4double delta_theta;
 
@@ -136,11 +139,14 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
 				    XtIntervalId* timer_id)
 {
   //phi spin stuff here
-  G4double delta_alpha;
+  //  G4double delta_alpha;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotateScene(0,(G4double)pView->rot_sens,1);
-
+  if (pView -> rotate_up) {
+    pView->rotateScene(0,-(G4double)pView->rot_sens,1);
+  } else {
+    pView->rotateScene(0,(G4double)pView->rot_sens,1);
+  }
   /*
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {

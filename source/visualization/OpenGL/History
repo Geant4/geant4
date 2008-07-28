@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2008-06-20 13:55:06 lgarnier Exp $
+$Id: History,v 1.116 2008-07-28 15:36:24 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+28 July Laurent Garnier
+ - Fix a bug in XmRotation panel introduce in last commit by myself.
 
 20th June 2008  Laurent Garnier
  - Correct some warnings

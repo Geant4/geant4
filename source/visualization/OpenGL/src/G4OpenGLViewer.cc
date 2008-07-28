@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.38 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.39 2008-07-28 15:36:45 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -926,7 +926,7 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   
   // to avoid z rotation flipping
   // to allow more than 360° rotation
-#ifdef GEANT4_QT_DEBUG
+
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -937,8 +937,9 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
 
 
-  printf("G4OpenGLViewer:: Tp: %f %f %f Vpd:%f %f %f - Up:%f %f %f Cp:%f %f %f\n",
-         targetPoint[0],targetPoint[1],targetPoint[2],
+#ifdef GEANT4_QT_DEBUG
+  printf("G4OpenGLViewer:: %f %f %f Tp: %f %f %f Vpd:%f %f %f - Up:%f %f %f Cp:%f %f %f\n",
+         dx,dy,deltaRotation,targetPoint[0],targetPoint[1],targetPoint[2],
          vp.x(),vp.y(),vp.z(),
          up.x(),up.y(),up.z(),
          cameraPosition[0],cameraPosition[1],cameraPosition[2]);
@@ -953,13 +954,12 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
     new_up = up;
     if (new_vp.z()*vp.z() <0) {
 #ifdef GEANT4_QT_DEBUG
-      //      printf("G4OpenGLViewer:: ***********************************************************\n");
+      //            printf("G4OpenGLViewer:: ***********************************************************\n");
 #endif
       new_up.set(new_up.x(),-new_up.y(),new_up.z());
       //      new_vp.set(-new_vp.x(),new_vp.y(),new_vp.z());
     }
   }
-  new_up.set(new_up.x(),-new_up.y(),new_up.z());
   fVP.SetUpVector(new_up);
   ////////////////
   // Rotates by fixed azimuthal angle delta_theta.
