@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.8 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.cc,v 1.9 2008-07-29 13:27:43 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadParamvol Implementation
@@ -190,20 +190,16 @@ Tube_dimensionsRead( const xercesc::DOMElement* const element,
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
-
-      if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
-      if (attName=="rmin")
+    
+      if (attName=="InR")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
-      if (attName=="rmax")
+      if (attName=="OutR")
         { parameter.dimension[1] = eval.Evaluate(attValue); } else
-      if (attName=="z")
+      if (attName=="hz")
         { parameter.dimension[2] = eval.Evaluate(attValue); } else
-      if (attName=="startphi")
+      if (attName=="StartPhi")
         { parameter.dimension[3] = eval.Evaluate(attValue); } else
-      if (attName=="deltaphi")
+      if (attName=="DeltaPhi")
         { parameter.dimension[4] = eval.Evaluate(attValue); }
    }
 
@@ -501,9 +497,12 @@ ParametersRead(const xercesc::DOMElement* const element) {
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-      
       if (tag=="rotation") { VectorRead(child,rotation); } else
       if (tag=="position") { VectorRead(child,position); } else
+      if (tag=="positionref")
+        { position = GetPosition(GenerateName(RefRead(child))); } else
+      if (tag=="rotationref")
+        { rotation = GetRotation(GenerateName(RefRead(child))); } else
       if (tag=="box_dimensions") { Box_dimensionsRead(child,parameter); } else
       if (tag=="trd_dimensions") { Trd_dimensionsRead(child,parameter); } else
       if (tag=="trap_dimensions") { Trap_dimensionsRead(child,parameter); } else
@@ -532,6 +531,43 @@ ParametersRead(const xercesc::DOMElement* const element) {
 
    parameterisation->AddParameter(parameter);
 }
+void G4GDMLReadParamvol::
+ParameterisedRead(const xercesc::DOMElement* const element)
+{
+   for (xercesc::DOMNode* iter = element->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = Transcode(child->getTagName());
+ 
+     if (tag=="parameters") {  
+         G4double number = 1;
+         const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+         XMLSize_t attributeCount = attributes->getLength();
+         for (XMLSize_t attribute_index=0;
+           attribute_index<attributeCount; attribute_index++)
+         {
+           xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+           if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+            { continue; }
+
+           const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+           const G4String attName = Transcode(attribute->getName());
+           const G4String attValue = Transcode(attribute->getValue());
+
+           if (attName=="number")
+           { number = eval.Evaluate(attValue); }
+         }
+
+      ParametersRead(child); } else
+      if (tag=="loop") { LoopRead(child,&G4GDMLRead::Paramvol_contentRead); }
+    }
+}
 
 void G4GDMLReadParamvol::
 Paramvol_contentRead(const xercesc::DOMElement* const element)
@@ -544,8 +580,7 @@ Paramvol_contentRead(const xercesc::DOMElement* const element)
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-
-      if (tag=="parameters") { ParametersRead(child); } else
+      if (tag=="parameterised_position_size") { ParameterisedRead(child); }else
       if (tag=="loop") { LoopRead(child,&G4GDMLRead::Paramvol_contentRead); }
     }
 }
@@ -567,6 +602,7 @@ ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") { volumeref = RefRead(child); }
+     
    }
 
    Paramvol_contentRead(element);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.18 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.19 2008-07-29 13:27:56 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteParamvol.hh"
+#include <sstream>
 
 void G4GDMLWriteParamvol::
 Box_dimensionsWrite(xercesc::DOMElement* parametersElement,
@@ -46,8 +47,6 @@ Box_dimensionsWrite(xercesc::DOMElement* parametersElement,
      setAttributeNode(NewAttribute("y",2.0*box->GetYHalfLength()/mm));
    box_dimensionsElement->
      setAttributeNode(NewAttribute("z",2.0*box->GetZHalfLength()/mm));
-   box_dimensionsElement->
-     setAttributeNode(NewAttribute("lunit","mm"));
    parametersElement->appendChild(box_dimensionsElement);
 }
 
@@ -116,22 +115,20 @@ void G4GDMLWriteParamvol::
 Tube_dimensionsWrite(xercesc::DOMElement* parametersElement,
                      const G4Tubs* const tube)
 {
-   xercesc::DOMElement* tube_dimensionsElement = NewElement("tube");
+   xercesc::DOMElement* tube_dimensionsElement = NewElement("tube_dimensions");
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("rmin",tube->GetInnerRadius()/mm));
+     setAttributeNode(NewAttribute("InR",tube->GetInnerRadius()/mm));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("rmax",tube->GetOuterRadius()/mm));
+     setAttributeNode(NewAttribute("OutR",tube->GetOuterRadius()/mm));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("z",2.0*tube->GetZHalfLength()/mm));
+     setAttributeNode(NewAttribute("hz",2.0*tube->GetZHalfLength()/mm));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("startphi",tube->GetStartPhiAngle()/degree));
+     setAttributeNode(NewAttribute("StartPhi",tube->GetStartPhiAngle()/radian));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("deltaphi",tube->GetDeltaPhiAngle()/degree));
-   tube_dimensionsElement->
-     setAttributeNode(NewAttribute("aunit","deg"));
-   tube_dimensionsElement->setAttributeNode(NewAttribute("lunit","mm"));
-   parametersElement->appendChild(tube_dimensionsElement);
+     setAttributeNode(NewAttribute("DeltaPhi",tube->GetDeltaPhiAngle()/radian));
+     parametersElement->appendChild(tube_dimensionsElement);
 }
+
 
 void G4GDMLWriteParamvol::
 Cone_dimensionsWrite(xercesc::DOMElement* parametersElement,
@@ -274,14 +271,22 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
 {
    paramvol->GetParameterisation()->
      ComputeTransformation(index,const_cast<G4VPhysicalVolume*>(paramvol));
-   
+   G4ThreeVector Angles;
    const G4String name = GenerateName(paramvol->GetName(),paramvol);
+   std::stringstream os; 
+   os.precision(15);
+   os << index;     
+   G4String sncopie = os.str(); 
    
    xercesc::DOMElement* parametersElement = NewElement("parameters");
-   RotationWrite(parametersElement, name+"rotation",
-                 GetAngles(paramvol->GetObjectRotationValue()));
-   PositionWrite(parametersElement, name+"position",
+   parametersElement->setAttributeNode(NewAttribute("number",index+1));
+
+   PositionWrite(parametersElement, name+"position"+sncopie,
                  paramvol->GetObjectTranslation());
+   Angles=GetAngles(paramvol->GetObjectRotationValue());
+   if(Angles.mag2()>DBL_EPSILON)
+   RotationWrite(parametersElement, name+"rotation"+sncopie,
+                 GetAngles(paramvol->GetObjectRotationValue()));
    paramvolElement->appendChild(parametersElement);
 
    G4VSolid* solid = paramvol->GetLogicalVolume()->GetSolid();
@@ -363,11 +368,25 @@ ParamvolWrite(xercesc::DOMElement* volumeElement,
                   GenerateName(paramvol->GetLogicalVolume()->GetName(),
                                paramvol->GetLogicalVolume());
    xercesc::DOMElement* paramvolElement = NewElement("paramvol");
+   paramvolElement->setAttributeNode(NewAttribute("ncopies",paramvol->GetMultiplicity()));
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
+
+   xercesc::DOMElement* algorithmElement = NewElement("parameterised_position_size");
    paramvolElement->appendChild(volumerefElement);
+   paramvolElement->appendChild(algorithmElement);
+   ParamvolAlgorithmWrite(algorithmElement,paramvol);
    volumeElement->appendChild(paramvolElement);
 
+}
+
+void G4GDMLWriteParamvol::
+ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,const G4VPhysicalVolume* const paramvol)
+{
+   const G4String volumeref =
+                  GenerateName(paramvol->GetLogicalVolume()->GetName(),
+                               paramvol->GetLogicalVolume());
+  
    const G4int parameterCount = paramvol->GetMultiplicity();
 
    for (G4int i=0; i<parameterCount; i++)
