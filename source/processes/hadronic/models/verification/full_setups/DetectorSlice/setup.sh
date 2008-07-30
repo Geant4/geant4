@@ -81,7 +81,7 @@ export G4BIN=$G4WORKDIR/bin
 #
 export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
 #
-export G4ANALYSIS_USE=1
+###export G4ANALYSIS_USE=1
 #
 # --- AIDA/PI ---
 ###export PI_DIR=$G4DEV/PI/$G4SYSTEM
