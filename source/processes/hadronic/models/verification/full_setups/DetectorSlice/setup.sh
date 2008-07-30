@@ -30,28 +30,32 @@ export G4LIB=$G4INSTALL/lib
 ###export G4LIB_BUILD_SHARED=1
 #
 #
-export G4DEV=/afs/cern.ch/sw/geant4/dev
+###export G4DEV=/afs/cern.ch/sw/geant4/dev
 #
 #--- data ---
-export G4LEVELGAMMADATA=$G4DEV/data/PhotonEvaporation
-export G4RADIOACTIVEDATA=$G4DEV/data/RadiativeDecay
-export G4LEDATA=$G4DEV/data/G4EMLOW
-export NeutronHPCrossSections=$G4DEV/data/G4NDL
+export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
+###export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
+export G4RADIOACTIVEDATA=$G4INSTALL/data/RadioactiveDecay
+export G4LEDATA=$G4INSTALL/data/G4EMLOW
+export NeutronHPCrossSections=$G4INSTALL/data/G4NDL
+export G4NEUTRONHPDATA=$G4INSTALL/data/G4NDL
 #
 #--- CLHEP ---
-# Before Geant4 version 7.1, use CLHEP 1.9.1.2 ;
-# for Geant4 version 7.1, use CLHEP 1.9.2.1 . 
-# for Geant4 version 8.0, use CLHEP 1.9.2.2 .
-# for Geant4 version 8.1, use CLHEP 1.9.2.3 .
-# for Geant4 version 8.2, use CLHEP 2.0.3.1 .
-# for Geant4 version 8.3, use CLHEP 2.0.3.1 .
-# for Geant4 version 9.0, use CLHEP 2.0.3.1 .
-###export CLHEP_BASE_DIR=$G4DEV/CLHEP/1.9.1.2/slc3_gcc323
-###export CLHEP_BASE_DIR=$G4DEV/CLHEP/1.9.2.1/slc3_gcc323
-###export CLHEP_BASE_DIR=$G4DEV/CLHEP/1.9.2.2/slc3_gcc323
-###export CLHEP_BASE_DIR=$G4DEV/CLHEP/1.9.2.3/slc3_gcc323
-export CLHEP_BASE_DIR=$G4DEV/CLHEP/2.0.3.1/slc3_gcc323
-#
+#----------------------------------------------------------------------------
+#    CLHEP  1.8.0.0  for G4 5.2.p02
+#           1.8.1.0  for G4 6.2.p01, 7.0.p01
+#           1.9.2.3  for G4 7.1p01a, 8.0.p01, 8.1.p02a
+#           2.0.3.1 or 1.9.3.1  for G4 8.2.p01, 8.3.p01, 9.0.p01
+#           2.0.3.2  for G4 9.1
+#           2.0.3.3  for G4 9.2
+#----------------------------------------------------------------------------
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.0.0/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.8.1.0/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.2.3/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir1.9.3.1/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.1/dirMyInstall
+###export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.2/dirMyInstall
+export CLHEP_BASE_DIR=/users/ribon/dirCLHEP/dir2.0.3.3/dirMyInstall
 export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
 export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP
@@ -80,8 +84,9 @@ export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
 export G4ANALYSIS_USE=1
 #
 # --- AIDA/PI ---
-# Use PI 1.3.3 before G4 8.0; use 1.3.12 for G4 8.0 .
-###export PI_DIR=$G4DEV/PI/1.3.3-lite/slc3_gcc323
-export PI_DIR=$G4DEV/PI/1.3.12-lite/slc3_gcc323
-export PATH=$PI_DIR/bin:$PATH
-eval `aida-config --runtime sh`
+###export PI_DIR=$G4DEV/PI/$G4SYSTEM
+###export PI_DIR=$G4DEV/PI/1.3.12-lite/slc3_gcc323
+###export PI_DIR=/afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_5/$PLATFORM
+###export PATH=$PI_DIR/bin:$PATH
+###eval `aida-config --runtime sh`
+
