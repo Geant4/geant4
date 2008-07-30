@@ -4,15 +4,16 @@
 #                        (total Pb+LAr : 27.6 X0).
 #
 # ATLAS hadronic barrel: sampling Fe-Sci.
-#                        25 layers: 6 cm (Fe) - 4 mm (Sci).
+#                        120 layers: Fe (14 mm) - Sci (3 mm)
 #                        (the scintillator tiles are indeed
 #                         parallel to the beam direction;
 #                         so we cannot simulate it with our
 #                         setup, therefore we assume the 
-#                         same sampling as for CMS HCAL).
+#                         same sampling as for the TileCal
+#                         at 90 degrees)
 #                        (total about 10 lambda).
 #
-# Radius of the cylinder: 75 cm
+# Radius of the cylinder: 84 cm
 #                         (diameter about 10 lambda)
 #---------------------------------------------------------------  
 #
@@ -42,13 +43,13 @@
 /mydet/hadAbsorberMaterial Iron
 /mydet/hadActiveMaterial Scintillator
 /mydet/isHadCalHomogeneous 0
-/mydet/hadAbsorberTotalLength 1500.0
-/mydet/hadActiveLayerNumber 25
-/mydet/hadActiveLayerSize 4.0
+/mydet/hadAbsorberTotalLength 1680.0
+/mydet/hadActiveLayerNumber 120
+/mydet/hadActiveLayerSize 3.0
 #
 /mydet/muonLength 0.0
 #
-/mydet/detectorRadius 750.0
+/mydet/detectorRadius 840.0
 #
 /mydet/update
 #
