@@ -60,6 +60,23 @@ export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
 export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP
 #
+#--- analysis/UI/visualization ---
+###export G4UI_BUILD_XM_SESSION=1
+###export G4UI_USE_XM=1
+###export G4UI_BUILD_XAW_SESSION=1
+###export G4UI_USE_XAW=1
+export G4UI_USE_TCSH=1
+#
+export G4VIS_NONE=1
+###export G4VIS_BUILD_DAWN_DRIVER=1
+###export G4VIS_BUILD_OPENGLX_DRIVER=1
+###export G4VIS_BUILD_OPENGLXM_DRIVER=1
+###export G4VIS_BUILD_VRML_DRIVER=1
+###export G4VIS_USE_DAWN=1
+###export G4VIS_USE_OPENGLX=1
+###export G4VIS_USE_OPENGLXM=1
+###export G4VIS_USE_VRML=1
+#
 # --- PATH ---
 export PATH=$PATH:$G4BIN/$G4SYSTEM
 #
