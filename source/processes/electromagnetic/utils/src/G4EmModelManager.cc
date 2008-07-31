@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.42 2008-07-16 09:45:49 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.43 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,14 +218,17 @@ void G4EmModelManager::UpdateEmModel(const G4String& nam,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel* G4EmModelManager::GetModel(G4int i)
+G4VEmModel* G4EmModelManager::GetModel(G4int i, G4bool ver)
 {
   G4VEmModel* m = 0;
-  if(i >= 0 && i < nEmModels) m = models[i];
-  else if(verboseLevel > 0) 
+  if(i >= 0 && i < nEmModels) {m = models[i];}
+  else if(verboseLevel > 0 && ver) { 
     G4cout << "G4EmModelManager::GetModel WARNING: "
 	   << "index " << i << " is wrong Nmodels= "
-	   << nEmModels << G4endl;
+	   << nEmModels;
+    if(particle) G4cout << " for " << particle->GetParticleName(); 
+    G4cout<< G4endl;
+  }
   return m;
 }
 

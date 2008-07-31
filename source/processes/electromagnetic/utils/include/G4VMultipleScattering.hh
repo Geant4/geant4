@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.53 2008-07-16 09:45:49 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.54 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -208,7 +208,7 @@ public:
 					    size_t& idxRegion) const;
 
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0);
+  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   //------------------------------------------------------------------------
   // Set parameters for simulation of multiple scattering
@@ -584,9 +584,10 @@ inline void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx)
+inline 
+G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver)
 {
-  return modelManager->GetModel(idx);
+  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

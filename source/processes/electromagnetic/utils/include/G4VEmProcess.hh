@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.46 2008-07-16 09:45:49 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.47 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,7 +218,7 @@ public:
   inline void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0);
+  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   //------------------------------------------------------------------------
   // Get/set parameters used for simulation of energy loss
@@ -502,9 +502,9 @@ inline void G4VEmProcess::SetLambdaFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx)
+inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 {
-  return modelManager->GetModel(idx);
+  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

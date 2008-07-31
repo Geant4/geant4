@@ -1,4 +1,4 @@
-$Id: History,v 1.340 2008-07-31 13:01:26 vnivanch Exp $
+$Id: History,v 1.341 2008-07-31 13:02:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 31 July 08: V.Ivant (emutils-V09-01-23)
 G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess - use verbosity flag
     for GetEmModel method
+G4VEmModel - use stl vector for cross sections instead of array
 
 21 July 08: V.Ivant (emutils-V09-01-22)
 G4VEmModel - added vector of G4ElementSelectors, in which vectors

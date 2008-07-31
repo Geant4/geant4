@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.22 2007-11-09 11:35:54 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.23 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -149,7 +149,7 @@ public:
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
-  G4VEmModel* GetModel(G4int);
+  G4VEmModel* GetModel(G4int, G4bool ver = false);
 
   G4int NumberOfModels() const;
 

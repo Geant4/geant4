@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.2 2008-07-22 15:55:15 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.3 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,6 +117,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 					  cutEnergy, e);
       xsec[i] = cross;
     }
+    if(DBL_MIN >= cross) cross = 1.0;
     // normalise cross section sum 
     for (i=0; i<nElmMinusOne; i++) {
       xSections[i]->PutValue(j, xsec[i]/cross);

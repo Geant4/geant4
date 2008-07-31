@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.80 2008-07-16 09:45:49 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.81 2008-07-31 13:01:26 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -302,8 +302,9 @@ public:
   //------------------------------------------------------------------------
 
   // Add EM model coupled with fluctuation model for the region
-  inline void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
-                                const G4Region* region = 0);
+  inline void AddEmModel(G4int, G4VEmModel*, 
+			 G4VEmFluctuationModel* fluc = 0,
+			 const G4Region* region = 0);
 
   // Assign a model to a process
   inline void SetEmModel(G4VEmModel*, G4int index=1);
@@ -321,7 +322,7 @@ public:
   inline void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0);
+  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   inline G4int NumberOfModels();
 
@@ -973,6 +974,7 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline
 void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
 				      G4VEmFluctuationModel* fluc,
 				      const G4Region* region)
@@ -983,9 +985,10 @@ void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx)
+inline 
+G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver)
 {
-  return modelManager->GetModel(idx);
+  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
