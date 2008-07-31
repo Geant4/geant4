@@ -48,6 +48,13 @@
  search the string "***LOOKHERE***") it is possible 
  to select the Physics List.
 
+ By editing the Sensitive Detectors
+ (src/DetectorSliceSensitiveEmCalo.cc, for the ECAL,
+  src/DetectorSliceSensitiveHadCalo.cc, for the HCAL,
+  search the string "***LOOKHERE***") it is possible
+ to activate Birks quenching (independently in the
+ ECAL and HCAL).
+
  By editing the detector construction 
  (src/DetectorSliceDetectorConstruction.cc, search
   the string "***LOOKHERE***") it is possible to
@@ -127,3 +134,9 @@
       The variable which is plotted is the logarithm (in
       base 10) of the kinetic energy in [MeV], in the range
       between -4.0 (i.e. 0.1 keV) and 6.0 (i.e. 1000 GeV). 
+
+ The subdirectory  dirEnergyScan/  is dedicated to the study of
+ calorimeter observables (in particular, visible energy and
+ energy resolution) as a function of the beam energy, scanning
+ the interval 1 - 30 GeV (see the README file in that directory).
+

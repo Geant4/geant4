@@ -1,0 +1,27 @@
+
+ Last update: 31-Jul-2008
+ ========================
+
+ In this directory you can find some useful staff for studying
+ calorimeter observables (in particular, visible energy and
+ energy resolution) as a function of the beam energy, scanning
+ the interval 1 - 30 GeV.
+
+ The compressed tar-balls:
+   dirEnergyScan_e.tgz
+   dirEnergyScan_pi-.tgz
+   dirEnergyScan_pi+.tgz
+   dirEnergyScan_p.tgz
+ contain the directory structure for the Geant4 macro files
+ corresponding to the interval 1 - 30 GeV of beam energy, 
+ for, respectively, electrons, pion-, pion+, and proton, 
+ for 3 simplified combined calorimeters: 
+   - combined CMS : PbWO4 (EM) + Cu-Sci (HAD) 
+   - combined ATLAS Barrel : Pb-LAr (EM) + Fe-Sci (HAD)
+   - combined ATLAS EndCap : Pb-LAr (EM) + Cu-LAr (HAD)
+ For each case, 5000 events are generated, without magnetic field.
+
+ The shell script  scanEnergy.sh  allows to run 1 Physics List
+ for one beam particle type (e-, or pi-, or pi+, or p), with
+ the 3 simplified combined calorimeters.
+
