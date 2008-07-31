@@ -51,6 +51,8 @@ public:
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
     
+  void AddMaxStep();
+
 private:
   G4double cutForGamma;
   G4double cutForElectron;
