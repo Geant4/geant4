@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2008-07-22 16:11:34 vnivanch Exp $
+$Id: History,v 1.120 2008-07-31 13:13:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 July 08: V.Ivant (emmuons-V09-01-11)
+G4MuMscModel - do not define min and max energy in constructor but use Set
+               methods
+G4MuMultipleScattering - added cout of model names
 
 21 April 08:  V.Ivanchenko (emmuons-V09-01-10)
 G4MuBremsstrahlungModel, G4MuPairProductionModel - use CrossSectionPerVolume

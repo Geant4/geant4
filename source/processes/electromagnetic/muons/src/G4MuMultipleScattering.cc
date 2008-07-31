@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.10 2008-04-21 06:17:15 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.11 2008-07-31 13:11:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -88,8 +88,8 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
       mscModel->SetStepLimitType(StepLimitType());
       mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
       mscModel->SetRangeFactor(RangeFactor());
-      mscModel->SetPolarAngleLimit(PolarAngleLimit());
     }
+    mscModel->SetPolarAngleLimit(PolarAngleLimit());
     return;
   }
 
@@ -99,7 +99,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
 
   // initialisation of parameters
-  //  mscModel = new G4MuMscModel(thetaLimit);
+  //mscModel = new G4MuMscModel();
   mscModel = new G4WentzelVIModel();
   mscModel->SetStepLimitType(StepLimitType());
   mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
@@ -114,9 +114,9 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MuMultipleScattering::PrintInfo()
 {
-  G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
+  G4cout << "      Model <" << mscModel->GetName() << ">, RangeFactor= "
 	 << RangeFactor()
-	 << "  Step limit type " << StepLimitType()
+	 << ", Step limit type " << StepLimitType()
 	 << G4endl;
 }
 

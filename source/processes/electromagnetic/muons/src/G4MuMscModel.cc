@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.24 2008-07-22 16:11:34 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.25 2008-07-31 13:11:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,9 +74,7 @@
 
 using namespace std;
 
-G4MuMscModel::G4MuMscModel(G4double thetaMax, 
-			   G4double tMax,  
-			   const G4String& nam) :
+G4MuMscModel::G4MuMscModel(const G4String& nam) :
   G4VMscModel(nam),
   theLambdaTable(0),
   theLambda2Table(0),
@@ -88,11 +86,9 @@ G4MuMscModel::G4MuMscModel(G4double thetaMax,
   nwarnlimit(50),
   currentCouple(0),
   cosThetaMin(1.0),
-  cosThetaMax(cos(thetaMax)),
-  q2Limit(tMax),
+  q2Limit(TeV*TeV),
   alpha2(fine_structure_const*fine_structure_const),
   isInitialized(false),
-  newrun(true),
   inside(false)
 {
   invsqrt12 = 1./sqrt(12.);
@@ -125,10 +121,11 @@ void G4MuMscModel::Initialise(const G4ParticleDefinition* p,
 			      const G4DataVector& cuts)
 {
   SetupParticle(p);
-  newrun = true;
   tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   xSection = currentRange = 0.0;
+  cosThetaMax = cos(PolarAngleLimit());
+
   // set values of some data members
   if(!isInitialized) {
     isInitialized = true;
@@ -239,7 +236,6 @@ G4double G4MuMscModel::ComputeTruePathLengthLimit(
     inside = false;
     SetupParticle(dp->GetDefinition());
     theLambdaTable = theTable;
-
   }
 
   // initialisation for each step  

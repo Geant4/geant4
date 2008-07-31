@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.53 2008-07-22 16:03:41 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.54 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,20 +67,15 @@
 
 using namespace std;
 
-G4eCoulombScatteringModel::G4eCoulombScatteringModel(
-  G4double thetaMin, G4double thetaMax, G4double tlim, const G4String& nam)
+G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
-    q2Limit(tlim),
-    lowKEnergy(keV),
-    highKEnergy(TeV),
+    q2Limit(TeV*TeV),
     alpha2(fine_structure_const*fine_structure_const),
     faclim(100.0),
     isInitialised(false)
 {
-  if(thetaMin > 0.0) cosThetaMin = cos(thetaMin);
-  if(thetaMax < pi)  cosThetaMax = cos(thetaMax);
   fNistManager = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
   theElectron = G4Electron::Electron();
@@ -118,6 +113,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   elecXSection = nucXSection = 0.0;
   tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
+  cosThetaMin = cos(PolarAngleLimit());
+  currentCuts = &cuts;
   //  G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   // << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   // << "  cos(TetMax)= " << cosThetaMax <<G4endl;
@@ -135,32 +132,36 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   if(mass < GeV && particle->GetParticleType() != "nucleus") {
     InitialiseElementSelectors(p,cuts);
   }
-  currentCuts = &cuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
 {
+  ecut = cutEnergy;
   G4double tmax = tkin;
-  if(particle == theElectron) tmax *= 0.5;
-  else if(particle != thePositron) {
+  cosTetMaxElec = 1.0;
+  if(mass > MeV) {
     G4double ratio = electron_mass_c2/mass;
     G4double tau = tkin/mass;
     tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
       (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
+    cosTetMaxElec = 1.0 - std::min(cutEnergy, tmax)*electron_mass_c2/mom2;
+  } else {
+
+    if(particle == theElectron) tmax *= 0.5;
+    G4double t = std::min(cutEnergy, tmax);
+    G4double mom21 = t*(t + 2.0*electron_mass_c2);
+    G4double t1 = tkin - t;
+    //G4cout << "tkin= " << tkin << " t= " << t << " t1= " << t1 << G4endl;
+    if(t1 > 0.0) {
+      G4double mom22 = t1*(t1 + 2.0*mass);
+      G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
+      //G4cout << "ctm= " << ctm << G4endl;
+      if(ctm < 1.0) cosTetMaxElec = ctm;
+    }
   }
-  cosTetMaxElec = 1.0;
-  G4double t = std::min(cutEnergy, tmax);
-  G4double mom21 = t*(t + 2.0*electron_mass_c2);
-  G4double t1 = tkin - t;
-  //G4cout << "tkin= " << tkin << " t= " << t << " t1= " << t1 << G4endl;
-  if(t1 > 0.0) {
-    G4double mom22 = t1*(t1 + 2.0*mass);
-    G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-    //G4cout << "ctm= " << ctm << G4endl;
-    if(ctm < 1.0) cosTetMaxElec = ctm;
-  }
+  if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,24 +172,25 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double,
 		G4double cutEnergy, G4double)
 {
-  //  if(p == particle && kinEnergy == tkin && Z == targetZ &&
-  //   cutEnergy == ecut) return nucXSection;
-
   //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
-  //	 << p->GetParticleName() << " Z= " << Z << " e(MeV)= " << kinEnergy/MeV << G4endl; 
+  //  << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
+  G4double xsec = 0.0;
   SetupParticle(p);
-  G4double ekin = std::max(keV, kinEnergy);
+  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
-  SetupTarget(Z, ekin);
+  if(cosTetMaxNuc > cosTetMinNuc) {
+    SetupTarget(Z, ekin);
+    xsec = CrossSectionPerAtom();  
+  }
   /*
-  G4cout << "cosTetMinNuc= " << cosTetMinNuc
+  G4cout << "e(MeV)= " << ekin/MeV << "cosTetMinNuc= " << cosTetMinNuc
 	 << " cosTetMaxNuc= " << cosTetMaxNuc
 	 << " cosTetMaxElec= " << cosTetMaxElec
 	 << " screenZ= " << screenZ
 	 << " formfactA= " << formfactA
 	 << " cosTetMaxHad= " << cosTetMaxHad << G4endl;
   */
-  return CrossSectionPerAtom();  
+  return xsec;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,24 +206,24 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
   G4double x  = 1.0 - cosTetMinNuc;
   G4double x1 = x + screenZ;
 
-  if(cosTetMaxElec < cosTetMinNuc) {
-    elecXSection = fac*(cosTetMinNuc - cosTetMaxElec)/
+  if(cosTetMaxElec2 < cosTetMinNuc) {
+    elecXSection = fac*(cosTetMinNuc - cosTetMaxElec2)/
       (x1*(1.0 - cosTetMaxElec + screenZ));
     nucXSection  = elecXSection;
   }
 
-  G4double costm = std::max(cosTetLimit,cosTetMaxHad);
   //G4cout << "XS tkin(MeV)= " << tkin<<"costmax= " << costm 
   //<< " costmin= " << cosTetMinNuc << G4endl;
-  if(costm < cosTetMinNuc) {
+  if(cosTetMaxNuc2 < cosTetMinNuc) {
     G4double s  = screenZ*formfactA;
-    G4double z1 = 1.0 - costm + screenZ;
+    G4double z1 = 1.0 - cosTetMaxNuc2 + screenZ;
     G4double d  = (1.0 - s)/formfactA;
     G4double x2 = x1 + d;
     G4double z2 = z1 + d;
-    //G4cout <<"x1= "<<x1<<" x2= " <<x2<<" z1= " <<z1<<" z2= "<<z2<<" s= " << " d= " <<d<<G4endl;
-    nucXSection += fac*targetZ*(1.0 - 2.0*s)*
-      ((cosTetMinNuc - costm)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
+    //G4cout <<"x1= "<<x1<<" x2= " <<x2<<" z1= " <<z1<<" z2= "<<z2
+    //<<" s= " << " d= " <<d<<G4endl;
+    nucXSection += fac*targetZ*(1.0 + 2.0*s)*
+      ((cosTetMinNuc - cosTetMaxNuc2)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
        2.0*log(z1*x2/(z2*x1))/d);
   }
 
@@ -244,14 +246,14 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(kinEnergy <= DBL_MIN) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  G4double ekin = std::max(keV, kinEnergy);
+  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   // << kinEnergy <<G4endl;
  
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,tkin,ecut,tkin);
-  SetupTarget(currentElement->GetZ(),tkin);
+  currentElement = SelectRandomAtom(couple,particle,ekin,ecut,ekin);
+  SetupTarget(currentElement->GetZ(),ekin);
   
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
@@ -278,17 +280,18 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double th = 
     std::min(recoilThreshold,
 	     targetZ*currentElement->GetIonisation()->GetMeanExcitationEnergy());
-  if(Trec > th)
-    {
-      G4int iz = G4int(targetZ);
-      G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+
+  if(Trec > th) {
+    G4int iz = G4int(targetZ);
+    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    Trec = z1*mom2/ion->GetPDGMass();
+    if(Trec < kinEnergy) {
       G4ThreeVector dir = (direction - newDirection).unit();
-      Trec = z1*mom2/ion->GetPDGMass();
       G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, Trec);
       fvect->push_back(newdp);
-
       fParticleChange->SetProposedKineticEnergy(kinEnergy - Trec);
     }
+  }
  
   return;
 }
@@ -297,16 +300,14 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
 G4double G4eCoulombScatteringModel::SampleCosineTheta()
 {
-  G4double costm = cosTetLimit;
+  G4double costm = cosTetMaxNuc2;
   G4double formf = formfactA;
   G4double prob  = ProbabilityScatteringOfElectron();
 
   // scattering off e or A?
   if(G4UniformRand() < prob) {
-    costm = cosTetMaxElec;
+    costm = cosTetMaxElec2;
     formf = 0.0;
-  } else if (cosTetLimit < cosTetMaxHad) {
-    costm = cosTetMaxHad;
   }
 
   /*

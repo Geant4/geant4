@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.16 2008-07-22 16:03:41 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.17 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,7 +86,15 @@ G4CoulombScattering::~G4CoulombScattering()
 
 void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(!isInitialised) {
+  // second initialisation
+  if(isInitialised) {
+    G4VEmModel* mod = GetModelByIndex(0);
+    mod->SetPolarAngleLimit(PolarAngleLimit());
+    mod = GetModelByIndex(1);
+    if(mod) mod->SetPolarAngleLimit(PolarAngleLimit());
+
+    // first initialisation
+  } else {
     isInitialised = true;
     aParticle = p;
     G4double mass = p->GetPDGMass();
@@ -105,15 +113,15 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     G4double eth  = thEnergy;
     if(mass < MeV) eth  = thEnergyElec; 
     if(eth > emin) {
-      G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(PolarAngleLimit(),pi,q2Max);
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetPolarAngleLimit(PolarAngleLimit());
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(std::min(eth,emax));
       AddEmModel(1, model);
     }
     if(eth < emax) {
-      G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(PolarAngleLimit(),pi,q2Max);
+      G4CoulombScatteringModel* model = new G4CoulombScatteringModel();
+      model->SetPolarAngleLimit(PolarAngleLimit());
       model->SetLowEnergyLimit(eth);
       model->SetHighEnergyLimit(emax);
       AddEmModel(2, model);

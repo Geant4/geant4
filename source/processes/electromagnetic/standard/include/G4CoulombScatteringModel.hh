@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.hh,v 1.14 2008-06-10 10:26:43 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.hh,v 1.15 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,9 +69,7 @@ class G4CoulombScatteringModel : public G4eCoulombScatteringModel
 
 public:
 
-  G4CoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			   G4double tlim = TeV*TeV,
-			   const G4String& nam = "CoulombScattering");
+  G4CoulombScatteringModel(const G4String& nam = "CoulombScattering");
  
   virtual ~G4CoulombScatteringModel();
 

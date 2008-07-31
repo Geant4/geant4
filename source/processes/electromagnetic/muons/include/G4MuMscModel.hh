@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.14 2008-07-22 16:11:34 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.15 2008-07-31 13:11:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,9 +74,7 @@ class G4MuMscModel : public G4VMscModel
 
 public:
 
-  G4MuMscModel(G4double thetaMax = 0.04,
-	       G4double tMax = TeV*TeV, 
-	       const G4String& nam = "MuMscUni");
+  G4MuMscModel(const G4String& nam = "MuMscUni");
 
   virtual ~G4MuMscModel();
 
@@ -201,11 +199,9 @@ private:
   G4double screenZ;
   G4double formfactA;
   G4double FF[100];
-  //  G4int    index[100];
 
   // flags
   G4bool   isInitialized;
-  G4bool   newrun;
   G4bool   inside;
 };
 
@@ -232,7 +228,8 @@ G4double G4MuMscModel::GetLambda(G4double e)
     G4bool b;
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
-    x = CrossSection(currentCouple,particle,e);
+    x = CrossSection(currentCouple,particle,e,
+		     (*currentCuts)[currentMaterialIndex]);
   }
   if(x > DBL_MIN) x = 1./x;
   else            x = DBL_MAX;
@@ -263,8 +260,12 @@ inline void G4MuMscModel::SetupKinematic(G4double ekin, G4double cut)
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
+    cosTetMaxNuc = cosThetaMax;
+    if(ekin <= 10.*cut && mass < MeV) {
+      cosTetMaxNuc = ekin*(cosThetaMax + 1.0)/(10.*cut) - 1.0;
+    }
+    cosTetMaxNuc = std::max(cosTetMaxNuc, 1.0 - 0.5*q2Limit/mom2);
     ComputeMaxElectronScattering(cut);
-    cosTetMaxNuc = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   } 
 }
 
@@ -276,10 +277,10 @@ inline void G4MuMscModel::SetupTarget(G4double Z, G4double e)
     etag    = e; 
     targetZ = Z;
     G4int iz = G4int(Z);
+    if(iz > 99) iz = 99;
     G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
-    if(iz > 99) iz = 99;
     formfactA = FF[iz];
     if(formfactA == 0.0) {
       x = fNistManager->GetA27(iz); 

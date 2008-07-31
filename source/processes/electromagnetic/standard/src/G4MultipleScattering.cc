@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.73 2008-03-11 12:03:43 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.74 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -201,9 +201,9 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MultipleScattering::PrintInfo()
 {
-  G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
+  G4cout << "      Model <" << mscUrban->GetName() << ">, RangeFactor= "
 	 << RangeFactor()
-	 << "  Step limit type " << StepLimitType()
+	 << ", Step limit type " << StepLimitType()
 	 << G4endl;
 }
 

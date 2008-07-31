@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.36 2008-07-22 16:03:41 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.37 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,9 +63,8 @@
 
 using namespace std;
 
-G4CoulombScatteringModel::G4CoulombScatteringModel(
-  G4double thetaMin, G4double thetaMax, G4double tlim, const G4String& nam)
-  : G4eCoulombScatteringModel(thetaMin,thetaMax,tlim,nam)
+G4CoulombScatteringModel::G4CoulombScatteringModel(const G4String& nam)
+  : G4eCoulombScatteringModel(nam)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,7 +83,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double)
 {
   SetupParticle(p);
-  G4double ekin = std::max(keV, kinEnergy);
+  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
   // save lab system kinematics
@@ -109,6 +108,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   G4double xsec = CrossSectionPerAtom();
 
+  // restore Lab system kinematics
   tkin = xtkin;
   mom2 = xmom2;
   invbeta2 = xinvb;
@@ -129,11 +129,11 @@ void G4CoulombScatteringModel::SampleSecondaries(
   if(kinEnergy <= DBL_MIN) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  G4double ekin = std::max(keV, kinEnergy);
+  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
   // Choose nucleus
-  currentElement = SelectRandomAtom(currentMaterial,particle,tkin,ecut,tkin);
+  currentElement = SelectRandomAtom(couple,particle,ekin,ecut,tkin);
 
   G4double Z  = currentElement->GetZ();
   G4int iz    = G4int(Z);

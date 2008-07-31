@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.32 2008-07-22 16:03:41 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.33 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,9 +75,7 @@ class G4eCoulombScatteringModel : public G4VEmModel
 
 public:
 
-  G4eCoulombScatteringModel(G4double thetaMin = 0.0, G4double thetaMax = pi,
-			    G4double tlim = TeV*TeV,
-			    const G4String& nam = "eCoulombScattering");
+  G4eCoulombScatteringModel(const G4String& nam = "eCoulombScattering");
  
   virtual ~G4eCoulombScatteringModel();
 
@@ -145,9 +143,9 @@ protected:
   G4double                  cosThetaMax;
   G4double                  cosTetMinNuc;
   G4double                  cosTetMaxNuc;
+  G4double                  cosTetMaxNuc2;
   G4double                  cosTetMaxElec;
-  G4double                  cosTetMaxHad;
-  G4double                  cosTetLimit;
+  G4double                  cosTetMaxElec2;
   G4double                  q2Limit;
   G4double                  recoilThreshold;
   G4double                  elecXSection;
@@ -164,6 +162,7 @@ protected:
   G4double                  mom2;
   G4double                  invbeta2;
   G4double                  etag;
+  G4double                  lowEnergyLimit;
 
   // target
   G4double                  targetZ;
@@ -174,8 +173,6 @@ protected:
 private:
 
   G4double                  a0;
-  G4double                  lowKEnergy;
-  G4double                  highKEnergy;
   G4double                  alpha2;
   G4double                  faclim;
   G4double                  FF[100];
@@ -208,6 +205,7 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
+    lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 
@@ -217,15 +215,15 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
 						      G4double cut)
 {
   if(ekin != tkin || ecut != cut) {
-    cosTetMinNuc = cosThetaMin;
-    cosTetMaxNuc = cosThetaMax;
-    if(cut > ekin && cosThetaMin < 1.0) {
-      cosTetMinNuc = ekin*(1.0 + cosThetaMin)/cut - 1.0;  
-    }
-    ecut = cut;
     tkin = ekin;
     mom2 = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
+    cosTetMinNuc = cosThetaMin;
+    cosTetMaxNuc = cosThetaMax;
+    if(ekin <= 10.*cut && mass < MeV && cosThetaMin < 1.0) {
+      cosTetMinNuc = ekin*(cosThetaMin + 1.0)/(10.*cut) - 1.0;
+    }
+    //    cosTetMaxNuc = std::max(cosTetMaxNuc, 1.0 - 0.5*q2Limit/mom2);
     ComputeMaxElectronScattering(cut);
   }
 }
@@ -237,12 +235,12 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
   if(Z != targetZ || e != etag) {
     etag    = e; 
     targetZ = Z;
-    G4double x = fNistManager->GetZ13(Z);
+    G4int iz= G4int(Z);
+    if(iz > 99) iz = 99;
+    G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     //screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
-    G4int iz = G4int(Z);
-    if(iz > 99) iz = 99;
     formfactA = FF[iz];
     if(formfactA == 0.0) {
       x = fNistManager->GetA27(iz); 
@@ -250,12 +248,17 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
       FF[iz] = formfactA;
     }
     formfactA *= mom2;
-    cosTetMaxHad = 1.0 - 0.5*q2Limit/formfactA;
-    cosTetLimit = cosTetMaxNuc;
-    if(particle == theProton && 1 == iz) {
-      if(cosTetMaxNuc < 0.0) cosTetLimit = 0.0;
-      if(cosTetMaxHad < 0.0) cosTetMaxHad = 0.0;
+    cosTetMaxNuc2 = cosTetMaxNuc;
+    if(particle == theProton && 1 == iz && cosTetMaxNuc2 < 0.0) {
+      cosTetMaxNuc2 = 0.0;
     }
+    
+    G4double z = std::max(-1.0, 1.0 - std::min(ecut,10.*eV*Z)
+			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
+    z = std::min(z, cosTetMaxElec);
+    cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
+    
+    //cosTetMaxElec2 = std::max(cosTetMaxNuc2, cosTetMaxElec);
   } 
 } 
 

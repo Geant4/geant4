@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.3 2008-07-22 16:03:41 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.4 2008-07-31 13:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,9 +75,7 @@ class G4WentzelVIModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIModel(G4double thetaMax = 0.5,
-		   G4double tMax = TeV*TeV, 
-		   const G4String& nam = "WentzelVIUni");
+  G4WentzelVIModel(const G4String& nam = "WentzelVIUni");
 
   virtual ~G4WentzelVIModel();
 
@@ -107,6 +105,8 @@ public:
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
 private:
+
+  G4double ComputeTransportXSectionPerVolume();
 
   G4double ComputeXSectionPerVolume();
 
@@ -143,12 +143,9 @@ private:
   G4double numlimit;
   G4double tlimitminfix;
   G4double invsqrt12;
-  G4double lowBinEnergy;
-  G4double highBinEnergy;
 
   // cash
   G4double preKinEnergy;
-  G4double xSection;
   G4double ecut;
   G4double lambda0;
   G4double tPathLength;
@@ -159,11 +156,10 @@ private:
   G4double par2;
   G4double par3;
 
-  G4double xsece1;
-  G4double xsece2;
-  G4double xsecn2;
-  G4double zcorr;
-  G4double xsecn[40];
+  G4double xtsec;
+  std::vector<G4double> xsecn;
+  std::vector<G4double> prob;
+  G4int    nelments;
 
   G4int    nbins;
   G4int    nwarnings;
@@ -179,11 +175,10 @@ private:
   G4double constn;
   G4double cosThetaMin;
   G4double cosThetaMax;
-  G4double cosThetaLimit;
   G4double cosTetMaxNuc;
   G4double cosTetMaxNuc2;
   G4double cosTetMaxElec;
-  G4double cosTetMaxHad;
+  G4double cosTetMaxElec2;
   G4double q2Limit;
   G4double alpha2;
   G4double a0;
@@ -198,6 +193,7 @@ private:
   G4double mom2;
   G4double invbeta2;
   G4double etag;
+  G4double lowEnergyLimit;
 
   // target
   G4double targetZ;
@@ -207,7 +203,6 @@ private:
 
   // flags
   G4bool   isInitialized;
-  G4bool   newrun;
   G4bool   inside;
 };
 
@@ -234,7 +229,8 @@ G4double G4WentzelVIModel::GetLambda(G4double e)
     G4bool b;
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
-    x = CrossSection(currentCouple,particle,e);
+    x = CrossSection(currentCouple,particle,e,
+		     (*currentCuts)[currentMaterialIndex]);
   }
   if(x > DBL_MIN) x = 1./x;
   else            x = DBL_MAX;
@@ -254,6 +250,7 @@ void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
+    lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 
@@ -262,11 +259,13 @@ void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
 inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
 {
   if(ekin != tkin || ecut != cut) {
-    cosTetMaxNuc = cosThetaLimit;
-    if(cut > ekin) cosTetMaxNuc = ekin*(1.0 + cosThetaLimit)/cut - 1.0;  
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
+    cosTetMaxNuc = cosThetaMax;
+    if(ekin <= 10.*cut && mass < MeV) {
+      cosTetMaxNuc = ekin*(cosThetaMax + 1.0)/(10.*cut) - 1.0;
+    }
     ComputeMaxElectronScattering(cut);
   } 
 }
@@ -278,12 +277,12 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
   if(Z != targetZ || e != etag) {
     etag    = e; 
     targetZ = Z;
-    G4double x = fNistManager->GetZ13(Z);
+    G4int iz= G4int(Z);
+    if(iz > 99) iz = 99;
+    G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
     //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
-    G4int iz = G4int(Z);
-    if(iz > 99) iz = 99;
     formfactA = FF[iz];
     if(formfactA == 0.0) {
       x = fNistManager->GetA27(iz); 
@@ -291,8 +290,14 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
       FF[iz] = formfactA;
     }
     formfactA *= mom2;
-    cosTetMaxHad = 1.0 - 0.5*q2Limit/formfactA;
-    if(particle == theProton && 1 == iz && cosTetMaxHad < 0.0)cosTetMaxHad = 0.0;
+    cosTetMaxNuc2 = cosTetMaxNuc;
+    
+    G4double z = std::max(-1.0, 1.0 - std::min(ecut,10.*eV*Z)
+			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
+    z = std::min(z, cosTetMaxElec);
+    cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
+    
+    //cosTetMaxElec2 = std::max(cosTetMaxNuc2, cosTetMaxElec);
   } 
 } 
 
