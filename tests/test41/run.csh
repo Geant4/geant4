@@ -2,7 +2,7 @@
 
 mkdir -p $REFERENCE
 cd $REFERENCE
-rm -f r.out p.out
+rm -f *.*
 
 set    work = "$G4MY/test41"
 set    dir  = "$G4INSTALL/tests/test41/"
@@ -11,7 +11,7 @@ setenv PHYSLIST    emstandard
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res0.out
 
-setenv PHYSLIST    standard_local
+setenv PHYSLIST    standard_opt3
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
 
