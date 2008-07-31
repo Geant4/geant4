@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.54 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.55 2008-07-31 17:30:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,7 +115,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   ecut = etag = DBL_MAX;
   cosThetaMin = cos(PolarAngleLimit());
   currentCuts = &cuts;
-  //  G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
+  //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   // << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   // << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   if(!isInitialised) {
@@ -161,7 +161,7 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
       if(ctm < 1.0) cosTetMaxElec = ctm;
     }
   }
-  if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
+  //if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,7 +178,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   SetupParticle(p);
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
-  if(cosTetMaxNuc > cosTetMinNuc) {
+  if(cosTetMaxNuc < cosTetMinNuc) {
     SetupTarget(Z, ekin);
     xsec = CrossSectionPerAtom();  
   }

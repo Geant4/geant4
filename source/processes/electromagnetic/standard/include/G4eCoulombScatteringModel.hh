@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.33 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.34 2008-07-31 17:30:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -223,7 +223,6 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
     if(ekin <= 10.*cut && mass < MeV && cosThetaMin < 1.0) {
       cosTetMinNuc = ekin*(cosThetaMin + 1.0)/(10.*cut) - 1.0;
     }
-    //    cosTetMaxNuc = std::max(cosTetMaxNuc, 1.0 - 0.5*q2Limit/mom2);
     ComputeMaxElectronScattering(cut);
   }
 }
@@ -252,13 +251,12 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     if(particle == theProton && 1 == iz && cosTetMaxNuc2 < 0.0) {
       cosTetMaxNuc2 = 0.0;
     }
-    
-    G4double z = std::max(-1.0, 1.0 - std::min(ecut,10.*eV*Z)
+    G4double e = 10.*eV*Z;
+    if(1 == iz) e *= 2.0;
+    G4double z = std::max(-1.0, 1.0 - std::max(ecut,e)
 			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
     z = std::min(z, cosTetMaxElec);
     cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
-    
-    //cosTetMaxElec2 = std::max(cosTetMaxNuc2, cosTetMaxElec);
   } 
 } 
 

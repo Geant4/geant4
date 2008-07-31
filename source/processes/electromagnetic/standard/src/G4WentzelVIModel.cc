@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.5 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.6 2008-07-31 17:30:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -636,7 +636,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
 
     // scattering off electrons
     if(cosThetaMin > cosem) {
-      esec = f*(cosThetaMin - cosem)/(x1*(1.0 - cosTetMaxElec + screenZ));
+      esec = f*(cosThetaMin - cosem)/(x1*(1.0 - cosem + screenZ));
     }
 
     // scattering off nucleaus

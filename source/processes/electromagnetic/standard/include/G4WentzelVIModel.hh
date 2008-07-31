@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.4 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.5 2008-07-31 17:30:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -291,13 +291,12 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     }
     formfactA *= mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
-    
-    G4double z = std::max(-1.0, 1.0 - std::min(ecut,10.*eV*Z)
+    G4double e = 10.*eV*Z;
+    if(1 == iz) e *= 2.0;
+    G4double z = std::max(-1.0, 1.0 - std::max(ecut,e)
 			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
     z = std::min(z, cosTetMaxElec);
     cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
-    
-    //cosTetMaxElec2 = std::max(cosTetMaxNuc2, cosTetMaxElec);
   } 
 } 
 
