@@ -1,5 +1,5 @@
 
- Last update: 31-Jul-2008
+ Last update: 01-Aug-2008
  ========================
 
  In this directory you can find some useful staff for studying
@@ -25,3 +25,9 @@
  for one beam particle type (e-, or pi-, or pi+, or p), with
  the 3 simplified combined calorimeters.
 
+ The Python script  energyScan  (which in turn uses the
+ Python script  addInfoInTable.py , which in turn uses the
+ Python script  printInfoLogfile.py ) is useful to collect
+ all the information from the generated log files.
+ (These scripts have been modified from those with the
+  same names in StatAccepTest/dirEnergyScan/ ).
