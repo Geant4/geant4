@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.55 2008-07-31 17:30:14 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.56 2008-08-01 11:09:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -161,7 +161,6 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
       if(ctm < 1.0) cosTetMaxElec = ctm;
     }
   }
-  //if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -208,7 +207,7 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 
   if(cosTetMaxElec2 < cosTetMinNuc) {
     elecXSection = fac*(cosTetMinNuc - cosTetMaxElec2)/
-      (x1*(1.0 - cosTetMaxElec + screenZ));
+      (x1*(1.0 - cosTetMaxElec2 + screenZ));
     nucXSection  = elecXSection;
   }
 
@@ -223,7 +222,7 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
     //G4cout <<"x1= "<<x1<<" x2= " <<x2<<" z1= " <<z1<<" z2= "<<z2
     //<<" s= " << " d= " <<d<<G4endl;
     nucXSection += fac*targetZ*(1.0 + 2.0*s)*
-      ((cosTetMinNuc - cosTetMaxNuc2)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
+      ((cosTetMinNuc - cosTetMaxNuc2)*(1.0/(x1*z1) + 1.0/(x2*z2)) -
        2.0*log(z1*x2/(z2*x1))/d);
   }
 
@@ -252,7 +251,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   // << kinEnergy <<G4endl;
  
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,ekin,ecut,ekin);
+  currentElement = SelectRandomAtom(couple,particle,ekin,cutEnergy,ekin);
   SetupTarget(currentElement->GetZ(),ekin);
   
   G4double cost = SampleCosineTheta();
@@ -302,7 +301,9 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
 {
   G4double costm = cosTetMaxNuc2;
   G4double formf = formfactA;
-  G4double prob  = ProbabilityScatteringOfElectron();
+  G4double prob  = 0.0; 
+  G4double xs = CrossSectionPerAtom();
+  if(xs > 0.0) prob = elecXSection/xs;
 
   // scattering off e or A?
   if(G4UniformRand() < prob) {

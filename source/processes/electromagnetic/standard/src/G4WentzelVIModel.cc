@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.6 2008-07-31 17:30:14 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.7 2008-08-01 11:09:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -398,7 +398,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   } else {
 
     // define threshold angle as 2 sigma of central value
-    cosThetaMin = 1.0 - 4.0*x1;
+    cosThetaMin = 1.0 - 2.0*x1;
 
     // for low-energy e-,e+ no limit
     ekin = std::max(ekin, lowEnergyLimit);
@@ -644,14 +644,14 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
 
       // Reserford part
       G4double s  = screenZ*formfactA;
-      G4double w  = 1.0 + 2.0*s;
       G4double z1 = 1.0 - cosnm + screenZ;
       G4double d  = (1.0 - s)/formfactA;
-      G4double x4 = x1 + d;
-      G4double z4 = z1 + d;
+      G4double x2 = x1 + d;
+      G4double z2 = z1 + d;
 
-      nsec = f*targetZ*w*((cosThetaMin - cosnm)*(1.0/(x1*z1) + 1.0/(x4*z4)) 
-			  - 2.0*log(z1*x4/(x1*z4))/d);
+      nsec = f*targetZ*(1.0 + 2.0*s)*
+	((cosThetaMin - cosnm)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
+	 2.0*log(z1*x2/(x1*z2))/d);
     }
     nsec += esec;
     if(nsec > 0.0) esec /= nsec;

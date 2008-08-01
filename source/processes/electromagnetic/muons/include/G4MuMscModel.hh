@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.hh,v 1.15 2008-07-31 13:11:57 vnivanch Exp $
+// $Id: G4MuMscModel.hh,v 1.16 2008-08-01 11:10:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -279,7 +279,8 @@ inline void G4MuMscModel::SetupTarget(G4double Z, G4double e)
     G4int iz = G4int(Z);
     if(iz > 99) iz = 99;
     G4double x = fNistManager->GetZ13(iz);
-    screenZ = a0*x*x*(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2)/mom2;
+    screenZ = a0*x*x/mom2;
+    if(iz > 1) screenZ *=(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
     //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
     formfactA = FF[iz];
     if(formfactA == 0.0) {
