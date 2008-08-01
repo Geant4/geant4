@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------------
-# Last update: 17-Jul-2008
+# Last update: 01-Aug-2008
 #
 # This script requires no input arguments, but it has some parameters that
 # need to be specified (see "***LOOKHERE***" below), and should be run as:
@@ -358,14 +358,15 @@ else :
             theResultFile.write( iEnergy + " " + line )
         theTable.close()
 
+        for iPhysicsList in listPhysicsLists :
+            os.system( "rm -f " + iPhysicsList )
+
     theResultFile.close()
 
     # Clean up temporary files.
     os.system( "rm -f listLogFiles.txt" )
     os.system( "rm -f template.txt" )
     os.system( "rm -f table.txt" )
-    for iPhysicsList in listPhysicsLists :
-        os.system( "rm -f iPhysicsList" )
     os.system( "rm -f old.*" )
     os.system( "rm -f .print*" )
 
