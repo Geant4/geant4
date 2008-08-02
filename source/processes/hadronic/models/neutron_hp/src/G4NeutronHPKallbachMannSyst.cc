@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080801 Protect div0 error, when theCompundFraction is 1 by T. Koi
+//
 #include "G4NeutronHPKallbachMannSyst.hh" 
 #include "Randomize.hh" 
 #include "G4HadronicException.hh" 
@@ -68,6 +70,11 @@ G4double G4NeutronHPKallbachMannSyst::Kallbach(G4double cosTh, G4double anEnergy
 G4double G4NeutronHPKallbachMannSyst::GetKallbachZero(G4double anEnergy)
 {
   G4double result;
+  if ( theCompoundFraction == 1 ) 
+  { 
+     //G4cout << "080730b Adjust theCompoundFraction " << G4endl;
+     theCompoundFraction *= (1-1.0e-15);   
+  } 
   result = 0.5 * (1./A(anEnergy)) * std::log((1-theCompoundFraction)/(1+theCompoundFraction));
   return result;
 }
