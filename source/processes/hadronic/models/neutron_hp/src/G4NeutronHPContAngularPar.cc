@@ -33,6 +33,7 @@
 // 080409 Fix div0 error with G4FPE by T. Koi
 // 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
 // 080714 Limiting the sum of energy of secondary particles by T. Koi
+// 080801 Fix div0 error wiht G4FPE and memory leak by T. Koi
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -120,13 +121,12 @@
            { 
               remaining_energy = theAngular[0].GetLabel();
               fresh = false; 
-            }
-            //TK080711
+           }
+           //TK080711
 
-	    G4double random = G4UniformRand();
-	    G4double * running = new G4double[nEnergies+1];
-	    running[0]=0;
-
+	   G4double random = G4UniformRand();
+	   G4double * running = new G4double[nEnergies+1];
+	   running[0]=0;
 
 	    for(i=1; i<nEnergies+1; i++)
 	    {
@@ -138,16 +138,22 @@
                //TK080711
 	    }
 
-	    for(i=1; i<nEnergies+1; i++)
-	    {
-		it = i-1;
-		if(random > running[i-1]/running[nEnergies] && random <= running[i]/running[nEnergies]) break;
-	    }
-	    fsEnergy = theAngular[it].GetLabel();
+            //080730
+            if ( running[ nEnergies ] != 0 ) 
+            {
 
-            //TK080711
-            if ( i == nEnergies+1 ) fsEnergy = remaining_energy;
-            //TK080711
+	       for ( i = 1 ; i < nEnergies+1 ; i++ )
+	       {
+	 	it = i-1;
+		if ( random > running[ i-1 ]/running[ nEnergies ] && random <= running[ i ] / running[ nEnergies ] ) break;
+               }
+	       fsEnergy = theAngular[ it ].GetLabel();
+
+            }
+
+            //TK080711 
+            if ( i == nEnergies+1 || running[ nEnergies ] == 0 ) fsEnergy = remaining_energy;
+            //TK080711 //080730
 
 	    G4NeutronHPLegendreStore theStore(1);
 	    theStore.Init(0,fsEnergy,nAngularParameters);
@@ -161,6 +167,10 @@
             //TK080711
             remaining_energy -= fsEnergy;
             //TK080711
+
+           //080801b
+	   delete[] running;
+           //080801b
         }
       else 
       {
@@ -203,23 +213,28 @@
                              theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
                              theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
         }
-
       }
       // cash the mean energy in this distribution
       //080409 TKDB
-      if ( nEnergies == 1 )  
+      if ( nEnergies == 1 || running[nEnergies-1] == 0 )  
          currentMeanEnergy = 0.0;
       else
+      { 
          currentMeanEnergy = weighted/running[nEnergies-1];
+      }
       
       //080409 TKDB
       if ( nEnergies == 1 ) it = 0; 
-      //for(i=1; i<nEnergies; i++)
-      for(i=1; i<nEnergies; i++)
+
+      //080729
+      if ( running[nEnergies-1] != 0 )  
       {
-        it = i;
-        if(random<running[i]/running[nEnergies-1]) break;
-      } 
+         for ( i = 1 ; i < nEnergies ; i++ )
+         {
+            it = i;
+            if ( random < running [ i ] / running [ nEnergies-1 ] ) break;
+         } 
+      }
 
       //080714
       if ( running [ nEnergies-1 ] == 0 ) it = 0;
