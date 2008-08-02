@@ -32,6 +32,7 @@
 // 080603 bug fix for Hadron Hyper News #932 by T. Koi 
 // 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4,6
 // 080717 bug fix of calculation of residual momentum by T. Koi
+// 080801 protect negative avalable energy by T. Koi
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -76,6 +77,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
+   theNDLDataA = (int)aFile.GetA();
+   theNDLDataZ = aFile.GetZ();
   if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
@@ -245,6 +248,12 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
     G4double availableEnergy = theNeutron.GetKineticEnergy() + theNeutron.GetMass() - aHadron.GetMass() +
                              (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass();
+//080730c
+    if ( availableEnergy < 0 )
+    {
+       //G4cout << "080730c Adjust availavleEnergy " << G4endl; 
+       availableEnergy = 0; 
+    }
     G4int nothingWasKnownOnHadron = 0;
     G4int dummy;
     G4double eGamm = 0;
