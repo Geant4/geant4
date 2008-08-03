@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.24 2008-05-16 15:21:12 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.25 2008-08-03 18:54:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -236,6 +236,7 @@ void PhysicsList::SetVerbose(G4int val)
 void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,6 +244,7 @@ void PhysicsList::SetCutForGamma(G4double cut)
 void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -250,6 +252,7 @@ void PhysicsList::SetCutForElectron(G4double cut)
 void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
