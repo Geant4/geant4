@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.22 2008-05-20 16:50:15 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.23 2008-08-03 18:30:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,7 +154,7 @@ private:
 
   void Initialise();
 
-  G4PhysicsVector* InitialiseMaterial(const G4Material*);
+  void BuildCorrectionVector();
 
   void SetupKinematics(const G4ParticleDefinition*,
 		       const G4Material*,
@@ -261,9 +261,12 @@ private:
   // Ion stopping data
   G4int                       nIons;
   G4int                       idx;
+  G4int                       currentZ;
   std::vector<G4int>          Zion;
   std::vector<G4int>          Aion;
   std::vector<G4String>       materialName;
+
+  std::vector<const G4ParticleDefinition*> ionList;
 
   std::vector<const G4Material*> materialList;
   std::vector<G4PhysicsVector*>  stopData;
