@@ -373,13 +373,13 @@ void test31Histo::TableControl()
   // G4double step = (xmax - xmin)/(G4double)nbin;
   // G4double x    = xmin;
 
-  const G4int ne = 37;
+  const G4int ne = 42;
   G4double e0[ne]={0.025, 0.03, 0.04, 0.05, 0.1, 0.2, 0.3, 
 		   0.5,   1.0,   1.1,  1.2,  1.3, 1.4, 1.5, 
 		   1.6,   1.7,   1.8,  1.9,  2.0, 2.1, 2.2,
                    2.3,   2.4,   2.5,  3.0,  5.0, 10., 15.0, 
                    20.0,   30.,  50.,  100., 200., 300., 400., 
-		   500., 1000.}; // 2000., 3000., 5000., 10000., 20000.};
+		   500., 1000., 2000., 3000., 5000., 10000., 20000.};
   //                  30000., 100000., 300000., 1000000., 10000000.,};
   const G4int np = 8;
   G4String namep[np] = {"e-","mu+","pi-","proton","alpha", "C12[0.0]", 
@@ -401,20 +401,27 @@ void test31Histo::TableControl()
     if(ii == 1) proc_name = mu_name;
     else if(ii == 2) proc_name = h_name;
     else if(ii == 4) {proc_name = ion_name;}
+
+    G4double AA = 1.0;
+    if(ii >= 5) {
+      G4int ZZ = part->GetAtomicNumber();
+      AA = mman->GetAtomicMassAmu(ZZ);
+    }
+
     G4cout << "================================================================" << G4endl;
     G4cout << "   Tables control for  " << namep[ii] << G4endl;
-    G4cout << "   Material            " << mat_name << G4endl;
+    G4cout << "   Material            " << mat_name << "  AA= "<< AA << G4endl;
     G4cout << "================================================================" << G4endl;
 
-      G4cout << "  N   E(MeV/N)  Esc(MeV) dEdx_T/NIST "
-	     << "dEdx_C/NIST  dEdx_G/NIST  dedx(MeV*cm^2/mg)" 
-	     << std::setprecision(6) << G4endl;
+    G4cout << "  N   E(MeV/N)  Esc(MeV) dEdx_T/NIST "
+	   << "dEdx_C/NIST  dEdx_G/NIST  dedx(MeV*cm^2/mg)" 
+	   << std::setprecision(6) << G4endl;
 
     for(G4int ij=0; ij<ne; ij++) {
     
       G4double e = e0[ij];
       G4double e1 = e;
-      if(ii >= 5) e1 *= part->GetPDGMass()/amu_c2;
+      if(ii >= 5) e1 *= AA;
       G4double dedx0 = cal.ComputeTotalDEDX(e1,part,mat,e1);
       G4double dedx  = cal.ComputeElectronicDEDX(e1,part,mat,e1);
       G4double dedx1 = cal.GetDEDX(e1,part,mat);

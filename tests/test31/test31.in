@@ -8,7 +8,7 @@
 /event/verbose 0
 /test31/verbose 0
 #
-/testem/phys/setCuts         1 mm
+/testem/phys/setCuts         1 km
 #/testem/phys/stepMax        0.1 mm
 /testem/phys/addPhysics      emstandard_opt2
 /test31/AbsorberMaterial     G4_WATER
@@ -25,6 +25,7 @@
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 1
+/testem/phys/setCuts         1 mm
 /test31/AbsorberMaterial     G4_Si
 /gun/particle e-
 /run/beamOn 100
