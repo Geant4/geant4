@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.43 2008-08-03 18:30:36 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.44 2008-08-03 18:47:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,15 +132,15 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
         G4double x1 = corr->ComputeIonCorrections(p,mat,kinEnergy);
         G4double x2 = corr->ComputeIonCorrections(p,mat,eth);
 	res += x1 - x2*eth/kinEnergy;
-	
+	/*	
 	G4cout << "### GetDEDX: E= " << kinEnergy << " res= " << res 
 	       << " x1= " << x1 << " x2= " << x2 
 	       << " del= " << x1 - x2*eth/kinEnergy << G4endl;;
-	
+	*/
       } 
     }
 
-    if(verbose>-1) {
+    if(verbose>0) {
       G4cout << "G4EmCalculator::GetDEDX: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
 	     << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
