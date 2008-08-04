@@ -11,8 +11,10 @@ setenv PHYSLIST    standardIG
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& resG.out
 
-ln -s $VFEM/test41/geant4-09-01-ref-06/*S.* ./
+#ln -s $VFEM/test41/geant4-09-01-ref-06/*S.* ./
+ln -s $VFEM/test41/geant4-09-01-ref-00/*S.* ./
 ln -s $VFEM/test41/geant4-09-01-ref-06/*0.* ./
 ln -s $VFEM/test41/geant4-09-01-ref-06/*1.* ./
-ln -s $VFEM/test41/geant4-09-01-ref-06/*3.* ./
+#ln -s $VFEM/test41/geant4-09-01-ref-06/*3.* ./
+ln -s ../20080804/*3.* ./
 source ${dir}plot.csh $1 >& p.out
