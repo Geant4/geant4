@@ -435,7 +435,16 @@ void test31Histo::TableControl()
 	     << std::setw(11) << dedx2*fact
 	     << G4endl; 
     }
-  
+    /*
+    G4double ee0 = 0.0;
+    G4cout << "######## Ranges ########" << G4endl;
+    for(G4int ik=0; ik<1000; ik++) {
+      G4double e = std::pow(10.,ee0);
+      G4double r = cal.GetRange(e,part,mat);
+      G4cout << "E(MeV)= " << e << "  R(mm)= " << r << G4endl;
+      ee0 += 0.003;
+    }
+    */
     //    G4bool icorr = true;
     G4bool icorr = false;
     if(icorr) {
