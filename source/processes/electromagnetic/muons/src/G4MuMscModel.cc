@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMscModel.cc,v 1.25 2008-07-31 13:11:57 vnivanch Exp $
+// $Id: G4MuMscModel.cc,v 1.26 2008-08-04 09:07:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,10 +194,10 @@ G4double G4MuMscModel::ComputeCrossSectionPerAtom(
     x2 = 1.0/(1.0 - x1); 
     x3 = x/screenZ;
     x4 = formfactA*x;
-    if(x3 < numlimit) 
+    if(x3 < numlimit && x1 < numlimit) {
       y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 
 			      - 1.5*x1 + 3.0*x1*x1 + 2.666666*x3*x1);
-    else {
+    } else {
       y  = ((1.0 + x1)*x2*log((1. + x3)/(1. + x4)) 
 	    - x3/(1. + x3) - x4/(1. + x4))*x2*x2; 
     }
