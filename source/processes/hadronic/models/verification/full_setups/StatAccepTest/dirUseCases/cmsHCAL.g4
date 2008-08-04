@@ -61,6 +61,7 @@
 #
 /mydet/update
 #
-/random/resetEngineFrom forVI-currentRun.rndm
-/run/beamOn 20000
+/run/beamOn 5000
+#/random/resetEngineFrom forVI-currentRun.rndm
+#/run/beamOn 20000
 #
