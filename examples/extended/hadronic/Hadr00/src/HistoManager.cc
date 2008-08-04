@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.2 2008-08-04 16:49:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void HistoManager::BeginOfRun()
   G4double e1 = std::log10(minKinEnergy/MeV);
   G4double e2 = std::log10(maxKinEnergy/MeV);
 
-  G4cout<<"e1= "<<e1<<" e2= "<<e2<<" p1= "<<p1<<" p2= "<<p2<<G4endl;
+  //G4cout<<"e1= "<<e1<<" e2= "<<e2<<" p1= "<<p1<<" p2= "<<p2<<G4endl;
 
   if(isInitialised) {
     histo->setHisto1D(0,nBinsP,p1,p2);
@@ -157,12 +157,12 @@ void HistoManager::EndOfRun()
 	 << " off " << elementName
 	 << G4endl;
   if(verbose > 0) {
-    G4cout << "---------------------------------------------------------" 
+    G4cout << "-------------------------------------------------------------" 
 	   << G4endl;
     G4cout << "    N     E(MeV)    Elastic(barn)   Inelastic(barn)";
     if(particle == neutron) G4cout << "  Capture(barn)     Fission(barn)";
     G4cout << G4endl;     
-    G4cout << "---------------------------------------------------------" 
+    G4cout << "-------------------------------------------------------------" 
 	   << G4endl;
   }
   if(!particle || !elm) {
@@ -198,6 +198,12 @@ void HistoManager::EndOfRun()
     if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
     histo->fill(3, x, xs/barn);    
     if(particle == neutron) {
+      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
+      if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+      histo->fill(5, x, xs/barn);    
+      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
+      if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+      histo->fill(7, x, xs/barn);    
     }
     if(verbose>0) G4cout << G4endl;
   }
@@ -211,6 +217,12 @@ void HistoManager::EndOfRun()
     histo->fill(0, x, xs/barn);    
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
     histo->fill(2, x, xs/barn); 
+    if(particle == neutron) {
+      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
+      histo->fill(4, x, xs/barn);    
+      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
+      histo->fill(6, x, xs/barn);    
+    }
   }
   if(verbose > 0) {
     G4cout << "---------------------------------------------------------" 

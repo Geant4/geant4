@@ -46,6 +46,7 @@
 /testhadr/targetElm  C
 /testhadr/HistoName  n_c
 /run/beamOn 0
+/testhadr/verbose 1
 /testhadr/targetElm  Al
 /testhadr/HistoName  n_al
 /run/beamOn 0
