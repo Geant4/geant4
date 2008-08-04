@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 August 2008 Vladimir Ivanchenko (hadr-man-V09-01-05)
+------------------------------------------------------
+- G4HadronicProcessStore - use sub-types to access cross sections,
+                           add proceses following only G4VProcess interface only  
+
 08 July 2008 Dennis Wright (hadr-man-V09-01-04)
 -----------------------------------------------
 - set process sub-type to 12 for G4HadronInelasticProcess

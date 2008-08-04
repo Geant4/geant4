@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.1 2008-05-19 09:49:46 vnivanch Exp $
+// $Id: G4HadronicProcessStore.hh,v 1.2 2008-08-04 13:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,6 +100,52 @@ public:
     G4double kineticEnergy,
     G4int Z, G4int A);
 
+  G4double GetCaptureCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material);
+
+  G4double GetCaptureCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement);
+
+  G4double GetCaptureCrossSectionPerIsotope(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    G4int Z, G4int A);
+
+  G4double GetFissionCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material);
+
+  G4double GetFissionCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement);
+
+  G4double GetFissionCrossSectionPerIsotope(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    G4int Z, G4int A);
+
+  G4double GetChargeExchangeCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material);
+
+  G4double GetChargeExchangeCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement);
+
+  G4double GetChargeExchangeCrossSectionPerIsotope(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    G4int Z, G4int A);
+
+  // register/deregister processes following G4HadronicProcess interface
   void Register(G4HadronicProcess*); 
 
   void RegisterParticle(G4HadronicProcess*,
@@ -110,6 +156,14 @@ public:
 
   void DeRegister(G4HadronicProcess*); 
 
+  // register/deregister processes following only G4VProcess interface
+  void RegisterExtraProcess(G4VProcess*); 
+
+  void RegisterParticleForExtraProcess(G4VProcess*,
+				       const G4ParticleDefinition*); 
+
+  void DeRegisterExtraProcess(G4VProcess*); 
+
   void PrintInfo(const G4ParticleDefinition*); 
 
   void Dump(G4int level);
@@ -118,14 +172,14 @@ public:
 
   G4int GetVerbose();
 
-  G4HadronicProcess* FindElasticProcess(const G4ParticleDefinition*);
-
-  G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+  G4HadronicProcess* FindProcess(const G4ParticleDefinition*, G4int subType);
 
 private:
 
+  // constructor
   G4HadronicProcessStore();
 
+  // print process info
   void Print(G4int idxProcess, G4int idxParticle);
 
   static G4HadronicProcessStore* theInstance;
@@ -134,26 +188,34 @@ private:
   typedef G4HadronicProcess* HP;
   typedef G4HadronicInteraction* HI;
 
-  std::multimap<PD,HP> p_map;
-  std::multimap<HP,HI> m_map;
-
+  // hadronic processes following G4HadronicProcess interface
   std::vector<G4HadronicProcess*> process;
   std::vector<G4HadronicInteraction*> model;
   std::vector<G4String> modelName;
   std::vector<PD> particle;
   std::vector<G4int> wasPrinted;
 
+  std::multimap<PD,HP> p_map;
+  std::multimap<HP,HI> m_map;
+
+  // hadronic processes following only G4VProcess interface
+  std::vector<G4VProcess*> extraProcess;
+  std::multimap<PD,G4VProcess*> ep_map;
+
+  // counters and options
+  G4int n_proc;
+  G4int n_model;
+  G4int n_part;
+  G4int n_extra;
+
+  G4int  verbose;
+  G4bool buildTableStart;
+
+  // cash
   HP   currentProcess;
   PD   currentParticle;
 
   G4DynamicParticle localDP;
-
-  G4int n_proc;
-  G4int n_model;
-  G4int n_part;
-
-  G4int  verbose;
-  G4bool buildTableStart;
 
 };
 

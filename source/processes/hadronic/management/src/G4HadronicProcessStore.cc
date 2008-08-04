@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.3 2008-06-05 17:07:38 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.4 2008-08-04 13:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,56 +84,11 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   n_proc = 0;
   n_part = 0;
   n_model= 0;
+  n_extra= 0;
   currentProcess  = 0;
   currentParticle = 0;
   verbose = 1;
   buildTableStart = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
-    const G4ParticleDefinition *aParticle,
-    G4double kineticEnergy,
-    const G4Material *material)
-{
-  G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
-  size_t nelm = material->GetNumberOfElements();
-  for (size_t i=0; i<nelm; i++) {
-    const G4Element* elm = (*theElementVector)[i];
-    cross += theAtomNumDensityVector[i]*
-      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
-  }
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4double G4HadronicProcessStore::GetInelasticCrossSectionPerAtom(
-    const G4ParticleDefinition *aParticle,
-    G4double kineticEnergy,
-    const G4Element *anElement)
-{
-  G4HadronicProcess* hp = FindInelasticProcess(aParticle);
-  localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
-  localDP.SetKineticEnergy(kineticEnergy);
-  G4double cross = 0.0;
-  if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
-						anElement,
-						STP_Temperature);
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4double G4HadronicProcessStore::GetInelasticCrossSectionPerIsotope(
-    const G4ParticleDefinition *,
-    G4double,
-    G4int, G4int)
-{
-  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -162,7 +117,7 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindElasticProcess(aParticle);
+  G4HadronicProcess* hp = FindProcess(aParticle, 11);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
@@ -183,15 +138,196 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerIsotope(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material)
+{
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    cross += theAtomNumDensityVector[i]*
+      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+  }
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetInelasticCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement)
+{
+  G4HadronicProcess* hp = FindProcess(aParticle, 12);
+  localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
+  localDP.SetKineticEnergy(kineticEnergy);
+  G4double cross = 0.0;
+  if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
+						anElement,
+						STP_Temperature);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetInelasticCrossSectionPerIsotope(
+    const G4ParticleDefinition *,
+    G4double,
+    G4int, G4int)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material)
+{
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    cross += theAtomNumDensityVector[i]*
+      GetCaptureCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+  }
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCaptureCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement)
+{
+  G4HadronicProcess* hp = FindProcess(aParticle, 13);
+  localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
+  localDP.SetKineticEnergy(kineticEnergy);
+  G4double cross = 0.0;
+  if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
+						anElement,
+						STP_Temperature);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCaptureCrossSectionPerIsotope(
+    const G4ParticleDefinition *,
+    G4double,
+    G4int, G4int)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material)
+{
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    cross += theAtomNumDensityVector[i]*
+      GetFissionCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+  }
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetFissionCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement)
+{
+  G4HadronicProcess* hp = FindProcess(aParticle, 14);
+  localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
+  localDP.SetKineticEnergy(kineticEnergy);
+  G4double cross = 0.0;
+  if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
+						anElement,
+						STP_Temperature);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetFissionCrossSectionPerIsotope(
+    const G4ParticleDefinition *,
+    G4double,
+    G4int, G4int)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material)
+{
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  size_t nelm = material->GetNumberOfElements();
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    cross += theAtomNumDensityVector[i]*
+      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+  }
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Element *anElement)
+{
+  G4HadronicProcess* hp = FindProcess(aParticle, 16);
+  localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
+  localDP.SetKineticEnergy(kineticEnergy);
+  G4double cross = 0.0;
+  if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
+						anElement,
+						STP_Temperature);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerIsotope(
+    const G4ParticleDefinition *,
+    G4double,
+    G4int, G4int)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4HadronicProcessStore::Register(G4HadronicProcess* proc) 
 { 
-  G4int i=0;
-  for(; i<n_proc; i++) {if(process[i] == proc) break;}
+  for(G4int i=0; i<n_proc; i++) {if(process[i] == proc) return;}
     
-  if(i == n_proc) {
-    n_proc++;
-    process.push_back(proc);
-  }
+  n_proc++;
+  process.push_back(proc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -211,7 +347,7 @@ void G4HadronicProcessStore::RegisterParticle(G4HadronicProcess* proc,
   }
   
   // the pair should be added?
-  if(i < n_proc && j < n_part - 1) {
+  if(i < n_proc) {
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
       if(it->first == part) {
@@ -247,14 +383,68 @@ void G4HadronicProcessStore::RegisterInteraction(G4HadronicProcess* proc,
 
 void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 {
-  G4int i=0;
-  for(; i<n_proc; i++) {
+  for(G4int i=0; i<n_proc; i++) {
     if(process[i] == proc) {
       process[i] = 0;
       break;
     }
   }
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
+{
+  for(G4int i=0; i<n_extra; i++) {if(extraProcess[i] == proc) return;}
+    
+  n_extra++;
+  extraProcess.push_back(proc);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::RegisterParticleForExtraProcess(
+                             G4VProcess* proc,
+			     const G4ParticleDefinition* part)
+{
+  G4int i=0;
+  for(; i<n_extra; i++) {if(extraProcess[i] == proc) break;}
+  G4int j=0;
+  for(; j<n_part; j++) {if(particle[j] == part) break;}
+
+  if(j == n_part) {
+    n_part++;
+    particle.push_back(part);
+    wasPrinted.push_back(0);
+  }
+  
+  // the pair should be added?
+  if(i < n_extra) {
+    std::multimap<PD,G4VProcess*,std::less<PD> >::iterator it;
+    for(it=ep_map.lower_bound(part); it!=ep_map.upper_bound(part); ++it) {
+      if(it->first == part) {
+	G4VProcess* process = (it->second);
+	if(proc == process) return;
+      }
+    }
+  }
+  
+  ep_map.insert(std::multimap<PD,G4VProcess*>::value_type(part,proc));
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
+{
+  for(G4int i=0; i<n_extra; i++) {
+    if(extraProcess[i] == proc) {
+      extraProcess[i] = 0;
+      break;
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part) 
 {
@@ -284,12 +474,15 @@ void G4HadronicProcessStore::Dump(G4int level)
 			   pname == "neutron" ||
 			   pname == "pi+" ||
 			   pname == "pi-" ||
+                           pname == "gamma" ||
+                           pname == "e-" ||
 			   pname == "kaon+" ||
 			   pname == "kaon-" ||
 			   pname == "lambda" ||
 			   pname == "anti_neutron" ||
 			   pname == "anti_proton")) yes = true;
     if(yes) {
+      // main processes
       std::multimap<PD,HP,std::less<PD> >::iterator it;
       for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
 	if(it->first == part) {
@@ -302,12 +495,21 @@ void G4HadronicProcessStore::Dump(G4int level)
 	  }
 	}
       }
+      // extra processes
+      std::multimap<PD,G4VProcess*,std::less<PD> >::iterator itp;
+      for(itp=ep_map.lower_bound(part); itp!=ep_map.upper_bound(part); ++itp) {
+	if(itp->first == part) {
+	  G4VProcess* proc = (itp->second);
+	  G4cout << std::setw(20) << proc->GetProcessName() << G4endl;
+	}
+      }
     }
   }
-  if(level > 0) 
+  if(level > 0) {
     G4cout << "=============================================================="
 	   << "=============================="
 	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -370,8 +572,8 @@ G4int G4HadronicProcessStore::GetVerbose()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4HadronicProcess* G4HadronicProcessStore::FindElasticProcess(
-		   const G4ParticleDefinition* part)
+G4HadronicProcess* G4HadronicProcessStore::FindProcess(
+		   const G4ParticleDefinition* part, G4int subType)
 {
   bool isNew = false;
   G4HadronicProcess* hp = 0;
@@ -382,7 +584,7 @@ G4HadronicProcess* G4HadronicProcessStore::FindElasticProcess(
     localDP.SetDefinition(const_cast<G4ParticleDefinition*>(part));
   } else if(!currentProcess) {
     isNew = true;
-  } else if(currentProcess->GetProcessName() == "hElastic") {
+  } else if(subType == currentProcess->GetProcessSubType()) {
     hp = currentProcess;
   } else {
     isNew = true;
@@ -391,51 +593,12 @@ G4HadronicProcess* G4HadronicProcessStore::FindElasticProcess(
   if(isNew) {
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-      if(it->first == part && (it->second)->GetProcessName() == "hElastic") {
+      if(it->first == part && subType == (it->second)->GetProcessSubType()) {
 	hp = it->second;
 	break;
       }
     }  
     currentProcess = hp;
-  }
-
-  return hp;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4HadronicProcess* G4HadronicProcessStore::FindInelasticProcess(
-                   const G4ParticleDefinition* part)
-{
-  bool isNew = false;
-  G4HadronicProcess* hp = 0;
-
-  G4String nam = currentProcess->GetProcessName();
-
-  if(part != currentParticle) {
-    isNew = true;
-    currentParticle = part;
-    localDP.SetDefinition(const_cast<G4ParticleDefinition*>(part));
-  } else if(!currentProcess) {
-    isNew = true;
-  } else if( nam.find("Inelastic") != std::string::npos ) {
-    hp = currentProcess;
-  } else {
-    isNew = true;
-  }
-
-  if(isNew) {
-    std::multimap<PD,HP,std::less<PD> >::iterator it;
-    for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-      if(it->first == part) {
-	nam = (it->second)->GetProcessName();
-	if( nam.find("Inelastic") != std::string::npos ) {
-	  hp = it->second;
-	  currentProcess = hp;
-	  break;
-	}
-      }
-    }  
   }
 
   return hp;

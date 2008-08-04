@@ -39,7 +39,7 @@
 /event/verbose 0 
 /tracking/verbose 0
 #
-#/gun/particle e-
+#/gun/particle e- 
 /gun/particle pi-
 #
 /gun/energy 100 GeV
@@ -61,5 +61,6 @@
 #
 /mydet/update
 #
-/run/beamOn 5000
+/random/resetEngineFrom forVI-currentRun.rndm
+/run/beamOn 20000
 #
