@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.hh,v 1.2 2006-06-29 19:51:56 gunter Exp $
+// $Id: G4WaterStopping.hh,v 1.3 2008-08-04 08:49:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4WaterStopping_h
@@ -73,8 +73,8 @@ private:
   G4WaterStopping & operator=(const  G4WaterStopping &right);
   G4WaterStopping(const  G4WaterStopping&);
 
-  G4int    Z[8];
-  G4int    A[8];
+  G4int    Z[16];
+  G4int    A[16];
   std::vector<G4LPhysicsFreeVector*>  dedx;
 };
 
