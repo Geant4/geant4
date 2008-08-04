@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.7 2008-08-01 11:09:29 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.8 2008-08-04 08:49:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,7 +204,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     x2 = 1.0/(1.0 - x1); 
     x3 = x/screenZ;
     x4 = formfactA*x;
-    if(x3 < numlimit) {
+    if(x3 < numlimit && x1 < numlimit) {
       y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 - 1.5*x1);
       //			      + 3.0*x1*x1 + 2.666666*x3*x1);
     } else {
@@ -398,7 +398,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   } else {
 
     // define threshold angle as 2 sigma of central value
-    cosThetaMin = 1.0 - 2.0*x1;
+    cosThetaMin = 1.0 - 3.0*x1;
 
     // for low-energy e-,e+ no limit
     ekin = std::max(ekin, lowEnergyLimit);
