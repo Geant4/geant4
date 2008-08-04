@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.9 2008-05-30 11:01:37 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.10 2008-08-04 09:11:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -170,7 +170,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 100*um);          
       muIoni->SetLinearLossLimit(1.e-3);
@@ -217,7 +217,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
       hIoni->SetLinearLossLimit(1.e-2);
@@ -245,7 +245,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     
   // Ionization
   //
-  opt.SetSubCutoff(true);    
+  //opt.SetSubCutoff(true);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
