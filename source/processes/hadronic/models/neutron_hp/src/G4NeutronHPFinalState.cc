@@ -1,4 +1,5 @@
 //080721 Create adjust_final_state method by T. Koi
+//080801 Residual reconstruction with theNDLDataA,Z (A, Z, and momentum are adjusted) by T. Koi
 
 #include "G4NeutronHPFinalState.hh"
 
@@ -30,7 +31,30 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    if ( (int)(theBaseZ - sum_Z) == 0 && (int)(theBaseA + 1 - sum_A) == 0 )
       resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ , max_SecA , 0.0 );
    else
+   {
       resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( int(theBaseZ - sum_Z) , (int)(theBaseA + 1 - sum_A) , 0.0 );
+      if ( resi_pd == NULL )
+      {
+        // theNDLDataZ,A has the Z and A of used NDL file
+        if ( (int)(theNDLDataZ - sum_Z) == 0 && (int)(theNDLDataA + 1 - sum_A) == 0 )
+        {
+           G4int dif_Z = ( int ) ( theNDLDataZ - theBaseZ );
+           G4int dif_A = ( int ) ( theNDLDataA - theBaseA );
+           resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ - dif_Z , max_SecA - dif_A , 0.0 );
+           for ( int i = 0 ; i < nSecondaries ; i++ )
+           {
+              if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
+                && theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
+              {
+                 G4ThreeVector p = theResult.GetSecondary( i )->GetParticle()->GetMomentum();
+                 p = p * resi_pd->GetPDGMass()/ G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ , max_SecA , 0.0 )->GetPDGMass(); 
+                 theResult.GetSecondary( i )->GetParticle()->SetDefinition( resi_pd );
+                 theResult.GetSecondary( i )->GetParticle()->SetMomentum( p );
+              } 
+           }
+        }
+      }
+   }
 
 
    G4LorentzVector secs_4p_lab( 0.0 );
