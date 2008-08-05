@@ -33,6 +33,7 @@
 // 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4,6
 // 080717 bug fix of calculation of residual momentum by T. Koi
 // 080801 protect negative avalable energy by T. Koi
+//        introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
