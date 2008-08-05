@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.60 2008-08-05 07:36:09 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.61 2008-08-05 07:37:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -267,7 +267,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     sint = 0.0;
     npos++;
   } else if(cost < -1 ) {
-
+    /*
     G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
 	   << N << " " << aParticle->GetDefinition()->GetParticleName()
 	   << " mom(GeV)= " << plab/GeV 
@@ -277,7 +277,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     else if(gtype ==  fHElastic) G4cout << " HElastic ";
     G4cout << " cost= " << cost 
 	   << G4endl; 
-
+    */
     cost = 1.0;
     sint = 0.0;
     nneg++;
