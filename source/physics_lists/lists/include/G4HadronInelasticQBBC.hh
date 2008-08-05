@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.4 2007-11-15 12:18:11 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.5 2008-08-05 10:25:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -88,9 +88,6 @@ public:
   virtual void ConstructProcess();
 
 private:
-
-  void Register(G4ParticleDefinition*, G4HadronicProcess*, 
-		G4HadronicInteraction*, const G4String&);
 
   G4PiNuclearCrossSection thePiCross;
   G4ProtonInelasticCrossSection  theXSecP;
