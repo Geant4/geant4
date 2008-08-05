@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.59 2008-05-19 09:59:44 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.60 2008-08-05 07:36:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -224,7 +224,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }
 
   if(gtype == fLElastic) {
-    t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
+    G4double g2 = GeV*GeV; 
+    t = g2*SampleT(tmax/g2,m1,m2,aTarget);
   }
 
   // use mean atomic number
@@ -266,6 +267,17 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     sint = 0.0;
     npos++;
   } else if(cost < -1 ) {
+
+    G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
+	   << N << " " << aParticle->GetDefinition()->GetParticleName()
+	   << " mom(GeV)= " << plab/GeV 
+	   << " the model type " << gtype;
+    if(gtype ==  fQElastic) G4cout << " CHIPS ";
+    else if(gtype ==  fLElastic) G4cout << " LElastic ";
+    else if(gtype ==  fHElastic) G4cout << " HElastic ";
+    G4cout << " cost= " << cost 
+	   << G4endl; 
+
     cost = 1.0;
     sint = 0.0;
     nneg++;
@@ -327,14 +339,14 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 }
 
 G4double 
-G4HadronElastic::SampleT(G4double, G4double, G4double, G4double atno2)
+G4HadronElastic::SampleT(G4double tmax, G4double, G4double, G4double atno2)
 {
   // G4cout << "Entering elastic scattering 2"<<G4endl;
   // Compute the direction of elastic scattering.
   // It is planned to replace this code with a method based on
   // parameterized functions and a Monte Carlo method to invert the CDF.
 
-  G4double ran = G4UniformRand();
+  //  G4double ran = G4UniformRand();
   G4double aa, bb, cc, dd, rr;
   if (atno2 <= 62.) {
     aa = std::pow(atno2, 1.63);
@@ -349,14 +361,18 @@ G4HadronElastic::SampleT(G4double, G4double, G4double, G4double atno2)
   }
   aa = aa/bb;
   cc = cc/dd;
+  G4double ran, t1, t2;
+  do {
+    ran = G4UniformRand();
+    t1 = -std::log(ran)/bb;
+    t2 = -std::log(ran)/dd;
+  } while(t1 > tmax || t2 > tmax);
+
   rr = (aa + cc)*ran;
+
   if (verboseLevel > 1) {
     G4cout << "DoIt: aa,bb,cc,dd,rr" << G4endl;
     G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << G4endl;
-  }
-  G4double t1 = -std::log(ran)/bb;
-  G4double t2 = -std::log(ran)/dd;
-  if (verboseLevel > 1) {
     G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << G4endl;
     G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << G4endl;
   }
@@ -367,7 +383,7 @@ G4HadronElastic::SampleT(G4double, G4double, G4double, G4double atno2)
   ier1 = Rtmi(&t, t1, t2, eps, ind1,
 	      aa, bb, cc, dd, rr);
   if (verboseLevel > 1) {
-    G4cout << "From Rtmi, ier1=" << ier1 << G4endl;
+    G4cout << "From Rtmi, ier1=" << ier1 << " t= " << t << G4endl;
     G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << G4endl;
   }
   if (ier1 != 0) t = 0.25*(3.*t1 + t2);
