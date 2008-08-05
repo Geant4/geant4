@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.6 2008-07-24 10:34:56 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.7 2008-08-05 13:19:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,9 @@
 // 24-07-08  central part of scattering angle (theta0) has been tuned
 //           tail of the scattering angle distribution has been tuned
 //           using some e- and proton scattering data
-
+//
+// 05-08-08  bugfix in ComputeTruePathLengthLimit (L.Urban)
+//
 
 // Class Description:
 //
@@ -477,6 +479,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 	      else
 	        tgeom = 2.*geomlimit/facgeom;
 	    }
+            else
+              tgeom = geombig;
 
           //define stepmin here (it depends on lambda!)
           //rough estimation of lambda_elastic/lambda_transport
