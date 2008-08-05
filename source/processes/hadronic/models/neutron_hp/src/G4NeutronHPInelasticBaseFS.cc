@@ -27,6 +27,9 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 080801 Give a warning message for irregular mass value in data file by T. Koi
+//        Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+//
 #include "G4NeutronHPInelasticBaseFS.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiPropertiesTable.hh"
@@ -75,6 +78,8 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
+   theNDLDataA = (int)aFile.GetA();
+   theNDLDataZ = aFile.GetZ();
   if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
@@ -177,6 +182,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
      { targetMass = theEnergyAngData->GetTargetMass(); }
   if(theAngularDistribution!=0)
      { targetMass = theAngularDistribution->GetTargetMass(); }
+//080731a
+if ( targetMass == 0 ) G4cout << "080731a targetMass become 0 " << G4endl;
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
   G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
