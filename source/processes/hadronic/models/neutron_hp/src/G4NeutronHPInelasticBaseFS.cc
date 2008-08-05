@@ -183,7 +183,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   if(theAngularDistribution!=0)
      { targetMass = theAngularDistribution->GetTargetMass(); }
 //080731a
-if ( targetMass == 0 ) G4cout << "080731a targetMass become 0 " << G4endl;
+if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in G4NDL, please update the latest version. If you use the latest, then please report this problem to Geant4 Hyper news." << G4endl;
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
   G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
