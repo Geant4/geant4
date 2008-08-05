@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.hh,v 1.2 2006-06-29 21:56:33 gunter Exp $
+// $Id: G4StepLimiterPerRegion.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@ class G4StepLimiterPerRegion : public G4VDiscreteProcess
 public:
 
   G4StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
-  ~G4StepLimiterPerRegion();
+  virtual ~G4StepLimiterPerRegion();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -61,7 +61,7 @@ public:
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-  {return 0.;};    // it is not needed here !
+  {return 0.;};    
 
 private:
 

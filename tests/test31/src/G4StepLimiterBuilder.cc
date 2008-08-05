@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterBuilder.cc,v 1.2 2006-06-29 21:57:59 gunter Exp $
+// $Id: G4StepLimiterBuilder.cc,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -68,9 +68,6 @@ void G4StepLimiterBuilder::ConstructParticle()
 
 void G4StepLimiterBuilder::ConstructProcess()
 {
-  // Add Decay Process
-
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -78,7 +75,7 @@ void G4StepLimiterBuilder::ConstructProcess()
 
     if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
 
-      pmanager->AddProcess(stepMax, -1,-1,6);
+      pmanager->AddDiscreteProcess(stepMax);
 
     }
   }

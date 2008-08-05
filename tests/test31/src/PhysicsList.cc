@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.25 2008-08-03 18:54:19 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.26 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ void PhysicsList::ConstructProcess()
     G4cout << "### PhysicsList Construte Processes" << G4endl;
   if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
   G4VModularPhysicsList::ConstructProcess();
-
+  /*
   // Define energy interval for loss processes
   G4EmProcessOptions emOptions;
   emOptions.SetMinEnergy(0.1*keV);
@@ -122,6 +122,7 @@ void PhysicsList::ConstructProcess()
   //  emOptions.SetBuildCSDARange(false);
   emOptions.SetApplyCuts(true);
   //emOptions.SetVerbose(0);
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
