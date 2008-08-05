@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.14 2008-07-22 00:09:17 tkoi Exp $
+// $Id: G4NeutronHPFinalState.hh,v 1.15 2008-08-05 22:43:26 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 080721 Create adjust_final_state method by T. Koi  
+// 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
@@ -50,6 +51,9 @@ public:
     hasAnyData = true;
     theBaseZ = 0;
     theBaseA = 0;
+
+    theNDLDataZ = 0;
+    theNDLDataA = 0;
 
      adjustResult = true;
      if ( getenv( "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
@@ -97,6 +101,8 @@ public:
 //080721
    protected:
       void adjust_final_state ( G4LorentzVector );
+      G4int theNDLDataZ;
+      G4int theNDLDataA;
 
    private:
       G4bool adjustResult;
