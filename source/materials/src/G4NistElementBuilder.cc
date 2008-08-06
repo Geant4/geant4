@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.17 2008-06-04 08:27:29 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.18 2008-08-06 16:16:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -235,12 +235,11 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   G4double ww = 0.0;
   G4double www;
   size_t nm = nc;
-  //  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i]; // - delm;
-    sigMass[index]      = (&sA)[i];
+    massIsotopes[index] = (&A)[i]*amu_c2; 
+    sigMass[index]      = (&sA)[i]*amu_c2;
     relAbundance[index] = www;
 
     atomicMass[Z] += www*(&A)[i];
@@ -261,6 +260,15 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
 
 void G4NistElementBuilder::Initialise()
 {
+  // Parameterisation from D.Lunney,J.M.Pearson,C.Thibault, 
+  // Rev.Mod.Phys. 75 (2003) 1021 
+  bindingEnergy[0] = 0.0;
+  for(G4int i=1; i<maxNumElements; i++) {
+    G4double Z = G4double(i);
+    bindingEnergy[i] = (14.4381*std::pow(Z,2.39) + 1.55468e-6*std::pow(Z,5.35))*eV;
+  }
+
+  // NIST data
   index    = 0;
    
   // Z = 1 ---------------------------------------------------------------------
@@ -269,6 +277,11 @@ void G4NistElementBuilder::Initialise()
   
   double HA[6] = 
   {1.00783, 2.0141, 3.01605, 4.02783, 5.03954, 6.04494};
+
+  // Garantee consistence with G4 masses
+  HA[0] = (proton_mass_c2 + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
+  HA[1] = (1.875613*GeV   + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
+  HA[2] = (2.80925*GeV    + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
   
   double HS[6] = 
   {4, 4, 11, 12, 102, 28};
@@ -284,6 +297,10 @@ void G4NistElementBuilder::Initialise()
   
   double HeA[8] = 
   {3.01603, 4.0026, 5.01222, 6.01889, 7.02803, 8.03392, 9.04382, 10.0524};
+
+  // Garantee consistence with G4 masses
+  HeA[0] = (2.80923*GeV  + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
+  HeA[1] = (3.727417*GeV + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
   
   double HeS[8] = 
   {9, 10, 50, 11, 30, 8, 70, 80};
