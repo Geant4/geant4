@@ -39,9 +39,6 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager; 
   runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); 
   QGSP  *thePL = new QGSP; 
-  //  QGSP_BIC  *thePL = new QGSP_BIC; 
-  //  QGSP_BERT  *thePL = new QGSP_BERT; 
-  //  LHEP  *thePL = new LHEP; 
   //thePL->SetDefaultCutValue( 1.0*cm ); 
   runManager->SetUserInitialization( thePL ); 
   runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); 
