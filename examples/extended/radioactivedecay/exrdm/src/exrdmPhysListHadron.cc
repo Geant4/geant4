@@ -266,11 +266,5 @@ void exrdmPhysListHadron::ConstructProcess()
   //theGenIonBC->SetMaxEnergy(20*GeV);
   theIonInelasticProcess->RegisterMe(theIonBC);
   theIonInelasticProcess->RegisterMe(theTheoModel);
-  pManager->AddDiscreteProcess(theIonInelasticProcess);
-
-  // Add RadioactiveDecay Process
-
-  G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
-  pManager->AddProcess(theRadioactiveDecay, 0, -1, 3);
- 
+  pManager->AddDiscreteProcess(theIonInelasticProcess); 
 }
