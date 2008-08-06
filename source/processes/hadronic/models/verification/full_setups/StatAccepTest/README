@@ -1,5 +1,5 @@
 
- Last update: 21-Jul-2008
+ Last update: 06-Aug-2008
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -179,6 +179,18 @@
  Please read the comments at the top of these files for more
  information.
 
+ The files that end with  "-m32"  have been added to allow
+ to build/run in 32-bit compatibility mode in 64-bit architectures.
+ For 32-bit architectures, whether you use these files, or the
+ corresponding "normal" ones (i.e. without the  "-m32"  extension),
+ nothing will change: you always build/run in 32-bit mode.
+ For 64-bit architectures, if you use the corresponding "normal"
+ files (i.e. without the  "-m32"  extension), then you build/run
+ in native 64-bit mode.
+
+
+ Other subdirectories :
+ 
  The subdirectory  dirPower/  is dedicated to the study of the
  statistical power of the Acceptance Suite. You can find more
  information in the README file in that subdirectory.
@@ -195,11 +207,7 @@
  energy resolution) as a function of the beam energy, scanning
  the interval 1 - 30 GeV (see the README file in that directory).
 
- The files that end with  "-m32"  have been added to allow
- to build/run in 32-bit compatibility mode in 64-bit architectures.
- For 32-bit architectures, whether you use these files, or the
- corresponding "normal" ones (i.e. without the  "-m32"  extension),
- nothing will change: you always build/run in 32-bit mode.
- For 64-bit architectures, if you use the corresponding "normal"
- files (i.e. without the  "-m32"  extension), then you build/run
- in native 64-bit mode.
+ The subdirectory  dirFluka/  is dedicated to the study of
+ the same set of simplified calorimeters used for Geant4
+ in the case of Fluka simulation program.
+

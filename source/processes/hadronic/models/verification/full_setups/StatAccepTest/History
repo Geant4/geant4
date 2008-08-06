@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+06-Aug-2008 - A.Ribon (statAccepTest-V09-01-03)
+- Added dirFluka for comparisons with Fluka.
+
+
 21-Jul-2008 - A.Ribon (statAccepTest-V09-01-02)
 - Added dirEnergyScan to study calorimeter observables
   as a function of the beam energy.
