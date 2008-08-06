@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.18 2008-08-06 16:16:30 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.19 2008-08-06 18:34:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -238,10 +238,12 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i]*amu_c2; 
+    // mass of the isotope in G4 units
+    massIsotopes[index] = (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
     sigMass[index]      = (&sA)[i]*amu_c2;
     relAbundance[index] = www;
 
+    // computation of mean atomic mass of the element in atomic units
     atomicMass[Z] += www*(&A)[i];
     ww += www;
     index++;

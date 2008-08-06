@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.16 2008-08-06 16:16:30 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.17 2008-08-06 18:34:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -171,9 +171,7 @@ inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
   G4double m = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {
-    m = massIsotopes[i + idxIsotopes[Z]] - Z*electron_mass_c2 + bindingEnergy[Z]; 
-  }
+  if(i >= 0 && i <nIsotopes[Z]) {m = massIsotopes[i + idxIsotopes[Z]];}
   return m;
 }
 
@@ -183,7 +181,9 @@ inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
 {
   G4double m = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {m = massIsotopes[i + idxIsotopes[Z]];} 
+  if(i >= 0 && i <nIsotopes[Z]) {
+    m = massIsotopes[i + idxIsotopes[Z]] + Z*electron_mass_c2 - bindingEnergy[Z]; 
+  }
   return m;
 }
 
@@ -193,7 +193,7 @@ inline G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N)
 {
   G4double x = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) x = relAbundance[i + idxIsotopes[Z]]; 
+  if(i >= 0 && i <nIsotopes[Z]) {x = relAbundance[i + idxIsotopes[Z]];}
   return x;
 }
 
