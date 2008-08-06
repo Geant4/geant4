@@ -74,7 +74,7 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
 
   pMessenger = new exrdmPhysicsListMessenger(this);
 
-  SetVerboseLevel(2);
+  SetVerboseLevel(1);
 
   //default physics
   particleList = new G4DecayPhysics();
@@ -157,19 +157,11 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     AddExtraBuilders(true);
     hadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
-    if (!hadPhysicsList) { 
-      if (emPhysicsList) delete emPhysicsList;
+      delete emPhysicsList;
       emPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
-    } else {
-      G4cout << "exrdmPhysicsList: using EM comes with Std-hadron" <<G4endl;
-    }     
   } else if (name == "Standard_EM") {
-    if (!hadPhysicsList ||(hadPhysicsList->GetPhysicsName()=="hadron") ) { 
-      if (emPhysicsList) delete emPhysicsList;
+      delete emPhysicsList;
       emPhysicsList = new G4EmStandardPhysics();
-    } else {
-      G4cout << "exrdmPhysicsList: using EM comes with Std-hadron" <<G4endl;
-    }
   } else {
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
 	     << name << "> Physics " << G4endl;
@@ -180,15 +172,7 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
 
 void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
 {
-  if (emPhysicsList) delete emPhysicsList;
-  emPhysicsList = new G4EmStandardPhysics();
-
-  if (hadPhysicsList) {
-    delete hadPhysicsList;
-    hadPhysicsList = 0;
-  }
   nhadcomp = 5;
-
   hadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
   hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
 						   flagHP));
@@ -201,7 +185,6 @@ void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
 
 void exrdmPhysicsList::SetCuts()
 {
-
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
