@@ -59,8 +59,6 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4DecayPhysics.hh"
 
-#include "G4RunManager.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
@@ -176,7 +174,6 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
 	     << name << "> Physics " << G4endl;
   }
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -190,14 +187,13 @@ void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
     delete hadPhysicsList;
     hadPhysicsList = 0;
   }
-  nhadcomp = 6;
+  nhadcomp = 5;
 
   hadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
   hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
 						   flagHP));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  hadronPhys.push_back( new G4RadioactiveDecayPhysics("radioactiveDecay"));
   hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
 }
 
