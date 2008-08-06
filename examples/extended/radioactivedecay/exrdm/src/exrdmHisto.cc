@@ -362,6 +362,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String x)
 
 void exrdmHisto::addRow(G4int i)
 {
+  if(verbose > 1) G4cout << "Added a raw #" << i << " to tuple" << G4endl; 
 #ifdef G4ANALYSIS_USE_AIDA
   if(ntup[i]) ntup[i]->addRow();
 #endif

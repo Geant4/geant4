@@ -45,10 +45,10 @@ exrdmSteppingAction::~exrdmSteppingAction()
 
 void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep) 
 {
-#ifdef G4ANALYSIS_USE
   G4Track* fTrack = fStep->GetTrack();
   G4int StepNo = fTrack->GetCurrentStepNumber();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
+#ifdef G4ANALYSIS_USE
   if (StepNo == 1) {
     if ( (fTrack->GetDefinition()->GetParticleType() == "nucleus") && 
 	 !( fTrack->GetDefinition()->GetPDGStable()) && 

@@ -59,6 +59,8 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4DecayPhysics.hh"
 
+#include "G4RunManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
@@ -86,7 +88,7 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
   emPhysicsList = new G4EmStandardPhysics();
   
   // Had physics 
-  hadPhysicsList = new exrdmPhysListHadron("hadron");
+  hadPhysicsList = 0;
   nhadcomp = 0;
 
 }
@@ -130,6 +132,8 @@ void exrdmPhysicsList::ConstructProcess()
     }
   }
   if (hadPhysicsList) hadPhysicsList->ConstructProcess();
+  G4cout << "### exrdmPhysicsList::ConstructProcess is done" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,23 +144,22 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     G4cout << "exrdmPhysicsList::SelectPhysicsList: <" << name << ">" << G4endl;
   }
   // default  Had physics
-  if (name == "Hadron" && nhadcomp == 0) {
-    if (hadPhysicsList) delete hadPhysicsList;
+  if (name == "Hadron" && !hadPhysicsList) {
     hadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
     AddExtraBuilders(false);
     hadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
-  } else if (name == "QGSP_BIC" && nhadcomp == 0) {
+  } else if (name == "QGSP_BIC" && !hadPhysicsList) {
     AddExtraBuilders(false);
     hadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
-  } else if (name == "QGSP_BERT_HP"  && nhadcomp == 0) {
+  } else if (name == "QGSP_BERT_HP"  && !hadPhysicsList) {
     AddExtraBuilders(true);
     hadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
-  } else if (name == "QGSP_BIC_HP"  && nhadcomp == 0) {
+  } else if (name == "QGSP_BIC_HP"  && !hadPhysicsList) {
     AddExtraBuilders(true);
     hadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
-    if (!hadPhysicsList ||(hadPhysicsList->GetPhysicsName()=="hadron") ) { 
+    if (!hadPhysicsList) { 
       if (emPhysicsList) delete emPhysicsList;
       emPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
     } else {
@@ -173,6 +176,7 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
 	     << name << "> Physics " << G4endl;
   }
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -225,6 +229,7 @@ void exrdmPhysicsList::SetCuts()
 void exrdmPhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -232,6 +237,7 @@ void exrdmPhysicsList::SetCutForGamma(G4double cut)
 void exrdmPhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -239,6 +245,7 @@ void exrdmPhysicsList::SetCutForElectron(G4double cut)
 void exrdmPhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

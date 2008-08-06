@@ -252,6 +252,7 @@ void exrdmPhysListHadron::ConstructProcess()
   theAlphaInelasticProcess->RegisterMe(theIonBC);
   theAlphaInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(theAlphaInelasticProcess);
+
   // GenericIon
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
   // need to add the elastic explicitly
@@ -270,7 +271,6 @@ void exrdmPhysListHadron::ConstructProcess()
   // Add RadioactiveDecay Process
 
   G4RadioactiveDecay*  theRadioactiveDecay = new G4RadioactiveDecay();
-  G4GenericIon* ion = G4GenericIon::GenericIon();
   pManager->AddProcess(theRadioactiveDecay, 0, -1, 3);
  
 }
