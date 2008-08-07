@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.cc,v 1.1 2008-08-06 08:34:23 grichine Exp $
+// $Id: G4MscRadiation.cc,v 1.2 2008-08-07 14:38:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -60,12 +60,13 @@ using namespace std;
 //
 // Constructor, destructor
 
-G4MscRadiation::G4MscRadiation(G4LogicalVolume *anEnvelope,
-				 G4Material* foilMat,G4Material* gasMat,
-				 G4double a, G4double b,
-				 G4int n,const G4String& processName,
-				 G4ProcessType type) :
+G4MscRadiation::G4MscRadiation( G4LogicalVolume *anEnvelope,
+			        G4Material* foilMat,G4Material* gasMat,
+				G4double a, G4double b,
+				G4int n,const G4String& processName,
+				G4ProcessType type) :
   G4VDiscreteProcess(processName, type),
+  fPlateMaterial(foilMat),
   fGammaCutInKineticEnergy(0),
   fGammaTkinCut(0),
   fAngleDistrTable(0),
@@ -74,7 +75,7 @@ G4MscRadiation::G4MscRadiation(G4LogicalVolume *anEnvelope,
   fGasPhotoAbsCof(0),
   fAngleForEnergyTable(0)
 {
-  verboseLevel = 1;
+  verboseLevel = 0;
 
   // Initialization of local constants
   fTheMinEnergyTR = 1.0*keV;
@@ -101,15 +102,15 @@ G4MscRadiation::G4MscRadiation(G4LogicalVolume *anEnvelope,
 
   fCofTR     = fine_structure_const/pi;
 
-  fEnvelope  = anEnvelope ;
+  fEnvelope  = anEnvelope;
 
-  fPlateNumber = n ;
+  fPlateNumber = n;
   if(verboseLevel > 0)
     G4cout<<"### G4MscRadiation: the number of TR radiator plates = "
-	  <<fPlateNumber<<G4endl ;
+	  <<fPlateNumber<<G4endl;
   if(fPlateNumber == 0)
   {
-    G4Exception("G4MscRadiation: No plates in X-ray TR radiator") ;
+    G4Exception("G4MscRadiation: No plates in X-ray TR radiator");
   }
   // default is XTR dEdx, not flux after radiator
 
@@ -120,39 +121,135 @@ G4MscRadiation::G4MscRadiation(G4LogicalVolume *anEnvelope,
   fLambda = DBL_MAX;
   // Mean thicknesses of plates and gas gaps
 
-  fPlateThick = a ;
-  fGasThick   = b ;
-  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;
+  fPlateThick = a;
+  fGasThick   = b;
+  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick);
   if(verboseLevel > 0)
-    G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
+    G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl;
 
   // index of plate material
-  fMatIndex1 = foilMat->GetIndex()  ;
+  fMatIndex1 = foilMat->GetIndex();
   if(verboseLevel > 0)
-    G4cout<<"plate material = "<<foilMat->GetName()<<G4endl ;
+    G4cout<<"plate material = "<<foilMat->GetName()<<G4endl;
 
   // index of gas material
-  fMatIndex2 = gasMat->GetIndex()  ;
+  fMatIndex2 = gasMat->GetIndex();
   if(verboseLevel > 0)
-    G4cout<<"gas material = "<<gasMat->GetName()<<G4endl ;
+    G4cout<<"gas material = "<<gasMat->GetName()<<G4endl;
 
   // plasma energy squared for plate material
 
-  fSigma1 = fPlasmaCof*foilMat->GetElectronDensity()  ;
-  //  fSigma1 = (20.9*eV)*(20.9*eV) ;
+  fSigma1 = fPlasmaCof*foilMat->GetElectronDensity();
+  //  fSigma1 = (20.9*eV)*(20.9*eV);
   if(verboseLevel > 0)
-    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
+    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl;
 
   // plasma energy squared for gas material
 
-  fSigma2 = fPlasmaCof*gasMat->GetElectronDensity()  ;
+  fSigma2 = fPlasmaCof*gasMat->GetElectronDensity();
   if(verboseLevel > 0)
-    G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
+    G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl;
 
   // Compute cofs for preparation of linear photo absorption
 
-  ComputePlatePhotoAbsCof() ;
-  ComputeGasPhotoAbsCof() ;
+  ComputePlatePhotoAbsCof();
+  ComputeGasPhotoAbsCof();
+
+  pParticleChange = &fParticleChange;
+
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Test constructor
+
+G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
+				const G4String& processName,
+				G4ProcessType type) :
+  G4VDiscreteProcess(processName, type),
+  fPlateMaterial(foilMat),
+  fGammaCutInKineticEnergy(0),
+  fGammaTkinCut(0),
+  fAngleDistrTable(0),
+  fEnergyDistrTable(0),
+  fPlatePhotoAbsCof(0),
+  fGasPhotoAbsCof(0),
+  fAngleForEnergyTable(0)
+{
+  verboseLevel = 0;
+
+  // Initialization of local constants
+  fTheMinEnergyTR = 1.0*keV;
+  fTheMaxEnergyTR = 100.0*keV;
+  fTheMaxAngle    = 1.0e-3;
+  fTheMinAngle    = 5.0e-6;
+  fBinTR          = 50;
+
+  fMinProtonTkin  = 100.0*GeV;
+  fMaxProtonTkin  = 100.0*TeV;
+  fTotBin         = 50;
+
+  // Proton energy vector initialization
+
+  fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+					       fMaxProtonTkin,
+					       fTotBin  );
+
+  fXTREnergyVector = new G4PhysicsLogVector(fTheMinEnergyTR,
+					    fTheMaxEnergyTR,
+					    fBinTR  );
+
+  fPlasmaCof = 4.0*pi*fine_structure_const*hbarc*hbarc*hbarc/electron_mass_c2;
+
+  fCofTR     = fine_structure_const/pi;
+
+
+  fPlateNumber = 1;
+  if(verboseLevel > 0)
+    G4cout<<"### G4MscRadiation: the number of TR radiator plates = "
+	  <<fPlateNumber<<G4endl;
+  if(fPlateNumber == 0)
+  {
+    G4Exception("G4MscRadiation: No plates in X-ray TR radiator");
+  }
+  // default is XTR dEdx, not flux after radiator
+
+  fExitFlux      = false;
+  fAngleRadDistr = false;
+  fCompton       = true;
+
+  fLambda = DBL_MAX;
+  // Mean thicknesses of plates and gas gaps
+
+  fPlateThick = a;
+  fGasThick   = 1;
+  fTotalDist  = fPlateNumber*fPlateThick;
+  if(verboseLevel > 0)
+    G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl;
+
+  // index of plate material
+  fMatIndex1 = foilMat->GetIndex();
+  if(verboseLevel > 0)
+  {
+    G4cout<<"plate material = "<<foilMat->GetName()<<G4endl;
+  }
+  
+  fMatIndex2 = 0; // gasMat->GetIndex();
+
+  // plasma energy squared for plate material
+
+  fSigma1 = fPlasmaCof*foilMat->GetElectronDensity();
+
+  if(verboseLevel > 0)
+    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl;
+
+  // plasma energy squared for gas material
+
+  fSigma2 = 0.; //fPlasmaCof*gasMat->GetElectronDensity();
+
+  // Compute cofs for preparation of linear photo absorption
+
+  ComputePlatePhotoAbsCof();
 
   pParticleChange = &fParticleChange;
 
@@ -172,7 +269,7 @@ G4MscRadiation::~G4MscRadiation()
 
 G4bool G4MscRadiation::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return  ( particle.GetPDGCharge() != 0.0 ) ;
+  return  ( particle.GetPDGCharge() != 0.0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -212,9 +309,9 @@ G4double G4MscRadiation::GetMeanFreePath(const G4Track& aTrack,
 
       for(iTkin = 0; iTkin < fTotBin; iTkin++)
       {
-        if( TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;    
+        if( TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;    
       }
-      iPlace = iTkin - 1 ;
+      iPlace = iTkin - 1;
 
       if(iTkin == 0) lambda = DBL_MAX; // Tkin is too small, neglect of TR photon generation
       else          // general case: Tkin between two vectors of the material
@@ -225,11 +322,11 @@ G4double G4MscRadiation::GetMeanFreePath(const G4Track& aTrack,
         }
         else
         {
-          E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-          E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
-           W = 1.0/(E2 - E1) ;
-          W1 = (E2 - TkinScaled)*W ;
-          W2 = (TkinScaled - E1)*W ;
+          E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1); 
+          E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin);
+           W = 1.0/(E2 - E1);
+          W1 = (E2 - TkinScaled)*W;
+          W2 = (TkinScaled - E1)*W;
           sigma = ( (*(*fEnergyDistrTable)(iPlace  ))(0)*W1 +
                 (*(*fEnergyDistrTable)(iPlace+1))(0)*W2   )*chargeSq;
       
@@ -285,33 +382,33 @@ void G4MscRadiation::BuildTable()
   
   // setting of min/max TR energies 
   
-  if(fGammaTkinCut > fTheMinEnergyTR)  fMinEnergyTR = fGammaTkinCut ;
-  else                                 fMinEnergyTR = fTheMinEnergyTR ;
+  if(fGammaTkinCut > fTheMinEnergyTR)  fMinEnergyTR = fGammaTkinCut;
+  else                                 fMinEnergyTR = fTheMinEnergyTR;
 	
-  if(fGammaTkinCut > fTheMaxEnergyTR) fMaxEnergyTR = 2.0*fGammaTkinCut ;  
-  else                                fMaxEnergyTR = fTheMaxEnergyTR ;
+  if(fGammaTkinCut > fTheMaxEnergyTR) fMaxEnergyTR = 2.0*fGammaTkinCut;  
+  else                                fMaxEnergyTR = fTheMaxEnergyTR;
 
-  G4cout.precision(4) ;
-  G4Timer timer ;
-  timer.Start() ;
+  G4cout.precision(4);
+  G4Timer timer;
+  timer.Start();
 
   if(verboseLevel > 0) {
     G4cout<<G4endl;
     G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
     G4cout<<G4endl;
   }
-  for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
+  for( iTkin = 0; iTkin < fTotBin; iTkin++ )      // Lorentz factor loop
   {
     G4PhysicsLogVector* energyVector = new G4PhysicsLogVector( fMinEnergyTR,
 							       fMaxEnergyTR,
-							       fBinTR  ) ;
+							       fBinTR  );
 
     fGamma = 1.0 + (fProtonEnergyVector->
-		    GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
+		    GetLowEdgeEnergy(iTkin)/proton_mass_c2);
 
-    fMaxThetaTR = 25.0/(fGamma*fGamma) ;  // theta^2
+    fMaxThetaTR = 25.0/(fGamma*fGamma);  // theta^2
 
-    fTheMinAngle = 1.0e-3 ; // was 5.e-6, e-6 !!!, e-5, e-4
+    fTheMinAngle = 1.0e-3; // was 5.e-6, e-6 !!!, e-5, e-4
  
     if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle; 
     else
@@ -330,7 +427,7 @@ void G4MscRadiation::BuildTable()
     energyVector->PutValue(fBinTR-1,energySum);
     angleVector->PutValue(fBinTR-1,angleSum);
 
-    for( iTR = fBinTR - 2 ; iTR >= 0 ; iTR-- )
+    for( iTR = fBinTR - 2; iTR >= 0; iTR-- )
       {
         energySum += radiatorCof*fCofTR*integral.Legendre10(
 		     this,&G4MscRadiation::SpectralXTRdEdx,
@@ -352,7 +449,7 @@ void G4MscRadiation::BuildTable()
 	  //   <<"fGamma = "
 	  <<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
 	  //  <<"sumN = "
-	  <<energySum      // <<" ; sumA = "<<angleSum
+	  <<energySum      // <<"; sumA = "<<angleSum
 	  <<G4endl;
       }
     iPlace = iTkin;
@@ -367,7 +464,7 @@ void G4MscRadiation::BuildTable()
 	  <<timer.GetUserElapsed()<<" s"<<G4endl;
   }
   fGamma = 0.;
-  return ;
+  return;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -406,15 +503,15 @@ void G4MscRadiation::BuildAngleTable()
     G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
     G4cout<<G4endl;
   }
-  for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
+  for( iTkin = 0; iTkin < fTotBin; iTkin++ )      // Lorentz factor loop
   {
     
     fGamma = 1.0 + (fProtonEnergyVector->
-                            GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
+                            GetLowEdgeEnergy(iTkin)/proton_mass_c2);
 
-    fMaxThetaTR = 25.0/(fGamma*fGamma) ;  // theta^2
+    fMaxThetaTR = 25.0/(fGamma*fGamma);  // theta^2
 
-    fTheMinAngle = 1.0e-3 ; // was 5.e-6, e-6 !!!, e-5, e-4
+    fTheMinAngle = 1.0e-3; // was 5.e-6, e-6 !!!, e-5, e-4
  
     if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle; 
     else
@@ -435,7 +532,7 @@ void G4MscRadiation::BuildAngleTable()
       angleVector = GetAngleVector(energy,fBinTR);
       // G4cout<<G4endl;
 
-      fAngleForEnergyTable->insertAt(iTR,angleVector) ;
+      fAngleForEnergyTable->insertAt(iTR,angleVector);
     }
     
     fAngleBank.push_back(fAngleForEnergyTable); 
@@ -485,7 +582,7 @@ G4PhysicsFreeVector* G4MscRadiation::GetAngleVector(G4double energy, G4int n)
   }
   angleVector->PutValue(n-1,fMaxThetaTR, angleSum);
 
-  for( iTheta = n - 2 ; iTheta >= 1 ; iTheta-- )
+  for( iTheta = n - 2; iTheta >= 1; iTheta-- )
   {
 
     k = iTheta- 1 + kMin;
@@ -546,29 +643,29 @@ void G4MscRadiation::BuildGlobalAngleTable()
   
   // setting of min/max TR energies 
   
-  if(fGammaTkinCut > fTheMinEnergyTR)  fMinEnergyTR = fGammaTkinCut ;
-  else                                 fMinEnergyTR = fTheMinEnergyTR ;
+  if(fGammaTkinCut > fTheMinEnergyTR)  fMinEnergyTR = fGammaTkinCut;
+  else                                 fMinEnergyTR = fTheMinEnergyTR;
 	
-  if(fGammaTkinCut > fTheMaxEnergyTR) fMaxEnergyTR = 2.0*fGammaTkinCut ;  
-  else                                fMaxEnergyTR = fTheMaxEnergyTR ;
+  if(fGammaTkinCut > fTheMaxEnergyTR) fMaxEnergyTR = 2.0*fGammaTkinCut;  
+  else                                fMaxEnergyTR = fTheMaxEnergyTR;
 
-  G4cout.precision(4) ;
-  G4Timer timer ;
-  timer.Start() ;
+  G4cout.precision(4);
+  G4Timer timer;
+  timer.Start();
   if(verboseLevel > 0) {
     G4cout<<G4endl;
     G4cout<<"Lorentz Factor"<<"\t"<<"XTR photon number"<<G4endl;
     G4cout<<G4endl;
   }
-  for( iTkin = 0 ; iTkin < fTotBin ; iTkin++ )      // Lorentz factor loop
+  for( iTkin = 0; iTkin < fTotBin; iTkin++ )      // Lorentz factor loop
   {
     
     fGamma = 1.0 + (fProtonEnergyVector->
-                            GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
+                            GetLowEdgeEnergy(iTkin)/proton_mass_c2);
 
-    fMaxThetaTR = 25.0/(fGamma*fGamma) ;  // theta^2
+    fMaxThetaTR = 25.0/(fGamma*fGamma);  // theta^2
 
-    fTheMinAngle = 1.0e-3 ; // was 5.e-6, e-6 !!!, e-5, e-4
+    fTheMinAngle = 1.0e-3; // was 5.e-6, e-6 !!!, e-5, e-4
  
     if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle; 
     else
@@ -586,7 +683,7 @@ void G4MscRadiation::BuildGlobalAngleTable()
    
     angleVector->PutValue(fBinTR-1,angleSum);
 
-    for( iTR = fBinTR - 2 ; iTR >= 0 ; iTR-- )
+    for( iTR = fBinTR - 2; iTR >= 0; iTR-- )
     {
 
       angleSum  += radiatorCof*fCofTR*integral.Legendre96(
@@ -601,7 +698,7 @@ void G4MscRadiation::BuildGlobalAngleTable()
 	// <<iTkin<<"\t"
 	//   <<"fGamma = "
 	<<fGamma<<"\t"  //  <<"  fMaxThetaTR = "<<fMaxThetaTR
-	//  <<"sumN = "<<energySum      // <<" ; sumA = "
+	//  <<"sumN = "<<energySum      // <<"; sumA = "
 	<<angleSum
 	<<G4endl;
     }
@@ -637,9 +734,9 @@ G4VParticleChange* G4MscRadiation::PostStepDoIt( const G4Track& aTrack,
 
   if(verboseLevel > 1)
   {
-    G4cout<<"Start of G4MscRadiation::PostStepDoIt "<<G4endl ;
+    G4cout<<"Start of G4MscRadiation::PostStepDoIt "<<G4endl;
     G4cout<<"name of current material =  "
-          <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl ;
+          <<aTrack.GetVolume()->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl;
   }
   if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
   {
@@ -656,16 +753,16 @@ G4VParticleChange* G4MscRadiation::PostStepDoIt( const G4Track& aTrack,
    
     // Now we are ready to Generate one TR photon
 
-    G4double kinEnergy = aParticle->GetKineticEnergy() ;
-    G4double mass      = aParticle->GetDefinition()->GetPDGMass() ;
-    G4double gamma     = 1.0 + kinEnergy/mass ;
+    G4double kinEnergy = aParticle->GetKineticEnergy();
+    G4double mass      = aParticle->GetDefinition()->GetPDGMass();
+    G4double gamma     = 1.0 + kinEnergy/mass;
 
     if(verboseLevel > 1 )
     {
-      G4cout<<"gamma = "<<gamma<<G4endl ;
+      G4cout<<"gamma = "<<gamma<<G4endl;
     }
-    G4double         massRatio   = proton_mass_c2/mass ;
-    G4double          TkinScaled = kinEnergy*massRatio ;
+    G4double         massRatio   = proton_mass_c2/mass;
+    G4double          TkinScaled = kinEnergy*massRatio;
     G4ThreeVector      position  = pPostStepPoint->GetPosition();
     G4ParticleMomentum direction = aParticle->GetMomentumDirection();
     G4double           startTime = pPostStepPoint->GetGlobalTime();
@@ -705,7 +802,7 @@ G4VParticleChange* G4MscRadiation::PostStepDoIt( const G4Track& aTrack,
 
       if( theta >= 0.1 ) theta = 0.1;
 
-      // G4cout<<" : theta = "<<theta<<endl ;
+      // G4cout<<" : theta = "<<theta<<endl;
 
       phi = twopi*G4UniformRand();
 
@@ -768,12 +865,12 @@ G4complex G4MscRadiation::OneInterfaceXTRdEdx( G4double energy,
                                            G4double gamma,
                                            G4double varAngle ) 
 {
-  G4complex Z1    = GetPlateComplexFZ(energy,gamma,varAngle) ;
-  G4complex Z2    = GetGasComplexFZ(energy,gamma,varAngle) ;
+  G4complex Z1    = GetPlateComplexFZ(energy,gamma,varAngle);
+  G4complex Z2    = GetGasComplexFZ(energy,gamma,varAngle);
 
   G4complex zOut  = (Z1 - Z2)*(Z1 - Z2)
-                    * (varAngle*energy/hbarc/hbarc) ;  
-  return    zOut  ;
+                    * (varAngle*energy/hbarc/hbarc);  
+  return    zOut;
 
 }
 
@@ -925,10 +1022,10 @@ G4double G4MscRadiation::GetPlateFormationZone( G4double omega ,
                                                 G4double gamma ,
                                                 G4double varAngle    ) 
 {
-  G4double cof, lambda ;
-  lambda = 1.0/gamma/gamma + varAngle + fSigma1/omega/omega ;
-  cof = 2.0*hbarc/omega/lambda ;
-  return cof ;
+  G4double cof, lambda;
+  lambda = 1.0/gamma/gamma + varAngle + fSigma1/omega/omega;
+  cof = 2.0*hbarc/omega/lambda;
+  return cof;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -939,17 +1036,17 @@ G4complex G4MscRadiation::GetPlateComplexFZ( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle    ) 
 {
-  G4double cof, length,delta, real, image ;
+  G4double cof, length,delta, real, image;
 
-  length = 0.5*GetPlateFormationZone(omega,gamma,varAngle) ;
-  delta  = length*GetPlateLinearPhotoAbs(omega) ;
-  cof    = 1.0/(1.0 + delta*delta) ;
+  length = 0.5*GetPlateFormationZone(omega,gamma,varAngle);
+  delta  = length*GetPlateLinearPhotoAbs(omega);
+  cof    = 1.0/(1.0 + delta*delta);
 
-  real   = length*cof ;
-  image  = real*delta ;
+  real   = length*cof;
+  image  = real*delta;
 
   G4complex zone(real,image); 
-  return zone ;
+  return zone;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -975,12 +1072,12 @@ void G4MscRadiation::ComputePlatePhotoAbsCof()
 
 G4double G4MscRadiation::GetPlateLinearPhotoAbs(G4double omega) 
 {
-  //  G4int i ;
-  G4double omega2, omega3, omega4 ; 
+  //  G4int i;
+  G4double omega2, omega3, omega4; 
 
-  omega2 = omega*omega ;
-  omega3 = omega2*omega ;
-  omega4 = omega2*omega2 ;
+  omega2 = omega*omega;
+  omega3 = omega2*omega;
+  omega4 = omega2*omega2;
 
   G4double* SandiaCof = fPlatePhotoAbsCof->GetSandiaCofForMaterial(omega);
   G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
@@ -997,10 +1094,10 @@ G4double G4MscRadiation::GetGasFormationZone( G4double omega ,
                                               G4double gamma ,
                                               G4double varAngle   ) 
 {
-  G4double cof, lambda ;
-  lambda = 1.0/gamma/gamma + varAngle + fSigma2/omega/omega ;
-  cof = 2.0*hbarc/omega/lambda ;
-  return cof ;
+  G4double cof, lambda;
+  lambda = 1.0/gamma/gamma + varAngle + fSigma2/omega/omega;
+  cof = 2.0*hbarc/omega/lambda;
+  return cof;
 }
 
 
@@ -1012,17 +1109,17 @@ G4complex G4MscRadiation::GetGasComplexFZ( G4double omega ,
                                            G4double gamma ,
                                            G4double varAngle    ) 
 {
-  G4double cof, length,delta, real, image ;
+  G4double cof, length,delta, real, image;
 
-  length = 0.5*GetGasFormationZone(omega,gamma,varAngle) ;
-  delta  = length*GetGasLinearPhotoAbs(omega) ;
-  cof    = 1.0/(1.0 + delta*delta) ;
+  length = 0.5*GetGasFormationZone(omega,gamma,varAngle);
+  delta  = length*GetGasLinearPhotoAbs(omega);
+  cof    = 1.0/(1.0 + delta*delta);
 
-  real   = length*cof ;
-  image  = real*delta ;
+  real   = length*cof;
+  image  = real*delta;
 
   G4complex zone(real,image); 
-  return zone ;
+  return zone;
 }
 
 
@@ -1047,11 +1144,11 @@ void G4MscRadiation::ComputeGasPhotoAbsCof()
 
 G4double G4MscRadiation::GetGasLinearPhotoAbs(G4double omega) 
 {
-  G4double omega2, omega3, omega4 ; 
+  G4double omega2, omega3, omega4; 
 
-  omega2 = omega*omega ;
-  omega3 = omega2*omega ;
-  omega4 = omega2*omega2 ;
+  omega2 = omega*omega;
+  omega3 = omega2*omega;
+  omega4 = omega2*omega2;
 
   G4double* SandiaCof = fGasPhotoAbsCof->GetSandiaCofForMaterial(omega);
   G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
@@ -1070,7 +1167,7 @@ G4double G4MscRadiation::GetPlateZmuProduct( G4double omega ,
                                              G4double varAngle   ) 
 {
   return GetPlateFormationZone(omega,gamma,varAngle)
-    * GetPlateLinearPhotoAbs(omega) ;
+    * GetPlateLinearPhotoAbs(omega);
 }
 //////////////////////////////////////////////////////////////////////
 //
@@ -1079,24 +1176,24 @@ G4double G4MscRadiation::GetPlateZmuProduct( G4double omega ,
 
 void G4MscRadiation::GetPlateZmuProduct() 
 {
-  ofstream outPlate("plateZmu.dat", ios::out ) ;
+  ofstream outPlate("plateZmu.dat", ios::out );
   outPlate.setf( ios::scientific, ios::floatfield );
 
-  G4int i ;
-  G4double omega, varAngle, gamma ;
-  gamma = 10000. ;
-  varAngle = 1/gamma/gamma ;
+  G4int i;
+  G4double omega, varAngle, gamma;
+  gamma = 10000.;
+  varAngle = 1/gamma/gamma;
   if(verboseLevel > 0)
-    G4cout<<"energy, keV"<<"\t"<<"Zmu for plate"<<G4endl ;
+    G4cout<<"energy, keV"<<"\t"<<"Zmu for plate"<<G4endl;
   for(i=0;i<100;i++)
   {
-    omega = (1.0 + i)*keV ;
+    omega = (1.0 + i)*keV;
     if(verboseLevel > 1)
       G4cout<<omega/keV<<"\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<"\t";
     if(verboseLevel > 0)
-      outPlate<<omega/keV<<"\t\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<G4endl ;
+      outPlate<<omega/keV<<"\t\t"<<GetPlateZmuProduct(omega,gamma,varAngle)<<G4endl;
   }
-  return  ;
+  return;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1108,7 +1205,7 @@ G4double G4MscRadiation::GetGasZmuProduct( G4double omega ,
                                              G4double gamma ,
                                              G4double varAngle   ) 
 {
-  return GetGasFormationZone(omega,gamma,varAngle)*GetGasLinearPhotoAbs(omega) ;
+  return GetGasFormationZone(omega,gamma,varAngle)*GetGasLinearPhotoAbs(omega);
 }
 //////////////////////////////////////////////////////////////////////
 //
@@ -1117,23 +1214,23 @@ G4double G4MscRadiation::GetGasZmuProduct( G4double omega ,
 
 void G4MscRadiation::GetGasZmuProduct() 
 {
-  ofstream outGas("gasZmu.dat", ios::out ) ;
+  ofstream outGas("gasZmu.dat", ios::out );
   outGas.setf( ios::scientific, ios::floatfield );
-  G4int i ;
-  G4double omega, varAngle, gamma ;
-  gamma = 10000. ;
-  varAngle = 1/gamma/gamma ;
+  G4int i;
+  G4double omega, varAngle, gamma;
+  gamma = 10000.;
+  varAngle = 1/gamma/gamma;
   if(verboseLevel > 0)
-    G4cout<<"energy, keV"<<"\t"<<"Zmu for gas"<<G4endl ;
+    G4cout<<"energy, keV"<<"\t"<<"Zmu for gas"<<G4endl;
   for(i=0;i<100;i++)
   {
-    omega = (1.0 + i)*keV ;
+    omega = (1.0 + i)*keV;
     if(verboseLevel > 1)
-      G4cout<<omega/keV<<"\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<"\t" ;
+      G4cout<<omega/keV<<"\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<"\t";
     if(verboseLevel > 0)
-      outGas<<omega/keV<<"\t\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<G4endl ;
+      outGas<<omega/keV<<"\t\t"<<GetGasZmuProduct(omega,gamma,varAngle)<<G4endl;
   }
-  return  ;
+  return;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1146,7 +1243,7 @@ G4double G4MscRadiation::GetPlateCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements() ;
+  numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements();
 
   for( i = 0; i < numberOfElements; i++ )
   {
@@ -1170,7 +1267,7 @@ G4double G4MscRadiation::GetGasCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex2]->GetNumberOfElements() ;
+  numberOfElements = (*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
 
   for( i = 0; i < numberOfElements; i++ )
   {
@@ -1190,7 +1287,7 @@ G4double G4MscRadiation::GetGasCompton(G4double omega)
 
 G4double G4MscRadiation::GetComptonPerAtom(G4double GammaEnergy, G4double Z) 
 {
-  G4double CrossSection = 0.0 ;
+  G4double CrossSection = 0.0;
   if ( Z < 0.9999 )                 return CrossSection;
   if ( GammaEnergy < 0.1*keV      ) return CrossSection;
   if ( GammaEnergy > (100.*GeV/Z) ) return CrossSection;
@@ -1217,7 +1314,7 @@ G4double G4MscRadiation::GetComptonPerAtom(G4double GammaEnergy, G4double Z)
   if (GammaEnergy < T0) 
   {
     G4double dT0 = 1.*keV;
-    X = (T0+dT0) / electron_mass_c2 ;
+    X = (T0+dT0) / electron_mass_c2;
     G4double sigma = p1Z*log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);
@@ -1245,17 +1342,17 @@ G4double
 G4MscRadiation::OneBoundaryXTRNdensity( G4double energy,G4double gamma,
                                          G4double varAngle ) const
 {
-  G4double  formationLength1, formationLength2 ;
+  G4double  formationLength1, formationLength2;
   formationLength1 = 1.0/
   (1.0/(gamma*gamma)
   + fSigma1/(energy*energy)
-  + varAngle) ;
+  + varAngle);
   formationLength2 = 1.0/
   (1.0/(gamma*gamma)
   + fSigma2/(energy*energy)
-  + varAngle) ;
+  + varAngle);
   return (varAngle/energy)*(formationLength1 - formationLength2)
-              *(formationLength1 - formationLength2)  ;
+              *(formationLength1 - formationLength2);
 
 }
 
@@ -1275,7 +1372,7 @@ G4double G4MscRadiation::GetStackFactor( G4double energy, G4double gamma,
 G4double G4MscRadiation::XTRNSpectralAngleDensity(G4double varAngle)
 {
   return OneBoundaryXTRNdensity(fEnergy,fGamma,varAngle)*
-         GetStackFactor(fEnergy,fGamma,varAngle)             ;
+         GetStackFactor(fEnergy,fGamma,varAngle);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -1284,12 +1381,12 @@ G4double G4MscRadiation::XTRNSpectralAngleDensity(G4double varAngle)
  
 G4double G4MscRadiation::XTRNSpectralDensity(G4double energy)
 {
-  fEnergy = energy ;
-  G4Integrator<G4MscRadiation,G4double(G4MscRadiation::*)(G4double)> integral ;
+  fEnergy = energy;
+  G4Integrator<G4MscRadiation,G4double(G4MscRadiation::*)(G4double)> integral;
   return integral.Legendre96(this,&G4MscRadiation::XTRNSpectralAngleDensity,
                              0.0,0.2*fMaxThetaTR) +
          integral.Legendre10(this,&G4MscRadiation::XTRNSpectralAngleDensity,
-	                     0.2*fMaxThetaTR,fMaxThetaTR) ;
+	                     0.2*fMaxThetaTR,fMaxThetaTR);
 } 
  
 //////////////////////////////////////////////////////////////////////////
@@ -1300,7 +1397,7 @@ G4double G4MscRadiation::XTRNSpectralDensity(G4double energy)
 G4double G4MscRadiation::XTRNAngleSpectralDensity(G4double energy)
 {
   return OneBoundaryXTRNdensity(energy,fGamma,fVarAngle)*
-         GetStackFactor(energy,fGamma,fVarAngle)             ;
+         GetStackFactor(energy,fGamma,fVarAngle);
 } 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1309,10 +1406,10 @@ G4double G4MscRadiation::XTRNAngleSpectralDensity(G4double energy)
 
 G4double G4MscRadiation::XTRNAngleDensity(G4double varAngle) 
 {
-  fVarAngle = varAngle ;
-  G4Integrator<G4MscRadiation,G4double(G4MscRadiation::*)(G4double)> integral ;
+  fVarAngle = varAngle;
+  G4Integrator<G4MscRadiation,G4double(G4MscRadiation::*)(G4double)> integral;
   return integral.Legendre96(this,&G4MscRadiation::XTRNAngleSpectralDensity,
-			     fMinEnergyTR,fMaxEnergyTR) ;
+			     fMinEnergyTR,fMaxEnergyTR);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1322,28 +1419,28 @@ G4double G4MscRadiation::XTRNAngleDensity(G4double varAngle)
 
 void G4MscRadiation::GetNumberOfPhotons()
 {
-  G4int iTkin ;
-  G4double gamma, numberE ;
+  G4int iTkin;
+  G4double gamma, numberE;
 
-  ofstream outEn("numberE.dat", ios::out ) ;
+  ofstream outEn("numberE.dat", ios::out );
   outEn.setf( ios::scientific, ios::floatfield );
 
-  ofstream outAng("numberAng.dat", ios::out ) ;
+  ofstream outAng("numberAng.dat", ios::out );
   outAng.setf( ios::scientific, ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {
      gamma = 1.0 + (fProtonEnergyVector->
-                            GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
-     numberE = (*(*fEnergyDistrTable)(iTkin))(0) ;
-     //  numberA = (*(*fAngleDistrTable)(iTkin))(0) ;
+                            GetLowEdgeEnergy(iTkin)/proton_mass_c2);
+     numberE = (*(*fEnergyDistrTable)(iTkin))(0);
+     //  numberA = (*(*fAngleDistrTable)(iTkin))(0);
      if(verboseLevel > 1)
        G4cout<<gamma<<"\t\t"<<numberE<<"\t"    //  <<numberA
-	     <<G4endl ; 
+	     <<G4endl; 
      if(verboseLevel > 0)
-       outEn<<gamma<<"\t\t"<<numberE<<G4endl ; 
+       outEn<<gamma<<"\t\t"<<numberE<<G4endl; 
   }
-  return ;
+  return;
 }  
 
 /////////////////////////////////////////////////////////////////////////
@@ -1353,48 +1450,48 @@ void G4MscRadiation::GetNumberOfPhotons()
 
 G4double G4MscRadiation::GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin )
 {
-  G4int iTransfer, iPlace  ;
-  G4double transfer = 0.0, position, E1, E2, W1, W2, W ;
+  G4int iTransfer, iPlace;
+  G4double transfer = 0.0, position, E1, E2, W1, W2, W;
 
-  iPlace = iTkin - 1 ;
+  iPlace = iTkin - 1;
 
-  //  G4cout<<"iPlace = "<<iPlace<<endl ;
+  //  G4cout<<"iPlace = "<<iPlace<<endl;
 
   if(iTkin == fTotBin) // relativistic plato, try from left
   {
-      position = (*(*fEnergyDistrTable)(iPlace))(0)*G4UniformRand() ;
+      position = (*(*fEnergyDistrTable)(iPlace))(0)*G4UniformRand();
 
       for(iTransfer=0;;iTransfer++)
       {
-        if(position >= (*(*fEnergyDistrTable)(iPlace))(iTransfer)) break ;
+        if(position >= (*(*fEnergyDistrTable)(iPlace))(iTransfer)) break;
       }
       transfer = GetXTRenergy(iPlace,position,iTransfer);
   }
   else
   {
-    E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-    E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
-    W  = 1.0/(E2 - E1) ;
-    W1 = (E2 - scaledTkin)*W ;
-    W2 = (scaledTkin - E1)*W ;
+    E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1); 
+    E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin); 
+    W  = 1.0/(E2 - E1);
+    W1 = (E2 - scaledTkin)*W;
+    W2 = (scaledTkin - E1)*W;
 
     position =( (*(*fEnergyDistrTable)(iPlace))(0)*W1 + 
-                    (*(*fEnergyDistrTable)(iPlace+1))(0)*W2 )*G4UniformRand() ;
+                    (*(*fEnergyDistrTable)(iPlace+1))(0)*W2 )*G4UniformRand();
 
-        // G4cout<<position<<"\t" ;
+        // G4cout<<position<<"\t";
 
     for(iTransfer=0;;iTransfer++)
     {
           if( position >=
           ( (*(*fEnergyDistrTable)(iPlace))(iTransfer)*W1 + 
-            (*(*fEnergyDistrTable)(iPlace+1))(iTransfer)*W2) ) break ;
+            (*(*fEnergyDistrTable)(iPlace+1))(iTransfer)*W2) ) break;
     }
     transfer = GetXTRenergy(iPlace,position,iTransfer);
     
   } 
-  //  G4cout<<"XTR transfer = "<<transfer/keV<<" keV"<<endl ; 
-  if(transfer < 0.0 ) transfer = 0.0 ;
-  return transfer ;
+  //  G4cout<<"XTR transfer = "<<transfer/keV<<" keV"<<endl; 
+  if(transfer < 0.0 ) transfer = 0.0;
+  return transfer;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1406,31 +1503,31 @@ G4double G4MscRadiation::GetXTRenergy( G4int    iPlace,
                                        G4double position, 
                                        G4int    iTransfer )
 {
-  G4double x1, x2, y1, y2, result ;
+  G4double x1, x2, y1, y2, result;
 
   if(iTransfer == 0)
   {
-    result = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+    result = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   }  
   else
   {
-    y1 = (*(*fEnergyDistrTable)(iPlace))(iTransfer-1) ;
-    y2 = (*(*fEnergyDistrTable)(iPlace))(iTransfer) ;
+    y1 = (*(*fEnergyDistrTable)(iPlace))(iTransfer-1);
+    y2 = (*(*fEnergyDistrTable)(iPlace))(iTransfer);
 
-    x1 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-    x2 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+    x1 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+    x2 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
 
-    if ( x1 == x2 )    result = x2 ;
+    if ( x1 == x2 )    result = x2;
     else
     {
-      if ( y1 == y2  ) result = x1 + (x2 - x1)*G4UniformRand() ;
+      if ( y1 == y2  ) result = x1 + (x2 - x1)*G4UniformRand();
       else
       {
-        result = x1 + (position - y1)*(x2 - x1)/(y2 - y1) ;
+        result = x1 + (position - y1)*(x2 - x1)/(y2 - y1);
       }
     }
   }
-  return result ;
+  return result;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -1452,11 +1549,11 @@ G4double G4MscRadiation::GetRandomAngle( G4double energyXTR, G4int iTkin )
   }
   if (iTR == fBinTR) iTR--;
       
-  position = (*(*fAngleForEnergyTable)(iTR))(0)*G4UniformRand() ;
+  position = (*(*fAngleForEnergyTable)(iTR))(0)*G4UniformRand();
 
   for(iAngle = 0;;iAngle++)
   {
-    if(position >= (*(*fAngleForEnergyTable)(iTR))(iAngle)) break ;
+    if(position >= (*(*fAngleForEnergyTable)(iTR))(iAngle)) break;  
   }
   angle = GetAngleXTR(iTR,position,iAngle);
   return angle;

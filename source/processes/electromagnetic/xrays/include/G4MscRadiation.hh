@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.1 2008-08-06 08:34:23 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.2 2008-08-07 14:38:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,8 @@
 class G4SandiaTable;
 class G4VParticleChange;
 class G4PhysicsFreeVector;
+class G4ParticleDefinition;
+class G4DynamicParticle;
 
 class G4MscRadiation : public G4VDiscreteProcess  // G4VContinuousProcess
 {
@@ -77,7 +79,13 @@ public:
 
   G4MscRadiation (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                     G4double,G4double,G4int,
-                    const G4String & processName = "XTRenergyLoss",
+                    const G4String & processName = "MscRadiation",
+                    G4ProcessType type = fElectromagnetic);
+
+  // test constructor
+
+  G4MscRadiation (  G4Material*,G4double,
+                    const G4String & processName = "MscRadiation",
                     G4ProcessType type = fElectromagnetic);
 
    ~G4MscRadiation ();
@@ -163,7 +171,13 @@ public:
   G4double  GetGamma()   {return fGamma;}; 
   G4double  GetEnergy()  {return fEnergy;};                
   G4double  GetVarAngle(){return fVarAngle;};
+  G4double CalculateParticleBeta( const G4ParticleDefinition* particle, 
+                                 	G4double momentum    );
+  G4double CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 );
   G4double  CalculateAm( G4double momentum, G4double n, G4double Z);
+  G4double  CalculateTransportXsc(  const G4ParticleDefinition* aParticle, 
+                                          G4double momentum, G4double Z);
+  G4double  CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
                
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
@@ -178,7 +192,7 @@ public:
 protected:
 
   G4ParticleDefinition* fPtrGamma;    // pointer to TR photon
-
+  G4Material* fPlateMaterial; 
   G4double* fGammaCutInKineticEnergy; // TR photon cut in energy array
 
   G4double         fGammaTkinCut;     // Tkin cut of TR photon in current mat.
@@ -224,6 +238,10 @@ protected:
   G4double fGasThick;     
   G4double fAlphaPlate;
   G4double fAlphaGas;
+
+
+  G4double fBeta;
+  G4double fZommerfeld;
   G4double fAm;
 
   G4SandiaTable* fPlatePhotoAbsCof;
@@ -236,6 +254,33 @@ protected:
   std::vector<G4PhysicsTable*>       fAngleBank;
 
 };
+
+// inline methods
+
+////////////////////////////////////////////////////////////////////
+//
+// return particle beta
+
+inline  G4double G4MscRadiation::CalculateParticleBeta( const G4ParticleDefinition* particle, 
+                                 	G4double momentum    )
+{
+  G4double mass = particle->GetPDGMass();
+  G4double a    = momentum/mass;
+  fBeta         = a/std::sqrt(1+a*a);
+
+  return fBeta; 
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// return Zommerfeld parameter for Coulomb scattering
+
+inline  G4double G4MscRadiation::CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 )
+{
+  fZommerfeld = fine_structure_const*Z1*Z2/beta;
+
+  return fZommerfeld; 
+}
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -250,6 +295,141 @@ inline  G4double G4MscRadiation::CalculateAm( G4double momentum, G4double n, G4d
   fAm          = ch/zn2;
 
   return fAm;
+}
+////////////////////////////////////////////////////////////////////
+//
+// return Wentzel correction for Coulomb scattering
+
+inline  G4double G4MscRadiation::CalculateTransportXsc( const G4ParticleDefinition* aParticle, 
+                                                        G4double momentum, G4double Z)
+{
+
+  G4double z = aParticle->GetPDGCharge();
+  if(verboseLevel) 
+  {
+    G4cout<<"z = "<<z<<G4endl;
+  }
+
+  fBeta       = CalculateParticleBeta( aParticle, momentum);
+  if(verboseLevel) 
+  {
+    G4cout<<"fBeta = "<<fBeta<<G4endl;
+  }
+  fZommerfeld = CalculateZommerfeld( fBeta, z, Z );
+  if(verboseLevel) 
+  {
+    G4cout<<"fZommerfeld = "<<fZommerfeld<<G4endl;
+  }
+  fAm         = CalculateAm( momentum, fZommerfeld, Z );
+  if(verboseLevel) 
+  {
+    G4cout<<"fAm = "<<fAm<<G4endl;
+  }
+
+  G4double xsc = twopi*z*z*Z*Z;
+
+  xsc *= fine_structure_const*fine_structure_const*hbarc*hbarc;
+
+  xsc /=  momentum*momentum*fBeta*fBeta;
+
+  // G4double lnfAm = std::log(1.+1./fAm) - 1./(1.+fAm);
+  G4double lnfAm = 1.;
+
+
+  if(verboseLevel) 
+  {
+    // G4cout<<"lnfAm = "<<lnfAm<<G4endl;
+  }
+  xsc *= lnfAm;
+
+  return xsc;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// return Msc differential xsc
+
+
+inline  G4double G4MscRadiation::CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy)
+{
+
+  const G4ParticleDefinition* aParticle = dParticle->GetDefinition(); 
+  G4double momentum = dParticle->GetTotalMomentum();
+  G4double Tkin = dParticle->GetKineticEnergy();
+  if(Tkin <= energy || Tkin <= 0. || energy <= 0.) return 0.;
+
+  G4double y = energy/Tkin;
+  if(verboseLevel) 
+  {
+    G4cout<<"y = "<<y<<G4endl;
+  }
+
+  G4double pMass = dParticle->GetMass();
+  fGamma = 1. + Tkin/pMass;
+  G4double Z = fPlateMaterial->GetZ();
+  if(verboseLevel) 
+  {
+    G4cout<<"Z = "<<Z<<G4endl;
+  }
+  G4double lambda = hbarc/energy;
+  if(verboseLevel) 
+  {
+    G4cout<<"lambda = "<<lambda<<" mm"<<G4endl;
+  }
+
+  G4double transportXsc  = CalculateTransportXsc( aParticle, momentum,  Z);
+
+  transportXsc  *=   fPlateMaterial->GetTotNbOfAtomsPerVolume()*lambda;
+  if(verboseLevel) 
+  {
+    G4cout<<"Nat = "<<fPlateMaterial->GetTotNbOfAtomsPerVolume()<<" 1/mm3"<<G4endl;
+  }
+
+  if(verboseLevel) 
+  {
+    G4cout<<"transportXsc = "<<transportXsc<<" "<<G4endl;
+  }
+
+  G4double xscCompton = GetPlateCompton(energy)*lambda;
+  if(verboseLevel) 
+  {
+    G4cout<<"xscCompton = "<<xscCompton<<" "<<G4endl;
+  }
+  
+  G4double xscAbs = GetPlateLinearPhotoAbs(energy)*lambda;
+  if(verboseLevel) 
+  {
+    G4cout<<"xscAbs = "<<xscAbs<<" "<<G4endl;
+  }
+
+  G4double mscDiffXsc = fine_structure_const/(pi*hbarc);
+
+  G4double polarisation = 1. +(fGamma*fGamma)*fSigma1/(energy*energy);
+  if(verboseLevel) 
+  {
+    G4cout<<"polarisation = "<<polarisation<<G4endl;
+  }
+  mscDiffXsc /=  polarisation;
+
+  G4double lnfAm = std::log(183.*std::pow(Z,-1./3.)*std::sqrt(polarisation));
+  if(verboseLevel) 
+  {
+    G4cout<<"lnfAm = "<<lnfAm<<G4endl;
+  }
+
+  G4double image = 2*fBeta*transportXsc*lnfAm;
+
+  // image += xscAbs;
+  // image += xscCompton;
+
+  mscDiffXsc *= image;
+  mscDiffXsc *= fGamma*fGamma;
+  mscDiffXsc *= y*y + 4.*(1.- y)/3.;
+  
+
+  if( mscDiffXsc < 0. )  mscDiffXsc = 0.;
+
+  return mscDiffXsc;
 }
 
 #endif

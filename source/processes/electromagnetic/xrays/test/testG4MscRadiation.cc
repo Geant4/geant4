@@ -24,15 +24,11 @@
 // ********************************************************************
 //
 //
-// 
+// Unit test for coherent elastic models
 //
-//  
+//  18.05.07 V. Grichine
 //
-//  Test routine for G4MscRadiation class and inherited from it code
 //
-// History:
-//
-// 20.01.05, V. Grichine 
 
 #include "G4ios.hh"
 #include <fstream>
@@ -40,679 +36,260 @@
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4UnitsTable.hh"
-
-
 #include <iomanip>
 
-#include "G4Isotope.hh"
+
 #include "G4Element.hh"
-#include "G4Material.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4Region.hh"
-#include "G4ProductionCuts.hh"
-#include "G4RegionStore.hh"
-#include "G4MaterialTable.hh"
+#include "G4NistManager.hh"
 
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-
-#include "G4MscRadiation.hh"
-#include "G4RegularXTRadiator.hh"
-#include "G4TransparentRegXTRadiator.hh"
-#include "G4GammaXTRadiator.hh"
-#include "G4StrawTubeXTRadiator.hh"
-
-#include "G4XTRGammaRadModel.hh"
-#include "G4XTRRegularRadModel.hh"
-#include "G4XTRTransparentRegRadModel.hh"
-
-#include "G4SynchrotronRadiation.hh"
 
 #include "G4ParticleDefinition.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
 #include "G4Proton.hh"
+#include "G4Electron.hh"
+
+#include "G4DynamicParticle.hh"
+#include "G4ParticleMomentum.hh"
 
 
+#include "G4MscRadiation.hh"
+
+
+
+
+using namespace std;
 
 int main()
 {
 
-  /*
-  std::ofstream outdEdx("XTRdEdx.out", std::ios::out ) ;
-  outdEdx.setf( std::ios::scientific, std::ios::floatfield );
-
-  std::ofstream outdNdx("XTRdNdx.out", std::ios::out ) ;
-  outdNdx.setf( std::ios::scientific, std::ios::floatfield );
-
-  std::ofstream outXsc("InitXsc.out", std::ios::out ) ;
-  outXsc.setf( std::ios::scientific, std::ios::floatfield );
-
-  //  std::ifstream fileRead("exp.dat", std::ios::out ) ;
-  //  fileRead.setf( std::ios::scientific, std::ios::floatfield );
-
-  std::ofstream fileWrite1("mpXTR.dat", std::ios::out ) ;
-  fileWrite1.setf( std::ios::scientific, std::ios::floatfield );
-  */
- 
-
-  /////////////////////////////////////////////////////////////////
-  //
-  // Create materials  
-
- 
-  G4String name, symbol ;                            //a =mass of a mole;
-  G4double a, z ;   //z =mean number of protons;  
-  G4double density, foilDensity, gasDensity, totDensity ;
-  G4double fractionFoil, fractionGas ;
-  G4int nel ; 
-  
-  //G4int ncomponents, natoms;
-  G4int  ncomponents;
-  //G4double abundance, fractionmass;
-  G4double fractionmass;
-  //G4double temperature, pressure;
-  
-  /////////////////////////////////////
-  //
-  // define Elements
-  
-   
-  a = 1.01*g/mole;
-  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-  
-  a = 6.94*g/mole;
-  G4Element* elLi = new G4Element(name="Lithium",symbol="Li" , z= 3., a);
-  
-  a = 9.01*g/mole;
-  G4Element* elBe = new G4Element(name="Berillium",symbol="Be" , z= 4., a);
-  
-  a = 12.01*g/mole;
-  G4Element* elC  = new G4Element(name="Carbon", symbol="C", z=6., a);
-  
-  a = 14.01*g/mole;
-  G4Element* elN  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
-  
-  a = 16.00*g/mole;
-  G4Element* elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
-  
-  a = 39.948*g/mole;
-  G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
-  
-  a = 131.29*g/mole;
-  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
-  
-  a = 19.00*g/mole;
-  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
-
-  /////////////////////////////////////////////////////////////////
-  //
-  // Detector windows, electrodes 
-  // Al for electrodes
-  
-  density = 2.700*g/cm3;
-  a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  
-  
-  ////////////////////////////////////////////////////////////////////////////
-  //
-  // Materials for popular X-ray TR radiators
-  //
-  
-  // TRT_CH2
-  
-  density = 0.935*g/cm3;
-  G4Material* TRT_CH2 = new G4Material(name="TRT_CH2",density, nel=2);
-  TRT_CH2->AddElement(elC,1);
-  TRT_CH2->AddElement(elH,2);
-  
-  // Radiator
-  
-  density = 0.059*g/cm3;
-  G4Material* Radiator = new G4Material(name="Radiator",density, nel=2);
-  Radiator->AddElement(elC,1);
-  Radiator->AddElement(elH,2);
- // Carbon Fiber
-  
-  density = 0.145*g/cm3;
-  G4Material* CarbonFiber = new G4Material(name="CarbonFiber",density, nel=1);
-  CarbonFiber->AddElement(elC,1);
-  
-  // Lithium
-  
-  density = 0.534*g/cm3;
-  G4Material* Li = new G4Material(name="Li",density, nel=1);
-  Li->AddElement(elLi,1);
-  
-  // Beryllium
-  
-  density = 1.848*g/cm3;
-  G4Material* Be = new G4Material(name="Be",density, nel=1);
-  Be->AddElement(elBe,1);
-  
-  // Mylar
-  
-  density = 1.39*g/cm3;
-  G4Material* Mylar = new G4Material(name="Mylar", density, nel=3);
-  Mylar->AddElement(elO,2);
-  Mylar->AddElement(elC,5);
-  Mylar->AddElement(elH,4);
-  
-  // Kapton (polyimide) ??? since = Mylar C5H4O2
-  
-  density = 1.39*g/cm3;
-  G4Material* Kapton = new G4Material(name="Kapton", density, nel=3);
-  Kapton->AddElement(elO,2);
-  Kapton->AddElement(elC,5);
-  Kapton->AddElement(elH,4);
-  
- // Polypropelene
-
-  G4Material* CH2 = new G4Material ("CH2" , 0.91*g/cm3, 2);
-  CH2->AddElement(elH,2);
-  CH2->AddElement(elC,1);
-  
-  //////////////////////////////////////////////////////////////////////////
-  //
-  // Noble gases , STP conditions
-  
-  // Helium as detector gas, STP
-  
-  density = 0.178*mg/cm3 ;
-  a = 4.0026*g/mole ;
-  G4Material* He  = new G4Material(name="He",z=2., a, density );
-  
-  // Neon as detector gas, STP
-
-  density = 0.900*mg/cm3 ;
-  a = 20.179*g/mole ;
-  G4Material* Ne  = new G4Material(name="Ne",z=10., a, density );
-
-  // Argon as detector gas, STP
-
-  density = 1.7836*mg/cm3 ;       // STP
-  G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
-  Argon->AddElement(elAr, 1);
-
-  // Krypton as detector gas, STP
-
-  density = 3.700*mg/cm3 ;
-  a = 83.80*g/mole ;
-  G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
-
-  // Xenon as detector gas, STP
-
-  density = 5.858*mg/cm3 ;
-  a = 131.29*g/mole ;
-  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Hydrocarbones, metane and others
-
-  // Metane, STP
-  
-  density = 0.7174*mg/cm3 ;
-  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
-  metane->AddElement(elC,1) ;
-  metane->AddElement(elH,4) ;
-  
-  // Propane, STP
-  
-  density = 2.005*mg/cm3 ;
-  G4Material* propane = new G4Material(name="C3H8",density,nel=2) ;
-  propane->AddElement(elC,3) ;
-  propane->AddElement(elH,8) ;
-  
-  // iso-Butane (methylpropane), STP
-  
-  density = 2.67*mg/cm3 ;
-  G4Material* isobutane = new G4Material(name="isoC4H10",density,nel=2) ;
-  isobutane->AddElement(elC,4) ;
-  isobutane->AddElement(elH,10) ;
-
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  // Molecular gases
-
-  // Carbon dioxide, STP 
-
-  density = 1.977*mg/cm3;
-  G4Material* CO2 = new G4Material(name="CO2", density, nel=2,
-                                       kStateGas,273.15*kelvin,1.*atmosphere);
-  CO2->AddElement(elC,1);
-  CO2->AddElement(elO,2);
-
-  // Carbon dioxide, STP
-
-  density = 1.977*mg/cm3;
-  G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2);
-  CarbonDioxide->AddElement(elC,1);
-  CarbonDioxide->AddElement(elO,2);
-
-
-  // Nitrogen, STP
-
-  density = 1.25053*mg/cm3 ;       // STP
-  G4Material* Nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
-  Nitrogen->AddElement(elN, 2);
-
-  // Oxygen, STP
-
-  density = 1.4289*mg/cm3 ;       // STP
-  G4Material* Oxygen = new G4Material(name="O2"  , density, ncomponents=1);
-  Oxygen->AddElement(elO, 2);
-
-  /* *****************************
-
-  density = 1.25053*mg/cm3 ;       // STP
-  a = 14.01*g/mole ;       // get atomic weight !!!
-  //  a = 28.016*g/mole;
-  G4Material* N2  = new G4Material(name="Nitrogen", z= 7.,a,density) ;
-
-  density = 1.25053*mg/cm3 ;       // STP
-  G4Material* anotherN2 = new G4Material(name="anotherN2", density,ncomponents=2);
-  anotherN2->AddElement(elN, 1);
-  anotherN2->AddElement(elN, 1);
-
-  // air made from oxigen and nitrogen only
-
-  density = 1.290*mg/cm3;  // old air from elements
-  G4Material* air = new G4Material(name="air"  , density, ncomponents=2);
-  air->AddElement(elN, fractionmass=0.7);
-  air->AddElement(elO, fractionmass=0.3);
-
-  ******************************************** */
-
-  // Dry Air (average composition), STP
-
-  density = 1.2928*mg/cm3 ;       // STP
-  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
-  Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
-  Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
-  Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
-
-   ////////////////////////////////////////////////////////////////////////////
-  //
-  // MWPC mixtures
-  
-  // 80% Xe + 20% CO2, STP
-  
-  density = 5.0818*mg/cm3 ;      
-  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , density, ncomponents=2);
-  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
-  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
-  
-  // 80% Kr + 20% CO2, STP
-  
-  density = 3.601*mg/cm3 ;      
-  G4Material* Kr20CO2 = new G4Material(name="Kr20CO2", density, 
-                                       ncomponents=2);
-  Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
-  Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
-  
-  // Xe + 55% He + 15% CH4 ; NIM A294 (1990) 465-472; STP
-  
-  density = 1.963*mg/cm3;
-  G4Material* Xe55He15CH4 = new G4Material(name="Xe55He15CH4",density,
-                                           ncomponents=3);
-  Xe55He15CH4->AddMaterial(Xe, 0.895);
-  Xe55He15CH4->AddMaterial(He, 0.050);
-  Xe55He15CH4->AddMaterial(metane,0.055);
-
-  // 90% Xe + 10% CH4, STP ; NIM A248 (1986) 379-388
-  
-  density = 5.344*mg/cm3 ;      
-  G4Material* Xe10CH4 = new G4Material(name="Xe10CH4"  , density, 
-                                       ncomponents=2);
-  Xe10CH4->AddMaterial( Xe,       fractionmass = 0.987 ) ;
-  Xe10CH4->AddMaterial( metane,   fractionmass = 0.013 ) ;
-  
-  // 95% Xe + 5% CH4, STP ; NIM A214 (1983) 261-268
-  
-  density = 5.601*mg/cm3 ;      
-  G4Material* Xe5CH4 = new G4Material(name="Xe5CH4"  , density, 
-                                      ncomponents=2);
-  Xe5CH4->AddMaterial( Xe,       fractionmass = 0.994 ) ;
-  Xe5CH4->AddMaterial( metane,   fractionmass = 0.006 ) ;
-  
-  // 80% Xe + 20% CH4, STP ; NIM A253 (1987) 235-244
-  
-  density = 4.83*mg/cm3 ;      
-  G4Material* Xe20CH4 = new G4Material(name="Xe20CH4"  , density, 
-                                       ncomponents=2);
-  Xe20CH4->AddMaterial( Xe,       fractionmass = 0.97 ) ;
-  Xe20CH4->AddMaterial( metane,   fractionmass = 0.03 ) ;
-
-  // 93% Ar + 7% CH4, STP ; NIM 107 (1973) 413-422
-
-  density = 1.709*mg/cm3 ;      
-  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density, 
-                                                  ncomponents=2);
-  Ar7CH4->AddMaterial( Argon,       fractionmass = 0.971 ) ;
-  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
-
-  // 93% Kr + 7% CH4, STP ; NIM 107 (1973) 413-422
-
-  density = 3.491*mg/cm3 ;      
-  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
-                                                  ncomponents=2);
-  Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
-  Kr7CH4->AddMaterial( metane,   fractionmass = 0.014 ) ;
-
-  // 0.5*(95% Xe + 5% CH4)+0.5*(93% Ar + 7% CH4), STP ; NIM A214 (1983) 261-268
-
-  density = 3.655*mg/cm3 ;      
-  G4Material* XeArCH4 = new G4Material(name="XeArCH4"  , density, 
-                                                  ncomponents=2);
-  XeArCH4->AddMaterial( Xe5CH4,       fractionmass = 0.766 ) ;
-  XeArCH4->AddMaterial( Ar7CH4,   fractionmass = 0.234 ) ;
-
-
-  ////////////////////////////////////////////////////////////
-  //
-  // Geometry 
-
-
-  G4double foilThick = 0.02*mm ; // 25*micrometer ;     
-  G4double gasGap       = 0.50*mm ;          //  1500*micrometer  ;   
-  G4double foilGasRatio = foilThick/(foilThick+gasGap) ;
-  G4int    foilNumber   = 120 ;             //  188 ;
-  G4double detGap       = 0.01*mm ;
-
-
-  G4double alphaPlate   = 2.0 ;
-  G4double alphaGas     = 10.0 ;
-  G4int    modelNumber  = 0 ;
-
-// TR radiator envelope
-
-  G4double radThick = foilNumber*(foilThick + gasGap) - gasGap + detGap;
-
-  G4double absorberRadius    = 10.*cm;
-
-  G4double absorberThickness = 15.0*mm ;   // 40.0*mm ;
-
-  // Preparation of mixed radiator material
-
-  foilDensity = 0.91*g/cm3 ;// CH2 1.39*g/cm3; // Mylar 0.534*g/cm3; //Li        
-  gasDensity  = 1.2928*mg/cm3 ; // Air 0.178*mg/cm3 ; // He 1.977*mg/cm3; // CO2
- 
-  totDensity  = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio) ;
-
-  fractionFoil =  foilDensity*foilGasRatio/totDensity ; 
-  fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity ;  
-    
-  G4Material* radiatorMat = new G4Material(name="radiatorMat"  , totDensity, 
-                                                  ncomponents=2);
-  radiatorMat->AddMaterial( CH2, fractionFoil ) ;
-  radiatorMat->AddMaterial( Air, fractionGas  ) ;
-
-  //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  // default materials of the calorimeter and TR radiator
-
-  G4Material* fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
-  G4Material* foilMat     = CH2 ; // Li ; // CH2 ;  
-  G4Material* gasMat      = Air ; // He;  //  CO2 ; 
-  G4Material* absMat      = Xe20CO2 ; // He ;// CO2 ; 
-  
-  // fWindowMat = Mylar ;
-  // fElectrodeMat = Al ;
-
-  // AbsorberMaterial = Ar7CH4; // Xe10CH4; // Xe55He15CH4;
- 
-
-  // fGapMat          = Xe10CH4 ;
-
-  // WorldMaterial    = Air ; // CO2 ;  
-
-
-
-  ///////////////////////
-
-  G4int i, j, k, nBin, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
-
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-
-  numOfMaterials = theMaterialTable->size();
-
-  G4String testName;
-
-  for( k = 0; k < numOfMaterials; k++ )
+  G4int i, j, k, iMax;
+  G4double x;
+
+
+  G4Element*     theElement;
+  G4Material*    theMaterial;
+  G4NistManager* man = G4NistManager::Instance();
+  man->SetVerbose(1);
+
+  G4cout << " 1 hydrogen" << G4endl;
+  G4cout << " 2 helium" << G4endl;
+  G4cout << " 4 berillium" << G4endl;
+  G4cout << " 6 carbon" << G4endl;
+  G4cout << " 7 nitrogen" << G4endl;
+  G4cout << " 8 oxigen" << G4endl;
+  G4cout << "13 aluminium" << G4endl;
+  G4cout << "14 silicon" << G4endl;
+  G4cout << "18 argon" << G4endl;
+  G4cout << "26 iron" << G4endl;
+  G4cout << "29 copper" << G4endl;
+  G4cout << "48 cadmium" << G4endl;
+  G4cout << "74 tugnsten" << G4endl;
+  G4cout << "77 iridium" << G4endl;
+  G4cout << "82 lead" << G4endl;
+  G4cout << "92 uranium" << G4endl;
+  G4int choice;
+  // G4cin >> choice;
+  choice = 77;
+
+
+  switch (choice)
   {
-    //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
+    case 1:
 
-    // outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
-    // G4cout <<k<<"\t"<< "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+      theElement  = man->FindOrBuildElement("H");
+      theMaterial = man->FindOrBuildMaterial("G4_H");
+      break;
+
+    case 2:
+
+      theElement  = man->FindOrBuildElement("He");
+      theMaterial = man->FindOrBuildMaterial("G4_He");
+      break;
+
+    case 4:
+
+      theElement  = man->FindOrBuildElement("Be");
+      theMaterial = man->FindOrBuildMaterial("G4_Be");
+      break;
+
+    case 6:
+
+      theElement  = man->FindOrBuildElement("C");
+      theMaterial = man->FindOrBuildMaterial("G4_C");
+      break;
+
+    case 7:
+
+      theElement  = man->FindOrBuildElement("N");
+      theMaterial = man->FindOrBuildMaterial("G4_N");
+      break;
+
+
+    case 8:
+
+      theElement  = man->FindOrBuildElement("O");
+      theMaterial = man->FindOrBuildMaterial("G4_O");
+      break;
+
+    case 13:
+
+      theElement  = man->FindOrBuildElement("Al");
+      theMaterial = man->FindOrBuildMaterial("G4_Al");
+      break;
+
+    case 14:
+
+      theElement  = man->FindOrBuildElement("Si");
+      theMaterial = man->FindOrBuildMaterial("G4_Si");
+      break;
+
+    case 18:
+
+      theElement  = man->FindOrBuildElement("Ar");
+      theMaterial = man->FindOrBuildMaterial("G4_Ar");
+      break;
+
+    case 26:
+
+      theElement  = man->FindOrBuildElement("Fe");
+      theMaterial = man->FindOrBuildMaterial("G4_Fe");
+      break;
+
+    case 29:
+
+      theElement  = man->FindOrBuildElement("Cu");
+      theMaterial = man->FindOrBuildMaterial("G4_Cu");
+      break;
+
+    case 48:
+
+      theElement  = man->FindOrBuildElement("Cd");
+      theMaterial = man->FindOrBuildMaterial("G4_Cd");
+      break;
+
+
+    case 74:
+
+      theElement  = man->FindOrBuildElement("W");
+      theMaterial = man->FindOrBuildMaterial("G4_W");
+      break;
+
+    case 77:
+
+      theElement  = man->FindOrBuildElement("Ir");
+      theMaterial = man->FindOrBuildMaterial("G4_Ir");
+      break;
+
+    case 82:
+
+      theElement  = man->FindOrBuildElement("Pb");
+      theMaterial = man->FindOrBuildMaterial("G4_Pb");
+      break;
+
+    case 92:
+
+      theElement  = man->FindOrBuildElement("U");
+      theMaterial = man->FindOrBuildMaterial("G4_U");
+      break;
   }
 
-  //  G4cout<<"Enter material name for test : "<<std::flush ;
-  //  G4cin>>testName ;
+// Particle definition
 
-    
-  // G4Region* regGasDet = new G4Region("VertexDetector");
-  // regGasDet->AddRootLogicalVolume(logicAbsorber);
-   
-  G4ProductionCuts* cuts = new G4ProductionCuts();
-  cuts->SetProductionCut(10.*mm,"gamma");
-  cuts->SetProductionCut(1.*mm,"e-");
-  cuts->SetProductionCut(1.*mm,"e+");
+  G4cout << " 1 electron" << G4endl;
+  G4cout << " 2 proton" << G4endl;
+  G4cout << " 3 pion+" << G4endl;
+  G4cout << " 4 pion-" << G4endl;
+  G4cout << " 4 muon+" << G4endl;
+  G4cout << " 5 muon-" << G4endl;
 
-   // regGasDet->SetProductionCuts(cuts);
-   
-  G4cout.precision(4);
+  //  G4cin >> choice;
+  choice = 1;
 
-  //  G4MaterialCutsCouple* matCC = new G4MaterialCutsCouple( 
-  //                                  (*theMaterialTable)[k], cuts);
+  G4ParticleDefinition* theParticleDefinition;
 
-  G4cout<<"radThick = "     <<radThick/mm<<" mm"<<G4endl ;
-  G4cout<<"foilNumber = "  <<foilNumber<<G4endl ;
-  G4cout<<"radiatorMat = " <<radiatorMat->GetName()<<G4endl ;
+
+  switch (choice)
+  {
+    case 1:
+
+      theParticleDefinition = G4Electron::ElectronDefinition();  
+      break;
+
+    case 2:
+
+      theParticleDefinition = G4Proton::ProtonDefinition();
+      break;
+
+    case 3:
+
+      theParticleDefinition = G4PionPlus::PionPlusDefinition(); 
+      break;
+
+    case 4:
+
+      theParticleDefinition = G4PionMinus::PionMinusDefinition();
+      break;
  
-
-  G4Box* solidRadiator = new G4Box("Radiator",1.1*absorberRadius , 
-                                              1.1*absorberRadius, 
-                                              0.5*radThick             ) ; 
-                         
-  G4LogicalVolume* logicRadiator = new G4LogicalVolume(solidRadiator,    
-                                                       radiatorMat,      
-                                                       "Radiator");            
+    case 5:
      
+      theParticleDefinition = G4MuonPlus::MuonPlusDefinition(); 
+      break;
 
-  // const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
-  // G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
+    case 6:
+     
+      theParticleDefinition = G4MuonMinus::MuonMinusDefinition();
+      break;
 
-  G4MscRadiation* processMsc;
-
-  const G4ParticleDefinition proton(
-                 name,   0.9382723*GeV,       0.0*MeV,       eplus,
-                    1,              +1,             0,
-                    1,              +1,             0,
-             "baryon",               0,            +1,        2212,
-                 true,            -1.0,          NULL,
-             false,           "neucleon"
-              );
-
-  G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
-  // *proton = theProton;  
-  processMsc->SetVerboseLevel(1);
-  // processMsc->SetAngleRadDistr(true);
-
-  // processMsc->BuildPhysicsTable(proton);
-
-  // processMsc->SetVerboseLevel(1);
-
-  static G4int totBin = processMsc->GetTotBin();
-  nBin = totBin;
-  G4cout<<"totBin = "<<totBin<<G4endl;
-
-  // test of XTR table step do-it
-
-
-  G4double energyTR = 10*keV, cofAngle = 5.1,  angle2, dNdA, xCompton, lambdaC;
-  G4double charge = 1.0;
-  G4double chargeSq  = charge*charge ;
-  G4double gamma     = 4.e4; 
-  G4cout<<"gamma = "<<gamma<<G4endl;
-  G4cout<<"energyTR = "<<energyTR/keV<<" keV"<<G4endl;
-  
-  processMsc->SetGamma(gamma);
-
-  // processMsc->GetAngleVector(energyTR,nBin);
-
-  // xCompton = processMsc->GetGasCompton(energyTR);
-
-  // lambdaC = 1./xCompton;
-
-  // G4cout<<"lambdaC = "<<lambdaC/m <<" m; for energy = "<<energyTR/keV<<" keV"<<G4endl;
-
-  // G4double dNdA = processMsc->SpectralXTRdEdx(energyTR);
-
-  // G4double angle2 = cofAngle*cofAngle/gamma/gamma;
-
-  // G4double dNdAngle = processMsc-> AngleXTRdEdx(angle2);
-  /*
-  for(i = 0; i < 40; i++ )
-  {
-    angle2 = processMsc->GetRandomAngle(energyTR,40);
-    G4cout<<"random theta*gamma = "<<std::sqrt(angle2)*gamma<<G4endl;
-  }
-  */
-
-  /*
-  for(i = 0; i < 40; i++ )
-  {
-     cofAngle = 0.5*i;
-     G4double angle2 = cofAngle*cofAngle/gamma/gamma;
-     G4double dNdAngle = processMsc-> AngleXTRdEdx(angle2);
-     dNdAngle *=fine_structure_const/pi;
-     G4cout<<"cofAngle = "<<cofAngle<<"; angle = "<<cofAngle/gamma
-           <<"; dNdAngle = "<<dNdAngle<<G4endl;
-  }
-  */
-
-
-  G4int iTkin;
-  G4cout<<"gamma = "<<gamma<<G4endl;
-
-  G4double TkinScaled = (gamma - 1.)*proton_mass_c2;
-
-  /*  
-  for( iTkin = 0; iTkin < totBin; iTkin++ )
-  {
-    if(TkinScaled < processMsc->GetProtonVector()->
-                                        GetLowEdgeEnergy(iTkin)) break;    
   }
 
-  G4double xtrEnergy[100];
-  G4int spectrum[100];
+  G4double energyMscXR, kinEnergy = 149.0*GeV;
 
 
-  for( k = 0; k < 100; k++ )
+  iMax = 5;
+
+  G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+                                              G4ParticleMomentum(0.,0.,1.),
+                                              kinEnergy);
+
+  G4double m1 = theParticleDefinition->GetPDGMass();
+  G4double plab = theDynamicParticle->GetTotalMomentum();
+  G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
+  G4double plabLowLimit = 20.0*MeV;
+
+  G4int Z   = G4int(theElement->GetZ());
+  G4int A    = G4int(theElement->GetN()+0.5);
+
+  G4double step = 0.128*mm;
+
+
+
+  G4double m2 = man->GetAtomicMassAmu(Z)*GeV;
+  // G4double m2 = man->GetAtomicMass( Z, A);
+  G4cout <<" target mass, m2 = "<<m2/GeV<<" GeV"<<G4endl;
+
+
+  G4MscRadiation* mscRad = new G4MscRadiation(theMaterial, step);
+
+  mscRad->SetVerboseLevel(1);
+
+  G4double numberMscXR; 
+
+  for( i = 0; i < iMax; i++ )
   {
-    xtrEnergy[k] = (1.0+ 1.0*k)*keV;
-    spectrum[k]  = 0;
+    energyMscXR = (1. +i*5.)*GeV;
+    numberMscXR = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
+    numberMscXR *= step*energyMscXR;
+    G4cout <<"energyMscXR  = "<<energyMscXR/GeV<<" GeV; numberMscXR =  "
+           <<numberMscXR<<" "<<G4endl<<G4endl;
   }
+
+
+  std::ofstream writef("angle.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
   
 
-  for( i = 0; i < 10000; i++ )
-  {
-    energyTR = processMsc->GetXTRrandomEnergy(TkinScaled,iTkin);
-
-    for( k = 0; k < 100; k++ )
-    {
-      if( energyTR <= xtrEnergy[k] ) break;    
-    }
-    spectrum[k] += 1;
-  }
-
-  // output to file
-
-
-  if(fXTRModel == "gammaR" )
-  {
-    std::ofstream fileWrite("gammaR.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "gammaM" )
-  {
-    std::ofstream fileWrite("gammaM.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "strawR" )
-  {
-    std::ofstream fileWrite("strawR.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "regR" )
-  {
-    std::ofstream fileWrite("regR.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "transpR" )
-  {
-    std::ofstream fileWrite("transpR.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "regM" )
-  {
-    std::ofstream fileWrite("regM.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else if(fXTRModel == "transpM" )
-  {
-    std::ofstream fileWrite("transpM.dat", std::ios::out ) ;
-    fileWrite.setf( std::ios::scientific, std::ios::floatfield );
-
-    for( k = 0; k < 41; k++ )
-    {    
-      G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
-      fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
-    }
-  }
-  else
-  {
-    G4Exception("Invalid XTR model name, no output file", "InvalidSetup",
-                 FatalException, "XTR model name is out of the name list");
-  }
-*/
-
-
-  return 1 ;
-}
-
+  return 1;
+} // end of main
