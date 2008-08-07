@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.22 2008-07-23 14:49:31 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.23 2008-08-07 10:15:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,6 +116,10 @@ public:
   // Get mass of the isotope in Geant4 units with electron shell
   //
   inline G4double GetAtomicMass(G4int Z, G4int N) const;
+
+  // Get total ionisation energy of an atom
+  //
+  inline G4double GetTotalElectronBindingEnergy(G4int Z) const;
 
   // Get N for the first natural isotope
   //
@@ -323,6 +327,14 @@ inline
 G4double G4NistManager::GetAtomicMass(G4int Z, G4int N) const
 {
   return elmBuilder->GetAtomicMass(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistManager::GetTotalElectronBindingEnergy(G4int Z) const
+{
+  return elmBuilder->GetTotalElectronBindingEnergy(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

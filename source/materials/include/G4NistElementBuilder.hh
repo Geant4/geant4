@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.17 2008-08-06 18:34:54 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.18 2008-08-07 10:15:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -75,39 +75,43 @@ public:
   // Get atomic number by element symbol
   G4int GetZ(const G4String& symb);
 
-  // Get the mass of the element in amu for the natuaral isotope composition
-  // with electron shell 
-  G4double GetA (G4int Z);
-
-  // Get the mass of the isotope in amu (without electron shell)
-  G4double GetIsotopeMass (G4int Z, G4int N);
-
-  // Get the atomic mass of the isotope in amu (with electron shell)
-  G4double GetAtomicMass  (G4int Z, G4int N);
-
-  // Get natural isotope abandance
-  G4double GetIsotopeAbundance (G4int Z, G4int N);
-
-  // Get N for the first natural isotope
-  G4int GetNistFirstIsotopeN(G4int Z);
-
-  // Get number of natural isotopes
-  G4int GetNumberOfNistIsotopes(G4int Z);
-
-  G4int GetMaxNumElements(); 
-
-  void SetVerbose   (G4int);
-  void PrintElement (G4int Z);
-
   // Find or build a G4Element by atomic number
   G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
   // Find  or build a G4Element by symbol
   G4Element* FindOrBuildElement (const G4String& symb,
 				 G4bool buildIsotopes = true);
+  // print element information
+  void PrintElement (G4int Z);
 
   // Access to the vector of Geant4 predefined element names 
   const std::vector<G4String>& GetElementNames() const;
+
+  // Get the mass of the element in amu for the natuaral isotope composition
+  // with electron shell 
+  inline G4double GetA (G4int Z);
+
+  // Get the mass of the isotope in G4 units (without electron shell)
+  inline G4double GetIsotopeMass (G4int Z, G4int N);
+
+  // Get the atomic mass of the isotope in G4 units (with electron shell)
+  inline G4double GetAtomicMass  (G4int Z, G4int N);
+
+  // Get total ionisation energy of an atom
+  inline G4double GetTotalElectronBindingEnergy(G4int Z) const;
+
+  // Get natural isotope abandance
+  inline G4double GetIsotopeAbundance (G4int Z, G4int N);
+
+  // Get N for the first natural isotope
+  inline G4int GetNistFirstIsotopeN(G4int Z);
+
+  // Get number of natural isotopes
+  inline G4int GetNumberOfNistIsotopes(G4int Z);
+
+  inline G4int GetMaxNumElements(); 
+
+  inline void SetVerbose   (G4int);
 
 private:
 
@@ -149,15 +153,6 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4int G4NistElementBuilder::GetZ(const G4String& name)
-{
-  G4int Z = maxNumElements;
-  do {Z--;} while( Z>0 && elmSymbol[Z] != name);
-  return Z;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline G4double G4NistElementBuilder::GetA(G4int Z)
 {
   G4double a = 0.0;
@@ -186,6 +181,15 @@ inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
   }
   return m;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistElementBuilder::GetTotalElectronBindingEnergy(G4int Z) const
+{
+  return bindingEnergy[Z];
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

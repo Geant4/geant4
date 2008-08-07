@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.19 2008-08-06 18:34:54 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.20 2008-08-07 10:15:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,8 +78,17 @@ G4NistElementBuilder::~G4NistElementBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4int G4NistElementBuilder::GetZ(const G4String& name)
+{
+  G4int Z = maxNumElements;
+  do {Z--;} while( Z>0 && elmSymbol[Z] != name);
+  return Z;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
-                                                          G4bool buildIsotopes)
+						    G4bool buildIsotopes)
 {
   if(first) {
     if(verbose > 0) {
