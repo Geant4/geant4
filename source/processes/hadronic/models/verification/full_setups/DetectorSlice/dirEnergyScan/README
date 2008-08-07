@@ -1,5 +1,5 @@
 
- Last update: 01-Aug-2008
+ Last update: 07-Aug-2008
  ========================
 
  In this directory you can find some useful staff for studying
@@ -25,9 +25,16 @@
  for one beam particle type (e-, or pi-, or pi+, or p), with
  the 3 simplified combined calorimeters.
 
- The Python script  energyScan  (which in turn uses the
+ The Python script  energyScan.py  (which in turn uses the
  Python script  addInfoInTable.py , which in turn uses the
  Python script  printInfoLogfile.py ) is useful to collect
  all the information from the generated log files.
  (These scripts have been modified from those with the
   same names in StatAccepTest/dirEnergyScan/ ).
+
+ The subdirectory dirOnlyHad/ is similar to the current
+ directory, with the only difference that only the HAD
+ calorimeter part of each combined calorimeter is kept
+ (i.e. without the EM calorimeter part).
+ Notice that the same Python script  energyScan.py  
+ can be used to collect information also in this case.
