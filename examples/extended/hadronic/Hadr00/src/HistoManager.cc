@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2008-08-04 16:49:15 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2008-08-07 15:28:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -51,6 +51,10 @@
 #include "G4ParticleTable.hh"
 #include "G4NistManager.hh"
 #include "G4HadronicProcessStore.hh"
+
+#include "G4NucleiProperties.hh"
+#include "G4NistManager.hh"
+#include "G4StableIsotopes.hh"
 
 #include "Histo.hh"
 
@@ -187,7 +191,8 @@ void HistoManager::EndOfRun()
 
   G4double x  = e1 - de*0.5; 
   G4double e, p, xs;
-  for(G4int i=0; i<nBinsE; i++) {
+  G4int i;
+  for(i=0; i<nBinsE; i++) {
     x += de;
     e  = std::pow(10.,x)*MeV;
     if(verbose>0) G4cout << std::setw(5) << i << std::setw(12) << e;  
@@ -200,16 +205,16 @@ void HistoManager::EndOfRun()
     if(particle == neutron) {
       xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
       if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
-      histo->fill(5, x, xs/barn);    
+      histo->fill(4, x, xs/barn);    
       xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
       if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
-      histo->fill(7, x, xs/barn);    
+      histo->fill(5, x, xs/barn);    
     }
     if(verbose>0) G4cout << G4endl;
   }
 
   x = p1 - dp*0.5; 
-  for(G4int i=0; i<nBinsP; i++) {
+  for(i=0; i<nBinsP; i++) {
     x += dp;
     p  = std::pow(10.,x)*GeV;
     e  = std::sqrt(p*p + mass*mass) - mass;
@@ -217,12 +222,6 @@ void HistoManager::EndOfRun()
     histo->fill(0, x, xs/barn);    
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
     histo->fill(2, x, xs/barn); 
-    if(particle == neutron) {
-      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
-      histo->fill(4, x, xs/barn);    
-      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
-      histo->fill(6, x, xs/barn);    
-    }
   }
   if(verbose > 0) {
     G4cout << "---------------------------------------------------------" 

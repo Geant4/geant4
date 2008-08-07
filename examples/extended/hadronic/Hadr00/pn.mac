@@ -17,7 +17,7 @@
 /gun/energy 100. MeV
 /testhadr/HistoType  root
 /testhadr/HistoName  p_al
-/testhadr/verbose 0
+/testhadr/verbose 1
 /process/eLoss/verbose 0
 /run/beamOn 0
 #
