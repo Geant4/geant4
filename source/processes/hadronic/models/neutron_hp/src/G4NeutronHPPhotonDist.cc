@@ -32,6 +32,9 @@
 //        T. Koi
 // 070606 Add Partial case by T. Koi 
 // 070618 fix memory leaking by T. Koi
+// 080801 fix memory leaking by T. Koi
+// 080801 Correcting data disorder which happened when both InitPartial 
+//        and InitAnglurar methods was called in a same instance by T. Koi
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
@@ -108,19 +111,45 @@ G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 
 void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
 {
+
   G4int i, ii;
   //angular distributions
   aDataFile >> isoFlag;
   if (isoFlag != 1)
   {
     aDataFile >> tabulationType >> nDiscrete2 >> nIso;
-    theShells = new G4double[nDiscrete2];
-    theGammas = new G4double[nDiscrete2];
+//080731
+      if ( theGammas != NULL && nDiscrete2 != nDiscrete ) G4cout << "080731c G4NeutronHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
+
+      // The order of cross section (InitPartials) and distribution (InitAngular here) data are different, we have to re-coordinate consistent data order.
+      std::vector < G4double > vct_gammas_par; 
+      std::vector < G4double > vct_shells_par; 
+      std::vector < G4int > vct_primary_par; 
+      std::vector < G4int > vct_distype_par; 
+      std::vector < G4NeutronHPVector* > vct_pXS_par;
+      if ( theGammas != NULL ) 
+      {
+         //copy the cross section data 
+         for ( i = 0 ; i < nDiscrete ; i++ )
+         {
+            vct_gammas_par.push_back( theGammas[ i ] );
+            vct_shells_par.push_back( theShells[ i ] );
+            vct_primary_par.push_back( isPrimary[ i ] );
+            vct_distype_par.push_back( disType[ i ] );
+            G4NeutronHPVector* hpv = new G4NeutronHPVector;
+            *hpv = thePartialXsec[ i ];
+            vct_pXS_par.push_back( hpv );
+         }
+      }
+     if ( theGammas == NULL ) theGammas = new G4double[nDiscrete2];
+     if ( theShells == NULL ) theShells = new G4double[nDiscrete2];
+//080731
+
     for (i=0; i< nIso; i++) // isotropic photons
     {
-        aDataFile >> theGammas[i] >> theShells[i];
-        theGammas[i]*=eV;
-        theShells[i]*=eV;
+       aDataFile >> theGammas[i] >> theShells[i];
+       theGammas[i]*=eV;
+       theShells[i]*=eV;
     }
     nNeu = new G4int [nDiscrete2-nIso];
     if(tabulationType==1)theLegendre=new G4NeutronHPLegendreTable *[nDiscrete2-nIso];
@@ -156,6 +185,31 @@ void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
         throw G4HadronicException(__FILE__, __LINE__, "cannot deal with this tabulation type for angular distributions.");
       }
     }
+//080731
+     if ( vct_gammas_par.size() > 0 ) 
+     {
+        //Reordering cross section data to corrsponding distribution data 
+        for ( i = 0 ; i < nDiscrete ; i++ ) 
+        {
+           for ( G4int j = 0 ; j < nDiscrete ; j++ )  
+           {
+              // Checking gamma and shell to identification 
+              if ( theGammas[ i ] == vct_gammas_par [ j ] && theShells [ i ] == vct_shells_par[ j ] )
+              {
+                 isPrimary [ i ] = vct_primary_par [ j ];
+                 disType [ i ] = vct_distype_par [ j ];
+                 thePartialXsec[ i ] = ( *( vct_pXS_par[ j ] ) );
+              }
+           }
+        }
+        //Garbage collection 
+        for ( std::vector < G4NeutronHPVector* >::iterator 
+           it = vct_pXS_par.begin() ; it != vct_pXS_par.end() ; it++ )
+        {
+           delete *it;
+        }
+     }
+//080731
   }
 }
 
@@ -187,6 +241,7 @@ void G4NeutronHPPhotonDist::InitEnergies(std::ifstream & aDataFile)
 
 void G4NeutronHPPhotonDist::InitPartials(std::ifstream & aDataFile)
 {
+
   //G4cout << "G4NeutronHPPhotonDist::InitPartials " << G4endl;
   aDataFile >> nDiscrete >> targetMass;
   if(nDiscrete != 1)
