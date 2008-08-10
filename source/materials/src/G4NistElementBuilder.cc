@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.20 2008-08-07 10:15:16 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.21 2008-08-10 17:35:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -153,7 +153,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 	 std::ostringstream os; 
 	 os << elmSymbol[Z] << n0 + i;
          ist = new G4Isotope(os.str(),Z, n0 + i,
-	                     massIsotopes[idx + i]*gram/mole);
+			     massIsotopes[idx + i]*gram/mole/amu_c2);
 	 iso.push_back(ist);
        }
     }
