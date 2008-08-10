@@ -86,7 +86,7 @@ public:
 
   void fillTuple(G4int, G4int, G4double);
   // Fill nTuple at a given col with a double
-  void fillTuple(G4int, const G4String&, G4String);
+  void fillTuple(G4int, const G4String&, G4String&);
   // Fill nTuple parameter with a string
 
   void fillTuple(G4int, const G4String&, G4bool);
@@ -110,19 +110,15 @@ private:
   G4int    verbose;
   G4int    defaultAct;
 
-  //#ifdef G4ANALYSIS_USE
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
   AIDA::ITree*    tree;
-  //#endif
 
-  //#ifdef G4ANALYSIS_USE_ROOT
   TFile* hfileROOT; 
   std::vector<TH1D*> ROOThisto;
   std::vector<TNtuple*>   ROOTntup;
   std::vector< std::vector<float> > Rarray;
   std::vector<G4int> Rcol;
-  //#endif
 
   exrdmHistoMessenger* messenger;
 

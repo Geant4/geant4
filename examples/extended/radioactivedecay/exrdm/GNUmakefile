@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2008-08-10 13:21:09 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2008-08-10 17:03:08 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -11,17 +11,24 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-ifdef G4ANALYSIS_USE_ROOT
-CPPFLAGS += -DG4ANALYSIS_USE_ROOT 
-CPPFLAGS += -D_REENTRANT -I$(ROOTSYS)/include
-
-EXTRALIBS += $(shell $(ROOTSYS)/bin/root-config --libs)
-
-endif
-
-
 .PHONY: all
 all: lib bin
 
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += -DG4ANALYSIS_USE_ROOT 
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+  LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
+endif
+
+#CPPFLAGS += -D_REENTRANT -I$(ROOTSYS)/include
+#EXTRALIBS += $(shell $(ROOTSYS)/bin/root-config --libs)
+
 include $(G4INSTALL)/config/binmake.gmk
 
+histclean:
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/exrdmHisto.o 

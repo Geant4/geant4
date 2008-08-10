@@ -57,9 +57,7 @@ exrdmAnalysisManager::exrdmAnalysisManager()
   detectorThresE = 10*keV;
   pulseWidth = 1.*microsecond;
   histo   = new exrdmHisto();
-#if defined G4ANALYSIS_USE_AIDA || defined G4ANALYSIS_USE_ROOT
-   bookHisto();
-#endif
+  bookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,9 +91,9 @@ void exrdmAnalysisManager::bookHisto()
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "100", "Emitted Particles","float PID Energy Time Weight" );
-  histo->addTuple( "200", "RadioIsotopes","float PID Time Weight" );
-  histo->addTuple( "300", "Energy Depositions","float Energy Time Weight" );
+  histo->addTuple( "1", "Emitted Particles","float PID Energy Time Weight" );
+  histo->addTuple( "2", "RadioIsotopes","float PID Time Weight" );
+  histo->addTuple( "3", "Energy Depositions","float Energy Time Weight" );
 
 }
 
@@ -103,9 +101,7 @@ void exrdmAnalysisManager::bookHisto()
 
 void exrdmAnalysisManager::BeginOfRun()
 {
-#if defined G4ANALYSIS_USE_AIDA || G4ANALYSIS_USE_ROOT
   histo->book();
-#endif
   if(verbose > 0) {
     G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started"
            << G4endl;
@@ -116,9 +112,7 @@ void exrdmAnalysisManager::BeginOfRun()
 
 void exrdmAnalysisManager::EndOfRun()
 {
-#if defined G4ANALYSIS_USE_AIDA || G4ANALYSIS_USE_ROOT
   histo->save();  
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

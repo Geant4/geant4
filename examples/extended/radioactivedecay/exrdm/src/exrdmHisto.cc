@@ -49,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 exrdmHisto::exrdmHisto()
 {
-  verbose    = 0;
+  verbose    = 1;
   histName   = "exrdm";
   histType   = "root";
   nHisto     = 0;
@@ -67,6 +67,7 @@ exrdmHisto::exrdmHisto()
   Rarray.clear();
   Rcol.clear();
 #endif
+
   active.clear();
   bins.clear();
   xmin.clear();
@@ -111,33 +112,41 @@ void exrdmHisto::book()
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory(); 
   // Creating a tree mapped to a new aida file.
-  G4String aidaFileName;
-  if (fileType == "hbook")
-    aidaFileName = histName +G4String(".hbook");
-  else
-    aidaFileName = histName +G4String(".aida");
-  tree = tf->create(aidaFileName,histType,false,true,"uncompress");
-  if(tree) 
+  G4String fileName = histName + "." + histType;
+  tree = tf->create(fileName,histType,false,true,"--noErrors uncompress");
+  if(tree) { 
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
-  else
-    G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl;
-
+  } else {
+    G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl; 
+  }
   // Creating a histogram factory, whose histograms will be handled by the tree
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
   // Creating an 1-dimensional histograms in the root directory of the tree
-  for(G4int i=0; i<nHisto; i++) {
+  G4int i;
+  for(i=0; i<nHisto; i++) {
     if(active[i]) {
-      histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
+      if(verbose>0)
+        G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
+      G4String tit = ids[i];
+      if(histType == "root") tit = "h" + ids[i];
+      histo[i] = hf->createHistogram1D(tit, titles[i], bins[i], xmin[i], xmax[i]);
     }
   }
+  G4cout << "AIDA histograms are booked" << G4endl;
   // Creating a tuple factory, whose tuples will be handled by the tree  
   AIDA::ITupleFactory* tpf =  af->createTupleFactory( *tree );
-  for(G4int i=0; i<nTuple; i++) {
+  G4cout << "AIDA will book " << nTuple << " ntuples" << G4endl;
+  for(i=0; i<nTuple; i++) {
     if(tupleList[i] != "") {
       G4cout << "Creating Ntuple: " << tupleName[i] << G4endl;
       ntup[i] = tpf->create(tupleId[i], tupleName[i], tupleList[i]);
     }
   }
+  G4cout << "AIDA ntuples are booked" << G4endl;
+  delete hf;
+  delete tpf;
+  delete tf;
+  delete af;
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
@@ -157,7 +166,8 @@ void exrdmHisto::book()
   for(G4int i=0; i<nTuple; i++) {
     if(tupleListROOT[i] != "") {
       G4String id = G4String("t")+tupleId[i];
-      G4cout << "Creating Ntuple "<<tupleId[i] << " in ROOT file: " << tupleName[i] << G4endl;
+      G4cout << "Creating Ntuple "<<tupleId[i] << " in ROOT file: " 
+	     << tupleName[i] << G4endl;
       ROOTntup[i] = new TNtuple(id, tupleName[i], tupleListROOT[i]);
     }
   }
@@ -243,7 +253,7 @@ void exrdmHisto::fillHisto(G4int i, G4double x, G4double w)
   }
 #ifdef G4ANALYSIS_USE
   if(i>=0 && i<nHisto) {
-    histo[i]->fill((float)(x/unit[i]), (float)w);
+    histo[i]->fill(x/unit[i], w);
   } else {
     G4cout << "exrdmHisto::fill: WARNING! wrong AIDA histogram index " << i << G4endl;
   }
@@ -283,16 +293,20 @@ void exrdmHisto::scaleHisto(G4int i, G4double x)
 
 void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String& w3)
 {
-//  G4cout << w1 << " " << w2 << " " << w3 << G4endl;
+  //G4cout << w1 << " " << w2 << " " << w3 << G4endl;
+  nTuple++;
+  tupleId.push_back(w1);
+  tupleName.push_back(w2) ;
+#ifdef G4ANALYSIS_USE
+  tupleList.push_back(w3);
+  ntup.push_back(0);
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
   std::vector<float> ar;
   ar.clear();
   for (size_t i = 0; i < 20; i++) ar.push_back(0.);
-  nTuple++;
-#ifdef G4ANALYSIS_USE_ROOT
   Rarray.push_back(ar);
-#endif
-  tupleId.push_back(w1);
-  tupleName.push_back(w2) ;
   // convert AIDA header to ROOT header for ntuple
   G4Tokenizer next(w3);
   G4String token = next();
@@ -306,11 +320,6 @@ void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String
   G4String ROOTList = ROOTList1.substr(0,ROOTList1.length()-2);
 //  G4cout << ROOTList << G4endl;
   tupleListROOT.push_back(ROOTList);
-  //
-#ifdef G4ANALYSIS_USE
-  ntup.push_back(0);
-#endif
-#ifdef G4ANALYSIS_USE_ROOT
   ROOTntup.push_back(0);
   Rcol.push_back(col-1);
 #endif
@@ -348,7 +357,7 @@ void exrdmHisto::fillTuple(G4int i, G4int col, G4double x)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String x)
+void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String& x)
 {
   if(verbose > 1) {
     G4cout << "fill tuple # " << i 
