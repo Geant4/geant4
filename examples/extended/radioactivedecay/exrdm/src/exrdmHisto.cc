@@ -30,7 +30,7 @@
 
 #include "G4Tokenizer.hh"
 
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
 #endif
 //
@@ -56,10 +56,11 @@ exrdmHisto::exrdmHisto()
   nTuple     = 0;
   defaultAct = 1;
   //
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   histo.clear();
   ntup.clear();
 #endif
+
 #ifdef G4ANALYSIS_USE_ROOT
   ROOThisto.clear();
   ROOTntup.clear();
@@ -86,7 +87,7 @@ exrdmHisto::exrdmHisto()
 
 exrdmHisto::~exrdmHisto()
 {
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   for(G4int i=0; i<nHisto; i++) {
     if(histo[i]) delete histo[i];
   }
@@ -104,7 +105,7 @@ exrdmHisto::~exrdmHisto()
 void exrdmHisto::book()
 {
   G4cout << "### exrdmHisto books " << nHisto << " histograms " << G4endl; 
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
   // Creating the tree factory
@@ -168,7 +169,7 @@ void exrdmHisto::book()
 
 void exrdmHisto::save()
 {
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   // Write histogram file
   tree->commit();
   G4cout << "Closing the AIDA tree..." << G4endl;
@@ -204,7 +205,7 @@ void exrdmHisto::add1D(const G4String& id, const G4String& name, G4int nb,
   unit.push_back(u);
   ids.push_back(id);
   titles.push_back(name);
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   histo.push_back(0);
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
@@ -240,7 +241,7 @@ void exrdmHisto::fillHisto(G4int i, G4double x, G4double w)
            << "  weight= " << w
            << G4endl;   
   }
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE
   if(i>=0 && i<nHisto) {
     histo[i]->fill((float)(x/unit[i]), (float)w);
   } else {
@@ -263,7 +264,7 @@ void exrdmHisto::scaleHisto(G4int i, G4double x)
   if(verbose > 0) {
     G4cout << "Scale histogram: #" << i << " by factor " << x << G4endl;   
   }
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
     histo[i]->scale(x);
     G4cout << "exrdmHisto::scale: WARNING! wrong AIDA histogram index " << i << G4endl;
@@ -306,7 +307,7 @@ void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String
 //  G4cout << ROOTList << G4endl;
   tupleListROOT.push_back(ROOTList);
   //
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE
   ntup.push_back(0);
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
@@ -322,7 +323,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4double x)
   if(verbose > 1) 
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE
   if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), (float)x);
 #endif
 }
@@ -335,7 +336,7 @@ void exrdmHisto::fillTuple(G4int i, G4int col, G4double x)
     G4cout << "fill tuple # " << i 
 	   <<" in column < " << col << "> = " << x << G4endl; 
   }
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE  
   if(ntup[i]) ntup[i]->fill(col, (float)x);
 #endif
 
@@ -353,7 +354,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String x)
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
   }
-#ifdef G4ANALYSIS_USE_AIDA  
+#ifdef G4ANALYSIS_USE
   if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
 }
@@ -363,7 +364,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String x)
 void exrdmHisto::addRow(G4int i)
 {
   if(verbose > 1) G4cout << "Added a raw #" << i << " to tuple" << G4endl; 
-#ifdef G4ANALYSIS_USE_AIDA
+#ifdef G4ANALYSIS_USE
   if(ntup[i]) ntup[i]->addRow();
 #endif
 

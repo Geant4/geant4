@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2008-05-01 14:16:25 flei Exp $
+# $Id: GNUmakefile,v 1.6 2008-08-10 13:21:09 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -19,11 +19,6 @@ EXTRALIBS += $(shell $(ROOTSYS)/bin/root-config --libs)
 
 endif
 
-ifdef G4ANALYSIS_USE_AIDA
-   CPPFLAGS += -DG4ANALYSIS_USE_AIDA
-   CPPFLAGS += `aida-config --include`
-   LDLIBS += `aida-config --lib`
-endif
 
 .PHONY: all
 all: lib bin
