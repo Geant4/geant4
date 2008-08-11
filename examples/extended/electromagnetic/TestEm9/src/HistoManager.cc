@@ -141,12 +141,14 @@ void HistoManager::BeginOfRun()
   n_gam  = 0;
   n_step = 0;
 
-  for(G4int i=0; i<nmax; i++) {
+  for(G4int i=0; i<5; i++) {
     stat[i] = 0;
     edep[i] = 0.0;
     erms[i] = 0.0;
-    edeptr[i] = 0.0;
-    ermstr[i] = 0.0;
+    if(i < 3) {
+      edeptr[i] = 0.0;
+      ermstr[i] = 0.0;
+    }
   }
 
   histo->book();
@@ -163,7 +165,7 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
-  G4String nam[3] = {"1x1", "3x3", "5x5"};
+  G4String nam[5] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25"};
 
   // average
 
@@ -200,10 +202,12 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   
-  for(j=0; j<nmax; j++) {
+  for(j=0; j<3; j++) {
     G4double e = edeptr[j];
     G4double s = ermstr[j];
-    G4double r = s*std::sqrt(x);
+    G4double xx= G4double(stat[j]);
+    if(xx > 0.0) xx = 1.0/xx;
+    G4double r = s*std::sqrt(xx);
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
            << " +- " << r;
     if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
@@ -221,8 +225,21 @@ void HistoManager::EndOfRun()
       G4cout << G4endl;
     }
   }
-  G4cout << std::setprecision(4) << "Ebeam(GeV)                   " << beamEnergy/GeV 
-	 << G4endl;
+  G4cout<<"===========  Ratios without trancating ==========================="<<G4endl;
+  for(j=3; j<5; j++) {
+    G4double e = edep[j];
+    G4double xx= G4double(stat[j]);
+    if(xx > 0.0) xx = 1.0/xx;
+    e *= xx;
+    G4double y = erms[j]*xx - e*e;
+    G4double r = 0.0;
+    if(y > 0.0) r = std::sqrt(y*xx);
+    G4cout << "  " << nam[j] << " =                   " << e
+           << " +- " << r;
+    G4cout << G4endl;
+  }
+  G4cout << std::setprecision(4) << "Beam Energy                  " << beamEnergy/GeV 
+	 << " GeV" << G4endl;
   G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
@@ -281,7 +298,9 @@ void HistoManager::EndOfEvent()
     e25 += E[i];
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
   }
-  histo->fill(0,E[12],1.0);
+  G4double e0 = E[12];
+
+  histo->fill(0,e0,1.0);
   histo->fill(1,e9,1.0);
   histo->fill(2,e25,1.0);
   histo->fill(5,Eabs1,1.0);
@@ -291,8 +310,6 @@ void HistoManager::EndOfEvent()
   float nn = (double)(Nvertex.size());
   histo->fill(9,nn,1.0);
 
-  G4double e0 = E[12];
-
   edep[0] += e0;
   erms[0] += e0*e0;
   edep[1] += e9;
@@ -300,6 +317,15 @@ void HistoManager::EndOfEvent()
   edep[2] += e25;
   erms[2] += e25*e25;
 
+  // compute ratios
+  if(e9 > 0.0) {
+    edep[3] += e0/e9;
+    erms[3] += e0*e0/(e9*e9);
+    edep[4] += e0/e25;
+    erms[4] += e0*e0/(e25*e25);
+    stat[3] += 1;
+    stat[4] += 1;
+  }
   // trancated mean
   if(limittrue[0] == DBL_MAX || std::abs(e0-edeptrue[0])<rmstrue[0]*limittrue[0]) {
     stat[0] += 1;
