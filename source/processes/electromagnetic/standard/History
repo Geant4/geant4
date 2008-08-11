@@ -1,4 +1,4 @@
-$Id: History,v 1.398 2008-08-04 09:06:49 vnivanch Exp $
+$Id: History,v 1.399 2008-08-11 17:01:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 August 08: V.Ivant (emstand-V09-01-24)
+G4IonFluctuations - do not perform loop over elements of material but use 
+                    effetive Z
+G4UrbanMscModel2 - bug fix in ComputeTruePathLengthLimit (L.Urban)
 
 4 August 08: V.Ivant (emstand-V09-01-23)
 G4eMultipleScattering - allowed to be applied for all changed particles
