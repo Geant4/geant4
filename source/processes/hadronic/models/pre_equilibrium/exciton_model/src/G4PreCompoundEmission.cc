@@ -278,38 +278,6 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
 G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4double g, 
 				    const G4double E, const G4double Ef) const
 {
-     G4double r1=rho1(p, h, g , E, Ef );
-     G4double r2(0);
-     G4double res(r1);
-
-     G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-     if ( (p+h-1)*log10(E - Aph ) < 300. )  // make sure we can take power in rho2()!
-     {
-        r2=rho2(p, h, g , E, Ef );
-	if ( (r1/r2)-1. > 1e-6 )
-	{
-          G4cout.precision(12);
-	  G4cout << "----------------" << G4endl;
-	  G4cout << "G4PreCompoundEmission::rho()- warning - rho new  old   (new/old)-1 : " << r1 << " " << r2 << " " << ((r1/r2) -1.) << G4endl;
-	  G4cout << "G4PreCompoundEmission::rho()- warning - p h g E Ef " << p << " " << h << " " << g << " " << E << " " << Ef << G4endl;
-	  r1=rho1(p, h, g , E, Ef, true);
-          r2=rho2(p, h, g , E, Ef, true);
-	  G4cout << "G4PreCompoundEmission::rho()- warning.- rho new  old   (new/old)-1 : " << r1 << " " << r2 << " " << ((r1/r2) -1.) << G4endl;
-	  G4cout << "G4PreCompoundEmission::rho()- warning.- p h g E Ef " << p << " " << h << " " << g << " " << E << " " << Ef << G4endl;
-	}  
-     }
-//       else
-//      { 
-// 	G4cout << " rho new  old-fails  " << r1 << G4endl;
-// 	G4cout << " p h g E Ef " << p << " " << h << " " << g << " " << E << " " << Ef << G4endl;        
-//      }
-     return res;
-
-}
-
-G4double G4PreCompoundEmission::rho1(const G4double p, const G4double h, const G4double g, 
-				    const G4double E, const G4double Ef, G4bool verbose) const
-{
 	
   G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
   G4double alpha = (p*p+h*h)/(2.0*g);
@@ -324,19 +292,12 @@ G4double G4PreCompoundEmission::rho1(const G4double p, const G4double h, const G
   
   G4double logConst =  (p+h)*std::log(g) - log (factph) - log(factp) - log(facth);
 
-  if (verbose) G4cout << "p! h! ph! const " << factp <<" "<< facth <<" "<< factph <<" "<< logConst <<G4endl;
-
 // initialise values using j=0
 
   G4double t1=1;
   G4double t2=1;
-//  G4double t3= std::pow( E-Aph , p+h-1 );
-
   G4double logt3=(p+h-1) * std::log(E-Aph);
   G4double tot = exp( logt3 + logConst );
-  if (verbose) G4cout << "t1 t2 t3  tot "
-   	               <<" "<< t1 <<" "<< t2 <<" "
-                       << exp(logt3) <<" "<< tot/exp(logConst) << G4endl;
 
 // and now sum rest of terms 
   G4int j(1);  
@@ -347,165 +308,12 @@ G4double G4PreCompoundEmission::rho1(const G4double p, const G4double h, const G
 	  logt3 = (p+h-1) * std::log( E - j*Ef - Aph) + logConst;
 	  G4double t3 = std::exp(logt3);
 	  tot += t1*t2*t3;
-	  if (verbose) G4cout << "t1 t2 t3  tot "  
-	               <<" "<< t1 <<" "<< t2 <<" "
-		       << t3/exp(logConst) <<" "<< tot/exp(logConst) << G4endl;
-
 	  j++;
     }
         
   return tot;
 }
 
-
-G4double G4PreCompoundEmission::rho2(const G4double p, const G4double h, const G4double g, 
-				    const G4double E, const G4double Ef, G4bool verbose) const
-{
-  // Values of factorial function from 0 to 60
-  const G4int factablesize = 61;
-  static const G4double fact[factablesize] = 
-    {
-      1.0, // 0!
-      1.0, // 1!
-      2.0, // 2!
-      6.0, // 3!
-      24.0, // 4!
-      120.0, // 5!
-      720.0, // 6!
-      5040.0, // 7!
-      40320.0, // 8!
-      362880.0, // 9!
-      3628800.0, // 10!
-      39916800.0, // 11!
-      479001600.0, // 12!
-      6227020800.0, // 13!
-      87178291200.0, // 14!
-      1307674368000.0, // 15!
-      20922789888000.0, // 16!
-      355687428096000.0, // 17!
-      6402373705728000.0, // 18!
-      121645100408832000.0, // 19!
-      2432902008176640000.0, // 20!
-      51090942171709440000.0, // 21!
-      1124000727777607680000.0, // 22!
-      25852016738884976640000.0, // 23!
-      620448401733239439360000.0, // 24!
-      15511210043330985984000000.0, // 25!
-      403291461126605635584000000.0, // 26!
-      10888869450418352160768000000.0, // 27!
-      304888344611713860501504000000.0, // 28!
-      8841761993739701954543616000000.0, // 29!
-      265252859812191058636308480000000.0, // 30!
-      8222838654177922817725562880000000.0, // 31!
-      263130836933693530167218012160000000.0, // 32!
-      8683317618811886495518194401280000000.0, // 33!
-      295232799039604140847618609643520000000.0, // 34!
-      10333147966386144929666651337523200000000.0, // 35!
-      371993326789901217467999448150835200000000.0, // 36!
-      13763753091226345046315979581580902400000000.0, // 37!
-      523022617466601111760007224100074291200000000.0, // 38!
-      20397882081197443358640281739902897356800000000.0, // 39!
-      815915283247897734345611269596115894272000000000.0, // 40!
-      33452526613163807108170062053440751665152000000000.0, // 41!
-      1405006117752879898543142606244511569936384000000000.0, // 42!
-      60415263063373835637355132068513997507264512000000000.0, // 43!
-      2658271574788448768043625811014615890319638528000000000.0, // 44!
-      119622220865480194561963161495657715064383733760000000000.0, // 45!
-      5502622159812088949850305428800254892961651752960000000000.0, // 46!
-      258623241511168180642964355153611979969197632389120000000000.0, // 47!
-      12413915592536072670862289047373375038521486354677760000000000.0, // 48!
-      608281864034267560872252163321295376887552831379210240000000000.0, // 49!
-      30414093201713378043612608166064768844377641568960512000000000000.0, // 50!
-      1551118753287382280224243016469303211063259720016986112000000000000.0, // 51!
-      80658175170943878571660636856403766975289505440883277824000000000000.0, // 52!
-      4274883284060025564298013753389399649690343788366813724672000000000000.0, // 53!
-      230843697339241380472092742683027581083278564571807941132288000000000000.0, // 54!
-      12696403353658275925965100847566516959580321051449436762275840000000000000.0, // 55!
-      710998587804863451854045647463724949736497978881168458687447040000000000000.0, // 56!
-      40526919504877216755680601905432322134980384796226602145184481280000000000000.0, // 57!
-      2350561331282878571829474910515074683828862318181142924420699914240000000000000.0, // 58!
-      138683118545689835737939019720389406345902876772687432540821294940160000000000000.0, // 59!
-      8320987112741390144276341183223364380754172606361245952449277696409600000000000000.0  // 60!
-    };
-  //    fact[0] = 1;
-  //    for (G4int n = 1; n < 21; n++) {
-  //      fact[n] = fact[n-1]*static_cast<G4double>(n); 
-  //    }
-	
-  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  G4double alpha = (p*p+h*h)/(2.0*g);
-
-  G4double tot = 0.0;
-  for (G4int j = 0; j <= h; j++) 
-    {
-      if (E-alpha-static_cast<G4double>(j)*Ef > 0.0)
-	{
-	  G4double t1 = std::pow(-1.0, static_cast<G4double>(j));
-	  G4double t2 = fact[static_cast<G4int>(h)]/ (fact[static_cast<G4int>(h)-j]*fact[j]);
-	  G4double t3 = E - static_cast<G4double>(j)*Ef - Aph;
-	  t3 = std::pow(t3,p+h-1);
-	  tot += t1*t2*t3;
-	  if (verbose) G4cout << "t1 t2 - t3 tot "  
-	               <<" "<< t1 <<" "<< t2 <<" "<< t3 <<" "<< tot << G4endl;
-	}
-      else 
-        {
-          break;
-        }
-    }
-    
-
-  G4double factp(0.0);
-  G4int ph = static_cast<G4int>(p);
-  if (ph < factablesize) 
-    {
-      factp = fact[ph];
-    }
-  else
-    {
-      factp = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          factp *= static_cast<G4double>(n);
-        }
-    }
-
-  G4double facth(0.0);
-  ph = static_cast<G4int>(h);
-  if (ph < factablesize) 
-    {
-      facth = fact[ph];
-    }
-  else
-    {
-      facth = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          facth *= static_cast<G4double>(n);
-        }
-    }
-  G4double factph(0.0);
-  ph = static_cast<G4int>(p+h)-1;
-  if (ph < factablesize)
-    {
-      factph = fact[ph];
-    }
-  else
-    {
-      factph = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          factph *= static_cast<G4double>(n);
-        }
-    }
-  
-  tot *= std::pow(g,p+h)/factph;
-  tot /= factp;
-  tot /= facth;
-  if (verbose) G4cout << "p! h! ph! const " << factp <<" "<< facth <<" "<< factph <<" "<< std::pow(g,p+h) <<G4endl;
-    
-  return tot;
-}
 
 
 G4double G4PreCompoundEmission::factorial(G4double a) const
