@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.19 2006-06-29 19:11:07 gunter Exp $
+// $Id: G4Isotope.hh,v 1.20 2008-08-11 11:53:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 //                                                 Z: atomic number,
 //                                                 N: number of nucleons, 
 //                                                 A: mass of a mole (optional).
+// If A is not defined it is taken from Geant4 database
 //
 // The class contains as a private static member the table of defined
 // isotopes (an ordered vector of isotopes).

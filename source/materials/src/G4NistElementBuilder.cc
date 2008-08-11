@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.21 2008-08-10 17:35:54 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.22 2008-08-11 11:53:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -152,8 +152,13 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
        if (relAbundance[idx + i] > 0.0) {
 	 std::ostringstream os; 
 	 os << elmSymbol[Z] << n0 + i;
-         ist = new G4Isotope(os.str(),Z, n0 + i,
-			     massIsotopes[idx + i]*gram/mole/amu_c2);
+         ist = new G4Isotope(os.str(), Z, n0 + i, 
+			     GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
+	 /*
+	 G4cout << " Z= " << Z << " N= " << n0 + i
+		<< " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
+		<< " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
+	 */
 	 iso.push_back(ist);
        }
     }
@@ -205,7 +210,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
       for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
       G4cout << G4endl;
       G4cout << "          mass(amu): ";
-      for(j=0; j<nc; j++) {G4cout << massIsotopes[idx + j] << " ";}
+      for(j=0; j<nc; j++) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
       G4cout << G4endl;
       G4cout << "     abanbance: ";
       for(j=0; j<nc; j++) {G4cout << relAbundance[idx + j] << " ";}

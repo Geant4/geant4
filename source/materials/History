@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2008-08-07 10:16:56 vnivanch Exp $
+$Id: History,v 1.126 2008-08-11 11:56:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,8 @@ committal in the CVS repository !
                          for lightest stable isotopes
 -G4NistManager and G4NistElementBuilder - added method 
                                           GetTotalElectronBindingEnergy 
+-G4Isotope - use AtomicMass instead of NuclearMass
+-G4Element - use G4int(fZeff) everywhere in the class
 
 23-07-08 V.Ivanchenko (materials-V09-01-13)
 - G4NistManager - bug introduced in tag (-11) is fixed
