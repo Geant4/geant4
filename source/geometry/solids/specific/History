@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2008-07-17 07:33:22 gcosmo Exp $
+$Id: History,v 1.145 2008-08-12 08:57:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-Jul-2008, I.Hrivnacova (geom-specific-V09-01-14)
+- G4ExtrudedSolid: fix in polygon decomposition; systematically use
+  half kCarTolerance instead of kCarTolerance; added solid name in the
+  error messages coming from fatal exceptions.
 
 16-Jul-2008, T.Nikitina (geom-specific-V09-01-13)
 - G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report
