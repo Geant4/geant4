@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.16 2008-07-25 16:23:07 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.17 2008-08-12 08:54:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,31 +67,29 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 
   // First check input parameters
 
-  if ( fNv < 3 ) {
-    G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-      FatalException, "Number of polygon vertices < 3");
+  if ( fNv < 3 )
+  {
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+                FatalException, "Number of polygon vertices < 3");
   }
      
-  if ( fNz < 2 ) {
-    G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-      FatalException, "Number of z-sides < 2");
+  if ( fNz < 2 )
+  {
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+                FatalException, "Number of z-sides < 2");
   }
      
   for ( G4int i=0; i<fNz-1; ++i ) 
   {
     if ( zsections[i].fZ > zsections[i+1].fZ ) 
     {
-      G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections have to be ordered by z value (z0 < z1 < z2 ...)");
     }
     if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
     {
-      G4Exception(
-        "G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
         FatalException, 
         "Z-sections with the same z position are not supported.");
     }
@@ -289,7 +287,7 @@ G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,
 
   if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance * 0.5 || 
        p.x() > std::max(l1.x(), l2.x()) + kCarTolerance * 0.5 ||
-       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5|| 
+       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5 || 
        p.y() > std::max(l1.y(), l2.y()) + kCarTolerance * 0.5 )
   {
     return false;
@@ -349,8 +347,7 @@ G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
   G4TwoVector t1 = pa - po;
   G4TwoVector t2 = pb - po;
   
-  G4double result
-    = (std::atan2(t1.y(), t1.x()) - std::atan2(t2.y(), t2.x()));
+  G4double result = (std::atan2(t1.y(), t1.x()) - std::atan2(t2.y(), t2.x()));
 
   if ( result < 0 ) result += 2*pi;
 
@@ -455,8 +452,9 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     // skip concave vertices
     //
     G4double angle = GetAngle(c2->first, c3->first, c1->first);
-    //G4cout << angle << G4endl; 
-    if ( angle > pi ) {
+
+    if ( angle > pi )
+    {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
       // try next three consecutive vertices
