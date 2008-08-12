@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+// 080808 bug fix in Sample() and GetXsec() by T. Koi
 //
 #include "G4NeutronHPVector.hh"
  
@@ -169,7 +170,9 @@
       // Protect against doubled-up x values
       //if( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
       if ( theData[high].GetX() !=0 
-       &&( theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+       //080808 TKDB
+       //&&( theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+       &&( std::abs( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() ) < 0.000001 ) )
       {
         y = theData[low].GetY();
       }
@@ -365,9 +368,11 @@
       if(theIntegral==0) { IntegrateAndNormalise(); }
       do
       {
+//080808
+/*
+        G4double rand;
         G4double value, test, baseline;
         baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
-        G4double rand;
         do
         {
           value = baseline*G4UniformRand();
@@ -378,6 +383,43 @@
         //while(test<rand);
         while( test < rand && test > 0 );
         result = value;
+*/
+        G4double rand;
+        G4double value, test;
+        do 
+        {
+           rand = G4UniformRand();
+           G4int ibin = -1;
+           for ( G4int i = 0 ; i < GetVectorLength() ; i++ )
+           {
+              if ( rand < theIntegral[i] ) 
+              {
+                 ibin = i; 
+                 break;
+              }
+           }
+           if ( ibin < 0 ) G4cout << "TKDB 080807 " << rand << G4endl; 
+           // result 
+           rand = G4UniformRand();
+           G4double x1, x2; 
+           if ( ibin == 0 ) 
+           {
+              x1 = theData[ ibin ].GetX(); 
+              value = x1; 
+              break;
+           }
+           else 
+           {
+              x1 = theData[ ibin-1 ].GetX();
+           }
+           
+           x2 = theData[ ibin ].GetX();
+           value = rand * ( x2 - x1 ) + x1;
+           test = GetY ( value ) / std::max ( GetY( ibin-1 ) , GetY ( ibin ) ); 
+        }
+        while ( G4UniformRand() > test );
+        result = value;
+//080807
       }
       while(IsBlocked(result));
     }
