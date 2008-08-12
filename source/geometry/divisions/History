@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2007-05-18 07:27:40 gcosmo Exp $
+$Id: History,v 1.27 2008-08-12 09:02:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July, 25th, 2008        I.Hrivnacova  (geomdiv-V09-01-00)
+- Corrected error message in G4VDivisionParameterisation::CheckNDivAndWidth().
 
 May, 18th, 2007         G.Cosmo  (geomdiv-V08-03-01)
 - Use kAngTolerance from G4GeometryTolerance class.
