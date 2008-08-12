@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.22 2007-05-23 08:47:34 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.23 2008-08-12 17:50:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ class G4eBremsstrahlungModel : public G4VEmModel
 public:
 
   G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
-			 const G4String& nam = "StandBrem");
+			 const G4String& nam = "eBrem");
 
   virtual ~G4eBremsstrahlungModel();
 
