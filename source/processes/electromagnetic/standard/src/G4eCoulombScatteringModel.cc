@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.56 2008-08-01 11:09:29 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.57 2008-08-13 16:08:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -245,6 +245,9 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(kinEnergy <= DBL_MIN) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
+  if() {
+    cost = G4UniformRand()*2.0 - 1.0;
+
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
@@ -273,22 +276,23 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
   // recoil sampling assuming a small recoil
   // and first order correction to primary 4-momentum
+  if(lowEnergyLimit < kinEnergy) {
+    G4int ia = SelectIsotopeNumber(currentElement);
+    G4double Trec = z1*mom2/(amu_c2*G4double(ia));
+    G4double th = 
+      std::min(recoilThreshold,
+	       targetZ*currentElement->GetIonisation()->GetMeanExcitationEnergy());
 
-  G4int ia = SelectIsotopeNumber(currentElement);
-  G4double Trec = z1*mom2/(amu_c2*G4double(ia));
-  G4double th = 
-    std::min(recoilThreshold,
-	     targetZ*currentElement->GetIonisation()->GetMeanExcitationEnergy());
-
-  if(Trec > th) {
-    G4int iz = G4int(targetZ);
-    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
-    Trec = z1*mom2/ion->GetPDGMass();
-    if(Trec < kinEnergy) {
-      G4ThreeVector dir = (direction - newDirection).unit();
-      G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, Trec);
-      fvect->push_back(newdp);
-      fParticleChange->SetProposedKineticEnergy(kinEnergy - Trec);
+    if(Trec > th) {
+      G4int iz = G4int(targetZ);
+      G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+      Trec = z1*mom2/ion->GetPDGMass();
+      if(Trec < kinEnergy) {
+	G4ThreeVector dir = (direction - newDirection).unit();
+	G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, Trec);
+	fvect->push_back(newdp);
+	fParticleChange->SetProposedKineticEnergy(kinEnergy - Trec);
+      }
     }
   }
  
