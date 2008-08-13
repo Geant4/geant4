@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.25 2006-06-29 19:11:13 gunter Exp $
+// $Id: G4Material.hh,v 1.26 2008-08-13 16:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -272,6 +272,7 @@ private:
   G4double         fPressure;             // Pressure    (defaults: STP)
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
+  G4int            fArrayLength;          // the length of FAtomVector 
   size_t           fNumberOfComponents;   // Nb of components declared so far
 
   size_t           fNumberOfElements;     // Nb of Elements in the material

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.41 2008-06-04 08:27:29 vnivanch Exp $
+// $Id: G4Material.cc,v 1.42 2008-08-13 16:06:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +65,7 @@
 // 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
+// 13-08-08, do not use fixed size arrays (V.Ivanchenko) 
 // 
 
 // 
@@ -106,6 +107,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   // Initialize theElementVector allocating one
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
+  fArrayLength           = maxNbComponents;
   fImplicitElement       = true;
   theElementVector       = new G4ElementVector();
   theElementVector->push_back( new G4Element(name, " ", z, a));  
@@ -151,6 +153,7 @@ G4Material::G4Material(const G4String& name, G4double density,
   fChemicalFormula = " ";
     
   maxNbComponents     = nComponents;
+  fArrayLength        = maxNbComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
   theElementVector    = new G4ElementVector();
@@ -184,8 +187,8 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 {   
   // initialization
   if ( fNumberOfElements == 0 ) {
-     fAtomsVector        = new G4int   [maxNbComponents];
-     fMassFractionVector = new G4double[maxNbComponents];
+     fAtomsVector        = new G4int   [fArrayLength];
+     fMassFractionVector = new G4double[fArrayLength];
   }
 
   // filling ...
@@ -226,8 +229,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 {
   // initialization
   if (fNumberOfComponents == 0) {
-    fMassFractionVector = new G4double[50];
-    fAtomsVector        = new G4int   [50];
+    fMassFractionVector = new G4double[fArrayLength];
+    fAtomsVector        = new G4int   [fArrayLength];
   }
 
   // filling ...
@@ -283,13 +286,31 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 {
   // initialization
   if (fNumberOfComponents == 0) {
-    fMassFractionVector = new G4double[50];
-    fAtomsVector        = new G4int   [50];
+    fMassFractionVector = new G4double[fArrayLength];
+    fAtomsVector        = new G4int   [fArrayLength];
+  }
+
+  size_t nelm = material->GetNumberOfElements();
+
+  // arrays should be extended
+  if(nelm > 1) {
+    G4int nold    = fArrayLength;
+    fArrayLength += nelm - 1;
+    G4double* v1 = new G4double[fArrayLength];
+    G4int* i1    = new G4int[fArrayLength];
+    for(G4int i=0; i<nold; i++) {
+      v1[i] = fMassFractionVector[i];
+      i1[i] = fAtomsVector[i];
+    }
+    delete [] fAtomsVector;
+    delete [] fMassFractionVector;
+    fMassFractionVector = v1;
+    fAtomsVector = i1;
   }
 
   // filling ...
   if (G4int(fNumberOfComponents) < maxNbComponents) {
-     for (size_t elm=0; elm < material->GetNumberOfElements(); elm++)
+     for (size_t elm=0; elm<nelm; elm++)
        {
         G4Element* element = (*(material->GetElementVector()))[elm];
         size_t el = 0;
