@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.hh,v 1.9 2008-07-29 13:27:20 tnikitin Exp $
+// $Id: G4GDMLWriteParamvol.hh,v 1.10 2008-08-13 13:58:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,7 +68,7 @@ class G4GDMLWriteParamvol : public G4GDMLWriteSetup
    void ParametersWrite(xercesc::DOMElement*,
                         const G4VPhysicalVolume* const, const G4int&);
    void ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
-			       const G4VPhysicalVolume* const paramvol);
+                               const G4VPhysicalVolume* const paramvol);
 
 };
 

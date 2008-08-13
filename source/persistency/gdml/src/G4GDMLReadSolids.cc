@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.20 2008-07-24 16:02:36 tnikitin Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.21 2008-08-13 13:58:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -476,7 +476,9 @@ void G4GDMLReadSolids::ParaRead(const xercesc::DOMElement* const paraElement)
 
    new G4Para(name,x,y,z,alpha,theta,phi);
 }
-void G4GDMLReadSolids::ParaboloidRead(const xercesc::DOMElement* const paraElement)
+
+void G4GDMLReadSolids::
+ParaboloidRead(const xercesc::DOMElement* const paraElement)
 {
    G4String name;
    G4double lunit = 1.0;

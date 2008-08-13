@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.53 2008-07-24 10:19:42 tnikitin Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.54 2008-08-13 13:58:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -297,17 +297,20 @@ ParaWrite(xercesc::DOMElement* solidsElement, const G4Para* const para)
    solidsElement->appendChild(paraElement);
 }
 
-
 void G4GDMLWriteSolids::
-ParaboloidWrite(xercesc::DOMElement* solidsElement, const G4Paraboloid* const paraboloid)
+ParaboloidWrite(xercesc::DOMElement* solidsElement,
+                const G4Paraboloid* const paraboloid)
 {
    const G4String name = GenerateName(paraboloid->GetName(),paraboloid);
 
    xercesc::DOMElement* paraboloidElement = NewElement("paraboloid");
    paraboloidElement->setAttributeNode(NewAttribute("name",name));
-   paraboloidElement->setAttributeNode(NewAttribute("rlo",paraboloid->GetRadiusMinusZ()/mm));
-   paraboloidElement->setAttributeNode(NewAttribute("rhi",paraboloid->GetRadiusPlusZ()/mm));
-   paraboloidElement->setAttributeNode(NewAttribute("dz",paraboloid->GetZHalfLength()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("rlo",
+                      paraboloid->GetRadiusMinusZ()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("rhi",
+                      paraboloid->GetRadiusPlusZ()/mm));
+   paraboloidElement->setAttributeNode(NewAttribute("dz",
+                      paraboloid->GetZHalfLength()/mm));
    paraboloidElement->setAttributeNode(NewAttribute("lunit","mm"));
    solidsElement->appendChild(paraboloidElement);
 }

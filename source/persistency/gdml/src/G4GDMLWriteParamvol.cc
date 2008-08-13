@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.19 2008-07-29 13:27:56 tnikitin Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.20 2008-08-13 13:58:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -47,6 +47,8 @@ Box_dimensionsWrite(xercesc::DOMElement* parametersElement,
      setAttributeNode(NewAttribute("y",2.0*box->GetYHalfLength()/mm));
    box_dimensionsElement->
      setAttributeNode(NewAttribute("z",2.0*box->GetZHalfLength()/mm));
+   box_dimensionsElement->
+     setAttributeNode(NewAttribute("lunit","mm"));
    parametersElement->appendChild(box_dimensionsElement);
 }
 
@@ -126,7 +128,11 @@ Tube_dimensionsWrite(xercesc::DOMElement* parametersElement,
      setAttributeNode(NewAttribute("StartPhi",tube->GetStartPhiAngle()/radian));
    tube_dimensionsElement->
      setAttributeNode(NewAttribute("DeltaPhi",tube->GetDeltaPhiAngle()/radian));
-     parametersElement->appendChild(tube_dimensionsElement);
+   tube_dimensionsElement->
+     setAttributeNode(NewAttribute("aunit","deg"));
+   tube_dimensionsElement->
+     setAttributeNode(NewAttribute("lunit","mm"));
+   parametersElement->appendChild(tube_dimensionsElement);
 }
 
 
@@ -269,24 +275,26 @@ void G4GDMLWriteParamvol::
 ParametersWrite(xercesc::DOMElement* paramvolElement,
                 const G4VPhysicalVolume* const paramvol,const G4int& index)
 {
-   paramvol->GetParameterisation()->
-     ComputeTransformation(index,const_cast<G4VPhysicalVolume*>(paramvol));
+   paramvol->GetParameterisation()
+     ->ComputeTransformation(index, const_cast<G4VPhysicalVolume*>(paramvol));
    G4ThreeVector Angles;
    const G4String name = GenerateName(paramvol->GetName(),paramvol);
    std::stringstream os; 
    os.precision(15);
    os << index;     
    G4String sncopie = os.str(); 
-   
+
    xercesc::DOMElement* parametersElement = NewElement("parameters");
    parametersElement->setAttributeNode(NewAttribute("number",index+1));
 
    PositionWrite(parametersElement, name+"position"+sncopie,
                  paramvol->GetObjectTranslation());
    Angles=GetAngles(paramvol->GetObjectRotationValue());
-   if(Angles.mag2()>DBL_EPSILON)
-   RotationWrite(parametersElement, name+"rotation"+sncopie,
-                 GetAngles(paramvol->GetObjectRotationValue()));
+   if (Angles.mag2()>DBL_EPSILON)
+   {
+     RotationWrite(parametersElement, name+"rotation"+sncopie,
+                   GetAngles(paramvol->GetObjectRotationValue()));
+   }
    paramvolElement->appendChild(parametersElement);
 
    G4VSolid* solid = paramvol->GetLogicalVolume()->GetSolid();
@@ -368,20 +376,22 @@ ParamvolWrite(xercesc::DOMElement* volumeElement,
                   GenerateName(paramvol->GetLogicalVolume()->GetName(),
                                paramvol->GetLogicalVolume());
    xercesc::DOMElement* paramvolElement = NewElement("paramvol");
-   paramvolElement->setAttributeNode(NewAttribute("ncopies",paramvol->GetMultiplicity()));
+   paramvolElement->setAttributeNode(NewAttribute("ncopies",
+                                     paramvol->GetMultiplicity()));
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
 
-   xercesc::DOMElement* algorithmElement = NewElement("parameterised_position_size");
+   xercesc::DOMElement* algorithmElement =
+     NewElement("parameterised_position_size");
    paramvolElement->appendChild(volumerefElement);
    paramvolElement->appendChild(algorithmElement);
    ParamvolAlgorithmWrite(algorithmElement,paramvol);
    volumeElement->appendChild(paramvolElement);
-
 }
 
 void G4GDMLWriteParamvol::
-ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,const G4VPhysicalVolume* const paramvol)
+ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
+                       const G4VPhysicalVolume* const paramvol)
 {
    const G4String volumeref =
                   GenerateName(paramvol->GetLogicalVolume()->GetName(),
@@ -391,6 +401,6 @@ ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,const G4VPhysicalVol
 
    for (G4int i=0; i<parameterCount; i++)
    {
-      ParametersWrite(paramvolElement,paramvol,i);
+     ParametersWrite(paramvolElement,paramvol,i);
    }
 }
