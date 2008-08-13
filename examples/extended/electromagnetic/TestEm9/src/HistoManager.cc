@@ -310,8 +310,8 @@ void HistoManager::EndOfEvent()
   G4double e19  = 0.0;
   G4double e125 = 0.0;
   if(e9 > 0.0) {
-    s19 = e0/e9;
-    s125 = e0/e25;
+    e19 = e0/e9;
+    e125 = e0/e25;
     edep[3] += e19;
     erms[3] += e19*e19;
     edep[4] += e125;
