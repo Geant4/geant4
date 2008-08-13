@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.1 2008-08-12 17:51:06 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.2 2008-08-13 16:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -141,6 +141,7 @@ protected:
   G4double z23;
   G4double lnZ;
   G4double densityFactor;
+  G4double densityCorr;
   G4double lpmEnergy;
 
   G4bool   isElectron;

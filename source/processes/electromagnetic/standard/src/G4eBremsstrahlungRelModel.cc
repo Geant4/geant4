@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.1 2008-08-12 17:51:06 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.2 2008-08-13 16:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -169,6 +169,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
 
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
+  densidyCorr = densityFactor*totalEnergy*totalEnergy;
 
   G4double dedx = 0.0;
 
@@ -208,7 +209,7 @@ G4double G4eBremsstrahlungRelModel::ComputeBremLoss(G4double cut)
       } else {
 	xs = ComputeDXSectionPerAtom(eg);
       }
-      loss += eg*wgi[i]*xs;
+      loss += eg*wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
     }
     e0 += delta;
   }
@@ -235,6 +236,8 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
 
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
+  densidyCorr = densityFactor*totalEnergy*totalEnergy;
+
   SetCurrentElement(Z);
 
   G4double cross = ComputeXSectionPerAtom(cut);
@@ -274,7 +277,7 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
       } else {
 	xs = ComputeDXSectionPerAtom(eg);
       }
-      cross += eg*wgi[i]*xs;
+      cross += eg*wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
     }
     e0 += delta;
   }
@@ -326,18 +329,21 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
+  G4double e2 = totalEnergy*totalEnergy;
   G4ThreeVector direction = dp->GetMomentumDirection();
 
   G4double fmax= 1.0;
   G4bool highe = true;
   if(totalEnergy < hydrogenEnergyTh*currentZ) highe = false;
  
-  G4double xmin = log(cut);
-  G4double xmax = log(emax);
-  G4double gammaEnergy, f; 
+  G4double xmin = log(cut*cut/e2 + densityFactor);
+  G4double xmax = log(emax*emax/e2  + densityFactor);
+  G4double gammaEnergy, f, x; 
 
   do {
-    gammaEnergy = exp(xmin + G4UniformRand()*(xmax - xmin));
+    x = e2*( exp(xmin + G4UniformRand()*(xmax - xmin)) - densityFactor );
+    if(x < 0.0) x = 0.0
+    gammaEnergy = sqrt(x);
     if(highe) f = ComputeRelDXSectionPerAtom(gammaEnergy);
     else      f = ComputeDXSectionPerAtom(gammaEnergy);
 
