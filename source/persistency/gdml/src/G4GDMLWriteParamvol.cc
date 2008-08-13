@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.20 2008-08-13 13:58:53 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.21 2008-08-13 16:10:34 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -125,9 +125,9 @@ Tube_dimensionsWrite(xercesc::DOMElement* parametersElement,
    tube_dimensionsElement->
      setAttributeNode(NewAttribute("hz",2.0*tube->GetZHalfLength()/mm));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("StartPhi",tube->GetStartPhiAngle()/radian));
+     setAttributeNode(NewAttribute("StartPhi",tube->GetStartPhiAngle()/degree));
    tube_dimensionsElement->
-     setAttributeNode(NewAttribute("DeltaPhi",tube->GetDeltaPhiAngle()/radian));
+     setAttributeNode(NewAttribute("DeltaPhi",tube->GetDeltaPhiAngle()/degree));
    tube_dimensionsElement->
      setAttributeNode(NewAttribute("aunit","deg"));
    tube_dimensionsElement->
