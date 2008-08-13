@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.22 2008-04-07 18:09:05 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.23 2008-08-13 16:19:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,6 +46,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardIG.hh"
+#include "PhysListEmStandardLPM.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
@@ -108,7 +109,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   // EM physics
   emName = G4String("emstandard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emPhysicsList = new G4EmStandardPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,6 +195,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmStandardIG();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set StandardIG EM physics" << G4endl;
+
+  } else if (name == "standardLPM") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardLPM();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set StandardLPM EM physics" << G4endl;
 
   } else if (name == "livermore") {
     emName = name;

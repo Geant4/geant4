@@ -86,7 +86,7 @@ void HistoManager::bookHisto()
   nBinsEA= 40;
   nBinsED= 100;
   nTuple = false;
-  nHisto = 10;
+  nHisto = 12;
 
   // initialise acceptance
   for(G4int i=0; i<nmax; i++) {
@@ -124,6 +124,12 @@ void HistoManager::bookHisto()
 
   histo->add1D("19",
     "Number of vertex hits",20,-0.5,19.5,1.0);
+
+  histo->add1D("20",
+    "E0/E3x3 ratio",nBinsED,0.0,1,1.0);
+
+  histo->add1D("21",
+    "E0/5x5 ratio",nBinsED,0.0,1.0,1.0);
 
   if(nTuple) {
     histo->addTuple( "100", "Dose deposite","float r, z, e" );
@@ -298,8 +304,23 @@ void HistoManager::EndOfEvent()
     e25 += E[i];
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
   }
-  G4double e0 = E[12];
 
+  // compute ratios
+  G4double e0 = E[12];
+  G4double e19  = 0.0;
+  G4double e125 = 0.0;
+  if(e9 > 0.0) {
+    s19 = e0/e9;
+    s125 = e0/e25;
+    edep[3] += e19;
+    erms[3] += e19*e19;
+    edep[4] += e125;
+    erms[4] += e125*e125;
+    stat[3] += 1;
+    stat[4] += 1;
+  }
+
+  // fill histo
   histo->fill(0,e0,1.0);
   histo->fill(1,e9,1.0);
   histo->fill(2,e25,1.0);
@@ -307,9 +328,11 @@ void HistoManager::EndOfEvent()
   histo->fill(6,Eabs2,1.0);
   histo->fill(7,Eabs3,1.0);
   histo->fill(8,Eabs4,1.0);
-  float nn = (double)(Nvertex.size());
-  histo->fill(9,nn,1.0);
+  histo->fill(9,G4double(Nvertex.size()),1.0);
+  histo->fill(10,e19,1.0);
+  histo->fill(11,e125,1.0);
 
+  // compute sums
   edep[0] += e0;
   erms[0] += e0*e0;
   edep[1] += e9;
@@ -317,15 +340,6 @@ void HistoManager::EndOfEvent()
   edep[2] += e25;
   erms[2] += e25*e25;
 
-  // compute ratios
-  if(e9 > 0.0) {
-    edep[3] += e0/e9;
-    erms[3] += e0*e0/(e9*e9);
-    edep[4] += e0/e25;
-    erms[4] += e0*e0/(e25*e25);
-    stat[3] += 1;
-    stat[4] += 1;
-  }
   // trancated mean
   if(limittrue[0] == DBL_MAX || std::abs(e0-edeptrue[0])<rmstrue[0]*limittrue[0]) {
     stat[0] += 1;
