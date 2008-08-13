@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.57 2008-08-13 16:08:12 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.58 2008-08-13 16:39:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -245,9 +245,6 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(kinEnergy <= DBL_MIN) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  if() {
-    cost = G4UniformRand()*2.0 - 1.0;
-
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
