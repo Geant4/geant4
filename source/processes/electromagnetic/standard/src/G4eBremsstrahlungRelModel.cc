@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.2 2008-08-13 16:08:50 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.3 2008-08-13 16:27:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -329,19 +329,19 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
-  G4double e2 = totalEnergy*totalEnergy;
+  densidyCorr = densityFactor*totalEnergy*totalEnergy;
   G4ThreeVector direction = dp->GetMomentumDirection();
 
   G4double fmax= 1.0;
   G4bool highe = true;
   if(totalEnergy < hydrogenEnergyTh*currentZ) highe = false;
  
-  G4double xmin = log(cut*cut/e2 + densityFactor);
-  G4double xmax = log(emax*emax/e2  + densityFactor);
+  G4double xmin = log(cut*cut + densityCorr);
+  G4double xmax = log(emax*emax  + densityCorr);
   G4double gammaEnergy, f, x; 
 
   do {
-    x = e2*( exp(xmin + G4UniformRand()*(xmax - xmin)) - densityFactor );
+    x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) x = 0.0
     gammaEnergy = sqrt(x);
     if(highe) f = ComputeRelDXSectionPerAtom(gammaEnergy);
