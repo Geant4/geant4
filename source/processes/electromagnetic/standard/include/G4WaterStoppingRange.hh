@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStoppingRange.hh,v 1.1 2008-08-08 18:56:43 antoni Exp $
+// $Id: G4WaterStoppingRange.hh,v 1.2 2008-08-14 16:05:53 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4WaterStoppingRange_h
@@ -53,23 +53,22 @@
 #include "G4LPhysicsFreeVector.hh"
 #include <vector>
 
-class G4EmCorrections;
 
 class G4WaterStoppingRange
 {
 public:
 
-  G4WaterStoppingRange(G4EmCorrections* corr = 0, G4bool splineFlag = true);
+  G4WaterStoppingRange(G4bool splineFlag = true);
 
   ~G4WaterStoppingRange();
 
-  G4double GetDEDX(G4int ionZ, G4double kinEnergy);
+  G4double GetRange(G4int ionZ, G4double kinEnergy);
 
   G4PhysicsVector* GetPhysicsVector(G4int ionZ);
 
 private:
 
-  void Initialise(G4EmCorrections*);
+  void Initialise();
 
   // hide assignment operator
   G4WaterStoppingRange & operator=(const G4WaterStoppingRange &right);
@@ -77,9 +76,9 @@ private:
 
   G4bool   spline;
   G4int    Z[16];
-  G4double    A[16];
+  G4double A[16];
 
-  std::vector<G4LPhysicsFreeVector*>  dedx;
+  std::vector<G4LPhysicsFreeVector*>  R;
 };
 
 #endif

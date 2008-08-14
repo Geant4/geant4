@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStopping.hh,v 1.1 2008-08-08 18:56:43 antoni Exp $
+// $Id: G4SimpleMaterialStopping.hh,v 1.2 2008-08-14 16:05:53 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStopping_h
@@ -55,13 +55,13 @@
 
 class G4EmCorrections;
 
-class G4MaterialStopping
+class G4SimpleMaterialStopping
 {
 public:
 
-  G4MaterialStopping(G4EmCorrections* corr = 0, G4bool splineFlag = true);
+  G4SimpleMaterialStopping(G4EmCorrections* corr = 0, G4bool splineFlag = true);
 
-  ~G4MaterialStopping();
+  ~G4SimpleMaterialStopping();
 
   G4double GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy);
 
@@ -82,8 +82,8 @@ private:
   void Initialise(G4EmCorrections*);
 
   // hide assignment operator
-  G4MaterialStopping & operator=(const  G4MaterialStopping &right);
-  G4MaterialStopping(const  G4MaterialStopping&);
+  G4SimpleMaterialStopping & operator=(const  G4SimpleMaterialStopping &right);
+  G4SimpleMaterialStopping(const  G4SimpleMaterialStopping&);
 
   G4bool   spline;
   G4int    Z[16];
