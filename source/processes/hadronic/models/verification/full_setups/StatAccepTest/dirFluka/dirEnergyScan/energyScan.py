@@ -68,16 +68,16 @@ import math
 #***LOOKHERE***
 
 listPhysicsLists = ( \
-                     'LHEP',
-                     'QGSP',
-                     'QGSC',
-                     'FTFP',
-                     'QGSP_BIC',
-                     'QGSP_BERT',
-                     'FTF_BIC',
-                     'QGS_BIC',
-                     'FTFP_BERT',
-#                     'fluka',
+#                     'LHEP',
+#                     'QGSP',
+#                     'QGSC',
+#                     'FTFP',
+#                     'QGSP_BIC',
+#                     'QGSP_BERT',
+#                     'FTF_BIC',
+#                     'QGS_BIC',
+#                     'FTFP_BERT',
+                     'fluka',
                    )
                   
 #PARTICLE='e-'

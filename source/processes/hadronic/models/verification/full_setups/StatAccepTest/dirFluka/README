@@ -1,5 +1,5 @@
 
- Last update: 06-Aug-2008
+ Last update: 15-Aug-2008
  ========================
 
  This directory contains all the stuff needed in order
@@ -55,8 +55,12 @@
  CMS HCAL:
            $  ln -sfn mysmallinclude.inc-cms  mysmallinclude.inc
 
- The shell script  scanEnergy.sh , and the tar-balls *.tgz
- are useful for a energy scan, from 1 to 30 GeV, of 4
- simplified calorimeters: ATLAS HEC, CMS HCAL, PbWO4, and
- TileCal.
+ The subdirectory  dirEnergyScan/  contains the stuff useful
+ for an energy scan, from 1 to 30 GeV, of 4 simplified
+ calorimeters: ATLAS HEC, CMS HCAL, PbWO4, and TileCal.
+ The Python scripts *.py are useful to quickly collect
+ results for the energy scan.
+ (The scripts  energyScan.py  and  addInfoInTable.py
+  are exactly the same as in  StatAccepTest/dirEnergyScan/ ,
+  whereas the script  printInfoLogfile.py  is different.)
 

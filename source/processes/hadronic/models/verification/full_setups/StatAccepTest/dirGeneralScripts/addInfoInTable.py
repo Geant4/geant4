@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------------
-# Last update: 01-Dec-2006
+# Last update: 15-Aug-2008
 #
 # This script requires at least 2 input arguments, and should be
 # run as:
@@ -12,8 +12,10 @@
 # at least the first column, with the names of the observables,
 # should be present, and the second argument, "file1" should be
 # a log-files produced by running one of the StatAccepTest
-# simulations. The remain arguments,  file2 ... fileN  are optionals,
-# and they are also meant to be log-files of StatAccepTest simulations.
+# simulations, of Fluka simulations.
+# The remain arguments,  file2 ... fileN  are optionals,
+# and they are also meant to be log-files of StatAccepTest simulations,
+# or Fluka simulations.
 # The table and files must be in the same directory as the script
 # (use symbolic link if they are located in other directories).
 #
@@ -34,8 +36,9 @@
 # Notice that the rows corresponding to observables which are
 # not recognized are reproduced in the new table as they are.
 # If one of the files specified in the argument is not a log-file
-# obtained by running one of the StatAccepTest simulations, nothing
-# will happen, i.e. the table will not be updated.
+# obtained by running one of the StatAccepTest simulations, or
+# Fluka simulatiosn, nothing will happen, i.e. the table will not
+# be updated.
 #
 # Look ***LOOKHERE*** to map the short names of the observables,
 # used in the first column of the table, with the actual names
@@ -185,6 +188,12 @@
 #        exit_#mu
 #        exit_#e
 #        exit_#other
+#
+# NB) In the case of Fluka simulations some of the above observables
+#     (CPU, #steps, most of the # of particles, L_*, and some of
+#      exit informations) are not defined. However, you can run this
+#     script normally because it will be printed "0" for those
+#     observables that are not defined in Fluka.
 #
 #--------------------------------------------------------------------------
 
