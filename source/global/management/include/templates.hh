@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.11 2008-03-13 09:34:54 gcosmo Exp $
+// $Id: templates.hh,v 1.12 2008-08-15 00:47:22 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,10 +111,10 @@ typedef float Float;
 //---------------------------------
 
 template <class T>
-inline void G4SwapPtr(T* a, T* b) {
-  T* tmp=a;
-  a = b;
-  b = tmp;
+inline void G4SwapPtr(T** a, T** b) {
+  T* tmp=*a;
+  *a = *b;
+  *b = tmp;
 }
 
 template <class T>
