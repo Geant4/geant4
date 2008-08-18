@@ -85,13 +85,21 @@ PARTICLE='pi-'
 #PARTICLE='pi+'
 #PARTICLE='p'
 
-#--- 3 possibilities : 1) combinedCMS
-#                      2) combinedATLASbarrel 
-#                      3) combinedATLASendcap
+#--- 3 x 2 possibilities : 1) a) combinedCMS
+#                             b) combinedCMS_onlyHad
+#                          2) a) combinedATLASbarrel
+#                             b) combinedATLASbarrel_onlyHad
+#                          3) a) combinedATLASendcap
+#                             b) combinedATLASendcap_onlyHad
 #                       
 CALORIMETER='combinedCMS'
+###CALORIMETER='combinedCMS_onlyHad'
+#
 #CALORIMETER='combinedATLASbarrel'
+###CALORIMETER='combinedATLASbarrel_onlyHad'
+#
 #CALORIMETER='combinedATLASendcap'
+###CALORIMETER='combinedATLASendcap_onlyHad'
 
 listObservables = ( \
 ###                    'CPU',
