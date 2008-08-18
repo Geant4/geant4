@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2008-08-12 09:02:20 gcosmo Exp $
+$Id: History,v 1.28 2008-08-18 16:14:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August, 18th, 2008      T.Nikitina  (geomdiv-V09-01-01)
+- Corrected initialisation for 'fnReplicas' and 'fwidth' data members in
+  CheckAndSetParameters(), to make use of precomputed values retrieved from
+  parameterisations; simplified method signature.
 
 July, 25th, 2008        I.Hrivnacova  (geomdiv-V09-01-00)
 - Corrected error message in G4VDivisionParameterisation::CheckNDivAndWidth().
