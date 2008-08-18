@@ -1,5 +1,5 @@
 ************************************************************************
-* Last update: 21-Jul-2008
+* Last update: 18-Aug-2008
 *
 * This Kumac uses the file:   result.txt
 * in the current directory.
@@ -10,11 +10,11 @@
 *   $  ln -s dir9.1.p02/result-pi-cms-9.1.p02-res.txt result.txt
 * where result.txt looks like:
 *              LHEP   QGSP   QGSC   FTFP   QGSP_BIC QGSP_BERT FTF_BIC QGS_BIC FTFP_BERT
-*   1GeV Evis  98.32% 91.99% 92.38% 90.29% 80.03%   56.81%    66.15%  60.73%  62.67%
-*   2GeV Evis  81.56% 76.8%  78.2%  80.21% 63.44%   50.99%    47.9%   60.51%  47.42%
+*   1GeV res  98.32% 91.99% 92.38% 90.29% 80.03%   56.81%    66.15%  60.73%  62.67%
+*   2GeV res  81.56% 76.8%  78.2%  80.21% 63.44%   50.99%    47.9%   60.51%  47.42%
   
 *   ...
-*   30GeV Evis 18.11% 18.54% 18.96% 17.18% 14.27%   14.29%    14.94%  14.89%  14.34%
+*   30GeV res  18.11% 18.54% 18.96% 17.18% 14.27%   14.29%    14.94%  14.89%  14.34%
 *   
 * The Kumac shows a plot and then save it in the file  plot.ps
 *
@@ -25,7 +25,7 @@ vec/input vx 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 
 vec/print vx
 wait
 *
-shell sed -e s:%:\ :g -e s:.*GeV\ res:\ :g -e s:.*GeV\ Evis:\ :g -e /P/d result.txt > input.txt
+shell sed -e s:%:\ :g -e s:.*GeV\ res:\ :g -e s:.*GeV\ res:\ :g -e /P/d result.txt > input.txt
 * 
 vec/read lhep,qgsp,qgsc,ftfp,qbic,qbert,fbic,qbic2,fbert input.txt
 *

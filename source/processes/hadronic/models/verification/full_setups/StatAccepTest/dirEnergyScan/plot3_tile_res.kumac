@@ -1,5 +1,5 @@
 ************************************************************************
-* Last update: 21-Jul-2008
+* Last update: 18-Aug-2008
 *
 * This Kumac uses the file:   result.txt
 * in the current directory.
@@ -10,10 +10,10 @@
 *   $  ln -s dir9.2.b01/result-pi-cms-9.2.b01-res.txt result.txt
 * where result.txt looks like:
 *                FTFP    FTF_BIC  FTFP_BERT
-*   1GeV Evis    89.64%  62.05%   62.74%
-*   2GeV Evis    77.72%  49.33%   46.77%
+*   1GeV res     89.64%  62.05%   62.74%
+*   2GeV res     77.72%  49.33%   46.77%
 *   ...
-*   30GeV Evis   17.0%   14.84%   15.37%
+*   30GeV res    17.0%   14.84%   15.37%
 * 
 * The Kumac shows a plot and then save it in the file  plot.ps
 *
@@ -24,7 +24,7 @@ vec/input vx 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 
 vec/print vx
 wait
 *
-shell sed -e s:%:\ :g -e s:.*GeV\ res:\ :g -e s:.*GeV\ Evis:\ :g -e /P/d result.txt > input.txt
+shell sed -e s:%:\ :g -e s:.*GeV\ res:\ :g -e s:.*GeV\ res:\ :g -e /P/d result.txt > input.txt
 * 
 vec/read ftfp,fbic,fbert input.txt
 *
