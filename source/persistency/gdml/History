@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2008-07-29 13:27:00 tnikitin Exp $
+$Id: History,v 1.86 2008-08-18 09:49:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,17 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 August 2008 Gabriele Cosmo (gdml-V09-01-12)
+- G4GDMLWriteSolids: fixes in naming convention for solids; added specification
+  of units where missing. Introduced parsing of vertices for tessellated solids
+  to avoid duplication in writing.
+
 29 July 2008 Tatiana Nikitina
-- Fixes Parameterisation Reading and Writing according to Schema
+- Fixes to parameterisation read and write to match the schema.
 
 24 July 2008 Tatiana Nikitina
-- Add to reading of Boolean Solids the possibility to have a refence to position and rotation, it was possible in GDML_2_10_0. 
+- Added to reader the possibility to have a reference to position and rotation
+  for Boolean solids, as it was possible in GDML_2_10_0.
 
 24 July 2008 Tatiana Nikitina
-- Fixes in Reading/Writing G4TwistedTrap
+- Fixes in reading/writing G4TwistedTrap shapes.
  
 22 July 2008 Tatiana Nikitina
-- Add G4Paraboloid to list of readed/writed Solids
+- Added G4Paraboloid to list of supported solids for reader and writer.
 
 16 July 2008 Gabriele Cosmo (gdml-V09-01-11)
 - Renamed internal methods wherever needed to match code policy and having
