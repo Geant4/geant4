@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------------
-# Last update: 01-Aug-2008
+# Last update: 18-Aug-2008
 #
 # This script requires at least 2 input arguments, and should be
 # run as:
@@ -66,6 +66,10 @@
 #        HAD_k_Evis
 #        HAD_p_Evis
 #        HAD_n_Evis
+#
+# NB) The scripts energyScan.py , addInfoInTable.py , printInfoLogfile.py
+#     have been obtained by modifying the Python scripts with the same
+#     names in  StatAccepTest/dirEnergyScan/
 #
 #--------------------------------------------------------------------------
 
@@ -139,7 +143,7 @@ def updateLine( infoList, tableLine ) :
                          newTableLine += "   " + valueStringFormatted
                     else :
                          newTableLine += "   " + str( value )   
-                         if ( longName == "resolution" ) :
+                         if ( longName.find( "resolution" ) > -1 ) :
                              newTableLine += "%"
                     break
 

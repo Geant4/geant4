@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------------
-# Last update: 01-Aug-2008
+# Last update: 18-Aug-2008
 #
 # This script requires no input arguments, but it has some parameters that
 # need to be specified (see "***LOOKHERE***" below), and should be run as:
@@ -55,6 +55,10 @@
 # uses the Python script  printInfoLogfile.py : both of them must be
 # present in the same directory as  energyScan.py .
 #
+# NB) The scripts energyScan.py , addInfoInTable.py , printInfoLogfile.py
+#     have been obtained by modifying the Python scripts with the same
+#     names in  StatAccepTest/dirEnergyScan/
+#
 #--------------------------------------------------------------------------
 
 import os
@@ -66,14 +70,31 @@ import math
 
 listPhysicsLists = ( \
 ###                     'LHEP',
+###                     'LHEP-hadBirks',
+#
 ###                     'QGSP',
+###                     'QGSP-hadBirks',
+#
 ###                     'QGSC',
+###                     'QGSC-hadBirks',
+#
 ###                     'FTFP',
+###                     'FTFP-hadBirks',
+#
+###                     'QGSP_BIC-hadBirks',
 ###                     'QGSP_BIC',
+#
                      'QGSP_BERT',
+###                     'QGSP_BERT-hadBirks',
+#
 ###                     'FTF_BIC',
+###                     'FTF_BIC-hadBirks',
+#
 ###                     'QGS_BIC',
+###                     'QGS_BIC-hadBirks',
+#
 ###                     'FTFP_BERT',
+###                     'FTFP_BERT-hadBirks',
                    )
                   
 #PARTICLE='e-'
@@ -198,7 +219,7 @@ else :
         #print iEnergy
         for iPhysicsList in listPhysicsLists :
             #print iPhysicsList
-            os.system( "rm -f iPhysicsList" )
+            os.system( "rm -f " + iPhysicsList )
             theListLogFiles = open( "listLogFiles.txt", "r" )
             if ( theListLogFiles ) :
                 for iFile in theListLogFiles :

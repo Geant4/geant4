@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 01-Aug-2008
+# Last update: 18-Aug-2008
 #
 # This script has 1 input argument, and should be run as:
 #
@@ -39,6 +39,10 @@
 # but is not a log-file obtained by completing a running
 # of DetectorSlice, then "0" is print for each of the above
 # observables.
+#
+# NB) The scripts energyScan.py , addInfoInTable.py , printInfoLogfile.py
+#     have been obtained by modifying the Python scripts with the same
+#     names in  StatAccepTest/dirEnergyScan/
 #
 #-------------------------------------------------------------------
 
