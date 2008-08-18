@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.20 2006-06-29 18:18:31 gunter Exp $
+// $Id: G4PVDivision.cc,v 1.21 2008-08-18 14:06:13 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -73,8 +73,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, nDivs,
                       width, offset, DivNDIVandWIDTH);
-  CheckAndSetParameters (pAxis, nDivs, width, offset,
-                         DivNDIVandWIDTH, pMotherLogical);
+  CheckAndSetParameters (pAxis,offset, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -104,7 +103,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
-  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
+  CheckAndSetParameters (pAxis, offset, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -134,40 +133,25 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
-  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
+  CheckAndSetParameters (pAxis, offset, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
 void
 G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
-                                     const G4int nDivs,
-                                     const G4double width,
                                      const G4double offset, 
-                                           DivisionType divType,
                                      const G4LogicalVolume* pMotherLogical )
 {
-  if( divType == DivWIDTH )
-  {
-    fnReplicas = fparam->GetNoDiv();
-  }
-  else
-  {
-    fnReplicas = nDivs;
-  }
+  fnReplicas = fparam->GetNoDiv();
+ 
   if (fnReplicas < 1 )
   {
     G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
                 FatalException, "Illegal number of replicas!");
   }
 
-  if( divType != DivNDIV)
-  {
-    fwidth = fparam->GetWidth();
-  }
-  else
-  {
-    fwidth = width;
-  }
+  fwidth = fparam->GetWidth();
+
   if( fwidth < 0 )
   {
     G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
