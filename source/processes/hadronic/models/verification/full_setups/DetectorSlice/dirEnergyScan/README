@@ -1,5 +1,5 @@
 
- Last update: 07-Aug-2008
+ Last update: 18-Aug-2008
  ========================
 
  In this directory you can find some useful staff for studying
@@ -31,6 +31,8 @@
  all the information from the generated log files.
  (These scripts have been modified from those with the
   same names in StatAccepTest/dirEnergyScan/ ).
+
+ The *.kumac are useful for plotting results of the energy scan.
 
  The subdirectory dirOnlyHad/ is similar to the current
  directory, with the only difference that only the HAD
