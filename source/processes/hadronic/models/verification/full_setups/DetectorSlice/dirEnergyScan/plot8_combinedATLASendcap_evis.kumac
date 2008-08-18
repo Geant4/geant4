@@ -128,7 +128,6 @@ wait
 * --- Individual plots ---
 *
 NULL 1.0 31.0 0.005 0.035
-NULL 1.0 31.0 0.0 0.05
 set pmci 1
 GRAPHICS/HPLOT/SYMBOLS vx rlhep 30 20 0.20 
 key 22.0 0.0180 20 'LHEP'

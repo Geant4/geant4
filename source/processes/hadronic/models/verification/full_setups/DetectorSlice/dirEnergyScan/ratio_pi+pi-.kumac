@@ -124,8 +124,8 @@ wait
 *
 *
 title 'Ratio pi+/pi- Visible Energy  CMS (Combined) HCAL  G4 9.2.b01'
-****title 'Ratio pi+/pi- Visible Energy  ATLAS (Combined) HEC HCAL  G4 9.2.b01'
 ***title 'Ratio pi+/pi- Visible Energy  ATLAS (Combined) Barrel HCAL  G4 9.2.b01'
+****title 'Ratio pi+/pi- Visible Energy  ATLAS (Combined) EndCap HCAL  G4 9.2.b01'
 *
 for/file 20 ratio.ps
 meta 20 -111
