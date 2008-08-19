@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.47 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.48 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -64,7 +64,7 @@ G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
 {
    std::stringstream stream; stream << name;
-   if (addPointerToName) stream << ptr; 
+   if (addPointerToName) { stream << ptr; }
    return G4String(stream.str());
 }
 
@@ -101,9 +101,11 @@ xercesc::DOMElement* G4GDMLWrite::NewElement(const G4String& name)
 G4Transform3D G4GDMLWrite::Write(const G4String& fname,
                                  const G4LogicalVolume* const logvol,
                                  const G4String& setSchemaLocation,
-                                 const G4int depth)
+                                 const G4int depth,
+                                       G4bool refs)
 {
    SchemaLocation = setSchemaLocation;
+   addPointerToName = refs;
 
    if (depth==0) { G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl; }
    else   { G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl; }

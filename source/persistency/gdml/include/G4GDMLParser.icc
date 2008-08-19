@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.3 2008-07-17 14:05:50 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.4 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@ void G4GDMLParser::Read(const G4String& filename, G4bool Validate)
 
 void G4GDMLParser::Write(const G4String& filename,
                          const G4VPhysicalVolume* const pvol,
+                               G4bool refs,
                          const G4String& SchemaLocation)
 { 
   const G4int depth = 0;
@@ -61,7 +62,7 @@ void G4GDMLParser::Write(const G4String& filename,
   {
     lvol = pvol->GetLogicalVolume();
   }
-  writer.Write(filename,lvol,SchemaLocation,depth);
+  writer.Write(filename,lvol,SchemaLocation,depth,refs);
 }
 
 G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,

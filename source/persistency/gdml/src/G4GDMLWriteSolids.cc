@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.55 2008-08-18 09:48:40 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.56 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -90,28 +90,28 @@ BooleanWrite(xercesc::DOMElement* solidsElement,
      || (std::fabs(pos.y()) > kLinearPrecision)
      || (std::fabs(pos.z()) > kLinearPrecision) )
    {
-     PositionWrite(booleanElement,name+"position",pos);
+     PositionWrite(booleanElement,name,pos);
    }
 
    if ( (std::fabs(rot.x()) > kAngularPrecision)
      || (std::fabs(rot.y()) > kAngularPrecision)
      || (std::fabs(rot.z()) > kAngularPrecision) )
    {
-     RotationWrite(booleanElement,name+"rotation",rot);
+     RotationWrite(booleanElement,name,rot);
    }
 
    if ( (std::fabs(firstpos.x()) > kLinearPrecision)
      || (std::fabs(firstpos.y()) > kLinearPrecision)
      || (std::fabs(firstpos.z()) > kLinearPrecision) )
    {
-     FirstpositionWrite(booleanElement,name+"firstposition",firstpos);
+     FirstpositionWrite(booleanElement,name,firstpos);
    }
 
    if ( (std::fabs(firstrot.x()) > kAngularPrecision)
      || (std::fabs(firstrot.y()) > kAngularPrecision)
      || (std::fabs(firstrot.z()) > kAngularPrecision) )
    {
-     FirstrotationWrite(booleanElement,name+"firstrotation",firstrot);
+     FirstrotationWrite(booleanElement,name,firstrot);
    }
 }
 

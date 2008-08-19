@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.36 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.37 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,8 @@ class G4GDMLWrite
 
    G4Transform3D Write(const G4String& filename,
                        const G4LogicalVolume* const topLog,
-                       const G4String& schemaPath, const G4int depth);
+                       const G4String& schemaPath,
+                       const G4int depth, G4bool storeReferences=true);
    void AddModule(const G4VPhysicalVolume* const topVol);
    void AddModule(const G4int depth);
    static void SetAddPointerToName(G4bool);

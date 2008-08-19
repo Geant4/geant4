@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.51 2008-07-17 14:05:50 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.52 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,7 @@ class G4GDMLParser
 
    inline void Write(const G4String& filename,
                      const G4VPhysicalVolume* const pvol = 0,
+                           G4bool storeReferences = true,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
 
    inline G4LogicalVolume* ParseST(const G4String& name,

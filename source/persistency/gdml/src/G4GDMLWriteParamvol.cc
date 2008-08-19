@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.21 2008-08-13 16:10:34 tnikitin Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.22 2008-08-19 15:03:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -278,7 +278,7 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
    paramvol->GetParameterisation()
      ->ComputeTransformation(index, const_cast<G4VPhysicalVolume*>(paramvol));
    G4ThreeVector Angles;
-   const G4String name = GenerateName(paramvol->GetName(),paramvol);
+   G4String name = GenerateName(paramvol->GetName(),paramvol);
    std::stringstream os; 
    os.precision(15);
    os << index;     
@@ -287,12 +287,15 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
    xercesc::DOMElement* parametersElement = NewElement("parameters");
    parametersElement->setAttributeNode(NewAttribute("number",index+1));
 
-   PositionWrite(parametersElement, name+"position"+sncopie,
-                 paramvol->GetObjectTranslation());
+   if (name.empty())
+   {
+     name = name + sncopie;
+   }
+   PositionWrite(parametersElement, name, paramvol->GetObjectTranslation());
    Angles=GetAngles(paramvol->GetObjectRotationValue());
    if (Angles.mag2()>DBL_EPSILON)
    {
-     RotationWrite(parametersElement, name+"rotation"+sncopie,
+     RotationWrite(parametersElement, name,
                    GetAngles(paramvol->GetObjectRotationValue()));
    }
    paramvolElement->appendChild(parametersElement);
