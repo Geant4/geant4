@@ -668,7 +668,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      Swap = !Swap;
 	      Through = false;
 	      theGlobalNormal = -theGlobalNormal;
-	      // G4SwapPtr(&Material1,&Material2);
+	      G4SwapPtr(Material1,Material2);
 	      G4SwapObj(&Rindex1,&Rindex2);
 	   }
 
@@ -875,7 +875,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	        }
 	        else {
 		   Swap = !Swap;
-		   // G4SwapPtr(&Material1,&Material2);
+		   G4SwapPtr(Material1,Material2);
 		   G4SwapObj(&Rindex1,&Rindex2);
 	        }
 		if ( theFinish == groundbackpainted )
