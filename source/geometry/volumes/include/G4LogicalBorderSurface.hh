@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.16 2008-07-17 00:43:11 gum Exp $
+// $Id: G4LogicalBorderSurface.hh,v 1.17 2008-08-19 15:31:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalBorderSurface
@@ -80,7 +80,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     static void CleanSurfaceTable();
     static const G4LogicalBorderSurfaceTable* GetSurfaceTable();
     static size_t GetNumberOfBorderSurfaces();
-    static void DumpTableInfo(); 
+    static void DumpInfo(); 
       // To handle the table of surfaces.
 
     G4int operator==( const G4LogicalBorderSurface &right ) const;

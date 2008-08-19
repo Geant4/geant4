@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.15 2008-07-17 00:44:10 gum Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.16 2008-08-19 15:31:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -129,7 +129,7 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 
 // Dump info for known surfaces
 //
-void G4LogicalSkinSurface::DumpTableInfo() 
+void G4LogicalSkinSurface::DumpInfo() 
 {
     G4cout << "***** Skin Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
