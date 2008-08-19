@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12th Aug 2008 Peter Gumplinger (op-V09-01-05)
+18th Aug 2008 Peter Gumplinger (op-V09-01-05)
               replaced G4SwapPtr with G4SwapObj for Rindex
               in G4OpBoundaryProcess - serious error since op-V09-01-00
               (see also Problem Report 1020)
