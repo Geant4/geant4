@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.2 2008-08-13 16:08:50 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.3 2008-08-19 15:27:39 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "G4NistManager.hh"
 
 class G4ParticleChangeForLoss;
+class G4PhysicsVector;
 
 class G4eBremsstrahlungRelModel : public G4VEmModel
 {
@@ -81,7 +82,7 @@ public:
 					      G4double tkin, 
 					      G4double Z,   G4double,
 					      G4double cutEnergy,
-					      G4double maxEnergy);
+					      G4double maxEnergy = DBL_MAX);
   
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -105,6 +106,10 @@ protected:
 
 private:
 
+  void InitialiseConstants();
+
+  void CalcLPMFunctions(G4double gammaEnergy);
+
   G4double ComputeBremLoss(G4double cutEnergy);
 
   G4double ComputeXSectionPerAtom(G4double cutEnergy);
@@ -115,7 +120,8 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  inline void SetCurrentElement(G4double Z);
+  inline void SetCurrentElement(const G4double);
+  void SetupForElement(const G4int);
 
   // hide assignment operator
   G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right);
@@ -137,17 +143,23 @@ protected:
   G4double kinEnergy;
   G4double totalEnergy;
   G4double currentZ;
-  G4double z13;
-  G4double z23;
-  G4double lnZ;
+  G4double z13, z23, lnZ;
+  G4double Fel, Finel, fCoulomb;
   G4double densityFactor;
   G4double densityCorr;
+
+  // LPM effect
   G4double lpmEnergy;
+  G4PhysicsVector  *fXiLPM, *fPhiLPM, *fGLPM;
+  G4double xiLPM, phiLPM, gLPM;
+
+  // critical gamma energies
+  G4double klpm, kp;
 
   G4bool   isElectron;
 
 private:
-
+  // consts
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double MigdalConstant;
@@ -155,6 +167,7 @@ private:
   G4double bremFactor;
   G4double highEnergyTh;
   G4double hydrogenEnergyTh;
+  G4double facFel, facFinel;
 
   G4bool   isInitialised;
 
@@ -162,14 +175,18 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4eBremsstrahlungRelModel::SetCurrentElement(G4double Z)
+inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
+    if (currentZ!=GetCurrentElement()->GetZ()) {
+      G4cout<<" ERROR in  G4eBremsstrahlungRelModel::SetCurrentElement "<<Z<<" vs. "<<GetCurrentElement()->GetZ()<<G4endl;
+    }
     G4int iz = G4int(Z);
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(iz);
+    SetupForElement(iz);
   }
 }
 
