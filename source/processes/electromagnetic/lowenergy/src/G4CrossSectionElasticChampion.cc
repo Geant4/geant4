@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElasticChampion.cc,v 1.1 2008-07-15 19:56:50 sincerti Exp $
+// $Id: G4CrossSectionElasticChampion.cc,v 1.2 2008-08-20 15:06:46 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ G4double G4CrossSectionElasticChampion::CrossSection(const G4Track& track )
 
   const G4String& particleName = particle->GetDefinition()->GetParticleName();
  
-  if (k > lowEnergyLimit && k < highEnergyLimit)
+  if (k >= lowEnergyLimit && k < highEnergyLimit)
   {
 	std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
 	pos = tableData.find(particleName);

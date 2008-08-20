@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.1 2008-07-15 19:56:50 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.2 2008-08-20 15:06:46 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ const G4FinalStateProduct& G4FinalStateElasticChampion::GenerateFinalState(const
 
   G4double k = track.GetDynamicParticle()->GetKineticEnergy();
 
-  if (k> lowEnergyLimit && k < highEnergyLimit)
+  if (k>= lowEnergyLimit && k < highEnergyLimit)
   {  
     G4double cosTheta = RandomizeCosTheta(k);
   
@@ -108,6 +108,11 @@ const G4FinalStateProduct& G4FinalStateElasticChampion::GenerateFinalState(const
     G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
 
     product.ModifyPrimaryParticle(zPrimeVers,k);
+  }
+
+  if (k<lowEnergyLimit)
+  {
+    product.KillPrimaryParticle();
   }
   
   return product;
