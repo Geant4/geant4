@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.30 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.31 2008-08-20 08:56:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -47,9 +47,9 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn)
    G4String nameOut(nameIn);
 
    if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
-   FilterOutReference(nameOut);
+   StripName(nameOut);
 
-   return nameOut;
+   return G4String (ModuleName + nameOut);
 }
 
 void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
@@ -63,21 +63,19 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
       stream << physvol->GetLogicalVolume()->GetName() << "_PV";
       nameOut = stream.str();
    }
+   else
+   {
+     nameOut = ModuleName + nameOut;
+   }
    nameOut = eval.SolveBrackets(nameOut);
-   FilterOutReference(nameOut);
+   StripName(nameOut);
 
    physvol->SetName(nameOut);
 }
 
-void G4GDMLRead::FilterOutReference(G4String& name)
+void G4GDMLRead::StripName(G4String& name) const
 {
-  str_size ref = 9;
-  str_size idx = name.size()-ref;
-
-  if (name.find("0x") == idx)
-  {
-    name = name.remove(idx, ref);
-  }
+  name.remove(name.find("0x"));
 }
 
 void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,

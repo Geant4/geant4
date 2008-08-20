@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.22 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.23 2008-08-20 08:56:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -287,15 +287,12 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
    xercesc::DOMElement* parametersElement = NewElement("parameters");
    parametersElement->setAttributeNode(NewAttribute("number",index+1));
 
-   if (name.empty())
-   {
-     name = name + sncopie;
-   }
-   PositionWrite(parametersElement, name, paramvol->GetObjectTranslation());
+   PositionWrite(parametersElement, name+sncopie+"_pos",
+                 paramvol->GetObjectTranslation());
    Angles=GetAngles(paramvol->GetObjectRotationValue());
    if (Angles.mag2()>DBL_EPSILON)
    {
-     RotationWrite(parametersElement, name,
+     RotationWrite(parametersElement, name+sncopie+"_rot",
                    GetAngles(paramvol->GetObjectRotationValue()));
    }
    paramvolElement->appendChild(parametersElement);

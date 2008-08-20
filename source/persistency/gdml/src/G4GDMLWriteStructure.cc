@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.70 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.71 2008-08-20 08:56:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -117,19 +117,19 @@ void G4GDMLWriteStructure::PhysvolWrite(xercesc::DOMElement* volumeElement,
     || std::fabs(pos.y()) > kLinearPrecision
     || std::fabs(pos.z()) > kLinearPrecision)
    {
-     PositionWrite(physvolElement,name,pos);
+     PositionWrite(physvolElement,name+"_pos",pos);
    }
    if (std::fabs(rot.x()) > kAngularPrecision
     || std::fabs(rot.y()) > kAngularPrecision
     || std::fabs(rot.z()) > kAngularPrecision)
    {
-     RotationWrite(physvolElement,name,rot);
+     RotationWrite(physvolElement,name+"_rot",rot);
    }
    if (std::fabs(scl.x()-1.0) > kRelativePrecision
     || std::fabs(scl.y()-1.0) > kRelativePrecision
     || std::fabs(scl.z()-1.0) > kRelativePrecision)
    {
-     ScaleWrite(physvolElement,name,scl);
+     ScaleWrite(physvolElement,name+"_scl",scl);
    }
 }
 
