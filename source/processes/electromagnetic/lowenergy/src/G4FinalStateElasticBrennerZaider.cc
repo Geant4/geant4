@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.4 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.5 2008-08-20 14:51:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateElasticBrennerZaider.hh"
@@ -101,7 +101,6 @@ const G4FinalStateProduct& G4FinalStateElasticBrennerZaider::GenerateFinalState(
   if (k<lowEnergyLimit)
   {
     product.KillPrimaryParticle();
-    product.AddEnergyDeposit(k);
   }
   
   return product;

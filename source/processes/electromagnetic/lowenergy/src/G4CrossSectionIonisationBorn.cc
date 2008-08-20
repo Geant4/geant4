@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionIonisationBorn.cc,v 1.3 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4CrossSectionIonisationBorn.cc,v 1.4 2008-08-20 14:51:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionIonisationBorn.hh"
@@ -32,7 +32,7 @@
 
 G4CrossSectionIonisationBorn::G4CrossSectionIonisationBorn()
 {
-  lowEnergyLimitDefault = 25 * eV;
+  lowEnergyLimitDefault = 12.61 * eV; // SI: i/o 25 eV
   highEnergyLimitDefault = 30 * keV;
 
   G4String fileElectron("dna/sigma_ionisation_e_born");
@@ -51,7 +51,7 @@ G4CrossSectionIonisationBorn::G4CrossSectionIonisationBorn()
     electron = electronDef->GetParticleName();
     tableFile[electron] = fileElectron;
 
-    lowEnergyLimit[electron] = 25. * eV;
+    lowEnergyLimit[electron] = 12.61 * eV; // SI: i/o 25 eV
     highEnergyLimit[electron] = 30. * keV;
 
     G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );

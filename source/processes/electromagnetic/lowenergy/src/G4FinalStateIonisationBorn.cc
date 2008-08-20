@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.12 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.13 2008-08-20 14:51:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationBorn.hh"
@@ -41,7 +41,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
   G4String electron;
   G4String proton;
 
-  lowEnergyLimitDefault = 25 * eV;
+  lowEnergyLimitDefault = 12.61 * eV; // SI: i/o 25 eV
   highEnergyLimitDefault = 10 * MeV;
 
   char *path = getenv("G4LEDATA");
@@ -52,7 +52,7 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
   if (electronDef != 0)
   {
     electron = electronDef->GetParticleName();
-    lowEnergyLimit[electron] = 25. * eV;
+    lowEnergyLimit[electron] = 12.61 * eV; // SI: i/o 25 eV
     highEnergyLimit[electron] = 30. * keV;
 
     std::ostringstream eFullFileName;

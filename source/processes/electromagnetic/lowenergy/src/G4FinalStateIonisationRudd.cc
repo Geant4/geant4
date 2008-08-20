@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.7 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.8 2008-08-20 14:51:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationRudd.hh"
@@ -155,7 +155,6 @@ const G4FinalStateProduct& G4FinalStateIonisationRudd::GenerateFinalState(const 
   if (k < lowLim) 
   {  
     product.KillPrimaryParticle();
-    product.AddEnergyDeposit(k);
   }
  
   return product;

@@ -1,4 +1,4 @@
-$Id: History,v 1.309 2008-07-16 19:01:07 sincerti Exp $
+$Id: History,v 1.310 2008-08-20 14:51:47 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.08.2008   S. Incerti, tag emlowen-V09-01-26
+             -removed AddEnergyDeposit below low energy limit in G4FinalStateElasticBrennerZaider.cc (bug, thanks to Marion Bug)
+             -removed AddEnergyDeposit below low energy limit in G4FinalStateExcitationEmfietzoglou.cc (idem)
+             -removed AddEnergyDeposit below low energy limit in G4FinalStateIonisationRudd.cc (idem)
+             -decreased low energy limit for e- to 12.61 eV in G4CrossSectionIonisationBorn.cc (from sigma_ionisation_e_born.dat table in $G4LEDATA/dna) instead of 25 eV
+             -decreased low energy limit for e- to 12.61 eV in G4FinalStateIonisationBorn.cc (from sigma_ionisation_e_born.dat table in $G4LEDATA/dna) instead of 25 eV
 
 16.07.2008   S. Incerti, tag emlowen-V09-01-25
              added preliminary process for positronium production
