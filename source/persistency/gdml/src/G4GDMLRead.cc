@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.31 2008-08-20 08:56:32 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.32 2008-08-21 12:17:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -33,6 +33,9 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLRead.hh"
+#include "G4SolidStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode)
 {
@@ -42,12 +45,12 @@ G4String G4GDMLRead::Transcode(const XMLCh* const toTranscode)
    return my_str;
 }
 
-G4String G4GDMLRead::GenerateName(const G4String& nameIn)
+G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
 {
    G4String nameOut(nameIn);
 
    if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
-   StripName(nameOut);
+   if (strip) { StripName(nameOut); }
 
    return G4String (ModuleName + nameOut);
 }
@@ -59,23 +62,74 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
 
    if (nameIn.empty())
    {
-      std::stringstream stream;
-      stream << physvol->GetLogicalVolume()->GetName() << "_PV";
-      nameOut = stream.str();
+     std::stringstream stream;
+     stream << physvol->GetLogicalVolume()->GetName() << "_PV";
+     nameOut = ModuleName + stream.str();
    }
    else
    {
      nameOut = ModuleName + nameOut;
    }
    nameOut = eval.SolveBrackets(nameOut);
-   StripName(nameOut);
+   // StripName(nameOut);
 
    physvol->SetName(nameOut);
+}
+
+G4String G4GDMLRead::Strip(const G4String& name) const
+{
+  G4String sname(name);
+  return sname.remove(sname.find("0x"));
 }
 
 void G4GDMLRead::StripName(G4String& name) const
 {
   name.remove(name.find("0x"));
+}
+
+void G4GDMLRead::StripNames() const
+{
+  // Strips off names of volumes and solids from possible
+  // reference pointers attached to their original identifiers.
+
+  G4PhysicalVolumeStore* pvols = G4PhysicalVolumeStore::GetInstance();
+  G4LogicalVolumeStore* lvols = G4LogicalVolumeStore::GetInstance();
+  G4SolidStore* solids = G4SolidStore::GetInstance();
+
+  G4cout << "Stripping off GDML names of solids and volumes ..." << G4endl;
+
+  G4String sname;
+  register size_t i;
+
+  // Solids...
+  //
+  for (i=0; i<solids->size(); i++)
+  {
+    G4VSolid* psol = (*solids)[i];
+    sname = psol->GetName();
+    StripName(sname);
+    psol->SetName(sname);
+  }
+
+  // Logical volumes...
+  //
+  for (i=0; i<lvols->size(); i++)
+  {
+    G4LogicalVolume* lvol = (*lvols)[i];
+    sname = lvol->GetName();
+    StripName(sname);
+    lvol->SetName(sname);
+  }
+
+  // Physical volumes...
+  //
+  for (i=0; i<pvols->size(); i++)
+  {
+    G4VPhysicalVolume* pvol = (*pvols)[i];
+    sname = pvol->GetName();
+    StripName(sname);
+    pvol->SetName(sname);
+  }
 }
 
 void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
@@ -247,4 +301,5 @@ void G4GDMLRead::Read(const G4String& fileName,
    {
       G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
    }
+   StripNames();
 }

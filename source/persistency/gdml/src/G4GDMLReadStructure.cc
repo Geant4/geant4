@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.45 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.46 2008-08-21 12:17:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -113,7 +113,7 @@ BordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
       break;
    }
 
-   new G4LogicalBorderSurface(name,pv1,pv2,prop);
+   new G4LogicalBorderSurface(Strip(name),pv1,pv2,prop);
 }
 
 void G4GDMLReadStructure::
@@ -198,8 +198,8 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
    if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }
 }
 
-G4LogicalVolume*
-G4GDMLReadStructure::FileRead(const xercesc::DOMElement* const fileElement)
+G4LogicalVolume* G4GDMLReadStructure::
+FileRead(const xercesc::DOMElement* const fileElement)
 {
    G4String name;
    G4String volname;
@@ -401,7 +401,7 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
       if (tag=="auxiliary")
         { auxList.push_back(AuxiliaryRead(child)); } else
       if (tag=="materialref")
-        { materialPtr = GetMaterial(GenerateName(RefRead(child))); } else
+        { materialPtr = GetMaterial(GenerateName(RefRead(child),true)); } else
       if (tag=="solidref")
         { solidPtr = GetSolid(GenerateName(RefRead(child))); }
    }
@@ -465,7 +465,7 @@ SkinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
       }
    }
 
-   new G4LogicalSkinSurface(name,logvol,prop);
+   new G4LogicalSkinSurface(Strip(name),logvol,prop);
 }
 
 void G4GDMLReadStructure::
@@ -528,7 +528,8 @@ StructureRead(const xercesc::DOMElement* const structureElement)
    }
 }
 
-G4VPhysicalVolume* G4GDMLReadStructure::GetPhysvol(const G4String& ref) const
+G4VPhysicalVolume* G4GDMLReadStructure::
+GetPhysvol(const G4String& ref) const
 {
    G4VPhysicalVolume* physvolPtr =
      G4PhysicalVolumeStore::GetInstance()->GetVolume(ref,false);
@@ -543,8 +544,9 @@ G4VPhysicalVolume* G4GDMLReadStructure::GetPhysvol(const G4String& ref) const
    return physvolPtr;
 }
 
-G4LogicalVolume* G4GDMLReadStructure::GetVolume(const G4String& ref) const {
-
+G4LogicalVolume* G4GDMLReadStructure::
+GetVolume(const G4String& ref) const
+{
    G4LogicalVolume *volumePtr
    = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false);
 
@@ -565,10 +567,10 @@ GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
    else { return G4GDMLAuxListType(); }
 }
 
-G4VPhysicalVolume*
-G4GDMLReadStructure::GetWorldVolume(const G4String& setupName)
+G4VPhysicalVolume* G4GDMLReadStructure::
+GetWorldVolume(const G4String& setupName)
 {    
-   G4LogicalVolume* volume = GetVolume(GetSetup(setupName));
+   G4LogicalVolume* volume = GetVolume(Strip(GetSetup(setupName)));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
    G4VPhysicalVolume* pvWorld =
      new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);

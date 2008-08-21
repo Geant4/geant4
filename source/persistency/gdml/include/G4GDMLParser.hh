@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.52 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.53 2008-08-21 12:17:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,8 +45,6 @@
 #include "G4GDMLWriteStructure.hh"
 #include "G4STRead.hh"
 
-#include "G4TransportationManager.hh"  // Used for the writing the whole
-                                       // geometrical structure
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
 
 class G4GDMLParser
@@ -55,16 +53,38 @@ class G4GDMLParser
 
    G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
    ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
+     //
+     // Parser constructor & destructor
 
    inline void Read(const G4String& filename, G4bool Validate=true);
+     //
+     // Imports geometry with world-volume, specified by the GDML filename
+     // in input. Validation against schema is activated by default.
+
+   inline void ReadModule(const G4String& filename, G4bool Validate=true);
+     //
+     // Imports a single GDML module, specified by the GDML filename
+     // in input. Validation against schema is activated by default.
 
    inline void Write(const G4String& filename,
                      const G4VPhysicalVolume* const pvol = 0,
                            G4bool storeReferences = true,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
+     //
+     // Exports on a GDML file, specified by 'filename' a geometry tree
+     // starting from 'pvol' as top volume. Uniqueness of stored entities
+     // is guaranteed by storing pointer-references by default.
+     // Alternative path for the schema location can be specified; by default
+     // the URL to the GDML web site is used.
 
    inline G4LogicalVolume* ParseST(const G4String& name,
-                                   G4Material* medium, G4Material* solid);
+                                         G4Material* medium,
+                                         G4Material* solid);
+     //
+     // Imports a tessellated geometry stored as STEP-Tools files
+     // 'name.geom' and 'name.tree'. It returns a pointer of a generated
+     // mother volume with 'medium' material associated, including the
+     // imported tessellated geometry with 'solid' material associated.
 
    // Methods for Reader
    //

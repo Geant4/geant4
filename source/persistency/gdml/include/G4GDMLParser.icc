@@ -24,20 +24,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.4 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.5 2008-08-21 12:17:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLParser inline methods
 //
 // -------------------------------------------------------------------------
- 
+
+inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool Validate)
 {   
-  const G4bool IsModule = false;
-  reader.Read(filename,Validate,IsModule); 
+  reader.Read(filename,Validate,false);
 }
 
+inline 
+void G4GDMLParser::ReadModule(const G4String& filename, G4bool Validate)
+{   
+  reader.Read(filename,Validate,true);
+}
+
+inline
 void G4GDMLParser::Write(const G4String& filename,
                          const G4VPhysicalVolume* const pvol,
                                G4bool refs,
@@ -48,9 +55,7 @@ void G4GDMLParser::Write(const G4String& filename,
 
   if (!pvol)
   {
-    G4VPhysicalVolume*
-      worldPV = G4TransportationManager::GetTransportationManager()
-              ->GetNavigatorForTracking()->GetWorldVolume();
+    G4VPhysicalVolume* worldPV = GetWorldVolume();
     if (!worldPV)
     {
       G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
@@ -65,6 +70,7 @@ void G4GDMLParser::Write(const G4String& filename,
   writer.Write(filename,lvol,SchemaLocation,depth,refs);
 }
 
+inline 
 G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
                                              G4Material* medium,
                                              G4Material* solid)
@@ -77,51 +83,61 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
 // Methods for Reader
 //
 
+inline 
 G4double G4GDMLParser::GetConstant(const G4String& name)
 {
   return reader.GetConstant(name);
 }
 
+inline 
 G4double G4GDMLParser::GetVariable(const G4String& name)
 {
   return reader.GetVariable(name);
 }
 
+inline 
 G4double G4GDMLParser::GetQuantity(const G4String& name)
 {
   return reader.GetQuantity(name);
 }
 
+inline 
 G4ThreeVector G4GDMLParser::GetPosition(const G4String& name)
 {
   return reader.GetPosition(name);
 }
 
+inline 
 G4ThreeVector G4GDMLParser::GetRotation(const G4String& name)
 {
   return reader.GetRotation(name);
 }
 
+inline 
 G4ThreeVector G4GDMLParser::GetScale(const G4String& name)
 {
   return reader.GetScale(name);
 }
 
+inline 
 G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name)
 {
   return reader.GetMatrix(name);
 }
 
+inline 
 G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name)
 {
   return reader.GetVolume(name);
 }
 
+inline 
 G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
 {
   return reader.GetWorldVolume(setupName);
 }
 
+inline 
 G4GDMLAuxListType
 G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
@@ -132,16 +148,19 @@ G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 // Methods for Writer
 //
 
+inline 
 void G4GDMLParser::AddModule(const G4VPhysicalVolume* const physvol)
 {
   writer.AddModule(physvol);
 }
 
+inline 
 void G4GDMLParser::AddModule(const G4int depth)
 {
   writer.AddModule(depth);
 }
 
+inline 
 void G4GDMLParser::SetAddPointerToName(G4bool set)
 {
   writer.SetAddPointerToName(set);
