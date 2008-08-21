@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.53 2008-07-22 15:53:33 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.54 2008-08-21 18:53:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -181,7 +181,8 @@ public:
   virtual void DefineForRegion(const G4Region*);
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-				const G4Material*);
+				const G4Material*,
+                                G4double kineticEnergy);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -339,6 +340,7 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 		G4double cutEnergy,
 		G4double maxEnergy)
 {
+  currentElement = elm;
   return ComputeCrossSectionPerAtom(part,kinEnergy,elm->GetZ(),elm->GetN(),
 				    cutEnergy,maxEnergy);
 }
@@ -552,7 +554,7 @@ inline void G4VEmModel::DefineForRegion(const G4Region*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
-					 const G4Material*)
+					 const G4Material*, G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

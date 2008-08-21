@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.3 2008-07-31 13:01:26 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.4 2008-08-21 18:53:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,9 +95,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 
   cutEnergy = cut;
   //G4cout << "cut(keV)= " << cut/keV << G4endl;
-  model->SetupForMaterial(part, material);
   G4double cross;
-  const G4Element* elm;
 
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
 
@@ -108,12 +106,12 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   // loop over bins
   for(G4int j=0; j<nbins; j++) {
     G4double e = (xSections[0])->GetLowEdgeEnergy(j);
+    model->SetupForMaterial(part, material, e);
     cross = 0.0;
     //G4cout << "j= " << j << " e(MeV)= " << e/MeV << G4endl;
     for (i=0; i<n; i++) {
-      elm = (*theElementVector)[i];
       cross += theAtomNumDensityVector[i]*      
-	model->ComputeCrossSectionPerAtom(part, e, elm->GetZ(), elm->GetN(),
+	model->ComputeCrossSectionPerAtom(part, (*theElementVector)[i], e, 
 					  cutEnergy, e);
       xsec[i] = cross;
     }
