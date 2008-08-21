@@ -452,6 +452,42 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   //	   << "\t total Absorber = " << zAbsorber*numberOfModules / m << " m " << G4endl
   //	   << "\t zCalo          = " << zCalo / m << " m " << G4endl; //***DEBUG***
 
+  //--------------------------------------------------------------------------
+  // 20-Aug-2008:  ***LOOKHERE***
+  //               Add few cm of Iron in front of the calorimeter (z < 0).
+  //               The half_thickness should not be bigger than about 20 cm, 
+  //               otherwise you would not use effectively all the specified
+  //               thickness, because beam particles are shot anyhow starting
+  //               at z = -2 m .
+  //G4double half_thickness = 1.0*cm;     //***LOOKHERE*** 
+  //G4double half_lateral_size = 1.0*m;
+  //G4Box* extraMaterial_box = new G4Box( "extraMaterial_box", 
+  //					half_lateral_size, 
+  //					half_lateral_size, 
+  //					half_thickness );
+  //G4LogicalVolume* extraMaterial_log = new G4LogicalVolume( extraMaterial_box,
+  //							    Iron,
+  //							    "extraMaterial_log",
+  //							    0,
+  //							    0,
+  //							    0 );
+  //G4VPhysicalVolume* extraMaterial_phys = 
+  //  new G4PVPlacement( 0,
+  //		       G4ThreeVector( 0.0, 0.0, -zCalo - half_thickness - 0.001*mm ),
+  //		       "extraMaterial_phys",
+  //		       extraMaterial_log,
+  //		       experimentalHall_phys,
+  //		       false,
+  //		       0,
+  //		       true );
+  //G4cout << G4endl << G4endl
+  //       << " *** ADDED AN EXTRA LAYER OF IRON OF half_thickness = " 
+  //       << half_thickness / cm << " cm " << G4endl
+  //       << "     IN FRONT OF THE CALORIMETER , at zCenter = "
+  //       << ( -zCalo - half_thickness - 0.001*mm ) / cm << " cm  *** " 
+  //       << G4endl << G4endl;
+  //--------------------------------------------------------------------------
+
   // --- Sensitive detectors
   if ( ! theSensitiveCalorimeter ) { 
     theSensitiveCalorimeter = 
