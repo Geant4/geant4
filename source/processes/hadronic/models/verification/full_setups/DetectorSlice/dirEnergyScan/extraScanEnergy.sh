@@ -1,10 +1,9 @@
 #------------------------------------------------------------------------
 # Last update: 21-Aug-2008
 #
-# This shell script run an energy scan, for some beam energies
+# This shell script run an energy scan, for some energy points 
 # above 30 GeV, for 1 Physics List, 1 beam particle, and 3 types of
-# simplified combined calorimeter (cms, atlasBarrel, atlasHec),
-# with only the HAD calorimeters (i.e. without their EM ones).
+# simplified combined calorimeter (cms, atlasBarrel, atlasHec).
 #
 # Because of the different Birks quenching in scintillator and LAr,
 # it is possible to specify a different name of the Physics List 
@@ -36,46 +35,52 @@ echo " "
 echo " === BEGIN === " $PHYSICS_LIST
 echo " "
 #
+date
 echo " === 50 GeV === "
 cd dir50GeV
-mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 cd ..
 #
+date
 echo " === 100 GeV === "
 cd dir100GeV
-mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 cd ..
 #
+###date
 ###echo " === 180 GeV === "
 ###cd dir180GeV
-###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 ###cd ..
 #
+date
 echo " === 200 GeV === "
 cd dir200GeV
-mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 cd ..
 #
+###date
 ###echo " === 300 GeV === "
 ###cd dir300GeV
-###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 ###cd ..
 #
+###date
 ###echo " === 350 GeV === "
 ###cd dir350GeV
-###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS_onlyHad-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel_onlyHad-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
-###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap_onlyHad-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_CMS combinedCMS.g4 > output.log-combinedCMS-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_CMS 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASbar combinedATLASbarrel.g4 > output.log-combinedATLASbarrel-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASbar 2>&1
+###mainDetectorSlice-$PHYSICS_LIST_ATLASend combinedATLASendcap.g4 > output.log-combinedATLASendcap-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST_ATLASend 2>&1
 ###cd ..
 #
 echo " "
