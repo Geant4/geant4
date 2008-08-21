@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.5 2008-08-19 15:27:39 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.6 2008-08-21 08:10:32 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 						     const G4String& name)
   : G4VEmModel(name),
     particle(0),
+    fXiLPM(0), fPhiLPM(0), fGLPM(0),
     isElectron(true),
     // wrong:
     //    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
@@ -89,7 +90,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   highEnergyTh = DBL_MAX;
   // Threshold for LPM effect (i.e. below which LPM hidden by density effect)
 
-  hydrogenEnergyTh = 1.e10; // 30.0*GeV;              // conservative estimate  yp*Elpm ~ 1/Z
+  hydrogenEnergyTh = 30.0*GeV;              // conservative estimate  yp*Elpm ~ 1/Z
                                             // yp = sqrt(MigdalConstant*ElectronDensity)
                                             // Elpm = LPMconstant*Radlen
   nist = G4NistManager::Instance();  
@@ -149,10 +150,10 @@ void  G4eBremsstrahlungRelModel::SetupForElement(const G4int iz)
   //  Compute Tsai's Expression for the Radiation Length
   // C. Amsler et al., 2008 Review of Particle Physics, Physics Letters B667, 1 (2008) see page 272
 
-  static const G4double Fel_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
-  static const G4double Finel_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
+  static const G4double Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
+  static const G4double Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
 
-  if (iz <= 3) {
+  if (iz <= 4) {
     Fel = Fel_light[iz];  
     Finel = Finel_light[iz] ; 
   }
@@ -161,19 +162,7 @@ void  G4eBremsstrahlungRelModel::SetupForElement(const G4int iz)
     Finel = facFinel - 2.*lnZ/3. ;
   }
 
-  /*
-  // for cross checks:
-  const G4double k1 = 0.0083 , k2 = 0.20206 ,k3 = 0.0020 , k4 = 0.0369 ;
-  G4double az2 = sqr(fine_structure_const*currentZ);
-  G4double az4 = az2 * az2;
-
-  fCoulomb = (k1*az4 + k2 + 1./(1.+az2))*az2 - (k3*az4 + k4)*az4;
-  */
   fCoulomb=GetCurrentElement()->GetfCoulomb();
-
-  //  G4cout<<" fCoulomb="<< fCoulomb<< G4endl;
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -190,7 +179,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
   highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
 
-  currentZ = 0;
+  currentZ = 0.;
 
   InitialiseElementSelectors(p, cuts);
 
@@ -349,7 +338,6 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
       } else {
 	xs = ComputeDXSectionPerAtom(eg);
       }
-      //      G4cout<<" xs="<<xs<<G4endl;
       cross += wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
     }
     e0 += delta;
