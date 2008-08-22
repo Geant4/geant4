@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.48 2008-08-22 09:13:04 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.49 2008-08-22 15:00:52 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -313,18 +313,83 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement)
 }
 
 void G4GDMLReadStructure::
-ReplicavolRead(const xercesc::DOMElement* const replicavolElement)
+ReplicavolRead(const xercesc::DOMElement* const replicavolElement,G4int number)
 {
-   G4String name;
-   G4double unit = 1.0;
+  G4LogicalVolume* logvol = 0;
+  for (xercesc::DOMNode* iter = replicavolElement->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = Transcode(child->getTagName()); 
+      
+       if (tag=="volumeref"){ logvol = GetVolume(GenerateName(RefRead(child)));}else
+       if (tag=="replicate_along_axis"){ReplicaRead(child,logvol,number);}else
+      {
+        G4String error_msg = "Unknown tag in ReplicavolRead: " + tag;
+        G4Exception("G4GDMLReadStructure::ReplicavolRead()", "ReadError",
+                    FatalException, error_msg);
+      }
+   }
+
+}
+void G4GDMLReadStructure::
+ReplicaRead(const xercesc::DOMElement* const replicaElement,  G4LogicalVolume* logvol,
+             G4int number)
+{ 
    G4double width = 0.0;
    G4double offset = 0.0;
-   G4int number = 0;
+   G4ThreeVector position(0.0,0.0,0.0);
+   G4ThreeVector rotation(0.0,0.0,0.0);
    EAxis axis = kUndefined;
-   G4LogicalVolume* logvol = 0;
+   G4String name;
+ 
+   for (xercesc::DOMNode* iter = replicaElement->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      const G4String tag = Transcode(child->getTagName()); 
+
+      if (tag=="position")
+        { VectorRead(child,position); } else
+      if (tag=="rotation")
+        { VectorRead(child,rotation); } else
+      if (tag=="positionref")
+        { position = GetPosition(GenerateName(RefRead(child))); } else
+      if (tag=="rotationref")
+        { rotation = GetRotation(GenerateName(RefRead(child))); } else
+      if (tag=="direction"){axis=AxisRead(child);}else
+      if (tag=="width"){width=QuantityRead(child);}else
+      if (tag=="offset"){offset=QuantityRead(child);}else
+      {
+        G4String error_msg = "Unknown tag in ReplicaRead: " + tag;
+        G4Exception("G4GDMLReadStructure::ReplicaRead()", "ReadError",
+                    FatalException, error_msg);
+      }
+
+   }
+
+   G4String pv_name = logvol->GetName() + "_refl";
+   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
+     ->Replicate(pv_name,logvol,pMotherLogical,axis,number,width,offset);
+
+   if (pair.first != 0) { GeneratePhysvolName(name,pair.first); }
+   if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }
+
+}
+EAxis G4GDMLReadStructure::
+AxisRead(const xercesc::DOMElement* const axisElement)
+{
+   
+   EAxis axis = kUndefined;
 
    const xercesc::DOMNamedNodeMap* const attributes
-         = replicavolElement->getAttributes();
+         = axisElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
 
    for (XMLSize_t attribute_index=0;
@@ -339,43 +404,41 @@ ReplicavolRead(const xercesc::DOMElement* const replicavolElement)
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
-
-      if (attName=="name") { name = attValue; } else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
-      if (attName=="width") { width = eval.Evaluate(attValue); } else
-      if (attName=="offset") { offset = eval.Evaluate(attValue); } else
-      if (attName=="number") { number = eval.EvaluateInteger(attValue); } else
-      if (attName=="axis")
-      {
-         if (attValue=="kXAxis") { axis = kXAxis; } else
-         if (attValue=="kYAxis") { axis = kYAxis; } else
-         if (attValue=="kZAxis") { axis = kZAxis; } else
-         if (attValue=="kRho") { axis = kRho; } else
-         if (attValue=="kPhi") { axis = kPhi; }
-      }
+      if (attName=="x")    {if( eval.Evaluate(attValue)==1.) axis=kXAxis; } else
+      if (attName=="y")    {if( eval.Evaluate(attValue)==1.) axis=kYAxis; } else
+      if (attName=="z")    {if( eval.Evaluate(attValue)==1.) axis=kZAxis; } else
+      if (attName=="rho")  {if( eval.Evaluate(attValue)==1.) axis=kRho;   } else
+      if (attName=="phi")  {if( eval.Evaluate(attValue)==1.) axis=kPhi;}
+     
    }
+return axis;
+}
 
-   width *= unit;
-   offset *= unit;
+G4double G4GDMLReadStructure::
+QuantityRead(const xercesc::DOMElement* const readElement)
+{
+   G4double value = 0.0;
+   G4double unit = 0.0;
+   const xercesc::DOMNamedNodeMap* const attributes
+         = readElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
 
-   for (xercesc::DOMNode* iter = replicavolElement->getFirstChild();
-        iter != 0; iter = iter->getNextSibling())
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
    {
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) { continue; }
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
 
-      const xercesc::DOMElement* const child
-            = dynamic_cast<xercesc::DOMElement*>(iter);
-      const G4String tag = Transcode(child->getTagName());
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
 
-      if (tag=="volumeref") { logvol = GetVolume(GenerateName(RefRead(child))); }
+      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="value"){ value= eval.Evaluate(attValue); } 
    }
-
-   G4String pv_name = logvol->GetName() + "_refl";
-   G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
-     ->Replicate(pv_name,logvol,pMotherLogical,axis,number,width,offset);
-
-   if (pair.first != 0) { GeneratePhysvolName(name,pair.first); }
-   if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }
+return value*unit;
 }
 
 void G4GDMLReadStructure::
@@ -487,7 +550,25 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
       if (tag=="physvol")
         { PhysvolRead(child); } else
       if (tag=="replicavol")
-        { ReplicavolRead(child); } else
+        { //ReplicavolRead(child); 
+         G4int number = 1;
+         const xercesc::DOMNamedNodeMap* const attributes = child->getAttributes();
+         XMLSize_t attributeCount = attributes->getLength();
+         for (XMLSize_t attribute_index=0;
+           attribute_index<attributeCount; attribute_index++)
+         {
+            xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+            if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+            { continue; }
+            const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+            const G4String attName = Transcode(attribute->getName());
+            const G4String attValue = Transcode(attribute->getValue());
+            if (attName=="number")
+            { number = eval.EvaluateInteger(attValue); }
+         }
+         ReplicavolRead(child,number); 
+        } else
       if (tag=="divisionvol")
         { DivisionvolRead(child); } else
       if (tag=="loop")

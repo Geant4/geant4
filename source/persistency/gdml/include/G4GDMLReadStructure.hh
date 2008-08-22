@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.20 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.21 2008-08-22 15:00:22 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,11 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    void DivisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* FileRead(const xercesc::DOMElement* const);
    void PhysvolRead(const xercesc::DOMElement* const);
-   void ReplicavolRead(const xercesc::DOMElement* const);
+   void ReplicavolRead(const xercesc::DOMElement* const, G4int number);
+   void ReplicaRead(const xercesc::DOMElement* const replicaElement,
+                    G4LogicalVolume* logvol,G4int number);
+   EAxis AxisRead(const xercesc::DOMElement* const axisElement);
+   G4double QuantityRead(const xercesc::DOMElement* const readElement);
    void SkinsurfaceRead(const xercesc::DOMElement* const);
    void VolumeRead(const xercesc::DOMElement* const);
    void Volume_contentRead(const xercesc::DOMElement* const);
