@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStopping.cc,v 1.2 2008-08-14 16:05:18 antoni Exp $
+// $Id: G4IronStopping.cc,v 1.3 2008-08-22 09:15:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
