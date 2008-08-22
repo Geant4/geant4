@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2008-08-22 15:06:52 tnikitin Exp $
+$Id: History,v 1.89 2008-08-22 16:01:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,14 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-22 August 2008 Tatiana Nikitina
-- G4GDMLREADStructure : Add Changes and Methods 
-  ReplicaRead(),AxisRead(),QuantityRead() in order to 
-  read ReplicaVolumes according to GDML Schema. 
-  The possibitily to Read/Write replication for Rho and Phi Axis
-- G4GDMLWRITEStructure : Add Changes in order to 
-  Write ReplicaVolumes according to GDML Schema
-19 August 2008 Gabriele Cosmo
+
+22 August 2008 Tatiana Nikitina (gdml-V09-01-14)
+- G4GDMLReadStructure: added methods ReplicaRead(), AxisRead(), QuantityRead()
+  and introduced corrections in order to read replica volumes conforming to the
+  GDML Schema. Added possibility to read/write replication for Rho and Phi axes.
+- G4GDMLWriteStructure: introduced corrections in order to write replica
+  volumes conforming to the GDML Schema.
+
+20 August 2008 Gabriele Cosmo (gdml-V09-01-13)
 - G4GDMLParser: added argument to Write() for specify if appending or not
   reference pointer to generated names. Default is TRUE.
 - G4GDMLRead: implemented filtering of names to remove from entity names
