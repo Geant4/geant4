@@ -106,8 +106,11 @@ void Histo::book()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
-    if(active[i]) 
-      histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
+    if(active[i]) {
+      G4String ss = ids[i];
+      if(histType == "root") ss = "h" + ids[i];
+      histo[i] = hf->createHistogram1D(ss, titles[i], bins[i], xmin[i], xmax[i]);
+    }
   }
   delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree

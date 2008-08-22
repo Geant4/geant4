@@ -86,7 +86,7 @@ void HistoManager::bookHisto()
   nBinsEA= 40;
   nBinsED= 100;
   nTuple = false;
-  nHisto = 12;
+  nHisto = 13;
 
   // initialise acceptance
   for(G4int i=0; i<nmax; i++) {
@@ -126,10 +126,13 @@ void HistoManager::bookHisto()
     "Number of vertex hits",20,-0.5,19.5,1.0);
 
   histo->add1D("20",
-    "E0/E3x3 ratio",nBinsED,0.0,1,1.0);
+    "E1/E9 Ratio",nBinsED,0.0,1,1.0);
 
   histo->add1D("21",
-    "E0/5x5 ratio",nBinsED,0.0,1.0,1.0);
+    "E1/25 Ratio",nBinsED,0.0,1.0,1.0);
+
+  histo->add1D("22",
+    "E9/E25 Ratio",nBinsED,0.0,1.0,1.0);
 
   if(nTuple) {
     histo->addTuple( "100", "Dose deposite","float r, z, e" );
@@ -147,7 +150,7 @@ void HistoManager::BeginOfRun()
   n_gam  = 0;
   n_step = 0;
 
-  for(G4int i=0; i<5; i++) {
+  for(G4int i=0; i<6; i++) {
     stat[i] = 0;
     edep[i] = 0.0;
     erms[i] = 0.0;
@@ -171,7 +174,7 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
-  G4String nam[5] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25"};
+  G4String nam[6] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25", "E9/E25"};
 
   // average
 
@@ -232,7 +235,7 @@ void HistoManager::EndOfRun()
     }
   }
   G4cout<<"===========  Ratios without trancating ==========================="<<G4endl;
-  for(j=3; j<5; j++) {
+  for(j=3; j<6; j++) {
     G4double e = edep[j];
     G4double xx= G4double(stat[j]);
     if(xx > 0.0) xx = 1.0/xx;
@@ -288,7 +291,7 @@ void HistoManager::BeginOfEvent()
   Eabs4  = 0.0;
   Evertex.clear();
   Nvertex.clear();
-  for (int i=0; i<25; i++) {
+  for (G4int i=0; i<25; i++) {
     E[i] = 0.0;
   }
 }
@@ -299,7 +302,7 @@ void HistoManager::EndOfEvent()
 {
   G4double e9 = 0.0;
   G4double e25= 0.0;
-  for (int i=0; i<25; i++) {
+  for (G4int i=0; i<25; i++) {
     E[i] /= beamEnergy;
     e25 += E[i];
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
@@ -309,15 +312,20 @@ void HistoManager::EndOfEvent()
   G4double e0 = E[12];
   G4double e19  = 0.0;
   G4double e125 = 0.0;
+  G4double e925 = 0.0;
   if(e9 > 0.0) {
     e19 = e0/e9;
     e125 = e0/e25;
+    e925 = e9/e25;
     edep[3] += e19;
     erms[3] += e19*e19;
     edep[4] += e125;
     erms[4] += e125*e125;
+    edep[5] += e925;
+    erms[5] += e925*e925;
     stat[3] += 1;
     stat[4] += 1;
+    stat[5] += 1;
   }
 
   // fill histo
@@ -331,6 +339,7 @@ void HistoManager::EndOfEvent()
   histo->fill(9,G4double(Nvertex.size()),1.0);
   histo->fill(10,e19,1.0);
   histo->fill(11,e125,1.0);
+  histo->fill(12,e925,1.0);
 
   // compute sums
   edep[0] += e0;
