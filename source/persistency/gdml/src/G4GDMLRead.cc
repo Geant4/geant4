@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.33 2008-08-22 07:50:58 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.34 2008-08-22 09:13:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -300,6 +300,6 @@ void G4GDMLRead::Read(const G4String& fileName,
    else
    {
       G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
+      StripNames();
    }
-   StripNames();
 }

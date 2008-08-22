@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.47 2008-08-22 08:06:02 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.48 2008-08-22 09:13:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -231,11 +231,11 @@ FileRead(const xercesc::DOMElement* const fileElement)
 
    if (volname.empty())
    {
-     return structure.GetVolume(Strip(structure.GetSetup("Default")));
+     return structure.GetVolume(structure.GetSetup("Default"));
    }
    else
    {
-     return structure.GetVolume(structure.GenerateName(volname,true));
+     return structure.GetVolume(structure.GenerateName(volname));
    }
 }
 
