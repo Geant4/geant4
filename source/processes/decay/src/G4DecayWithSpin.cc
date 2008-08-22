@@ -105,7 +105,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
        point[2] = (aStep.GetPostStepPoint()->GetPosition())[2];
        point[3] = aTrack.GetGlobalTime();
 
-       G4double fieldValue[3];
+       G4double fieldValue[6];
        field -> GetFieldValue(point,fieldValue);
 
        G4ThreeVector B(fieldValue[0],fieldValue[1],fieldValue[2]);
