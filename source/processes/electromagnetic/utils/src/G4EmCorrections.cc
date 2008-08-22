@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.46 2008-08-21 18:53:32 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.47 2008-08-22 10:50:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,9 +85,9 @@ G4EmCorrections::G4EmCorrections()
   ncouples   = 0;
   massFactor = 1.0;
   eth        = 2.0*MeV;
-  nbinCorr   = 15;
+  nbinCorr   = 25;
   eCorrMin   = 10.*keV;
-  eCorrMax   = 10.*MeV;
+  eCorrMax   = 1000.*MeV;
   nist = G4NistManager::Instance();
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
   Initialise();
