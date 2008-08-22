@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-08 16:35:35 gunter Exp $
+$Id: README,v 1.2 2008-08-22 22:07:03 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,4 +7,7 @@ $Id: README,v 1.1 1999-01-08 16:35:35 gunter Exp $
 
                             Test11
                             ------
+
+This is a neutron transport test which uses the HP neutron and LEP models.
+The detector is a simple box made up of air, aluminum, lead or uranium.
 
