@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.72 2008-08-22 15:01:33 tnikitin Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.73 2008-08-22 16:00:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -154,15 +154,15 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
 
-  xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
+   xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
    replicavolElement->appendChild(replicateElement);
 
    xercesc::DOMElement* dirElement = NewElement("direction");
-    if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
-    if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
-    if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
-    if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
-    if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
+   if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
+   if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
+   if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
+   if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
+   if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");
@@ -264,7 +264,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
       }
       else
       {   
-	 G4GDMLWriteStructure writer;
+         G4GDMLWriteStructure writer;
          daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),
                                   SchemaLocation,depth+1);
       }
@@ -277,7 +277,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
             G4String ErrorMessage = "Division volume in '"
                                   + name
                                   + "' can not be related to reflected solid!";
-	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
          DivisionvolWrite(volumeElement,divisionvol); 
@@ -289,7 +289,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
             G4String ErrorMessage = "Parameterised volume in '"
                                   + name
                                   + "' can not be related to reflected solid!";
-	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
          ParamvolWrite(volumeElement,physvol);
@@ -301,7 +301,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
             G4String ErrorMessage = "Replica volume in '"
                                   + name
                                   + "' can not be related to reflected solid!";
-	    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
                         "InvalidSetup", FatalException, ErrorMessage);
          }
          ReplicavolWrite(volumeElement,physvol); 
