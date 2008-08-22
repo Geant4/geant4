@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStopping.cc,v 1.3 2008-08-22 09:15:05 vnivanch Exp $
+// $Id: G4IronStopping.cc,v 1.4 2008-08-22 09:23:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -216,7 +216,7 @@ for(i=0; i<53; i++){pv->PutValues(i,E[i],Kr_Fe[i]*dens[j]*factor);}j++;
 if(corr) {
   G4int n = 0;
   for(j=0; j<16; j++) {
-      corr->AddStoppingData(26, 26, NameMaterial[j], dedx[n]);
+      corr->AddStoppingData(26, 56, NameMaterial[j], dedx[n]);
       n++;
   }
 }

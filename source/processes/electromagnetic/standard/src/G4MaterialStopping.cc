@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStopping.cc,v 1.4 2008-08-22 09:15:05 vnivanch Exp $
+// $Id: G4MaterialStopping.cc,v 1.5 2008-08-22 09:23:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -150,15 +150,15 @@ G4LPhysicsFreeVector* pv;
 G4double dens[31]={1.127,.92,1.2048E-03,3.97,1.85,1.85,1.76,3.18,1.8421E-03,2.23,1.42,2.635,2.44,6.6715E-04,1.04,1.14,3.815,1.032,1.2,.94,1.4,1.19,1.06,2.20,1.8794E-03,2.32,3.667,1.0641E-03,1.8263E-03,1.0,7.5618E-04};
 G4int Z_Ion[16] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
 G4double A_Ion[16] = {6.941,9.0122,10.811,12.011,14.007,15.999,18.998,20.180,22.990,24.305,26.982,28.086,30.974,32.065,35.453,39.948};
-G4double AA_Ion[16] = {7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40};
+G4int AA_Ion[16] = {7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40};
 G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","G4_ALUMINUM_OXIDE","G4_BONE_COMPACT_ICRU","G4_BONE_CORTICAL_ICRP","G4_C-552","G4_CALCIUM_FLUORIDE","G4_CARBON_DIOXIDE","G4_Pyrex_Glass","G4_KAPTON","G4_LITHIUM_FLUORIDE","G4_LITHIUM_TETRABORATE","G4_METHANE","G4_MUSCLE_STRIATED_ICRU","G4_NYLON-6/6","G4_PHOTO_EMULSION","G4_PLASTIC_SC_VINYLTOLUENE","G4_POLYCARBONATE","G4_POLYETHYLENE","G4_MYLAR","G4_LUCITE","G4_POLYSTYRENE","G4_TEFLON","G4_PROPANE","G4_SILICON_DIOXIDE","G4_SODIUM_IODIDE","G4_TISSUE-METHANE","G4_TISSUE-PROPANE","G4_WATER","G4_WATER_VAPOR"};
-G4String Mater0[31]={"A","AA","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","XX","YY","ZZ","Z3"};
+//G4String Mater0[31]={"A","AA","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","XX","YY","ZZ","Z3"};
 
 for(i=0; i<16; i++) { 
   Z[i] = Z_Ion[i];
   A[i] = A_Ion[i];
-  AA[i] = AA_Ion[i];
 }
+
 for(i=0;i<31;i++){
 MatName[i]=NameMaterial[i];
 Density[i]=dens[i]*gram/cm3;
@@ -1424,7 +1424,7 @@ if(corr) {
   G4int n = 0;
   for(j=0; j<31; j++) {
     for(i=0; i<16; i++) {
-      corr->AddStoppingData(Z[i], AA[i], NameMaterial[j], dedx[n]);
+      corr->AddStoppingData(Z[i], AA_Ion[i], NameMaterial[j], dedx[n]);
       n++;
     }
   }

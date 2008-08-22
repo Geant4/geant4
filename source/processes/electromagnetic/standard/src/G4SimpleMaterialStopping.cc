@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStopping.cc,v 1.4 2008-08-22 09:15:05 vnivanch Exp $
+// $Id: G4SimpleMaterialStopping.cc,v 1.5 2008-08-22 09:23:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -145,13 +145,12 @@ G4LPhysicsFreeVector* pv;
 G4double dens[25]={8.988E-05, 1.785E-04, 1.848, 1.9, .00125, .001429, 8.99E-04, 2.699, 2.329, .0017837, 4.508, 7.873, 8.907, 8.933, 5.323, .003743, 1.22, 1.5, 7.285, .005895, 19.254, 21.45, 19.291, 11.343, 19.05};
 G4int Z_Ion[16] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
 G4double A_Ion[16] = {6.941,9.0122,1.811,12.011,14.007,15.999,18.998,2.180,22.990,24.305,26.982,28.086,3.974,32.065,35.453,39.948};
-G4double AA_Ion[16] = {7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40};
+G4int AA_Ion[16] = {7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40};
 G4String NameMaterial[25]={"G4_H", "G4_He", "G4_Be", "G4_C", "G4_N", "G4_O", "G4_Ne", "G4_Al", "G4_Si", "G4_Ar", "G4_Ti", "G4_Fe", "G4_Ni", "G4_Cu", "G4_Ge", "G4_Kr", "G4_Mo", "G4_Ag", "G4_Sn", "G4_Xe", "G4_W", "G4_Pt", "G4_Au", "G4_Pb", "G4_U"};
 
 for(i=0; i<16; i++) {
   Z[i] = Z_Ion[i];
   A[i] = A_Ion[i];
-  AA[i] = AA_Ion[i];
 }
 for(i=0;i<25;i++){
 MatName[i]=NameMaterial[i];
@@ -1412,13 +1411,11 @@ pv=new G4LPhysicsFreeVector(31,E[0],E[30]);pv->SetSpline(spline);dedx.push_back(
 for(i=0;i<31;i++){pv->PutValues(i,E[i],U_18[i]*dens[j]*factor);}
 j++;
 
-
-
 if(corr) {
   G4int n = 0;
   for(j=0; j<25; j++) {
     for(i=0; i<16; i++) {
-      corr->AddStoppingData(Z[i], Z[i], NameMaterial[j], dedx[n]);
+      corr->AddStoppingData(Z[i], AA_Ion[i], NameMaterial[j], dedx[n]);
       n++;
     }
   }

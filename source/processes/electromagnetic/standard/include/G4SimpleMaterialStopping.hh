@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStopping.hh,v 1.4 2008-08-22 09:12:53 vnivanch Exp $
+// $Id: G4SimpleMaterialStopping.hh,v 1.5 2008-08-22 09:23:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStopping_h
@@ -87,8 +87,7 @@ private:
 
   G4bool   spline;
   G4int    Z[16];
-  G4double    A[16];
-  G4double AA[16];
+  G4double A[16];
   G4String MatName[31];
   G4double Density[31];
 
