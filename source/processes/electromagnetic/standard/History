@@ -1,4 +1,4 @@
-$Id: History,v 1.400 2008-08-13 16:08:12 vnivanch Exp $
+$Id: History,v 1.401 2008-08-22 09:27:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 August 08: V.Ivant (emstand-V09-01-26)
+Added new classes with stopping data G4MaterialStopping, 
+      G4SimpleMaterialStopping, G4IronStopping 
 
 13 August 08: V.Ivant (emstand-V09-01-25)
 G4eCoulombScatteringModel - added extra protection for precision lost in 
