@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-08 16:35:43 gunter Exp $
+$Id: README,v 1.2 2008-08-22 23:34:14 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,3 +8,10 @@ $Id: README,v 1.1 1999-01-08 16:35:43 gunter Exp $
                             Test13
                             ------
 
+Description:    test of QGS string model with precompound model.
+                100, 400 and 1000 GeV hadrons incident upon simple 
+                box of air, aluminum or lead.
+
+Type of test:   run to completion
+
+Output:         run log
