@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.34 2008-08-22 09:13:03 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.35 2008-08-22 09:35:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -53,6 +53,16 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
    if (strip) { StripName(nameOut); }
 
    return G4String (ModuleName + nameOut);
+}
+
+G4String G4GDMLRead::GenerateMatName(const G4String& nameIn, G4bool strip)
+{
+   G4String nameOut(nameIn);
+
+   if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
+   if (strip) { StripName(nameOut); }
+
+   return G4String (nameOut);
 }
 
 void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
