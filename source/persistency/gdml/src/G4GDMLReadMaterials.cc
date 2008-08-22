@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.15 2008-08-22 09:35:09 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.16 2008-08-22 10:00:20 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -204,7 +204,7 @@ ElementRead(const xercesc::DOMElement* const elementElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateMatName(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="formula") { formula = attValue; } else
       if (attName=="Z") { Z = eval.Evaluate(attValue); }
    }
@@ -289,7 +289,7 @@ IsotopeRead(const xercesc::DOMElement* const isotopeElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateMatName(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="Z") { Z = eval.EvaluateInteger(attValue); } else
       if (attName=="N") { N = eval.EvaluateInteger(attValue); }
    }
@@ -337,7 +337,7 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateMatName(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="Z") { Z = eval.Evaluate(attValue); } else
       if (attName=="state")
       {
@@ -359,9 +359,9 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="atom") { a = AtomRead(child); } else
-      if (tag=="Dref") { D = GetQuantity(GenerateMatName(RefRead(child))); } else
-      if (tag=="Pref") { P = GetQuantity(GenerateMatName(RefRead(child))); } else
-      if (tag=="Tref") { T = GetQuantity(GenerateMatName(RefRead(child))); } else
+      if (tag=="Dref") { D = GetQuantity(GenerateName(RefRead(child))); } else
+      if (tag=="Pref") { P = GetQuantity(GenerateName(RefRead(child))); } else
+      if (tag=="Tref") { T = GetQuantity(GenerateName(RefRead(child))); } else
       if (tag=="D") { D = DRead(child); } else
       if (tag=="P") { P = PRead(child); } else
       if (tag=="T") { T = TRead(child); } else
@@ -409,7 +409,7 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement, G4Element *element)
       {
          G4String ref;
          G4double n = FractionRead(child,ref);
-         element->AddIsotope(GetIsotope(GenerateMatName(ref,true)),n);
+         element->AddIsotope(GetIsotope(GenerateName(ref,true)),n);
       }
    }
 }
@@ -432,8 +432,8 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
          G4String ref;
          G4double n = FractionRead(child,ref);
          
-         G4Material *materialPtr = GetMaterial(GenerateMatName(ref,true), false);
-         G4Element *elementPtr = GetElement(GenerateMatName(ref,true), false);
+         G4Material *materialPtr = GetMaterial(GenerateName(ref,true), false);
+         G4Element *elementPtr = GetElement(GenerateName(ref,true), false);
 
          if (materialPtr != 0) { material->AddMaterial(materialPtr,n); } else
          if (elementPtr != 0)  { material->AddElement(elementPtr,n); }
@@ -441,7 +441,7 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
          if ((materialPtr == 0) && (elementPtr == 0))
          {
             G4String error_msg = "Referenced material/element '"
-                               + GenerateMatName(ref,true) + "' was not found!";
+                               + GenerateName(ref,true) + "' was not found!";
             G4Exception("G4GDMLReadMaterials::MixtureRead()", "InvalidSetup",
                         FatalException, error_msg);   
          }
@@ -451,7 +451,7 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
          G4String ref;
          G4int n = CompositeRead(child,ref);
 
-         G4Element *elementPtr = GetElement(GenerateMatName(ref,true));
+         G4Element *elementPtr = GetElement(GenerateName(ref,true));
          material->AddElement(elementPtr,n);
       }
    }
@@ -482,7 +482,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateMatName(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
    }
 
