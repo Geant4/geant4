@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.32 2008-08-21 12:17:09 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.33 2008-08-22 07:50:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -64,7 +64,7 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
    {
      std::stringstream stream;
      stream << physvol->GetLogicalVolume()->GetName() << "_PV";
-     nameOut = ModuleName + stream.str();
+     nameOut = stream.str();
    }
    else
    {
