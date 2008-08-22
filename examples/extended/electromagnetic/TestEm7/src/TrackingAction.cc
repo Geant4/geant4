@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.4 2008-02-04 18:15:17 vnivanch Exp $
+// $Id: TrackingAction.cc,v 1.5 2008-08-22 18:30:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     //G4cout << " range= " << x << " x= " << aTrack->GetPosition().x()
     //	   << " ofset= " << runAction->GetOffsetX() << G4endl;
     if(x > 0.0) runAction->AddProjRange(x);
+    runAction->FillHisto(2, x/mm, 1.0);
   }  
 }
 

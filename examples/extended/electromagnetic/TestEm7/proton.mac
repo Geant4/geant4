@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.12 2008-04-25 14:39:55 vnivanch Exp $
+# $Id: proton.mac,v 1.13 2008-08-22 18:30:27 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -7,10 +7,10 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
+/testem/det/setMat G4_WATER
 /testem/det/setSizeX  10 cm
 /testem/det/setSizeYZ 10 cm
-/testem/det/tallyMat Water
+/testem/det/tallyMat G4_WATER
 #
 /testem/phys/addPhysics  emstandard_opt3
 #
@@ -24,4 +24,9 @@
 #
 /testem/event/printModulo 1000
 #
-#/run/beamOn 10000
+/testem/histo/fileType root
+/testem/histo/setHisto 1 100 70 80
+/testem/histo/setHisto 2 100 70 80
+#
+/run/beamOn 10000
+#

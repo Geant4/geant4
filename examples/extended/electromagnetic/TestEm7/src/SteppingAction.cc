@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.13 2008-02-04 18:15:17 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.14 2008-08-22 18:30:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,6 +67,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
   G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
   runAction->FillHisto(0, x/mm , edep);
+  runAction->FillHisto(1, x/mm , edep);
 
   //fill tallies
   //

@@ -23,69 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
 //
-// $Id: PhysicsList.hh,v 1.7 2008-08-22 18:30:27 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.1 2008-08-22 18:30:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef HistoMessenger_h
+#define HistoMessenger_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
-class StepMax;
-class PhysicsListMessenger;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Histo;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class HistoMessenger: public G4UImessenger
 {
-public:
+  public:
 
-  PhysicsList();
-  virtual ~PhysicsList();
+   HistoMessenger(Histo* );
+  ~HistoMessenger();
 
-  void ConstructParticle();
-    
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-        
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-    
-  void AddStepMax();       
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+   void SetNewValue(G4UIcommand* ,G4String );
 
-private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
+  private:
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-    
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    
-  StepMax* stepMaxProcess;
-    
-  PhysicsListMessenger* pMessenger;
+   Histo*                  histo;
+   
+   G4UIdirectory*          histoDir;   
+   G4UIcmdWithAString*     factoryCmd;
+   G4UIcmdWithAString*     fileCmd;
+   G4UIcommand*            histoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
