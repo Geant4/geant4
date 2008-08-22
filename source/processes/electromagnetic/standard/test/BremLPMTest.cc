@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: BremLPMTest.cc,v 1.1 2008-08-21 15:16:53 schaelic Exp $
+// $Id: BremLPMTest.cc,v 1.2 2008-08-22 08:16:17 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -31,11 +31,10 @@
 //      -- including LPM effect
 // ------------------------------------------------------------
 // run
-//   export G4ANALYIS_USE=1    
 //   make -f GNUmakefile.root G4TARGET=BremLPMTest
 //   BremLPMTest
-// which creates a file eBremRel01.root
-//   ipython readBremLPM.py
+// this creates a file eBremRel01.root which can be read using e.g.
+//   python readBremLPM.py
 // ------------------------------------------------------------
 //
 //  History
@@ -117,6 +116,7 @@ void CalcCrossSection()
 
   // fill plots
   G4double cross[nmax+1], cross1[nmax+1];
+  G4double xDEDX[nmax+1], xDEDX1[nmax+1];
 
   for (G4int i=0; i<nElements; i++ ) {
     currentZ=theZ[i];
@@ -137,8 +137,8 @@ void CalcCrossSection()
 //       cross1[j] = 
 // 	model1->ComputeCrossSectionPerAtom( G4Electron::Electron(),
 // 					    kinEs[j], theZ[i], dum, cut)/barn;
-//       G4double xDEDX = model->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinE, cut)/dndV;
-//       G4double xDEDX1 = model1->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinE, cut)/dndV; 
+      xDEDX[j]= modelR->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut)/dndV/barn;
+      xDEDX1[j] = model1->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut)/dndV/barn; 
       cross[j] = modelR->CrossSectionPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut, kinEs[j])/dndV/barn;
       cross1[j] = model1->CrossSectionPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut, kinEs[j])/dndV/barn; 
     }
@@ -154,6 +154,19 @@ void CalcCrossSection()
     gR.GetHistogram()->SetXTitle("E_{kin}");
     gR.GetHistogram()->SetYTitle("#sigma(E_{kin})");
     g1.Write("model1");
+
+    TGraph xR(nmax,kinEs,xDEDX);
+    xR.Draw("Alp");
+    xR.SetLineColor(2);
+    xR.GetHistogram()->SetXTitle("E_{kin}");
+    xR.GetHistogram()->SetYTitle("dE/dx");
+    xR.Write("xDEDXR");
+    TGraph x1(nmax,kinEs,xDEDX1);
+    x1.Draw("lp");
+    x1.SetLineColor(4);
+    xR.GetHistogram()->SetXTitle("E_{kin}");
+    xR.GetHistogram()->SetYTitle("dE/dx");
+    x1.Write("xDEDX1");
   }
   tree.Write();
 }
