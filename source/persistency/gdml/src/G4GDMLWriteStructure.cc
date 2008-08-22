@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.71 2008-08-20 08:56:32 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.72 2008-08-22 15:01:33 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -52,7 +52,7 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
    if (axis==kXAxis) { axisString = "kXAxis"; } else
    if (axis==kYAxis) { axisString = "kYAxis"; } else
    if (axis==kZAxis) { axisString = "kZAxis"; } else
-   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
+   if (axis==kRho) { axisString = "kRho";     } else
    if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
 
    const G4String name
@@ -62,7 +62,6 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
                         divisionvol->GetLogicalVolume());
 
    xercesc::DOMElement* divisionvolElement = NewElement("divisionvol");
-   divisionvolElement->setAttributeNode(NewAttribute("name",name));
    divisionvolElement->setAttributeNode(NewAttribute("axis",axisString));
    divisionvolElement->setAttributeNode(NewAttribute("number",number));
    divisionvolElement->setAttributeNode(NewAttribute("width",width));
@@ -141,33 +140,41 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    G4double width = 0.0;
    G4double offset = 0.0;
    G4bool consuming = false;
+   G4String unitString("mm");
 
    replicavol->GetReplicationData(axis,number,width,offset,consuming);
 
-   G4String unitString("mm");
-   G4String axisString("kUndefined");
-   if (axis==kXAxis) { axisString = "kXAxis"; } else
-   if (axis==kYAxis) { axisString = "kYAxis"; } else
-   if (axis==kZAxis) { axisString = "kZAxis"; } else
-   if (axis==kRho) { axisString = "kRho"; unitString = "degree"; } else
-   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
-
-   const G4String name
-         = GenerateName(replicavol->GetName(),replicavol);
    const G4String volumeref
          = GenerateName(replicavol->GetLogicalVolume()->GetName(),
                         replicavol->GetLogicalVolume());
 
    xercesc::DOMElement* replicavolElement = NewElement("replicavol");
-   replicavolElement->setAttributeNode(NewAttribute("name",name));
-   replicavolElement->setAttributeNode(NewAttribute("axis",axisString));
    replicavolElement->setAttributeNode(NewAttribute("number",number));
-   replicavolElement->setAttributeNode(NewAttribute("width",width));
-   replicavolElement->setAttributeNode(NewAttribute("offset",offset));
-   replicavolElement->setAttributeNode(NewAttribute("unit",unitString));
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
+
+  xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
+   replicavolElement->appendChild(replicateElement);
+
+   xercesc::DOMElement* dirElement = NewElement("direction");
+    if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
+    if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
+    if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
+    if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
+    if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
+   replicateElement->appendChild(dirElement);
+
+   xercesc::DOMElement* widthElement = NewElement("width");
+   widthElement->setAttributeNode(NewAttribute("value",width));
+   widthElement->setAttributeNode(NewAttribute("unit",unitString));
+   replicateElement->appendChild(widthElement);
+
+   xercesc::DOMElement* offsetElement = NewElement("offset");
+   offsetElement->setAttributeNode(NewAttribute("value",offset));
+   offsetElement->setAttributeNode(NewAttribute("unit",unitString));
+   replicateElement->appendChild(offsetElement);
+
    volumeElement->appendChild(replicavolElement);
 }
 
