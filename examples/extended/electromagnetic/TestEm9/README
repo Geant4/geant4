@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2008-05-07 08:33:30 maire Exp $
+$Id: README,v 1.12 2008-08-22 14:35:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -44,13 +44,19 @@ $Id: README,v 1.11 2008-05-07 08:33:30 maire Exp $
     3. Decays
     4. StepMax - for steplimitation
 
-    The following options for EM physics are available:	 
-    - "standard"        the best standard EM physics (default)
-    - "G4standard"      recommended standard EM physics for LHC
-    - "G4standard_fast" the best CPU performance standard physics for LHC
-    - "G4standard_exp"  experimental standard physics for LHC
-    - "Livermore"       low-energy EM physics using Livermore data
-    - "Penelope"        low-energy EM physics implementing Penelope models
+    The following options for EM physics using builders from physics_lists
+    sub-package are available:	 
+    - "emstandard"        (default)
+    - "emstandard_opt1"   (EMV)
+    - "emstandard_opt2"   (EMX)
+    - "emstandard_opt3"   recommended for medical and space applications
+
+    There are local to this example variants of EM physics: 
+    - "emstandard_local"   close to opt3
+    - "standardIG"         close to opt2
+    - "standardLPM"        relativistic bremsstrahlung model added to opt1  
+    - "Livermore"          low-energy EM physics using Livermore data
+    - "Penelope"           low-energy EM physics implementing Penelope models
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons
@@ -104,9 +110,9 @@ $Id: README,v 1.11 2008-05-07 08:33:30 maire Exp $
  7- Using histograms
  ------------------- 
 
-By default the histograms are not activated. To activate histograms
-the environment variable G4ANALYSIS_USE should be defined. For instance
-uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+     By default the histograms are not activated. To activate histograms
+     the environment variable G4ANALYSIS_USE should be defined. For instance
+     uncomment the flag G4ANALYSIS_USE in GNUmakefile.
 
-To use histograms any of implementations of AIDA interfaces should
-be available. See InstallAida.txt
+     To use histograms any of implementations of AIDA interfaces should
+     be available. See InstallAida.txt
