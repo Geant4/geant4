@@ -1,10 +1,19 @@
-$Id: README,v 1.1 1999-11-18 14:48:11 stesting Exp $
+$Id: README,v 1.2 2008-08-23 00:12:45 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            Test02
+                            Test15
                             ------
+
+Description:   test of neutron isotope production.
+               10 GeV proton incident on simple box of air, aluminum, 
+               lead or uranium
+
+Type of test:  run to completion
+
+Output:        run log
+
 
