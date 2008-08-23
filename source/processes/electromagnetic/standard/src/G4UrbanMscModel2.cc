@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.7 2008-08-05 13:19:07 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.8 2008-08-23 14:06:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -952,8 +952,8 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       //from continuity of derivatives
       b = 1.+(c-xsi)/a;
 
-      b1 = b+1.;
-      bx = b-x0;
+      b1  = b+1.;
+      bx  = c/a;
       eb1 = exp(c1*log(b1));
       ebx = exp(c1*log(bx));
 
