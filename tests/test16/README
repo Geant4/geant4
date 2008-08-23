@@ -1,10 +1,20 @@
-$Id: README,v 1.1 1999-11-18 14:58:15 stesting Exp $
+$Id: README,v 1.2 2008-08-23 00:41:44 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            Test02
+                            Test16
                             ------
+
+Description:   test of n and p cross sections at 1, 10 and 20 GeV.
+               Detector is a simple box of air, aluminum or lead.
+
+Type of test:  run to completion
+
+Output:        run log
+
+
+
 
