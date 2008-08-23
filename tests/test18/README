@@ -1,0 +1,20 @@
+$Id: README,v 1.1 2008-08-23 01:10:09 dennis Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test18
+                            ------
+
+Description:   test of radioactive decay for 1 MeV incident ions.
+               Decay of ions Na24, Ne24, F9, Al24, Cr46 and Po215
+
+Type of test:  run to completion
+
+Output:        run log (verbosity 1)
+
+
+
+
