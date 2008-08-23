@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.24 2008-04-11 10:59:11 maire Exp $
+// $Id: HistoManager.cc,v 1.25 2008-08-23 18:28:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,7 +198,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(reflect , charged) : projected angle at exit",	//33
 		  "dummy","dummy","dummy","dummy","dummy","dummy",	//34-39
 		  "(reflect , neutral) : kinetic energy at exit",	//40
-		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	//41
+		  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",	//41
 		  "(reflect , neutral) : space angle: dN/dOmega",	//42
 		  "(reflect , neutral) : projected angle at exit",	//43
 		  "dummy","dummy","dummy","dummy","dummy","dummy"	//44-49

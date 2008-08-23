@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.16 2007-11-28 12:37:57 maire Exp $
+// $Id: TrackingAction.cc,v 1.17 2008-08-23 18:28:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +64,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   G4ThreeVector position = aTrack->GetPosition();
-  G4double charge    = aTrack->GetDefinition()->GetPDGCharge();
+  G4ThreeVector vertex   = aTrack->GetVertexPosition();  
+  G4double charge        = aTrack->GetDefinition()->GetPDGCharge();
 
-  G4bool transmit = (position.x() >= xendAbs);
-  G4bool reflect  = (position.x() <= xstartAbs);
+  G4bool transmit = ((position.x() >= xendAbs) && (vertex.x() < xendAbs));
+  G4bool reflect  = ((position.x() <= xstartAbs) && (vertex.x() > xstartAbs));
   G4bool notabsor = (transmit || reflect);
 
   //transmitted + reflected particles counter

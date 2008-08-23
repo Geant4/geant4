@@ -1,4 +1,4 @@
-$Id: README,v 1.22 2008-05-06 11:32:22 maire Exp $
+$Id: README,v 1.23 2008-08-23 18:28:59 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -26,7 +26,8 @@ $Id: README,v 1.22 2008-05-06 11:32:22 maire Exp $
  	
  The default geometry is constructed in DetectorConstruction class, but all the
  parameters can be changed via commands defined in the DetectorMessenger class.
- The parameters of the "World" can be changed, too.
+ The parameters of the "World" can be changed, too. However, if World material
+ is not set to vacuum, the plots 10->43 below may be not pertinent.
  
  2- PHYSICS LIST
 
@@ -41,6 +42,7 @@ $Id: README,v 1.22 2008-05-06 11:32:22 maire Exp $
  - "emstandard"        G4EmStandardPhysics builder
  - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
  - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
+ - "emstandard_opt3"   G4EmStandardPhysics_option3 builder 
  See geant4/source/physics_lists/History for details 
          	
  3- AN EVENT : THE PRIMARY GENERATOR
@@ -99,24 +101,24 @@ $Id: README,v 1.22 2008-05-06 11:32:22 maire Exp $
 	3	"energy of gammas at creation (log10(Ekin/MeV))"
 	4       "x_vertex of charged secondaries (all)"
 	5       "x_vertex of charged secondaries (not absorbed)"
-	10	"(transmit, charged) : kinetic energy at exit"
+	10	"(transmit, charged) : kinetic energy at exit of world"
         11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
 	12	"(transmit, charged) : space angle dN/dOmega"
-	13	"(transmit, charged) : projected angle at exit"
-	14	"(transmit, charged) : projected position at exit"
-	15	"(transmit, charged) : radius at exit"	
-	20	"(transmit, neutral) : kinetic energy at exit"
+	13	"(transmit, charged) : projected angle at exit of world"
+	14	"(transmit, charged) : projected position at exit of world"
+	15	"(transmit, charged) : radius at exit of world"	
+	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
-	23	"(transmit, neutral) : projected angle at exit"
-	30	"(reflect , charged) : kinetic energy at exit"
+	23	"(transmit, neutral) : projected angle at exit of world"
+	30	"(reflect , charged) : kinetic energy at exit of world"
 	31	"(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
 	32	"(reflect , charged) : space angle dN/dOmega"
-	33	"(reflect , charged) : projected angle at exit"
-	40	"(reflect , neutral) : kinetic energy at exit"
+	33	"(reflect , charged) : projected angle at exit of world"
+	40	"(reflect , neutral) : kinetic energy at exit of world"
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
-	43	"(reflect , neutral) : projected angle at exit"
+	43	"(reflect , neutral) : projected angle at exit of world"
 
  The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
  
