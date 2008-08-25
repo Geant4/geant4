@@ -1,4 +1,4 @@
-$Id: History,v 1.403 2008-08-25 08:46:06 vnivanch Exp $
+$Id: History,v 1.404 2008-08-25 15:58:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 August 08: V.Ivant (emstand-V09-01-29)
+G4MaterialStopping, G4SimpleMaterialStopping - fixed compillation
+    problem at Windows by adding a new method AddData  
 
 25 August 08: V.Ivant (emstand-V09-01-28)
 23 August 08: V.Ivant (emstand-V09-01-27)

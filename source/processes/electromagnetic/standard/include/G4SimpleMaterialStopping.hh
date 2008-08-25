@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStopping.hh,v 1.5 2008-08-22 09:23:04 vnivanch Exp $
+// $Id: G4SimpleMaterialStopping.hh,v 1.6 2008-08-25 15:58:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStopping_h
@@ -80,6 +80,8 @@ public:
 private:
 
   void Initialise(G4EmCorrections*);
+
+  void AddData(G4double* energy, G4double* stoppower, G4double factor);
 
   // hide assignment operator
   G4SimpleMaterialStopping & operator=(const  G4SimpleMaterialStopping &right);
