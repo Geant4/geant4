@@ -7,6 +7,12 @@
                             Test25
                             ------
 
+Description:   test of Bertini cascade for p, n, LEP for all other hadrons
+
+Type of test:  run to completion
+
+Output:        run log
+
 Testing the cascade code in a simple setup
 Materials include H, Si, Cu, U
 
