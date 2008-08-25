@@ -1,0 +1,17 @@
+$Id: README,v 1.1 2008-08-25 21:43:29 dennis Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test28
+                            ------
+
+Description:   test of Wilson abrasion and EM disociation models
+
+Type of test:  run to completion
+
+Output:        run log
+
+
