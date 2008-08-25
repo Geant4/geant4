@@ -1,0 +1,20 @@
+$Id: README,v 1.1 2008-08-25 19:06:09 dennis Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test21
+                            ------
+
+Description:   test of CHIPS as intra-nuclear transport, with photo/lepton 
+               + T>1GeV cut
+
+Type of test:  run to completion
+
+Output:        run log
+
+
+
+
