@@ -144,7 +144,9 @@ void Histo::book()
   G4int i;
   for(i=0; i<m_Histo; i++) {
     if(m_active[i]) {
-      m_histo[i] = hf->createHistogram1D(m_ids[i], m_titles[i], m_bins[i], 
+      G4String ss = m_ids[i];
+      if(m_histType == "root") ss = "h" + m_ids[i]; 
+      m_histo[i] = hf->createHistogram1D(ss, m_titles[i], m_bins[i], 
 					 m_xmin[i], m_xmax[i]);
       if(m_histo[i] && m_verbose>0) ListHistogram(i);
     }
@@ -160,7 +162,8 @@ void Histo::book()
     G4cout << "### Histo books " << nt << " tuples " << G4endl;
     AIDA::ITupleFactory* tpf = m_af->createTupleFactory(*m_tree);
     for(G4int i=0; i<nt; i++) {
-       m_ntup[i] = tpf->create(m_tuplePath[i], m_tupleTitle[i], m_tupleColumns[i]);
+       m_ntup[i] = tpf->create(m_tuplePath[i], m_tupleTitle[i], 
+			       m_tupleColumns[i]);
     }
     delete tpf;
   }

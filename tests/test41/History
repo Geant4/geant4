@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-08-08  V.Ivanchenko (test41-V09-01-01)
+- Updated SS and IG PhysLists
+
 21-04-08  V.Ivanchenko (test41-V09-01-00)
 - use spline and polarAngleLimit
 
