@@ -29,7 +29,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -41,7 +41,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -54,7 +54,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -64,7 +64,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -76,7 +76,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -85,7 +85,7 @@ ionIoni:   tables are built for  GenericIon
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
 
-      Stopping Power data for 8 ion/material pairs are used.
+      Stopping Power data for 16 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
@@ -115,7 +115,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -162,7 +162,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -183,6 +183,13 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 30000
+
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
@@ -225,22 +232,22 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     84 hits are stored in ExN04TrackerHitsCollection.
-     8 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.53122454 (GeV)
+     71 hits are stored in ExN04TrackerHitsCollection.
+     6 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.48604533 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     19 hits are stored in ExN04TrackerHitsCollection.
-     16 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.241335 (GeV)
+     35 hits are stored in ExN04TrackerHitsCollection.
+     26 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.940699 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     35 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.6749638 (GeV)
+     25 hits are stored in ExN04TrackerHitsCollection.
+     29 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.7799 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

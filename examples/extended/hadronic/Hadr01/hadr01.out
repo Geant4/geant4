@@ -29,7 +29,7 @@ PhysicsList::AddPhysicsList: <QBBC>
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
    --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204311173.221 pc   Nucl.Int.Length: 114319773.046 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: G4_Galactic     density:  0.000 mg/cm3  RadL: 204310166.735 pc   Nucl.Int.Length: 114319209.879 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
    --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
    --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -38,6 +38,7 @@ PhysicsList::AddPhysicsList: <QBBC>
 Thank you for using G4BinaryCascade. 
 ### Adding Neutron tracking cut for neutron
 ###  cut value is 10 microseconds
+Thank you for using G4BinaryCascade. 
 Thank you for using G4BinaryCascade. 
 Thank you for using G4BinaryCascade. 
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -50,50 +51,57 @@ PhysicsList::SetCuts:CutLength : 1 mm
 
                      Hadronic Processes for <anti_neutron>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <anti_proton>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
+
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 30000
+
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <kaon->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <lambda>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <neutron>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
             nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 
                      Hadronic Processes for <pi+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <pi->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 
                      Hadronic Processes for <proton>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
+          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     4  Emax(GeV)= 100000
+                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 6
 ============================================================================================
 
 ========= Table of registered couples ==============================
@@ -129,35 +137,34 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.77s Real=0.77s Sys=0.01s
+  User=0.75s Real=0.76s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         55.6   RMS(MeV) 30.66
-Average number of steps              264.7
-Average number of gamma              2.2
-Average number of e-                 4.15
-Average number of e+                 0.04
-Average number of neutrons           0.76
-Average number of protons            0.86
+Average energy deposit (MeV)         59.5   RMS(MeV) 42.36
+Average number of steps              273.3
+Average number of gamma              2.51
+Average number of e-                 4.46
+Average number of e+                 0.07
+Average number of neutrons           0.69
+Average number of protons            0.67
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.23
-Average number of pi0                0.15
+Average number of pi+ & pi-          0.34
+Average number of pi0                0.13
 Average number of kaons              0
 Average number of muons              0
-Average number of deuterons+tritons  0.01
-Average number of He3+alpha          0.03
-Average number of ions               0.56
-Average number of forward neutrons   0.11
-Average number of reflected neutrons 0.01
-Average number of leaked neutrons    0.56
-Average number of proton leak        0.42
-Average number of pion leak          0.21
+Average number of deuterons+tritons  0.05
+Average number of He3+alpha          0.04
+Average number of ions               0.44
+Average number of forward neutrons   0.13
+Average number of reflected neutrons 0.02
+Average number of leaked neutrons    0.5
+Average number of proton leak        0.3
+Average number of pion leak          0.34
 ========================================================
 
 #
-### G4HadronElastic destructor Warnings: ###          N(cost <-1)= 1###
 G4 kernel has come to Quit state.

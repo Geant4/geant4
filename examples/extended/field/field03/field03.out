@@ -128,7 +128,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -141,13 +141,13 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -176,7 +176,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -223,7 +223,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -294,7 +294,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -318,7 +318,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

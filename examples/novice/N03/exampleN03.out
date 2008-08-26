@@ -115,7 +115,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -127,7 +127,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -140,7 +140,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -150,7 +150,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -187,7 +187,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -234,7 +234,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -278,16 +278,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 264.55156 MeV       total track length: 18.345166 cm 
-        Gap: total energy: 19.144958 MeV       total track length: 10.025524 cm 
+   Absorber: total energy: 274.7405 MeV       total track length: 19.010729 cm 
+        Gap: total energy: 16.174054 MeV       total track length: 7.6614045 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 264.55156 MeV +- 0 eV 
- mean Energy in Gap      : 19.144958 MeV +- 0 eV 
+ mean Energy in Absorber : 274.7405 MeV +- 0 eV 
+ mean Energy in Gap      : 16.174054 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.345166 cm  +- 0 fm 
- mean trackLength in Gap      : 10.025524 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.010729 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.6614045 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -311,7 +311,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -323,7 +323,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -336,7 +336,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -346,7 +346,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -383,7 +383,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -430,7 +430,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -445,19 +445,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 956622716, 838392990
+ Current couple of seeds = 1753695386, 729847137
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 281.65571 MeV       total track length: 20.039426 cm 
-        Gap: total energy: 13.753624 MeV       total track length: 6.5710399 cm 
+   Absorber: total energy: 281.48164 MeV       total track length: 19.696871 cm 
+        Gap: total energy: 16.354285 MeV       total track length: 8.5891135 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 281.65571 MeV +- 0 eV 
- mean Energy in Gap      : 13.753624 MeV +- 0 eV 
+ mean Energy in Absorber : 281.48164 MeV +- 0 eV 
+ mean Energy in Gap      : 16.354285 MeV +- 0 eV 
 
- mean trackLength in Absorber : 20.039426 cm  +- 0 fm 
- mean trackLength in Gap      : 6.5710399 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.696871 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.5891135 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -481,7 +481,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -493,7 +493,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -506,7 +506,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -516,7 +516,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -553,7 +553,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -600,7 +600,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -615,19 +615,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1053937794, 1541691737
+ Current couple of seeds = 429542194, 1014135587
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 411.98181 MeV       total track length: 96.252153 cm 
-        Gap: total energy: 83.479179 MeV       total track length: 2.3039353 m  
+   Absorber: total energy: 312.16322 MeV       total track length: 73.547569 cm 
+        Gap: total energy: 66.236378 MeV       total track length: 1.846884 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 411.98181 MeV +- 0 eV 
- mean Energy in Gap      : 83.479179 MeV +- 0 eV 
+ mean Energy in Absorber : 312.16322 MeV +- 0 eV 
+ mean Energy in Gap      : 66.236378 MeV +- 0 eV 
 
- mean trackLength in Absorber : 96.252153 cm  +- 0 fm 
- mean trackLength in Gap      : 2.3039353 m   +- 0 fm 
+ mean trackLength in Absorber : 73.547569 cm  +- 0 fm 
+ mean trackLength in Gap      : 1.846884 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

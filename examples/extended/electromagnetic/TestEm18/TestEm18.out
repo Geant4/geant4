@@ -92,7 +92,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -106,7 +106,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -129,7 +129,7 @@ ionIoni:   tables are built for  GenericIon
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
 
-      Stopping Power data for 8 ion/material pairs are used.
+      Stopping Power data for 16 ion/material pairs are used.
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       CSDA range table up to 100 TeV in 120 bins
 
@@ -266,7 +266,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.66s Real=2.66s Sys=0.01s
+  User=2.71s Real=2.72s Sys=0s
 
  ======================== run summary ======================
 
@@ -294,7 +294,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

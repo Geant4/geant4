@@ -107,7 +107,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 2
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
@@ -121,7 +121,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Subcutoff sampling in 1 regions
 
@@ -137,7 +137,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Subcutoff sampling in 1 regions
 
@@ -148,7 +148,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
@@ -162,7 +162,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
@@ -171,7 +171,7 @@ ionIoni:   tables are built for  GenericIon
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
 
-      Stopping Power data for 8 ion/material pairs are used.
+      Stopping Power data for 16 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
@@ -209,7 +209,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
@@ -266,7 +266,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
@@ -312,7 +312,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=13.5s Real=18.8s Sys=0.59s
+  User=13.96s Real=19.01s Sys=0.62s
 
  ======================== run summary ======================
 
@@ -320,29 +320,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.812 MeV
+ total energy deposit: 99.728 MeV
 
- nb tracks/event   neutral:     27.881   charged:     148.59
- nb  steps/event   neutral:     141.43   charged:     482.61
+ nb tracks/event   neutral:     27.923   charged:     148.21
+ nb  steps/event   neutral:     141.13   charged:     481.09
 
  nb of process calls per event: 
-            msc       eBrem       eIoni        conv     annihil       compt        photTransportation
-         153.45      25.363       302.4        1.39      1.3905      113.54      25.553      0.9425
+            msc       eBrem       eIoni        phot       comptTransportation        conv     annihil
+         152.14      25.398      302.14      25.521      113.21       1.007         1.4         1.4
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.078 cm    rms = 3.8311 cm 
- proj Range = 9.6504 cm    rms = 3.5514 cm 
- proj/true  = 0.87112
- transverse dispersion at end = 1.6967 cm 
-      mass true Range from simulation = 29.911 g/cm2 
+ true Range = 11.118 cm    rms = 3.7661 cm 
+ proj Range = 9.5393 cm    rms = 3.4614 cm 
+ proj/true  = 0.858
+ transverse dispersion at end = 1.7855 cm 
+      mass true Range from simulation = 30.019 g/cm2 
        from PhysicsTable (csda range) = 31.82 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 431960559, 1806083599
+ Current couple of seeds = 49535161, 501400978
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -372,7 +372,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 431960559, 1806083599
+ Current couple of seeds = 49535161, 501400978
 ----------------------------------------
 Start Run processing.
 
@@ -380,7 +380,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=24.85s Real=29.99s Sys=0.59s
+  User=25.53s Real=30.74s Sys=0.6s
 
  ======================== run summary ======================
 
@@ -388,29 +388,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.818 MeV
+ total energy deposit: 99.739 MeV
 
- nb tracks/event   neutral:     36.727   charged:     292.17
- nb  steps/event   neutral:     147.91   charged:     910.47
+ nb tracks/event   neutral:     36.489   charged:     290.51
+ nb  steps/event   neutral:     146.05   charged:     905.73
 
  nb of process calls per event: 
-          eIoni       eBrem        phot         msc        conv     annihil       comptTransportation
-         584.95       34.76      34.403      289.33        1.42        1.42      111.18      0.9145
+            msc       eIoni       eBrem        conv     annihil       compt        photTransportation
+         287.28      582.43      34.663      1.3445      1.3445      109.56      34.151      1.0055
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.203 cm    rms = 3.7907 cm 
- proj Range = 9.7844 cm    rms = 3.5267 cm 
- proj/true  = 0.87337
- transverse dispersion at end = 1.7334 cm 
-      mass true Range from simulation = 30.248 g/cm2 
+ true Range = 11.315 cm    rms = 3.8133 cm 
+ proj Range = 9.7324 cm    rms = 3.5107 cm 
+ proj/true  = 0.8601
+ transverse dispersion at end = 1.8474 cm 
+      mass true Range from simulation = 30.552 g/cm2 
        from PhysicsTable (csda range) = 31.82 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 691287431, 1198819295
+ Current couple of seeds = 918623357, 866720484
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -418,7 +418,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

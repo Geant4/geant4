@@ -68,7 +68,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
+      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 2
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
@@ -89,7 +89,7 @@ eIoni:   tables are built for  e+
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 2
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
@@ -150,37 +150,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8720 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 9995 Ncav= 6 Ic/Iw= 3.14883 Ne-_cav= 2766 doseCavity/Ebeam= 1.04719  (100*(ratio-1) = 4.71883 %)
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52454 Ne-_cav= 2724 doseCavity/Ebeam= 0.98664  (100*(ratio-1) = -1.33552 %)
 
---->evntNb= 20000 Nwall= 19994 Ncav= 7 Ic/Iw= 1.83645 Ne-_cav= 5630 doseCavity/Ebeam= 1.05723  (100*(ratio-1) = 5.72335 %)
+--->evntNb= 20000 Nwall= 19994 Ncav= 7 Ic/Iw= 1.83645 Ne-_cav= 5570 doseCavity/Ebeam= 1.00589  (100*(ratio-1) = 0.58928 %)
 
---->evntNb= 30000 Nwall= 29991 Ncav= 10 Ic/Iw= 1.74900 Ne-_cav= 8487 doseCavity/Ebeam= 1.03462  (100*(ratio-1) = 3.46159 %)
+--->evntNb= 30000 Nwall= 29993 Ncav= 8 Ic/Iw= 1.39911 Ne-_cav= 8223 doseCavity/Ebeam= 1.04784  (100*(ratio-1) = 4.78370 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
   User=16s Real=16s Sys=0s
 
- Process calls frequency --->  msc= 599702  eIoni= 615269  Transportation= 22705
+ Process calls frequency --->  msc= 531803  eIoni= 618804  Transportation= 21972
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11351	 Energy = 7.256 GeV
-      Exit  --> nbParticles = 11354	 Energy = 7.260 GeV
+      Enter --> nbParticles = 10985	 Energy = 6.979 GeV
+      Exit  --> nbParticles = 10986	 Energy = 6.983 GeV
 
  beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.57410	 energyFluence = 38.12113 MeV*cm2/mg
 
- Total edep in cavity = 7.86715 MeV +- 3.85407 %
- Total dose in cavity = 39.33575 MeV*cm2/mg +- 3.85407 %
+ Total edep in cavity = 8.32655 MeV +- 6.48829 %
+ Total dose in cavity = 41.63274 MeV*cm2/mg +- 6.48829 %
 
- DoseCavity/EnergyFluence = 1.03186 +- 0.03977
+ DoseCavity/EnergyFluence = 1.09212 +- 0.07086
 
- Total charged trackLength in cavity = 35.0293 m     (mean value = 3.0860 mm )
+ Total charged trackLength in cavity = 34.8185 m     (mean value = 3.1696 mm )
 
- StepSize of ch. tracks in wall   = 149.2673 um  +- 180.2632 um 	 (nbSteps/track = 29.3982)
- StepSize of ch. tracks in cavity = 564.0609 um  +- 1.3017 mm 	 (nbSteps/track = 5.4711)
+ StepSize of ch. tracks in wall   = 158.0621 um  +- 182.2140 um 	 (nbSteps/track = 27.7623)
+ StepSize of ch. tracks in cavity = 557.8008 um  +- 1.0255 mm 	 (nbSteps/track = 5.6824)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 522523360, 1914266286
+ Current couple of seeds = 1530490902, 289490935
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -188,7 +188,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
